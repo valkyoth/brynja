@@ -1,0 +1,19 @@
+[package]
+name = "brynja-proofs"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Repository-only formal proof harnesses for Brynja"
+publish = false
+
+[features]
+default = []
+
+
+[lints]
+workspace = true
+

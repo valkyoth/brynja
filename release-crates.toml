@@ -1,0 +1,151 @@
+[release]
+version = "0.1.0"
+policy = "independent"
+
+[crates."brynja"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-core"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-crypto"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-pki"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-tls"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-quic-tls"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-dtls"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-platform"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-historical"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-tls11"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-tls10"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-ssl3"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-ssl2"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-wtls"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-pct"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-snp"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-ssl1-research"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-test-support"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-interop"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-xtask"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-proofs"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+

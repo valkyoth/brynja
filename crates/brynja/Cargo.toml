@@ -1,0 +1,29 @@
+[package]
+name = "brynja"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Security-first no_std TLS facade"
+publish = false
+
+[features]
+default = []
+dtls = ["dep:brynja-dtls"]
+platform = ["dep:brynja-platform"]
+quic = ["dep:brynja-quic-tls"]
+
+[dependencies]
+brynja-core = { workspace = true }
+brynja-crypto = { workspace = true }
+brynja-pki = { workspace = true }
+brynja-tls = { workspace = true }
+brynja-dtls = { workspace = true, optional = true }
+brynja-platform = { workspace = true, optional = true }
+brynja-quic-tls = { workspace = true, optional = true }
+
+[lints]
+workspace = true

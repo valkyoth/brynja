@@ -1,0 +1,33 @@
+[package]
+name = "brynja-historical"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Explicit facade for isolated historical transport-security protocols"
+publish = false
+
+[features]
+default = []
+tls11 = ["dep:brynja-tls11"]
+tls10 = ["dep:brynja-tls10"]
+ssl3 = ["dep:brynja-ssl3"]
+ssl2 = ["dep:brynja-ssl2"]
+wtls = ["dep:brynja-wtls"]
+pct = ["dep:brynja-pct"]
+snp = ["dep:brynja-snp"]
+
+[dependencies]
+brynja-tls11 = { workspace = true, optional = true }
+brynja-tls10 = { workspace = true, optional = true }
+brynja-ssl3 = { workspace = true, optional = true }
+brynja-ssl2 = { workspace = true, optional = true }
+brynja-wtls = { workspace = true, optional = true }
+brynja-pct = { workspace = true, optional = true }
+brynja-snp = { workspace = true, optional = true }
+
+[lints]
+workspace = true

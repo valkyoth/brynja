@@ -1,0 +1,3 @@
+rfc/rfc*.txt -text
+vendor/** linguist-vendored
+

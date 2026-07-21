@@ -1,0 +1,10 @@
+# filename URL role
+NIST.FIPS.180-4.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf sha2
+NIST.FIPS.197-upd1.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf aes
+NIST.SP.800-38D.pdf https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf gcm-ghash
+NIST.FIPS.186-5.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf signatures
+NIST.SP.800-186.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf elliptic-curves
+NIST.SP.800-56Ar3.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar3.pdf key-establishment
+NIST.SP.800-90Ar1.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90Ar1.pdf random-bit-generation
+NIST.SP.800-107r1.pdf https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-107r1.pdf hash-usage
+

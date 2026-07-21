@@ -1,0 +1,62 @@
+# Rust build output
+/target/
+/fuzz/target/
+/fuzz/artifacts/
+/fuzz/corpus/
+
+# Local tool/runtime state
+/.agents/
+/.codex/
+/.cargo-deny-advisory-dbs/
+README.internal.md
+
+# Logs and diagnostics
+*.log
+logs/
+release-reports/
+*.pid
+
+# Local-only licensed or redistribution-restricted references
+/references/local/*
+!/references/local/.gitkeep
+ISO_IEC_*.pdf
+NIST_*.pdf
+
+# Python local bytecode
+__pycache__/
+*.py[cod]
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.secret
+*.token
+*.key
+*.pem
+*.p12
+*.pfx
+*.der
+
+# Local release/security scratch
+PENTEST.md
+
+# Local generated data and archives
+tmp/
+temp/
+/dist/
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.zst
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+.idea/
+.vscode/
+

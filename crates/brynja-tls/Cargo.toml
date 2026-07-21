@@ -1,0 +1,23 @@
+[package]
+name = "brynja-tls"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Modern TLS 1.3 and TLS 1.2 state machines for Brynja"
+publish = false
+
+[features]
+default = []
+
+
+[dependencies]
+brynja-core = { workspace = true }
+brynja-crypto = { workspace = true }
+brynja-pki = { workspace = true }
+
+[lints]
+workspace = true

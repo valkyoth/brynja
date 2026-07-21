@@ -1,0 +1,50 @@
+[workspace]
+members = ["crates/*"]
+default-members = ["crates/brynja"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.90"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/valkyoth/brynja"
+repository = "https://github.com/valkyoth/brynja"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unsafe_op_in_unsafe_fn = "forbid"
+unused_must_use = "deny"
+missing_docs = "deny"
+
+[workspace.lints.clippy]
+panic = "forbid"
+unwrap_used = "forbid"
+expect_used = "forbid"
+undocumented_unsafe_blocks = "forbid"
+indexing_slicing = "forbid"
+arithmetic_side_effects = "forbid"
+cast_possible_truncation = "deny"
+cast_sign_loss = "deny"
+
+[profile.release]
+overflow-checks = true
+panic = "abort"
+codegen-units = 1
+lto = "fat"
+
+[workspace.dependencies]
+brynja-core = { path = "crates/brynja-core", version = "=0.1.0" }
+brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.0" }
+brynja-pki = { path = "crates/brynja-pki", version = "=0.1.0" }
+brynja-tls = { path = "crates/brynja-tls", version = "=0.1.0" }
+brynja-dtls = { path = "crates/brynja-dtls", version = "=0.1.0" }
+brynja-platform = { path = "crates/brynja-platform", version = "=0.1.0" }
+brynja-quic-tls = { path = "crates/brynja-quic-tls", version = "=0.1.0" }
+brynja-pct = { path = "crates/brynja-pct", version = "=0.1.0" }
+brynja-snp = { path = "crates/brynja-snp", version = "=0.1.0" }
+brynja-ssl2 = { path = "crates/brynja-ssl2", version = "=0.1.0" }
+brynja-ssl3 = { path = "crates/brynja-ssl3", version = "=0.1.0" }
+brynja-tls10 = { path = "crates/brynja-tls10", version = "=0.1.0" }
+brynja-tls11 = { path = "crates/brynja-tls11", version = "=0.1.0" }
+brynja-wtls = { path = "crates/brynja-wtls", version = "=0.1.0" }

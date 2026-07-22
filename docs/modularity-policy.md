@@ -48,7 +48,11 @@ parameterized over limb count, reduced-width exhaustive models that validate
 algorithm and harness structure, and production-width vector or differential
 evidence. Reduced-width evidence never proves production-width equivalence;
 residual width, path, abstraction, and tool gaps remain explicit through the
-v0.155.0 final coverage gate.
+v0.155.0 final coverage gate. That gate owns a deterministic machine-readable
+claim register mapping each primitive and exact implementation symbol to its
+property, supported widths or parameters, verification method, evidence,
+assumptions, and residual gaps; repository checks reject stale or incomplete
+entries.
 
 The FIPS architecture freezes its boundary, dependency allowlist, services,
 ports, SSP design, and operational-environment model before implementation; it

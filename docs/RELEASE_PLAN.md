@@ -4595,7 +4595,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete and audit the proof harnesses introduced with every arithmetic and cryptographic milestone: use symbolic full-width proofs where tractable, limb-count-parameterized proofs where sound, and reduced-width exhaustive models only to validate algorithms and harness structure; treat production-width official vectors and at least two independent external differential processes as evidence rather than proof, map every claim to exact code and widths, and publish every residual proof gap without claiming reduced-to-production-width equivalence.
+Plan scope: Complete and audit the proof harnesses introduced with every arithmetic and cryptographic milestone: use symbolic full-width proofs where tractable, limb-count-parameterized proofs where sound, and reduced-width exhaustive models only to validate algorithms and harness structure; treat production-width official vectors and at least two independent external differential processes as evidence rather than proof; publish a machine-readable claim register mapping every primitive, implementation symbol, proven property, supported width or parameter, verification method, and residual gap without claiming reduced-to-production-width equivalence.
 
 Goal: complete the **Cryptographic Formal Coverage And Residual-Gap Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -4608,6 +4608,10 @@ Deliverables:
   classify every harness as symbolic full-width, sound limb-count-parameterized,
   or reduced-width exhaustive, record every abstraction and assumption, map it
   to exact production code and supported widths, and inventory residual gaps;
+- define and generate a versioned, deterministic machine-readable cryptographic
+  claim register whose entries name the primitive, exact implementation symbol,
+  claimed property, supported widths or parameters, verification method,
+  evidence identifiers, assumptions, and residual gaps;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -4621,6 +4625,10 @@ Verification:
   least two independent external reference processes as differential evidence,
   never as proof of equivalence; reject unsupported claims and publish every
   remaining width, path, tool, or abstraction gap;
+- schema-validate and deterministically regenerate the claim register; reject
+  duplicate or orphan entries, missing symbols, unclassified verification
+  methods, unsupported widths or parameters, stale evidence references, and
+  omitted residual gaps;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -4628,7 +4636,8 @@ Exit criteria:
 
 - every cryptographic claim names its exact implementation, proof class,
   assumptions, widths, production evidence, and residual gaps, with no
-  reduced-to-production-width equivalence claim;
+  reduced-to-production-width equivalence claim, and the machine-readable
+  register completely represents the reviewed claim set;
 - `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.156.0 - External-Process Fuzz And Differential Campaign

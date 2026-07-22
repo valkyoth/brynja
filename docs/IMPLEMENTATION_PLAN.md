@@ -95,7 +95,10 @@ event is ignored or dropped.
    rather than introducing the models for the first time. Classify claims as
    symbolic full-width, sound limb-count-parameterized, or reduced-width
    algorithm/harness validation, and treat production-width vectors and
-   differentials as evidence rather than proof of equivalence.
+   differentials as evidence rather than proof of equivalence. At v0.155.0,
+   generate a deterministic machine-readable register mapping each primitive,
+   exact implementation symbol, property, supported width or parameter,
+   verification method, evidence, assumptions, and residual gaps.
    RSA signing accepts validated imported keys; first-party RSA key generation
    is outside v1.
 4. Implement bounded identity containers, DER, X.509 path construction, split
@@ -190,6 +193,9 @@ The repository will maintain:
   limb-count-parameterized, or reduced-width algorithm/harness validation;
   production-width vectors and independent-process differentials remain evidence,
   not equivalence proofs, and residual proof gaps remain explicit;
+- schema, deterministic-regeneration, symbol-resolution, uniqueness,
+  completeness, evidence-reference, supported-parameter, and residual-gap tests
+  for the v0.155.0 machine-readable cryptographic claim register;
 - pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
   assurance tools that do not weaken repository Cargo dependency policy.
 

@@ -1,6 +1,6 @@
 # Brynja Version Plan
 
-Status: revised planning sequence
+Status: reconciled planning sequence
 
 This document defines the intended order and scope of Brynja releases through
 `1.0.0`. Each version is an exclusive implementation stop: it must finish and
@@ -8,12 +8,10 @@ verify only its named boundary before adjacent work begins. A version may be
 split into smaller reviewable patches or milestones, but unrelated scopes must
 not be merged merely to preserve numbering.
 
-[RELEASE_PLAN.md](RELEASE_PLAN.md) remains the normative source for each
-release's Goal, Deliverables, Verification, and Exit criteria. Its existing
-numbering predates this revision. Before implementation beyond `0.1.0`, it must
-be reconciled one-for-one with this plan and its structural validators must be
-strengthened. Until that reconciliation is committed, the stricter requirement
-or gate in either document applies.
+[RELEASE_PLAN.md](RELEASE_PLAN.md) is the normative source for each release's
+Goal, Deliverables, Verification, and Exit criteria. It is maintained
+one-for-one with this sequence: every release repeats its exact version-plan
+scope, and the repository validator rejects numbering, ordering, or scope drift.
 
 ## Admission Rules For Every Version
 

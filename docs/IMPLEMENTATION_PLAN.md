@@ -39,10 +39,11 @@ brynja
 ├── brynja-crypto
 ├── future exact-build FIPS module artifact (never a feature)
 ├── brynja-pki
-└── brynja-tls
-    ├── optional brynja-quic-tls
-    ├── optional brynja-dtls
-    └── optional brynja-platform
+├── future brynja-tls-handshake (shared recordless TLS 1.3 state machine)
+├── brynja-tls (stream records plus shared handshake)
+├── optional brynja-quic-tls (shared handshake plus QUIC profile)
+├── optional brynja-dtls (independent datagram state machine)
+└── optional brynja-platform (downstream implementations only)
 
 brynja-historical (never a brynja dependency)
 ├── brynja-tls11
@@ -58,6 +59,13 @@ brynja-historical (never a brynja dependency)
 transport. Repository-only test, interoperability, task, and proof packages
 are permanently excluded from normal application dependency graphs.
 
+All protocol-facing capability and effect traits live in `brynja-core` or
+another upstream `no_std` interface crate. `brynja-platform` implements those
+contracts and is never a protocol-engine dependency. Stream TLS and QUIC share
+one record-independent TLS 1.3 handshake implementation; DTLS may reuse codecs,
+transcripts, certificate processing, and key-schedule components but owns its
+state machine, epochs, fragmentation, paths, and retransmission.
+
 ## Implementation Order
 
 1. Freeze policy enforcement, standards provenance, requirements ledgers,
@@ -70,19 +78,20 @@ are permanently excluded from normal application dependency graphs.
    vectors outward with per-compiler and per-target constant-time evidence.
 4. Implement bounded identity containers, DER, X.509 path construction, split
    RFC 5280 validation, revocation, CT policy, and an independent PKI audit.
-5. Exercise an internal deterministic Sans-I/O contract, then implement
-   one-pass highest-version negotiation and audit TLS 1.3 as a typed state
-   machine over explicit effects.
-6. Admit a hardened, explicitly configured TLS 1.2 engine without fallback or
-   renegotiation.
+5. Extract the shared recordless TLS handshake and exercise an unstable
+   deterministic Sans-I/O contract, then implement and audit TLS 1.3.
+6. Admit and audit hardened TLS 1.2, then integrate symmetric one-pass routing
+   only after both target engines exist; never retry another engine.
 7. Implement QUIC TLS and key-derivation ownership, path-bound one-pass DTLS,
    standardized PQ hybrids, and the predesigned exact-build FIPS module and
    approved-only TLS profile.
-8. Freeze the public Sans-I/O facade and add each optional protocol facility as
-   a separate bounded module without repeating earlier ALPN, SNI, exporter, or
-   channel-binding work.
-9. Run complete conformance, fuzzing, formal, memory, side-channel, platform,
-   resource, interoperability, external audit, and remediation phases.
+8. Add each planned v1 optional protocol facility against the unstable internal
+   model without repeating ALPN, SNI, exporter, or channel-binding work; freeze
+   the public facade and Sans-I/O actions only after those modules are complete.
+9. Qualify caller-provided host integration and the Aesynx ABI/emulator against
+   the final public interface, then run complete conformance, fuzzing, formal,
+   memory, side-channel, platform, resource, interoperability, external audit,
+   and remediation phases.
 10. Freeze the exact `1.0.0` package set and promote an unchanged, approved
     release candidate.
 
@@ -120,14 +129,18 @@ before a permanent PASS report is committed.
 
 ## Platform Strategy
 
-Core crates expose pure transformations, caller-owned non-overlapping arenas,
-opaque path tokens, and deterministic effects. Raw entropy and initialized
-secure randomness are different contracts; wall and monotonic time are
+Upstream core interface crates expose pure transformations, caller-owned
+non-overlapping arenas, opaque path tokens, and deterministic effects. Raw
+entropy and initialized secure randomness are different contracts; wall and
+monotonic time are
 non-interchangeable. Trust stores, transports, stateful and stateless ticket
 storage, anti-replay state, concurrency, pending operations, and acceleration
-enter through narrow traits in `brynja-platform`. Linux, Windows, BSD, macOS,
-Android, iOS, and bare-metal remain outside protocol conditional logic. Aesynx
-requires a stable adapter contract and executable target-ABI or emulator gate
+enter through narrow upstream traits that `brynja-platform` may implement;
+protocol engines never depend on that downstream crate. For v1, host and kernel
+applications provide entropy implementations and Brynja ships no built-in OS
+entropy FFI. Linux, Windows, BSD, macOS, Android, iOS, and bare-metal remain
+outside protocol conditional logic. Aesynx requires a stable adapter contract
+and executable target-ABI or emulator gate
 for v1; real-hardware qualification may follow without weakening that contract.
 
 ## Completion Definition

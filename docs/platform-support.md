@@ -12,9 +12,16 @@ Status: policy
 
 Compilation is not a complete support claim. Production support later requires
 native interoperability, entropy/time integration, lifecycle tests, packaging,
-and platform-specific security review. Core packages may not inspect the OS or
-assume `std`; platform adapters must fail closed when a required capability is
-unavailable.
+and platform-specific security review. Protocol-facing traits live in upstream
+`no_std` interface crates; `brynja-platform` is a downstream implementer and is
+never required by a protocol engine. Core packages may not inspect the OS or
+assume `std`.
+
+For v1, applications and kernels provide entropy implementations. Brynja ships
+no built-in Windows, macOS, BSD, mobile, or bare-metal entropy FFI. Safe clock,
+transport, and storage examples may be provided, but every future OS-specific
+unsafe adapter requires its own crate, versioned unsafe/FFI milestone, platform
+tests, and external audit. Missing capabilities always fail closed.
 
 Real Aesynx hardware qualification may follow `1.0.0` if hardware is not
 available during the release line, but the ABI/emulator, entropy, time,

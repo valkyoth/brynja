@@ -20,8 +20,12 @@ handshake used by stream TLS and QUIC TLS. DTLS may reuse reviewed codecs,
 transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
 
-Validated FIPS module source, symbols, dependency closure, features, dispatch
-tables, and build inputs are immutable for that artifact identity. HPKE, ECH,
-certificate compression, and every later optional module remain downstream of
-provider ports and cannot alter the validated module. Any such change starts a
-new validation and artifact line.
+The FIPS architecture freezes its boundary, dependency allowlist, services,
+ports, SSP design, and operational-environment model before implementation; it
+does not claim an exact artifact identity at that point. Only after the DRBG,
+provider, indicators, SSP services, algorithms, and linked self-tests are final
+does the artifact freeze its source, symbols, exact dependency closure,
+features, dispatch tables, build inputs, tool configuration, and binary hashes.
+HPKE, ECH, certificate compression, and every later optional module remain
+downstream of provider ports and cannot alter that artifact. Any such change
+starts a new validation and artifact line.

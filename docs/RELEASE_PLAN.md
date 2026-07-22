@@ -108,7 +108,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate the requirements and source ledger from every admitted algorithm, encoding, extension, and protocol milestone; include RFC 5077, RFC 5746, RFC 6962 or RFC 9162, RFC 7468, RFC 8410, RFC 5958 or the chosen PKCS#8 authority, RFC 9146 when DTLS 1.2 CID is admitted, applicable NIST standards and errata, frozen IANA snapshots, and the final ECDHE-ML-KEM RFC and code points before admission.
+Plan scope: Generate the requirements and source ledger from every admitted algorithm, encoding, extension, and protocol milestone; include RFC 5077, RFC 5705, RFC 5746, RFC 6962 or RFC 9162, RFC 7468, RFC 8410, RFC 5958 or the chosen PKCS#8 authority, RFC 9146 when DTLS 1.2 CID is admitted, RFC 9258, RFC 9266, applicable NIST standards and errata, frozen IANA snapshots, and the final ECDHE-ML-KEM RFC and code points before admission.
 
 Goal: complete the **Requirements And Standards Ledger** implementation stop without admitting or
 claiming adjacent capability.
@@ -2200,13 +2200,13 @@ Exit criteria:
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.74.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.75.0 - External PSKs And PSK Modes
+### v0.75.0 - External PSKs And PSK Importer
 
 Status: planned
 
-Plan scope: Separate external from resumption PSKs, require hardened psk_dhe_ke by default, perform constant-work unknown-identity and binder handling, type single-use pending lookup operations, and forbid silent psk_ke, cross-domain fallback, or binder-failure fallback to certificate authentication on the same attempted path unless the state machine explicitly permits it.
+Plan scope: Separate external from resumption PSKs; implement RFC 9258 imported identities and derived imported PSKs with protocol, KDF, context, application, ALPN, and deployment-domain separation; require the importer whenever one provisioned external key could cross TLS, DTLS, QUIC, ALPN, application, or deployment domains; allow raw external PSKs only when callers attest unique provisioning per protocol and deployment context; require hardened psk_dhe_ke by default; perform constant-work unknown-identity and binder handling; type single-use pending lookup operations; and forbid silent psk_ke, cross-domain fallback, or binder-failure fallback.
 
-Goal: complete the **External PSKs And PSK Modes** implementation stop without admitting or
+Goal: complete the **External PSKs And PSK Importer** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -2220,7 +2220,7 @@ Deliverables:
 Verification:
 
 - run RFC vectors, fragmentation, versions, GREASE, client and server selection, HRR, transcript, downgrade, ticket, PSK timing, storage atomicity, and peer matrices;
-- exercise premature routing, retry, cross-version state, replay, unknown PSKs, binder failure, crash consistency, zero-RTT races, key limits, and cleanup;
+- exercise imported-identity derivation, protocol, KDF, context, application, ALPN and deployment separation, raw-key uniqueness attestation, premature routing, retry, cross-version state, replay, unknown PSKs, binder failure, crash consistency, zero-RTT races, key limits, and cleanup;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -2287,13 +2287,13 @@ Exit criteria:
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.77.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.78.0 - Exporters And Channel Binding
+### v0.78.0 - Exporters And TLS-Exporter Channel Binding
 
 Status: planned
 
-Plan scope: Implement exporters and channel binding exactly once with context separation, transcript binding, authorization timing, and secret-output policy.
+Plan scope: Implement the RFC 5705 exporter for TLS 1.2 and the RFC 9846 exporter for TLS 1.3, then admit only the RFC 9266 tls-exporter channel binding with exact label, context, transcript, and protocol-version rules; exclude tls-unique for TLS 1.3 and tls-server-end-point for v1; release outputs only after protocol-specific authorization as typed, non-formatting secrets with explicit ownership, use, and zeroization policy.
 
-Goal: complete the **Exporters And Channel Binding** implementation stop without admitting or
+Goal: complete the **Exporters And TLS-Exporter Channel Binding** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -2306,7 +2306,7 @@ Deliverables:
 
 Verification:
 
-- run RFC vectors, fragmentation, versions, GREASE, client and server selection, HRR, transcript, downgrade, ticket, PSK timing, storage atomicity, and peer matrices;
+- run RFC 5705, RFC 9266 and RFC 9846 exporter vectors, label and context boundaries, TLS 1.2 and 1.3 transcript and authorization timing, excluded binding types, secret ownership and zeroization, and peer matrices;
 - exercise premature routing, retry, cross-version state, replay, unknown PSKs, binder failure, crash consistency, zero-RTT races, key limits, and cleanup;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
@@ -3569,22 +3569,22 @@ Exit criteria:
 
 ## Phase 4: FIPS Module Instantiation, Validation, And TLS Profile
 
-Validated closure and correct module-versus-connection failure semantics are enforced.
+Architecture is frozen before implementation; exact artifact identity is frozen only after all module components and self-tests exist. Correct module-versus-connection failure semantics are enforced throughout.
 
-### v0.122.0 - FIPS Module Boundary
+### v0.122.0 - FIPS Module Architecture Freeze
 
 Status: planned
 
-Plan scope: Instantiate and freeze the exact binary, artifact and dependency closure, operational environments, ports, services, roles, SSP inventory, compiler, linker and CPU inputs, and approved and non-approved exclusions; later optional modules must be downstream and cannot alter symbols, dependencies, features, dispatch tables, build inputs, source identity, or validation claims.
+Plan scope: Freeze the architectural boundary, dependency allowlist, approved and non-approved services, ports, roles, SSP inventory, operational-environment design, build-reproducibility contract, and downstream optional-module constraints without claiming or freezing an exact binary, source identity, dispatch table, dependency closure, or validation artifact.
 
-Goal: complete the **FIPS Module Boundary** implementation stop without admitting or
+Goal: complete the **FIPS Module Architecture Freeze** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- freeze only architecture and allowlists at this stop, preserving exact binary, source identity, dispatch, and dependency-closure instantiation until every module component and self-test is final;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3597,7 +3597,7 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
+- the architecture is frozen without a premature artifact claim, and connection policy failures never misuse the module catastrophic-failure latch;
 - `v0.122.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.123.0 - SP 800-90 Entropy And DRBG Boundary
@@ -3613,7 +3613,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3626,7 +3626,7 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
 - `v0.123.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.124.0 - Approved Provider And Service Indicator
@@ -3642,7 +3642,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3655,7 +3655,7 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
 - `v0.124.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.125.0 - SSP Lifecycle And Zeroization Services
@@ -3671,7 +3671,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3684,7 +3684,7 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
 - `v0.125.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.126.0 - FIPS Self-Tests And Failure Latch
@@ -3700,7 +3700,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3713,10 +3713,44 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
 - `v0.126.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.127.0 - ACVTS And CAVP Evidence
+### v0.127.0 - Exact FIPS Module Artifact Freeze
+
+Status: planned
+
+Plan scope: After the DRBG, approved provider, service indicators, SSP services, algorithms, and self-tests are final and linked, instantiate and freeze the exact binary, source identity, build inputs, compiler and linker configuration, symbols, dispatch tables, dependency closure, operational-environment mappings, and reproducible artifact hashes; all ACVTS, CAVP, CMVP, and later closure evidence must name this exact artifact.
+
+Goal: complete the **Exact FIPS Module Artifact Freeze** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, storage, failure, dependency, and package boundaries;
+- emit a reviewed identity manifest covering every source, tool, flag, build
+  input, symbol, dispatch path, dependency, operational environment, binary,
+  and self-test input that determines the module artifact;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- reproduce the artifact from clean inputs and byte-compare binaries, hashes,
+  symbols, dispatch tables, dependencies, build metadata, and source identity;
+- prove the complete linked self-test and failure-latch implementation belongs
+  to that artifact and make ACVTS, CAVP, CMVP, and closure tooling reject every
+  mismatched identity or post-freeze module mutation;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- one final artifact identity is reproducible and every later validation datum is mechanically bound to it;
+- `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.128.0 - ACVTS And CAVP Evidence
 
 Status: planned
 
@@ -3729,7 +3763,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3742,10 +3776,10 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
-- `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- `v0.128.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.128.0 - CMVP Submission Artifacts
+### v0.129.0 - CMVP Submission Artifacts
 
 Status: planned
 
@@ -3758,7 +3792,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3771,10 +3805,10 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
-- `v0.128.0 implementation stop reached. Run pentest for this exact commit.`
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- `v0.129.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.129.0 - Accredited FIPS Evaluation
+### v0.130.0 - Accredited FIPS Evaluation
 
 Status: planned
 
@@ -3787,7 +3821,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3800,10 +3834,10 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
-- `v0.129.0 implementation stop reached. Run pentest for this exact commit.`
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- `v0.130.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.130.0 - Boundary And Package Audit
+### v0.131.0 - Boundary And Package Audit
 
 Status: planned
 
@@ -3816,7 +3850,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3829,10 +3863,10 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
-- `v0.130.0 implementation stop reached. Run pentest for this exact commit.`
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- `v0.131.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.131.0 - Approved-Only TLS Operating Profile
+### v0.132.0 - Approved-Only TLS Operating Profile
 
 Status: planned
 
@@ -3845,7 +3879,7 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze the validated closure, implement final DRBG, provider, SSP and linked tests, and distinguish connection-profile termination from module catastrophic failure;
+- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3858,14 +3892,14 @@ Verification:
 
 Exit criteria:
 
-- validated artifact identity is structurally preserved and connection policy failures never misuse the module catastrophic-failure latch;
-- `v0.131.0 implementation stop reached. Run pentest for this exact commit.`
+- architectural boundaries and, after v0.127.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- `v0.132.0 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase 5: Optional Modules, Composition, Stable Integration, Assurance, And General Availability
 
 Optional send/receive paths, FIPS closure, and composition precede public freeze.
 
-### v0.132.0 - Operational State Rotation
+### v0.133.0 - Operational State Rotation
 
 Status: planned
 
@@ -3892,9 +3926,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.132.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.133.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.133.0 - Record Size Limit
+### v0.134.0 - Record Size Limit
 
 Status: planned
 
@@ -3921,9 +3955,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.133.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.134.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.134.0 - Raw Public Keys
+### v0.135.0 - Raw Public Keys
 
 Status: planned
 
@@ -3950,9 +3984,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.134.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.135.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.135.0 - HPKE KEM And Context Foundation
+### v0.136.0 - HPKE KEM And Context Foundation
 
 Status: planned
 
@@ -3979,9 +4013,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.135.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.136.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.136.0 - HPKE Base Mode
+### v0.137.0 - HPKE Base Mode
 
 Status: planned
 
@@ -4008,15 +4042,15 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.136.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.137.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.137.0 - ECH Configuration And Suite Selection
+### v0.138.0 - ECH Configuration Bootstrap And Suite Selection
 
 Status: planned
 
-Plan scope: Implement bounded ECHConfig parsing, version and suite selection, public-name policy, key configuration, GREASE inputs, and resource limits.
+Plan scope: Keep DNS, SVCB, HTTPS resolution, network access, and caching caller-owned; accept bounded ECHConfigList bytes with authenticated origin metadata, cache generation, and lifetime; implement bounded ECHConfig parsing, version and suite selection, public-name policy, key configuration, GREASE inputs, origin binding, retry-configuration precedence, and stale-generation replacement without hidden I/O or global cache state.
 
-Goal: complete the **ECH Configuration And Suite Selection** implementation stop without admitting or
+Goal: complete the **ECH Configuration Bootstrap And Suite Selection** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -4030,16 +4064,16 @@ Deliverables:
 Verification:
 
 - run extension, precompressed-artifact, composition, incompatible typestate, FIPS-closure, ECH, RPK, delegation, compression, trace, zero-allocation, Aesynx, rotation, and target tests;
-- exercise cross-feature cancellation, rotation, transcript, storage, exhaustion, decompression, trust confusion, unavailable entropy, and prohibited validated-module mutation;
+- exercise malformed ECHConfigList inputs, origin and generation mismatch, expired and stale configuration, retry precedence, caller-cache replacement, hidden-I/O prohibition, cross-feature cancellation, rotation, transcript, storage, exhaustion, and trust confusion;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.137.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.138.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.138.0 - ECH Client Construction
+### v0.139.0 - ECH Client Construction
 
 Status: planned
 
@@ -4066,9 +4100,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.138.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.139.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.139.0 - ECH Server Opening And Acceptance
+### v0.140.0 - ECH Server Opening And Acceptance
 
 Status: planned
 
@@ -4095,9 +4129,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.139.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.140.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.140.0 - ECH HRR Retry And Rotation
+### v0.141.0 - ECH HRR Retry And Rotation
 
 Status: planned
 
@@ -4124,9 +4158,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.140.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.141.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.141.0 - Delegated Credentials
+### v0.142.0 - Delegated Credentials
 
 Status: planned
 
@@ -4153,9 +4187,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.141.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.142.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.142.0 - Certificate Compression Receive Provider
+### v0.143.0 - Certificate Compression Receive Provider
 
 Status: planned
 
@@ -4182,13 +4216,13 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.142.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.143.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.143.0 - Certificate Compression Send Artifacts
+### v0.144.0 - Certificate Compression Send Artifacts
 
 Status: planned
 
-Plan scope: Support sending compressed server and client-authentication certificates through caller-supplied precompressed artifacts verified at configuration against the canonical Certificate message; advertise only algorithms with a usable receive provider, send only peer-advertised algorithms, preserve transcript bytes, and enforce exact algorithm, input, output, identity, and rotation binding.
+Plan scope: Support sending compressed server and client-authentication certificates through caller-supplied precompressed artifacts verified at configuration by decompressing and byte-comparing with the complete canonical Certificate message, including certificate_request_context and every per-certificate extension; advertise only algorithms with a usable receive provider, send only peer-advertised algorithms, preserve transcript bytes, and enforce exact algorithm, input, output, identity, request-context, extension, and rotation binding.
 
 Goal: complete the **Certificate Compression Send Artifacts** implementation stop without admitting or
 claiming adjacent capability.
@@ -4203,7 +4237,7 @@ Deliverables:
 
 Verification:
 
-- run extension, precompressed-artifact, composition, incompatible typestate, FIPS-closure, ECH, RPK, delegation, compression, trace, zero-allocation, Aesynx, rotation, and target tests;
+- run complete canonical Certificate byte-comparison tests across certificate_request_context, per-certificate extensions, server and client authentication, malformed and stale precompressed artifacts, composition, FIPS closure, rotation, and targets;
 - exercise cross-feature cancellation, rotation, transcript, storage, exhaustion, decompression, trust confusion, unavailable entropy, and prohibited validated-module mutation;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
@@ -4211,9 +4245,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.143.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.144.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.144.0 - Validated FIPS Closure Preservation Gate
+### v0.145.0 - Validated FIPS Closure Preservation Gate
 
 Status: planned
 
@@ -4240,13 +4274,13 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.144.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.145.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.145.0 - Optional-Feature Composition Gate
+### v0.146.0 - Optional-Feature Composition Gate
 
 Status: planned
 
-Plan scope: Define and test ECH with tickets, resumption, external PSKs, zero-RTT, inner identity, ALPN, certificates, client authentication and delegated credentials; RPK with delegated credentials and client authentication; compression with RPK, delegated credentials and client certificates; Record Size Limit with large certificates and DTLS fragmentation; protocol applicability; approved-only exclusions; compile-time incompatible typestates; and cross-feature cancellation, rotation, transcript, storage and resource exhaustion.
+Plan scope: Define and test ECH with tickets, resumption, imported and raw external PSKs, zero-RTT, inner identity, ALPN, certificates, client authentication and delegated credentials; bind every ECH resumption ticket to the authenticated inner identity and applicable ECH policy and configuration generation, rejecting stale or mismatched tickets without outer-identity fallback; test RPK with delegated credentials and client authentication; compression with RPK, delegated credentials and client certificates; Record Size Limit with large certificates and DTLS fragmentation; protocol applicability; approved-only exclusions; compile-time incompatible typestates; and cross-feature cancellation, rotation, transcript, storage and resource exhaustion.
 
 Goal: complete the **Optional-Feature Composition Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -4262,16 +4296,16 @@ Deliverables:
 Verification:
 
 - run extension, precompressed-artifact, composition, incompatible typestate, FIPS-closure, ECH, RPK, delegation, compression, trace, zero-allocation, Aesynx, rotation, and target tests;
-- exercise cross-feature cancellation, rotation, transcript, storage, exhaustion, decompression, trust confusion, unavailable entropy, and prohibited validated-module mutation;
+- exercise ECH ticket inner-identity, policy and configuration-generation mismatch, stale tickets, retry rotation, no outer fallback, imported-PSK domains, cross-feature cancellation, rotation, transcript, storage, exhaustion, decompression, trust confusion, unavailable entropy, and prohibited validated-module mutation;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.145.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.146.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.146.0 - Facade Configuration Typestates
+### v0.147.0 - Facade Configuration Typestates
 
 Status: planned
 
@@ -4298,9 +4332,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.146.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.147.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.147.0 - Stable Sans-I/O API
+### v0.148.0 - Stable Sans-I/O API
 
 Status: planned
 
@@ -4327,9 +4361,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.147.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.148.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.148.0 - Caller-Provided Host Capability Integration
+### v0.149.0 - Caller-Provided Host Capability Integration
 
 Status: planned
 
@@ -4356,9 +4390,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.148.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.149.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.149.0 - Zero-Allocation And Resource Proof
+### v0.150.0 - Zero-Allocation And Resource Proof
 
 Status: planned
 
@@ -4385,9 +4419,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.149.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.150.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.150.0 - Aesynx ABI And Emulator Qualification
+### v0.151.0 - Aesynx ABI And Emulator Qualification
 
 Status: planned
 
@@ -4414,9 +4448,9 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.150.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.151.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.151.0 - Formal Harnesses
+### v0.152.0 - Formal Harnesses
 
 Status: planned
 
@@ -4443,9 +4477,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.151.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.152.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.152.0 - External-Process Fuzz And Differential Campaign
+### v0.153.0 - External-Process Fuzz And Differential Campaign
 
 Status: planned
 
@@ -4472,9 +4506,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.152.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.153.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.153.0 - Memory And Side-Channel Evidence
+### v0.154.0 - Memory And Side-Channel Evidence
 
 Status: planned
 
@@ -4501,9 +4535,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.153.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.154.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.154.0 - Sustained Platform And Hostile-Load Qualification
+### v0.155.0 - Sustained Platform And Hostile-Load Qualification
 
 Status: planned
 
@@ -4530,9 +4564,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.154.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.155.0 - Consolidated External Audits
+### v0.156.0 - Consolidated External Audits
 
 Status: planned
 
@@ -4559,9 +4593,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.156.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.156.0 - Audit Remediation And Clean Retest
+### v0.157.0 - Audit Remediation And Clean Retest
 
 Status: planned
 
@@ -4588,9 +4622,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.156.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.157.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.157.0 - Public API Requirements And Documentation Freeze
+### v0.158.0 - Public API Requirements And Documentation Freeze
 
 Status: planned
 
@@ -4617,9 +4651,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.157.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.158.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.158.0 - Clean-Room Release Rehearsal
+### v0.159.0 - Clean-Room Release Rehearsal
 
 Status: planned
 
@@ -4646,7 +4680,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.158.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.159.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v1.0.0-rc.1 - Exact Production Candidate
 

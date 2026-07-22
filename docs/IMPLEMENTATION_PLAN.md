@@ -69,7 +69,8 @@ state machine, epochs, fragmentation, paths, and retransmission.
 ## Implementation Order
 
 1. Freeze policy enforcement, standards provenance, requirements ledgers,
-   bounded domains, caller-owned arenas, and adversarial test infrastructure.
+   including RFC 5705, RFC 9258, RFC 9266, and RFC 9848 ownership, bounded
+   domains, caller-owned arenas, and adversarial test infrastructure.
 2. Freeze production owned-memory zeroization and constant-time operations;
    separate entropy from secure randomness and wall from monotonic time;
    define pending-provider effects; and design the FIPS-aware provider boundary
@@ -81,17 +82,29 @@ state machine, epochs, fragmentation, paths, and retransmission.
 4. Implement bounded identity containers, DER, X.509 path construction, split
    RFC 5280 validation, revocation, CT policy, and an independent PKI audit.
 5. Extract the shared recordless TLS handshake and exercise an unstable
-   deterministic Sans-I/O contract, then implement and audit TLS 1.3.
+   deterministic Sans-I/O contract, then implement and audit TLS 1.3. External
+   PSKs use RFC 9258 import and domain separation whenever provisioned key
+   material could cross protocol or deployment domains. Channel binding admits
+   only tls-exporter, with exact TLS 1.2 and TLS 1.3 exporter constructions and
+   typed, authorized, zeroized output.
 6. Admit and audit hardened TLS 1.2, then integrate symmetric one-pass routing
    only after both target engines exist; never retry another engine.
 7. Implement QUIC TLS and key-derivation ownership, QUIC resumption and
    zero-RTT, path-bound one-pass DTLS, version-specific DTLS CIDs, explicit
-   DTLS early-data exclusion, standardized PQ hybrid policies, and the
-   predesigned exact-build FIPS module and approved-only TLS profile.
+   DTLS early-data exclusion, and standardized PQ hybrid policies. For FIPS,
+   freeze architecture and allowlists first; implement the DRBG, provider,
+   indicators, SSP services, and complete linked self-tests; only then freeze
+   the exact artifact and bind ACVTS, CAVP, CMVP, and closure evidence to it.
+   The approved-only TLS profile follows without conflating connection failure
+   with a FIPS-defined catastrophic module latch.
 8. Add each planned v1 optional protocol facility against the unstable internal
-   model without repeating ALPN, SNI, exporter, or channel-binding work. Prove
-   optional modules cannot change the validated FIPS closure, then pass a
-   cross-feature composition gate before freezing facade and Sans-I/O actions.
+   model without repeating ALPN, SNI, exporter, or channel-binding work. ECH
+   takes caller-resolved, origin-bound ECHConfigList input and performs no DNS,
+   network access, or hidden caching. Precompressed send artifacts must round
+   trip to the complete canonical Certificate message. ECH tickets bind the
+   inner identity, policy, and configuration generation. Prove optional modules
+   cannot change the validated FIPS closure, then pass a cross-feature
+   composition gate before freezing facade and Sans-I/O actions.
 9. Qualify caller-provided host integration and the Aesynx ABI/emulator against
    the final public interface, then run complete conformance, fuzzing, formal,
    memory, side-channel, platform, resource, interoperability, external audit,
@@ -119,6 +132,9 @@ The repository will maintain:
 - compile tests for every promised Rust version and target tier;
 - restart, replay, reordering, loss, fragmentation, exhaustion, and
   cancellation tests;
+- external-PSK importer domain separation, exact exporter and tls-exporter
+  channel binding, ECH origin/cache generation, canonical certificate
+  compression round-trip, and ECH inner-identity ticket-binding tests;
 - cross-feature typestate, transcript, rotation, storage, cancellation,
   pre-authentication resource, and validated-dependency-closure tests;
 - secret-lifetime, redaction, zeroization, and error-path tests;

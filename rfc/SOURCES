@@ -8,6 +8,7 @@
 5288 https://www.rfc-editor.org/rfc/rfc5288.txt tls-12-aes-gcm
 5289 https://www.rfc-editor.org/rfc/rfc5289.txt tls-12-ecc-aes-gcm
 5480 https://www.rfc-editor.org/rfc/rfc5480.txt ecc-subject-public-key-info
+5705 https://www.rfc-editor.org/rfc/rfc5705.txt tls-exporters
 5758 https://www.rfc-editor.org/rfc/rfc5758.txt ecdsa-pkix
 5869 https://www.rfc-editor.org/rfc/rfc5869.txt hkdf
 5912 https://www.rfc-editor.org/rfc/rfc5912.txt pkix-asn1
@@ -39,6 +40,7 @@
 9147 https://www.rfc-editor.org/rfc/rfc9147.txt dtls-13
 9180 https://www.rfc-editor.org/rfc/rfc9180.txt hpke
 9258 https://www.rfc-editor.org/rfc/rfc9258.txt external-psk-importer
+9266 https://www.rfc-editor.org/rfc/rfc9266.txt tls-exporter-channel-binding
 9325 https://www.rfc-editor.org/rfc/rfc9325.txt tls-dtls-policy
 9345 https://www.rfc-editor.org/rfc/rfc9345.txt delegated-credentials
 9525 https://www.rfc-editor.org/rfc/rfc9525.txt service-identity
@@ -46,4 +48,3 @@
 9847 https://www.rfc-editor.org/rfc/rfc9847.txt tls-dtls-registry-update
 9848 https://www.rfc-editor.org/rfc/rfc9848.txt ech-dns-bootstrap
 9849 https://www.rfc-editor.org/rfc/rfc9849.txt encrypted-client-hello
-

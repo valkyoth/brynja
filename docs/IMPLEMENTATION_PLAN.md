@@ -64,7 +64,10 @@ another upstream `no_std` interface crate. `brynja-platform` implements those
 contracts and is never a protocol-engine dependency. Stream TLS and QUIC share
 one record-independent TLS 1.3 handshake implementation; DTLS may reuse codecs,
 transcripts, certificate processing, and key-schedule components but owns its
-state machine, epochs, fragmentation, paths, and retransmission.
+state machine, epochs, fragmentation, paths, and retransmission. The upstream
+interface also owns a bounded, caller-drained SecurityEvent action schema;
+protocol engines and providers emit events but cannot call logging code,
+allocate for events, block on consumers, or let observation affect state.
 
 ## Implementation Order
 
@@ -74,7 +77,9 @@ state machine, epochs, fragmentation, paths, and retransmission.
 2. Freeze production owned-memory zeroization and constant-time operations;
    separate entropy from secure randomness and wall from monotonic time;
    define pending-provider effects; and design the FIPS-aware provider boundary
-   without making a validation claim.
+   without making a validation claim. Freeze a secret-free, format-safe,
+   allocation-free security-event schema with caller timestamps, deterministic
+   ordering, bounded capacity, and explicit dropped-event accounting.
 3. Implement and independently audit cryptographic primitives from official
    vectors outward with per-compiler and per-target constant-time evidence.
    RSA signing accepts validated imported keys; first-party RSA key generation
@@ -94,17 +99,21 @@ state machine, epochs, fragmentation, paths, and retransmission.
    DTLS early-data exclusion, and standardized PQ hybrid policies. For FIPS,
    freeze architecture and allowlists first; implement the DRBG, provider,
    indicators, SSP services, and complete linked self-tests; only then freeze
-   the exact artifact and bind ACVTS, CAVP, CMVP, and closure evidence to it.
+   module-specific security events and the exact artifact, then bind ACVTS,
+   CAVP, CMVP, and closure evidence to that artifact.
    The approved-only TLS profile follows without conflating connection failure
    with a FIPS-defined catastrophic module latch.
 8. Add each planned v1 optional protocol facility against the unstable internal
    model without repeating ALPN, SNI, exporter, or channel-binding work. ECH
-   takes caller-resolved, origin-bound ECHConfigList input and performs no DNS,
-   network access, or hidden caching. Precompressed send artifacts must round
-   trip to the complete canonical Certificate message. ECH tickets bind the
-   inner identity, policy, and configuration generation. Prove optional modules
-   cannot change the validated FIPS closure, then pass a cross-feature
-   composition gate before freezing facade and Sans-I/O actions.
+   treats caller-resolved ECHConfigList input as hostile and separately types
+   intended origin, caller-asserted provenance, generation, lifetime, and
+   Required, Preferred, or GREASE-only policy; Required never falls through to
+   public SNI. Precompressed send artifacts are invalidated on every encoded
+   input change. ECH tickets bind inner identity, policy, and configuration
+   generation. Prove optional modules cannot change the validated FIPS closure,
+   then generate all pairwise feature and protocol-applicability cases plus
+   security-critical higher-order combinations before freezing facade and
+   Sans-I/O actions.
 9. Qualify caller-provided host integration and the Aesynx ABI/emulator against
    the final public interface, then run complete conformance, fuzzing, formal,
    memory, side-channel, platform, resource, interoperability, external audit,
@@ -135,8 +144,14 @@ The repository will maintain:
 - external-PSK importer domain separation, exact exporter and tls-exporter
   channel binding, ECH origin/cache generation, canonical certificate
   compression round-trip, and ECH inner-identity ticket-binding tests;
+- exhaustive SecurityEvent schema, redaction, formatting, ordering, caller-time,
+  delayed or absent drain, overflow, non-reentrancy, and state-independence
+  tests across protocol engines and the final FIPS module;
 - cross-feature typestate, transcript, rotation, storage, cancellation,
   pre-authentication resource, and validated-dependency-closure tests;
+- generated pairwise optional-feature and stream TLS, DTLS, and QUIC
+  applicability matrices plus targeted ECH, RPK, hybrid, resumption, early-data,
+  FIPS, compression, OCSP, SCT, HRR, padding, transcript, and downgrade cases;
 - secret-lifetime, redaction, zeroization, and error-path tests;
 - pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
   assurance tools that do not weaken repository Cargo dependency policy.

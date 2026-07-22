@@ -20,12 +20,19 @@ handshake used by stream TLS and QUIC TLS. DTLS may reuse reviewed codecs,
 transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
 
+The bounded SecurityEvent schema is an upstream `no_std` interface owned with
+the other Sans-I/O effects. Engines and providers emit caller-drained actions;
+they never depend on a logger, allocator, callback, or platform integration.
+Event capacity, ordering, caller-supplied timestamps, redaction, and dropped
+counts are explicit, and observation cannot block or alter cryptographic state.
+
 The FIPS architecture freezes its boundary, dependency allowlist, services,
 ports, SSP design, and operational-environment model before implementation; it
 does not claim an exact artifact identity at that point. Only after the DRBG,
 provider, indicators, SSP services, algorithms, and linked self-tests are final
-does the artifact freeze its source, symbols, exact dependency closure,
-features, dispatch tables, build inputs, tool configuration, and binary hashes.
+and module-specific security events are integrated does the artifact freeze its
+source, symbols, exact dependency closure, features, dispatch tables, build
+inputs, tool configuration, and binary hashes.
 HPKE, ECH, certificate compression, and every later optional module remain
 downstream of provider ports and cannot alter that artifact. Any such change
 starts a new validation and artifact line.

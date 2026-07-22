@@ -24,7 +24,17 @@ The bounded SecurityEvent schema is an upstream `no_std` interface owned with
 the other Sans-I/O effects. Engines and providers emit caller-drained actions;
 they never depend on a logger, allocator, callback, or platform integration.
 Event capacity, ordering, caller-supplied timestamps, redaction, and dropped
-counts are explicit, and observation cannot block or alter cryptographic state.
+counts are explicit. Boot and self-test events may be untimestamped for later
+caller enrichment; dropped counts saturate and report saturation; identifiers
+cannot contain handles, private identities, or stable cross-connection values.
+Observation cannot block or alter cryptographic state.
+
+The stable effect surface is explicitly versioned as EngineV1, EventV1, and
+ActionV1. Mandatory effects are exhaustive and cannot be ignored through a
+wildcard arm or generic success path. Adding a mandatory effect creates V2
+interfaces and requires a major SemVer release; V1 does not change underneath
+applications. Only bounded, secret-free, observational SecurityEvent values may
+be non-exhaustive, and unknown informational values cannot affect engine state.
 
 The FIPS architecture freezes its boundary, dependency allowlist, services,
 ports, SSP design, and operational-environment model before implementation; it

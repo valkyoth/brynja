@@ -543,7 +543,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Define an upstream no_std, Sans-I/O SecurityEvent action schema for self-test and module-state transitions, per-service approval indicators, protocol, version and profile selection, authentication success and failure categories, ticket, resumption, PSK and early-data decisions, replay, amplification, resource-exhaustion and provider failures, key installation, rotation, expiration and destruction completion, ECH acceptance or rejection without inner-identity disclosure, and terminal connection transitions; events are caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, timestamped only from caller-provided typed time, explicitly account for overflow or dropped events, never invoke reentrant callbacks, and cannot block or alter cryptographic state.
+Plan scope: Define an upstream no_std, Sans-I/O SecurityEvent action schema for self-test and module-state transitions, per-service approval indicators, protocol, version and profile selection, authentication success and failure categories, ticket, resumption, PSK and early-data decisions, replay, amplification, resource-exhaustion and provider failures, key installation, rotation, expiration and destruction completion, ECH acceptance or rejection without inner-identity disclosure, and terminal connection transitions; events are caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, use caller-provided typed timestamps when available, may remain explicitly untimestamped during boot or self-tests for later caller enrichment, use saturating dropped-event counters that report saturation, and never expose key handles, inner ECH names, PSK identities, or stable cross-connection correlation identifiers; events never invoke reentrant callbacks and cannot block or alter cryptographic state.
 
 Goal: complete the **Bounded Security Event Contract** implementation stop without admitting or
 claiming adjacent capability.
@@ -552,19 +552,22 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze bounded discriminants and payloads, caller-drain and timestamp actions,
-  capacity accounting, deterministic ordering, redaction rules, overflow totals,
-  and the separation between operational evidence and peer-visible alerts;
+- freeze bounded discriminants and payloads, caller-drain and optional timestamp
+  enrichment actions, deterministic ordering, identifier redaction, saturating
+  dropped-event accounting with a visible saturation state, and the separation
+  between operational evidence and peer-visible alerts;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- exhaustively construct and format every event variant and prove no key,
-  identity, plaintext, transcript, PSK, ticket, or ECH inner name can appear;
-- test full queues, delayed and absent drains, counter exhaustion, unavailable
-  time, cancellation, provider failure, terminal transitions, and attempted
-  callback reentrancy without cryptographic-state or peer-alert differences;
+- exhaustively construct and format every event variant and prove no key handle,
+  identity, plaintext, transcript, PSK identity, ticket, ECH inner name, or
+  stable cross-connection correlation value can appear;
+- test timestamp-free boot and self-tests, later caller enrichment, full queues,
+  delayed and absent drains, saturating counters and saturation reporting,
+  unavailable time, cancellation, provider failure, terminal transitions, and
+  attempted reentrancy without cryptographic-state or peer-alert differences;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -2234,13 +2237,13 @@ Exit criteria:
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.75.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.76.0 - External PSKs And PSK Importer
+### v0.76.0 - TLS 1.3-Profile External PSKs And PSK Importer
 
 Status: planned
 
-Plan scope: Separate external from resumption PSKs; implement RFC 9258 imported identities and derived imported PSKs with protocol, KDF, context, application, ALPN, and deployment-domain separation; require the importer whenever one provisioned external key could cross TLS, DTLS, QUIC, ALPN, application, or deployment domains; allow raw external PSKs only when callers attest unique provisioning per protocol and deployment context; require hardened psk_dhe_ke by default; perform constant-work unknown-identity and binder handling; type single-use pending lookup operations; and forbid silent psk_ke, cross-domain fallback, or binder-failure fallback.
+Plan scope: Separate external from resumption PSKs; apply RFC 9258 only to admitted TLS 1.3-derived profiles—TLS 1.3, DTLS 1.3, and QUIC—and never enable external-PSK or PSK cipher suites in hardened TLS 1.2 or DTLS 1.2; implement imported identities and derived imported PSKs with protocol, KDF, context, application, ALPN, and deployment-domain separation; require the importer whenever one provisioned key could cross admitted protocol or deployment domains; allow raw external PSKs only with unique per-profile and deployment provisioning; require psk_dhe_ke, constant-work identity and binder handling, single-use pending lookups, and no silent psk_ke, cross-domain, binder-failure, or certificate-authentication fallback.
 
-Goal: complete the **External PSKs And PSK Importer** implementation stop without admitting or
+Goal: complete the **TLS 1.3-Profile External PSKs And PSK Importer** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -2254,13 +2257,13 @@ Deliverables:
 Verification:
 
 - run RFC vectors, fragmentation, versions, GREASE, client and server selection, HRR, transcript, downgrade, ticket, PSK timing, storage atomicity, and peer matrices;
-- exercise imported-identity derivation, protocol, KDF, context, application, ALPN and deployment separation, raw-key uniqueness attestation, premature routing, retry, cross-version state, replay, unknown PSKs, binder failure, crash consistency, zero-RTT races, key limits, and cleanup;
+- exercise imported-identity derivation across TLS 1.3, DTLS 1.3 and QUIC, protocol, KDF, context, application, ALPN and deployment separation, raw-key uniqueness attestation, and negative TLS 1.2 and DTLS 1.2 PSK-suite construction and negotiation tests alongside replay, binder failure, zero-RTT races, and cleanup;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
+- RFC 9258 and raw external PSKs are confined to TLS 1.3-derived profiles, and hardened TLS 1.2 and DTLS 1.2 cannot construct or negotiate a PSK suite;
 - `v0.76.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.77.0 - Zero-RTT
@@ -3754,7 +3757,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement the frozen security-event schema inside the module for self-test and module-state transitions, per-service approval indicators, SSP entry, output, installation, rotation, expiration, destruction completion, and catastrophic failure; keep payloads secret-free and format-safe, use only caller-supplied timestamps, preserve exact event ordering and dropped-event accounting, and prove event backpressure, absence, or overflow cannot alter services, latching, zeroization, or cryptographic state.
+Plan scope: Implement the frozen security-event schema inside the module for self-test and module-state transitions, per-service approval indicators, SSP entry, output, installation, rotation, expiration, destruction completion, and catastrophic failure; keep payloads and identifiers secret-free, format-safe, and non-correlating, use caller-supplied timestamps when available while permitting explicitly untimestamped boot and self-test events for later enrichment, preserve exact event ordering and saturating dropped-event accounting with visible saturation, and prove event backpressure, absence, or overflow cannot alter services, latching, zeroization, or cryptographic state.
 
 Goal: complete the **FIPS Security Event Integration** implementation stop without admitting or
 claiming adjacent capability.
@@ -3765,7 +3768,8 @@ Deliverables:
   secret, effect, storage, failure, dependency, and package boundaries;
 - bind each module transition, service indicator, SSP lifecycle completion, and
   catastrophic condition to a deterministic redacted event while preserving
-  caller-drained delivery, overflow totals, and non-reentrant operation;
+  caller-drained delivery, optional later timestamp enrichment, saturating drop
+  totals and visible saturation, non-correlating identifiers, and non-reentrancy;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3773,8 +3777,9 @@ Verification:
 
 - fault-inject every self-test, provider, SSP, zeroization, indicator, and latch
   path and compare event order and categories with the module state machine;
-- fill, neglect, and repeatedly drain event capacity under unavailable time,
-  concurrent services, and terminal failure, proving identical service output,
+- fill, neglect, and repeatedly drain event capacity through timestamp-free
+  boot, later enrichment, counter saturation, concurrent services, and terminal
+  failure, proving no identifier correlation and identical service output,
   latching, destruction completion, and cryptographic state;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
@@ -4402,13 +4407,13 @@ Exit criteria:
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.149.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.150.0 - Stable Sans-I/O API
+### v0.150.0 - Versioned Stable Sans-I/O V1 API
 
 Status: planned
 
-Plan scope: After every planned v1 optional module has exercised it, freeze the deterministic client and server Event-to-Action API including caller-drained bounded SecurityEvent actions and overflow accounting, ECH key and configuration lookup, decompression, RPK trust, delegated-credential selection, path tokens, pending providers, consumed and produced counts, backpressure, cancellation, and compile-fail exhaustiveness tests; security-event handling remains non-reentrant and cannot block or alter protocol or cryptographic state.
+Plan scope: Freeze explicit EngineV1, EventV1, and ActionV1 interfaces after every planned v1 optional module has exercised them; require applications to exhaustively handle every mandatory entropy, signing, storage, timer, decompression, trust, provider, and transport action with no wildcard ignore path, and fail closed on any unhandled or mismatched mandatory action; adding a mandatory effect requires separate EngineV2, EventV2, and ActionV2 interfaces and a major SemVer release rather than changing V1; bounded informational SecurityEvent values may be non-exhaustive and safely ignored only when unknown values remain secret-free, format-safe, and observational; retain ECH lookup, decompression, RPK trust, delegated credentials, path tokens, consumed and produced counts, backpressure, cancellation, overflow accounting, and compile-fail exhaustiveness tests.
 
-Goal: complete the **Stable Sans-I/O API** implementation stop without admitting or
+Goal: complete the **Versioned Stable Sans-I/O V1 API** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -4422,13 +4427,13 @@ Deliverables:
 Verification:
 
 - run extension, precompressed-artifact, composition, incompatible typestate, FIPS-closure, ECH, RPK, delegation, compression, trace, zero-allocation, Aesynx, rotation, and target tests;
-- exercise security-event draining, delayed and absent consumers, overflow accounting, caller timestamps, non-reentrancy and state independence alongside cross-feature cancellation, rotation, transcript, storage, exhaustion, decompression, trust confusion, and unavailable entropy;
+- compile-test exhaustive EngineV1, EventV1 and ActionV1 handling with no wildcard ignore path; inject unknown, mismatched and unhandled mandatory effects and require fail-closed termination; prove mandatory additions require V2 and a major release while unknown informational SecurityEvent values remain bounded, secret-free and observational;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
+- every V1 mandatory action is exhaustively handled or fails closed, V1 cannot gain mandatory variants, and only bounded observational SecurityEvent values are non-exhaustive;
 - `v0.150.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.151.0 - Caller-Provided Host Capability Integration
@@ -4518,13 +4523,13 @@ Exit criteria:
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.153.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.154.0 - Formal Harnesses
+### v0.154.0 - Protocol State And Resource Formal Harnesses
 
 Status: planned
 
-Plan scope: Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, and secret-release invariants using pinned external tools.
+Plan scope: Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, secret-release invariants, zeroization and obsolete-key transitions, X.509 path-work and policy-tree ceilings, and single-consumption pending-operation tokens using pinned external tools.
 
-Goal: complete the **Formal Harnesses** implementation stop without admitting or
+Goal: complete the **Protocol State And Resource Formal Harnesses** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -4537,17 +4542,52 @@ Deliverables:
 
 Verification:
 
-- run campaigns across compiler, target, provider, feature combination, package, harness, peer, path, selector, adapter, and clean environment;
+- prove cursor, length, transition, replay, selector, zeroization, obsolete-key, X.509 budget, policy-tree, pending-token single-consumption, and secret-release properties across bounded models and supported configurations;
 - retain regressions and prove replay, clean retest, traceability, artifact identity, rollback, compromise, and incident procedures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
+- protocol, resource, zeroization, X.509-budget, and pending-token proof claims name exact harnesses, bounds, assumptions, and implementations;
 - `v0.154.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.155.0 - External-Process Fuzz And Differential Campaign
+### v0.155.0 - Cryptographic Arithmetic Formal Harnesses
+
+Status: planned
+
+Plan scope: Prove fixed-limb carry, borrow and reduction bounds, Montgomery conversion and multiplication invariants, field canonicalization, scalar range and point-decoding rejection, ladder and group-operation exceptional cases, ML-KEM polynomial and NTT array bounds and encoding round trips, HKDF output and counter exhaustion, and AEAD destination non-mutation after authentication failure; use reduced-width exhaustive models where full proofs are impractical and establish equivalence to production widths with official vectors and at least two independent external reference processes.
+
+Goal: complete the **Cryptographic Arithmetic Formal Harnesses** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, storage, failure, dependency, and package boundaries;
+- maintain proof harnesses beside small arithmetic and cryptographic modules,
+  record every abstraction and reduced-width assumption, and map each model to
+  the exact production implementation and supported parameter widths;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- run pinned Kani or equivalent proofs for limb, Montgomery, field, scalar,
+  point, ladder, group, ML-KEM, HKDF, AEAD failure-atomicity, bounds, exhaustion,
+  canonicalization, rejection, and round-trip invariants;
+- compare reduced and production-width behavior with official vectors,
+  boundary corpora, and at least two independent external reference processes,
+  failing closed on any unproved equivalence or unsupported proof claim;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- arithmetic proof claims name exact models, assumptions, widths, implementations, and independent equivalence evidence;
+- `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.156.0 - External-Process Fuzz And Differential Campaign
 
 Status: planned
 
@@ -4574,9 +4614,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.156.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.156.0 - Memory And Side-Channel Evidence
+### v0.157.0 - Memory And Side-Channel Evidence
 
 Status: planned
 
@@ -4603,9 +4643,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.156.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.157.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.157.0 - Sustained Platform And Hostile-Load Qualification
+### v0.158.0 - Sustained Platform And Hostile-Load Qualification
 
 Status: planned
 
@@ -4632,9 +4672,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.157.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.158.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.158.0 - Consolidated External Audits
+### v0.159.0 - Consolidated External Audits
 
 Status: planned
 
@@ -4661,9 +4701,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.158.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.159.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.159.0 - Audit Remediation And Clean Retest
+### v0.160.0 - Audit Remediation And Clean Retest
 
 Status: planned
 
@@ -4690,9 +4730,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.159.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.160.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.160.0 - Public API Requirements And Documentation Freeze
+### v0.161.0 - Public API Requirements And Documentation Freeze
 
 Status: planned
 
@@ -4719,9 +4759,9 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.160.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.161.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.161.0 - Clean-Room Release Rehearsal
+### v0.162.0 - Clean-Room Release Rehearsal
 
 Status: planned
 
@@ -4748,7 +4788,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.161.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.162.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v1.0.0-rc.1 - Exact Production Candidate
 

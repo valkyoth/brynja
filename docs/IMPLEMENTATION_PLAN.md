@@ -68,6 +68,9 @@ state machine, epochs, fragmentation, paths, and retransmission. The upstream
 interface also owns a bounded, caller-drained SecurityEvent action schema;
 protocol engines and providers emit events but cannot call logging code,
 allocate for events, block on consumers, or let observation affect state.
+Events may be explicitly untimestamped until a caller clock exists, dropped
+counts saturate visibly, and identifiers cannot expose handles, peer identities,
+or stable cross-connection correlation values.
 
 ## Implementation Order
 
@@ -78,8 +81,9 @@ allocate for events, block on consumers, or let observation affect state.
    separate entropy from secure randomness and wall from monotonic time;
    define pending-provider effects; and design the FIPS-aware provider boundary
    without making a validation claim. Freeze a secret-free, format-safe,
-   allocation-free security-event schema with caller timestamps, deterministic
-   ordering, bounded capacity, and explicit dropped-event accounting.
+   allocation-free security-event schema with optional caller timestamps and
+   later enrichment, deterministic ordering, bounded capacity, saturating
+   dropped-event accounting, and non-correlating identifiers.
 3. Implement and independently audit cryptographic primitives from official
    vectors outward with per-compiler and per-target constant-time evidence.
    RSA signing accepts validated imported keys; first-party RSA key generation
@@ -88,10 +92,11 @@ allocate for events, block on consumers, or let observation affect state.
    RFC 5280 validation, revocation, CT policy, and an independent PKI audit.
 5. Extract the shared recordless TLS handshake and exercise an unstable
    deterministic Sans-I/O contract, then implement and audit TLS 1.3. External
-   PSKs use RFC 9258 import and domain separation whenever provisioned key
-   material could cross protocol or deployment domains. Channel binding admits
-   only tls-exporter, with exact TLS 1.2 and TLS 1.3 exporter constructions and
-   typed, authorized, zeroized output.
+   PSKs use RFC 9258 import and domain separation only for TLS 1.3-derived TLS,
+   DTLS 1.3, and QUIC profiles whenever provisioned key material could cross
+   protocol or deployment domains; hardened TLS 1.2 and DTLS 1.2 never gain PSK
+   cipher suites. Channel binding admits only tls-exporter, with exact TLS 1.2
+   and TLS 1.3 exporter constructions and typed, authorized, zeroized output.
 6. Admit and audit hardened TLS 1.2, then integrate symmetric one-pass routing
    only after both target engines exist; never retry another engine.
 7. Implement QUIC TLS and key-derivation ownership, QUIC resumption and
@@ -113,7 +118,11 @@ allocate for events, block on consumers, or let observation affect state.
    generation. Prove optional modules cannot change the validated FIPS closure,
    then generate all pairwise feature and protocol-applicability cases plus
    security-critical higher-order combinations before freezing facade and
-   Sans-I/O actions.
+   Sans-I/O actions. Freeze those actions as exhaustive EngineV1, EventV1, and
+   ActionV1 interfaces: applications cannot ignore mandatory effects, and any
+   new mandatory effect requires V2 interfaces and a major SemVer release;
+   only bounded secret-free informational SecurityEvent values may evolve
+   non-exhaustively.
 9. Qualify caller-provided host integration and the Aesynx ABI/emulator against
    the final public interface, then run complete conformance, fuzzing, formal,
    memory, side-channel, platform, resource, interoperability, external audit,
@@ -141,18 +150,27 @@ The repository will maintain:
 - compile tests for every promised Rust version and target tier;
 - restart, replay, reordering, loss, fragmentation, exhaustion, and
   cancellation tests;
-- external-PSK importer domain separation, exact exporter and tls-exporter
+- TLS 1.3-derived external-PSK importer domain separation plus negative TLS 1.2
+  and DTLS 1.2 PSK-suite construction tests, exact exporter and tls-exporter
   channel binding, ECH origin/cache generation, canonical certificate
   compression round-trip, and ECH inner-identity ticket-binding tests;
 - exhaustive SecurityEvent schema, redaction, formatting, ordering, caller-time,
-  delayed or absent drain, overflow, non-reentrancy, and state-independence
-  tests across protocol engines and the final FIPS module;
+  timestamp-free boot and later enrichment, delayed or absent drain, saturating
+  overflow reporting, identifier non-correlation, non-reentrancy, and
+  state-independence tests across protocol engines and the final FIPS module;
 - cross-feature typestate, transcript, rotation, storage, cancellation,
   pre-authentication resource, and validated-dependency-closure tests;
 - generated pairwise optional-feature and stream TLS, DTLS, and QUIC
   applicability matrices plus targeted ECH, RPK, hybrid, resumption, early-data,
   FIPS, compression, OCSP, SCT, HRR, padding, transcript, and downgrade cases;
 - secret-lifetime, redaction, zeroization, and error-path tests;
+- exhaustive mandatory EngineV1, EventV1, and ActionV1 handling, fail-closed
+  unknown-action fixtures, and compile failures for wildcard ignore paths;
+- formal protocol and resource models for zeroization, obsolete keys, X.509
+  work ceilings, and pending-token consumption, plus separate cryptographic
+  arithmetic models for limbs, Montgomery operations, fields, scalars, points,
+  ladders, groups, ML-KEM, HKDF exhaustion, and AEAD failure atomicity with
+  reduced-width assumptions and independent-process equivalence evidence;
 - pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
   assurance tools that do not weaken repository Cargo dependency policy.
 

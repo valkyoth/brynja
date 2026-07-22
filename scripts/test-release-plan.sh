@@ -44,7 +44,7 @@ if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/nul
 fi
 
 cp docs/RELEASE_PLAN.md "$release_tmp"
-sed -i '0,/### v0\.152\.0 /{/### v0\.152\.0 /d;}' "$release_tmp"
+sed -i '0,/### v0\.158\.0 /{/### v0\.158\.0 /d;}' "$release_tmp"
 if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
     echo "release plan validator accepted a missing version" >&2
     exit 1

@@ -76,18 +76,22 @@ state machine, epochs, fragmentation, paths, and retransmission.
    without making a validation claim.
 3. Implement and independently audit cryptographic primitives from official
    vectors outward with per-compiler and per-target constant-time evidence.
+   RSA signing accepts validated imported keys; first-party RSA key generation
+   is outside v1.
 4. Implement bounded identity containers, DER, X.509 path construction, split
    RFC 5280 validation, revocation, CT policy, and an independent PKI audit.
 5. Extract the shared recordless TLS handshake and exercise an unstable
    deterministic Sans-I/O contract, then implement and audit TLS 1.3.
 6. Admit and audit hardened TLS 1.2, then integrate symmetric one-pass routing
    only after both target engines exist; never retry another engine.
-7. Implement QUIC TLS and key-derivation ownership, path-bound one-pass DTLS,
-   standardized PQ hybrids, and the predesigned exact-build FIPS module and
-   approved-only TLS profile.
+7. Implement QUIC TLS and key-derivation ownership, QUIC resumption and
+   zero-RTT, path-bound one-pass DTLS, version-specific DTLS CIDs, explicit
+   DTLS early-data exclusion, standardized PQ hybrid policies, and the
+   predesigned exact-build FIPS module and approved-only TLS profile.
 8. Add each planned v1 optional protocol facility against the unstable internal
-   model without repeating ALPN, SNI, exporter, or channel-binding work; freeze
-   the public facade and Sans-I/O actions only after those modules are complete.
+   model without repeating ALPN, SNI, exporter, or channel-binding work. Prove
+   optional modules cannot change the validated FIPS closure, then pass a
+   cross-feature composition gate before freezing facade and Sans-I/O actions.
 9. Qualify caller-provided host integration and the Aesynx ABI/emulator against
    the final public interface, then run complete conformance, fuzzing, formal,
    memory, side-channel, platform, resource, interoperability, external audit,
@@ -115,6 +119,8 @@ The repository will maintain:
 - compile tests for every promised Rust version and target tier;
 - restart, replay, reordering, loss, fragmentation, exhaustion, and
   cancellation tests;
+- cross-feature typestate, transcript, rotation, storage, cancellation,
+  pre-authentication resource, and validated-dependency-closure tests;
 - secret-lifetime, redaction, zeroization, and error-path tests;
 - pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
   assurance tools that do not weaken repository Cargo dependency policy.

@@ -2,35 +2,30 @@
 
 Status: reconciled planning sequence
 
-This document defines the order and exclusive scope of Brynja releases through
-`1.0.0`. Each version is a small implementation stop completed and verified
-before adjacent capability begins. Split growing work; never merge unrelated
-scope to preserve numbering.
+This document defines the exclusive, ordered Brynja release line through
+`1.0.0`. Each version is an independently reviewable implementation stop.
+Split growing work; never merge unrelated scope to preserve numbering.
 
 [RELEASE_PLAN.md](RELEASE_PLAN.md) is normative for Goal, Deliverables,
-Verification, and Exit criteria. It repeats every exact title and scope, and the
+Verification, and Exit criteria. It repeats every exact title and scope; the
 validator rejects numbering, ordering, title, or scope drift.
 
 ## Admission Rules For Every Version
 
 Every milestone retains `no_std` production packages, no third-party crates in
 repository Cargo manifests, bounded hostile-input and pre-authentication work,
-mandatory owned-region secret destruction, negative and adversarial tests, all
-supported Rust and target evidence, an SBOM, clean CI, and exact-commit review.
+mandatory owned-region secret destruction, adversarial tests, supported Rust
+and target evidence, SBOM, clean CI, and exact-commit review.
 
-Protocol-facing capability contracts and the shared recordless TLS handshake
-live upstream; platform and transport adapters depend on them. Version
-negotiation policy is implemented early, but symmetric one-pass routing is
-admitted only after both target engines exist. Optional modules exercise the
-internal effects model before the public facade and Sans-I/O API freeze.
-
-Brynja does not use `cargo-fuzz` or `libfuzzer-sys`. Pinned external process
-tools drive first-party harnesses. FIPS is an exact-build module,
-operational-environment, service, and connection-profile claim, never a feature.
+Protocol and optional-module dependency direction is downstream from frozen
+interfaces and validated provider ports. Early negotiation policy is distinct
+from final engine routing. Optional features pass a composition gate before
+public API freeze. FIPS module catastrophic failure is distinct from terminating
+a connection that violates its approved-only profile.
 
 ## Phase 0: Repository, Effects, Memory, And Wire Foundations
 
-Requirements are generated from admitted scope, capability traits point upstream, and record framing remains version-neutral.
+Generated standards scope and upstream dependency direction precede implementation.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
@@ -57,7 +52,7 @@ Requirements are generated from admitted scope, capability traits point upstream
 
 ## Phase 1: First-Party Cryptography, Identity Formats, And PKI
 
-AEAD failure is caller-buffer safe, RSA private operations and DTLS CIDs are definitive admitted work, and crypto and PKI retain separate audit gates.
+AEADs, import-only RSA signing, and explicit algorithm exclusions pass independent crypto and PKI gates.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
@@ -83,9 +78,9 @@ AEAD failure is caller-buffer safe, RSA private operations and DTLS CIDs are def
 | `0.40.0` | P-384 ECDSA | Implement P-384 ECDSA signing and verification with strict encoding, nonce policy, vectors, per-target side-channel evidence, and independent review. |
 | `0.41.0` | RSA-PSS Verification | Implement strict RSA public-key decoding and RSA-PSS verification with unambiguous parameters and modulus and exponent policy. |
 | `0.42.0` | RSA PKCS1 v1.5 Verification | Implement strict RSASSA-PKCS1-v1_5 certificate-signature verification for SHA-256, SHA-384 and SHA-512 with complete padding, exact DigestInfo, no trailing bytes, and no SHA-1 or MD5 aliases; keep TLS CertificateVerify and signing excluded. |
-| `0.43.0` | RSA-PSS Private Operations | Implement blinded fixed-schedule first-party RSA-PSS private operations with CRT consistency checks, approved key generation or import policy, fault detection, immediate blinding and intermediate destruction, and external-signer support as an additional path rather than a conditional substitute. |
+| `0.43.0` | RSA-PSS Private Operations | Implement blinded fixed-schedule first-party RSA-PSS private operations for strictly validated imported keys, with CRT consistency, fault detection, immediate blinding and intermediate destruction, and external-signer support; v1 does not generate RSA keys. |
 | `0.44.0` | Ed25519 | Implement Ed25519 signing and verification with canonical encoding, small-order and malleability rejection, official vectors, and constant-time secret operations. |
-| `0.45.0` | Version-One Algorithm Decisions | Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing, encrypted private-key containers, ML-DSA, SLH-DSA, and every unimplemented algorithm family. |
+| `0.45.0` | Version-One Algorithm Decisions | Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing, encrypted private-key containers, first-party RSA key generation, ML-DSA, SLH-DSA, and every unimplemented algorithm family. |
 | `0.46.0` | Cryptographic Substrate Audit Gate | Complete independent cryptographic-substrate review, per-target constant-time and zeroization evidence, and remediation before PKI or TLS consumption. |
 | `0.47.0` | PEM Base64 And Chain Containers | Implement bounded strict Base64 and PEM armor plus certificate-chain containers with label, count, size, whitespace, trailing-data, and resource policies. |
 | `0.48.0` | Private-Key Input Formats | Implement bounded unencrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key decoding with algorithm and key consistency and secret-arena ownership; keep encrypted PKCS#8 an explicit v1 non-goal unless separately versioned. |
@@ -103,7 +98,7 @@ AEAD failure is caller-buffer safe, RSA private operations and DTLS CIDs are def
 
 ## Phase 2: Shared Handshake, Internal Sans-I/O, And Modern TLS
 
-One shared recordless TLS handshake prevents QUIC duplication. Early version codecs define policy; final symmetric routing waits until both TLS engines exist.
+Shared handshake ownership, separate negotiation policy, audited engines, and final symmetric routing remain ordered.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
@@ -143,7 +138,7 @@ One shared recordless TLS handshake prevents QUIC duplication. Early version cod
 
 ## Phase 3: QUIC TLS, DTLS, And Post-Quantum Work
 
-QUIC gets an explicit TLS profile. DTLS negotiation policy precedes engines, while final path-bound routing follows both implementations.
+QUIC resumption is transport-aware, DTLS early data is excluded for v1, CID behavior is version-specific, and hybrid policy is explicit.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
@@ -152,83 +147,91 @@ QUIC gets an explicit TLS profile. DTLS negotiation policy precedes engines, whi
 | `0.95.0` | QUIC Key-Derivation Boundary | Have TLS emit typed handshake and application traffic secrets; optionally derive quic key, quic iv and quic hp in brynja-quic-tls; keep version-specific Initial salts and secrets, packet protection, Retry integrity, key phase, and quic ku in the QUIC transport; verify all admitted derivations with RFC 9001 vectors. |
 | `0.96.0` | QUIC Transport Parameters | Implement bounded syntactic transport-parameter parsing and transcript binding while exposing typed values for QUIC-owned semantic enforcement. |
 | `0.97.0` | QUIC Sans-I/O Handshake | Implement per-level TLS handshake input and output, alerts, pending providers, bounded future-level data, traffic-secret events, and deterministic rejection of late data. |
-| `0.98.0` | Optional QUIC CRYPTO Reassembly Helper | Provide an explicitly optional bounded CRYPTO-offset reassembly helper with conflict and exhaustion handling that is not used implicitly and does not implement retransmission or loss recovery. |
-| `0.99.0` | QUIC Conformance And Audit | Pass RFC 9001 vectors plus loss, reorder, discard, 0-RTT, key-derivation, interoperability, ownership-boundary, and external review gates. |
-| `0.100.0` | DTLS Path Identity Contract | Introduce an opaque caller-provided path token binding cookie state, amplification accounting, CID routing, migration, PMTU, timers, and datagram metadata so packets cannot transfer validation or budgets between paths. |
-| `0.101.0` | DTLS Version Negotiation Codec And Policy | Implement shared DTLS offer and selection parsing and policy without routing into an engine: one ClientHello or ServerHello is evaluated, unknown future versions are skipped, recognized legacy versions are rejected, the highest configured version and downgrade policy are typed, and transcript plus opaque path identity are preserved. |
-| `0.102.0` | DTLS Unified Headers And Epochs | Implement DTLS 1.3 unified headers, epochs, compact sequence reconstruction, AEAD nonce construction, and checked sequence exhaustion. |
-| `0.103.0` | DTLS Record-Number Encryption | Implement record-number encryption and authenticated reconstruction-failure handling with official vectors and no replay-window mutation before authentication. |
-| `0.104.0` | DTLS Replay And Epoch-Key Lifetimes | Implement fixed replay windows across epoch transitions, bounded previous and future retention, transactional key installation, and immediate obsolete-key destruction. |
-| `0.105.0` | DTLS Connection IDs | Implement bounded DTLS 1.2 and DTLS 1.3 connection IDs and CID updates with opaque path-token routing, privacy, replay, rebinding, migration, PMTU, and amplification invariants and the applicable RFC 9146 requirements. |
-| `0.106.0` | DTLS Fragmentation And Reassembly | Implement caller-owned bounded handshake fragmentation and reassembly with canonical transcript messages and overlap and conflicting-fragment rejection. |
-| `0.107.0` | DTLS Flights ACKs And Timers | Implement deterministic flights, ACK processing, typed timer actions, cached retransmission, checked backoff, congestion limits, and path-token ownership. |
-| `0.108.0` | DTLS Address Validation And Amplification Defense | Implement path-bound cookies, address validation, amplification budgets, deterministic PMTU policy, and cheap rejection before expensive cryptography. |
-| `0.109.0` | DTLS 1.3 State Machines | Complete DTLS 1.3 client and server states, key updates, duplicate idempotence, terminal cleanup, and provider cancellation. |
-| `0.110.0` | Hardened DTLS 1.2 | Implement DTLS 1.2 using only the admitted TLS 1.2 ECDHE-plus-AEAD profile and isolated epoch, replay, ticket, path, and downgrade state. |
-| `0.111.0` | Integrated One-Pass DTLS Router | After both DTLS engines exist, integrate symmetric one-pass routing: one server ClientHello or one client ServerHello enters exactly one highest acceptable offered engine, preserves transcript and opaque path state, validates downgrade policy, and never retries or crosses credentials, tickets, epochs, replay windows, CIDs, or secrets after failure. |
-| `0.112.0` | DTLS Conformance And Audit | Pass loss, reorder, duplicate, fragmentation, replay, path-token, CID, version-selection, hostile-load, fuzz, interoperability, and external audit gates. |
-| `0.113.0` | ML-KEM Arithmetic And Encoding | Implement ML-KEM polynomial, NTT, sampling, and canonical encoding and decoding foundations. |
-| `0.114.0` | ML-KEM Key Generation And Encapsulation | Implement ML-KEM-512, ML-KEM-768 and ML-KEM-1024 key generation and encapsulation with FIPS 203, errata, randomness, stack, and applicable SP 800-227 checks. |
-| `0.115.0` | ML-KEM Decapsulation And Implicit Rejection | Implement constant-time ML-KEM decapsulation and implicit rejection with malformed-ciphertext, failure-path, and side-channel campaigns. |
-| `0.116.0` | Standard Hybrid Groups | Implement only final standardized X25519MLKEM768, P256MLKEM768, and P384MLKEM1024 encodings, component order, lengths, identifiers, and combiner behavior. |
-| `0.117.0` | Hybrid Protocol Integration | Complete hybrid TLS, DTLS, and QUIC transcript, resource, fragmentation, downgrade, required-policy, and interoperability gates with no classical-only fallback. |
-| `0.118.0` | PQ Standards And Audit Gate | Complete PQ external review and standards freeze; keep ML-DSA and SLH-DSA excluded from v1 authentication unless a separately reviewed final standard, TLS mapping, and interoperability milestone is added. |
+| `0.98.0` | QUIC Resumption And Zero-RTT Profile | Distinguish TLS handshake completion from QUIC handshake confirmation; emit typed completion, confirmation and key-discard events; deliver NewSessionTicket only after handshake completion; require max_early_data_size 0xffffffff; bind remembered QUIC transport parameters, ALPN and application state to tickets; map invalid early-data values to the correct QUIC error; expose deterministic acceptance and rejection; enforce ticket privacy and non-reuse policy; and leave the transport in control of zero-RTT byte quantity. |
+| `0.99.0` | Optional QUIC CRYPTO Reassembly Helper | Provide an explicitly optional bounded CRYPTO-offset reassembly helper with conflict and exhaustion handling that is not used implicitly and does not implement retransmission or loss recovery. |
+| `0.100.0` | QUIC Conformance And Audit | Pass RFC 9001 vectors plus loss, reorder, discard, 0-RTT, key-derivation, interoperability, ownership-boundary, and external review gates. |
+| `0.101.0` | DTLS Path Identity Contract | Introduce an opaque caller-provided path token binding cookie state, amplification accounting, CID routing, migration, PMTU, timers, and datagram metadata so packets cannot transfer validation or budgets between paths. |
+| `0.102.0` | DTLS Version Negotiation Codec And Policy | Implement shared DTLS offer and selection parsing and policy without routing into an engine: one ClientHello or ServerHello is evaluated, unknown future versions are skipped, recognized legacy versions are rejected, the highest configured version and downgrade policy are typed, and transcript plus opaque path identity are preserved. |
+| `0.103.0` | DTLS Unified Headers And Epochs | Implement DTLS 1.3 unified headers, epochs, compact sequence reconstruction, AEAD nonce construction, and checked sequence exhaustion. |
+| `0.104.0` | DTLS Record-Number Encryption | Implement record-number encryption and authenticated reconstruction-failure handling with official vectors and no replay-window mutation before authentication. |
+| `0.105.0` | DTLS Replay And Epoch-Key Lifetimes | Implement fixed replay windows across epoch transitions, bounded previous and future retention, transactional key installation, and immediate obsolete-key destruction. |
+| `0.106.0` | DTLS 1.2 Connection IDs | Implement RFC 9146 DTLS 1.2 connection-ID negotiation and its version-specific record construction with opaque path-token routing, privacy, replay, rebinding, migration, PMTU, and amplification invariants; do not accept DTLS 1.3 CID-update messages. |
+| `0.107.0` | DTLS 1.3 Connection-ID Updates | Implement DTLS 1.3 connection IDs, NewConnectionId and RequestConnectionId post-handshake updates with bounded active and retired IDs, opaque path-token routing, collision, privacy, replay, migration, rotation, PMTU, and amplification invariants. |
+| `0.108.0` | DTLS Fragmentation And Reassembly | Implement caller-owned bounded handshake fragmentation and reassembly with canonical transcript messages and overlap and conflicting-fragment rejection. |
+| `0.109.0` | DTLS Flights ACKs And Timers | Implement deterministic flights, ACK processing, typed timer actions, cached retransmission, checked backoff, congestion limits, and path-token ownership. |
+| `0.110.0` | DTLS Address Validation And Amplification Defense | Implement path-bound cookies, address validation, amplification budgets, deterministic PMTU policy, and cheap rejection before expensive cryptography. |
+| `0.111.0` | DTLS 1.3 State Machines | Complete DTLS 1.3 client and server states, key updates, duplicate idempotence, terminal cleanup, and provider cancellation. |
+| `0.112.0` | DTLS 1.3 Early-Data Exclusion | Reject DTLS 1.3 early data for v1: never offer or accept it, never derive or retain epoch 1 application-data keys, reject EndOfEarlyData on wire and in transcript, and test reordered or duplicated early records, address validation, amplification accounting, ticket policy, and deterministic peer failure independently from record replay. |
+| `0.113.0` | Hardened DTLS 1.2 | Implement DTLS 1.2 using only the admitted TLS 1.2 ECDHE-plus-AEAD profile and isolated epoch, replay, ticket, path, and downgrade state. |
+| `0.114.0` | Integrated One-Pass DTLS Router | After both DTLS engines exist, integrate symmetric one-pass routing: one server ClientHello or one client ServerHello enters exactly one highest acceptable offered engine, preserves transcript and opaque path state, validates downgrade policy, and never retries or crosses credentials, tickets, epochs, replay windows, CIDs, or secrets after failure. |
+| `0.115.0` | DTLS Conformance And Audit | Pass loss, reorder, duplicate, fragmentation, replay, path-token, CID, version-selection, hostile-load, fuzz, interoperability, and external audit gates. |
+| `0.116.0` | ML-KEM Arithmetic And Encoding | Implement ML-KEM polynomial, NTT, sampling, and canonical encoding and decoding foundations. |
+| `0.117.0` | ML-KEM Key Generation And Encapsulation | Implement ML-KEM-512, ML-KEM-768 and ML-KEM-1024 key generation and encapsulation with FIPS 203, errata, randomness, stack, and applicable SP 800-227 checks. |
+| `0.118.0` | ML-KEM Decapsulation And Implicit Rejection | Implement constant-time ML-KEM decapsulation and implicit rejection with malformed-ciphertext, failure-path, and side-channel campaigns. |
+| `0.119.0` | Standard Hybrid Groups | Implement only final standardized X25519MLKEM768, P256MLKEM768, and P384MLKEM1024 encodings, component order, lengths, identifiers, and combiner behavior. |
+| `0.120.0` | Hybrid Protocol Integration | Implement explicit HybridRequired and HybridPreferred policies: Required fails if no admitted hybrid is negotiated; Preferred may select an offered admitted classical group through ordinary one-pass negotiation when the peer lacks hybrids; every selected hybrid must complete both components and partial failure never degrades to its classical component. |
+| `0.121.0` | PQ Standards And Audit Gate | Complete PQ external review and standards freeze; keep ML-DSA and SLH-DSA excluded from v1 authentication unless a separately reviewed final standard, TLS mapping, and interoperability milestone is added. |
 
 ## Phase 4: FIPS Module Instantiation, Validation, And TLS Profile
 
-The DRBG, provider, and SSP services exist before final whole-module self-tests, validation evidence, and approved-only connection policy.
+The validated dependency closure is frozen and connection failure is distinct from the module catastrophic-failure latch.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
-| `0.119.0` | FIPS Module Boundary | Instantiate the exact binary and artifact boundary, operational environments, ports, services, roles, SSP inventory, compiler, linker and CPU inputs, and approved and non-approved exclusions. |
-| `0.120.0` | SP 800-90 Entropy And DRBG Boundary | Select SP 800-90A DRBGs; validate SP 800-90B entropy sources and health tests; satisfy SP 800-90C construction rules; and define prediction resistance, personalization, fork, reseed, security-strength, and catastrophic-failure semantics. |
-| `0.121.0` | Approved Provider And Service Indicator | Implement the sealed approved-only provider and unambiguous per-service approved indicator with no additive fips feature or construction before self-test success. |
-| `0.122.0` | SSP Lifecycle And Zeroization Services | Define SSP entry, output, storage, high-water lifetime, external storage, accelerator handle, cache and DMA completion, and zeroization services with completion indications and secret-free status events. |
-| `0.123.0` | FIPS Self-Tests And Failure Latch | After the final DRBG, provider, SSP and algorithm implementations are linked, implement module integrity, algorithm and DRBG KATs, pairwise-consistency and conditional tests, permanent failure latching, and deterministic fault-injection evidence over the complete module contents. |
-| `0.124.0` | ACVTS And CAVP Evidence | Complete ACVTS and CAVP campaigns for every approved implementation, dispatch path, parameter set, and operational environment. |
-| `0.125.0` | CMVP Submission Artifacts | Produce the CMVP Security Policy, finite-state model, service and SSP inventory, entropy assessment, source-to-object trace, and reproducible module artifacts. |
-| `0.126.0` | Accredited FIPS Evaluation | Complete accredited-lab FIPS 140-3 evaluation, remediation, retest, and certificate and caveat recording; make no validation claim before issuance. |
-| `0.127.0` | Boundary And Package Audit | Complete the final modern, historical, experimental, and FIPS dependency-boundary, symbol, dispatch, feature, and package-content audit. |
-| `0.128.0` | Approved-Only TLS Operating Profile | Implement a facade approved-only connection profile enforcing minimum key and security strengths, admitted suite, group, signature and certificate combinations, approved entropy and key-generation provenance, resumption, external PSK and zero-RTT policy, aggregation of per-service indicators, and permanent failure if any allegedly approved connection invokes X25519, Ed25519, ChaCha20, HPKE, ECH, experimental hybrids, or another non-approved service. |
+| `0.122.0` | FIPS Module Boundary | Instantiate and freeze the exact binary, artifact and dependency closure, operational environments, ports, services, roles, SSP inventory, compiler, linker and CPU inputs, and approved and non-approved exclusions; later optional modules must be downstream and cannot alter symbols, dependencies, features, dispatch tables, build inputs, source identity, or validation claims. |
+| `0.123.0` | SP 800-90 Entropy And DRBG Boundary | Select SP 800-90A DRBGs; validate SP 800-90B entropy sources and health tests; satisfy SP 800-90C construction rules; and define prediction resistance, personalization, fork, reseed, security-strength, and catastrophic-failure semantics. |
+| `0.124.0` | Approved Provider And Service Indicator | Implement the sealed approved-only provider and unambiguous per-service approved indicator with no additive fips feature or construction before self-test success. |
+| `0.125.0` | SSP Lifecycle And Zeroization Services | Define SSP entry, output, storage, high-water lifetime, external storage, accelerator handle, cache and DMA completion, and zeroization services with completion indications and secret-free status events. |
+| `0.126.0` | FIPS Self-Tests And Failure Latch | After the final DRBG, provider, SSP and algorithm implementations are linked, implement module integrity, algorithm and DRBG KATs, pairwise-consistency and conditional tests, permanent failure latching, and deterministic fault-injection evidence over the complete module contents. |
+| `0.127.0` | ACVTS And CAVP Evidence | Complete ACVTS and CAVP campaigns for every approved implementation, dispatch path, parameter set, and operational environment. |
+| `0.128.0` | CMVP Submission Artifacts | Produce the CMVP Security Policy, finite-state model, service and SSP inventory, entropy assessment, source-to-object trace, and reproducible module artifacts. |
+| `0.129.0` | Accredited FIPS Evaluation | Complete accredited-lab FIPS 140-3 evaluation, remediation, retest, and certificate and caveat recording; make no validation claim before issuance. |
+| `0.130.0` | Boundary And Package Audit | Complete the final modern, historical, experimental, and FIPS dependency-boundary, symbol, dispatch, feature, and package-content audit. |
+| `0.131.0` | Approved-Only TLS Operating Profile | Implement a facade approved-only connection profile enforcing minimum key and security strengths, admitted suite, group, signature and certificate combinations, approved entropy and key-generation provenance, resumption, external PSK and zero-RTT policy, and aggregated per-service indicators; invoking a non-approved service terminates the connection and invalidates its approved configuration claim, while the module permanent latch remains reserved for FIPS-defined integrity, self-test, and catastrophic failures. |
 
-## Phase 5: Optional Modules, Stable Public Integration, Assurance, And General Availability
+## Phase 5: Optional Modules, Composition, Stable Integration, Assurance, And General Availability
 
-Every v1 optional module exercises the unstable internal model before facade and Sans-I/O freeze; final host and Aesynx qualification targets the frozen interface.
+Receive and send compression, post-validation closure, and cross-feature composition complete before public API freeze.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
-| `0.129.0` | Operational State Rotation | Complete session cache, stateless ticket-key and resumption-PSK rotation, anti-replay storage, certificate and private-key rotation, trust-anchor and CT log-list updates, and transactional failure recovery. |
-| `0.130.0` | Record Size Limit | Implement Record Size Limit negotiation and enforcement with directional limits, fragmentation, buffering, peer-violation, and interoperability tests. |
-| `0.131.0` | Raw Public Keys | Implement Raw Public Keys with a dedicated pinning and trust-provider contract, identity and rotation policy, negotiation, and proof that RPK never silently bypasses X.509 requirements. |
-| `0.132.0` | HPKE KEM And Context Foundation | Implement HPKE DHKEM X25519 and P-256 context derivation, labeled HKDF operations, public-key validation, domain separation, and bounded context state. |
-| `0.133.0` | HPKE Base Mode | Implement RFC 9180 HPKE base mode with admitted AEADs, sequence and nonce exhaustion, seal and open failure atomicity, official vectors, and independent differential tests. |
-| `0.134.0` | ECH Configuration And Suite Selection | Implement bounded ECHConfig parsing, version and suite selection, public-name policy, key configuration, GREASE inputs, and resource limits. |
-| `0.135.0` | ECH Client Construction | Implement client inner and outer ClientHello construction, outer-extension references, AAD inputs, GREASE, padding, transcript preservation, and configuration and resource policy. |
-| `0.136.0` | ECH Server Opening And Acceptance | Implement server configuration lookup, HPKE opening, inner and outer consistency checks, acceptance confirmation, identity selection, uniform rejection, and no fallback to attacker-modified state. |
-| `0.137.0` | ECH HRR Retry And Rotation | Implement ECH HelloRetryRequest interaction, retry configurations, configuration rotation, second-ClientHello invariants, downgrade detection, and client and server interoperability. |
-| `0.138.0` | Delegated Credentials | Implement delegated credentials as an independent optional module with authorization, lifetime, signature, selection, revocation interaction, and downgrade policy. |
-| `0.139.0` | Certificate Compression Provider | Treat decompression as strictly bounded hostile pre-authentication work; retain wire CompressedCertificate bytes for the transcript, pass decompressed Certificate bytes to PKI, release no identity or application data before decompression, X.509, CertificateVerify and Finished succeed, and terminate on provider error, overrun, short output, trailing compressed data, or algorithm mismatch. |
-| `0.140.0` | Facade Configuration Typestates | After every planned v1 optional module has exercised the internal effects model, freeze facade typestates for exact versions, integrated one-pass routing, suites, trust, RPK, ECH, delegated credentials, compression, resources, revocation, PSK, zero-RTT, Certificate Transparency, FIPS profile, and providers with no raw crypto re-export or legacy range. |
-| `0.141.0` | Stable Sans-I/O API | After every planned v1 optional module has exercised it, freeze the deterministic client and server Event-to-Action API including ECH key and configuration lookup, decompression, RPK trust, delegated-credential selection, path tokens, pending providers, consumed and produced counts, backpressure, cancellation, and compile-fail exhaustiveness tests. |
-| `0.142.0` | Caller-Provided Host Capability Integration | Keep protocol-facing contracts upstream and require caller-provided entropy and OS integration for v1; provide no built-in OS entropy FFI. Supply reviewed examples for safe std clocks, transport and storage and for caller or kernel entropy, while documenting that any future Windows, macOS, BSD, mobile, or bare-metal unsafe adapter requires its own crate, versioned unsafe and FFI milestone, audit, and platform evidence. |
-| `0.143.0` | Zero-Allocation And Resource Proof | Prove the caller-owned zero-allocation profile with exact workspace sizes, non-overlapping arenas, stack ceilings, concurrency limits, and hostile-load budgets. |
-| `0.144.0` | Aesynx ABI And Emulator Qualification | Make the stable Aesynx adapter contract a v1 requirement and pass an executable target-ABI or emulator harness for entropy, randomness, time, transport, storage, acceleration, boot-to-handshake, and lifecycle behavior; allow real-hardware qualification after v1 without weakening the contract. |
-| `0.145.0` | Formal Harnesses | Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, and secret-release invariants using pinned external tools. |
-| `0.146.0` | External-Process Fuzz And Differential Campaign | Do not use cargo-fuzz or libfuzzer-sys; drive first-party corpus and stdin harness binaries with pinned external process-level mutation and instrumentation, deterministic replay, differential corpora, and crash minimization without third-party repository crates. |
-| `0.147.0` | Memory And Side-Channel Evidence | Complete Miri and sanitizer evidence plus compiler and target constant-time assembly, owned-region zeroization-store survival, cache and branch, and statistical side-channel matrices. |
-| `0.148.0` | Sustained Platform And Hostile-Load Qualification | Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load. |
-| `0.149.0` | Consolidated External Audits | Complete exact-commit external crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS-boundary and profile, optional-module, zeroization, and systems-integration audits. |
-| `0.150.0` | Audit Remediation And Clean Retest | Remediate every admitted finding, add permanent regressions, and obtain clean independent retests with no unresolved critical or high findings. |
-| `0.151.0` | Public API Requirements And Documentation Freeze | Freeze public APIs, features, package inventory, requirements ledger, admitted algorithms and extensions, migration guidance, deployment profiles, incident procedures, limitations, and non-goals. |
-| `0.152.0` | Clean-Room Release Rehearsal | Pass reproducible clean-room builds, package installation, artifact comparison, rollback, key-compromise, incident, and disaster-recovery exercises. |
+| `0.132.0` | Operational State Rotation | Complete session cache, stateless ticket-key and resumption-PSK rotation, anti-replay storage, certificate and private-key rotation, trust-anchor and CT log-list updates, and transactional failure recovery. |
+| `0.133.0` | Record Size Limit | Implement Record Size Limit negotiation and enforcement with directional limits, fragmentation, buffering, peer-violation, and interoperability tests. |
+| `0.134.0` | Raw Public Keys | Implement Raw Public Keys with a dedicated pinning and trust-provider contract, identity and rotation policy, negotiation, and proof that RPK never silently bypasses X.509 requirements. |
+| `0.135.0` | HPKE KEM And Context Foundation | Implement HPKE DHKEM X25519 and P-256 context derivation, labeled HKDF, public-key validation, domain separation, and bounded contexts strictly downstream of validated provider ports, with no symbol, dependency, feature, dispatch, build-input, or source change to a validated FIPS module. |
+| `0.136.0` | HPKE Base Mode | Implement RFC 9180 HPKE base mode with admitted AEADs, sequence and nonce exhaustion, seal and open failure atomicity, official vectors, and independent differential tests. |
+| `0.137.0` | ECH Configuration And Suite Selection | Implement bounded ECHConfig parsing, version and suite selection, public-name policy, key configuration, GREASE inputs, and resource limits. |
+| `0.138.0` | ECH Client Construction | Implement client inner and outer ClientHello construction, outer-extension references, AAD inputs, GREASE, padding, transcript preservation, and configuration and resource policy. |
+| `0.139.0` | ECH Server Opening And Acceptance | Implement server configuration lookup, HPKE opening, inner and outer consistency checks, acceptance confirmation, identity selection, uniform rejection, and no fallback to attacker-modified state. |
+| `0.140.0` | ECH HRR Retry And Rotation | Implement ECH HelloRetryRequest interaction, retry configurations, configuration rotation, second-ClientHello invariants, downgrade detection, and client and server interoperability. |
+| `0.141.0` | Delegated Credentials | Implement delegated credentials as an independent optional module with authorization, lifetime, signature, selection, revocation interaction, and downgrade policy. |
+| `0.142.0` | Certificate Compression Receive Provider | Treat decompression as strictly bounded hostile pre-authentication work; retain wire CompressedCertificate bytes for the transcript, pass decompressed Certificate bytes to PKI, release no identity or application data before decompression, X.509, CertificateVerify and Finished succeed, and terminate on provider error, overrun, short output, trailing compressed data, or algorithm mismatch. |
+| `0.143.0` | Certificate Compression Send Artifacts | Support sending compressed server and client-authentication certificates through caller-supplied precompressed artifacts verified at configuration against the canonical Certificate message; advertise only algorithms with a usable receive provider, send only peer-advertised algorithms, preserve transcript bytes, and enforce exact algorithm, input, output, identity, and rotation binding. |
+| `0.144.0` | Validated FIPS Closure Preservation Gate | After HPKE, ECH and every optional module exists, prove they remain downstream of validated provider ports and cannot add module symbols, dependencies, features, dispatch entries, build inputs, non-approved algorithms, or source changes; any module change invalidates prior artifact identity and validation claims and requires a new validation line. |
+| `0.145.0` | Optional-Feature Composition Gate | Define and test ECH with tickets, resumption, external PSKs, zero-RTT, inner identity, ALPN, certificates, client authentication and delegated credentials; RPK with delegated credentials and client authentication; compression with RPK, delegated credentials and client certificates; Record Size Limit with large certificates and DTLS fragmentation; protocol applicability; approved-only exclusions; compile-time incompatible typestates; and cross-feature cancellation, rotation, transcript, storage and resource exhaustion. |
+| `0.146.0` | Facade Configuration Typestates | After every planned v1 optional module has exercised the internal effects model, freeze facade typestates for exact versions, integrated one-pass routing, suites, trust, RPK, ECH, delegated credentials, compression, resources, revocation, PSK, zero-RTT, Certificate Transparency, FIPS profile, and providers with no raw crypto re-export or legacy range. |
+| `0.147.0` | Stable Sans-I/O API | After every planned v1 optional module has exercised it, freeze the deterministic client and server Event-to-Action API including ECH key and configuration lookup, decompression, RPK trust, delegated-credential selection, path tokens, pending providers, consumed and produced counts, backpressure, cancellation, and compile-fail exhaustiveness tests. |
+| `0.148.0` | Caller-Provided Host Capability Integration | Keep protocol-facing contracts upstream and require caller-provided entropy and OS integration for v1; provide no built-in OS entropy FFI. Supply reviewed examples for safe std clocks, transport and storage and for caller or kernel entropy, while documenting that any future Windows, macOS, BSD, mobile, or bare-metal unsafe adapter requires its own crate, versioned unsafe and FFI milestone, audit, and platform evidence. |
+| `0.149.0` | Zero-Allocation And Resource Proof | Prove the caller-owned zero-allocation profile with exact workspace sizes, non-overlapping arenas, stack ceilings, concurrency limits, and hostile-load budgets. |
+| `0.150.0` | Aesynx ABI And Emulator Qualification | Make the stable Aesynx adapter contract a v1 requirement and pass an executable target-ABI or emulator harness for entropy, randomness, time, transport, storage, acceleration, boot-to-handshake, and lifecycle behavior; allow real-hardware qualification after v1 without weakening the contract. |
+| `0.151.0` | Formal Harnesses | Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, and secret-release invariants using pinned external tools. |
+| `0.152.0` | External-Process Fuzz And Differential Campaign | Do not use cargo-fuzz or libfuzzer-sys; drive first-party corpus and stdin harness binaries with pinned external process-level mutation and instrumentation, deterministic replay, differential corpora, and crash minimization without third-party repository crates. |
+| `0.153.0` | Memory And Side-Channel Evidence | Complete Miri and sanitizer evidence plus compiler and target constant-time assembly, owned-region zeroization-store survival, cache and branch, and statistical side-channel matrices. |
+| `0.154.0` | Sustained Platform And Hostile-Load Qualification | Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load. |
+| `0.155.0` | Consolidated External Audits | Complete exact-commit external crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS-boundary and profile, optional-module, zeroization, and systems-integration audits. |
+| `0.156.0` | Audit Remediation And Clean Retest | Remediate every admitted finding, add permanent regressions, and obtain clean independent retests with no unresolved critical or high findings. |
+| `0.157.0` | Public API Requirements And Documentation Freeze | Freeze public APIs, features, package inventory, requirements ledger, admitted algorithms and extensions, migration guidance, deployment profiles, incident procedures, limitations, and non-goals. |
+| `0.158.0` | Clean-Room Release Rehearsal | Pass reproducible clean-room builds, package installation, artifact comparison, rollback, key-compromise, incident, and disaster-recovery exercises. |
 | `1.0.0-rc.1` | Exact Production Candidate | Build final artifacts once and freeze source, compiler, flags, archives, SBOM, checksums, provenance, documentation, and the pentested exact commit. |
 | `1.0.0` | First Serious Production-Ready Brynja TLS Release | Promote only the byte-identical approved candidate without rebuild, source change, metadata drift, or expanded capability claim. |
 
 ## Independent Historical Package Sequence
 
-`H0.N.0` is shorthand: each historical crate has its own SemVer `0.N.0`
-line and never inherits the facade version. Repeat the sequence for TLS 1.1,
-TLS 1.0, SSL 3, SSL 2, WTLS, PCT, and SNP. SSL 1 remains research-only.
+Each historical crate uses its own SemVer `0.N.0` line. TLS 1.1, TLS 1.0,
+SSL 3, SSL 2, WTLS, PCT, and SNP separately pass source, codec, state,
+primitive, client, optional server, containment, and external audit/pentest
+stages. SSL 1 remains research-only and unpublished. Historical work never
+blocks or inherits modern `1.0.0`.
 
 | Historical stage | Exclusive scope |
 | --- | --- |
@@ -240,7 +243,3 @@ TLS 1.0, SSL 3, SSL 2, WTLS, PCT, and SNP. SSL 1 remains research-only.
 | `H0.6.0` | Add server interoperability only when separately justified, with amplification and hostile-load review. |
 | `H0.7.0` | Require separate listeners, paths, policy, credentials, storage, diagnostics, and process containment. |
 | `H0.8.0` | Complete a protocol-specific external audit and pentest and verify every warning and non-fallback property. |
-
-`1.0.0` means the frozen modern requirements ledger and exact artifacts
-passed every applicable gate. It does not mean every historical protocol,
-draft extension, physical platform adapter, or future TLS feature exists.

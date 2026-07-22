@@ -24,7 +24,7 @@ FIELDS = (
 
 
 def expected_versions() -> list[str]:
-    versions = [f"v0.{number}.0" for number in range(1, 153)]
+    versions = [f"v0.{number}.0" for number in range(1, 159)]
     versions.extend(["v1.0.0-rc.1", "v1.0.0"])
     return versions
 

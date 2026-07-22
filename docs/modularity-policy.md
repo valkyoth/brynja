@@ -19,3 +19,9 @@ implement them, but TLS, QUIC TLS, and DTLS must not depend on it. A planned
 handshake used by stream TLS and QUIC TLS. DTLS may reuse reviewed codecs,
 transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
+
+Validated FIPS module source, symbols, dependency closure, features, dispatch
+tables, and build inputs are immutable for that artifact identity. HPKE, ECH,
+certificate compression, and every later optional module remain downstream of
+provider ports and cannot alter the validated module. Any such change starts a
+new validation and artifact line.

@@ -13,9 +13,10 @@ test count, or interoperability alone never establishes that claim.
 
 - Rust `1.90.0` MSRV and current stable Rust for full release evidence.
 - No third-party runtime, build, development, fuzz, test, or tooling crates in
-  repository Cargo manifests. Pinned assurance tools may run as external
-  executables, but adding an assurance-only crate still requires an explicit
-  future policy change and can never affect a shipped package graph.
+  repository Cargo manifests. Brynja does not use `cargo-fuzz` or
+  `libfuzzer-sys`; pinned external process tools drive first-party harness
+  binaries. Adding any assurance crate requires an explicit future policy
+  change and can never affect a shipped package graph.
 - `no_std` production crates with no assumed allocator, OS, socket, clock,
   filesystem, or entropy source.
 - No Rust source file over 500 lines. Split modules before 450 lines so tests
@@ -26,6 +27,8 @@ test count, or interoperability alone never establishes that claim.
   state machines, caches, ticket keys, and connection paths.
 - Every externally controlled length, count, retry, allocation, transcript,
   certificate chain, fragment, and work unit has a caller-visible bound.
+- Production admission requires reviewed zeroization of complete owned secret
+  memory regions; a weaker owned-region claim cannot pass the `1.0.0` gate.
 - Every release stops for an exact-commit pentest before tagging.
 
 ## Workspace Architecture
@@ -59,19 +62,22 @@ are permanently excluded from normal application dependency graphs.
 
 1. Freeze policy enforcement, standards provenance, requirements ledgers,
    bounded domains, caller-owned arenas, and adversarial test infrastructure.
-2. Freeze constant-time operations; separate entropy from secure randomness;
-   separate wall from monotonic time; define pending-provider effects; and
-   design the FIPS-aware provider boundary without making a validation claim.
+2. Freeze production owned-memory zeroization and constant-time operations;
+   separate entropy from secure randomness and wall from monotonic time;
+   define pending-provider effects; and design the FIPS-aware provider boundary
+   without making a validation claim.
 3. Implement and independently audit cryptographic primitives from official
    vectors outward with per-compiler and per-target constant-time evidence.
 4. Implement bounded identity containers, DER, X.509 path construction, split
    RFC 5280 validation, revocation, CT policy, and an independent PKI audit.
-5. Exercise an internal deterministic Sans-I/O contract, then implement and
-   audit TLS 1.3 as a typed state machine over explicit effects.
+5. Exercise an internal deterministic Sans-I/O contract, then implement
+   one-pass highest-version negotiation and audit TLS 1.3 as a typed state
+   machine over explicit effects.
 6. Admit a hardened, explicitly configured TLS 1.2 engine without fallback or
    renegotiation.
-7. Implement QUIC TLS ownership boundaries, the complete DTLS record model,
-   standardized PQ hybrids, and the predesigned exact-build FIPS module.
+7. Implement QUIC TLS and key-derivation ownership, path-bound one-pass DTLS,
+   standardized PQ hybrids, and the predesigned exact-build FIPS module and
+   approved-only TLS profile.
 8. Freeze the public Sans-I/O facade and add each optional protocol facility as
    a separate bounded module without repeating earlier ALPN, SNI, exporter, or
    channel-binding work.
@@ -92,8 +98,8 @@ The repository will maintain:
 
 - official RFC, NIST, and algorithm vectors with source provenance;
 - generated exhaustive tests for small domains;
-- deterministic mutation and structured fuzz harnesses without adding Cargo
-  dependencies to this repository;
+- deterministic mutation, corpus replay, and stdin harness binaries driven by
+  pinned external process tools; `cargo-fuzz` and `libfuzzer-sys` are excluded;
 - differential tests against at least two independent mature implementations,
   confined to repository tools;
 - network interoperability tests with packet captures and expected alerts;
@@ -101,8 +107,8 @@ The repository will maintain:
 - restart, replay, reordering, loss, fragmentation, exhaustion, and
   cancellation tests;
 - secret-lifetime, redaction, zeroization, and error-path tests;
-- pinned external Kani, Miri, sanitizer, fuzz, and equivalent assurance tools
-  that do not weaken repository Cargo dependency policy.
+- pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
+  assurance tools that do not weaken repository Cargo dependency policy.
 
 ## Security Review Loop
 
@@ -115,13 +121,14 @@ before a permanent PASS report is committed.
 ## Platform Strategy
 
 Core crates expose pure transformations, caller-owned non-overlapping arenas,
-and deterministic effects. Raw entropy and initialized secure randomness are
-different contracts; wall and monotonic time are non-interchangeable. Trust
-stores, transports, persistent ticket and anti-replay storage, concurrency,
-pending operations, and acceleration enter through narrow traits in
-`brynja-platform`. This keeps Linux, Windows, BSD, macOS, Android, iOS,
-bare-metal targets, and future Aesynx support from becoming conditional logic
-inside protocol state machines.
+opaque path tokens, and deterministic effects. Raw entropy and initialized
+secure randomness are different contracts; wall and monotonic time are
+non-interchangeable. Trust stores, transports, stateful and stateless ticket
+storage, anti-replay state, concurrency, pending operations, and acceleration
+enter through narrow traits in `brynja-platform`. Linux, Windows, BSD, macOS,
+Android, iOS, and bare-metal remain outside protocol conditional logic. Aesynx
+requires a stable adapter contract and executable target-ABI or emulator gate
+for v1; real-hardware qualification may follow without weakening that contract.
 
 ## Completion Definition
 

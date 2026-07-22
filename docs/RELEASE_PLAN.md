@@ -2,61 +2,63 @@
 
 Status: normative planning document
 
-This plan is deliberately granular. Brynja processes hostile input and will
-protect authentication material and application plaintext, so every milestone
-must be independently reviewable, testable, pentestable, and safe to stop.
+Brynja processes hostile input and will protect authentication material and
+application plaintext. Every milestone is deliberately small enough to review,
+test, pentest, and stop independently.
 
 ## Version-Plan Synchronization
 
-[VERSION_PLAN.md](VERSION_PLAN.md) defines every modern release's title,
-exclusive scope, and order. Each section below repeats the title in its heading
-and the scope as `Plan scope:`. `scripts/check-release-plan.py` fails on a
-missing, reordered, duplicated, renamed, or altered release.
+[VERSION_PLAN.md](VERSION_PLAN.md) defines every modern release title, exclusive
+scope, and order. Each section repeats its exact title and `Plan scope:`.
+`scripts/check-release-plan.py` rejects missing, reordered, duplicated,
+renamed, or altered releases.
 
 Tags use `v0.N.0` for review milestones, `v1.0.0-rc.N` for immutable
 production candidates, and `v1.0.0` for the first serious production-ready
-modern TLS release. Split any growing scope; never merge adjacent work to
-preserve a schedule or number.
+modern TLS release. Split growing scope; never merge adjacent work to preserve
+a schedule or number.
 
 ## Release Principles
 
 Every release requires mapped normative requirements, explicit resource and
 work limits, secret-lifetime and effect boundaries, negative and adversarial
 tests, documented limitations, release notes, no third-party crates in
-repository Cargo manifests, `no_std` production evidence, source-file length
+repository Cargo manifests, `no_std` production evidence, file-length
 enforcement, SBOM comparison, clean local and CI gates, CodeQL Default review,
-and a completed pentest for the exact implementation commit.
+and a pentest for the exact implementation commit.
 
-Pinned assurance tools may run externally but never become normal, optional,
-development, test, build, fuzz, or tooling dependencies in repository Cargo
-manifests without an explicit future policy change. Self-tests do not establish
-cryptographic security. Official vectors, differential and interoperability
-tests, resource analysis, compiler-output and side-channel evidence, formal
-methods, external audit, and pentest are complementary.
+Brynja does not use `cargo-fuzz` or `libfuzzer-sys`. Pinned external tools
+drive first-party corpus and stdin harness binaries at process boundaries and
+never become repository Cargo dependencies. Self-tests alone do not establish
+security; vectors, differential and interoperability tests, resource analysis,
+compiler-output and side-channel evidence, formal methods, audit, and pentest
+are complementary.
 
-The modern facade never depends on historical packages. FIPS is an exact-build
-module and operational-environment claim, never an additive feature or a claim
-inferred from vectors. Draft PQ groups remain experimental and outside stable
-compatibility until their standards and code points are final.
+Production admission requires reviewed destruction of complete owned secret
+memory regions. Claims remain precise about registers, copies, crash dumps,
+caches, DMA, and physical memory, but a weaker owned-region guarantee cannot
+pass v1.
+
+Protocol choice is one-pass negotiation, never fallback. The modern facade
+never depends on historical packages. FIPS is an exact-build module,
+operational-environment, and service-configuration claim, never a feature or a
+claim inferred from vectors.
 
 ## Required Milestone Contract
 
 Every milestone contains, in order, Status, Plan scope, Goal, Deliverables,
-Verification, and Exit criteria. Deliverables identify applicable input, state,
-resource, secret, effect, failure, and package boundaries. Verification includes
-positive, negative, boundary, deliberate-failure, and exact-target evidence.
-
-Repository-wide checks are additive to milestone checks. Completing one stop
-does not admit adjacent capability or broaden earlier claims.
+Verification, and Exit criteria. Deliverables identify input, state, resource,
+secret, effect, failure, and package boundaries. Verification includes positive,
+negative, boundary, deliberate-failure, and exact-target evidence. Repository
+checks are additive; one stop never admits adjacent capability.
 
 ## Pentest Before Every Tag
 
 A tag is forbidden until `scripts/checks.sh`, `cargo deny check`,
 `cargo audit --deny warnings`, latest-tool checks, SBOM comparison, release
 notes, GitHub CI, CodeQL Default review, package checks, and the version gate
-pass. The permanent pentest report names the exact 40-character
-`git rev-parse HEAD`, date, tester, scope, and `Status: PASS`; the gate
-compares that commit byte-for-byte with HEAD.
+pass. The permanent report names the exact 40-character `git rev-parse HEAD`,
+date, tester, scope, and `Status: PASS`; the gate compares it with HEAD.
 
 Implementation stops before pentest. Findings may live temporarily in ignored
 root `PENTEST.md`, then must be fixed, documented, regression-tested, removed,
@@ -64,25 +66,24 @@ and cleanly retested. Tags and publishing happen only when explicitly requested.
 
 ## Historical Package Release Line
 
-Historical packages use independent SemVer lines and never block or inherit the
-modern facade's `1.0.0` claim. Repeat these stages separately for TLS 1.1, TLS
-1.0, SSL 3, SSL 2, WTLS, PCT, and SNP. SSL 1 remains research-only and
-unpublished.
+Historical packages use independent SemVer and never block or inherit the
+modern facade's `1.0.0` claim. Repeat these stages for TLS 1.1, TLS 1.0, SSL 3,
+SSL 2, WTLS, PCT, and SNP. SSL 1 remains research-only and unpublished.
 
 | Stage | Required result |
 | --- | --- |
 | `H0.1.0` | Authenticate sources and rights, record errata, publish conspicuous insecurity warnings, and freeze the protocol threat model. |
 | `H0.2.0` | Implement only the protocol-specific bounded wire codec. |
-| `H0.3.0` | Implement an isolated state machine with no shared modern configuration, negotiation, credentials, caches, tickets, or fallback. |
+| `H0.3.0` | Implement isolated state with no shared modern configuration, negotiation, credentials, caches, tickets, paths, or fallback. |
 | `H0.4.0` | Bind audited shared primitives and keep required weak primitives in a historical-only crypto package. |
 | `H0.5.0` | Complete controlled client-only interoperability and containment evidence. |
 | `H0.6.0` | Add server interoperability only when separately justified and reviewed for amplification and hostile load. |
-| `H0.7.0` | Require separate listeners, policy, credentials, storage, diagnostics, and process-containment guidance. |
+| `H0.7.0` | Require separate listeners, path state, policy, credentials, storage, diagnostics, and process containment. |
 | `H0.8.0` | Complete a protocol-specific external audit and pentest and verify every warning and non-fallback property. |
 
-## Phase 0: Repository, Effects, And Wire Foundations
+## Phase 0: Repository, Effects, Memory, And Wire Foundations
 
-Repository enforcement and bounded core types precede constant-time, entropy, clock, provider, FIPS-aware, and wire contracts.
+Repository enforcement and bounded types precede production zeroization, constant-time, effect, FIPS-aware, and record-framing contracts.
 
 ### v0.1.0 - Workspace Foundation
 
@@ -104,11 +105,11 @@ Deliverables:
 
 Verification:
 
-- exercise policy scripts with positive and deliberately broken dependency, feature, metadata, evidence, workflow, and release-state fixtures;
+- exercise positive and deliberately broken dependency, feature, metadata, evidence, workflow, isolation, and release-state fixtures;
 - inspect clean archives, source locks, CI permissions, branch and tag assumptions, tool pinning, and reproducibility inputs;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
@@ -119,7 +120,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern/historical isolation fixtures, and document protected release controls.
+Plan scope: Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and historical isolation fixtures, and document protected release controls.
 
 Goal: complete the **Release And Isolation Enforcement** implementation stop without admitting or
 claiming adjacent capability.
@@ -135,11 +136,11 @@ Deliverables:
 
 Verification:
 
-- exercise policy scripts with positive and deliberately broken dependency, feature, metadata, evidence, workflow, and release-state fixtures;
+- exercise positive and deliberately broken dependency, feature, metadata, evidence, workflow, isolation, and release-state fixtures;
 - inspect clean archives, source locks, CI permissions, branch and tag assumptions, tool pinning, and reproducibility inputs;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
@@ -166,11 +167,11 @@ Deliverables:
 
 Verification:
 
-- exercise policy scripts with positive and deliberately broken dependency, feature, metadata, evidence, workflow, and release-state fixtures;
+- exercise positive and deliberately broken dependency, feature, metadata, evidence, workflow, isolation, and release-state fixtures;
 - inspect clean archives, source locks, CI permissions, branch and tag assumptions, tool pinning, and reproducibility inputs;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
@@ -181,7 +182,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Establish mutation and differential harnesses, true bare-metal targets, and pinned external assurance-tool policy without adding any third-party crate to repository Cargo manifests.
+Plan scope: Establish first-party mutation and differential harnesses, true bare-metal targets, and pinned external assurance-tool policy without adding third-party crates to repository Cargo manifests.
 
 Goal: complete the **Assurance Harness And Bare-Metal Matrix** implementation stop without admitting or
 claiming adjacent capability.
@@ -197,11 +198,11 @@ Deliverables:
 
 Verification:
 
-- exercise policy scripts with positive and deliberately broken dependency, feature, metadata, evidence, workflow, and release-state fixtures;
+- exercise positive and deliberately broken dependency, feature, metadata, evidence, workflow, isolation, and release-state fixtures;
 - inspect clean archives, source locks, CI permissions, branch and tag assumptions, tool pinning, and reproducibility inputs;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
@@ -221,22 +222,22 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
 - `v0.5.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.6.0 - Bounded Numeric And Resource Domains
@@ -252,22 +253,22 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
 - `v0.6.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.7.0 - Borrowed Read Cursor
@@ -283,22 +284,22 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
 - `v0.7.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.8.0 - Transactional Write Cursor
@@ -314,22 +315,22 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
 - `v0.8.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.9.0 - Caller-Owned Workspace And Arena Model
@@ -345,60 +346,91 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
 - `v0.9.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.10.0 - Secret Lifetime And Zeroization Contract
+### v0.10.0 - Secret Lifetime And Destruction Contract
 
 Status: planned
 
-Plan scope: Define non-cloneable and non-serializable secret ownership, transition/error/cancellation/provider-failure/drop destruction, external secret-store duties, accelerator-handle destruction, and optimizer-resistant zeroization evidence or an explicit weaker claim.
+Plan scope: Define non-cloneable and non-serializable secret ownership, transition, error, cancellation, provider-failure and drop destruction, immediate obsolete-secret cleanup, external-store and accelerator duties, and a mandatory production guarantee for the complete owned memory region.
 
-Goal: complete the **Secret Lifetime And Zeroization Contract** implementation stop without admitting or
+Goal: complete the **Secret Lifetime And Destruction Contract** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
 - `v0.10.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.11.0 - Constant-Time Foundation
+### v0.11.0 - Owned-Memory Zeroization Primitive
 
 Status: planned
 
-Plan scope: Implement constant-time equality, choice and mask types, conditional select/swap, fixed-width secret operations, compiler-barrier strategy, and rules forbidding secret-dependent control flow, indexing, loop counts, and error timing.
+Plan scope: After explicit unsafe-policy approval, implement the smallest isolated first-party primitive needed to preserve zeroization stores through optimization; define proof obligations, cache and DMA completion duties, MIR, LLVM and assembly evidence for every supported compiler and target, and precise exclusions for registers, copies, dumps, and physical memory.
+
+Goal: complete the **Owned-Memory Zeroization Primitive** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.11.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.12.0 - Constant-Time Foundation
+
+Status: planned
+
+Plan scope: Implement constant-time equality, choice and mask types, conditional select and swap, fixed-width secret operations, compiler barriers, and rules forbidding secret-dependent control flow, indexing, loop counts, and error timing.
 
 Goal: complete the **Constant-Time Foundation** implementation stop without admitting or
 claiming adjacent capability.
@@ -407,29 +439,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.11.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.12.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.12.0 - Provider Capabilities And Opaque Handles
+### v0.13.0 - Provider Capabilities And Opaque Handles
 
 Status: planned
 
-Plan scope: Define crypto, signature, KEM, and AEAD capability traits with opaque key handles, frozen capabilities, transactional key installation, and no implicit software fallback.
+Plan scope: Define crypto, signature, KEM, and AEAD capability traits with opaque key handles, frozen capabilities, transactional key installation, exact-operation token binding, and no implicit software fallback.
 
 Goal: complete the **Provider Capabilities And Opaque Handles** implementation stop without admitting or
 claiming adjacent capability.
@@ -438,29 +470,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.12.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.13.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.13.0 - Entropy And Secure-Random Contracts
+### v0.14.0 - Entropy And Secure-Random Contracts
 
 Status: planned
 
-Plan scope: Separate caller-provided raw entropy from initialized secure randomness; type security strength, purpose, retryable/permanent failure, fork/reseed rules, clone prohibition, and test-only providers that production configuration cannot construct.
+Plan scope: Separate caller-provided raw entropy from initialized secure randomness; type security strength, purpose, retryable and permanent failure, fork and reseed rules, clone prohibition, and test-only providers that production configuration cannot construct.
 
 Goal: complete the **Entropy And Secure-Random Contracts** implementation stop without admitting or
 claiming adjacent capability.
@@ -469,25 +501,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.13.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.14.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.14.0 - Wall And Monotonic Clock Contracts
+### v0.15.0 - Wall And Monotonic Clock Contracts
 
 Status: planned
 
@@ -500,29 +532,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.14.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.15.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.15.0 - Pending Operations And Accelerator Lifecycle
+### v0.16.0 - Pending Operations And Accelerator Lifecycle
 
 Status: planned
 
-Plan scope: Define resumable provider tokens, certificate/signature/accelerator requests, cancellation, key-handle destruction, retry semantics, backpressure, and failure-atomic state transitions.
+Plan scope: Define resumable provider tokens, certificate, signature and accelerator requests, cancellation, key-handle destruction, retry semantics, backpressure, and failure-atomic state transitions.
 
 Goal: complete the **Pending Operations And Accelerator Lifecycle** implementation stop without admitting or
 claiming adjacent capability.
@@ -531,29 +563,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.15.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.16.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.16.0 - FIPS-Aware Provider Architecture
+### v0.17.0 - FIPS-Aware Provider Architecture
 
 Status: planned
 
-Plan scope: Freeze approved/non-approved service separation, self-test and permanent-failure hooks, dispatch, service indicators, SSP boundaries, deterministic module-build expectations, operational-environment assumptions, and sealed-provider exclusions without making a validation claim.
+Plan scope: Freeze approved and non-approved service separation, self-test and permanent-failure hooks, dispatch, service indicators, SSP boundaries, deterministic module-build expectations, operational-environment assumptions, and sealed-provider exclusions without making a validation claim.
 
 Goal: complete the **FIPS-Aware Provider Architecture** implementation stop without admitting or
 claiming adjacent capability.
@@ -562,29 +594,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.16.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.17.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.17.0 - TLS And DTLS Record Framing
+### v0.18.0 - TLS And DTLS Record Framing
 
 Status: planned
 
-Plan scope: Separate TLS and DTLS record framing codecs and make modern parsers reject unknown or legacy versions deterministically.
+Plan scope: Keep record framing independent of protocol selection and fallback; ignore TLSPlaintext legacy_record_version where required, validate TLSCiphertext constants where applicable, preserve bytes, and leave version choice exclusively to typed handshake policy.
 
 Goal: complete the **TLS And DTLS Record Framing** implementation stop without admitting or
 claiming adjacent capability.
@@ -593,29 +625,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.17.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.18.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.18.0 - Bounded DER Reader
+### v0.19.0 - Bounded DER Reader
 
 Status: planned
 
-Plan scope: Implement a non-recursive DER tag/length/value reader with definite, minimal, overflow-safe, depth-, node-, size-, and work-bounded parsing.
+Plan scope: Implement a non-recursive DER tag, length and value reader with definite, minimal, overflow-safe, depth-, node-, size-, and work-bounded parsing.
 
 Goal: complete the **Bounded DER Reader** implementation stop without admitting or
 claiming adjacent capability.
@@ -624,29 +656,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.18.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.19.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.19.0 - Canonical ASN.1 Primitives
+### v0.20.0 - Canonical ASN.1 Primitives
 
 Status: planned
 
-Plan scope: Add canonical ASN.1 integer, bit/octet string, OID, Boolean, string, sequence/set, and time primitives with malformed and non-canonical corpora.
+Plan scope: Add canonical ASN.1 integer, bit and octet string, OID, Boolean, string, sequence and set, and time primitives with malformed and non-canonical corpora.
 
 Goal: complete the **Canonical ASN.1 Primitives** implementation stop without admitting or
 claiming adjacent capability.
@@ -655,29 +687,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, provider failure, and secret-free error behavior before downstream use;
+- freeze public type invariants, caller-owned resource limits, effect boundaries, transactional mutation, mandatory production zeroization, provider failure, and secret-free errors before downstream use;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, and deterministic-provider tests;
-- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, and every documented terminal state;
+- run unit, boundary, truncation-at-every-offset, overflow, exhaustion, compile-fail, no-mutation-on-error, no_std, zeroization, and deterministic-provider tests;
+- test minimum and maximum workspaces, arena overlap, malformed encodings, unavailable effects, pending cancellation, drop, optimization, cache and DMA duties, and every terminal state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the bounded foundation is deterministic and panic-free for hostile input and exposes no unfinished cryptographic or protocol capability;
-- `v0.19.0 implementation stop reached. Run pentest for this exact commit.`
+- the bounded foundation is deterministic and panic-free for hostile input and its owned secret regions meet the reviewed destruction contract;
+- `v0.20.0 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase 1: First-Party Cryptography, Identity Formats, And PKI
 
-Cryptography is audited before bounded identity loading and split PKI validation enter their own audit gate.
+Arithmetic, group operations, key agreement, signatures, identity loading, PKI, revocation, and CT advance through separate reviewable stops.
 
-### v0.20.0 - SHA-256
+### v0.21.0 - SHA-256
 
 Status: planned
 
@@ -690,25 +722,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.20.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.21.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.21.0 - SHA-384 And SHA-512
+### v0.22.0 - SHA-384 And SHA-512
 
 Status: planned
 
@@ -721,29 +753,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.21.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.22.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.22.0 - Keccak SHA-3 And SHAKE
+### v0.23.0 - Keccak SHA-3 And SHAKE
 
 Status: planned
 
-Plan scope: Implement Keccak-f[1600], SHA3-256/512, and SHAKE128/256 as the required ML-KEM foundation.
+Plan scope: Implement Keccak-f[1600], SHA3-256 and SHA3-512, and SHAKE128 and SHAKE256 as the required ML-KEM foundation.
 
 Goal: complete the **Keccak SHA-3 And SHAKE** implementation stop without admitting or
 claiming adjacent capability.
@@ -752,29 +784,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.22.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.23.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.23.0 - HMAC
+### v0.24.0 - HMAC
 
 Status: planned
 
-Plan scope: Implement HMAC-SHA-256/384/512 with constant-time verification and misuse tests.
+Plan scope: Implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests.
 
 Goal: complete the **HMAC** implementation stop without admitting or
 claiming adjacent capability.
@@ -783,29 +815,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.23.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.24.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.24.0 - HKDF And TLS Labels
+### v0.25.0 - HKDF And TLS Labels
 
 Status: planned
 
-Plan scope: Implement HKDF extract/expand and TLS HKDF-Expand-Label with all input and output limits explicit.
+Plan scope: Implement HKDF extract and expand and TLS HKDF-Expand-Label with all input and output limits explicit.
 
 Goal: complete the **HKDF And TLS Labels** implementation stop without admitting or
 claiming adjacent capability.
@@ -814,29 +846,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.24.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.25.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.25.0 - Portable AES
+### v0.26.0 - Portable AES
 
 Status: planned
 
-Plan scope: Implement portable constant-time AES-128/256 without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.
+Plan scope: Implement portable constant-time AES-128 and AES-256 without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.
 
 Goal: complete the **Portable AES** implementation stop without admitting or
 claiming adjacent capability.
@@ -845,25 +877,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.25.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.26.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.26.0 - GHASH
+### v0.27.0 - GHASH
 
 Status: planned
 
@@ -876,29 +908,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.26.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.27.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.27.0 - AES-GCM
+### v0.28.0 - AES-GCM
 
 Status: planned
 
-Plan scope: Implement AES-GCM seal/open with nonce and usage limits and no plaintext release before authentication.
+Plan scope: Implement AES-GCM seal and open with nonce and usage limits and no plaintext release before authentication.
 
 Goal: complete the **AES-GCM** implementation stop without admitting or
 claiming adjacent capability.
@@ -907,25 +939,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.27.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.28.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.28.0 - ChaCha20
+### v0.29.0 - ChaCha20
 
 Status: planned
 
@@ -938,25 +970,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.28.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.29.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.29.0 - Poly1305 And ChaCha20-Poly1305
+### v0.30.0 - Poly1305 And ChaCha20-Poly1305
 
 Status: planned
 
@@ -969,149 +1001,335 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.29.0 implementation stop reached. Run pentest for this exact commit.`
-
-### v0.30.0 - Fixed-Limb Arithmetic
-
-Status: planned
-
-Plan scope: Implement fixed-limb RSA and ECC arithmetic with no attacker-selected allocation, normalization schedule, or limb count.
-
-Goal: complete the **Fixed-Limb Arithmetic** implementation stop without admitting or
-claiming adjacent capability.
-
-Deliverables:
-
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
-- update requirement mappings, threat-model delta, security controls, current
-  status, known limitations, release notes, and permanent evidence index for
-  this exact implementation.
-
-Verification:
-
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
-- pass full repository checks, all promised Rust versions and targets,
-  dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
-
-Exit criteria:
-
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
 - `v0.30.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.31.0 - X25519
+### v0.31.0 - Fixed-Limb RSA Arithmetic
 
 Status: planned
 
-Plan scope: Implement X25519 using a fixed ladder, low-order handling, and explicit non-FIPS classification.
+Plan scope: Implement fixed-limb unsigned arithmetic, Montgomery operations, modular exponentiation, and RSA-size policies with no attacker-selected allocation, normalization schedule, or limb count.
 
-Goal: complete the **X25519** implementation stop without admitting or
+Goal: complete the **Fixed-Limb RSA Arithmetic** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
 - `v0.31.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.32.0 - P-256
+### v0.32.0 - Prime-Field And ECC Arithmetic
 
 Status: planned
 
-Plan scope: Implement P-256 ECDH and ECDSA, complete point validation, and explicit deterministic and randomized nonce policy using the secure-random contract.
+Plan scope: Implement fixed-width prime-field arithmetic, inversion, square roots, scalar primitives, and complete-formula foundations needed by admitted curves, separate from RSA limbs.
 
-Goal: complete the **P-256** implementation stop without admitting or
+Goal: complete the **Prime-Field And ECC Arithmetic** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
 - `v0.32.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.33.0 - P-384
+### v0.33.0 - X25519 Field And Ladder
 
 Status: planned
 
-Plan scope: Implement P-384 ECDH and ECDSA with separate vectors, side-channel evidence, and review.
+Plan scope: Implement X25519 field encoding, canonical decoding policy, clamping, fixed Montgomery ladder, and low-order input handling.
 
-Goal: complete the **P-384** implementation stop without admitting or
+Goal: complete the **X25519 Field And Ladder** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
 - `v0.33.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.34.0 - RSA-PSS Verification
+### v0.34.0 - X25519 ECDH Lifecycle
+
+Status: planned
+
+Plan scope: Implement unbiased ephemeral input generation, no private-key reuse, imported public and private consistency policy, all-zero shared-secret rejection, immediate scalar destruction, and provider-token binding to group, connection, and transcript.
+
+Goal: complete the **X25519 ECDH Lifecycle** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.34.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.35.0 - P-256 Group Operations
+
+Status: planned
+
+Plan scope: Implement P-256 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors.
+
+Goal: complete the **P-256 Group Operations** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.35.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.36.0 - P-256 ECDH Lifecycle
+
+Status: planned
+
+Plan scope: Implement unbiased P-256 private-scalar generation, no ephemeral reuse, imported key consistency, invalid shared-secret handling, immediate scalar destruction, and exact group, connection, and transcript provider-token binding.
+
+Goal: complete the **P-256 ECDH Lifecycle** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.36.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.37.0 - P-256 ECDSA
+
+Status: planned
+
+Plan scope: Implement P-256 ECDSA signing and verification, strict encoding, low-S policy decision, and deterministic and randomized nonce policy using the secure-random contract.
+
+Goal: complete the **P-256 ECDSA** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.37.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.38.0 - P-384 Group Operations
+
+Status: planned
+
+Plan scope: Implement P-384 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors.
+
+Goal: complete the **P-384 Group Operations** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.38.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.39.0 - P-384 ECDH Lifecycle
+
+Status: planned
+
+Plan scope: Implement unbiased P-384 private-scalar generation, no ephemeral reuse, imported key consistency, invalid shared-secret handling, immediate scalar destruction, and exact group, connection, and transcript provider-token binding.
+
+Goal: complete the **P-384 ECDH Lifecycle** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.39.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.40.0 - P-384 ECDSA
+
+Status: planned
+
+Plan scope: Implement P-384 ECDSA signing and verification with strict encoding, nonce policy, vectors, per-target side-channel evidence, and independent review.
+
+Goal: complete the **P-384 ECDSA** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.40.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.41.0 - RSA-PSS Verification
 
 Status: planned
 
@@ -1124,29 +1342,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.34.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.41.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.35.0 - RSA PKCS1 v1.5 Verification
+### v0.42.0 - RSA PKCS1 v1.5 Verification
 
 Status: planned
 
-Plan scope: Implement strict RSASSA-PKCS1-v1_5 certificate-signature verification for SHA-256/384/512 with complete padding, exact DigestInfo, no trailing bytes, and no SHA-1 or MD5 aliases; keep TLS CertificateVerify and signing excluded.
+Plan scope: Implement strict RSASSA-PKCS1-v1_5 certificate-signature verification for SHA-256, SHA-384 and SHA-512 with complete padding, exact DigestInfo, no trailing bytes, and no SHA-1 or MD5 aliases; keep TLS CertificateVerify and signing excluded.
 
 Goal: complete the **RSA PKCS1 v1.5 Verification** implementation stop without admitting or
 claiming adjacent capability.
@@ -1155,25 +1373,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.35.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.42.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.36.0 - RSA-PSS Private Operations
+### v0.43.0 - RSA-PSS Private Operations
 
 Status: planned
 
@@ -1186,25 +1404,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.36.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.43.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.37.0 - Ed25519
+### v0.44.0 - Ed25519
 
 Status: planned
 
@@ -1217,29 +1435,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.37.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.44.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.38.0 - Version-One Algorithm Decisions
+### v0.45.0 - Version-One Algorithm Decisions
 
 Status: planned
 
-Plan scope: Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing, encrypted private-key containers, and every unimplemented algorithm family.
+Plan scope: Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing, encrypted private-key containers, ML-DSA, SLH-DSA, and every unimplemented algorithm family.
 
 Goal: complete the **Version-One Algorithm Decisions** implementation stop without admitting or
 claiming adjacent capability.
@@ -1248,29 +1466,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.38.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.45.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.39.0 - Cryptographic Substrate Audit Gate
+### v0.46.0 - Cryptographic Substrate Audit Gate
 
 Status: planned
 
-Plan scope: Complete independent cryptographic-substrate review, per-target constant-time evidence, and remediation before PKI or TLS consumption.
+Plan scope: Complete independent cryptographic-substrate review, per-target constant-time and zeroization evidence, and remediation before PKI or TLS consumption.
 
 Goal: complete the **Cryptographic Substrate Audit Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -1279,25 +1497,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- record parameters, key, nonce and randomness domains, usage ceilings, secret lifetimes, constant-time obligations, algorithm exclusions, and provider boundaries;
+- record parameters, arithmetic and group invariants, key, nonce and randomness domains, usage ceilings, ephemeral non-reuse and destruction, constant-time obligations, exclusions, and provider-token binding;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, and failure injection;
-- review emitted MIR, LLVM and assembly and run primitive-appropriate timing, cache, branch, malformed-input, exhaustion, and zeroization-store tests for every admitted compiler and target;
+- run official vectors, boundary and misuse cases, two independent differential implementations where available, supported-target no_std tests, imported-key consistency, and provider fault injection;
+- review MIR, LLVM and assembly and run timing, cache, branch, malformed-input, invalid-secret, exhaustion, key-reuse, stale-token, and zeroization-store tests per compiler and target;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have traceable functional, misuse, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
-- `v0.39.0 implementation stop reached. Run pentest for this exact commit.`
+- admitted algorithms have traceable functional, lifecycle, resource, and layered side-channel evidence and no downstream use before the crypto audit gate;
+- `v0.46.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.40.0 - PEM Base64 And Chain Containers
+### v0.47.0 - PEM Base64 And Chain Containers
 
 Status: planned
 
@@ -1310,29 +1528,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.40.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.47.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.41.0 - Private-Key Input Formats
+### v0.48.0 - Private-Key Input Formats
 
 Status: planned
 
-Plan scope: Implement bounded unencrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key decoding with algorithm/key consistency and secret-arena ownership; keep encrypted PKCS#8 an explicit v1 non-goal unless separately versioned.
+Plan scope: Implement bounded unencrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key decoding with algorithm and key consistency and secret-arena ownership; keep encrypted PKCS#8 an explicit v1 non-goal unless separately versioned.
 
 Goal: complete the **Private-Key Input Formats** implementation stop without admitting or
 claiming adjacent capability.
@@ -1341,25 +1559,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.41.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.48.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.42.0 - X.509 Decoder
+### v0.49.0 - X.509 Decoder
 
 Status: planned
 
@@ -1372,29 +1590,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.42.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.49.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.43.0 - Service Identity And Extensions
+### v0.50.0 - Service Identity And Extensions
 
 Status: planned
 
-Plan scope: Validate SAN/service identity, ASCII A-label DNS inputs, wildcards, IP, email and URI names, critical and duplicate extensions, and caller-owned international-name normalization policy.
+Plan scope: Validate SAN and service identity, ASCII A-label DNS inputs, wildcards, IP, email and URI names, critical and duplicate extensions, and caller-owned international-name normalization policy.
 
 Goal: complete the **Service Identity And Extensions** implementation stop without admitting or
 claiming adjacent capability.
@@ -1403,25 +1621,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.43.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.50.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.44.0 - Bounded Path Construction
+### v0.51.0 - Bounded Path Construction
 
 Status: planned
 
@@ -1434,25 +1652,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.44.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.51.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.45.0 - Core Chain Validation
+### v0.52.0 - Core Chain Validation
 
 Status: planned
 
@@ -1465,25 +1683,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.45.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.52.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.46.0 - Name Constraints
+### v0.53.0 - Name Constraints
 
 Status: planned
 
@@ -1496,25 +1714,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.46.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.53.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.47.0 - Certificate Policy Processing
+### v0.54.0 - Certificate Policy Processing
 
 Status: planned
 
@@ -1527,25 +1745,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.47.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.54.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.0 - Trust Anchors Cross-Signing And Algorithms
+### v0.55.0 - Trust Anchors Cross-Signing And Algorithms
 
 Status: planned
 
@@ -1558,25 +1776,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.48.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.55.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.49.0 - CRL Validation
+### v0.56.0 - CRL Validation
 
 Status: planned
 
@@ -1589,29 +1807,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.49.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.56.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.50.0 - OCSP Validation
+### v0.57.0 - OCSP Validation
 
 Status: planned
 
-Plan scope: Validate stapled and offline OCSP responses, responder authorization, freshness, nonce, issuer and serial matching, and explicit hard/soft-fail policy.
+Plan scope: Validate stapled and offline OCSP responses, responder authorization, freshness, nonce, issuer and serial matching, and explicit hard and soft-fail policy.
 
 Goal: complete the **OCSP Validation** implementation stop without admitting or
 claiming adjacent capability.
@@ -1620,60 +1838,60 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.50.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.57.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.51.0 - SCT Parsing And Certificate Transparency Policy
+### v0.58.0 - Certificate Transparency Contract
 
 Status: planned
 
-Plan scope: Implement bounded SCT certificate-entry parsing and an explicit Certificate Transparency verification/provider policy; fail closed when CT is required and no admitted verifier exists.
+Plan scope: Implement bounded SCT parsing and define verifier ownership, log identities and list updates, signed-entry reconstruction, timestamp validity, log disqualification, duplicate handling, and distinct-log and operator policy; fail closed when CT is required and no admitted verifier exists.
 
-Goal: complete the **SCT Parsing And Certificate Transparency Policy** implementation stop without admitting or
+Goal: complete the **Certificate Transparency Contract** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.51.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.58.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.52.0 - PKI Audit Gate
+### v0.59.0 - PKI Audit Gate
 
 Status: planned
 
-Plan scope: Complete PKI adversarial, differential, fuzz, path-complexity, revocation, and external audit campaigns with clean remediation.
+Plan scope: Complete PKI adversarial, differential, fuzz, path-complexity, revocation, Certificate Transparency, and external audit campaigns with clean remediation.
 
 Goal: complete the **PKI Audit Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -1682,33 +1900,33 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- bind parsers and validators to exact signed bytes, explicit normalization and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
+- bind parsers and validators to exact signed bytes, explicit normalization, CT and algorithm policy, caller-supplied trust and time, secret arenas, and immutable size, depth, count, path, and work budgets;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path and policy matrices, differential validation, deterministic selection, and work-exhaustion tests;
-- test unknown critical and duplicate extensions, ambiguous algorithms, invalid key containers, cycles, cross-signing, constraint interactions, stale or unauthorized status data, and unavailable CT policy;
+- run standards vectors, malformed DER, armor, key and certificate corpora, truncation, path, constraint, policy, revocation and CT matrices, differential validation, deterministic selection, and exhaustion tests;
+- test ambiguous algorithms, invalid keys, cycles, cross-signing, constraints, stale status, log disqualification, duplicate SCTs, operator diversity, log-list updates, and unavailable required verifier state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- identity and PKI processing is fail-closed, bounded, deterministic, and independently reviewed before a handshake authenticates a peer;
-- `v0.52.0 implementation stop reached. Run pentest for this exact commit.`
+- identity, PKI, revocation, and CT processing is fail-closed, bounded, deterministic, and independently reviewed before peer authentication;
+- `v0.59.0 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase 2: Internal Sans-I/O, Modern TLS 1.3, And Explicit TLS 1.2
 
-The internal effects model is exercised first; TLS 1.3 completes before an isolated, explicitly selected TLS 1.2 profile.
+The effects model and one-pass selector prevent fallback; TLS 1.2 signaling is implemented exactly rather than rejected wholesale.
 
-### v0.53.0 - Internal Sans-I/O Execution Contract
+### v0.60.0 - Internal Sans-I/O Execution Contract
 
 Status: planned
 
-Plan scope: Define an explicitly unstable deterministic Event-to-Action driver for consumed input, output workspace, timers, entropy/time, certificate/signature/accelerator requests, application data, backpressure, resumable operations, cancellation, and terminal states.
+Plan scope: Define an explicitly unstable deterministic Event-to-Action driver for consumed input, output workspace, timers, entropy and time, certificate, signature and accelerator requests, application data, backpressure, resumable operations, path tokens, cancellation, and terminal states.
 
 Goal: complete the **Internal Sans-I/O Execution Contract** implementation stop without admitting or
 claiming adjacent capability.
@@ -1717,29 +1935,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze the internal input-consumption, output, timer, entropy, clock, certificate, signature, accelerator, application-data, pending-operation, cancellation, and terminal action vocabulary;
+- freeze internal input, output, timer, entropy, clock, path, certificate, signature, accelerator, application-data, pending-operation, cancellation, and terminal effects;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run deterministic action traces, partial-input/output, backpressure, re-entry prohibition, pending resume/cancel, provider fault, terminal-state, and workspace-exhaustion tests;
-- prove no callback reentrancy, hidden I/O, global state, lost authenticated transition, half-installed key, secret output, or action replay after cancellation;
+- run deterministic traces, partial input and output, path-token, backpressure, re-entry prohibition, pending resume and cancel, provider fault, terminal-state, and exhaustion tests;
+- prove no hidden I/O, global state, lost authenticated transition, half-installed key, cross-path budget transfer, secret output, or action replay after cancellation;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- protocol engines can be implemented as deterministic effects over caller-owned state without committing the later public facade API;
-- `v0.53.0 implementation stop reached. Run pentest for this exact commit.`
+- engines operate as deterministic effects over caller-owned state without prematurely freezing the later public facade;
+- `v0.60.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.54.0 - TLS Record Protection
+### v0.61.0 - TLS Record Protection
 
 Status: planned
 
-Plan scope: Implement TLS record protection, checked sequence exhaustion, inner content-type and padding validation, transactional state changes, and fragmentation boundaries.
+Plan scope: Implement TLS record protection, checked sequence exhaustion, inner content-type and padding validation, transactional state changes, and fragmentation boundaries without performing protocol selection.
 
 Goal: complete the **TLS Record Protection** implementation stop without admitting or
 claiming adjacent capability.
@@ -1748,29 +1966,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.54.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.61.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.55.0 - TLS 1.3 Handshake Codec
+### v0.62.0 - TLS 1.3 Handshake Codec
 
 Status: planned
 
-Plan scope: Implement the complete TLS 1.3 handshake codec with duplicate, ordering, extension-context, unknown/GREASE-extension, compatibility ChangeCipherSpec, and resource rules.
+Plan scope: Implement the complete TLS 1.3 handshake codec with duplicate, ordering, extension-context, unknown and GREASE extension, compatibility ChangeCipherSpec, and resource rules.
 
 Goal: complete the **TLS 1.3 Handshake Codec** implementation stop without admitting or
 claiming adjacent capability.
@@ -1779,25 +1997,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.55.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.62.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.56.0 - Transcript And Key Schedule
+### v0.63.0 - Transcript And Key Schedule
 
 Status: planned
 
@@ -1810,56 +2028,118 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.56.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.63.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.57.0 - TLS 1.3 Opening Flight
+### v0.64.0 - ClientHello Construction And Offers
 
 Status: planned
 
-Plan scope: Implement ClientHello, versions, groups, signatures, key shares, HelloRetryRequest, cookies, GREASE tolerance, and downgrade invariants.
+Plan scope: Implement bounded ClientHello construction and parsing for supported versions, groups, signature schemes, key shares, GREASE, SNI, ALPN, extension ordering, and exact original-byte preservation.
 
-Goal: complete the **TLS 1.3 Opening Flight** implementation stop without admitting or
+Goal: complete the **ClientHello Construction And Offers** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.57.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.64.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.58.0 - TLS 1.3 Authenticated Server Flight
+### v0.65.0 - HelloRetryRequest And Cookies
+
+Status: planned
+
+Plan scope: Implement HelloRetryRequest validation, transcript message_hash transformation, selected-group rules, cookies, second-ClientHello invariants, and retry resource ceilings.
+
+Goal: complete the **HelloRetryRequest And Cookies** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.65.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.66.0 - One-Pass Modern TLS Version Selector
+
+Status: planned
+
+Plan scope: Parse one ClientHello once, safely skip unknown future offered versions, reject recognized legacy versions by policy, intersect configured TLS 1.3 and hardened TLS 1.2, choose the highest, apply downgrade sentinels when selecting TLS 1.2, preserve original bytes, and transfer credentials, tickets, PSKs and state into exactly one typed engine with no retry after failure.
+
+Goal: complete the **One-Pass Modern TLS Version Selector** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.66.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.67.0 - TLS 1.3 Authenticated Server Flight
 
 Status: planned
 
@@ -1872,29 +2152,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.58.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.67.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.59.0 - Certificate Negotiation And Selection
+### v0.68.0 - Certificate Negotiation And Selection
 
 Status: planned
 
-Plan scope: Implement signature_algorithms_cert, certificate_authorities, oid_filters, certificate/public-key compatibility, bounded identity selection, and deterministic external-signer requests.
+Plan scope: Implement signature_algorithms_cert, certificate_authorities, oid_filters, certificate and public-key compatibility, bounded identity selection, and deterministic external-signer requests.
 
 Goal: complete the **Certificate Negotiation And Selection** implementation stop without admitting or
 claiming adjacent capability.
@@ -1903,29 +2183,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.59.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.68.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.60.0 - Stapled Status And SCT Transport
+### v0.69.0 - Stapled Status And SCT Transport
 
 Status: planned
 
-Plan scope: Implement status_request and stapled OCSP transport plus bounded SCT transport and handoff to the admitted PKI and CT policies.
+Plan scope: Implement status_request and stapled OCSP transport plus bounded SCT transport and handoff to admitted PKI and Certificate Transparency policies.
 
 Goal: complete the **Stapled Status And SCT Transport** implementation stop without admitting or
 claiming adjacent capability.
@@ -1934,25 +2214,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.60.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.69.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.61.0 - Client Authentication And Finished
+### v0.70.0 - Client Authentication And Finished
 
 Status: planned
 
@@ -1965,25 +2245,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.61.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.70.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.62.0 - Alerts Closure And Cancellation
+### v0.71.0 - Alerts Closure And Cancellation
 
 Status: planned
 
@@ -1996,56 +2276,87 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.62.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.71.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.63.0 - Tickets And Resumption PSKs
+### v0.72.0 - Stateful Tickets And Resumption PSKs
 
 Status: planned
 
-Plan scope: Implement session tickets and resumption PSK binders with protocol-specific ticket-key, cache, external-storage secrecy, rotation, and lifetime domains.
+Plan scope: Implement stateful cache tickets and resumption PSK binders with protocol-specific cache, key, external-storage secrecy, rotation, lifetime, and identity domains.
 
-Goal: complete the **Tickets And Resumption PSKs** implementation stop without admitting or
+Goal: complete the **Stateful Tickets And Resumption PSKs** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.63.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.72.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.64.0 - External PSKs And PSK Modes
+### v0.73.0 - Stateless Ticket Protection
+
+Status: planned
+
+Plan scope: Implement an optional versioned AEAD ticket envelope binding protocol version, suite, SNI, ALPN, client-authentication state, PSK and early-data policy, issue and expiry time, key identifier, rotation generation, and deployment domain with nonce uniqueness and uniform failures.
+
+Goal: complete the **Stateless Ticket Protection** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.73.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.74.0 - External PSKs And PSK Modes
 
 Status: planned
 
@@ -2058,25 +2369,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.64.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.74.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.65.0 - Zero-RTT
+### v0.75.0 - Zero-RTT
 
 Status: planned
 
@@ -2089,25 +2400,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.65.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.75.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.66.0 - TLS KeyUpdate
+### v0.76.0 - TLS KeyUpdate
 
 Status: planned
 
@@ -2120,25 +2431,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.66.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.76.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.67.0 - Exporters And Channel Binding
+### v0.77.0 - Exporters And Channel Binding
 
 Status: planned
 
@@ -2151,25 +2462,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.67.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.77.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.68.0 - TLS 1.3 Suite Completion
+### v0.78.0 - TLS 1.3 Suite Completion
 
 Status: planned
 
@@ -2182,25 +2493,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.68.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.78.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.69.0 - TLS 1.3 Conformance And Interoperability
+### v0.79.0 - TLS 1.3 Conformance And Interoperability
 
 Status: planned
 
@@ -2213,25 +2524,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.69.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.79.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.70.0 - TLS 1.3 Audit Gate
+### v0.80.0 - TLS 1.3 Audit Gate
 
 Status: planned
 
@@ -2244,25 +2555,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- encode TLS 1.3 transcript, certificate, PSK, secret, record, effects, configuration, and failure invariants as closed types with caller-owned storage;
+- encode record, transcript, one-pass version selection, HRR, certificate, PSK, ticket, secret, effects, configuration, and failure invariants as closed version-domain types;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC vectors, truncation and fragmentation matrices, illegal-order, duplicate and GREASE tests, transcript and key-schedule checks, provider faults, and independent-peer interoperability;
-- exercise downgrade, compatibility CCS, replay, binders, external and resumption PSKs, tickets, zero-RTT, key limits, backpressure, cancellation, alert, status, selection, and terminal cleanup;
+- run RFC vectors, truncation and fragmentation, illegal-order, duplicate, unknown-version and GREASE tests, transcript, selector, downgrade, key-schedule, provider-fault, and independent-peer matrices;
+- exercise retry prohibition, cross-version state, compatibility CCS, replay, binders, ticket envelopes, external and resumption PSKs, zero-RTT, key limits, status, selection, and terminal cleanup;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the named TLS 1.3 boundary is interoperable and fail-closed without admitting unfinished states, unauthenticated output, or overlapping feature ownership;
-- `v0.70.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS negotiation selects one highest acceptable modern engine once and the named TLS 1.3 boundary is interoperable and fail-closed;
+- `v0.80.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.71.0 - TLS 1.2 Policy Boundary
+### v0.81.0 - TLS 1.2 Policy Boundary
 
 Status: planned
 
@@ -2275,60 +2586,153 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep TLS 1.2 independently selectable and restricted to ECDHE plus AEAD with EMS, protocol-specific tickets, and no retry fallback from TLS 1.3;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run TLS 1.2 vectors, transcript and nonce tests, admitted-suite interoperability, extension and resumption matrices, downgrade corpora, and explicit-disablement checks;
-- prove rejection of static RSA, CBC, SHA-1 signing, compression, renegotiation, weak groups, downgrade ambiguity, and cross-version credential, cache, ticket, or state reuse;
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the TLS 1.2 profile is isolated, explicitly configured, independently disableable, and covered by separate audit evidence;
-- `v0.71.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.81.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.72.0 - TLS 1.2 PRF Records And Downgrade Defense
+### v0.82.0 - TLS 1.2 PRF And Key Block
 
 Status: planned
 
-Plan scope: Implement the TLS 1.2 PRF, record nonces, EMS transcript binding, downgrade sentinel, and SCSV and renegotiation-info rejection rules.
+Plan scope: Implement the TLS 1.2 PRF, master secret, EMS master-secret input, key-block expansion, label separation, and length limits.
 
-Goal: complete the **TLS 1.2 PRF Records And Downgrade Defense** implementation stop without admitting or
+Goal: complete the **TLS 1.2 PRF And Key Block** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep TLS 1.2 independently selectable and restricted to ECDHE plus AEAD with EMS, protocol-specific tickets, and no retry fallback from TLS 1.3;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run TLS 1.2 vectors, transcript and nonce tests, admitted-suite interoperability, extension and resumption matrices, downgrade corpora, and explicit-disablement checks;
-- prove rejection of static RSA, CBC, SHA-1 signing, compression, renegotiation, weak groups, downgrade ambiguity, and cross-version credential, cache, ticket, or state reuse;
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the TLS 1.2 profile is isolated, explicitly configured, independently disableable, and covered by separate audit evidence;
-- `v0.72.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.82.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.73.0 - TLS 1.2 ECDHE State Machines
+### v0.83.0 - TLS 1.2 Record Nonces And Protection
 
 Status: planned
 
-Plan scope: Implement isolated ECDHE_ECDSA and ECDHE_RSA TLS 1.2 client and server state machines.
+Plan scope: Implement admitted TLS 1.2 AEAD record nonces, additional data, sequence exhaustion, limits, fragmentation, and failure-atomic open.
+
+Goal: complete the **TLS 1.2 Record Nonces And Protection** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.83.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.84.0 - TLS 1.2 EMS Transcript Binding
+
+Status: planned
+
+Plan scope: Implement Extended Master Secret transcript selection, session-hash rules, resumption consistency, and mandatory EMS failure behavior.
+
+Goal: complete the **TLS 1.2 EMS Transcript Binding** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.84.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.85.0 - TLS 1.2 Signaling And Renegotiation Semantics
+
+Status: planned
+
+Plan scope: Accept TLS_EMPTY_RENEGOTIATION_INFO_SCSV only as initial secure-renegotiation signaling, accept empty renegotiation_info where required, emit inappropriate_fallback for TLS_FALLBACK_SCSV only when a higher enabled version exists, apply downgrade sentinels, and reject every subsequent renegotiation attempt.
+
+Goal: complete the **TLS 1.2 Signaling And Renegotiation Semantics** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.85.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.86.0 - TLS 1.2 ECDHE State Machines
+
+Status: planned
+
+Plan scope: Implement isolated ECDHE_ECDSA and ECDHE_RSA TLS 1.2 client and server state machines entered only by the one-pass modern selector.
 
 Goal: complete the **TLS 1.2 ECDHE State Machines** implementation stop without admitting or
 claiming adjacent capability.
@@ -2337,29 +2741,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep TLS 1.2 independently selectable and restricted to ECDHE plus AEAD with EMS, protocol-specific tickets, and no retry fallback from TLS 1.3;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run TLS 1.2 vectors, transcript and nonce tests, admitted-suite interoperability, extension and resumption matrices, downgrade corpora, and explicit-disablement checks;
-- prove rejection of static RSA, CBC, SHA-1 signing, compression, renegotiation, weak groups, downgrade ambiguity, and cross-version credential, cache, ticket, or state reuse;
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the TLS 1.2 profile is isolated, explicitly configured, independently disableable, and covered by separate audit evidence;
-- `v0.73.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.86.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.74.0 - TLS 1.2 Suite Completion
+### v0.87.0 - TLS 1.2 Suite Completion
 
 Status: planned
 
-Plan scope: Admit only the six ECDSA/RSA combinations over AES-128-GCM, AES-256-GCM, and ChaCha20-Poly1305.
+Plan scope: Admit only the six ECDSA and RSA combinations over AES-128-GCM, AES-256-GCM, and ChaCha20-Poly1305.
 
 Goal: complete the **TLS 1.2 Suite Completion** implementation stop without admitting or
 claiming adjacent capability.
@@ -2368,29 +2772,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep TLS 1.2 independently selectable and restricted to ECDHE plus AEAD with EMS, protocol-specific tickets, and no retry fallback from TLS 1.3;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run TLS 1.2 vectors, transcript and nonce tests, admitted-suite interoperability, extension and resumption matrices, downgrade corpora, and explicit-disablement checks;
-- prove rejection of static RSA, CBC, SHA-1 signing, compression, renegotiation, weak groups, downgrade ambiguity, and cross-version credential, cache, ticket, or state reuse;
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the TLS 1.2 profile is isolated, explicitly configured, independently disableable, and covered by separate audit evidence;
-- `v0.74.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.87.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.75.0 - TLS 1.2 Resumption And Interoperability
+### v0.88.0 - TLS 1.2 Resumption And Interoperability
 
 Status: planned
 
-Plan scope: Complete TLS 1.2 resumption, protocol-specific tickets, extension hardening, interop, and downgrade corpora.
+Plan scope: Complete TLS 1.2 stateful and stateless resumption, protocol-specific tickets, extension hardening, interop, and downgrade corpora.
 
 Goal: complete the **TLS 1.2 Resumption And Interoperability** implementation stop without admitting or
 claiming adjacent capability.
@@ -2399,25 +2803,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep TLS 1.2 independently selectable and restricted to ECDHE plus AEAD with EMS, protocol-specific tickets, and no retry fallback from TLS 1.3;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run TLS 1.2 vectors, transcript and nonce tests, admitted-suite interoperability, extension and resumption matrices, downgrade corpora, and explicit-disablement checks;
-- prove rejection of static RSA, CBC, SHA-1 signing, compression, renegotiation, weak groups, downgrade ambiguity, and cross-version credential, cache, ticket, or state reuse;
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the TLS 1.2 profile is isolated, explicitly configured, independently disableable, and covered by separate audit evidence;
-- `v0.75.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.88.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.76.0 - TLS 1.2 Audit Gate
+### v0.89.0 - TLS 1.2 Audit Gate
 
 Status: planned
 
@@ -2430,33 +2834,33 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep TLS 1.2 independently selectable and restricted to ECDHE plus AEAD with EMS, protocol-specific tickets, and no retry fallback from TLS 1.3;
+- keep TLS 1.2 explicitly selected and restricted to ECDHE plus AEAD with EMS, exact initial SCSV and renegotiation signaling, protocol-specific tickets, and no retry fallback;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run TLS 1.2 vectors, transcript and nonce tests, admitted-suite interoperability, extension and resumption matrices, downgrade corpora, and explicit-disablement checks;
-- prove rejection of static RSA, CBC, SHA-1 signing, compression, renegotiation, weak groups, downgrade ambiguity, and cross-version credential, cache, ticket, or state reuse;
+- run PRF, key-block, nonce, record, EMS, initial SCSV and renegotiation-info, FALLBACK_SCSV, downgrade, resumption, suite, interoperability, and disablement matrices;
+- prove correct initial compatibility signaling and rejection of actual renegotiation, static RSA, CBC, SHA-1 signing, compression, weak groups, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- the TLS 1.2 profile is isolated, explicitly configured, independently disableable, and covered by separate audit evidence;
-- `v0.76.0 implementation stop reached. Run pentest for this exact commit.`
+- TLS 1.2 is compliant for admitted initial-handshake signaling, isolated, explicitly configured, independently disableable, and separately audited;
+- `v0.89.0 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase 3: QUIC TLS, DTLS, And Post-Quantum Work
 
-QUIC transport ownership, DTLS datagram state, and standardized post-quantum integrations remain separate boundaries.
+QUIC derivation ownership, DTLS path and version identity, and PQ authentication exclusions are explicit.
 
-### v0.77.0 - QUIC Ownership And Encryption Levels
+### v0.90.0 - QUIC Ownership And Encryption Levels
 
 Status: planned
 
-Plan scope: Define distinct QUIC encryption levels and secret install/discard events; consume ordered bytes supplied by QUIC and exclude packet processing, offsets, retransmission, packet numbers, loss recovery, Retry, key phase, TLS records, and TLS KeyUpdate.
+Plan scope: Define distinct QUIC encryption levels and secret install and discard events; consume ordered bytes supplied by QUIC and exclude packet processing, offsets, retransmission, packet numbers, loss recovery, Retry, key phase, TLS records, and TLS KeyUpdate.
 
 Goal: complete the **QUIC Ownership And Encryption Levels** implementation stop without admitting or
 claiming adjacent capability.
@@ -2465,25 +2869,56 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep QUIC encryption levels, ordered TLS bytes, transport-parameter syntax, secret events, optional helpers, and buffering limits distinct from QUIC transport ownership;
+- separate typed TLS traffic secrets and optional quic key, iv and hp expansion from QUIC-owned Initial salts, packets, Retry, recovery, key phase, and quic ku;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC 9001 vectors, level ordering, ordered-byte delivery, secret install and discard, transport-parameter syntax, helper conflict, loss and reorder simulation, and independent peer tests;
-- test future and late data, conflicting helper ranges, forbidden TLS records, KeyUpdate and post-handshake authentication, semantic-boundary violations, 0-RTT rejection, and exhaustion;
+- run RFC 9001 secret and expansion vectors, level ordering, ordered-byte delivery, install and discard, parameter syntax, helper conflict, loss simulation, and independent peers;
+- test future and late data, conflicting ranges, derivation-domain confusion, forbidden TLS records and KeyUpdate, semantic-boundary violations, 0-RTT rejection, and exhaustion;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- Brynja consumes and emits only bounded TLS effects and cannot become an implicit QUIC packet, recovery, offset, Retry, or key-phase implementation;
-- `v0.77.0 implementation stop reached. Run pentest for this exact commit.`
+- Brynja owns only documented TLS and optional expansion effects and cannot become an implicit QUIC transport or version-salt owner;
+- `v0.90.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.78.0 - QUIC Transport Parameters
+### v0.91.0 - QUIC Key-Derivation Boundary
+
+Status: planned
+
+Plan scope: Have TLS emit typed handshake and application traffic secrets; optionally derive quic key, quic iv and quic hp in brynja-quic-tls; keep version-specific Initial salts and secrets, packet protection, Retry integrity, key phase, and quic ku in the QUIC transport; verify all admitted derivations with RFC 9001 vectors.
+
+Goal: complete the **QUIC Key-Derivation Boundary** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- separate typed TLS traffic secrets and optional quic key, iv and hp expansion from QUIC-owned Initial salts, packets, Retry, recovery, key phase, and quic ku;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run RFC 9001 secret and expansion vectors, level ordering, ordered-byte delivery, install and discard, parameter syntax, helper conflict, loss simulation, and independent peers;
+- test future and late data, conflicting ranges, derivation-domain confusion, forbidden TLS records and KeyUpdate, semantic-boundary violations, 0-RTT rejection, and exhaustion;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- Brynja owns only documented TLS and optional expansion effects and cannot become an implicit QUIC transport or version-salt owner;
+- `v0.91.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.92.0 - QUIC Transport Parameters
 
 Status: planned
 
@@ -2496,29 +2931,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep QUIC encryption levels, ordered TLS bytes, transport-parameter syntax, secret events, optional helpers, and buffering limits distinct from QUIC transport ownership;
+- separate typed TLS traffic secrets and optional quic key, iv and hp expansion from QUIC-owned Initial salts, packets, Retry, recovery, key phase, and quic ku;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC 9001 vectors, level ordering, ordered-byte delivery, secret install and discard, transport-parameter syntax, helper conflict, loss and reorder simulation, and independent peer tests;
-- test future and late data, conflicting helper ranges, forbidden TLS records, KeyUpdate and post-handshake authentication, semantic-boundary violations, 0-RTT rejection, and exhaustion;
+- run RFC 9001 secret and expansion vectors, level ordering, ordered-byte delivery, install and discard, parameter syntax, helper conflict, loss simulation, and independent peers;
+- test future and late data, conflicting ranges, derivation-domain confusion, forbidden TLS records and KeyUpdate, semantic-boundary violations, 0-RTT rejection, and exhaustion;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- Brynja consumes and emits only bounded TLS effects and cannot become an implicit QUIC packet, recovery, offset, Retry, or key-phase implementation;
-- `v0.78.0 implementation stop reached. Run pentest for this exact commit.`
+- Brynja owns only documented TLS and optional expansion effects and cannot become an implicit QUIC transport or version-salt owner;
+- `v0.92.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.79.0 - QUIC Sans-I/O Handshake
+### v0.93.0 - QUIC Sans-I/O Handshake
 
 Status: planned
 
-Plan scope: Implement per-level TLS handshake input/output, alerts, pending providers, bounded future-level data, secret events, and deterministic rejection of late data.
+Plan scope: Implement per-level TLS handshake input and output, alerts, pending providers, bounded future-level data, traffic-secret events, and deterministic rejection of late data.
 
 Goal: complete the **QUIC Sans-I/O Handshake** implementation stop without admitting or
 claiming adjacent capability.
@@ -2527,25 +2962,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep QUIC encryption levels, ordered TLS bytes, transport-parameter syntax, secret events, optional helpers, and buffering limits distinct from QUIC transport ownership;
+- separate typed TLS traffic secrets and optional quic key, iv and hp expansion from QUIC-owned Initial salts, packets, Retry, recovery, key phase, and quic ku;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC 9001 vectors, level ordering, ordered-byte delivery, secret install and discard, transport-parameter syntax, helper conflict, loss and reorder simulation, and independent peer tests;
-- test future and late data, conflicting helper ranges, forbidden TLS records, KeyUpdate and post-handshake authentication, semantic-boundary violations, 0-RTT rejection, and exhaustion;
+- run RFC 9001 secret and expansion vectors, level ordering, ordered-byte delivery, install and discard, parameter syntax, helper conflict, loss simulation, and independent peers;
+- test future and late data, conflicting ranges, derivation-domain confusion, forbidden TLS records and KeyUpdate, semantic-boundary violations, 0-RTT rejection, and exhaustion;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- Brynja consumes and emits only bounded TLS effects and cannot become an implicit QUIC packet, recovery, offset, Retry, or key-phase implementation;
-- `v0.79.0 implementation stop reached. Run pentest for this exact commit.`
+- Brynja owns only documented TLS and optional expansion effects and cannot become an implicit QUIC transport or version-salt owner;
+- `v0.93.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.80.0 - Optional QUIC CRYPTO Reassembly Helper
+### v0.94.0 - Optional QUIC CRYPTO Reassembly Helper
 
 Status: planned
 
@@ -2558,29 +2993,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep QUIC encryption levels, ordered TLS bytes, transport-parameter syntax, secret events, optional helpers, and buffering limits distinct from QUIC transport ownership;
+- separate typed TLS traffic secrets and optional quic key, iv and hp expansion from QUIC-owned Initial salts, packets, Retry, recovery, key phase, and quic ku;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC 9001 vectors, level ordering, ordered-byte delivery, secret install and discard, transport-parameter syntax, helper conflict, loss and reorder simulation, and independent peer tests;
-- test future and late data, conflicting helper ranges, forbidden TLS records, KeyUpdate and post-handshake authentication, semantic-boundary violations, 0-RTT rejection, and exhaustion;
+- run RFC 9001 secret and expansion vectors, level ordering, ordered-byte delivery, install and discard, parameter syntax, helper conflict, loss simulation, and independent peers;
+- test future and late data, conflicting ranges, derivation-domain confusion, forbidden TLS records and KeyUpdate, semantic-boundary violations, 0-RTT rejection, and exhaustion;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- Brynja consumes and emits only bounded TLS effects and cannot become an implicit QUIC packet, recovery, offset, Retry, or key-phase implementation;
-- `v0.80.0 implementation stop reached. Run pentest for this exact commit.`
+- Brynja owns only documented TLS and optional expansion effects and cannot become an implicit QUIC transport or version-salt owner;
+- `v0.94.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.81.0 - QUIC Conformance And Audit
+### v0.95.0 - QUIC Conformance And Audit
 
 Status: planned
 
-Plan scope: Pass RFC 9001 vectors plus loss, reorder, discard, 0-RTT, interoperability, ownership-boundary, and external review gates.
+Plan scope: Pass RFC 9001 vectors plus loss, reorder, discard, 0-RTT, key-derivation, interoperability, ownership-boundary, and external review gates.
 
 Goal: complete the **QUIC Conformance And Audit** implementation stop without admitting or
 claiming adjacent capability.
@@ -2589,25 +3024,56 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- keep QUIC encryption levels, ordered TLS bytes, transport-parameter syntax, secret events, optional helpers, and buffering limits distinct from QUIC transport ownership;
+- separate typed TLS traffic secrets and optional quic key, iv and hp expansion from QUIC-owned Initial salts, packets, Retry, recovery, key phase, and quic ku;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run RFC 9001 vectors, level ordering, ordered-byte delivery, secret install and discard, transport-parameter syntax, helper conflict, loss and reorder simulation, and independent peer tests;
-- test future and late data, conflicting helper ranges, forbidden TLS records, KeyUpdate and post-handshake authentication, semantic-boundary violations, 0-RTT rejection, and exhaustion;
+- run RFC 9001 secret and expansion vectors, level ordering, ordered-byte delivery, install and discard, parameter syntax, helper conflict, loss simulation, and independent peers;
+- test future and late data, conflicting ranges, derivation-domain confusion, forbidden TLS records and KeyUpdate, semantic-boundary violations, 0-RTT rejection, and exhaustion;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- Brynja consumes and emits only bounded TLS effects and cannot become an implicit QUIC packet, recovery, offset, Retry, or key-phase implementation;
-- `v0.81.0 implementation stop reached. Run pentest for this exact commit.`
+- Brynja owns only documented TLS and optional expansion effects and cannot become an implicit QUIC transport or version-salt owner;
+- `v0.95.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.82.0 - DTLS Unified Headers And Epochs
+### v0.96.0 - DTLS Path Identity Contract
+
+Status: planned
+
+Plan scope: Introduce an opaque caller-provided path token binding cookie state, amplification accounting, CID routing, migration, PMTU, timers, and datagram metadata so packets cannot transfer validation or budgets between paths.
+
+Goal: complete the **DTLS Path Identity Contract** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.96.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.97.0 - DTLS Unified Headers And Epochs
 
 Status: planned
 
@@ -2620,25 +3086,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.82.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.97.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.83.0 - DTLS Record-Number Encryption
+### v0.98.0 - DTLS Record-Number Encryption
 
 Status: planned
 
@@ -2651,29 +3117,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.83.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.98.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.84.0 - DTLS Replay And Epoch-Key Lifetimes
+### v0.99.0 - DTLS Replay And Epoch-Key Lifetimes
 
 Status: planned
 
-Plan scope: Implement fixed replay windows across epoch transitions, bounded previous/future retention, transactional key installation, and immediate obsolete-key destruction.
+Plan scope: Implement fixed replay windows across epoch transitions, bounded previous and future retention, transactional key installation, and immediate obsolete-key destruction.
 
 Goal: complete the **DTLS Replay And Epoch-Key Lifetimes** implementation stop without admitting or
 claiming adjacent capability.
@@ -2682,29 +3148,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.84.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.99.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.85.0 - DTLS Connection IDs
+### v0.100.0 - DTLS Connection IDs
 
 Status: planned
 
-Plan scope: Implement bounded optional connection IDs and CID updates with routing/privacy policy, replay and migration invariants, or record their explicit exclusion if standards evidence cannot meet the gate.
+Plan scope: Implement bounded optional connection IDs and CID updates with path-token routing, privacy, replay and migration invariants, or record their explicit exclusion if standards evidence cannot meet the gate.
 
 Goal: complete the **DTLS Connection IDs** implementation stop without admitting or
 claiming adjacent capability.
@@ -2713,25 +3179,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.85.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.100.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.86.0 - DTLS Fragmentation And Reassembly
+### v0.101.0 - DTLS Fragmentation And Reassembly
 
 Status: planned
 
@@ -2744,29 +3210,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.86.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.101.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.87.0 - DTLS Flights ACKs And Timers
+### v0.102.0 - DTLS Flights ACKs And Timers
 
 Status: planned
 
-Plan scope: Implement deterministic flights, ACK processing, typed timer actions, cached retransmission, checked backoff, and congestion limits.
+Plan scope: Implement deterministic flights, ACK processing, typed timer actions, cached retransmission, checked backoff, congestion limits, and path-token ownership.
 
 Goal: complete the **DTLS Flights ACKs And Timers** implementation stop without admitting or
 claiming adjacent capability.
@@ -2775,29 +3241,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.87.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.102.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.88.0 - DTLS Address Validation And Amplification Defense
+### v0.103.0 - DTLS Address Validation And Amplification Defense
 
 Status: planned
 
-Plan scope: Implement cookies, address validation, amplification budgets, deterministic PMTU policy, and cheap rejection before expensive cryptography.
+Plan scope: Implement path-bound cookies, address validation, amplification budgets, deterministic PMTU policy, and cheap rejection before expensive cryptography.
 
 Goal: complete the **DTLS Address Validation And Amplification Defense** implementation stop without admitting or
 claiming adjacent capability.
@@ -2806,25 +3272,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.88.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.103.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.89.0 - DTLS 1.3 State Machines
+### v0.104.0 - DTLS 1.3 State Machines
 
 Status: planned
 
@@ -2837,29 +3303,60 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.89.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.104.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.90.0 - Hardened DTLS 1.2
+### v0.105.0 - One-Pass DTLS Version Selector
 
 Status: planned
 
-Plan scope: Implement DTLS 1.2 using only the admitted TLS 1.2 ECDHE-plus-AEAD profile and isolated epoch, replay, ticket, and downgrade state.
+Plan scope: Parse one ClientHello once, safely skip unknown future versions, choose the highest configured DTLS 1.3 or hardened DTLS 1.2 version, preserve transcript and path state, and enter exactly one typed engine with no credentials, tickets, epochs, replay windows, or state crossing domains and no retry after failure.
+
+Goal: complete the **One-Pass DTLS Version Selector** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.105.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.106.0 - Hardened DTLS 1.2
+
+Status: planned
+
+Plan scope: Implement DTLS 1.2 using only the admitted TLS 1.2 ECDHE-plus-AEAD profile and isolated epoch, replay, ticket, path, and downgrade state.
 
 Goal: complete the **Hardened DTLS 1.2** implementation stop without admitting or
 claiming adjacent capability.
@@ -2868,29 +3365,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.90.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.106.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.91.0 - DTLS Conformance And Audit
+### v0.107.0 - DTLS Conformance And Audit
 
 Status: planned
 
-Plan scope: Pass loss, reorder, duplicate, fragmentation, replay, CID, hostile-load, fuzz, interoperability, and external audit gates.
+Plan scope: Pass loss, reorder, duplicate, fragmentation, replay, path-token, CID, version-selection, hostile-load, fuzz, interoperability, and external audit gates.
 
 Goal: complete the **DTLS Conformance And Audit** implementation stop without admitting or
 claiming adjacent capability.
@@ -2899,25 +3396,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- make unified headers, record-number protection, epochs, replay, key retention, CIDs, reassembly, transcripts, flights, timers, cookies, amplification, and PMTU budgets explicit and caller-owned;
+- bind unified headers, record numbers, epochs, replay, keys, CIDs, reassembly, flights, timers, cookies, amplification, PMTU, migration, and one-pass version state to opaque caller path tokens;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run DTLS vectors plus loss, reorder, duplicate, header, record-number, replay, CID, overlap, conflict, ACK, timer, retransmission, retention, and independent-peer matrices;
-- exercise unauthenticated reconstruction failures, replay across transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, provider failure, and hostile PMTU changes;
+- run DTLS vectors plus path, version, loss, reorder, duplicate, header, record-number, replay, CID, overlap, ACK, timer, retention, and independent-peer matrices;
+- exercise cross-path packets, reconstruction failures, replay transitions, spoofed amplification, sequence exhaustion, sparse fragments, stale timers, CID updates, and cross-version state;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- DTLS remains bounded and deterministic on an adversarial datagram network and releases no unauthenticated transition or stale secret;
-- `v0.91.0 implementation stop reached. Run pentest for this exact commit.`
+- DTLS selects one engine once and remains path-bound, bounded, deterministic, and free of unauthenticated transition or stale-secret release;
+- `v0.107.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.92.0 - ML-KEM Arithmetic And Encoding
+### v0.108.0 - ML-KEM Arithmetic And Encoding
 
 Status: planned
 
@@ -2930,29 +3427,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- implement only standards-traced ML-KEM parameters and exact final hybrid encodings with canonical lengths, component order, transcript binding, randomness, and explicit experimental boundaries;
+- implement standards-traced ML-KEM and exact final hybrids with canonical lengths, component order, transcript binding, randomness, authentication exclusions, and experimental boundaries;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack and resource profiles, implicit-rejection tests, and supported-target evidence;
-- run constant-time decapsulation, failure-path, downgrade, fragmentation, combiner, code-point, required-policy, and classical-only fallback tests;
+- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack profiles, implicit rejection, hybrid transcript, and supported-target evidence;
+- run constant-time decapsulation, failure, downgrade, fragmentation, combiner, code-point, required-policy, classical-only fallback, and excluded-signature tests;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- PQC scope has external review and either final standards admission or explicit exclusion from stable compatibility and FIPS claims;
-- `v0.92.0 implementation stop reached. Run pentest for this exact commit.`
+- PQC scope is externally reviewed and unadmitted PQ signatures remain intentional, documented v1 exclusions;
+- `v0.108.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.93.0 - ML-KEM Key Generation And Encapsulation
+### v0.109.0 - ML-KEM Key Generation And Encapsulation
 
 Status: planned
 
-Plan scope: Implement ML-KEM-512/768/1024 key generation and encapsulation with FIPS 203, errata, randomness, stack, and applicable SP 800-227 checks.
+Plan scope: Implement ML-KEM-512, ML-KEM-768 and ML-KEM-1024 key generation and encapsulation with FIPS 203, errata, randomness, stack, and applicable SP 800-227 checks.
 
 Goal: complete the **ML-KEM Key Generation And Encapsulation** implementation stop without admitting or
 claiming adjacent capability.
@@ -2961,25 +3458,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- implement only standards-traced ML-KEM parameters and exact final hybrid encodings with canonical lengths, component order, transcript binding, randomness, and explicit experimental boundaries;
+- implement standards-traced ML-KEM and exact final hybrids with canonical lengths, component order, transcript binding, randomness, authentication exclusions, and experimental boundaries;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack and resource profiles, implicit-rejection tests, and supported-target evidence;
-- run constant-time decapsulation, failure-path, downgrade, fragmentation, combiner, code-point, required-policy, and classical-only fallback tests;
+- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack profiles, implicit rejection, hybrid transcript, and supported-target evidence;
+- run constant-time decapsulation, failure, downgrade, fragmentation, combiner, code-point, required-policy, classical-only fallback, and excluded-signature tests;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- PQC scope has external review and either final standards admission or explicit exclusion from stable compatibility and FIPS claims;
-- `v0.93.0 implementation stop reached. Run pentest for this exact commit.`
+- PQC scope is externally reviewed and unadmitted PQ signatures remain intentional, documented v1 exclusions;
+- `v0.109.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.94.0 - ML-KEM Decapsulation And Implicit Rejection
+### v0.110.0 - ML-KEM Decapsulation And Implicit Rejection
 
 Status: planned
 
@@ -2992,25 +3489,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- implement only standards-traced ML-KEM parameters and exact final hybrid encodings with canonical lengths, component order, transcript binding, randomness, and explicit experimental boundaries;
+- implement standards-traced ML-KEM and exact final hybrids with canonical lengths, component order, transcript binding, randomness, authentication exclusions, and experimental boundaries;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack and resource profiles, implicit-rejection tests, and supported-target evidence;
-- run constant-time decapsulation, failure-path, downgrade, fragmentation, combiner, code-point, required-policy, and classical-only fallback tests;
+- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack profiles, implicit rejection, hybrid transcript, and supported-target evidence;
+- run constant-time decapsulation, failure, downgrade, fragmentation, combiner, code-point, required-policy, classical-only fallback, and excluded-signature tests;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- PQC scope has external review and either final standards admission or explicit exclusion from stable compatibility and FIPS claims;
-- `v0.94.0 implementation stop reached. Run pentest for this exact commit.`
+- PQC scope is externally reviewed and unadmitted PQ signatures remain intentional, documented v1 exclusions;
+- `v0.110.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.95.0 - Standard Hybrid Groups
+### v0.111.0 - Standard Hybrid Groups
 
 Status: planned
 
@@ -3023,25 +3520,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- implement only standards-traced ML-KEM parameters and exact final hybrid encodings with canonical lengths, component order, transcript binding, randomness, and explicit experimental boundaries;
+- implement standards-traced ML-KEM and exact final hybrids with canonical lengths, component order, transcript binding, randomness, authentication exclusions, and experimental boundaries;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack and resource profiles, implicit-rejection tests, and supported-target evidence;
-- run constant-time decapsulation, failure-path, downgrade, fragmentation, combiner, code-point, required-policy, and classical-only fallback tests;
+- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack profiles, implicit rejection, hybrid transcript, and supported-target evidence;
+- run constant-time decapsulation, failure, downgrade, fragmentation, combiner, code-point, required-policy, classical-only fallback, and excluded-signature tests;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- PQC scope has external review and either final standards admission or explicit exclusion from stable compatibility and FIPS claims;
-- `v0.95.0 implementation stop reached. Run pentest for this exact commit.`
+- PQC scope is externally reviewed and unadmitted PQ signatures remain intentional, documented v1 exclusions;
+- `v0.111.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.96.0 - Hybrid Protocol Integration
+### v0.112.0 - Hybrid Protocol Integration
 
 Status: planned
 
@@ -3054,29 +3551,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- implement only standards-traced ML-KEM parameters and exact final hybrid encodings with canonical lengths, component order, transcript binding, randomness, and explicit experimental boundaries;
+- implement standards-traced ML-KEM and exact final hybrids with canonical lengths, component order, transcript binding, randomness, authentication exclusions, and experimental boundaries;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack and resource profiles, implicit-rejection tests, and supported-target evidence;
-- run constant-time decapsulation, failure-path, downgrade, fragmentation, combiner, code-point, required-policy, and classical-only fallback tests;
+- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack profiles, implicit rejection, hybrid transcript, and supported-target evidence;
+- run constant-time decapsulation, failure, downgrade, fragmentation, combiner, code-point, required-policy, classical-only fallback, and excluded-signature tests;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- PQC scope has external review and either final standards admission or explicit exclusion from stable compatibility and FIPS claims;
-- `v0.96.0 implementation stop reached. Run pentest for this exact commit.`
+- PQC scope is externally reviewed and unadmitted PQ signatures remain intentional, documented v1 exclusions;
+- `v0.112.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.97.0 - PQ Standards And Audit Gate
+### v0.113.0 - PQ Standards And Audit Gate
 
 Status: planned
 
-Plan scope: Complete PQ external review and standards freeze; admit final RFC groups or keep draft work experimental and outside stable and FIPS claims.
+Plan scope: Complete PQ external review and standards freeze; keep ML-DSA and SLH-DSA excluded from v1 authentication unless a separately reviewed final standard, TLS mapping, and interoperability milestone is added.
 
 Goal: complete the **PQ Standards And Audit Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -3085,33 +3582,33 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- implement only standards-traced ML-KEM parameters and exact final hybrid encodings with canonical lengths, component order, transcript binding, randomness, and explicit experimental boundaries;
+- implement standards-traced ML-KEM and exact final hybrids with canonical lengths, component order, transcript binding, randomness, authentication exclusions, and experimental boundaries;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack and resource profiles, implicit-rejection tests, and supported-target evidence;
-- run constant-time decapsulation, failure-path, downgrade, fragmentation, combiner, code-point, required-policy, and classical-only fallback tests;
+- run FIPS 203 vectors and errata, malformed key and ciphertext corpora, differential tests, stack profiles, implicit rejection, hybrid transcript, and supported-target evidence;
+- run constant-time decapsulation, failure, downgrade, fragmentation, combiner, code-point, required-policy, classical-only fallback, and excluded-signature tests;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- PQC scope has external review and either final standards admission or explicit exclusion from stable compatibility and FIPS claims;
-- `v0.97.0 implementation stop reached. Run pentest for this exact commit.`
+- PQC scope is externally reviewed and unadmitted PQ signatures remain intentional, documented v1 exclusions;
+- `v0.113.0 implementation stop reached. Run pentest for this exact commit.`
 
-## Phase 4: FIPS Module Instantiation And Validation
+## Phase 4: FIPS Module Instantiation, Validation, And TLS Profile
 
-The FIPS-aware architecture frozen before crypto is instantiated, tested, documented, and submitted as an exact-build module.
+The exact-build module is validated and then constrained by an approved-only facade profile.
 
-### v0.98.0 - FIPS Module Boundary
+### v0.114.0 - FIPS Module Boundary
 
 Status: planned
 
-Plan scope: Instantiate the exact binary and artifact boundary, operational environments, ports, services, roles, SSP inventory, compiler/linker/CPU inputs, and approved and non-approved exclusions.
+Plan scope: Instantiate the exact binary and artifact boundary, operational environments, ports, services, roles, SSP inventory, compiler, linker and CPU inputs, and approved and non-approved exclusions.
 
 Goal: complete the **FIPS Module Boundary** implementation stop without admitting or
 claiming adjacent capability.
@@ -3120,25 +3617,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.98.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.114.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.99.0 - Approved Provider And Service Indicator
+### v0.115.0 - Approved Provider And Service Indicator
 
 Status: planned
 
@@ -3151,29 +3648,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.99.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.115.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.100.0 - FIPS Self-Tests And Failure Latch
+### v0.116.0 - FIPS Self-Tests And Failure Latch
 
 Status: planned
 
-Plan scope: Implement integrity, CAST/KAT, pairwise-consistency, required conditional tests, permanent failure latch, and deterministic fault-injection evidence.
+Plan scope: Implement integrity, CAST and KAT, pairwise-consistency, required conditional tests, permanent failure latch, and deterministic fault-injection evidence.
 
 Goal: complete the **FIPS Self-Tests And Failure Latch** implementation stop without admitting or
 claiming adjacent capability.
@@ -3182,29 +3679,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.100.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.116.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.101.0 - SSP Lifecycle And Zeroization Services
+### v0.117.0 - SSP Lifecycle And Zeroization Services
 
 Status: planned
 
-Plan scope: Define SSP entry, output, storage, high-water lifetime, external storage, accelerator handle, and zeroization services with completion indications and secret-free status events.
+Plan scope: Define SSP entry, output, storage, high-water lifetime, external storage, accelerator handle, cache and DMA completion, and zeroization services with completion indications and secret-free status events.
 
 Goal: complete the **SSP Lifecycle And Zeroization Services** implementation stop without admitting or
 claiming adjacent capability.
@@ -3213,56 +3710,56 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.101.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.117.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.102.0 - Entropy And DRBG Boundary
+### v0.118.0 - SP 800-90 Entropy And DRBG Boundary
 
 Status: planned
 
-Plan scope: Implement the SP 800-90 entropy and DRBG boundary, health tests, security-strength mapping, reseed and fork behavior, failure model, and platform entropy evidence.
+Plan scope: Select SP 800-90A DRBGs; validate SP 800-90B entropy sources and health tests; satisfy SP 800-90C construction rules; and define prediction resistance, personalization, fork, reseed, security-strength, and catastrophic-failure semantics.
 
-Goal: complete the **Entropy And DRBG Boundary** implementation stop without admitting or
+Goal: complete the **SP 800-90 Entropy And DRBG Boundary** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.102.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.118.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.103.0 - ACVTS And CAVP Evidence
+### v0.119.0 - ACVTS And CAVP Evidence
 
 Status: planned
 
@@ -3275,25 +3772,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.103.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.119.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.104.0 - CMVP Submission Artifacts
+### v0.120.0 - CMVP Submission Artifacts
 
 Status: planned
 
@@ -3306,25 +3803,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.104.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.120.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.105.0 - Accredited FIPS Evaluation
+### v0.121.0 - Accredited FIPS Evaluation
 
 Status: planned
 
@@ -3337,25 +3834,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.105.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.121.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.106.0 - Boundary And Package Audit
+### v0.122.0 - Boundary And Package Audit
 
 Status: planned
 
@@ -3368,33 +3865,64 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- instantiate the predesigned narrow module using exact source, compiler, linker, flags, CPU features, operational environments, services, roles, SSPs, and approved and non-approved boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run integrity and algorithm self-tests, fault injection, service indicators, SSP lifecycle, entropy and DRBG, reproducible artifacts, and applicable ACVTS and CAVP evidence;
-- prove permanent failure latching, zeroization completion, dispatch separation, no additive feature activation, no untested environment claim, and no output through failed self-tests;
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- claims match accredited evidence exactly and algorithm testing alone is never represented as FIPS 140-3 validation;
-- `v0.106.0 implementation stop reached. Run pentest for this exact commit.`
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.122.0 implementation stop reached. Run pentest for this exact commit.`
 
-## Phase 5: Stable Integration, Optional Modules, Assurance, And General Availability
-
-Stable public integration and independent optional modules precede complete assurance, remediation, freeze, rehearsal, and immutable promotion.
-
-### v0.107.0 - Facade Configuration Typestates
+### v0.123.0 - Approved-Only TLS Operating Profile
 
 Status: planned
 
-Plan scope: Freeze facade typestates for exact modern versions, suites, trust, identity, resources, revocation, PSK, 0-RTT, CT, and provider policy; expose no raw crypto re-export or legacy-version range.
+Plan scope: Implement a facade-level approved-only profile that rejects X25519, Ed25519, ChaCha20, HPKE, ECH, experimental hybrids, and every service not admitted by the exact validated module and operational environment.
+
+Goal: complete the **Approved-Only TLS Operating Profile** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- instantiate exact module source, toolchain, CPU, environments, services, roles and SSPs, then make a facade profile expose only services admitted by the validated boundary;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run integrity and algorithm self-tests, SP 800-90A, B and C evidence, fault injection, service indicators, SSP lifecycle, profile compile-fail, reproducibility, and ACVTS and CAVP campaigns;
+- prove permanent failure latching, zeroization, dispatch separation, prediction and catastrophic failure, excluded-service rejection, no feature activation, and no untested-environment claim;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- module and facade claims match accredited evidence exactly and approved-only configuration cannot name an unapproved service;
+- `v0.123.0 implementation stop reached. Run pentest for this exact commit.`
+
+## Phase 5: Stable Integration, Optional Modules, Assurance, And General Availability
+
+Public integration, executable Aesynx contracts, split ECH work, bounded pre-authentication compression, and dependency-free assurance precede release.
+
+### v0.124.0 - Facade Configuration Typestates
+
+Status: planned
+
+Plan scope: Freeze facade typestates for exact modern versions, one-pass selection, suites, trust, identity, resources, revocation, PSK, zero-RTT, Certificate Transparency, FIPS profile, and provider policy; expose no raw crypto re-export or legacy-version range.
 
 Goal: complete the **Facade Configuration Typestates** implementation stop without admitting or
 claiming adjacent capability.
@@ -3403,29 +3931,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.107.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.124.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.108.0 - Stable Sans-I/O API
+### v0.125.0 - Stable Sans-I/O API
 
 Status: planned
 
-Plan scope: Promote the exercised internal effects model into the stable deterministic client and server Event-to-Action API with consumed/produced counts, backpressure, pending operations, cancellation, and compile-fail misuse tests.
+Plan scope: Promote the exercised internal effects model into the stable deterministic client and server Event-to-Action API with consumed and produced counts, path tokens, backpressure, pending operations, cancellation, and compile-fail misuse tests.
 
 Goal: complete the **Stable Sans-I/O API** implementation stop without admitting or
 claiming adjacent capability.
@@ -3434,25 +3962,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.108.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.125.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.109.0 - Host Platform Adapters
+### v0.126.0 - Host Platform Adapters
 
 Status: planned
 
@@ -3465,25 +3993,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.109.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.126.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.110.0 - Zero-Allocation And Resource Proof
+### v0.127.0 - Zero-Allocation And Resource Proof
 
 Status: planned
 
@@ -3496,60 +4024,60 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.110.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.111.0 - Aesynx Qualification
+### v0.128.0 - Aesynx ABI And Emulator Qualification
 
 Status: planned
 
-Plan scope: Qualify the Aesynx target and entropy, randomness, time, transport, storage, and accelerator adapters with boot-to-handshake and lifecycle tests when the target is available.
+Plan scope: Make the stable Aesynx adapter contract a v1 requirement and pass an executable target-ABI or emulator harness for entropy, randomness, time, transport, storage, acceleration, boot-to-handshake, and lifecycle behavior; allow real-hardware qualification after v1 without weakening the contract.
 
-Goal: complete the **Aesynx Qualification** implementation stop without admitting or
+Goal: complete the **Aesynx ABI And Emulator Qualification** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.111.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.128.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.112.0 - Operational State Rotation
+### v0.129.0 - Operational State Rotation
 
 Status: planned
 
-Plan scope: Complete session cache, ticket-key and resumption-PSK rotation, anti-replay storage, certificate and private-key rotation, trust-anchor rotation, and transactional failure recovery.
+Plan scope: Complete session cache, stateless ticket-key and resumption-PSK rotation, anti-replay storage, certificate and private-key rotation, trust-anchor and CT log-list updates, and transactional failure recovery.
 
 Goal: complete the **Operational State Rotation** implementation stop without admitting or
 claiming adjacent capability.
@@ -3558,25 +4086,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.112.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.129.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.113.0 - Record Size Limit
+### v0.130.0 - Record Size Limit
 
 Status: planned
 
@@ -3589,25 +4117,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.113.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.130.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.114.0 - Raw Public Keys
+### v0.131.0 - Raw Public Keys
 
 Status: planned
 
@@ -3620,25 +4148,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.114.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.131.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.115.0 - HPKE KEM And Context Foundation
+### v0.132.0 - HPKE KEM And Context Foundation
 
 Status: planned
 
@@ -3651,29 +4179,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.115.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.132.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.116.0 - HPKE Base Mode
+### v0.133.0 - HPKE Base Mode
 
 Status: planned
 
-Plan scope: Implement RFC 9180 HPKE base mode with admitted AEADs, sequence and nonce exhaustion, seal/open failure atomicity, official vectors, and independent differential tests.
+Plan scope: Implement RFC 9180 HPKE base mode with admitted AEADs, sequence and nonce exhaustion, seal and open failure atomicity, official vectors, and independent differential tests.
 
 Goal: complete the **HPKE Base Mode** implementation stop without admitting or
 claiming adjacent capability.
@@ -3682,25 +4210,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.116.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.133.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.117.0 - ECH Configuration And Suite Selection
+### v0.134.0 - ECH Configuration And Suite Selection
 
 Status: planned
 
@@ -3713,56 +4241,118 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.117.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.134.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.118.0 - ECH Protocol Integration
+### v0.135.0 - ECH Client Construction
 
 Status: planned
 
-Plan scope: Implement inner and outer ClientHello construction, outer-extension references, AAD, acceptance confirmation, retry configurations, HRR interaction, GREASE, padding, transcript binding, and downgrade/resource tests.
+Plan scope: Implement client inner and outer ClientHello construction, outer-extension references, AAD inputs, GREASE, padding, transcript preservation, and configuration and resource policy.
 
-Goal: complete the **ECH Protocol Integration** implementation stop without admitting or
+Goal: complete the **ECH Client Construction** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.118.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.135.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.119.0 - Delegated Credentials
+### v0.136.0 - ECH Server Opening And Acceptance
+
+Status: planned
+
+Plan scope: Implement server configuration lookup, HPKE opening, inner and outer consistency checks, acceptance confirmation, identity selection, uniform rejection, and no fallback to attacker-modified state.
+
+Goal: complete the **ECH Server Opening And Acceptance** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.136.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.137.0 - ECH HRR Retry And Rotation
+
+Status: planned
+
+Plan scope: Implement ECH HelloRetryRequest interaction, retry configurations, configuration rotation, second-ClientHello invariants, downgrade detection, and client and server interoperability.
+
+Goal: complete the **ECH HRR Retry And Rotation** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, failure, and package boundaries;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- update requirement mappings, threat-model delta, security controls, current
+  status, known limitations, release notes, and permanent evidence index for
+  this exact implementation.
+
+Verification:
+
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
+- pass full repository checks, all promised Rust versions and targets,
+  dependency policy, advisory scans, SBOM comparison, package inspection,
+  documentation links, and modern and historical graph isolation.
+
+Exit criteria:
+
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.137.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.138.0 - Delegated Credentials
 
 Status: planned
 
@@ -3775,29 +4365,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.119.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.138.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.120.0 - Certificate Compression Provider
+### v0.139.0 - Certificate Compression Provider
 
 Status: planned
 
-Plan scope: Implement certificate compression through a bounded caller-provided decompression provider with transcript preservation, exact output length, ratio, CPU-work, workspace, algorithm-selection, and no-peer-admission-before-authentication rules; first-party zlib, Brotli, and Zstandard remain separate future work.
+Plan scope: Treat decompression as strictly bounded hostile pre-authentication work; retain wire CompressedCertificate bytes for the transcript, pass decompressed Certificate bytes to PKI, release no identity or application data before decompression, X.509, CertificateVerify and Finished succeed, and terminate on provider error, overrun, short output, trailing compressed data, or algorithm mismatch.
 
 Goal: complete the **Certificate Compression Provider** implementation stop without admitting or
 claiming adjacent capability.
@@ -3806,29 +4396,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- freeze public typestates and effects with explicit trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
+- freeze public typestates and effects with explicit path, trust, identity, entropy, clocks, storage, compression, accelerator, cancellation, workspace, extension, and downgrade contracts;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run compile-fail misuse tests, deterministic traces, adapter and provider fault injection, zero-allocation accounting, stack ceilings, rotation, extension vectors, and every supported target;
-- exercise unavailable effects, partial providers, cancellation, stale handles, storage races, decompression bombs, trust-model confusion, resource exhaustion, and forbidden policy fallback;
+- run compile-fail misuse, deterministic traces, adapter and provider faults, zero-allocation accounting, Aesynx ABI or emulator, rotation, extension vectors, decompression failures, and supported targets;
+- exercise unavailable effects, stale handles, storage races, cross-path state, decompression bombs, pre-authentication work, trust confusion, resource exhaustion, and forbidden fallback;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- public integration and each optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
-- `v0.120.0 implementation stop reached. Run pentest for this exact commit.`
+- public integration and every optional module is runtime-neutral, bounded, independently disableable, and incapable of weakening authentication or transcript policy;
+- `v0.139.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.121.0 - Formal Harnesses
+### v0.140.0 - Formal Harnesses
 
 Status: planned
 
-Plan scope: Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, and secret-release invariants using pinned external tools.
+Plan scope: Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, and secret-release invariants using pinned external tools.
 
 Goal: complete the **Formal Harnesses** implementation stop without admitting or
 claiming adjacent capability.
@@ -3837,60 +4427,60 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.121.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.140.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.122.0 - Fuzz And Differential Campaign
+### v0.141.0 - External-Process Fuzz And Differential Campaign
 
 Status: planned
 
-Plan scope: Complete parser and state fuzzing, deterministic mutation, differential corpora, and crash minimization without adding third-party crates to repository Cargo manifests or shipped graphs.
+Plan scope: Do not use cargo-fuzz or libfuzzer-sys; drive first-party corpus and stdin harness binaries with pinned external process-level mutation and instrumentation, deterministic replay, differential corpora, and crash minimization without third-party repository crates.
 
-Goal: complete the **Fuzz And Differential Campaign** implementation stop without admitting or
+Goal: complete the **External-Process Fuzz And Differential Campaign** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.122.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.141.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.123.0 - Memory And Side-Channel Evidence
+### v0.142.0 - Memory And Side-Channel Evidence
 
 Status: planned
 
-Plan scope: Complete Miri and sanitizer evidence plus compiler/target constant-time assembly, zeroization-store survival, cache/branch, and statistical side-channel matrices.
+Plan scope: Complete Miri and sanitizer evidence plus compiler and target constant-time assembly, owned-region zeroization-store survival, cache and branch, and statistical side-channel matrices.
 
 Goal: complete the **Memory And Side-Channel Evidence** implementation stop without admitting or
 claiming adjacent capability.
@@ -3899,29 +4489,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.123.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.142.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.124.0 - Sustained Platform And Hostile-Load Qualification
+### v0.143.0 - Sustained Platform And Hostile-Load Qualification
 
 Status: planned
 
-Plan scope: Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and available Aesynx qualification under concurrency, provider failure, resource exhaustion, and hostile load.
+Plan scope: Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load.
 
 Goal: complete the **Sustained Platform And Hostile-Load Qualification** implementation stop without admitting or
 claiming adjacent capability.
@@ -3930,29 +4520,29 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.124.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.143.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.125.0 - Consolidated External Audits
+### v0.144.0 - Consolidated External Audits
 
 Status: planned
 
-Plan scope: Complete exact-commit external crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS-boundary, optional-module, and systems-integration audits.
+Plan scope: Complete exact-commit external crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS-boundary and profile, optional-module, zeroization, and systems-integration audits.
 
 Goal: complete the **Consolidated External Audits** implementation stop without admitting or
 claiming adjacent capability.
@@ -3961,25 +4551,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.125.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.144.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.126.0 - Audit Remediation And Clean Retest
+### v0.145.0 - Audit Remediation And Clean Retest
 
 Status: planned
 
@@ -3992,25 +4582,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.126.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.145.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.127.0 - Public API Requirements And Documentation Freeze
+### v0.146.0 - Public API Requirements And Documentation Freeze
 
 Status: planned
 
@@ -4023,25 +4613,25 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.146.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.128.0 - Clean-Room Release Rehearsal
+### v0.147.0 - Clean-Room Release Rehearsal
 
 Status: planned
 
@@ -4054,23 +4644,23 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, failure, and package boundaries;
-- capture reproducible proof, fuzz, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence for exact admitted scope;
+- capture reproducible formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, external-review, remediation, API-freeze, and operational evidence;
 - update requirement mappings, threat-model delta, security controls, current
   status, known limitations, release notes, and permanent evidence index for
   this exact implementation.
 
 Verification:
 
-- run the named campaign across every relevant compiler, target, provider, feature set, package archive, independent peer, and clean environment;
-- retain minimized regressions for every finding and prove clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
+- run the named campaign across every compiler, target, provider, feature, package, first-party harness, independent peer, path model, selector, and clean environment;
+- retain minimized regressions and prove deterministic replay, clean retests, requirements traceability, artifact identity, rollback, key-compromise, and incident procedures;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
 - the exact-commit evidence set is complete, findings are dispositioned, and frozen claims do not exceed tested behavior;
-- `v0.128.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.147.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v1.0.0-rc.1 - Exact Production Candidate
 
@@ -4096,11 +4686,11 @@ Verification:
 - exercise key-compromise and disaster procedures, registry and package inspection, downstream compatibility, and absence of historical, draft, or excluded scope;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- stable artifacts are byte-identical to the approved candidate and every public claim maps to permanent exact-commit evidence;
+- stable artifacts are byte-identical to the approved candidate and every claim maps to permanent exact-commit evidence;
 - `v1.0.0-rc.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v1.0.0 - First Serious Production-Ready Brynja TLS Release
@@ -4127,9 +4717,9 @@ Verification:
 - exercise key-compromise and disaster procedures, registry and package inspection, downstream compatibility, and absence of historical, draft, or excluded scope;
 - pass full repository checks, all promised Rust versions and targets,
   dependency policy, advisory scans, SBOM comparison, package inspection,
-  documentation links, and modern/historical graph isolation.
+  documentation links, and modern and historical graph isolation.
 
 Exit criteria:
 
-- stable artifacts are byte-identical to the approved candidate and every public claim maps to permanent exact-commit evidence;
+- stable artifacts are byte-identical to the approved candidate and every claim maps to permanent exact-commit evidence;
 - `v1.0.0 implementation stop reached. Run pentest for this exact commit.`

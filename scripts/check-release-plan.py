@@ -10,7 +10,7 @@ from pathlib import Path
 VERSION = r"(?:0\.[0-9]+\.0|1\.0\.0(?:-rc\.[0-9]+)?)"
 HEADING = re.compile(rf"^### (v{VERSION}) - (.+)$", re.MULTILINE)
 VERSION_ROW = re.compile(
-    rf"^\| `({VERSION})` \| (.+) \|$",
+    rf"^\| `({VERSION})` \| ([^|]+) \| (.+) \|$",
     re.MULTILINE,
 )
 FIELDS = (
@@ -24,15 +24,18 @@ FIELDS = (
 
 
 def expected_versions() -> list[str]:
-    versions = [f"v0.{number}.0" for number in range(1, 100)]
+    versions = [f"v0.{number}.0" for number in range(1, 129)]
     versions.extend(["v1.0.0-rc.1", "v1.0.0"])
     return versions
 
 
-def version_scopes(path: Path) -> list[tuple[str, str]]:
+def version_entries(path: Path) -> list[tuple[str, str, str]]:
     text = path.read_text(encoding="utf-8")
-    rows = [(f"v{match.group(1)}", match.group(2)) for match in VERSION_ROW.finditer(text)]
-    versions = [version for version, _scope in rows]
+    rows = [
+        (f"v{match.group(1)}", match.group(2).strip(), match.group(3))
+        for match in VERSION_ROW.finditer(text)
+    ]
+    versions = [version for version, _title, _scope in rows]
     if versions != expected_versions():
         raise ValueError("version plan is missing, duplicating, or reordering modern releases")
     return rows
@@ -51,11 +54,11 @@ def bullet_count(section: str, start: str, end: str) -> int:
 
 
 def validate(release_path: Path, version_path: Path) -> None:
-    scopes = version_scopes(version_path)
+    entries = version_entries(version_path)
     text = release_path.read_text(encoding="utf-8")
     matches = list(HEADING.finditer(text))
     versions = [match.group(1) for match in matches]
-    expected = [version for version, _scope in scopes]
+    expected = [version for version, _title, _scope in entries]
 
     if versions != expected:
         raise ValueError(
@@ -65,10 +68,12 @@ def validate(release_path: Path, version_path: Path) -> None:
     if len(versions) != len(set(versions)):
         raise ValueError("duplicate release versions")
 
-    for index, (match, (version, scope)) in enumerate(zip(matches, scopes, strict=True)):
+    for index, (match, (version, planned_title, scope)) in enumerate(
+        zip(matches, entries, strict=True)
+    ):
         title = match.group(2).strip()
-        if not title:
-            raise ValueError(f"{version} has an empty title")
+        if title != planned_title:
+            raise ValueError(f"{version} title differs from VERSION_PLAN.md")
         end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
         section = text[match.end():end]
 

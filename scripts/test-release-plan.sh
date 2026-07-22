@@ -23,6 +23,13 @@ if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/nul
 fi
 
 cp docs/RELEASE_PLAN.md "$release_tmp"
+sed -i '0,/### v0\.2\.0 - /s/- /- Altered /' "$release_tmp"
+if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
+    echo "release plan validator accepted title drift" >&2
+    exit 1
+fi
+
+cp docs/RELEASE_PLAN.md "$release_tmp"
 sed -i '0,/Run pentest for this exact commit\./s//Run review./' "$release_tmp"
 if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
     echo "release plan validator accepted a missing pentest exit" >&2
@@ -37,9 +44,8 @@ if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/nul
 fi
 
 cp docs/RELEASE_PLAN.md "$release_tmp"
-sed -i '0,/### v0\.99\.0 /{/### v0\.99\.0 /d;}' "$release_tmp"
+sed -i '0,/### v0\.128\.0 /{/### v0\.128\.0 /d;}' "$release_tmp"
 if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
     echo "release plan validator accepted a missing version" >&2
     exit 1
 fi
-

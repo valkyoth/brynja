@@ -13,7 +13,9 @@ test count, or interoperability alone never establishes that claim.
 
 - Rust `1.90.0` MSRV and current stable Rust for full release evidence.
 - No third-party runtime, build, development, fuzz, test, or tooling crates in
-  Cargo manifests.
+  repository Cargo manifests. Pinned assurance tools may run as external
+  executables, but adding an assurance-only crate still requires an explicit
+  future policy change and can never affect a shipped package graph.
 - `no_std` production crates with no assumed allocator, OS, socket, clock,
   filesystem, or entropy source.
 - No Rust source file over 500 lines. Split modules before 450 lines so tests
@@ -32,6 +34,7 @@ test count, or interoperability alone never establishes that claim.
 brynja
 ├── brynja-core
 ├── brynja-crypto
+├── future exact-build FIPS module artifact (never a feature)
 ├── brynja-pki
 └── brynja-tls
     ├── optional brynja-quic-tls
@@ -54,23 +57,28 @@ are permanently excluded from normal application dependency graphs.
 
 ## Implementation Order
 
-1. Freeze policies, standards provenance, requirements ledgers, bounded error
-   domains, and test infrastructure.
-2. Implement cryptographic primitives separately, from official vectors
-   outward, with constant-time and differential evidence before TLS consumes
-   them.
-3. Implement strict DER and X.509 validation with explicit time, trust-anchor,
-   algorithm, path, name, revocation, and resource policies.
-4. Implement TLS 1.3 as a typed state machine around a strict codec, transcript,
-   key schedule, record layer, alerts, resumption, and key update.
-5. Admit a hardened, explicitly configured TLS 1.2 engine without fallback or
+1. Freeze policy enforcement, standards provenance, requirements ledgers,
+   bounded domains, caller-owned arenas, and adversarial test infrastructure.
+2. Freeze constant-time operations; separate entropy from secure randomness;
+   separate wall from monotonic time; define pending-provider effects; and
+   design the FIPS-aware provider boundary without making a validation claim.
+3. Implement and independently audit cryptographic primitives from official
+   vectors outward with per-compiler and per-target constant-time evidence.
+4. Implement bounded identity containers, DER, X.509 path construction, split
+   RFC 5280 validation, revocation, CT policy, and an independent PKI audit.
+5. Exercise an internal deterministic Sans-I/O contract, then implement and
+   audit TLS 1.3 as a typed state machine over explicit effects.
+6. Admit a hardened, explicitly configured TLS 1.2 engine without fallback or
    renegotiation.
-6. Add facade, platform, QUIC, DTLS, and advanced extension boundaries without
-   weakening the core.
-7. Run complete conformance, fuzzing, model, side-channel, platform, resource,
-   interoperability, external audit, and remediation phases.
-8. Freeze the exact `1.0.0` package set and promote an unchanged, approved
-   release candidate.
+7. Implement QUIC TLS ownership boundaries, the complete DTLS record model,
+   standardized PQ hybrids, and the predesigned exact-build FIPS module.
+8. Freeze the public Sans-I/O facade and add each optional protocol facility as
+   a separate bounded module without repeating earlier ALPN, SNI, exporter, or
+   channel-binding work.
+9. Run complete conformance, fuzzing, formal, memory, side-channel, platform,
+   resource, interoperability, external audit, and remediation phases.
+10. Freeze the exact `1.0.0` package set and promote an unchanged, approved
+    release candidate.
 
 ## Test Architecture
 
@@ -84,8 +92,8 @@ The repository will maintain:
 
 - official RFC, NIST, and algorithm vectors with source provenance;
 - generated exhaustive tests for small domains;
-- deterministic mutation and structured fuzz harnesses without Cargo
-  dependencies;
+- deterministic mutation and structured fuzz harnesses without adding Cargo
+  dependencies to this repository;
 - differential tests against at least two independent mature implementations,
   confined to repository tools;
 - network interoperability tests with packet captures and expected alerts;
@@ -93,8 +101,8 @@ The repository will maintain:
 - restart, replay, reordering, loss, fragmentation, exhaustion, and
   cancellation tests;
 - secret-lifetime, redaction, zeroization, and error-path tests;
-- Kani/Miri/sanitizer or equivalent evidence where the tool can run without
-  weakening the dependency policy.
+- pinned external Kani, Miri, sanitizer, fuzz, and equivalent assurance tools
+  that do not weaken repository Cargo dependency policy.
 
 ## Security Review Loop
 
@@ -106,10 +114,12 @@ before a permanent PASS report is committed.
 
 ## Platform Strategy
 
-Core crates expose pure transformations and caller-owned buffers. Entropy,
-monotonic/wall time, trust stores, sockets, persistent ticket storage,
-anti-replay storage, concurrency, and acceleration enter through narrow traits
-in `brynja-platform`. This keeps Linux, Windows, BSD, macOS, Android, iOS,
+Core crates expose pure transformations, caller-owned non-overlapping arenas,
+and deterministic effects. Raw entropy and initialized secure randomness are
+different contracts; wall and monotonic time are non-interchangeable. Trust
+stores, transports, persistent ticket and anti-replay storage, concurrency,
+pending operations, and acceleration enter through narrow traits in
+`brynja-platform`. This keeps Linux, Windows, BSD, macOS, Android, iOS,
 bare-metal targets, and future Aesynx support from becoming conditional logic
 inside protocol state machines.
 
@@ -120,4 +130,3 @@ critical/high findings, audited first-party cryptography and PKI, sustained
 cross-platform interoperability, quantitative resource ceilings,
 reproducible packages, exact SBOM/provenance, frozen public APIs, operational
 guides, and an unchanged exact release candidate approved by pentest.
-

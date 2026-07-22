@@ -27,7 +27,12 @@ Event capacity, ordering, caller-supplied timestamps, redaction, and dropped
 counts are explicit. Boot and self-test events may be untimestamped for later
 caller enrichment; dropped counts saturate and report saturation; identifiers
 cannot contain handles, private identities, or stable cross-connection values.
-Observation cannot block or alter cryptographic state.
+Observation cannot block or alter cryptographic state. SecurityEvent is only an
+audit duplicate: service approval, external-key destruction, authentication,
+ECH, early-data, anti-replay, and policy decisions remain authoritative through
+mandatory typed results, single-consumption completion tokens, and engine state.
+Ignoring or dropping every event cannot turn a rejected or non-approved outcome
+into an apparently accepted or approved one.
 
 The stable effect surface is explicitly versioned as EngineV1, EventV1, and
 ActionV1. Mandatory effects are exhaustive and cannot be ignored through a
@@ -35,6 +40,15 @@ wildcard arm or generic success path. Adding a mandatory effect creates V2
 interfaces and requires a major SemVer release; V1 does not change underneath
 applications. Only bounded, secret-free, observational SecurityEvent values may
 be non-exhaustive, and unknown informational values cannot affect engine state.
+
+Every arithmetic and cryptographic implementation milestone owns its applicable
+proof harness beside the small production module. Harness and documentation
+claims explicitly distinguish symbolic full-width proofs, sound proofs
+parameterized over limb count, reduced-width exhaustive models that validate
+algorithm and harness structure, and production-width vector or differential
+evidence. Reduced-width evidence never proves production-width equivalence;
+residual width, path, abstraction, and tool gaps remain explicit through the
+v0.155.0 final coverage gate.
 
 The FIPS architecture freezes its boundary, dependency allowlist, services,
 ports, SSP design, and operational-environment model before implementation; it

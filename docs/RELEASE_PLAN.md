@@ -19,6 +19,14 @@ downstream of validated provider ports and pass a composition gate before public
 API freeze. FIPS catastrophic module failure is distinct from terminating a
 connection or configuration that violates approved-only policy.
 
+Every arithmetic and cryptographic implementation stop introduces its applicable
+proof harness beside the production code. Claims must identify whether evidence
+is a symbolic full-width proof, a sound limb-count-parameterized proof, a
+reduced-width exhaustive model that validates algorithm and harness structure,
+or production-width vector and differential evidence. Reduced-width evidence
+never establishes production-width equivalence, and every residual proof gap is
+published through the final v0.155.0 coverage gate.
+
 ## Required Milestone Contract
 
 Every section contains Status, Plan scope, Goal, Deliverables, Verification, and
@@ -485,7 +493,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Define resumable provider tokens, certificate, signature and accelerator requests, cancellation, key-handle destruction, retry semantics, backpressure, and failure-atomic state transitions.
+Plan scope: Define resumable provider tokens, certificate, signature and accelerator requests, cancellation, retry semantics, backpressure, and failure-atomic state transitions; external-key and accelerator-handle destruction completes only through a mandatory single-consumption token transition, never through an informational event.
 
 Goal: complete the **Pending Operations And Accelerator Lifecycle** implementation stop without admitting or
 claiming adjacent capability.
@@ -501,7 +509,7 @@ Deliverables:
 Verification:
 
 - run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, terminal states, and exact single consumption of every external-key or accelerator-handle destruction token;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -539,13 +547,13 @@ Exit criteria:
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
 - `v0.17.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.18.0 - Bounded Security Event Contract
+### v0.18.0 - Bounded Observational Security Event Contract
 
 Status: planned
 
-Plan scope: Define an upstream no_std, Sans-I/O SecurityEvent action schema for self-test and module-state transitions, per-service approval indicators, protocol, version and profile selection, authentication success and failure categories, ticket, resumption, PSK and early-data decisions, replay, amplification, resource-exhaustion and provider failures, key installation, rotation, expiration and destruction completion, ECH acceptance or rejection without inner-identity disclosure, and terminal connection transitions; events are caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, use caller-provided typed timestamps when available, may remain explicitly untimestamped during boot or self-tests for later caller enrichment, use saturating dropped-event counters that report saturation, and never expose key handles, inner ECH names, PSK identities, or stable cross-connection correlation identifiers; events never invoke reentrant callbacks and cannot block or alter cryptographic state.
+Plan scope: Define an upstream no_std, Sans-I/O SecurityEvent audit schema that only duplicates authoritative state and mandatory results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, replay, amplification, exhaustion, provider failure, key lifecycle, ECH, and terminal transitions; FIPS approval is returned by a mandatory typed service result or ActionV1, external-key destruction by a mandatory completion-token transition, and authentication, ECH, early-data, anti-replay, and policy decisions by engine state plus mandatory results, so dropped or ignored events cannot make a rejected or non-approved connection appear accepted or approved; events remain caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, optionally caller-timestamped or explicitly untimestamped for later enrichment, use saturating drop counters with visible saturation, contain no secret or stable correlating identifier, never reenter, and cannot block or alter cryptographic state.
 
-Goal: complete the **Bounded Security Event Contract** implementation stop without admitting or
+Goal: complete the **Bounded Observational Security Event Contract** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -556,6 +564,10 @@ Deliverables:
   enrichment actions, deterministic ordering, identifier redaction, saturating
   dropped-event accounting with a visible saturation state, and the separation
   between operational evidence and peer-visible alerts;
+- define authoritative mandatory results and state transitions for service
+  approval, external-key destruction, authentication, ECH, early data,
+  anti-replay, and policy decisions; events only duplicate those outcomes for
+  audit and never complete or authorize them;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -568,12 +580,17 @@ Verification:
   delayed and absent drains, saturating counters and saturation reporting,
   unavailable time, cancellation, provider failure, terminal transitions, and
   attempted reentrancy without cryptographic-state or peer-alert differences;
+- discard every SecurityEvent in accepted, rejected, approved, non-approved,
+  destruction, authentication, ECH, early-data, anti-replay, and policy paths
+  and prove mandatory results and engine state remain complete and unambiguous;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- security evidence is bounded, pull-based, secret-free, deterministic, and observational only;
+- security events are bounded, pull-based, secret-free, deterministic audit
+  duplicates, while every security decision and completion remains mandatory
+  and unambiguous when all events are ignored or dropped;
 - `v0.18.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.19.0 - TLS And DTLS Record Framing
@@ -787,7 +804,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement HKDF extract and expand and TLS HKDF-Expand-Label with all input and output limits explicit.
+Plan scope: Implement HKDF extract and expand and TLS HKDF-Expand-Label with all input and output limits explicit, introducing symbolic or bounded proof harnesses for output-length and counter exhaustion beside the implementation.
 
 Goal: complete the **HKDF And TLS Labels** implementation stop without admitting or
 claiming adjacent capability.
@@ -874,7 +891,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement AES-GCM seal and open with nonce and usage limits, authenticate ciphertext before any caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, and leave the complete destination unchanged on authentication failure.
+Plan scope: Implement AES-GCM seal and open with nonce and usage limits, authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on authentication failure, and introduce its failure-atomicity proof harness beside the implementation.
 
 Goal: complete the **AES-GCM** implementation stop without admitting or
 claiming adjacent capability.
@@ -932,7 +949,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement Poly1305 and ChaCha20-Poly1305 with constant-time tag verification, authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, and leave the complete destination unchanged on failure.
+Plan scope: Implement Poly1305 and ChaCha20-Poly1305 with constant-time tag verification, authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on failure, and introduce its failure-atomicity proof harness beside the implementation.
 
 Goal: complete the **Poly1305 And ChaCha20-Poly1305** implementation stop without admitting or
 claiming adjacent capability.
@@ -961,7 +978,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement fixed-limb unsigned arithmetic, Montgomery operations, modular exponentiation, and RSA-size policies with no attacker-selected allocation, normalization schedule, or limb count.
+Plan scope: Implement fixed-limb unsigned arithmetic, Montgomery operations, modular exponentiation, and RSA-size policies with no attacker-selected allocation, normalization schedule, or limb count; introduce carry, borrow, reduction, conversion, and multiplication harnesses, preferring limb-count-generic or full-width proofs and recording reduced-width limits.
 
 Goal: complete the **Fixed-Limb RSA Arithmetic** implementation stop without admitting or
 claiming adjacent capability.
@@ -990,7 +1007,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement fixed-width prime-field arithmetic, inversion, square roots, scalar primitives, and complete-formula foundations needed by admitted curves, separate from RSA limbs.
+Plan scope: Implement fixed-width prime-field arithmetic, inversion, square roots, scalar primitives, and complete-formula foundations needed by admitted curves, separate from RSA limbs; introduce field canonicalization, scalar-range, and exceptional-case proof harnesses beside the implementation.
 
 Goal: complete the **Prime-Field And ECC Arithmetic** implementation stop without admitting or
 claiming adjacent capability.
@@ -1019,7 +1036,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement X25519 field encoding, canonical decoding policy, clamping, fixed Montgomery ladder, and low-order input handling.
+Plan scope: Implement X25519 field encoding, canonical decoding policy, clamping, fixed Montgomery ladder, and low-order input handling, with full-width or explicitly reduced-width ladder and exceptional-input proof harnesses introduced beside the implementation.
 
 Goal: complete the **X25519 Field And Ladder** implementation stop without admitting or
 claiming adjacent capability.
@@ -1077,7 +1094,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement P-256 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors.
+Plan scope: Implement P-256 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors; introduce point-rejection, scalar-range, group-exception, and canonicalization proof harnesses beside the implementation.
 
 Goal: complete the **P-256 Group Operations** implementation stop without admitting or
 claiming adjacent capability.
@@ -1164,7 +1181,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement P-384 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors.
+Plan scope: Implement P-384 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors; introduce point-rejection, scalar-range, group-exception, and canonicalization proof harnesses beside the implementation.
 
 Goal: complete the **P-384 Group Operations** implementation stop without admitting or
 claiming adjacent capability.
@@ -3434,7 +3451,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement ML-KEM polynomial, NTT, sampling, and canonical encoding and decoding foundations.
+Plan scope: Implement ML-KEM polynomial, NTT, sampling, and canonical encoding and decoding foundations while introducing array-bound, index, reduction, and encoding round-trip proof harnesses beside the implementation.
 
 Goal: complete the **ML-KEM Arithmetic And Encoding** implementation stop without admitting or
 claiming adjacent capability.
@@ -3666,13 +3683,13 @@ Exit criteria:
 - architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
 - `v0.124.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.125.0 - Approved Provider And Service Indicator
+### v0.125.0 - Approved Provider And Mandatory Service Indicator
 
 Status: planned
 
-Plan scope: Implement the sealed approved-only provider and unambiguous per-service approved indicator with no additive fips feature or construction before self-test success.
+Plan scope: Implement the sealed approved-only provider and return an unambiguous per-service approval indicator through each mandatory typed service result or ActionV1, with SecurityEvent only duplicating that status for audit; permit no additive fips feature or construction before self-test success.
 
-Goal: complete the **Approved Provider And Service Indicator** implementation stop without admitting or
+Goal: complete the **Approved Provider And Mandatory Service Indicator** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -3680,6 +3697,9 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- return the approval or non-approval status from every service invocation in a
+  mandatory typed result or ActionV1 and emit only a redundant, non-authoritative
+  SecurityEvent audit copy;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3687,19 +3707,22 @@ Verification:
 
 - run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
 - prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- drop every audit event and prove callers must still consume an unambiguous
+  mandatory approval indicator before treating service output as approved;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- every service result carries mandatory approval status independently of audit
+  delivery, while architectural boundaries and catastrophic-latch semantics are preserved;
 - `v0.125.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.126.0 - SSP Lifecycle And Zeroization Services
 
 Status: planned
 
-Plan scope: Define SSP entry, output, storage, high-water lifetime, external storage, accelerator handle, cache and DMA completion, and zeroization services with completion indications and secret-free status events.
+Plan scope: Define SSP entry, output, storage, high-water lifetime, external storage, accelerator handle, cache and DMA completion, and zeroization services with mandatory single-consumption completion indications; SecurityEvent may only duplicate secret-free status for audit.
 
 Goal: complete the **SSP Lifecycle And Zeroization Services** implementation stop without admitting or
 claiming adjacent capability.
@@ -3753,13 +3776,13 @@ Exit criteria:
 - architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
 - `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.128.0 - FIPS Security Event Integration
+### v0.128.0 - FIPS Observational Security Event Integration
 
 Status: planned
 
-Plan scope: Implement the frozen security-event schema inside the module for self-test and module-state transitions, per-service approval indicators, SSP entry, output, installation, rotation, expiration, destruction completion, and catastrophic failure; keep payloads and identifiers secret-free, format-safe, and non-correlating, use caller-supplied timestamps when available while permitting explicitly untimestamped boot and self-test events for later enrichment, preserve exact event ordering and saturating dropped-event accounting with visible saturation, and prove event backpressure, absence, or overflow cannot alter services, latching, zeroization, or cryptographic state.
+Plan scope: Duplicate mandatory service indicators, module-state results, SSP lifecycle token completions, and catastrophic failures into the frozen audit schema without making SecurityEvent authoritative; keep payloads and identifiers secret-free, format-safe, and non-correlating, permit optional caller timestamps and later enrichment, preserve ordering and saturating drop accounting, and prove missing or ignored events cannot alter or obscure approval, service results, latching, zeroization, destruction completion, or cryptographic state.
 
-Goal: complete the **FIPS Security Event Integration** implementation stop without admitting or
+Goal: complete the **FIPS Observational Security Event Integration** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -3770,23 +3793,31 @@ Deliverables:
   catastrophic condition to a deterministic redacted event while preserving
   caller-drained delivery, optional later timestamp enrichment, saturating drop
   totals and visible saturation, non-correlating identifiers, and non-reentrancy;
+- retain service approval, module state, SSP zeroization and destruction
+  completion as mandatory typed results, state, and single-consumption token
+  transitions; events are checked only as audit duplicates;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
 - fault-inject every self-test, provider, SSP, zeroization, indicator, and latch
-  path and compare event order and categories with the module state machine;
+  path and compare each event duplicate with its authoritative result or module
+  state and with the documented event order and category;
 - fill, neglect, and repeatedly drain event capacity through timestamp-free
   boot, later enrichment, counter saturation, concurrent services, and terminal
   failure, proving no identifier correlation and identical service output,
   latching, destruction completion, and cryptographic state;
+- suppress all SecurityEvents and prove approval, non-approval, permanent
+  failure, zeroization, and destruction completion remain mandatory and
+  unambiguous to the caller;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- module events are complete evidence of security-relevant transitions without becoming a control path or exposing SSPs;
+- module events are non-authoritative audit duplicates that may be absent without
+  obscuring any mandatory service, state, latch, zeroization, or destruction outcome;
 - `v0.128.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.129.0 - Exact FIPS Module Artifact Freeze
@@ -4411,7 +4442,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze explicit EngineV1, EventV1, and ActionV1 interfaces after every planned v1 optional module has exercised them; require applications to exhaustively handle every mandatory entropy, signing, storage, timer, decompression, trust, provider, and transport action with no wildcard ignore path, and fail closed on any unhandled or mismatched mandatory action; adding a mandatory effect requires separate EngineV2, EventV2, and ActionV2 interfaces and a major SemVer release rather than changing V1; bounded informational SecurityEvent values may be non-exhaustive and safely ignored only when unknown values remain secret-free, format-safe, and observational; retain ECH lookup, decompression, RPK trust, delegated credentials, path tokens, consumed and produced counts, backpressure, cancellation, overflow accounting, and compile-fail exhaustiveness tests.
+Plan scope: Freeze EngineV1, EventV1, and ActionV1 with exhaustive mandatory entropy, signing, storage, timer, decompression, trust, provider, transport, service-approval, external-destruction, authentication, ECH, early-data, anti-replay, and policy results; applications cannot wildcard-ignore mandatory effects, and unhandled or mismatched effects fail closed; new mandatory effects require V2 interfaces and a major SemVer release; only bounded secret-free observational SecurityEvent values are non-exhaustive, and ignoring every such event still leaves accepted, rejected, approved, non-approved, and destruction-complete states unambiguous through mandatory state and results.
 
 Goal: complete the **Versioned Stable Sans-I/O V1 API** implementation stop without admitting or
 claiming adjacent capability.
@@ -4421,6 +4452,9 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - exercise optional receive and send paths and cross-feature combinations before freezing APIs, then qualify downstream host and Aesynx adapters;
+- freeze authoritative mandatory result and state paths for approval,
+  destruction, authentication, ECH, early data, anti-replay, and policy outcomes
+  separately from the non-exhaustive observational SecurityEvent schema;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -4428,12 +4462,17 @@ Verification:
 
 - run extension, precompressed-artifact, composition, incompatible typestate, FIPS-closure, ECH, RPK, delegation, compression, trace, zero-allocation, Aesynx, rotation, and target tests;
 - compile-test exhaustive EngineV1, EventV1 and ActionV1 handling with no wildcard ignore path; inject unknown, mismatched and unhandled mandatory effects and require fail-closed termination; prove mandatory additions require V2 and a major release while unknown informational SecurityEvent values remain bounded, secret-free and observational;
+- ignore or drop every SecurityEvent across accepted, rejected, approved,
+  non-approved, and destruction-complete paths and prove exhaustive mandatory
+  results and engine state cannot be mistaken for the opposite outcome;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- every V1 mandatory action is exhaustively handled or fails closed, V1 cannot gain mandatory variants, and only bounded observational SecurityEvent values are non-exhaustive;
+- every V1 security outcome is authoritative in exhaustive mandatory state or
+  results, every unhandled mandatory action fails closed, and only bounded
+  observational SecurityEvent audit values are non-exhaustive;
 - `v0.150.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.151.0 - Caller-Provided Host Capability Integration
@@ -4552,13 +4591,13 @@ Exit criteria:
 - protocol, resource, zeroization, X.509-budget, and pending-token proof claims name exact harnesses, bounds, assumptions, and implementations;
 - `v0.154.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.155.0 - Cryptographic Arithmetic Formal Harnesses
+### v0.155.0 - Cryptographic Formal Coverage And Residual-Gap Gate
 
 Status: planned
 
-Plan scope: Prove fixed-limb carry, borrow and reduction bounds, Montgomery conversion and multiplication invariants, field canonicalization, scalar range and point-decoding rejection, ladder and group-operation exceptional cases, ML-KEM polynomial and NTT array bounds and encoding round trips, HKDF output and counter exhaustion, and AEAD destination non-mutation after authentication failure; use reduced-width exhaustive models where full proofs are impractical and establish equivalence to production widths with official vectors and at least two independent external reference processes.
+Plan scope: Complete and audit the proof harnesses introduced with every arithmetic and cryptographic milestone: use symbolic full-width proofs where tractable, limb-count-parameterized proofs where sound, and reduced-width exhaustive models only to validate algorithms and harness structure; treat production-width official vectors and at least two independent external differential processes as evidence rather than proof, map every claim to exact code and widths, and publish every residual proof gap without claiming reduced-to-production-width equivalence.
 
-Goal: complete the **Cryptographic Arithmetic Formal Harnesses** implementation stop without admitting or
+Goal: complete the **Cryptographic Formal Coverage And Residual-Gap Gate** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -4566,25 +4605,30 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - maintain proof harnesses beside small arithmetic and cryptographic modules,
-  record every abstraction and reduced-width assumption, and map each model to
-  the exact production implementation and supported parameter widths;
+  classify every harness as symbolic full-width, sound limb-count-parameterized,
+  or reduced-width exhaustive, record every abstraction and assumption, map it
+  to exact production code and supported widths, and inventory residual gaps;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run pinned Kani or equivalent proofs for limb, Montgomery, field, scalar,
+- run pinned Kani or equivalent full-width, limb-count-parameterized, or
+  explicitly reduced-width harnesses for limb, Montgomery, field, scalar,
   point, ladder, group, ML-KEM, HKDF, AEAD failure-atomicity, bounds, exhaustion,
   canonicalization, rejection, and round-trip invariants;
-- compare reduced and production-width behavior with official vectors,
-  boundary corpora, and at least two independent external reference processes,
-  failing closed on any unproved equivalence or unsupported proof claim;
+- exercise production widths with official vectors, boundary corpora, and at
+  least two independent external reference processes as differential evidence,
+  never as proof of equivalence; reject unsupported claims and publish every
+  remaining width, path, tool, or abstraction gap;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- arithmetic proof claims name exact models, assumptions, widths, implementations, and independent equivalence evidence;
+- every cryptographic claim names its exact implementation, proof class,
+  assumptions, widths, production evidence, and residual gaps, with no
+  reduced-to-production-width equivalence claim;
 - `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.156.0 - External-Process Fuzz And Differential Campaign

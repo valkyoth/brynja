@@ -70,7 +70,11 @@ protocol engines and providers emit events but cannot call logging code,
 allocate for events, block on consumers, or let observation affect state.
 Events may be explicitly untimestamped until a caller clock exists, dropped
 counts saturate visibly, and identifiers cannot expose handles, peer identities,
-or stable cross-connection correlation values.
+or stable cross-connection correlation values. SecurityEvent is an audit-only
+duplicate: approval, external-key destruction, authentication, ECH, early-data,
+anti-replay, and policy outcomes remain authoritative in exhaustive mandatory
+results, single-consumption completion tokens, and engine state even when every
+event is ignored or dropped.
 
 ## Implementation Order
 
@@ -85,7 +89,13 @@ or stable cross-connection correlation values.
    later enrichment, deterministic ordering, bounded capacity, saturating
    dropped-event accounting, and non-correlating identifiers.
 3. Implement and independently audit cryptographic primitives from official
-   vectors outward with per-compiler and per-target constant-time evidence.
+   vectors outward with per-compiler and per-target constant-time evidence. Each
+   arithmetic or cryptographic milestone introduces its applicable proof harness
+   beside the implementation; v0.155.0 completes coverage and publishes gaps
+   rather than introducing the models for the first time. Classify claims as
+   symbolic full-width, sound limb-count-parameterized, or reduced-width
+   algorithm/harness validation, and treat production-width vectors and
+   differentials as evidence rather than proof of equivalence.
    RSA signing accepts validated imported keys; first-party RSA key generation
    is outside v1.
 4. Implement bounded identity containers, DER, X.509 path construction, split
@@ -103,8 +113,9 @@ or stable cross-connection correlation values.
    zero-RTT, path-bound one-pass DTLS, version-specific DTLS CIDs, explicit
    DTLS early-data exclusion, and standardized PQ hybrid policies. For FIPS,
    freeze architecture and allowlists first; implement the DRBG, provider,
-   indicators, SSP services, and complete linked self-tests; only then freeze
-   module-specific security events and the exact artifact, then bind ACVTS,
+   mandatory typed per-service indicators, SSP services and mandatory lifecycle
+   completion tokens, and complete linked self-tests; only then freeze
+   module-specific audit-event duplication and the exact artifact, then bind ACVTS,
    CAVP, CMVP, and closure evidence to that artifact.
    The approved-only TLS profile follows without conflating connection failure
    with a FIPS-defined catastrophic module latch.
@@ -121,8 +132,9 @@ or stable cross-connection correlation values.
    Sans-I/O actions. Freeze those actions as exhaustive EngineV1, EventV1, and
    ActionV1 interfaces: applications cannot ignore mandatory effects, and any
    new mandatory effect requires V2 interfaces and a major SemVer release;
-   only bounded secret-free informational SecurityEvent values may evolve
-   non-exhaustively.
+   only bounded secret-free observational SecurityEvent audit values may evolve
+   non-exhaustively. Authentication, ECH, early-data, anti-replay, policy,
+   approval, and destruction outcomes always remain mandatory and authoritative.
 9. Qualify caller-provided host integration and the Aesynx ABI/emulator against
    the final public interface, then run complete conformance, fuzzing, formal,
    memory, side-channel, platform, resource, interoperability, external audit,
@@ -158,6 +170,10 @@ The repository will maintain:
   timestamp-free boot and later enrichment, delayed or absent drain, saturating
   overflow reporting, identifier non-correlation, non-reentrancy, and
   state-independence tests across protocol engines and the final FIPS module;
+  suppress every event and prove accepted/rejected, approved/non-approved,
+  authentication, ECH, early-data, anti-replay, policy, latching, zeroization,
+  and destruction-complete outcomes remain unambiguous in mandatory state,
+  results, and single-consumption tokens;
 - cross-feature typestate, transcript, rotation, storage, cancellation,
   pre-authentication resource, and validated-dependency-closure tests;
 - generated pairwise optional-feature and stream TLS, DTLS, and QUIC
@@ -170,7 +186,10 @@ The repository will maintain:
   work ceilings, and pending-token consumption, plus separate cryptographic
   arithmetic models for limbs, Montgomery operations, fields, scalars, points,
   ladders, groups, ML-KEM, HKDF exhaustion, and AEAD failure atomicity with
-  reduced-width assumptions and independent-process equivalence evidence;
+  harnesses introduced beside each implementation and classified as full-width,
+  limb-count-parameterized, or reduced-width algorithm/harness validation;
+  production-width vectors and independent-process differentials remain evidence,
+  not equivalence proofs, and residual proof gaps remain explicit;
 - pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
   assurance tools that do not weaken repository Cargo dependency policy.
 

@@ -26,6 +26,7 @@ FIELDS = (
 def expected_versions() -> list[str]:
     patch_releases = {
         3: (1, 2, 3, 4, 5),
+        11: (1, 2),
         18: (1,),
         57: (1,),
         58: (1, 2, 3),

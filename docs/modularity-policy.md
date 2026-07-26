@@ -14,6 +14,18 @@ fallback paths of `brynja`. Repository-only packages must remain unpublished.
 Scripts check the dependency graph, manifest policy, README synchronization,
 and source-file lengths.
 
+The conditional `brynja-sanitization` package is a downstream integration
+boundary, never a feature or dependency of `brynja`, `brynja-core`,
+`brynja-crypto`, `brynja-pki`, a modern or legacy engine, or
+`brynja-fips-module`. It may be admitted only after v0.11.1 approves the exact
+latest stable first-party `sanitization` package, and then must exact-pin it
+with default features disabled and no activated `zeroize` or other third-party
+crate. Adapter-owned wrappers bridge the contracts without violating Rust's
+orphan rules. The same protocol-neutral package serves modern and legacy
+callers with identical destruction guarantees; legacy code does not receive a
+separate weaker sanitizer. Any future need for `brynja-legacy-sanitization`
+requires its own numbered admission review.
+
 RFC 9850 key logging belongs only to a separately compiled, unpublished
 test-support artifact. No production crate, facade feature, default build,
 release archive, FIPS module, or downstream dependency path may contain its
@@ -101,6 +113,11 @@ features, dispatch tables, build inputs, tool configuration, and binary hashes.
 HPKE, ECH, certificate compression, and every later optional module remain
 downstream of provider ports and cannot alter that artifact. Any such change
 starts a new validation and artifact line.
+
+`brynja-sanitization` is outside the validated module closure. It may protect
+application-owned storage around a FIPS deployment, but it cannot implement,
+replace, or imply the validated module's SSP destruction service or inherit
+the module certificate.
 
 Certificate identity, caveats, status, sunset, operational environments,
 approved services, security-policy hash, and artifact hashes live in an

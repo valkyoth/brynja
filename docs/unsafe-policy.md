@@ -17,3 +17,10 @@ Its proof must cover every supported compiler and target plus platform cache
 and DMA completion duties. Claims must disclose limits for registers, copies,
 crash dumps, and physical memory, but a weaker owned-region guarantee cannot
 pass the `1.0.0` gate. This paragraph does not itself authorize unsafe code.
+
+The v0.11.1 review treats unsafe code inside the exact `sanitization` release as
+part of the adapter's inherited trusted computing base. Admission requires the
+same necessity, invariant, Miri, emitted-code, target, and external-review
+evidence expected of a local exception. Approval applies only to the separately
+selected `brynja-sanitization` adapter and does not authorize additional unsafe
+code or replace Brynja's mandatory v0.11.0 primitive.

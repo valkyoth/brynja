@@ -12,6 +12,7 @@ No crate has a published or production-ready implementation.
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
+| Future `brynja-sanitization` | not admitted | no | Conditional downstream adapter after v0.11.1 review |
 
 ## Enforced crates.io Release Policy
 
@@ -58,6 +59,14 @@ certificate, artifact hashes, caveats, and tested operational environments.
 Any changed module is a different artifact and cannot reuse the validation
 claim; the facade may update only when its manifest, API, or approved profile
 changes without mutating the validated module.
+
+If v0.11.1 admits it, `brynja-sanitization` also uses an independent SemVer
+line and publishes only when its adapter code or exact `sanitization` pin
+changes. The approved `sanitization` package must publish first and be visible
+on crates.io. The adapter never enters the modern, legacy, or FIPS facade
+publication set automatically. Until admission, it is absent from
+`release-crates.toml` and the workspace rather than represented by a placeholder
+package.
 
 Actual publication requires a clean worktree, the matching release tag at
 `HEAD`, a current committed PASS pentest report, user-confirmed green GitHub

@@ -46,6 +46,9 @@ use-after-failure.
 - deterministic builds, pinned CI actions, zero dependencies, SBOMs, and
   a current committed pentest report that must change with every later release
   candidate fix;
+- exact-pinned, default-features-disabled admission of any optional
+  `brynja-sanitization` adapter, with no `zeroize` or third-party crate in its
+  activated graph and no path into facades, engines, or the FIPS module;
 - machine-readable protocol-surface classification so new or changed standards
   and IANA entries cannot remain silently unowned;
 - current RFC update closure and complete normative-requirement traceability,

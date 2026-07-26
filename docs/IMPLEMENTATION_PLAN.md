@@ -54,7 +54,8 @@ brynja
 │   └── future brynja-tlsNN (one package per admitted TLS generation)
 ├── optional brynja-quic-tls (TLS 1.3 handshake plus QUIC profile)
 ├── optional brynja-dtls (independent datagram state machine)
-└── optional brynja-platform (downstream implementations only)
+├── optional brynja-platform (downstream implementations only)
+└── future brynja-sanitization (explicit downstream adapter only)
 
 brynja-legacy (never a brynja dependency)
 ├── brynja-legacy-tls11
@@ -99,6 +100,19 @@ offers the easy client and server entry points, but it constructs them only from
 a certificate-bound manifest and matching validated-module handle. Ordinary
 `brynja` configuration can never acquire a FIPS claim through feature unification.
 
+`brynja-sanitization` is a conditional, separately selected downstream adapter,
+not a feature or dependency of any Brynja facade or protocol engine. Admission
+requires the v0.11.1 review of the latest stable first-party `sanitization`
+release; implementation at v0.11.2 uses an exact pin, disables default
+features, and rejects any activated `zeroize` or other third-party dependency.
+Adapter-owned wrappers avoid orphan-rule workarounds. One protocol-neutral
+adapter serves modern and legacy applications with the same destruction
+semantics; a `brynja-legacy-sanitization` split is rejected unless a later
+numbered review proves an irreducible and safe need. Brynja's own complete
+owned-region destruction primitive remains mandatory. The adapter stays
+outside `brynja-fips-module`; using it in application code cannot inherit or
+satisfy a FIPS validation claim.
+
 A newer TLS generation does not automatically make an older generation
 legacy. Admission of TLS 1.N requires a new version-specific package,
 requirements closure, audit line, and explicit router milestone. Retirement
@@ -122,7 +136,9 @@ pentest, and release line. Code never changes classification silently in place.
    remain unclassified or silently weaken behavior. Keep RFC 9850 key logging in
    a separately compiled test-support artifact that production crates and
    features cannot reach.
-2. Freeze production owned-memory zeroization and constant-time operations;
+2. Freeze production owned-memory zeroization; review and, only if admitted,
+   add the optional downstream `brynja-sanitization` adapter without changing
+   the mandatory core primitive; then freeze constant-time operations;
    separate entropy from secure randomness and wall from monotonic time;
    define pending-provider effects; and design the FIPS-aware provider boundary
    without making a validation claim. Freeze authoritative mandatory security
@@ -261,6 +277,8 @@ The repository will maintain:
   applicability matrices plus targeted ECH, RPK, hybrid, resumption, early-data,
   FIPS, compression, OCSP, SCT, HRR, padding, transcript, and downgrade cases;
 - secret-lifetime, redaction, zeroization, and error-path tests;
+- exact-pin, feature-unification, dependency-direction, modern/legacy
+  equivalence, and FIPS-boundary tests for any admitted sanitization adapter;
 - exhaustive mandatory EngineV1, EventV1, and ActionV1 handling, fail-closed
   unknown-action fixtures, and compile failures for wildcard ignore paths;
 - formal protocol and resource models for zeroization, obsolete keys, X.509

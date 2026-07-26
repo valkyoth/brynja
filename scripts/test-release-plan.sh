@@ -56,3 +56,10 @@ if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/nul
     echo "release plan validator accepted a missing patch milestone" >&2
     exit 1
 fi
+
+cp docs/RELEASE_PLAN.md "$release_tmp"
+sed -i '0,/### v0\.11\.2 /{/### v0\.11\.2 /d;}' "$release_tmp"
+if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
+    echo "release plan validator accepted a missing sanitization milestone" >&2
+    exit 1
+fi

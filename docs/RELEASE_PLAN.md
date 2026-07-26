@@ -622,6 +622,108 @@ Exit criteria:
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
 - `v0.11.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
+### v0.11.1 - Sanitization Adapter Admission Review
+
+Status: planned
+
+Plan scope: Audit the latest stable first-party `sanitization` crate against Brynja's MSRV, `no_std`, license, unsafe, target, complete-owned-region destruction, feature, dependency, advisory, optimization-evidence, and FIPS-boundary policies; compare one protocol-neutral adapter with a legacy-specific split, require an activated graph with no `zeroize` or other third-party crate, and record a fail-closed admit-or-reject decision without changing any Brynja production dependency graph.
+
+Goal: decide whether `sanitization` can support a separately selected Brynja
+adapter without weakening the mandatory first-party core destruction contract,
+modern/legacy isolation, dependency policy, or FIPS boundary.
+
+Deliverables:
+
+- record the exact audited `sanitization` release, source and package hashes,
+  MSRV, license, enabled and disabled features, unsafe inventory, dependency
+  closure, target guarantees, evidence, advisories, and residual gaps;
+- freeze a downstream adapter boundary using adapter-owned wrapper types, with
+  no orphan-rule workaround, protocol-engine dependency, facade feature,
+  default activation, implicit conversion, or ownership ambiguity;
+- decide whether one protocol-neutral `brynja-sanitization` can serve modern
+  and legacy consumers with identical guarantees; reject a separate
+  `brynja-legacy-sanitization` unless irreducible legacy-only semantics make a
+  later independently versioned package necessary;
+- specify that Brynja's v0.11.0 primitive remains mandatory and authoritative,
+  while the optional adapter may only add reviewed storage and lifecycle
+  ergonomics and cannot downgrade complete-owned-region destruction;
+- record an explicit admission or rejection decision, including the reason,
+  required remediation, update policy, and conditions that force re-review.
+
+Verification:
+
+- build and test the candidate boundary from Rust `1.90.0` through the pinned
+  stable toolchain across the promised `no_std`, desktop, mobile, BSD, and
+  bare-metal target matrix;
+- inspect Cargo metadata, the lockfile, package archive, activated features,
+  and feature-unification fixtures to prove that `zeroize`, derive, serde,
+  subtle, and every other third-party crate remain outside the activated graph;
+- compare destruction behavior and emitted MIR, LLVM IR, and assembly with
+  Brynja's v0.11.0 obligations, including drop, explicit clear, replacement,
+  error, cancellation, panic-unwind, optimization, and complete-capacity cases;
+- exercise negative dependency-direction, modern/legacy isolation, orphan
+  wrapper, FIPS-boundary, version-drift, advisory, and unsupported-target
+  fixtures, then pass repository policy, SBOM, documentation, and pentest gates.
+
+Exit criteria:
+
+- a committed, evidence-backed admit-or-reject decision preserves every Brynja
+  destruction and isolation invariant without adding a production dependency;
+- `v0.11.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+
+### v0.11.2 - Optional Brynja Sanitization Adapter
+
+Status: planned
+
+Plan scope: Conditional on the v0.11.1 admission decision, implement and independently publish a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.
+
+Goal: provide an explicitly selected first-party sanitization integration
+without making Brynja depend on it or creating a weaker legacy destruction
+domain.
+
+Deliverables:
+
+- if admitted, add the separately versioned and separately published
+  `brynja-sanitization` package with adapter-owned secret wrappers and narrow
+  conversions over frozen `brynja-core` contracts;
+- exact-pin the admitted `sanitization` release with default features disabled,
+  expose no feature that activates `zeroize` or another third-party crate, and
+  require a new admission review before any version or feature change;
+- make applications select the adapter through an explicit dependency; do not
+  add it to `brynja`, `brynja-tls`, any version-specific engine, any legacy
+  engine or facade, `brynja-platform`, or a default/all-features shortcut;
+- share the protocol-neutral adapter between modern and legacy applications
+  while preserving separate engine state and credentials; do not create
+  `brynja-legacy-sanitization` unless a later numbered review proves it is
+  necessary and safe;
+- exclude the adapter from `brynja-fips-module` and all validation claims;
+  application use outside the module boundary cannot satisfy or imply FIPS SSP
+  destruction, service approval, or certificate coverage;
+- if admission fails or later evidence invalidates it, publish no adapter and
+  close the milestone with the rejection evidence and migration guidance.
+
+Verification:
+
+- run adapter API, redaction, non-Clone, destruction, replacement, cancellation,
+  error, unwind, capacity, compile-fail, Miri, emitted-code, and differential
+  tests against the exact admitted release;
+- prove `no_std` and Rust `1.90.0` through pinned-stable compatibility across
+  every promised target, with explicit compile-only versus runtime evidence;
+- test modern and legacy downstream examples against the same adapter contract
+  and reject dependency paths from any facade or engine back to the adapter;
+- inspect Cargo metadata, feature resolution, lockfile, SBOM, package contents,
+  crates.io order, and negative fixtures for version drift, default-feature
+  activation, `zeroize`, third-party crates, and FIPS-boundary contamination;
+- pass the full repository, documentation, advisory, isolation, release, and
+  pentest gates with the independent-crate publication policy enforced.
+
+Exit criteria:
+
+- either the optional adapter is independently usable with identical modern and
+  legacy guarantees and no core or FIPS dependency, or a documented
+  fail-closed non-admission leaves the production graph unchanged;
+- `v0.11.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+
 ### v0.12.0 - Constant-Time Foundation
 
 Status: planned

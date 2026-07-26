@@ -62,6 +62,11 @@ the facade last.
   existing engine package or automatically make its predecessor legacy.
 - Runtime and build dependencies are forbidden. Any future exception requires
   a dedicated adapter crate, written admission review, tests, and release gate.
+- Versions `0.11.1` and `0.11.2` evaluate and conditionally implement one
+  separately selected `brynja-sanitization` adapter to the first-party
+  `sanitization` crate. It uses an exact pin with default features disabled,
+  never activates `zeroize`, and is not a dependency or feature of a facade,
+  protocol engine, legacy engine, or FIPS module.
 - Every production crate is `no_std` by default. Platform services enter
   through explicit caller-provided interfaces.
 - FIPS 140-3 support is planned through separate `brynja-fips-module` and
@@ -92,6 +97,7 @@ the facade last.
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
+| Future `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | Not admitted |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | Repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
@@ -119,6 +125,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Pinned stable toolchain | Rust `1.97.1` |
 | Default target | `no_std` |
 | Third-party crates | Forbidden |
+| First-party companion crates | Conditional adapter-only admission review |
 | Unsafe Rust | Forbidden until a versioned, audited exception is approved |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |

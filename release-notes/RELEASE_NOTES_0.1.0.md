@@ -1,6 +1,6 @@
 # Brynja 0.1.0 Release Notes
 
-Status: awaiting pentest; not released
+Status: pentest passed; awaiting green GitHub CI; not released
 
 This foundation milestone establishes the dependency-free `no_std` workspace,
 documentation, security policy, standards corpus workflow, platform matrix,
@@ -17,6 +17,11 @@ unchanged supporting crates are not republished. Repository-only packages are
 mechanically excluded, and actual publication requires the matching tag at
 `HEAD` plus the complete release gate.
 
-Release remains blocked on the `v0.1.0` implementation gate, committed PASS
-pentest report, green GitHub checks, and explicit tag authorization described
-in `docs/RELEASE_PLAN.md`.
+The foundation pentest reported two low-severity hardening opportunities.
+Truncating-cast and sign-loss lints are now non-overridable, and CI downloads
+each exact security and SBOM tool archive, verifies its independently pinned
+SHA-256 hash, and installs from the verified source archive and packaged
+lockfile. Retesting found no open findings.
+
+Release remains blocked on green GitHub checks and explicit tag authorization
+described in `docs/RELEASE_PLAN.md`.

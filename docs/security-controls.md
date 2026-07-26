@@ -5,6 +5,7 @@ Status: foundation
 | Control | Foundation enforcement |
 | --- | --- |
 | Dependency surface | Cargo manifests and `cargo metadata` must contain no external packages |
+| CI tool provenance | Exact versions and independently pinned `.crate` SHA-256 hashes are verified before installing security and SBOM tools |
 | Unsafe Rust | Workspace lint forbids it |
 | `no_std` | Every package declares `#![no_std]` |
 | Modern/legacy isolation | Graph validator requires `brynja-legacy-*` engine names and rejects legacy edges into modern crates |

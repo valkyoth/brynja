@@ -2,6 +2,7 @@
 set -eu
 
 ci_file=".github/workflows/ci.yml"
+tool_lock="scripts/ci-tools.lock"
 manifest_url="${RUST_STABLE_MANIFEST_URL:-https://static.rust-lang.org/dist/channel-rust-stable.toml}"
 
 pinned_rust="$(sed -n 's/^channel = "\([0-9][0-9.]*\)"$/\1/p' rust-toolchain.toml | head -n 1)"
@@ -14,7 +15,7 @@ if [ "$pinned_rust" != "$latest_rust" ]; then
 fi
 
 for tool in cargo-deny cargo-audit cargo-sbom; do
-    pinned="$(sed -n "s/.*cargo install --locked ${tool} --version \([0-9][^ ]*\).*/\1/p" "$ci_file" | head -n 1)"
+    pinned="$(sed -n "s/^${tool} \\([0-9][^ ]*\\) [0-9a-f]\\{64\\}$/\\1/p" "$tool_lock" | head -n 1)"
     latest="$(cargo info "$tool" | sed -n 's/^version: //p' | head -n 1)"
     test -n "$pinned"
     test -n "$latest"
@@ -23,6 +24,8 @@ for tool in cargo-deny cargo-audit cargo-sbom; do
         exit 1
     fi
 done
+
+scripts/install-ci-tools.sh --verify-only
 
 failed=0
 for workflow in .github/workflows/*.yml; do
@@ -50,4 +53,3 @@ if [ "$pinned_tag" != "$latest_tag" ] || [ "$pinned_sha" != "$latest_sha" ]; the
     echo "actions/checkout is stale or has the wrong SHA" >&2
     exit 1
 fi
-

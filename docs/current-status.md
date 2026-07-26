@@ -1,6 +1,6 @@
 # Current Status
 
-Status: repository foundation implemented; awaiting pentest
+Status: repository foundation pentest passed; awaiting green GitHub CI
 
 Brynja has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The workspace compiles only to prove the intended
@@ -22,11 +22,11 @@ crates.io release and confirmed its declared Rust `1.90.0` MSRV, pinned Rust
 This is planning evidence only; v0.11.1 must recheck and formally admit or
 reject the then-current release.
 
-The `v0.1.0` repository policy and evidence automation are implemented.
-Release readiness intentionally fails closed until a current versioned pentest
-PASS report is committed with zero open findings and clean retest evidence.
-After that commit, GitHub must be green and the user must explicitly authorize
-the tag. No tag or package publication is currently authorized.
+The `v0.1.0` repository policy and evidence automation are implemented. The
+committed pentest report records PASS, zero open findings, and clean retest
+evidence after both low-severity hardening findings were remediated. GitHub must
+now become green and the user must explicitly authorize the tag. No tag or
+package publication is currently authorized.
 The 2026-07-26 RFC planning audit locks a 103-document protocol source closure
 and records roadmap dispositions; machine-readable normative source-to-code-
 and-test traceability remains planned for v0.3.0 through v0.3.5.

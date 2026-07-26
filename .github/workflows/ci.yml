@@ -25,10 +25,7 @@ jobs:
       - name: Install Rust toolchain
         run: rustup show
       - name: Install security and SBOM tools
-        run: |
-          cargo install --locked cargo-deny --version 0.20.2
-          cargo install --locked cargo-audit --version 0.22.2
-          cargo install --locked cargo-sbom --version 0.10.0
+        run: scripts/install-ci-tools.sh
       - name: Run repository gate
         run: scripts/checks.sh
       - name: Validate committed pentest report when present

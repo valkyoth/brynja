@@ -18,3 +18,8 @@ Keep a Changelog and Semantic Versioning.
   protocol-neutral `brynja-sanitization` downstream adapter, with no
   `zeroize`, third-party activated dependency, facade, engine, or FIPS-module
   path.
+- Independently pinned and verified CI security-tool archive checksums.
+
+### Changed
+
+- Made truncating-cast and sign-loss Clippy lints non-overridable.

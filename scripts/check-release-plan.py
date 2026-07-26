@@ -116,7 +116,11 @@ def validate(release_path: Path, version_path: Path) -> None:
             raise ValueError(f"{version} Plan scope differs from VERSION_PLAN.md")
 
         status_lines = [line for line in section.splitlines() if line.startswith("Status:")]
-        if status_lines[0] not in ("Status: planned", "Status: awaiting pentest"):
+        if status_lines[0] not in (
+            "Status: planned",
+            "Status: awaiting pentest",
+            "Status: awaiting green CI",
+        ):
             raise ValueError(f"{version} has an unsupported status")
 
         if bullet_count(section, "Deliverables:", "Verification:") < 3:

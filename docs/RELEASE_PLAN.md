@@ -128,7 +128,7 @@ Generated requirements and upstream interfaces precede implementation.
 
 ### v0.1.0 - Workspace Foundation
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Preserve the explicit `brynja-legacy-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim.
 

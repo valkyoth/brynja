@@ -33,6 +33,39 @@ Every section contains Status, Plan scope, Goal, Deliverables, Verification, and
 Exit criteria. Repository checks are additive and one stop never admits adjacent
 capability.
 
+## Crate Versioning And Publication
+
+The workspace follows the same independent-crate release model as `eth`, with
+additional fail-closed rules for the Brynja foundation and repository-only
+packages. `release-crates.toml` records every package's previous version,
+planned version, change class, publication decision, and reason.
+
+Once crates.io publication is admitted:
+
+- every official modern release tag publishes the `brynja` facade at exactly
+  the tag version, even when the release only advances its dependency pins or
+  release-facing metadata;
+- supporting crates publish only for an explicit initial release, code or API
+  work, an API-compatible bug fix, a required internal dependency-pin change,
+  or immutable crates.io metadata correction;
+- unchanged supporting crates retain their previous independent versions and
+  are not republished;
+- changed dependencies publish and become available first, and `brynja`
+  publishes last;
+- repository-only test, interop, task, proof, and SSL 1 research packages can
+  never be selected for crates.io publication; and
+- legacy packages require their independent legacy admission line and remain
+  unreachable from the modern facade.
+
+`scripts/release_crates.py --check` enforces the complete inventory, exact
+internal pins, manifest publishability, independent SemVer transitions,
+dependency availability and ordering, repository-only exclusions, and the
+mandatory facade release. Actual publication additionally requires a clean
+worktree, the matching tag at `HEAD`, the versioned release gate, Cargo deny
+and audit checks, package verification, and typed version confirmation. There
+is no production bypass for a dirty or untagged tree, skipped checks, or
+`cargo publish --no-verify`.
+
 ## TLS Package And Retirement Rule
 
 `brynja-tls` remains the evergreen public facade and one-pass router.

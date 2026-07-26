@@ -1,6 +1,7 @@
 [release]
 version = "0.1.0"
 policy = "independent"
+stage = "foundation"
 
 [crates."brynja"]
 previous_version = "unpublished"
@@ -138,34 +139,34 @@ reason = "Foundation boundary only; no protocol implementation or release approv
 [crates."brynja-research-ssl1"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
+change = "repository"
 publish = false
 reason = "Repository-only SSL 1 reconstruction research; publication and secure transport claims are permanently prohibited."
 
 [crates."brynja-test-support"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
+change = "repository"
 publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+reason = "Repository-only test support; it is never a crates.io product."
 
 [crates."brynja-interop"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
+change = "repository"
 publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+reason = "Repository-only interoperability runner; it is never a crates.io product."
 
 [crates."brynja-xtask"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
+change = "repository"
 publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+reason = "Repository-only maintenance tooling; it is never a crates.io product."
 
 [crates."brynja-proofs"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
+change = "repository"
 publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+reason = "Repository-only proof harnesses; they are never a crates.io product."

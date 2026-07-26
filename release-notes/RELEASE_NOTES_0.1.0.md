@@ -10,5 +10,12 @@ evergreen router facade over the version-specific `brynja-tls12`,
 `brynja-tls13`, and `brynja-tls13-handshake` boundaries. It does not implement
 TLS and must not be used for network security.
 
+The foundation also installs the guarded independent-crate release policy used
+by `eth`: every admitted modern release publishes `brynja` at the tag version,
+changed supporting crates publish first on their own SemVer lines, and
+unchanged supporting crates are not republished. Repository-only packages are
+mechanically excluded, and actual publication requires the matching tag at
+`HEAD` plus the complete release gate.
+
 Release remains blocked on the `v0.1.0` implementation gate and exact-commit
 pentest described in `docs/RELEASE_PLAN.md`.

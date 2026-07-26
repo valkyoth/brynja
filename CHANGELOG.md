@@ -10,4 +10,5 @@ Keep a Changelog and Semantic Versioning.
 - Security-first, dependency-free, `no_std` workspace foundation.
 - Modern and legacy protocol package boundaries.
 - Standards provenance, toolchain, platform, and release planning policies.
-
+- Guarded independent-version crates.io planning and dependency-order
+  publication with mandatory facade releases.

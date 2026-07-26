@@ -82,6 +82,15 @@ def main() -> int:
     )
     require_rejection(research_leak, "a modern-to-research dependency")
 
+    published_research = copy.deepcopy(baseline)
+    research = next(
+        package
+        for package in published_research["packages"]
+        if package["name"] == "brynja-research-ssl1"
+    )
+    research["publish"] = None
+    require_rejection(published_research, "a publishable research crate")
+
     missing_engine = copy.deepcopy(baseline)
     tls12 = package_id(missing_engine, "brynja-tls12")
     router = node(missing_engine, "brynja-tls")

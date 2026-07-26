@@ -9,7 +9,9 @@ scripts/test-release-plan.sh
 scripts/validate-workspace.sh
 python3 scripts/test-workspace-metadata.py
 scripts/validate-release-metadata.sh
-python3 scripts/validate-release-crates.py
+scripts/release_crates.py --check
+python3 scripts/test-release-crates.py
+scripts/test-release-readiness.sh
 scripts/check-packages.sh
 scripts/verify-rfcs.sh
 scripts/verify-local-references.sh

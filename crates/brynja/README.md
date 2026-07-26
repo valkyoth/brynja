@@ -43,6 +43,12 @@ published, the normal dependency will be:
 brynja = "0.1"
 ```
 
+For every admitted modern release tag, the `brynja` facade is published at the
+tag version. Supporting crates keep independent versions and are published only
+when they change; unchanged support crates are not republished. The guarded
+publisher validates the exact package set and dependency order and publishes
+the facade last.
+
 ## Design Boundaries
 
 - The modern `brynja` facade can never enable SSL or other legacy

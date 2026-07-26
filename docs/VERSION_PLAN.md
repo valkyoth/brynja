@@ -29,6 +29,13 @@ symbolic proofs, limb-count-parameterized proofs, reduced-width exhaustive
 models, and production-width vector or differential evidence; residual gaps
 remain explicit and reduced-width evidence never claims full-width equivalence.
 
+Every admitted modern release tag publishes the `brynja` facade at the tag
+version. Supporting crates retain independent SemVer lines and publish only
+when their package or exact internal dependency requirements change.
+Repository-only crates never publish, changed dependencies publish first, and
+the facade publishes last. `release-crates.toml` and
+`scripts/release_crates.py` enforce this policy for every release candidate.
+
 ## TLS Package And Retirement Rule
 
 `brynja-tls` remains the evergreen public facade and one-pass router.

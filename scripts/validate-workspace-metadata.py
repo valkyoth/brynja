@@ -18,6 +18,13 @@ AMBIGUOUS_LEGACY_NAMES = {
     "brynja-tls11",
     "brynja-wtls",
 }
+REPOSITORY_ONLY = {
+    "brynja-interop",
+    "brynja-proofs",
+    "brynja-research-ssl1",
+    "brynja-test-support",
+    "brynja-xtask",
+}
 
 
 def is_legacy(name: str) -> bool:
@@ -66,8 +73,10 @@ def main() -> int:
     for package in packages.values():
         if package.get("source") is not None:
             raise ValueError(f"external package source: {package['name']}")
-        if package.get("publish") != []:
-            raise ValueError(f"foundation package is publishable: {package['name']}")
+        if package["name"] in REPOSITORY_ONLY and package.get("publish") != []:
+            raise ValueError(
+                f"repository-only package is publishable: {package['name']}"
+            )
         for dependency in package["dependencies"]:
             if dependency.get("source") is not None:
                 raise ValueError(

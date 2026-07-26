@@ -7,7 +7,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = r"(?:0\.[0-9]+\.0|1\.0\.0(?:-rc\.[0-9]+)?)"
+VERSION = r"(?:0\.[0-9]+\.[0-9]+|1\.0\.0(?:-rc\.[0-9]+)?)"
 HEADING = re.compile(rf"^### (v{VERSION}) - (.+)$", re.MULTILINE)
 VERSION_ROW = re.compile(
     rf"^\| `({VERSION})` \| ([^|]+) \| (.+) \|$",
@@ -24,7 +24,28 @@ FIELDS = (
 
 
 def expected_versions() -> list[str]:
-    versions = [f"v0.{number}.0" for number in range(1, 163)]
+    patch_releases = {
+        3: (1,),
+        18: (1,),
+        76: (1,),
+        99: (1,),
+        123: (1,),
+        124: (1, 2),
+        127: (1,),
+        130: (1,),
+        131: (1,),
+        132: (1, 2),
+        134: (1, 2, 3),
+        135: (1,),
+        140: (1,),
+        146: (1,),
+    }
+    versions = []
+    for number in range(1, 163):
+        versions.append(f"v0.{number}.0")
+        versions.extend(
+            f"v0.{number}.{patch}" for patch in patch_releases.get(number, ())
+        )
     versions.extend(["v1.0.0-rc.1", "v1.0.0"])
     return versions
 

@@ -112,13 +112,13 @@ Exit criteria:
 - repository evidence and enforcement agree and every deliberate violation fails before release;
 - `v0.2.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.3.0 - Requirements And Standards Ledger
+### v0.3.0 - Requirements And Standards Source Ledger
 
 Status: planned
 
-Plan scope: Generate the requirements and source ledger from every admitted algorithm, encoding, extension, and protocol milestone; include RFC 5077, RFC 5705, RFC 5746, RFC 6962 or RFC 9162, RFC 7468, RFC 8410, RFC 5958 or the chosen PKCS#8 authority, RFC 9146 when DTLS 1.2 CID is admitted, RFC 9258, RFC 9266, applicable NIST standards and errata, frozen IANA snapshots, and the final ECDHE-ML-KEM RFC and code points before admission.
+Plan scope: Generate the normative requirements and source ledger from every algorithm, encoding, extension, protocol, validation, and operational milestone; include RFC 5077, RFC 5705, RFC 5746, RFC 6962 or RFC 9162, RFC 7468, RFC 8410, RFC 5958 or the chosen PKCS#8 authority, RFC 9146 when DTLS 1.2 CID is admitted, RFC 9258, RFC 9266, RFC 9954, applicable NIST and CMVP documents and errata, and the final ECDHE-ML-KEM group RFC and code points before admission.
 
-Goal: complete the **Requirements And Standards Ledger** implementation stop without admitting or
+Goal: complete the **Requirements And Standards Source Ledger** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -140,6 +140,38 @@ Exit criteria:
 
 - repository evidence and enforcement agree and every deliberate violation fails before release;
 - `v0.3.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.3.1 - Machine-Readable Protocol Surface Decision Register
+
+Status: planned
+
+Plan scope: Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, algorithm, extension, message, alert, cipher suite, signature scheme, named group, certificate type, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, historical-only, or future work with normative source, owning milestone, code and test targets, and fail the repository when a source, registry snapshot, status, erratum, or classification drifts.
+
+Goal: complete the **Machine-Readable Protocol Surface Decision Register** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- define a versioned deterministic schema for protocol surfaces, normative
+  sources, ownership, milestone, code, test, and status classification;
+- generate human-readable coverage from the machine register and preserve
+  current RFC Editor, IANA, NIST, CMVP, errata, and transition snapshots;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- regenerate twice and byte-compare the register and rendered coverage;
+- inject missing, duplicate, unknown, obsolete, status-drifted, unowned, and
+  untested entries and require repository failure;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- every relevant protocol and cryptographic surface has one explicit,
+  reviewable disposition and drift cannot remain silent;
+- `v0.3.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
 
@@ -547,51 +579,77 @@ Exit criteria:
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
 - `v0.17.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.18.0 - Bounded Observational Security Event Contract
+### v0.18.0 - Mandatory Security Outcome Authority Contract
 
 Status: planned
 
-Plan scope: Define an upstream no_std, Sans-I/O SecurityEvent audit schema that only duplicates authoritative state and mandatory results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, replay, amplification, exhaustion, provider failure, key lifecycle, ECH, and terminal transitions; FIPS approval is returned by a mandatory typed service result or ActionV1, external-key destruction by a mandatory completion-token transition, and authentication, ECH, early-data, anti-replay, and policy decisions by engine state plus mandatory results, so dropped or ignored events cannot make a rejected or non-approved connection appear accepted or approved; events remain caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, optionally caller-timestamped or explicitly untimestamped for later enrichment, use saturating drop counters with visible saturation, contain no secret or stable correlating identifier, never reenter, and cannot block or alter cryptographic state.
+Plan scope: Define authoritative engine state and exhaustive mandatory typed results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, anti-replay, amplification, exhaustion, provider failure, key lifecycle, ECH, policy, and terminal transitions; external-key destruction completes only through a mandatory token transition, and ignoring every informational output cannot make rejected, non-approved, incomplete, or failed work appear accepted, approved, complete, or successful.
 
-Goal: complete the **Bounded Observational Security Event Contract** implementation stop without admitting or
+Goal: complete the **Mandatory Security Outcome Authority Contract** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze bounded discriminants and payloads, caller-drain and optional timestamp
-  enrichment actions, deterministic ordering, identifier redaction, saturating
-  dropped-event accounting with a visible saturation state, and the separation
-  between operational evidence and peer-visible alerts;
 - define authoritative mandatory results and state transitions for service
   approval, external-key destruction, authentication, ECH, early data,
-  anti-replay, and policy decisions; events only duplicate those outcomes for
-  audit and never complete or authorize them;
+  anti-replay, and policy decisions, with exact success, rejection, pending,
+  cancellation, failure, and terminal semantics;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- exhaustively construct and format every event variant and prove no key handle,
-  identity, plaintext, transcript, PSK identity, ticket, ECH inner name, or
-  stable cross-connection correlation value can appear;
-- test timestamp-free boot and self-tests, later caller enrichment, full queues,
-  delayed and absent drains, saturating counters and saturation reporting,
-  unavailable time, cancellation, provider failure, terminal transitions, and
-  attempted reentrancy without cryptographic-state or peer-alert differences;
-- discard every SecurityEvent in accepted, rejected, approved, non-approved,
+- exhaustively exercise accepted, rejected, approved, non-approved, pending,
   destruction, authentication, ECH, early-data, anti-replay, and policy paths
-  and prove mandatory results and engine state remain complete and unambiguous;
+  and prove mandatory results and engine state are complete and unambiguous;
+- discard every informational output, inject cancellation and provider failure,
+  and prove no incomplete or failed operation can be observed as successful;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- security events are bounded, pull-based, secret-free, deterministic audit
-  duplicates, while every security decision and completion remains mandatory
-  and unambiguous when all events are ignored or dropped;
+- every security decision and completion is authoritative, mandatory, and
+  unambiguous without relying on an audit or informational path;
 - `v0.18.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.18.1 - Bounded Observational Security Event Schema
+
+Status: planned
+
+Plan scope: Define an upstream no_std Sans-I/O SecurityEvent audit schema that only duplicates the authoritative outcomes frozen at v0.18.0; events are caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, optionally caller-timestamped or explicitly untimestamped for later enrichment, use saturating drop counters with visible saturation, contain no secret or stable correlating identifier, never reenter, and cannot block, authorize, complete, or alter cryptographic or protocol state.
+
+Goal: complete the **Bounded Observational Security Event Schema** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- freeze bounded event discriminants and payloads, deterministic ordering,
+  caller-drain and optional timestamp enrichment, redaction, drop accounting,
+  visible saturation, and separation from peer-visible alerts;
+- map each event to an already-authoritative v0.18.0 state or mandatory result
+  and prohibit event-only decisions, completion, authorization, or latching;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- exhaustively construct and format every variant and prove no key handle,
+  identity, plaintext, transcript, PSK identity, ticket, ECH inner name, or
+  stable cross-connection correlation value can appear;
+- test timestamp-free boot, later enrichment, full queues, absent drains,
+  counter saturation, provider failure, terminal transitions, and attempted
+  reentrancy with identical authoritative state and peer-alert behavior;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- events are bounded audit duplicates whose absence or loss cannot change or
+  obscure any security outcome;
+- `v0.18.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.19.0 - TLS And DTLS Record Framing
 
@@ -2254,13 +2312,13 @@ Exit criteria:
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.75.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.76.0 - TLS 1.3-Profile External PSKs And PSK Importer
+### v0.76.0 - TLS 1.3-Profile External PSK Policy
 
 Status: planned
 
-Plan scope: Separate external from resumption PSKs; apply RFC 9258 only to admitted TLS 1.3-derived profiles—TLS 1.3, DTLS 1.3, and QUIC—and never enable external-PSK or PSK cipher suites in hardened TLS 1.2 or DTLS 1.2; implement imported identities and derived imported PSKs with protocol, KDF, context, application, ALPN, and deployment-domain separation; require the importer whenever one provisioned key could cross admitted protocol or deployment domains; allow raw external PSKs only with unique per-profile and deployment provisioning; require psk_dhe_ke, constant-work identity and binder handling, single-use pending lookups, and no silent psk_ke, cross-domain, binder-failure, or certificate-authentication fallback.
+Plan scope: Separate external from resumption PSKs; admit external PSKs only for TLS 1.3, DTLS 1.3, and QUIC, never for hardened TLS 1.2 or DTLS 1.2; require psk_dhe_ke, constant-work identity and binder handling, single-use pending lookups, unique per-profile and deployment provisioning for any raw PSK, and no silent psk_ke, cross-domain, binder-failure, or certificate-authentication fallback.
 
-Goal: complete the **TLS 1.3-Profile External PSKs And PSK Importer** implementation stop without admitting or
+Goal: complete the **TLS 1.3-Profile External PSK Policy** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -2274,14 +2332,50 @@ Deliverables:
 Verification:
 
 - run RFC vectors, fragmentation, versions, GREASE, client and server selection, HRR, transcript, downgrade, ticket, PSK timing, storage atomicity, and peer matrices;
-- exercise imported-identity derivation across TLS 1.3, DTLS 1.3 and QUIC, protocol, KDF, context, application, ALPN and deployment separation, raw-key uniqueness attestation, and negative TLS 1.2 and DTLS 1.2 PSK-suite construction and negotiation tests alongside replay, binder failure, zero-RTT races, and cleanup;
+- exercise external-versus-resumption separation, raw-key uniqueness
+  attestation, constant-work selection and binder handling, and negative TLS
+  1.2 and DTLS 1.2 PSK-suite construction and negotiation tests;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- RFC 9258 and raw external PSKs are confined to TLS 1.3-derived profiles, and hardened TLS 1.2 and DTLS 1.2 cannot construct or negotiate a PSK suite;
+- external PSKs are confined to TLS 1.3-derived profiles, require DHE, and
+  cannot silently fall back or enter hardened TLS 1.2 or DTLS 1.2;
 - `v0.76.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.76.1 - External PSK Importer And Domain Separation
+
+Status: planned
+
+Plan scope: Implement RFC 9258 imported identities and derived imported PSKs with protocol, KDF, context, application, ALPN, and deployment-domain separation; require the importer whenever provisioned key material could cross an admitted protocol or deployment domain, bind importer metadata into tickets and pending operations, and reject missing, ambiguous, mismatched, or reused import contexts.
+
+Goal: complete the **External PSK Importer And Domain Separation** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement imported identities and derived PSKs with exact RFC 9258 labels,
+  contexts, KDF binding, input validation, and secret destruction;
+- type importer provenance and bind it to profile, application, ALPN,
+  deployment, tickets, storage, and single-use pending operations;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- run official and generated importer vectors, context-boundary, collision,
+  malformed identity, wrong-KDF, cross-protocol, and cross-deployment tests;
+- prove missing, ambiguous, mismatched, replayed, or reused contexts fail
+  without raw-PSK, certificate-authentication, or other-profile fallback;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- provisioned PSK material cannot cross an admitted domain without explicit,
+  importer-enforced separation;
+- `v0.76.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.77.0 - Zero-RTT
 
@@ -2925,34 +3019,71 @@ Exit criteria:
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
 - `v0.98.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.99.0 - QUIC Resumption And Zero-RTT Profile
+### v0.99.0 - QUIC Resumption Lifecycle
 
 Status: planned
 
-Plan scope: Distinguish TLS handshake completion from QUIC handshake confirmation; emit typed completion, confirmation and key-discard events; deliver NewSessionTicket only after handshake completion; require max_early_data_size 0xffffffff; bind remembered QUIC transport parameters, ALPN and application state to tickets; map invalid early-data values to the correct QUIC error; expose deterministic acceptance and rejection; enforce ticket privacy and non-reuse policy; and leave the transport in control of zero-RTT byte quantity.
+Plan scope: Distinguish TLS handshake completion from QUIC handshake confirmation; emit typed completion, confirmation and key-discard outcomes; deliver NewSessionTicket only after handshake completion; bind negotiated QUIC version, remembered transport parameters, ALPN, application state, and deployment domain to tickets; and enforce ticket confidentiality, lifetime, privacy, rotation, and non-reuse policy.
 
-Goal: complete the **QUIC Resumption And Zero-RTT Profile** implementation stop without admitting or
+Goal: complete the **QUIC Resumption Lifecycle** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- enforce recordless QUIC TLS plus resumption and zero-RTT semantics while separating TLS traffic secrets and optional expansion from QUIC transport ownership;
+- enforce recordless QUIC TLS resumption while separating TLS completion,
+  confirmation, ticket, traffic-secret, and key-discard ownership;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run RFC 9001, forbidden-message, level, CRYPTO_ERROR, ALPN, completion and confirmation, key-discard, ticket sentinel and binding, zero-RTT decision, secret, expansion, parameter, and peer matrices;
-- test CCS, EndOfEarlyData, KeyUpdate, records, invalid early size, ticket reuse, missing ALPN, late data, conflicting ranges, derivation confusion, and exhaustion;
+- run RFC 9001 completion, confirmation, key-discard, NewSessionTicket,
+  transport-parameter, version, ALPN, application, deployment, and peer matrices;
+- test premature ticket delivery, version and parameter mismatch, ticket reuse,
+  missing ALPN, late data, rotation, derivation confusion, and exhaustion;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
+- QUIC resumption preserves explicit completion and confirmation, exact ticket
+  binding, non-reuse, and transport-owned packet state;
 - `v0.99.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.99.1 - QUIC Zero-RTT Profile
+
+Status: planned
+
+Plan scope: Require max_early_data_size 0xffffffff for QUIC, validate remembered transport parameters and application policy before offering or accepting early data, map invalid values to the correct QUIC error, expose deterministic authoritative acceptance and rejection, preserve anti-replay and ticket single-use rules, and leave the QUIC transport in control of zero-RTT byte quantity and packet processing.
+
+Goal: complete the **QUIC Zero-RTT Profile** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement QUIC-specific early-data offer, acceptance, rejection, and error
+  mapping over the shared TLS 1.3 zero-RTT policy;
+- bind remembered transport parameters, version, ALPN, application state,
+  deployment domain, anti-replay, and single-use ticket state;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test exact max_early_data_size handling, changed transport parameters,
+  cross-version tickets, replay, reordered levels, rejection, and confirmation;
+- prove TLS never meters QUIC early-data bytes or processes packets and that
+  ignored audit events cannot obscure authoritative acceptance or rejection;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- QUIC zero-RTT is explicitly accepted or rejected with anti-replay and
+  transport ownership preserved;
+- `v0.99.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.100.0 - Optional QUIC CRYPTO Reassembly Helper
 
@@ -3538,7 +3669,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement only final standardized X25519MLKEM768, P256MLKEM768, and P384MLKEM1024 encodings, component order, lengths, identifiers, and combiner behavior.
+Plan scope: Implement only final standardized X25519MLKEM768, SecP256r1MLKEM768, and SecP384r1MLKEM1024 encodings, component order, lengths, identifiers, and concatenated shared-secret construction under RFC 9954 plus the final Standards Track ECDHE-ML-KEM group RFC; provisional drafts and private code points never enter release artifacts.
 
 Goal: complete the **Standard Hybrid Groups** implementation stop without admitting or
 claiming adjacent capability.
@@ -3625,63 +3756,171 @@ Exit criteria:
 
 Architecture is frozen before implementation; exact artifact identity is frozen only after all module components and self-tests exist. Correct module-versus-connection failure semantics are enforced throughout.
 
-### v0.123.0 - FIPS Module Architecture Freeze
+### v0.123.0 - FIPS 140-3 Level-One Requirements Baseline
 
 Status: planned
 
-Plan scope: Freeze the architectural boundary, dependency allowlist, approved and non-approved services, ports, roles, SSP inventory, operational-environment design, build-reproducibility contract, and downstream optional-module constraints without claiming or freezing an exact binary, source identity, dispatch table, dependency closure, or validation artifact.
+Plan scope: Target an overall Security Level 1 software cryptographic module and map every applicable FIPS 140-3 and ISO/IEC 19790 security area and ISO/IEC 24759 test assertion to FIPS 140-3, SP 800-140 and 140A through 140F, the current CMVP Management Manual, current Implementation Guidance, RFG and CMVP resolutions, algorithm transitions, caveats, and lab evidence; record justified non-applicability, pin dated submission baselines, and require review of later guidance without claiming validation.
+
+Goal: complete the **FIPS 140-3 Level-One Requirements Baseline** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the Plan scope exactly and preserve its input, state, resource,
+  secret, effect, storage, failure, dependency, and package boundaries;
+- produce a dated requirement and test-assertion matrix for all eleven FIPS
+  security areas, applicable supplemental publications, guidance, transitions,
+  caveats, evidence owners, and justified non-applicability;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- compare the matrix with current CMVP publications, Management Manual,
+  Implementation Guidance, RFG resolutions, transition tables, and lab input;
+- inject stale guidance, missing assertions, unowned evidence, unsupported
+  levels, and unjustified non-applicability and require repository failure;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the Level 1 target and every applicable requirement have dated, owned,
+  testable evidence obligations without a validation claim;
+- `v0.123.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.123.1 - FIPS Module Architecture Freeze
+
+Status: planned
+
+Plan scope: Freeze the separately publishable brynja-fips-module boundary, dependency allowlist, approved and non-approved services, ports, roles, authentication applicability, SSP inventory, operational environments, build-reproducibility contract, and downstream brynja-fips facade and optional-module constraints without claiming or freezing an exact binary, certificate, source identity, dispatch table, dependency closure, or validation artifact.
 
 Goal: complete the **FIPS Module Architecture Freeze** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze only architecture and allowlists at this stop, preserving exact binary, source identity, dispatch, and dependency-closure instantiation until every module component and self-test is final;
+- freeze the module diagram, logical interfaces, roles, services, SSP flows,
+  operational environments, dependency allowlist, and downstream ports;
+- keep exact source, binary, dispatch, dependency closure, certificate, and
+  validation identity unfrozen until every component and self-test is final;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- prove ordinary brynja, brynja-fips, optional modules, platform adapters, and
+  historical packages cannot enter or mutate the module boundary;
+- test approved/non-approved service separation, port direction, role and
+  authentication applicability, SSP flows, environment mapping, and build inputs;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the architecture is frozen without a premature artifact claim, and connection policy failures never misuse the module catastrophic-failure latch;
-- `v0.123.0 implementation stop reached. Run pentest for this exact commit.`
+- a separately publishable Level 1 module architecture is frozen without a
+  premature artifact or validation claim;
+- `v0.123.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.124.0 - SP 800-90 Entropy And DRBG Boundary
+### v0.124.0 - SP 800-90B Entropy Source And Health Tests
 
 Status: planned
 
-Plan scope: Select SP 800-90A DRBGs; validate SP 800-90B entropy sources and health tests; satisfy SP 800-90C construction rules; and define prediction resistance, personalization, fork, reseed, security-strength, and catastrophic-failure semantics.
+Plan scope: Select each in-boundary, bound-module, or caller-supplied validated entropy-source construction and operational environment; define noise source, conditioning, IID or non-IID assessment, minimum entropy, startup and continuous health tests, failure handling, restart and virtualization assumptions, and complete SP 800-90B and ESV documentation without treating an arbitrary caller RNG as validated entropy.
 
-Goal: complete the **SP 800-90 Entropy And DRBG Boundary** implementation stop without admitting or
+Goal: complete the **SP 800-90B Entropy Source And Health Tests** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- define each entropy source, conditioning chain, assessed entropy rate,
+  operational environment, restart model, and health-test state machine;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- run IID or non-IID assessment, startup, repetition-count, adaptive-proportion,
+  restart, failure-injection, conditioning, virtualization, and environment tests;
+- prove arbitrary caller randomness cannot satisfy a validated entropy-source
+  contract and every health failure is authoritative and fail closed;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- every admitted entropy source has bounded behavior and complete SP 800-90B
+  evidence tied to its operational environment;
 - `v0.124.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.124.1 - SP 800-90A DRBG Implementation
+
+Status: planned
+
+Plan scope: Select and implement the final approved DRBG mechanisms with exact instantiate, generate, reseed, uninstantiate, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, and catastrophic-error behavior plus algorithm and state-machine test harnesses.
+
+Goal: complete the **SP 800-90A DRBG Implementation** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement only the selected SP 800-90A mechanisms and complete request,
+  reseed, state, concurrency, fork, rollback, and zeroization contracts;
+- add official algorithm vectors, deterministic providers, fault hooks, and
+  state-machine and proof harnesses beside the implementation;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- run instantiate, generate, reseed, prediction-resistance, personalization,
+  additional-input, limit, exhaustion, rollback, fork, and concurrency matrices;
+- fault-inject entropy, state, request, reseed, and zeroization paths and prove
+  no output or reusable state escapes a catastrophic error;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the final DRBG implementation is bounded, testable, zeroizing, and ready for
+  an exact SP 800-90C construction;
+- `v0.124.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.124.2 - SP 800-90C RBG Construction
+
+Status: planned
+
+Plan scope: Bind only admitted SP 800-90B entropy sources to the final SP 800-90A DRBGs through selected SP 800-90C RBG constructions; define primary and subordinate DRBG topology, entropy and nonce inputs, reseed chains, health and catastrophic propagation, operational-environment identity, and the exact RBG service boundary for later ESV testing.
+
+Goal: complete the **SP 800-90C RBG Construction** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the selected RBG construction and explicit primary, subordinate,
+  entropy, nonce, reseed, and security-strength topology;
+- bind every source, DRBG, service, state, and failure to the exact module and
+  operational-environment identity required by later ESV evidence;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- run SP 800-90C construction, source substitution, reseed chain, subordinate
+  state, strength, prediction-resistance, fork, health, and catastrophic tests;
+- prove unvalidated source, DRBG, topology, environment, and state substitutions
+  fail closed and cannot inherit an approved indicator;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- one exact RBG construction connects validated entropy assumptions to the
+  module random service without ambiguous substitutions;
+- `v0.124.2 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.125.0 - Approved Provider And Mandatory Service Indicator
 
@@ -3696,7 +3935,8 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- generate an approved-only policy from the exact validated service and
+  parameter manifest while keeping connection failure distinct from module error;
 - return the approval or non-approval status from every service invocation in a
   mandatory typed result or ActionV1 and emit only a redundant, non-authoritative
   SecurityEvent audit copy;
@@ -3705,8 +3945,10 @@ Deliverables:
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- test every admitted and excluded suite, group, signature, certificate,
+  entropy, key provenance, resumption, PSK, and early-data combination;
+- inject non-approved services and prove immediate connection termination,
+  mandatory non-approval results, no application data, and no module latch;
 - drop every audit event and prove callers must still consume an unambiguous
   mandatory approval indicator before treating service output as approved;
 - pass repository checks, promised Rust versions and targets, dependency and
@@ -3729,52 +3971,97 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- define the complete service table for SSP generation, establishment, entry,
+  output, use, storage, replacement, and destruction, including roles,
+  inputs, outputs, state transitions, and mandatory completion indications;
+- implement bounded lifetimes and zeroization for stack, heap, static,
+  external-storage, accelerator-handle, cache, high-water, and DMA-backed SSPs,
+  with single-consumption completion tokens and no secret-bearing audit data;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- exercise every SSP transition, abnormal return, cancellation, reset, panic,
+  retry, ownership transfer, external-storage failure, accelerator timeout,
+  cache path, and DMA completion ordering;
+- prove zeroization before reuse or release, prove completion indications cannot
+  be forged, replayed, dropped, or consumed twice, and scan all errors, traces,
+  events, dumps, and test artifacts for SSP material;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- every SSP has a reviewed, testable lifetime and destruction path, and callers
+  receive a mandatory secret-free completion result independently of auditing;
 - `v0.126.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.127.0 - FIPS Self-Tests And Failure Latch
+### v0.127.0 - Module Integrity And Pre-Operational Self-Tests
 
 Status: planned
 
-Plan scope: After the final DRBG, provider, SSP and algorithm implementations are linked, implement module integrity, algorithm and DRBG KATs, pairwise-consistency and conditional tests, permanent failure latching, and deterministic fault-injection evidence over the complete module contents.
+Plan scope: After the final DRBG, provider, SSP, and algorithm implementations are linked, implement module-integrity verification and every required algorithm, DRBG, and component pre-operational self-test over the complete final image; no cryptographic service or output is available before success, and deterministic fault injection covers every test and integrity path.
 
-Goal: complete the **FIPS Self-Tests And Failure Latch** implementation stop without admitting or
+Goal: complete the **Module Integrity And Pre-Operational Self-Tests** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- implement final-image integrity and required algorithm, DRBG, component, and
+  dependency pre-operational tests with deterministic fault hooks;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- corrupt every covered image region and every self-test expected result and
+  require failure before any cryptographic service or output;
+- test concurrent first use, repeated status queries, interrupted startup,
+  unavailable dependencies, exact test coverage, and secret-free errors;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- complete-image integrity and pre-operational tests block every service until
+  success and fail deterministically under every injected fault;
 - `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.127.1 - Conditional Self-Tests And Permanent Failure State
+
+Status: planned
+
+Plan scope: Implement required pairwise-consistency, conditional, on-demand, firmware or software load, and continuous health-test coordination; serialize concurrent test requests, destroy affected SSPs, block prohibited services, and enter an irreversible module error state exactly for FIPS-defined integrity, self-test, and catastrophic failures.
+
+Goal: complete the **Conditional Self-Tests And Permanent Failure State** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement every applicable conditional, pairwise-consistency, on-demand,
+  load, and health-test transition with explicit concurrency semantics;
+- freeze irreversible error-state entry, SSP destruction, allowed status and
+  zeroization services, recovery requirements, and connection/module separation;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- fault-inject each test before, during, and after concurrent services and prove
+  affected outputs and SSPs never escape and prohibited services stay blocked;
+- distinguish ordinary invalid inputs and approved-profile connection failures
+  from integrity, self-test, entropy, and catastrophic module failures;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- conditional testing and the permanent module error state are complete,
+  irreversible where required, and never misused for connection policy;
+- `v0.127.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.128.0 - FIPS Observational Security Event Integration
 
@@ -3865,81 +4152,229 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- enumerate every claimed algorithm, parameter set, implementation symbol, CPU
+  dispatch path, dependency, and operational environment in an evidence matrix
+  bound to the exact v0.129.0 artifact;
+- complete production ACVTS/CAVP vector campaigns, retain request and response
+  identifiers plus lab-consumable results, and clearly label development or
+  demonstration vectors as non-validation evidence;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- reconcile every vector result with the implementation symbol, dispatch path,
+  parameters, operational environment, source identity, and frozen artifact
+  hash, rejecting omissions, substitutions, and post-freeze changes;
+- replay locally reproducible portions, test malformed and rejected vectors,
+  compare production evidence with independent known-answer tests, and require
+  every claimed approved service to have applicable evidence;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- every claimed approved implementation and dispatch path has traceable
+  production validation evidence bound to the exact frozen module artifact;
 - `v0.130.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.131.0 - CMVP Submission Artifacts
+### v0.130.1 - ESV Entropy And RBG Validation Evidence
 
 Status: planned
 
-Plan scope: Produce the CMVP Security Policy, finite-state model, service and SSP inventory, entropy assessment, source-to-object trace, and reproducible module artifacts.
+Plan scope: Complete production ESVTS evidence for every claimed SP 800-90B entropy source and SP 800-90C RBG construction in each operational environment, bind validation identifiers and caveats to the exact module artifact, and reject unvalidated entropy substitutions or environment drift.
 
-Goal: complete the **CMVP Submission Artifacts** implementation stop without admitting or
+Goal: complete the **ESV Entropy And RBG Validation Evidence** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- complete production ESVTS submissions and documentation for each entropy
+  source, RBG construction, conditioning chain, and operational environment;
+- bind returned identifiers, assessed entropy, evidence, environment,
+  construction, dependencies, and caveats to the exact frozen artifact;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- replay ESV evidence generation and compare source, sample, assessment,
+  documentation, environment, RBG topology, and returned identifiers;
+- reject demo-only results, stale evidence, source substitution, environment
+  drift, changed conditioning, caveat omission, and mismatched artifacts;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- every entropy and RBG claim has production validation evidence tied to the
+  exact module and operational environment;
+- `v0.130.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.131.0 - CMVP Security Policy And Public Documentation
+
+Status: planned
+
+Plan scope: Produce the SP 800-140B Rev. 1 security policy, module specification, ports and interfaces, roles, services, approved-service indicators, SSP inventory and lifecycle, finite-state model, self-tests, installation, initialization, secure-operation, zeroization, operational-environment, mitigation, and guidance documents with exact certificate-ready tables and no unsupported claim.
+
+Goal: complete the **CMVP Security Policy And Public Documentation** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- generate the security policy and public guidance tables from the frozen
+  service, SSP, state, self-test, environment, and evidence inventories;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- schema-check every required SP 800-140B Rev. 1 section and cross-reference
+  every service, indicator, SSP, state, algorithm, certificate, and caveat;
+- compare generated documentation with public APIs, module identity, exact
+  artifact, operational environments, tests, and secure-operation procedures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- the complete public security policy is certificate-ready, exact-artifact
+  bound, internally consistent, and free of unsupported claims;
 - `v0.131.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.132.0 - Accredited FIPS Evaluation
+### v0.131.1 - CMVP Test Evidence And Lab Submission Package
 
 Status: planned
 
-Plan scope: Complete accredited-lab FIPS 140-3 evaluation, remediation, retest, and certificate and caveat recording; make no validation claim before issuance.
+Plan scope: Produce the SP 800-140A and Derived Test Requirements evidence package, source-to-object and requirements trace, algorithm and entropy certificates, test environment, reproducible artifacts, vendor evidence, responses, and lab handoff package, with every datum mechanically bound to the exact frozen artifact.
 
-Goal: complete the **Accredited FIPS Evaluation** implementation stop without admitting or
+Goal: complete the **CMVP Test Evidence And Lab Submission Package** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- assemble the derived-test, vendor, algorithm, entropy, source-to-object,
+  environment, reproducibility, and artifact evidence required by the lab;
+- generate traceability from each applicable assertion and security-policy
+  statement to exact source, symbol, binary, test, result, owner, and response;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- schema and cross-reference the complete handoff package against the current
+  baseline, exact artifact, security policy, certificates, and lab checklist;
+- inject missing assertions, mismatched hashes, stale results, changed tools,
+  incomplete responses, and unowned evidence and require rejection;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the accredited lab receives one complete, reproducible, internally consistent
+  evidence package for the exact module artifact;
+- `v0.131.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.132.0 - Accredited FIPS Lab Evaluation And Findings
+
+Status: planned
+
+Plan scope: Submit the exact artifact and evidence to an NVLAP-accredited CST laboratory, complete applicable FIPS 140-3 and ISO/IEC 24759 testing, preserve question and evidence provenance, and record every finding without changing or claiming validation for the submitted artifact.
+
+Goal: complete the **Accredited FIPS Lab Evaluation And Findings** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- preserve a tamper-evident lab exchange and finding ledger naming exact
+  artifacts, questions, evidence, responses, decisions, owners, and deadlines;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- reproduce every lab test and response locally where possible and compare the
+  exact artifact, environment, input, output, and interpretation;
+- prove no lab exchange silently changes source, binaries, evidence, scope,
+  security policy, or validation claim and every finding remains visible;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- evaluation is complete for the submitted identity, every finding is recorded,
+  and no validation claim has been made;
 - `v0.132.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.132.1 - FIPS Evaluation Remediation And Clean Retest
+
+Status: planned
+
+Plan scope: Classify every lab or CMVP finding, remediate through a new exact artifact identity when code or build inputs change, repeat affected algorithm, entropy, regression, and module tests, update all evidence, and obtain a clean accredited-lab retest with no unresolved finding.
+
+Goal: complete the **FIPS Evaluation Remediation And Clean Retest** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- trace each finding to root cause, affected requirements, artifacts, evidence,
+  remediation, regressions, revalidation impact, and independent retest;
+- create a new artifact identity for every source, build, dependency, dispatch,
+  self-test, or other identity-changing correction and regenerate all evidence;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- replay every finding against old and remediated artifacts and retain a
+  permanent failing regression plus affected algorithm and module retests;
+- compare lab retest scope with the change-impact analysis and require no
+  unresolved, waived-without-authority, stale, or identity-mismatched finding;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the final submitted identity has a clean accredited-lab retest and complete
+  remediation evidence with no unresolved finding;
+- `v0.132.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.132.2 - FIPS Certificate Issuance Caveat And Claim Gate
+
+Status: planned
+
+Plan scope: Make no FIPS 140-3 validated or Inside claim until CMVP issuance; then record the exact certificate number, module version, overall and per-area levels, tested operational environments, approved services, dependencies, caveats, status, sunset, security-policy hash, and permitted wording, and mechanically prevent claims from mismatched, unissued, revoked, or unsupported artifacts.
+
+Goal: complete the **FIPS Certificate Issuance Caveat And Claim Gate** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- capture the issued certificate, security policy, caveats, levels, services,
+  dependencies, environments, dates, status, hashes, and permitted claim text;
+- generate package and documentation claims only from exact certificate and
+  artifact identity, with ordinary brynja remaining explicitly non-validated;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test pre-issuance, pending, active, interim, historical, revoked, sunset,
+  wrong-environment, wrong-artifact, wrong-version, and changed-policy states;
+- scan packages, metadata, docs, examples, banners, and release notes for
+  unsupported FIPS wording, logo use, missing certificate number, or caveat loss;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- only the exact issued module can carry the exact permitted certificate-bound
+  claim, and all other builds fail closed to a non-validated status;
+- `v0.132.2 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.133.0 - Boundary And Package Audit
 
@@ -3952,64 +4387,181 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- audit ordinary `brynja`, `brynja-fips`, `brynja-fips-module`, historical, and
+  experimental packages independently, recording source, dependency, feature,
+  symbol, dispatch, build-script, generated-file, and archive membership;
+- add automated allowlists and negative scans proving ordinary and optional
+  packages cannot import, re-export, select, mutate, or claim the validated
+  module except through the certificate-bound FIPS facade;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- compare package archives, dependency graphs, features, public APIs, symbols,
+  dispatch tables, build outputs, SBOMs, and reproducible hashes with their
+  allowlists on every supported configuration;
+- inject forbidden cross-boundary imports, re-exports, feature activation,
+  provider substitution, optional dispatch, and FIPS wording and require the
+  corresponding build, package, or claim gate to fail;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- every shipped package has an exact reviewed closure, and no optional,
+  historical, experimental, or ordinary path can contaminate or impersonate
+  the validated module;
 - `v0.133.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.134.0 - Approved-Only TLS Operating Profile
 
 Status: planned
 
-Plan scope: Implement a facade approved-only connection profile enforcing minimum key and security strengths, admitted suite, group, signature and certificate combinations, approved entropy and key-generation provenance, resumption, external PSK and zero-RTT policy, and aggregated per-service indicators; invoking a non-approved service terminates the connection and invalidates its approved configuration claim, while the module permanent latch remains reserved for FIPS-defined integrity, self-test, and catastrophic failures.
+Plan scope: Implement an internal approved-only connection profile derived from the exact validated-module service manifest and current final NIST TLS, key-strength, algorithm-transition, key-generation, and key-establishment guidance; enforce admitted version, suite, group, signature, certificate, entropy, key provenance, resumption, external PSK, and zero-RTT combinations plus aggregated mandatory per-service indicators; invoking a non-approved service terminates the connection and invalidates its approved configuration claim, while the permanent module error state remains reserved for FIPS-defined integrity, self-test, and catastrophic failures.
 
 Goal: complete the **Approved-Only TLS Operating Profile** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- preserve the architectural freeze, implement final DRBG, provider, SSP and linked tests, instantiate the exact closure only after every component is final, and distinguish connection-profile termination from module catastrophic failure;
+- generate the admitted TLS combination matrix from the exact validated-module
+  service manifest and a dated snapshot of current final NIST TLS, strength,
+  transition, key-generation, and key-establishment guidance;
+- implement a typed approved-only connection builder and mandatory aggregate
+  service result that rejects excluded entropy, keys, certificates, PSKs,
+  resumption state, zero-RTT, algorithms, and parameter combinations before use;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run SP 800-90A/B/C, provider and SSP, final integrity and KAT, conditional, fault latch, profile, closure, reproducibility, and ACVTS/CAVP tests;
-- prove optional modules cannot alter symbols, dependencies, features, dispatch or inputs; test excluded-service connection termination separately from module latching;
+- exhaustively test admitted and pairwise/exhaustively relevant excluded
+  combinations, guideline snapshot changes, service-indicator aggregation,
+  resumed sessions, imported state, and downgrade or fallback attempts;
+- prove excluded-service use terminates only the affected connection, while
+  FIPS-defined integrity, self-test, or catastrophic failure alone enters the
+  permanent module error state;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- architectural boundaries and, after v0.129.0, exact artifact identity are preserved while connection policy failures never misuse the module catastrophic-failure latch;
+- the TLS profile admits only certificate-bound approved services and reports
+  every service outcome without confusing connection and module failure;
 - `v0.134.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.134.1 - Validated Module Manifest And Operational-Environment Selection
+
+Status: planned
+
+Plan scope: Generate a machine-readable immutable manifest for each validated brynja-fips-module artifact containing hashes, certificate identity and status snapshot, caveats, sunset, security-policy hash, approved services and parameter sets, self-test identity, CPU dispatch, build inputs, and tested operational environments; require exact target and runtime module-identity matching and fail closed without an applicable validated artifact.
+
+Goal: complete the **Validated Module Manifest And Operational-Environment Selection** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- define and generate the certificate-bound validated-module manifest and a
+  typed module identity and readiness query;
+- map compile target, runtime environment, CPU dispatch, module hashes,
+  certificate caveats, services, parameters, and self-test identity exactly;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- deterministically regenerate and schema-check manifests against the issued
+  certificate, security policy, artifact identity, and environment evidence;
+- reject wrong targets, CPU paths, environments, hashes, versions, policies,
+  certificates, caveats, status snapshots, services, and self-test identities;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- module selection succeeds only for one exact validated artifact in an
+  explicitly listed operational environment;
+- `v0.134.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.134.2 - Ergonomic Brynja FIPS Facade And Misconfiguration Gate
+
+Status: planned
+
+Plan scope: Publish a separate no_std brynja-fips facade with obvious client and server constructors that require a validated-module handle and select the approved-only TLS profile, exact provider, DRBG, algorithms, strengths, certificate policy, resumption, PSK, and early-data rules from the manifest; expose only permitted choices, provide authoritative readiness and per-service results, prohibit a boolean Cargo fips feature, generic-provider injection, silent fallback, and any FIPS claim from ordinary brynja configuration, and compile-fail every mixed or incomplete configuration.
+
+Goal: complete the **Ergonomic Brynja FIPS Facade And Misconfiguration Gate** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- publish the separate brynja-fips facade and minimal typed client and server
+  builders that require a validated module and approved identity and trust inputs;
+- derive closed algorithm and policy choices from the certificate-bound
+  manifest while keeping ordinary brynja and optional modules outside the claim;
+- update requirements, threat model, controls, status, limitations, release
+  notes, examples, and permanent evidence index.
+
+Verification:
+
+- compile-pass documented minimal client and server configurations for every
+  validated environment and compile-fail missing or mixed security inputs;
+- test Cargo feature unification, generic provider injection, ordinary-facade
+  construction, non-approved overrides, fallback, stale manifests, and ignored
+  audit events while preserving mandatory readiness and service results;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- users select FIPS through one obvious separate facade that is easy to use
+  correctly and impossible to use for an unsupported validation claim;
+- `v0.134.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.134.3 - FIPS Deployment Claim Update And Revalidation Lifecycle
+
+Status: planned
+
+Plan scope: Publish install, initialize, self-test, secure-operation, zeroization, troubleshooting, certificate and caveat verification, approved-mode, indicator, and integration guidance; monitor current CMVP guidance, RFG resolutions, algorithm transitions, certificate status, sunset, CVEs, patches, and operational environments; separate immutable validated artifacts from patched unvalidated lines and require documented change impact, regression testing, revalidation scenario, incident response, rollback, and claim withdrawal.
+
+Goal: complete the **FIPS Deployment Claim Update And Revalidation Lifecycle** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- publish operator and integrator procedures for exact installation,
+  initialization, identity, self-tests, approved services, zeroization, and status;
+- automate dated monitoring and triage for CMVP guidance, transitions,
+  certificate status, CVEs, environments, sunsets, patches, and claim wording;
+- define immutable validated and separate patched-unvalidated release lines,
+  revalidation decisions, incident response, rollback, and claim withdrawal.
+
+Verification:
+
+- rehearse supported and unsupported installation, initialization, startup,
+  service indicator, zeroization, update, rollback, compromise, and recovery;
+- inject guidance, transition, certificate, CVE, patch, environment, sunset,
+  and revocation changes and require correct hold, withdrawal, or revalidation;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- operators can keep the exact validation claim true over deployment and
+  lifecycle changes, or automatically lose the claim safely when it is not;
+- `v0.134.3 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase 5: Optional Modules, Composition, Stable Integration, Assurance, And General Availability
 
 Optional send/receive paths, FIPS closure, and composition precede public freeze.
 
-### v0.135.0 - Operational State Rotation
+### v0.135.0 - Resumption And Anti-Replay State Rotation
 
 Status: planned
 
-Plan scope: Complete session cache, stateless ticket-key and resumption-PSK rotation, anti-replay storage, certificate and private-key rotation, trust-anchor and CT log-list updates, and transactional failure recovery.
+Plan scope: Complete stateful cache, stateless ticket-key, resumption-PSK, and anti-replay generation rotation with overlap windows, bounded retention, concurrency, crash consistency, rollback detection, compromise response, transactional failure recovery, and protocol, identity, ALPN, FIPS-profile, ECH, and deployment-domain separation.
 
-Goal: complete the **Operational State Rotation** implementation stop without admitting or
+Goal: complete the **Resumption And Anti-Replay State Rotation** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -4031,6 +4583,39 @@ Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.135.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.135.1 - Identity Trust And Transparency Rotation
+
+Status: planned
+
+Plan scope: Complete certificate and private-key rotation, external signer and handle rollover, trust-anchor and distrust updates, revocation state, CT log-list and operator-policy updates, ECH identity binding, atomic configuration generations, in-flight connection semantics, rollback and compromise response, and transactional failure recovery.
+
+Goal: complete the **Identity Trust And Transparency Rotation** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement atomic identity, signer, trust, distrust, revocation, CT, and ECH
+  configuration generations with bounded overlap and in-flight semantics;
+- bind external handles, caches, tickets, precompressed artifacts, delegated
+  credentials, and ECH state to exact generations and compromise response;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test concurrent handshakes across every rotation boundary, rollback,
+  cancellation, partial storage failure, stale handles, and compromise;
+- prove old trust, identity, CT, revocation, ECH, and artifact state cannot
+  leak into a new generation or silently reappear after rollback;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- identity and trust state rotates atomically with explicit in-flight,
+  rollback, and compromise behavior;
+- `v0.135.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.136.0 - Record Size Limit
 
@@ -4148,13 +4733,13 @@ Exit criteria:
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.139.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.140.0 - ECH Origin Policy And Configuration Bootstrap
+### v0.140.0 - ECH Origin And Downgrade Policy
 
 Status: planned
 
-Plan scope: Keep DNS, SVCB, HTTPS resolution, network access, and caching caller-owned; accept bounded hostile ECHConfigList bytes with separately typed intended origin, caller-asserted provenance and trust status, configuration generation, and lifetime; implement bounded parsing, version and suite selection, public-name and key configuration, GREASE inputs, origin binding, retry precedence, stale replacement, and explicit EchRequired, EchPreferred, and GreaseOnly policies; missing, stale, malformed, stripped, or unusable configuration fails closed under EchRequired and can never silently establish a public-SNI connection.
+Plan scope: Keep DNS, SVCB, HTTPS resolution, network access, and cache ownership outside protocol crates; type the intended origin, caller-asserted source and trust status, EchRequired, EchPreferred, and GreaseOnly intent, public-name exposure, retry authority, and fallback result so missing, stripped, rejected, or unusable ECH can never silently violate caller policy or establish the wrong public-SNI identity.
 
-Goal: complete the **ECH Origin Policy And Configuration Bootstrap** implementation stop without admitting or
+Goal: complete the **ECH Origin And Downgrade Policy** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -4176,6 +4761,39 @@ Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.140.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.140.1 - ECH Configuration Bootstrap And Cache Lifecycle
+
+Status: planned
+
+Plan scope: Accept bounded hostile ECHConfigList bytes from RFC 9848 bootstrap with typed provenance, origin, generation, receipt and expiry; implement RFC 9849 bounded parsing, mandatory-extension handling, version and HPKE-suite selection, public-name and key validation, GREASE inputs, stale replacement, retry-configuration precedence, cache partitioning and invalidation, and deterministic behavior for malformed, unknown, expired, or rotated configurations.
+
+Goal: complete the **ECH Configuration Bootstrap And Cache Lifecycle** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement bounded ECHConfigList parsing, mandatory-extension behavior,
+  version, suite, public-name, key, length, and duplicate validation;
+- bind provenance, origin, receipt, lifetime, generation, retry authority,
+  cache partition, replacement, invalidation, and GREASE state;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- run RFC 9848 and RFC 9849 vectors plus truncation, duplicate, mandatory
+  extension, unknown version, malformed key, suite, expiry, rotation, and retry;
+- test cross-origin and cross-generation cache confusion, stale replacement,
+  poisoned provenance, unavailable time, rollback, and deterministic GREASE;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- ECH configuration state is bounded, origin-bound, freshness-aware, and
+  deterministically selected without protocol-owned network access;
+- `v0.140.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.141.0 - ECH Client Construction
 
@@ -4322,13 +4940,13 @@ Exit criteria:
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.145.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.146.0 - Certificate Compression Send Artifacts
+### v0.146.0 - Precompressed Certificate Artifact Validation
 
 Status: planned
 
-Plan scope: Support sending compressed server and client-authentication certificates through caller-supplied precompressed artifacts verified at configuration by decompressing and byte-comparing with the complete canonical Certificate message, including certificate_request_context and every per-certificate extension; regenerate or invalidate every artifact whenever any encoded input changes, including OCSP staples, SCT lists, delegated credentials, request context, per-certificate extensions, or selected RPK versus X.509 representation; advertise only usable and peer-advertised algorithms, preserve transcript bytes, and enforce exact algorithm, input, output, identity, and rotation binding.
+Plan scope: Validate each caller-supplied compressed server or client-authentication artifact at configuration by bounded decompression and byte comparison with the complete canonical Certificate message, including certificate_request_context and every per-certificate extension; bind exact algorithm, compressed and uncompressed lengths, identity, configuration generation, and all encoded inputs, and invalidate on any OCSP, SCT, delegated-credential, request-context, extension, chain, or RPK-versus-X.509 change.
 
-Goal: complete the **Certificate Compression Send Artifacts** implementation stop without admitting or
+Goal: complete the **Precompressed Certificate Artifact Validation** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -4350,6 +4968,39 @@ Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.146.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.146.1 - Certificate Compression Send Negotiation And Transcript Integration
+
+Status: planned
+
+Plan scope: Advertise only locally validated compression algorithms and select only a peer-advertised algorithm with a current validated artifact; integrate server and client-authentication sends, preserve the exact CompressedCertificate wire bytes in the transcript, enforce direction and message-context legality, rotation and cancellation behavior, deterministic uncompressed fallback only when policy permits, and fail closed on missing, stale, mismatched, or over-budget artifacts.
+
+Goal: complete the **Certificate Compression Send Negotiation And Transcript Integration** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement algorithm advertisement and selection over current validated
+  artifacts for server and client-authentication directions;
+- bind transcript bytes, direction, request context, identity generation,
+  rotation, cancellation, fallback policy, and resource budgets;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test peer preference, unsupported and duplicate algorithms, both directions,
+  transcript bytes, request context, rotation, cancellation, and fallback;
+- reject stale, missing, mismatched, over-budget, wrong-direction, wrong-context,
+  and post-validation-mutated artifacts without partial output;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- send compression uses only current validated artifacts with exact transcript,
+  direction, identity, and policy binding;
+- `v0.146.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.147.0 - Validated FIPS Closure Preservation Gate
 
@@ -4384,7 +5035,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, zero-RTT, HybridRequired and HybridPreferred groups, approved-only FIPS policy, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, and DTLS fragmentation; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
+Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, and DTLS fragmentation; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
 
 Goal: complete the **Generated Optional-Feature Composition Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -4413,7 +5064,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: After every planned v1 optional module has exercised the internal effects model, freeze facade typestates for exact versions, integrated one-pass routing, suites, trust, RPK, ECH, delegated credentials, compression, resources, revocation, PSK, zero-RTT, Certificate Transparency, FIPS profile, and providers with no raw crypto re-export or legacy range.
+Plan scope: After every planned v1 optional module has exercised the internal effects model, freeze ordinary brynja typestates for exact versions, integrated one-pass routing, suites, trust, RPK, ECH, delegated credentials, compression, resources, revocation, PSK, zero-RTT, Certificate Transparency, and providers, and separately freeze brynja-fips typestates around the certificate-bound validated-module handle and closed approved-only profile; neither facade re-exports raw cryptography or admits a legacy range.
 
 Goal: complete the **Facade Configuration Typestates** implementation stop without admitting or
 claiming adjacent capability.
@@ -4702,7 +5353,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load.
+Plan scope: Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load; separately qualify every claimed FIPS artifact only on its certificate-listed operational environments and dispatch paths.
 
 Goal: complete the **Sustained Platform And Hostile-Load Qualification** implementation stop without admitting or
 claiming adjacent capability.
@@ -4731,7 +5382,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete exact-commit external crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS-boundary and profile, optional-module, zeroization, and systems-integration audits.
+Plan scope: Complete exact-commit external crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS boundary, entropy, self-test, manifest, facade, profile, deployment and claim lifecycle, optional-module, zeroization, and systems-integration audits.
 
 Goal: complete the **Consolidated External Audits** implementation stop without admitting or
 claiming adjacent capability.
@@ -4789,7 +5440,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze public APIs, features, package inventory, requirements ledger, admitted algorithms and extensions, migration guidance, deployment profiles, incident procedures, limitations, and non-goals.
+Plan scope: Freeze public APIs, features, package inventory, requirements and protocol-surface ledgers, admitted algorithms and extensions, migration guidance, deployment profiles, incident procedures, limitations, non-goals, and exact FIPS certificate, manifest, operational-environment, caveat, claim, update, and revalidation documentation.
 
 Goal: complete the **Public API Requirements And Documentation Freeze** implementation stop without admitting or
 claiming adjacent capability.

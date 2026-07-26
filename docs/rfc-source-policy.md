@@ -29,3 +29,11 @@ Official NIST documents use the separate local-only allowlist and hash manifest
 under references/. Release maintenance rechecks current RFC replacements,
 errata, IANA registries, NIST planning notes, and NIST errata before work on a
 dependent milestone.
+
+FIPS planning also snapshots the dated FIPS 140-3 CMVP Management Manual,
+Implementation Guidance, RFG and CMVP resolutions, SP 800-140 supplemental
+lists, programmatic transitions, certificate caveats and status, ESV guidance,
+and permitted validation wording. Mutable web guidance is recorded with
+retrieval time and content hash; it never silently replaces the submission
+baseline, and every later change receives an explicit applicability and
+revalidation decision.

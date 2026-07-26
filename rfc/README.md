@@ -16,6 +16,11 @@ obsoletes it; RFC 8448 remains for official TLS 1.3 example traces. RFC 5246,
 hardened TLS 1.2 profile and migration tests need historical requirements in
 combination with RFC 9846's current TLS 1.2 updates.
 
+RFC 9954 supplies the generic hybrid key-exchange construction. Concrete
+ECDHE-ML-KEM groups remain blocked on their final Standards Track RFC and final
+IANA code points; Internet-Draft bytes and provisional identifiers are never
+release inputs.
+
 SOURCES is the reviewed HTTPS allowlist. SHA256SUMS pins exact downloaded bytes.
 verify-rfcs.sh rejects missing, extra, changed, empty, or unlisted RFCs. Build
 scripts never download standards. RFC text is excluded from every crate package.
@@ -23,4 +28,3 @@ scripts never download standards. RFC text is excluded from every crate package.
 Non-RFC standards and historical specifications are handled by
 references/SOURCES.md. They remain local-only until an explicit redistribution
 review says otherwise.
-

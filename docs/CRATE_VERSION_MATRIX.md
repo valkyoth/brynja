@@ -17,10 +17,16 @@ republished only for code/API changes, required dependency-range changes, or
 immutable metadata corrections. Release metadata must name the exact package
 set and publish in dependency order.
 
+The future `brynja-fips-module` and `brynja-fips` packages also use independent
+versions. A validated module version is immutable and bound to its exact
+certificate, artifact hashes, caveats, and tested operational environments.
+Any changed module is a different artifact and cannot reuse the validation
+claim; the facade may update only when its manifest, API, or approved profile
+changes without mutating the validated module.
+
 ## Rust Compatibility
 
 | Rust | Evidence |
 | --- | --- |
 | `1.90.0` through `1.97.0` | `cargo check --workspace --all-features` on each listed stable release |
 | `1.97.1` | Full release gate and all target checks |
-

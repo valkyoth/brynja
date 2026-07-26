@@ -54,13 +54,29 @@ property, supported widths or parameters, verification method, evidence,
 assumptions, and residual gaps; repository checks reject stale or incomplete
 entries.
 
-The FIPS architecture freezes its boundary, dependency allowlist, services,
-ports, SSP design, and operational-environment model before implementation; it
-does not claim an exact artifact identity at that point. Only after the DRBG,
-provider, indicators, SSP services, algorithms, and linked self-tests are final
-and module-specific security events are integrated does the artifact freeze its
-source, symbols, exact dependency closure, features, dispatch tables, build
-inputs, tool configuration, and binary hashes.
+FIPS is a package and type boundary, never an additive boolean Cargo feature.
+The separately publishable `brynja-fips-module` is the exact artifact inside the
+validation boundary. The downstream `brynja-fips` facade provides easy client
+and server construction but requires a matching certificate-bound manifest and
+validated-module handle; ordinary `brynja` configuration and generic providers
+cannot acquire or imply a FIPS claim.
+
+The FIPS sequence first freezes a current overall Security Level 1 requirement
+baseline, then its boundary, dependency allowlist, services, ports, SSP design,
+and operational-environment model; it does not claim an exact artifact identity
+at either point. Only after SP 800-90B entropy, the SP 800-90A DRBG, SP 800-90C
+construction, provider, indicators, SSP services, algorithms, pre-operational
+and conditional self-tests, permanent error state, and module audit events are
+final does the artifact freeze its source, symbols, exact dependency closure,
+features, dispatch tables, build inputs, tool configuration, and binary hashes.
 HPKE, ECH, certificate compression, and every later optional module remain
 downstream of provider ports and cannot alter that artifact. Any such change
 starts a new validation and artifact line.
+
+Certificate identity, caveats, status, sunset, operational environments,
+approved services, security-policy hash, and artifact hashes live in an
+immutable generated manifest. Patched unvalidated artifacts use a separate
+release identity and cannot reuse the validated claim. Guidance changes,
+algorithm transitions, vulnerabilities, patches, certificate changes, and
+environment additions require recorded impact, regression scope, and the
+applicable CMVP revalidation path.

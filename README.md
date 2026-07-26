@@ -53,6 +53,10 @@ brynja = "0.1"
   a dedicated adapter crate, written admission review, tests, and release gate.
 - Every production crate is `no_std` by default. Platform services enter
   through explicit caller-provided interfaces.
+- FIPS 140-3 support is planned through separate `brynja-fips-module` and
+  `brynja-fips` packages, not a boolean Cargo feature. Only an exact issued,
+  certificate-bound module and tested operational environment may carry a
+  validation claim; the current project is not FIPS validated.
 - Source files are limited to 500 lines and milestones are split before they
   become too large to review safely.
 - A feature being compiled is never evidence that a protocol is implemented,
@@ -96,6 +100,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Unsafe Rust | Forbidden until a versioned, audited exception is approved |
 | Default networking | None |
 | Historical protocols in `brynja` | Impossible by package boundary |
+| FIPS 140-3 status | Planned Level 1 software-module path; not validated |
 | Production readiness | Not before an exact reviewed `1.0.0-rc.N` candidate |
 
 ## Rust Version Support

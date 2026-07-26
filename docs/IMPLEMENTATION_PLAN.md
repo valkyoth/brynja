@@ -37,7 +37,8 @@ test count, or interoperability alone never establishes that claim.
 brynja
 ├── brynja-core
 ├── brynja-crypto
-├── future exact-build FIPS module artifact (never a feature)
+├── future brynja-fips-module (exact validated artifact; never a feature)
+├── future brynja-fips (downstream approved-only selection facade)
 ├── brynja-pki
 ├── future brynja-tls-handshake (shared recordless TLS 1.3 state machine)
 ├── brynja-tls (stream records plus shared handshake)
@@ -76,18 +77,29 @@ anti-replay, and policy outcomes remain authoritative in exhaustive mandatory
 results, single-consumption completion tokens, and engine state even when every
 event is ignored or dropped.
 
+FIPS support uses package and type boundaries, not an additive Cargo feature.
+`brynja-fips-module` is the exact cryptographic module artifact submitted for
+validation. The separate `brynja-fips` facade remains outside that boundary and
+offers the easy client and server entry points, but it constructs them only from
+a certificate-bound manifest and matching validated-module handle. Ordinary
+`brynja` configuration can never acquire a FIPS claim through feature unification.
+
 ## Implementation Order
 
 1. Freeze policy enforcement, standards provenance, requirements ledgers,
    including RFC 5705, RFC 9258, RFC 9266, and RFC 9848 ownership, bounded
-   domains, caller-owned arenas, and adversarial test infrastructure.
+   domains, caller-owned arenas, and adversarial test infrastructure. Generate
+   a machine-readable decision register for every relevant protocol and IANA
+   surface so an extension, message, algorithm, or standards change cannot
+   remain unclassified.
 2. Freeze production owned-memory zeroization and constant-time operations;
    separate entropy from secure randomness and wall from monotonic time;
    define pending-provider effects; and design the FIPS-aware provider boundary
-   without making a validation claim. Freeze a secret-free, format-safe,
-   allocation-free security-event schema with optional caller timestamps and
-   later enrichment, deterministic ordering, bounded capacity, saturating
-   dropped-event accounting, and non-correlating identifiers.
+   without making a validation claim. Freeze authoritative mandatory security
+   outcomes first, then a secret-free, format-safe, allocation-free audit-event
+   schema with optional caller timestamps and later enrichment, deterministic
+   ordering, bounded capacity, saturating dropped-event accounting, and
+   non-correlating identifiers.
 3. Implement and independently audit cryptographic primitives from official
    vectors outward with per-compiler and per-target constant-time evidence. Each
    arithmetic or cryptographic milestone introduces its applicable proof harness
@@ -112,16 +124,19 @@ event is ignored or dropped.
    and TLS 1.3 exporter constructions and typed, authorized, zeroized output.
 6. Admit and audit hardened TLS 1.2, then integrate symmetric one-pass routing
    only after both target engines exist; never retry another engine.
-7. Implement QUIC TLS and key-derivation ownership, QUIC resumption and
-   zero-RTT, path-bound one-pass DTLS, version-specific DTLS CIDs, explicit
+7. Implement QUIC TLS and key-derivation ownership, separately gated QUIC
+   resumption and zero-RTT, path-bound one-pass DTLS, version-specific DTLS CIDs, explicit
    DTLS early-data exclusion, and standardized PQ hybrid policies. For FIPS,
-   freeze architecture and allowlists first; implement the DRBG, provider,
-   mandatory typed per-service indicators, SSP services and mandatory lifecycle
-   completion tokens, and complete linked self-tests; only then freeze
-   module-specific audit-event duplication and the exact artifact, then bind ACVTS,
-   CAVP, CMVP, and closure evidence to that artifact.
-   The approved-only TLS profile follows without conflating connection failure
-   with a FIPS-defined catastrophic module latch.
+   first freeze a current overall Security Level 1 requirement baseline and the
+   separate module architecture. Implement SP 800-90B entropy and health tests,
+   SP 800-90A DRBGs, the selected SP 800-90C RBG construction, mandatory typed
+   per-service indicators, SSP services, linked pre-operational and conditional
+   self-tests, and the permanent error state. Only then freeze module-specific
+   audit-event duplication and the exact artifact, and bind ACVTS/CAVP, ESV,
+   CMVP documentation, lab, remediation, issuance, and closure evidence to it.
+   The approved-only TLS profile, certificate-bound manifest, separate ergonomic
+   `brynja-fips` facade, and deployment/revalidation lifecycle follow without
+   conflating connection failure with a FIPS-defined module error state.
 8. Add each planned v1 optional protocol facility against the unstable internal
    model without repeating ALPN, SNI, exporter, or channel-binding work. ECH
    treats caller-resolved ECHConfigList input as hostile and separately types
@@ -129,7 +144,9 @@ event is ignored or dropped.
    Required, Preferred, or GREASE-only policy; Required never falls through to
    public SNI. Precompressed send artifacts are invalidated on every encoded
    input change. ECH tickets bind inner identity, policy, and configuration
-   generation. Prove optional modules cannot change the validated FIPS closure,
+   generation. Split ECH origin policy from hostile configuration lifecycle and
+   split compressed-certificate artifact validation from send negotiation.
+   Prove optional modules cannot change the validated FIPS closure,
    then generate all pairwise feature and protocol-applicability cases plus
    security-critical higher-order combinations before freezing facade and
    Sans-I/O actions. Freeze those actions as exhaustive EngineV1, EventV1, and
@@ -196,6 +213,11 @@ The repository will maintain:
 - schema, deterministic-regeneration, symbol-resolution, uniqueness,
   completeness, evidence-reference, supported-parameter, and residual-gap tests
   for the v0.155.0 machine-readable cryptographic claim register;
+- current FIPS 140-3 requirement/assertion, guidance, RFG, transition, caveat,
+  security-policy, algorithm, ESV, artifact, lab, certificate, operational
+  environment, approved-profile, manifest, facade, claim, update, and
+  revalidation fixtures, including compile failures for every mixed or
+  incomplete `brynja-fips` configuration;
 - pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
   assurance tools that do not weaken repository Cargo dependency policy.
 
@@ -222,6 +244,9 @@ entropy FFI. Linux, Windows, BSD, macOS, Android, iOS, and bare-metal remain
 outside protocol conditional logic. Aesynx requires a stable adapter contract
 and executable target-ABI or emulator gate
 for v1; real-hardware qualification may follow without weakening that contract.
+An ordinary caller entropy implementation never inherits FIPS validation.
+`brynja-fips` accepts only the entropy source and SP 800-90C construction named
+by the exact validated-module manifest and tested operational environment.
 
 ## Completion Definition
 
@@ -229,4 +254,7 @@ for v1; real-hardware qualification may follow without weakening that contract.
 critical/high findings, audited first-party cryptography and PKI, sustained
 cross-platform interoperability, quantitative resource ceilings,
 reproducible packages, exact SBOM/provenance, frozen public APIs, operational
-guides, and an unchanged exact release candidate approved by pentest.
+guides, and an unchanged exact release candidate approved by pentest. Any FIPS
+claim additionally requires the exact issued certificate, caveats, operational
+environment, immutable module artifact, and separate `brynja-fips` facade
+defined by the Phase 4 gates.

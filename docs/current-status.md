@@ -11,3 +11,6 @@ profile, or configuration may state or imply a FIPS validation claim.
 The `v0.1.0` repository policy and evidence automation are implemented.
 Release readiness intentionally fails closed until an exact-commit pentest PASS
 report exists. No tag or package publication is authorized.
+The 2026-07-26 RFC planning audit locks a 103-document protocol source closure
+and records roadmap dispositions; machine-readable normative source-to-code-
+and-test traceability remains planned for v0.3.0 through v0.3.5.

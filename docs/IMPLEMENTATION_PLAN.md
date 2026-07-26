@@ -87,11 +87,15 @@ a certificate-bound manifest and matching validated-module handle. Ordinary
 ## Implementation Order
 
 1. Freeze policy enforcement, standards provenance, requirements ledgers,
-   including RFC 5705, RFC 9258, RFC 9266, and RFC 9848 ownership, bounded
-   domains, caller-owned arenas, and adversarial test infrastructure. Generate
-   a machine-readable decision register for every relevant protocol and IANA
-   surface so an extension, message, algorithm, or standards change cannot
-   remain unclassified.
+   complete current updated-by and obsoleted-by closure, bounded domains,
+   caller-owned arenas, and adversarial test infrastructure. Generate a
+   machine-readable decision register for every relevant protocol and IANA
+   surface, then map every applicable normative statement and invariant to its
+   disposition, milestone, planned target or actual code or boundary, positive
+   and negative tests, and evidence lifecycle so a standards change cannot
+   remain unclassified or silently weaken behavior. Keep RFC 9850 key logging in
+   a separately compiled test-support artifact that production crates and
+   features cannot reach.
 2. Freeze production owned-memory zeroization and constant-time operations;
    separate entropy from secure randomness and wall from monotonic time;
    define pending-provider effects; and design the FIPS-aware provider boundary
@@ -113,20 +117,30 @@ a certificate-bound manifest and matching validated-module handle. Ordinary
    verification method, evidence, assumptions, and residual gaps.
    RSA signing accepts validated imported keys; first-party RSA key generation
    is outside v1.
-4. Implement bounded identity containers, DER, X.509 path construction, split
-   RFC 5280 validation, revocation, CT policy, and an independent PKI audit.
+4. Implement bounded identity containers, DER, and the current RFC 5280 update
+   closure: strict algorithm identifiers, current internationalized names,
+   bounded policy graphs, CRL issuer key usage, noRevAvail, current OCSP
+   nonces, Must-Staple, the optional RFC 9919 SHA-256 lightweight OCSP client
+   profile over caller-owned transport and cache, strictly versioned CT, path
+   construction, revocation, and an independent PKI audit.
 5. Extract the shared recordless TLS handshake and exercise an unstable
    deterministic Sans-I/O contract, then implement and audit TLS 1.3. External
    PSKs use RFC 9258 import and domain separation only for TLS 1.3-derived TLS,
    DTLS 1.3, and QUIC profiles whenever provisioned key material could cross
-   protocol or deployment domains; hardened TLS 1.2 and DTLS 1.2 never gain PSK
-   cipher suites. Channel binding admits only tls-exporter, with exact TLS 1.2
-   and TLS 1.3 exporter constructions and typed, authorized, zeroized output.
-6. Admit and audit hardened TLS 1.2, then integrate symmetric one-pass routing
-   only after both target engines exist; never retry another engine.
+   protocol or deployment domains; apply RFC 9257 key strength, pairwise role,
+   peer-identity, provisioning, rotation, and deletion requirements, and reject
+   certificate-with-external-PSK mode. Hardened TLS 1.2 and DTLS 1.2 never gain
+   PSK cipher suites. Channel binding admits only tls-exporter, with exact TLS
+   1.2 and TLS 1.3 exporter constructions and typed, authorized, zeroized output.
+6. Admit and audit hardened TLS 1.2 under the current MD5/SHA-1 and obsolete
+   key-exchange deprecations and the TLS-only RFC 9851 feature freeze, require
+   the RFC 9846-renamed Extended Main Secret while preserving its wire label,
+   then integrate symmetric one-pass routing only after both target engines
+   exist; never retry another engine.
 7. Implement QUIC TLS and key-derivation ownership, separately gated QUIC
-   resumption and zero-RTT, path-bound one-pass DTLS, version-specific DTLS CIDs, explicit
-   DTLS early-data exclusion, and standardized PQ hybrid policies. For FIPS,
+   resumption and zero-RTT, path-bound one-pass DTLS, version-specific DTLS
+   CIDs, RFC 9853 return-routability checks, explicit DTLS early-data
+   exclusion, and standardized PQ hybrid policies. For FIPS,
    first freeze a current overall Security Level 1 requirement baseline and the
    separate module architecture. Implement SP 800-90B entropy and health tests,
    SP 800-90A DRBGs, the selected SP 800-90C RBG construction, mandatory typed
@@ -138,7 +152,10 @@ a certificate-bound manifest and matching validated-module handle. Ordinary
    `brynja-fips` facade, and deployment/revalidation lifecycle follow without
    conflating connection failure with a FIPS-defined module error state.
 8. Add each planned v1 optional protocol facility against the unstable internal
-   model without repeating ALPN, SNI, exporter, or channel-binding work. ECH
+   model without repeating ALPN, SNI, exporter, or channel-binding work.
+   Complete HPKE Base mode with bounded secret export, ordered-delivery and
+   loss invalidation, role separation, context destruction, and explicit
+   rejection of unadmitted modes before ECH consumes it. ECH
    treats caller-resolved ECHConfigList input as hostile and separately types
    intended origin, caller-asserted provenance, generation, lifetime, and
    Required, Preferred, or GREASE-only policy; Required never falls through to
@@ -186,6 +203,21 @@ The repository will maintain:
   and DTLS 1.2 PSK-suite construction tests, exact exporter and tls-exporter
   channel binding, ECH origin/cache generation, canonical certificate
   compression round-trip, and ECH inner-identity ticket-binding tests;
+- deterministic source-closure, protocol-surface, normative-requirement,
+  obsolete-authority, errata, IANA-drift, orphan-owner, source-to-code,
+  source-to-test, and documented-boundary fixtures;
+- current PKIX internationalization, policy-graph exhaustion, noRevAvail,
+  CRL-issuer key usage, OCSP nonce, Must-Staple, unsigned-certificate, and
+  version-separated CT fixtures;
+- lightweight OCSP request, SHA-256 CertID, responder, nextUpdate, nonce/time,
+  caller-transport, URI, cache, and forged-HTTP-metadata fixtures;
+- external-PSK length, provenance, pairwise role, identity, collision, rotation,
+  parent-destruction, reflection, combined-certificate, and privacy fixtures;
+- TLS 1.2 feature-freeze registry dates, exceptions, DTLS separation, and
+  forbidden PQC-backport fixtures plus production key-log isolation fixtures;
+- RFC 9853 DTLS return-routability loss, migration, rebinding, path-binding,
+  timer, PMTU, and amplification tests plus HPKE exporter, role, ordering,
+  loss-invalidation, unsupported-mode, and context-destruction tests;
 - exhaustive SecurityEvent schema, redaction, formatting, ordering, caller-time,
   timestamp-free boot and later enrichment, delayed or absent drain, saturating
   overflow reporting, identifier non-correlation, non-reentrancy, and

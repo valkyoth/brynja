@@ -42,6 +42,7 @@ SSL 1 remains research-only and unpublished.
 | Historical stage | Required result |
 | --- | --- |
 | `H0.1.0` | Authenticate sources and rights, record errata, publish conspicuous insecurity warnings, and freeze the protocol threat model. |
+| `H0.1.1` | Freeze the exact per-protocol cipher-suite, compression, extension, message, certificate, key-format, and primitive admission register before codec or weak-primitive work. |
 | `H0.2.0` | Implement only the protocol-specific bounded wire codec. |
 | `H0.3.0` | Implement isolated state with no shared modern configuration, negotiation, credentials, caches, tickets, paths, or fallback. |
 | `H0.4.0` | Bind audited shared primitives and keep required weak primitives in a historical-only crypto package. |
@@ -116,7 +117,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate the normative requirements and source ledger from every algorithm, encoding, extension, protocol, validation, and operational milestone; include RFC 5077, RFC 5705, RFC 5746, RFC 6962 or RFC 9162, RFC 7468, RFC 8410, RFC 5958 or the chosen PKCS#8 authority, RFC 9146 when DTLS 1.2 CID is admitted, RFC 9258, RFC 9266, RFC 9954, applicable NIST and CMVP documents and errata, and the final ECDHE-ML-KEM group RFC and code points before admission.
+Plan scope: Generate the normative source ledger from every algorithm, encoding, extension, protocol, validation, and operational milestone; close current RFC updated-by and obsoleted-by chains, record errata decisions and IANA snapshots, distinguish current authorities from compatibility baselines, and require the final ECDHE-ML-KEM group RFC and code points before admission.
 
 Goal: complete the **Requirements And Standards Source Ledger** implementation stop without admitting or
 claiming adjacent capability.
@@ -145,7 +146,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, algorithm, extension, message, alert, cipher suite, signature scheme, named group, certificate type, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, historical-only, or future work with normative source, owning milestone, code and test targets, and fail the repository when a source, registry snapshot, status, erratum, or classification drifts.
+Plan scope: Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, historical-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, historical-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts.
 
 Goal: complete the **Machine-Readable Protocol Surface Decision Register** implementation stop without admitting or
 claiming adjacent capability.
@@ -172,6 +173,145 @@ Exit criteria:
 - every relevant protocol and cryptographic surface has one explicit,
   reviewable disposition and drift cannot remain silent;
 - `v0.3.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.3.2 - Normative Requirement Matrix Foundation
+
+Status: planned
+
+Plan scope: Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, historical and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities.
+
+Goal: complete the **Normative Requirement Matrix Foundation** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- define deterministic schema, identifiers, lifecycle transitions, target
+  references, and machine-to-human projections that survive rendering changes;
+- implement source hash, section, status, errata, strength, applicability,
+  decision, milestone, planned or actual symbol, test, evidence, and residual
+  fields without pretending future code already exists;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- regenerate twice and byte-compare schema, pilot records, and rendered reports;
+- inject changed source hashes, invalid sections, illegal lifecycle transitions,
+  obsolete authority, duplicate ID, absent owner, premature evidence, weakened
+  SHOULD decision, and missing target records and require repository failure;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the matrix can truthfully represent requirements before and after code exists,
+  and the normative-language and registry pilot proves deterministic drift;
+- `v0.3.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.3.3 - Cryptography Encoding And PKIX Normative Coverage
+
+Status: planned
+
+Plan scope: Populate and review every applicable normative statement and invariant for admitted primitives, arithmetic, DER, key and certificate formats, service identity, path processing, revocation, OCSP and Certificate Transparency; record explicit algorithm exclusions, current-versus-compatibility authority, positive and negative target tests, work bounds, and unresolved evidence.
+
+Goal: complete the **Cryptography Encoding And PKIX Normative Coverage** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- populate the complete crypto, encoding, key-container, certificate, name,
+  path, policy, revocation, OCSP, TLS Feature, and CT requirement domains;
+- bind every rule to an owner, explicit disposition, resource or side-channel
+  invariant, planned target, positive and negative target tests, and evidence
+  lifecycle without accepting an unreviewed algorithm identifier;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- compare source-to-plan and plan-to-source coverage for every owning milestone
+  and regenerate all projections byte-identically;
+- remove, duplicate, weaken, misclassify, obsolete, or orphan requirements from
+  each domain and require failure, including cross-domain AlgorithmIdentifier,
+  name, policy, revocation, CT-version, and work-bound cases;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- every locked cryptographic, encoding, and PKIX rule has a reviewable lifecycle
+  and no admitted or rejected algorithm or validation surface remains implicit;
+- `v0.3.3 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.3.4 - TLS DTLS And QUIC Normative Coverage
+
+Status: planned
+
+Plan scope: Populate and review every applicable normative statement and invariant for current and compatibility TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2 and DTLS 1.3; map every message, extension, alert, registry value, state transition, transport boundary, intentional rejection and caller-owned responsibility to its milestone and target tests.
+
+Goal: complete the **TLS DTLS And QUIC Normative Coverage** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- populate base, update, compatibility, deprecation, feature-freeze, record,
+  handshake, PSK, exporter, ticket, QUIC, datagram, CID, path, and routing rules;
+- map every wire surface and state transition to exact ownership, disposition,
+  alert or transport failure, resource bounds, planned target, target tests, and
+  evidence lifecycle while preserving version separation;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- compare every TLS, DTLS, and QUIC-TLS source, registry, and planned milestone
+  in both directions and regenerate projections byte-identically;
+- inject missing messages, illegal contexts, registry drift, wrong-version
+  reuse, obsolete authority, caller/protocol ownership swaps, ignored alerts,
+  and weakened security requirements and require failure;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- every transport-protocol requirement and boundary is explicitly versioned,
+  owned, test-targeted, and unable to hide behind generic TLS reuse;
+- `v0.3.4 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.3.5 - Optional Historical And Residual Normative Closure
+
+Status: planned
+
+Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, historical protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
+
+Goal: complete the **Optional Historical And Residual Normative Closure** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- populate every remaining optional, PQ, historical, operational, source-rights,
+  test-only, caller-owned, rejected, blocked, and presently pinned non-RFC rule;
+- generate complete source-to-plan, plan-to-source, surface-to-requirement, and
+  requirement-to-owner reports with explicit dependent-milestone refresh rules
+  for mutable guidance and unavailable future standards;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- require complete bidirectional coverage across all locked sources, roadmap
+  rows, surface decisions, non-RFC ledgers, historical packages, and blockers;
+- inject draft identifiers, future-source claims, rights gaps, stale mutable
+  guidance, missing exclusions, orphan plans, premature implementation status,
+  and uncovered surfaces and require repository failure;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the complete current planning baseline is closed without claiming unavailable
+  standards, future code, mutable evidence, or historical rights as complete;
+- `v0.3.5 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
 
@@ -215,20 +355,26 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- freeze upstream capability types, caller limits, transactional effects,
+  mandatory zeroization, version-neutral framing, provider failure,
+  secret-free errors, and a one-way production-to-test-support boundary;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
 - run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- test arena overlap, malformed framing, unavailable effects, dependency
+  inversion, cancellation, optimization, cache and DMA duties, terminal states,
+  and broken production graphs containing RFC 9850 labels or hooks;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- the upstream foundation is deterministic, hostile-input safe,
+  platform-independent, reviewably destroys owned secrets, and cannot log
+  production traffic secrets;
 - `v0.5.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.6.0 - Bounded Numeric And Resource Domains
@@ -351,7 +497,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Define non-cloneable and non-serializable secret ownership, transition, error, cancellation, provider-failure and drop destruction, immediate obsolete-secret cleanup, external-store and accelerator duties, and a mandatory production guarantee for the complete owned memory region.
+Plan scope: Define non-cloneable and non-serializable secret ownership, transition, error, cancellation, provider-failure and drop destruction, immediate obsolete-secret cleanup, external-store and accelerator duties, a mandatory production guarantee for the complete owned memory region, and RFC 9850 key logging only in a separately compiled test-support artifact that cannot enter production packages or features.
 
 Goal: complete the **Secret Lifetime And Destruction Contract** implementation stop without admitting or
 claiming adjacent capability.
@@ -655,7 +801,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Keep record framing independent of protocol selection and fallback; ignore TLSPlaintext legacy_record_version where required, validate TLSCiphertext constants where applicable, preserve bytes, and leave version choice exclusively to typed handshake policy.
+Plan scope: Keep record framing independent of protocol selection and fallback; ignore TLSPlaintext legacy_record_version where required, validate TLSCiphertext constants where applicable, preserve bytes, reject RFC 6520 Heartbeat content and negotiation in every modern profile, and leave version choice exclusively to typed handshake policy.
 
 Goal: complete the **TLS And DTLS Record Framing** implementation stop without admitting or
 claiming adjacent capability.
@@ -755,20 +901,26 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
+- record arithmetic, group, buffer, key, nonce, randomness, use-limit,
+  import-only RSA, ephemeral-lifecycle, constant-time, exclusion, registry, and
+  provider-token invariants;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
 - run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
+- review MIR, LLVM and assembly and test timing, cache, branch, malformed
+  inputs, invalid secrets, exhaustion, reuse, fault attacks, zeroization, and
+  negative RFC 9935 and RFC 9963 code-point reachability;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- admitted and rejected algorithms have complete registry decisions, and every
+  admitted algorithm has functional, caller-buffer, lifecycle, resource, and
+  side-channel evidence before downstream use;
 - `v0.22.0 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.23.0 - SHA-384 And SHA-512
@@ -1442,7 +1594,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing, encrypted private-key containers, first-party RSA key generation, ML-DSA, SLH-DSA, and every unimplemented algorithm family.
+Plan scope: Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing including RFC 9963 legacy client CertificateVerify code points, encrypted private-key containers, first-party RSA key generation, RFC 9935 ML-KEM PKIX credentials, ML-DSA, SLH-DSA, and every unimplemented algorithm family.
 
 Goal: complete the **Version-One Algorithm Decisions** implementation stop without admitting or
 claiming adjacent capability.
@@ -1558,7 +1710,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Decode X.509 Certificate, TBSCertificate, and SPKI while preserving the exact original signed byte slice and rejecting ambiguous algorithms.
+Plan scope: Decode X.509 Certificate, TBSCertificate, and SPKI under the current RFC 5280 update closure while preserving the exact original signed byte slice, enforcing current RSA, EC, X25519, and Ed25519 AlgorithmIdentifier rules, and rejecting ambiguous algorithms and id-alg-unsigned in every signature-verification context.
 
 Goal: complete the **X.509 Decoder** implementation stop without admitting or
 claiming adjacent capability.
@@ -1587,7 +1739,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Validate SAN and service identity, ASCII A-label DNS inputs, wildcards, IP, email and URI names, critical and duplicate extensions, and caller-owned international-name normalization policy.
+Plan scope: Validate SAN and service identity, ASCII IDNA2008 A-label DNS inputs, wildcards, IP, internationalized and ASCII email, and URI names under RFC 9525 and the current RFC 5280 internationalization updates; enforce critical and duplicate extensions while keeping Unicode mapping and presentation caller-owned.
 
 Goal: complete the **Service Identity And Extensions** implementation stop without admitting or
 claiming adjacent capability.
@@ -1674,7 +1826,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Validate DNS, IP, email, URI, and directory-name constraints with explicit subtree, comparison, normalization, and work budgets.
+Plan scope: Validate DNS, IP, rfc822Name and SmtpUTF8Mailbox email, URI, and directory-name constraints under the current RFC 5280 internationalization updates with explicit subtree, comparison, normalization, and work budgets.
 
 Goal: complete the **Name Constraints** implementation stop without admitting or
 claiming adjacent capability.
@@ -1703,7 +1855,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement certificate policies, mappings, anyPolicy, inhibition, policy constraints, and bounded policy-tree processing.
+Plan scope: Implement certificate policies, mappings, anyPolicy, inhibition, policy constraints, and RFC 9618 bounded policy-graph processing with signature-first validation, hard depth, node, edge, output, and work ceilings, and no exponential policy-tree construction.
 
 Goal: complete the **Certificate Policy Processing** implementation stop without admitting or
 claiming adjacent capability.
@@ -1761,7 +1913,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Validate base, delta, and indirect CRLs with issuer authorization, freshness, distribution-point, reason, entry, and work ceilings.
+Plan scope: Validate base, delta, and indirect CRLs with issuer authorization, freshness, distribution-point, reason, entry, and work ceilings; for every v3 CRL-issuer certificate require a present keyUsage extension with cRLSign asserted as clarified by RFC 10007.
 
 Goal: complete the **CRL Validation** implementation stop without admitting or
 claiming adjacent capability.
@@ -1786,11 +1938,45 @@ Exit criteria:
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
 - `v0.57.0 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.57.1 - No-Revocation-Available Certificate Policy
+
+Status: planned
+
+Plan scope: Implement RFC 9608 noRevAvail parsing and path semantics; reject the extension on CA certificates and every contradictory CRL, Freshest CRL, OCSP AIA, or basicConstraints combination, and skip revocation only for a valid end-entity assertion under explicit caller policy.
+
+Goal: complete the **No-Revocation-Available Certificate Policy** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the noRevAvail extension, certificate-profile validation, path
+  result, and explicit relying-party policy without inferring availability;
+- preserve the distinction between valid noRevAvail, absent revocation data,
+  unavailable status, stale evidence, and ordinary soft-fail policy;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test end-entity and CA placement, criticality, basicConstraints, CRL and
+  Freshest CRL extensions, OCSP AIA, mixed paths, unknown extensions, and
+  caller policies at every certificate position;
+- prove contradictory or malformed assertions fail validation and that only a
+  valid explicitly admitted assertion can suppress revocation processing;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- revocation is skipped only under the exact RFC 9608 certificate profile and
+  an explicit relying-party decision;
+- `v0.57.1 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.58.0 - OCSP Validation
 
 Status: planned
 
-Plan scope: Validate stapled and offline OCSP responses, responder authorization, freshness, nonce, issuer and serial matching, and explicit hard and soft-fail policy.
+Plan scope: Validate stapled and offline OCSP responses, responder authorization, freshness, issuer and serial matching, and RFC 9654 nonce generation, encoding, bounds, echo, mismatch, omission, and malformed-request behavior under explicit hard and soft-fail policy.
 
 Goal: complete the **OCSP Validation** implementation stop without admitting or
 claiming adjacent capability.
@@ -1815,13 +2001,119 @@ Exit criteria:
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
 - `v0.58.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.59.0 - Certificate Transparency Contract
+### v0.58.1 - TLS Feature Must-Staple Enforcement
 
 Status: planned
 
-Plan scope: Implement bounded SCT parsing and define verifier ownership, log identities and list updates, signed-entry reconstruction, timestamp validity, log disqualification, duplicate handling, and distinct-log and operator policy; fail closed when CT is required and no admitted verifier exists.
+Plan scope: Implement RFC 7633 TLS Feature extension parsing and policy, require a valid applicable stapled OCSP response when status_request is asserted, reject unknown required feature values or unsatisfied declarations, and keep connection validity authoritative and independent of audit-event delivery.
 
-Goal: complete the **Certificate Transparency Contract** implementation stop without admitting or
+Goal: complete the **TLS Feature Must-Staple Enforcement** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- parse and validate bounded TLS Feature values and bind status_request
+  requirements to the exact end-entity certificate and handshake;
+- expose an authoritative mandatory validation result for satisfied, absent,
+  unknown, malformed, and unsatisfied declarations;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test critical and non-critical encodings, empty, duplicate, unknown, and
+  malformed values, missing and stale staples, wrong issuer or serial, revoked
+  status, responder failure, resumption, and certificate rotation;
+- drop all observational events and prove an unsatisfied declaration still
+  rejects the connection with no identity or application-data release;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- every admitted TLS Feature declaration is either satisfied by applicable
+  validated evidence or terminates authentication unambiguously;
+- `v0.58.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.58.2 - Lightweight OCSP Message Profile
+
+Status: planned
+
+Plan scope: Implement the RFC 9919 message profile with one SHA-256 CertID request, request extension and signature policy, BasicOCSPResponse and responder-ID handling, mandatory nextUpdate freshness, nonce-to-time fallback, and signed-data-before-request ordering.
+
+Goal: complete the **Lightweight OCSP Message Profile** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement the bounded one-certificate request and response profile, current
+  SHA-256 identifiers, responder authorization, byKey and byName handling,
+  exact time and freshness rules, and nonce policy;
+- order certificate-signature validation before request release and keep
+  ordinary RFC 6960 validation distinct from the explicitly selected profile;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- exercise every request field, CertID hash, responder ID, status, extension,
+  signature, producedAt, thisUpdate, nextUpdate, nonce, clock, DER encoding,
+  and response-count boundary;
+- prove certificate signatures are validated before any request action and
+  stale, unsigned, mismatched, or unauthorized responses cannot become good
+  status;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the optional high-volume message profile cannot emit SHA-1 requests, process
+  stale status, or bypass ordinary OCSP authentication;
+- `v0.58.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.58.3 - Lightweight OCSP Sans-I/O Transport And Cache Profile
+
+Status: planned
+
+Plan scope: Implement RFC 9919 AIA discovery, exact GET-at-or-below-255 and POST-above-255 selection, Base64 and URI construction, response media and length checks, cache metadata, freshness, retry, and invalidation as typed effects while keeping network and cache implementation caller-owned and signed OCSP data authoritative.
+
+Goal: complete the **Lightweight OCSP Sans-I/O Transport And Cache Profile** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- expose typed AIA, GET, POST, URI, request-body, response-metadata, time, retry,
+  cache-read, cache-write, and invalidation effects with exact size limits;
+- validate Base64 and percent encoding, media type, content length, cache
+  controls, and freshness hints without performing I/O or treating unsigned
+  transport data as certificate status;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test the 255-byte boundary, URI joins, every Base64 and percent character,
+  malformed AIA, GET and POST bodies, content metadata, retries, clock skew,
+  cache hit, expiry, replacement, rollback, and hostile caller results;
+- forge or omit every HTTP field and prove only the signed OCSP thisUpdate,
+  nextUpdate, producedAt, status, and signature can authorize acceptance;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the caller can implement RFC 9919 transport and caching through deterministic
+  typed effects, while Brynja performs no network access and unsigned metadata
+  never overrides signed revocation evidence;
+- `v0.58.3 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.59.0 - Versioned Certificate Transparency Contract
+
+Status: planned
+
+Plan scope: Implement strictly version-separated RFC 6962 CT v1 and RFC 9162 CT v2 SCT, log, signed-entry, timestamp, extension, and proof formats; define verifier ownership, log-list and operator updates, disqualification and duplicate handling, and fail closed without a verifier for every required version while never interpreting one version as the other.
+
+Goal: complete the **Versioned Certificate Transparency Contract** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -2084,7 +2376,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement shared offer and selection parsing and policy without routing into an engine: servers evaluate one ClientHello, clients evaluate one ServerHello, unknown future offered versions are skipped safely, recognized legacy versions are rejected by policy, highest-version and downgrade-sentinel rules are typed, and exact transcript bytes are preserved.
+Plan scope: Implement shared offer and selection parsing and policy without routing into an engine: servers evaluate one ClientHello, clients evaluate one ServerHello, unknown future offered versions are skipped safely, recognized legacy versions are rejected by policy, highest-version and downgrade-sentinel rules are typed, exact transcript bytes are preserved, and application profiles can require TLS 1.3 so new protocols satisfy RFC 9852 without silently enabling TLS 1.2.
 
 Goal: complete the **TLS Version Negotiation Codec And Policy** implementation stop without admitting or
 claiming adjacent capability.
@@ -2377,6 +2669,43 @@ Exit criteria:
   importer-enforced separation;
 - `v0.76.1 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.76.2 - External PSK Provisioning And Role Security
+
+Status: planned
+
+Plan scope: Apply RFC 9257 with a mandatory 128-bit minimum key length, typed entropy provenance, client/server role and logical-node binding, pairwise-or-imported group policy, opaque identity comparison and collision domains, peer-identifier confirmation, privacy warnings, rotation and main-key destruction; reject low-entropy PSKs and RFC 9973 certificate-with-external-PSK mode for v1.
+
+Goal: complete the **External PSK Provisioning And Role Security** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- define typed provisioning for key length, claimed entropy provenance, client
+  and server roles, logical nodes, intended peer identifiers, identity domains,
+  reuse, rotation, and deletion obligations;
+- enforce pairwise PSKs or RFC 9258 imported contexts that bind both endpoint
+  identities, separate external and resumption identities, and make linkability
+  and group-membership limitations explicit;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test short, low-entropy, reused, shared, same-role, reflected, misbound,
+  colliding, cross-profile, stale, undeleted, and privacy-bearing PSK cases;
+- prove psk_dhe_ke remains mandatory, raw or imported keys cannot switch roles
+  or peers, parent material is destroyed when promised, and RFC 9973 cannot be
+  negotiated or smuggled through unknown-extension handling;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- every admitted external PSK has reviewable strength, provenance, role, peer,
+  domain, lifetime, and destruction policy with no silent group or combined-
+  certificate mode;
+- `v0.76.2 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.77.0 - Zero-RTT
 
 Status: planned
@@ -2555,7 +2884,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze an explicit TLS 1.2 ECDHE-plus-AEAD policy with EMS required and static RSA, CBC, SHA-1 signing, compression, renegotiation, and automatic fallback excluded.
+Plan scope: Freeze an explicit TLS 1.2 ECDHE-plus-AEAD policy with Extended Main Secret required and static RSA, finite-field DH, static ECDH, CBC, MD5 and SHA-1 signing, compression, renegotiation, and automatic fallback excluded.
 
 Goal: complete the **TLS 1.2 Policy Boundary** implementation stop without admitting or
 claiming adjacent capability.
@@ -2580,11 +2909,80 @@ Exit criteria:
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
 - `v0.83.0 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.83.1 - Current TLS And DTLS 1.2 Deprecation Closure
+
+Status: planned
+
+Plan scope: Apply RFC 9155 and RFC 10015 to TLS 1.2 and the later DTLS 1.2 profile: never offer or select MD5/SHA-1 signatures, static RSA, finite-field DH, or static DH/ECDH certificate types; generate exact alerts for forbidden peer selections and prove IANA discouraged entries cannot enter configuration, negotiation, resumption, or imported state.
+
+Goal: complete the **Current TLS And DTLS 1.2 Deprecation Closure** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- generate deny sets from the current signature, cipher-suite, certificate-type,
+  and named-group registry decisions and bind them to both 1.2 profiles;
+- reject forbidden values at configuration, offer construction, peer
+  selection, certificate selection, state import, and resumption boundaries;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- exercise every RFC 9155 and RFC 10015 affected signature, key exchange,
+  certificate type, cipher suite, alias, malformed value, and registry status;
+- prove TLS 1.2 and DTLS 1.2 allow only ECDHE with admitted AEAD suites and
+  current signatures, emit exact alerts, and cannot revive rejected state via
+  tickets, caches, providers, or serialized configuration;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- obsolete 1.2 key exchange and signature mechanisms are unreachable across
+  configuration, negotiation, authentication, resumption, and import;
+- `v0.83.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.83.2 - TLS 1.2 Feature-Freeze Enforcement
+
+Status: planned
+
+Plan scope: Apply RFC 9851 to TLS 1.2 only: reject post-freeze protocol, cipher, group, signature, extension, alert, and other registry additions unless they are an authenticated urgent-security correction or the RFC-permitted ALPN and exporter-label exceptions; keep DTLS decisions separate and prohibit PQC backports to TLS 1.2.
+
+Goal: complete the **TLS 1.2 Feature-Freeze Enforcement** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- bind the RFC 9851 publication cutoff and current IANA registration metadata to
+  the TLS 1.2 surface register and typed configuration;
+- implement separate authenticated decisions for urgent security corrections,
+  ALPN identifiers, exporter labels, DTLS entries, and TLS 1.3-or-later entries
+  without broadening the frozen TLS 1.2 profile;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- inject post-freeze cipher, group, signature, extension, alert, certificate,
+  compression, PSK, and content entries plus valid and invalid exceptions;
+- prove no PQC or other new TLS 1.2 mechanism is constructible, ALPN and exporter
+  label additions do not expand cryptography, and DTLS registry decisions remain
+  independently classified;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- TLS 1.2 remains a closed hardened compatibility profile whose only post-freeze
+  changes are authenticated RFC 9851 exceptions;
+- `v0.83.2 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.84.0 - TLS 1.2 PRF And Key Block
 
 Status: planned
 
-Plan scope: Implement the TLS 1.2 PRF, master secret, EMS master-secret input, key-block expansion, label separation, and length limits.
+Plan scope: Implement the TLS 1.2 PRF, main secret, Extended Main Secret input, key-block expansion, label compatibility, separation, and length limits.
 
 Goal: complete the **TLS 1.2 PRF And Key Block** implementation stop without admitting or
 claiming adjacent capability.
@@ -2638,13 +3036,13 @@ Exit criteria:
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
 - `v0.85.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.86.0 - TLS 1.2 EMS Transcript Binding
+### v0.86.0 - TLS 1.2 Extended Main Secret Transcript Binding
 
 Status: planned
 
-Plan scope: Implement Extended Master Secret transcript selection, session-hash rules, resumption consistency, and mandatory EMS failure behavior.
+Plan scope: Implement the RFC 9846-renamed Extended Main Secret transcript selection, wire-compatible label, session-hash rules, resumption consistency, API indication for TLS 1.3, and mandatory failure behavior.
 
-Goal: complete the **TLS 1.2 EMS Transcript Binding** implementation stop without admitting or
+Goal: complete the **TLS 1.2 Extended Main Secret Transcript Binding** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -3432,6 +3830,42 @@ Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
 - `v0.111.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.111.1 - DTLS Return Routability Check
+
+Status: planned
+
+Plan scope: Implement RFC 9853 negotiation and authenticated basic and enhanced return-routability checks for CID-enabled DTLS 1.2 and DTLS 1.3, including path challenge, response and drop messages, unpredictable cookies, timers, pacing, anti-amplification, PMTU probes, rebinding and voluntary migration, buffered-data suspension, nested-rebinding behavior, unknown-message handling, and exact old/new path binding.
+
+Goal: complete the **DTLS Return Routability Check** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement rrc negotiation, all three message types, basic and enhanced state
+  machines, opaque path-token binding, caller timer and pacing actions, and
+  explicit application-data suspension or anti-amplification results;
+- keep DTLS 1.2 and 1.3 authentication, padding, CID, record, epoch, replay,
+  PMTU, rebinding, migration, and failure behavior version-specific;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test negotiation dependencies, unknown message types, challenge randomness,
+  response and drop routing, timeout, loss, duplication, reordering, nested
+  rebinding, voluntary migration, old-path failure, spoofing, and PMTU probes;
+- prove buffered data cannot escape to an unvalidated path, every response is
+  sent to the challenge source, invalid responses are silent, and
+  anti-amplification limits hold across both protocol versions;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- every CID path change is either validated by the selected RFC 9853 procedure
+  or remains bound to the prior path without application-data leakage;
+- `v0.111.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.112.0 - DTLS 1.3 State Machines
 
@@ -4588,7 +5022,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete certificate and private-key rotation, external signer and handle rollover, trust-anchor and distrust updates, revocation state, CT log-list and operator-policy updates, ECH identity binding, atomic configuration generations, in-flight connection semantics, rollback and compromise response, and transactional failure recovery.
+Plan scope: Complete certificate and private-key rotation, external signer and handle rollover, trust-anchor and distrust updates, noRevAvail, Must-Staple and revocation state, versioned CT log-list and operator-policy updates, ECH identity binding, atomic configuration generations, in-flight connection semantics, rollback and compromise response, and transactional failure recovery.
 
 Goal: complete the **Identity Trust And Transparency Rotation** implementation stop without admitting or
 claiming adjacent capability.
@@ -4732,6 +5166,42 @@ Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.139.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.139.1 - HPKE Secret Export And Context Lifecycle
+
+Status: planned
+
+Plan scope: Implement RFC 9180 Context.Export with exact exporter-context and 255*Nh output bounds, role separation, export-only AEAD policy, single-shot API decisions, ordered-open requirements, loss and cancellation invalidation, sequence-exhaustion closure, replay ownership, and immediate destruction of key, base nonce, exporter secret, and failed or discarded contexts; reject PSK, Auth, and AuthPSK modes unless separately admitted.
+
+Goal: complete the **HPKE Secret Export And Context Lifecycle** implementation stop without admitting or
+claiming adjacent capability.
+
+Deliverables:
+
+- implement typed sender, recipient, export, and optional single-shot
+  operations with exact suite, role, context, length, and ownership binding;
+- define mandatory context invalidation and destruction for loss, out-of-order
+  input, authentication failure, cancellation, provider failure, exhaustion,
+  and explicit discard, with unsupported modes unconstructible;
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- run every applicable RFC 9180 vector for Export, export-only, sender and
+  recipient contexts, bounds, roles, ordering, single-shot decisions, and
+  admitted suites;
+- inject replay, loss, reordering, wrong role or suite, oversized output,
+  sequence exhaustion, failed open, cancellation, and unsupported modes and
+  prove failure atomicity plus complete secret destruction;
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- the complete admitted HPKE base-mode context interface includes bounded
+  export and deterministic destruction, and no unsupported mode is reachable;
+- `v0.139.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.140.0 - ECH Origin And Downgrade Policy
 
@@ -5035,7 +5505,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, and DTLS fragmentation; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
+Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
 
 Goal: complete the **Generated Optional-Feature Composition Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -5093,7 +5563,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze EngineV1, EventV1, and ActionV1 with exhaustive mandatory entropy, signing, storage, timer, decompression, trust, provider, transport, service-approval, external-destruction, authentication, ECH, early-data, anti-replay, and policy results; applications cannot wildcard-ignore mandatory effects, and unhandled or mismatched effects fail closed; new mandatory effects require V2 interfaces and a major SemVer release; only bounded secret-free observational SecurityEvent values are non-exhaustive, and ignoring every such event still leaves accepted, rejected, approved, non-approved, and destruction-complete states unambiguous through mandatory state and results.
+Plan scope: Freeze EngineV1, EventV1, and ActionV1 with exhaustive mandatory entropy, signing, storage, timer, path-validation, OCSP transport and cache, decompression, trust, revocation-feature, external-PSK provisioning, CT-version, HPKE-context, provider, transport, service-approval, external-destruction, authentication, ECH, early-data, anti-replay, and policy results; applications cannot wildcard-ignore mandatory effects, and unhandled or mismatched effects fail closed; new mandatory effects require V2 interfaces and a major SemVer release; only bounded secret-free observational SecurityEvent values are non-exhaustive, and ignoring every such event still leaves accepted, rejected, approved, non-approved, and destruction-complete states unambiguous through mandatory state and results.
 
 Goal: complete the **Versioned Stable Sans-I/O V1 API** implementation stop without admitting or
 claiming adjacent capability.
@@ -5217,7 +5687,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, secret-release invariants, zeroization and obsolete-key transitions, X.509 path-work and policy-tree ceilings, and single-consumption pending-operation tokens using pinned external tools.
+Plan scope: Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, secret-release invariants, zeroization and obsolete-key transitions, X.509 path-work and policy-graph ceilings, DTLS return-routability path binding, HPKE context invalidation, and single-consumption pending-operation tokens using pinned external tools.
 
 Goal: complete the **Protocol State And Resource Formal Harnesses** implementation stop without admitting or
 claiming adjacent capability.
@@ -5232,7 +5702,10 @@ Deliverables:
 
 Verification:
 
-- prove cursor, length, transition, replay, selector, zeroization, obsolete-key, X.509 budget, policy-tree, pending-token single-consumption, and secret-release properties across bounded models and supported configurations;
+- prove cursor, length, transition, replay, selector, zeroization, obsolete-key,
+  X.509 budget, policy-graph, DTLS path-binding, HPKE invalidation,
+  pending-token single-consumption, and secret-release properties across bounded
+  models and supported configurations;
 - retain regressions and prove replay, clean retest, traceability, artifact identity, rollback, compromise, and incident procedures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
@@ -5382,7 +5855,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete exact-commit external crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS boundary, entropy, self-test, manifest, facade, profile, deployment and claim lifecycle, optional-module, zeroization, and systems-integration audits.
+Plan scope: Complete exact-commit external standards-closure and normative-traceability, crypto, PKI, TLS, DTLS, QUIC, PQ, FIPS boundary, entropy, self-test, manifest, facade, profile, deployment and claim lifecycle, optional-module, zeroization, and systems-integration audits.
 
 Goal: complete the **Consolidated External Audits** implementation stop without admitting or
 claiming adjacent capability.
@@ -5440,7 +5913,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze public APIs, features, package inventory, requirements and protocol-surface ledgers, admitted algorithms and extensions, migration guidance, deployment profiles, incident procedures, limitations, non-goals, and exact FIPS certificate, manifest, operational-environment, caveat, claim, update, and revalidation documentation.
+Plan scope: Freeze public APIs, features, package inventory, current and compatibility source closure, normative-requirement and protocol-surface ledgers, admitted algorithms and extensions, migration guidance, deployment profiles, incident procedures, limitations, non-goals, and exact FIPS certificate, manifest, operational-environment, caveat, claim, update, and revalidation documentation.
 
 Goal: complete the **Public API Requirements And Documentation Freeze** implementation stop without admitting or
 claiming adjacent capability.

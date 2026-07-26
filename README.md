@@ -61,6 +61,10 @@ brynja = "0.1"
   become too large to review safely.
 - A feature being compiled is never evidence that a protocol is implemented,
   secure, interoperable, audited, or production-ready.
+- The locked RFC closure and its roadmap mapping are recorded in the
+  [RFC coverage audit](https://github.com/valkyoth/brynja/blob/main/docs/RFC_COVERAGE_AUDIT.md);
+  v0.3.2 through v0.3.5 later turn every applicable normative statement into
+  lifecycle-correct source-to-plan-to-code-and-test traceability.
 
 ## Workspace
 

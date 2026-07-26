@@ -25,11 +25,13 @@ decision.
 
 ## Independent Small-Pass Sequence
 
-Each implementation package follows versions `0.1.0` through `0.8.0`:
+Each implementation package follows versions `0.1.0` through `0.8.0`, with a
+separate admission freeze before codec work:
 
 | Version | Goal | Required verification |
 | --- | --- | --- |
 | `0.1.0` | Lock authentic specifications, rights, errata, insecurity statement, and threat model | provenance review and source hashes |
+| `0.1.1` | Freeze the exact cipher-suite, compression, extension, message, certificate, key-format, and primitive admission register | source-to-register completeness, IANA or source-value checks, explicit rejection and research-only decisions, and no unspecified primitive |
 | `0.2.0` | Strict bounded wire codec | truncation, canonicality, mutation, and resource tests |
 | `0.3.0` | Typed handshake state machine without cryptography | complete transition and illegal-message model |
 | `0.4.0` | Bind only required reviewed primitives | official/derived vectors and cross-protocol separation |
@@ -49,3 +51,14 @@ secure transport API, and must not accept production credentials.
 Every version exits with: `vX.Y.Z implementation stop reached. Run pentest
 for this exact commit.`
 
+## RFC Source Baselines
+
+TLS 1.0 uses RFC 2246, TLS 1.1 uses RFC 4346, and SSL 3.0 uses the
+historical RFC 6101 publication as locked compatibility baselines. Current
+prohibition and deprecation documents remain mandatory warning and containment
+inputs; they never make a historical protocol modern or recommended.
+
+SSL 2.0, SSL 1.0 research, WTLS, PCT, and SNP depend on separately authenticated
+local-only sources. No package may leave H0.1.0 or H0.1.1 until exact source
+identity, rights, errata, wire values, cipher subset, and primitive ownership
+are frozen.

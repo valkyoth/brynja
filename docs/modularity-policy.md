@@ -12,6 +12,11 @@ features, modules, or fallback paths of `brynja`. Repository-only packages
 must remain unpublished. Scripts check the dependency graph, manifest policy,
 README synchronization, and source-file lengths.
 
+RFC 9850 key logging belongs only to a separately compiled, unpublished
+test-support artifact. No production crate, facade feature, default build,
+release archive, FIPS module, or downstream dependency path may contain its
+labels, formatting code, callbacks, environment lookup, or secret-export hook.
+
 Protocol-facing capability and effect contracts belong in upstream `no_std`
 interfaces such as `brynja-core`. `brynja-platform` is downstream and may
 implement them, but TLS, QUIC TLS, and DTLS must not depend on it. A planned
@@ -40,6 +45,15 @@ wildcard arm or generic success path. Adding a mandatory effect creates V2
 interfaces and requires a major SemVer release; V1 does not change underneath
 applications. Only bounded, secret-free, observational SecurityEvent values may
 be non-exhaustive, and unknown informational values cannot affect engine state.
+
+Standards traceability is also a boundary. One machine-readable source ledger
+owns current, obsolete-compatibility, historical, and caller-owned authorities;
+one protocol-surface register owns every identifier and disposition; and one
+normative-requirement matrix owns exact source-to-decision, milestone, code or
+documented boundary, test, and evidence links. Generated projections may not
+become competing authorities. Repository checks reject stale source closure,
+orphan requirements, unclassified surfaces, and obsolete text presented as
+current.
 
 Every arithmetic and cryptographic implementation milestone owns its applicable
 proof harness beside the small production module. Harness and documentation

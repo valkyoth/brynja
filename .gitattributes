@@ -1,3 +1,2 @@
-rfc/rfc*.txt -text
+rfc/rfc*.txt -text whitespace=-blank-at-eol,-blank-at-eof
 vendor/** linguist-vendored
-

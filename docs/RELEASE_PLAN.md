@@ -42,27 +42,27 @@ in `brynja-tls13-handshake` for stream TLS and QUIC. Adding a TLS generation
 requires a new package, requirements closure, implementation sequence, engine
 audit, and router integration and audit milestones.
 
-A successor does not automatically make an older TLS generation historical.
+A successor does not automatically make an older TLS generation legacy.
 Retirement requires a newly added numbered security-boundary milestone backed
 by current standards and cryptographic evidence. It removes the engine from all
 modern graphs and negotiation before any controlled-interoperability package is
 created. Any continuation starts a separate
-`brynja-historical-tls1N` SemVer, warning, audit, and pentest line; the former
-modern package is explicitly deprecated and never forwards to historical code.
+`brynja-legacy-tls1N` SemVer, warning, audit, and pentest line; the former
+modern package is explicitly deprecated and never forwards to legacy code.
 
-## Historical Package Release Line
+## Legacy Package Release Line
 
-Historical packages use independent SemVer and separately pass source, codec,
+Legacy packages use independent SemVer and separately pass source, codec,
 state, primitive, client, optional server, containment, and audit/pentest stages.
 SSL 1 remains research-only and unpublished.
 
-| Historical stage | Required result |
+| Legacy stage | Required result |
 | --- | --- |
 | `H0.1.0` | Authenticate sources and rights, record errata, publish conspicuous insecurity warnings, and freeze the protocol threat model. |
 | `H0.1.1` | Freeze the exact per-protocol cipher-suite, compression, extension, message, certificate, key-format, and primitive admission register before codec or weak-primitive work. |
 | `H0.2.0` | Implement only the protocol-specific bounded wire codec. |
 | `H0.3.0` | Implement isolated state with no shared modern configuration, negotiation, credentials, caches, tickets, paths, or fallback. |
-| `H0.4.0` | Bind audited shared primitives and keep required weak primitives in a historical-only crypto package. |
+| `H0.4.0` | Bind audited shared primitives and keep required weak primitives in a legacy-only crypto package. |
 | `H0.5.0` | Complete controlled client-only interoperability and containment evidence. |
 | `H0.6.0` | Add server interoperability only when separately justified and reviewed for amplification and hostile load. |
 | `H0.7.0` | Require separate listeners, paths, policy, credentials, storage, diagnostics, and process containment. |
@@ -76,7 +76,7 @@ Generated requirements and upstream interfaces precede implementation.
 
 Status: awaiting pentest
 
-Plan scope: Preserve the explicit `brynja-historical-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim.
+Plan scope: Preserve the explicit `brynja-legacy-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim.
 
 Goal: complete the **Workspace Foundation** implementation stop without admitting or
 claiming adjacent capability.
@@ -105,7 +105,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and historical isolation fixtures, and document protected release controls.
+Plan scope: Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls.
 
 Goal: complete the **Release And Isolation Enforcement** implementation stop without admitting or
 claiming adjacent capability.
@@ -163,7 +163,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, historical-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, historical-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts.
+Plan scope: Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, legacy-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, legacy-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts.
 
 Goal: complete the **Machine-Readable Protocol Surface Decision Register** implementation stop without admitting or
 claiming adjacent capability.
@@ -195,7 +195,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, historical and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities.
+Plan scope: Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, legacy and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities.
 
 Goal: complete the **Normative Requirement Matrix Foundation** implementation stop without admitting or
 claiming adjacent capability.
@@ -295,18 +295,18 @@ Exit criteria:
   owned, test-targeted, and unable to hide behind generic TLS reuse;
 - `v0.3.4 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.3.5 - Optional Historical And Residual Normative Closure
+### v0.3.5 - Optional Legacy And Residual Normative Closure
 
 Status: planned
 
-Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, historical protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
+Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
 
-Goal: complete the **Optional Historical And Residual Normative Closure** implementation stop without admitting or
+Goal: complete the **Optional Legacy And Residual Normative Closure** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
-- populate every remaining optional, PQ, historical, operational, source-rights,
+- populate every remaining optional, PQ, legacy, operational, source-rights,
   test-only, caller-owned, rejected, blocked, and presently pinned non-RFC rule;
 - generate complete source-to-plan, plan-to-source, surface-to-requirement, and
   requirement-to-owner reports with explicit dependent-milestone refresh rules
@@ -317,7 +317,7 @@ Deliverables:
 Verification:
 
 - require complete bidirectional coverage across all locked sources, roadmap
-  rows, surface decisions, non-RFC ledgers, historical packages, and blockers;
+  rows, surface decisions, non-RFC ledgers, legacy packages, and blockers;
 - inject draft identifiers, future-source claims, rights gaps, stale mutable
   guidance, missing exclusions, orphan plans, premature implementation status,
   and uncovered surfaces and require repository failure;
@@ -327,7 +327,7 @@ Verification:
 Exit criteria:
 
 - the complete current planning baseline is closed without claiming unavailable
-  standards, future code, mutable evidence, or historical rights as complete;
+  standards, future code, mutable evidence, or legacy rights as complete;
 - `v0.3.5 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
@@ -4262,7 +4262,7 @@ Deliverables:
 Verification:
 
 - prove ordinary brynja, brynja-fips, optional modules, platform adapters, and
-  historical packages cannot enter or mutate the module boundary;
+  legacy packages cannot enter or mutate the module boundary;
 - test approved/non-approved service separation, port direction, role and
   authentication applicability, SSP flows, environment mapping, and build inputs;
 - pass repository checks, promised Rust versions and targets, dependency and
@@ -4814,7 +4814,7 @@ Deliverables:
 
 Verification:
 
-- test pre-issuance, pending, active, interim, historical, revoked, sunset,
+- test pre-issuance, pending, active, interim, legacy, revoked, sunset,
   wrong-environment, wrong-artifact, wrong-version, and changed-policy states;
 - scan packages, metadata, docs, examples, banners, and release notes for
   unsupported FIPS wording, logo use, missing certificate number, or caveat loss;
@@ -4831,14 +4831,14 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete the final modern, historical, experimental, and FIPS dependency-boundary, symbol, dispatch, feature, and package-content audit.
+Plan scope: Complete the final modern, legacy, experimental, and FIPS dependency-boundary, symbol, dispatch, feature, and package-content audit.
 
 Goal: complete the **Boundary And Package Audit** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
-- audit ordinary `brynja`, `brynja-fips`, `brynja-fips-module`, historical, and
+- audit ordinary `brynja`, `brynja-fips`, `brynja-fips-module`, legacy, and
   experimental packages independently, recording source, dependency, feature,
   symbol, dispatch, build-script, generated-file, and archive membership;
 - add automated allowlists and negative scans proving ordinary and optional
@@ -4861,7 +4861,7 @@ Verification:
 Exit criteria:
 
 - every shipped package has an exact reviewed closure, and no optional,
-  historical, experimental, or ordinary path can contaminate or impersonate
+  legacy, experimental, or ordinary path can contaminate or impersonate
   the validated module;
 - `v0.133.0 implementation stop reached. Run pentest for this exact commit.`
 
@@ -6004,7 +6004,7 @@ Deliverables:
 Verification:
 
 - reproduce artifacts, compare every byte, verify installation and rollback, and rerun every production gate;
-- exercise compromise, disaster, package inspection, downstream compatibility, and absence of historical, draft, or excluded scope;
+- exercise compromise, disaster, package inspection, downstream compatibility, and absence of legacy, draft, or excluded scope;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -6033,7 +6033,7 @@ Deliverables:
 Verification:
 
 - reproduce artifacts, compare every byte, verify installation and rollback, and rerun every production gate;
-- exercise compromise, disaster, package inspection, downstream compatibility, and absence of historical, draft, or excluded scope;
+- exercise compromise, disaster, package inspection, downstream compatibility, and absence of legacy, draft, or excluded scope;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 

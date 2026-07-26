@@ -6,9 +6,9 @@ Rust source files must remain at or below 500 lines, including tests and module
 documentation. New code should split around 450 lines. Splits follow security
 and ownership boundaries, not arbitrary line counts.
 
-The modern facade may depend only on modern production crates. Every historical
-engine is named `brynja-historical-<protocol>` so risk is visible in package
-metadata without inspecting source or features. Historical packages may reuse
+The modern facade may depend only on modern production crates. Every legacy
+engine is named `brynja-legacy-<protocol>` so risk is visible in package
+metadata without inspecting source or features. Legacy packages may reuse
 reviewed primitive crates but may not be dependencies, features, modules, or
 fallback paths of `brynja`. Repository-only packages must remain unpublished.
 Scripts check the dependency graph, manifest policy, README synchronization,
@@ -31,14 +31,14 @@ cannot alter an older engine in place. DTLS may reuse reviewed codecs,
 transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
 
-Supersession alone never makes a TLS version historical. Reclassification needs
+Supersession alone never makes a TLS version legacy. Reclassification needs
 a dedicated numbered security-boundary release, standards and cryptographic
 evidence, removal from every modern dependency and negotiation path, and a
 clean graph audit. Any justified controlled-interoperability continuation moves
-to a newly named `brynja-historical-tls1N` package with independent types,
+to a newly named `brynja-legacy-tls1N` package with independent types,
 configuration, state, credentials, caches, tickets, audit, pentest, and SemVer.
 The formerly modern package receives an explicit deprecation release and may
-never become a hidden forwarding dependency to the historical package.
+never become a hidden forwarding dependency to the legacy package.
 
 The bounded SecurityEvent schema is an upstream `no_std` interface owned with
 the other Sans-I/O effects. Engines and providers emit caller-drained actions;
@@ -62,7 +62,7 @@ applications. Only bounded, secret-free, observational SecurityEvent values may
 be non-exhaustive, and unknown informational values cannot affect engine state.
 
 Standards traceability is also a boundary. One machine-readable source ledger
-owns current, obsolete-compatibility, historical, and caller-owned authorities;
+owns current, obsolete-compatibility, legacy, and caller-owned authorities;
 one protocol-surface register owns every identifier and disposition; and one
 normative-requirement matrix owns exact source-to-decision, milestone, code or
 documented boundary, test, and evidence links. Generated projections may not

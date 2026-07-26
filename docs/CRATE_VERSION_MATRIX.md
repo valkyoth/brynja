@@ -9,8 +9,8 @@ No crate has a published or production-ready implementation.
 | --- | --- | --- | --- |
 | `brynja`, `brynja-tls`, and modern production crates | `0.1.0` | no | Compile-time architecture only |
 | `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | no | Version-specific modern TLS boundaries only |
-| `brynja-historical` and `brynja-historical-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
-| `brynja-historical-ssl1-research` | `0.1.0` | never | Research boundary only |
+| `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
+| `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
 
 After the foundation release, crates use independent versions. A crate is

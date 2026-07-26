@@ -33,52 +33,48 @@ dependencies = [
 ]
 
 [[package]]
-name = "brynja-historical"
+name = "brynja-interop"
+version = "0.1.0"
+
+[[package]]
+name = "brynja-legacy"
 version = "0.1.0"
 dependencies = [
- "brynja-historical-pct",
- "brynja-historical-snp",
- "brynja-historical-ssl2",
- "brynja-historical-ssl3",
- "brynja-historical-tls10",
- "brynja-historical-tls11",
- "brynja-historical-wtls",
+ "brynja-legacy-pct",
+ "brynja-legacy-snp",
+ "brynja-legacy-ssl2",
+ "brynja-legacy-ssl3",
+ "brynja-legacy-tls10",
+ "brynja-legacy-tls11",
+ "brynja-legacy-wtls",
 ]
 
 [[package]]
-name = "brynja-historical-pct"
+name = "brynja-legacy-pct"
 version = "0.1.0"
 
 [[package]]
-name = "brynja-historical-snp"
+name = "brynja-legacy-snp"
 version = "0.1.0"
 
 [[package]]
-name = "brynja-historical-ssl1-research"
+name = "brynja-legacy-ssl2"
 version = "0.1.0"
 
 [[package]]
-name = "brynja-historical-ssl2"
+name = "brynja-legacy-ssl3"
 version = "0.1.0"
 
 [[package]]
-name = "brynja-historical-ssl3"
+name = "brynja-legacy-tls10"
 version = "0.1.0"
 
 [[package]]
-name = "brynja-historical-tls10"
+name = "brynja-legacy-tls11"
 version = "0.1.0"
 
 [[package]]
-name = "brynja-historical-tls11"
-version = "0.1.0"
-
-[[package]]
-name = "brynja-historical-wtls"
-version = "0.1.0"
-
-[[package]]
-name = "brynja-interop"
+name = "brynja-legacy-wtls"
 version = "0.1.0"
 
 [[package]]
@@ -106,6 +102,10 @@ dependencies = [
  "brynja-core",
  "brynja-tls13-handshake",
 ]
+
+[[package]]
+name = "brynja-research-ssl1"
+version = "0.1.0"
 
 [[package]]
 name = "brynja-test-support"

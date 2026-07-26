@@ -1,0 +1,18 @@
+[package]
+name = "brynja-legacy-ssl2"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Explicitly legacy and insecure SSL 2.0 interoperability boundary"
+publish = false
+
+[features]
+default = []
+
+
+[lints]
+workspace = true

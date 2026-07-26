@@ -23,10 +23,10 @@ test count, or interoperability alone never establishes that claim.
   and review changes have room.
 - Unsafe Rust remains forbidden until a versioned need, proof obligation,
   isolated crate/module, audit, and explicit policy change are approved.
-- Modern and historical engines have separate packages, APIs, configuration,
+- Modern and legacy engines have separate packages, APIs, configuration,
   state machines, caches, ticket keys, and connection paths.
-- Every historical implementation package uses the
-  `brynja-historical-<protocol>` prefix so manifests, lockfiles, SBOMs, and
+- Every legacy implementation package uses the
+  `brynja-legacy-<protocol>` prefix so manifests, lockfiles, SBOMs, and
   policy tools expose the risk without requiring feature inspection.
 - `brynja-tls` is an evergreen facade and one-pass modern-version router;
   version-specific state machines remain in version-named packages.
@@ -54,17 +54,17 @@ brynja
 ├── optional brynja-dtls (independent datagram state machine)
 └── optional brynja-platform (downstream implementations only)
 
-brynja-historical (never a brynja dependency)
-├── brynja-historical-tls11
-├── brynja-historical-tls10
-├── brynja-historical-ssl3
-├── brynja-historical-ssl2
-├── brynja-historical-wtls
-├── brynja-historical-pct
-└── brynja-historical-snp
+brynja-legacy (never a brynja dependency)
+├── brynja-legacy-tls11
+├── brynja-legacy-tls10
+├── brynja-legacy-ssl3
+├── brynja-legacy-ssl2
+├── brynja-legacy-wtls
+├── brynja-legacy-pct
+└── brynja-legacy-snp
 ```
 
-`brynja-historical-ssl1-research` is reconstruction research and can never
+`brynja-research-ssl1` is reconstruction research and can never
 claim secure transport. Repository-only test, interoperability, task, and proof
 packages are permanently excluded from normal application dependency graphs.
 
@@ -98,14 +98,14 @@ a certificate-bound manifest and matching validated-module handle. Ordinary
 `brynja` configuration can never acquire a FIPS claim through feature unification.
 
 A newer TLS generation does not automatically make an older generation
-historical. Admission of TLS 1.N requires a new version-specific package,
+legacy. Admission of TLS 1.N requires a new version-specific package,
 requirements closure, audit line, and explicit router milestone. Retirement
 requires a separate numbered security-boundary milestone justified by current
 standards and cryptographic evidence. That milestone removes the engine from
 the modern graph, disables modern negotiation before any fallback can occur,
 freezes and deprecates the former modern package, and—only where controlled
 interoperability remains justified—creates a new
-`brynja-historical-tls1N` package with an independent API, warnings, audit,
+`brynja-legacy-tls1N` package with an independent API, warnings, audit,
 pentest, and release line. Code never changes classification silently in place.
 
 ## Implementation Order

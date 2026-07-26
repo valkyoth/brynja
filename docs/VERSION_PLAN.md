@@ -38,13 +38,13 @@ in `brynja-tls13-handshake` for stream TLS and QUIC. Adding a TLS generation
 requires a new package, requirements closure, implementation sequence, engine
 audit, and router integration and audit milestones.
 
-A successor does not automatically make an older TLS generation historical.
+A successor does not automatically make an older TLS generation legacy.
 Retirement requires a newly added numbered security-boundary milestone backed
 by current standards and cryptographic evidence. It removes the engine from all
 modern graphs and negotiation before any controlled-interoperability package is
 created. Any continuation starts a separate
-`brynja-historical-tls1N` SemVer, warning, audit, and pentest line; the former
-modern package is explicitly deprecated and never forwards to historical code.
+`brynja-legacy-tls1N` SemVer, warning, audit, and pentest line; the former
+modern package is explicitly deprecated and never forwards to legacy code.
 
 ## Phase 0: Repository, Effects, Memory, And Wire Foundations
 
@@ -52,14 +52,14 @@ Generated standards scope and upstream dependency direction precede implementati
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
-| `0.1.0` | Workspace Foundation | Preserve the explicit `brynja-historical-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim. |
-| `0.2.0` | Release And Isolation Enforcement | Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and historical isolation fixtures, and document protected release controls. |
+| `0.1.0` | Workspace Foundation | Preserve the explicit `brynja-legacy-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim. |
+| `0.2.0` | Release And Isolation Enforcement | Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls. |
 | `0.3.0` | Requirements And Standards Source Ledger | Generate the normative source ledger from every algorithm, encoding, extension, protocol, validation, and operational milestone; close current RFC updated-by and obsoleted-by chains, record errata decisions and IANA snapshots, distinguish current authorities from compatibility baselines, and require the final ECDHE-ML-KEM group RFC and code points before admission. |
-| `0.3.1` | Machine-Readable Protocol Surface Decision Register | Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, historical-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, historical-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts. |
-| `0.3.2` | Normative Requirement Matrix Foundation | Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, historical and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities. |
+| `0.3.1` | Machine-Readable Protocol Surface Decision Register | Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, legacy-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, legacy-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts. |
+| `0.3.2` | Normative Requirement Matrix Foundation | Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, legacy and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities. |
 | `0.3.3` | Cryptography Encoding And PKIX Normative Coverage | Populate and review every applicable normative statement and invariant for admitted primitives, arithmetic, DER, key and certificate formats, service identity, path processing, revocation, OCSP and Certificate Transparency; record explicit algorithm exclusions, current-versus-compatibility authority, positive and negative target tests, work bounds, and unresolved evidence. |
 | `0.3.4` | TLS DTLS And QUIC Normative Coverage | Populate and review every applicable normative statement and invariant for current and compatibility TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2 and DTLS 1.3; map every message, extension, alert, registry value, state transition, transport boundary, intentional rejection and caller-owned responsibility to its milestone and target tests. |
-| `0.3.5` | Optional Historical And Residual Normative Closure | Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, historical protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins. |
+| `0.3.5` | Optional Legacy And Residual Normative Closure | Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins. |
 | `0.4.0` | Assurance Harness And Bare-Metal Matrix | Establish first-party mutation and differential harnesses, true bare-metal targets, and pinned external assurance-tool policy without adding third-party crates to repository Cargo manifests. |
 | `0.5.0` | Error Alert And Exhaustion Domains | Freeze non-secret error, alert, close, provider-failure, and resource-exhaustion domains; prohibit secret-bearing formatting and ambiguous failure collapse. |
 | `0.6.0` | Bounded Numeric And Resource Domains | Introduce checked bounded integers, counts, lengths, sequence numbers, epochs, and immutable resource and work budgets. |
@@ -236,7 +236,7 @@ Architecture is frozen before implementation; exact artifact identity is frozen 
 | `0.132.0` | Accredited FIPS Lab Evaluation And Findings | Submit the exact artifact and evidence to an NVLAP-accredited CST laboratory, complete applicable FIPS 140-3 and ISO/IEC 24759 testing, preserve question and evidence provenance, and record every finding without changing or claiming validation for the submitted artifact. |
 | `0.132.1` | FIPS Evaluation Remediation And Clean Retest | Classify every lab or CMVP finding, remediate through a new exact artifact identity when code or build inputs change, repeat affected algorithm, entropy, regression, and module tests, update all evidence, and obtain a clean accredited-lab retest with no unresolved finding. |
 | `0.132.2` | FIPS Certificate Issuance Caveat And Claim Gate | Make no FIPS 140-3 validated or Inside claim until CMVP issuance; then record the exact certificate number, module version, overall and per-area levels, tested operational environments, approved services, dependencies, caveats, status, sunset, security-policy hash, and permitted wording, and mechanically prevent claims from mismatched, unissued, revoked, or unsupported artifacts. |
-| `0.133.0` | Boundary And Package Audit | Complete the final modern, historical, experimental, and FIPS dependency-boundary, symbol, dispatch, feature, and package-content audit. |
+| `0.133.0` | Boundary And Package Audit | Complete the final modern, legacy, experimental, and FIPS dependency-boundary, symbol, dispatch, feature, and package-content audit. |
 | `0.134.0` | Approved-Only TLS Operating Profile | Implement an internal approved-only connection profile derived from the exact validated-module service manifest and current final NIST TLS, key-strength, algorithm-transition, key-generation, and key-establishment guidance; enforce admitted version, suite, group, signature, certificate, entropy, key provenance, resumption, external PSK, and zero-RTT combinations plus aggregated mandatory per-service indicators; invoking a non-approved service terminates the connection and invalidates its approved configuration claim, while the permanent module error state remains reserved for FIPS-defined integrity, self-test, and catastrophic failures. |
 | `0.134.1` | Validated Module Manifest And Operational-Environment Selection | Generate a machine-readable immutable manifest for each validated brynja-fips-module artifact containing hashes, certificate identity and status snapshot, caveats, sunset, security-policy hash, approved services and parameter sets, self-test identity, CPU dispatch, build inputs, and tested operational environments; require exact target and runtime module-identity matching and fail closed without an applicable validated artifact. |
 | `0.134.2` | Ergonomic Brynja FIPS Facade And Misconfiguration Gate | Publish a separate no_std brynja-fips facade with obvious client and server constructors that require a validated-module handle and select the approved-only TLS profile, exact provider, DRBG, algorithms, strengths, certificate policy, resumption, PSK, and early-data rules from the manifest; expose only permitted choices, provide authoritative readiness and per-service results, prohibit a boolean Cargo fips feature, generic-provider injection, silent fallback, and any FIPS claim from ordinary brynja configuration, and compile-fail every mixed or incomplete configuration. |
@@ -283,21 +283,21 @@ Receive and send compression, post-validation closure, and cross-feature composi
 | `1.0.0-rc.1` | Exact Production Candidate | Build final artifacts once and freeze source, compiler, flags, archives, SBOM, checksums, provenance, documentation, and the pentested exact commit. |
 | `1.0.0` | First Serious Production-Ready Brynja TLS Release | Promote only the byte-identical approved candidate without rebuild, source change, metadata drift, or expanded capability claim. |
 
-## Independent Historical Package Sequence
+## Independent Legacy Package Sequence
 
-Each historical crate uses its own SemVer `0.N.0` line. TLS 1.1, TLS 1.0,
+Each legacy crate uses its own SemVer `0.N.0` line. TLS 1.1, TLS 1.0,
 SSL 3, SSL 2, WTLS, PCT, and SNP separately pass source, codec, state,
 primitive, client, optional server, containment, and external audit/pentest
-stages. SSL 1 remains research-only and unpublished. Historical work never
+stages. SSL 1 remains research-only and unpublished. Legacy work never
 blocks or inherits modern `1.0.0`.
 
-| Historical stage | Exclusive scope |
+| Legacy stage | Exclusive scope |
 | --- | --- |
 | `H0.1.0` | Authenticate sources and rights, track errata, publish conspicuous insecurity warnings, and define the protocol-specific threat model. |
 | `H0.1.1` | Freeze a per-protocol machine-readable cipher-suite, compression, extension, message, certificate, key-format, and primitive admission register from the authenticated source closure; distinguish implemented interoperability subsets from rejected or research-only surfaces and prohibit an unspecified weak primitive from entering H0.4.0. |
 | `H0.2.0` | Implement only the protocol-specific bounded wire codec. |
 | `H0.3.0` | Implement isolated state with no shared modern configuration, negotiation, credentials, caches, tickets, paths, or fallback. |
-| `H0.4.0` | Bind audited shared primitives and isolate required weak primitives in a historical-only crypto package. |
+| `H0.4.0` | Bind audited shared primitives and isolate required weak primitives in a legacy-only crypto package. |
 | `H0.5.0` | Complete controlled client-only interoperability and containment evidence. |
 | `H0.6.0` | Add server interoperability only when separately justified, with amplification and hostile-load review. |
 | `H0.7.0` | Require separate listeners, paths, policy, credentials, storage, diagnostics, and process containment. |

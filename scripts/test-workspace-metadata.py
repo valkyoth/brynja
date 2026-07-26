@@ -53,19 +53,34 @@ def main() -> int:
         raise AssertionError(f"workspace validator rejected baseline: {accepted.stderr}")
 
     ambiguous_name = copy.deepcopy(baseline)
-    historical = next(
+    legacy = next(
         package
         for package in ambiguous_name["packages"]
-        if package["name"] == "brynja-historical-ssl2"
+        if package["name"] == "brynja-legacy-ssl2"
     )
-    historical["name"] = "brynja-ssl2"
-    require_rejection(ambiguous_name, "an ambiguously named historical crate")
+    legacy["name"] = "brynja-ssl2"
+    require_rejection(ambiguous_name, "an ambiguously named legacy crate")
+
+    deprecated_name = copy.deepcopy(baseline)
+    legacy = next(
+        package
+        for package in deprecated_name["packages"]
+        if package["name"] == "brynja-legacy-ssl2"
+    )
+    legacy["name"] = "brynja-historical-ssl2"
+    require_rejection(deprecated_name, "the deprecated historical prefix")
 
     modern_leak = copy.deepcopy(baseline)
     node(modern_leak, "brynja")["deps"].append(
-        {"pkg": package_id(modern_leak, "brynja-historical-ssl2")}
+        {"pkg": package_id(modern_leak, "brynja-legacy-ssl2")}
     )
-    require_rejection(modern_leak, "a modern-to-historical dependency")
+    require_rejection(modern_leak, "a modern-to-legacy dependency")
+
+    research_leak = copy.deepcopy(baseline)
+    node(research_leak, "brynja")["deps"].append(
+        {"pkg": package_id(research_leak, "brynja-research-ssl1")}
+    )
+    require_rejection(research_leak, "a modern-to-research dependency")
 
     missing_engine = copy.deepcopy(baseline)
     tls12 = package_id(missing_engine, "brynja-tls12")

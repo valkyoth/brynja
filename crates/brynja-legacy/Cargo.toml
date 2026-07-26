@@ -1,0 +1,33 @@
+[package]
+name = "brynja-legacy"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Explicit facade for isolated legacy transport-security protocols"
+publish = false
+
+[features]
+default = []
+tls11 = ["dep:brynja-legacy-tls11"]
+tls10 = ["dep:brynja-legacy-tls10"]
+ssl3 = ["dep:brynja-legacy-ssl3"]
+ssl2 = ["dep:brynja-legacy-ssl2"]
+wtls = ["dep:brynja-legacy-wtls"]
+pct = ["dep:brynja-legacy-pct"]
+snp = ["dep:brynja-legacy-snp"]
+
+[dependencies]
+brynja-legacy-tls11 = { workspace = true, optional = true }
+brynja-legacy-tls10 = { workspace = true, optional = true }
+brynja-legacy-ssl3 = { workspace = true, optional = true }
+brynja-legacy-ssl2 = { workspace = true, optional = true }
+brynja-legacy-wtls = { workspace = true, optional = true }
+brynja-legacy-pct = { workspace = true, optional = true }
+brynja-legacy-snp = { workspace = true, optional = true }
+
+[lints]
+workspace = true

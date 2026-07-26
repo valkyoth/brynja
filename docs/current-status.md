@@ -2,10 +2,10 @@
 
 Status: repository foundation implemented; awaiting pentest
 
-Brynja has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or historical
+Brynja has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The workspace compiles only to prove the intended
-package graph and isolation boundaries: historical engines use explicit
-`brynja-historical-*` names, while the evergreen `brynja-tls` facade reaches
+package graph and isolation boundaries: legacy engines use explicit
+`brynja-legacy-*` names, while the evergreen `brynja-tls` facade reaches
 separate TLS 1.2 and TLS 1.3 engine packages. Do not use it for network
 security.
 Brynja is not FIPS 140-3 validated and no current package, feature, build,

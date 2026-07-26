@@ -1,12 +1,12 @@
 # number URL role
 2104 https://www.rfc-editor.org/rfc/rfc2104.txt hmac
 2119 https://www.rfc-editor.org/rfc/rfc2119.txt normative-language
-2246 https://www.rfc-editor.org/rfc/rfc2246.txt tls-10-historical
+2246 https://www.rfc-editor.org/rfc/rfc2246.txt tls-10-legacy
 3279 https://www.rfc-editor.org/rfc/rfc3279.txt pkix-algorithm-identifiers
 3986 https://www.rfc-editor.org/rfc/rfc3986.txt uri
 4055 https://www.rfc-editor.org/rfc/rfc4055.txt pkix-rsa-algorithm-identifiers
 4231 https://www.rfc-editor.org/rfc/rfc4231.txt hmac-vectors
-4346 https://www.rfc-editor.org/rfc/rfc4346.txt tls-11-historical
+4346 https://www.rfc-editor.org/rfc/rfc4346.txt tls-11-legacy
 5077 https://www.rfc-editor.org/rfc/rfc5077.txt tls-12-session-tickets-obsoleted-baseline
 5116 https://www.rfc-editor.org/rfc/rfc5116.txt aead-interface
 5246 https://www.rfc-editor.org/rfc/rfc5246.txt tls-12-obsoleted-baseline
@@ -27,8 +27,8 @@
 5929 https://www.rfc-editor.org/rfc/rfc5929.txt tls-channel-bindings
 5958 https://www.rfc-editor.org/rfc/rfc5958.txt asymmetric-key-packages
 6066 https://www.rfc-editor.org/rfc/rfc6066.txt tls-extensions
-6101 https://www.rfc-editor.org/rfc/rfc6101.txt ssl-30-historical
-6151 https://www.rfc-editor.org/rfc/rfc6151.txt md5-hmac-md5-historical-security
+6101 https://www.rfc-editor.org/rfc/rfc6101.txt ssl-30-legacy
+6151 https://www.rfc-editor.org/rfc/rfc6151.txt md5-hmac-md5-legacy-security
 6176 https://www.rfc-editor.org/rfc/rfc6176.txt ssl-20-prohibition
 6347 https://www.rfc-editor.org/rfc/rfc6347.txt dtls-12
 6520 https://www.rfc-editor.org/rfc/rfc6520.txt tls-dtls-heartbeat-explicit-exclusion

@@ -120,7 +120,7 @@ brynja-proof-harness
 
 They can still be public and used by contributors, CI, pentesters, and auditors.
 
-4. What “historical protocols remain separate” means
+4. What “legacy protocols remain separate” means
 
 It means separation at four levels:
 
@@ -131,24 +131,24 @@ Separate runtime connection path
 
 For example:
 
-brynja-historical-ssl3
-brynja-historical-ssl2
-brynja-historical-tls10
-brynja-historical-tls11
-brynja-historical-wtls
-brynja-historical-pct
-brynja-historical-snp
+brynja-legacy-ssl3
+brynja-legacy-ssl2
+brynja-legacy-tls10
+brynja-legacy-tls11
+brynja-legacy-wtls
+brynja-legacy-pct
+brynja-legacy-snp
 
 Someone needing SSL 3.0 could write:
 
 [dependencies]
 brynja = "2"
-brynja-historical-ssl3 = "2"
+brynja-legacy-ssl3 = "2"
 
 Then:
 
 use brynja::tls13::Client as ModernClient;
-use brynja_historical_ssl3::Client as HistoricalSsl3Client;
+use brynja_legacy_ssl3::Client as LegacySsl3Client;
 
 Both are public Brynja crates. They simply cannot be confused with one another.
 
@@ -158,7 +158,7 @@ Under my strictest recommendation: no.
 
 The user would explicitly add:
 
-brynja-historical-ssl3 = "2"
+brynja-legacy-ssl3 = "2"
 
 rather than:
 
@@ -179,50 +179,50 @@ With a separate package, the graph clearly shows:
 
 my-application
 ├── brynja
-└── brynja-historical-ssl3
+└── brynja-legacy-ssl3
 
-There is no ambiguity about historical code being present.
+There is no ambiguity about legacy code being present.
 
-6. The ergonomic compromise: brynja-historical
+6. The ergonomic compromise: brynja-legacy
 
 A good compromise would be to publish a second facade:
 
 brynja              # Modern production facade
-brynja-historical   # Explicit historical facade
+brynja-legacy   # Explicit legacy facade
 
 A user could then write:
 
 [dependencies]
 brynja = { version = "2", features = ["tls13", "tls12"] }
 
-brynja-historical = {
+brynja-legacy = {
     version = "2",
     default-features = false,
     features = ["ssl3"]
 }
 
-The historical facade would internally select the relevant package:
+The legacy facade would internally select the relevant package:
 
 [features]
-ssl3 = ["dep:brynja-historical-ssl3"]
-ssl2 = ["dep:brynja-historical-ssl2"]
-tls10 = ["dep:brynja-historical-tls10"]
-tls11 = ["dep:brynja-historical-tls11"]
-wtls = ["dep:brynja-historical-wtls"]
-pct = ["dep:brynja-historical-pct"]
-snp = ["dep:brynja-historical-snp"]
+ssl3 = ["dep:brynja-legacy-ssl3"]
+ssl2 = ["dep:brynja-legacy-ssl2"]
+tls10 = ["dep:brynja-legacy-tls10"]
+tls11 = ["dep:brynja-legacy-tls11"]
+wtls = ["dep:brynja-legacy-wtls"]
+pct = ["dep:brynja-legacy-pct"]
+snp = ["dep:brynja-legacy-snp"]
 
 Then users get a convenient unified namespace:
 
 use brynja::tls13::Client;
-use brynja_historical::ssl3::Client as Ssl3Client;
+use brynja_legacy::ssl3::Client as Ssl3Client;
 
 I think this gives you the best balance:
 
 brynja
 └── Modern, production-safe protocols
 
-brynja-historical
+brynja-legacy
 ├── TLS 1.1
 ├── TLS 1.0
 ├── SSL 3.0
@@ -231,9 +231,9 @@ brynja-historical
 ├── PCT
 └── SNP
 
-Everything remains public and available on crates.io, but a normal cargo add brynja never introduces historical protocols.
+Everything remains public and available on crates.io, but a normal cargo add brynja never introduces legacy protocols.
 
-7. Could the main crate still offer historical features?
+7. Could the main crate still offer legacy features?
 
 Technically, yes:
 
@@ -241,43 +241,43 @@ Technically, yes:
 brynja = {
     version = "2",
     default-features = false,
-    features = ["tls13", "historical-ssl3"]
+    features = ["tls13", "legacy-ssl3"]
 }
 
 And Brynja could implement:
 
 [dependencies]
-brynja-historical-ssl3 = { version = "2", optional = true }
+brynja-legacy-ssl3 = { version = "2", optional = true }
 
 [features]
-historical-ssl3 = ["dep:brynja-historical-ssl3"]
+legacy-ssl3 = ["dep:brynja-legacy-ssl3"]
 
 with:
 
-#[cfg(feature = "historical-ssl3")]
-pub mod historical {
-    pub use brynja_historical_ssl3 as ssl3;
+#[cfg(feature = "legacy-ssl3")]
+pub mod legacy {
+    pub use brynja_legacy_ssl3 as ssl3;
 }
 
 That is possible and would not automatically make the normal TLS engine negotiate SSL 3.0, provided the APIs remain completely separate.
 
-However, I would still prefer brynja-historical because:
+However, I would still prefer brynja-legacy because:
 
 cargo add brynja has an unambiguous modern-security meaning.
 --all-features on brynja does not pull in every broken protocol.
 Transitive dependencies cannot enable SSL code inside the modern facade.
 Modern documentation remains focused.
-Security scanners can identify historical use from package names.
-Dependency policies can reject brynja-historical-ssl3 without rejecting modern Brynja.
+Security scanners can identify legacy use from package names.
+Dependency policies can reject brynja-legacy-ssl3 without rejecting modern Brynja.
 Future audits can certify the modern package without including SSL.
-Removing or changing a historical protocol does not disturb the modern facade.
+Removing or changing a legacy protocol does not disturb the modern facade.
 8. Separate does not mean the user cannot combine them
 
 A migration tool can deliberately use both:
 
 [dependencies]
 brynja = { version = "2", features = ["tls13"] }
-brynja-historical = {
+brynja-legacy = {
     version = "2",
     default-features = false,
     features = ["ssl3"]
@@ -288,7 +288,7 @@ For example:
 let modern_listener = brynja::tls13::Server::new(modern_config);
 
 let old_device_listener =
-    brynja_historical::ssl3::Server::new(historical_config);
+    brynja_legacy::ssl3::Server::new(legacy_config);
 
 But this must be prohibited:
 
@@ -304,9 +304,9 @@ Instead:
 
 let modern = brynja::tls::ServerConfig::tls13(...);
 
-let historical =
-    brynja_historical::ssl3::ServerConfig::new(
-        HistoricalAuthority::for_controlled_interop(...)
+let legacy =
+    brynja_legacy::ssl3::ServerConfig::new(
+        LegacyAuthority::for_controlled_interop(...)
     );
 
 There should be:
@@ -334,20 +334,20 @@ Published modern crates
 ├── brynja-dtls
 └── brynja-platform
 
-Published historical facade
-└── brynja-historical
+Published legacy facade
+└── brynja-legacy
 
-Published historical implementation crates
-├── brynja-historical-tls11
-├── brynja-historical-tls10
-├── brynja-historical-ssl3
-├── brynja-historical-ssl2
-├── brynja-historical-wtls
-├── brynja-historical-pct
-└── brynja-historical-snp
+Published legacy implementation crates
+├── brynja-legacy-tls11
+├── brynja-legacy-tls10
+├── brynja-legacy-ssl3
+├── brynja-legacy-ssl2
+├── brynja-legacy-wtls
+├── brynja-legacy-pct
+└── brynja-legacy-snp
 
 Public but unpublished repository packages
-├── brynja-historical-ssl1-research
+├── brynja-research-ssl1
 ├── brynja-test-support
 ├── brynja-fuzz
 ├── brynja-interop
@@ -356,7 +356,7 @@ Public but unpublished repository packages
 
 So the answer to your main question is:
 
-Yes, users can absolutely use SSL 3.0 when they genuinely need it. But I would make them opt in through brynja-historical-ssl3 or brynja-historical, rather than enabling SSL 3.0 as an ordinary feature of the main modern brynja package.
+Yes, users can absolutely use SSL 3.0 when they genuinely need it. But I would make them opt in through brynja-legacy-ssl3 or brynja-legacy, rather than enabling SSL 3.0 as an ordinary feature of the main modern brynja package.
 
 10. Final package-lifecycle refinement
 
@@ -366,9 +366,9 @@ implementations live in `brynja-tls12`, `brynja-tls13`, and
 `brynja-tls13-handshake`; a future TLS generation receives a new package and an
 independent implementation and audit line.
 
-An older TLS generation does not become historical merely because a successor
+An older TLS generation does not become legacy merely because a successor
 exists. If standards or cryptographic evidence later require retirement, a
 dedicated release removes it from every modern dependency and negotiation path.
 Only then may controlled interoperability continue through a newly isolated
-`brynja-historical-tls1N` package. The former modern crate is deprecated and
-never forwards silently into historical code.
+`brynja-legacy-tls1N` package. The former modern crate is deprecated and
+never forwards silently into legacy code.

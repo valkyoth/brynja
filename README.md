@@ -1,6 +1,6 @@
 <p align="center">
   <b>Security-first, dependency-free, no_std TLS in Rust.</b><br>
-  Built in small audited releases with strict modern/historical protocol isolation.
+  Built in small audited releases with strict modern/legacy protocol isolation.
 </p>
 
 <div align="center">
@@ -45,15 +45,15 @@ brynja = "0.1"
 
 ## Design Boundaries
 
-- The modern `brynja` facade can never enable SSL or other historical
+- The modern `brynja` facade can never enable SSL or other legacy
   protocols through its features.
-- Historical implementations live in explicitly named packages and use
+- Legacy implementations live in explicitly named packages and use
   separate APIs, state, configuration, negotiation, caches, and ticket keys.
-- Every historical engine uses a `brynja-historical-*` package name so its
+- Every legacy engine uses a `brynja-legacy-*` package name so its
   presence is obvious in manifests, lockfiles, SBOMs, and policy reports.
 - `brynja-tls` is an evergreen facade and one-pass router over independently
   versioned modern TLS engines; a new TLS generation does not redefine an
-  existing engine package or automatically make its predecessor historical.
+  existing engine package or automatically make its predecessor legacy.
 - Runtime and build dependencies are forbidden. Any future exception requires
   a dedicated adapter crate, written admission review, tests, and release gate.
 - Every production crate is `no_std` by default. Platform services enter
@@ -86,9 +86,13 @@ brynja = "0.1"
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| `brynja-historical` | Opt-in historical facade; no default features | Boundary only |
-| `brynja-historical-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
+| `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
+| `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | Repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
+
+See the [legacy protocol plan](https://github.com/valkyoth/brynja/blob/main/docs/LEGACY_PROTOCOL_PLAN.md)
+for the independent warning, containment, audit, and pentest line required for
+every obsolete protocol.
 
 ## Platform Policy
 
@@ -111,7 +115,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Third-party crates | Forbidden |
 | Unsafe Rust | Forbidden until a versioned, audited exception is approved |
 | Default networking | None |
-| Historical protocols in `brynja` | Impossible by package boundary |
+| Legacy protocols in `brynja` | Impossible by package boundary |
 | FIPS 140-3 status | Planned Level 1 software-module path; not validated |
 | Production readiness | Not before an exact reviewed `1.0.0-rc.N` candidate |
 

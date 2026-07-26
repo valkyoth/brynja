@@ -44,10 +44,10 @@ brynja-tls13-handshake = { path = "crates/brynja-tls13-handshake", version = "=0
 brynja-dtls = { path = "crates/brynja-dtls", version = "=0.1.0" }
 brynja-platform = { path = "crates/brynja-platform", version = "=0.1.0" }
 brynja-quic-tls = { path = "crates/brynja-quic-tls", version = "=0.1.0" }
-brynja-historical-pct = { path = "crates/brynja-historical-pct", version = "=0.1.0" }
-brynja-historical-snp = { path = "crates/brynja-historical-snp", version = "=0.1.0" }
-brynja-historical-ssl2 = { path = "crates/brynja-historical-ssl2", version = "=0.1.0" }
-brynja-historical-ssl3 = { path = "crates/brynja-historical-ssl3", version = "=0.1.0" }
-brynja-historical-tls10 = { path = "crates/brynja-historical-tls10", version = "=0.1.0" }
-brynja-historical-tls11 = { path = "crates/brynja-historical-tls11", version = "=0.1.0" }
-brynja-historical-wtls = { path = "crates/brynja-historical-wtls", version = "=0.1.0" }
+brynja-legacy-pct = { path = "crates/brynja-legacy-pct", version = "=0.1.0" }
+brynja-legacy-snp = { path = "crates/brynja-legacy-snp", version = "=0.1.0" }
+brynja-legacy-ssl2 = { path = "crates/brynja-legacy-ssl2", version = "=0.1.0" }
+brynja-legacy-ssl3 = { path = "crates/brynja-legacy-ssl3", version = "=0.1.0" }
+brynja-legacy-tls10 = { path = "crates/brynja-legacy-tls10", version = "=0.1.0" }
+brynja-legacy-tls11 = { path = "crates/brynja-legacy-tls11", version = "=0.1.0" }
+brynja-legacy-wtls = { path = "crates/brynja-legacy-wtls", version = "=0.1.0" }

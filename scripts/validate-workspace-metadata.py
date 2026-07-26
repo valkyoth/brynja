@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 
-AMBIGUOUS_HISTORICAL_NAMES = {
+AMBIGUOUS_LEGACY_NAMES = {
     "brynja-pct",
     "brynja-snp",
     "brynja-ssl1-research",
@@ -20,8 +20,12 @@ AMBIGUOUS_HISTORICAL_NAMES = {
 }
 
 
-def is_historical(name: str) -> bool:
-    return name == "brynja-historical" or name.startswith("brynja-historical-")
+def is_legacy(name: str) -> bool:
+    return name == "brynja-legacy" or name.startswith("brynja-legacy-")
+
+
+def is_restricted(name: str) -> bool:
+    return is_legacy(name) or name.startswith("brynja-research-")
 
 
 def reachable_names(
@@ -48,9 +52,16 @@ def main() -> int:
     document = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
     packages = {package["id"]: package for package in document["packages"]}
     names = {package["name"]: package_id for package_id, package in packages.items()}
-    ambiguous = sorted(AMBIGUOUS_HISTORICAL_NAMES.intersection(names))
+    ambiguous = sorted(AMBIGUOUS_LEGACY_NAMES.intersection(names))
     if ambiguous:
-        raise ValueError(f"historical package lacks explicit prefix: {ambiguous}")
+        raise ValueError(f"legacy package lacks explicit prefix: {ambiguous}")
+    deprecated = sorted(
+        name
+        for name in names
+        if name == "brynja-historical" or name.startswith("brynja-historical-")
+    )
+    if deprecated:
+        raise ValueError(f"deprecated historical package name remains: {deprecated}")
 
     for package in packages.values():
         if package.get("source") is not None:
@@ -71,9 +82,9 @@ def main() -> int:
         for node in resolve["nodes"]
     }
     modern = reachable_names("brynja", names, packages, edges)
-    leaked = sorted(name for name in modern if is_historical(name))
+    leaked = sorted(name for name in modern if is_restricted(name))
     if leaked:
-        raise ValueError(f"modern facade reaches historical packages: {leaked}")
+        raise ValueError(f"modern facade reaches legacy or research packages: {leaked}")
 
     router = reachable_names("brynja-tls", names, packages, edges)
     required_router = {"brynja-tls", "brynja-tls12", "brynja-tls13"}
@@ -90,7 +101,7 @@ def main() -> int:
         raise ValueError("QUIC does not reach the recordless TLS 1.3 handshake")
 
     print(
-        "workspace has zero external dependencies and preserves historical "
+        "workspace has zero external dependencies and preserves legacy "
         "and version-specific TLS isolation"
     )
     return 0

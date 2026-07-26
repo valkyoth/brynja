@@ -21,7 +21,7 @@ Requirements:
   replacement or update;
 - every normative requirement must eventually map to code, a test, a documented
   non-goal, or an explicit future milestone;
-- obsolete RFCs are retained only with an exact compatibility or historical
+- obsolete RFCs are retained only with an exact compatibility or legacy
   role and can never override a current specification;
 - RFC text never enters crates.io packages or the project's software license;
 - non-RFC PDFs/specifications default to local-only until redistribution rights

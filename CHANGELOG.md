@@ -8,6 +8,6 @@ Keep a Changelog and Semantic Versioning.
 ### Added
 
 - Security-first, dependency-free, `no_std` workspace foundation.
-- Modern and historical protocol package boundaries.
+- Modern and legacy protocol package boundaries.
 - Standards provenance, toolchain, platform, and release planning policies.
 

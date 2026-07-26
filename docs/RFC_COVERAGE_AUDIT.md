@@ -12,12 +12,12 @@ optional facility promised by the version and release plans with:
 - each base RFC's current updated-by and obsoleted-by closure;
 - normative language, protocol invariants, security considerations, registries,
   and algorithm or extension identifiers;
-- current compatibility baselines needed for TLS 1.2 and historical packages;
-- explicit caller-owned, rejected, historical-only, and future surfaces.
+- current compatibility baselines needed for TLS 1.2 and legacy packages;
+- explicit caller-owned, rejected, legacy-only, and future surfaces.
 
 The repository now locks 103 RFCs. Fifty-three were added by this audit. The source
 ledger deliberately retains obsolete documents only when current specifications
-require compatibility behavior or an isolated historical package needs them.
+require compatibility behavior or an isolated legacy package needs them.
 
 This document records planning coverage, not protocol conformance. v0.3.2
 through v0.3.5 must later extract every applicable normative statement into
@@ -44,7 +44,7 @@ tests, and evidence as their owning milestones land.
 | HPKE | RFC 9180 | v0.138.0-v0.139.1 | Gap closed: Context.Export, export-only policy, ordered delivery, loss invalidation, role separation, unsupported modes, and complete context destruction are explicit. |
 | ECH and DNS bootstrap boundary | RFC 9180, RFC 9460, RFC 9848, RFC 9849 | v0.140.0-v0.143.0 | Covered. DNS resolution and caching remain caller-owned; hostile ECHConfigList parsing, provenance, retry, and downgrade policy remain protocol-owned. |
 | Raw public keys, delegated credentials, record size, and certificate compression | RFC 7250, RFC 8449, RFC 8879, RFC 9345 | v0.136.0-v0.137.0, v0.144.0-v0.146.1 | Covered with distinct trust, authorization, transcript, algorithm-provider, and resource boundaries. |
-| Historical TLS and SSL | RFC 2246, RFC 4346, RFC 6101, RFC 6151 plus authenticated local-only SSL, WTLS, PCT, and SNP sources | independent H0.1.0-H0.8.0 lines | Gap closed: H0.1.1 now freezes each package's exact cipher and protocol-surface subset before any weak primitive or codec work. |
+| Legacy TLS and SSL | RFC 2246, RFC 4346, RFC 6101, RFC 6151 plus authenticated local-only SSL, WTLS, PCT, and SNP sources | independent H0.1.0-H0.8.0 lines | Gap closed: H0.1.1 now freezes each package's exact cipher and protocol-surface subset before any weak primitive or codec work. |
 
 ## Explicitly Rejected Or Caller-Owned Surfaces
 
@@ -75,7 +75,7 @@ The following are deliberate boundaries rather than omissions:
   bytes, failure behavior, and artifact invalidation.
 - `id-alg-unsigned` certificates are never accepted in a signature-verification
   context.
-- Historical packages implement only the exact H0.1.1 admitted interoperability
+- Legacy packages implement only the exact H0.1.1 admitted interoperability
   subset; they do not imply every cipher ever registered for that protocol.
 
 ## Reviewed Update-Chain Exclusions
@@ -108,5 +108,5 @@ inapplicable document. The following direct updates were reviewed and excluded:
 - Verified errata and every later updated-by, obsoleted-by, BCP, NIST, or CMVP
   change require an applicability decision; a source update never silently
   changes an already reviewed implementation baseline.
-- Historical non-RFC sources still require exact provenance, hashes, rights
+- Legacy non-RFC sources still require exact provenance, hashes, rights
   review, and per-protocol cipher decisions before implementation.

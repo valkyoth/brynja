@@ -42,7 +42,7 @@ use-after-failure.
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
-- modern/historical package and runtime isolation;
+- modern/legacy package and runtime isolation;
 - deterministic builds, pinned CI actions, zero dependencies, SBOMs, and
   exact-commit pentest evidence.
 - machine-readable protocol-surface classification so new or changed standards

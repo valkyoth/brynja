@@ -6,11 +6,13 @@ Rust source files must remain at or below 500 lines, including tests and module
 documentation. New code should split around 450 lines. Splits follow security
 and ownership boundaries, not arbitrary line counts.
 
-The modern facade may depend only on modern production crates. Historical
-packages may reuse reviewed primitive crates but may not be dependencies,
-features, modules, or fallback paths of `brynja`. Repository-only packages
-must remain unpublished. Scripts check the dependency graph, manifest policy,
-README synchronization, and source-file lengths.
+The modern facade may depend only on modern production crates. Every historical
+engine is named `brynja-historical-<protocol>` so risk is visible in package
+metadata without inspecting source or features. Historical packages may reuse
+reviewed primitive crates but may not be dependencies, features, modules, or
+fallback paths of `brynja`. Repository-only packages must remain unpublished.
+Scripts check the dependency graph, manifest policy, README synchronization,
+and source-file lengths.
 
 RFC 9850 key logging belongs only to a separately compiled, unpublished
 test-support artifact. No production crate, facade feature, default build,
@@ -19,11 +21,24 @@ labels, formatting code, callbacks, environment lookup, or secret-export hook.
 
 Protocol-facing capability and effect contracts belong in upstream `no_std`
 interfaces such as `brynja-core`. `brynja-platform` is downstream and may
-implement them, but TLS, QUIC TLS, and DTLS must not depend on it. A planned
-`brynja-tls-handshake` crate owns the single record-independent TLS 1.3
-handshake used by stream TLS and QUIC TLS. DTLS may reuse reviewed codecs,
+implement them, but TLS, QUIC TLS, and DTLS must not depend on it. The
+`brynja-tls` package is the evergreen facade and one-pass router; it does not
+own version-specific protocol state machines. `brynja-tls12` owns the hardened
+TLS 1.2 engine. `brynja-tls13` owns TLS 1.3 stream records and adapts the
+`brynja-tls13-handshake` record-independent state machine that is also consumed
+by QUIC TLS. A future TLS generation receives its own version-named package and
+cannot alter an older engine in place. DTLS may reuse reviewed codecs,
 transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
+
+Supersession alone never makes a TLS version historical. Reclassification needs
+a dedicated numbered security-boundary release, standards and cryptographic
+evidence, removal from every modern dependency and negotiation path, and a
+clean graph audit. Any justified controlled-interoperability continuation moves
+to a newly named `brynja-historical-tls1N` package with independent types,
+configuration, state, credentials, caches, tickets, audit, pentest, and SemVer.
+The formerly modern package receives an explicit deprecation release and may
+never become a hidden forwarding dependency to the historical package.
 
 The bounded SecurityEvent schema is an upstream `no_std` interface owned with
 the other Sans-I/O effects. Engines and providers emit caller-drained actions;

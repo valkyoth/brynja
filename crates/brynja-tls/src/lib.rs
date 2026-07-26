@@ -1,7 +1,9 @@
-//! Modern TLS 1.3 and TLS 1.2 state machines for Brynja.
+//! Evergreen modern TLS facade and one-pass version router for Brynja.
 //!
 //! This package is a compile-time boundary established by Brynja 0.1.0.
 //! Protocol or cryptographic functionality is not implemented yet.
+//! Version-specific engines remain in separate packages so a future TLS
+//! generation can be added without turning this facade into a TLS 1.3 API.
 
 #![no_std]
 

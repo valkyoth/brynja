@@ -16,8 +16,7 @@ default = []
 
 [dependencies]
 brynja-core = { workspace = true }
-brynja-crypto = { workspace = true }
-brynja-pki = { workspace = true }
+brynja-tls13-handshake = { workspace = true }
 
 [lints]
 workspace = true

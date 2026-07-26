@@ -29,13 +29,30 @@ symbolic proofs, limb-count-parameterized proofs, reduced-width exhaustive
 models, and production-width vector or differential evidence; residual gaps
 remain explicit and reduced-width evidence never claims full-width equivalence.
 
+## TLS Package And Retirement Rule
+
+`brynja-tls` remains the evergreen public facade and one-pass router.
+`brynja-tls12`, `brynja-tls13`, and each later admitted TLS generation own
+separate version-specific engines; record-independent TLS 1.3 state is isolated
+in `brynja-tls13-handshake` for stream TLS and QUIC. Adding a TLS generation
+requires a new package, requirements closure, implementation sequence, engine
+audit, and router integration and audit milestones.
+
+A successor does not automatically make an older TLS generation historical.
+Retirement requires a newly added numbered security-boundary milestone backed
+by current standards and cryptographic evidence. It removes the engine from all
+modern graphs and negotiation before any controlled-interoperability package is
+created. Any continuation starts a separate
+`brynja-historical-tls1N` SemVer, warning, audit, and pentest line; the former
+modern package is explicitly deprecated and never forwards to historical code.
+
 ## Phase 0: Repository, Effects, Memory, And Wire Foundations
 
 Generated standards scope and upstream dependency direction precede implementation.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
-| `0.1.0` | Workspace Foundation | Preserve the existing workspace foundation with no cryptographic or protocol security claim. |
+| `0.1.0` | Workspace Foundation | Preserve the explicit `brynja-historical-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim. |
 | `0.2.0` | Release And Isolation Enforcement | Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and historical isolation fixtures, and document protected release controls. |
 | `0.3.0` | Requirements And Standards Source Ledger | Generate the normative source ledger from every algorithm, encoding, extension, protocol, validation, and operational milestone; close current RFC updated-by and obsoleted-by chains, record errata decisions and IANA snapshots, distinguish current authorities from compatibility baselines, and require the final ECDHE-ML-KEM group RFC and code points before admission. |
 | `0.3.1` | Machine-Readable Protocol Surface Decision Register | Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, historical-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, historical-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts. |
@@ -119,9 +136,9 @@ Shared handshake ownership, separate negotiation policy, audited engines, and fi
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
-| `0.61.0` | Shared Recordless TLS Handshake Boundary | Create an upstream no_std brynja-tls-handshake crate containing the single record-independent TLS 1.3 handshake state machine consumed by brynja-tls and brynja-quic-tls; stream TLS owns records, QUIC owns transport, and DTLS may reuse codecs, transcript, certificate and key-schedule components but retains its own state machine, epochs, fragmentation, and retransmission. |
+| `0.61.0` | Shared Recordless TLS 1.3 Handshake Boundary | Implement and freeze the upstream no_std brynja-tls13-handshake crate containing the single record-independent TLS 1.3 handshake state machine consumed by brynja-tls13 and brynja-quic-tls; brynja-tls13 owns stream records, QUIC owns transport, brynja-tls reaches it only through the version-specific engine, and DTLS may reuse codecs, transcript, certificate and key-schedule components but retains its own state machine, epochs, fragmentation, and retransmission. |
 | `0.62.0` | Internal Sans-I/O Execution Contract | Define an explicitly unstable deterministic Event-to-Action driver for consumed input, output workspace, timers, entropy and time, certificate, signature and accelerator requests, application data, backpressure, resumable operations, path tokens, cancellation, and terminal states. |
-| `0.63.0` | TLS Record Protection | Implement TLS record protection, checked sequence exhaustion, inner content-type and padding validation, transactional state changes, and fragmentation boundaries without performing protocol selection. |
+| `0.63.0` | TLS 1.3 Record Protection | Implement TLS 1.3 record protection in brynja-tls13, including checked sequence exhaustion, inner content-type and padding validation, transactional state changes, and fragmentation boundaries, without performing protocol selection or exposing the evergreen router. |
 | `0.64.0` | TLS 1.3 Handshake Codec | Implement the complete TLS 1.3 handshake codec with duplicate, ordering, extension-context, unknown and GREASE extension, compatibility ChangeCipherSpec, and resource rules. |
 | `0.65.0` | Transcript And Key Schedule | Implement transcript and key-schedule states with immediate destruction of obsolete early, handshake, master, exporter, and resumption secrets. |
 | `0.66.0` | ClientHello Construction And Offers | Implement bounded ClientHello construction and parsing for supported versions, groups, signature schemes, key shares, GREASE, SNI, ALPN, extension ordering, and exact original-byte preservation. |
@@ -143,7 +160,7 @@ Shared handshake ownership, separate negotiation policy, audited engines, and fi
 | `0.80.0` | TLS 1.3 Suite Completion | Admit only AES-128-GCM/SHA-256, AES-256-GCM/SHA-384, and ChaCha20-Poly1305/SHA-256 for the initial TLS 1.3 profile. |
 | `0.81.0` | TLS 1.3 Conformance And Interoperability | Pass official vectors, truncation and fragmentation matrices, independent peer implementations, state-model and fuzz gates, and provider fault injection. |
 | `0.82.0` | TLS 1.3 Audit Gate | Complete an external TLS 1.3 audit and clean remediation retest. |
-| `0.83.0` | TLS 1.2 Policy Boundary | Freeze an explicit TLS 1.2 ECDHE-plus-AEAD policy with Extended Main Secret required and static RSA, finite-field DH, static ECDH, CBC, MD5 and SHA-1 signing, compression, renegotiation, and automatic fallback excluded. |
+| `0.83.0` | TLS 1.2 Engine And Policy Boundary | Freeze brynja-tls12 as an engine independent from TLS 1.3 and define its explicit ECDHE-plus-AEAD policy with Extended Main Secret required and static RSA, finite-field DH, static ECDH, CBC, MD5 and SHA-1 signing, compression, renegotiation, and automatic fallback excluded. |
 | `0.83.1` | Current TLS And DTLS 1.2 Deprecation Closure | Apply RFC 9155 and RFC 10015 to TLS 1.2 and the later DTLS 1.2 profile: never offer or select MD5/SHA-1 signatures, static RSA, finite-field DH, or static DH/ECDH certificate types; generate exact alerts for forbidden peer selections and prove IANA discouraged entries cannot enter configuration, negotiation, resumption, or imported state. |
 | `0.83.2` | TLS 1.2 Feature-Freeze Enforcement | Apply RFC 9851 to TLS 1.2 only: reject post-freeze protocol, cipher, group, signature, extension, alert, and other registry additions unless they are an authenticated urgent-security correction or the RFC-permitted ALPN and exporter-label exceptions; keep DTLS decisions separate and prohibit PQC backports to TLS 1.2. |
 | `0.84.0` | TLS 1.2 PRF And Key Block | Implement the TLS 1.2 PRF, main secret, Extended Main Secret input, key-block expansion, label compatibility, separation, and length limits. |
@@ -154,7 +171,7 @@ Shared handshake ownership, separate negotiation policy, audited engines, and fi
 | `0.89.0` | TLS 1.2 Suite Completion | Admit only the six ECDSA and RSA combinations over AES-128-GCM, AES-256-GCM, and ChaCha20-Poly1305. |
 | `0.90.0` | TLS 1.2 Resumption And Interoperability | Complete TLS 1.2 stateful and stateless resumption, protocol-specific tickets, extension hardening, interop, and downgrade corpora. |
 | `0.91.0` | TLS 1.2 Audit Gate | Complete a separate TLS 1.2 external audit while retaining explicit configuration and independent disablement. |
-| `0.92.0` | Integrated One-Pass Modern TLS Router | After both TLS 1.3 and hardened TLS 1.2 engines exist, integrate symmetric one-pass routing: one server ClientHello or one client ServerHello selects exactly one highest acceptable offered engine, validates downgrade sentinels, transfers original transcript bytes and version-domain state once, and never retries another engine or crosses credentials, tickets, PSKs, caches, or secrets after failure. |
+| `0.92.0` | Integrated Evergreen One-Pass TLS Router | In brynja-tls, after brynja-tls13 and brynja-tls12 exist and pass independent audits, integrate symmetric one-pass routing: one server ClientHello or one client ServerHello selects exactly one highest acceptable offered engine, validates downgrade sentinels, transfers original transcript bytes and version-domain state once, and never retries another engine or crosses credentials, tickets, PSKs, caches, or secrets after failure; preserve an engine-registration boundary for a separately versioned future TLS generation. |
 | `0.93.0` | Modern Multi-Version Routing Audit Gate | Complete client and server cross-version, downgrade, unknown-version, transcript-preservation, domain-separation, no-retry, interoperability, differential, fuzz, and external audit campaigns for the integrated TLS router. |
 
 ## Phase 3: QUIC TLS, DTLS, And Post-Quantum Work

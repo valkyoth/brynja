@@ -12,22 +12,22 @@ publish = false
 
 [features]
 default = []
-tls11 = ["dep:brynja-tls11"]
-tls10 = ["dep:brynja-tls10"]
-ssl3 = ["dep:brynja-ssl3"]
-ssl2 = ["dep:brynja-ssl2"]
-wtls = ["dep:brynja-wtls"]
-pct = ["dep:brynja-pct"]
-snp = ["dep:brynja-snp"]
+tls11 = ["dep:brynja-historical-tls11"]
+tls10 = ["dep:brynja-historical-tls10"]
+ssl3 = ["dep:brynja-historical-ssl3"]
+ssl2 = ["dep:brynja-historical-ssl2"]
+wtls = ["dep:brynja-historical-wtls"]
+pct = ["dep:brynja-historical-pct"]
+snp = ["dep:brynja-historical-snp"]
 
 [dependencies]
-brynja-tls11 = { workspace = true, optional = true }
-brynja-tls10 = { workspace = true, optional = true }
-brynja-ssl3 = { workspace = true, optional = true }
-brynja-ssl2 = { workspace = true, optional = true }
-brynja-wtls = { workspace = true, optional = true }
-brynja-pct = { workspace = true, optional = true }
-brynja-snp = { workspace = true, optional = true }
+brynja-historical-tls11 = { workspace = true, optional = true }
+brynja-historical-tls10 = { workspace = true, optional = true }
+brynja-historical-ssl3 = { workspace = true, optional = true }
+brynja-historical-ssl2 = { workspace = true, optional = true }
+brynja-historical-wtls = { workspace = true, optional = true }
+brynja-historical-pct = { workspace = true, optional = true }
+brynja-historical-snp = { workspace = true, optional = true }
 
 [lints]
 workspace = true

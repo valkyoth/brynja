@@ -7,7 +7,8 @@ Status: foundation
 | Dependency surface | Cargo manifests and `cargo metadata` must contain no external packages |
 | Unsafe Rust | Workspace lint forbids it |
 | `no_std` | Every package declares `#![no_std]` |
-| Modern/historical isolation | Graph validator rejects historical edges into modern crates |
+| Modern/historical isolation | Graph validator requires `brynja-historical-*` engine names and rejects historical edges into modern crates |
+| TLS version isolation | Graph validator requires the evergreen router to reach separate TLS 1.2 and TLS 1.3 engines while QUIC reaches only the recordless TLS 1.3 handshake |
 | Review size | Source files over 500 lines fail checks |
 | Toolchain | Pinned stable plus explicit MSRV matrix |
 | Standards | HTTPS allowlist, immutable RFC bytes, SHA-256 lock, current update-closure audit; machine-enforced surface and normative traceability are gated at v0.3.0-v0.3.5 |

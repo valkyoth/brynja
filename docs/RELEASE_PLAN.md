@@ -33,6 +33,23 @@ Every section contains Status, Plan scope, Goal, Deliverables, Verification, and
 Exit criteria. Repository checks are additive and one stop never admits adjacent
 capability.
 
+## TLS Package And Retirement Rule
+
+`brynja-tls` remains the evergreen public facade and one-pass router.
+`brynja-tls12`, `brynja-tls13`, and each later admitted TLS generation own
+separate version-specific engines; record-independent TLS 1.3 state is isolated
+in `brynja-tls13-handshake` for stream TLS and QUIC. Adding a TLS generation
+requires a new package, requirements closure, implementation sequence, engine
+audit, and router integration and audit milestones.
+
+A successor does not automatically make an older TLS generation historical.
+Retirement requires a newly added numbered security-boundary milestone backed
+by current standards and cryptographic evidence. It removes the engine from all
+modern graphs and negotiation before any controlled-interoperability package is
+created. Any continuation starts a separate
+`brynja-historical-tls1N` SemVer, warning, audit, and pentest line; the former
+modern package is explicitly deprecated and never forwards to historical code.
+
 ## Historical Package Release Line
 
 Historical packages use independent SemVer and separately pass source, codec,
@@ -59,7 +76,7 @@ Generated requirements and upstream interfaces precede implementation.
 
 Status: awaiting pentest
 
-Plan scope: Preserve the existing workspace foundation with no cryptographic or protocol security claim.
+Plan scope: Preserve the explicit `brynja-historical-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim.
 
 Goal: complete the **Workspace Foundation** implementation stop without admitting or
 claiming adjacent capability.
@@ -2169,13 +2186,13 @@ Exit criteria:
 
 Shared handshake, separate policy, audited engines, and final routing remain ordered.
 
-### v0.61.0 - Shared Recordless TLS Handshake Boundary
+### v0.61.0 - Shared Recordless TLS 1.3 Handshake Boundary
 
 Status: planned
 
-Plan scope: Create an upstream no_std brynja-tls-handshake crate containing the single record-independent TLS 1.3 handshake state machine consumed by brynja-tls and brynja-quic-tls; stream TLS owns records, QUIC owns transport, and DTLS may reuse codecs, transcript, certificate and key-schedule components but retains its own state machine, epochs, fragmentation, and retransmission.
+Plan scope: Implement and freeze the upstream no_std brynja-tls13-handshake crate containing the single record-independent TLS 1.3 handshake state machine consumed by brynja-tls13 and brynja-quic-tls; brynja-tls13 owns stream records, QUIC owns transport, brynja-tls reaches it only through the version-specific engine, and DTLS may reuse codecs, transcript, certificate and key-schedule components but retains its own state machine, epochs, fragmentation, and retransmission.
 
-Goal: complete the **Shared Recordless TLS Handshake Boundary** implementation stop without admitting or
+Goal: complete the **Shared Recordless TLS 1.3 Handshake Boundary** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -2227,13 +2244,13 @@ Exit criteria:
 - stream TLS and QUIC share one handshake, DTLS retains independent state, and internal effects remain unstable until optional composition completes;
 - `v0.62.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.63.0 - TLS Record Protection
+### v0.63.0 - TLS 1.3 Record Protection
 
 Status: planned
 
-Plan scope: Implement TLS record protection, checked sequence exhaustion, inner content-type and padding validation, transactional state changes, and fragmentation boundaries without performing protocol selection.
+Plan scope: Implement TLS 1.3 record protection in brynja-tls13, including checked sequence exhaustion, inner content-type and padding validation, transactional state changes, and fragmentation boundaries, without performing protocol selection or exposing the evergreen router.
 
-Goal: complete the **TLS Record Protection** implementation stop without admitting or
+Goal: complete the **TLS 1.3 Record Protection** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -2880,13 +2897,13 @@ Exit criteria:
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.82.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.83.0 - TLS 1.2 Policy Boundary
+### v0.83.0 - TLS 1.2 Engine And Policy Boundary
 
 Status: planned
 
-Plan scope: Freeze an explicit TLS 1.2 ECDHE-plus-AEAD policy with Extended Main Secret required and static RSA, finite-field DH, static ECDH, CBC, MD5 and SHA-1 signing, compression, renegotiation, and automatic fallback excluded.
+Plan scope: Freeze brynja-tls12 as an engine independent from TLS 1.3 and define its explicit ECDHE-plus-AEAD policy with Extended Main Secret required and static RSA, finite-field DH, static ECDH, CBC, MD5 and SHA-1 signing, compression, renegotiation, and automatic fallback excluded.
 
-Goal: complete the **TLS 1.2 Policy Boundary** implementation stop without admitting or
+Goal: complete the **TLS 1.2 Engine And Policy Boundary** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
@@ -3210,13 +3227,13 @@ Exit criteria:
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
 - `v0.91.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.92.0 - Integrated One-Pass Modern TLS Router
+### v0.92.0 - Integrated Evergreen One-Pass TLS Router
 
 Status: planned
 
-Plan scope: After both TLS 1.3 and hardened TLS 1.2 engines exist, integrate symmetric one-pass routing: one server ClientHello or one client ServerHello selects exactly one highest acceptable offered engine, validates downgrade sentinels, transfers original transcript bytes and version-domain state once, and never retries another engine or crosses credentials, tickets, PSKs, caches, or secrets after failure.
+Plan scope: In brynja-tls, after brynja-tls13 and brynja-tls12 exist and pass independent audits, integrate symmetric one-pass routing: one server ClientHello or one client ServerHello selects exactly one highest acceptable offered engine, validates downgrade sentinels, transfers original transcript bytes and version-domain state once, and never retries another engine or crosses credentials, tickets, PSKs, caches, or secrets after failure; preserve an engine-registration boundary for a separately versioned future TLS generation.
 
-Goal: complete the **Integrated One-Pass Modern TLS Router** implementation stop without admitting or
+Goal: complete the **Integrated Evergreen One-Pass TLS Router** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:

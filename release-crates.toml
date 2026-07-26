@@ -37,6 +37,27 @@ change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
+[crates."brynja-tls12"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-tls13"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
+[crates."brynja-tls13-handshake"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "unpublished"
+publish = false
+reason = "Foundation boundary only; no protocol implementation or release approval exists."
+
 [crates."brynja-quic-tls"]
 previous_version = "unpublished"
 version = "0.1.0"
@@ -65,56 +86,56 @@ change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-tls11"]
+[crates."brynja-historical-tls11"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-tls10"]
+[crates."brynja-historical-tls10"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-ssl3"]
+[crates."brynja-historical-ssl3"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-ssl2"]
+[crates."brynja-historical-ssl2"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-wtls"]
+[crates."brynja-historical-wtls"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-pct"]
+[crates."brynja-historical-pct"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-snp"]
+[crates."brynja-historical-snp"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
 
-[crates."brynja-ssl1-research"]
+[crates."brynja-historical-ssl1-research"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "unpublished"
@@ -148,4 +169,3 @@ version = "0.1.0"
 change = "unpublished"
 publish = false
 reason = "Foundation boundary only; no protocol implementation or release approval exists."
-

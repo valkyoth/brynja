@@ -86,6 +86,9 @@ brynja-core
 brynja-crypto
 brynja-pki
 brynja-tls
+brynja-tls12
+brynja-tls13
+brynja-tls13-handshake
 brynja-quic-tls
 brynja-platform
 brynja-dtls
@@ -128,24 +131,24 @@ Separate runtime connection path
 
 For example:
 
-brynja-ssl3
-brynja-ssl2
-brynja-tls10
-brynja-tls11
-brynja-wtls
-brynja-pct
-brynja-snp
+brynja-historical-ssl3
+brynja-historical-ssl2
+brynja-historical-tls10
+brynja-historical-tls11
+brynja-historical-wtls
+brynja-historical-pct
+brynja-historical-snp
 
 Someone needing SSL 3.0 could write:
 
 [dependencies]
 brynja = "2"
-brynja-ssl3 = "2"
+brynja-historical-ssl3 = "2"
 
 Then:
 
 use brynja::tls13::Client as ModernClient;
-use brynja_ssl3::Client as HistoricalSsl3Client;
+use brynja_historical_ssl3::Client as HistoricalSsl3Client;
 
 Both are public Brynja crates. They simply cannot be confused with one another.
 
@@ -155,7 +158,7 @@ Under my strictest recommendation: no.
 
 The user would explicitly add:
 
-brynja-ssl3 = "2"
+brynja-historical-ssl3 = "2"
 
 rather than:
 
@@ -176,7 +179,7 @@ With a separate package, the graph clearly shows:
 
 my-application
 ├── brynja
-└── brynja-ssl3
+└── brynja-historical-ssl3
 
 There is no ambiguity about historical code being present.
 
@@ -201,13 +204,13 @@ brynja-historical = {
 The historical facade would internally select the relevant package:
 
 [features]
-ssl3 = ["dep:brynja-ssl3"]
-ssl2 = ["dep:brynja-ssl2"]
-tls10 = ["dep:brynja-tls10"]
-tls11 = ["dep:brynja-tls11"]
-wtls = ["dep:brynja-wtls"]
-pct = ["dep:brynja-pct"]
-snp = ["dep:brynja-snp"]
+ssl3 = ["dep:brynja-historical-ssl3"]
+ssl2 = ["dep:brynja-historical-ssl2"]
+tls10 = ["dep:brynja-historical-tls10"]
+tls11 = ["dep:brynja-historical-tls11"]
+wtls = ["dep:brynja-historical-wtls"]
+pct = ["dep:brynja-historical-pct"]
+snp = ["dep:brynja-historical-snp"]
 
 Then users get a convenient unified namespace:
 
@@ -244,16 +247,16 @@ brynja = {
 And Brynja could implement:
 
 [dependencies]
-brynja-ssl3 = { version = "2", optional = true }
+brynja-historical-ssl3 = { version = "2", optional = true }
 
 [features]
-historical-ssl3 = ["dep:brynja-ssl3"]
+historical-ssl3 = ["dep:brynja-historical-ssl3"]
 
 with:
 
 #[cfg(feature = "historical-ssl3")]
 pub mod historical {
-    pub use brynja_ssl3 as ssl3;
+    pub use brynja_historical_ssl3 as ssl3;
 }
 
 That is possible and would not automatically make the normal TLS engine negotiate SSL 3.0, provided the APIs remain completely separate.
@@ -265,7 +268,7 @@ cargo add brynja has an unambiguous modern-security meaning.
 Transitive dependencies cannot enable SSL code inside the modern facade.
 Modern documentation remains focused.
 Security scanners can identify historical use from package names.
-Dependency policies can reject brynja-ssl3 without rejecting modern Brynja.
+Dependency policies can reject brynja-historical-ssl3 without rejecting modern Brynja.
 Future audits can certify the modern package without including SSL.
 Removing or changing a historical protocol does not disturb the modern facade.
 8. Separate does not mean the user cannot combine them
@@ -324,6 +327,9 @@ Published modern crates
 ├── brynja-crypto
 ├── brynja-pki
 ├── brynja-tls
+├── brynja-tls12
+├── brynja-tls13
+├── brynja-tls13-handshake
 ├── brynja-quic-tls
 ├── brynja-dtls
 └── brynja-platform
@@ -332,16 +338,16 @@ Published historical facade
 └── brynja-historical
 
 Published historical implementation crates
-├── brynja-tls11
-├── brynja-tls10
-├── brynja-ssl3
-├── brynja-ssl2
-├── brynja-wtls
-├── brynja-pct
-├── brynja-snp
-└── brynja-ssl1-research
+├── brynja-historical-tls11
+├── brynja-historical-tls10
+├── brynja-historical-ssl3
+├── brynja-historical-ssl2
+├── brynja-historical-wtls
+├── brynja-historical-pct
+└── brynja-historical-snp
 
 Public but unpublished repository packages
+├── brynja-historical-ssl1-research
 ├── brynja-test-support
 ├── brynja-fuzz
 ├── brynja-interop
@@ -350,4 +356,19 @@ Public but unpublished repository packages
 
 So the answer to your main question is:
 
-Yes, users can absolutely use SSL 3.0 when they genuinely need it. But I would make them opt in through brynja-ssl3 or brynja-historical, rather than enabling SSL 3.0 as an ordinary feature of the main modern brynja package.
+Yes, users can absolutely use SSL 3.0 when they genuinely need it. But I would make them opt in through brynja-historical-ssl3 or brynja-historical, rather than enabling SSL 3.0 as an ordinary feature of the main modern brynja package.
+
+10. Final package-lifecycle refinement
+
+The modern `brynja-tls` package should remain an evergreen facade and one-pass
+version router rather than becoming synonymous with TLS 1.3. Version-specific
+implementations live in `brynja-tls12`, `brynja-tls13`, and
+`brynja-tls13-handshake`; a future TLS generation receives a new package and an
+independent implementation and audit line.
+
+An older TLS generation does not become historical merely because a successor
+exists. If standards or cryptographic evidence later require retirement, a
+dedicated release removes it from every modern dependency and negotiation path.
+Only then may controlled interoperability continue through a newly isolated
+`brynja-historical-tls1N` package. The former modern crate is deprecated and
+never forwards silently into historical code.

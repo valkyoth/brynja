@@ -25,6 +25,11 @@ test count, or interoperability alone never establishes that claim.
   isolated crate/module, audit, and explicit policy change are approved.
 - Modern and historical engines have separate packages, APIs, configuration,
   state machines, caches, ticket keys, and connection paths.
+- Every historical implementation package uses the
+  `brynja-historical-<protocol>` prefix so manifests, lockfiles, SBOMs, and
+  policy tools expose the risk without requiring feature inspection.
+- `brynja-tls` is an evergreen facade and one-pass modern-version router;
+  version-specific state machines remain in version-named packages.
 - Every externally controlled length, count, retry, allocation, transcript,
   certificate chain, fragment, and work unit has a caller-visible bound.
 - Production admission requires reviewed zeroization of complete owned secret
@@ -40,33 +45,41 @@ brynja
 ├── future brynja-fips-module (exact validated artifact; never a feature)
 ├── future brynja-fips (downstream approved-only selection facade)
 ├── brynja-pki
-├── future brynja-tls-handshake (shared recordless TLS 1.3 state machine)
-├── brynja-tls (stream records plus shared handshake)
-├── optional brynja-quic-tls (shared handshake plus QUIC profile)
+├── brynja-tls (evergreen facade and one-pass modern-version router)
+│   ├── brynja-tls13 (TLS 1.3 stream records and adapter)
+│   │   └── brynja-tls13-handshake (shared recordless state machine)
+│   ├── brynja-tls12 (isolated hardened TLS 1.2 engine)
+│   └── future brynja-tlsNN (one package per admitted TLS generation)
+├── optional brynja-quic-tls (TLS 1.3 handshake plus QUIC profile)
 ├── optional brynja-dtls (independent datagram state machine)
 └── optional brynja-platform (downstream implementations only)
 
 brynja-historical (never a brynja dependency)
-├── brynja-tls11
-├── brynja-tls10
-├── brynja-ssl3
-├── brynja-ssl2
-├── brynja-wtls
-├── brynja-pct
-└── brynja-snp
+├── brynja-historical-tls11
+├── brynja-historical-tls10
+├── brynja-historical-ssl3
+├── brynja-historical-ssl2
+├── brynja-historical-wtls
+├── brynja-historical-pct
+└── brynja-historical-snp
 ```
 
-`brynja-ssl1-research` is reconstruction research and can never claim secure
-transport. Repository-only test, interoperability, task, and proof packages
-are permanently excluded from normal application dependency graphs.
+`brynja-historical-ssl1-research` is reconstruction research and can never
+claim secure transport. Repository-only test, interoperability, task, and proof
+packages are permanently excluded from normal application dependency graphs.
 
 All protocol-facing capability and effect traits live in `brynja-core` or
 another upstream `no_std` interface crate. `brynja-platform` implements those
-contracts and is never a protocol-engine dependency. Stream TLS and QUIC share
-one record-independent TLS 1.3 handshake implementation; DTLS may reuse codecs,
-transcripts, certificate processing, and key-schedule components but owns its
-state machine, epochs, fragmentation, paths, and retransmission. The upstream
-interface also owns a bounded, caller-drained SecurityEvent action schema;
+contracts and is never a protocol-engine dependency. `brynja-tls` owns only the
+stable public facade, pre-routing negotiation policy, and one-pass selection
+between independently versioned modern engines. `brynja-tls13` owns TLS 1.3
+stream records and consumes `brynja-tls13-handshake`; QUIC consumes that same
+record-independent handshake without acquiring stream records or multi-version
+routing. `brynja-tls12` retains an independent hardened TLS 1.2 state machine.
+DTLS may reuse codecs, transcripts, certificate processing, and key-schedule
+components but owns its state machine, epochs, fragmentation, paths, and
+retransmission. The upstream interface also owns a bounded, caller-drained
+SecurityEvent action schema;
 protocol engines and providers emit events but cannot call logging code,
 allocate for events, block on consumers, or let observation affect state.
 Events may be explicitly untimestamped until a caller clock exists, dropped
@@ -83,6 +96,17 @@ validation. The separate `brynja-fips` facade remains outside that boundary and
 offers the easy client and server entry points, but it constructs them only from
 a certificate-bound manifest and matching validated-module handle. Ordinary
 `brynja` configuration can never acquire a FIPS claim through feature unification.
+
+A newer TLS generation does not automatically make an older generation
+historical. Admission of TLS 1.N requires a new version-specific package,
+requirements closure, audit line, and explicit router milestone. Retirement
+requires a separate numbered security-boundary milestone justified by current
+standards and cryptographic evidence. That milestone removes the engine from
+the modern graph, disables modern negotiation before any fallback can occur,
+freezes and deprecates the former modern package, and—only where controlled
+interoperability remains justified—creates a new
+`brynja-historical-tls1N` package with an independent API, warnings, audit,
+pentest, and release line. Code never changes classification silently in place.
 
 ## Implementation Order
 
@@ -123,8 +147,11 @@ a certificate-bound manifest and matching validated-module handle. Ordinary
    nonces, Must-Staple, the optional RFC 9919 SHA-256 lightweight OCSP client
    profile over caller-owned transport and cache, strictly versioned CT, path
    construction, revocation, and an independent PKI audit.
-5. Extract the shared recordless TLS handshake and exercise an unstable
-   deterministic Sans-I/O contract, then implement and audit TLS 1.3. External
+5. Implement the shared recordless TLS 1.3 handshake in
+   `brynja-tls13-handshake`, connect it to the `brynja-tls13` stream engine,
+   and exercise an unstable deterministic Sans-I/O contract before the
+   version-neutral `brynja-tls` router admits it. Then implement and audit TLS
+   1.3. External
    PSKs use RFC 9258 import and domain separation only for TLS 1.3-derived TLS,
    DTLS 1.3, and QUIC profiles whenever provisioned key material could cross
    protocol or deployment domains; apply RFC 9257 key strength, pairwise role,
@@ -132,11 +159,11 @@ a certificate-bound manifest and matching validated-module handle. Ordinary
    certificate-with-external-PSK mode. Hardened TLS 1.2 and DTLS 1.2 never gain
    PSK cipher suites. Channel binding admits only tls-exporter, with exact TLS
    1.2 and TLS 1.3 exporter constructions and typed, authorized, zeroized output.
-6. Admit and audit hardened TLS 1.2 under the current MD5/SHA-1 and obsolete
-   key-exchange deprecations and the TLS-only RFC 9851 feature freeze, require
-   the RFC 9846-renamed Extended Main Secret while preserving its wire label,
-   then integrate symmetric one-pass routing only after both target engines
-   exist; never retry another engine.
+6. Admit and audit hardened TLS 1.2 in `brynja-tls12` under the current
+   MD5/SHA-1 and obsolete key-exchange deprecations and the TLS-only RFC 9851
+   feature freeze, require the RFC 9846-renamed Extended Main Secret while
+   preserving its wire label, then integrate symmetric one-pass routing only
+   after both target engines exist; never retry another engine.
 7. Implement QUIC TLS and key-derivation ownership, separately gated QUIC
    resumption and zero-RTT, path-bound one-pass DTLS, version-specific DTLS
    CIDs, RFC 9853 return-routability checks, explicit DTLS early-data

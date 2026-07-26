@@ -2,6 +2,8 @@
 //!
 //! This package is a compile-time boundary established by Brynja 0.1.0.
 //! Protocol or cryptographic functionality is not implemented yet.
+//! It consumes the record-independent TLS 1.3 handshake package and never the
+//! stream TLS record layer or its multi-version router.
 
 #![no_std]
 

@@ -1,0 +1,18 @@
+[package]
+name = "brynja-historical-snp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Explicitly historical and insecure SNP interoperability boundary"
+publish = false
+
+[features]
+default = []
+
+
+[lints]
+workspace = true

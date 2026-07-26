@@ -7,6 +7,7 @@ scripts/check_doc_links.sh
 python3 scripts/check-release-plan.py
 scripts/test-release-plan.sh
 scripts/validate-workspace.sh
+python3 scripts/test-workspace-metadata.py
 scripts/validate-release-metadata.sh
 python3 scripts/validate-release-crates.py
 scripts/check-packages.sh

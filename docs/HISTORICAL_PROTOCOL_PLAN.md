@@ -10,6 +10,8 @@ decision.
 
 ## Universal Isolation Rules
 
+- Every engine is named `brynja-historical-<protocol>`; abbreviated names that
+  can appear modern or generally supported are prohibited.
 - No dependency, feature, re-export, version enum, configuration builder,
   negotiation range, session cache, ticket key, credential store, listener, or
   fallback path is shared with the modern facade.
@@ -22,6 +24,30 @@ decision.
   are reused.
 - Security scanners and policy engines can reject historical use by package
   name.
+
+## Future TLS Retirement
+
+A TLS generation is not historical merely because a successor is standardized.
+Multiple externally reviewed generations may remain in the modern
+`brynja-tls` router while their cryptography and deployment profiles remain
+admitted.
+
+Moving a modern generation to this plan requires a dedicated numbered
+security-boundary milestone. It must:
+
+- cite the current standards, cryptographic, ecosystem, and Brynja policy
+  evidence requiring retirement;
+- remove the version engine from `brynja-tls`, `brynja`, QUIC, FIPS, and every
+  modern feature graph before historical work begins;
+- prohibit negotiation retry, compatibility forwarding, shared types,
+  credentials, caches, tickets, PSKs, and state across the boundary;
+- issue an explicit deprecation release for the former modern package; and
+- create a new `brynja-historical-tls1N` package only when controlled
+  interoperability remains justified, starting again at the independent
+  historical sequence below.
+
+The former modern crate never changes meaning in place and never forwards to
+the historical package.
 
 ## Independent Small-Pass Sequence
 
@@ -40,11 +66,13 @@ separate admission freeze before codec work:
 | `0.7.0` | Operational containment API | separate listener/config/cache proofs and misuse tests |
 | `0.8.0` | External historical-protocol review | remediation, clean retest, release warnings, pentest |
 
-This sequence applies separately to `brynja-tls11`, `brynja-tls10`,
-`brynja-ssl3`, `brynja-ssl2`, `brynja-wtls`, `brynja-pct`, and
-`brynja-snp`; completion in one package cannot satisfy another.
+This sequence applies separately to `brynja-historical-tls11`,
+`brynja-historical-tls10`, `brynja-historical-ssl3`,
+`brynja-historical-ssl2`, `brynja-historical-wtls`,
+`brynja-historical-pct`, and `brynja-historical-snp`; completion in one package
+cannot satisfy another.
 
-`brynja-ssl1-research` stops after source/provenance reconstruction,
+`brynja-historical-ssl1-research` stops after source/provenance reconstruction,
 documentation, and parser research. It remains `publish = false`, exposes no
 secure transport API, and must not accept production credentials.
 

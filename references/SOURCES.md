@@ -29,11 +29,11 @@ bytes are pinned by LOCAL_SHA256SUMS.
 | NIST CAVP vector archives | algorithm known-answer tests | review each archive before tracking |
 | ITU-T X.690 | ASN.1 BER/CER/DER | local-only licensed standard |
 | ITU-T X.509 | certificate model | local-only licensed standard; RFC 5280 drives Internet PKI |
-| TLS 1.0, TLS 1.1, and historical SSL 3.0 RFC publications | brynja-tls10, brynja-tls11, and brynja-ssl3 baselines | tracked under `rfc/` as RFC 2246, RFC 4346, and RFC 6101; current prohibition documents remain mandatory context |
-| Original SSL 3.0 specification | historical brynja-ssl3 provenance comparison | local-only pending provenance/rights review; compare with RFC 6101 before implementation |
-| SSL 2.0 specification | historical brynja-ssl2 research | local-only pending provenance/rights review |
-| SSL 1.0 surviving material | brynja-ssl1-research only | local-only, provenance and authenticity required |
-| WAP WTLS specifications | historical brynja-wtls research | local-only pending rights review |
+| TLS 1.0, TLS 1.1, and historical SSL 3.0 RFC publications | brynja-historical-tls10, brynja-historical-tls11, and brynja-historical-ssl3 baselines | tracked under `rfc/` as RFC 2246, RFC 4346, and RFC 6101; current prohibition documents remain mandatory context |
+| Original SSL 3.0 specification | historical brynja-historical-ssl3 provenance comparison | local-only pending provenance/rights review; compare with RFC 6101 before implementation |
+| SSL 2.0 specification | historical brynja-historical-ssl2 research | local-only pending provenance/rights review |
+| SSL 1.0 surviving material | brynja-historical-ssl1-research only | local-only, provenance and authenticity required |
+| WAP WTLS specifications | historical brynja-historical-wtls research | local-only pending rights review |
 | PCT and SNP specifications | historical research | local-only pending rights review |
 
 Historical and licensed standards still require URLs, hashes, retrieval dates,

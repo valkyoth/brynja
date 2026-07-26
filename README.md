@@ -49,6 +49,11 @@ brynja = "0.1"
   protocols through its features.
 - Historical implementations live in explicitly named packages and use
   separate APIs, state, configuration, negotiation, caches, and ticket keys.
+- Every historical engine uses a `brynja-historical-*` package name so its
+  presence is obvious in manifests, lockfiles, SBOMs, and policy reports.
+- `brynja-tls` is an evergreen facade and one-pass router over independently
+  versioned modern TLS engines; a new TLS generation does not redefine an
+  existing engine package or automatically make its predecessor historical.
 - Runtime and build dependencies are forbidden. Any future exception requires
   a dedicated adapter crate, written admission review, tests, and release gate.
 - Every production crate is `no_std` by default. Platform services enter
@@ -74,12 +79,15 @@ brynja = "0.1"
 | `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Foundation only |
 | `brynja-crypto` | First-party hashes, MACs, AEADs, KDFs, RSA, and ECC | Foundation only |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
-| `brynja-tls` | TLS 1.3 and explicitly hardened TLS 1.2 engines | Foundation only |
+| `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
+| `brynja-tls13` | Version-specific TLS 1.3 stream engine | Foundation only |
+| `brynja-tls13-handshake` | Record-independent TLS 1.3 handshake shared with QUIC | Foundation only |
+| `brynja-tls12` | Version-specific explicitly hardened TLS 1.2 engine | Foundation only |
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | `brynja-historical` | Opt-in historical facade; no default features | Boundary only |
-| Historical protocol crates | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
+| `brynja-historical-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | Repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
 
 ## Platform Policy

@@ -25,9 +25,10 @@
 
 # brynja-quic-tls
 
-`brynja-quic-tls` is a narrowly scoped Brynja workspace package. In `0.1.0` it
-establishes a compile-time boundary only; it does not provide a working TLS,
-cryptographic, PKI, platform, or historical-protocol implementation.
+`brynja-quic-tls` consumes the record-independent
+`brynja-tls13-handshake` boundary without depending on stream TLS records or
+the multi-version TLS router. In `0.1.0` it establishes a compile-time boundary
+only; it does not provide a working QUIC/TLS implementation.
 
 Most application users will eventually depend on the modern facade:
 
@@ -43,4 +44,3 @@ pentest in the
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,
 platform-portability, and modern/historical isolation policies apply here.
-

@@ -25,9 +25,11 @@
 
 # brynja-tls
 
-`brynja-tls` is a narrowly scoped Brynja workspace package. In `0.1.0` it
-establishes a compile-time boundary only; it does not provide a working TLS,
-cryptographic, PKI, platform, or historical-protocol implementation.
+`brynja-tls` is Brynja's evergreen modern TLS facade and one-pass
+version-selection boundary. Version-specific protocol state remains in
+`brynja-tls12`, `brynja-tls13`, and future version-named packages. In `0.1.0`
+this package establishes a compile-time boundary only; it does not provide a
+working TLS implementation.
 
 Most application users will eventually depend on the modern facade:
 
@@ -43,4 +45,3 @@ pentest in the
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,
 platform-portability, and modern/historical isolation policies apply here.
-

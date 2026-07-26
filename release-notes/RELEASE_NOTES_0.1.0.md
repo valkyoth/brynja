@@ -4,8 +4,11 @@ Status: awaiting pentest; not released
 
 This foundation milestone establishes the dependency-free `no_std` workspace,
 documentation, security policy, standards corpus workflow, platform matrix,
-and explicit separation between modern and historical protocol crates. It
-does not implement TLS and must not be used for network security.
+explicit `brynja-historical-*` package naming, and separation between modern
+and historical protocol crates. It also establishes `brynja-tls` as an
+evergreen router facade over the version-specific `brynja-tls12`,
+`brynja-tls13`, and `brynja-tls13-handshake` boundaries. It does not implement
+TLS and must not be used for network security.
 
 Release remains blocked on the `v0.1.0` implementation gate and exact-commit
 pentest described in `docs/RELEASE_PLAN.md`.

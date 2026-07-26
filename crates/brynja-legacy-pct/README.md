@@ -38,8 +38,8 @@ brynja = "0.1"
 ```
 
 This package is currently marked `publish = false`. Publication requires the
-version-specific deliverables, verification, documentation, and exact-commit
-pentest in the
+version-specific deliverables, verification, documentation, a current
+committed PASS pentest report, and green GitHub checks in the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

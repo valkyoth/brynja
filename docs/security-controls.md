@@ -12,6 +12,6 @@ Status: foundation
 | Review size | Source files over 500 lines fail checks |
 | Toolchain | Pinned stable plus explicit MSRV matrix |
 | Standards | HTTPS allowlist, immutable RFC bytes, SHA-256 lock, current update-closure audit; machine-enforced surface and normative traceability are gated at v0.3.0-v0.3.5 |
-| Release | Release notes, SBOM, exact pentest metadata, and local gate required |
+| Release | Versioned committed PASS report, zero open findings, report update on every later candidate change, clean GitHub, explicit tag authorization, release notes, SBOM, and local gate required |
 | CI | Read-only permissions and full-SHA action pins |
 | CodeQL | GitHub Default setup; no advanced workflow |

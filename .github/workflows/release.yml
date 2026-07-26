@@ -19,3 +19,5 @@ jobs:
         run: scripts/validate-release-metadata.sh
       - name: Validate independent crate release plan
         run: scripts/release_crates.py --check
+      - name: Require committed pentest report
+        run: scripts/validate-current-pentest.sh --required

@@ -76,8 +76,8 @@ cannot satisfy another.
 documentation, and parser research. It remains `publish = false`, exposes no
 secure transport API, and must not accept production credentials.
 
-Every version exits with: `vX.Y.Z implementation stop reached. Run pentest
-for this exact commit.`
+Every version exits with: `vX.Y.Z implementation stop reached. Run pentest for
+this release candidate and commit the updated report.`
 
 ## RFC Source Baselines
 

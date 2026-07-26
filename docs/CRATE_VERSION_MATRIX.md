@@ -60,7 +60,8 @@ claim; the facade may update only when its manifest, API, or approved profile
 changes without mutating the validated module.
 
 Actual publication requires a clean worktree, the matching release tag at
-`HEAD`, the complete versioned release gate, advisory and dependency-policy
+`HEAD`, a current committed PASS pentest report, user-confirmed green GitHub
+checks, the complete versioned release gate, advisory and dependency-policy
 checks, and typed version confirmation. The publisher provides no dirty-tree,
 untagged, skipped-check, or `--no-verify` production bypass.
 

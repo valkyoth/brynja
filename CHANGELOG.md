@@ -12,3 +12,5 @@ Keep a Changelog and Semantic Versioning.
 - Standards provenance, toolchain, platform, and release planning policies.
 - Guarded independent-version crates.io planning and dependency-order
   publication with mandatory facade releases.
+- Committed per-version pentest reports that must stay synchronized with every
+  later release-candidate fix before green CI and explicit tagging.

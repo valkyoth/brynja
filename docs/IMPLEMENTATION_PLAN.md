@@ -34,7 +34,9 @@ test count, or interoperability alone never establishes that claim.
   certificate chain, fragment, and work unit has a caller-visible bound.
 - Production admission requires reviewed zeroization of complete owned secret
   memory regions; a weaker owned-region claim cannot pass the `1.0.0` gate.
-- Every release stops for an exact-commit pentest before tagging.
+- Every release stops for pentest; implementation and the current report are
+  committed together, GitHub must become green, and tagging requires explicit
+  user authorization.
 
 ## Workspace Architecture
 
@@ -285,8 +287,11 @@ The repository will maintain:
 For each version: implement only the listed scope, update requirements and
 threat model, add adversarial tests, run local checks, produce an SBOM, review
 all source-file lengths and unsafe/dependency surfaces, write release notes,
-stop, and hand the exact commit to pentest. Findings are fixed and retested
-before a permanent PASS report is committed.
+stop, and ask the user for pentest. Keep the versioned report current while
+findings are fixed and retested. Commit implementation and the final PASS
+report together, then wait for green GitHub CI. Any CI-driven fix must update
+the report in the same commit and pass CI again before the user authorizes the
+tag.
 
 ## Platform Strategy
 
@@ -313,7 +318,8 @@ by the exact validated-module manifest and tested operational environment.
 critical/high findings, audited first-party cryptography and PKI, sustained
 cross-platform interoperability, quantitative resource ceilings,
 reproducible packages, exact SBOM/provenance, frozen public APIs, operational
-guides, and an unchanged exact release candidate approved by pentest. Any FIPS
+guides, and a green release candidate with a current committed PASS pentest
+report. Any FIPS
 claim additionally requires the exact issued certificate, caveats, operational
 environment, immutable module artifact, and separate `brynja-fips` facade
 defined by the Phase 4 gates.

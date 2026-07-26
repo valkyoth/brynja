@@ -20,10 +20,22 @@ workflow while Default setup is active.
 
 ## Release Gate
 
-Every release requires a matching permanent PASS report under
-`security/pentest/` naming the exact reviewed commit. The implementation
-stops before pentest; findings are fixed and all evidence rerun before the
-report commit. Tags and publishing occur only when explicitly requested.
+Every release requires one matching permanent report at
+`security/pentest/vX.Y.Z[-rc.N].md`. When implementation stops, the user
+pentests the release candidate and the report is kept current throughout
+findings, fixes, and retests. The implementation and PASS report may be
+committed together.
+
+That candidate commit is pushed and allowed to complete GitHub CI. If CI
+requires a change, the code and report are updated and committed together, then
+CI runs again. The tag is created only after the user explicitly confirms that
+GitHub is green. The gate requires a clean worktree, a report committed at
+`HEAD`, `Status: PASS`, `Open-Findings: 0`, and `Retest: PASS`. Once a report
+exists, a later repository-changing commit is rejected unless it also updates
+the report.
+
+The report format and disclosure rules are documented in
+[`security/pentest/README.md`](security/pentest/README.md).
 
 ## Dependency Policy
 
@@ -36,4 +48,3 @@ SBOM and policy evidence, a replacement plan, and a versioned audit gate.
 
 Do not publish exploitable details before a fix is available. Use GitHub private
 vulnerability reporting or the repository's private security channel.
-

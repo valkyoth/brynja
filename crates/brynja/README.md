@@ -162,6 +162,11 @@ The networked `scripts/check_latest_tools.sh` check is mandatory before a
 release. GitHub CodeQL uses Default setup; this repository intentionally does
 not add an advanced CodeQL workflow.
 
+At each implementation stop, the user pentests the release candidate. The
+implementation and current versioned PASS report are committed together. Any
+later CI-driven fix must update that report in the same commit, and tagging
+occurs only after GitHub is green and the user explicitly requests it.
+
 ## Documentation
 
 - [Initial idea and final architecture decision](https://github.com/valkyoth/brynja/blob/main/docs/initial-idea.md)

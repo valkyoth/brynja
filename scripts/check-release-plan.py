@@ -128,7 +128,7 @@ def validate(release_path: Path, version_path: Path) -> None:
 
         exit_text = (
             f"`{version} implementation stop reached. "
-            "Run pentest for this exact commit.`"
+            "Run pentest for this release candidate and commit the updated report.`"
         )
         if section.count(exit_text) != 1:
             raise ValueError(f"{version} is missing its exact pentest exit")

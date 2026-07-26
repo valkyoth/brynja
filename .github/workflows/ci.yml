@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
       - name: Install Rust toolchain
         run: rustup show
       - name: Install security and SBOM tools
@@ -29,6 +31,8 @@ jobs:
           cargo install --locked cargo-sbom --version 0.10.0
       - name: Run repository gate
         run: scripts/checks.sh
+      - name: Validate committed pentest report when present
+        run: scripts/validate-current-pentest.sh
       - name: Check dependency policy
         run: cargo deny check
       - name: Check RustSec advisories

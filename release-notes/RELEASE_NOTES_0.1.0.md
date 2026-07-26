@@ -17,5 +17,6 @@ unchanged supporting crates are not republished. Repository-only packages are
 mechanically excluded, and actual publication requires the matching tag at
 `HEAD` plus the complete release gate.
 
-Release remains blocked on the `v0.1.0` implementation gate and exact-commit
-pentest described in `docs/RELEASE_PLAN.md`.
+Release remains blocked on the `v0.1.0` implementation gate, committed PASS
+pentest report, green GitHub checks, and explicit tag authorization described
+in `docs/RELEASE_PLAN.md`.

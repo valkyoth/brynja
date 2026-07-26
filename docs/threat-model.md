@@ -44,7 +44,8 @@ use-after-failure.
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
 - deterministic builds, pinned CI actions, zero dependencies, SBOMs, and
-  exact-commit pentest evidence.
+  a current committed pentest report that must change with every later release
+  candidate fix;
 - machine-readable protocol-surface classification so new or changed standards
   and IANA entries cannot remain silently unowned;
 - current RFC update closure and complete normative-requirement traceability,

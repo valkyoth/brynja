@@ -15,7 +15,8 @@ validator rejects numbering, ordering, title, or scope drift.
 Every milestone retains `no_std` production packages, no third-party crates in
 repository Cargo manifests, bounded hostile-input and pre-authentication work,
 mandatory owned-region secret destruction, adversarial tests, supported Rust
-and target evidence, SBOM, clean CI, and exact-commit review.
+and target evidence, SBOM, an up-to-date committed PASS pentest report, clean
+GitHub CI, and explicit user authorization before tagging.
 
 Protocol and optional-module dependency direction is downstream from frozen
 interfaces and validated provider ports. Early negotiation policy is distinct
@@ -60,7 +61,7 @@ Generated standards scope and upstream dependency direction precede implementati
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |
 | `0.1.0` | Workspace Foundation | Preserve the explicit `brynja-legacy-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim. |
-| `0.2.0` | Release And Isolation Enforcement | Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls. |
+| `0.2.0` | Release And Isolation Enforcement | Harden committed-report and exact-tag comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls. |
 | `0.3.0` | Requirements And Standards Source Ledger | Generate the normative source ledger from every algorithm, encoding, extension, protocol, validation, and operational milestone; close current RFC updated-by and obsoleted-by chains, record errata decisions and IANA snapshots, distinguish current authorities from compatibility baselines, and require the final ECDHE-ML-KEM group RFC and code points before admission. |
 | `0.3.1` | Machine-Readable Protocol Surface Decision Register | Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, legacy-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, legacy-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts. |
 | `0.3.2` | Normative Requirement Matrix Foundation | Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, legacy and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities. |
@@ -287,7 +288,7 @@ Receive and send compression, post-validation closure, and cross-feature composi
 | `0.160.0` | Audit Remediation And Clean Retest | Remediate every admitted finding, add permanent regressions, and obtain clean independent retests with no unresolved critical or high findings. |
 | `0.161.0` | Public API Requirements And Documentation Freeze | Freeze public APIs, features, package inventory, current and compatibility source closure, normative-requirement and protocol-surface ledgers, admitted algorithms and extensions, migration guidance, deployment profiles, incident procedures, limitations, non-goals, and exact FIPS certificate, manifest, operational-environment, caveat, claim, update, and revalidation documentation. |
 | `0.162.0` | Clean-Room Release Rehearsal | Pass reproducible clean-room builds, package installation, artifact comparison, rollback, key-compromise, incident, and disaster-recovery exercises. |
-| `1.0.0-rc.1` | Exact Production Candidate | Build final artifacts once and freeze source, compiler, flags, archives, SBOM, checksums, provenance, documentation, and the pentested exact commit. |
+| `1.0.0-rc.1` | Exact Production Candidate | Build final artifacts once and freeze source, compiler, flags, archives, SBOM, checksums, provenance, documentation, and the pentested candidate state with its committed report. |
 | `1.0.0` | First Serious Production-Ready Brynja TLS Release | Promote only the byte-identical approved candidate without rebuild, source change, metadata drift, or expanded capability claim. |
 
 ## Independent Legacy Package Sequence

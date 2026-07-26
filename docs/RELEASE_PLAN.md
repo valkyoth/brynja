@@ -12,7 +12,7 @@ Every release requires generated normative traceability, explicit resource,
 secret, storage, effect, dependency and failure boundaries, adversarial tests,
 documented limitations, no third-party crates in repository Cargo manifests,
 `no_std` evidence, SBOM comparison, clean CI and CodeQL Default, and an
-exact-commit pentest.
+up-to-date committed pentest report.
 
 Early negotiation policy is separate from final routing. Optional modules remain
 downstream of validated provider ports and pass a composition gate before public
@@ -32,6 +32,27 @@ published through the final v0.155.0 coverage gate.
 Every section contains Status, Plan scope, Goal, Deliverables, Verification, and
 Exit criteria. Repository checks are additive and one stop never admits adjacent
 capability.
+
+## Simple Pentest, CI, And Tag Flow
+
+Each version uses one report at `security/pentest/vX.Y.Z[-rc.N].md`:
+
+1. Complete the version scope and local verification, then stop and ask the
+   user for pentest.
+2. Keep the report current while findings are fixed and retested. If no finding
+   exists, record that explicitly.
+3. Commit the implementation and PASS report together. The report must state
+   `Open-Findings: 0` and `Retest: PASS`.
+4. Push and wait for GitHub CI and CodeQL Default to become green.
+5. If GitHub exposes a problem, fix it, update the same report, commit both,
+   push, and wait for green again.
+6. Create the tag only after the user explicitly confirms that GitHub is green.
+
+The report does not contain a self-referential commit hash. The gate instead
+proves that the versioned report is committed at `HEAD`, matches the worktree,
+has a final PASS state, and was updated in any later commit that changed the
+candidate. The pre-tag gate rejects an existing tag. The guarded publisher
+accepts the tag only when it points to that exact green candidate commit.
 
 ## Crate Versioning And Publication
 
@@ -132,13 +153,13 @@ Verification:
 Exit criteria:
 
 - repository evidence and enforcement agree and every deliberate violation fails before release;
-- `v0.1.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.1.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.2.0 - Release And Isolation Enforcement
 
 Status: planned
 
-Plan scope: Fix exact-HEAD pentest comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls.
+Plan scope: Harden committed-report and exact-tag comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls.
 
 Goal: complete the **Release And Isolation Enforcement** implementation stop without admitting or
 claiming adjacent capability.
@@ -161,7 +182,7 @@ Verification:
 Exit criteria:
 
 - repository evidence and enforcement agree and every deliberate violation fails before release;
-- `v0.2.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.2.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.3.0 - Requirements And Standards Source Ledger
 
@@ -190,7 +211,7 @@ Verification:
 Exit criteria:
 
 - repository evidence and enforcement agree and every deliberate violation fails before release;
-- `v0.3.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.3.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.3.1 - Machine-Readable Protocol Surface Decision Register
 
@@ -222,7 +243,7 @@ Exit criteria:
 
 - every relevant protocol and cryptographic surface has one explicit,
   reviewable disposition and drift cannot remain silent;
-- `v0.3.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.3.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.3.2 - Normative Requirement Matrix Foundation
 
@@ -256,7 +277,7 @@ Exit criteria:
 
 - the matrix can truthfully represent requirements before and after code exists,
   and the normative-language and registry pilot proves deterministic drift;
-- `v0.3.2 implementation stop reached. Run pentest for this exact commit.`
+- `v0.3.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.3.3 - Cryptography Encoding And PKIX Normative Coverage
 
@@ -291,7 +312,7 @@ Exit criteria:
 
 - every locked cryptographic, encoding, and PKIX rule has a reviewable lifecycle
   and no admitted or rejected algorithm or validation surface remains implicit;
-- `v0.3.3 implementation stop reached. Run pentest for this exact commit.`
+- `v0.3.3 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.3.4 - TLS DTLS And QUIC Normative Coverage
 
@@ -326,7 +347,7 @@ Exit criteria:
 
 - every transport-protocol requirement and boundary is explicitly versioned,
   owned, test-targeted, and unable to hide behind generic TLS reuse;
-- `v0.3.4 implementation stop reached. Run pentest for this exact commit.`
+- `v0.3.4 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.3.5 - Optional Legacy And Residual Normative Closure
 
@@ -361,7 +382,7 @@ Exit criteria:
 
 - the complete current planning baseline is closed without claiming unavailable
   standards, future code, mutable evidence, or legacy rights as complete;
-- `v0.3.5 implementation stop reached. Run pentest for this exact commit.`
+- `v0.3.5 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
 
@@ -390,7 +411,7 @@ Verification:
 Exit criteria:
 
 - repository evidence and enforcement agree and every deliberate violation fails before release;
-- `v0.4.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.4.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.5.0 - Error Alert And Exhaustion Domains
 
@@ -425,7 +446,7 @@ Exit criteria:
 - the upstream foundation is deterministic, hostile-input safe,
   platform-independent, reviewably destroys owned secrets, and cannot log
   production traffic secrets;
-- `v0.5.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.5.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.6.0 - Bounded Numeric And Resource Domains
 
@@ -454,7 +475,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.6.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.6.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.7.0 - Borrowed Read Cursor
 
@@ -483,7 +504,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.7.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.7.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.8.0 - Transactional Write Cursor
 
@@ -512,7 +533,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.8.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.8.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.9.0 - Caller-Owned Workspace And Arena Model
 
@@ -541,7 +562,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.9.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.9.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.10.0 - Secret Lifetime And Destruction Contract
 
@@ -570,7 +591,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.10.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.10.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.11.0 - Owned-Memory Zeroization Primitive
 
@@ -599,7 +620,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.11.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.11.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.12.0 - Constant-Time Foundation
 
@@ -628,7 +649,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.12.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.12.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.13.0 - Provider Capabilities And Opaque Handles
 
@@ -657,7 +678,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.13.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.13.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.14.0 - Entropy And Secure-Random Contracts
 
@@ -686,7 +707,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.14.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.14.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.15.0 - Wall And Monotonic Clock Contracts
 
@@ -715,7 +736,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.15.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.15.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.16.0 - Pending Operations And Accelerator Lifecycle
 
@@ -744,7 +765,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.16.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.16.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.17.0 - FIPS-Aware Provider Architecture
 
@@ -773,7 +794,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.17.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.17.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.18.0 - Mandatory Security Outcome Authority Contract
 
@@ -809,7 +830,7 @@ Exit criteria:
 
 - every security decision and completion is authoritative, mandatory, and
   unambiguous without relying on an audit or informational path;
-- `v0.18.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.18.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.18.1 - Bounded Observational Security Event Schema
 
@@ -845,7 +866,7 @@ Exit criteria:
 
 - events are bounded audit duplicates whose absence or loss cannot change or
   obscure any security outcome;
-- `v0.18.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.18.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.19.0 - TLS And DTLS Record Framing
 
@@ -874,7 +895,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.19.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.19.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.20.0 - Bounded DER Reader
 
@@ -903,7 +924,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.20.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.20.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.21.0 - Canonical ASN.1 Primitives
 
@@ -932,7 +953,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.21.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.21.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ## Phase 1: First-Party Cryptography, Identity Formats, And PKI
 
@@ -971,7 +992,7 @@ Exit criteria:
 - admitted and rejected algorithms have complete registry decisions, and every
   admitted algorithm has functional, caller-buffer, lifecycle, resource, and
   side-channel evidence before downstream use;
-- `v0.22.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.22.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.23.0 - SHA-384 And SHA-512
 
@@ -1000,7 +1021,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.23.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.23.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.24.0 - Keccak SHA-3 And SHAKE
 
@@ -1029,7 +1050,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.24.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.24.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.25.0 - HMAC
 
@@ -1058,7 +1079,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.25.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.25.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.26.0 - HKDF And TLS Labels
 
@@ -1087,7 +1108,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.26.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.26.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.27.0 - Portable AES
 
@@ -1116,7 +1137,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.27.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.27.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.28.0 - GHASH
 
@@ -1145,7 +1166,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.28.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.28.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.29.0 - AES-GCM
 
@@ -1174,7 +1195,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.29.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.29.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.30.0 - ChaCha20
 
@@ -1203,7 +1224,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.30.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.30.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.31.0 - Poly1305 And ChaCha20-Poly1305
 
@@ -1232,7 +1253,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.31.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.31.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.32.0 - Fixed-Limb RSA Arithmetic
 
@@ -1261,7 +1282,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.32.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.32.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.33.0 - Prime-Field And ECC Arithmetic
 
@@ -1290,7 +1311,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.33.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.33.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.34.0 - X25519 Field And Ladder
 
@@ -1319,7 +1340,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.34.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.34.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.35.0 - X25519 ECDH Lifecycle
 
@@ -1348,7 +1369,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.35.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.35.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.36.0 - P-256 Group Operations
 
@@ -1377,7 +1398,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.36.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.36.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.37.0 - P-256 ECDH Lifecycle
 
@@ -1406,7 +1427,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.37.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.37.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.38.0 - P-256 ECDSA
 
@@ -1435,7 +1456,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.38.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.38.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.39.0 - P-384 Group Operations
 
@@ -1464,7 +1485,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.39.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.39.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.40.0 - P-384 ECDH Lifecycle
 
@@ -1493,7 +1514,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.40.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.40.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.41.0 - P-384 ECDSA
 
@@ -1522,7 +1543,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.41.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.41.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.42.0 - RSA-PSS Verification
 
@@ -1551,7 +1572,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.42.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.42.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.43.0 - RSA PKCS1 v1.5 Verification
 
@@ -1580,7 +1601,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.43.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.43.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.44.0 - RSA-PSS Private Operations
 
@@ -1609,7 +1630,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.44.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.44.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.45.0 - Ed25519
 
@@ -1638,7 +1659,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.45.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.45.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.46.0 - Version-One Algorithm Decisions
 
@@ -1667,7 +1688,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.46.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.46.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.47.0 - Cryptographic Substrate Audit Gate
 
@@ -1696,7 +1717,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.47.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.47.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.48.0 - PEM Base64 And Chain Containers
 
@@ -1725,7 +1746,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.48.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.48.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.49.0 - Private-Key Input Formats
 
@@ -1754,7 +1775,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.49.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.49.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.50.0 - X.509 Decoder
 
@@ -1783,7 +1804,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.50.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.50.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.51.0 - Service Identity And Extensions
 
@@ -1812,7 +1833,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.51.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.51.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.52.0 - Bounded Path Construction
 
@@ -1841,7 +1862,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.52.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.52.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.53.0 - Core Chain Validation
 
@@ -1870,7 +1891,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.53.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.53.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.54.0 - Name Constraints
 
@@ -1899,7 +1920,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.54.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.54.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.55.0 - Certificate Policy Processing
 
@@ -1928,7 +1949,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.55.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.55.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.56.0 - Trust Anchors Cross-Signing And Algorithms
 
@@ -1957,7 +1978,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.56.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.56.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.57.0 - CRL Validation
 
@@ -1986,7 +2007,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.57.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.57.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.57.1 - No-Revocation-Available Certificate Policy
 
@@ -2020,7 +2041,7 @@ Exit criteria:
 
 - revocation is skipped only under the exact RFC 9608 certificate profile and
   an explicit relying-party decision;
-- `v0.57.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.57.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.58.0 - OCSP Validation
 
@@ -2049,7 +2070,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.58.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.58.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.58.1 - TLS Feature Must-Staple Enforcement
 
@@ -2083,7 +2104,7 @@ Exit criteria:
 
 - every admitted TLS Feature declaration is either satisfied by applicable
   validated evidence or terminates authentication unambiguously;
-- `v0.58.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.58.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.58.2 - Lightweight OCSP Message Profile
 
@@ -2119,7 +2140,7 @@ Exit criteria:
 
 - the optional high-volume message profile cannot emit SHA-1 requests, process
   stale status, or bypass ordinary OCSP authentication;
-- `v0.58.2 implementation stop reached. Run pentest for this exact commit.`
+- `v0.58.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.58.3 - Lightweight OCSP Sans-I/O Transport And Cache Profile
 
@@ -2155,7 +2176,7 @@ Exit criteria:
 - the caller can implement RFC 9919 transport and caching through deterministic
   typed effects, while Brynja performs no network access and unsigned metadata
   never overrides signed revocation evidence;
-- `v0.58.3 implementation stop reached. Run pentest for this exact commit.`
+- `v0.58.3 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.59.0 - Versioned Certificate Transparency Contract
 
@@ -2184,7 +2205,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.59.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.59.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.60.0 - PKI Audit Gate
 
@@ -2213,7 +2234,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.60.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.60.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ## Phase 2: Shared Handshake, Internal Sans-I/O, And Modern TLS
 
@@ -2246,7 +2267,7 @@ Verification:
 Exit criteria:
 
 - stream TLS and QUIC share one handshake, DTLS retains independent state, and internal effects remain unstable until optional composition completes;
-- `v0.61.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.61.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.62.0 - Internal Sans-I/O Execution Contract
 
@@ -2275,7 +2296,7 @@ Verification:
 Exit criteria:
 
 - stream TLS and QUIC share one handshake, DTLS retains independent state, and internal effects remain unstable until optional composition completes;
-- `v0.62.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.62.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.63.0 - TLS 1.3 Record Protection
 
@@ -2304,7 +2325,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.63.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.63.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.64.0 - TLS 1.3 Handshake Codec
 
@@ -2333,7 +2354,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.64.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.64.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.65.0 - Transcript And Key Schedule
 
@@ -2362,7 +2383,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.65.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.65.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.66.0 - ClientHello Construction And Offers
 
@@ -2391,7 +2412,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.66.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.66.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.67.0 - HelloRetryRequest And Cookies
 
@@ -2420,7 +2441,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.67.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.67.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.68.0 - TLS Version Negotiation Codec And Policy
 
@@ -2449,7 +2470,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.68.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.68.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.69.0 - TLS 1.3 Authenticated Server Flight
 
@@ -2478,7 +2499,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.69.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.69.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.70.0 - Certificate Negotiation And Selection
 
@@ -2507,7 +2528,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.70.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.70.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.71.0 - Stapled Status And SCT Transport
 
@@ -2536,7 +2557,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.71.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.71.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.72.0 - Client Authentication And Finished
 
@@ -2565,7 +2586,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.72.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.72.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.73.0 - Alerts Closure And Cancellation
 
@@ -2594,7 +2615,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.73.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.73.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.74.0 - Stateful Tickets And Resumption PSKs
 
@@ -2623,7 +2644,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.74.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.74.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.75.0 - Stateless Ticket Protection
 
@@ -2652,7 +2673,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.75.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.75.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.76.0 - TLS 1.3-Profile External PSK Policy
 
@@ -2684,7 +2705,7 @@ Exit criteria:
 
 - external PSKs are confined to TLS 1.3-derived profiles, require DHE, and
   cannot silently fall back or enter hardened TLS 1.2 or DTLS 1.2;
-- `v0.76.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.76.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.76.1 - External PSK Importer And Domain Separation
 
@@ -2717,7 +2738,7 @@ Exit criteria:
 
 - provisioned PSK material cannot cross an admitted domain without explicit,
   importer-enforced separation;
-- `v0.76.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.76.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.76.2 - External PSK Provisioning And Role Security
 
@@ -2754,7 +2775,7 @@ Exit criteria:
 - every admitted external PSK has reviewable strength, provenance, role, peer,
   domain, lifetime, and destruction policy with no silent group or combined-
   certificate mode;
-- `v0.76.2 implementation stop reached. Run pentest for this exact commit.`
+- `v0.76.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.77.0 - Zero-RTT
 
@@ -2783,7 +2804,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.77.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.77.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.78.0 - TLS KeyUpdate
 
@@ -2812,7 +2833,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.78.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.78.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.79.0 - Exporters And TLS-Exporter Channel Binding
 
@@ -2841,7 +2862,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.79.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.79.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.80.0 - TLS 1.3 Suite Completion
 
@@ -2870,7 +2891,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.80.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.80.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.81.0 - TLS 1.3 Conformance And Interoperability
 
@@ -2899,7 +2920,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.81.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.81.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.82.0 - TLS 1.3 Audit Gate
 
@@ -2928,7 +2949,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.82.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.82.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.83.0 - TLS 1.2 Engine And Policy Boundary
 
@@ -2957,7 +2978,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.83.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.83.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.83.1 - Current TLS And DTLS 1.2 Deprecation Closure
 
@@ -2991,7 +3012,7 @@ Exit criteria:
 
 - obsolete 1.2 key exchange and signature mechanisms are unreachable across
   configuration, negotiation, authentication, resumption, and import;
-- `v0.83.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.83.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.83.2 - TLS 1.2 Feature-Freeze Enforcement
 
@@ -3026,7 +3047,7 @@ Exit criteria:
 
 - TLS 1.2 remains a closed hardened compatibility profile whose only post-freeze
   changes are authenticated RFC 9851 exceptions;
-- `v0.83.2 implementation stop reached. Run pentest for this exact commit.`
+- `v0.83.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.84.0 - TLS 1.2 PRF And Key Block
 
@@ -3055,7 +3076,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.84.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.84.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.85.0 - TLS 1.2 Record Nonces And Protection
 
@@ -3084,7 +3105,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.85.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.85.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.86.0 - TLS 1.2 Extended Main Secret Transcript Binding
 
@@ -3113,7 +3134,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.86.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.86.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.87.0 - TLS 1.2 Signaling And Renegotiation Semantics
 
@@ -3142,7 +3163,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.87.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.87.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.88.0 - TLS 1.2 ECDHE State Machines
 
@@ -3171,7 +3192,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.88.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.88.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.89.0 - TLS 1.2 Suite Completion
 
@@ -3200,7 +3221,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.89.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.89.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.90.0 - TLS 1.2 Resumption And Interoperability
 
@@ -3229,7 +3250,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.90.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.90.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.91.0 - TLS 1.2 Audit Gate
 
@@ -3258,7 +3279,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.91.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.91.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.92.0 - Integrated Evergreen One-Pass TLS Router
 
@@ -3287,7 +3308,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.92.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.92.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.93.0 - Modern Multi-Version Routing Audit Gate
 
@@ -3316,7 +3337,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.93.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.93.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ## Phase 3: QUIC TLS, DTLS, And Post-Quantum Work
 
@@ -3349,7 +3370,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.94.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.94.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.95.0 - QUIC-Specific TLS Profile
 
@@ -3378,7 +3399,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.95.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.95.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.96.0 - QUIC Key-Derivation Boundary
 
@@ -3407,7 +3428,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.96.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.96.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.97.0 - QUIC Transport Parameters
 
@@ -3436,7 +3457,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.97.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.97.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.98.0 - QUIC Sans-I/O Handshake
 
@@ -3465,7 +3486,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.98.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.98.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.99.0 - QUIC Resumption Lifecycle
 
@@ -3498,7 +3519,7 @@ Exit criteria:
 
 - QUIC resumption preserves explicit completion and confirmation, exact ticket
   binding, non-reuse, and transport-owned packet state;
-- `v0.99.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.99.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.99.1 - QUIC Zero-RTT Profile
 
@@ -3531,7 +3552,7 @@ Exit criteria:
 
 - QUIC zero-RTT is explicitly accepted or rejected with anti-replay and
   transport ownership preserved;
-- `v0.99.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.99.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.100.0 - Optional QUIC CRYPTO Reassembly Helper
 
@@ -3560,7 +3581,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.100.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.100.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.101.0 - QUIC Conformance And Audit
 
@@ -3589,7 +3610,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.101.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.101.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.102.0 - DTLS Path Identity Contract
 
@@ -3618,7 +3639,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.102.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.102.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.103.0 - DTLS Version Negotiation Codec And Policy
 
@@ -3647,7 +3668,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.103.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.103.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.104.0 - DTLS Unified Headers And Epochs
 
@@ -3676,7 +3697,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.104.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.104.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.105.0 - DTLS Record-Number Encryption
 
@@ -3705,7 +3726,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.105.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.105.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.106.0 - DTLS Replay And Epoch-Key Lifetimes
 
@@ -3734,7 +3755,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.106.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.106.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.107.0 - DTLS 1.2 Connection IDs
 
@@ -3763,7 +3784,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.107.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.107.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.108.0 - DTLS 1.3 Connection-ID Updates
 
@@ -3792,7 +3813,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.108.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.108.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.109.0 - DTLS Fragmentation And Reassembly
 
@@ -3821,7 +3842,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.109.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.109.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.110.0 - DTLS Flights ACKs And Timers
 
@@ -3850,7 +3871,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.110.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.110.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.111.0 - DTLS Address Validation And Amplification Defense
 
@@ -3879,7 +3900,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.111.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.111.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.111.1 - DTLS Return Routability Check
 
@@ -3915,7 +3936,7 @@ Exit criteria:
 
 - every CID path change is either validated by the selected RFC 9853 procedure
   or remains bound to the prior path without application-data leakage;
-- `v0.111.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.111.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.112.0 - DTLS 1.3 State Machines
 
@@ -3944,7 +3965,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.112.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.112.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.113.0 - DTLS 1.3 Early-Data Exclusion
 
@@ -3973,7 +3994,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.113.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.113.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.114.0 - Hardened DTLS 1.2
 
@@ -4002,7 +4023,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.114.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.114.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.115.0 - Integrated One-Pass DTLS Router
 
@@ -4031,7 +4052,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.115.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.115.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.116.0 - DTLS Conformance And Audit
 
@@ -4060,7 +4081,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.116.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.116.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.117.0 - ML-KEM Arithmetic And Encoding
 
@@ -4089,7 +4110,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.117.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.117.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.118.0 - ML-KEM Key Generation And Encapsulation
 
@@ -4118,7 +4139,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.118.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.118.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.119.0 - ML-KEM Decapsulation And Implicit Rejection
 
@@ -4147,7 +4168,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.119.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.119.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.120.0 - Standard Hybrid Groups
 
@@ -4176,7 +4197,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.120.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.120.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.121.0 - Hybrid Protocol Integration
 
@@ -4205,7 +4226,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.121.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.121.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.122.0 - PQ Standards And Audit Gate
 
@@ -4234,7 +4255,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.122.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.122.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ## Phase 4: FIPS Module Instantiation, Validation, And TLS Profile
 
@@ -4272,7 +4293,7 @@ Exit criteria:
 
 - the Level 1 target and every applicable requirement have dated, owned,
   testable evidence obligations without a validation claim;
-- `v0.123.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.123.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.123.1 - FIPS Module Architecture Freeze
 
@@ -4305,7 +4326,7 @@ Exit criteria:
 
 - a separately publishable Level 1 module architecture is frozen without a
   premature artifact or validation claim;
-- `v0.123.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.123.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.124.0 - SP 800-90B Entropy Source And Health Tests
 
@@ -4338,7 +4359,7 @@ Exit criteria:
 
 - every admitted entropy source has bounded behavior and complete SP 800-90B
   evidence tied to its operational environment;
-- `v0.124.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.124.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.124.1 - SP 800-90A DRBG Implementation
 
@@ -4371,7 +4392,7 @@ Exit criteria:
 
 - the final DRBG implementation is bounded, testable, zeroizing, and ready for
   an exact SP 800-90C construction;
-- `v0.124.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.124.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.124.2 - SP 800-90C RBG Construction
 
@@ -4404,7 +4425,7 @@ Exit criteria:
 
 - one exact RBG construction connects validated entropy assumptions to the
   module random service without ambiguous substitutions;
-- `v0.124.2 implementation stop reached. Run pentest for this exact commit.`
+- `v0.124.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.125.0 - Approved Provider And Mandatory Service Indicator
 
@@ -4442,7 +4463,7 @@ Exit criteria:
 
 - every service result carries mandatory approval status independently of audit
   delivery, while architectural boundaries and catastrophic-latch semantics are preserved;
-- `v0.125.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.125.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.126.0 - SSP Lifecycle And Zeroization Services
 
@@ -4479,7 +4500,7 @@ Exit criteria:
 
 - every SSP has a reviewed, testable lifetime and destruction path, and callers
   receive a mandatory secret-free completion result independently of auditing;
-- `v0.126.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.126.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.127.0 - Module Integrity And Pre-Operational Self-Tests
 
@@ -4512,7 +4533,7 @@ Exit criteria:
 
 - complete-image integrity and pre-operational tests block every service until
   success and fail deterministically under every injected fault;
-- `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.127.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.127.1 - Conditional Self-Tests And Permanent Failure State
 
@@ -4545,7 +4566,7 @@ Exit criteria:
 
 - conditional testing and the permanent module error state are complete,
   irreversible where required, and never misused for connection policy;
-- `v0.127.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.127.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.128.0 - FIPS Observational Security Event Integration
 
@@ -4589,7 +4610,7 @@ Exit criteria:
 
 - module events are non-authoritative audit duplicates that may be absent without
   obscuring any mandatory service, state, latch, zeroization, or destruction outcome;
-- `v0.128.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.128.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.129.0 - Exact FIPS Module Artifact Freeze
 
@@ -4623,7 +4644,7 @@ Verification:
 Exit criteria:
 
 - one final artifact identity is reproducible and every later validation datum is mechanically bound to it;
-- `v0.129.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.129.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.130.0 - ACVTS And CAVP Evidence
 
@@ -4660,7 +4681,7 @@ Exit criteria:
 
 - every claimed approved implementation and dispatch path has traceable
   production validation evidence bound to the exact frozen module artifact;
-- `v0.130.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.130.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.130.1 - ESV Entropy And RBG Validation Evidence
 
@@ -4693,7 +4714,7 @@ Exit criteria:
 
 - every entropy and RBG claim has production validation evidence tied to the
   exact module and operational environment;
-- `v0.130.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.130.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.131.0 - CMVP Security Policy And Public Documentation
 
@@ -4726,7 +4747,7 @@ Exit criteria:
 
 - the complete public security policy is certificate-ready, exact-artifact
   bound, internally consistent, and free of unsupported claims;
-- `v0.131.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.131.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.131.1 - CMVP Test Evidence And Lab Submission Package
 
@@ -4759,7 +4780,7 @@ Exit criteria:
 
 - the accredited lab receives one complete, reproducible, internally consistent
   evidence package for the exact module artifact;
-- `v0.131.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.131.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.132.0 - Accredited FIPS Lab Evaluation And Findings
 
@@ -4792,7 +4813,7 @@ Exit criteria:
 
 - evaluation is complete for the submitted identity, every finding is recorded,
   and no validation claim has been made;
-- `v0.132.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.132.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.132.1 - FIPS Evaluation Remediation And Clean Retest
 
@@ -4825,7 +4846,7 @@ Exit criteria:
 
 - the final submitted identity has a clean accredited-lab retest and complete
   remediation evidence with no unresolved finding;
-- `v0.132.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.132.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.132.2 - FIPS Certificate Issuance Caveat And Claim Gate
 
@@ -4858,7 +4879,7 @@ Exit criteria:
 
 - only the exact issued module can carry the exact permitted certificate-bound
   claim, and all other builds fail closed to a non-validated status;
-- `v0.132.2 implementation stop reached. Run pentest for this exact commit.`
+- `v0.132.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.133.0 - Boundary And Package Audit
 
@@ -4896,7 +4917,7 @@ Exit criteria:
 - every shipped package has an exact reviewed closure, and no optional,
   legacy, experimental, or ordinary path can contaminate or impersonate
   the validated module;
-- `v0.133.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.133.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.134.0 - Approved-Only TLS Operating Profile
 
@@ -4933,7 +4954,7 @@ Exit criteria:
 
 - the TLS profile admits only certificate-bound approved services and reports
   every service outcome without confusing connection and module failure;
-- `v0.134.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.134.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.134.1 - Validated Module Manifest And Operational-Environment Selection
 
@@ -4966,7 +4987,7 @@ Exit criteria:
 
 - module selection succeeds only for one exact validated artifact in an
   explicitly listed operational environment;
-- `v0.134.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.134.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.134.2 - Ergonomic Brynja FIPS Facade And Misconfiguration Gate
 
@@ -5000,7 +5021,7 @@ Exit criteria:
 
 - users select FIPS through one obvious separate facade that is easy to use
   correctly and impossible to use for an unsupported validation claim;
-- `v0.134.2 implementation stop reached. Run pentest for this exact commit.`
+- `v0.134.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.134.3 - FIPS Deployment Claim Update And Revalidation Lifecycle
 
@@ -5033,7 +5054,7 @@ Exit criteria:
 
 - operators can keep the exact validation claim true over deployment and
   lifecycle changes, or automatically lose the claim safely when it is not;
-- `v0.134.3 implementation stop reached. Run pentest for this exact commit.`
+- `v0.134.3 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ## Phase 5: Optional Modules, Composition, Stable Integration, Assurance, And General Availability
 
@@ -5066,7 +5087,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.135.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.135.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.135.1 - Identity Trust And Transparency Rotation
 
@@ -5099,7 +5120,7 @@ Exit criteria:
 
 - identity and trust state rotates atomically with explicit in-flight,
   rollback, and compromise behavior;
-- `v0.135.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.135.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.136.0 - Record Size Limit
 
@@ -5128,7 +5149,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.136.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.136.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.137.0 - Raw Public Keys
 
@@ -5157,7 +5178,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.137.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.137.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.138.0 - HPKE KEM And Context Foundation
 
@@ -5186,7 +5207,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.138.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.138.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.139.0 - HPKE Base Mode
 
@@ -5215,7 +5236,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.139.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.139.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.139.1 - HPKE Secret Export And Context Lifecycle
 
@@ -5251,7 +5272,7 @@ Exit criteria:
 
 - the complete admitted HPKE base-mode context interface includes bounded
   export and deterministic destruction, and no unsupported mode is reachable;
-- `v0.139.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.139.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.140.0 - ECH Origin And Downgrade Policy
 
@@ -5280,7 +5301,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.140.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.140.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.140.1 - ECH Configuration Bootstrap And Cache Lifecycle
 
@@ -5313,7 +5334,7 @@ Exit criteria:
 
 - ECH configuration state is bounded, origin-bound, freshness-aware, and
   deterministically selected without protocol-owned network access;
-- `v0.140.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.140.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.141.0 - ECH Client Construction
 
@@ -5342,7 +5363,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.141.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.141.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.142.0 - ECH Server Opening And Acceptance
 
@@ -5371,7 +5392,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.142.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.142.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.143.0 - ECH HRR Retry And Rotation
 
@@ -5400,7 +5421,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.143.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.143.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.144.0 - Delegated Credentials
 
@@ -5429,7 +5450,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.144.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.144.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.145.0 - Certificate Compression Receive Provider
 
@@ -5458,7 +5479,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.145.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.145.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.146.0 - Precompressed Certificate Artifact Validation
 
@@ -5487,7 +5508,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.146.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.146.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.146.1 - Certificate Compression Send Negotiation And Transcript Integration
 
@@ -5520,7 +5541,7 @@ Exit criteria:
 
 - send compression uses only current validated artifacts with exact transcript,
   direction, identity, and policy binding;
-- `v0.146.1 implementation stop reached. Run pentest for this exact commit.`
+- `v0.146.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.147.0 - Validated FIPS Closure Preservation Gate
 
@@ -5549,7 +5570,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.147.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.147.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.148.0 - Generated Optional-Feature Composition Gate
 
@@ -5578,7 +5599,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.148.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.148.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.149.0 - Facade Configuration Typestates
 
@@ -5607,7 +5628,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.149.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.149.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.150.0 - Versioned Stable Sans-I/O V1 API
 
@@ -5644,7 +5665,7 @@ Exit criteria:
 - every V1 security outcome is authoritative in exhaustive mandatory state or
   results, every unhandled mandatory action fails closed, and only bounded
   observational SecurityEvent audit values are non-exhaustive;
-- `v0.150.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.150.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.151.0 - Caller-Provided Host Capability Integration
 
@@ -5673,7 +5694,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.151.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.151.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.152.0 - Zero-Allocation And Resource Proof
 
@@ -5702,7 +5723,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.152.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.152.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.153.0 - Aesynx ABI And Emulator Qualification
 
@@ -5731,7 +5752,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.153.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.153.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.154.0 - Protocol State And Resource Formal Harnesses
 
@@ -5763,7 +5784,7 @@ Verification:
 Exit criteria:
 
 - protocol, resource, zeroization, X.509-budget, and pending-token proof claims name exact harnesses, bounds, assumptions, and implementations;
-- `v0.154.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.154.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.155.0 - Cryptographic Formal Coverage And Residual-Gap Gate
 
@@ -5812,7 +5833,7 @@ Exit criteria:
   assumptions, widths, production evidence, and residual gaps, with no
   reduced-to-production-width equivalence claim, and the machine-readable
   register completely represents the reviewed claim set;
-- `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.155.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.156.0 - External-Process Fuzz And Differential Campaign
 
@@ -5841,7 +5862,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.156.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.156.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.157.0 - Memory And Side-Channel Evidence
 
@@ -5870,7 +5891,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.157.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.157.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.158.0 - Sustained Platform And Hostile-Load Qualification
 
@@ -5899,7 +5920,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.158.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.158.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.159.0 - Consolidated External Audits
 
@@ -5928,7 +5949,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.159.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.159.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.160.0 - Audit Remediation And Clean Retest
 
@@ -5957,7 +5978,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.160.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.160.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.161.0 - Public API Requirements And Documentation Freeze
 
@@ -5986,7 +6007,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.161.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.161.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.162.0 - Clean-Room Release Rehearsal
 
@@ -6015,13 +6036,13 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.162.0 implementation stop reached. Run pentest for this exact commit.`
+- `v0.162.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v1.0.0-rc.1 - Exact Production Candidate
 
 Status: planned
 
-Plan scope: Build final artifacts once and freeze source, compiler, flags, archives, SBOM, checksums, provenance, documentation, and the pentested exact commit.
+Plan scope: Build final artifacts once and freeze source, compiler, flags, archives, SBOM, checksums, provenance, documentation, and the pentested candidate state with its committed report.
 
 Goal: complete the **Exact Production Candidate** implementation stop without admitting or
 claiming adjacent capability.
@@ -6044,7 +6065,7 @@ Verification:
 Exit criteria:
 
 - stable artifacts are byte-identical to the approved candidate and every claim maps to exact-commit evidence;
-- `v1.0.0-rc.1 implementation stop reached. Run pentest for this exact commit.`
+- `v1.0.0-rc.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v1.0.0 - First Serious Production-Ready Brynja TLS Release
 
@@ -6073,4 +6094,4 @@ Verification:
 Exit criteria:
 
 - stable artifacts are byte-identical to the approved candidate and every claim maps to exact-commit evidence;
-- `v1.0.0 implementation stop reached. Run pentest for this exact commit.`
+- `v1.0.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`

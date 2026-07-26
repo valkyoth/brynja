@@ -157,17 +157,6 @@ def validate_repository_entry(name: str, entry: dict) -> None:
         raise RuntimeError(f"{name} must use change=repository and publish=false")
 
 
-def validate_foundation_entry(name: str, entry: dict, release: str) -> None:
-    previous, change, publish = validate_common(name, entry)
-    if name in REPOSITORY_ONLY:
-        validate_repository_entry(name, entry)
-        return
-    if previous != "unpublished" or change != "unpublished" or publish:
-        raise RuntimeError(f"{name} foundation entry must remain unpublished")
-    if name == FACADE and entry["version"] != release:
-        raise RuntimeError(f"{FACADE} foundation version must be {release}")
-
-
 def validate_facade_entry(entry: dict, release: str) -> None:
     previous, change, publish = validate_common(FACADE, entry)
     if entry["version"] != release:
@@ -233,8 +222,10 @@ def release_plan(path: Path = DEFAULT_PLAN) -> dict:
     if not isinstance(version, str):
         raise RuntimeError("release-crates.toml is missing [release].version")
     parse_version(version)
-    if stage not in ("foundation", "public"):
-        raise RuntimeError("release stage must be foundation or public")
+    if stage != "public":
+        raise RuntimeError(
+            "every release tag is public and must publish the brynja facade"
+        )
     if set(crates) != set(PUBLISH_ORDER):
         raise RuntimeError(
             "release inventory differs from PUBLISH_ORDER: "
@@ -242,9 +233,7 @@ def release_plan(path: Path = DEFAULT_PLAN) -> dict:
             f"extra={sorted(set(crates) - set(PUBLISH_ORDER))}"
         )
     for name, entry in crates.items():
-        if stage == "foundation":
-            validate_foundation_entry(name, entry, version)
-        elif name == FACADE:
+        if name == FACADE:
             validate_facade_entry(entry, version)
         else:
             validate_support_entry(name, entry)
@@ -270,9 +259,7 @@ def verify_repository(packages: dict[str, dict], plan: dict) -> None:
             )
         publishable = package_is_publishable(package)
         must_be_publishable = (
-            plan["stage"] == "public"
-            and name not in REPOSITORY_ONLY
-            and entry["change"] != "unpublished"
+            name not in REPOSITORY_ONLY and entry["change"] != "unpublished"
         )
         if publishable != must_be_publishable:
             expected = "publishable" if must_be_publishable else "publish=false"

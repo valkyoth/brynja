@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
 description = "Explicit platform integration traits for Brynja"
-publish = false
+publish = ["crates-io"]
 
 [features]
 default = []

@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
 description = "Evergreen modern TLS facade and one-pass version router for Brynja"
-publish = false
+publish = ["crates-io"]
 
 [features]
 default = []

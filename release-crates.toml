@@ -1,84 +1,84 @@
 [release]
 version = "0.1.0"
 policy = "independent"
-stage = "foundation"
+stage = "public"
 
 [crates."brynja"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the foundation-only modern facade; it carries no protocol implementation or security claim."
 
 [crates."brynja-core"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the bounded core package boundary required by the modern facade."
 
 [crates."brynja-crypto"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the first-party cryptography package boundary required by the modern facade."
 
 [crates."brynja-pki"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the PKI package boundary required by the modern facade."
 
 [crates."brynja-tls"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the evergreen TLS router boundary required by the modern facade."
 
 [crates."brynja-tls12"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the hardened TLS 1.2 engine boundary required by the TLS router."
 
 [crates."brynja-tls13"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the TLS 1.3 stream-engine boundary required by the TLS router."
 
 [crates."brynja-tls13-handshake"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the record-independent TLS 1.3 handshake boundary required by TLS and QUIC."
 
 [crates."brynja-quic-tls"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the optional QUIC-TLS integration boundary exposed by the modern facade."
 
 [crates."brynja-dtls"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the optional modern DTLS boundary exposed by the modern facade."
 
 [crates."brynja-platform"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "unpublished"
-publish = false
-reason = "Foundation boundary only; no protocol implementation or release approval exists."
+change = "initial"
+publish = true
+reason = "Initial crates.io publication of the optional platform-integration boundary exposed by the modern facade."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"

@@ -35,19 +35,21 @@ TLS and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not published or ready for application use. Once a milestone is
-published, the normal dependency will be:
+Brynja is not ready for application use. Version `0.1.0` is the initial
+crates.io foundation release and exists to establish the audited package
+boundaries and names; it does not implement TLS. The dependency is:
 
 ```toml
 [dependencies]
 brynja = "0.1"
 ```
 
-For every admitted modern release tag, the `brynja` facade is published at the
-tag version. Supporting crates keep independent versions and are published only
-when they change; unchanged support crates are not republished. The guarded
-publisher validates the exact package set and dependency order and publishes
-the facade last.
+Every official release tag publishes the `brynja` facade at the tag version.
+Supporting crates keep independent versions and are published only when they
+change; unchanged support crates are not republished. The initial release also
+publishes the complete modern dependency closure required by the facade. The
+guarded publisher validates and packages the exact set in dependency order and
+publishes the facade last.
 
 ## Design Boundaries
 
@@ -161,6 +163,8 @@ project promises to support. The authoritative matrix is
 ```bash
 scripts/checks.sh
 scripts/check-rust-version-matrix.sh
+scripts/release_crates.py --check
+scripts/release_crates.py --package-check
 cargo deny check
 cargo audit
 ```
@@ -168,6 +172,17 @@ cargo audit
 The networked `scripts/check_latest_tools.sh` check is mandatory before a
 release. GitHub CodeQL uses Default setup; this repository intentionally does
 not add an advanced CodeQL workflow.
+
+After the exact green candidate is tagged, the interactive crates.io publisher
+is:
+
+```bash
+scripts/release_crates.py --version 0.1.0
+```
+
+It reruns the complete release gate, publishes changed dependencies in order,
+waits for crates.io indexing between dependent packages, and publishes
+`brynja` last.
 
 At each implementation stop, the user pentests the release candidate. The
 implementation and current versioned PASS report are committed together. Any

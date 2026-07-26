@@ -1,14 +1,17 @@
 # Crate Version Matrix
 
-Status: foundation
+Status: initial public release candidate
 
-All workspace packages are currently version `0.1.0` and `publish = false`.
-No crate has a published or production-ready implementation.
+All workspace packages are currently version `0.1.0`. The modern dependency
+closure is selected for initial crates.io publication; legacy and
+repository-only packages remain unpublished. Package publication does not
+imply protocol implementation or production readiness.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja`, `brynja-tls`, and modern production crates | `0.1.0` | no | Compile-time architecture only |
-| `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | no | Version-specific modern TLS boundaries only |
+| `brynja`, `brynja-core`, `brynja-crypto`, and `brynja-pki` | `0.1.0` | yes | Initial foundation publication |
+| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | yes | Initial modern TLS boundary publication |
+| `brynja-dtls`, `brynja-quic-tls`, and `brynja-platform` | `0.1.0` | yes | Initial optional normal-dependency publication |
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
@@ -22,10 +25,10 @@ inventory drift, manifest-version drift, non-exact internal dependency pins,
 invalid version bumps, unavailable dependencies, publication-order errors, or
 an accidentally publishable repository-only package.
 
-After crates.io admission, every official modern `vX.Y.Z` or `vX.Y.Z-rc.N`
-release tag publishes `brynja` at exactly `X.Y.Z` or `X.Y.Z-rc.N`. The main
+Every official modern `vX.Y.Z` or `vX.Y.Z-rc.N` release tag publishes `brynja`
+at exactly `X.Y.Z` or `X.Y.Z-rc.N`, including the foundation release. The main
 facade is always the final crate in the publication sequence. An unchanged
-facade entry or `publish = false` is invalid for a public release.
+facade entry, `publish = false`, or non-public release stage is invalid.
 
 Supporting crates use independent versions and are published only when their
 own package changes or an internal dependency must move outside the currently
@@ -73,6 +76,11 @@ Actual publication requires a clean worktree, the matching release tag at
 checks, the complete versioned release gate, advisory and dependency-policy
 checks, and typed version confirmation. The publisher provides no dirty-tree,
 untagged, skipped-check, or `--no-verify` production bypass.
+
+For `v0.1.0`, the enforced initial publication order is:
+`brynja-core`, `brynja-crypto`, `brynja-pki`, `brynja-platform`,
+`brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`,
+`brynja-dtls`, `brynja-quic-tls`, then `brynja`.
 
 ## Rust Compatibility
 

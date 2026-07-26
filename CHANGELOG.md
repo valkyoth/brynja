@@ -23,3 +23,6 @@ Keep a Changelog and Semantic Versioning.
 ### Changed
 
 - Made truncating-cast and sign-loss Clippy lints non-overridable.
+- Enforced publication of `brynja` for every official tag, selected the full
+  initial modern dependency closure, and added non-uploading package-archive
+  validation to the guarded publisher.

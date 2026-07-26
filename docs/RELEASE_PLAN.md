@@ -57,15 +57,15 @@ accepts the tag only when it points to that exact green candidate commit.
 ## Crate Versioning And Publication
 
 The workspace follows the same independent-crate release model as `eth`, with
-additional fail-closed rules for the Brynja foundation and repository-only
-packages. `release-crates.toml` records every package's previous version,
-planned version, change class, publication decision, and reason.
-
-Once crates.io publication is admitted:
+additional fail-closed rules for repository-only packages.
+`release-crates.toml` records every package's previous version, planned
+version, change class, publication decision, and reason.
 
 - every official modern release tag publishes the `brynja` facade at exactly
   the tag version, even when the release only advances its dependency pins or
   release-facing metadata;
+- the initial public release publishes every modern package required by the
+  facade, including optional normal dependencies, before the facade;
 - supporting crates publish only for an explicit initial release, code or API
   work, an API-compatible bug fix, a required internal dependency-pin change,
   or immutable crates.io metadata correction;
@@ -81,10 +81,15 @@ Once crates.io publication is admitted:
 `scripts/release_crates.py --check` enforces the complete inventory, exact
 internal pins, manifest publishability, independent SemVer transitions,
 dependency availability and ordering, repository-only exclusions, and the
-mandatory facade release. Actual publication additionally requires a clean
-worktree, the matching tag at `HEAD`, the versioned release gate, Cargo deny
-and audit checks, package verification, and typed version confirmation. There
-is no production bypass for a dirty or untagged tree, skipped checks, or
+mandatory facade release. `--package-check` validates the Cargo file set for
+every selected crate and builds every dependency-root `.crate` archive that is
+packageable before new internal dependencies reach crates.io. The interactive
+publisher then packages and publishes downstream crates in dependency order,
+waiting for each new dependency to be indexed. Actual publication additionally
+requires a clean worktree, the matching tag at `HEAD`, the versioned release
+gate, Cargo deny and audit checks, Cargo package verification, and typed
+version confirmation.
+There is no production bypass for a dirty or untagged tree, skipped checks, or
 `cargo publish --no-verify`.
 
 ## TLS Package And Retirement Rule

@@ -1,6 +1,6 @@
 # Brynja 0.1.0 Release Notes
 
-Status: pentest passed; awaiting green GitHub CI; not released
+Status: corrected crates.io publication candidate; not production ready
 
 This foundation milestone establishes the dependency-free `no_std` workspace,
 documentation, security policy, standards corpus workflow, platform matrix,
@@ -10,18 +10,22 @@ evergreen router facade over the version-specific `brynja-tls12`,
 `brynja-tls13`, and `brynja-tls13-handshake` boundaries. It does not implement
 TLS and must not be used for network security.
 
-The foundation also installs the guarded independent-crate release policy used
-by `eth`: every admitted modern release publishes `brynja` at the tag version,
-changed supporting crates publish first on their own SemVer lines, and
-unchanged supporting crates are not republished. Repository-only packages are
-mechanically excluded, and actual publication requires the matching tag at
-`HEAD` plus the complete release gate.
+The initial crates.io release publishes the eleven modern packages required by
+the `brynja` facade, including its optional normal dependencies. The guarded
+independent-crate release policy used by `eth` publishes dependencies in order
+and `brynja` last. Every later official tag publishes a matching `brynja`
+version while unchanged supporting crates are not republished. Legacy and
+repository-only packages remain excluded.
 
-The foundation pentest reported two low-severity hardening opportunities.
-Truncating-cast and sign-loss lints are now non-overridable, and CI downloads
-each exact security and SBOM tool archive, verifies its independently pinned
-SHA-256 hash, and installs from the verified source archive and packaged
-lockfile. Retesting found no open findings.
+The foundation pentest reported two low-severity hardening opportunities and
+one medium release-integrity finding. Truncating-cast and sign-loss lints are
+now non-overridable, CI verifies independently pinned SHA-256 hashes for its
+security and SBOM tool archives, and the release policy no longer permits an
+official tag that publishes no `brynja` facade. Retesting found no open
+findings.
 
-Release remains blocked on green GitHub checks and explicit tag authorization
-described in `docs/RELEASE_PLAN.md`.
+The release script validates policy with `--check`; `--package-check` validates
+every selected package file set and creates every dependency-root archive
+available before registry indexing. The interactive tag-bound crates.io
+publisher creates and publishes downstream archives in dependency order only
+after the complete release gate passes.

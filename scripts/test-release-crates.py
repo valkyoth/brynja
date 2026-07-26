@@ -93,6 +93,28 @@ def test_facade_always_publishes_at_release_version() -> None:
     )
 
 
+def test_foundation_stage_is_rejected() -> None:
+    plan = public_plan()
+    plan["stage"] = "foundation"
+    original_load = policy.load_toml
+    policy.load_toml = lambda _path: {
+        "release": {
+            "version": plan["version"],
+            "policy": "independent",
+            "stage": plan["stage"],
+        },
+        "crates": plan["crates"],
+    }
+    try:
+        assert_fails(
+            "every release tag is public",
+            policy.release_plan,
+            Path("ignored.toml"),
+        )
+    finally:
+        policy.load_toml = original_load
+
+
 def test_facade_cannot_be_publish_false() -> None:
     facade = entry("0.3.0", "0.4.0", "code", False)
     assert_fails(
@@ -314,10 +336,52 @@ def test_resume_must_select_a_published_crate() -> None:
     )
 
 
+def test_package_check_builds_without_uploading() -> None:
+    calls = []
+    original_run = publisher.run
+    publisher.run = lambda command, **kwargs: calls.append((command, kwargs))
+    try:
+        publisher.package_archive("brynja-core")
+    finally:
+        publisher.run = original_run
+    assert calls == [
+        (
+            ["cargo", "package", "--no-verify", "-p", "brynja-core"],
+            {"dry_run": False},
+        )
+    ]
+
+
+def test_package_check_lists_files_without_uploading() -> None:
+    calls = []
+    original_run = publisher.run
+    publisher.run = lambda command, **kwargs: calls.append((command, kwargs))
+    try:
+        publisher.package_file_list("brynja-pki")
+    finally:
+        publisher.run = original_run
+    assert calls == [
+        (
+            ["cargo", "package", "--list", "-p", "brynja-pki"],
+            {"dry_run": False},
+        )
+    ]
+
+
+def test_package_roots_exclude_new_internal_dependencies() -> None:
+    fixture = packages()
+    selected = ("brynja-core", "brynja-crypto", "brynja-pki", policy.FACADE)
+    assert publisher.package_roots(selected, fixture) == (
+        "brynja-core",
+        "brynja-crypto",
+    )
+
+
 def run_tests() -> None:
     tests = (
         test_current_repository_plan,
         test_facade_always_publishes_at_release_version,
+        test_foundation_stage_is_rejected,
         test_facade_cannot_be_publish_false,
         test_facade_version_must_advance,
         test_initial_publication_is_explicit,
@@ -336,6 +400,9 @@ def run_tests() -> None:
         test_release_candidates_parse_structurally,
         test_post_tag_preflight_supplies_guarded_context,
         test_resume_must_select_a_published_crate,
+        test_package_check_builds_without_uploading,
+        test_package_check_lists_files_without_uploading,
+        test_package_roots_exclude_new_internal_dependencies,
     )
     for test in tests:
         test()

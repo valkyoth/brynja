@@ -15,9 +15,11 @@ from release_policy import (
     FACADE,
     PUBLISH_ORDER,
     ROOT,
+    cargo_metadata,
     parse_version,
     publish_plan,
     validate_repository,
+    workspace_packages,
 )
 
 
@@ -133,6 +135,47 @@ def publish(package: str, *, dry_run: bool) -> None:
     run(["cargo", "publish", "-p", package], dry_run=dry_run)
 
 
+def package_archive(package: str) -> None:
+    run(
+        ["cargo", "package", "--no-verify", "-p", package],
+        dry_run=False,
+    )
+
+
+def package_file_list(package: str) -> None:
+    run(["cargo", "package", "--list", "-p", package], dry_run=False)
+
+
+def package_roots(
+    steps: tuple[str, ...],
+    packages: dict[str, dict],
+) -> tuple[str, ...]:
+    selected = set(steps)
+    return tuple(
+        name
+        for name in steps
+        if not any(
+            dependency["name"] in selected
+            for dependency in packages[name]["dependencies"]
+        )
+    )
+
+
+def package_check(steps: tuple[str, ...]) -> None:
+    packages = workspace_packages(cargo_metadata())
+    for package in steps:
+        package_file_list(package)
+    roots = package_roots(steps, packages)
+    for package in roots:
+        package_archive(package)
+    print(f"Validated package contents for {len(steps)} selected crate(s).")
+    print(
+        f"Built {len(roots)} dependency-root archive(s) without uploading; "
+        "downstream archives become packageable as the publisher waits for "
+        "each new dependency to be indexed."
+    )
+
+
 def plan_path(raw: str) -> Path:
     path = Path(raw)
     return path if path.is_absolute() else (ROOT / path).resolve()
@@ -159,15 +202,24 @@ def main() -> int:
         choices=PUBLISH_ORDER,
         help="Resume at a selected package after earlier publications succeeded.",
     )
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--check",
         action="store_true",
         help="Validate policy, versions, publishability, pins, and order, then exit.",
     )
-    parser.add_argument(
+    mode.add_argument(
         "--dry-run",
         action="store_true",
         help="Print the guarded publication sequence without publishing.",
+    )
+    mode.add_argument(
+        "--package-check",
+        action="store_true",
+        help=(
+            "Validate every selected package file set and build each currently "
+            "packageable dependency-root archive without uploading."
+        ),
     )
     parser.add_argument(
         "--yes",
@@ -192,8 +244,10 @@ def main() -> int:
                 f"with {len(steps)} selected crate(s)"
             )
             return 0
-        if plan["stage"] != "public":
-            raise RuntimeError("foundation plans cannot publish crates")
+        if args.package_check:
+            require_clean_tree(dry_run=False)
+            package_check(steps)
+            return 0
 
         require_clean_tree(dry_run=args.dry_run)
         tag_at_head = check_release_tag(version, dry_run=args.dry_run)

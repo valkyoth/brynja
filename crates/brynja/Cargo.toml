@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
 description = "Security-first no_std TLS facade"
-publish = false
+publish = ["crates-io"]
 
 [features]
 default = []

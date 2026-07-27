@@ -38,11 +38,12 @@ python3 scripts/test-requirements.py
 python3 scripts/test-requirement-lifecycles.py
 ```
 
-The 32 broken-fixture and positive tests reject changed source hashes, invalid
+The 33 broken-fixture and positive tests reject changed source hashes, invalid
 sections, duplicate or malformed identifiers, obsolete-as-current authority,
 illegal lifecycle transitions, missing owners or targets, premature evidence,
 weakened SHOULD decisions, unknown surface decisions, stale generated output,
-and unsupported protocol implementation claims.
+repository-escaping symlink targets, and unsupported protocol implementation
+claims.
 
 After a reviewed policy change, regenerate and inspect all projections:
 

@@ -1,6 +1,6 @@
 # Brynja 0.3.2 Release Notes
 
-Status: implementation complete; awaiting pentest
+Status: remediation complete; awaiting pentest retest
 
 Brynja 0.3.2 establishes the normative-requirement matrix foundation. It does
 not implement TLS, cryptography, PKI, QUIC, DTLS, platform services, or legacy
@@ -38,7 +38,7 @@ cover only the requirement-governance tooling itself.
 ## Fail-Closed Verification
 
 Normal checks regenerate the schema, matrix, indexes, and coverage report and
-compare them byte for byte. Thirty-two positive and broken-fixture tests
+compare them byte for byte. Thirty-three positive and broken-fixture tests
 reject:
 
 - changed source-ledger, surface-register, RFC, IANA snapshot, registry, or
@@ -49,7 +49,7 @@ reject:
   premature test or evidence claims, and unsupported protocol implementation
   claims;
 - weakened SHOULD decisions without an explicit bounded deviation rationale;
-  and
+- repository-escaping symlink targets; and
 - stale or nondeterministic generated artifacts.
 
 These checks run in the ordinary repository gate and the dedicated v0.3.2
@@ -64,6 +64,12 @@ Legacy and repository-only packages remain unpublished.
 Publication still requires the repository owner's committed PASS pentest
 report, green hosted GitHub checks, explicit tag authorization, and the exact
 signed tag at `HEAD`.
+
+The initial pentest reported no exploitable vulnerability. Its one optional
+defense-in-depth observation was adopted: actual requirement targets are now
+resolved and rejected if a repository-internal symlink escapes the repository
+root. A dedicated regression fixture covers the boundary. Repository-owner
+retest confirmation remains required.
 
 ## Limitations
 

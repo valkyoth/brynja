@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.3.2 implementation complete; awaiting pentest
+Status: v0.3.2 remediation complete; awaiting pentest retest
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -57,10 +57,11 @@ Version 0.3.2 adds the normative-requirement foundation:
 - implementation, test, and evidence claims require existing file anchors,
   while protocol requirements are forbidden from making premature
   implementation claims; and
-- 32 positive and broken-fixture tests reject source or registry drift,
+- 33 positive and broken-fixture tests reject source or registry drift,
   malformed or duplicate identifiers, invalid sections, obsolete-as-current
   authority, illegal transitions, missing ownership and targets, premature
-  evidence, weakened SHOULD decisions, and stale generated output.
+  evidence, weakened SHOULD decisions, symlink target escapes, and stale
+  generated output.
 
 This remains governance and planning evidence, not protocol implementation.
 The pilot proves the representation and failure behavior; v0.3.3 through
@@ -71,6 +72,9 @@ Standards Track RFC and final IANA values exist.
 No `brynja-sanitization` package or dependency exists yet; its admission
 decision remains gated at v0.11.1.
 
-The v0.3.2 implementation stop is complete locally. It now requires the
-repository owner's pentest. A permanent PASS report must be committed with the
-candidate before hosted GitHub checks and explicit tag authorization.
+The repository owner's pentest reported no exploitable vulnerability and one
+optional defense-in-depth improvement. Target validation now resolves paths
+and rejects symlinks that escape the repository root, with a dedicated broken
+fixture. The remediation is complete and requires repository-owner retest
+confirmation before the permanent report can become PASS, hosted GitHub checks
+can begin, or a tag can be authorized.

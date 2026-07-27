@@ -131,6 +131,27 @@ def test_missing_actual_symbol_fails() -> None:
     )
 
 
+def test_symlink_target_escape_fails() -> None:
+    original_root = lib.ROOT
+    with tempfile.TemporaryDirectory() as directory:
+        temporary_root = Path(directory) / "repository"
+        outside = Path(directory) / "outside.py"
+        scripts = temporary_root / "scripts"
+        scripts.mkdir(parents=True)
+        outside.write_text("def escaped():\n    pass\n", encoding="utf-8")
+        (scripts / "escaped.py").symlink_to(outside)
+        lib.ROOT = temporary_root
+        try:
+            assert_fails(
+                "target escapes repository root",
+                lib.require_actual_target,
+                "scripts/escaped.py#escaped",
+                "fixture",
+            )
+        finally:
+            lib.ROOT = original_root
+
+
 def test_tested_lifecycle_requires_actual_test() -> None:
     policy, ledger, register = inputs()
     broken = copy.deepcopy(policy)

@@ -78,12 +78,13 @@ identifiers, exact source hash and section, source status and errata, normative
 strength, applicability decision, owner, planned target or actual governance
 symbol or documented boundary, tests, evidence lifecycle, and residual status.
 Generated schema, matrix, coverage, and bidirectional source, decision, owner,
-target, test, and evidence indexes are reproduced byte for byte. Thirty-two
+target, test, and evidence indexes are reproduced byte for byte. Thirty-three
 positive and broken-fixture tests reject orphaned requirements, duplicate
 identifiers, invalid sections or lifecycle transitions, a changed source
 closure, premature evidence, missing targets, obsolete-as-current authority,
-and unexplained weakening of SHOULD or SHOULD NOT language. Versions v0.3.3
-through v0.3.5 populate the remaining normative domains.
+unexplained weakening of SHOULD or SHOULD NOT language, and symlink targets
+that escape the repository root. Versions v0.3.3 through v0.3.5 populate the
+remaining normative domains.
 
 FIPS planning also snapshots the dated FIPS 140-3 CMVP Management Manual,
 Implementation Guidance, RFG and CMVP resolutions, SP 800-140 supplemental

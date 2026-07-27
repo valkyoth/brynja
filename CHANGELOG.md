@@ -14,9 +14,9 @@ Keep a Changelog and Semantic Versioning.
 - A 12-requirement authority pilot spanning all eight lifecycle states and
   binding exact RFC, errata, IANA, source-ledger, and protocol-surface
   evidence.
-- Thirty-two positive and broken-fixture tests for identity, source, section,
+- Thirty-three positive and broken-fixture tests for identity, source, section,
   lifecycle, transition, ownership, target, evidence, SHOULD-deviation, drift,
-  and stale-output failures.
+  symlink-escape, and stale-output failures.
 
 ### Security
 
@@ -24,6 +24,8 @@ Keep a Changelog and Semantic Versioning.
   before their owning implementation milestone and existing anchors.
 - Ordinary and release checks now fail closed on requirement-policy or
   generated-evidence drift.
+- Actual target validation resolves symlinks and rejects paths that leave the
+  repository root.
 
 ## [0.3.1] - 2026-07-27
 

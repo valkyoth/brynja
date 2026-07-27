@@ -113,9 +113,15 @@ def validate_repository_target(target: object, label: str) -> str:
 
 def require_actual_target(target: str, label: str) -> None:
     path, anchor = split_target(target)
-    if not path.is_file():
+    root = ROOT.resolve()
+    resolved = path.resolve()
+    try:
+        resolved.relative_to(root)
+    except ValueError:
+        fail(f"{label} target escapes repository root: {target}")
+    if not resolved.is_file():
         fail(f"{label} actual target is missing: {target}")
-    if anchor and anchor not in path.read_text(encoding="utf-8"):
+    if anchor and anchor not in resolved.read_text(encoding="utf-8"):
         fail(f"{label} actual target anchor is missing: {target}")
 
 

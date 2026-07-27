@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.3.2 remediation complete; awaiting pentest retest
+Status: v0.3.2 pentest passed; awaiting green GitHub checks and tag authorization
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -82,13 +82,13 @@ revisions were not bound to immutable history, and decision links could be
 structurally valid but semantically unrelated. Both are remediated locally with
 immutable parent-matrix comparison, append-only identifiers, exact revision
 rules, explicit mapping scopes, source/disposition/owner consistency, and 16
-dedicated history and semantic-link tests. Repository-owner retest remains
-required before the permanent report can become PASS. A later retest found one
-remaining medium bypass: protocol rows could select reviewed-global and avoid
+dedicated history and semantic-link tests. A later retest found one remaining
+medium bypass: protocol rows could select reviewed-global and avoid
 exact-source checks. Reviewed-global is now governance-only, released scope is
 immutable, and the two affected RFC-wide protocol pilot rows now use exact
-IANA sources at revision three. Hosted GitHub checks and tag authorization
-remain blocked pending retest. Ordinary CI now accepts only the exact current,
+IANA sources at revision three. Ordinary CI now accepts only the exact current,
 committed `RETEST REQUIRED`/`PENDING` remediation state so hosted checks can
-run truthfully before that retest; all release and tag paths still require
-`PASS`/`PASS`.
+run truthfully before retest, while all release and tag paths require
+`PASS`/`PASS`. The final repository-owner retest passed with zero open
+findings. Tag authorization remains blocked until the committed candidate is
+green on GitHub.

@@ -38,6 +38,8 @@ Keep a Changelog and Semantic Versioning.
 - Ordinary CI accepts only a well-formed, current, committed
   `RETEST REQUIRED`/`PENDING` pentest report while remediation awaits external
   retest; release and tag gates continue to require `PASS`/`PASS`.
+- The repository-owner retest passed after all v0.3.2 remediations, leaving
+  zero open findings and the permanent report in `PASS`/`PASS` state.
 
 ## [0.3.1] - 2026-07-27
 

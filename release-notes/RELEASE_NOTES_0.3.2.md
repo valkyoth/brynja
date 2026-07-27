@@ -1,6 +1,6 @@
 # Brynja 0.3.2 Release Notes
 
-Status: remediation complete; awaiting pentest retest
+Status: pentest passed; awaiting green GitHub checks and tag authorization
 
 Brynja 0.3.2 establishes the normative-requirement matrix foundation. It does
 not implement TLS, cryptography, PKI, QUIC, DTLS, platform services, or legacy
@@ -91,8 +91,9 @@ ownership, and private-use classification checks plus 16 dedicated fixtures.
 The next retest found that protocol rows could still select reviewed-global;
 that remaining medium bypass is closed with governance-only global mappings,
 immutable released scope, exact IANA sources for the affected pilot rows, and
-two additional fixtures. Repository-owner retest confirmation remains
-required.
+two additional fixtures. The final repository-owner retest passed all
+remediations with zero open findings. The release now awaits green hosted
+GitHub checks and explicit tag authorization.
 
 ## Limitations
 

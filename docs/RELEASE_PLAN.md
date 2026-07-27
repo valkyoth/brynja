@@ -266,7 +266,7 @@ Exit criteria:
 
 ### v0.3.2 - Normative Requirement Matrix Foundation
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, legacy and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities.
 

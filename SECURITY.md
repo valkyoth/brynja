@@ -1,8 +1,8 @@
 # Security Policy
 
 Brynja is security-sensitive protocol, cryptographic, PKI, platform, and
-release infrastructure. Version 0.1.0 is scaffolding only and is not supported
-for securing traffic.
+release infrastructure. Releases through version 0.3.1 are planning and
+scaffolding evidence only and are not supported for securing traffic.
 
 ## Routine Checks
 
@@ -10,6 +10,7 @@ for securing traffic.
 scripts/checks.sh
 scripts/check-rust-version-matrix.sh
 scripts/check_latest_tools.sh
+python3 scripts/check-protocol-surfaces.py
 cargo deny check
 cargo audit
 scripts/generate-sbom.sh --check

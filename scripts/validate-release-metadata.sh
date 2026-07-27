@@ -27,6 +27,8 @@ test -s standards/snapshots/rfc-index.json
 test -x scripts/release_crates.py
 test -x scripts/check-standards-ledger.py
 test -x scripts/test-standards-ledger.py
+test -x scripts/check-protocol-surfaces.py
+test -x scripts/test-protocol-surfaces.py
 test -x scripts/update-standards-snapshots.py
 test -f scripts/release_policy.py
 test -x scripts/test-release-crates.py
@@ -38,6 +40,9 @@ test -x scripts/install-ci-tools.sh
 test -s scripts/ci-tools.lock
 test -f security/pentest/README.md
 test -s docs/evidence-index.md
+test -s standards/surface-policy.json
+test -s standards/protocol-surfaces.json
+test -s standards/protocol-surface-coverage.md
 test -f release-crates.toml
 cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml

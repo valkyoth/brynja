@@ -18,6 +18,8 @@ scripts/verify-rfcs.sh
 scripts/verify-local-references.sh
 python3 scripts/check-standards-ledger.py
 python3 scripts/test-standards-ledger.py
+python3 scripts/check-protocol-surfaces.py
+python3 scripts/test-protocol-surfaces.py
 if ! cmp -s README.md crates/brynja/README.md; then
     echo "README.md and crates/brynja/README.md must remain identical" >&2
     diff -u README.md crates/brynja/README.md >&2 || true

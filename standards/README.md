@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: v0.3.0 reviewed source ledger
+Status: v0.3.1 reviewed source ledger and protocol-surface decisions
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -24,6 +24,15 @@ primitive is implemented.
 - `snapshots/iana/*.xml` are exact official IANA registry snapshots.
 - `SHA256SUMS` locks every generated upstream evidence artifact. The ledger is
   excluded because it is reproduced and compared directly.
+- `surface-policy.json` is the reviewed classification policy bound to the
+  exact source-ledger hash. It records explicit semantic decisions, complete
+  collection defaults, registry-specific rules, and exact entry overrides.
+- `protocol-surfaces.json` deterministically classifies every semantic
+  decision, nested registry, and individual record in all eight pinned IANA
+  collections with its disposition, source, owner, code target, test target,
+  and rationale.
+- `protocol-surface-coverage.md` is the generated human-readable count and
+  domain summary. It is never edited independently of the JSON register.
 
 The RFC and local NIST checksum manifests are trust pins, not outputs of a
 fetch. Their lock scripts validate existing pins and deliberately cannot
@@ -56,6 +65,8 @@ Normal builds and tests never access the network:
 ```bash
 python3 scripts/check-standards-ledger.py
 python3 scripts/test-standards-ledger.py
+python3 scripts/check-protocol-surfaces.py
+python3 scripts/test-protocol-surfaces.py
 ```
 
 The checker fails on non-HTTPS or unallowlisted URLs, redirects outside the
@@ -65,6 +76,14 @@ obsolete-as-current authority, unclosed RFC relationships, relaxed hybrid
 admission, or a stale generated ledger. XML and HTTP response limits plus
 DTD/entity rejection bound compromised-upstream parsing. Broken fixtures prove
 these failure paths.
+
+The surface checker additionally fails on a changed source-ledger hash,
+missing or duplicate collection, registry, record, decision, or identifier,
+unknown disposition, source, milestone, or target, overlapping registry
+rules, unmatched or duplicated overrides, any premature `implemented` claim,
+or stale generated JSON or Markdown. All 4,106 individual IANA records, 192
+nested registries, and 45 semantic decisions are represented; `future-work`
+does not claim implementation.
 
 ## Reviewed Refresh
 

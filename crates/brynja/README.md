@@ -29,15 +29,16 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.3.0` adds a deterministic ledger of locked RFC and NIST authorities,
-reviewed errata decisions, exact IANA snapshots, lifecycle classifications,
-roadmap ownership, and release-time upstream drift rejection. It does **not**
-implement TLS and must not be used to secure network traffic.
+Version `0.3.1` adds a deterministic decision register for 4,343 semantic,
+protocol, algorithm, format, registry, and individual IANA-entry surfaces.
+Every surface has a disposition, normative source, owning milestone, planned
+code target, and planned test target. It does **not** implement TLS and must
+not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.3.0` is a standards
-evidence release; it does not implement TLS. The dependency is:
+Brynja is not ready for application use. Version `0.3.1` is a protocol-surface
+planning release; it does not implement TLS. The dependency is:
 
 ```toml
 [dependencies]
@@ -81,6 +82,9 @@ publishes the facade last.
   secure, interoperable, audited, or production-ready.
 - The locked RFC closure and its roadmap mapping are recorded in the
   [RFC coverage audit](https://github.com/valkyoth/brynja/blob/main/docs/RFC_COVERAGE_AUDIT.md);
+  the generated
+  [protocol-surface coverage](https://github.com/valkyoth/brynja/blob/main/standards/protocol-surface-coverage.md)
+  classifies every pinned IANA record and explicit non-registry decision;
   v0.3.2 through v0.3.5 later turn every applicable normative statement into
   lifecycle-correct source-to-plan-to-code-and-test traceability.
 
@@ -167,6 +171,7 @@ scripts/release_crates.py --check
 scripts/release_crates.py --package-check
 scripts/check-github-release-controls.py
 python3 scripts/check-standards-ledger.py
+python3 scripts/check-protocol-surfaces.py
 cargo deny check
 cargo audit
 ```
@@ -179,7 +184,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.3.0
+scripts/release_crates.py --version 0.3.1
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

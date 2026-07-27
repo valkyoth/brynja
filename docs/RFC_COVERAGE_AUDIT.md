@@ -1,7 +1,7 @@
 # RFC Coverage Audit
 
-Status: planning audit completed 2026-07-26; implementation traceability remains
-gated by v0.3.0 through v0.3.5
+Status: source and surface traceability complete through v0.3.1; normative
+requirement traceability remains gated by v0.3.2 through v0.3.5
 
 ## Scope And Method
 
@@ -56,7 +56,7 @@ The following are deliberate boundaries rather than omissions:
 - RFC 9850 key logging is available only from a separately compiled
   test-support artifact and can never enter production crates or features.
 - TLS 1.3 post-handshake client authentication is rejected for v1; ordinary
-  handshake client authentication remains implemented.
+  handshake client authentication remains admitted future work.
 - RFC 9963 legacy PKCS1 client CertificateVerify code points and RFC 9973
   certificate-with-external-PSK authentication are rejected for v1.
 - RFC 9935 ML-KEM certificates and private-key containers are not admitted;
@@ -71,8 +71,8 @@ The following are deliberate boundaries rather than omissions:
 - ECH DNS, SVCB, and HTTPS resolution and network caching remain caller-owned;
   Brynja validates the supplied configuration bytes and their typed provenance.
 - Certificate decompression algorithms remain bounded caller providers.
-  Brynja owns negotiation, exact lengths, canonical comparison, transcript
-  bytes, failure behavior, and artifact invalidation.
+  Planned Brynja code owns negotiation, exact lengths, canonical comparison,
+  transcript bytes, failure behavior, and artifact invalidation.
 - `id-alg-unsigned` certificates are never accepted in a signature-verification
   context.
 - Legacy packages implement only the exact H0.1.1 admitted interoperability
@@ -88,7 +88,7 @@ inapplicable document. The following direct updates were reviewed and excluded:
 - RFC 7320 and RFC 8820 govern URI scheme ownership and design rather than the
   admitted certificate-name comparison rules.
 - RFC 4680, RFC 4681, and RFC 5878 define unadmitted TLS supplemental-data,
-  user-mapping, and authorization extensions; v0.3.1 must retain explicit
+  user-mapping, and authorization extensions; v0.3.1 retains explicit
   rejection decisions.
 - RFC 3546 and RFC 4366 are superseded TLS-extension baselines replaced by the
   locked RFC 6066/current TLS authorities; RFC 8446, RFC 5019, and RFC 8773 are

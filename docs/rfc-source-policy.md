@@ -63,6 +63,15 @@ DNS-over-HTTPS. The comparison covered every locked RFC and NIST source, all
 IANA snapshots, the canonical RFC-index projection, and the canonical 285-entry
 errata set.
 
+The v0.3.1 `surface-policy.json` binds to the byte-exact generated source
+ledger and classifies every semantic surface plus every nested registry and
+individual record in all eight pinned IANA collections. The generated
+`protocol-surfaces.json` carries normative sources, disposition, milestone,
+planned code target, planned test target, and rationale for every row.
+`check-protocol-surfaces.py` rejects a changed ledger, collection, registry,
+record, classification, owner, target, or unmatched override and reproduces
+both the JSON register and human-readable coverage byte for byte.
+
 The v0.3.2 through v0.3.5 requirement-matrix passes record exact source hash and
 section, normative strength, applicability decision, owner, planned target or
 actual implementation symbol or documented boundary, positive and negative

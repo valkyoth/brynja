@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.3.0 pentested release candidate awaiting green GitHub CI
+Status: v0.3.1 implementation candidate awaiting pentest
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -15,12 +15,15 @@ consistent in the same commit.
 | `standards/snapshots/iana/*.xml` | Exact official registry state | XML identity, checksum lock, ledger checker, and networked release drift check |
 | `standards/ERRATA.json` | Complete locked-RFC errata inventory and reviewed disposition | Ledger checker and networked release drift check |
 | `standards/source-ledger.json` | Deterministic joined inventory of every admitted authority and owner | Byte-for-byte regeneration and 28 positive/broken-fixture tests |
+| `standards/surface-policy.json` | Reviewed dispositions and ownership for semantic surfaces, complete IANA collections, nested registries, and exact entry overrides | Schema, source, owner, target, uniqueness, completeness, and override validation |
+| `standards/protocol-surfaces.json` | Deterministic classification of 4,343 semantic and registry surfaces | Byte-for-byte regeneration and 25 positive/broken-fixture tests |
+| `standards/protocol-surface-coverage.md` | Human-readable disposition, kind, and domain counts | Generated and byte-compared with the machine register |
 | `package-policy.toml` | Complete package and dependency boundary | Workspace metadata validators and fixtures |
 | `github-release-controls.toml` | Protected release branch requirements | Local fixtures and authenticated live release check |
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |
 | `security/pentest/vX.Y.Z.md` | Permanent per-version pentest and remediation outcome | Release-readiness and report-history validators |
 
-The v0.3.0 ledger is source-level evidence only. Protocol surface decisions
-begin at v0.3.1, normative statement extraction at v0.3.2, domain population at
-v0.3.3 through v0.3.5, and implementation afterward. No ledger entry is an
+The v0.3.0 ledger and v0.3.1 decisions are planning evidence only. Normative
+statement extraction begins at v0.3.2, domain population at v0.3.3 through
+v0.3.5, and implementation afterward. No ledger or surface entry is an
 implementation, interoperability, security, or FIPS validation claim.

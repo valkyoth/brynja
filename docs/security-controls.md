@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.3.0 standards source-ledger enforcement
+Status: v0.3.1 standards and protocol-surface enforcement
 
 | Control | Foundation enforcement |
 | --- | --- |
@@ -14,6 +14,7 @@ Status: v0.3.0 standards source-ledger enforcement
 | Review size | Source files over 500 lines fail checks |
 | Toolchain | Pinned stable plus explicit MSRV matrix |
 | Standards | Exact HTTPS host/path and redirect allowlists, independently reviewed non-self-replacing pins, bounded responses, DTD/entity rejection, immutable RFC/NIST bytes, exact RFC-index and IANA snapshots, 285 reviewed errata decisions, lifecycle and milestone ownership, complete updated-by/obsoleted-by closure, deterministic ledger generation, broken fixtures, and release-time live drift rejection |
+| Protocol surfaces | Deterministic classification of every semantic decision, nested registry, and individual record across all eight pinned IANA collections with exact source-ledger binding, disposition, milestone, code target, test target, and broken-fixture enforcement |
 | Hybrid admission | Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track RFC and final IANA code points exist; drafts and private values are forbidden |
 | Release | Regular committed PASS report, zero open findings, report update against every parent carrying the report, clean GitHub, explicit tag authorization, exact signed annotated tag and subject, release notes, SBOM, and local gate required |
 | GitHub protection | Active machine-checked main ruleset requires signed linear history, review and CodeQL while retaining explicit accountable owner/admin bypass |

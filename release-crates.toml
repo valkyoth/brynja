@@ -1,14 +1,14 @@
 [release]
-version = "0.3.0"
+version = "0.3.1"
 policy = "independent"
 stage = "public"
 
 [crates."brynja"]
-previous_version = "0.2.0"
-version = "0.3.0"
+previous_version = "0.3.0"
+version = "0.3.1"
 change = "code"
 publish = true
-reason = "Mandatory facade release for the standards source-ledger milestone; it adds no protocol implementation."
+reason = "Mandatory facade release for the protocol-surface decision-register milestone; it adds no protocol implementation."
 
 [crates."brynja-core"]
 previous_version = "0.1.0"

@@ -5,6 +5,35 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-07-27
+
+### Added
+
+- A deterministic protocol-surface register containing 45 explicit semantic
+  decisions, 192 nested IANA registries, and all 4,106 individual records from
+  the eight pinned registry collections.
+- Required disposition, normative-source, milestone-owner, planned-code-target,
+  planned-test-target, and rationale fields for all 4,343 classified surfaces.
+- Explicit decisions for Heartbeat, status_request_v2, production and
+  test-only SSLKEYLOGFILE handling, TLS 1.3 post-handshake authentication,
+  certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX
+  credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC
+  version-specific cryptography, and certificate compression.
+- Human-readable generated disposition, kind, and domain coverage.
+- Twenty-five positive and broken-fixture tests for completeness, ownership,
+  source binding, classification, override, parser, and reproducibility
+  failures.
+
+### Security
+
+- Bound the surface policy to the byte-exact v0.3.0 source ledger so RFC
+  status, errata, registry, source, and classification drift cannot remain
+  silent.
+- Rejected missing or duplicate collections, registries, semantic IDs, JSON
+  keys, and overrides; unknown sources, milestones, dispositions, and targets;
+  overlapping rules; unmatched selectors; unsafe XML declarations; and any
+  premature `implemented` claim.
+
 ## [0.3.0] - 2026-07-27
 
 ### Added

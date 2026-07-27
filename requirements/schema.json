@@ -1,0 +1,80 @@
+{
+  "applicabilities": [
+    "apply",
+    "blocked",
+    "delegate",
+    "legacy",
+    "reject"
+  ],
+  "decisions": [
+    "defer",
+    "delegate",
+    "deviate",
+    "enforce",
+    "exclude",
+    "isolate"
+  ],
+  "id_format": "BRY-REQ-[A-Z0-9]+-[0-9]{4}",
+  "lifecycles": [
+    "blocked",
+    "caller-owned",
+    "evidenced",
+    "implemented",
+    "legacy",
+    "planned",
+    "rejected",
+    "tested"
+  ],
+  "schema": 1,
+  "strengths": [
+    "INVARIANT",
+    "MAY",
+    "MUST",
+    "MUST NOT",
+    "REGISTRY",
+    "SHOULD",
+    "SHOULD NOT"
+  ],
+  "target_kinds": [
+    "actual-symbol",
+    "blocker",
+    "boundary",
+    "legacy-boundary",
+    "planned-symbol"
+  ],
+  "test_statuses": [
+    "actual",
+    "planned"
+  ],
+  "transitions": {
+    "blocked": [
+      "planned"
+    ],
+    "caller-owned": [
+      "planned"
+    ],
+    "evidenced": [
+      "tested"
+    ],
+    "implemented": [
+      "tested"
+    ],
+    "legacy": [
+      "planned"
+    ],
+    "planned": [
+      "blocked",
+      "caller-owned",
+      "implemented",
+      "legacy",
+      "rejected"
+    ],
+    "rejected": [
+      "planned"
+    ],
+    "tested": [
+      "evidenced",
+      "implemented"
+    ]
+  }
+}

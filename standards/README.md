@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: v0.3.1 reviewed source ledger and protocol-surface decisions
+Status: v0.3.2 reviewed source, surface, and requirement foundation
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -33,6 +33,10 @@ primitive is implemented.
   and rationale.
 - `protocol-surface-coverage.md` is the generated human-readable count and
   domain summary. It is never edited independently of the JSON register.
+- `../requirements/` binds stable pilot requirements to this exact ledger and
+  surface register and generates lifecycle, traceability, and coverage
+  evidence. It remains a foundation pilot until v0.3.3 through v0.3.5 complete
+  domain population.
 
 The RFC and local NIST checksum manifests are trust pins, not outputs of a
 fetch. Their lock scripts validate existing pins and deliberately cannot
@@ -67,6 +71,9 @@ python3 scripts/check-standards-ledger.py
 python3 scripts/test-standards-ledger.py
 python3 scripts/check-protocol-surfaces.py
 python3 scripts/test-protocol-surfaces.py
+python3 scripts/check-requirements.py
+python3 scripts/test-requirements.py
+python3 scripts/test-requirement-lifecycles.py
 ```
 
 The checker fails on non-HTTPS or unallowlisted URLs, redirects outside the
@@ -84,6 +91,14 @@ rules, unmatched or duplicated overrides, any premature `implemented` claim,
 or stale generated JSON or Markdown. All 4,106 individual IANA records, 192
 nested registries, and 45 semantic decisions are represented; `future-work`
 does not claim implementation.
+
+The requirement checker additionally fails on changed ledger or surface hashes,
+invalid RFC sections or anchors, obsolete-as-current sources, unknown or
+duplicate stable identifiers, illegal lifecycle transitions, absent owners or
+targets, premature test or evidence claims, weakened SHOULD decisions, broken
+bidirectional mappings, or stale generated artifacts. Its 12 pilot
+requirements exercise all eight lifecycle states; governance-tool evidence is
+not protocol implementation evidence.
 
 ## Reviewed Refresh
 

@@ -1,13 +1,13 @@
 //! Security-first, dependency-free `no_std` TLS facade.
 //!
-//! This release adds machine-checked protocol-surface decisions. It does not
-//! yet provide a TLS connection API.
+//! This release adds a machine-checked normative-requirement foundation. It
+//! does not yet provide a TLS connection API.
 
 #![no_std]
 
 /// Whether this package provides its planned implementation.
 ///
-/// The decision-register milestone intentionally reports `false`.
+/// The requirement-matrix milestone intentionally reports `false`.
 pub const IMPLEMENTED: bool = false;
 
 pub use brynja_core as core;

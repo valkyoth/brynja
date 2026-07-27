@@ -1,16 +1,17 @@
 # Current Status
 
-Status: v0.3.1 pentest complete; awaiting green GitHub CI
+Status: v0.3.2 implementation complete; awaiting pentest
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
 must not be used to secure network traffic. Brynja is not FIPS 140-3 validated,
 and no package, feature, build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.3.0 established the workspace, hardened
-release and isolation controls, and made standards authority executable. The
-v0.3.1 candidate advances only `brynja`; unchanged supporting crates remain at
-their independently published `0.1.0` versions and are not selected again.
+Signed releases v0.1.0 through v0.3.1 established the workspace, hardened
+release and isolation controls, made standards authority executable, and
+classified the complete protocol-surface inventory. The v0.3.2 candidate
+advances only `brynja`; unchanged supporting crates remain at their
+independently published `0.1.0` versions and are not selected again.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -44,17 +45,32 @@ Version 0.3.1 adds explicit protocol-surface decisions:
   overlapping rules, unmatched overrides, stale output, and premature
   implementation claims.
 
-This is decision and planning evidence, not implementation. A `future-work`
-entry does not admit code or interoperability. v0.3.2 through v0.3.5 will
-extract and populate normative requirement mappings before protocol work
+Version 0.3.2 adds the normative-requirement foundation:
+
+- 12 stable pilot requirements bind exact source-ledger and surface-register
+  hashes, source sections and anchors, status, errata, strength, applicability,
+  decisions, owners, residual risk, targets, tests, and evidence;
+- all eight lifecycle states are represented: planned, implemented, tested,
+  evidenced, rejected, caller-owned, legacy, and blocked;
+- deterministic schema, matrix, coverage, and bidirectional source, decision,
+  owner, target, test, and evidence indexes are reproduced byte for byte;
+- implementation, test, and evidence claims require existing file anchors,
+  while protocol requirements are forbidden from making premature
+  implementation claims; and
+- 32 positive and broken-fixture tests reject source or registry drift,
+  malformed or duplicate identifiers, invalid sections, obsolete-as-current
+  authority, illegal transitions, missing ownership and targets, premature
+  evidence, weakened SHOULD decisions, and stale generated output.
+
+This remains governance and planning evidence, not protocol implementation.
+The pilot proves the representation and failure behavior; v0.3.3 through
+v0.3.5 populate the remaining normative requirements before protocol work
 begins. Concrete ECDHE-ML-KEM groups remain blocked until both a final
 Standards Track RFC and final IANA values exist.
 
 No `brynja-sanitization` package or dependency exists yet; its admission
 decision remains gated at v0.11.1.
 
-The repository owner pentested signed implementation candidate
-`8785252d9ae16d59e9bb27787d63bd4684bcb493` and reported no findings. The
-permanent report records PASS, zero open findings, and a green result. The
-candidate now waits only for hosted GitHub checks and explicit tag
-authorization.
+The v0.3.2 implementation stop is complete locally. It now requires the
+repository owner's pentest. A permanent PASS report must be committed with the
+candidate before hosted GitHub checks and explicit tag authorization.

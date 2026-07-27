@@ -234,7 +234,7 @@ Exit criteria:
 
 ### v0.3.1 - Machine-Readable Protocol Surface Decision Register
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Generate a machine-readable register covering every current TLS, DTLS, QUIC-TLS, PKIX, HPKE, ECH, legacy-protocol, algorithm, extension, content and handshake message, alert, cipher suite, signature scheme, named group, certificate and key format, and relevant IANA entry; classify each as implemented, intentionally rejected, safely ignored, caller-owned, legacy-only, or future work with normative source, owning milestone, code and test targets, including explicit decisions for Heartbeat, status_request_v2, SSLKEYLOGFILE, TLS 1.3 post-handshake authentication, certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX credentials, HPKE non-base modes, unsigned X.509 certificates, QUIC version-specific transport cryptography, and compression algorithms; fail when a source, registry snapshot, status, erratum, or classification drifts.
 
@@ -266,7 +266,7 @@ Exit criteria:
 
 ### v0.3.2 - Normative Requirement Matrix Foundation
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, legacy and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities.
 

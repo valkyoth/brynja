@@ -29,6 +29,11 @@ test -x scripts/check-standards-ledger.py
 test -x scripts/test-standards-ledger.py
 test -x scripts/check-protocol-surfaces.py
 test -x scripts/test-protocol-surfaces.py
+test -x scripts/check-requirements.py
+test -x scripts/test-requirements.py
+test -x scripts/test-requirement-lifecycles.py
+test -f scripts/requirements_lib.py
+test -f scripts/requirements_test_support.py
 test -x scripts/update-standards-snapshots.py
 test -f scripts/release_policy.py
 test -x scripts/test-release-crates.py
@@ -43,6 +48,12 @@ test -s docs/evidence-index.md
 test -s standards/surface-policy.json
 test -s standards/protocol-surfaces.json
 test -s standards/protocol-surface-coverage.md
+test -s requirements/README.md
+test -s requirements/policy.json
+test -s requirements/schema.json
+test -s requirements/matrix.json
+test -s requirements/indexes.json
+test -s requirements/coverage.md
 test -f release-crates.toml
 cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml

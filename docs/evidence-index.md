@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.3.1 pentested release candidate awaiting green GitHub CI
+Status: v0.3.2 implementation complete; awaiting pentest
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -18,12 +18,18 @@ consistent in the same commit.
 | `standards/surface-policy.json` | Reviewed dispositions and ownership for semantic surfaces, complete IANA collections, nested registries, and exact entry overrides | Schema, source, owner, target, uniqueness, completeness, and override validation |
 | `standards/protocol-surfaces.json` | Deterministic classification of 4,343 semantic and registry surfaces | Byte-for-byte regeneration and 25 positive/broken-fixture tests |
 | `standards/protocol-surface-coverage.md` | Human-readable disposition, kind, and domain counts | Generated and byte-compared with the machine register |
+| `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
+| `requirements/schema.json` | Deterministic lifecycle and transition contract | Byte-for-byte regeneration |
+| `requirements/matrix.json` | Resolved pilot requirements bound to exact source, section, errata, registry, and surface evidence | Byte-for-byte regeneration and 32 positive/broken-fixture tests |
+| `requirements/indexes.json` | Bidirectional source, decision, owner, target, test, and evidence mappings | Generated from and cross-checked against the matrix |
+| `requirements/coverage.md` | Human-readable pilot lifecycle, strength, scope, and index coverage | Generated and byte-compared with the machine evidence |
 | `package-policy.toml` | Complete package and dependency boundary | Workspace metadata validators and fixtures |
 | `github-release-controls.toml` | Protected release branch requirements | Local fixtures and authenticated live release check |
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |
 | `security/pentest/vX.Y.Z.md` | Permanent per-version pentest and remediation outcome | Release-readiness and report-history validators |
 
-The v0.3.0 ledger and v0.3.1 decisions are planning evidence only. Normative
-statement extraction begins at v0.3.2, domain population at v0.3.3 through
-v0.3.5, and implementation afterward. No ledger or surface entry is an
-implementation, interoperability, security, or FIPS validation claim.
+The v0.3.0 ledger, v0.3.1 decisions, and v0.3.2 requirement pilot are planning
+and governance evidence only. Domain population occurs at v0.3.3 through
+v0.3.5, and protocol implementation afterward. No ledger, surface, or planned
+protocol-requirement entry is an implementation, interoperability, security,
+or FIPS validation claim.

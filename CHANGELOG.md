@@ -5,6 +5,26 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-07-27
+
+### Added
+
+- A stable normative-requirement policy and deterministic schema, resolved
+  matrix, bidirectional indexes, and human-readable coverage report.
+- A 12-requirement authority pilot spanning all eight lifecycle states and
+  binding exact RFC, errata, IANA, source-ledger, and protocol-surface
+  evidence.
+- Thirty-two positive and broken-fixture tests for identity, source, section,
+  lifecycle, transition, ownership, target, evidence, SHOULD-deviation, drift,
+  and stale-output failures.
+
+### Security
+
+- Protocol requirements cannot claim implemented, tested, or evidenced status
+  before their owning implementation milestone and existing anchors.
+- Ordinary and release checks now fail closed on requirement-policy or
+  generated-evidence drift.
+
 ## [0.3.1] - 2026-07-27
 
 ### Added

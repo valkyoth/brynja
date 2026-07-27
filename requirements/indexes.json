@@ -1,0 +1,411 @@
+{
+  "by_requirement": {
+    "BRY-REQ-APP-0001": {
+      "decisions": [
+        "iana.tls-extensiontype-values.alpn-protocol-ids"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.130.0"
+      ],
+      "sources": [
+        "iana.tls-extensiontype-values.alpn-protocol-ids"
+      ],
+      "targets": [
+        "boundary:boundary:application-alpn-semantics"
+      ],
+      "tests": [
+        "planned:tests/requirements/alpn.rs#opaque_round_trip"
+      ]
+    },
+    "BRY-REQ-HYB-0001": {
+      "decisions": [
+        "algorithm.ecdhe-ml-kem"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.120.0"
+      ],
+      "sources": [
+        "rfc:9954#5"
+      ],
+      "targets": [
+        "blocker:standards/source-policy.toml#ecdhe-ml-kem-groups"
+      ],
+      "tests": [
+        "planned:tests/requirements/hybrid.rs#final_rfc_and_iana_required"
+      ]
+    },
+    "BRY-REQ-IANA-0001": {
+      "decisions": [
+        "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
+      ],
+      "evidence": [
+        "requirements/indexes.json#requirements_by"
+      ],
+      "owners": [
+        "0.3.2"
+      ],
+      "sources": [
+        "rfc:8126#3.1"
+      ],
+      "targets": [
+        "actual-symbol:scripts/check-requirements.py#resolve_source"
+      ],
+      "tests": [
+        "actual:scripts/test-requirements.py#test_iana_source_drift_changes_matrix"
+      ]
+    },
+    "BRY-REQ-IANA-0002": {
+      "decisions": [
+        "iana.tls-extensiontype-values.alpn-protocol-ids"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.130.0"
+      ],
+      "sources": [
+        "rfc:8126#4.5"
+      ],
+      "targets": [
+        "boundary:boundary:iana-designated-expert"
+      ],
+      "tests": [
+        "planned:tests/requirements/alpn.rs#caller_owned_semantics"
+      ]
+    },
+    "BRY-REQ-IANA-0003": {
+      "decisions": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.148.0"
+      ],
+      "sources": [
+        "rfc:8126#4.1"
+      ],
+      "targets": [
+        "boundary:boundary:private-use-codepoints"
+      ],
+      "tests": [
+        "planned:tests/requirements/private_use.rs#no_public_admission"
+      ]
+    },
+    "BRY-REQ-LEG-0001": {
+      "decisions": [
+        "legacy.tls10"
+      ],
+      "evidence": [],
+      "owners": [
+        "H0.2.0"
+      ],
+      "sources": [
+        "rfc:2246#3"
+      ],
+      "targets": [
+        "legacy-boundary:crates/brynja-legacy-tls10/src/lib.rs#IMPLEMENTED"
+      ],
+      "tests": [
+        "planned:tests/requirements/legacy_tls10.rs#modern_isolation"
+      ]
+    },
+    "BRY-REQ-STD-0001": {
+      "decisions": [
+        "protocol.tls13"
+      ],
+      "evidence": [
+        "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+      ],
+      "owners": [
+        "0.3.2"
+      ],
+      "sources": [
+        "rfc:8174#2"
+      ],
+      "targets": [
+        "actual-symbol:scripts/check-requirements.py#validate_strength"
+      ],
+      "tests": [
+        "actual:scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+      ]
+    },
+    "BRY-REQ-STD-0002": {
+      "decisions": [
+        "protocol.tls13"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.3.2"
+      ],
+      "sources": [
+        "rfc:2119#7"
+      ],
+      "targets": [
+        "actual-symbol:scripts/check-requirements.py#validate_requirement"
+      ],
+      "tests": [
+        "actual:scripts/test-requirements.py#test_missing_residual_fails"
+      ]
+    },
+    "BRY-REQ-STD-0003": {
+      "decisions": [
+        "protocol.tls13"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.3.2"
+      ],
+      "sources": [
+        "rfc:8126#2.2"
+      ],
+      "targets": [
+        "actual-symbol:scripts/requirements_lib.py#ID_PATTERN"
+      ],
+      "tests": [
+        "planned:tests/requirements/stable_ids.rs#rendering_independence"
+      ]
+    },
+    "BRY-REQ-STD-0004": {
+      "decisions": [
+        "protocol.tls13"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.3.5"
+      ],
+      "sources": [
+        "rfc:2119#6"
+      ],
+      "targets": [
+        "planned-symbol:scripts/check-requirements.py#validate_normative_usage"
+      ],
+      "tests": [
+        "planned:tests/requirements/normative_usage.rs#unsupported_imperative"
+      ]
+    },
+    "BRY-REQ-TLS-0001": {
+      "decisions": [
+        "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.67.0"
+      ],
+      "sources": [
+        "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256"
+      ],
+      "tests": [
+        "planned:tests/requirements/tls13_cipher_suites.rs#aes128_gcm"
+      ]
+    },
+    "BRY-REQ-TLS-0002": {
+      "decisions": [
+        "facility.heartbeat",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
+      ],
+      "evidence": [],
+      "owners": [
+        "0.19.0"
+      ],
+      "sources": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
+      ],
+      "targets": [
+        "boundary:boundary:modern-heartbeat-rejection"
+      ],
+      "tests": [
+        "planned:tests/requirements/heartbeat.rs#negotiation_and_content_rejected"
+      ]
+    }
+  },
+  "requirements_by": {
+    "decisions": {
+      "algorithm.ecdhe-ml-kem": [
+        "BRY-REQ-HYB-0001"
+      ],
+      "facility.heartbeat": [
+        "BRY-REQ-TLS-0002"
+      ],
+      "iana.tls-extensiontype-values.alpn-protocol-ids": [
+        "BRY-REQ-APP-0001",
+        "BRY-REQ-IANA-0002"
+      ],
+      "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1": [
+        "BRY-REQ-TLS-0002"
+      ],
+      "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1": [
+        "BRY-REQ-IANA-0003"
+      ],
+      "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1": [
+        "BRY-REQ-IANA-0001",
+        "BRY-REQ-TLS-0001"
+      ],
+      "legacy.tls10": [
+        "BRY-REQ-LEG-0001"
+      ],
+      "protocol.tls13": [
+        "BRY-REQ-STD-0001",
+        "BRY-REQ-STD-0002",
+        "BRY-REQ-STD-0003",
+        "BRY-REQ-STD-0004"
+      ]
+    },
+    "evidence": {
+      "requirements/indexes.json#requirements_by": [
+        "BRY-REQ-IANA-0001"
+      ],
+      "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength": [
+        "BRY-REQ-STD-0001"
+      ]
+    },
+    "owners": {
+      "0.120.0": [
+        "BRY-REQ-HYB-0001"
+      ],
+      "0.130.0": [
+        "BRY-REQ-APP-0001",
+        "BRY-REQ-IANA-0002"
+      ],
+      "0.148.0": [
+        "BRY-REQ-IANA-0003"
+      ],
+      "0.19.0": [
+        "BRY-REQ-TLS-0002"
+      ],
+      "0.3.2": [
+        "BRY-REQ-IANA-0001",
+        "BRY-REQ-STD-0001",
+        "BRY-REQ-STD-0002",
+        "BRY-REQ-STD-0003"
+      ],
+      "0.3.5": [
+        "BRY-REQ-STD-0004"
+      ],
+      "0.67.0": [
+        "BRY-REQ-TLS-0001"
+      ],
+      "H0.2.0": [
+        "BRY-REQ-LEG-0001"
+      ]
+    },
+    "sources": {
+      "iana.tls-extensiontype-values.alpn-protocol-ids": [
+        "BRY-REQ-APP-0001"
+      ],
+      "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1": [
+        "BRY-REQ-TLS-0002"
+      ],
+      "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1": [
+        "BRY-REQ-TLS-0001"
+      ],
+      "rfc:2119#6": [
+        "BRY-REQ-STD-0004"
+      ],
+      "rfc:2119#7": [
+        "BRY-REQ-STD-0002"
+      ],
+      "rfc:2246#3": [
+        "BRY-REQ-LEG-0001"
+      ],
+      "rfc:8126#2.2": [
+        "BRY-REQ-STD-0003"
+      ],
+      "rfc:8126#3.1": [
+        "BRY-REQ-IANA-0001"
+      ],
+      "rfc:8126#4.1": [
+        "BRY-REQ-IANA-0003"
+      ],
+      "rfc:8126#4.5": [
+        "BRY-REQ-IANA-0002"
+      ],
+      "rfc:8174#2": [
+        "BRY-REQ-STD-0001"
+      ],
+      "rfc:9954#5": [
+        "BRY-REQ-HYB-0001"
+      ]
+    },
+    "targets": {
+      "actual-symbol:scripts/check-requirements.py#resolve_source": [
+        "BRY-REQ-IANA-0001"
+      ],
+      "actual-symbol:scripts/check-requirements.py#validate_requirement": [
+        "BRY-REQ-STD-0002"
+      ],
+      "actual-symbol:scripts/check-requirements.py#validate_strength": [
+        "BRY-REQ-STD-0001"
+      ],
+      "actual-symbol:scripts/requirements_lib.py#ID_PATTERN": [
+        "BRY-REQ-STD-0003"
+      ],
+      "blocker:standards/source-policy.toml#ecdhe-ml-kem-groups": [
+        "BRY-REQ-HYB-0001"
+      ],
+      "boundary:boundary:application-alpn-semantics": [
+        "BRY-REQ-APP-0001"
+      ],
+      "boundary:boundary:iana-designated-expert": [
+        "BRY-REQ-IANA-0002"
+      ],
+      "boundary:boundary:modern-heartbeat-rejection": [
+        "BRY-REQ-TLS-0002"
+      ],
+      "boundary:boundary:private-use-codepoints": [
+        "BRY-REQ-IANA-0003"
+      ],
+      "legacy-boundary:crates/brynja-legacy-tls10/src/lib.rs#IMPLEMENTED": [
+        "BRY-REQ-LEG-0001"
+      ],
+      "planned-symbol:crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256": [
+        "BRY-REQ-TLS-0001"
+      ],
+      "planned-symbol:scripts/check-requirements.py#validate_normative_usage": [
+        "BRY-REQ-STD-0004"
+      ]
+    },
+    "tests": {
+      "actual:scripts/test-requirements.py#test_iana_source_drift_changes_matrix": [
+        "BRY-REQ-IANA-0001"
+      ],
+      "actual:scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength": [
+        "BRY-REQ-STD-0001"
+      ],
+      "actual:scripts/test-requirements.py#test_missing_residual_fails": [
+        "BRY-REQ-STD-0002"
+      ],
+      "planned:tests/requirements/alpn.rs#caller_owned_semantics": [
+        "BRY-REQ-IANA-0002"
+      ],
+      "planned:tests/requirements/alpn.rs#opaque_round_trip": [
+        "BRY-REQ-APP-0001"
+      ],
+      "planned:tests/requirements/heartbeat.rs#negotiation_and_content_rejected": [
+        "BRY-REQ-TLS-0002"
+      ],
+      "planned:tests/requirements/hybrid.rs#final_rfc_and_iana_required": [
+        "BRY-REQ-HYB-0001"
+      ],
+      "planned:tests/requirements/legacy_tls10.rs#modern_isolation": [
+        "BRY-REQ-LEG-0001"
+      ],
+      "planned:tests/requirements/normative_usage.rs#unsupported_imperative": [
+        "BRY-REQ-STD-0004"
+      ],
+      "planned:tests/requirements/private_use.rs#no_public_admission": [
+        "BRY-REQ-IANA-0003"
+      ],
+      "planned:tests/requirements/stable_ids.rs#rendering_independence": [
+        "BRY-REQ-STD-0003"
+      ],
+      "planned:tests/requirements/tls13_cipher_suites.rs#aes128_gcm": [
+        "BRY-REQ-TLS-0001"
+      ]
+    }
+  },
+  "schema": 1
+}

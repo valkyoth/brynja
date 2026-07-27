@@ -1,7 +1,8 @@
 # RFC Coverage Audit
 
 Status: source and surface traceability complete through v0.3.1; normative
-requirement traceability remains gated by v0.3.2 through v0.3.5
+requirement foundation complete at v0.3.2 and domain population gated by
+v0.3.3 through v0.3.5
 
 ## Scope And Method
 
@@ -20,9 +21,11 @@ ledger deliberately retains obsolete documents only when current specifications
 require compatibility behavior or an isolated legacy package needs them.
 
 This document records planning coverage, not protocol conformance. v0.3.2
-through v0.3.5 must later extract every applicable normative statement into
-stable machine-readable requirements whose planned targets become actual code,
-tests, and evidence as their owning milestones land.
+establishes stable machine-readable identifiers, lifecycle states, exact
+authority binding, bidirectional mappings, and fail-closed pilot verification.
+Versions v0.3.3 through v0.3.5 must populate every applicable current and
+compatibility rule; planned targets become actual code, tests, and evidence
+only in their owning milestone.
 
 ## Coverage By Implementation Domain
 

@@ -1,0 +1,426 @@
+{
+  "requirements": [
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "protocol.tls13"
+      ],
+      "deviation_rationale": null,
+      "evidence": [
+        "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+      ],
+      "id": "BRY-REQ-STD-0001",
+      "lifecycle": "evidenced",
+      "owner": "0.3.2",
+      "residual": "Normative prose without BCP 14 keywords still requires later manual extraction and review.",
+      "revision": 1,
+      "scope": "governance",
+      "source": {
+        "anchor": "The words have the meanings specified herein only when they are in all capitals.",
+        "id": "rfc:8174",
+        "kind": "rfc",
+        "section": "2"
+      },
+      "statement": "The extractor treats BCP 14 keywords as special requirement strength only when they appear in uppercase.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "scripts/check-requirements.py#validate_strength"
+        }
+      ],
+      "tests": [
+        {
+          "status": "actual",
+          "target": "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+        }
+      ]
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "protocol.tls13"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-STD-0002",
+      "lifecycle": "tested",
+      "owner": "0.3.2",
+      "residual": "Later domain records must provide their own concrete security consequence and cannot inherit this pilot text.",
+      "revision": 1,
+      "scope": "governance",
+      "source": {
+        "anchor": "The effects on security of not implementing a MUST or SHOULD",
+        "id": "rfc:2119",
+        "kind": "rfc",
+        "section": "7"
+      },
+      "statement": "Every requirement records residual security context so a mandatory or recommended rule cannot be weakened silently.",
+      "strength": "SHOULD",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "scripts/check-requirements.py#validate_requirement"
+        }
+      ],
+      "tests": [
+        {
+          "status": "actual",
+          "target": "scripts/test-requirements.py#test_missing_residual_fails"
+        }
+      ]
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "protocol.tls13"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-STD-0003",
+      "lifecycle": "implemented",
+      "owner": "0.3.2",
+      "residual": "Identifier allocation remains a review responsibility and this milestone does not populate every future domain.",
+      "revision": 1,
+      "scope": "governance",
+      "source": {
+        "anchor": "must provide clear instructions on details of the namespace",
+        "id": "rfc:8126",
+        "kind": "rfc",
+        "section": "2.2"
+      },
+      "statement": "Stable requirement identifiers use one documented namespace and survive changes to rendering, ordering, and prose.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "scripts/requirements_lib.py#ID_PATTERN"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/stable_ids.rs#rendering_independence"
+        }
+      ]
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "protocol.tls13"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-STD-0004",
+      "lifecycle": "planned",
+      "owner": "0.3.5",
+      "residual": "Complete semantic extraction beyond the BCP 14 pilot remains owned by the v0.3.3 through v0.3.5 population passes.",
+      "revision": 1,
+      "scope": "governance",
+      "source": {
+        "anchor": "they MUST only be used where it is actually required for interoperation",
+        "id": "rfc:2119",
+        "kind": "rfc",
+        "section": "6"
+      },
+      "statement": "The final coverage pass reviews imperative use and rejects requirements that lack an interoperability or harm-limitation basis.",
+      "strength": "MUST",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "scripts/check-requirements.py#validate_normative_usage"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/normative_usage.rs#unsupported_imperative"
+        }
+      ]
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
+      ],
+      "deviation_rationale": null,
+      "evidence": [
+        "requirements/indexes.json#requirements_by"
+      ],
+      "id": "BRY-REQ-IANA-0001",
+      "lifecycle": "evidenced",
+      "owner": "0.3.2",
+      "residual": "Registry identity does not itself admit an algorithm; the owning cryptographic and protocol milestones remain mandatory.",
+      "revision": 1,
+      "scope": "governance",
+      "source": {
+        "anchor": "Use the exact registry name as listed on the IANA web page",
+        "id": "rfc:8126",
+        "kind": "rfc",
+        "section": "3.1"
+      },
+      "statement": "Registry-backed requirements bind the exact collection, nested registry, record, snapshot hash, and surface decision.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "scripts/check-requirements.py#resolve_source"
+        }
+      ],
+      "tests": [
+        {
+          "status": "actual",
+          "target": "scripts/test-requirements.py#test_iana_source_drift_changes_matrix"
+        }
+      ]
+    },
+    {
+      "applicability": "delegate",
+      "decision": "delegate",
+      "decision_ids": [
+        "iana.tls-extensiontype-values.alpn-protocol-ids"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-IANA-0002",
+      "lifecycle": "caller-owned",
+      "owner": "0.130.0",
+      "residual": "Brynja still validates ALPN wire bounds and negotiation context while application protocol semantics stay external.",
+      "revision": 1,
+      "scope": "protocol",
+      "source": {
+        "anchor": "review and approval by a designated expert",
+        "id": "rfc:8126",
+        "kind": "rfc",
+        "section": "4.5"
+      },
+      "statement": "Designated-expert approval and application meaning for registered ALPN values remain outside Brynja's protocol ownership.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "boundary",
+          "target": "boundary:iana-designated-expert"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/alpn.rs#caller_owned_semantics"
+        }
+      ]
+    },
+    {
+      "applicability": "delegate",
+      "decision": "delegate",
+      "decision_ids": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-IANA-0003",
+      "lifecycle": "caller-owned",
+      "owner": "0.148.0",
+      "residual": "Private-use values never become interoperable defaults and must remain explicitly configured and collision-scoped.",
+      "revision": 1,
+      "scope": "protocol",
+      "source": {
+        "anchor": "responsibility of the sites making use of the Private Use range",
+        "id": "rfc:8126",
+        "kind": "rfc",
+        "section": "4.1"
+      },
+      "statement": "Private-use registry values remain caller-owned and cannot satisfy public interoperability or standards admission.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "boundary",
+          "target": "boundary:private-use-codepoints"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/private_use.rs#no_public_admission"
+        }
+      ]
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-TLS-0001",
+      "lifecycle": "planned",
+      "owner": "0.67.0",
+      "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
+      "revision": 1,
+      "scope": "protocol",
+      "source": {
+        "kind": "iana",
+        "surface_id": "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
+      },
+      "statement": "TLS_AES_128_GCM_SHA256 remains an explicitly planned TLS 1.3 cipher suite with exact registry identity.",
+      "strength": "REGISTRY",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/tls13_cipher_suites.rs#aes128_gcm"
+        }
+      ]
+    },
+    {
+      "applicability": "reject",
+      "decision": "exclude",
+      "decision_ids": [
+        "facility.heartbeat",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-TLS-0002",
+      "lifecycle": "rejected",
+      "owner": "0.19.0",
+      "residual": "Every modern stream and datagram parser must retain an explicit negative test for negotiation and content.",
+      "revision": 1,
+      "scope": "protocol",
+      "source": {
+        "kind": "iana",
+        "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
+      },
+      "statement": "The registered Heartbeat extension is excluded from every modern Brynja TLS and DTLS profile.",
+      "strength": "REGISTRY",
+      "targets": [
+        {
+          "kind": "boundary",
+          "target": "boundary:modern-heartbeat-rejection"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/heartbeat.rs#negotiation_and_content_rejected"
+        }
+      ]
+    },
+    {
+      "applicability": "delegate",
+      "decision": "delegate",
+      "decision_ids": [
+        "iana.tls-extensiontype-values.alpn-protocol-ids"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-APP-0001",
+      "lifecycle": "caller-owned",
+      "owner": "0.130.0",
+      "residual": "Brynja owns bounded opaque transport and exact transcript binding but not the selected application's semantics.",
+      "revision": 1,
+      "scope": "protocol",
+      "source": {
+        "kind": "iana",
+        "surface_id": "iana.tls-extensiontype-values.alpn-protocol-ids"
+      },
+      "statement": "ALPN protocol identifiers are transported opaquely and their application behavior remains caller-owned.",
+      "strength": "REGISTRY",
+      "targets": [
+        {
+          "kind": "boundary",
+          "target": "boundary:application-alpn-semantics"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/alpn.rs#opaque_round_trip"
+        }
+      ]
+    },
+    {
+      "applicability": "legacy",
+      "decision": "isolate",
+      "decision_ids": [
+        "legacy.tls10"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-LEG-0001",
+      "lifecycle": "legacy",
+      "owner": "H0.2.0",
+      "residual": "Legacy package presence never permits modern-facade reachability, automatic fallback, or a security claim.",
+      "revision": 1,
+      "scope": "protocol",
+      "source": {
+        "anchor": "TLS 1.0 and SSL 3.0 do not interoperate",
+        "id": "rfc:2246",
+        "kind": "rfc",
+        "section": "3"
+      },
+      "statement": "TLS 1.0 requirements remain confined to the independently packaged legacy TLS 1.0 boundary.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "legacy-boundary",
+          "target": "crates/brynja-legacy-tls10/src/lib.rs#IMPLEMENTED"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/legacy_tls10.rs#modern_isolation"
+        }
+      ]
+    },
+    {
+      "applicability": "blocked",
+      "decision": "defer",
+      "decision_ids": [
+        "algorithm.ecdhe-ml-kem"
+      ],
+      "deviation_rationale": null,
+      "evidence": [],
+      "id": "BRY-REQ-HYB-0001",
+      "lifecycle": "blocked",
+      "owner": "0.120.0",
+      "residual": "RFC 9954 gives a generic construction but cannot supply the missing final concrete group specification and code points.",
+      "revision": 1,
+      "scope": "protocol",
+      "source": {
+        "anchor": "the \"Recommended\" column SHOULD be \"N\"",
+        "id": "rfc:9954",
+        "kind": "rfc",
+        "section": "5"
+      },
+      "statement": "Concrete ECDHE-ML-KEM groups remain blocked until final Standards Track definitions and final IANA assignments both exist.",
+      "strength": "SHOULD",
+      "targets": [
+        {
+          "kind": "blocker",
+          "target": "standards/source-policy.toml#ecdhe-ml-kem-groups"
+        }
+      ],
+      "tests": [
+        {
+          "status": "planned",
+          "target": "tests/requirements/hybrid.rs#final_rfc_and_iana_required"
+        }
+      ]
+    }
+  ],
+  "schema": 1,
+  "source_ledger_sha256": "c604876babe74781ab02ed45e86b487a73628c92cba4847dda499e6206037f01",
+  "surface_register_sha256": "635962b9a3db3d820a0ecd4f504c19c77aabfceb83b4ec6c82781bbf9b117bde"
+}

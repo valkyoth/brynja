@@ -1,6 +1,6 @@
 # Brynja 0.3.0 Release Notes
 
-Status: pentest remediation complete; awaiting clean retest
+Status: release-ready locally; pentest complete and awaiting green GitHub CI
 
 Brynja 0.3.0 is a standards source-ledger milestone. It does not implement
 TLS, cryptography, PKI, QUIC, DTLS, platform services, or legacy protocols and
@@ -23,7 +23,7 @@ tracked without altering requirements; rejected entries do not apply.
 Normal repository checks are fully offline. They validate all source and
 snapshot hashes, complete ownership, lifecycle consistency, roadmap
 references, RFC relationship closure, errata dispositions, IANA identity, the
-hybrid admission blocker, and byte-for-byte ledger reproducibility. Sixteen
+hybrid admission blocker, and byte-for-byte ledger reproducibility. Twenty-eight
 positive and broken fixtures prove the principal failure paths. The release
 gate separately queries official sources and fails if the RFC index, errata,
 or any registry has drifted.
@@ -43,6 +43,11 @@ intentionally gitignored. Clean CI now validates the complete source and hash
 manifests without requiring the cache. If any local reference exists—or
 `VERIFY_LOCAL_REFERENCE_FILES=1` is set—the complete cache becomes mandatory
 and every byte is verified.
+
+The repository owner confirmed the complete remediation retest green against
+commit `7001b93deef27907a7878a6f7951547ab85adcb8`. The permanent PASS report has
+zero open findings. Only the final hosted GitHub checks remain before explicit
+tag authorization.
 
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
 RFC and final IANA code points are available. RFC 9954's generic construction,

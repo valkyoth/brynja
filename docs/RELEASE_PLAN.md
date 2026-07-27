@@ -205,7 +205,7 @@ Exit criteria:
 
 ### v0.3.0 - Requirements And Standards Source Ledger
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Generate the normative source ledger from every algorithm, encoding, extension, protocol, validation, and operational milestone; close current RFC updated-by and obsoleted-by chains, record errata decisions and IANA snapshots, distinguish current authorities from compatibility baselines, and require the final ECDHE-ML-KEM group RFC and code points before admission.
 

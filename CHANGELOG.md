@@ -15,7 +15,7 @@ Keep a Changelog and Semantic Versioning.
 - A complete reviewed inventory of 285 official errata with fail-closed
   dispositions based on RFC Editor status.
 - Offline source, checksum, lifecycle, relationship, ownership, blocker, and
-  reproducibility validation with 26 positive and broken-fixture tests.
+  reproducibility validation with 28 positive and broken-fixture tests.
 - A networked release check that rejects RFC index, errata, or IANA drift.
 - A permanent evidence index and explicit final-RFC plus final-IANA admission
   blocker for concrete ECDHE-ML-KEM groups.

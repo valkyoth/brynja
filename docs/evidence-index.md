@@ -20,7 +20,7 @@ consistent in the same commit.
 | `standards/protocol-surface-coverage.md` | Human-readable disposition, kind, and domain counts | Generated and byte-compared with the machine register |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/schema.json` | Deterministic lifecycle and transition contract | Byte-for-byte regeneration |
-| `requirements/matrix.json` | Resolved pilot requirements bound to exact source, section, errata, registry, surface, and immutable parent-history evidence | Byte-for-byte regeneration and 49 positive/broken-fixture tests |
+| `requirements/matrix.json` | Resolved pilot requirements bound to exact source, section, errata, registry, surface, and immutable parent-history evidence | Byte-for-byte regeneration and 51 positive/broken-fixture tests |
 | `requirements/indexes.json` | Bidirectional source, decision, owner, target, test, and evidence mappings | Generated from and cross-checked against the matrix |
 | `requirements/coverage.md` | Human-readable pilot lifecycle, strength, scope, and index coverage | Generated and byte-compared with the machine evidence |
 | `package-policy.toml` | Complete package and dependency boundary | Workspace metadata validators and fixtures |

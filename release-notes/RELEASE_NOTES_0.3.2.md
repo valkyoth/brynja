@@ -38,7 +38,7 @@ cover only the requirement-governance tooling itself.
 ## Fail-Closed Verification
 
 Normal checks regenerate the schema, matrix, indexes, and coverage report and
-compare them byte for byte. Forty-nine positive and broken-fixture tests
+compare them byte for byte. Fifty-one positive and broken-fixture tests
 reject:
 
 - changed source-ledger, surface-register, RFC, IANA snapshot, registry, or
@@ -58,6 +58,8 @@ the declared transition graph, new records start at revision one, unchanged
 records retain their revision, and changed records increment exactly once.
 Exact-source mappings enforce cited-source, disposition, and owner consistency;
 RFC-wide governance mappings require explicit reviewed rationale.
+Reviewed-global mappings are governance-only, every protocol row requires
+exact-source validation, and released governance/protocol scope is immutable.
 
 These checks run in the ordinary repository gate and the dedicated v0.3.2
 release gate.
@@ -80,7 +82,11 @@ retest then identified missing production history enforcement and unrelated
 decision-link acceptance as two medium findings. Both are remediated with
 immutable history, revision, transition, mapping-scope, source, disposition,
 ownership, and private-use classification checks plus 16 dedicated fixtures.
-Repository-owner retest confirmation remains required.
+The next retest found that protocol rows could still select reviewed-global;
+that remaining medium bypass is closed with governance-only global mappings,
+immutable released scope, exact IANA sources for the affected pilot rows, and
+two additional fixtures. Repository-owner retest confirmation remains
+required.
 
 ## Limitations
 

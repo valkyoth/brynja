@@ -106,6 +106,8 @@ def validate(previous: dict | None, current: list[dict], transition) -> None:
             if now["revision"] != 1:
                 lib.fail(f"{requirement_id} must begin at revision 1")
             continue
+        if old["scope"] != now["scope"]:
+            lib.fail(f"{requirement_id} released scope cannot change")
         if now["lifecycle"] != old["lifecycle"]:
             transition(old["lifecycle"], now["lifecycle"])
         changed = without_revision(old) != without_revision(now)

@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "c4e36953847d3d7645dab75442dbb5d964c1679dd433330f8737a7ca05812690",
+  "policy_sha256": "4e3da2b64bccb81f0cd78f3d0eb77204ce3ac0681afe11d9c90359cdae3d9f39",
   "requirements": [
     {
       "applicability": "delegate",
@@ -148,36 +148,23 @@
       "evidence": [],
       "id": "BRY-REQ-IANA-0002",
       "lifecycle": "caller-owned",
-      "mapping_rationale": "RFC 8126 designated-expert responsibility is broader than ALPN, while the ALPN registry is the reviewed pilot boundary for caller-owned application semantics.",
-      "mapping_scope": "reviewed-global",
+      "mapping_rationale": null,
+      "mapping_scope": "exact-source",
       "owner": "0.130.0",
       "residual": "Brynja still validates ALPN wire bounds and negotiation context while application protocol semantics stay external.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
-        "anchor": "review and approval by a designated expert",
-        "errata": [
-          {
-            "disposition": "track-not-applied",
-            "id": 5772,
-            "status": "Held for Document Update"
-          },
-          {
-            "disposition": "not-applicable",
-            "id": 6522,
-            "status": "Rejected"
-          }
-        ],
-        "id": "rfc:8126",
-        "kind": "rfc",
-        "lifecycle": "current",
-        "section": "4.5",
-        "section_sha256": "e225bb1ff4b6c9c1cf12bfc3fb6931329a54e35cac9d1e0d8df409fe7f45a2ec",
-        "sha256": "b8b5cc1e61e78352b5a12c4a92fa0573b3400d49522a448913455a478dd87401",
-        "status": "BEST CURRENT PRACTICE"
+        "collection": "tls-extensiontype-values",
+        "disposition": "caller-owned",
+        "kind": "iana",
+        "record_sha256": "f37a0aaf535252f5a74aa27556066ee54ab177bbc975969271aadc3b4c25c891",
+        "registry": "alpn-protocol-ids",
+        "snapshot_sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305",
+        "surface_id": "iana.tls-extensiontype-values.alpn-protocol-ids"
       },
-      "statement": "Designated-expert approval and application meaning for registered ALPN values remain outside Brynja's protocol ownership.",
-      "strength": "INVARIANT",
+      "statement": "Registered ALPN identifiers are transported opaquely while their application meaning remains outside Brynja's protocol ownership.",
+      "strength": "REGISTRY",
       "targets": [
         {
           "kind": "boundary",
@@ -201,36 +188,23 @@
       "evidence": [],
       "id": "BRY-REQ-IANA-0003",
       "lifecycle": "caller-owned",
-      "mapping_rationale": "RFC 8126 private-use responsibility applies across registries, while this exact TLS extension assignment is the reviewed pilot for collision-scoped caller ownership.",
-      "mapping_scope": "reviewed-global",
+      "mapping_rationale": null,
+      "mapping_scope": "exact-source",
       "owner": "0.148.0",
       "residual": "Private-use values never become interoperable defaults and must remain explicitly configured and collision-scoped.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
-        "anchor": "responsibility of the sites making use of the Private Use range",
-        "errata": [
-          {
-            "disposition": "track-not-applied",
-            "id": 5772,
-            "status": "Held for Document Update"
-          },
-          {
-            "disposition": "not-applicable",
-            "id": 6522,
-            "status": "Rejected"
-          }
-        ],
-        "id": "rfc:8126",
-        "kind": "rfc",
-        "lifecycle": "current",
-        "section": "4.1",
-        "section_sha256": "5bae8b460745d0104f2fc1cc98da60101181b25935d40ef074bb4737842becc6",
-        "sha256": "b8b5cc1e61e78352b5a12c4a92fa0573b3400d49522a448913455a478dd87401",
-        "status": "BEST CURRENT PRACTICE"
+        "collection": "tls-extensiontype-values",
+        "disposition": "caller-owned",
+        "kind": "iana",
+        "record_sha256": "ab13d6b33840ce6c1644e009dc6f2e4aab234a42b6d996ce4ff2a70577e94c66",
+        "registry": "tls-extensiontype-values-1",
+        "snapshot_sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305",
+        "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
       },
       "statement": "Private-use registry values remain caller-owned and cannot satisfy public interoperability or standards admission.",
-      "strength": "INVARIANT",
+      "strength": "REGISTRY",
       "targets": [
         {
           "kind": "boundary",

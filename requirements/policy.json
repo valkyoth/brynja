@@ -199,20 +199,18 @@
       "evidence": [],
       "id": "BRY-REQ-IANA-0002",
       "lifecycle": "caller-owned",
-      "mapping_rationale": "RFC 8126 designated-expert responsibility is broader than ALPN, while the ALPN registry is the reviewed pilot boundary for caller-owned application semantics.",
-      "mapping_scope": "reviewed-global",
+      "mapping_rationale": null,
+      "mapping_scope": "exact-source",
       "owner": "0.130.0",
       "residual": "Brynja still validates ALPN wire bounds and negotiation context while application protocol semantics stay external.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
-        "anchor": "review and approval by a designated expert",
-        "id": "rfc:8126",
-        "kind": "rfc",
-        "section": "4.5"
+        "kind": "iana",
+        "surface_id": "iana.tls-extensiontype-values.alpn-protocol-ids"
       },
-      "statement": "Designated-expert approval and application meaning for registered ALPN values remain outside Brynja's protocol ownership.",
-      "strength": "INVARIANT",
+      "statement": "Registered ALPN identifiers are transported opaquely while their application meaning remains outside Brynja's protocol ownership.",
+      "strength": "REGISTRY",
       "targets": [
         {
           "kind": "boundary",
@@ -236,20 +234,18 @@
       "evidence": [],
       "id": "BRY-REQ-IANA-0003",
       "lifecycle": "caller-owned",
-      "mapping_rationale": "RFC 8126 private-use responsibility applies across registries, while this exact TLS extension assignment is the reviewed pilot for collision-scoped caller ownership.",
-      "mapping_scope": "reviewed-global",
+      "mapping_rationale": null,
+      "mapping_scope": "exact-source",
       "owner": "0.148.0",
       "residual": "Private-use values never become interoperable defaults and must remain explicitly configured and collision-scoped.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
-        "anchor": "responsibility of the sites making use of the Private Use range",
-        "id": "rfc:8126",
-        "kind": "rfc",
-        "section": "4.1"
+        "kind": "iana",
+        "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
       },
       "statement": "Private-use registry values remain caller-owned and cannot satisfy public interoperability or standards admission.",
-      "strength": "INVARIANT",
+      "strength": "REGISTRY",
       "targets": [
         {
           "kind": "boundary",

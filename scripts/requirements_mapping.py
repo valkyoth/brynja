@@ -39,6 +39,10 @@ def validate(
     rationale = requirement["mapping_rationale"]
 
     if mapping_scope == "reviewed-global":
+        if requirement["scope"] != "governance":
+            lib.fail(
+                f"{requirement_id} protocol requirements require exact-source mapping"
+            )
         if source["kind"] != "rfc":
             lib.fail(f"{requirement_id} global mapping requires an RFC source")
         if not isinstance(rationale, str) or len(rationale.strip()) < 40:

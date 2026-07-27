@@ -98,10 +98,11 @@ duplicate stable identifiers, illegal lifecycle transitions, absent owners or
 targets, premature test or evidence claims, weakened SHOULD decisions, broken
 bidirectional mappings, repository-escaping targets, released-ID removal,
 incorrect revisions, unrelated decision links, lifecycle/disposition or owner
-conflicts, or stale generated artifacts. Its 12 pilot requirements exercise
-all eight lifecycle states; governance-tool evidence is not protocol
-implementation evidence. The private-use extension pilot is explicitly
-caller-owned rather than inherited future work.
+conflicts, protocol use of global mappings, released-scope changes, or stale
+generated artifacts. Its 12 pilot requirements exercise all eight lifecycle
+states; governance-tool evidence is not protocol implementation evidence.
+Reviewed-global mappings are governance-only. The private-use extension pilot
+is explicitly caller-owned rather than inherited future work.
 
 ## Reviewed Refresh
 

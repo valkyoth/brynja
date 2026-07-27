@@ -65,7 +65,7 @@
         "0.130.0"
       ],
       "sources": [
-        "rfc:8126#4.5"
+        "iana.tls-extensiontype-values.alpn-protocol-ids"
       ],
       "targets": [
         "boundary:boundary:iana-designated-expert"
@@ -83,7 +83,7 @@
         "0.148.0"
       ],
       "sources": [
-        "rfc:8126#4.1"
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
       ],
       "targets": [
         "boundary:boundary:private-use-codepoints"
@@ -294,10 +294,14 @@
     },
     "sources": {
       "iana.tls-extensiontype-values.alpn-protocol-ids": [
-        "BRY-REQ-APP-0001"
+        "BRY-REQ-APP-0001",
+        "BRY-REQ-IANA-0002"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1": [
         "BRY-REQ-TLS-0002"
+      ],
+      "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1": [
+        "BRY-REQ-IANA-0003"
       ],
       "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1": [
         "BRY-REQ-TLS-0001"
@@ -316,12 +320,6 @@
       ],
       "rfc:8126#3.1": [
         "BRY-REQ-IANA-0001"
-      ],
-      "rfc:8126#4.1": [
-        "BRY-REQ-IANA-0003"
-      ],
-      "rfc:8126#4.5": [
-        "BRY-REQ-IANA-0002"
       ],
       "rfc:8174#2": [
         "BRY-REQ-STD-0001"

@@ -27,6 +27,7 @@ def row(
         "id": "BRY-REQ-TEST-0001",
         "lifecycle": lifecycle,
         "revision": revision,
+        "scope": "protocol",
         "statement": statement,
     }
 
@@ -186,11 +187,34 @@ def test_reviewed_global_mapping_requires_rationale() -> None:
     )
 
 
+def test_protocol_requirement_cannot_use_reviewed_global() -> None:
+    policy, ledger, register = inputs()
+    broken = copy.deepcopy(policy)
+    item = requirement(broken, "BRY-REQ-LEG-0001")
+    item["decision_ids"] = ["legacy.ssl2"]
+    item["mapping_scope"] = "reviewed-global"
+    item["mapping_rationale"] = (
+        "This deliberately invalid rationale cannot let a protocol requirement "
+        "escape exact-source validation."
+    )
+    assert_fails(
+        "protocol requirements require exact-source mapping",
+        checker.build_matrix,
+        broken,
+        ledger,
+        register,
+        False,
+    )
+
+
 def test_reviewed_global_mapping_requires_rfc_source() -> None:
     policy, ledger, register = inputs()
     broken = copy.deepcopy(policy)
-    item = requirement(broken, "BRY-REQ-APP-0001")
-    item["mapping_scope"] = "reviewed-global"
+    item = requirement(broken, "BRY-REQ-IANA-0001")
+    item["source"] = {
+        "kind": "iana",
+        "surface_id": item["decision_ids"][0],
+    }
     item["mapping_rationale"] = (
         "This deliberately invalid fixture attempts a global IANA mapping."
     )
@@ -201,6 +225,18 @@ def test_reviewed_global_mapping_requires_rfc_source() -> None:
         ledger,
         register,
         False,
+    )
+
+
+def test_released_requirement_scope_cannot_change() -> None:
+    changed = row(revision=2, statement="changed")
+    changed["scope"] = "governance"
+    assert_fails(
+        "released scope cannot change",
+        history.validate,
+        baseline(row()),
+        [changed],
+        checker.validate_transition,
     )
 
 

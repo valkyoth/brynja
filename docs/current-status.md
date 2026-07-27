@@ -57,12 +57,13 @@ Version 0.3.2 adds the normative-requirement foundation:
 - implementation, test, and evidence claims require existing file anchors,
   while protocol requirements are forbidden from making premature
   implementation claims; and
-- 49 positive and broken-fixture tests reject source or registry drift,
+- 51 positive and broken-fixture tests reject source or registry drift,
   malformed or duplicate identifiers, invalid sections, obsolete-as-current
   authority, illegal transitions, missing ownership and targets, premature
   evidence, weakened SHOULD decisions, symlink target escapes, released-ID
-  removal, stale revisions, unrelated decision links, lifecycle/disposition
-  conflict, and stale generated output.
+  removal, stale revisions, unrelated decision links, protocol use of global
+  mappings, released-scope changes, lifecycle/disposition conflict, and stale
+  generated output.
 
 This remains governance and planning evidence, not protocol implementation.
 The pilot proves the representation and failure behavior; v0.3.3 through
@@ -82,5 +83,9 @@ structurally valid but semantically unrelated. Both are remediated locally with
 immutable parent-matrix comparison, append-only identifiers, exact revision
 rules, explicit mapping scopes, source/disposition/owner consistency, and 16
 dedicated history and semantic-link tests. Repository-owner retest remains
-required before the permanent report can become PASS, hosted GitHub checks can
-begin, or a tag can be authorized.
+required before the permanent report can become PASS. A later retest found one
+remaining medium bypass: protocol rows could select reviewed-global and avoid
+exact-source checks. Reviewed-global is now governance-only, released scope is
+immutable, and the two affected RFC-wide protocol pilot rows now use exact
+IANA sources at revision three. Hosted GitHub checks and tag authorization
+remain blocked pending retest.

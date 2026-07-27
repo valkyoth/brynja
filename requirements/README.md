@@ -33,15 +33,18 @@ Normal generation compares the worktree with the immutable matrix in `HEAD`,
 or a clean committed candidate with `HEAD^`. Existing identifiers cannot
 disappear. New identifiers start at revision one; unchanged content retains its
 revision; any content change increments exactly once; and lifecycle changes
-must follow the declared transition graph. The signed linear release history
-anchors this chain. v0.3.2 is the bootstrap matrix release; later release tags
-preserve the same chain as permanent baselines.
+must follow the declared transition graph. Governance versus protocol scope is
+immutable after an identifier enters history; a genuine scope change requires
+a new stable identifier. The signed linear release history anchors this chain.
+v0.3.2 is the bootstrap matrix release; later release tags preserve the same
+chain as permanent baselines.
 
 An `exact-source` mapping requires direct source relation and consistent
-surface disposition and owner. An IANA-backed requirement must include its
+surface disposition and owner. Every protocol requirement must use this scope.
+An IANA-backed requirement must include its
 exact source surface; any additional surface must share normative authority
 and ownership. A `reviewed-global` mapping is limited to RFC-backed rules and
-requires a substantive human-reviewed rationale.
+governance requirements and requires a substantive human-reviewed rationale.
 
 ## Verification
 
@@ -53,13 +56,14 @@ python3 scripts/test-requirements.py
 python3 scripts/test-requirement-lifecycles.py
 ```
 
-The 49 broken-fixture and positive tests reject changed source hashes, invalid
+The 51 broken-fixture and positive tests reject changed source hashes, invalid
 sections, duplicate or malformed identifiers, obsolete-as-current authority,
 illegal lifecycle transitions, missing owners or targets, premature evidence,
 weakened SHOULD decisions, unknown surface decisions, stale generated output,
 repository-escaping symlink targets, removed released identifiers, stale or
-gratuitous revisions, unrelated semantic links, lifecycle/disposition or owner
-conflicts, and unsupported protocol implementation claims.
+gratuitous revisions, released-scope changes, protocol use of global mappings,
+unrelated semantic links, lifecycle/disposition or owner conflicts, and
+unsupported protocol implementation claims.
 
 After a reviewed policy change, regenerate and inspect all projections:
 

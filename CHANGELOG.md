@@ -14,7 +14,7 @@ Keep a Changelog and Semantic Versioning.
 - A 12-requirement authority pilot spanning all eight lifecycle states and
   binding exact RFC, errata, IANA, source-ledger, and protocol-surface
   evidence.
-- Forty-nine positive and broken-fixture tests for identity, source, section,
+- Fifty-one positive and broken-fixture tests for identity, source, section,
   lifecycle, transition, ownership, target, evidence, SHOULD-deviation, drift,
   symlink-escape, immutable history, revision, semantic-link, and stale-output
   failures.
@@ -33,6 +33,8 @@ Keep a Changelog and Semantic Versioning.
 - Exact-source decision mappings now enforce source, disposition, and owner
   consistency, while broader governance mappings require explicit reviewed
   rationale.
+- Reviewed-global mappings are restricted to governance requirements, and a
+  released requirement cannot change between governance and protocol scope.
 
 ## [0.3.1] - 2026-07-27
 

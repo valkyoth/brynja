@@ -33,6 +33,11 @@ commit `5131bf2e2a1126812e30ddcb98f5bbee7412d1e3` and were independently
 reverified over TLS using addresses obtained from Google DNS-over-HTTPS,
 independently of every later `--write`.
 
+NIST PDFs remain local-only and are not required in a clean clone. The ledger
+always validates their complete allowlist and hash manifest. When any expected
+PDF is present, the entire cache must be present and every byte is checked.
+Set `VERIFY_LOCAL_REFERENCE_FILES=1` to require the cache explicitly.
+
 The lifecycle `current` is implicit. Explicit classes are:
 
 - `compatibility`: obsolete text needed to implement a currently permitted

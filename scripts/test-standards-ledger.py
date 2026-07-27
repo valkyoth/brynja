@@ -391,6 +391,36 @@ def test_checksum_set_and_bytes_fail_closed() -> None:
         )
 
 
+def test_manifest_only_mode_allows_absent_local_bytes() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        checker.check_hashes(
+            {"local.pdf": lib.sha256(b"reviewed")},
+            Path(directory),
+            {"local.pdf"},
+            "local fixture",
+            verify_files=False,
+        )
+
+
+def test_partial_local_cache_fails_when_verifying() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        (root / "one.pdf").write_bytes(b"one")
+        manifest = {
+            "one.pdf": lib.sha256(b"one"),
+            "two.pdf": lib.sha256(b"two"),
+        }
+        assert_fails(
+            "pinned file is missing: two.pdf",
+            checker.check_hashes,
+            manifest,
+            root,
+            set(manifest),
+            "local fixture",
+            verify_files=True,
+        )
+
+
 def test_errata_parser_uses_authoritative_identity() -> None:
     fixture = b"""
     <h2>Verified (1)</h2><table><tr>

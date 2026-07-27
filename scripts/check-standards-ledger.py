@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 from pathlib import Path
 
@@ -20,6 +21,8 @@ def check_hashes(
     directory: Path,
     expected: set[str],
     label: str,
+    *,
+    verify_files: bool = True,
 ) -> None:
     if set(manifest) != expected:
         fail(
@@ -27,8 +30,14 @@ def check_hashes(
             f"found {sorted(manifest)}"
         )
     for name, digest in manifest.items():
+        if lib.SHA256_PATTERN.fullmatch(digest) is None:
+            fail(f"{label} has invalid SHA-256 pin: {name}")
+        if not verify_files:
+            continue
         path = directory / name
-        if not path.is_file() or lib.sha256(path.read_bytes()) != digest:
+        if not path.is_file():
+            fail(f"{label} pinned file is missing: {name}")
+        if lib.sha256(path.read_bytes()) != digest:
             fail(f"{label} checksum mismatch: {name}")
 
 
@@ -242,11 +251,19 @@ def build_ledger() -> dict:
     expected_rfc_files = {f"rfc{number}.txt" for number in rfc_sources}
     check_hashes(rfc_hashes, lib.ROOT / "rfc", expected_rfc_files, "RFC")
     local_hashes = lib.read_hash_file(lib.LOCAL_HASHES)
+    local_directory = lib.ROOT / "references/local"
+    local_mode = os.environ.get("VERIFY_LOCAL_REFERENCE_FILES", "0")
+    if local_mode not in {"0", "1"}:
+        fail("VERIFY_LOCAL_REFERENCE_FILES must be 0 or 1")
+    local_files_present = any(
+        (local_directory / name).is_file() for name in local_sources
+    )
     check_hashes(
         local_hashes,
-        lib.ROOT / "references/local",
+        local_directory,
         set(local_sources),
         "local authority",
+        verify_files=local_mode == "1" or local_files_present,
     )
 
     standards_hashes = lib.read_hash_file(lib.STANDARDS_HASHES)

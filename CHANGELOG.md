@@ -29,6 +29,9 @@ Keep a Changelog and Semantic Versioning.
 - Bounded all upstream responses and rejected XML DTD and entity declarations
   before parsing to prevent compromised-source expansion and memory denial of
   service.
+- Kept local-only, redistribution-restricted NIST bytes optional in clean CI
+  while still validating their complete manifest and automatically checking
+  every byte whenever a local cache exists.
 
 ## [0.2.0] - 2026-07-27
 

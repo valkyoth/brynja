@@ -34,8 +34,15 @@ the signed pre-pentest candidate; RFC and NIST lock scripts can no longer
 compute or overwrite their own trust anchors. Exact HTTPS host/path and
 redirect allowlists are now executable controls. All upstream responses are
 bounded, and XML containing DTD or entity declarations is rejected before
-parsing. The standards regression suite now contains 26 positive and broken
+parsing. The standards regression suite now contains 28 positive and broken
 fixtures covering the new failure paths.
+
+The first hosted run also exposed that the ledger checker required the
+local-only NIST PDF cache even though those redistribution-restricted bytes are
+intentionally gitignored. Clean CI now validates the complete source and hash
+manifests without requiring the cache. If any local reference exists—or
+`VERIFY_LOCAL_REFERENCE_FILES=1` is set—the complete cache becomes mandatory
+and every byte is verified.
 
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
 RFC and final IANA code points are available. RFC 9954's generic construction,

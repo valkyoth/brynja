@@ -37,7 +37,9 @@ errata, IANA registries, NIST planning notes, and NIST errata before work on a
 dependent milestone.
 
 The v0.3.0 evidence under `standards/` makes the source-level policy
-executable. `source-policy.toml` owns lifecycle and milestone decisions;
+executable. `source-policy.toml` owns lifecycle and milestone decisions plus
+independently reviewed hashes for the canonical RFC-index projection, canonical
+official errata fields, and exact IANA bytes;
 `ERRATA.json`, the compact RFC-index projection, and exact IANA XML snapshots
 preserve the reviewed upstream state; and `source-ledger.json` is reproduced
 byte-for-byte by `scripts/check-standards-ledger.py`. Normal verification is
@@ -45,6 +47,21 @@ offline. The networked release gate runs
 `scripts/update-standards-snapshots.py --check` and fails on upstream drift so
 that no source, relationship, erratum, registry assignment, or date can change
 silently.
+
+Fetch and refresh operations cannot generate their own trust anchors. RFC and
+local NIST lock scripts only validate pre-existing reviewed hash manifests;
+the standards refresh refuses both `--check` and `--write` unless every result
+matches the policy pin. A legitimate change requires manual pin entry from a
+separate resolver, egress, or signed upstream channel before refresh. All URLs
+must remain on the exact HTTPS host/path allowlist, including every redirect.
+Network responses are size-bounded, and XML with DTD or entity declarations is
+rejected before the dependency-free parser runs.
+
+The v0.3.0 pins are anchored to the signed pre-pentest candidate and were
+independently re-fetched over TLS using addresses returned by Google
+DNS-over-HTTPS. The comparison covered every locked RFC and NIST source, all
+IANA snapshots, the canonical RFC-index projection, and the canonical 285-entry
+errata set.
 
 The v0.3.2 through v0.3.5 requirement-matrix passes record exact source hash and
 section, normative strength, applicability decision, owner, planned target or

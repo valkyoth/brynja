@@ -14,23 +14,48 @@ def collect() -> dict[Path, bytes]:
     policy = lib.read_policy()
     rfc_sources = lib.read_source_file(lib.RFC_SOURCES, int)
     numbers = set(rfc_sources)
-    index = lib.project_rfc_index(
-        lib.fetch(policy["review"]["rfc_index"]),
-        numbers,
+    index_data = lib.fetch(
+        policy["review"]["rfc_index"],
+        max_bytes=lib.MAX_RFC_INDEX_BYTES,
     )
-    artifacts = {lib.RFC_INDEX: lib.json_bytes(index)}
+    index = lib.project_rfc_index(index_data, numbers)
+    index_artifact = lib.json_bytes(index)
+    lib.verify_sha256(
+        index_artifact,
+        policy["review"]["rfc_index_sha256"],
+        "RFC index projection",
+    )
+    artifacts = {lib.RFC_INDEX: index_artifact}
 
     for registry in policy["registry"]:
-        data = lib.fetch(registry["url"])
+        data = lib.fetch(registry["url"], max_bytes=lib.MAX_IANA_BYTES)
+        lib.verify_sha256(
+            data,
+            registry["expected_sha256"],
+            f"IANA registry {registry['id']}",
+        )
         lib.validate_iana_snapshot(data, registry["id"])
         artifacts[lib.IANA_DIRECTORY / f"{registry['id']}.xml"] = data
 
     def get_errata(number: int) -> tuple[int, list[dict]]:
-        data = lib.fetch(lib.errata_url(number))
+        data = lib.fetch(
+            lib.errata_url(number),
+            max_bytes=lib.MAX_ERRATA_BYTES,
+        )
         return number, lib.parse_errata(data, number)
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         results = dict(pool.map(get_errata, sorted(numbers)))
+    official_errata = lib.official_errata_bytes(
+        results,
+        policy["review"]["errata"],
+        numbers,
+    )
+    lib.verify_sha256(
+        official_errata,
+        policy["review"]["errata_sha256"],
+        "RFC errata set",
+    )
 
     reviewed = []
     for number in sorted(numbers):

@@ -10,7 +10,9 @@ primitive is implemented.
 
 - `source-policy.toml` is the reviewed human-authored mapping from each locked
   source to lifecycle, domain, milestone, registry, closure exception, and
-  admission blocker.
+  admission blocker. It also contains independently reviewed hashes for the
+  canonical RFC-index projection, canonical official errata fields, and every
+  exact IANA XML snapshot.
 - `source-ledger.json` is generated deterministically from that policy, the
   locked RFC and local-source manifests, official metadata snapshots, and
   reviewed errata decisions.
@@ -22,6 +24,14 @@ primitive is implemented.
 - `snapshots/iana/*.xml` are exact official IANA registry snapshots.
 - `SHA256SUMS` locks every generated upstream evidence artifact. The ledger is
   excluded because it is reproduced and compared directly.
+
+The RFC and local NIST checksum manifests are trust pins, not outputs of a
+fetch. Their lock scripts validate existing pins and deliberately cannot
+compute or replace them. The standards-policy pins are likewise established
+before a refresh. The current standards pins are anchored to signed candidate
+commit `5131bf2e2a1126812e30ddcb98f5bbee7412d1e3` and were independently
+reverified over TLS using addresses obtained from Google DNS-over-HTTPS,
+independently of every later `--write`.
 
 The lifecycle `current` is implicit. Explicit classes are:
 
@@ -43,10 +53,13 @@ python3 scripts/check-standards-ledger.py
 python3 scripts/test-standards-ledger.py
 ```
 
-The checker fails on missing or extra sources, hashes, domains, milestones,
-registries, errata decisions, lifecycle conflicts, obsolete-as-current
-authority, unclosed RFC relationships, relaxed hybrid admission, or a stale
-generated ledger. Broken fixtures prove these failure paths.
+The checker fails on non-HTTPS or unallowlisted URLs, redirects outside the
+allowlist, missing or mismatched pins, missing or extra sources, hashes,
+domains, milestones, registries, errata decisions, lifecycle conflicts,
+obsolete-as-current authority, unclosed RFC relationships, relaxed hybrid
+admission, or a stale generated ledger. XML and HTTP response limits plus
+DTD/entity rejection bound compromised-upstream parsing. Broken fixtures prove
+these failure paths.
 
 ## Reviewed Refresh
 
@@ -60,9 +73,12 @@ python3 scripts/check-standards-ledger.py --write
 
 `--check` is part of the release gate and fails when an official RFC index,
 errata result, or IANA registry differs. `--write` does not make upstream drift
-acceptable: the resulting diff must be reviewed, the policy adjusted when
-needed, the ledger regenerated, tests passed, and all artifacts committed
-together.
+acceptable and cannot replace a pin. For legitimate drift, first retrieve and
+review the new digest through a separate resolver, network egress, or signed
+upstream channel; manually update the policy pin and its provenance; then run
+`--write`, review the semantic and byte diff, regenerate the ledger, pass all
+tests, and commit the pin plus evidence together. The same pin-first process
+applies to new RFC and NIST source bytes.
 
 Concrete ECDHE-ML-KEM groups remain fail-closed at milestone `0.120.0`.
 RFC 9954 supplies only the generic construction; a final Standards Track RFC

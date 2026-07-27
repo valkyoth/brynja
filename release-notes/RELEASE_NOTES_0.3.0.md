@@ -1,6 +1,6 @@
 # Brynja 0.3.0 Release Notes
 
-Status: implementation complete; awaiting pentest
+Status: pentest remediation complete; awaiting clean retest
 
 Brynja 0.3.0 is a standards source-ledger milestone. It does not implement
 TLS, cryptography, PKI, QUIC, DTLS, platform services, or legacy protocols and
@@ -27,6 +27,15 @@ hybrid admission blocker, and byte-for-byte ledger reproducibility. Sixteen
 positive and broken fixtures prove the principal failure paths. The release
 gate separately queries official sources and fails if the RFC index, errata,
 or any registry has drifted.
+
+The initial pentest found three standards-ingestion weaknesses. Refresh-time
+hash generation has been replaced by independently reviewed pins anchored to
+the signed pre-pentest candidate; RFC and NIST lock scripts can no longer
+compute or overwrite their own trust anchors. Exact HTTPS host/path and
+redirect allowlists are now executable controls. All upstream responses are
+bounded, and XML containing DTD or entity declarations is rejected before
+parsing. The standards regression suite now contains 26 positive and broken
+fixtures covering the new failure paths.
 
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
 RFC and final IANA code points are available. RFC 9954's generic construction,

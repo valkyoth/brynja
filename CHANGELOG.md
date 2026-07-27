@@ -15,10 +15,20 @@ Keep a Changelog and Semantic Versioning.
 - A complete reviewed inventory of 285 official errata with fail-closed
   dispositions based on RFC Editor status.
 - Offline source, checksum, lifecycle, relationship, ownership, blocker, and
-  reproducibility validation with 16 positive and broken-fixture tests.
+  reproducibility validation with 26 positive and broken-fixture tests.
 - A networked release check that rejects RFC index, errata, or IANA drift.
 - A permanent evidence index and explicit final-RFC plus final-IANA admission
   blocker for concrete ECDHE-ML-KEM groups.
+
+### Fixed
+
+- Replaced refresh-time trust-on-first-use hashes with independently reviewed,
+  non-self-replacing RFC, NIST, RFC-index, errata, and IANA pins.
+- Enforced the exact HTTPS source and redirect allowlist in the Python
+  standards pipeline.
+- Bounded all upstream responses and rejected XML DTD and entity declarations
+  before parsing to prevent compromised-source expansion and memory denial of
+  service.
 
 ## [0.2.0] - 2026-07-27
 

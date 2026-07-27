@@ -24,9 +24,9 @@ checker = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(checker)
 
 
-def assert_fails(expected: str, function, *args) -> None:
+def assert_fails(expected: str, function, *args, **kwargs) -> None:
     try:
-        function(*args)
+        function(*args, **kwargs)
     except RuntimeError as error:
         if expected not in str(error):
             raise AssertionError(f"expected {expected!r} in {error!r}") from error
@@ -48,6 +48,7 @@ def test_current_repository() -> None:
     assert len(ledger["rfcs"]) == 103
     assert len(ledger["local_authorities"]) == 8
     assert len(ledger["registries"]) == 8
+    assert ledger["integrity"]["pin_provenance"]
 
 
 def test_missing_rfc_domain_fails() -> None:
@@ -73,6 +74,68 @@ def test_unknown_local_source_fails() -> None:
         broken,
         rfcs,
         local,
+    )
+
+
+def test_non_https_source_fails() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        source = Path(directory) / "SOURCES"
+        source.write_text("1 http://www.rfc-editor.org/rfc/rfc1.txt role\n")
+        assert_fails("unapproved HTTPS", lib.read_source_file, source, int)
+    assert_fails(
+        "unapproved HTTPS",
+        lib.fetch,
+        "http://www.rfc-editor.org/rfc-index.xml",
+        max_bytes=1,
+    )
+
+
+def test_unallowlisted_registry_url_fails() -> None:
+    policy, rfcs, local, _, _ = load_inputs()
+    broken = copy.deepcopy(policy)
+    broken["registry"][0]["url"] = "https://example.com/registry.xml"
+    assert_fails(
+        "not allowlisted",
+        checker.validate_policy,
+        broken,
+        rfcs,
+        local,
+    )
+
+
+def test_missing_upstream_pin_fails() -> None:
+    policy, rfcs, local, _, _ = load_inputs()
+    broken = copy.deepcopy(policy)
+    del broken["registry"][0]["expected_sha256"]
+    assert_fails(
+        "requires a pinned SHA-256",
+        checker.validate_policy,
+        broken,
+        rfcs,
+        local,
+    )
+
+
+def test_missing_pin_provenance_fails() -> None:
+    policy, rfcs, local, _, _ = load_inputs()
+    broken = copy.deepcopy(policy)
+    broken["review"]["pin_provenance"] = ""
+    assert_fails(
+        "requires independent pin provenance",
+        checker.validate_policy,
+        broken,
+        rfcs,
+        local,
+    )
+
+
+def test_pin_mismatch_fails() -> None:
+    assert_fails(
+        "does not match pinned",
+        lib.verify_sha256,
+        b"upstream bytes",
+        "0" * 64,
+        "fixture",
     )
 
 
@@ -200,6 +263,19 @@ def test_errata_decision_drift_fails() -> None:
     )
 
 
+def test_official_errata_drift_fails() -> None:
+    _, rfcs, _, _, errata = load_inputs()
+    broken = copy.deepcopy(errata)
+    broken["records"][0]["section"] += "-changed"
+    assert_fails(
+        "does not match pinned",
+        checker.validate_errata,
+        broken,
+        set(rfcs),
+        lib.read_policy(),
+    )
+
+
 def test_unknown_errata_status_fails() -> None:
     assert_fails("unknown errata status", lib.errata_disposition, "Pending")
 
@@ -215,6 +291,79 @@ def test_wrong_iana_registry_fails() -> None:
         data,
         "expected",
     )
+
+
+def test_xml_dtd_and_oversize_fail_before_parse() -> None:
+    entity = b"""<!DOCTYPE registry [
+    <!ENTITY x "expansion">
+    ]><registry xmlns="http://www.iana.org/assignments" id="expected">&x;</registry>
+    """
+    assert_fails(
+        "DTD and entity declarations are forbidden",
+        lib.validate_iana_snapshot,
+        entity,
+        "expected",
+    )
+    oversized = b"x" * (lib.MAX_RFC_INDEX_BYTES + 1)
+    assert_fails(
+        "XML exceeds",
+        lib.project_rfc_index,
+        oversized,
+        set(),
+    )
+
+
+def test_fetch_response_cap_fails() -> None:
+    class Response:
+        status = 200
+        headers = {}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        @staticmethod
+        def geturl():
+            return "https://www.rfc-editor.org/rfc-index.xml"
+
+        @staticmethod
+        def read(size):
+            return b"x" * size
+
+    original = lib.HTTPS_OPENER.open
+    lib.HTTPS_OPENER.open = lambda *_args, **_kwargs: Response()
+    try:
+        assert_fails(
+            "response exceeds 8 bytes",
+            lib.fetch,
+            "https://www.rfc-editor.org/rfc-index.xml",
+            max_bytes=8,
+        )
+    finally:
+        lib.HTTPS_OPENER.open = original
+
+
+def test_redirect_downgrade_fails() -> None:
+    handler = lib.HttpsOnlyRedirectHandler()
+    assert_fails(
+        "unapproved HTTPS",
+        handler.redirect_request,
+        None,
+        None,
+        302,
+        "Found",
+        {},
+        "http://www.rfc-editor.org/rfc-index.xml",
+    )
+
+
+def test_lock_scripts_cannot_generate_pins() -> None:
+    for name in ("lock-rfcs.sh", "lock-local-references.sh"):
+        text = (lib.ROOT / "scripts" / name).read_text(encoding="utf-8")
+        assert "sha256sum" not in text
+        assert "never computes or replaces the trust pins" in text
 
 
 def test_checksum_set_and_bytes_fail_closed() -> None:

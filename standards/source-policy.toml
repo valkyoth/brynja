@@ -4,8 +4,11 @@ version = 1
 [review]
 checked_at = "2026-07-27"
 owner = "Brynja standards review"
+pin_provenance = "Signed pre-pentest candidate 5131bf2e2a1126812e30ddcb98f5bbee7412d1e3; independently reverified 2026-07-27 over TLS with addresses from Google DNS-over-HTTPS; pins remain separate from every later refresh."
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
+rfc_index_sha256 = "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674"
 errata = "https://errata.rfc-editor.org/search/"
+errata_sha256 = "8028ed0a9068a812fbff7e1e9cf011b4a46dbb4c43bd3c3b72ee2d1a70df25a2"
 
 [lifecycle]
 compatibility = [5077, 5246, 6347, 6962, 7507, 7627, 8422]
@@ -17,48 +20,56 @@ evidence = [4231, 8448]
 [[registry]]
 id = "tls-parameters"
 url = "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
+expected_sha256 = "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
 domains = ["standards", "tls12", "tls13", "dtls", "hybrid"]
 milestones = ["0.3.0", "0.3.1", "0.3.4", "0.120.0"]
 
 [[registry]]
 id = "tls-extensiontype-values"
 url = "https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml"
+expected_sha256 = "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
 domains = ["tls12", "tls13", "dtls", "optional"]
 milestones = ["0.3.0", "0.3.1", "0.3.4", "0.3.5"]
 
 [[registry]]
 id = "tls-ech-configuration-extensions"
 url = "https://www.iana.org/assignments/tls-ech-configuration-extensions/tls-ech-configuration-extensions.xml"
+expected_sha256 = "b481939a3ea685209a7026e508ba554d904ec5afc6439d29a2bc2e13b6053e98"
 domains = ["ech"]
 milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
 
 [[registry]]
 id = "hpke"
 url = "https://www.iana.org/assignments/hpke/hpke.xml"
+expected_sha256 = "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
 domains = ["hpke", "ech"]
 milestones = ["0.3.0", "0.3.1", "0.3.5", "0.138.0"]
 
 [[registry]]
 id = "quic"
 url = "https://www.iana.org/assignments/quic/quic.xml"
+expected_sha256 = "8867dffa0213139187ea9bb358ab907b746f47918a6ed713c38a322580232536"
 domains = ["quic"]
 milestones = ["0.3.0", "0.3.1", "0.3.4", "0.94.0"]
 
 [[registry]]
 id = "trans"
 url = "https://www.iana.org/assignments/trans/trans.xml"
+expected_sha256 = "c861d172ca324e939d2495f3ec03551ed3fbf9118cd791ada1da4a3c52566066"
 domains = ["ct"]
 milestones = ["0.3.0", "0.3.1", "0.3.3", "0.59.0"]
 
 [[registry]]
 id = "smi-numbers"
 url = "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
+expected_sha256 = "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7"
 domains = ["pkix", "ocsp"]
 milestones = ["0.3.0", "0.3.1", "0.3.3", "0.48.0"]
 
 [[registry]]
 id = "dns-parameters"
 url = "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
+expected_sha256 = "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5"
 domains = ["ech"]
 milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
 

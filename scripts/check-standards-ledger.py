@@ -47,6 +47,31 @@ def validate_policy(policy: dict, rfcs: dict, local: dict) -> None:
     registry_ids = [item["id"] for item in policy.get("registry", [])]
     if len(registry_ids) != len(set(registry_ids)):
         fail("source policy has duplicate registry IDs")
+    review = policy.get("review", {})
+    if not review.get("pin_provenance", "").strip():
+        fail("source policy requires independent pin provenance")
+    expected_review_urls = {
+        "rfc_index": "https://www.rfc-editor.org/rfc-index.xml",
+        "errata": "https://errata.rfc-editor.org/search/",
+    }
+    for field, expected in expected_review_urls.items():
+        if review.get(field) != expected:
+            fail(f"source policy {field} URL is not allowlisted")
+        lib.validate_https_url(review[field])
+        digest = review.get(f"{field}_sha256")
+        if not isinstance(digest, str) or lib.SHA256_PATTERN.fullmatch(digest) is None:
+            fail(f"source policy {field} requires a pinned SHA-256")
+
+    for number, source in rfcs.items():
+        expected = f"https://www.rfc-editor.org/rfc/rfc{number}.txt"
+        if source["url"] != expected:
+            fail(f"RFC {number} URL is not allowlisted")
+    for name, source in local.items():
+        if (
+            "/" in name
+            or not source["url"].startswith("https://nvlpubs.nist.gov/")
+        ):
+            fail(f"local authority {name} URL is not allowlisted")
 
     rfc_domains, local_domains = lib.domain_maps(policy)
     if set(rfc_domains) != set(rfcs):
@@ -82,6 +107,16 @@ def validate_policy(policy: dict, rfcs: dict, local: dict) -> None:
         unknown = set(registry["domains"]) - set(domain_ids)
         if unknown:
             fail(f"registry {registry['id']} has unknown domains: {sorted(unknown)}")
+        expected_url = (
+            f"https://www.iana.org/assignments/{registry['id']}/"
+            f"{registry['id']}.xml"
+        )
+        if registry["url"] != expected_url:
+            fail(f"registry {registry['id']} URL is not allowlisted")
+        lib.validate_https_url(registry["url"])
+        digest = registry.get("expected_sha256")
+        if not isinstance(digest, str) or lib.SHA256_PATTERN.fullmatch(digest) is None:
+            fail(f"registry {registry['id']} requires a pinned SHA-256")
 
     blocker_ids = [blocker["id"] for blocker in policy["blocker"]]
     if blocker_ids != ["ecdhe-ml-kem-groups"]:
@@ -139,6 +174,8 @@ def validate_errata(
 ) -> dict[int, list[dict]]:
     if errata.get("schema") != 1 or set(errata.get("reviewed_rfcs", [])) != locked:
         fail("errata review must cover exactly every locked RFC")
+    if errata.get("source") != policy["review"]["errata"]:
+        fail("errata review source is not allowlisted")
     if errata.get("checked_at") != policy["review"]["checked_at"]:
         fail("errata review date must match the source policy")
     records: dict[int, list[dict]] = {number: [] for number in locked}
@@ -182,6 +219,16 @@ def validate_errata(
         if record["url"] != expected_url:
             fail(f"erratum {record['id']} has a non-authoritative URL")
         records[record["rfc"]].append(record)
+    official = lib.official_errata_bytes(
+        records,
+        errata["source"],
+        locked,
+    )
+    lib.verify_sha256(
+        official,
+        policy["review"]["errata_sha256"],
+        "RFC errata set",
+    )
     return records
 
 
@@ -278,6 +325,8 @@ def build_ledger() -> dict:
     registries = []
     for registry in policy["registry"]:
         relative = f"snapshots/iana/{registry['id']}.xml"
+        if standards_hashes[relative] != registry["expected_sha256"]:
+            fail(f"registry {registry['id']} snapshot differs from its policy pin")
         metadata = lib.validate_iana_snapshot(
             (lib.ROOT / "standards" / relative).read_bytes(),
             registry["id"],
@@ -296,6 +345,19 @@ def build_ledger() -> dict:
     return {
         "blockers": policy["blocker"],
         "closure_exclusions": policy["closure_exclusion"],
+        "integrity": {
+            "errata_sha256": policy["review"]["errata_sha256"],
+            "local_source_manifest_sha256": lib.sha256(
+                lib.LOCAL_HASHES.read_bytes()
+            ),
+            "pin_provenance": policy["review"]["pin_provenance"],
+            "rfc_index_projection_sha256": policy["review"][
+                "rfc_index_sha256"
+            ],
+            "rfc_source_manifest_sha256": lib.sha256(
+                lib.RFC_HASHES.read_bytes()
+            ),
+        },
         "local_authorities": local_entries,
         "registries": registries,
         "rfcs": rfc_entries,

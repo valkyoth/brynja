@@ -10,10 +10,9 @@ if [[ -z "$actual" || "$actual" != "$sources" ]]; then
     exit 1
 fi
 
-(
-    cd rfc
-    sha256sum rfc*.txt > SHA256SUMS
-)
+# This script deliberately never computes or replaces the trust pins. New
+# hashes must be obtained through an independent review channel and entered
+# manually before fetch-rfcs.sh can admit the bytes.
 chmod a-w rfc/rfc*.txt rfc/SHA256SUMS
 scripts/verify-rfcs.sh
-
+echo "RFC bytes match the independently reviewed pins."

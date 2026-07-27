@@ -8,8 +8,8 @@ sources="$(sed -n 's/^\([^ ]*\.pdf\) https:\/\/nvlpubs\.nist\.gov\/[^ ]* [a-z0-9
     diff <(printf '%s\n' "$sources") <(printf '%s\n' "$actual") || true
     exit 1
 }
-(
-    cd references/local
-    sha256sum *.pdf
-) > references/LOCAL_SHA256SUMS
-
+# This script deliberately never computes or replaces the trust pins. New
+# hashes must be obtained through an independent review channel and entered
+# manually before fetch-local-references.sh can admit the bytes.
+scripts/verify-local-references.sh
+echo "Local-only reference bytes match the independently reviewed pins."

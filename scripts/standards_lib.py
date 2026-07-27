@@ -28,6 +28,42 @@ IANA_DIRECTORY = ROOT / "standards/snapshots/iana"
 USER_AGENT = "brynja-standards-ledger/0.3 (+https://github.com/valkyoth/brynja)"
 RFC_NS = {"r": "https://www.rfc-editor.org/rfc-index"}
 IANA_NS = {"i": "http://www.iana.org/assignments"}
+ALLOWED_HOSTS = {
+    "errata.rfc-editor.org",
+    "nvlpubs.nist.gov",
+    "www.iana.org",
+    "www.rfc-editor.org",
+}
+MAX_RFC_INDEX_BYTES = 16 * 1024 * 1024
+MAX_IANA_BYTES = 2 * 1024 * 1024
+MAX_ERRATA_BYTES = 2 * 1024 * 1024
+SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
+
+
+class HttpsOnlyRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Reject every redirect that leaves the exact HTTPS allowlist."""
+
+    def redirect_request(
+        self,
+        request,
+        file_pointer,
+        code,
+        message,
+        headers,
+        new_url,
+    ):
+        validate_https_url(new_url)
+        return super().redirect_request(
+            request,
+            file_pointer,
+            code,
+            message,
+            headers,
+            new_url,
+        )
+
+
+HTTPS_OPENER = urllib.request.build_opener(HttpsOnlyRedirectHandler())
 
 
 def read_policy(path: Path = POLICY) -> dict:
@@ -41,7 +77,11 @@ def read_source_file(path: Path, key_type=str) -> dict:
         if not line or line.startswith("#"):
             continue
         key, url, role = line.split()
-        result[key_type(key)] = {"url": url, "role": role}
+        validate_https_url(url)
+        converted = key_type(key)
+        if converted in result:
+            raise RuntimeError(f"{path}: duplicate source {converted!r}")
+        result[converted] = {"url": url, "role": role}
     return result
 
 
@@ -63,12 +103,66 @@ def json_bytes(value: object) -> bytes:
     return (json.dumps(value, indent=2, sort_keys=True) + "\n").encode()
 
 
-def fetch(url: str) -> bytes:
+def validate_https_url(url: str) -> None:
+    parsed = urllib.parse.urlsplit(url)
+    try:
+        port = parsed.port
+    except ValueError as error:
+        raise RuntimeError(f"unapproved HTTPS source URL: {url!r}") from error
+    if (
+        parsed.scheme != "https"
+        or parsed.hostname not in ALLOWED_HOSTS
+        or parsed.username is not None
+        or parsed.password is not None
+        or port not in (None, 443)
+        or parsed.fragment
+    ):
+        raise RuntimeError(f"unapproved HTTPS source URL: {url!r}")
+
+
+def verify_sha256(data: bytes, expected: str, label: str) -> None:
+    if not isinstance(expected, str) or SHA256_PATTERN.fullmatch(expected) is None:
+        raise RuntimeError(f"{label}: invalid pinned SHA-256")
+    actual = sha256(data)
+    if actual != expected:
+        raise RuntimeError(
+            f"{label}: SHA-256 {actual} does not match pinned {expected}"
+        )
+
+
+def fetch(url: str, *, max_bytes: int) -> bytes:
+    validate_https_url(url)
+    if max_bytes <= 0:
+        raise RuntimeError("fetch byte limit must be positive")
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=60) as response:
+    with HTTPS_OPENER.open(request, timeout=60) as response:
         if response.status != 200:
             raise RuntimeError(f"{url}: HTTP {response.status}")
-        return response.read()
+        validate_https_url(response.geturl())
+        length = response.headers.get("Content-Length")
+        if length is not None:
+            try:
+                declared_length = int(length)
+            except ValueError as error:
+                raise RuntimeError(f"{url}: invalid Content-Length") from error
+            if declared_length < 0 or declared_length > max_bytes:
+                raise RuntimeError(f"{url}: response exceeds {max_bytes} bytes")
+        data = response.read(max_bytes + 1)
+        if len(data) > max_bytes:
+            raise RuntimeError(f"{url}: response exceeds {max_bytes} bytes")
+        return data
+
+
+def safe_xml_root(data: bytes, *, max_bytes: int, label: str) -> ET.Element:
+    if len(data) > max_bytes:
+        raise RuntimeError(f"{label}: XML exceeds {max_bytes} bytes")
+    lowered = data.lower()
+    if b"<!doctype" in lowered or b"<!entity" in lowered:
+        raise RuntimeError(f"{label}: DTD and entity declarations are forbidden")
+    try:
+        return ET.fromstring(data)
+    except ET.ParseError as error:
+        raise RuntimeError(f"{label}: malformed XML: {error}") from error
 
 
 def direct_text(element: ET.Element | None) -> str:
@@ -85,7 +179,11 @@ def related(entry: ET.Element, relation: str) -> list[int]:
 
 
 def project_rfc_index(data: bytes, numbers: set[int]) -> dict:
-    root = ET.fromstring(data)
+    root = safe_xml_root(
+        data,
+        max_bytes=MAX_RFC_INDEX_BYTES,
+        label="RFC index",
+    )
     entries = {}
     for entry in root.findall("r:rfc-entry", RFC_NS):
         doc_id = direct_text(entry.find("r:doc-id", RFC_NS))
@@ -212,9 +310,33 @@ class ErrataTableParser(HTMLParser):
 
 
 def parse_errata(data: bytes, number: int) -> list[dict]:
+    if len(data) > MAX_ERRATA_BYTES:
+        raise RuntimeError(
+            f"RFC {number} errata response exceeds {MAX_ERRATA_BYTES} bytes"
+        )
     parser = ErrataTableParser(number)
     parser.feed(data.decode("utf-8"))
     return sorted(parser.records, key=lambda item: item["id"])
+
+
+def official_errata_bytes(
+    results: dict[int, list[dict]],
+    source: str,
+    numbers: set[int],
+) -> bytes:
+    fields = ("date_reported", "id", "rfc", "section", "status", "type", "url")
+    return json_bytes(
+        {
+            "records": [
+                {field: record[field] for field in fields}
+                for number in sorted(numbers)
+                for record in results[number]
+            ],
+            "reviewed_rfcs": sorted(numbers),
+            "schema": 1,
+            "source": source,
+        }
+    )
 
 
 def errata_disposition(status: str) -> tuple[str, str]:
@@ -269,7 +391,11 @@ def errata_review(record: dict, policy: dict) -> tuple[str, str]:
 
 
 def validate_iana_snapshot(data: bytes, expected_id: str) -> dict:
-    root = ET.fromstring(data)
+    root = safe_xml_root(
+        data,
+        max_bytes=MAX_IANA_BYTES,
+        label=f"IANA registry {expected_id}",
+    )
     if root.tag != f"{{{IANA_NS['i']}}}registry":
         raise RuntimeError(f"{expected_id}: unexpected IANA XML root")
     if root.get("id") != expected_id:

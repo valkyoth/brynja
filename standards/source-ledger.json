@@ -133,6 +133,13 @@
       "target": 9907
     }
   ],
+  "integrity": {
+    "errata_sha256": "8028ed0a9068a812fbff7e1e9cf011b4a46dbb4c43bd3c3b72ee2d1a70df25a2",
+    "local_source_manifest_sha256": "126d814cb26098854dea9b6a78974e29679e02bbc546d76ccff2f1a044d60dbd",
+    "pin_provenance": "Signed pre-pentest candidate 5131bf2e2a1126812e30ddcb98f5bbee7412d1e3; independently reverified 2026-07-27 over TLS with addresses from Google DNS-over-HTTPS; pins remain separate from every later refresh.",
+    "rfc_index_projection_sha256": "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674",
+    "rfc_source_manifest_sha256": "d6644cc4fe1083491221a3bc9f2076da966e662075fd209b974c86112724b00d"
+  },
   "local_authorities": [
     {
       "domains": [

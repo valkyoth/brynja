@@ -5,6 +5,21 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-27
+
+### Added
+
+- A deterministic standards ledger covering all 103 locked RFCs, eight
+  local-only NIST authorities, eight exact IANA registry snapshots, and every
+  owning roadmap milestone.
+- A complete reviewed inventory of 285 official errata with fail-closed
+  dispositions based on RFC Editor status.
+- Offline source, checksum, lifecycle, relationship, ownership, blocker, and
+  reproducibility validation with 16 positive and broken-fixture tests.
+- A networked release check that rejects RFC index, errata, or IANA drift.
+- A permanent evidence index and explicit final-RFC plus final-IANA admission
+  blocker for concrete ECDHE-ML-KEM groups.
+
 ## [0.2.0] - 2026-07-27
 
 ### Added

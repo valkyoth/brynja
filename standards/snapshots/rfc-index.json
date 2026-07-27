@@ -1,0 +1,1873 @@
+{
+  "rfcs": {
+    "10007": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Clarification to Processing Key Usage Values During Certificate Revocation List (CRL) Validation",
+      "updated_by": [],
+      "updates": [
+        5280
+      ]
+    },
+    "10015": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Deprecating Obsolete Key Exchange Methods in TLS 1.2 and DTLS 1.2",
+      "updated_by": [],
+      "updates": [
+        4162,
+        4279,
+        4346,
+        4785,
+        5246,
+        5288,
+        5289,
+        5469,
+        5487,
+        5932,
+        6209,
+        6347,
+        6367,
+        6655,
+        7905,
+        8422,
+        9325
+      ]
+    },
+    "2104": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "February",
+        "year": "1997"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "HMAC: Keyed-Hashing for Message Authentication",
+      "updated_by": [
+        6151
+      ],
+      "updates": []
+    },
+    "2119": {
+      "current_status": "BEST CURRENT PRACTICE",
+      "date": {
+        "month": "March",
+        "year": "1997"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "BEST CURRENT PRACTICE",
+      "stream": "IETF",
+      "title": "Key words for use in RFCs to Indicate Requirement Levels",
+      "updated_by": [
+        8174
+      ],
+      "updates": []
+    },
+    "2246": {
+      "current_status": "HISTORIC",
+      "date": {
+        "month": "January",
+        "year": "1999"
+      },
+      "obsoleted_by": [
+        4346
+      ],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The TLS Protocol Version 1.0",
+      "updated_by": [
+        3546,
+        5746,
+        6176,
+        7465,
+        7507,
+        7919
+      ],
+      "updates": []
+    },
+    "3279": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "May",
+        "year": "2002"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Algorithms and Identifiers for the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "updated_by": [
+        4055,
+        4491,
+        5480,
+        5758,
+        8692
+      ],
+      "updates": []
+    },
+    "3986": {
+      "current_status": "INTERNET STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2005"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        1808,
+        2396,
+        2732
+      ],
+      "publication_status": "INTERNET STANDARD",
+      "stream": "IETF",
+      "title": "Uniform Resource Identifier (URI): Generic Syntax",
+      "updated_by": [
+        7320,
+        8820
+      ],
+      "updates": [
+        1738
+      ]
+    },
+    "4055": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2005"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Additional Algorithms and Identifiers for RSA Cryptography for use in the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "updated_by": [
+        5756
+      ],
+      "updates": [
+        3279
+      ]
+    },
+    "4231": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "December",
+        "year": "2005"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Identifiers and Test Vectors for HMAC-SHA-224, HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512",
+      "updated_by": [],
+      "updates": []
+    },
+    "4346": {
+      "current_status": "HISTORIC",
+      "date": {
+        "month": "April",
+        "year": "2006"
+      },
+      "obsoleted_by": [
+        5246
+      ],
+      "obsoletes": [
+        2246
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The Transport Layer Security (TLS) Protocol Version 1.1",
+      "updated_by": [
+        4366,
+        4680,
+        4681,
+        5746,
+        6176,
+        7465,
+        7507,
+        7919,
+        10015
+      ],
+      "updates": []
+    },
+    "5077": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2008"
+      },
+      "obsoleted_by": [
+        8446,
+        9846
+      ],
+      "obsoletes": [
+        4507
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Transport Layer Security (TLS) Session Resumption without Server-Side State",
+      "updated_by": [
+        8447
+      ],
+      "updates": []
+    },
+    "5116": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2008"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "An Interface and Algorithms for Authenticated Encryption",
+      "updated_by": [],
+      "updates": []
+    },
+    "5246": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2008"
+      },
+      "obsoleted_by": [
+        8446,
+        9846
+      ],
+      "obsoletes": [
+        3268,
+        4346,
+        4366
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The Transport Layer Security (TLS) Protocol Version 1.2",
+      "updated_by": [
+        5746,
+        5878,
+        6176,
+        7465,
+        7507,
+        7568,
+        7627,
+        7685,
+        7905,
+        7919,
+        8447,
+        9155,
+        10015
+      ],
+      "updates": [
+        4492
+      ]
+    },
+    "5280": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "May",
+        "year": "2008"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        3280,
+        4325,
+        4630
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "updated_by": [
+        6818,
+        8398,
+        8399,
+        9549,
+        9598,
+        9608,
+        9618,
+        9925,
+        10007
+      ],
+      "updates": []
+    },
+    "5288": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2008"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "AES Galois Counter Mode (GCM) Cipher Suites for TLS",
+      "updated_by": [
+        9325,
+        10015
+      ],
+      "updates": []
+    },
+    "5289": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2008"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "TLS Elliptic Curve Cipher Suites with SHA-256/384 and AES Galois Counter Mode (GCM)",
+      "updated_by": [
+        10015
+      ],
+      "updates": []
+    },
+    "5480": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2009"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Elliptic Curve Cryptography Subject Public Key Information",
+      "updated_by": [
+        8813
+      ],
+      "updates": [
+        3279
+      ]
+    },
+    "5705": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Keying Material Exporters for Transport Layer Security (TLS)",
+      "updated_by": [
+        8446,
+        8447,
+        9846
+      ],
+      "updates": []
+    },
+    "5746": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "February",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Transport Layer Security (TLS) Renegotiation Indication Extension",
+      "updated_by": [],
+      "updates": [
+        2246,
+        4346,
+        4347,
+        4366,
+        5246
+      ]
+    },
+    "5754": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Using SHA2 Algorithms with Cryptographic Message Syntax",
+      "updated_by": [],
+      "updates": [
+        3370
+      ]
+    },
+    "5756": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Updates for RSAES-OAEP and RSASSA-PSS Algorithm Parameters",
+      "updated_by": [],
+      "updates": [
+        4055
+      ]
+    },
+    "5758": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internet X.509 Public Key Infrastructure: Additional Algorithms and Identifiers for DSA and ECDSA",
+      "updated_by": [],
+      "updates": [
+        3279
+      ]
+    },
+    "5869": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "May",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)",
+      "updated_by": [],
+      "updates": []
+    },
+    "5890": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        3490
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internationalized Domain Names for Applications (IDNA): Definitions and Document Framework",
+      "updated_by": [],
+      "updates": [
+        4343
+      ]
+    },
+    "5891": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        3490,
+        3491
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internationalized Domain Names in Applications (IDNA): Protocol",
+      "updated_by": [],
+      "updates": [
+        3492
+      ]
+    },
+    "5892": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The Unicode Code Points and Internationalized Domain Names for Applications (IDNA)",
+      "updated_by": [
+        8753
+      ],
+      "updates": []
+    },
+    "5912": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "June",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "New ASN.1 Modules for the Public Key Infrastructure Using X.509 (PKIX)",
+      "updated_by": [
+        6960,
+        9480,
+        9810
+      ],
+      "updates": []
+    },
+    "5929": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Channel Bindings for TLS",
+      "updated_by": [
+        9266
+      ],
+      "updates": []
+    },
+    "5958": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2010"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        5208
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Asymmetric Key Packages",
+      "updated_by": [],
+      "updates": []
+    },
+    "6066": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2011"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        4366
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Transport Layer Security (TLS) Extensions: Extension Definitions",
+      "updated_by": [
+        8446,
+        8449,
+        9325,
+        9846
+      ],
+      "updates": []
+    },
+    "6101": {
+      "current_status": "HISTORIC",
+      "date": {
+        "month": "August",
+        "year": "2011"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "HISTORIC",
+      "stream": "IETF",
+      "title": "The Secure Sockets Layer (SSL) Protocol Version 3.0",
+      "updated_by": [],
+      "updates": []
+    },
+    "6151": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "March",
+        "year": "2011"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "Updated Security Considerations for the MD5 Message-Digest and the HMAC-MD5 Algorithms",
+      "updated_by": [],
+      "updates": [
+        1321,
+        2104
+      ]
+    },
+    "6176": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2011"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Prohibiting Secure Sockets Layer (SSL) Version 2.0",
+      "updated_by": [
+        8996
+      ],
+      "updates": [
+        2246,
+        4346,
+        5246
+      ]
+    },
+    "6347": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2012"
+      },
+      "obsoleted_by": [
+        9147
+      ],
+      "obsoletes": [
+        4347
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Datagram Transport Layer Security Version 1.2",
+      "updated_by": [
+        7507,
+        7905,
+        8996,
+        9146,
+        10015
+      ],
+      "updates": []
+    },
+    "6520": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "February",
+        "year": "2012"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS) Heartbeat Extension",
+      "updated_by": [
+        8447
+      ],
+      "updates": []
+    },
+    "6818": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "January",
+        "year": "2013"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "updated_by": [],
+      "updates": [
+        5280
+      ]
+    },
+    "6960": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2013"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        2560,
+        6277
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP",
+      "updated_by": [
+        8954,
+        9654
+      ],
+      "updates": [
+        5912
+      ]
+    },
+    "6961": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2013"
+      },
+      "obsoleted_by": [
+        8446,
+        9846
+      ],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The Transport Layer Security (TLS) Multiple Certificate Status Request Extension",
+      "updated_by": [],
+      "updates": []
+    },
+    "6962": {
+      "current_status": "EXPERIMENTAL",
+      "date": {
+        "month": "June",
+        "year": "2013"
+      },
+      "obsoleted_by": [
+        9162
+      ],
+      "obsoletes": [],
+      "publication_status": "EXPERIMENTAL",
+      "stream": "IETF",
+      "title": "Certificate Transparency",
+      "updated_by": [],
+      "updates": []
+    },
+    "6979": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "August",
+        "year": "2013"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "INDEPENDENT",
+      "title": "Deterministic Usage of the Digital Signature Algorithm (DSA) and Elliptic Curve Digital Signature Algorithm (ECDSA)",
+      "updated_by": [],
+      "updates": []
+    },
+    "7250": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2014"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Using Raw Public Keys in Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)",
+      "updated_by": [],
+      "updates": []
+    },
+    "7301": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2014"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension",
+      "updated_by": [
+        8447
+      ],
+      "updates": []
+    },
+    "7465": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "February",
+        "year": "2015"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Prohibiting RC4 Cipher Suites",
+      "updated_by": [
+        8996
+      ],
+      "updates": [
+        2246,
+        4346,
+        5246
+      ]
+    },
+    "7468": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "April",
+        "year": "2015"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Textual Encodings of PKIX, PKCS, and CMS Structures",
+      "updated_by": [],
+      "updates": []
+    },
+    "7507": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "April",
+        "year": "2015"
+      },
+      "obsoleted_by": [
+        8996
+      ],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "TLS Fallback Signaling Cipher Suite Value (SCSV) for Preventing Protocol Downgrade Attacks",
+      "updated_by": [],
+      "updates": [
+        2246,
+        4346,
+        4347,
+        5246,
+        6347
+      ]
+    },
+    "7568": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2015"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Deprecating Secure Sockets Layer Version 3.0",
+      "updated_by": [
+        8996
+      ],
+      "updates": [
+        5246
+      ]
+    },
+    "7627": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "September",
+        "year": "2015"
+      },
+      "obsoleted_by": [
+        9846
+      ],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Transport Layer Security (TLS) Session Hash and Extended Master Secret Extension",
+      "updated_by": [],
+      "updates": [
+        5246
+      ]
+    },
+    "7633": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "October",
+        "year": "2015"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "X.509v3 Transport Layer Security (TLS) Feature Extension",
+      "updated_by": [],
+      "updates": []
+    },
+    "7685": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "October",
+        "year": "2015"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "A Transport Layer Security (TLS) ClientHello Padding Extension",
+      "updated_by": [],
+      "updates": [
+        5246
+      ]
+    },
+    "7748": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "January",
+        "year": "2016"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IRTF",
+      "title": "Elliptic Curves for Security",
+      "updated_by": [],
+      "updates": []
+    },
+    "7905": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2016"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "ChaCha20-Poly1305 Cipher Suites for Transport Layer Security (TLS)",
+      "updated_by": [
+        10015
+      ],
+      "updates": [
+        5246,
+        6347
+      ]
+    },
+    "7919": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2016"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Negotiated Finite Field Diffie-Hellman Ephemeral Parameters for Transport Layer Security (TLS)",
+      "updated_by": [],
+      "updates": [
+        2246,
+        4346,
+        4492,
+        5246
+      ]
+    },
+    "8017": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "November",
+        "year": "2016"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        3447
+      ],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "PKCS #1: RSA Cryptography Specifications Version 2.2",
+      "updated_by": [],
+      "updates": []
+    },
+    "8032": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "January",
+        "year": "2017"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IRTF",
+      "title": "Edwards-Curve Digital Signature Algorithm (EdDSA)",
+      "updated_by": [],
+      "updates": []
+    },
+    "8126": {
+      "current_status": "BEST CURRENT PRACTICE",
+      "date": {
+        "month": "June",
+        "year": "2017"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        5226
+      ],
+      "publication_status": "BEST CURRENT PRACTICE",
+      "stream": "IETF",
+      "title": "Guidelines for Writing an IANA Considerations Section in RFCs",
+      "updated_by": [
+        9907
+      ],
+      "updates": []
+    },
+    "8174": {
+      "current_status": "BEST CURRENT PRACTICE",
+      "date": {
+        "month": "May",
+        "year": "2017"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "BEST CURRENT PRACTICE",
+      "stream": "IETF",
+      "title": "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words",
+      "updated_by": [],
+      "updates": [
+        2119
+      ]
+    },
+    "8410": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2018"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Algorithm Identifiers for Ed25519, Ed448, X25519, and X448 for Use in the Internet X.509 Public Key Infrastructure",
+      "updated_by": [
+        9295
+      ],
+      "updates": []
+    },
+    "8422": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2018"
+      },
+      "obsoleted_by": [
+        9846
+      ],
+      "obsoletes": [
+        4492
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Elliptic Curve Cryptography (ECC) Cipher Suites for Transport Layer Security (TLS) Versions 1.2 and Earlier",
+      "updated_by": [
+        8996,
+        10015
+      ],
+      "updates": []
+    },
+    "8439": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "June",
+        "year": "2018"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        7539
+      ],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IRTF",
+      "title": "ChaCha20 and Poly1305 for IETF Protocols",
+      "updated_by": [],
+      "updates": []
+    },
+    "8447": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2018"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "IANA Registry Updates for TLS and DTLS",
+      "updated_by": [
+        9847
+      ],
+      "updates": [
+        3749,
+        4680,
+        5077,
+        5246,
+        5705,
+        5878,
+        6520,
+        7301
+      ]
+    },
+    "8448": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "January",
+        "year": "2019"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "Example Handshake Traces for TLS 1.3",
+      "updated_by": [],
+      "updates": []
+    },
+    "8449": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2018"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Record Size Limit Extension for TLS",
+      "updated_by": [],
+      "updates": [
+        6066
+      ]
+    },
+    "8701": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "January",
+        "year": "2020"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "Applying Generate Random Extensions And Sustain Extensibility (GREASE) to TLS Extensibility",
+      "updated_by": [],
+      "updates": []
+    },
+    "8753": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "April",
+        "year": "2020"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internationalized Domain Names for Applications (IDNA) Review for New Unicode Versions",
+      "updated_by": [],
+      "updates": [
+        5892
+      ]
+    },
+    "8813": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2020"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Clarifications for Elliptic Curve Cryptography Subject Public Key Information",
+      "updated_by": [],
+      "updates": [
+        5480
+      ]
+    },
+    "8879": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "December",
+        "year": "2020"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "TLS Certificate Compression",
+      "updated_by": [],
+      "updates": []
+    },
+    "8996": {
+      "current_status": "BEST CURRENT PRACTICE",
+      "date": {
+        "month": "March",
+        "year": "2021"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        5469,
+        7507
+      ],
+      "publication_status": "BEST CURRENT PRACTICE",
+      "stream": "IETF",
+      "title": "Deprecating TLS 1.0 and TLS 1.1",
+      "updated_by": [],
+      "updates": [
+        3261,
+        3329,
+        3436,
+        3470,
+        3501,
+        3552,
+        3568,
+        3656,
+        3749,
+        3767,
+        3856,
+        3871,
+        3887,
+        3903,
+        3943,
+        3983,
+        4097,
+        4111,
+        4162,
+        4168,
+        4217,
+        4235,
+        4261,
+        4279,
+        4497,
+        4513,
+        4531,
+        4540,
+        4582,
+        4616,
+        4642,
+        4680,
+        4681,
+        4712,
+        4732,
+        4743,
+        4744,
+        4785,
+        4791,
+        4823,
+        4851,
+        4964,
+        4975,
+        4976,
+        4992,
+        5018,
+        5019,
+        5023,
+        5024,
+        5049,
+        5054,
+        5091,
+        5158,
+        5216,
+        5238,
+        5263,
+        5281,
+        5364,
+        5415,
+        5422,
+        5456,
+        5734,
+        5878,
+        5953,
+        6012,
+        6042,
+        6083,
+        6084,
+        6176,
+        6347,
+        6353,
+        6367,
+        6460,
+        6614,
+        6739,
+        6749,
+        6750,
+        7030,
+        7465,
+        7525,
+        7562,
+        7568,
+        8261,
+        8422
+      ]
+    },
+    "9000": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "May",
+        "year": "2021"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "QUIC: A UDP-Based Multiplexed and Secure Transport",
+      "updated_by": [],
+      "updates": []
+    },
+    "9001": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "May",
+        "year": "2021"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Using TLS to Secure QUIC",
+      "updated_by": [],
+      "updates": []
+    },
+    "9002": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "May",
+        "year": "2021"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "QUIC Loss Detection and Congestion Control",
+      "updated_by": [],
+      "updates": []
+    },
+    "9146": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Connection Identifier for DTLS 1.2",
+      "updated_by": [
+        9853
+      ],
+      "updates": [
+        6347
+      ]
+    },
+    "9147": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "April",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        6347
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The Datagram Transport Layer Security (DTLS) Protocol Version 1.3",
+      "updated_by": [
+        9853
+      ],
+      "updates": []
+    },
+    "9155": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "December",
+        "year": "2021"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Deprecating MD5 and SHA-1 Signature Hashes in TLS 1.2 and DTLS 1.2",
+      "updated_by": [],
+      "updates": [
+        5246
+      ]
+    },
+    "9162": {
+      "current_status": "EXPERIMENTAL",
+      "date": {
+        "month": "December",
+        "year": "2021"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        6962
+      ],
+      "publication_status": "EXPERIMENTAL",
+      "stream": "IETF",
+      "title": "Certificate Transparency Version 2.0",
+      "updated_by": [],
+      "updates": []
+    },
+    "9180": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "February",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IRTF",
+      "title": "Hybrid Public Key Encryption",
+      "updated_by": [],
+      "updates": []
+    },
+    "9257": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "July",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "Guidance for External Pre-Shared Key (PSK) Usage in TLS",
+      "updated_by": [],
+      "updates": []
+    },
+    "9258": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Importing External Pre-Shared Keys (PSKs) for TLS 1.3",
+      "updated_by": [],
+      "updates": []
+    },
+    "9266": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Channel Bindings for TLS 1.3",
+      "updated_by": [],
+      "updates": [
+        5801,
+        5802,
+        5929,
+        7677
+      ]
+    },
+    "9295": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "September",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Clarifications for Ed25519, Ed448, X25519, and X448 Algorithm Identifiers",
+      "updated_by": [],
+      "updates": [
+        8410
+      ]
+    },
+    "9325": {
+      "current_status": "BEST CURRENT PRACTICE",
+      "date": {
+        "month": "November",
+        "year": "2022"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        7525
+      ],
+      "publication_status": "BEST CURRENT PRACTICE",
+      "stream": "IETF",
+      "title": "Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)",
+      "updated_by": [
+        9852,
+        10015
+      ],
+      "updates": [
+        5288,
+        6066
+      ]
+    },
+    "9345": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2023"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Delegated Credentials for TLS and DTLS",
+      "updated_by": [],
+      "updates": []
+    },
+    "9369": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "May",
+        "year": "2023"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "QUIC Version 2",
+      "updated_by": [],
+      "updates": []
+    },
+    "9460": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "November",
+        "year": "2023"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Service Binding and Parameter Specification via the DNS (SVCB and HTTPS Resource Records)",
+      "updated_by": [],
+      "updates": []
+    },
+    "9525": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "November",
+        "year": "2023"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        6125
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Service Identity in TLS",
+      "updated_by": [],
+      "updates": []
+    },
+    "9549": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2024"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        8399
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internationalization Updates to RFC 5280",
+      "updated_by": [],
+      "updates": [
+        5280
+      ]
+    },
+    "9598": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "May",
+        "year": "2024"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        8398
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internationalized Email Addresses in X.509 Certificates",
+      "updated_by": [],
+      "updates": [
+        5280
+      ]
+    },
+    "9608": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "June",
+        "year": "2024"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "No Revocation Available for X.509 Public Key Certificates",
+      "updated_by": [],
+      "updates": [
+        5280
+      ]
+    },
+    "9618": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2024"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Updates to X.509 Policy Validation",
+      "updated_by": [],
+      "updates": [
+        5280
+      ]
+    },
+    "9654": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "August",
+        "year": "2024"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        8954
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Online Certificate Status Protocol (OCSP) Nonce Extension",
+      "updated_by": [],
+      "updates": [
+        6960
+      ]
+    },
+    "9846": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        5077,
+        5246,
+        6961,
+        7627,
+        8422,
+        8446
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The Transport Layer Security (TLS) Protocol Version 1.3",
+      "updated_by": [],
+      "updates": [
+        5705,
+        6066
+      ]
+    },
+    "9847": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "December",
+        "year": "2025"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "IANA Registry Updates for TLS and DTLS",
+      "updated_by": [],
+      "updates": [
+        8447
+      ]
+    },
+    "9848": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings",
+      "updated_by": [],
+      "updates": []
+    },
+    "9849": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "TLS Encrypted Client Hello",
+      "updated_by": [],
+      "updates": []
+    },
+    "9850": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "The SSLKEYLOGFILE Format for TLS",
+      "updated_by": [],
+      "updates": []
+    },
+    "9851": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "TLS 1.2 is in Feature Freeze",
+      "updated_by": [],
+      "updates": []
+    },
+    "9852": {
+      "current_status": "BEST CURRENT PRACTICE",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "BEST CURRENT PRACTICE",
+      "stream": "IETF",
+      "title": "New Protocols Using TLS Must Require TLS 1.3",
+      "updated_by": [],
+      "updates": [
+        9325
+      ]
+    },
+    "9853": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Return Routability Check for DTLS 1.2 and 1.3",
+      "updated_by": [],
+      "updates": [
+        9146,
+        9147
+      ]
+    },
+    "9919": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        5019
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "The Lightweight Online Certificate Status Protocol (OCSP) Profile for High-Volume Environments",
+      "updated_by": [],
+      "updates": []
+    },
+    "9925": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "February",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Unsigned X.509 Certificates",
+      "updated_by": [],
+      "updates": [
+        5280
+      ]
+    },
+    "9935": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "March",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Internet X.509 Public Key Infrastructure - Algorithm Identifiers for the Module-Lattice-Based Key-Encapsulation Mechanism (ML-KEM)",
+      "updated_by": [],
+      "updates": []
+    },
+    "9954": {
+      "current_status": "INFORMATIONAL",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "INFORMATIONAL",
+      "stream": "IETF",
+      "title": "Hybrid Key Exchange in TLS 1.3",
+      "updated_by": [],
+      "updates": []
+    },
+    "9963": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "April",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "Legacy RSASSA-PKCS1-v1_5 Code Points for TLS 1.3",
+      "updated_by": [],
+      "updates": []
+    },
+    "9973": {
+      "current_status": "PROPOSED STANDARD",
+      "date": {
+        "month": "July",
+        "year": "2026"
+      },
+      "obsoleted_by": [],
+      "obsoletes": [
+        8773
+      ],
+      "publication_status": "PROPOSED STANDARD",
+      "stream": "IETF",
+      "title": "TLS 1.3 Extension for Using Certificates with an External Pre-Shared Key",
+      "updated_by": [],
+      "updates": []
+    }
+  },
+  "schema": 1,
+  "source": "https://www.rfc-editor.org/rfc-index.xml"
+}

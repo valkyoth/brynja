@@ -29,18 +29,19 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.2.0` hardens release integrity, complete feature-graph validation,
-and modern/legacy package isolation on top of the `0.1.0` foundation. It does
-**not** implement TLS and must not be used to secure network traffic.
+Version `0.3.0` adds a deterministic ledger of locked RFC and NIST authorities,
+reviewed errata decisions, exact IANA snapshots, lifecycle classifications,
+roadmap ownership, and release-time upstream drift rejection. It does **not**
+implement TLS and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.2.0` is a policy and
-isolation release; it does not implement TLS. The dependency is:
+Brynja is not ready for application use. Version `0.3.0` is a standards
+evidence release; it does not implement TLS. The dependency is:
 
 ```toml
 [dependencies]
-brynja = "0.2"
+brynja = "0.3"
 ```
 
 Every official release tag publishes the `brynja` facade at the tag version.
@@ -165,6 +166,7 @@ scripts/check-rust-version-matrix.sh
 scripts/release_crates.py --check
 scripts/release_crates.py --package-check
 scripts/check-github-release-controls.py
+python3 scripts/check-standards-ledger.py
 cargo deny check
 cargo audit
 ```
@@ -177,7 +179,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.2.0
+scripts/release_crates.py --version 0.3.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,
@@ -197,3 +199,5 @@ occurs only after GitHub is green and the user explicitly requests it.
 - [Version plan](https://github.com/valkyoth/brynja/blob/main/docs/VERSION_PLAN.md)
 - [Threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md)
 - [Standards source policy](https://github.com/valkyoth/brynja/blob/main/docs/rfc-source-policy.md)
+- [Machine-readable standards evidence](https://github.com/valkyoth/brynja/blob/main/standards/README.md)
+- [Permanent evidence index](https://github.com/valkyoth/brynja/blob/main/docs/evidence-index.md)

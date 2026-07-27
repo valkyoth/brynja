@@ -18,7 +18,16 @@ test -s docs/VERSION_PLAN.md
 test -s docs/CRATE_VERSION_MATRIX.md
 test -s package-policy.toml
 test -s github-release-controls.toml
+test -s standards/README.md
+test -s standards/source-policy.toml
+test -s standards/source-ledger.json
+test -s standards/ERRATA.json
+test -s standards/SHA256SUMS
+test -s standards/snapshots/rfc-index.json
 test -x scripts/release_crates.py
+test -x scripts/check-standards-ledger.py
+test -x scripts/test-standards-ledger.py
+test -x scripts/update-standards-snapshots.py
 test -f scripts/release_policy.py
 test -x scripts/test-release-crates.py
 test -x scripts/test-release-readiness.sh
@@ -28,6 +37,7 @@ test -x scripts/validate-current-pentest.sh
 test -x scripts/install-ci-tools.sh
 test -s scripts/ci-tools.lock
 test -f security/pentest/README.md
+test -s docs/evidence-index.md
 test -f release-crates.toml
 cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml

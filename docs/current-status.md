@@ -1,41 +1,35 @@
 # Current Status
 
-Status: v0.2.0 pentest complete; awaiting green GitHub CI
+Status: v0.3.0 implementation complete; awaiting pentest
 
-Brynja has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
-protocol implementation. The workspace compiles only to prove the intended
-package graph and isolation boundaries: legacy engines use explicit
-`brynja-legacy-*` names, while the evergreen `brynja-tls` facade reaches
-separate TLS 1.2 and TLS 1.3 engine packages. Do not use it for network
-security.
-Brynja is not FIPS 140-3 validated and no current package, feature, build,
-profile, or configuration may state or imply a FIPS validation claim.
-No `brynja-sanitization` package or dependency exists in the current workspace.
-Versions v0.11.1 and v0.11.2 now gate evaluation and possible implementation
-of one protocol-neutral, explicitly selected adapter to the first-party
-`sanitization` crate. It will not replace Brynja's mandatory internal
-destruction primitive, enter a facade or engine graph, activate `zeroize`, or
-inherit a FIPS claim.
-The 2026-07-26 planning check found `sanitization` `2.0.3` as the latest stable
-crates.io release and confirmed its declared Rust `1.90.0` MSRV, pinned Rust
-`1.97.1` development toolchain, `no_std` core, and MIT OR Apache-2.0 license.
-This is planning evidence only; v0.11.1 must recheck and formally admit or
-reject the then-current release.
+Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
+protocol implementation. The Rust workspace remains package scaffolding and
+must not be used to secure network traffic. Brynja is not FIPS 140-3 validated,
+and no package, feature, build, profile, or configuration may imply otherwise.
 
-The signed `v0.1.0` foundation and all eleven selected crates are published.
-The `v0.2.0` candidate advances only `brynja`; unchanged supporting crates
-remain at `0.1.0`. It adds a committed 24-package class policy, exact
-no-default and all-feature graph validation, modern and legacy negative
-fixtures, regular committed-report enforcement, exact signed-tag comparison,
-and a live-checked active GitHub ruleset matching the protected `eth` model.
-The v0.2.0 pentest remediation adds no-default-feature Clippy coverage and
-documents the intentional fail-closed panic posture. A later hosted-run failure
-was remediated by supplying step-scoped `GH_TOKEN` to the live ruleset check
-without broadening read-only workflow permissions. The committed PASS report
-records zero open findings, the owner-accepted solo-maintainer governance
-risks, and the repository owner's green remediation retest. No `v0.2.0` tag
-exists; this final CI fix must receive green GitHub CI before explicit tag
-authorization.
-The 2026-07-26 RFC planning audit locks a 103-document protocol source closure
-and records roadmap dispositions; machine-readable normative source-to-code-
-and-test traceability remains planned for v0.3.0 through v0.3.5.
+Signed releases v0.1.0 and v0.2.0 established the workspace and hardened its
+release and isolation controls. The v0.3.0 candidate advances only `brynja`;
+unchanged supporting crates remain at their independently published `0.1.0`
+versions and are not selected again.
+
+Version 0.3.0 turns the source inventory into executable evidence:
+
+- all 103 locked RFCs and eight local NIST authorities map to lifecycle,
+  domain, and roadmap ownership;
+- a compact RFC Editor index snapshot records status and update/obsolescence
+  relationships, with every unlocked edge receiving an explicit exclusion;
+- eight exact IANA XML snapshots record the current registries relevant to
+  planned TLS, DTLS, QUIC, HPKE, ECH, CT, PKIX, OCSP, and DNS work;
+- all 285 official errata found for the locked RFC set have a fail-closed
+  disposition: verified errata apply, reported and held errata remain tracked
+  without changing requirements, and rejected errata do not apply;
+- ordinary checks reproduce the complete ledger offline, while the release
+  gate compares it with live official sources and stops on drift; and
+- concrete ECDHE-ML-KEM groups remain blocked until both a final Standards
+  Track RFC and final IANA code points exist.
+
+This is source-level traceability, not implementation. v0.3.1 will classify
+the complete protocol surface, and v0.3.2 through v0.3.5 will extract and
+populate normative requirement mappings before implementation work begins.
+No `brynja-sanitization` package or dependency exists yet; its admission
+decision remains gated at v0.11.1.

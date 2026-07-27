@@ -1,15 +1,15 @@
 # Crate Version Matrix
 
-Status: v0.2.0 pentested release candidate awaiting green GitHub CI
+Status: v0.3.0 implementation candidate awaiting pentest
 
-The `brynja` facade advances to `0.2.0`. Every unchanged modern supporting
+The `brynja` facade advances to `0.3.0`. Every unchanged modern supporting
 crate retains its published `0.1.0` version and is not republished. Legacy and
 repository-only packages remain unpublished. Package publication does not
 imply protocol implementation or production readiness.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.2.0` | yes | Mandatory facade release with strengthened policy and isolation enforcement |
+| `brynja` | `0.3.0` | yes | Mandatory facade release for the standards source-ledger milestone |
 | `brynja-core`, `brynja-crypto`, and `brynja-pki` | `0.1.0` | no | Published and unchanged |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | no | Published and unchanged |
 | `brynja-dtls`, `brynja-quic-tls`, and `brynja-platform` | `0.1.0` | no | Published and unchanged |
@@ -27,9 +27,9 @@ invalid version bumps, unavailable dependencies, publication-order errors, or
 an accidentally publishable repository-only package.
 
 Every official modern `vX.Y.Z` or `vX.Y.Z-rc.N` release tag publishes `brynja`
-at exactly `X.Y.Z` or `X.Y.Z-rc.N`, including the foundation release. The main
-facade is always the final crate in the publication sequence. An unchanged
-facade entry, `publish = false`, or non-public release stage is invalid.
+at exactly `X.Y.Z` or `X.Y.Z-rc.N`. The facade is always the final crate in the
+publication sequence. An unchanged facade entry, `publish = false`, or
+non-public release stage is invalid.
 
 Supporting crates use independent versions and are published only when their
 own package changes or an internal dependency must move outside the currently
@@ -57,38 +57,26 @@ publication. Legacy packages may publish only through their separately
 admitted legacy release line and never become dependencies of the modern
 facade.
 
-The future `brynja-fips-module` and `brynja-fips` packages also use independent
-versions. A validated module version is immutable and bound to its exact
-certificate, artifact hashes, caveats, and tested operational environments.
-Any changed module is a different artifact and cannot reuse the validation
-claim; the facade may update only when its manifest, API, or approved profile
-changes without mutating the validated module.
+The future FIPS packages use independent versions. A validated module version
+is immutable and bound to its exact certificate, artifact hashes, caveats, and
+tested operational environments. Any changed module is a different artifact
+and cannot reuse the validation claim.
 
 If v0.11.1 admits it, `brynja-sanitization` also uses an independent SemVer
 line and publishes only when its adapter code or exact `sanitization` pin
-changes. The approved `sanitization` package must publish first and be visible
-on crates.io. The adapter never enters the modern, legacy, or FIPS facade
-publication set automatically. Until admission, it is absent from
-`release-crates.toml` and the workspace rather than represented by a placeholder
-package.
+changes. Until admission, it is absent from the release manifest and workspace.
 
-Actual publication requires a clean worktree, the matching release tag at
-`HEAD`, a current committed PASS pentest report, user-confirmed green GitHub
-checks, the complete versioned release gate, advisory and dependency-policy
-checks, and typed version confirmation. The publisher provides no dirty-tree,
-untagged, skipped-check, or `--no-verify` production bypass.
+Actual publication requires a clean worktree, matching release tag at `HEAD`,
+current committed PASS pentest report, user-confirmed green GitHub checks,
+complete versioned release gate, advisory and dependency-policy checks, SBOM,
+packages, and typed version confirmation. There is no production bypass.
 
-For `v0.1.0`, the enforced initial publication order is:
-`brynja-core`, `brynja-crypto`, `brynja-pki`, `brynja-platform`,
-`brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`,
-`brynja-dtls`, `brynja-quic-tls`, then `brynja`.
-
-For `v0.2.0`, only `brynja 0.2.0` is selected. Its complete exact-pinned
+For `v0.3.0`, only `brynja 0.3.0` is selected. Its complete exact-pinned
 supporting closure is already available at `0.1.0`.
 
 ## Rust Compatibility
 
 | Rust | Evidence |
 | --- | --- |
-| `1.90.0` through `1.97.0` | `cargo check --workspace --all-features` on each listed stable release |
+| `1.90.0` through `1.97.0` | Workspace all-feature compatibility check on each listed stable release |
 | `1.97.1` | Full release gate and all target checks |

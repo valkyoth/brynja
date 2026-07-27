@@ -1,0 +1,5741 @@
+{
+  "blockers": [
+    {
+      "drafts_forbidden": true,
+      "id": "ecdhe-ml-kem-groups",
+      "owner": "0.120.0",
+      "reason": "Concrete hybrid groups require a final Standards Track RFC and final IANA values; RFC 9954 alone is only the generic construction.",
+      "required_final_iana_codepoints": true,
+      "required_final_rfc": true,
+      "required_registry": "tls-parameters",
+      "status": "blocked"
+    }
+  ],
+  "closure_exclusions": [
+    {
+      "reason": "Superseded TLS extension baseline; RFC 6066 is locked.",
+      "relation": "updated-by",
+      "source": 2246,
+      "target": 3546
+    },
+    {
+      "reason": "GOST PKIX algorithms are not admitted.",
+      "relation": "updated-by",
+      "source": 3279,
+      "target": 4491
+    },
+    {
+      "reason": "SHAKE PKIX algorithms are not admitted.",
+      "relation": "updated-by",
+      "source": 3279,
+      "target": 8692
+    },
+    {
+      "reason": "URI scheme ownership is outside certificate identity comparison.",
+      "relation": "updated-by",
+      "source": 3986,
+      "target": 7320
+    },
+    {
+      "reason": "URI scheme design is outside certificate identity comparison.",
+      "relation": "updated-by",
+      "source": 3986,
+      "target": 8820
+    },
+    {
+      "reason": "Superseded TLS extension baseline; RFC 6066 is locked.",
+      "relation": "updated-by",
+      "source": 4346,
+      "target": 4366
+    },
+    {
+      "reason": "TLS supplemental data is not admitted.",
+      "relation": "updated-by",
+      "source": 4346,
+      "target": 4680
+    },
+    {
+      "reason": "TLS user mapping is not admitted.",
+      "relation": "updated-by",
+      "source": 4346,
+      "target": 4681
+    },
+    {
+      "reason": "RFC 9846 is the locked replacement for RFC 8446.",
+      "relation": "obsoleted-by",
+      "source": 5077,
+      "target": 8446
+    },
+    {
+      "reason": "TLS authorization extensions are not admitted.",
+      "relation": "updated-by",
+      "source": 5246,
+      "target": 5878
+    },
+    {
+      "reason": "RFC 9846 is the locked replacement for RFC 8446.",
+      "relation": "obsoleted-by",
+      "source": 5246,
+      "target": 8446
+    },
+    {
+      "reason": "Superseded by locked RFC 9598.",
+      "relation": "updated-by",
+      "source": 5280,
+      "target": 8398
+    },
+    {
+      "reason": "Superseded by locked RFC 9549.",
+      "relation": "updated-by",
+      "source": 5280,
+      "target": 8399
+    },
+    {
+      "reason": "RFC 9846 is the locked replacement for RFC 8446.",
+      "relation": "updated-by",
+      "source": 5705,
+      "target": 8446
+    },
+    {
+      "reason": "CMP ASN.1 modules are outside Brynja.",
+      "relation": "updated-by",
+      "source": 5912,
+      "target": 9480
+    },
+    {
+      "reason": "CMP ASN.1 modules are outside Brynja.",
+      "relation": "updated-by",
+      "source": 5912,
+      "target": 9810
+    },
+    {
+      "reason": "RFC 9846 is the locked replacement for RFC 8446.",
+      "relation": "updated-by",
+      "source": 6066,
+      "target": 8446
+    },
+    {
+      "reason": "Superseded by locked RFC 9654.",
+      "relation": "updated-by",
+      "source": 6960,
+      "target": 8954
+    },
+    {
+      "reason": "RFC 9846 is locked and status_request_v2 is explicitly excluded.",
+      "relation": "obsoleted-by",
+      "source": 6961,
+      "target": 8446
+    },
+    {
+      "reason": "YANG document guidance is outside Brynja registry policy.",
+      "relation": "updated-by",
+      "source": 8126,
+      "target": 9907
+    }
+  ],
+  "local_authorities": [
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "filename": "NIST.FIPS.180-4.pdf",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "role": "sha2",
+      "sha256": "0455b406d89648d20cbde375561e19c245b9815e894164c2670772e3d54deb82",
+      "url": "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "filename": "NIST.FIPS.186-5.pdf",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "role": "signatures",
+      "sha256": "fbb9c7c2ba442f03c57b63b43c888311903c9d0f29f89b06efdebd9b619140c5",
+      "url": "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "filename": "NIST.FIPS.197-upd1.pdf",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "role": "aes",
+      "sha256": "62c86eb567f13edb8f71826e985da870b04ef6381634f303cdb16e84d47becd1",
+      "url": "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "filename": "NIST.SP.800-107r1.pdf",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "role": "hash-usage",
+      "sha256": "2b691bd8895cbc6793e442b1e5a45398f5ca777edc2a79072469ad05405b093b",
+      "url": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-107r1.pdf"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "filename": "NIST.SP.800-186.pdf",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "role": "elliptic-curves",
+      "sha256": "53c7cf3340528aaa0a7bbeaef947f2099568192367d4341a7d4abceb55f78432",
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "filename": "NIST.SP.800-38D.pdf",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "role": "gcm-ghash",
+      "sha256": "d99f3921ccebca049e7522426553aba071dae14ec3d5b6041e8c111a6cb57bba",
+      "url": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "filename": "NIST.SP.800-56Ar3.pdf",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "role": "key-establishment",
+      "sha256": "6b315e3a91012981f9a88ad62c97ea7d4b170a7746e713f34dd29538ee46f403",
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar3.pdf"
+    },
+    {
+      "domains": [
+        "entropy"
+      ],
+      "filename": "NIST.SP.800-90Ar1.pdf",
+      "milestones": [
+        "0.14.0",
+        "0.124.0",
+        "0.125.0",
+        "0.126.0"
+      ],
+      "role": "random-bit-generation",
+      "sha256": "d58e3dac4aaa5971c9a6a20a9bd5c13e2f1930cd1a199c0c00f768e7327355e2",
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90Ar1.pdf"
+    }
+  ],
+  "registries": [
+    {
+      "created": "2005-08-23",
+      "domains": [
+        "standards",
+        "tls12",
+        "tls13",
+        "dtls",
+        "hybrid"
+      ],
+      "id": "tls-parameters",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.4",
+        "0.120.0"
+      ],
+      "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc",
+      "title": "Transport Layer Security (TLS) Parameters",
+      "updated": "2026-07-20",
+      "url": "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
+    },
+    {
+      "created": "2005-11-15",
+      "domains": [
+        "tls12",
+        "tls13",
+        "dtls",
+        "optional"
+      ],
+      "id": "tls-extensiontype-values",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.4",
+        "0.3.5"
+      ],
+      "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305",
+      "title": "Transport Layer Security (TLS) Extensions",
+      "updated": "2026-07-23",
+      "url": "https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml"
+    },
+    {
+      "created": "2025-07-30",
+      "domains": [
+        "ech"
+      ],
+      "id": "tls-ech-configuration-extensions",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.5",
+        "0.140.0"
+      ],
+      "sha256": "b481939a3ea685209a7026e508ba554d904ec5afc6439d29a2bc2e13b6053e98",
+      "title": "TLS Encrypted Client Hello (ECH) Configuration Extensions",
+      "updated": "2026-04-16",
+      "url": "https://www.iana.org/assignments/tls-ech-configuration-extensions/tls-ech-configuration-extensions.xml"
+    },
+    {
+      "created": "2021-11-16",
+      "domains": [
+        "hpke",
+        "ech"
+      ],
+      "id": "hpke",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.5",
+        "0.138.0"
+      ],
+      "sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002",
+      "title": "Hybrid Public Key Encryption (HPKE)",
+      "updated": "2026-04-16",
+      "url": "https://www.iana.org/assignments/hpke/hpke.xml"
+    },
+    {
+      "created": "2021-02-11",
+      "domains": [
+        "quic"
+      ],
+      "id": "quic",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.4",
+        "0.94.0"
+      ],
+      "sha256": "8867dffa0213139187ea9bb358ab907b746f47918a6ed713c38a322580232536",
+      "title": "QUIC",
+      "updated": "2026-05-04",
+      "url": "https://www.iana.org/assignments/quic/quic.xml"
+    },
+    {
+      "created": "2021-08-04",
+      "domains": [
+        "ct"
+      ],
+      "id": "trans",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.3",
+        "0.59.0"
+      ],
+      "sha256": "c861d172ca324e939d2495f3ec03551ed3fbf9118cd791ada1da4a3c52566066",
+      "title": "Public Notary Transparency",
+      "updated": "2021-12-14",
+      "url": "https://www.iana.org/assignments/trans/trans.xml"
+    },
+    {
+      "created": "",
+      "domains": [
+        "pkix",
+        "ocsp"
+      ],
+      "id": "smi-numbers",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.3",
+        "0.48.0"
+      ],
+      "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+      "title": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
+      "updated": "2026-07-20",
+      "url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
+    },
+    {
+      "created": "",
+      "domains": [
+        "ech"
+      ],
+      "id": "dns-parameters",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.5",
+        "0.140.0"
+      ],
+      "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+      "title": "Domain Name System (DNS) Parameters",
+      "updated": "2026-07-20",
+      "url": "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
+    }
+  ],
+  "rfcs": [
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 501,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2794,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 3694,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 4459,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4809,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 8185,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 8296,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "number": 2104,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          6151
+        ],
+        "updates": []
+      },
+      "role": "hmac",
+      "sha256": "64d5245a9101929025336e470e3737f118704001249d503c85a86e19fe9fbb01",
+      "status": "INFORMATIONAL",
+      "title": "HMAC: Keyed-Hashing for Message Authentication",
+      "url": "https://www.rfc-editor.org/rfc/rfc2104.txt"
+    },
+    {
+      "domains": [
+        "standards"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 493,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 494,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 495,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 496,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 497,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 498,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 499,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 500,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2969,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 5101,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5206,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 6773,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 6954,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8849,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8850,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.2"
+      ],
+      "number": 2119,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8174
+        ],
+        "updates": []
+      },
+      "role": "normative-language",
+      "sha256": "3c2ceb7bfc84cd34720f4a5271338ab9d8280d34bdd1eb250c64306202f2ed8b",
+      "status": "BEST CURRENT PRACTICE",
+      "title": "Key words for use in RFCs to Indicate Requirement Levels",
+      "url": "https://www.rfc-editor.org/rfc/rfc2119.txt"
+    },
+    {
+      "domains": [
+        "legacy"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 3481,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 3482,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "legacy",
+      "milestones": [
+        "H0.1.0",
+        "H0.1.1",
+        "H0.2.0",
+        "H0.3.0",
+        "H0.4.0",
+        "H0.5.0",
+        "H0.6.0",
+        "H0.7.0",
+        "H0.8.0"
+      ],
+      "number": 2246,
+      "relationships": {
+        "obsoleted_by": [
+          4346
+        ],
+        "obsoletes": [],
+        "updated_by": [
+          3546,
+          5746,
+          6176,
+          7465,
+          7507,
+          7919
+        ],
+        "updates": []
+      },
+      "role": "tls-10-legacy",
+      "sha256": "d6489dc4c87b821146724e00db9a9ed31fb317e3bd628387a8adf50e9033eea1",
+      "status": "HISTORIC",
+      "title": "The TLS Protocol Version 1.0",
+      "url": "https://www.rfc-editor.org/rfc/rfc2246.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 307,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 1909,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 2048,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 4036,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 4102,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6672,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7296,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 3279,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          4055,
+          4491,
+          5480,
+          5758,
+          8692
+        ],
+        "updates": []
+      },
+      "role": "pkix-algorithm-identifiers",
+      "sha256": "6d3f19f18e17fa1c68da5aaf4021327748fabca840d7300443b77357a1fc1614",
+      "status": "PROPOSED STANDARD",
+      "title": "Algorithms and Identifiers for the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "url": "https://www.rfc-editor.org/rfc/rfc3279.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 1783,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2033,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 2525,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2624,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 2717,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2933,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 3330,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 4293,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 4393,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 4394,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4547,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4789,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4942,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5428,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 7019,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 7590,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 8442,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 3986,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          1808,
+          2396,
+          2732
+        ],
+        "updated_by": [
+          7320,
+          8820
+        ],
+        "updates": [
+          1738
+        ]
+      },
+      "role": "uri",
+      "sha256": "3102dae4b68cebe40337730312fcb612297b8928547267e8b3d1ee6002b2d683",
+      "status": "INTERNET STANDARD",
+      "title": "Uniform Resource Identifier (URI): Generic Syntax",
+      "url": "https://www.rfc-editor.org/rfc/rfc3986.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 1468,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 1676,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 1677,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2724,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5199,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5325,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 4055,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          5756
+        ],
+        "updates": [
+          3279
+        ]
+      },
+      "role": "pkix-rsa-algorithm-identifiers",
+      "sha256": "b8a1ef3fb135c32aed4eee121264f3ec83a46def746c8fe68e05bd1b60324e9a",
+      "status": "PROPOSED STANDARD",
+      "title": "Additional Algorithms and Identifiers for RSA Cryptography for use in the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "url": "https://www.rfc-editor.org/rfc/rfc4055.txt"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 3853,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "evidence",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "number": 4231,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "hmac-vectors",
+      "sha256": "72178527ce93500e730bc8eb182b857e583096d652b64ece0879c52ba1df973b",
+      "status": "PROPOSED STANDARD",
+      "title": "Identifiers and Test Vectors for HMAC-SHA-224, HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512",
+      "url": "https://www.rfc-editor.org/rfc/rfc4231.txt"
+    },
+    {
+      "domains": [
+        "legacy"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 116,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 117,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 1075,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 1896,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "legacy",
+      "milestones": [
+        "H0.1.0",
+        "H0.1.1",
+        "H0.2.0",
+        "H0.3.0",
+        "H0.4.0",
+        "H0.5.0",
+        "H0.6.0",
+        "H0.7.0",
+        "H0.8.0"
+      ],
+      "number": 4346,
+      "relationships": {
+        "obsoleted_by": [
+          5246
+        ],
+        "obsoletes": [
+          2246
+        ],
+        "updated_by": [
+          4366,
+          4680,
+          4681,
+          5746,
+          6176,
+          7465,
+          7507,
+          7919,
+          10015
+        ],
+        "updates": []
+      },
+      "role": "tls-11-legacy",
+      "sha256": "009ff1834b93340a20ff8d71c8b4f5387ea6ca2e6b293691d85cf719eeb922fd",
+      "status": "HISTORIC",
+      "title": "The Transport Layer Security (TLS) Protocol Version 1.1",
+      "url": "https://www.rfc-editor.org/rfc/rfc4346.txt"
+    },
+    {
+      "domains": [
+        "tls13-session"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 4800,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "compatibility",
+      "milestones": [
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0"
+      ],
+      "number": 5077,
+      "relationships": {
+        "obsoleted_by": [
+          8446,
+          9846
+        ],
+        "obsoletes": [
+          4507
+        ],
+        "updated_by": [
+          8447
+        ],
+        "updates": []
+      },
+      "role": "tls-12-session-tickets-obsoleted-baseline",
+      "sha256": "e9f9cb247c4930a773dadf87b4cedf06cad9bbeec5e364d08fd5a83f678817ef",
+      "status": "PROPOSED STANDARD",
+      "title": "Transport Layer Security (TLS) Session Resumption without Server-Side State",
+      "url": "https://www.rfc-editor.org/rfc/rfc5077.txt"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 4008,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 4268,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4338,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5219,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5233,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6415,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "number": 5116,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "aead-interface",
+      "sha256": "8762fee7c85e682fce609c75e0f5040ee7efa8fca96969ffd85df37585e0eda1",
+      "status": "PROPOSED STANDARD",
+      "title": "An Interface and Algorithms for Authenticated Encryption",
+      "url": "https://www.rfc-editor.org/rfc/rfc5116.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 1585,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2165,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 2390,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 2643,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 2864,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 2865,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 3122,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 3123,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 3191,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4007,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 4109,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 4382,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 4507,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 4750,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4885,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 4912,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5036,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5352,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5409,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5535,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6244,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 6572,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "compatibility",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 5246,
+      "relationships": {
+        "obsoleted_by": [
+          8446,
+          9846
+        ],
+        "obsoletes": [
+          3268,
+          4346,
+          4366
+        ],
+        "updated_by": [
+          5746,
+          5878,
+          6176,
+          7465,
+          7507,
+          7568,
+          7627,
+          7685,
+          7905,
+          7919,
+          8447,
+          9155,
+          10015
+        ],
+        "updates": [
+          4492
+        ]
+      },
+      "role": "tls-12-obsoleted-baseline",
+      "sha256": "2ebe1b8e651696aeacc8ab3848bedb465505737901ea3b691acf40c392958feb",
+      "status": "PROPOSED STANDARD",
+      "title": "The Transport Layer Security (TLS) Protocol Version 1.2",
+      "url": "https://www.rfc-editor.org/rfc/rfc5246.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 1774,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 3085,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 3200,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 3466,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 3579,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 3674,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 3693,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 3754,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 3986,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4274,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4847,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 5802,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5876,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 5938,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5967,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5997,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 6414,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 6830,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 7164,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7634,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7658,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7661,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8561,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 5280,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          3280,
+          4325,
+          4630
+        ],
+        "updated_by": [
+          6818,
+          8398,
+          8399,
+          9549,
+          9598,
+          9608,
+          9618,
+          9925,
+          10007
+        ],
+        "updates": []
+      },
+      "role": "pkix",
+      "sha256": "a2f2628c0a83b873fc4786abd921f9b2c02395954b655d190bf16b831633345d",
+      "status": "PROPOSED STANDARD",
+      "title": "Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "url": "https://www.rfc-editor.org/rfc/rfc5280.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 4694,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 5288,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          9325,
+          10015
+        ],
+        "updates": []
+      },
+      "role": "tls-12-aes-gcm",
+      "sha256": "f68375c3f1948802240ca5b21f3aa44311ea02f877e4e240d1fc70927ecf1307",
+      "status": "PROPOSED STANDARD",
+      "title": "AES Galois Counter Mode (GCM) Cipher Suites for TLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc5288.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 5289,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          10015
+        ],
+        "updates": []
+      },
+      "role": "tls-12-ecc-aes-gcm",
+      "sha256": "4bc7e5ae5b8a9e8c022a85530989593ba95bff2d2153aaf2aa5c017f2bd1410b",
+      "status": "PROPOSED STANDARD",
+      "title": "TLS Elliptic Curve Cipher Suites with SHA-256/384 and AES Galois Counter Mode (GCM)",
+      "url": "https://www.rfc-editor.org/rfc/rfc5289.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 1727,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 1728,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4170,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 6670,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 8026,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 5480,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8813
+        ],
+        "updates": [
+          3279
+        ]
+      },
+      "role": "ecc-subject-public-key-info",
+      "sha256": "593bf29fd0da2ff8b903c3ebf1c9d189a770039159e2ba46a0c3b91355037f26",
+      "status": "PROPOSED STANDARD",
+      "title": "Elliptic Curve Cryptography Subject Public Key Information",
+      "url": "https://www.rfc-editor.org/rfc/rfc5480.txt"
+    },
+    {
+      "domains": [
+        "tls13-session"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 4395,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0"
+      ],
+      "number": 5705,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8446,
+          8447,
+          9846
+        ],
+        "updates": []
+      },
+      "role": "tls-exporters",
+      "sha256": "29c829cbdf29f4f6a1a0f59eacddf0503bfa67c22af28f127e25b502b3eb2c7a",
+      "status": "PROPOSED STANDARD",
+      "title": "Keying Material Exporters for Transport Layer Security (TLS)",
+      "url": "https://www.rfc-editor.org/rfc/rfc5705.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 5746,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          2246,
+          4346,
+          4347,
+          4366,
+          5246
+        ]
+      },
+      "role": "tls-secure-renegotiation",
+      "sha256": "fb894a464bffd123ef7be802b63d7309b7af2bc34091683873c311556de2036d",
+      "status": "PROPOSED STANDARD",
+      "title": "Transport Layer Security (TLS) Renegotiation Indication Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc5746.txt"
+    },
+    {
+      "domains": [
+        "ocsp"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 2025,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 2693,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 4846,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.58.0",
+        "0.58.1",
+        "0.58.2",
+        "0.58.3",
+        "0.71.0"
+      ],
+      "number": 5754,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          3370
+        ]
+      },
+      "role": "sha2-algorithm-identifiers",
+      "sha256": "13d095299ffec21ba7726fa6626f9bc4f9e24654bb9a96d70bbc3c78ee51575e",
+      "status": "PROPOSED STANDARD",
+      "title": "Using SHA2 Algorithms with Cryptographic Message Syntax",
+      "url": "https://www.rfc-editor.org/rfc/rfc5754.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 2021,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 5756,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          4055
+        ]
+      },
+      "role": "rsa-pss-parameter-updates",
+      "sha256": "304a0b826bf211028209db48bd1419c1088127f33e1689d62028378c739e67f5",
+      "status": "PROPOSED STANDARD",
+      "title": "Updates for RSAES-OAEP and RSASSA-PSS Algorithm Parameters",
+      "url": "https://www.rfc-editor.org/rfc/rfc5756.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 2013,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 5758,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          3279
+        ]
+      },
+      "role": "ecdsa-pkix",
+      "sha256": "4d02628ff0875a1960d34be584a68f88528b96242bdc5a05a40a29ef01cf1532",
+      "status": "PROPOSED STANDARD",
+      "title": "Internet X.509 Public Key Infrastructure: Additional Algorithms and Identifiers for DSA and ECDSA",
+      "url": "https://www.rfc-editor.org/rfc/rfc5758.txt"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5161,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "number": 5869,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "hkdf",
+      "sha256": "7a40eb3835b35fc947eb12a2ed614db079d43b26e50dbc537c31fba16397089c",
+      "status": "INFORMATIONAL",
+      "title": "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)",
+      "url": "https://www.rfc-editor.org/rfc/rfc5869.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 4695,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 4696,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4823,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4824,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5484,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7291,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 9026,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 5890,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          3490
+        ],
+        "updated_by": [],
+        "updates": [
+          4343
+        ]
+      },
+      "role": "idna-definitions",
+      "sha256": "24d27002e26fedaec6c9f6479547e9d0855d952bc47d6ce1000851efd70b7430",
+      "status": "PROPOSED STANDARD",
+      "title": "Internationalized Domain Names for Applications (IDNA): Definitions and Document Framework",
+      "url": "https://www.rfc-editor.org/rfc/rfc5890.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 3969,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 5891,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          3490,
+          3491
+        ],
+        "updated_by": [],
+        "updates": [
+          3492
+        ]
+      },
+      "role": "idna-protocol",
+      "sha256": "c9b898f6214c2241b25e4697d6b928ea805099bb136f0e92c48a531490672cda",
+      "status": "PROPOSED STANDARD",
+      "title": "Internationalized Domain Names in Applications (IDNA): Protocol",
+      "url": "https://www.rfc-editor.org/rfc/rfc5891.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 3312,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 5892,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8753
+        ],
+        "updates": []
+      },
+      "role": "idna-code-points",
+      "sha256": "606dd3619e1d17b3625ef323ac44b0aad272712d067692185d1e417416b66c70",
+      "status": "PROPOSED STANDARD",
+      "title": "The Unicode Code Points and Internationalized Domain Names for Applications (IDNA)",
+      "url": "https://www.rfc-editor.org/rfc/rfc5892.txt"
+    },
+    {
+      "domains": [
+        "key-containers"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 2649,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 2839,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 3130,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 3259,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 3623,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 3626,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 3692,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 4145,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 4244,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6806,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.20.0",
+        "0.21.0",
+        "0.48.0",
+        "0.49.0",
+        "0.50.0"
+      ],
+      "number": 5912,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          6960,
+          9480,
+          9810
+        ],
+        "updates": []
+      },
+      "role": "pkix-asn1",
+      "sha256": "32d508e114363baf6df01a8085d7a6f0515c65776801b3cb728aeed0843b18fc",
+      "status": "INFORMATIONAL",
+      "title": "New ASN.1 Modules for the Public Key Infrastructure Using X.509 (PKIX)",
+      "url": "https://www.rfc-editor.org/rfc/rfc5912.txt"
+    },
+    {
+      "domains": [
+        "tls13-session"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0"
+      ],
+      "number": 5929,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          9266
+        ],
+        "updates": []
+      },
+      "role": "tls-channel-bindings",
+      "sha256": "d32604f5d5e2028f09a8e0cf1584b7bb27e75b2e060233cd5387446ac486eab7",
+      "status": "PROPOSED STANDARD",
+      "title": "Channel Bindings for TLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc5929.txt"
+    },
+    {
+      "domains": [
+        "key-containers"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 2653,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5962,
+          "status": "Reported"
+        },
+        {
+          "disposition": "apply",
+          "id": 8490,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.20.0",
+        "0.21.0",
+        "0.48.0",
+        "0.49.0",
+        "0.50.0"
+      ],
+      "number": 5958,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          5208
+        ],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "asymmetric-key-packages",
+      "sha256": "82778b9ce7b34f02b5ae9777bfb9e42579744aebd2e1479f476513864525af67",
+      "status": "PROPOSED STANDARD",
+      "title": "Asymmetric Key Packages",
+      "url": "https://www.rfc-editor.org/rfc/rfc5958.txt"
+    },
+    {
+      "domains": [
+        "ocsp",
+        "tls13"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 3283,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 4817,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5658,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.58.0",
+        "0.58.1",
+        "0.58.2",
+        "0.58.3",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 6066,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          4366
+        ],
+        "updated_by": [
+          8446,
+          8449,
+          9325,
+          9846
+        ],
+        "updates": []
+      },
+      "role": "tls-extensions",
+      "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
+      "status": "PROPOSED STANDARD",
+      "title": "Transport Layer Security (TLS) Extensions: Extension Definitions",
+      "url": "https://www.rfc-editor.org/rfc/rfc6066.txt"
+    },
+    {
+      "domains": [
+        "legacy"
+      ],
+      "errata": [],
+      "lifecycle": "legacy",
+      "milestones": [
+        "H0.1.0",
+        "H0.1.1",
+        "H0.2.0",
+        "H0.3.0",
+        "H0.4.0",
+        "H0.5.0",
+        "H0.6.0",
+        "H0.7.0",
+        "H0.8.0"
+      ],
+      "number": 6101,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "ssl-30-legacy",
+      "sha256": "9571fe931f68204163a8e8a374a104fd1389ff7056f2e9e5d3fac886f7d180bb",
+      "status": "HISTORIC",
+      "title": "The Secure Sockets Layer (SSL) Protocol Version 3.0",
+      "url": "https://www.rfc-editor.org/rfc/rfc6101.txt"
+    },
+    {
+      "domains": [
+        "legacy"
+      ],
+      "errata": [],
+      "lifecycle": "legacy",
+      "milestones": [
+        "H0.1.0",
+        "H0.1.1",
+        "H0.2.0",
+        "H0.3.0",
+        "H0.4.0",
+        "H0.5.0",
+        "H0.6.0",
+        "H0.7.0",
+        "H0.8.0"
+      ],
+      "number": 6151,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          1321,
+          2104
+        ]
+      },
+      "role": "md5-hmac-md5-legacy-security",
+      "sha256": "4e5599d99a0d335560c0a47a959e91469ee47d49edcd224aa2b7b0b0a6b8588d",
+      "status": "INFORMATIONAL",
+      "title": "Updated Security Considerations for the MD5 Message-Digest and the HMAC-MD5 Algorithms",
+      "url": "https://www.rfc-editor.org/rfc/rfc6151.txt"
+    },
+    {
+      "domains": [
+        "legacy",
+        "tls12"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 5520,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 5536,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0",
+        "H0.1.0",
+        "H0.1.1",
+        "H0.2.0",
+        "H0.3.0",
+        "H0.4.0",
+        "H0.5.0",
+        "H0.6.0",
+        "H0.7.0",
+        "H0.8.0"
+      ],
+      "number": 6176,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8996
+        ],
+        "updates": [
+          2246,
+          4346,
+          5246
+        ]
+      },
+      "role": "ssl-20-prohibition",
+      "sha256": "026957e8ee1cbe85ad04a1cf3a0fae1ad71fa001e809c813a63d79d3bd79a3eb",
+      "status": "PROPOSED STANDARD",
+      "title": "Prohibiting Secure Sockets Layer (SSL) Version 2.0",
+      "url": "https://www.rfc-editor.org/rfc/rfc6176.txt"
+    },
+    {
+      "domains": [
+        "dtls"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 3917,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4103,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4104,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4105,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4642,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5026,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5186,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5903,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8089,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "compatibility",
+      "milestones": [
+        "0.102.0",
+        "0.103.0",
+        "0.104.0",
+        "0.105.0",
+        "0.106.0",
+        "0.107.0",
+        "0.108.0",
+        "0.109.0",
+        "0.110.0",
+        "0.111.0",
+        "0.112.0",
+        "0.113.0",
+        "0.114.0",
+        "0.115.0",
+        "0.116.0"
+      ],
+      "number": 6347,
+      "relationships": {
+        "obsoleted_by": [
+          9147
+        ],
+        "obsoletes": [
+          4347
+        ],
+        "updated_by": [
+          7507,
+          7905,
+          8996,
+          9146,
+          10015
+        ],
+        "updates": []
+      },
+      "role": "dtls-12",
+      "sha256": "16c851f2ee94586e653566cc3276c6c58256f0b54f3331a68784a6d55357104b",
+      "status": "PROPOSED STANDARD",
+      "title": "Datagram Transport Layer Security Version 1.2",
+      "url": "https://www.rfc-editor.org/rfc/rfc6347.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 6825,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "exclusion",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 6520,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8447
+        ],
+        "updates": []
+      },
+      "role": "tls-dtls-heartbeat-explicit-exclusion",
+      "sha256": "c91107dd629722b8bd9b5a03ae9493d33f7ea0930d3aab3b2e081e8d2946c44d",
+      "status": "PROPOSED STANDARD",
+      "title": "Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS) Heartbeat Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc6520.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 6818,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5280
+        ]
+      },
+      "role": "pkix-corrections",
+      "sha256": "e6bb52bd92138bb36cfd01202f22153d98318c6f7e3e5b15171374aec67a829f",
+      "status": "PROPOSED STANDARD",
+      "title": "Updates to the Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile",
+      "url": "https://www.rfc-editor.org/rfc/rfc6818.txt"
+    },
+    {
+      "domains": [
+        "ocsp"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5730,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 5891,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5929,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 6165,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6166,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6167,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7961,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7962,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.58.0",
+        "0.58.1",
+        "0.58.2",
+        "0.58.3",
+        "0.71.0"
+      ],
+      "number": 6960,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          2560,
+          6277
+        ],
+        "updated_by": [
+          8954,
+          9654
+        ],
+        "updates": [
+          5912
+        ]
+      },
+      "role": "ocsp",
+      "sha256": "7e63ffa1ea2ce2737d9aaf895a63776e9105ddbdfc97b8ae4029e3e825b4cdea",
+      "status": "PROPOSED STANDARD",
+      "title": "X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP",
+      "url": "https://www.rfc-editor.org/rfc/rfc6960.txt"
+    },
+    {
+      "domains": [
+        "ocsp"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 4882,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "exclusion",
+      "milestones": [
+        "0.58.0",
+        "0.58.1",
+        "0.58.2",
+        "0.58.3",
+        "0.71.0"
+      ],
+      "number": 6961,
+      "relationships": {
+        "obsoleted_by": [
+          8446,
+          9846
+        ],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-multiple-certificate-status-explicit-exclusion",
+      "sha256": "c33e7e30760c8852509fbdae89f2daf3efcc424d6a90651de048efd6685745db",
+      "status": "PROPOSED STANDARD",
+      "title": "The Transport Layer Security (TLS) Multiple Certificate Status Request Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc6961.txt"
+    },
+    {
+      "domains": [
+        "ct"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 3686,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4204,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 4286,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "compatibility",
+      "milestones": [
+        "0.59.0",
+        "0.71.0"
+      ],
+      "number": 6962,
+      "relationships": {
+        "obsoleted_by": [
+          9162
+        ],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "certificate-transparency-v1",
+      "sha256": "08fdf31c10b9f20872a65c027a9fe8cee27280f930120784241a57de744752af",
+      "status": "EXPERIMENTAL",
+      "title": "Certificate Transparency",
+      "url": "https://www.rfc-editor.org/rfc/rfc6962.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 3812,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5963,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 6979,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "deterministic-ecdsa",
+      "sha256": "456e8f17558fdbd206f968b96fc6f1b4a71ea331ab30ad17f711ab3adaa7d701",
+      "status": "INFORMATIONAL",
+      "title": "Deterministic Usage of the Digital Signature Algorithm (DSA) and Elliptic Curve Digital Signature Algorithm (ECDSA)",
+      "url": "https://www.rfc-editor.org/rfc/rfc6979.txt"
+    },
+    {
+      "domains": [
+        "optional"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5013,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.136.0",
+        "0.137.0",
+        "0.144.0",
+        "0.145.0",
+        "0.146.0",
+        "0.146.1"
+      ],
+      "number": 7250,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "raw-public-keys",
+      "sha256": "834f7695e5258237efd4638f573203b325dbe8bce66a5690f6ff730fb00538dd",
+      "status": "PROPOSED STANDARD",
+      "title": "Using Raw Public Keys in Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)",
+      "url": "https://www.rfc-editor.org/rfc/rfc7250.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 5176,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 7301,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8447
+        ],
+        "updates": []
+      },
+      "role": "alpn",
+      "sha256": "ba122aee58871c604c9e98e2c9f81d5042e4056bd497cd41e23ad80fe3123222",
+      "status": "PROPOSED STANDARD",
+      "title": "Transport Layer Security (TLS) Application-Layer Protocol Negotiation Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc7301.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 7465,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8996
+        ],
+        "updates": [
+          2246,
+          4346,
+          5246
+        ]
+      },
+      "role": "rc4-prohibition",
+      "sha256": "0c619db38176f199f739dc696a2d3faabbe658ee82d59621c6d040d0b7cce2dd",
+      "status": "PROPOSED STANDARD",
+      "title": "Prohibiting RC4 Cipher Suites",
+      "url": "https://www.rfc-editor.org/rfc/rfc7465.txt"
+    },
+    {
+      "domains": [
+        "key-containers"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 4508,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7697,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.20.0",
+        "0.21.0",
+        "0.48.0",
+        "0.49.0",
+        "0.50.0"
+      ],
+      "number": 7468,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "pkix-textual-encodings",
+      "sha256": "0b2c3c2087cc0b099789c90e61c0208e87b25793f0ce40090979e8c734b3d989",
+      "status": "PROPOSED STANDARD",
+      "title": "Textual Encodings of PKIX, PKCS, and CMS Structures",
+      "url": "https://www.rfc-editor.org/rfc/rfc7468.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "compatibility",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 7507,
+      "relationships": {
+        "obsoleted_by": [
+          8996
+        ],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          2246,
+          4346,
+          4347,
+          5246,
+          6347
+        ]
+      },
+      "role": "fallback-scsv",
+      "sha256": "540854df66a35bf656e912969cb091ab9ff9e48cf31671eb32ad5bc6add8b691",
+      "status": "PROPOSED STANDARD",
+      "title": "TLS Fallback Signaling Cipher Suite Value (SCSV) for Preventing Protocol Downgrade Attacks",
+      "url": "https://www.rfc-editor.org/rfc/rfc7507.txt"
+    },
+    {
+      "domains": [
+        "legacy"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 4561,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "H0.1.0",
+        "H0.1.1",
+        "H0.2.0",
+        "H0.3.0",
+        "H0.4.0",
+        "H0.5.0",
+        "H0.6.0",
+        "H0.7.0",
+        "H0.8.0"
+      ],
+      "number": 7568,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          8996
+        ],
+        "updates": [
+          5246
+        ]
+      },
+      "role": "ssl-30-prohibition",
+      "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
+      "status": "PROPOSED STANDARD",
+      "title": "Deprecating Secure Sockets Layer Version 3.0",
+      "url": "https://www.rfc-editor.org/rfc/rfc7568.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "compatibility",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 7627,
+      "relationships": {
+        "obsoleted_by": [
+          9846
+        ],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5246
+        ]
+      },
+      "role": "tls-12-extended-main-secret-obsoleted-baseline",
+      "sha256": "3e908b1a511f5894b64b2c7867c5e0e8db43896add4d99a340fe67a07ee11a59",
+      "status": "PROPOSED STANDARD",
+      "title": "Transport Layer Security (TLS) Session Hash and Extended Master Secret Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc7627.txt"
+    },
+    {
+      "domains": [
+        "ocsp"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 4571,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.58.0",
+        "0.58.1",
+        "0.58.2",
+        "0.58.3",
+        "0.71.0"
+      ],
+      "number": 7633,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-feature-must-staple",
+      "sha256": "7e69fff081b9b28fb130954464e80d50bfb6a9c8c656077445951b566323edf5",
+      "status": "PROPOSED STANDARD",
+      "title": "X.509v3 Transport Layer Security (TLS) Feature Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc7633.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 7685,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5246
+        ]
+      },
+      "role": "tls-padding",
+      "sha256": "872478b60fa383c204f3de4596648d5f8eeb27a07287725fc5e5ee14d2f61c1b",
+      "status": "PROPOSED STANDARD",
+      "title": "A Transport Layer Security (TLS) ClientHello Padding Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc7685.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 4730,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 5028,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5568,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5651,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 7095,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7096,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7625,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 7824,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 7879,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 7748,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "x25519-x448",
+      "sha256": "279ca0ecc5e92e2962e27b846986aeb74729d9dd34bd4a04a362f80dcb596ad3",
+      "status": "INFORMATIONAL",
+      "title": "Elliptic Curves for Security",
+      "url": "https://www.rfc-editor.org/rfc/rfc7748.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5251,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 7905,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          10015
+        ],
+        "updates": [
+          5246,
+          6347
+        ]
+      },
+      "role": "tls-chacha20-poly1305",
+      "sha256": "afa1e233822c6bda1f1ced014d32e6d740454415b53130fa84630a9c5ad2fe69",
+      "status": "PROPOSED STANDARD",
+      "title": "ChaCha20-Poly1305 Cipher Suites for Transport Layer Security (TLS)",
+      "url": "https://www.rfc-editor.org/rfc/rfc7905.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 4908,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7579,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 7919,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          2246,
+          4346,
+          4492,
+          5246
+        ]
+      },
+      "role": "ffdhe",
+      "sha256": "e7ffd3d8109670aa48d218964ceccf82cc6d2fd36132403c89589434bf8a4d72",
+      "status": "PROPOSED STANDARD",
+      "title": "Negotiated Finite Field Diffie-Hellman Ephemeral Parameters for Transport Layer Security (TLS)",
+      "url": "https://www.rfc-editor.org/rfc/rfc7919.txt"
+    },
+    {
+      "domains": [
+        "key-containers",
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 5111,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 5154,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 5235,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5576,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 5577,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7405,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.20.0",
+        "0.21.0",
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0",
+        "0.48.0",
+        "0.49.0",
+        "0.50.0"
+      ],
+      "number": 8017,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          3447
+        ],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "rsa",
+      "sha256": "1e72dc473d18df3fc5598cdc12795a9f18f36f1aef15abc23a55eb0d58151d11",
+      "status": "INFORMATIONAL",
+      "title": "PKCS #1: RSA Cryptography Specifications Version 2.2",
+      "url": "https://www.rfc-editor.org/rfc/rfc8017.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 5519,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5757,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5758,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5759,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 5930,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 5968,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6306,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 6348,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6851,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7031,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 8197,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 8032,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "eddsa",
+      "sha256": "ed63657ff389301282b169b0abde9b5dd2c7e4d524fdfa5da6ff3094fc93c4c3",
+      "status": "INFORMATIONAL",
+      "title": "Edwards-Curve Digital Signature Algorithm (EdDSA)",
+      "url": "https://www.rfc-editor.org/rfc/rfc8032.txt"
+    },
+    {
+      "domains": [
+        "standards"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5772,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 6522,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.2"
+      ],
+      "number": 8126,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          5226
+        ],
+        "updated_by": [
+          9907
+        ],
+        "updates": []
+      },
+      "role": "registry-policy",
+      "sha256": "b8b5cc1e61e78352b5a12c4a92fa0573b3400d49522a448913455a478dd87401",
+      "status": "BEST CURRENT PRACTICE",
+      "title": "Guidelines for Writing an IANA Considerations Section in RFCs",
+      "url": "https://www.rfc-editor.org/rfc/rfc8126.txt"
+    },
+    {
+      "domains": [
+        "standards"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5022,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 6878,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.2"
+      ],
+      "number": 8174,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          2119
+        ]
+      },
+      "role": "normative-language",
+      "sha256": "5ca0e2f90be0bc5928ee465f76518fee316dfa775aed885658a29a419cc293b7",
+      "status": "BEST CURRENT PRACTICE",
+      "title": "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words",
+      "url": "https://www.rfc-editor.org/rfc/rfc8174.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5459,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5696,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5707,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 5709,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6229,
+          "status": "Reported"
+        },
+        {
+          "disposition": "apply",
+          "id": 6263,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6738,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6936,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7070,
+          "status": "Reported"
+        },
+        {
+          "disposition": "apply",
+          "id": 7384,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7848,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 8297,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 8410,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          9295
+        ],
+        "updates": []
+      },
+      "role": "edwards-montgomery-pkix",
+      "sha256": "90a0ff0b3dd661d3e26e1873f40f2ca8b41709a7bbd755a1ed3599c4746313d2",
+      "status": "PROPOSED STANDARD",
+      "title": "Algorithm Identifiers for Ed25519, Ed448, X25519, and X448 for Use in the Internet X.509 Public Key Infrastructure",
+      "url": "https://www.rfc-editor.org/rfc/rfc8410.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5466,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5468,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 5703,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6002,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8179,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "compatibility",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 8422,
+      "relationships": {
+        "obsoleted_by": [
+          9846
+        ],
+        "obsoletes": [
+          4492
+        ],
+        "updated_by": [
+          8996,
+          10015
+        ],
+        "updates": []
+      },
+      "role": "tls-12-ecc-obsoleted-baseline",
+      "sha256": "cac45754399e5115342cf1d773a51ac5a77ad221e9336e43ceadd8f294712350",
+      "status": "PROPOSED STANDARD",
+      "title": "Elliptic Curve Cryptography (ECC) Cipher Suites for Transport Layer Security (TLS) Versions 1.2 and Earlier",
+      "url": "https://www.rfc-editor.org/rfc/rfc8422.txt"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 5675,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 5689,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 5989,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6025,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 6257,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 6569,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 6989,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 7880,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "number": 8439,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          7539
+        ],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "chacha20-poly1305",
+      "sha256": "25bef70fbf7a07ff45c2fe4cb7c6ce954eac687413d8610603268b4e4415324c",
+      "status": "INFORMATIONAL",
+      "title": "ChaCha20 and Poly1305 for IETF Protocols",
+      "url": "https://www.rfc-editor.org/rfc/rfc8439.txt"
+    },
+    {
+      "domains": [
+        "standards"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 6009,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.2"
+      ],
+      "number": 8447,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          9847
+        ],
+        "updates": [
+          3749,
+          4680,
+          5077,
+          5246,
+          5705,
+          5878,
+          6520,
+          7301
+        ]
+      },
+      "role": "tls-dtls-registry-baseline",
+      "sha256": "45ea188a76b41dffce472324923dd208b9440732f9003271242131b6f74deb6a",
+      "status": "PROPOSED STANDARD",
+      "title": "IANA Registry Updates for TLS and DTLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc8447.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 5645,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 5720,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "evidence",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 8448,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-13-vectors",
+      "sha256": "6564d1376d1ec744fc7a9993da15ebc1b9be361908b166091f47ef605c537fba",
+      "status": "INFORMATIONAL",
+      "title": "Example Handshake Traces for TLS 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc8448.txt"
+    },
+    {
+      "domains": [
+        "optional"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.136.0",
+        "0.137.0",
+        "0.144.0",
+        "0.145.0",
+        "0.146.0",
+        "0.146.1"
+      ],
+      "number": 8449,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          6066
+        ]
+      },
+      "role": "record-size-limit",
+      "sha256": "b67744f9a9fbca30eaa0580ea51ccd455dd1448e75a7c244559954c175e84724",
+      "status": "PROPOSED STANDARD",
+      "title": "Record Size Limit Extension for TLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc8449.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 8701,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-grease",
+      "sha256": "47334d907d7c269e4bcc8257a87116ecae0bf8e0a90ccbd5a8f62ae38e8921e6",
+      "status": "INFORMATIONAL",
+      "title": "Applying Generate Random Extensions And Sustain Extensibility (GREASE) to TLS Extensibility",
+      "url": "https://www.rfc-editor.org/rfc/rfc8701.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 8753,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5892
+        ]
+      },
+      "role": "idna-unicode-version-review",
+      "sha256": "0a84789569881678418a507a3952379d7c60f2cfc9fc0e40d2d958e983a6ecc4",
+      "status": "PROPOSED STANDARD",
+      "title": "Internationalized Domain Names for Applications (IDNA) Review for New Unicode Versions",
+      "url": "https://www.rfc-editor.org/rfc/rfc8753.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 8813,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5480
+        ]
+      },
+      "role": "ecc-subject-public-key-info-clarifications",
+      "sha256": "5afd9bef9ca83f58543578d099e03a54e64ddd6ed333a0e6efd724c437ed60c9",
+      "status": "PROPOSED STANDARD",
+      "title": "Clarifications for Elliptic Curve Cryptography Subject Public Key Information",
+      "url": "https://www.rfc-editor.org/rfc/rfc8813.txt"
+    },
+    {
+      "domains": [
+        "optional"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 8738,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8753,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.136.0",
+        "0.137.0",
+        "0.144.0",
+        "0.145.0",
+        "0.146.0",
+        "0.146.1"
+      ],
+      "number": 8879,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "certificate-compression",
+      "sha256": "8e30b047e20762ea3de13fb3487d93ee416712b62cab2993900368438c8d20db",
+      "status": "PROPOSED STANDARD",
+      "title": "TLS Certificate Compression",
+      "url": "https://www.rfc-editor.org/rfc/rfc8879.txt"
+    },
+    {
+      "domains": [
+        "legacy",
+        "tls13"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 7103,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7769,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7796,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0",
+        "H0.1.0",
+        "H0.1.1",
+        "H0.2.0",
+        "H0.3.0",
+        "H0.4.0",
+        "H0.5.0",
+        "H0.6.0",
+        "H0.7.0",
+        "H0.8.0"
+      ],
+      "number": 8996,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          5469,
+          7507
+        ],
+        "updated_by": [],
+        "updates": [
+          3261,
+          3329,
+          3436,
+          3470,
+          3501,
+          3552,
+          3568,
+          3656,
+          3749,
+          3767,
+          3856,
+          3871,
+          3887,
+          3903,
+          3943,
+          3983,
+          4097,
+          4111,
+          4162,
+          4168,
+          4217,
+          4235,
+          4261,
+          4279,
+          4497,
+          4513,
+          4531,
+          4540,
+          4582,
+          4616,
+          4642,
+          4680,
+          4681,
+          4712,
+          4732,
+          4743,
+          4744,
+          4785,
+          4791,
+          4823,
+          4851,
+          4964,
+          4975,
+          4976,
+          4992,
+          5018,
+          5019,
+          5023,
+          5024,
+          5049,
+          5054,
+          5091,
+          5158,
+          5216,
+          5238,
+          5263,
+          5281,
+          5364,
+          5415,
+          5422,
+          5456,
+          5734,
+          5878,
+          5953,
+          6012,
+          6042,
+          6083,
+          6084,
+          6176,
+          6347,
+          6353,
+          6367,
+          6460,
+          6614,
+          6739,
+          6749,
+          6750,
+          7030,
+          7465,
+          7525,
+          7562,
+          7568,
+          8261,
+          8422
+        ]
+      },
+      "role": "tls-10-11-deprecation",
+      "sha256": "a8250792df7fc533328f2021dbdcce847bbdfbc703de89a93e18ce165d4b8d14",
+      "status": "BEST CURRENT PRACTICE",
+      "title": "Deprecating TLS 1.0 and TLS 1.1",
+      "url": "https://www.rfc-editor.org/rfc/rfc8996.txt"
+    },
+    {
+      "domains": [
+        "quic"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 6811,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7365,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7374,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7578,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7861,
+          "status": "Verified"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 8106,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "apply",
+          "id": 8240,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8875,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 9003,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "caller-owned",
+      "milestones": [
+        "0.94.0",
+        "0.95.0",
+        "0.96.0",
+        "0.97.0",
+        "0.98.0",
+        "0.99.0",
+        "0.100.0",
+        "0.101.0"
+      ],
+      "number": 9000,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "quic-transport",
+      "sha256": "f88aae47f8b18e102024916e975e919201d8dde689cba79b01079eaedd402e22",
+      "status": "PROPOSED STANDARD",
+      "title": "QUIC: A UDP-Based Multiplexed and Secure Transport",
+      "url": "https://www.rfc-editor.org/rfc/rfc9000.txt"
+    },
+    {
+      "domains": [
+        "quic"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 7785,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.94.0",
+        "0.95.0",
+        "0.96.0",
+        "0.97.0",
+        "0.98.0",
+        "0.99.0",
+        "0.100.0",
+        "0.101.0"
+      ],
+      "number": 9001,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "quic-tls",
+      "sha256": "3bbaecdf5afd278052a2c48348ce118c4ff8d0cf6b9915549858171b3f98a591",
+      "status": "PROPOSED STANDARD",
+      "title": "Using TLS to Secure QUIC",
+      "url": "https://www.rfc-editor.org/rfc/rfc9001.txt"
+    },
+    {
+      "domains": [
+        "quic"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 7539,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "caller-owned",
+      "milestones": [
+        "0.94.0",
+        "0.95.0",
+        "0.96.0",
+        "0.97.0",
+        "0.98.0",
+        "0.99.0",
+        "0.100.0",
+        "0.101.0"
+      ],
+      "number": 9002,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "quic-loss-detection",
+      "sha256": "3a8a54eea1ad5d1c134a548bf15edfa0e21bfb4106dbd7db3c09cace842099af",
+      "status": "PROPOSED STANDARD",
+      "title": "QUIC Loss Detection and Congestion Control",
+      "url": "https://www.rfc-editor.org/rfc/rfc9002.txt"
+    },
+    {
+      "domains": [
+        "dtls"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.102.0",
+        "0.103.0",
+        "0.104.0",
+        "0.105.0",
+        "0.106.0",
+        "0.107.0",
+        "0.108.0",
+        "0.109.0",
+        "0.110.0",
+        "0.111.0",
+        "0.112.0",
+        "0.113.0",
+        "0.114.0",
+        "0.115.0",
+        "0.116.0"
+      ],
+      "number": 9146,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [
+          9853
+        ],
+        "updates": [
+          6347
+        ]
+      },
+      "role": "dtls-12-connection-id",
+      "sha256": "b6a4a2ace20ceefb4c8c6c2433b21fb39bc4d7279f52030d960f981a29aac1be",
+      "status": "PROPOSED STANDARD",
+      "title": "Connection Identifier for DTLS 1.2",
+      "url": "https://www.rfc-editor.org/rfc/rfc9146.txt"
+    },
+    {
+      "domains": [
+        "dtls"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 8047,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8048,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8050,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8051,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8066,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8067,
+          "status": "Reported"
+        },
+        {
+          "disposition": "apply",
+          "id": 8100,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8107,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8108,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 8141,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.102.0",
+        "0.103.0",
+        "0.104.0",
+        "0.105.0",
+        "0.106.0",
+        "0.107.0",
+        "0.108.0",
+        "0.109.0",
+        "0.110.0",
+        "0.111.0",
+        "0.112.0",
+        "0.113.0",
+        "0.114.0",
+        "0.115.0",
+        "0.116.0"
+      ],
+      "number": 9147,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          6347
+        ],
+        "updated_by": [
+          9853
+        ],
+        "updates": []
+      },
+      "role": "dtls-13",
+      "sha256": "04e2142333923e36268eb565ec44bdda4db06390114897b819c2f022cb351ebe",
+      "status": "PROPOSED STANDARD",
+      "title": "The Datagram Transport Layer Security (DTLS) Protocol Version 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9147.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 9155,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5246
+        ]
+      },
+      "role": "tls-dtls-md5-sha1-signature-deprecation",
+      "sha256": "87c859e927ab6bbf245f4f3cd909852b28c5d253e2305cbdd715e93aa79db7d2",
+      "status": "PROPOSED STANDARD",
+      "title": "Deprecating MD5 and SHA-1 Signature Hashes in TLS 1.2 and DTLS 1.2",
+      "url": "https://www.rfc-editor.org/rfc/rfc9155.txt"
+    },
+    {
+      "domains": [
+        "ct"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 8670,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.59.0",
+        "0.71.0"
+      ],
+      "number": 9162,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          6962
+        ],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "certificate-transparency-v2",
+      "sha256": "a0e432ce7580c99fcc8faf0cf3f6191f9ce6b4864f949158e020d4ecb295081f",
+      "status": "EXPERIMENTAL",
+      "title": "Certificate Transparency Version 2.0",
+      "url": "https://www.rfc-editor.org/rfc/rfc9162.txt"
+    },
+    {
+      "domains": [
+        "ech",
+        "hpke"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 6941,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7121,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7251,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7790,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7932,
+          "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 7933,
+          "status": "Held for Document Update"
+        },
+        {
+          "disposition": "apply",
+          "id": 7934,
+          "status": "Verified"
+        },
+        {
+          "disposition": "apply",
+          "id": 7937,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.138.0",
+        "0.139.0",
+        "0.139.1",
+        "0.140.0",
+        "0.141.0",
+        "0.142.0",
+        "0.143.0"
+      ],
+      "number": 9180,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "hpke",
+      "sha256": "f45a8b7c30231b26d668b1e8168074e5ab514b174d656b67e859895117f1f8f6",
+      "status": "INFORMATIONAL",
+      "title": "Hybrid Public Key Encryption",
+      "url": "https://www.rfc-editor.org/rfc/rfc9180.txt"
+    },
+    {
+      "domains": [
+        "tls13-session"
+      ],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 7643,
+          "status": "Verified"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0"
+      ],
+      "number": 9257,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "external-psk-security-guidance",
+      "sha256": "de6e69654cdbc21c115db159d5aef3b7ba60176d8e8443041ad50aaa7a7a88ed",
+      "status": "INFORMATIONAL",
+      "title": "Guidance for External Pre-Shared Key (PSK) Usage in TLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc9257.txt"
+    },
+    {
+      "domains": [
+        "tls13-session"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0"
+      ],
+      "number": 9258,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "external-psk-importer",
+      "sha256": "38664f5a729711082fa8f486da73a2d40da6b2fe0371381b85aa0fa7b19ff5d0",
+      "status": "PROPOSED STANDARD",
+      "title": "Importing External Pre-Shared Keys (PSKs) for TLS 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9258.txt"
+    },
+    {
+      "domains": [
+        "tls13-session"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0"
+      ],
+      "number": 9266,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5801,
+          5802,
+          5929,
+          7677
+        ]
+      },
+      "role": "tls-exporter-channel-binding",
+      "sha256": "dda84b295ff134eb77105f406a55ab6cee3afe035fd23c9e79a2dad662c2e880",
+      "status": "PROPOSED STANDARD",
+      "title": "Channel Bindings for TLS 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9266.txt"
+    },
+    {
+      "domains": [
+        "public-key"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.32.0",
+        "0.33.0",
+        "0.34.0",
+        "0.35.0",
+        "0.36.0",
+        "0.37.0",
+        "0.38.0",
+        "0.39.0",
+        "0.40.0",
+        "0.41.0",
+        "0.42.0",
+        "0.43.0",
+        "0.44.0",
+        "0.45.0"
+      ],
+      "number": 9295,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          8410
+        ]
+      },
+      "role": "edwards-montgomery-pkix-clarifications",
+      "sha256": "033677142911db5336076e7952c828f9aac9e5d30b935f904208145c72e4e578",
+      "status": "PROPOSED STANDARD",
+      "title": "Clarifications for Ed25519, Ed448, X25519, and X448 Algorithm Identifiers",
+      "url": "https://www.rfc-editor.org/rfc/rfc9295.txt"
+    },
+    {
+      "domains": [
+        "dtls",
+        "tls12",
+        "tls13"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0",
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0",
+        "0.102.0",
+        "0.103.0",
+        "0.104.0",
+        "0.105.0",
+        "0.106.0",
+        "0.107.0",
+        "0.108.0",
+        "0.109.0",
+        "0.110.0",
+        "0.111.0",
+        "0.112.0",
+        "0.113.0",
+        "0.114.0",
+        "0.115.0",
+        "0.116.0"
+      ],
+      "number": 9325,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          7525
+        ],
+        "updated_by": [
+          9852,
+          10015
+        ],
+        "updates": [
+          5288,
+          6066
+        ]
+      },
+      "role": "tls-dtls-policy",
+      "sha256": "e3475381d056bde1eed65252954cce68250168454387f6799b38660806f215bc",
+      "status": "BEST CURRENT PRACTICE",
+      "title": "Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)",
+      "url": "https://www.rfc-editor.org/rfc/rfc9325.txt"
+    },
+    {
+      "domains": [
+        "optional"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.136.0",
+        "0.137.0",
+        "0.144.0",
+        "0.145.0",
+        "0.146.0",
+        "0.146.1"
+      ],
+      "number": 9345,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "delegated-credentials",
+      "sha256": "42817f99b19f29ebe8cf1c4b3976d3d908cd3605d2846a763fba04aa09f73b1f",
+      "status": "PROPOSED STANDARD",
+      "title": "Delegated Credentials for TLS and DTLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc9345.txt"
+    },
+    {
+      "domains": [
+        "quic"
+      ],
+      "errata": [],
+      "lifecycle": "caller-owned",
+      "milestones": [
+        "0.94.0",
+        "0.95.0",
+        "0.96.0",
+        "0.97.0",
+        "0.98.0",
+        "0.99.0",
+        "0.100.0",
+        "0.101.0"
+      ],
+      "number": 9369,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "quic-v2-caller-owned",
+      "sha256": "3d5db815157c4a83778775ff3d123dc94565429c5858bb28a7275372c531b239",
+      "status": "PROPOSED STANDARD",
+      "title": "QUIC Version 2",
+      "url": "https://www.rfc-editor.org/rfc/rfc9369.txt"
+    },
+    {
+      "domains": [
+        "ech"
+      ],
+      "errata": [
+        {
+          "disposition": "not-applicable",
+          "id": 7871,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 8168,
+          "status": "Rejected"
+        },
+        {
+          "disposition": "not-applicable",
+          "id": 8787,
+          "status": "Rejected"
+        }
+      ],
+      "lifecycle": "caller-owned",
+      "milestones": [
+        "0.140.0",
+        "0.141.0",
+        "0.142.0",
+        "0.143.0"
+      ],
+      "number": 9460,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "svcb-https-ech-bootstrap",
+      "sha256": "0741d5743b7b4cd54762e53633b597e442b3d8299b80a9d5f2acec6d9beae433",
+      "status": "PROPOSED STANDARD",
+      "title": "Service Binding and Parameter Specification via the DNS (SVCB and HTTPS Resource Records)",
+      "url": "https://www.rfc-editor.org/rfc/rfc9460.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 8173,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 9525,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          6125
+        ],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "service-identity",
+      "sha256": "ed8116c2435376dffe37ec2ca688c3a8515e36820852b29e0b6cdfbe92abd2c5",
+      "status": "PROPOSED STANDARD",
+      "title": "Service Identity in TLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc9525.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 9549,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          8399
+        ],
+        "updated_by": [],
+        "updates": [
+          5280
+        ]
+      },
+      "role": "pkix-internationalization-update",
+      "sha256": "28c505895b36bda33264cb7d12ea81a2c9fc8821982ca329f6a8c51e3d4bc0f4",
+      "status": "PROPOSED STANDARD",
+      "title": "Internationalization Updates to RFC 5280",
+      "url": "https://www.rfc-editor.org/rfc/rfc9549.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 9598,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          8398
+        ],
+        "updated_by": [],
+        "updates": [
+          5280
+        ]
+      },
+      "role": "pkix-internationalized-email",
+      "sha256": "df8f7adc70b6f18c9b72cc99e29d0e015b6970126c46d2392a2cad1ed10120ce",
+      "status": "PROPOSED STANDARD",
+      "title": "Internationalized Email Addresses in X.509 Certificates",
+      "url": "https://www.rfc-editor.org/rfc/rfc9598.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 8012,
+          "status": "Held for Document Update"
+        }
+      ],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 9608,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5280
+        ]
+      },
+      "role": "pkix-no-revocation-available",
+      "sha256": "4952984e5b76585753daf6bf7fc83ad891e6fc40488a2df19752fa90c9abb0c5",
+      "status": "PROPOSED STANDARD",
+      "title": "No Revocation Available for X.509 Public Key Certificates",
+      "url": "https://www.rfc-editor.org/rfc/rfc9608.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 9618,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5280
+        ]
+      },
+      "role": "pkix-policy-validation-update",
+      "sha256": "d36535f56c1425924e153cd2aa177346de838c3624a8158e638ebd0020e5c1d1",
+      "status": "PROPOSED STANDARD",
+      "title": "Updates to X.509 Policy Validation",
+      "url": "https://www.rfc-editor.org/rfc/rfc9618.txt"
+    },
+    {
+      "domains": [
+        "ocsp"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.58.0",
+        "0.58.1",
+        "0.58.2",
+        "0.58.3",
+        "0.71.0"
+      ],
+      "number": 9654,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          8954
+        ],
+        "updated_by": [],
+        "updates": [
+          6960
+        ]
+      },
+      "role": "ocsp-nonce-current",
+      "sha256": "7748863d861043606af3118b7970f1a3d80b2ba8720cf35463ca32d6ffaad792",
+      "status": "PROPOSED STANDARD",
+      "title": "Online Certificate Status Protocol (OCSP) Nonce Extension",
+      "url": "https://www.rfc-editor.org/rfc/rfc9654.txt"
+    },
+    {
+      "domains": [
+        "tls12",
+        "tls13",
+        "tls13-session"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0",
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 9846,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          5077,
+          5246,
+          6961,
+          7627,
+          8422,
+          8446
+        ],
+        "updated_by": [],
+        "updates": [
+          5705,
+          6066
+        ]
+      },
+      "role": "tls-13-current",
+      "sha256": "b1bee06a814f92ca4677c85b97519be53869b2bf8edc79ade955fb51c0402b17",
+      "status": "PROPOSED STANDARD",
+      "title": "The Transport Layer Security (TLS) Protocol Version 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9846.txt"
+    },
+    {
+      "domains": [
+        "standards"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.3.0",
+        "0.3.1",
+        "0.3.2"
+      ],
+      "number": 9847,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          8447
+        ]
+      },
+      "role": "tls-dtls-registry-update",
+      "sha256": "5f26e46fdda1b04860afef42b8e3162d861fdf86dad6ec200cd21fff9f279c6f",
+      "status": "PROPOSED STANDARD",
+      "title": "IANA Registry Updates for TLS and DTLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc9847.txt"
+    },
+    {
+      "domains": [
+        "ech"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.140.0",
+        "0.141.0",
+        "0.142.0",
+        "0.143.0"
+      ],
+      "number": 9848,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "ech-dns-bootstrap",
+      "sha256": "1ccc15a4413ba63b8d946cff278913c5de0926aedcf2026a3607fc850eda64f0",
+      "status": "PROPOSED STANDARD",
+      "title": "Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings",
+      "url": "https://www.rfc-editor.org/rfc/rfc9848.txt"
+    },
+    {
+      "domains": [
+        "ech"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.140.0",
+        "0.141.0",
+        "0.142.0",
+        "0.143.0"
+      ],
+      "number": 9849,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "encrypted-client-hello",
+      "sha256": "56cf7f40c41b2566bfe9c3df18e73cd649b7c0e33690439a43582a65a3b3a0cc",
+      "status": "PROPOSED STANDARD",
+      "title": "TLS Encrypted Client Hello",
+      "url": "https://www.rfc-editor.org/rfc/rfc9849.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [],
+      "lifecycle": "exclusion",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 9850,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-secret-key-log-explicit-exclusion",
+      "sha256": "22dd50eb54705d89c282cfdc88dc17cd98f2f40452888ba0fd3a12028d158ad8",
+      "status": "INFORMATIONAL",
+      "title": "The SSLKEYLOGFILE Format for TLS",
+      "url": "https://www.rfc-editor.org/rfc/rfc9850.txt"
+    },
+    {
+      "domains": [
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
+      ],
+      "number": 9851,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-12-feature-freeze",
+      "sha256": "0316373efeb97c5f05382862ff39ab25d38ca5c088bbd5f11a362ac9dbf84323",
+      "status": "PROPOSED STANDARD",
+      "title": "TLS 1.2 is in Feature Freeze",
+      "url": "https://www.rfc-editor.org/rfc/rfc9851.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 9852,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          9325
+        ]
+      },
+      "role": "new-protocols-require-tls-13",
+      "sha256": "79059256740e9453965a1c922e2f4b95c67063fa79e002997eb6da6b4617a34d",
+      "status": "BEST CURRENT PRACTICE",
+      "title": "New Protocols Using TLS Must Require TLS 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9852.txt"
+    },
+    {
+      "domains": [
+        "dtls"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.102.0",
+        "0.103.0",
+        "0.104.0",
+        "0.105.0",
+        "0.106.0",
+        "0.107.0",
+        "0.108.0",
+        "0.109.0",
+        "0.110.0",
+        "0.111.0",
+        "0.112.0",
+        "0.113.0",
+        "0.114.0",
+        "0.115.0",
+        "0.116.0"
+      ],
+      "number": 9853,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          9146,
+          9147
+        ]
+      },
+      "role": "dtls-return-routability",
+      "sha256": "88b0e4322763defc5d9219d3f1405fb6d488f1c3101c4e60d5b36ff3fa8d70d0",
+      "status": "PROPOSED STANDARD",
+      "title": "Return Routability Check for DTLS 1.2 and 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9853.txt"
+    },
+    {
+      "domains": [
+        "ocsp"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.58.0",
+        "0.58.1",
+        "0.58.2",
+        "0.58.3",
+        "0.71.0"
+      ],
+      "number": 9919,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          5019
+        ],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "lightweight-ocsp-current",
+      "sha256": "357068ee329eee8281fc206bbeeaeac29891682e4d9dcdb4d0312e7895804046",
+      "status": "PROPOSED STANDARD",
+      "title": "The Lightweight Online Certificate Status Protocol (OCSP) Profile for High-Volume Environments",
+      "url": "https://www.rfc-editor.org/rfc/rfc9919.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [],
+      "lifecycle": "exclusion",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 9925,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5280
+        ]
+      },
+      "role": "unsigned-x509-explicit-exclusion",
+      "sha256": "dbc7f877f180c511e954f32dac4dd9552ceed6d478fd83daa151f2b8c5ffaf6d",
+      "status": "PROPOSED STANDARD",
+      "title": "Unsigned X.509 Certificates",
+      "url": "https://www.rfc-editor.org/rfc/rfc9925.txt"
+    },
+    {
+      "domains": [
+        "hybrid"
+      ],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 9020,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 9021,
+          "status": "Reported"
+        }
+      ],
+      "lifecycle": "exclusion",
+      "milestones": [
+        "0.117.0",
+        "0.118.0",
+        "0.119.0",
+        "0.120.0",
+        "0.121.0",
+        "0.122.0"
+      ],
+      "number": 9935,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "ml-kem-pkix-explicit-exclusion",
+      "sha256": "9a369bca93a613d0b89b8f4ed119ba9ded91c00acd97ae5b9a2f9b3f02e49b4f",
+      "status": "PROPOSED STANDARD",
+      "title": "Internet X.509 Public Key Infrastructure - Algorithm Identifiers for the Module-Lattice-Based Key-Encapsulation Mechanism (ML-KEM)",
+      "url": "https://www.rfc-editor.org/rfc/rfc9935.txt"
+    },
+    {
+      "domains": [
+        "hybrid"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.117.0",
+        "0.118.0",
+        "0.119.0",
+        "0.120.0",
+        "0.121.0",
+        "0.122.0"
+      ],
+      "number": 9954,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-hybrid-key-exchange",
+      "sha256": "db5b9f76fa7182dd02e05e1e0640f095cb51ccc8dd035fca38d66f9189d55ad0",
+      "status": "INFORMATIONAL",
+      "title": "Hybrid Key Exchange in TLS 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9954.txt"
+    },
+    {
+      "domains": [
+        "tls13"
+      ],
+      "errata": [],
+      "lifecycle": "exclusion",
+      "milestones": [
+        "0.10.0",
+        "0.61.0",
+        "0.62.0",
+        "0.63.0",
+        "0.64.0",
+        "0.65.0",
+        "0.66.0",
+        "0.67.0",
+        "0.68.0",
+        "0.69.0",
+        "0.70.0",
+        "0.71.0",
+        "0.72.0",
+        "0.73.0",
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0",
+        "0.80.0",
+        "0.81.0",
+        "0.82.0"
+      ],
+      "number": 9963,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-13-legacy-pkcs1-client-signatures-explicit-exclusion",
+      "sha256": "e55c7e2124e5d974db18ed971ea6243a91135c347f4bf873d003ef6d403ad697",
+      "status": "PROPOSED STANDARD",
+      "title": "Legacy RSASSA-PKCS1-v1_5 Code Points for TLS 1.3",
+      "url": "https://www.rfc-editor.org/rfc/rfc9963.txt"
+    },
+    {
+      "domains": [
+        "tls13-session"
+      ],
+      "errata": [],
+      "lifecycle": "exclusion",
+      "milestones": [
+        "0.74.0",
+        "0.75.0",
+        "0.76.0",
+        "0.76.1",
+        "0.76.2",
+        "0.77.0",
+        "0.78.0",
+        "0.79.0"
+      ],
+      "number": 9973,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [
+          8773
+        ],
+        "updated_by": [],
+        "updates": []
+      },
+      "role": "tls-cert-external-psk-explicit-exclusion",
+      "sha256": "ee3268e5974e323d4cbb67d017e03e684fb6f0f39c530b9ec9211b982dbd79fa",
+      "status": "PROPOSED STANDARD",
+      "title": "TLS 1.3 Extension for Using Certificates with an External Pre-Shared Key",
+      "url": "https://www.rfc-editor.org/rfc/rfc9973.txt"
+    },
+    {
+      "domains": [
+        "pkix"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.50.0",
+        "0.51.0",
+        "0.52.0",
+        "0.53.0",
+        "0.54.0",
+        "0.55.0",
+        "0.56.0",
+        "0.57.0",
+        "0.57.1"
+      ],
+      "number": 10007,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          5280
+        ]
+      },
+      "role": "crl-key-usage-clarification",
+      "sha256": "db490bb4765aad4fc2a0c12855d22b33ed37adc8e0e44cf42bcbfabbde88dbeb",
+      "status": "PROPOSED STANDARD",
+      "title": "Clarification to Processing Key Usage Values During Certificate Revocation List (CRL) Validation",
+      "url": "https://www.rfc-editor.org/rfc/rfc10007.txt"
+    },
+    {
+      "domains": [
+        "dtls",
+        "tls12"
+      ],
+      "errata": [],
+      "lifecycle": "current",
+      "milestones": [
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0",
+        "0.102.0",
+        "0.103.0",
+        "0.104.0",
+        "0.105.0",
+        "0.106.0",
+        "0.107.0",
+        "0.108.0",
+        "0.109.0",
+        "0.110.0",
+        "0.111.0",
+        "0.112.0",
+        "0.113.0",
+        "0.114.0",
+        "0.115.0",
+        "0.116.0"
+      ],
+      "number": 10015,
+      "relationships": {
+        "obsoleted_by": [],
+        "obsoletes": [],
+        "updated_by": [],
+        "updates": [
+          4162,
+          4279,
+          4346,
+          4785,
+          5246,
+          5288,
+          5289,
+          5469,
+          5487,
+          5932,
+          6209,
+          6347,
+          6367,
+          6655,
+          7905,
+          8422,
+          9325
+        ]
+      },
+      "role": "tls-dtls-12-obsolete-kex-deprecation",
+      "sha256": "1cc53f068b7c02e7c49c77816d16d6453b6f094762fb16e361d358da96ac1086",
+      "status": "PROPOSED STANDARD",
+      "title": "Deprecating Obsolete Key Exchange Methods in TLS 1.2 and DTLS 1.2",
+      "url": "https://www.rfc-editor.org/rfc/rfc10015.txt"
+    }
+  ],
+  "schema": 1
+}

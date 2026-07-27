@@ -1,0 +1,301 @@
+[schema]
+version = 1
+
+[review]
+checked_at = "2026-07-27"
+owner = "Brynja standards review"
+rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
+errata = "https://errata.rfc-editor.org/search/"
+
+[lifecycle]
+compatibility = [5077, 5246, 6347, 6962, 7507, 7627, 8422]
+legacy = [2246, 4346, 6101, 6151]
+exclusion = [6520, 6961, 9850, 9925, 9935, 9963, 9973]
+caller_owned = [9000, 9002, 9369, 9460]
+evidence = [4231, 8448]
+
+[[registry]]
+id = "tls-parameters"
+url = "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
+domains = ["standards", "tls12", "tls13", "dtls", "hybrid"]
+milestones = ["0.3.0", "0.3.1", "0.3.4", "0.120.0"]
+
+[[registry]]
+id = "tls-extensiontype-values"
+url = "https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml"
+domains = ["tls12", "tls13", "dtls", "optional"]
+milestones = ["0.3.0", "0.3.1", "0.3.4", "0.3.5"]
+
+[[registry]]
+id = "tls-ech-configuration-extensions"
+url = "https://www.iana.org/assignments/tls-ech-configuration-extensions/tls-ech-configuration-extensions.xml"
+domains = ["ech"]
+milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
+
+[[registry]]
+id = "hpke"
+url = "https://www.iana.org/assignments/hpke/hpke.xml"
+domains = ["hpke", "ech"]
+milestones = ["0.3.0", "0.3.1", "0.3.5", "0.138.0"]
+
+[[registry]]
+id = "quic"
+url = "https://www.iana.org/assignments/quic/quic.xml"
+domains = ["quic"]
+milestones = ["0.3.0", "0.3.1", "0.3.4", "0.94.0"]
+
+[[registry]]
+id = "trans"
+url = "https://www.iana.org/assignments/trans/trans.xml"
+domains = ["ct"]
+milestones = ["0.3.0", "0.3.1", "0.3.3", "0.59.0"]
+
+[[registry]]
+id = "smi-numbers"
+url = "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
+domains = ["pkix", "ocsp"]
+milestones = ["0.3.0", "0.3.1", "0.3.3", "0.48.0"]
+
+[[registry]]
+id = "dns-parameters"
+url = "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
+domains = ["ech"]
+milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
+
+[[domain]]
+id = "standards"
+milestones = ["0.3.0", "0.3.1", "0.3.2"]
+rfcs = [2119, 8126, 8174, 8447, 9847]
+local = []
+
+[[domain]]
+id = "symmetric"
+milestones = ["0.25.0", "0.26.0", "0.27.0", "0.28.0", "0.29.0", "0.30.0", "0.31.0"]
+rfcs = [2104, 4231, 5116, 5869, 8439]
+local = ["NIST.FIPS.180-4.pdf", "NIST.FIPS.197-upd1.pdf", "NIST.SP.800-38D.pdf", "NIST.SP.800-107r1.pdf"]
+
+[[domain]]
+id = "public-key"
+milestones = ["0.32.0", "0.33.0", "0.34.0", "0.35.0", "0.36.0", "0.37.0", "0.38.0", "0.39.0", "0.40.0", "0.41.0", "0.42.0", "0.43.0", "0.44.0", "0.45.0"]
+rfcs = [3279, 4055, 5480, 5756, 5758, 6979, 7748, 8017, 8032, 8410, 8813, 9295]
+local = ["NIST.FIPS.186-5.pdf", "NIST.SP.800-186.pdf", "NIST.SP.800-56Ar3.pdf"]
+
+[[domain]]
+id = "key-containers"
+milestones = ["0.20.0", "0.21.0", "0.48.0", "0.49.0", "0.50.0"]
+rfcs = [5912, 5958, 7468, 8017]
+local = []
+
+[[domain]]
+id = "pkix"
+milestones = ["0.50.0", "0.51.0", "0.52.0", "0.53.0", "0.54.0", "0.55.0", "0.56.0", "0.57.0", "0.57.1"]
+rfcs = [3986, 5280, 5890, 5891, 5892, 6818, 8753, 9525, 9549, 9598, 9608, 9618, 9925, 10007]
+local = []
+
+[[domain]]
+id = "ocsp"
+milestones = ["0.58.0", "0.58.1", "0.58.2", "0.58.3", "0.71.0"]
+rfcs = [5754, 6066, 6960, 6961, 7633, 9654, 9919]
+local = []
+
+[[domain]]
+id = "ct"
+milestones = ["0.59.0", "0.71.0"]
+rfcs = [6962, 9162]
+local = []
+
+[[domain]]
+id = "tls13"
+milestones = ["0.10.0", "0.61.0", "0.62.0", "0.63.0", "0.64.0", "0.65.0", "0.66.0", "0.67.0", "0.68.0", "0.69.0", "0.70.0", "0.71.0", "0.72.0", "0.73.0", "0.74.0", "0.75.0", "0.76.0", "0.76.1", "0.76.2", "0.77.0", "0.78.0", "0.79.0", "0.80.0", "0.81.0", "0.82.0"]
+rfcs = [6066, 6520, 7301, 7685, 8448, 8701, 8996, 9325, 9846, 9850, 9852, 9963]
+local = []
+
+[[domain]]
+id = "tls13-session"
+milestones = ["0.74.0", "0.75.0", "0.76.0", "0.76.1", "0.76.2", "0.77.0", "0.78.0", "0.79.0"]
+rfcs = [5077, 5705, 5929, 9257, 9258, 9266, 9846, 9973]
+local = []
+
+[[domain]]
+id = "tls12"
+milestones = ["0.83.0", "0.83.1", "0.83.2", "0.84.0", "0.85.0", "0.86.0", "0.87.0", "0.88.0", "0.89.0", "0.90.0", "0.91.0", "0.92.0", "0.93.0"]
+rfcs = [5246, 5288, 5289, 5746, 6176, 7465, 7507, 7627, 7905, 7919, 8422, 9155, 9325, 9846, 9851, 10015]
+local = []
+
+[[domain]]
+id = "quic"
+milestones = ["0.94.0", "0.95.0", "0.96.0", "0.97.0", "0.98.0", "0.99.0", "0.100.0", "0.101.0"]
+rfcs = [9000, 9001, 9002, 9369]
+local = []
+
+[[domain]]
+id = "dtls"
+milestones = ["0.102.0", "0.103.0", "0.104.0", "0.105.0", "0.106.0", "0.107.0", "0.108.0", "0.109.0", "0.110.0", "0.111.0", "0.112.0", "0.113.0", "0.114.0", "0.115.0", "0.116.0"]
+rfcs = [6347, 9146, 9147, 9325, 9853, 10015]
+local = []
+
+[[domain]]
+id = "hybrid"
+milestones = ["0.117.0", "0.118.0", "0.119.0", "0.120.0", "0.121.0", "0.122.0"]
+rfcs = [9935, 9954]
+local = []
+
+[[domain]]
+id = "hpke"
+milestones = ["0.138.0", "0.139.0", "0.139.1"]
+rfcs = [9180]
+local = []
+
+[[domain]]
+id = "ech"
+milestones = ["0.140.0", "0.141.0", "0.142.0", "0.143.0"]
+rfcs = [9180, 9460, 9848, 9849]
+local = []
+
+[[domain]]
+id = "optional"
+milestones = ["0.136.0", "0.137.0", "0.144.0", "0.145.0", "0.146.0", "0.146.1"]
+rfcs = [7250, 8449, 8879, 9345]
+local = []
+
+[[domain]]
+id = "legacy"
+milestones = ["H0.1.0", "H0.1.1", "H0.2.0", "H0.3.0", "H0.4.0", "H0.5.0", "H0.6.0", "H0.7.0", "H0.8.0"]
+rfcs = [2246, 4346, 6101, 6151, 6176, 7568, 8996]
+local = []
+
+[[domain]]
+id = "entropy"
+milestones = ["0.14.0", "0.124.0", "0.125.0", "0.126.0"]
+rfcs = []
+local = ["NIST.SP.800-90Ar1.pdf"]
+
+[[closure_exclusion]]
+source = 2246
+relation = "updated-by"
+target = 3546
+reason = "Superseded TLS extension baseline; RFC 6066 is locked."
+
+[[closure_exclusion]]
+source = 3279
+relation = "updated-by"
+target = 4491
+reason = "GOST PKIX algorithms are not admitted."
+
+[[closure_exclusion]]
+source = 3279
+relation = "updated-by"
+target = 8692
+reason = "SHAKE PKIX algorithms are not admitted."
+
+[[closure_exclusion]]
+source = 3986
+relation = "updated-by"
+target = 7320
+reason = "URI scheme ownership is outside certificate identity comparison."
+
+[[closure_exclusion]]
+source = 3986
+relation = "updated-by"
+target = 8820
+reason = "URI scheme design is outside certificate identity comparison."
+
+[[closure_exclusion]]
+source = 4346
+relation = "updated-by"
+target = 4366
+reason = "Superseded TLS extension baseline; RFC 6066 is locked."
+
+[[closure_exclusion]]
+source = 4346
+relation = "updated-by"
+target = 4680
+reason = "TLS supplemental data is not admitted."
+
+[[closure_exclusion]]
+source = 4346
+relation = "updated-by"
+target = 4681
+reason = "TLS user mapping is not admitted."
+
+[[closure_exclusion]]
+source = 5077
+relation = "obsoleted-by"
+target = 8446
+reason = "RFC 9846 is the locked replacement for RFC 8446."
+
+[[closure_exclusion]]
+source = 5246
+relation = "updated-by"
+target = 5878
+reason = "TLS authorization extensions are not admitted."
+
+[[closure_exclusion]]
+source = 5246
+relation = "obsoleted-by"
+target = 8446
+reason = "RFC 9846 is the locked replacement for RFC 8446."
+
+[[closure_exclusion]]
+source = 5280
+relation = "updated-by"
+target = 8398
+reason = "Superseded by locked RFC 9598."
+
+[[closure_exclusion]]
+source = 5280
+relation = "updated-by"
+target = 8399
+reason = "Superseded by locked RFC 9549."
+
+[[closure_exclusion]]
+source = 5705
+relation = "updated-by"
+target = 8446
+reason = "RFC 9846 is the locked replacement for RFC 8446."
+
+[[closure_exclusion]]
+source = 5912
+relation = "updated-by"
+target = 9480
+reason = "CMP ASN.1 modules are outside Brynja."
+
+[[closure_exclusion]]
+source = 5912
+relation = "updated-by"
+target = 9810
+reason = "CMP ASN.1 modules are outside Brynja."
+
+[[closure_exclusion]]
+source = 6066
+relation = "updated-by"
+target = 8446
+reason = "RFC 9846 is the locked replacement for RFC 8446."
+
+[[closure_exclusion]]
+source = 6960
+relation = "updated-by"
+target = 8954
+reason = "Superseded by locked RFC 9654."
+
+[[closure_exclusion]]
+source = 6961
+relation = "obsoleted-by"
+target = 8446
+reason = "RFC 9846 is locked and status_request_v2 is explicitly excluded."
+
+[[closure_exclusion]]
+source = 8126
+relation = "updated-by"
+target = 9907
+reason = "YANG document guidance is outside Brynja registry policy."
+
+[[blocker]]
+id = "ecdhe-ml-kem-groups"
+status = "blocked"
+owner = "0.120.0"
+required_registry = "tls-parameters"
+required_final_rfc = true
+required_final_iana_codepoints = true
+drafts_forbidden = true
+reason = "Concrete hybrid groups require a final Standards Track RFC and final IANA values; RFC 9954 alone is only the generic construction."

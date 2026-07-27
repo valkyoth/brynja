@@ -36,6 +36,16 @@ under references/. Release maintenance rechecks current RFC replacements,
 errata, IANA registries, NIST planning notes, and NIST errata before work on a
 dependent milestone.
 
+The v0.3.0 evidence under `standards/` makes the source-level policy
+executable. `source-policy.toml` owns lifecycle and milestone decisions;
+`ERRATA.json`, the compact RFC-index projection, and exact IANA XML snapshots
+preserve the reviewed upstream state; and `source-ledger.json` is reproduced
+byte-for-byte by `scripts/check-standards-ledger.py`. Normal verification is
+offline. The networked release gate runs
+`scripts/update-standards-snapshots.py --check` and fails on upstream drift so
+that no source, relationship, erratum, registry assignment, or date can change
+silently.
+
 The v0.3.2 through v0.3.5 requirement-matrix passes record exact source hash and
 section, normative strength, applicability decision, owner, planned target or
 actual implementation symbol or documented boundary, positive and negative

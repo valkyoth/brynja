@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise negative fixtures for package-name and TLS graph isolation."""
+"""Exercise positive and negative package-class and feature-graph fixtures."""
 
 from __future__ import annotations
 
@@ -14,8 +14,12 @@ from pathlib import Path
 VALIDATOR = Path(__file__).with_name("validate-workspace-metadata.py")
 
 
+def package(document: dict, name: str) -> dict:
+    return next(item for item in document["packages"] if item["name"] == name)
+
+
 def package_id(document: dict, name: str) -> str:
-    return next(package["id"] for package in document["packages"] if package["name"] == name)
+    return package(document, name)["id"]
 
 
 def node(document: dict, name: str) -> dict:
@@ -23,87 +27,311 @@ def node(document: dict, name: str) -> dict:
     return next(item for item in document["resolve"]["nodes"] if item["id"] == identifier)
 
 
-def validator_result(document: dict) -> subprocess.CompletedProcess[str]:
+def dependency(document: dict, owner: str, name: str) -> dict:
+    return next(
+        item for item in package(document, owner)["dependencies"] if item["name"] == name
+    )
+
+
+def validator_result(
+    document: dict,
+    mode: str,
+) -> subprocess.CompletedProcess[str]:
     with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as fixture:
         json.dump(document, fixture)
         fixture.flush()
         return subprocess.run(
-            [sys.executable, str(VALIDATOR), fixture.name],
+            [
+                sys.executable,
+                str(VALIDATOR),
+                "--mode",
+                mode,
+                fixture.name,
+            ],
             check=False,
             capture_output=True,
             text=True,
         )
 
 
-def require_rejection(document: dict, label: str) -> None:
-    result = validator_result(document)
+def require_rejection(
+    document: dict,
+    mode: str,
+    expected: str,
+    label: str,
+) -> None:
+    result = validator_result(document, mode)
     if result.returncode == 0:
         raise AssertionError(f"workspace validator accepted {label}")
+    if expected not in result.stderr:
+        raise AssertionError(
+            f"{label} did not report {expected!r}: {result.stderr.strip()}"
+        )
 
 
-def main() -> int:
-    baseline = json.loads(
+def metadata(*options: str) -> dict:
+    return json.loads(
         subprocess.check_output(
-            ["cargo", "metadata", "--format-version", "1"],
+            ["cargo", "metadata", "--format-version", "1", *options],
             text=True,
         )
     )
-    accepted = validator_result(baseline)
-    if accepted.returncode != 0:
-        raise AssertionError(f"workspace validator rejected baseline: {accepted.stderr}")
 
-    ambiguous_name = copy.deepcopy(baseline)
-    legacy = next(
-        package
-        for package in ambiguous_name["packages"]
-        if package["name"] == "brynja-legacy-ssl2"
+
+def graph_dependency(document: dict, owner: str, dependency_name: str) -> dict:
+    return {
+        "name": dependency_name.replace("-", "_"),
+        "pkg": package_id(document, dependency_name),
+        "dep_kinds": [{"kind": None, "target": None}],
+    }
+
+
+def test_baselines(no_default: dict, all_features: dict) -> None:
+    for document, mode in (
+        (no_default, "no-default-features"),
+        (all_features, "all-features"),
+    ):
+        accepted = validator_result(document, mode)
+        if accepted.returncode != 0:
+            raise AssertionError(
+                f"workspace validator rejected {mode}: {accepted.stderr}"
+            )
+
+
+def test_inventory_and_names(baseline: dict) -> None:
+    ambiguous = copy.deepcopy(baseline)
+    package(ambiguous, "brynja-legacy-ssl2")["name"] = "brynja-ssl2"
+    require_rejection(
+        ambiguous,
+        "all-features",
+        "workspace differs from package policy",
+        "an ambiguously named legacy crate",
     )
-    legacy["name"] = "brynja-ssl2"
-    require_rejection(ambiguous_name, "an ambiguously named legacy crate")
 
-    deprecated_name = copy.deepcopy(baseline)
-    legacy = next(
-        package
-        for package in deprecated_name["packages"]
-        if package["name"] == "brynja-legacy-ssl2"
+    deprecated = copy.deepcopy(baseline)
+    package(deprecated, "brynja-legacy-ssl2")["name"] = "brynja-historical-ssl2"
+    require_rejection(
+        deprecated,
+        "all-features",
+        "workspace differs from package policy",
+        "the deprecated historical prefix",
     )
-    legacy["name"] = "brynja-historical-ssl2"
-    require_rejection(deprecated_name, "the deprecated historical prefix")
 
-    modern_leak = copy.deepcopy(baseline)
+    missing = copy.deepcopy(baseline)
+    removed = package_id(missing, "brynja-proofs")
+    missing["workspace_members"].remove(removed)
+    require_rejection(
+        missing,
+        "all-features",
+        "external packages entered",
+        "an unclassified workspace package",
+    )
+
+
+def test_manifest_classes(baseline: dict) -> None:
+    published_legacy = copy.deepcopy(baseline)
+    package(published_legacy, "brynja-legacy-ssl2")["publish"] = ["crates-io"]
+    require_rejection(
+        published_legacy,
+        "all-features",
+        "publication class is not enforced",
+        "a publishable legacy engine",
+    )
+
+    published_repository = copy.deepcopy(baseline)
+    package(published_repository, "brynja-research-ssl1")["publish"] = [
+        "crates-io"
+    ]
+    require_rejection(
+        published_repository,
+        "all-features",
+        "publication class is not enforced",
+        "a publishable research crate",
+    )
+
+    wrong_edition = copy.deepcopy(baseline)
+    package(wrong_edition, "brynja-core")["edition"] = "2021"
+    require_rejection(
+        wrong_edition,
+        "all-features",
+        "must use Rust edition 2024",
+        "edition drift",
+    )
+
+    binary_target = copy.deepcopy(baseline)
+    package(binary_target, "brynja-core")["targets"][0]["kind"] = ["bin"]
+    require_rejection(
+        binary_target,
+        "all-features",
+        "target must be a library only",
+        "a binary product target",
+    )
+
+    wrong_repository = copy.deepcopy(baseline)
+    package(wrong_repository, "brynja-core")["repository"] = (
+        "https://example.invalid/brynja"
+    )
+    require_rejection(
+        wrong_repository,
+        "all-features",
+        "unexpected repository metadata",
+        "repository metadata drift",
+    )
+
+
+def test_dependency_contracts(baseline: dict) -> None:
+    external = copy.deepcopy(baseline)
+    dependency(external, "brynja-pki", "brynja-core")["source"] = (
+        "registry+https://github.com/rust-lang/crates.io-index"
+    )
+    require_rejection(
+        external,
+        "all-features",
+        "external dependency",
+        "a registry dependency",
+    )
+
+    wrong_pin = copy.deepcopy(baseline)
+    dependency(wrong_pin, "brynja-pki", "brynja-core")["req"] = "^0.1"
+    require_rejection(
+        wrong_pin,
+        "all-features",
+        "must pin brynja-core",
+        "a non-exact workspace dependency",
+    )
+
+    default_features = copy.deepcopy(baseline)
+    dependency(default_features, "brynja-pki", "brynja-core")[
+        "uses_default_features"
+    ] = False
+    require_rejection(
+        default_features,
+        "all-features",
+        "default-feature policy drifted",
+        "workspace dependency default-feature drift",
+    )
+
+    optionality = copy.deepcopy(baseline)
+    dependency(optionality, "brynja", "brynja-dtls")["optional"] = False
+    require_rejection(
+        optionality,
+        "all-features",
+        "optionality drifted",
+        "an optional boundary made mandatory",
+    )
+
+    legacy_dependency = copy.deepcopy(baseline)
+    package(legacy_dependency, "brynja-legacy-ssl2")["dependencies"].append(
+        copy.deepcopy(dependency(legacy_dependency, "brynja-pki", "brynja-core"))
+    )
+    require_rejection(
+        legacy_dependency,
+        "all-features",
+        "dependency policy mismatch",
+        "an undeclared legacy-to-modern dependency",
+    )
+
+
+def test_feature_contracts(baseline: dict) -> None:
+    modern_feature = copy.deepcopy(baseline)
+    package(modern_feature, "brynja")["features"]["legacy-ssl2"] = [
+        "dep:brynja-legacy-ssl2"
+    ]
+    require_rejection(
+        modern_feature,
+        "all-features",
+        "feature policy differs",
+        "legacy feature smuggling through the modern facade",
+    )
+
+    default_feature = copy.deepcopy(baseline)
+    package(default_feature, "brynja")["features"]["default"] = ["dtls"]
+    require_rejection(
+        default_feature,
+        "all-features",
+        "feature policy differs",
+        "a non-empty default feature",
+    )
+
+
+def test_resolved_isolation(all_features: dict, no_default: dict) -> None:
+    modern_leak = copy.deepcopy(all_features)
     node(modern_leak, "brynja")["deps"].append(
-        {"pkg": package_id(modern_leak, "brynja-legacy-ssl2")}
+        graph_dependency(modern_leak, "brynja", "brynja-legacy-ssl2")
     )
-    require_rejection(modern_leak, "a modern-to-legacy dependency")
-
-    research_leak = copy.deepcopy(baseline)
-    node(research_leak, "brynja")["deps"].append(
-        {"pkg": package_id(research_leak, "brynja-research-ssl1")}
+    require_rejection(
+        modern_leak,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "a modern-to-legacy resolved edge",
     )
-    require_rejection(research_leak, "a modern-to-research dependency")
 
-    published_research = copy.deepcopy(baseline)
-    research = next(
-        package
-        for package in published_research["packages"]
-        if package["name"] == "brynja-research-ssl1"
+    legacy_leak = copy.deepcopy(all_features)
+    node(legacy_leak, "brynja-legacy")["deps"].append(
+        graph_dependency(legacy_leak, "brynja-legacy", "brynja-core")
     )
-    research["publish"] = None
-    require_rejection(published_research, "a publishable research crate")
+    require_rejection(
+        legacy_leak,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "a legacy-to-modern resolved edge",
+    )
 
-    missing_engine = copy.deepcopy(baseline)
+    missing_legacy = copy.deepcopy(all_features)
+    ssl2 = package_id(missing_legacy, "brynja-legacy-ssl2")
+    legacy = node(missing_legacy, "brynja-legacy")
+    legacy["deps"] = [item for item in legacy["deps"] if item["pkg"] != ssl2]
+    require_rejection(
+        missing_legacy,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "an incomplete legacy all-feature graph",
+    )
+
+    missing_engine = copy.deepcopy(all_features)
     tls12 = package_id(missing_engine, "brynja-tls12")
     router = node(missing_engine, "brynja-tls")
-    router["deps"] = [dependency for dependency in router["deps"] if dependency["pkg"] != tls12]
-    require_rejection(missing_engine, "an evergreen router without TLS 1.2")
-
-    quic_stream_leak = copy.deepcopy(baseline)
-    node(quic_stream_leak, "brynja-quic-tls")["deps"].append(
-        {"pkg": package_id(quic_stream_leak, "brynja-tls13")}
+    router["deps"] = [item for item in router["deps"] if item["pkg"] != tls12]
+    require_rejection(
+        missing_engine,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "an evergreen router without TLS 1.2",
     )
-    require_rejection(quic_stream_leak, "a QUIC-to-stream-TLS dependency")
 
-    print("workspace metadata validator rejects package and TLS graph regressions")
+    quic_stream = copy.deepcopy(all_features)
+    node(quic_stream, "brynja-quic-tls")["deps"].append(
+        graph_dependency(quic_stream, "brynja-quic-tls", "brynja-tls13")
+    )
+    require_rejection(
+        quic_stream,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "a QUIC-to-stream-TLS dependency",
+    )
+
+    no_default_optional = copy.deepcopy(no_default)
+    node(no_default_optional, "brynja")["deps"].append(
+        graph_dependency(no_default_optional, "brynja", "brynja-dtls")
+    )
+    require_rejection(
+        no_default_optional,
+        "no-default-features",
+        "resolved no-default-features dependency graph drifted",
+        "optional DTLS activation without a feature",
+    )
+
+
+def main() -> int:
+    no_default = metadata("--no-default-features")
+    all_features = metadata("--all-features")
+    test_baselines(no_default, all_features)
+    test_inventory_and_names(all_features)
+    test_manifest_classes(all_features)
+    test_dependency_contracts(all_features)
+    test_feature_contracts(all_features)
+    test_resolved_isolation(all_features, no_default)
+    print("workspace policy rejects 21 package-class and feature-graph regressions")
     return 0
 
 

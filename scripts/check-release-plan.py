@@ -120,6 +120,7 @@ def validate(release_path: Path, version_path: Path) -> None:
             "Status: planned",
             "Status: awaiting pentest",
             "Status: awaiting green CI",
+            "Status: released",
         ):
             raise ValueError(f"{version} has an unsupported status")
 

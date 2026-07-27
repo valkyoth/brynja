@@ -1,13 +1,13 @@
 //! Security-first, dependency-free `no_std` TLS facade.
 //!
-//! This foundation release contains package boundaries and policy only. It
-//! does not yet provide a TLS connection API.
+//! This release hardens package isolation and release integrity. It does not
+//! yet provide a TLS connection API.
 
 #![no_std]
 
 /// Whether this package provides its planned implementation.
 ///
-/// The foundation release intentionally reports `false`.
+/// The release-and-isolation milestone intentionally reports `false`.
 pub const IMPLEMENTED: bool = false;
 
 pub use brynja_core as core;
@@ -25,7 +25,7 @@ pub use brynja_quic_tls as quic_tls;
 #[cfg(test)]
 mod tests {
     #[test]
-    fn foundation_does_not_claim_implementation() {
+    fn policy_release_does_not_claim_implementation() {
         assert!(!::core::hint::black_box(super::IMPLEMENTED));
     }
 }

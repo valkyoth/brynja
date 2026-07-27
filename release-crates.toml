@@ -1,84 +1,84 @@
 [release]
-version = "0.1.0"
+version = "0.2.0"
 policy = "independent"
 stage = "public"
 
 [crates."brynja"]
-previous_version = "unpublished"
-version = "0.1.0"
-change = "initial"
+previous_version = "0.1.0"
+version = "0.2.0"
+change = "code"
 publish = true
-reason = "Initial crates.io publication of the foundation-only modern facade; it carries no protocol implementation or security claim."
+reason = "Mandatory facade release for the release-integrity and package-isolation enforcement milestone; it adds no protocol implementation."
 
 [crates."brynja-core"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the bounded core package boundary required by the modern facade."
+change = "unchanged"
+publish = false
+reason = "No brynja-core package change; retain the published 0.1.0 boundary."
 
 [crates."brynja-crypto"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the first-party cryptography package boundary required by the modern facade."
+change = "unchanged"
+publish = false
+reason = "No brynja-crypto package change; retain the published 0.1.0 boundary."
 
 [crates."brynja-pki"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the PKI package boundary required by the modern facade."
+change = "unchanged"
+publish = false
+reason = "No brynja-pki package change; retain the published 0.1.0 boundary."
 
 [crates."brynja-tls"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the evergreen TLS router boundary required by the modern facade."
+change = "unchanged"
+publish = false
+reason = "No brynja-tls package change; retain the published 0.1.0 router boundary."
 
 [crates."brynja-tls12"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the hardened TLS 1.2 engine boundary required by the TLS router."
+change = "unchanged"
+publish = false
+reason = "No brynja-tls12 package change; retain the published 0.1.0 engine boundary."
 
 [crates."brynja-tls13"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the TLS 1.3 stream-engine boundary required by the TLS router."
+change = "unchanged"
+publish = false
+reason = "No brynja-tls13 package change; retain the published 0.1.0 engine boundary."
 
 [crates."brynja-tls13-handshake"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the record-independent TLS 1.3 handshake boundary required by TLS and QUIC."
+change = "unchanged"
+publish = false
+reason = "No brynja-tls13-handshake package change; retain the published 0.1.0 boundary."
 
 [crates."brynja-quic-tls"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the optional QUIC-TLS integration boundary exposed by the modern facade."
+change = "unchanged"
+publish = false
+reason = "No brynja-quic-tls package change; retain the published 0.1.0 adapter boundary."
 
 [crates."brynja-dtls"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the optional modern DTLS boundary exposed by the modern facade."
+change = "unchanged"
+publish = false
+reason = "No brynja-dtls package change; retain the published 0.1.0 engine boundary."
 
 [crates."brynja-platform"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Initial crates.io publication of the optional platform-integration boundary exposed by the modern facade."
+change = "unchanged"
+publish = false
+reason = "No brynja-platform package change; retain the published 0.1.0 adapter boundary."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"

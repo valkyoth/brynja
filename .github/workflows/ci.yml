@@ -28,6 +28,8 @@ jobs:
         run: scripts/install-ci-tools.sh
       - name: Run repository gate
         run: scripts/checks.sh
+      - name: Validate protected release controls
+        run: scripts/check-github-release-controls.py --public
       - name: Validate committed pentest report when present
         run: scripts/validate-current-pentest.sh
       - name: Check dependency policy

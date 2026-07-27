@@ -27,6 +27,9 @@ publish_tag="${BRYNJA_RELEASE_PUBLISH_TAG:-}"
 test -s "$report" || fail "missing pentest report: ${report}"
 git cat-file -e "HEAD:${report}" 2>/dev/null ||
     fail "pentest report must be committed at HEAD: ${report}"
+test "$(git ls-tree HEAD -- "$report" | awk '{ print $1 " " $2 }')" = \
+    "100644 blob" ||
+    fail "pentest report must be a regular non-executable committed file"
 git diff --quiet HEAD -- "$report" ||
     fail "pentest report differs from the committed HEAD version: ${report}"
 
@@ -49,19 +52,39 @@ test -n "$(field_value Tester)" ||
 test -n "$(field_value Scope)" ||
     fail "pentest report requires a Scope"
 
-parent="$(git rev-parse -q --verify HEAD^ 2>/dev/null || true)"
-if test -n "$parent" && git cat-file -e "${parent}:${report}" 2>/dev/null; then
-    changed_paths="$(git diff --name-only "$parent" HEAD)"
-    if printf '%s\n' "$changed_paths" | grep -Fvxq "$report"; then
-        printf '%s\n' "$changed_paths" | grep -Fxq "$report" ||
-            fail "repository changed after pentest without updating ${report}"
+parents="$(git rev-parse HEAD^@ 2>/dev/null || true)"
+for parent in $parents; do
+    if git cat-file -e "${parent}:${report}" 2>/dev/null; then
+        changed_paths="$(git diff --name-only "$parent" HEAD)"
+        if printf '%s\n' "$changed_paths" | grep -Fvxq "$report"; then
+            printf '%s\n' "$changed_paths" | grep -Fxq "$report" ||
+                fail "repository changed after pentest without updating ${report}"
+        fi
     fi
-fi
+done
 
 if git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
     test "$publish_tag" = "$version" ||
         fail "tag already exists: ${version}"
-    tag_commit="$(git rev-list -n 1 "$version")"
+    test "$(git cat-file -t "refs/tags/${version}")" = "tag" ||
+        fail "publish tag ${version} must be an annotated signed tag"
+    git verify-tag "$version" >/dev/null 2>&1 ||
+        fail "publish tag ${version} signature verification failed"
+    tag_subject="$(
+        git for-each-ref \
+            --format='%(contents:subject)' \
+            "refs/tags/${version}"
+    )"
+    test "$tag_subject" = "brynja ${version}" ||
+        fail "publish tag ${version} subject must be: brynja ${version}"
+    tag_target="$(
+        git cat-file -p "refs/tags/${version}" |
+            sed -n 's/^object //p' |
+            head -n 1
+    )"
+    test "$(git cat-file -t "$tag_target")" = "commit" ||
+        fail "publish tag ${version} must point directly to a commit"
+    tag_commit="$(git rev-parse "refs/tags/${version}^{commit}")"
     head_commit="$(git rev-parse HEAD)"
     test "$tag_commit" = "$head_commit" ||
         fail "publish tag ${version} does not point at HEAD"

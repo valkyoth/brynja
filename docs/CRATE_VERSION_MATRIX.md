@@ -1,17 +1,18 @@
 # Crate Version Matrix
 
-Status: initial public release candidate
+Status: v0.2.0 release candidate awaiting pentest
 
-All workspace packages are currently version `0.1.0`. The modern dependency
-closure is selected for initial crates.io publication; legacy and
+The `brynja` facade advances to `0.2.0`. Every unchanged modern supporting
+crate retains its published `0.1.0` version and is not republished. Legacy and
 repository-only packages remain unpublished. Package publication does not
 imply protocol implementation or production readiness.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja`, `brynja-core`, `brynja-crypto`, and `brynja-pki` | `0.1.0` | yes | Initial foundation publication |
-| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | yes | Initial modern TLS boundary publication |
-| `brynja-dtls`, `brynja-quic-tls`, and `brynja-platform` | `0.1.0` | yes | Initial optional normal-dependency publication |
+| `brynja` | `0.2.0` | yes | Mandatory facade release with strengthened policy and isolation enforcement |
+| `brynja-core`, `brynja-crypto`, and `brynja-pki` | `0.1.0` | no | Published and unchanged |
+| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | no | Published and unchanged |
+| `brynja-dtls`, `brynja-quic-tls`, and `brynja-platform` | `0.1.0` | no | Published and unchanged |
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
@@ -81,6 +82,9 @@ For `v0.1.0`, the enforced initial publication order is:
 `brynja-core`, `brynja-crypto`, `brynja-pki`, `brynja-platform`,
 `brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`,
 `brynja-dtls`, `brynja-quic-tls`, then `brynja`.
+
+For `v0.2.0`, only `brynja 0.2.0` is selected. Its complete exact-pinned
+supporting closure is already available at `0.1.0`.
 
 ## Rust Compatibility
 

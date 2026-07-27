@@ -6,6 +6,11 @@ unset BRYNJA_RELEASE_PUBLISH_TAG
 fixture_root="$(mktemp -d "${TMPDIR:-/tmp}/brynja-readiness.XXXXXX")"
 trap 'rm -rf "$fixture_root"' EXIT HUP INT TERM
 source_script="$(pwd)/scripts/validate-release-readiness.sh"
+signing_key="$fixture_root/signing-key"
+allowed_signers="$fixture_root/allowed-signers"
+ssh-keygen -q -t ed25519 -N "" -f "$signing_key"
+printf 'release-test@example.invalid %s\n' "$(cat "${signing_key}.pub")" \
+    >"$allowed_signers"
 
 make_fixture() {
     local name="$1"
@@ -17,6 +22,9 @@ make_fixture() {
         git init -q
         git config user.email "release-test@example.invalid"
         git config user.name "Brynja Release Test"
+        git config gpg.format ssh
+        git config user.signingkey "$signing_key"
+        git config gpg.ssh.allowedSignersFile "$allowed_signers"
         printf 'fixture\n' >README.md
         git add README.md scripts/validate-release-readiness.sh
         git commit -q -m "fixture"
@@ -46,6 +54,11 @@ EOF
 commit_report() {
     git add security/pentest/v0.2.0.md
     git commit -q -m "docs: record v0.2.0 pentest"
+}
+
+sign_tag() {
+    local message="${1:-brynja v0.2.0}"
+    git tag -s v0.2.0 -m "$message"
 }
 
 assert_fails_with() {
@@ -158,12 +171,58 @@ repository="$(make_fixture modified-report)"
         scripts/validate-release-readiness.sh v0.2.0
 )
 
-repository="$(make_fixture tag-flow)"
+repository="$(make_fixture symlink-report)"
+(
+    cd "$repository"
+    mkdir -p security/pentest
+    write_report
+    mv security/pentest/v0.2.0.md report-target.md
+    ln -s ../../report-target.md security/pentest/v0.2.0.md
+    git add report-target.md security/pentest/v0.2.0.md
+    git commit -q -m "docs: add symlinked report"
+    assert_fails_with "must be a regular non-executable committed file" \
+        scripts/validate-release-readiness.sh v0.2.0
+)
+
+repository="$(make_fixture lightweight-tag)"
 (
     cd "$repository"
     write_report
     commit_report
     git tag v0.2.0
+    assert_fails_with "must be an annotated signed tag" \
+        env BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
+        scripts/validate-release-readiness.sh v0.2.0
+)
+
+repository="$(make_fixture unsigned-tag)"
+(
+    cd "$repository"
+    write_report
+    commit_report
+    git tag -a v0.2.0 -m "brynja v0.2.0"
+    assert_fails_with "signature verification failed" \
+        env BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
+        scripts/validate-release-readiness.sh v0.2.0
+)
+
+repository="$(make_fixture wrong-tag-subject)"
+(
+    cd "$repository"
+    write_report
+    commit_report
+    sign_tag "release v0.2.0"
+    assert_fails_with "subject must be: brynja v0.2.0" \
+        env BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
+        scripts/validate-release-readiness.sh v0.2.0
+)
+
+repository="$(make_fixture tag-flow)"
+(
+    cd "$repository"
+    write_report
+    commit_report
+    sign_tag
     assert_fails_with "tag already exists: v0.2.0" \
         scripts/validate-release-readiness.sh v0.2.0
     BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
@@ -185,7 +244,7 @@ repository="$(make_fixture stale-tag)"
     cd "$repository"
     write_report
     commit_report
-    git tag v0.2.0
+    sign_tag
     printf 'later\n' >later.txt
     printf '\nLater candidate retested.\n' >>security/pentest/v0.2.0.md
     git add later.txt security/pentest/v0.2.0.md

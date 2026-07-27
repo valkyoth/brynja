@@ -1,44 +1,211 @@
 #!/usr/bin/env python3
-"""Enforce Brynja workspace dependency and publication boundaries."""
+"""Enforce every Brynja package class and resolved feature graph."""
 
 from __future__ import annotations
 
+import argparse
 import json
-import sys
+import tomllib
 from pathlib import Path
 
 
-AMBIGUOUS_LEGACY_NAMES = {
-    "brynja-pct",
-    "brynja-snp",
-    "brynja-ssl1-research",
-    "brynja-ssl2",
-    "brynja-ssl3",
-    "brynja-tls10",
-    "brynja-tls11",
-    "brynja-wtls",
-}
-REPOSITORY_ONLY = {
-    "brynja-interop",
-    "brynja-proofs",
-    "brynja-research-ssl1",
-    "brynja-test-support",
-    "brynja-xtask",
-}
+ROOT = Path(__file__).resolve().parents[1]
+POLICY = ROOT / "package-policy.toml"
+MODERN_CLASSES = frozenset(
+    {
+        "modern-facade",
+        "modern-router",
+        "modern-engine",
+        "modern-shared",
+        "platform-adapter",
+        "protocol-adapter",
+    }
+)
+LEGACY_CLASSES = frozenset({"legacy-facade", "legacy-engine"})
+PRIVATE_CLASSES = frozenset({"repository-only", "research-only"})
+ALL_CLASSES = MODERN_CLASSES | LEGACY_CLASSES | PRIVATE_CLASSES
+AMBIGUOUS_LEGACY_NAMES = frozenset(
+    {
+        "brynja-pct",
+        "brynja-snp",
+        "brynja-ssl1-research",
+        "brynja-ssl2",
+        "brynja-ssl3",
+        "brynja-tls10",
+        "brynja-tls11",
+        "brynja-wtls",
+    }
+)
 
 
-def is_legacy(name: str) -> bool:
-    return name == "brynja-legacy" or name.startswith("brynja-legacy-")
+def load_policy() -> dict[str, dict]:
+    with POLICY.open("rb") as handle:
+        document = tomllib.load(handle)
+    if document.get("schema") != {"version": 1}:
+        raise ValueError("package policy schema must be exactly version 1")
+    packages = document.get("packages")
+    if not isinstance(packages, dict) or not packages:
+        raise ValueError("package policy has no package inventory")
+    for name, entry in packages.items():
+        if entry.get("class") not in ALL_CLASSES:
+            raise ValueError(f"{name} has unknown package class")
+        if entry.get("publish") not in {"crates-io", "blocked", "never"}:
+            raise ValueError(f"{name} has unknown publication class")
+        required = entry.get("required")
+        optional = entry.get("optional")
+        if not isinstance(required, list) or not isinstance(optional, dict):
+            raise ValueError(f"{name} has malformed dependency policy")
+        dependencies = required + list(optional.values())
+        if len(dependencies) != len(set(dependencies)):
+            raise ValueError(f"{name} repeats a dependency")
+        if name in dependencies:
+            raise ValueError(f"{name} depends on itself")
+    return packages
 
 
-def is_restricted(name: str) -> bool:
-    return is_legacy(name) or name.startswith("brynja-research-")
+def workspace_packages(document: dict) -> tuple[dict[str, dict], dict[str, str]]:
+    members = set(document.get("workspace_members", []))
+    by_id = {
+        package["id"]: package
+        for package in document.get("packages", [])
+        if package["id"] in members
+    }
+    if set(by_id) != members:
+        raise ValueError("workspace member metadata is incomplete")
+    by_name = {package["name"]: package for package in by_id.values()}
+    if len(by_name) != len(by_id):
+        raise ValueError("workspace package names are not unique")
+    if len(document.get("packages", [])) != len(by_id):
+        external = sorted(
+            package["name"]
+            for package in document["packages"]
+            if package["id"] not in members
+        )
+        raise ValueError(f"external packages entered the resolved graph: {external}")
+    return by_name, {name: package["id"] for name, package in by_name.items()}
+
+
+def expected_publish(entry: dict) -> list[str]:
+    return ["crates-io"] if entry["publish"] == "crates-io" else []
+
+
+def validate_target(name: str, package: dict) -> None:
+    targets = package.get("targets", [])
+    if len(targets) != 1:
+        raise ValueError(f"{name} must contain exactly one library target")
+    target = targets[0]
+    if target.get("kind") != ["lib"] or target.get("crate_types") != ["lib"]:
+        raise ValueError(f"{name} target must be a library only")
+    if package.get("edition") != "2024":
+        raise ValueError(f"{name} must use Rust edition 2024")
+    if package.get("rust_version") != "1.90":
+        raise ValueError(f"{name} must declare Rust 1.90")
+    if package.get("license") != "MIT OR Apache-2.0":
+        raise ValueError(f"{name} has unexpected license metadata")
+    expected_repository = "https://github.com/valkyoth/brynja"
+    if package.get("repository") != expected_repository:
+        raise ValueError(f"{name} has unexpected repository metadata")
+    if package.get("homepage") != expected_repository:
+        raise ValueError(f"{name} has unexpected homepage metadata")
+    expected_manifest = (ROOT / "crates" / name / "Cargo.toml").resolve()
+    if Path(package.get("manifest_path", "")).resolve() != expected_manifest:
+        raise ValueError(f"{name} manifest escaped its classified package directory")
+    if not package.get("description"):
+        raise ValueError(f"{name} must have a package description")
+
+
+def validate_dependencies(
+    name: str,
+    package: dict,
+    entry: dict,
+    packages: dict[str, dict],
+) -> None:
+    required = set(entry["required"])
+    optional = set(entry["optional"].values())
+    expected = required | optional
+    dependencies = package.get("dependencies", [])
+    actual = {dependency["name"] for dependency in dependencies}
+    if actual != expected:
+        raise ValueError(
+            f"{name} dependency policy mismatch: "
+            f"missing={sorted(expected - actual)}, extra={sorted(actual - expected)}"
+        )
+    for dependency in dependencies:
+        dependency_name = dependency["name"]
+        if dependency.get("source") is not None or dependency.get("path") is None:
+            raise ValueError(f"external dependency: {name} -> {dependency_name}")
+        if dependency.get("kind") is not None or dependency.get("target") is not None:
+            raise ValueError(f"{name} has a non-production dependency")
+        if dependency.get("optional") != (dependency_name in optional):
+            raise ValueError(f"{name} optionality drifted for {dependency_name}")
+        if dependency.get("features") != []:
+            raise ValueError(f"{name} directly enables features on {dependency_name}")
+        if dependency.get("uses_default_features") is not True:
+            raise ValueError(f"{name} default-feature policy drifted for {dependency_name}")
+        expected_req = f"={packages[dependency_name]['version']}"
+        if dependency.get("req") != expected_req:
+            raise ValueError(
+                f"{name} must pin {dependency_name} to {expected_req}"
+            )
+
+
+def validate_features(name: str, package: dict, entry: dict) -> None:
+    expected = {"default": []}
+    expected.update(
+        {
+            feature: [f"dep:{dependency}"]
+            for feature, dependency in entry["optional"].items()
+        }
+    )
+    if package.get("features") != expected:
+        raise ValueError(f"{name} feature policy differs from its package class")
+
+
+def validate_manifest_inventory(
+    packages: dict[str, dict],
+    policy: dict[str, dict],
+) -> None:
+    if set(packages) != set(policy):
+        raise ValueError(
+            "workspace differs from package policy: "
+            f"missing={sorted(set(policy) - set(packages))}, "
+            f"extra={sorted(set(packages) - set(policy))}"
+        )
+    ambiguous = sorted(AMBIGUOUS_LEGACY_NAMES.intersection(packages))
+    if ambiguous:
+        raise ValueError(f"legacy package lacks explicit prefix: {ambiguous}")
+    deprecated = sorted(
+        name
+        for name in packages
+        if name == "brynja-historical" or name.startswith("brynja-historical-")
+    )
+    if deprecated:
+        raise ValueError(f"deprecated historical package name remains: {deprecated}")
+    for name, package in packages.items():
+        entry = policy[name]
+        if package.get("source") is not None:
+            raise ValueError(f"external package source: {name}")
+        if package.get("publish") != expected_publish(entry):
+            raise ValueError(f"{name} publication class is not enforced")
+        validate_target(name, package)
+        validate_dependencies(name, package, entry, packages)
+        validate_features(name, package, entry)
+
+
+def resolved_edges(document: dict) -> dict[str, set[str]]:
+    resolve = document.get("resolve")
+    if not isinstance(resolve, dict):
+        raise ValueError("Cargo metadata is missing the resolved graph")
+    return {
+        node["id"]: {dependency["pkg"] for dependency in node["deps"]}
+        for node in resolve["nodes"]
+    }
 
 
 def reachable_names(
     root: str,
     names: dict[str, str],
-    packages: dict[str, dict],
+    packages_by_id: dict[str, dict],
     edges: dict[str, set[str]],
 ) -> set[str]:
     pending = [names[root]]
@@ -49,69 +216,89 @@ def reachable_names(
             continue
         seen.add(package_id)
         pending.extend(edges.get(package_id, set()))
-    return {packages[package_id]["name"] for package_id in seen}
+    return {packages_by_id[package_id]["name"] for package_id in seen}
 
 
-def main() -> int:
-    if len(sys.argv) != 2:
-        print("usage: validate-workspace-metadata.py METADATA", file=sys.stderr)
-        return 2
-    document = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
-    packages = {package["id"]: package for package in document["packages"]}
-    names = {package["name"]: package_id for package_id, package in packages.items()}
-    ambiguous = sorted(AMBIGUOUS_LEGACY_NAMES.intersection(names))
-    if ambiguous:
-        raise ValueError(f"legacy package lacks explicit prefix: {ambiguous}")
-    deprecated = sorted(
-        name
-        for name in names
-        if name == "brynja-historical" or name.startswith("brynja-historical-")
-    )
-    if deprecated:
-        raise ValueError(f"deprecated historical package name remains: {deprecated}")
+def validate_resolved_mode(
+    document: dict,
+    mode: str,
+    packages: dict[str, dict],
+    packages_by_id: dict[str, dict],
+    names: dict[str, str],
+    policy: dict[str, dict],
+) -> None:
+    edges = resolved_edges(document)
+    nodes = {node["id"]: node for node in document["resolve"]["nodes"]}
+    for name, package in packages.items():
+        entry = policy[name]
+        expected_dependencies = set(entry["required"])
+        expected_features: set[str] = set()
+        if mode == "all-features":
+            expected_dependencies.update(entry["optional"].values())
+            expected_features.update(package["features"])
+        package_id = names[name]
+        actual_dependencies = {
+            packages_by_id[dependency_id]["name"]
+            for dependency_id in edges.get(package_id, set())
+        }
+        if actual_dependencies != expected_dependencies:
+            raise ValueError(f"{name} resolved {mode} dependency graph drifted")
+        actual_features = set(nodes[package_id].get("features", []))
+        if mode == "no-default-features":
+            actual_features.discard("default")
+        if actual_features != expected_features:
+            raise ValueError(f"{name} resolved {mode} feature set drifted")
 
-    for package in packages.values():
-        if package.get("source") is not None:
-            raise ValueError(f"external package source: {package['name']}")
-        if package["name"] in REPOSITORY_ONLY and package.get("publish") != []:
-            raise ValueError(
-                f"repository-only package is publishable: {package['name']}"
-            )
-        for dependency in package["dependencies"]:
-            if dependency.get("source") is not None:
-                raise ValueError(
-                    f"external dependency: {package['name']} -> {dependency['name']}"
-                )
-
-    resolve = document.get("resolve")
-    if not isinstance(resolve, dict):
-        raise ValueError("Cargo metadata is missing the resolved graph")
-    edges = {
-        node["id"]: {dependency["pkg"] for dependency in node["deps"]}
-        for node in resolve["nodes"]
-    }
-    modern = reachable_names("brynja", names, packages, edges)
-    leaked = sorted(name for name in modern if is_restricted(name))
-    if leaked:
-        raise ValueError(f"modern facade reaches legacy or research packages: {leaked}")
-
-    router = reachable_names("brynja-tls", names, packages, edges)
-    required_router = {"brynja-tls", "brynja-tls12", "brynja-tls13"}
-    if not required_router.issubset(router):
-        raise ValueError("evergreen TLS router does not reach both version engines")
-    if "brynja-tls13-handshake" not in router:
-        raise ValueError("TLS 1.3 engine does not reach its handshake package")
-
-    quic = reachable_names("brynja-quic-tls", names, packages, edges)
+    modern = reachable_names("brynja", names, packages_by_id, edges)
+    if any(policy[name]["class"] not in MODERN_CLASSES for name in modern):
+        raise ValueError("modern facade reaches a non-modern package class")
+    legacy = reachable_names("brynja-legacy", names, packages_by_id, edges)
+    if any(policy[name]["class"] not in LEGACY_CLASSES for name in legacy):
+        raise ValueError("legacy facade reaches a non-legacy package class")
+    expected_legacy = {"brynja-legacy"}
+    if mode == "all-features":
+        expected_legacy.update(policy["brynja-legacy"]["optional"].values())
+    if legacy != expected_legacy:
+        raise ValueError(f"legacy facade {mode} graph is incomplete")
+    quic = reachable_names("brynja-quic-tls", names, packages_by_id, edges)
     forbidden_quic = {"brynja-tls", "brynja-tls12", "brynja-tls13"}
     if forbidden_quic.intersection(quic):
         raise ValueError("QUIC reaches stream TLS or its multi-version router")
     if "brynja-tls13-handshake" not in quic:
         raise ValueError("QUIC does not reach the recordless TLS 1.3 handshake")
 
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("metadata", type=Path)
+    parser.add_argument(
+        "--mode",
+        required=True,
+        choices=("no-default-features", "all-features"),
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    document = json.loads(args.metadata.read_text(encoding="utf-8"))
+    policy = load_policy()
+    packages_by_id = {
+        package["id"]: package for package in document.get("packages", [])
+    }
+    packages, names = workspace_packages(document)
+    validate_manifest_inventory(packages, policy)
+    validate_resolved_mode(
+        document,
+        args.mode,
+        packages,
+        packages_by_id,
+        names,
+        policy,
+    )
     print(
-        "workspace has zero external dependencies and preserves legacy "
-        "and version-specific TLS isolation"
+        f"{args.mode} graph enforces {len(packages)} classified packages, "
+        "zero external dependencies, and modern/legacy isolation"
     )
     return 0
 

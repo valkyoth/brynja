@@ -14,6 +14,12 @@ fallback paths of `brynja`. Repository-only packages must remain unpublished.
 Scripts check the dependency graph, manifest policy, README synchronization,
 and source-file lengths.
 
+`package-policy.toml` is the executable inventory for these boundaries. It
+classifies every workspace package and freezes its exact direct dependencies,
+optional feature edges, publication class, and resolved no-default and
+all-feature graph expectations. Adding, renaming, publishing, or connecting a
+package therefore requires an explicit reviewed policy change.
+
 The conditional `brynja-sanitization` package is a downstream integration
 boundary, never a feature or dependency of `brynja`, `brynja-core`,
 `brynja-crypto`, `brynja-pki`, a modern or legacy engine, or

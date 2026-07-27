@@ -29,19 +29,19 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.1.0` is a repository foundation only. It establishes crate,
-platform, standards, test, and security boundaries. It does **not** implement
-TLS and must not be used to secure network traffic.
+Version `0.2.0` hardens release integrity, complete feature-graph validation,
+and modern/legacy package isolation on top of the `0.1.0` foundation. It does
+**not** implement TLS and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.1.0` is the initial
-crates.io foundation release and exists to establish the audited package
-boundaries and names; it does not implement TLS. The dependency is:
+Brynja is not ready for application use. Version `0.2.0` is a policy and
+isolation release; it does not implement TLS. After this candidate completes
+pentest and release gates, the dependency will be:
 
 ```toml
 [dependencies]
-brynja = "0.1"
+brynja = "0.2"
 ```
 
 Every official release tag publishes the `brynja` facade at the tag version.
@@ -86,7 +86,7 @@ publishes the facade last.
 
 ## Workspace
 
-| Package | Role | 0.1.0 status |
+| Package | Role | Current status |
 | --- | --- | --- |
 | `brynja` | Modern production facade | Foundation only |
 | `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Foundation only |
@@ -137,7 +137,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.97.1`, the current stable patch release checked on 2026-07-21.
+to Rust `1.97.1`, the current stable patch release checked on 2026-07-27.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 
@@ -165,6 +165,7 @@ scripts/checks.sh
 scripts/check-rust-version-matrix.sh
 scripts/release_crates.py --check
 scripts/release_crates.py --package-check
+scripts/check-github-release-controls.py
 cargo deny check
 cargo audit
 ```
@@ -177,7 +178,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.1.0
+scripts/release_crates.py --version 0.2.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

@@ -8,6 +8,7 @@ python3 scripts/check-release-plan.py
 scripts/test-release-plan.sh
 scripts/validate-workspace.sh
 python3 scripts/test-workspace-metadata.py
+python3 scripts/test-github-release-controls.py
 scripts/validate-release-metadata.sh
 scripts/release_crates.py --check
 python3 scripts/test-release-crates.py

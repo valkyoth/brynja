@@ -1,0 +1,146 @@
+[schema]
+version = 1
+
+[packages.brynja]
+class = "modern-facade"
+publish = "crates-io"
+required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-tls"]
+optional = { dtls = "brynja-dtls", platform = "brynja-platform", quic = "brynja-quic-tls" }
+
+[packages.brynja-core]
+class = "modern-shared"
+publish = "crates-io"
+required = []
+optional = {}
+
+[packages.brynja-crypto]
+class = "modern-shared"
+publish = "crates-io"
+required = []
+optional = {}
+
+[packages.brynja-pki]
+class = "modern-shared"
+publish = "crates-io"
+required = ["brynja-core"]
+optional = {}
+
+[packages.brynja-platform]
+class = "platform-adapter"
+publish = "crates-io"
+required = ["brynja-core"]
+optional = {}
+
+[packages.brynja-tls13-handshake]
+class = "modern-shared"
+publish = "crates-io"
+required = ["brynja-core", "brynja-crypto", "brynja-pki"]
+optional = {}
+
+[packages.brynja-tls12]
+class = "modern-engine"
+publish = "crates-io"
+required = ["brynja-core", "brynja-crypto", "brynja-pki"]
+optional = {}
+
+[packages.brynja-tls13]
+class = "modern-engine"
+publish = "crates-io"
+required = ["brynja-core", "brynja-crypto", "brynja-tls13-handshake"]
+optional = {}
+
+[packages.brynja-tls]
+class = "modern-router"
+publish = "crates-io"
+required = ["brynja-core", "brynja-tls12", "brynja-tls13"]
+optional = {}
+
+[packages.brynja-dtls]
+class = "modern-engine"
+publish = "crates-io"
+required = ["brynja-core", "brynja-crypto", "brynja-pki"]
+optional = {}
+
+[packages.brynja-quic-tls]
+class = "protocol-adapter"
+publish = "crates-io"
+required = ["brynja-core", "brynja-tls13-handshake"]
+optional = {}
+
+[packages.brynja-legacy]
+class = "legacy-facade"
+publish = "blocked"
+required = []
+optional = { pct = "brynja-legacy-pct", snp = "brynja-legacy-snp", ssl2 = "brynja-legacy-ssl2", ssl3 = "brynja-legacy-ssl3", tls10 = "brynja-legacy-tls10", tls11 = "brynja-legacy-tls11", wtls = "brynja-legacy-wtls" }
+
+[packages.brynja-legacy-pct]
+class = "legacy-engine"
+publish = "blocked"
+required = []
+optional = {}
+
+[packages.brynja-legacy-snp]
+class = "legacy-engine"
+publish = "blocked"
+required = []
+optional = {}
+
+[packages.brynja-legacy-ssl2]
+class = "legacy-engine"
+publish = "blocked"
+required = []
+optional = {}
+
+[packages.brynja-legacy-ssl3]
+class = "legacy-engine"
+publish = "blocked"
+required = []
+optional = {}
+
+[packages.brynja-legacy-tls10]
+class = "legacy-engine"
+publish = "blocked"
+required = []
+optional = {}
+
+[packages.brynja-legacy-tls11]
+class = "legacy-engine"
+publish = "blocked"
+required = []
+optional = {}
+
+[packages.brynja-legacy-wtls]
+class = "legacy-engine"
+publish = "blocked"
+required = []
+optional = {}
+
+[packages.brynja-interop]
+class = "repository-only"
+publish = "never"
+required = []
+optional = {}
+
+[packages.brynja-proofs]
+class = "repository-only"
+publish = "never"
+required = []
+optional = {}
+
+[packages.brynja-research-ssl1]
+class = "research-only"
+publish = "never"
+required = []
+optional = {}
+
+[packages.brynja-test-support]
+class = "repository-only"
+publish = "never"
+required = []
+optional = {}
+
+[packages.brynja-xtask]
+class = "repository-only"
+publish = "never"
+required = []
+optional = {}

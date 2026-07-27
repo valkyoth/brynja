@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -eu
+
+scripts/checks.sh
+scripts/release_crates.py --check
+scripts/check-rust-version-matrix.sh
+scripts/check_latest_tools.sh
+scripts/check-github-release-controls.py
+cargo deny check
+cargo audit --deny warnings
+scripts/generate-sbom.sh --check
+scripts/validate-release-readiness.sh v0.2.0

@@ -133,7 +133,7 @@ Generated requirements and upstream interfaces precede implementation.
 
 ### v0.1.0 - Workspace Foundation
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Preserve the explicit `brynja-legacy-*` naming boundary, evergreen `brynja-tls` router facade, version-specific `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` package graph, and the remaining workspace foundation with no cryptographic or protocol security claim.
 
@@ -162,7 +162,7 @@ Exit criteria:
 
 ### v0.2.0 - Release And Isolation Enforcement
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Harden committed-report and exact-tag comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls.
 
@@ -171,16 +171,30 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- make policy executable through generated traceability, fail-closed scripts, broken fixtures, immutable evidence, ownership, and release boundaries;
+- classify every workspace package and freeze its exact direct dependencies,
+  optional feature edges, publication status, library target, edition, MSRV,
+  license, and source boundary in one committed policy;
+- validate both no-default and all-feature resolved graphs, including the
+  modern facade, evergreen TLS router, QUIC adapter, legacy facade, all legacy
+  engines, research boundary, platform adapter, and repository-only packages;
+- require a regular committed pentest report synchronized against every parent
+  that already carried the report, and accept publication only from an exact
+  directly targeted signed annotated tag with the canonical subject;
+- install and live-check the protected main-branch ruleset used by `eth`,
+  including signed linear history, review, CODEOWNER, CodeQL, force-push and
+  deletion protections, and explicit accountable bypass identities;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- exercise positive and broken dependency, metadata, standards-ledger, workflow, isolation, evidence, and release-state fixtures;
-- inspect source locks, clean archives, permissions, tag assumptions, tool pinning, ledger completeness, and reproducibility;
+- exercise positive graphs plus broken package inventory, publication class,
+  target, edition, exact-pin, optionality, feature-smuggling, modern/legacy,
+  QUIC/stream, repository, report-file, signed-tag, review, CodeQL, ruleset,
+  and bypass fixtures;
+- inspect clean archives, package versions, live GitHub protection, exact tag
+  identity and signature, committed report mode and history, permissions,
+  action pins, tool pins, SBOM, and reproducibility;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 

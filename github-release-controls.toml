@@ -1,0 +1,40 @@
+[repository]
+name = "valkyoth/brynja"
+default_branch = "main"
+ruleset_name = "Valkyoth Protect Main Branch"
+
+[ruleset]
+target = "branch"
+enforcement = "active"
+include = ["~DEFAULT_BRANCH"]
+exclude = []
+required_rules = [
+    "creation",
+    "deletion",
+    "non_fast_forward",
+    "update",
+    "required_linear_history",
+    "required_signatures",
+    "pull_request",
+    "code_scanning",
+]
+
+[pull_request]
+required_approving_review_count = 1
+dismiss_stale_reviews_on_push = true
+require_code_owner_review = true
+require_last_push_approval = true
+
+[code_scanning]
+tool = "CodeQL"
+security_alerts_threshold = "all"
+alerts_threshold = "all"
+
+[[bypass]]
+actor_id = 1921261
+actor_type = "User"
+bypass_mode = "always"
+
+[[bypass]]
+actor_type = "OrganizationAdmin"
+bypass_mode = "always"

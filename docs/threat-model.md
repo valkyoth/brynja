@@ -46,6 +46,11 @@ use-after-failure.
 - deterministic builds, pinned CI actions, zero dependencies, SBOMs, and
   a current committed pentest report that must change with every later release
   candidate fix;
+- explicit package classes and exact no-default and all-feature graph policy so
+  optional features cannot smuggle legacy, research, tooling, or platform code
+  across a product boundary;
+- protected signed linear history, accountable bypass identities, clean
+  CodeQL, exact signed release tags, and regular committed report files;
 - exact-pinned, default-features-disabled admission of any optional
   `brynja-sanitization` adapter, with no `zeroize` or third-party crate in its
   activated graph and no path into facades, engines, or the FIPS module;
@@ -62,7 +67,8 @@ use-after-failure.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.1.0
+## Non-Goals At 0.2.0
 
-No security or interoperability guarantee exists. The current code is package
-scaffolding only.
+No transport security or interoperability guarantee exists. The current Rust
+code is still package scaffolding; v0.2.0 strengthens repository, release, and
+dependency isolation controls only.

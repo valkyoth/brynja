@@ -5,6 +5,26 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.2.0] - Unreleased
+
+### Added
+
+- Machine-readable classification and exact dependency/feature/publication
+  policy for all 24 workspace packages.
+- Separate no-default and all-feature graph validation with modern, legacy,
+  QUIC, repository, target, pin, and feature-smuggling negative fixtures.
+- Machine-checked GitHub main-branch release controls matching the protected
+  `eth` ruleset model.
+
+### Changed
+
+- Required pentest reports to be regular committed files synchronized against
+  every prior report-bearing parent.
+- Required release tags to be directly targeted, signed and annotated with the
+  exact `brynja vX.Y.Z` subject.
+
+## [0.1.0] - 2026-07-26
+
 ### Added
 
 - Security-first, dependency-free, `no_std` workspace foundation.

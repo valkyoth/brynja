@@ -2,8 +2,9 @@
 /Cargo.toml @eldryoth
 /Cargo.lock @eldryoth
 /deny.toml @eldryoth
+/package-policy.toml @eldryoth
+/github-release-controls.toml @eldryoth
 /.github/ @eldryoth
 /rfc/ @eldryoth
 /scripts/ @eldryoth
 /security/ @eldryoth
-

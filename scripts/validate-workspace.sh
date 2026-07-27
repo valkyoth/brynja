@@ -22,7 +22,12 @@ if grep -q '^source = ' Cargo.lock; then
     exit 1
 fi
 
-metadata="$(mktemp "${TMPDIR:-/tmp}/brynja-metadata.XXXXXX")"
-trap 'rm -f "$metadata"' EXIT HUP INT TERM
-cargo metadata --format-version 1 > "$metadata"
-python3 scripts/validate-workspace-metadata.py "$metadata"
+metadata_no_default="$(mktemp "${TMPDIR:-/tmp}/brynja-metadata-none.XXXXXX")"
+metadata_all="$(mktemp "${TMPDIR:-/tmp}/brynja-metadata-all.XXXXXX")"
+trap 'rm -f "$metadata_no_default" "$metadata_all"' EXIT HUP INT TERM
+cargo metadata --format-version 1 --no-default-features > "$metadata_no_default"
+cargo metadata --format-version 1 --all-features > "$metadata_all"
+python3 scripts/validate-workspace-metadata.py \
+    --mode no-default-features "$metadata_no_default"
+python3 scripts/validate-workspace-metadata.py \
+    --mode all-features "$metadata_all"

@@ -36,6 +36,10 @@ use-after-failure.
 ## Required Controls
 
 - strict canonical parsing with exact consumption and bounded work;
+- fallible untrusted-input paths return typed errors and must not rely on
+  unwinding, panic recovery, unchecked arithmetic, or indexing; release builds
+  deliberately abort if an otherwise unreachable panic violates this boundary,
+  accepting availability loss as the final fail-closed response;
 - typed states that cannot emit application data before authentication;
 - transcript and negotiation binding with downgrade and cross-protocol checks;
 - constant-time secret operations and explicit secret lifetime/erasure;

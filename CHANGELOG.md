@@ -22,6 +22,10 @@ Keep a Changelog and Semantic Versioning.
   every prior report-bearing parent.
 - Required release tags to be directly targeted, signed and annotated with the
   exact `brynja vX.Y.Z` subject.
+- Extended Clippy enforcement to both all-feature and no-default-feature
+  workspace configurations.
+- Documented the intentional fail-closed release panic posture and its
+  availability tradeoff.
 
 ## [0.1.0] - 2026-07-26
 

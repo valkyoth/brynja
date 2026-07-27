@@ -24,5 +24,6 @@ fi
 cargo check --workspace --all-features
 cargo check --workspace --no-default-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
+cargo clippy --workspace --all-targets --no-default-features -- -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --all-features --no-deps

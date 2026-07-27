@@ -162,7 +162,7 @@ Exit criteria:
 
 ### v0.2.0 - Release And Isolation Enforcement
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Harden committed-report and exact-tag comparison, validate all-feature graphs and every package class, add negative modern and legacy isolation fixtures, and document protected release controls.
 

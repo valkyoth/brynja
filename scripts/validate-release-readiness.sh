@@ -15,9 +15,19 @@ field_value() {
     sed -n "s/^${label}: //p" "$report"
 }
 
+allow_pending=false
+if test "${1:-}" = "--allow-pending"; then
+    allow_pending=true
+    shift
+fi
+
 version="${1:-}"
+test "$#" -eq 1 || {
+    echo "usage: scripts/validate-release-readiness.sh [--allow-pending] vX.Y.Z[-rc.N]" >&2
+    exit 2
+}
 [[ "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ ]] || {
-    echo "usage: scripts/validate-release-readiness.sh vX.Y.Z[-rc.N]" >&2
+    echo "usage: scripts/validate-release-readiness.sh [--allow-pending] vX.Y.Z[-rc.N]" >&2
     exit 2
 }
 
@@ -38,12 +48,22 @@ test -z "$status" || fail "release candidate worktree must be clean"
 
 test "$(field_value Version)" = "$version" ||
     fail "pentest report version must be ${version}"
-test "$(field_value Status)" = "PASS" ||
-    fail "pentest report must record Status: PASS"
+status_value="$(field_value Status)"
+retest_value="$(field_value Retest)"
+pending=false
+if test "$allow_pending" = true &&
+    test "$status_value" = "RETEST REQUIRED"; then
+    pending=true
+    test "$retest_value" = "PENDING" ||
+        fail "pending pentest report must record Retest: PENDING"
+else
+    test "$status_value" = "PASS" ||
+        fail "pentest report must record Status: PASS"
+    test "$retest_value" = "PASS" ||
+        fail "pentest report must record Retest: PASS"
+fi
 test "$(field_value Open-Findings)" = "0" ||
     fail "pentest report must record Open-Findings: 0"
-test "$(field_value Retest)" = "PASS" ||
-    fail "pentest report must record Retest: PASS"
 date="$(field_value Date)"
 [[ "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] ||
     fail "pentest report requires Date: YYYY-MM-DD"
@@ -92,4 +112,8 @@ elif test -n "$publish_tag"; then
     fail "publish tag context requires existing tag: ${version}"
 fi
 
-echo "${version} has a current committed PASS pentest report and is tag-ready"
+if test "$pending" = true; then
+    echo "${version} has a current committed pending-retest report; release remains blocked"
+else
+    echo "${version} has a current committed PASS pentest report and is tag-ready"
+fi

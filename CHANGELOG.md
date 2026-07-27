@@ -35,6 +35,9 @@ Keep a Changelog and Semantic Versioning.
   rationale.
 - Reviewed-global mappings are restricted to governance requirements, and a
   released requirement cannot change between governance and protocol scope.
+- Ordinary CI accepts only a well-formed, current, committed
+  `RETEST REQUIRED`/`PENDING` pentest report while remediation awaits external
+  retest; release and tag gates continue to require `PASS`/`PASS`.
 
 ## [0.3.1] - 2026-07-27
 

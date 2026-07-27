@@ -88,4 +88,7 @@ remaining medium bypass: protocol rows could select reviewed-global and avoid
 exact-source checks. Reviewed-global is now governance-only, released scope is
 immutable, and the two affected RFC-wide protocol pilot rows now use exact
 IANA sources at revision three. Hosted GitHub checks and tag authorization
-remain blocked pending retest.
+remain blocked pending retest. Ordinary CI now accepts only the exact current,
+committed `RETEST REQUIRED`/`PENDING` remediation state so hosted checks can
+run truthfully before that retest; all release and tag paths still require
+`PASS`/`PASS`.

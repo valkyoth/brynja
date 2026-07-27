@@ -6,6 +6,7 @@ unset BRYNJA_RELEASE_PUBLISH_TAG
 fixture_root="$(mktemp -d "${TMPDIR:-/tmp}/brynja-readiness.XXXXXX")"
 trap 'rm -rf "$fixture_root"' EXIT HUP INT TERM
 source_script="$(pwd)/scripts/validate-release-readiness.sh"
+source_current="$(pwd)/scripts/validate-current-pentest.sh"
 signing_key="$fixture_root/signing-key"
 allowed_signers="$fixture_root/allowed-signers"
 ssh-keygen -q -t ed25519 -N "" -f "$signing_key"
@@ -17,6 +18,7 @@ make_fixture() {
     local repository="$fixture_root/$name"
     mkdir -p "$repository/scripts" "$repository/security/pentest"
     cp "$source_script" "$repository/scripts/validate-release-readiness.sh"
+    cp "$source_current" "$repository/scripts/validate-current-pentest.sh"
     (
         cd "$repository"
         git init -q
@@ -26,7 +28,8 @@ make_fixture() {
         git config user.signingkey "$signing_key"
         git config gpg.ssh.allowedSignersFile "$allowed_signers"
         printf 'fixture\n' >README.md
-        git add README.md scripts/validate-release-readiness.sh
+        printf '[release]\nversion = "0.2.0"\n' >release-crates.toml
+        git add README.md release-crates.toml scripts
         git commit -q -m "fixture"
     )
     printf '%s\n' "$repository"
@@ -78,6 +81,11 @@ assert_fails_with() {
 repository="$(make_fixture missing-report)"
 (
     cd "$repository"
+    scripts/validate-current-pentest.sh
+    assert_fails_with "missing required pentest report" \
+        scripts/validate-current-pentest.sh --required
+    assert_fails_with "usage: scripts/validate-current-pentest.sh" \
+        scripts/validate-current-pentest.sh --required unexpected
     assert_fails_with "missing pentest report" \
         scripts/validate-release-readiness.sh v0.2.0
 )
@@ -117,6 +125,37 @@ repository="$(make_fixture failed-retest)"
         scripts/validate-release-readiness.sh v0.2.0
 )
 
+repository="$(make_fixture pending-retest)"
+(
+    cd "$repository"
+    write_report "RETEST REQUIRED" 0 PENDING
+    commit_report
+    scripts/validate-current-pentest.sh
+    assert_fails_with "pentest report must record Status: PASS" \
+        scripts/validate-current-pentest.sh --required
+)
+
+repository="$(make_fixture malformed-pending-retest)"
+(
+    cd "$repository"
+    write_report "RETEST REQUIRED" 0 FAIL
+    commit_report
+    assert_fails_with "pending pentest report must record Retest: PENDING" \
+        scripts/validate-current-pentest.sh
+)
+
+repository="$(make_fixture stale-pending-report)"
+(
+    cd "$repository"
+    write_report "RETEST REQUIRED" 0 PENDING
+    commit_report
+    printf 'unreviewed remediation\n' >fix.txt
+    git add fix.txt
+    git commit -q -m "fix: omit pending report update"
+    assert_fails_with "repository changed after pentest without updating" \
+        scripts/validate-current-pentest.sh
+)
+
 repository="$(make_fixture initial-candidate)"
 (
     cd "$repository"
@@ -124,6 +163,7 @@ repository="$(make_fixture initial-candidate)"
     write_report
     git add implementation.txt security/pentest/v0.2.0.md
     git commit -q -m "release: prepare v0.2.0 candidate"
+    scripts/validate-current-pentest.sh
     scripts/validate-release-readiness.sh v0.2.0
 )
 

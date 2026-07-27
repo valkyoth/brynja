@@ -64,6 +64,12 @@ exact-source validation, and released governance/protocol scope is immutable.
 These checks run in the ordinary repository gate and the dedicated v0.3.2
 release gate.
 
+Ordinary CI now distinguishes a valid remediation candidate from an authorized
+release: it accepts only a current committed `RETEST REQUIRED`/`PENDING`
+report while external retest is outstanding. The dedicated v0.3.2 release and
+tag gates remain strict and require `PASS`/`PASS`, zero open findings, and all
+other release controls.
+
 ## Publication
 
 Only `brynja 0.3.2` is selected for crates.io publication. All unchanged

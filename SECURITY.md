@@ -36,6 +36,12 @@ GitHub is green. The gate requires a clean worktree, a report committed at
 exists, a later repository-changing commit is rejected unless it also updates
 the report.
 
+Ordinary CI may validate a current committed remediation candidate with
+`Status: RETEST REQUIRED`, `Open-Findings: 0`, and `Retest: PENDING`. This
+state allows the checks needed before external retest to become green but is
+not release authorization. The dedicated release and tag paths always use the
+strict PASS gate.
+
 The report format and disclosure rules are documented in
 [`security/pentest/README.md`](security/pentest/README.md).
 

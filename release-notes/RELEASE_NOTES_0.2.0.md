@@ -1,6 +1,6 @@
 # Brynja 0.2.0 Release Notes
 
-Status: pentest complete; awaiting green GitHub CI
+Status: release-ready; pentest and local release gates complete
 
 Brynja 0.2.0 is a release-integrity and package-isolation milestone. It does
 not implement TLS, cryptography, PKI, QUIC, DTLS, platform services, or legacy
@@ -34,6 +34,9 @@ the intentional panic policy: fallible untrusted-input paths must return typed
 errors, while an otherwise unreachable release panic aborts as the final
 fail-closed response. The repository owner explicitly accepted the current
 solo-maintainer CODEOWNER and accountable direct-release bypass model.
+The hosted release-control check now receives the read-only workflow token
+through step-scoped `GH_TOKEN`, and repository metadata validation prevents
+that required GitHub CLI wiring from being removed silently.
 
 Only `brynja 0.2.0` is selected for crates.io publication. All unchanged
 modern support crates remain exact-pinned at their published `0.1.0` versions.

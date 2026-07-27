@@ -29,6 +29,8 @@ jobs:
       - name: Run repository gate
         run: scripts/checks.sh
       - name: Validate protected release controls
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: scripts/check-github-release-controls.py --public
       - name: Validate committed pentest report when present
         run: scripts/validate-current-pentest.sh

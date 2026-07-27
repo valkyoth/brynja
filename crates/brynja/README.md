@@ -36,8 +36,7 @@ and modern/legacy package isolation on top of the `0.1.0` foundation. It does
 ## Install
 
 Brynja is not ready for application use. Version `0.2.0` is a policy and
-isolation release; it does not implement TLS. After this candidate completes
-the remaining release gates, the dependency will be:
+isolation release; it does not implement TLS. The dependency is:
 
 ```toml
 [dependencies]

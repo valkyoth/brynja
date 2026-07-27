@@ -29,10 +29,13 @@ no-default and all-feature graph validation, modern and legacy negative
 fixtures, regular committed-report enforcement, exact signed-tag comparison,
 and a live-checked active GitHub ruleset matching the protected `eth` model.
 The v0.2.0 pentest remediation adds no-default-feature Clippy coverage and
-documents the intentional fail-closed panic posture. The committed PASS report
-records zero open findings and the owner-accepted solo-maintainer governance
-risks. No `v0.2.0` tag exists; the candidate must receive green GitHub CI
-before explicit tag authorization.
+documents the intentional fail-closed panic posture. A later hosted-run failure
+was remediated by supplying step-scoped `GH_TOKEN` to the live ruleset check
+without broadening read-only workflow permissions. The committed PASS report
+records zero open findings, the owner-accepted solo-maintainer governance
+risks, and the repository owner's green remediation retest. No `v0.2.0` tag
+exists; this final CI fix must receive green GitHub CI before explicit tag
+authorization.
 The 2026-07-26 RFC planning audit locks a 103-document protocol source closure
 and records roadmap dispositions; machine-readable normative source-to-code-
 and-test traceability remains planned for v0.3.0 through v0.3.5.

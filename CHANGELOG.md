@@ -5,7 +5,7 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
-## [0.2.0] - Unreleased
+## [0.2.0] - 2026-07-27
 
 ### Added
 
@@ -24,6 +24,8 @@ Keep a Changelog and Semantic Versioning.
   exact `brynja vX.Y.Z` subject.
 - Extended Clippy enforcement to both all-feature and no-default-feature
   workspace configurations.
+- Supplied step-scoped GitHub workflow authentication to the live protected
+  release-control validator and enforced that wiring in release metadata.
 - Documented the intentional fail-closed release panic posture and its
   availability tradeoff.
 

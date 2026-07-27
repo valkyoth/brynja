@@ -31,6 +31,15 @@ test -f security/pentest/README.md
 test -f release-crates.toml
 cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml
-grep -q 'run: scripts/check-github-release-controls.py --public' \
-    .github/workflows/ci.yml
+python3 -c '
+from pathlib import Path
+workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")
+step = """      - name: Validate protected release controls
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/check-github-release-controls.py --public
+"""
+if step not in workflow:
+    raise SystemExit("live release-control step requires step-scoped GH_TOKEN")
+'
 test "$(git ls-files PENTEST.md)" = ""

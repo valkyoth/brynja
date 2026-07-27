@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.3.1 implementation complete; awaiting pentest
+Status: v0.3.1 pentest complete; awaiting green GitHub CI
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -52,3 +52,9 @@ Standards Track RFC and final IANA values exist.
 
 No `brynja-sanitization` package or dependency exists yet; its admission
 decision remains gated at v0.11.1.
+
+The repository owner pentested signed implementation candidate
+`8785252d9ae16d59e9bb27787d63bd4684bcb493` and reported no findings. The
+permanent report records PASS, zero open findings, and a green result. The
+candidate now waits only for hosted GitHub checks and explicit tag
+authorization.

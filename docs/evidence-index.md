@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.3.1 implementation candidate awaiting pentest
+Status: v0.3.1 pentested release candidate awaiting green GitHub CI
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

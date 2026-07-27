@@ -1,6 +1,6 @@
 # Brynja 0.3.1 Release Notes
 
-Status: implementation complete; awaiting pentest
+Status: release-ready locally; pentest complete and awaiting green GitHub CI
 
 Brynja 0.3.1 is a protocol-surface decision milestone. It does not implement
 TLS, cryptography, PKI, QUIC, DTLS, platform services, or legacy protocols and
@@ -75,6 +75,11 @@ surface decisions, tests, pentest, and clean CI.
 Only `brynja 0.3.1` is selected for crates.io publication. All unchanged
 modern supporting crates retain version `0.1.0` and are not republished.
 Legacy and repository-only packages remain unpublished.
+
+The repository owner pentested signed implementation candidate
+`8785252d9ae16d59e9bb27787d63bd4684bcb493` and reported no findings. The
+permanent PASS report records zero open findings. Hosted GitHub checks and
+explicit tag authorization remain required.
 
 ## Limitations
 

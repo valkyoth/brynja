@@ -78,13 +78,18 @@ identifiers, exact source hash and section, source status and errata, normative
 strength, applicability decision, owner, planned target or actual governance
 symbol or documented boundary, tests, evidence lifecycle, and residual status.
 Generated schema, matrix, coverage, and bidirectional source, decision, owner,
-target, test, and evidence indexes are reproduced byte for byte. Thirty-three
+target, test, and evidence indexes are reproduced byte for byte. Forty-nine
 positive and broken-fixture tests reject orphaned requirements, duplicate
 identifiers, invalid sections or lifecycle transitions, a changed source
 closure, premature evidence, missing targets, obsolete-as-current authority,
 unexplained weakening of SHOULD or SHOULD NOT language, and symlink targets
-that escape the repository root. Versions v0.3.3 through v0.3.5 populate the
-remaining normative domains.
+that escape the repository root. Normal generation compares policy with the
+immutable parent matrix: released identifiers cannot disappear, lifecycle
+changes must use a declared transition, new records begin at revision one, and
+changed records increment exactly once. Exact-source mappings require the
+cited surface and consistent normative authority, disposition, and owner;
+broader governance mappings require explicit reviewed rationale. Versions
+v0.3.3 through v0.3.5 populate the remaining normative domains.
 
 FIPS planning also snapshots the dated FIPS 140-3 CMVP Management Manual,
 Implementation Guidance, RFG and CMVP resolutions, SP 800-140 supplemental

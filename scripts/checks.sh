@@ -23,6 +23,7 @@ python3 scripts/test-protocol-surfaces.py
 python3 scripts/check-requirements.py
 python3 scripts/test-requirements.py
 python3 scripts/test-requirement-lifecycles.py
+python3 scripts/test-requirement-history.py
 if ! cmp -s README.md crates/brynja/README.md; then
     echo "README.md and crates/brynja/README.md must remain identical" >&2
     diff -u README.md crates/brynja/README.md >&2 || true

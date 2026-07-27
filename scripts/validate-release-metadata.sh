@@ -32,7 +32,10 @@ test -x scripts/test-protocol-surfaces.py
 test -x scripts/check-requirements.py
 test -x scripts/test-requirements.py
 test -x scripts/test-requirement-lifecycles.py
+test -x scripts/test-requirement-history.py
 test -f scripts/requirements_lib.py
+test -f scripts/requirements_history.py
+test -f scripts/requirements_mapping.py
 test -f scripts/requirements_test_support.py
 test -x scripts/update-standards-snapshots.py
 test -f scripts/release_policy.py

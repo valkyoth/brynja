@@ -37,10 +37,14 @@ def test_generation_is_deterministic() -> None:
 
 def test_stable_id_survives_rendering() -> None:
     policy, ledger, register = inputs()
-    original, _ = checker.build_matrix(policy, ledger, register)
+    original, _ = checker.build_matrix(
+        policy, ledger, register, previous=False
+    )
     changed = copy.deepcopy(policy)
     changed["requirements"][0]["statement"] += " Rendering changed."
-    updated, _ = checker.build_matrix(changed, ledger, register)
+    updated, _ = checker.build_matrix(
+        changed, ledger, register, previous=False
+    )
     assert [item["id"] for item in original["requirements"]] == [
         item["id"] for item in updated["requirements"]
     ]
@@ -77,7 +81,9 @@ def test_missing_residual_fails() -> None:
 
 def test_iana_source_drift_changes_matrix() -> None:
     policy, ledger, register = inputs()
-    original, _ = checker.build_matrix(policy, ledger, register)
+    original, _ = checker.build_matrix(
+        policy, ledger, register, previous=False
+    )
     changed_register = copy.deepcopy(register)
     target = next(
         item
@@ -89,7 +95,10 @@ def test_iana_source_drift_changes_matrix() -> None:
     changed_policy = copy.deepcopy(policy)
     bind(changed_policy, ledger, changed_register)
     updated, _ = checker.build_matrix(
-        changed_policy, ledger, changed_register
+        changed_policy,
+        ledger,
+        changed_register,
+        previous=False,
     )
     original_source = next(
         item

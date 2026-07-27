@@ -7,6 +7,8 @@ import argparse
 import re
 
 import requirements_lib as lib
+import requirements_history as history
+import requirements_mapping as mapping
 import standards_lib as standards
 import surface_lib as surfaces
 
@@ -19,6 +21,8 @@ REQUIREMENT_FIELDS = {
     "evidence",
     "id",
     "lifecycle",
+    "mapping_rationale",
+    "mapping_scope",
     "owner",
     "residual",
     "revision",
@@ -29,7 +33,6 @@ REQUIREMENT_FIELDS = {
     "targets",
     "tests",
 }
-
 
 def roadmap_versions() -> set[str]:
     text = (lib.ROOT / "docs/VERSION_PLAN.md").read_text(encoding="utf-8")
@@ -272,17 +275,7 @@ def validate_requirement(
     validate_strength(requirement, section_text)
     validate_targets(requirement)
     validate_tests_and_evidence(requirement)
-
-    decision_ids = requirement["decision_ids"]
-    if (
-        not isinstance(decision_ids, list)
-        or not decision_ids
-        or len(decision_ids) != len(set(decision_ids))
-    ):
-        lib.fail(f"{requirement_id} has missing or duplicate decisions")
-    unknown = set(decision_ids) - set(surface_map)
-    if unknown:
-        lib.fail(f"{requirement_id} references unknown decisions: {sorted(unknown)}")
+    mapping.validate(requirement, source, surface_map)
     return {**requirement, "source": source}
 
 
@@ -290,6 +283,7 @@ def build_matrix(
     policy: dict | None = None,
     ledger: dict | None = None,
     register: dict | None = None,
+    previous: dict | None | object | bool = history.AUTO,
 ) -> tuple[dict, dict]:
     policy = policy or lib.read_json(lib.POLICY)
     ledger = ledger or lib.read_json(standards.LEDGER)
@@ -323,6 +317,10 @@ def build_matrix(
     if len(ids) != len(set(ids)):
         lib.fail("requirement policy has duplicate stable IDs")
     requirements.sort(key=lambda requirement: requirement["id"])
+    if previous is not False:
+        if previous is history.AUTO:
+            previous = history.load_matrix()
+        history.validate(previous, requirements, validate_transition)
     matrix = {
         "policy_sha256": standards.sha256(standards.json_bytes(policy)),
         "requirements": requirements,

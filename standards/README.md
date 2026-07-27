@@ -96,9 +96,12 @@ The requirement checker additionally fails on changed ledger or surface hashes,
 invalid RFC sections or anchors, obsolete-as-current sources, unknown or
 duplicate stable identifiers, illegal lifecycle transitions, absent owners or
 targets, premature test or evidence claims, weakened SHOULD decisions, broken
-bidirectional mappings, or stale generated artifacts. Its 12 pilot
-requirements exercise all eight lifecycle states; governance-tool evidence is
-not protocol implementation evidence.
+bidirectional mappings, repository-escaping targets, released-ID removal,
+incorrect revisions, unrelated decision links, lifecycle/disposition or owner
+conflicts, or stale generated artifacts. Its 12 pilot requirements exercise
+all eight lifecycle states; governance-tool evidence is not protocol
+implementation evidence. The private-use extension pilot is explicitly
+caller-owned rather than inherited future work.
 
 ## Reviewed Refresh
 

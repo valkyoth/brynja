@@ -135,6 +135,7 @@ def schema_document() -> dict:
         ),
         "id_format": ID_PATTERN.pattern,
         "lifecycles": sorted(LIFECYCLES),
+        "mapping_scopes": ["exact-source", "reviewed-global"],
         "schema": 1,
         "strengths": sorted(STRENGTHS),
         "target_kinds": [

@@ -25,6 +25,10 @@
     "rejected",
     "tested"
   ],
+  "mapping_scopes": [
+    "exact-source",
+    "reviewed-global"
+  ],
   "schema": 1,
   "strengths": [
     "INVARIANT",

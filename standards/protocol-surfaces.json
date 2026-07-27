@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "7c4de416449557656a76c44378deb3d6162fe9f90ece145126353202160c971e",
+  "policy_sha256": "f0601efcb784c5ae722c2ebf9078cdfad36b0a67ba78f8a5bbe5237a8b5e40ec",
   "schema": 1,
   "source_ledger_sha256": "c604876babe74781ab02ed45e86b487a73628c92cba4847dda499e6206037f01",
   "surfaces": [
@@ -90610,8 +90610,8 @@
     },
     {
       "code_target": "crates/brynja-tls/src/extensions.rs",
-      "disposition": "future-work",
-      "domain": "tls",
+      "disposition": "caller-owned",
+      "domain": "application",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1",
       "kind": "iana-entry",
       "normative_sources": [
@@ -90619,7 +90619,7 @@
         "rfc:9846"
       ],
       "owner": "0.148.0",
-      "rationale": "Registered extension values require an explicit context and composition decision before version-one completion.",
+      "rationale": "Private-use extension values remain explicitly configured and collision-scoped by the caller and never imply public interoperability.",
       "record": {
         "attributes": {
           "updated": "2025-08-12"
@@ -90641,7 +90641,7 @@
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1"
       },
-      "test_target": "tests/surface/extensions.rs#registry"
+      "test_target": "tests/surface/extensions.rs#private_use"
     },
     {
       "code_target": "crates/brynja-tls/src/extensions.rs",

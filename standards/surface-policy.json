@@ -1000,6 +1000,23 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-tls/src/extensions.rs",
+        "disposition": "caller-owned",
+        "domain": "application",
+        "owner": "0.148.0",
+        "rationale": "Private-use extension values remain explicitly configured and collision-scoped by the caller and never imply public interoperability.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:9846"],
+        "test_target": "tests/surface/extensions.rs#private_use"
+      },
+      "selector": {
+        "collection": "tls-extensiontype-values",
+        "equals": "65280",
+        "field": "value",
+        "registry": "tls-extensiontype-values-1"
+      }
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-tls12/src/extensions.rs",
         "disposition": "intentionally-rejected",
         "domain": "tls12",

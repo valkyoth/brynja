@@ -14,9 +14,10 @@ Keep a Changelog and Semantic Versioning.
 - A 12-requirement authority pilot spanning all eight lifecycle states and
   binding exact RFC, errata, IANA, source-ledger, and protocol-surface
   evidence.
-- Thirty-three positive and broken-fixture tests for identity, source, section,
+- Forty-nine positive and broken-fixture tests for identity, source, section,
   lifecycle, transition, ownership, target, evidence, SHOULD-deviation, drift,
-  symlink-escape, and stale-output failures.
+  symlink-escape, immutable history, revision, semantic-link, and stale-output
+  failures.
 
 ### Security
 
@@ -26,6 +27,12 @@ Keep a Changelog and Semantic Versioning.
   generated-evidence drift.
 - Actual target validation resolves symlinks and rejects paths that leave the
   repository root.
+- Requirement changes are compared with the immutable parent matrix; IDs
+  cannot disappear, lifecycle transitions must be legal, and content changes
+  require exactly one revision increment.
+- Exact-source decision mappings now enforce source, disposition, and owner
+  consistency, while broader governance mappings require explicit reviewed
+  rationale.
 
 ## [0.3.1] - 2026-07-27
 

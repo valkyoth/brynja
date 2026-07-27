@@ -57,11 +57,12 @@ Version 0.3.2 adds the normative-requirement foundation:
 - implementation, test, and evidence claims require existing file anchors,
   while protocol requirements are forbidden from making premature
   implementation claims; and
-- 33 positive and broken-fixture tests reject source or registry drift,
+- 49 positive and broken-fixture tests reject source or registry drift,
   malformed or duplicate identifiers, invalid sections, obsolete-as-current
   authority, illegal transitions, missing ownership and targets, premature
-  evidence, weakened SHOULD decisions, symlink target escapes, and stale
-  generated output.
+  evidence, weakened SHOULD decisions, symlink target escapes, released-ID
+  removal, stale revisions, unrelated decision links, lifecycle/disposition
+  conflict, and stale generated output.
 
 This remains governance and planning evidence, not protocol implementation.
 The pilot proves the representation and failure behavior; v0.3.3 through
@@ -72,9 +73,14 @@ Standards Track RFC and final IANA values exist.
 No `brynja-sanitization` package or dependency exists yet; its admission
 decision remains gated at v0.11.1.
 
-The repository owner's pentest reported no exploitable vulnerability and one
-optional defense-in-depth improvement. Target validation now resolves paths
-and rejects symlinks that escape the repository root, with a dedicated broken
-fixture. The remediation is complete and requires repository-owner retest
-confirmation before the permanent report can become PASS, hosted GitHub checks
-can begin, or a tag can be authorized.
+The repository owner's first pentest reported no exploitable vulnerability and
+one optional defense-in-depth improvement. Target validation now resolves
+paths and rejects symlinks that escape the repository root. The subsequent
+retest found two medium release-assurance defects: lifecycle transitions and
+revisions were not bound to immutable history, and decision links could be
+structurally valid but semantically unrelated. Both are remediated locally with
+immutable parent-matrix comparison, append-only identifiers, exact revision
+rules, explicit mapping scopes, source/disposition/owner consistency, and 16
+dedicated history and semantic-link tests. Repository-owner retest remains
+required before the permanent report can become PASS, hosted GitHub checks can
+begin, or a tag can be authorized.

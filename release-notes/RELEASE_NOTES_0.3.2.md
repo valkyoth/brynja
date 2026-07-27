@@ -38,7 +38,7 @@ cover only the requirement-governance tooling itself.
 ## Fail-Closed Verification
 
 Normal checks regenerate the schema, matrix, indexes, and coverage report and
-compare them byte for byte. Thirty-three positive and broken-fixture tests
+compare them byte for byte. Forty-nine positive and broken-fixture tests
 reject:
 
 - changed source-ledger, surface-register, RFC, IANA snapshot, registry, or
@@ -51,6 +51,13 @@ reject:
 - weakened SHOULD decisions without an explicit bounded deviation rationale;
 - repository-escaping symlink targets; and
 - stale or nondeterministic generated artifacts.
+
+The production builder also compares every candidate with its immutable parent
+matrix. Released identifiers cannot disappear, lifecycle changes must follow
+the declared transition graph, new records start at revision one, unchanged
+records retain their revision, and changed records increment exactly once.
+Exact-source mappings enforce cited-source, disposition, and owner consistency;
+RFC-wide governance mappings require explicit reviewed rationale.
 
 These checks run in the ordinary repository gate and the dedicated v0.3.2
 release gate.
@@ -69,7 +76,11 @@ The initial pentest reported no exploitable vulnerability. Its one optional
 defense-in-depth observation was adopted: actual requirement targets are now
 resolved and rejected if a repository-internal symlink escapes the repository
 root. A dedicated regression fixture covers the boundary. Repository-owner
-retest confirmation remains required.
+retest then identified missing production history enforcement and unrelated
+decision-link acceptance as two medium findings. Both are remediated with
+immutable history, revision, transition, mapping-scope, source, disposition,
+ownership, and private-use classification checks plus 16 dedicated fixtures.
+Repository-owner retest confirmation remains required.
 
 ## Limitations
 

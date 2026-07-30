@@ -71,13 +71,15 @@ use-after-failure.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.3.2
+## Non-Goals At 0.3.3
 
 No transport security or interoperability guarantee exists. The current Rust
 code is still package scaffolding. v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
 proves stable requirement identity, lifecycle, mapping, and drift enforcement
-with a 12-requirement authority pilot, but does not complete domain population
-or implement protocol or cryptographic behavior. Planned, future-work, and
+with a 12-requirement authority pilot. v0.3.3 adds 34 cryptography, encoding,
+PKIX, OCSP, and CT requirements, but does not implement protocol or
+cryptographic behavior. TLS, DTLS, QUIC, optional, legacy, residual, and hybrid
+domain population remains owned by v0.3.4 and v0.3.5. Planned, future-work, and
 governance-tool implementation states are not protocol implementation claims.

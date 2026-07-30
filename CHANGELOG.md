@@ -5,6 +5,37 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-07-30
+
+### Added
+
+- Thirty-four cryptography, encoding, PKIX, OCSP, and Certificate
+  Transparency requirements, bringing the deterministic matrix to 46 stable
+  records.
+- Exact authority-role coverage for all 53 assigned sources, section-hash
+  coverage for 364 normative RFC sections, and requirement or explicit
+  deferral coverage for all 3,322 selected protocol surfaces.
+- Local-only checksum pins for FIPS 202 and the in-force ITU-T X.690 (2021)
+  plus Erratum 1.
+- Explicit SHA-3/SHAKE, GHASH, and ChaCha20 semantic decisions and corrected
+  SHA-2, HMAC, HKDF, and AES milestone ownership.
+- A generated domain-coverage artifact and 15 positive and broken-fixture
+  tests for authority, scope, role, ownership, work-bound, invariant,
+  test-polarity, surface-group, and reproducibility failures.
+
+### Security
+
+- Every new requirement records explicit resource or work assurance,
+  positive and negative target tests, unresolved evidence, and residual risk
+  without claiming planned code exists.
+- Current, compatibility, evidence, and exclusion authorities cannot be
+  silently interchanged; every in-scope source must be cited and every
+  selected surface must be assigned.
+- ML-KEM algorithm and PKIX credential surfaces remain explicitly deferred to
+  the complete hybrid review at v0.3.5.
+- Five newly reported RFC Editor errata were reviewed as
+  `track-not-applied`; no reported erratum was silently incorporated.
+
 ## [0.3.2] - 2026-07-27
 
 ### Added

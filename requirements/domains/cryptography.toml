@@ -1,0 +1,210 @@
+schema = 1
+domain = "cryptography"
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0001"
+owner = "0.22.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.sha2"]
+sources = [{ id = "nist:NIST.FIPS.180-4.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-107r1.pdf", authority_role = "current" }]
+statement = "SHA-256, SHA-384, and SHA-512 follow the pinned secure-hash algorithms, length rules, and approved hash-use constraints."
+invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
+target = "crates/brynja-crypto/src/hash.rs#Sha2"
+positive_test = "tests/requirements/crypto_hash.rs#sha2_vectors_and_boundaries"
+negative_test = "tests/requirements/crypto_hash.rs#sha2_length_exhaustion"
+work_bound = "Processing work is linear in complete input blocks with checked bit-length accumulation and deterministic exhaustion."
+evidence_gap = "Official vectors, differential tests, proof bounds, emitted-code review, and target side-channel evidence remain unresolved until v0.22.0 and v0.23.0."
+residual = "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze."
+mapping_rationale = "The SHA-2 semantic surface is the exact implementation decision governed by both pinned NIST hash authorities."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0002"
+owner = "0.24.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.sha3-shake"]
+sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }]
+statement = "Keccak-f[1600], SHA3-256, SHA3-512, SHAKE128, and SHAKE256 remain exact FIPS 202 constructions with domain separation."
+invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
+target = "crates/brynja-crypto/src/sha3.rs#KeccakF1600"
+positive_test = "tests/requirements/crypto_sha3.rs#fips202_vectors"
+negative_test = "tests/requirements/crypto_sha3.rs#domain_and_output_bounds"
+work_bound = "Absorb and squeeze work is bounded by input and requested output blocks, with checked counters and no unbounded output request."
+evidence_gap = "Permutation proofs, official vectors, differential campaigns, and per-target side-channel evidence remain unresolved until v0.24.0."
+residual = "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears."
+mapping_rationale = "The SHA-3 and SHAKE semantic surface directly records the complete algorithm family admitted from the pinned current FIPS 202 authority."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0003"
+owner = "0.25.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.hmac"]
+sources = [{ id = "rfc:2104", authority_role = "current" }, { id = "rfc:4231", authority_role = "evidence" }]
+statement = "HMAC uses the admitted SHA-2 hashes, preserves key preprocessing rules, and verifies tags without secret-dependent comparison."
+invariants = ["constant-time", "key-lifecycle", "resource-bound", "work-bound"]
+target = "crates/brynja-crypto/src/hmac.rs#Hmac"
+positive_test = "tests/requirements/crypto_hmac.rs#rfc4231_vectors"
+negative_test = "tests/requirements/crypto_hmac.rs#tag_and_key_misuse"
+work_bound = "HMAC performs a bounded constant number of hash initializations plus work linear in the supplied message length."
+evidence_gap = "RFC 4231 vectors, misuse tests, differential evidence, and constant-time verification remain unresolved until v0.25.0."
+residual = "RFC 4231 is evidence rather than current normative authority and cannot independently admit a hash or truncate tags."
+mapping_rationale = "The HMAC semantic surface is directly sourced by the current RFC 2104 construction and its evidence-only RFC 4231 vector set."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0004"
+owner = "0.26.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.hkdf"]
+sources = [{ id = "rfc:5869", authority_role = "current" }]
+statement = "HKDF extract and expand preserve salt and input-key-material semantics and reject output lengths beyond the counter limit."
+invariants = ["key-lifecycle", "resource-bound", "validation", "work-bound"]
+target = "crates/brynja-crypto/src/hkdf.rs#Hkdf"
+positive_test = "tests/requirements/crypto_hkdf.rs#rfc5869_vectors"
+negative_test = "tests/requirements/crypto_hkdf.rs#counter_and_label_exhaustion"
+work_bound = "Expand performs at most 255 hash-output blocks and rejects every output or label length that cannot be represented safely."
+evidence_gap = "Vectors, boundary tests, counter proofs, and key-lifecycle evidence remain unresolved until the v0.26.0 implementation."
+residual = "TLS label encoding adds downstream protocol bounds and does not weaken the RFC 5869 extraction and expansion limits."
+mapping_rationale = "The HKDF semantic surface and registry-backed KDF entries cite RFC 5869 directly and are owned by the bounded HKDF milestone."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0005"
+owner = "0.27.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.aes"]
+sources = [{ id = "nist:NIST.FIPS.197-upd1.pdf", authority_role = "current" }]
+statement = "AES-128 and AES-256 implement the pinned updated FIPS 197 transformations without secret-indexed lookup tables."
+invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
+target = "crates/brynja-crypto/src/aes.rs#Aes"
+positive_test = "tests/requirements/crypto_aes.rs#fips197_vectors"
+negative_test = "tests/requirements/crypto_aes.rs#invalid_key_sizes"
+work_bound = "Every block uses a fixed round count determined only by the public key size and accepts only complete fixed-size blocks."
+evidence_gap = "Known-answer, differential, emitted-code, cache, branch, and statistical evidence remain unresolved until v0.27.0."
+residual = "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path."
+mapping_rationale = "The AES semantic surface is directly and exclusively governed by the independently pinned updated FIPS 197 authority."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0006"
+owner = "0.28.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.ghash"]
+sources = [{ id = "nist:NIST.SP.800-38D.pdf", authority_role = "current" }]
+statement = "GHASH uses the specified binary-field representation and multiplication while keeping authentication subkeys secret-independent in control flow."
+invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
+target = "crates/brynja-crypto/src/ghash.rs#Ghash"
+positive_test = "tests/requirements/crypto_ghash.rs#nist_vectors"
+negative_test = "tests/requirements/crypto_ghash.rs#length_and_counter_bounds"
+work_bound = "Incremental GHASH work is linear in authenticated blocks with checked length accounting and no attacker-selected limb count."
+evidence_gap = "Full-width arithmetic proofs, known-answer tests, differential evidence, and per-target side-channel review remain unresolved until v0.28.0."
+residual = "NIST has announced a future revision of SP 800-38D, so changed limits or constructions require explicit re-admission."
+mapping_rationale = "The separate GHASH semantic surface is directly governed by the pinned SP 800-38D field and authentication authority."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0007"
+owner = "0.29.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.aes-gcm"]
+sources = [{ id = "rfc:5116", authority_role = "current" }, { id = "nist:NIST.SP.800-38D.pdf", authority_role = "current" }]
+statement = "AES-GCM enforces the admitted AEAD interface, nonce and usage limits, authentication-before-release, and failure-atomic output behavior."
+invariants = ["failure-atomicity", "resource-bound", "validation", "work-bound"]
+target = "crates/brynja-crypto/src/aes_gcm.rs#AesGcm"
+positive_test = "tests/requirements/crypto_aead.rs#aes_gcm_vectors"
+negative_test = "tests/requirements/crypto_aead.rs#aes_gcm_failure_atomicity"
+work_bound = "AEAD work is bounded by public plaintext and associated-data limits, checked block counters, and immutable per-key usage ceilings."
+evidence_gap = "AEAD vectors, overlap tests, failure-atomicity proofs, usage accounting, and side-channel evidence remain unresolved until v0.29.0."
+residual = "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them."
+mapping_rationale = "The AES-GCM semantic surface directly joins the generic RFC 5116 AEAD contract with the pinned SP 800-38D construction."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0008"
+owner = "0.30.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.chacha20"]
+sources = [{ id = "rfc:8439", authority_role = "current" }]
+statement = "ChaCha20 preserves the RFC 8439 state layout and round function and closes deterministically before its block counter wraps."
+invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
+target = "crates/brynja-crypto/src/chacha20.rs#ChaCha20"
+positive_test = "tests/requirements/crypto_chacha.rs#rfc8439_vectors"
+negative_test = "tests/requirements/crypto_chacha.rs#counter_exhaustion"
+work_bound = "Each block has a fixed twenty-round schedule and stream generation rejects requests that would wrap the 32-bit block counter."
+evidence_gap = "Vectors, counter-bound proofs, differential campaigns, and target side-channel evidence remain unresolved until v0.30.0."
+residual = "The raw stream cipher is never exposed as a facade security service and is admitted only for reviewed compositions."
+mapping_rationale = "The separate ChaCha20 semantic surface directly records the stream construction and exhaustion rules sourced from RFC 8439."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0009"
+owner = "0.31.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.chacha20-poly1305"]
+sources = [{ id = "rfc:8439", authority_role = "current" }]
+statement = "ChaCha20-Poly1305 uses one-time authenticator keys, constant-time tag checks, authenticate-before-release, and failure-atomic output."
+invariants = ["constant-time", "failure-atomicity", "key-lifecycle", "resource-bound", "work-bound"]
+target = "crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305"
+positive_test = "tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors"
+negative_test = "tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity"
+work_bound = "Seal and open work is linear in bounded public input lengths and rejects every counter, padding, or encoded-length overflow."
+evidence_gap = "Vectors, one-time-key lifecycle tests, overlap cases, failure proofs, and side-channel evidence remain unresolved until v0.31.0."
+residual = "Protocol nonce construction and usage ceilings remain separate downstream obligations and cannot be inferred from primitive correctness."
+mapping_rationale = "The combined ChaCha20-Poly1305 semantic surface directly records the RFC 8439 AEAD construction and its staged owner."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0010"
+owner = "0.33.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.elliptic-curve"]
+sources = [{ id = "nist:NIST.FIPS.186-5.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-186.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-56Ar3.pdf", authority_role = "current" }, { id = "rfc:5480", authority_role = "current" }, { id = "rfc:5758", authority_role = "current" }, { id = "rfc:6979", authority_role = "current" }, { id = "rfc:7748", authority_role = "current" }, { id = "rfc:8813", authority_role = "current" }]
+statement = "Elliptic-curve arithmetic, encodings, key agreement, and ECDSA inputs use admitted curves, canonical values, fixed schedules, and validated public points."
+invariants = ["canonical-encoding", "constant-time", "key-lifecycle", "resource-bound", "side-channel", "validation", "work-bound"]
+target = "crates/brynja-crypto/src/ecc.rs#FieldAndGroup"
+positive_test = "tests/requirements/crypto_ecc.rs#official_group_and_signature_vectors"
+negative_test = "tests/requirements/crypto_ecc.rs#invalid_points_scalars_and_shared_secrets"
+work_bound = "Field and group operations use fixed public widths and schedules with no attacker-selected allocation, limb count, or secret-dependent loop bound."
+evidence_gap = "Full-width arithmetic proofs, exceptional-input campaigns, lifecycle tests, emitted-code review, and side-channel evidence remain unresolved across v0.33.0 through v0.41.0."
+residual = "Each concrete curve and operation still requires its own milestone evidence; this bundle does not admit P-521, Ed448, or arbitrary explicit curves."
+mapping_rationale = "The elliptic-curve semantic surface directly cites the core EC, X25519, and NIST curve authorities; cross-document algorithm details remain versioned."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0011"
+owner = "0.42.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.rsa"]
+sources = [{ id = "rfc:3279", authority_role = "current" }, { id = "rfc:4055", authority_role = "current" }, { id = "rfc:5756", authority_role = "current" }, { id = "rfc:8017", authority_role = "current" }]
+statement = "RSA public operations and admitted signatures enforce fixed-width arithmetic, strict keys, exact PSS or DigestInfo parameters, and complete padding validation."
+invariants = ["algorithm-admission", "canonical-encoding", "resource-bound", "side-channel", "validation", "work-bound"]
+target = "crates/brynja-crypto/src/rsa.rs#RsaVerification"
+positive_test = "tests/requirements/crypto_rsa.rs#pss_and_pkcs1_vectors"
+negative_test = "tests/requirements/crypto_rsa.rs#ambiguous_parameters_and_padding"
+work_bound = "RSA uses policy-fixed modulus widths, exponents, and operation counts with no attacker-selected limb count, allocation, or normalization schedule."
+evidence_gap = "Arithmetic proofs, strict decoding corpora, signature vectors, fault cases, and side-channel evidence remain unresolved across v0.32.0 and v0.42.0 through v0.44.0."
+residual = "PKCS1 v1.5 signing, weak hashes, ambiguous parameters, unvalidated private keys, and first-party key generation remain excluded."
+mapping_rationale = "The RSA semantic surface directly cites RFC 8017 while the related PKIX algorithm-identifier authorities constrain its exact accepted encodings."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0012"
+owner = "0.45.0"
+lifecycle = "planned"
+decision_ids = ["algorithm.ed25519"]
+sources = [{ id = "rfc:8032", authority_role = "current" }, { id = "rfc:8410", authority_role = "current" }, { id = "rfc:9295", authority_role = "current" }]
+statement = "Ed25519 signing and verification enforce canonical encodings, scalar and point validity, small-order and malleability rejection, and absent AlgorithmIdentifier parameters."
+invariants = ["canonical-encoding", "constant-time", "key-lifecycle", "resource-bound", "side-channel", "validation", "work-bound"]
+target = "crates/brynja-crypto/src/ed25519.rs#Ed25519"
+positive_test = "tests/requirements/crypto_ed25519.rs#rfc8032_vectors"
+negative_test = "tests/requirements/crypto_ed25519.rs#noncanonical_and_small_order_inputs"
+work_bound = "Signing and verification use fixed public widths and bounded schedules, with no attacker-selected group size or secret-dependent iteration."
+evidence_gap = "Official vectors, malformed corpora, key-lifecycle tests, emitted-code review, and target side-channel evidence remain unresolved until v0.45.0."
+residual = "Ed448 remains excluded, and newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes."
+mapping_rationale = "The Ed25519 semantic surface directly cites the algorithm and PKIX identifier authorities, including the current RFC 9295 clarification."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0013"
+owner = "0.46.0"
+lifecycle = "planned"
+decision_ids = ["iana.tls-parameters.tls-kdf-ids"]
+sources = [{ id = "rfc:3279", authority_role = "current" }]
+statement = "Every algorithm identifier remains denied unless an explicit version-one decision, owner, implementation target, and complete evidence gate admits it."
+invariants = ["algorithm-admission", "resource-bound", "validation", "work-bound"]
+target = "crates/brynja-crypto/src/algorithm.rs#AlgorithmPolicy"
+positive_test = "tests/requirements/crypto_admission.rs#explicit_allowlist"
+negative_test = "tests/requirements/crypto_admission.rs#unknown_and_excluded_algorithms"
+work_bound = "Identifier dispatch uses bounded exact comparison against a frozen allowlist and never performs attacker-selected discovery or dynamic loading."
+evidence_gap = "The complete v1 allowlist and per-algorithm functional, lifecycle, resource, and side-channel evidence remain unresolved until v0.46.0 and v0.47.0."
+residual = "Registry presence is not admission, and hybrid or post-quantum algorithms remain owned by their later explicit coverage and implementation gates."
+mapping_rationale = "This reviewed cross-domain rule binds the complete cryptography registry surface to the v0.46.0 deny-by-default decision gate rather than treating any one RFC registry as automatic admission."

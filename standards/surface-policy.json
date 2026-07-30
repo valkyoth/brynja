@@ -739,8 +739,8 @@
         "code_target": "crates/brynja-crypto/src/hash.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.25.0",
-        "rationale": "SHA-256 and SHA-384 remain first-party future implementations with known-answer and differential evidence.",
+        "owner": "0.22.0",
+        "rationale": "SHA-256, SHA-384, and SHA-512 remain staged first-party implementations with known-answer, boundary, and differential evidence.",
         "sources": ["nist:NIST.FIPS.180-4.pdf"],
         "test_target": "tests/surface/primitives.rs#sha2"
       },
@@ -748,10 +748,22 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-crypto/src/sha3.rs",
+        "disposition": "future-work",
+        "domain": "cryptography",
+        "owner": "0.24.0",
+        "rationale": "Keccak-f[1600], SHA3-256, SHA3-512, SHAKE128, and SHAKE256 remain staged first-party work under the pinned current FIPS 202 authority.",
+        "sources": ["nist:NIST.FIPS.202.pdf"],
+        "test_target": "tests/surface/primitives.rs#sha3_shake"
+      },
+      "id": "algorithm.sha3-shake"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-crypto/src/hmac.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.26.0",
+        "owner": "0.25.0",
         "rationale": "HMAC-SHA-256 and HMAC-SHA-384 remain future first-party constant-time constructions.",
         "sources": ["rfc:2104", "rfc:4231"],
         "test_target": "tests/surface/primitives.rs#hmac"
@@ -763,7 +775,7 @@
         "code_target": "crates/brynja-crypto/src/hkdf.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.27.0",
+        "owner": "0.26.0",
         "rationale": "HKDF remains future first-party extract and expand logic with bounded labels and outputs.",
         "sources": ["rfc:5869"],
         "test_target": "tests/surface/primitives.rs#hkdf"
@@ -775,12 +787,24 @@
         "code_target": "crates/brynja-crypto/src/aes.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.28.0",
+        "owner": "0.27.0",
         "rationale": "AES-128 and AES-256 remain future first-party implementations with architecture-specific review gates.",
         "sources": ["nist:NIST.FIPS.197-upd1.pdf"],
         "test_target": "tests/surface/primitives.rs#aes"
       },
       "id": "algorithm.aes"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-crypto/src/ghash.rs",
+        "disposition": "future-work",
+        "domain": "cryptography",
+        "owner": "0.28.0",
+        "rationale": "GHASH finite-field arithmetic remains separate constant-time work with bounded incremental processing and full-width proof obligations.",
+        "sources": ["nist:NIST.SP.800-38D.pdf"],
+        "test_target": "tests/surface/primitives.rs#ghash"
+      },
+      "id": "algorithm.ghash"
     },
     {
       "decision": {
@@ -793,6 +817,18 @@
         "test_target": "tests/surface/primitives.rs#aes_gcm"
       },
       "id": "algorithm.aes-gcm"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-crypto/src/chacha20.rs",
+        "disposition": "future-work",
+        "domain": "cryptography",
+        "owner": "0.30.0",
+        "rationale": "ChaCha20 remains separate first-party work with checked block counters and deterministic exhaustion closure.",
+        "sources": ["rfc:8439"],
+        "test_target": "tests/surface/primitives.rs#chacha20"
+      },
+      "id": "algorithm.chacha20"
     },
     {
       "decision": {
@@ -1238,5 +1274,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "c604876babe74781ab02ed45e86b487a73628c92cba4847dda499e6206037f01"
+  "source_ledger_sha256": "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
 }

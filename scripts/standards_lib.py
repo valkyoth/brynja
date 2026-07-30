@@ -31,6 +31,7 @@ IANA_NS = {"i": "http://www.iana.org/assignments"}
 ALLOWED_HOSTS = {
     "errata.rfc-editor.org",
     "nvlpubs.nist.gov",
+    "www.itu.int",
     "www.iana.org",
     "www.rfc-editor.org",
 }

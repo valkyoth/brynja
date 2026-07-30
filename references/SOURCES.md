@@ -1,17 +1,18 @@
 # External Reference Provenance
 
-Status: initial source inventory
+Status: v0.3.3 cryptography, DER, and PKIX authority inventory
 
 These non-RFC sources are required for first-party cryptography, PKI, or
 legacy-protocol research. They default to local-only under
 references/local/ and are gitignored until a document-specific redistribution
-review approves tracking. Recording a URL does not grant a license. The exact
-official NIST URLs are allowlisted in LOCAL_SOURCES and their inspected local
-bytes are pinned by LOCAL_SHA256SUMS.
+review approves tracking. Recording a URL does not grant a license. Exact
+official NIST and ITU URLs are allowlisted in `LOCAL_SOURCES`, and their
+inspected local bytes are pinned by `LOCAL_SHA256SUMS`.
 
 | Source | Purpose | Repository policy |
 | --- | --- | --- |
 | NIST FIPS 180-4 | SHA-2 | downloaded local-only; NIST has announced a future revision |
+| NIST FIPS 202 | SHA-3 and SHAKE | downloaded local-only; the 2015 final remains current while NIST's announced update is unresolved |
 | NIST FIPS 197-upd1 | AES | local-only PDF; track derived test vectors with provenance only |
 | NIST SP 800-38D | GCM/GHASH | downloaded local-only; NIST has announced a future revision |
 | NIST FIPS 186-5 and SP 800-186 | ECDSA/RSA and curve parameters | downloaded local-only; errata must be checked before use |
@@ -27,7 +28,7 @@ bytes are pinned by LOCAL_SHA256SUMS.
 | NIST SP 800-131A Rev. 2, SP 800-133 Rev. 2, and SP 800-56C Rev. 2 | transitions, key generation, and key derivation | local-only; current CMVP supplemental lists govern approval |
 | NIST FIPS 203 and SP 800-227 | ML-KEM and KEM use | local-only; errata, CMVP approval, and final TLS group standards remain separate gates |
 | NIST CAVP vector archives | algorithm known-answer tests | review each archive before tracking |
-| ITU-T X.690 | ASN.1 BER/CER/DER | local-only licensed standard |
+| ITU-T X.690 (02/2021) and Erratum 1 (09/2021) | ASN.1 BER/CER/DER | downloaded local-only from the current in-force ITU publication; the erratum is mandatory |
 | ITU-T X.509 | certificate model | local-only licensed standard; RFC 5280 drives Internet PKI |
 | TLS 1.0, TLS 1.1, and legacy SSL 3.0 RFC publications | brynja-legacy-tls10, brynja-legacy-tls11, and brynja-legacy-ssl3 baselines | tracked under `rfc/` as RFC 2246, RFC 4346, and RFC 6101; current prohibition documents remain mandatory context |
 | Original SSL 3.0 specification | legacy brynja-legacy-ssl3 provenance comparison | local-only pending provenance/rights review; compare with RFC 6101 before implementation |

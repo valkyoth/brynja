@@ -75,11 +75,22 @@ def validate_policy(policy: dict, rfcs: dict, local: dict) -> None:
         expected = f"https://www.rfc-editor.org/rfc/rfc{number}.txt"
         if source["url"] != expected:
             fail(f"RFC {number} URL is not allowlisted")
+    itu_sources = {
+        "ITU-T.X.690-202102.pdf": (
+            "https://www.itu.int/rec/dologin_pub.asp?"
+            "id=T-REC-X.690-202102-I%21%21PDF-E&lang=e&type=items"
+        ),
+        "ITU-T.X.690-202109-Err1.pdf": (
+            "https://www.itu.int/rec/dologin_pub.asp?"
+            "id=T-REC-X.690-202109-I%21Err1%21PDF-E&lang=e&type=items"
+        ),
+    }
     for name, source in local.items():
-        if (
-            "/" in name
-            or not source["url"].startswith("https://nvlpubs.nist.gov/")
-        ):
+        url = source["url"]
+        allowed = url.startswith("https://nvlpubs.nist.gov/") or (
+            name in itu_sources and url == itu_sources[name]
+        )
+        if "/" in name or not allowed:
             fail(f"local authority {name} URL is not allowlisted")
 
     rfc_domains, local_domains = lib.domain_maps(policy)

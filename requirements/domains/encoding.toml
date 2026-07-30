@@ -1,0 +1,66 @@
+schema = 1
+domain = "encoding"
+
+[[requirement]]
+id = "BRY-REQ-ENC-0001"
+owner = "0.20.0"
+lifecycle = "planned"
+decision_ids = ["format.x509.signed"]
+sources = [{ id = "itu:ITU-T.X.690-202102.pdf", authority_role = "current" }, { id = "itu:ITU-T.X.690-202109-Err1.pdf", authority_role = "current" }]
+statement = "The DER reader accepts only definite, minimal, canonical encodings under the in-force X.690 edition and its mandatory erratum."
+invariants = ["canonical-encoding", "resource-bound", "validation", "work-bound"]
+target = "crates/brynja-pki/src/der.rs#Reader"
+positive_test = "tests/requirements/der.rs#canonical_values"
+negative_test = "tests/requirements/der.rs#noncanonical_depth_and_length"
+work_bound = "Parsing is non-recursive and bounded by immutable input-byte, depth, node, child, length-octet, and total-work ceilings."
+evidence_gap = "A malformed DER corpus, bound proofs, exact X.690 clause mapping, fuzzing, and independent parser review remain unresolved until v0.20.0."
+residual = "The ITU publications remain local-only provenance inputs, and the implementation must retain the original signed bytes where PKIX requires them."
+mapping_rationale = "This reviewed cross-domain rule maps the foundational DER authority to signed X.509 because every admitted certificate and key container depends on the bounded canonical reader."
+
+[[requirement]]
+id = "BRY-REQ-ENC-0002"
+owner = "0.21.0"
+lifecycle = "planned"
+decision_ids = ["format.x509.signed"]
+sources = [{ id = "itu:ITU-T.X.690-202102.pdf", authority_role = "current" }, { id = "itu:ITU-T.X.690-202109-Err1.pdf", authority_role = "current" }, { id = "rfc:5912", authority_role = "current" }]
+statement = "ASN.1 integers, bit and octet strings, identifiers, booleans, strings, sequences, sets, and times use canonical DER representations."
+invariants = ["canonical-encoding", "resource-bound", "validation", "work-bound"]
+target = "crates/brynja-pki/src/asn1.rs#CanonicalValue"
+positive_test = "tests/requirements/asn1.rs#canonical_primitives"
+negative_test = "tests/requirements/asn1.rs#malformed_and_noncanonical_primitives"
+work_bound = "Every primitive decoder consumes a bounded slice once, rejects overflow before conversion, and shares the reader's depth, node, and work budgets."
+evidence_gap = "Per-type canonical corpora, round-trip properties, ambiguous AlgorithmIdentifier cases, and time-boundary tests remain unresolved until v0.21.0."
+residual = "RFC 5912 modules do not replace X.690 encoding rules, and unsupported ASN.1 types cannot enter through generic open-type handling."
+mapping_rationale = "This reviewed cross-domain rule joins the in-force X.690 encoding contract and RFC 5912 PKIX modules at the common signed-certificate surface."
+
+[[requirement]]
+id = "BRY-REQ-ENC-0003"
+owner = "0.48.0"
+lifecycle = "planned"
+decision_ids = ["format.pem"]
+sources = [{ id = "rfc:7468", authority_role = "current" }]
+statement = "PEM and Base64 containers enforce admitted labels, strict alphabet and padding, bounded objects, and complete trailing-data policy."
+invariants = ["canonical-encoding", "resource-bound", "validation", "work-bound"]
+target = "crates/brynja-pki/src/pem.rs#PemReader"
+positive_test = "tests/requirements/pem.rs#rfc7468_objects"
+negative_test = "tests/requirements/pem.rs#labels_padding_counts_and_trailing_data"
+work_bound = "Decoding is linear in bounded input bytes and applies hard per-object, chain-count, aggregate-size, label, and whitespace ceilings."
+evidence_gap = "RFC examples, malformed Base64 and armor corpora, chain-bound tests, and fuzz evidence remain unresolved until v0.48.0."
+residual = "Encrypted private-key armor and unknown labels remain rejected unless a later independently reviewed version admits them."
+mapping_rationale = "The PEM semantic surface cites RFC 7468 directly and is owned by the bounded Base64, armor, and chain-container milestone."
+
+[[requirement]]
+id = "BRY-REQ-ENC-0004"
+owner = "0.49.0"
+lifecycle = "planned"
+decision_ids = ["format.private-key-containers"]
+sources = [{ id = "rfc:5958", authority_role = "current" }, { id = "rfc:8017", authority_role = "current" }]
+statement = "Unencrypted PKCS8 and PKCS1 key containers require exact algorithms, parameters, public-private consistency, canonical DER, and secret ownership."
+invariants = ["algorithm-admission", "canonical-encoding", "key-lifecycle", "resource-bound", "validation", "work-bound"]
+target = "crates/brynja-pki/src/key_format.rs#PrivateKeyInput"
+positive_test = "tests/requirements/private_keys.rs#admitted_formats"
+negative_test = "tests/requirements/private_keys.rs#encrypted_ambiguous_and_inconsistent_keys"
+work_bound = "Private-key decoding uses fixed policy size ceilings, bounded DER work, and no attacker-selected arithmetic width or automatic decryption."
+evidence_gap = "Format vectors, malformed corpora, key-consistency tests, owned-region destruction, and integration review remain unresolved until v0.49.0."
+residual = "Encrypted PKCS8, arbitrary algorithms, RSA key generation, and secret-bearing diagnostic formatting remain explicit version-one exclusions."
+mapping_rationale = "The private-key-container semantic surface directly cites RFC 5958 and RFC 8017 and remains bound to its dedicated secret-owning input milestone."

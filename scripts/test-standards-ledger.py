@@ -46,7 +46,7 @@ def load_inputs() -> tuple[dict, dict, dict, dict, dict]:
 def test_current_repository() -> None:
     ledger = checker.build_ledger()
     assert len(ledger["rfcs"]) == 103
-    assert len(ledger["local_authorities"]) == 8
+    assert len(ledger["local_authorities"]) == 11
     assert len(ledger["registries"]) == 8
     assert ledger["integrity"]["pin_provenance"]
 

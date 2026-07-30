@@ -31,11 +31,15 @@ test -x scripts/check-protocol-surfaces.py
 test -x scripts/test-protocol-surfaces.py
 test -x scripts/check-requirements.py
 test -x scripts/test-requirements.py
+test -x scripts/test-requirement-domains.py
 test -x scripts/test-requirement-lifecycles.py
 test -x scripts/test-requirement-history.py
 test -f scripts/requirements_lib.py
 test -f scripts/requirements_history.py
 test -f scripts/requirements_mapping.py
+test -f scripts/requirements_domain.py
+test -f scripts/requirements_domain_coverage.py
+test -f scripts/requirements_validation.py
 test -f scripts/requirements_test_support.py
 test -x scripts/update-standards-snapshots.py
 test -f scripts/release_policy.py
@@ -53,10 +57,17 @@ test -s standards/protocol-surfaces.json
 test -s standards/protocol-surface-coverage.md
 test -s requirements/README.md
 test -s requirements/policy.json
+test -s requirements/domain-scope.toml
+test -s requirements/domains/cryptography.toml
+test -s requirements/domains/encoding.toml
+test -s requirements/domains/pkix.toml
+test -s requirements/domains/ocsp.toml
+test -s requirements/domains/ct.toml
 test -s requirements/schema.json
 test -s requirements/matrix.json
 test -s requirements/indexes.json
 test -s requirements/coverage.md
+test -s requirements/domain-coverage.json
 test -f release-crates.toml
 cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml

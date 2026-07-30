@@ -12,6 +12,8 @@ import surface_lib as surfaces
 
 AUTO = object()
 TRACKED_INPUTS = (
+    "requirements/domain-scope.toml",
+    "requirements/domains",
     "requirements/policy.json",
     "requirements/matrix.json",
     "standards/surface-policy.json",
@@ -64,7 +66,7 @@ def load_matrix(ref: str | None = None) -> dict | None:
         lib.fail(f"{ref} requirement matrix is invalid JSON: {error}")
     if (
         not isinstance(value, dict)
-        or value.get("schema") != 1
+        or value.get("schema") not in {1, 2}
         or not isinstance(value.get("requirements"), list)
     ):
         lib.fail(f"{ref} requirement matrix has an invalid schema")

@@ -29,15 +29,15 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.3.2` adds a deterministic normative-requirement foundation bound to
-the exact source ledger and protocol-surface register. Its 12-requirement pilot
-covers all eight lifecycle states and generates bidirectional source,
-decision, owner, target, test, and evidence mappings. It does **not** implement
-TLS and must not be used to secure network traffic.
+Version `0.3.3` adds complete reviewed normative coverage for the currently
+planned classical cryptography, encoding, key-container, PKIX, OCSP, and
+Certificate Transparency domains. The generated matrix now contains 46
+requirements bound to 53 exact authorities and 3,322 applicable surfaces. It
+does **not** implement TLS and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.3.2` is a normative
+Brynja is not ready for application use. Version `0.3.3` is a normative
 requirement-planning release; it does not implement TLS. The dependency is:
 
 ```toml
@@ -87,8 +87,9 @@ publishes the facade last.
   classifies every pinned IANA record and explicit non-registry decision;
   the generated
   [requirement coverage](https://github.com/valkyoth/brynja/blob/main/requirements/coverage.md)
-  proves the v0.3.2 lifecycle and mapping foundation; v0.3.3 through v0.3.5
-  populate every applicable normative statement before implementation.
+  proves the lifecycle and mapping foundation plus v0.3.3 cryptography,
+  encoding, and PKIX domain coverage; v0.3.4 and v0.3.5 complete the remaining
+  protocol domains before implementation.
 
 ## Workspace
 
@@ -187,7 +188,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.3.2
+scripts/release_crates.py --version 0.3.3
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

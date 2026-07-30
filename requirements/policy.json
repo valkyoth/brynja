@@ -441,6 +441,6 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "c604876babe74781ab02ed45e86b487a73628c92cba4847dda499e6206037f01",
-  "surface_register_sha256": "ab2bf2e511ff3e4204abcea1dcfa36b68a928bf39e0e67b77c47bf53adaab356"
+  "source_ledger_sha256": "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf",
+  "surface_register_sha256": "b473fa45d8098887eced932914b013b80d9b02f92fd52f9b5281f277241d0432"
 }

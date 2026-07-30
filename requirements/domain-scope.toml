@@ -1,0 +1,121 @@
+schema = 1
+milestone = "0.3.3"
+source_ledger_sha256 = "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
+surface_register_sha256 = "b473fa45d8098887eced932914b013b80d9b02f92fd52f9b5281f277241d0432"
+source_domains = ["ct", "key-containers", "ocsp", "pkix", "public-key", "symmetric"]
+surface_domains = ["cryptography", "ct", "ocsp", "pki", "pkix"]
+
+[[surface_exclusion]]
+id = "algorithm.ml-kem"
+deferred_to = "0.3.5"
+rationale = "ML-KEM and hybrid normative population is explicitly owned by v0.3.5 and remains blocked from this classical cryptography pass."
+
+[[surface_exclusion]]
+id = "format.ml-kem-pkix-credentials"
+deferred_to = "0.3.5"
+rationale = "ML-KEM PKIX credential exclusion remains explicit but its complete hybrid authority review is owned by v0.3.5."
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.22.0"
+requirement_id = "BRY-REQ-CRYPTO-0001"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.24.0"
+requirement_id = "BRY-REQ-CRYPTO-0002"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.25.0"
+requirement_id = "BRY-REQ-CRYPTO-0003"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.26.0"
+requirement_id = "BRY-REQ-CRYPTO-0004"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.27.0"
+requirement_id = "BRY-REQ-CRYPTO-0005"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.28.0"
+requirement_id = "BRY-REQ-CRYPTO-0006"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.29.0"
+requirement_id = "BRY-REQ-CRYPTO-0007"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.30.0"
+requirement_id = "BRY-REQ-CRYPTO-0008"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.31.0"
+requirement_id = "BRY-REQ-CRYPTO-0009"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.33.0"
+requirement_id = "BRY-REQ-CRYPTO-0010"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.42.0"
+requirement_id = "BRY-REQ-CRYPTO-0011"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.45.0"
+requirement_id = "BRY-REQ-CRYPTO-0012"
+
+[[surface_group]]
+domain = "cryptography"
+owner = "0.46.0"
+requirement_id = "BRY-REQ-CRYPTO-0013"
+
+[[surface_group]]
+domain = "pkix"
+owner = "0.46.0"
+requirement_id = "BRY-REQ-PKIX-0010"
+
+[[surface_group]]
+domain = "pkix"
+owner = "0.48.0"
+requirement_id = "BRY-REQ-ENC-0003"
+
+[[surface_group]]
+domain = "pkix"
+owner = "0.49.0"
+requirement_id = "BRY-REQ-ENC-0004"
+
+[[surface_group]]
+domain = "pkix"
+owner = "0.50.0"
+requirement_id = "BRY-REQ-PKIX-0001"
+
+[[surface_group]]
+domain = "pkix"
+owner = "0.53.0"
+requirement_id = "BRY-REQ-PKIX-0004"
+
+[[surface_group]]
+domain = "pki"
+owner = "0.136.0"
+requirement_id = "BRY-REQ-OCSP-0006"
+
+[[surface_group]]
+domain = "ocsp"
+owner = "0.58.0"
+requirement_id = "BRY-REQ-OCSP-0001"
+
+[[surface_group]]
+domain = "ct"
+owner = "0.59.0"
+requirement_id = "BRY-REQ-CT-0001"

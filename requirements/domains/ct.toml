@@ -1,0 +1,18 @@
+schema = 1
+domain = "ct"
+
+[[requirement]]
+id = "BRY-REQ-CT-0001"
+owner = "0.59.0"
+lifecycle = "planned"
+decision_ids = ["protocol.certificate-transparency"]
+sources = [{ id = "rfc:6962", authority_role = "compatibility" }, { id = "rfc:9162", authority_role = "current" }]
+statement = "Certificate Transparency processing separates protocol generations and validates every accepted proof within explicit resource bounds."
+invariants = ["canonical-encoding", "resource-bound", "validation", "version-separation", "work-bound"]
+target = "crates/brynja-pki/src/ct.rs#CertificateTransparency"
+positive_test = "tests/requirements/ct.rs#accepts_valid_versioned_proof"
+negative_test = "tests/requirements/ct.rs#rejects_cross_version_or_malformed_proof"
+work_bound = "Every input length, list cardinality, tree size, proof depth, and signature verification count is checked against caller-selected limits before allocation or iteration."
+evidence_gap = "No implementation, interoperability corpus, differential test, or independent cryptographic review exists before milestone 0.59.0."
+residual = "A conforming parser can still encode an incorrect log policy or trust decision; policy composition and log-list governance remain application responsibilities."
+mapping_rationale = "RFC 9162 is the current protocol authority. RFC 6962 remains compatibility evidence only and must never silently select RFC 9162 semantics."

@@ -17,6 +17,7 @@ SCHEMA = DIRECTORY / "schema.json"
 MATRIX = DIRECTORY / "matrix.json"
 INDEXES = DIRECTORY / "indexes.json"
 COVERAGE = DIRECTORY / "coverage.md"
+DOMAIN_COVERAGE = DIRECTORY / "domain-coverage.json"
 ID_PATTERN = re.compile(r"BRY-REQ-[A-Z0-9]+-[0-9]{4}")
 SECTION_PATTERN = re.compile(r"^([0-9]+(?:\.[0-9]+)*)\.\s+(.+?)\s*$", re.MULTILINE)
 REPOSITORY_TARGET = re.compile(r"(?:crates|requirements|scripts|standards|tests)/[A-Za-z0-9_./-]+(?:#[A-Za-z0-9_.:-]+)?")
@@ -135,8 +136,31 @@ def schema_document() -> dict:
         ),
         "id_format": ID_PATTERN.pattern,
         "lifecycles": sorted(LIFECYCLES),
-        "mapping_scopes": ["exact-source", "reviewed-global"],
-        "schema": 1,
+        "authority_roles": [
+            "compatibility",
+            "current",
+            "evidence",
+            "exclusion",
+        ],
+        "domain_invariants": [
+            "algorithm-admission",
+            "canonical-encoding",
+            "constant-time",
+            "failure-atomicity",
+            "key-lifecycle",
+            "resource-bound",
+            "side-channel",
+            "validation",
+            "version-separation",
+            "work-bound",
+        ],
+        "mapping_scopes": [
+            "exact-source",
+            "reviewed-domain",
+            "reviewed-global",
+        ],
+        "profiles": ["crypto-encoding-pkix", "foundation"],
+        "schema": 2,
         "strengths": sorted(STRENGTHS),
         "target_kinds": [
             "actual-symbol",
@@ -145,6 +169,7 @@ def schema_document() -> dict:
             "legacy-boundary",
             "planned-symbol",
         ],
+        "test_polarities": ["negative", "positive"],
         "test_statuses": ["actual", "planned"],
         "transitions": TRANSITIONS,
     }
@@ -156,12 +181,21 @@ def reference_key(source: dict) -> str:
     return source["surface_id"]
 
 
+def reference_keys(requirement: dict) -> list[str]:
+    if "source" in requirement:
+        return [reference_key(requirement["source"])]
+    return [source["id"] for source in requirement["sources"]]
+
+
 def build_indexes(requirements: list[dict]) -> dict:
     reverse: dict[str, dict[str, list[str]]] = {
         key: {}
         for key in (
+            "authority_roles",
             "decisions",
+            "domains",
             "evidence",
+            "invariants",
             "owners",
             "sources",
             "targets",
@@ -172,16 +206,34 @@ def build_indexes(requirements: list[dict]) -> dict:
     for requirement in requirements:
         requirement_id = requirement["id"]
         values = {
+            "authority_roles": sorted(
+                {
+                    source["authority_role"]
+                    for source in requirement.get("sources", [])
+                }
+            ),
             "decisions": requirement["decision_ids"],
+            "domains": [requirement["domain"]]
+            if "domain" in requirement
+            else [],
             "evidence": requirement["evidence"],
+            "invariants": requirement.get("invariants", []),
             "owners": [requirement["owner"]],
-            "sources": [reference_key(requirement["source"])],
+            "sources": reference_keys(requirement),
             "targets": [
                 f"{target['kind']}:{target['target']}"
                 for target in requirement["targets"]
             ],
             "tests": [
-                f"{test['status']}:{test['target']}"
+                ":".join(
+                    part
+                    for part in (
+                        test["status"],
+                        test.get("polarity"),
+                        test["target"],
+                    )
+                    if part is not None
+                )
                 for test in requirement["tests"]
             ],
         }
@@ -198,7 +250,7 @@ def build_indexes(requirements: list[dict]) -> dict:
             key: dict(sorted(value.items()))
             for key, value in sorted(reverse.items())
         },
-        "schema": 1,
+        "schema": 2,
     }
 
 
@@ -206,22 +258,26 @@ def render_coverage(matrix: dict, indexes: dict) -> bytes:
     lifecycle_counts = {key: 0 for key in LIFECYCLES}
     strength_counts = {key: 0 for key in STRENGTHS}
     scope_counts: dict[str, int] = {}
+    domain_counts: dict[str, int] = {}
     for requirement in matrix["requirements"]:
         lifecycle_counts[requirement["lifecycle"]] += 1
         strength_counts[requirement["strength"]] += 1
         scope = requirement["scope"]
         scope_counts[scope] = scope_counts.get(scope, 0) + 1
+        if "domain" in requirement:
+            domain = requirement["domain"]
+            domain_counts[domain] = domain_counts.get(domain, 0) + 1
     lines = [
         "# Normative Requirement Matrix Coverage",
         "",
-        "Generated from the reviewed pilot policy and exact standards evidence.",
+        "Generated from reviewed policies and exact standards evidence.",
         "Do not edit this file by hand.",
         "",
         f"- Schema: `{matrix['schema']}`",
         f"- Policy SHA-256: `{matrix['policy_sha256']}`",
         f"- Source-ledger SHA-256: `{matrix['source_ledger_sha256']}`",
         f"- Surface-register SHA-256: `{matrix['surface_register_sha256']}`",
-        f"- Pilot requirements: **{len(matrix['requirements'])}**",
+        f"- Requirements: **{len(matrix['requirements'])}**",
         "",
         "## Lifecycles",
         "",
@@ -257,6 +313,18 @@ def render_coverage(matrix: dict, indexes: dict) -> bytes:
     lines.extend(
         f"| `{key}` | {scope_counts[key]} |" for key in sorted(scope_counts)
     )
+    lines.extend(
+        [
+            "",
+            "## Populated Domains",
+            "",
+            "| Domain | Count |",
+            "| --- | ---: |",
+        ]
+    )
+    lines.extend(
+        f"| `{key}` | {domain_counts[key]} |" for key in sorted(domain_counts)
+    )
     reverse = indexes["requirements_by"]
     lines.extend(
         [
@@ -274,8 +342,8 @@ def render_coverage(matrix: dict, indexes: dict) -> bytes:
     lines.extend(
         [
             "",
-            "This is a foundation pilot, not complete protocol coverage. v0.3.3",
-            "through v0.3.5 populate the remaining normative requirements.",
+            "Cryptography, encoding, and PKIX are populated in v0.3.3. v0.3.4",
+            "and v0.3.5 populate transport, optional, legacy, and residual rules.",
             "",
         ]
     )

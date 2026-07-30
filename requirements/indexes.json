@@ -1,10 +1,13 @@
 {
   "by_requirement": {
     "BRY-REQ-APP-0001": {
+      "authority_roles": [],
       "decisions": [
         "iana.tls-extensiontype-values.alpn-protocol-ids"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.130.0"
       ],
@@ -18,11 +21,606 @@
         "planned:tests/requirements/alpn.rs#opaque_round_trip"
       ]
     },
+    "BRY-REQ-CRYPTO-0001": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.sha2"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound"
+      ],
+      "owners": [
+        "0.22.0"
+      ],
+      "sources": [
+        "nist:NIST.FIPS.180-4.pdf",
+        "nist:NIST.SP.800-107r1.pdf"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/hash.rs#Sha2"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_hash.rs#sha2_vectors_and_boundaries",
+        "planned:negative:tests/requirements/crypto_hash.rs#sha2_length_exhaustion"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0002": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.sha3-shake"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound"
+      ],
+      "owners": [
+        "0.24.0"
+      ],
+      "sources": [
+        "nist:NIST.FIPS.202.pdf"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/sha3.rs#KeccakF1600"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_sha3.rs#fips202_vectors",
+        "planned:negative:tests/requirements/crypto_sha3.rs#domain_and_output_bounds"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0003": {
+      "authority_roles": [
+        "current",
+        "evidence"
+      ],
+      "decisions": [
+        "algorithm.hmac"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "key-lifecycle",
+        "resource-bound",
+        "work-bound"
+      ],
+      "owners": [
+        "0.25.0"
+      ],
+      "sources": [
+        "rfc:2104",
+        "rfc:4231"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/hmac.rs#Hmac"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_hmac.rs#rfc4231_vectors",
+        "planned:negative:tests/requirements/crypto_hmac.rs#tag_and_key_misuse"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0004": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.hkdf"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "key-lifecycle",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.26.0"
+      ],
+      "sources": [
+        "rfc:5869"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/hkdf.rs#Hkdf"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_hkdf.rs#rfc5869_vectors",
+        "planned:negative:tests/requirements/crypto_hkdf.rs#counter_and_label_exhaustion"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0005": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.aes"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound"
+      ],
+      "owners": [
+        "0.27.0"
+      ],
+      "sources": [
+        "nist:NIST.FIPS.197-upd1.pdf"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_aes.rs#fips197_vectors",
+        "planned:negative:tests/requirements/crypto_aes.rs#invalid_key_sizes"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0006": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.ghash"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound"
+      ],
+      "owners": [
+        "0.28.0"
+      ],
+      "sources": [
+        "nist:NIST.SP.800-38D.pdf"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/ghash.rs#Ghash"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_ghash.rs#nist_vectors",
+        "planned:negative:tests/requirements/crypto_ghash.rs#length_and_counter_bounds"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0007": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.aes-gcm"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "failure-atomicity",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.29.0"
+      ],
+      "sources": [
+        "rfc:5116",
+        "nist:NIST.SP.800-38D.pdf"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/aes_gcm.rs#AesGcm"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_aead.rs#aes_gcm_vectors",
+        "planned:negative:tests/requirements/crypto_aead.rs#aes_gcm_failure_atomicity"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0008": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.chacha20"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "resource-bound",
+        "side-channel",
+        "work-bound"
+      ],
+      "owners": [
+        "0.30.0"
+      ],
+      "sources": [
+        "rfc:8439"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_chacha.rs#rfc8439_vectors",
+        "planned:negative:tests/requirements/crypto_chacha.rs#counter_exhaustion"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0009": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.chacha20-poly1305"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "work-bound"
+      ],
+      "owners": [
+        "0.31.0"
+      ],
+      "sources": [
+        "rfc:8439"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors",
+        "planned:negative:tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0010": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.elliptic-curve"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "constant-time",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.33.0"
+      ],
+      "sources": [
+        "nist:NIST.FIPS.186-5.pdf",
+        "nist:NIST.SP.800-186.pdf",
+        "nist:NIST.SP.800-56Ar3.pdf",
+        "rfc:5480",
+        "rfc:5758",
+        "rfc:6979",
+        "rfc:7748",
+        "rfc:8813"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/ecc.rs#FieldAndGroup"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_ecc.rs#official_group_and_signature_vectors",
+        "planned:negative:tests/requirements/crypto_ecc.rs#invalid_points_scalars_and_shared_secrets"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0011": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.rsa"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.42.0"
+      ],
+      "sources": [
+        "rfc:3279",
+        "rfc:4055",
+        "rfc:5756",
+        "rfc:8017"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/rsa.rs#RsaVerification"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_rsa.rs#pss_and_pkcs1_vectors",
+        "planned:negative:tests/requirements/crypto_rsa.rs#ambiguous_parameters_and_padding"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0012": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.ed25519"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "constant-time",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.45.0"
+      ],
+      "sources": [
+        "rfc:8032",
+        "rfc:8410",
+        "rfc:9295"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/ed25519.rs#Ed25519"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_ed25519.rs#rfc8032_vectors",
+        "planned:negative:tests/requirements/crypto_ed25519.rs#noncanonical_and_small_order_inputs"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0013": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.tls-parameters.tls-kdf-ids"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.46.0"
+      ],
+      "sources": [
+        "rfc:3279"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-crypto/src/algorithm.rs#AlgorithmPolicy"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crypto_admission.rs#explicit_allowlist",
+        "planned:negative:tests/requirements/crypto_admission.rs#unknown_and_excluded_algorithms"
+      ]
+    },
+    "BRY-REQ-CT-0001": {
+      "authority_roles": [
+        "compatibility",
+        "current"
+      ],
+      "decisions": [
+        "protocol.certificate-transparency"
+      ],
+      "domains": [
+        "ct"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "version-separation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.59.0"
+      ],
+      "sources": [
+        "rfc:6962",
+        "rfc:9162"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/ct.rs#CertificateTransparency"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/ct.rs#accepts_valid_versioned_proof",
+        "planned:negative:tests/requirements/ct.rs#rejects_cross_version_or_malformed_proof"
+      ]
+    },
+    "BRY-REQ-ENC-0001": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "encoding"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.20.0"
+      ],
+      "sources": [
+        "itu:ITU-T.X.690-202102.pdf",
+        "itu:ITU-T.X.690-202109-Err1.pdf"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/der.rs#Reader"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/der.rs#canonical_values",
+        "planned:negative:tests/requirements/der.rs#noncanonical_depth_and_length"
+      ]
+    },
+    "BRY-REQ-ENC-0002": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "encoding"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.21.0"
+      ],
+      "sources": [
+        "itu:ITU-T.X.690-202102.pdf",
+        "itu:ITU-T.X.690-202109-Err1.pdf",
+        "rfc:5912"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/asn1.rs#canonical_primitives",
+        "planned:negative:tests/requirements/asn1.rs#malformed_and_noncanonical_primitives"
+      ]
+    },
+    "BRY-REQ-ENC-0003": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.pem"
+      ],
+      "domains": [
+        "encoding"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.48.0"
+      ],
+      "sources": [
+        "rfc:7468"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/pem.rs#PemReader"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/pem.rs#rfc7468_objects",
+        "planned:negative:tests/requirements/pem.rs#labels_padding_counts_and_trailing_data"
+      ]
+    },
+    "BRY-REQ-ENC-0004": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.private-key-containers"
+      ],
+      "domains": [
+        "encoding"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "key-lifecycle",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.49.0"
+      ],
+      "sources": [
+        "rfc:5958",
+        "rfc:8017"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/key_format.rs#PrivateKeyInput"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/private_keys.rs#admitted_formats",
+        "planned:negative:tests/requirements/private_keys.rs#encrypted_ambiguous_and_inconsistent_keys"
+      ]
+    },
     "BRY-REQ-HYB-0001": {
+      "authority_roles": [],
       "decisions": [
         "algorithm.ecdhe-ml-kem"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.120.0"
       ],
@@ -37,12 +635,15 @@
       ]
     },
     "BRY-REQ-IANA-0001": {
+      "authority_roles": [],
       "decisions": [
         "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
       ],
+      "domains": [],
       "evidence": [
         "requirements/indexes.json#requirements_by"
       ],
+      "invariants": [],
       "owners": [
         "0.3.2"
       ],
@@ -57,10 +658,13 @@
       ]
     },
     "BRY-REQ-IANA-0002": {
+      "authority_roles": [],
       "decisions": [
         "iana.tls-extensiontype-values.alpn-protocol-ids"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.130.0"
       ],
@@ -75,10 +679,13 @@
       ]
     },
     "BRY-REQ-IANA-0003": {
+      "authority_roles": [],
       "decisions": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.148.0"
       ],
@@ -93,10 +700,13 @@
       ]
     },
     "BRY-REQ-LEG-0001": {
+      "authority_roles": [],
       "decisions": [
         "legacy.tls10"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "H0.2.0"
       ],
@@ -110,13 +720,532 @@
         "planned:tests/requirements/legacy_tls10.rs#modern_isolation"
       ]
     },
+    "BRY-REQ-OCSP-0001": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "protocol.ocsp"
+      ],
+      "domains": [
+        "ocsp"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.58.0"
+      ],
+      "sources": [
+        "rfc:5754",
+        "rfc:6960",
+        "rfc:9654"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/ocsp.rs#OcspValidator"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/ocsp.rs#authorized_fresh_responses",
+        "planned:negative:tests/requirements/ocsp.rs#identity_nonce_freshness_and_signature_failures"
+      ]
+    },
+    "BRY-REQ-OCSP-0002": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-tlsfeature.1"
+      ],
+      "domains": [
+        "ocsp"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.58.1"
+      ],
+      "sources": [
+        "rfc:7633"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/tls_feature.rs#MustStaple"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/must_staple.rs#satisfied_status_request",
+        "planned:negative:tests/requirements/must_staple.rs#missing_invalid_and_unknown_features"
+      ]
+    },
+    "BRY-REQ-OCSP-0003": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "protocol.ocsp"
+      ],
+      "domains": [
+        "ocsp"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.58.2"
+      ],
+      "sources": [
+        "rfc:9919"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/ocsp_lightweight.rs#MessageProfile"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/ocsp_lightweight.rs#rfc9919_messages",
+        "planned:negative:tests/requirements/ocsp_lightweight.rs#profile_order_and_freshness_failures"
+      ]
+    },
+    "BRY-REQ-OCSP-0004": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "protocol.ocsp"
+      ],
+      "domains": [
+        "ocsp"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.58.3"
+      ],
+      "sources": [
+        "rfc:9919"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/ocsp_transport.rs#TransportEffect"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/ocsp_transport.rs#get_post_and_cache_metadata",
+        "planned:negative:tests/requirements/ocsp_transport.rs#uri_media_length_retry_and_cache_failures"
+      ]
+    },
+    "BRY-REQ-OCSP-0005": {
+      "authority_roles": [
+        "exclusion"
+      ],
+      "decisions": [
+        "facility.status-request-v2"
+      ],
+      "domains": [
+        "ocsp"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.58.0"
+      ],
+      "sources": [
+        "rfc:6961"
+      ],
+      "targets": [
+        "boundary:boundary:status-request-v2"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/ocsp_exclusions.rs#status_request_v1_remains_available",
+        "planned:negative:tests/requirements/ocsp_exclusions.rs#status_request_v2_rejected"
+      ]
+    },
+    "BRY-REQ-OCSP-0006": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.tls-extensiontype-values.certificate-status"
+      ],
+      "domains": [
+        "ocsp"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.136.0"
+      ],
+      "sources": [
+        "rfc:6066"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-tls/src/certificate_status.rs#CertificateStatusType"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/certificate_status.rs#ocsp_negotiation",
+        "planned:negative:tests/requirements/certificate_status.rs#unknown_context_and_length_failures"
+      ]
+    },
+    "BRY-REQ-PKIX-0001": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.50.0"
+      ],
+      "sources": [
+        "rfc:5280",
+        "rfc:6818"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/x509.rs#Certificate"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/x509.rs#current_signed_certificates",
+        "planned:negative:tests/requirements/x509.rs#ambiguous_algorithms_and_malformed_der"
+      ]
+    },
+    "BRY-REQ-PKIX-0002": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.51.0"
+      ],
+      "sources": [
+        "rfc:3986",
+        "rfc:5890",
+        "rfc:5891",
+        "rfc:5892",
+        "rfc:8753",
+        "rfc:9525",
+        "rfc:9549",
+        "rfc:9598"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/identity.rs#ServiceIdentity"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/service_identity.rs#typed_reference_identifiers",
+        "planned:negative:tests/requirements/service_identity.rs#wildcards_unicode_and_cross_type_confusion"
+      ]
+    },
+    "BRY-REQ-PKIX-0003": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.52.0"
+      ],
+      "sources": [
+        "rfc:5280"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/path.rs#PathBuilder"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/path_building.rs#deterministic_paths",
+        "planned:negative:tests/requirements/path_building.rs#loops_candidates_and_work_exhaustion"
+      ]
+    },
+    "BRY-REQ-PKIX-0004": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.smi-numbers.smi-numbers-1.3.101"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.53.0"
+      ],
+      "sources": [
+        "rfc:3279",
+        "rfc:4055",
+        "rfc:5280",
+        "rfc:5480",
+        "rfc:5758",
+        "rfc:8410",
+        "rfc:9295"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/validate.rs#ChainValidator"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/chain_validation.rs#admitted_algorithms_and_constraints",
+        "planned:negative:tests/requirements/chain_validation.rs#unknown_parameters_usage_and_path_failures"
+      ]
+    },
+    "BRY-REQ-PKIX-0005": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "canonical-encoding",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.54.0"
+      ],
+      "sources": [
+        "rfc:5280",
+        "rfc:9549",
+        "rfc:9598"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/name_constraints.rs#NameConstraints"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/name_constraints.rs#permitted_and_excluded_subtrees",
+        "planned:negative:tests/requirements/name_constraints.rs#normalization_subtree_and_work_limits"
+      ]
+    },
+    "BRY-REQ-PKIX-0006": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.55.0"
+      ],
+      "sources": [
+        "rfc:5280",
+        "rfc:9618"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/policy.rs#PolicyValidator"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/certificate_policy.rs#valid_policy_graphs",
+        "planned:negative:tests/requirements/certificate_policy.rs#cycles_explosion_and_invalid_mappings"
+      ]
+    },
+    "BRY-REQ-PKIX-0007": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.56.0"
+      ],
+      "sources": [
+        "rfc:5280"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/trust.rs#TrustPolicy"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/trust.rs#anchors_cross_signing_and_selection",
+        "planned:negative:tests/requirements/trust.rs#distrust_ambiguity_and_algorithm_positions"
+      ]
+    },
+    "BRY-REQ-PKIX-0008": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.57.0"
+      ],
+      "sources": [
+        "rfc:5280",
+        "rfc:10007"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/crl.rs#CrlValidator"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/crl.rs#base_delta_and_indirect_crls",
+        "planned:negative:tests/requirements/crl.rs#issuer_usage_freshness_and_work_limits"
+      ]
+    },
+    "BRY-REQ-PKIX-0009": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "format.x509.signed"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.57.1"
+      ],
+      "sources": [
+        "rfc:9608"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-pki/src/revocation.rs#NoRevAvail"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/no_rev_avail.rs#valid_end_entity_policy",
+        "planned:negative:tests/requirements/no_rev_avail.rs#ca_and_contradictory_extensions"
+      ]
+    },
+    "BRY-REQ-PKIX-0010": {
+      "authority_roles": [
+        "exclusion"
+      ],
+      "decisions": [
+        "format.x509.unsigned"
+      ],
+      "domains": [
+        "pkix"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "resource-bound",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.46.0"
+      ],
+      "sources": [
+        "rfc:9925"
+      ],
+      "targets": [
+        "boundary:boundary:unsigned-x509"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/x509_exclusions.rs#signed_certificates_remain_admitted",
+        "planned:negative:tests/requirements/x509_exclusions.rs#unsigned_certificates_rejected"
+      ]
+    },
     "BRY-REQ-STD-0001": {
+      "authority_roles": [],
       "decisions": [
         "protocol.tls13"
       ],
+      "domains": [],
       "evidence": [
         "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
       ],
+      "invariants": [],
       "owners": [
         "0.3.2"
       ],
@@ -131,10 +1260,13 @@
       ]
     },
     "BRY-REQ-STD-0002": {
+      "authority_roles": [],
       "decisions": [
         "protocol.tls13"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.3.2"
       ],
@@ -149,10 +1281,13 @@
       ]
     },
     "BRY-REQ-STD-0003": {
+      "authority_roles": [],
       "decisions": [
         "protocol.tls13"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.3.2"
       ],
@@ -167,10 +1302,13 @@
       ]
     },
     "BRY-REQ-STD-0004": {
+      "authority_roles": [],
       "decisions": [
         "protocol.tls13"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.3.5"
       ],
@@ -185,10 +1323,13 @@
       ]
     },
     "BRY-REQ-TLS-0001": {
+      "authority_roles": [],
       "decisions": [
         "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.67.0"
       ],
@@ -203,11 +1344,14 @@
       ]
     },
     "BRY-REQ-TLS-0002": {
+      "authority_roles": [],
       "decisions": [
         "facility.heartbeat",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       ],
+      "domains": [],
       "evidence": [],
+      "invariants": [],
       "owners": [
         "0.19.0"
       ],
@@ -223,22 +1367,140 @@
     }
   },
   "requirements_by": {
+    "authority_roles": {
+      "compatibility": [
+        "BRY-REQ-CT-0001"
+      ],
+      "current": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0003",
+        "BRY-REQ-CRYPTO-0004",
+        "BRY-REQ-CRYPTO-0005",
+        "BRY-REQ-CRYPTO-0006",
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0008",
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-CRYPTO-0013",
+        "BRY-REQ-CT-0001",
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002",
+        "BRY-REQ-ENC-0003",
+        "BRY-REQ-ENC-0004",
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0002",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004",
+        "BRY-REQ-OCSP-0006",
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0003",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0005",
+        "BRY-REQ-PKIX-0006",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0008",
+        "BRY-REQ-PKIX-0009"
+      ],
+      "evidence": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
+      "exclusion": [
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-PKIX-0010"
+      ]
+    },
     "decisions": {
+      "algorithm.aes": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
+      "algorithm.aes-gcm": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
+      "algorithm.chacha20": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
+      "algorithm.chacha20-poly1305": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
       "algorithm.ecdhe-ml-kem": [
         "BRY-REQ-HYB-0001"
+      ],
+      "algorithm.ed25519": [
+        "BRY-REQ-CRYPTO-0012"
+      ],
+      "algorithm.elliptic-curve": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "algorithm.ghash": [
+        "BRY-REQ-CRYPTO-0006"
+      ],
+      "algorithm.hkdf": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
+      "algorithm.hmac": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
+      "algorithm.rsa": [
+        "BRY-REQ-CRYPTO-0011"
+      ],
+      "algorithm.sha2": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "algorithm.sha3-shake": [
+        "BRY-REQ-CRYPTO-0002"
       ],
       "facility.heartbeat": [
         "BRY-REQ-TLS-0002"
       ],
+      "facility.status-request-v2": [
+        "BRY-REQ-OCSP-0005"
+      ],
+      "format.pem": [
+        "BRY-REQ-ENC-0003"
+      ],
+      "format.private-key-containers": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "format.x509.signed": [
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002",
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0003",
+        "BRY-REQ-PKIX-0005",
+        "BRY-REQ-PKIX-0006",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0008",
+        "BRY-REQ-PKIX-0009"
+      ],
+      "format.x509.unsigned": [
+        "BRY-REQ-PKIX-0010"
+      ],
+      "iana.smi-numbers.smi-numbers-1.3.101": [
+        "BRY-REQ-PKIX-0004"
+      ],
+      "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-tlsfeature.1": [
+        "BRY-REQ-OCSP-0002"
+      ],
       "iana.tls-extensiontype-values.alpn-protocol-ids": [
         "BRY-REQ-APP-0001",
         "BRY-REQ-IANA-0002"
+      ],
+      "iana.tls-extensiontype-values.certificate-status": [
+        "BRY-REQ-OCSP-0006"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1": [
         "BRY-REQ-TLS-0002"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1": [
         "BRY-REQ-IANA-0003"
+      ],
+      "iana.tls-parameters.tls-kdf-ids": [
+        "BRY-REQ-CRYPTO-0013"
       ],
       "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1": [
         "BRY-REQ-IANA-0001",
@@ -247,11 +1509,65 @@
       "legacy.tls10": [
         "BRY-REQ-LEG-0001"
       ],
+      "protocol.certificate-transparency": [
+        "BRY-REQ-CT-0001"
+      ],
+      "protocol.ocsp": [
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004"
+      ],
       "protocol.tls13": [
         "BRY-REQ-STD-0001",
         "BRY-REQ-STD-0002",
         "BRY-REQ-STD-0003",
         "BRY-REQ-STD-0004"
+      ]
+    },
+    "domains": {
+      "cryptography": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0003",
+        "BRY-REQ-CRYPTO-0004",
+        "BRY-REQ-CRYPTO-0005",
+        "BRY-REQ-CRYPTO-0006",
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0008",
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-CRYPTO-0013"
+      ],
+      "ct": [
+        "BRY-REQ-CT-0001"
+      ],
+      "encoding": [
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002",
+        "BRY-REQ-ENC-0003",
+        "BRY-REQ-ENC-0004"
+      ],
+      "ocsp": [
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0002",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004",
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-OCSP-0006"
+      ],
+      "pkix": [
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0003",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0005",
+        "BRY-REQ-PKIX-0006",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0008",
+        "BRY-REQ-PKIX-0009",
+        "BRY-REQ-PKIX-0010"
       ]
     },
     "evidence": {
@@ -262,6 +1578,176 @@
         "BRY-REQ-STD-0001"
       ]
     },
+    "invariants": {
+      "algorithm-admission": [
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0013",
+        "BRY-REQ-ENC-0004",
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-OCSP-0006",
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0010"
+      ],
+      "canonical-encoding": [
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-CT-0001",
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002",
+        "BRY-REQ-ENC-0003",
+        "BRY-REQ-ENC-0004",
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004",
+        "BRY-REQ-OCSP-0006",
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0005"
+      ],
+      "constant-time": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0003",
+        "BRY-REQ-CRYPTO-0005",
+        "BRY-REQ-CRYPTO-0006",
+        "BRY-REQ-CRYPTO-0008",
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0012"
+      ],
+      "failure-atomicity": [
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0009"
+      ],
+      "key-lifecycle": [
+        "BRY-REQ-CRYPTO-0003",
+        "BRY-REQ-CRYPTO-0004",
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-ENC-0004"
+      ],
+      "resource-bound": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0003",
+        "BRY-REQ-CRYPTO-0004",
+        "BRY-REQ-CRYPTO-0005",
+        "BRY-REQ-CRYPTO-0006",
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0008",
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-CRYPTO-0013",
+        "BRY-REQ-CT-0001",
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002",
+        "BRY-REQ-ENC-0003",
+        "BRY-REQ-ENC-0004",
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0002",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004",
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-OCSP-0006",
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0003",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0005",
+        "BRY-REQ-PKIX-0006",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0008",
+        "BRY-REQ-PKIX-0009",
+        "BRY-REQ-PKIX-0010"
+      ],
+      "side-channel": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0005",
+        "BRY-REQ-CRYPTO-0006",
+        "BRY-REQ-CRYPTO-0008",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0012"
+      ],
+      "validation": [
+        "BRY-REQ-CRYPTO-0004",
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-CRYPTO-0013",
+        "BRY-REQ-CT-0001",
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002",
+        "BRY-REQ-ENC-0003",
+        "BRY-REQ-ENC-0004",
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0002",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004",
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-OCSP-0006",
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0003",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0005",
+        "BRY-REQ-PKIX-0006",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0008",
+        "BRY-REQ-PKIX-0009",
+        "BRY-REQ-PKIX-0010"
+      ],
+      "version-separation": [
+        "BRY-REQ-CT-0001"
+      ],
+      "work-bound": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0003",
+        "BRY-REQ-CRYPTO-0004",
+        "BRY-REQ-CRYPTO-0005",
+        "BRY-REQ-CRYPTO-0006",
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0008",
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-CRYPTO-0013",
+        "BRY-REQ-CT-0001",
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002",
+        "BRY-REQ-ENC-0003",
+        "BRY-REQ-ENC-0004",
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0002",
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004",
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-OCSP-0006",
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0003",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0005",
+        "BRY-REQ-PKIX-0006",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0008",
+        "BRY-REQ-PKIX-0009",
+        "BRY-REQ-PKIX-0010"
+      ]
+    },
     "owners": {
       "0.120.0": [
         "BRY-REQ-HYB-0001"
@@ -270,11 +1756,41 @@
         "BRY-REQ-APP-0001",
         "BRY-REQ-IANA-0002"
       ],
+      "0.136.0": [
+        "BRY-REQ-OCSP-0006"
+      ],
       "0.148.0": [
         "BRY-REQ-IANA-0003"
       ],
       "0.19.0": [
         "BRY-REQ-TLS-0002"
+      ],
+      "0.20.0": [
+        "BRY-REQ-ENC-0001"
+      ],
+      "0.21.0": [
+        "BRY-REQ-ENC-0002"
+      ],
+      "0.22.0": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "0.24.0": [
+        "BRY-REQ-CRYPTO-0002"
+      ],
+      "0.25.0": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
+      "0.26.0": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
+      "0.27.0": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
+      "0.28.0": [
+        "BRY-REQ-CRYPTO-0006"
+      ],
+      "0.29.0": [
+        "BRY-REQ-CRYPTO-0007"
       ],
       "0.3.2": [
         "BRY-REQ-IANA-0001",
@@ -284,6 +1800,74 @@
       ],
       "0.3.5": [
         "BRY-REQ-STD-0004"
+      ],
+      "0.30.0": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
+      "0.31.0": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
+      "0.33.0": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "0.42.0": [
+        "BRY-REQ-CRYPTO-0011"
+      ],
+      "0.45.0": [
+        "BRY-REQ-CRYPTO-0012"
+      ],
+      "0.46.0": [
+        "BRY-REQ-CRYPTO-0013",
+        "BRY-REQ-PKIX-0010"
+      ],
+      "0.48.0": [
+        "BRY-REQ-ENC-0003"
+      ],
+      "0.49.0": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "0.50.0": [
+        "BRY-REQ-PKIX-0001"
+      ],
+      "0.51.0": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "0.52.0": [
+        "BRY-REQ-PKIX-0003"
+      ],
+      "0.53.0": [
+        "BRY-REQ-PKIX-0004"
+      ],
+      "0.54.0": [
+        "BRY-REQ-PKIX-0005"
+      ],
+      "0.55.0": [
+        "BRY-REQ-PKIX-0006"
+      ],
+      "0.56.0": [
+        "BRY-REQ-PKIX-0007"
+      ],
+      "0.57.0": [
+        "BRY-REQ-PKIX-0008"
+      ],
+      "0.57.1": [
+        "BRY-REQ-PKIX-0009"
+      ],
+      "0.58.0": [
+        "BRY-REQ-OCSP-0001",
+        "BRY-REQ-OCSP-0005"
+      ],
+      "0.58.1": [
+        "BRY-REQ-OCSP-0002"
+      ],
+      "0.58.2": [
+        "BRY-REQ-OCSP-0003"
+      ],
+      "0.58.3": [
+        "BRY-REQ-OCSP-0004"
+      ],
+      "0.59.0": [
+        "BRY-REQ-CT-0001"
       ],
       "0.67.0": [
         "BRY-REQ-TLS-0001"
@@ -306,6 +1890,45 @@
       "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1": [
         "BRY-REQ-TLS-0001"
       ],
+      "itu:ITU-T.X.690-202102.pdf": [
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002"
+      ],
+      "itu:ITU-T.X.690-202109-Err1.pdf": [
+        "BRY-REQ-ENC-0001",
+        "BRY-REQ-ENC-0002"
+      ],
+      "nist:NIST.FIPS.180-4.pdf": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "nist:NIST.FIPS.186-5.pdf": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "nist:NIST.FIPS.197-upd1.pdf": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
+      "nist:NIST.FIPS.202.pdf": [
+        "BRY-REQ-CRYPTO-0002"
+      ],
+      "nist:NIST.SP.800-107r1.pdf": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "nist:NIST.SP.800-186.pdf": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "nist:NIST.SP.800-38D.pdf": [
+        "BRY-REQ-CRYPTO-0006",
+        "BRY-REQ-CRYPTO-0007"
+      ],
+      "nist:NIST.SP.800-56Ar3.pdf": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "rfc:10007": [
+        "BRY-REQ-PKIX-0008"
+      ],
+      "rfc:2104": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
       "rfc:2119#6": [
         "BRY-REQ-STD-0004"
       ],
@@ -315,6 +1938,99 @@
       "rfc:2246#3": [
         "BRY-REQ-LEG-0001"
       ],
+      "rfc:3279": [
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-CRYPTO-0013",
+        "BRY-REQ-PKIX-0004"
+      ],
+      "rfc:3986": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "rfc:4055": [
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-PKIX-0004"
+      ],
+      "rfc:4231": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
+      "rfc:5116": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
+      "rfc:5280": [
+        "BRY-REQ-PKIX-0001",
+        "BRY-REQ-PKIX-0003",
+        "BRY-REQ-PKIX-0004",
+        "BRY-REQ-PKIX-0005",
+        "BRY-REQ-PKIX-0006",
+        "BRY-REQ-PKIX-0007",
+        "BRY-REQ-PKIX-0008"
+      ],
+      "rfc:5480": [
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-PKIX-0004"
+      ],
+      "rfc:5754": [
+        "BRY-REQ-OCSP-0001"
+      ],
+      "rfc:5756": [
+        "BRY-REQ-CRYPTO-0011"
+      ],
+      "rfc:5758": [
+        "BRY-REQ-CRYPTO-0010",
+        "BRY-REQ-PKIX-0004"
+      ],
+      "rfc:5869": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
+      "rfc:5890": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "rfc:5891": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "rfc:5892": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "rfc:5912": [
+        "BRY-REQ-ENC-0002"
+      ],
+      "rfc:5958": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "rfc:6066": [
+        "BRY-REQ-OCSP-0006"
+      ],
+      "rfc:6818": [
+        "BRY-REQ-PKIX-0001"
+      ],
+      "rfc:6960": [
+        "BRY-REQ-OCSP-0001"
+      ],
+      "rfc:6961": [
+        "BRY-REQ-OCSP-0005"
+      ],
+      "rfc:6962": [
+        "BRY-REQ-CT-0001"
+      ],
+      "rfc:6979": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "rfc:7468": [
+        "BRY-REQ-ENC-0003"
+      ],
+      "rfc:7633": [
+        "BRY-REQ-OCSP-0002"
+      ],
+      "rfc:7748": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "rfc:8017": [
+        "BRY-REQ-CRYPTO-0011",
+        "BRY-REQ-ENC-0004"
+      ],
+      "rfc:8032": [
+        "BRY-REQ-CRYPTO-0012"
+      ],
       "rfc:8126#2.2": [
         "BRY-REQ-STD-0003"
       ],
@@ -323,6 +2039,54 @@
       ],
       "rfc:8174#2": [
         "BRY-REQ-STD-0001"
+      ],
+      "rfc:8410": [
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-PKIX-0004"
+      ],
+      "rfc:8439": [
+        "BRY-REQ-CRYPTO-0008",
+        "BRY-REQ-CRYPTO-0009"
+      ],
+      "rfc:8753": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "rfc:8813": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "rfc:9162": [
+        "BRY-REQ-CT-0001"
+      ],
+      "rfc:9295": [
+        "BRY-REQ-CRYPTO-0012",
+        "BRY-REQ-PKIX-0004"
+      ],
+      "rfc:9525": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "rfc:9549": [
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0005"
+      ],
+      "rfc:9598": [
+        "BRY-REQ-PKIX-0002",
+        "BRY-REQ-PKIX-0005"
+      ],
+      "rfc:9608": [
+        "BRY-REQ-PKIX-0009"
+      ],
+      "rfc:9618": [
+        "BRY-REQ-PKIX-0006"
+      ],
+      "rfc:9654": [
+        "BRY-REQ-OCSP-0001"
+      ],
+      "rfc:9919": [
+        "BRY-REQ-OCSP-0003",
+        "BRY-REQ-OCSP-0004"
+      ],
+      "rfc:9925": [
+        "BRY-REQ-PKIX-0010"
       ],
       "rfc:9954#5": [
         "BRY-REQ-HYB-0001"
@@ -356,8 +2120,110 @@
       "boundary:boundary:private-use-codepoints": [
         "BRY-REQ-IANA-0003"
       ],
+      "boundary:boundary:status-request-v2": [
+        "BRY-REQ-OCSP-0005"
+      ],
+      "boundary:boundary:unsigned-x509": [
+        "BRY-REQ-PKIX-0010"
+      ],
       "legacy-boundary:crates/brynja-legacy-tls10/src/lib.rs#IMPLEMENTED": [
         "BRY-REQ-LEG-0001"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/aes_gcm.rs#AesGcm": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/algorithm.rs#AlgorithmPolicy": [
+        "BRY-REQ-CRYPTO-0013"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/ecc.rs#FieldAndGroup": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/ed25519.rs#Ed25519": [
+        "BRY-REQ-CRYPTO-0012"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/ghash.rs#Ghash": [
+        "BRY-REQ-CRYPTO-0006"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/hash.rs#Sha2": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/hkdf.rs#Hkdf": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/hmac.rs#Hmac": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/rsa.rs#RsaVerification": [
+        "BRY-REQ-CRYPTO-0011"
+      ],
+      "planned-symbol:crates/brynja-crypto/src/sha3.rs#KeccakF1600": [
+        "BRY-REQ-CRYPTO-0002"
+      ],
+      "planned-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue": [
+        "BRY-REQ-ENC-0002"
+      ],
+      "planned-symbol:crates/brynja-pki/src/crl.rs#CrlValidator": [
+        "BRY-REQ-PKIX-0008"
+      ],
+      "planned-symbol:crates/brynja-pki/src/ct.rs#CertificateTransparency": [
+        "BRY-REQ-CT-0001"
+      ],
+      "planned-symbol:crates/brynja-pki/src/der.rs#Reader": [
+        "BRY-REQ-ENC-0001"
+      ],
+      "planned-symbol:crates/brynja-pki/src/identity.rs#ServiceIdentity": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "planned-symbol:crates/brynja-pki/src/key_format.rs#PrivateKeyInput": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "planned-symbol:crates/brynja-pki/src/name_constraints.rs#NameConstraints": [
+        "BRY-REQ-PKIX-0005"
+      ],
+      "planned-symbol:crates/brynja-pki/src/ocsp.rs#OcspValidator": [
+        "BRY-REQ-OCSP-0001"
+      ],
+      "planned-symbol:crates/brynja-pki/src/ocsp_lightweight.rs#MessageProfile": [
+        "BRY-REQ-OCSP-0003"
+      ],
+      "planned-symbol:crates/brynja-pki/src/ocsp_transport.rs#TransportEffect": [
+        "BRY-REQ-OCSP-0004"
+      ],
+      "planned-symbol:crates/brynja-pki/src/path.rs#PathBuilder": [
+        "BRY-REQ-PKIX-0003"
+      ],
+      "planned-symbol:crates/brynja-pki/src/pem.rs#PemReader": [
+        "BRY-REQ-ENC-0003"
+      ],
+      "planned-symbol:crates/brynja-pki/src/policy.rs#PolicyValidator": [
+        "BRY-REQ-PKIX-0006"
+      ],
+      "planned-symbol:crates/brynja-pki/src/revocation.rs#NoRevAvail": [
+        "BRY-REQ-PKIX-0009"
+      ],
+      "planned-symbol:crates/brynja-pki/src/tls_feature.rs#MustStaple": [
+        "BRY-REQ-OCSP-0002"
+      ],
+      "planned-symbol:crates/brynja-pki/src/trust.rs#TrustPolicy": [
+        "BRY-REQ-PKIX-0007"
+      ],
+      "planned-symbol:crates/brynja-pki/src/validate.rs#ChainValidator": [
+        "BRY-REQ-PKIX-0004"
+      ],
+      "planned-symbol:crates/brynja-pki/src/x509.rs#Certificate": [
+        "BRY-REQ-PKIX-0001"
+      ],
+      "planned-symbol:crates/brynja-tls/src/certificate_status.rs#CertificateStatusType": [
+        "BRY-REQ-OCSP-0006"
       ],
       "planned-symbol:crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256": [
         "BRY-REQ-TLS-0001"
@@ -375,6 +2241,210 @@
       ],
       "actual:scripts/test-requirements.py#test_missing_residual_fails": [
         "BRY-REQ-STD-0002"
+      ],
+      "planned:negative:tests/requirements/asn1.rs#malformed_and_noncanonical_primitives": [
+        "BRY-REQ-ENC-0002"
+      ],
+      "planned:negative:tests/requirements/certificate_policy.rs#cycles_explosion_and_invalid_mappings": [
+        "BRY-REQ-PKIX-0006"
+      ],
+      "planned:negative:tests/requirements/certificate_status.rs#unknown_context_and_length_failures": [
+        "BRY-REQ-OCSP-0006"
+      ],
+      "planned:negative:tests/requirements/chain_validation.rs#unknown_parameters_usage_and_path_failures": [
+        "BRY-REQ-PKIX-0004"
+      ],
+      "planned:negative:tests/requirements/crl.rs#issuer_usage_freshness_and_work_limits": [
+        "BRY-REQ-PKIX-0008"
+      ],
+      "planned:negative:tests/requirements/crypto_admission.rs#unknown_and_excluded_algorithms": [
+        "BRY-REQ-CRYPTO-0013"
+      ],
+      "planned:negative:tests/requirements/crypto_aead.rs#aes_gcm_failure_atomicity": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
+      "planned:negative:tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
+      "planned:negative:tests/requirements/crypto_aes.rs#invalid_key_sizes": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
+      "planned:negative:tests/requirements/crypto_chacha.rs#counter_exhaustion": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
+      "planned:negative:tests/requirements/crypto_ecc.rs#invalid_points_scalars_and_shared_secrets": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "planned:negative:tests/requirements/crypto_ed25519.rs#noncanonical_and_small_order_inputs": [
+        "BRY-REQ-CRYPTO-0012"
+      ],
+      "planned:negative:tests/requirements/crypto_ghash.rs#length_and_counter_bounds": [
+        "BRY-REQ-CRYPTO-0006"
+      ],
+      "planned:negative:tests/requirements/crypto_hash.rs#sha2_length_exhaustion": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "planned:negative:tests/requirements/crypto_hkdf.rs#counter_and_label_exhaustion": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
+      "planned:negative:tests/requirements/crypto_hmac.rs#tag_and_key_misuse": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
+      "planned:negative:tests/requirements/crypto_rsa.rs#ambiguous_parameters_and_padding": [
+        "BRY-REQ-CRYPTO-0011"
+      ],
+      "planned:negative:tests/requirements/crypto_sha3.rs#domain_and_output_bounds": [
+        "BRY-REQ-CRYPTO-0002"
+      ],
+      "planned:negative:tests/requirements/ct.rs#rejects_cross_version_or_malformed_proof": [
+        "BRY-REQ-CT-0001"
+      ],
+      "planned:negative:tests/requirements/der.rs#noncanonical_depth_and_length": [
+        "BRY-REQ-ENC-0001"
+      ],
+      "planned:negative:tests/requirements/must_staple.rs#missing_invalid_and_unknown_features": [
+        "BRY-REQ-OCSP-0002"
+      ],
+      "planned:negative:tests/requirements/name_constraints.rs#normalization_subtree_and_work_limits": [
+        "BRY-REQ-PKIX-0005"
+      ],
+      "planned:negative:tests/requirements/no_rev_avail.rs#ca_and_contradictory_extensions": [
+        "BRY-REQ-PKIX-0009"
+      ],
+      "planned:negative:tests/requirements/ocsp.rs#identity_nonce_freshness_and_signature_failures": [
+        "BRY-REQ-OCSP-0001"
+      ],
+      "planned:negative:tests/requirements/ocsp_exclusions.rs#status_request_v2_rejected": [
+        "BRY-REQ-OCSP-0005"
+      ],
+      "planned:negative:tests/requirements/ocsp_lightweight.rs#profile_order_and_freshness_failures": [
+        "BRY-REQ-OCSP-0003"
+      ],
+      "planned:negative:tests/requirements/ocsp_transport.rs#uri_media_length_retry_and_cache_failures": [
+        "BRY-REQ-OCSP-0004"
+      ],
+      "planned:negative:tests/requirements/path_building.rs#loops_candidates_and_work_exhaustion": [
+        "BRY-REQ-PKIX-0003"
+      ],
+      "planned:negative:tests/requirements/pem.rs#labels_padding_counts_and_trailing_data": [
+        "BRY-REQ-ENC-0003"
+      ],
+      "planned:negative:tests/requirements/private_keys.rs#encrypted_ambiguous_and_inconsistent_keys": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "planned:negative:tests/requirements/service_identity.rs#wildcards_unicode_and_cross_type_confusion": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "planned:negative:tests/requirements/trust.rs#distrust_ambiguity_and_algorithm_positions": [
+        "BRY-REQ-PKIX-0007"
+      ],
+      "planned:negative:tests/requirements/x509.rs#ambiguous_algorithms_and_malformed_der": [
+        "BRY-REQ-PKIX-0001"
+      ],
+      "planned:negative:tests/requirements/x509_exclusions.rs#unsigned_certificates_rejected": [
+        "BRY-REQ-PKIX-0010"
+      ],
+      "planned:positive:tests/requirements/asn1.rs#canonical_primitives": [
+        "BRY-REQ-ENC-0002"
+      ],
+      "planned:positive:tests/requirements/certificate_policy.rs#valid_policy_graphs": [
+        "BRY-REQ-PKIX-0006"
+      ],
+      "planned:positive:tests/requirements/certificate_status.rs#ocsp_negotiation": [
+        "BRY-REQ-OCSP-0006"
+      ],
+      "planned:positive:tests/requirements/chain_validation.rs#admitted_algorithms_and_constraints": [
+        "BRY-REQ-PKIX-0004"
+      ],
+      "planned:positive:tests/requirements/crl.rs#base_delta_and_indirect_crls": [
+        "BRY-REQ-PKIX-0008"
+      ],
+      "planned:positive:tests/requirements/crypto_admission.rs#explicit_allowlist": [
+        "BRY-REQ-CRYPTO-0013"
+      ],
+      "planned:positive:tests/requirements/crypto_aead.rs#aes_gcm_vectors": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
+      "planned:positive:tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
+      "planned:positive:tests/requirements/crypto_aes.rs#fips197_vectors": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
+      "planned:positive:tests/requirements/crypto_chacha.rs#rfc8439_vectors": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
+      "planned:positive:tests/requirements/crypto_ecc.rs#official_group_and_signature_vectors": [
+        "BRY-REQ-CRYPTO-0010"
+      ],
+      "planned:positive:tests/requirements/crypto_ed25519.rs#rfc8032_vectors": [
+        "BRY-REQ-CRYPTO-0012"
+      ],
+      "planned:positive:tests/requirements/crypto_ghash.rs#nist_vectors": [
+        "BRY-REQ-CRYPTO-0006"
+      ],
+      "planned:positive:tests/requirements/crypto_hash.rs#sha2_vectors_and_boundaries": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "planned:positive:tests/requirements/crypto_hkdf.rs#rfc5869_vectors": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
+      "planned:positive:tests/requirements/crypto_hmac.rs#rfc4231_vectors": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
+      "planned:positive:tests/requirements/crypto_rsa.rs#pss_and_pkcs1_vectors": [
+        "BRY-REQ-CRYPTO-0011"
+      ],
+      "planned:positive:tests/requirements/crypto_sha3.rs#fips202_vectors": [
+        "BRY-REQ-CRYPTO-0002"
+      ],
+      "planned:positive:tests/requirements/ct.rs#accepts_valid_versioned_proof": [
+        "BRY-REQ-CT-0001"
+      ],
+      "planned:positive:tests/requirements/der.rs#canonical_values": [
+        "BRY-REQ-ENC-0001"
+      ],
+      "planned:positive:tests/requirements/must_staple.rs#satisfied_status_request": [
+        "BRY-REQ-OCSP-0002"
+      ],
+      "planned:positive:tests/requirements/name_constraints.rs#permitted_and_excluded_subtrees": [
+        "BRY-REQ-PKIX-0005"
+      ],
+      "planned:positive:tests/requirements/no_rev_avail.rs#valid_end_entity_policy": [
+        "BRY-REQ-PKIX-0009"
+      ],
+      "planned:positive:tests/requirements/ocsp.rs#authorized_fresh_responses": [
+        "BRY-REQ-OCSP-0001"
+      ],
+      "planned:positive:tests/requirements/ocsp_exclusions.rs#status_request_v1_remains_available": [
+        "BRY-REQ-OCSP-0005"
+      ],
+      "planned:positive:tests/requirements/ocsp_lightweight.rs#rfc9919_messages": [
+        "BRY-REQ-OCSP-0003"
+      ],
+      "planned:positive:tests/requirements/ocsp_transport.rs#get_post_and_cache_metadata": [
+        "BRY-REQ-OCSP-0004"
+      ],
+      "planned:positive:tests/requirements/path_building.rs#deterministic_paths": [
+        "BRY-REQ-PKIX-0003"
+      ],
+      "planned:positive:tests/requirements/pem.rs#rfc7468_objects": [
+        "BRY-REQ-ENC-0003"
+      ],
+      "planned:positive:tests/requirements/private_keys.rs#admitted_formats": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "planned:positive:tests/requirements/service_identity.rs#typed_reference_identifiers": [
+        "BRY-REQ-PKIX-0002"
+      ],
+      "planned:positive:tests/requirements/trust.rs#anchors_cross_signing_and_selection": [
+        "BRY-REQ-PKIX-0007"
+      ],
+      "planned:positive:tests/requirements/x509.rs#current_signed_certificates": [
+        "BRY-REQ-PKIX-0001"
+      ],
+      "planned:positive:tests/requirements/x509_exclusions.rs#signed_certificates_remain_admitted": [
+        "BRY-REQ-PKIX-0010"
       ],
       "planned:tests/requirements/alpn.rs#caller_owned_semantics": [
         "BRY-REQ-IANA-0002"
@@ -405,5 +2475,5 @@
       ]
     }
   },
-  "schema": 1
+  "schema": 2
 }

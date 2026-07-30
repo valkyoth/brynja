@@ -6,6 +6,12 @@
     "legacy",
     "reject"
   ],
+  "authority_roles": [
+    "compatibility",
+    "current",
+    "evidence",
+    "exclusion"
+  ],
   "decisions": [
     "defer",
     "delegate",
@@ -13,6 +19,18 @@
     "enforce",
     "exclude",
     "isolate"
+  ],
+  "domain_invariants": [
+    "algorithm-admission",
+    "canonical-encoding",
+    "constant-time",
+    "failure-atomicity",
+    "key-lifecycle",
+    "resource-bound",
+    "side-channel",
+    "validation",
+    "version-separation",
+    "work-bound"
   ],
   "id_format": "BRY-REQ-[A-Z0-9]+-[0-9]{4}",
   "lifecycles": [
@@ -27,9 +45,14 @@
   ],
   "mapping_scopes": [
     "exact-source",
+    "reviewed-domain",
     "reviewed-global"
   ],
-  "schema": 1,
+  "profiles": [
+    "crypto-encoding-pkix",
+    "foundation"
+  ],
+  "schema": 2,
   "strengths": [
     "INVARIANT",
     "MAY",
@@ -45,6 +68,10 @@
     "boundary",
     "legacy-boundary",
     "planned-symbol"
+  ],
+  "test_polarities": [
+    "negative",
+    "positive"
   ],
   "test_statuses": [
     "actual",

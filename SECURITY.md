@@ -1,7 +1,7 @@
 # Security Policy
 
 Brynja is security-sensitive protocol, cryptographic, PKI, platform, and
-release infrastructure. Releases through version 0.3.2 are planning and
+release infrastructure. Releases through version 0.3.3 are planning and
 scaffolding evidence only and are not supported for securing traffic.
 
 ## Routine Checks

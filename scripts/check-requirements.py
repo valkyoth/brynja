@@ -9,6 +9,8 @@ import re
 import requirements_lib as lib
 import requirements_history as history
 import requirements_mapping as mapping
+import requirements_domain as domain
+import requirements_validation as validation
 import standards_lib as standards
 import surface_lib as surfaces
 
@@ -147,77 +149,8 @@ def collection_hashes(ledger: dict) -> dict[str, str]:
     return {entry["id"]: entry["sha256"] for entry in ledger["registries"]}
 
 
-def validate_targets(requirement: dict) -> None:
-    lifecycle = requirement["lifecycle"]
-    targets = requirement["targets"]
-    if not isinstance(targets, list) or len(targets) != 1:
-        lib.fail(f"{requirement['id']} requires exactly one target")
-    target = targets[0]
-    if set(target) != {"kind", "target"}:
-        lib.fail(f"{requirement['id']} has malformed target")
-    kind = target["kind"]
-    value = target["target"]
-    expected_kinds = {
-        "blocked": "blocker",
-        "caller-owned": "boundary",
-        "evidenced": "actual-symbol",
-        "implemented": "actual-symbol",
-        "legacy": "legacy-boundary",
-        "planned": "planned-symbol",
-        "rejected": "boundary",
-        "tested": "actual-symbol",
-    }
-    if kind != expected_kinds[lifecycle]:
-        lib.fail(f"{requirement['id']} has target incompatible with lifecycle")
-    if kind == "boundary":
-        if not isinstance(value, str) or re.fullmatch(
-            r"boundary:[a-z0-9.-]+", value
-        ) is None:
-            lib.fail(f"{requirement['id']} has invalid caller boundary")
-    else:
-        lib.validate_repository_target(value, requirement["id"])
-        if kind in {"actual-symbol", "blocker", "legacy-boundary"}:
-            lib.require_actual_target(value, requirement["id"])
-        if kind == "legacy-boundary" and "brynja-legacy" not in value:
-            lib.fail(f"{requirement['id']} legacy target is not isolated")
-
-
-def validate_tests_and_evidence(requirement: dict) -> None:
-    tests = requirement["tests"]
-    if not isinstance(tests, list) or not tests:
-        lib.fail(f"{requirement['id']} requires test targets")
-    actual_tests = 0
-    for test in tests:
-        if set(test) != {"status", "target"} or test["status"] not in {
-            "actual",
-            "planned",
-        }:
-            lib.fail(f"{requirement['id']} has malformed test target")
-        target = lib.validate_repository_target(
-            test["target"], f"{requirement['id']} test"
-        )
-        if test["status"] == "actual":
-            actual_tests += 1
-            lib.require_actual_target(target, f"{requirement['id']} test")
-    lifecycle = requirement["lifecycle"]
-    if lifecycle in {"tested", "evidenced"} and actual_tests == 0:
-        lib.fail(f"{requirement['id']} lifecycle requires an actual test")
-    if lifecycle in {"planned", "implemented"} and actual_tests:
-        lib.fail(f"{requirement['id']} claims tests before tested lifecycle")
-
-    evidence = requirement["evidence"]
-    if not isinstance(evidence, list) or len(evidence) != len(set(evidence)):
-        lib.fail(f"{requirement['id']} has invalid evidence")
-    if lifecycle == "evidenced":
-        if not evidence:
-            lib.fail(f"{requirement['id']} evidenced lifecycle lacks evidence")
-        for target in evidence:
-            target = lib.validate_repository_target(
-                target, f"{requirement['id']} evidence"
-            )
-            lib.require_actual_target(target, f"{requirement['id']} evidence")
-    elif evidence:
-        lib.fail(f"{requirement['id']} has premature evidence")
+validate_targets = validation.validate_targets
+validate_tests_and_evidence = validation.validate_tests_and_evidence
 
 
 def validate_requirement(
@@ -284,7 +217,11 @@ def build_matrix(
     ledger: dict | None = None,
     register: dict | None = None,
     previous: dict | None | object | bool = history.AUTO,
+    include_domains: bool | None = None,
 ) -> tuple[dict, dict]:
+    custom_inputs = any(value is not None for value in (policy, ledger, register))
+    if include_domains is None:
+        include_domains = not custom_inputs
     policy = policy or lib.read_json(lib.POLICY)
     ledger = ledger or lib.read_json(standards.LEDGER)
     register = register or lib.read_json(surfaces.REGISTER)
@@ -313,6 +250,15 @@ def build_matrix(
         )
         for requirement in policy["requirements"]
     ]
+    if include_domains:
+        domain_requirements, _domain_coverage, domain_hash = domain.build(
+            ledger,
+            register,
+            versions,
+        )
+        requirements.extend(domain_requirements)
+    else:
+        _scope, _domain_requirements, domain_hash = domain.load_policy()
     ids = [requirement["id"] for requirement in requirements]
     if len(ids) != len(set(ids)):
         lib.fail("requirement policy has duplicate stable IDs")
@@ -322,9 +268,10 @@ def build_matrix(
             previous = history.load_matrix()
         history.validate(previous, requirements, validate_transition)
     matrix = {
+        "domain_policy_sha256": domain_hash,
         "policy_sha256": standards.sha256(standards.json_bytes(policy)),
         "requirements": requirements,
-        "schema": 1,
+        "schema": 2,
         "source_ledger_sha256": policy["source_ledger_sha256"],
         "surface_register_sha256": policy["surface_register_sha256"],
     }
@@ -336,8 +283,14 @@ def main() -> int:
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     matrix, indexes = build_matrix()
+    _domain_requirements, domain_coverage, _domain_hash = domain.build(
+        lib.read_json(standards.LEDGER),
+        lib.read_json(surfaces.REGISTER),
+        roadmap_versions(),
+    )
     artifacts = {
         lib.COVERAGE: lib.render_coverage(matrix, indexes),
+        lib.DOMAIN_COVERAGE: standards.json_bytes(domain_coverage),
         lib.INDEXES: standards.json_bytes(indexes),
         lib.MATRIX: standards.json_bytes(matrix),
         lib.SCHEMA: standards.json_bytes(lib.schema_document()),
@@ -352,7 +305,7 @@ def main() -> int:
             if not path.is_file() or path.read_bytes() != data:
                 lib.fail(f"normative requirement artifact is stale: {path}")
         print(
-            f"{len(matrix['requirements'])} pilot requirements are explicit "
+            f"{len(matrix['requirements'])} requirements are explicit "
             "and reproducible"
         )
     return 0

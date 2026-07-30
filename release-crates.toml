@@ -1,14 +1,14 @@
 [release]
-version = "0.3.2"
+version = "0.3.3"
 policy = "independent"
 stage = "public"
 
 [crates."brynja"]
-previous_version = "0.3.1"
-version = "0.3.2"
+previous_version = "0.3.2"
+version = "0.3.3"
 change = "code"
 publish = true
-reason = "Mandatory facade release for the normative-requirement matrix foundation; it adds no protocol implementation."
+reason = "Mandatory facade release for cryptography, encoding, and PKIX normative coverage; it adds no protocol implementation."
 
 [crates."brynja-core"]
 previous_version = "0.1.0"

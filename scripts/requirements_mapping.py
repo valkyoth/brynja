@@ -16,6 +16,13 @@ EXPECTED_DISPOSITIONS = {
     "rejected": {"intentionally-rejected"},
     "tested": {"implemented"},
 }
+DOMAIN_SURFACES = {
+    "cryptography": {"cryptography"},
+    "ct": {"ct"},
+    "encoding": {"pkix"},
+    "ocsp": {"ocsp", "pki", "pkix", "tls12"},
+    "pkix": {"pkix"},
+}
 
 
 def validate(
@@ -97,4 +104,66 @@ def validate(
     if wrong_owner:
         lib.fail(
             f"{requirement_id} owner conflicts with linked surfaces: {wrong_owner}"
+        )
+
+
+def validate_domain(
+    requirement: dict,
+    sources: list[dict],
+    surface_map: dict[str, dict],
+    allowed_surfaces: set[str],
+) -> None:
+    requirement_id = requirement["id"]
+    decision_ids = requirement["decision_ids"]
+    if (
+        not isinstance(decision_ids, list)
+        or not decision_ids
+        or len(decision_ids) != len(set(decision_ids))
+    ):
+        lib.fail(f"{requirement_id} has missing or duplicate decisions")
+    unknown = set(decision_ids) - set(surface_map)
+    if unknown:
+        lib.fail(f"{requirement_id} references unknown decisions: {sorted(unknown)}")
+    outside = set(decision_ids) - allowed_surfaces
+    if outside:
+        lib.fail(
+            f"{requirement_id} links decisions outside v0.3.3 scope: "
+            f"{sorted(outside)}"
+        )
+    if requirement["mapping_scope"] != "reviewed-domain":
+        lib.fail(f"{requirement_id} domain requirement must use reviewed-domain")
+    rationale = requirement["mapping_rationale"]
+    if not isinstance(rationale, str) or len(rationale.strip()) < 80:
+        lib.fail(f"{requirement_id} domain mapping requires reviewed rationale")
+
+    linked = [surface_map[item] for item in decision_ids]
+    allowed_domains = DOMAIN_SURFACES.get(requirement["domain"])
+    if allowed_domains is None:
+        lib.fail(f"{requirement_id} has unknown coverage domain")
+    wrong_domain = [
+        item["id"] for item in linked if item["domain"] not in allowed_domains
+    ]
+    if wrong_domain:
+        lib.fail(
+            f"{requirement_id} links decisions outside its coverage domain: "
+            f"{wrong_domain}"
+        )
+    allowed_dispositions = EXPECTED_DISPOSITIONS[requirement["lifecycle"]]
+    mismatched = [
+        item["id"]
+        for item in linked
+        if item["disposition"] not in allowed_dispositions
+    ]
+    if mismatched:
+        lib.fail(
+            f"{requirement_id} lifecycle conflicts with surface disposition: "
+            f"{mismatched}"
+        )
+    authority_ids = {source["id"] for source in sources}
+    if not any(
+        authority_ids.intersection(item["normative_sources"])
+        for item in linked
+    ) and "cross-domain" not in rationale.lower():
+        lib.fail(
+            f"{requirement_id} unrelated domain mapping lacks cross-domain review"
         )

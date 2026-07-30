@@ -266,7 +266,7 @@ Exit criteria:
 
 ### v0.3.2 - Normative Requirement Matrix Foundation
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Define stable requirement identifiers bound to exact source hashes, sections, status and errata; model planned, implemented, tested, evidenced, rejected, caller-owned, legacy and blocked lifecycles; generate bidirectional source, decision, milestone, target-symbol-or-boundary, test and evidence mappings; and prove extraction and drift failures on the normative-language and registry authorities.
 
@@ -300,7 +300,7 @@ Exit criteria:
 
 ### v0.3.3 - Cryptography Encoding And PKIX Normative Coverage
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Populate and review every applicable normative statement and invariant for admitted primitives, arithmetic, DER, key and certificate formats, service identity, path processing, revocation, OCSP and Certificate Transparency; record explicit algorithm exclusions, current-versus-compatibility authority, positive and negative target tests, work bounds, and unresolved evidence.
 
@@ -311,9 +311,14 @@ Deliverables:
 
 - populate the complete crypto, encoding, key-container, certificate, name,
   path, policy, revocation, OCSP, TLS Feature, and CT requirement domains;
+- pin the missing FIPS 202 and in-force ITU-T X.690 plus erratum authorities,
+  classify SHA-3/SHAKE, GHASH, and ChaCha20 explicitly, and correct stale
+  primitive milestone ownership before coverage is accepted;
 - bind every rule to an owner, explicit disposition, resource or side-channel
   invariant, planned target, positive and negative target tests, and evidence
   lifecycle without accepting an unreviewed algorithm identifier;
+- generate an exact authority, normative-section, surface-assignment, and
+  deferral artifact bound to the source ledger and surface register;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -321,6 +326,8 @@ Verification:
 
 - compare source-to-plan and plan-to-source coverage for every owning milestone
   and regenerate all projections byte-identically;
+- require all 53 assigned authorities and all 3,322 selected surfaces to be
+  covered, with only the two explicitly named v0.3.5 ML-KEM deferrals;
 - remove, duplicate, weaken, misclassify, obsolete, or orphan requirements from
   each domain and require failure, including cross-domain AlgorithmIdentifier,
   name, policy, revocation, CT-version, and work-bound cases;
@@ -331,6 +338,8 @@ Exit criteria:
 
 - every locked cryptographic, encoding, and PKIX rule has a reviewable lifecycle
   and no admitted or rejected algorithm or validation surface remains implicit;
+- every record carries a substantive work bound, unresolved-evidence statement,
+  residual risk, and both positive and negative planned test targets;
 - `v0.3.3 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.3.4 - TLS DTLS And QUIC Normative Coverage

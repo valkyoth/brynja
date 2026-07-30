@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: v0.3.2 reviewed source, surface, and requirement foundation
+Status: v0.3.3 reviewed cryptography, encoding, and PKIX coverage
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -33,20 +33,20 @@ primitive is implemented.
   and rationale.
 - `protocol-surface-coverage.md` is the generated human-readable count and
   domain summary. It is never edited independently of the JSON register.
-- `../requirements/` binds stable pilot requirements to this exact ledger and
-  surface register and generates lifecycle, traceability, and coverage
-  evidence. It remains a foundation pilot until v0.3.3 through v0.3.5 complete
-  domain population.
+- `../requirements/` binds stable requirements to this exact ledger and
+  surface register and generates lifecycle, traceability, domain, and coverage
+  evidence. v0.3.3 completes cryptography, encoding, PKIX, OCSP, and CT
+  population; v0.3.4 and v0.3.5 own the remaining domains.
 
-The RFC and local NIST checksum manifests are trust pins, not outputs of a
+The RFC and local NIST/ITU checksum manifests are trust pins, not outputs of a
 fetch. Their lock scripts validate existing pins and deliberately cannot
 compute or replace them. The standards-policy pins are likewise established
-before a refresh. The current standards pins are anchored to signed candidate
-commit `5131bf2e2a1126812e30ddcb98f5bbee7412d1e3` and were independently
+before a refresh. The current standards pins are anchored to signed v0.3.2
+commit `00b1180a9014b7e69986e8ddd29d46e85a20aa2f` and were independently
 reverified over TLS using addresses obtained from Google DNS-over-HTTPS,
 independently of every later `--write`.
 
-NIST PDFs remain local-only and are not required in a clean clone. The ledger
+NIST and ITU PDFs remain local-only and are not required in a clean clone. The ledger
 always validates their complete allowlist and hash manifest. When any expected
 PDF is present, the entire cache must be present and every byte is checked.
 Set `VERIFY_LOCAL_REFERENCE_FILES=1` to require the cache explicitly.
@@ -73,6 +73,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/test-protocol-surfaces.py
 python3 scripts/check-requirements.py
 python3 scripts/test-requirements.py
+python3 scripts/test-requirement-domains.py
 python3 scripts/test-requirement-lifecycles.py
 ```
 
@@ -89,7 +90,7 @@ missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
 or stale generated JSON or Markdown. All 4,106 individual IANA records, 192
-nested registries, and 45 semantic decisions are represented; `future-work`
+nested registries, and 48 semantic decisions are represented; `future-work`
 does not claim implementation.
 
 The requirement checker additionally fails on changed ledger or surface hashes,
@@ -99,8 +100,10 @@ targets, premature test or evidence claims, weakened SHOULD decisions, broken
 bidirectional mappings, repository-escaping targets, released-ID removal,
 incorrect revisions, unrelated decision links, lifecycle/disposition or owner
 conflicts, protocol use of global mappings, released-scope changes, or stale
-generated artifacts. Its 12 pilot requirements exercise all eight lifecycle
-states; governance-tool evidence is not protocol implementation evidence.
+generated artifacts. Its 12 foundation requirements exercise all eight
+lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
+encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces.
+Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
 
@@ -121,7 +124,7 @@ review the new digest through a separate resolver, network egress, or signed
 upstream channel; manually update the policy pin and its provenance; then run
 `--write`, review the semantic and byte diff, regenerate the ledger, pass all
 tests, and commit the pin plus evidence together. The same pin-first process
-applies to new RFC and NIST source bytes.
+applies to new RFC, NIST, and ITU source bytes.
 
 Concrete ECDHE-ML-KEM groups remain fail-closed at milestone `0.120.0`.
 RFC 9954 supplies only the generic construction; a final Standards Track RFC

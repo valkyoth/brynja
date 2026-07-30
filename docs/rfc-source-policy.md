@@ -31,10 +31,10 @@ Use scripts/fetch-rfcs.sh to obtain missing allowlisted files, then inspect them
 and use scripts/lock-rfcs.sh to create or refresh the reviewed checksum file.
 Any source-list change and checksum change must be reviewed together.
 
-Official NIST documents use the separate local-only allowlist and hash manifest
-under references/. Release maintenance rechecks current RFC replacements,
-errata, IANA registries, NIST planning notes, and NIST errata before work on a
-dependent milestone.
+Official NIST and ITU documents use the separate local-only allowlist and hash
+manifest under references/. Release maintenance rechecks current RFC
+replacements, errata, IANA registries, NIST planning notes, NIST errata, and
+the in-force ITU edition before work on a dependent milestone.
 
 The v0.3.0 evidence under `standards/` makes the source-level policy
 executable. `source-policy.toml` owns lifecycle and milestone decisions plus
@@ -49,7 +49,7 @@ that no source, relationship, erratum, registry assignment, or date can change
 silently.
 
 Fetch and refresh operations cannot generate their own trust anchors. RFC and
-local NIST lock scripts only validate pre-existing reviewed hash manifests;
+local NIST/ITU lock scripts only validate pre-existing reviewed hash manifests;
 the standards refresh refuses both `--check` and `--write` unless every result
 matches the policy pin. A legitimate change requires manual pin entry from a
 separate resolver, egress, or signed upstream channel before refresh. All URLs
@@ -90,7 +90,14 @@ changed records increment exactly once; released governance/protocol scope is
 immutable. Exact-source mappings require the cited surface and consistent
 normative authority, disposition, and owner. Broader reviewed-global mappings
 are governance-only, RFC-backed, and require explicit reviewed rationale.
-Versions v0.3.3 through v0.3.5 populate the remaining normative domains.
+The v0.3.3 domain policy completes classical cryptography, encoding,
+key-container, PKIX, OCSP, and CT coverage. It binds 34 new requirements to all
+53 assigned exact authorities, records current, compatibility, evidence, and
+exclusion roles, hashes every applicable normative RFC section, and assigns
+all 3,322 selected surfaces or explicitly defers the two ML-KEM surfaces to
+v0.3.5. FIPS 202 and the in-force ITU-T X.690 (2021) plus Erratum 1 are
+local-only checksum-pinned authorities. Versions v0.3.4 and v0.3.5 populate
+the remaining normative domains.
 
 FIPS planning also snapshots the dated FIPS 140-3 CMVP Management Manual,
 Implementation Guidance, RFG and CMVP resolutions, SP 800-140 supplemental

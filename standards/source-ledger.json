@@ -134,19 +134,54 @@
     }
   ],
   "integrity": {
-    "errata_sha256": "8028ed0a9068a812fbff7e1e9cf011b4a46dbb4c43bd3c3b72ee2d1a70df25a2",
-    "local_source_manifest_sha256": "126d814cb26098854dea9b6a78974e29679e02bbc546d76ccff2f1a044d60dbd",
-    "pin_provenance": "Signed pre-pentest candidate 5131bf2e2a1126812e30ddcb98f5bbee7412d1e3; independently reverified 2026-07-27 over TLS with addresses from Google DNS-over-HTTPS; pins remain separate from every later refresh.",
+    "errata_sha256": "7c62be3e760edbc05b844a000f29df5c5a8bff42f9a43d59bf78c53290f3090e",
+    "local_source_manifest_sha256": "128ccb64a75cbe9db3c916534100b9515d830b549980872b2dcbc38478d831cd",
+    "pin_provenance": "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh.",
     "rfc_index_projection_sha256": "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674",
     "rfc_source_manifest_sha256": "d6644cc4fe1083491221a3bc9f2076da966e662075fd209b974c86112724b00d"
   },
   "local_authorities": [
     {
       "domains": [
+        "key-containers"
+      ],
+      "filename": "ITU-T.X.690-202102.pdf",
+      "milestones": [
+        "0.20.0",
+        "0.21.0",
+        "0.48.0",
+        "0.49.0",
+        "0.50.0"
+      ],
+      "role": "der",
+      "sha256": "6ac799a2d1ebed36abe39c9eac3586185bfb7db679f801e737189d6fdb1bbd6c",
+      "url": "https://www.itu.int/rec/dologin_pub.asp?id=T-REC-X.690-202102-I%21%21PDF-E&lang=e&type=items"
+    },
+    {
+      "domains": [
+        "key-containers"
+      ],
+      "filename": "ITU-T.X.690-202109-Err1.pdf",
+      "milestones": [
+        "0.20.0",
+        "0.21.0",
+        "0.48.0",
+        "0.49.0",
+        "0.50.0"
+      ],
+      "role": "der-erratum",
+      "sha256": "bb1acaa66a0897f9e53569d3449ce8fbf0892243ddd0cc430c912ed3178d6835",
+      "url": "https://www.itu.int/rec/dologin_pub.asp?id=T-REC-X.690-202109-I%21Err1%21PDF-E&lang=e&type=items"
+    },
+    {
+      "domains": [
         "symmetric"
       ],
       "filename": "NIST.FIPS.180-4.pdf",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -190,6 +225,9 @@
       ],
       "filename": "NIST.FIPS.197-upd1.pdf",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -206,8 +244,32 @@
       "domains": [
         "symmetric"
       ],
+      "filename": "NIST.FIPS.202.pdf",
+      "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.28.0",
+        "0.29.0",
+        "0.30.0",
+        "0.31.0"
+      ],
+      "role": "sha3-shake",
+      "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e",
+      "url": "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf"
+    },
+    {
+      "domains": [
+        "symmetric"
+      ],
       "filename": "NIST.SP.800-107r1.pdf",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -251,6 +313,9 @@
       ],
       "filename": "NIST.SP.800-38D.pdf",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -495,6 +560,9 @@
       ],
       "lifecycle": "current",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -955,6 +1023,9 @@
       ],
       "lifecycle": "evidence",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -1121,6 +1192,9 @@
       ],
       "lifecycle": "current",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -1836,6 +1910,9 @@
       ],
       "lifecycle": "current",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -2091,7 +2168,13 @@
       "domains": [
         "tls13-session"
       ],
-      "errata": [],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 9041,
+          "status": "Reported"
+        }
+      ],
       "lifecycle": "current",
       "milestones": [
         "0.74.0",
@@ -3580,6 +3663,11 @@
           "disposition": "apply",
           "id": 8297,
           "status": "Verified"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 9045,
+          "status": "Reported"
         }
       ],
       "lifecycle": "current",
@@ -3729,6 +3817,9 @@
       ],
       "lifecycle": "current",
       "milestones": [
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -5133,7 +5224,23 @@
         "tls13",
         "tls13-session"
       ],
-      "errata": [],
+      "errata": [
+        {
+          "disposition": "track-not-applied",
+          "id": 9040,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 9042,
+          "status": "Reported"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 9043,
+          "status": "Reported"
+        }
+      ],
       "lifecycle": "current",
       "milestones": [
         "0.10.0",

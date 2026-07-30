@@ -2,13 +2,13 @@
 version = 1
 
 [review]
-checked_at = "2026-07-27"
+checked_at = "2026-07-30"
 owner = "Brynja standards review"
-pin_provenance = "Signed pre-pentest candidate 5131bf2e2a1126812e30ddcb98f5bbee7412d1e3; independently reverified 2026-07-27 over TLS with addresses from Google DNS-over-HTTPS; pins remain separate from every later refresh."
+pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh."
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
 rfc_index_sha256 = "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674"
 errata = "https://errata.rfc-editor.org/search/"
-errata_sha256 = "8028ed0a9068a812fbff7e1e9cf011b4a46dbb4c43bd3c3b72ee2d1a70df25a2"
+errata_sha256 = "7c62be3e760edbc05b844a000f29df5c5a8bff42f9a43d59bf78c53290f3090e"
 
 [lifecycle]
 compatibility = [5077, 5246, 6347, 6962, 7507, 7627, 8422]
@@ -81,9 +81,9 @@ local = []
 
 [[domain]]
 id = "symmetric"
-milestones = ["0.25.0", "0.26.0", "0.27.0", "0.28.0", "0.29.0", "0.30.0", "0.31.0"]
+milestones = ["0.22.0", "0.23.0", "0.24.0", "0.25.0", "0.26.0", "0.27.0", "0.28.0", "0.29.0", "0.30.0", "0.31.0"]
 rfcs = [2104, 4231, 5116, 5869, 8439]
-local = ["NIST.FIPS.180-4.pdf", "NIST.FIPS.197-upd1.pdf", "NIST.SP.800-38D.pdf", "NIST.SP.800-107r1.pdf"]
+local = ["NIST.FIPS.180-4.pdf", "NIST.FIPS.197-upd1.pdf", "NIST.FIPS.202.pdf", "NIST.SP.800-38D.pdf", "NIST.SP.800-107r1.pdf"]
 
 [[domain]]
 id = "public-key"
@@ -95,7 +95,7 @@ local = ["NIST.FIPS.186-5.pdf", "NIST.SP.800-186.pdf", "NIST.SP.800-56Ar3.pdf"]
 id = "key-containers"
 milestones = ["0.20.0", "0.21.0", "0.48.0", "0.49.0", "0.50.0"]
 rfcs = [5912, 5958, 7468, 8017]
-local = []
+local = ["ITU-T.X.690-202102.pdf", "ITU-T.X.690-202109-Err1.pdf"]
 
 [[domain]]
 id = "pkix"

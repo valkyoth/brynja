@@ -344,7 +344,7 @@ Exit criteria:
 
 ### v0.3.4 - TLS DTLS And QUIC Normative Coverage
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Populate and review every applicable normative statement and invariant for current and compatibility TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2 and DTLS 1.3; map every message, extension, alert, registry value, state transition, transport boundary, intentional rejection and caller-owned responsibility to its milestone and target tests.
 

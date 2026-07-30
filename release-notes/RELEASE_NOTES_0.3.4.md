@@ -1,6 +1,6 @@
 # Brynja 0.3.4 Release Notes
 
-Status: pentest findings remediated; repository-owner retest required
+Status: pentest and remediation retest passed; awaiting green GitHub checks
 
 Brynja 0.3.4 completes the TLS, DTLS, and QUIC-TLS normative-coverage
 pass. It does not implement TLS, cryptography, PKI, QUIC, DTLS, platform
@@ -79,9 +79,10 @@ The repository owner pentested signed candidate
 `42869b4b85087bac647c11a08064189878346112` and reported two Medium
 governance-integrity findings. One permitted unrelated surfaces to hide behind
 a related link; the other inventoried normative sections without binding them
-to individual requirements. Both findings are remediated with regression
-fixtures and zero findings remain open. The changed candidate requires a clean
-external retest before this note and the permanent report can be marked PASS.
+to individual requirements. Both findings were remediated in signed commit
+`091c6c29dbf4613646564f3d13b9e40ecc5d40ed` with regression fixtures. The
+repository-owner retest was green, the permanent report is `PASS`/`PASS`, and
+zero findings remain open.
 
 ## Limitations
 

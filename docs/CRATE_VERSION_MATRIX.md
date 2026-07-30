@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.3.4 implementation complete; repository-owner pentest required
+Status: v0.3.4 pentest and remediation retest passed; awaiting green CI
 
 The `brynja` facade advances to `0.3.4`. Every unchanged modern supporting
 crate retains its published `0.1.0` version and is not republished. Legacy and

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.3.4 implementation complete; repository-owner pentest required
+Status: v0.3.4 pentest and remediation retest passed; awaiting green CI
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -89,6 +89,9 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 - 70 new requirements bring the matrix to 116 stable records and cover all 40
   admitted transport authorities, 550 normative RFC sections, and 480
   selected transport surfaces;
+- all 914 domain and transport normative RFC sections now carry exact
+  requirement IDs, unique extraction anchors, and section hashes, with zero
+  implicit or unreviewed exclusions;
 - source roles distinguish current, compatibility, evidence, exclusion, and
   caller-owned authority, including explicit Heartbeat, legacy signature,
   post-handshake-authentication, certificate-with-external-PSK, and QUIC
@@ -99,8 +102,10 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 - RFC 9850 key logging and four optional TLS facility groups remain explicit
   v0.3.5 deferrals, while status_request_v2 remains bound to the completed
   v0.3.3 OCSP review; and
-- eight transport fixtures reject missing owners, binding drift, role swaps,
-  duplicate identities, omitted authorities, and nondeterministic output.
+- eight transport and seven section-binding fixtures reject missing owners,
+  binding drift, role swaps, duplicate identities, omitted authorities,
+  unmapped or non-normative sections, source/requirement mismatch, incomplete
+  semantic revisions, unreviewed exclusions, and nondeterministic output.
 
 This remains governance and planning evidence, not protocol implementation.
 v0.3.5 populates optional, legacy, operational, and residual requirements
@@ -132,7 +137,12 @@ The repository owner pentested the signed v0.3.3 implementation candidate and
 reported a green result with no findings. Its permanent report records `PASS`,
 zero open findings, and `PASS` retest status.
 
-The v0.3.4 implementation stop is complete locally. No v0.3.4 pentest result
-is claimed yet. The next authorized step is the repository-owner pentest
-against the signed candidate commit; release finalization, green GitHub checks,
-and explicit tag authorization follow only after the report is committed.
+The repository owner pentested signed v0.3.4 candidate
+`42869b4b85087bac647c11a08064189878346112` and reported two Medium
+governance-integrity findings. Both were remediated in signed commit
+`091c6c29dbf4613646564f3d13b9e40ecc5d40ed`: every linked surface now has an
+independent authority and owner check or an exact structured exception, and
+every normative RFC section now has an exact requirement binding or reviewed
+disposition. The repository-owner retest was green with zero open findings.
+The permanent v0.3.4 report is `PASS`/`PASS`; the next step is green hosted
+GitHub checks followed by explicit user authorization to tag.

@@ -44,7 +44,8 @@ Keep a Changelog and Semantic Versioning.
   every linked surface must independently match authority and owner or use an
   exact structured exception, and every normative section must have an
   explicit requirement binding or reviewed disposition. External retest of
-  the remediated candidate is required before release.
+  the remediated candidate passed with zero open findings; the permanent
+  v0.3.4 report is `PASS`/`PASS`.
 
 ## [0.3.3] - 2026-07-30
 

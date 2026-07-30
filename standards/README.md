@@ -111,9 +111,9 @@ lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
 encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces; 70
 transport requirements cover 40 authorities, 550 normative sections, 63
 implementation milestones, and 483 TLS, DTLS, and QUIC surfaces. Forty-seven
-v0.3.5 residual requirements cover 34 authorities, 193 reviewed normative
+v0.3.5 residual requirements cover 33 authorities, 182 reviewed normative
 sections, and all 741 formerly uncovered surfaces. The residual section policy
-contains 175 exact mappings and 18 explicit exclusions, producing complete
+contains 165 exact mappings and 17 explicit exclusions, producing complete
 closure across all 126 sources and 4,422 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot

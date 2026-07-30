@@ -181,15 +181,15 @@
         },
         {
           "decision": {
-            "code_target": "crates/brynja-tls/src/rrc.rs",
+            "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
             "disposition": "future-work",
-            "domain": "tls",
-            "owner": "0.148.0",
-            "rationale": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+            "domain": "dtls",
+            "owner": "0.111.1",
+            "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
             "sources": [
               "iana:tls-parameters"
             ],
-            "test_target": "tests/surface/rrc.rs#registry"
+            "test_target": "tests/requirements/dtls_routability.rs#registry"
           },
           "ids": [
             "tls-rrc-message-types"
@@ -1088,8 +1088,8 @@
         "disposition": "legacy-only",
         "domain": "legacy",
         "owner": "H0.3.0",
-        "rationale": "SSL 3.0 is confined to an independently packaged insecure legacy release line.",
-        "sources": ["rfc:6101"],
+        "rationale": "SSL 3.0 is confined to an independently packaged insecure legacy release line and remains prohibited by current TLS policy.",
+        "sources": ["rfc:6101", "rfc:7568"],
         "test_target": "tests/surface/legacy.rs#ssl3_isolation"
       },
       "id": "legacy.ssl3"
@@ -1097,11 +1097,12 @@
     {
       "decision": {
         "code_target": "crates/brynja-legacy-ssl2/src/lib.rs",
-        "disposition": "legacy-only",
+        "disposition": "future-work",
         "domain": "legacy",
         "owner": "H0.4.0",
-        "rationale": "SSL 2.0 is confined to an independently packaged insecure legacy release line.",
+        "rationale": "SSL 2.0 remains source-blocked before any independent insecure legacy release line can begin.",
         "sources": ["rfc:6176"],
+        "source_blocker": "legacy-non-rfc-sources",
         "test_target": "tests/surface/legacy.rs#ssl2_isolation"
       },
       "id": "legacy.ssl2"
@@ -1109,11 +1110,12 @@
     {
       "decision": {
         "code_target": "crates/brynja-legacy-wtls/src/lib.rs",
-        "disposition": "legacy-only",
+        "disposition": "future-work",
         "domain": "legacy",
         "owner": "H0.5.0",
-        "rationale": "WTLS research and implementation are confined to an independent insecure legacy package.",
-        "sources": ["rfc:7568"],
+        "rationale": "WTLS research and implementation remain blocked until authenticated protocol-source provenance and rights are recorded.",
+        "sources": [],
+        "source_blocker": "legacy-non-rfc-sources",
         "test_target": "tests/surface/legacy.rs#wtls_isolation"
       },
       "id": "legacy.wtls"
@@ -1121,11 +1123,12 @@
     {
       "decision": {
         "code_target": "crates/brynja-legacy-pct/src/lib.rs",
-        "disposition": "legacy-only",
+        "disposition": "future-work",
         "domain": "legacy",
         "owner": "H0.6.0",
-        "rationale": "PCT is confined to an independently packaged insecure legacy release line.",
-        "sources": ["rfc:7568"],
+        "rationale": "PCT remains blocked until authenticated protocol-source provenance and rights are recorded.",
+        "sources": [],
+        "source_blocker": "legacy-non-rfc-sources",
         "test_target": "tests/surface/legacy.rs#pct_isolation"
       },
       "id": "legacy.pct"
@@ -1133,11 +1136,12 @@
     {
       "decision": {
         "code_target": "crates/brynja-legacy-snp/src/lib.rs",
-        "disposition": "legacy-only",
+        "disposition": "future-work",
         "domain": "legacy",
         "owner": "H0.7.0",
-        "rationale": "Secure Network Programming is confined to an independent insecure legacy package.",
-        "sources": ["rfc:7568"],
+        "rationale": "Secure Network Programming remains blocked until authenticated protocol-source provenance and rights are recorded.",
+        "sources": [],
+        "source_blocker": "legacy-non-rfc-sources",
         "test_target": "tests/surface/legacy.rs#snp_isolation"
       },
       "id": "legacy.snp"
@@ -1145,17 +1149,35 @@
     {
       "decision": {
         "code_target": "crates/brynja-research-ssl1/src/lib.rs",
-        "disposition": "legacy-only",
+        "disposition": "future-work",
         "domain": "legacy",
         "owner": "H0.8.0",
-        "rationale": "SSL 1 is reconstruction research only and can never be a secure or published protocol product.",
-        "sources": ["rfc:7568"],
+        "rationale": "SSL 1 reconstruction research remains source-blocked and can never become a secure or published protocol product.",
+        "sources": [],
+        "source_blocker": "legacy-non-rfc-sources",
         "test_target": "tests/surface/legacy.rs#ssl1_research_isolation"
       },
       "id": "legacy.ssl1-research"
     }
   ],
   "entry_overrides": [
+    {
+      "decision": {
+        "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
+        "disposition": "future-work",
+        "domain": "dtls",
+        "owner": "0.111.1",
+        "rationale": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:9853"],
+        "test_target": "tests/requirements/dtls_routability.rs#registry"
+      },
+      "selector": {
+        "collection": "tls-extensiontype-values",
+        "equals": "rrc",
+        "field": "name",
+        "registry": "tls-extensiontype-values-1"
+      }
+    },
     {
       "decision": {
         "code_target": "crates/brynja-tls/src/rejected.rs",

@@ -178,6 +178,62 @@ def test_reviewed_exclusion_is_explicit() -> None:
     assert coverage[("rfc:8422", "2")]["disposition"] == "not-applicable"
 
 
+def test_global_mapped_and_excluded_conflict_fails() -> None:
+    _requirements, _authorities, policy = fixture()
+    conflicting = copy.deepcopy(policy)
+    conflicting["binding"] = [
+        {
+            "rationale": (
+                "This synthetic cross-policy binding exists only to prove "
+                "that a section cannot also carry an exclusion."
+            ),
+            "requirement_id": "BRY-REQ-TLS12-0088",
+            "sections": ["2"],
+            "source_id": "rfc:8422",
+        }
+    ]
+    conflicting["exclusion"] = []
+    excluded = {
+        "binding": [],
+        "exclusion": [
+            {
+                "disposition": "not-applicable",
+                "rationale": (
+                    "This synthetic cross-policy exclusion exists only to "
+                    "prove that a section cannot also carry a binding."
+                ),
+                "section": "2",
+                "source_id": "rfc:8422",
+            }
+        ],
+    }
+    assert_fails(
+        "section is both mapped and excluded",
+        sections.validate_global_policies,
+        [conflicting, excluded],
+    )
+
+
+def test_global_exclusion_dispositions_must_agree() -> None:
+    first = {
+        "binding": [],
+        "exclusion": [
+            {
+                "disposition": "not-applicable",
+                "section": "2",
+                "source_id": "rfc:8422",
+            }
+        ],
+    }
+    second = copy.deepcopy(first)
+    second["exclusion"][0]["disposition"] = "caller-owned"
+    assert_fails(
+        "section has conflicting exclusions",
+        sections.validate_global_policies,
+        [first, second],
+    )
+
+
 def main() -> int:
     count = support.run_tests(globals())
     print(f"{count} normative-section tests passed")

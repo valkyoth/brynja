@@ -89,9 +89,9 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 - 70 new requirements bring the matrix to 116 stable records and cover all 40
   admitted transport authorities, 550 normative RFC sections, and 483
   selected transport surfaces;
-- all 914 domain and transport normative RFC sections now carry exact
-  requirement IDs, unique extraction anchors, and section hashes, with zero
-  implicit or unreviewed exclusions;
+- all 914 domain and transport normative RFC sections carry reviewed
+  decisions: 909 exact mappings and five explicit dispositions with unique
+  extraction anchors and section hashes;
 - source roles distinguish current, compatibility, evidence, exclusion, and
   caller-owned authority, including explicit Heartbeat, legacy signature,
   post-handshake-authentication, certificate-with-external-PSK, and QUIC
@@ -102,7 +102,7 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 - RFC 9850 key logging and four optional TLS facility groups remain explicit
   v0.3.5 deferrals, while status_request_v2 remains bound to the completed
   v0.3.3 OCSP review; and
-- eight transport and seven section-binding fixtures reject missing owners,
+- eight transport and nine section-binding fixtures reject missing owners,
   binding drift, role swaps, duplicate identities, omitted authorities,
   unmapped or non-normative sections, source/requirement mismatch, incomplete
   semantic revisions, unreviewed exclusions, and nondeterministic output.
@@ -112,8 +112,8 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 - 47 new requirements bring the matrix to 163 stable records;
 - final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are added as
   local-only checksum-pinned authorities;
-- 34 residual authorities and 193 normative RFC sections are reviewed through
-  175 exact mappings and 18 explicit terminology or conventions exclusions;
+- 33 residual authorities and 182 normative RFC sections are reviewed through
+  165 exact mappings and 17 explicit dispositions;
 - all 741 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,422 surfaces;
 - the generated closure maps all 126 locked sources, all 205 roadmap rows, all
@@ -121,16 +121,21 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
-- twenty-one residual fixtures reject draft claims, missing or duplicate
+- twenty-two residual fixtures reject draft claims, missing or duplicate
   groups, unlinked or boundary-mixed surfaces, non-representative source,
   target, owner or disposition drift, blanket section coverage, orphaned
   sources or plans, stale mutable guidance, source-rights gaps, missing
-  exclusions, and weakened hybrid, legacy, or FIPS blockers.
+  exclusions, actionable source-blocked legacy requirements, and weakened
+  hybrid, legacy, or FIPS blockers;
+- domain, transport, and residual section decisions are globally reconciled;
+  DTLS RRC extension and message registry ownership is fixed at v0.111.1; and
+  RFC 7568 section 3 is authority only for the SSLv3 prohibition boundary.
 
 This remains governance and planning evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
-RFC and final IANA values exist. Non-RFC legacy implementations remain blocked
-until exact source provenance and rights are authenticated. FIPS validation
+RFC and final IANA values exist. Non-RFC legacy requirements carry
+machine-checked blocked lifecycles and exact blocker targets until source
+provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
 No `brynja-sanitization` package or dependency exists yet; its admission
@@ -167,5 +172,6 @@ every normative RFC section now has an exact requirement binding or reviewed
 disposition. The repository-owner retest was green with zero open findings.
 The permanent v0.3.4 report is `PASS`/`PASS`, and signed tag `v0.3.4` is
 published. The v0.3.5 implementation candidate now requires repository-owner
-retest after two Medium traceability findings were remediated. The permanent
-report records `RETEST REQUIRED`/`PENDING` with zero open findings.
+retest after five Medium integrity findings across two assessment rounds were
+remediated. The permanent report records `RETEST REQUIRED`/`PENDING` with zero
+known open findings.

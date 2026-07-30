@@ -110,9 +110,12 @@ def covered_surface_ids(
 
 def _target(lifecycle: str, surface: dict) -> dict:
     if lifecycle == "blocked":
+        blocker = surface.get("source_blocker")
+        if blocker is None:
+            lib.fail("blocked residual requirement lacks a source blocker")
         return {
             "kind": "blocker",
-            "target": "standards/source-policy.toml#ecdhe-ml-kem-groups",
+            "target": f"requirements/authority-claims.toml#{blocker}",
         }
     if lifecycle == "legacy":
         target = surface["code_target"]
@@ -127,7 +130,7 @@ def _target(lifecycle: str, surface: dict) -> dict:
 
 def _invariants(domain: str, lifecycle: str) -> list[str]:
     values = ["resource-bound", "validation", "work-bound"]
-    if domain in {"ech", "hpke", "hybrid", "tls", "tls12"}:
+    if domain in {"dtls", "ech", "hpke", "hybrid", "tls", "tls12"}:
         values.append("version-separation")
     if domain in {"cryptography", "entropy", "hpke", "hybrid"}:
         values.extend(["key-lifecycle", "side-channel"])
@@ -195,7 +198,10 @@ def make_requirement(
         "sources": [resolve_source(item, sources) for item in raw["sources"]],
         "statement": surface["rationale"],
         "strength": "INVARIANT",
-        "targets": [_target(lifecycle, surface)],
+        "targets": [_target(
+            lifecycle,
+            {**surface, "source_blocker": raw.get("blocker")},
+        )],
         "tests": _tests(surface),
         "work_bound": (
             "Inputs, parsing, retained bytes, retries, provider operations, "
@@ -239,17 +245,26 @@ def validate_policy(
     for item in groups:
         if (
             not GROUP_FIELDS <= set(item)
-            or set(item) - GROUP_FIELDS - {"lifecycle", "revision"}
+            or set(item)
+            - GROUP_FIELDS
+            - {"blocker", "lifecycle", "revision"}
         ) or (
             item["owner"] not in versions
             or item["disposition"] not in DISPOSITION_LIFECYCLE
             or not isinstance(item["sources"], list)
-            or not item["sources"]
+            or (
+                not item["sources"]
+                and item.get("lifecycle") != "blocked"
+            )
             or not isinstance(item["surface_ids"], list)
             or not item["surface_ids"]
             or len(item["surface_ids"]) != len(set(item["surface_ids"]))
             or not isinstance(item.get("revision", 1), int)
             or item.get("revision", 1) < 1
+            or (
+                (item.get("lifecycle") == "blocked")
+                != isinstance(item.get("blocker"), str)
+            )
         ):
             lib.fail("residual policy has a malformed surface group")
     if any(set(item) != REGISTRY_FIELDS for item in policy["registry_requirement"]):
@@ -304,14 +319,23 @@ def build(
         ]
         if incompatible:
             lib.fail(f"{raw['id']} contains incompatible surfaces: {incompatible}")
+        blockers = {item.get("source_blocker") for item in candidates}
+        if blockers != {raw.get("blocker")}:
+            lib.fail(f"{raw['id']} source blocker differs across surfaces")
         unknown = set(raw["sources"]) - set(authorities)
         if unknown:
             lib.fail(f"residual policy references unknown authority: {sorted(unknown)}")
-        unrelated = [
-            item["id"]
-            for item in candidates
-            if not set(raw["sources"]).intersection(item["normative_sources"])
-        ]
+        unrelated = (
+            []
+            if raw.get("lifecycle") == "blocked" and not raw["sources"]
+            else [
+                item["id"]
+                for item in candidates
+                if not set(raw["sources"]).intersection(
+                    item["normative_sources"]
+                )
+            ]
+        )
         if unrelated:
             lib.fail(f"{raw['id']} has unrelated surfaces: {unrelated}")
         boundaries = {
@@ -392,7 +416,10 @@ def build(
     all_requirements = existing_requirements + requirements
     cited = set()
     for requirement in all_requirements:
-        for source in requirement.get("sources") or [requirement.get("source")]:
+        raw_sources = requirement.get("sources")
+        if raw_sources is None:
+            raw_sources = [requirement.get("source")]
+        for source in raw_sources:
             identifier = source.get("id")
             if identifier is None and source.get("kind") == "iana":
                 identifier = f"iana:{source['collection']}"

@@ -54,13 +54,15 @@ requirements.
 - `coverage.md` is the generated human-readable lifecycle and scope report.
 - `domain-coverage.json` proves exact authority, normative-section, and
   protocol-surface coverage for the v0.3.3 scope, including requirement IDs
-  for all 364 normative sections.
+  or a reviewed disposition for all 364 normative sections.
 - `transport-coverage.json` proves exact coverage of 40 authorities, 550
   normative RFC sections, 63 owner milestones, and 483 transport surfaces,
   including requirement IDs or reviewed dispositions for every section.
-- `residual-coverage.json` proves exact coverage of 34 residual authorities,
-  193 normative RFC sections, and 741 previously uncovered surfaces, including
-  175 mapped sections, 18 explicit exclusions, and 279 exact section links.
+- `residual-coverage.json` proves exact coverage of 33 residual authorities,
+  182 normative RFC sections, and 741 previously uncovered surfaces, including
+  165 mapped sections, 17 explicit exclusions, and 266 exact section links.
+- Domain, transport, and residual section policies are reconciled globally so
+  no section can be both mapped and excluded or carry conflicting exclusions.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
   requirement-to-owner reports across 126 authorities, 205 roadmap rows,

@@ -76,11 +76,12 @@ def source_id(source: dict) -> str:
 
 
 def requirement_sources(requirement: dict) -> set[str]:
+    sources = requirement.get("sources")
+    if sources is None:
+        sources = [requirement.get("source")]
     return {
         source_id(source)
-        for source in (
-            requirement.get("sources") or [requirement.get("source")]
-        )
+        for source in sources
     }
 
 
@@ -250,6 +251,36 @@ def surface_assignments(
     return assignments
 
 
+def validate_source_blockers(
+    register: dict,
+    blockers: dict[str, dict],
+    assignments: dict[str, set[str]],
+    requirements: dict[str, dict],
+) -> None:
+    blocker_id = "legacy-non-rfc-sources"
+    expected = set(blockers[blocker_id]["surfaces"])
+    marked = {
+        item["id"]
+        for item in register["surfaces"]
+        if item.get("source_blocker") == blocker_id
+    }
+    unknown = {
+        item.get("source_blocker")
+        for item in register["surfaces"]
+        if item.get("source_blocker") not in {None, blocker_id}
+    }
+    if marked != expected or unknown:
+        lib.fail("source-blocked surface linkage is incomplete")
+    target = f"requirements/authority-claims.toml#{blocker_id}"
+    for surface_id in expected:
+        for requirement_id in assignments[surface_id]:
+            requirement = requirements[requirement_id]
+            if requirement["lifecycle"] != "blocked":
+                lib.fail(f"{surface_id} must remain source blocked")
+            if requirement["targets"] != [{"kind": "blocker", "target": target}]:
+                lib.fail(f"{surface_id} requires its exact source blocker target")
+
+
 def build(
     ledger: dict,
     register: dict,
@@ -303,6 +334,7 @@ def build(
     surfaces = surface_assignments(
         register, (domain, transport, residual), foundation
     )
+    validate_source_blockers(register, blockers, surfaces, requirement_map)
     provisional = [
         item["id"]
         for item in register["surfaces"]

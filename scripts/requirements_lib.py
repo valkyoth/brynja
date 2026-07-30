@@ -48,7 +48,7 @@ TRANSITIONS = {
     "caller-owned": ["planned"],
     "evidenced": ["tested"],
     "implemented": ["tested"],
-    "legacy": ["planned"],
+    "legacy": ["blocked", "planned"],
     "planned": [
         "blocked",
         "caller-owned",

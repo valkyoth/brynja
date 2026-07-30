@@ -3016,6 +3016,7 @@
       ],
       "normative_sections": [
         {
+          "disposition": "not-applicable",
           "occurrences": {
             "MAY": 1,
             "MUST": 1,
@@ -3023,9 +3024,7 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0005"
-          ],
+          "rationale": "RFC 6961 section 1.1 defines BCP 14 terminology and conventions rather than an independently implementable OCSP behavior; it remains reviewed context and is not assigned to a requirement.",
           "section": "1.1",
           "section_sha256": "815942bac140a8f3fddbf89424200400f80b7283d0e40342b689a0868d419238"
         },
@@ -5520,10 +5519,10 @@
     }
   ],
   "authority_count": 53,
-  "excluded_normative_section_count": 0,
-  "mapped_normative_section_count": 364,
+  "excluded_normative_section_count": 1,
+  "mapped_normative_section_count": 363,
   "normative_section_count": 364,
-  "policy_sha256": "316ee646cb37c08670a6eb3ac4841507907c95e1e2e73af81a3fac722477a7a4",
+  "policy_sha256": "dadc8c947fee6cf5a5873e3fb42aaef25dfab9a741fd9d20c0b0a074a38e970a",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3322,

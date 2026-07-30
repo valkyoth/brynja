@@ -47,8 +47,8 @@ def test_current_repository() -> None:
     requirements, coverage, _digest = domain.build(ledger, register, versions)
     assert len(requirements) == 34
     assert coverage["authority_count"] == 53
-    assert coverage["mapped_normative_section_count"] == 364
-    assert coverage["excluded_normative_section_count"] == 0
+    assert coverage["mapped_normative_section_count"] == 363
+    assert coverage["excluded_normative_section_count"] == 1
     assert coverage["normative_section_count"] == 364
     assert coverage["surface_count"] == 3322
     assert standards.json_bytes(coverage) == lib.DOMAIN_COVERAGE.read_bytes()

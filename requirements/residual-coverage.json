@@ -128,6 +128,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
       ],
       "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
@@ -881,20 +882,14 @@
         {
           "anchor": "3. Do Not Use SSL Version 3.0 SSLv3 MUST NOT be used. Negotiation of SSLv3 from any version of TLS MUST NOT be permitted. Any version of TLS is more secure than",
           "requirement_ids": [
-            "BRY-REQ-LEGACY-0500",
-            "BRY-REQ-LEGACY-0600",
-            "BRY-REQ-LEGACY-0700",
-            "BRY-REQ-LEGACYSSL1-0800"
+            "BRY-REQ-LEGACY-0300"
           ],
           "section": "3",
           "section_sha256": "8b4cd0ed8e45011184d21b623a0cba6ef6ea3627dde1354234a5549f28f5e464"
         }
       ],
       "requirement_ids": [
-        "BRY-REQ-LEGACY-0500",
-        "BRY-REQ-LEGACY-0600",
-        "BRY-REQ-LEGACY-0700",
-        "BRY-REQ-LEGACYSSL1-0800"
+        "BRY-REQ-LEGACY-0300"
       ],
       "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
       "status": "PROPOSED STANDARD"
@@ -2398,126 +2393,6 @@
       "status": "INFORMATIONAL"
     },
     {
-      "authority_role": "current",
-      "domains": [
-        "dtls"
-      ],
-      "errata": [],
-      "id": "rfc:9853",
-      "kind": "rfc",
-      "milestones": [
-        "0.102.0",
-        "0.103.0",
-        "0.104.0",
-        "0.105.0",
-        "0.106.0",
-        "0.107.0",
-        "0.108.0",
-        "0.109.0",
-        "0.110.0",
-        "0.111.0",
-        "0.112.0",
-        "0.113.0",
-        "0.114.0",
-        "0.115.0",
-        "0.116.0"
-      ],
-      "normative_sections": [
-        {
-          "anchor": "10.3.1. Designated Expert Instructions To enable a broadly informed review of registration decisions, it is recommended that multiple designated experts be appo",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "10.3.1",
-          "section_sha256": "a06224818b97a63bd7c7578b02378957274436ec072b989a01e5fe1c7f45314a"
-        },
-        {
-          "anchor": "2. Conventions and Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
-          "disposition": "not-applicable",
-          "rationale": "rfc:9853 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
-          "section": "2",
-          "section_sha256": "c6d5043897b79bde0787c02eb7c56306103e4498555d01bc37de1706892fd2b9"
-        },
-        {
-          "anchor": "3. RRC Extension The use of RRC is negotiated via the rrc extension. The rrc extension is only defined for DTLS 1.2 and 1.3. On connecting, a client wishing to",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "3",
-          "section_sha256": "6ca69d4b9074468c84f6bebeaa79f5cd5612ca22521da92563006e51abe3c30c"
-        },
-        {
-          "anchor": "3.1. RRC and CID Interplay RRC offers an in-protocol mechanism to perform peer address validation that complements the \"peer address update\" procedure described",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "3.1",
-          "section_sha256": "c0ad499d373ae56a67f148eba522e95e8f4318f718027b116d582be289c487fa"
-        },
-        {
-          "anchor": "4. Return Routability Check Message Types This document defines the return_routability_check content type (Figure 1) to carry Return Routability Check messages.",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "4",
-          "section_sha256": "545b30ff30cb1910257729c68b0f5400cd5be912e65f34525652b2631b3e5465"
-        },
-        {
-          "anchor": "5. Path Validation Procedure A receiver that observes the peer's address change MUST stop sending any buffered application data or limit the data sent to the un",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "5",
-          "section_sha256": "1bf6ae73c00cc0f04e9615a1263359442fb6643ae9678bc10ba9b654492def2f"
-        },
-        {
-          "anchor": "5.2. Enhanced The enhanced return routability check comprises the following steps: 1. The receiver (i.e., the initiator) creates a return_routability_check mess",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "5.2",
-          "section_sha256": "29a7f6f7c7afb650f73570b088a4e9e0086638f8599c8c79ed71f25b36578603"
-        },
-        {
-          "anchor": "5.3. Path Challenge Requirements * The initiator MAY send multiple return_routability_check messages of type path_challenge to account for packet loss on the pr",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "5.3",
-          "section_sha256": "db0ee3651707538f995f61d2588eea10531dc02acd2f5796bfe8165b505e990a"
-        },
-        {
-          "anchor": "5.4. Path Response/Drop Requirements * The responder MUST NOT delay sending an elicited path_response or path_drop messages. * The responder MUST send exactly o",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "5.4",
-          "section_sha256": "01eb06dffaf20ae842acd06107d6e63da6fe16ecfe4c39b1e12fcbe099e7d40e"
-        },
-        {
-          "anchor": "5.5. Timer Choice When setting T, implementations are cautioned that the new path could have a longer RTT than the original. In settings where there is external",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "5.5",
-          "section_sha256": "8ba4b7ae1fc937e4a3c0811b37adba54b9c344c523d097fe58ef9d41f333f1ea"
-        },
-        {
-          "anchor": "9. Privacy Considerations When using DTLS 1.3, peers SHOULD avoid using the same CID on multiple network paths, in particular when initiating connection migrati",
-          "requirement_ids": [
-            "BRY-REQ-RRCREG-0148"
-          ],
-          "section": "9",
-          "section_sha256": "c180dfde630a5de74023a079ca5f4f3af82db99893e5ee726f44dc570e63dc63"
-        }
-      ],
-      "requirement_ids": [
-        "BRY-REQ-RRCREG-0148"
-      ],
-      "sha256": "88b0e4322763defc5d9219d3f1405fb6d488f1c3101c4e60d5b36ff3fa8d70d0",
-      "status": "PROPOSED STANDARD"
-    },
-    {
       "authority_role": "exclusion",
       "domains": [
         "hybrid"
@@ -2655,10 +2530,10 @@
       "status": "INFORMATIONAL"
     }
   ],
-  "authority_count": 34,
-  "mapped_normative_section_count": 175,
-  "normative_section_count": 193,
-  "policy_sha256": "eeceb5608ddf3aea0e1130077dc2ba2a903ebf45a7cf1ce443d16682693b8a0a",
+  "authority_count": 33,
+  "mapped_normative_section_count": 165,
+  "normative_section_count": 182,
+  "policy_sha256": "2696bcc0ec2371cfcac8013d6d53ca183d20b112ea0937ebaaa0251a5beb311b",
   "requirement_count": 47,
   "schema": 1,
   "surface_count": 741,
@@ -7498,10 +7373,10 @@
     {
       "coverage": "requirement",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
-      "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "owner": "0.111.1",
+      "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
@@ -8330,49 +8205,49 @@
     {
       "coverage": "requirement",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-response.1",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.reserved-for-private-use.1",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.unassigned.1",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
@@ -8465,7 +8340,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.pct",
       "owner": "H0.6.0",
@@ -8473,7 +8348,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.snp",
       "owner": "H0.7.0",
@@ -8481,7 +8356,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.ssl1-research",
       "owner": "H0.8.0",
@@ -8489,7 +8364,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.ssl2",
       "owner": "H0.4.0",
@@ -8513,7 +8388,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.wtls",
       "owner": "H0.5.0",

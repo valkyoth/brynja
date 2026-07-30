@@ -10,8 +10,8 @@ not be used to secure network traffic.
 ## Highlights
 
 - Adds 47 stable residual requirements, bringing the matrix to 163 records.
-- Covers 34 residual authorities and reviews 193 normative RFC sections
-  through 175 exact mappings and 18 explicit exclusions.
+- Covers 33 residual authorities and reviews 182 normative RFC sections
+  through 165 exact mappings and 17 explicit exclusions.
 - Assigns all 741 surfaces left by the foundation, domain, and transport
   bundles, closing all 4,422 protocol surfaces.
 - Generates complete source-to-plan, plan-to-source,
@@ -71,11 +71,23 @@ back from its requirement. Groups cannot cross code or test boundaries, and
 every member is independently checked for source, owner, disposition, and
 identity. Nine mixed groups were split into separate requirements.
 
-The new reviewed residual section policy assigns all 193 inventoried sections
-to exact requirements or explicit exclusions. Generated evidence records 279
-exact requirement links instead of 541 blanket associations. Twenty-one
+The new reviewed residual section policy assigns all 182 inventoried sections
+to exact requirements or explicit exclusions. Generated evidence records 266
+exact requirement links instead of 541 blanket associations. Twenty-two
 residual fixtures reproduce both findings and their non-representative
 variants. External remediation retest remains required.
+
+A subsequent retest found three additional Medium integrity defects. Global
+reconciliation now prevents any domain, transport, or residual policy from
+excluding a section another bundle maps. RFC 9853 sections 3 through 9 belong
+only to `BRY-REQ-DTLS-1111`; its terminology and designated-expert sections
+are explicitly excluded or caller-owned. The RRC extension and message
+registry now share the `brynja-dtls-core` v0.111.1 boundary.
+
+RFC 7568 section 3 now maps only to the SSLv3 prohibition requirement. SSL 2,
+WTLS, PCT, SNP, and SSL 1 carry explicit source-blocker identities, blocked
+lifecycles, and exact authority-claim blocker targets until their actual
+specifications pass provenance and rights review.
 
 ## Verification
 
@@ -85,8 +97,8 @@ The release candidate verifies:
 - all 126 locked source authorities;
 - all 205 roadmap rows;
 - all 4,422 protocol surfaces;
-- 193 residual normative RFC sections with exact anchors and hashes;
-- 103 requirement positive and broken-fixture tests, including 21 dedicated
+- 182 residual normative RFC sections with exact anchors and hashes;
+- 106 requirement positive and broken-fixture tests, including 22 dedicated
   residual-closure fixtures;
 - deterministic standards, surface, matrix, coverage, closure, package, and
   SBOM artifacts;

@@ -2808,7 +2808,8 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-DTLS-1111"
+        "BRY-REQ-DTLS-1111",
+        "BRY-REQ-RRCREG-0148"
       ],
       "scope": "Implement RFC 9853 negotiation and authenticated basic and enhanced return-routability checks for CID-enabled DTLS 1.2 and DTLS 1.3, including path challenge, response and drop messages, unpredictable cookies, timers, pacing, anti-amplification, PMTU probes, rebinding and voluntary migration, buffered-data suspension, nested-rebinding behavior, unknown-message handling, and exact old/new path binding.",
       "source_ids": [],
@@ -3504,8 +3505,7 @@
       "requirement_ids": [
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-IANA-0003",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-IANA-0003"
       ],
       "scope": "Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.",
       "source_ids": [],
@@ -4106,7 +4106,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.7",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.8",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.9",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.sequence-number-encryption-algorithms.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-authz.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-certificate-type.1",
@@ -5356,7 +5355,8 @@
       "lifecycle": "legacy",
       "owner": "H0.3.0",
       "source_ids": [
-        "rfc:6101"
+        "rfc:6101",
+        "rfc:7568"
       ]
     },
     {
@@ -5364,7 +5364,7 @@
         "legacy.ssl2"
       ],
       "id": "BRY-REQ-LEGACY-0400",
-      "lifecycle": "legacy",
+      "lifecycle": "blocked",
       "owner": "H0.4.0",
       "source_ids": [
         "rfc:6176"
@@ -5375,33 +5375,27 @@
         "legacy.wtls"
       ],
       "id": "BRY-REQ-LEGACY-0500",
-      "lifecycle": "legacy",
+      "lifecycle": "blocked",
       "owner": "H0.5.0",
-      "source_ids": [
-        "rfc:7568"
-      ]
+      "source_ids": []
     },
     {
       "decision_ids": [
         "legacy.pct"
       ],
       "id": "BRY-REQ-LEGACY-0600",
-      "lifecycle": "legacy",
+      "lifecycle": "blocked",
       "owner": "H0.6.0",
-      "source_ids": [
-        "rfc:7568"
-      ]
+      "source_ids": []
     },
     {
       "decision_ids": [
         "legacy.snp"
       ],
       "id": "BRY-REQ-LEGACY-0700",
-      "lifecycle": "legacy",
+      "lifecycle": "blocked",
       "owner": "H0.7.0",
-      "source_ids": [
-        "rfc:7568"
-      ]
+      "source_ids": []
     },
     {
       "decision_ids": [
@@ -5477,11 +5471,9 @@
         "legacy.ssl1-research"
       ],
       "id": "BRY-REQ-LEGACYSSL1-0800",
-      "lifecycle": "legacy",
+      "lifecycle": "blocked",
       "owner": "H0.8.0",
-      "source_ids": [
-        "rfc:7568"
-      ]
+      "source_ids": []
     },
     {
       "decision_ids": [
@@ -5926,6 +5918,7 @@
     },
     {
       "decision_ids": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
         "iana.tls-parameters.tls-rrc-message-types",
         "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
         "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
@@ -5935,10 +5928,10 @@
       ],
       "id": "BRY-REQ-RRCREG-0148",
       "lifecycle": "planned",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "source_ids": [
-        "iana:tls-parameters",
-        "rfc:9853"
+        "iana:tls-extensiontype-values",
+        "iana:tls-parameters"
       ]
     },
     {
@@ -6662,6 +6655,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS-0002",
         "BRY-REQ-TLS12EXT-0058"
       ],
@@ -7934,10 +7928,7 @@
         "H0.8.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-LEGACY-0500",
-        "BRY-REQ-LEGACY-0600",
-        "BRY-REQ-LEGACY-0700",
-        "BRY-REQ-LEGACYSSL1-0800"
+        "BRY-REQ-LEGACY-0300"
       ],
       "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1"
     },
@@ -9146,8 +9137,7 @@
         "0.116.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-DTLS-1111",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-DTLS-1111"
       ],
       "sha256": "88b0e4322763defc5d9219d3f1405fb6d488f1c3101c4e60d5b36ff3fa8d70d0"
     },
@@ -26518,7 +26508,7 @@
     {
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
       "requirement_ids": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RRCREG-0148"
       ]
     },
     {

@@ -91,14 +91,17 @@ def residual_build(
     )
 
 
-def closure_build(claims: dict | None = None) -> dict:
+def closure_build(
+    claims: dict | None = None,
+    matrix: dict | None = None,
+) -> dict:
     foundation_ids = {
         item["id"] for item in lib.read_json(lib.POLICY)["requirements"]
     }
     return closure.build(
         lib.read_json(standards.LEDGER),
         lib.read_json(surfaces.REGISTER),
-        lib.read_json(lib.MATRIX),
+        matrix or lib.read_json(lib.MATRIX),
         lib.read_json(lib.DOMAIN_COVERAGE),
         lib.read_json(lib.TRANSPORT_COVERAGE),
         lib.read_json(lib.RESIDUAL_COVERAGE),
@@ -110,9 +113,9 @@ def closure_build(claims: dict | None = None) -> dict:
 def test_current_residual_repository() -> None:
     requirements, coverage, _digest = residual_build()
     assert len(requirements) == 47
-    assert coverage["authority_count"] == 34
-    assert coverage["normative_section_count"] == 193
-    assert coverage["mapped_normative_section_count"] == 175
+    assert coverage["authority_count"] == 33
+    assert coverage["normative_section_count"] == 182
+    assert coverage["mapped_normative_section_count"] == 165
     assert coverage["surface_count"] == 741
     requirement_map = {item["id"]: item for item in requirements}
     assert all(
@@ -305,6 +308,22 @@ def test_missing_legacy_exclusion_fails() -> None:
     )
     target["surfaces"].pop()
     assert_fails("legacy source-rights blocker", closure_build, broken)
+
+
+def test_source_blocked_requirement_cannot_be_actionable() -> None:
+    broken = copy.deepcopy(lib.read_json(lib.MATRIX))
+    target = next(
+        item
+        for item in broken["requirements"]
+        if item["id"] == "BRY-REQ-LEGACY-0500"
+    )
+    target["lifecycle"] = "legacy"
+    assert_fails(
+        "must remain source blocked",
+        closure_build,
+        None,
+        broken,
+    )
 
 
 def test_orphan_plan_fails() -> None:

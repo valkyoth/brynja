@@ -152,7 +152,23 @@ def test_every_surface_has_complete_decision() -> None:
     for surface in register["surfaces"]:
         assert required <= set(surface)
         assert surface["disposition"] in lib.DISPOSITIONS
-        assert surface["normative_sources"]
+        assert surface["normative_sources"] or surface.get("source_blocker")
+
+
+def test_source_blocked_surfaces_are_explicit() -> None:
+    register = checker.build_register()
+    blocked = {
+        surface["id"]
+        for surface in register["surfaces"]
+        if surface.get("source_blocker") == "legacy-non-rfc-sources"
+    }
+    assert blocked == {
+        "legacy.pct",
+        "legacy.snp",
+        "legacy.ssl1-research",
+        "legacy.ssl2",
+        "legacy.wtls",
+    }
 
 
 def test_mandatory_explicit_decisions() -> None:

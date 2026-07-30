@@ -33,9 +33,10 @@ Version `0.3.5` closes the complete pre-implementation normative baseline.
 The generated matrix contains 163 requirements and maps all 126 locked
 authorities and all 4,422 protocol surfaces. The residual bundle adds 47
 optional, HPKE, ECH, ML-KEM, entropy, operational, and legacy requirements,
-reviews 193 normative RFC sections through 175 exact mappings and 18 explicit
-exclusions, and records fail-closed future, mutable, source-rights, and
-FIPS-validation blockers. It does **not** implement TLS and must not be used
+reviews 182 normative RFC sections through 165 exact mappings and 17 explicit
+exclusions, and records globally reconciled, fail-closed future, mutable,
+source-rights, and FIPS-validation blockers. It does **not** implement TLS and
+must not be used
 to secure network traffic.
 
 ## Install

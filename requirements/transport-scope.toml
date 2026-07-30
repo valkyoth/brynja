@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.4"
 source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
-surface_register_sha256 = "895b8e187aa02bce1fda938f5c30e61661a7405b2c62d61d41933e1aee345945"
+surface_register_sha256 = "6fcc18b4730ba931963abd1057a42eac4cbd300b57e668b44d01de0ea8b7f704"
 source_domains = ["dtls", "quic", "tls12", "tls13", "tls13-session"]
 surface_domains = ["dtls", "quic", "tls", "tls12", "tls13"]
 surface_auto_requirements = true
@@ -67,6 +67,12 @@ domain = "tls"
 owner = "0.148.0"
 deferred_to = "0.3.5"
 rationale = "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+
+[[surface_defer_group]]
+domain = "dtls"
+owner = "0.111.1"
+deferred_to = "0.3.5"
+rationale = "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
 
 [[surface_defer_group]]
 domain = "tls12"

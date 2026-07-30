@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0633e8beb612ce3e0b6586c9f40da248ba2ee1ccb5a7b6ed099092694aed6574",
-  "domain_policy_sha256": "316ee646cb37c08670a6eb3ac4841507907c95e1e2e73af81a3fac722477a7a4",
-  "policy_sha256": "a6d47b98fa84d033212836854eb19ba2a821f870a1ba22d0c1a01111541ee029",
+  "domain_policy_sha256": "dadc8c947fee6cf5a5873e3fb42aaef25dfab9a741fd9d20c0b0a074a38e970a",
+  "policy_sha256": "3734d4adae14d6c2302851229fed5ddc9c6087afb1f30324ccd4ecf7b6120c53",
   "requirements": [
     {
       "applicability": "delegate",
@@ -498,7 +498,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.7",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.8",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.9",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.sequence-number-encryption-algorithms.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-authz.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-certificate-type.1",
@@ -563,7 +562,7 @@
       "owner": "0.148.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -7117,7 +7116,7 @@
       "owner": "0.111.1",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -7146,16 +7145,6 @@
             "0.116.0"
           ],
           "sections": [
-            {
-              "anchor": "10.3.1. Designated Expert Instructions To enable a broadly informed review of registration decisions, it is recommended that multiple designated experts be appo",
-              "section": "10.3.1",
-              "section_sha256": "a06224818b97a63bd7c7578b02378957274436ec072b989a01e5fe1c7f45314a"
-            },
-            {
-              "anchor": "2. Conventions and Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
-              "section": "2",
-              "section_sha256": "c6d5043897b79bde0787c02eb7c56306103e4498555d01bc37de1706892fd2b9"
-            },
             {
               "anchor": "3. RRC Extension The use of RRC is negotiated via the rrc extension. The rrc extension is only defined for DTLS 1.2 and 1.3. On connecting, a client wishing to",
               "section": "3",
@@ -10984,12 +10973,12 @@
         "algorithm-admission"
       ],
       "lifecycle": "legacy",
-      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
       "owner": "H0.3.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -11014,9 +11003,44 @@
           "sections": [],
           "sha256": "9571fe931f68204163a8e8a374a104fd1389ff7056f2e9e5d3fac886f7d180bb",
           "status": "HISTORIC"
+        },
+        {
+          "authority_role": "current",
+          "domains": [
+            "legacy"
+          ],
+          "errata": [
+            {
+              "disposition": "track-not-applied",
+              "id": 4561,
+              "status": "Held for Document Update"
+            }
+          ],
+          "id": "rfc:7568",
+          "kind": "rfc",
+          "milestones": [
+            "H0.1.0",
+            "H0.1.1",
+            "H0.2.0",
+            "H0.3.0",
+            "H0.4.0",
+            "H0.5.0",
+            "H0.6.0",
+            "H0.7.0",
+            "H0.8.0"
+          ],
+          "sections": [
+            {
+              "anchor": "3. Do Not Use SSL Version 3.0 SSLv3 MUST NOT be used. Negotiation of SSLv3 from any version of TLS MUST NOT be permitted. Any version of TLS is more secure than",
+              "section": "3",
+              "section_sha256": "8b4cd0ed8e45011184d21b623a0cba6ef6ea3627dde1354234a5549f28f5e464"
+            }
+          ],
+          "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
+          "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "SSL 3.0 is confined to an independently packaged insecure legacy release line.",
+      "statement": "SSL 3.0 is confined to an independently packaged insecure legacy release line and remains prohibited by current TLS policy.",
       "strength": "INVARIANT",
       "targets": [
         {
@@ -11039,8 +11063,8 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "legacy",
-      "decision": "isolate",
+      "applicability": "blocked",
+      "decision": "defer",
       "decision_ids": [
         "legacy.ssl2"
       ],
@@ -11052,16 +11076,15 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
-      "lifecycle": "legacy",
+      "lifecycle": "blocked",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
       "owner": "H0.4.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -11119,12 +11142,12 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "SSL 2.0 is confined to an independently packaged insecure legacy release line.",
+      "statement": "SSL 2.0 remains source-blocked before any independent insecure legacy release line can begin.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "legacy-boundary",
-          "target": "crates/brynja-legacy-ssl2/src/lib.rs"
+          "kind": "blocker",
+          "target": "requirements/authority-claims.toml#legacy-non-rfc-sources"
         }
       ],
       "tests": [
@@ -11142,8 +11165,8 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "legacy",
-      "decision": "isolate",
+      "applicability": "blocked",
+      "decision": "defer",
       "decision_ids": [
         "legacy.wtls"
       ],
@@ -11155,60 +11178,23 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
-      "lifecycle": "legacy",
-      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
+      "lifecycle": "blocked",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
       "owner": "H0.5.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
-      "sources": [
-        {
-          "authority_role": "current",
-          "domains": [
-            "legacy"
-          ],
-          "errata": [
-            {
-              "disposition": "track-not-applied",
-              "id": 4561,
-              "status": "Held for Document Update"
-            }
-          ],
-          "id": "rfc:7568",
-          "kind": "rfc",
-          "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
-          ],
-          "sections": [
-            {
-              "anchor": "3. Do Not Use SSL Version 3.0 SSLv3 MUST NOT be used. Negotiation of SSLv3 from any version of TLS MUST NOT be permitted. Any version of TLS is more secure than",
-              "section": "3",
-              "section_sha256": "8b4cd0ed8e45011184d21b623a0cba6ef6ea3627dde1354234a5549f28f5e464"
-            }
-          ],
-          "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
-          "status": "PROPOSED STANDARD"
-        }
-      ],
-      "statement": "WTLS research and implementation are confined to an independent insecure legacy package.",
+      "sources": [],
+      "statement": "WTLS research and implementation remain blocked until authenticated protocol-source provenance and rights are recorded.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "legacy-boundary",
-          "target": "crates/brynja-legacy-wtls/src/lib.rs"
+          "kind": "blocker",
+          "target": "requirements/authority-claims.toml#legacy-non-rfc-sources"
         }
       ],
       "tests": [
@@ -11226,8 +11212,8 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "legacy",
-      "decision": "isolate",
+      "applicability": "blocked",
+      "decision": "defer",
       "decision_ids": [
         "legacy.pct"
       ],
@@ -11239,60 +11225,23 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
-      "lifecycle": "legacy",
-      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
+      "lifecycle": "blocked",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
       "owner": "H0.6.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
-      "sources": [
-        {
-          "authority_role": "current",
-          "domains": [
-            "legacy"
-          ],
-          "errata": [
-            {
-              "disposition": "track-not-applied",
-              "id": 4561,
-              "status": "Held for Document Update"
-            }
-          ],
-          "id": "rfc:7568",
-          "kind": "rfc",
-          "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
-          ],
-          "sections": [
-            {
-              "anchor": "3. Do Not Use SSL Version 3.0 SSLv3 MUST NOT be used. Negotiation of SSLv3 from any version of TLS MUST NOT be permitted. Any version of TLS is more secure than",
-              "section": "3",
-              "section_sha256": "8b4cd0ed8e45011184d21b623a0cba6ef6ea3627dde1354234a5549f28f5e464"
-            }
-          ],
-          "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
-          "status": "PROPOSED STANDARD"
-        }
-      ],
-      "statement": "PCT is confined to an independently packaged insecure legacy release line.",
+      "sources": [],
+      "statement": "PCT remains blocked until authenticated protocol-source provenance and rights are recorded.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "legacy-boundary",
-          "target": "crates/brynja-legacy-pct/src/lib.rs"
+          "kind": "blocker",
+          "target": "requirements/authority-claims.toml#legacy-non-rfc-sources"
         }
       ],
       "tests": [
@@ -11310,8 +11259,8 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "legacy",
-      "decision": "isolate",
+      "applicability": "blocked",
+      "decision": "defer",
       "decision_ids": [
         "legacy.snp"
       ],
@@ -11323,60 +11272,23 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
-      "lifecycle": "legacy",
-      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
+      "lifecycle": "blocked",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
       "owner": "H0.7.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
-      "sources": [
-        {
-          "authority_role": "current",
-          "domains": [
-            "legacy"
-          ],
-          "errata": [
-            {
-              "disposition": "track-not-applied",
-              "id": 4561,
-              "status": "Held for Document Update"
-            }
-          ],
-          "id": "rfc:7568",
-          "kind": "rfc",
-          "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
-          ],
-          "sections": [
-            {
-              "anchor": "3. Do Not Use SSL Version 3.0 SSLv3 MUST NOT be used. Negotiation of SSLv3 from any version of TLS MUST NOT be permitted. Any version of TLS is more secure than",
-              "section": "3",
-              "section_sha256": "8b4cd0ed8e45011184d21b623a0cba6ef6ea3627dde1354234a5549f28f5e464"
-            }
-          ],
-          "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
-          "status": "PROPOSED STANDARD"
-        }
-      ],
-      "statement": "Secure Network Programming is confined to an independent insecure legacy package.",
+      "sources": [],
+      "statement": "Secure Network Programming remains blocked until authenticated protocol-source provenance and rights are recorded.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "legacy-boundary",
-          "target": "crates/brynja-legacy-snp/src/lib.rs"
+          "kind": "blocker",
+          "target": "requirements/authority-claims.toml#legacy-non-rfc-sources"
         }
       ],
       "tests": [
@@ -11593,8 +11505,8 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "legacy",
-      "decision": "isolate",
+      "applicability": "blocked",
+      "decision": "defer",
       "decision_ids": [
         "legacy.ssl1-research"
       ],
@@ -11606,60 +11518,23 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
-      "lifecycle": "legacy",
-      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
+      "lifecycle": "blocked",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
       "owner": "H0.8.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
-      "sources": [
-        {
-          "authority_role": "current",
-          "domains": [
-            "legacy"
-          ],
-          "errata": [
-            {
-              "disposition": "track-not-applied",
-              "id": 4561,
-              "status": "Held for Document Update"
-            }
-          ],
-          "id": "rfc:7568",
-          "kind": "rfc",
-          "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
-          ],
-          "sections": [
-            {
-              "anchor": "3. Do Not Use SSL Version 3.0 SSLv3 MUST NOT be used. Negotiation of SSLv3 from any version of TLS MUST NOT be permitted. Any version of TLS is more secure than",
-              "section": "3",
-              "section_sha256": "8b4cd0ed8e45011184d21b623a0cba6ef6ea3627dde1354234a5549f28f5e464"
-            }
-          ],
-          "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
-          "status": "PROPOSED STANDARD"
-        }
-      ],
-      "statement": "SSL 1 is reconstruction research only and can never be a secure or published protocol product.",
+      "sources": [],
+      "statement": "SSL 1 reconstruction research remains source-blocked and can never become a secure or published protocol product.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "legacy-boundary",
-          "target": "crates/brynja-legacy/src/lib.rs"
+          "kind": "blocker",
+          "target": "requirements/authority-claims.toml#legacy-non-rfc-sources"
         }
       ],
       "tests": [
@@ -12384,7 +12259,7 @@
       "owner": "0.58.0",
       "profile": "crypto-encoding-pkix",
       "residual": "A registered or peer-offered value never admits the excluded facility, and no generic unknown-extension path may activate it.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -12409,11 +12284,6 @@
             "0.71.0"
           ],
           "sections": [
-            {
-              "anchor": "1.1. Requirements Language The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in t",
-              "section": "1.1",
-              "section_sha256": "815942bac140a8f3fddbf89424200400f80b7283d0e40342b689a0868d419238"
-            },
             {
               "anchor": "2.2. Multiple Certificate Status Request Record Clients that support a certificate status protocol like OCSP may send the \"status_request_v2\" extension to the s",
               "section": "2.2",
@@ -19530,6 +19400,7 @@
       "applicability": "apply",
       "decision": "enforce",
       "decision_ids": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
         "iana.tls-parameters.tls-rrc-message-types",
         "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
         "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
@@ -19538,9 +19409,9 @@
         "iana.tls-parameters.tls-rrc-message-types.unassigned.1"
       ],
       "deviation_rationale": null,
-      "domain": "tls",
+      "domain": "dtls",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.111.1.",
       "id": "BRY-REQ-RRCREG-0148",
       "invariants": [
         "resource-bound",
@@ -19549,14 +19420,33 @@
         "version-separation"
       ],
       "lifecycle": "planned",
-      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.148.0",
+      "owner": "0.111.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
+        {
+          "authority_role": "current",
+          "collection": "tls-extensiontype-values",
+          "domains": [
+            "tls12",
+            "tls13",
+            "dtls",
+            "optional"
+          ],
+          "id": "iana:tls-extensiontype-values",
+          "kind": "iana",
+          "milestones": [
+            "0.3.0",
+            "0.3.1",
+            "0.3.4",
+            "0.3.5"
+          ],
+          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+        },
         {
           "authority_role": "current",
           "collection": "tls-parameters",
@@ -19576,106 +19466,26 @@
             "0.120.0"
           ],
           "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
-        },
-        {
-          "authority_role": "current",
-          "domains": [
-            "dtls"
-          ],
-          "errata": [],
-          "id": "rfc:9853",
-          "kind": "rfc",
-          "milestones": [
-            "0.102.0",
-            "0.103.0",
-            "0.104.0",
-            "0.105.0",
-            "0.106.0",
-            "0.107.0",
-            "0.108.0",
-            "0.109.0",
-            "0.110.0",
-            "0.111.0",
-            "0.112.0",
-            "0.113.0",
-            "0.114.0",
-            "0.115.0",
-            "0.116.0"
-          ],
-          "sections": [
-            {
-              "anchor": "10.3.1. Designated Expert Instructions To enable a broadly informed review of registration decisions, it is recommended that multiple designated experts be appo",
-              "section": "10.3.1",
-              "section_sha256": "a06224818b97a63bd7c7578b02378957274436ec072b989a01e5fe1c7f45314a"
-            },
-            {
-              "anchor": "3. RRC Extension The use of RRC is negotiated via the rrc extension. The rrc extension is only defined for DTLS 1.2 and 1.3. On connecting, a client wishing to",
-              "section": "3",
-              "section_sha256": "6ca69d4b9074468c84f6bebeaa79f5cd5612ca22521da92563006e51abe3c30c"
-            },
-            {
-              "anchor": "3.1. RRC and CID Interplay RRC offers an in-protocol mechanism to perform peer address validation that complements the \"peer address update\" procedure described",
-              "section": "3.1",
-              "section_sha256": "c0ad499d373ae56a67f148eba522e95e8f4318f718027b116d582be289c487fa"
-            },
-            {
-              "anchor": "4. Return Routability Check Message Types This document defines the return_routability_check content type (Figure 1) to carry Return Routability Check messages.",
-              "section": "4",
-              "section_sha256": "545b30ff30cb1910257729c68b0f5400cd5be912e65f34525652b2631b3e5465"
-            },
-            {
-              "anchor": "5. Path Validation Procedure A receiver that observes the peer's address change MUST stop sending any buffered application data or limit the data sent to the un",
-              "section": "5",
-              "section_sha256": "1bf6ae73c00cc0f04e9615a1263359442fb6643ae9678bc10ba9b654492def2f"
-            },
-            {
-              "anchor": "5.2. Enhanced The enhanced return routability check comprises the following steps: 1. The receiver (i.e., the initiator) creates a return_routability_check mess",
-              "section": "5.2",
-              "section_sha256": "29a7f6f7c7afb650f73570b088a4e9e0086638f8599c8c79ed71f25b36578603"
-            },
-            {
-              "anchor": "5.3. Path Challenge Requirements * The initiator MAY send multiple return_routability_check messages of type path_challenge to account for packet loss on the pr",
-              "section": "5.3",
-              "section_sha256": "db0ee3651707538f995f61d2588eea10531dc02acd2f5796bfe8165b505e990a"
-            },
-            {
-              "anchor": "5.4. Path Response/Drop Requirements * The responder MUST NOT delay sending an elicited path_response or path_drop messages. * The responder MUST send exactly o",
-              "section": "5.4",
-              "section_sha256": "01eb06dffaf20ae842acd06107d6e63da6fe16ecfe4c39b1e12fcbe099e7d40e"
-            },
-            {
-              "anchor": "5.5. Timer Choice When setting T, implementations are cautioned that the new path could have a longer RTT than the original. In settings where there is external",
-              "section": "5.5",
-              "section_sha256": "8ba4b7ae1fc937e4a3c0811b37adba54b9c344c523d097fe58ef9d41f333f1ea"
-            },
-            {
-              "anchor": "9. Privacy Considerations When using DTLS 1.3, peers SHOULD avoid using the same CID on multiple network paths, in particular when initiating connection migrati",
-              "section": "9",
-              "section_sha256": "c180dfde630a5de74023a079ca5f4f3af82db99893e5ee726f44dc570e63dc63"
-            }
-          ],
-          "sha256": "88b0e4322763defc5d9219d3f1405fb6d488f1c3101c4e60d5b36ff3fa8d70d0",
-          "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+      "statement": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
       "strength": "INVARIANT",
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "crates/brynja-tls/src/rrc.rs"
+          "target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/surface/rrc.rs#registry"
+          "target": "tests/requirements/dtls_routability.rs#registry"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/surface/rrc.rs#reject_invalid_and_exhausted"
+          "target": "tests/requirements/dtls_routability.rs#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -21838,7 +21648,7 @@
       "owner": "0.83.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -22095,11 +21905,6 @@
             "H0.8.0"
           ],
           "sections": [
-            {
-              "anchor": "1.1. Requirements Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY",
-              "section": "1.1",
-              "section_sha256": "17ac919da2a761a180e63974e165fe13ff1946da2f398b60b424b251a0ce7494"
-            },
             {
               "anchor": "3. Changes to TLS Because of the deficiencies noted in the previous section: o TLS clients MUST NOT send the SSL version 2.0 compatible CLIENT- HELLO message fo",
               "section": "3",
@@ -25906,7 +25711,7 @@
       "owner": "0.66.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -26017,11 +25822,6 @@
             "0.82.0"
           ],
           "sections": [
-            {
-              "anchor": "2. Requirements Language The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in thi",
-              "section": "2",
-              "section_sha256": "68e5163c67c437878acd02488fdfae06427d5952f3fdd842ae775fa07646845a"
-            },
             {
               "anchor": "3.1. The Application-Layer Protocol Negotiation Extension A new extension type (\"application_layer_protocol_negotiation(16)\") is defined and MAY be included by",
               "section": "3.1",
@@ -26537,7 +26337,7 @@
       "owner": "0.69.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -26649,9 +26449,9 @@
           ],
           "sections": [
             {
-              "anchor": "2. Requirements Language The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in thi",
-              "section": "2",
-              "section_sha256": "68e5163c67c437878acd02488fdfae06427d5952f3fdd842ae775fa07646845a"
+              "anchor": "3.1. The Application-Layer Protocol Negotiation Extension A new extension type (\"application_layer_protocol_negotiation(16)\") is defined and MAY be included by",
+              "section": "3.1",
+              "section_sha256": "636c743fcda502bd6d3fe3fb56627ef5e8b1b964691af15cc49753bce5184e4c"
             }
           ],
           "sha256": "ba122aee58871c604c9e98e2c9f81d5042e4056bd497cd41e23ad80fe3123222",
@@ -29216,9 +29016,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "eeceb5608ddf3aea0e1130077dc2ba2a903ebf45a7cf1ce443d16682693b8a0a",
+  "residual_policy_sha256": "2696bcc0ec2371cfcac8013d6d53ca183d20b112ea0937ebaaa0251a5beb311b",
   "schema": 5,
   "source_ledger_sha256": "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7",
-  "surface_register_sha256": "895b8e187aa02bce1fda938f5c30e61661a7405b2c62d61d41933e1aee345945",
-  "transport_policy_sha256": "96d3dffb78533ae0565006c89e815706c2c4ffa0c00c0a00b7f392d0450b9ae3"
+  "surface_register_sha256": "6fcc18b4730ba931963abd1057a42eac4cbd300b57e668b44d01de0ea8b7f704",
+  "transport_policy_sha256": "da884d3603a7fd689c87d4025f0f6b0fef915f380f8dd6f263ad3c5df195db4e"
 }

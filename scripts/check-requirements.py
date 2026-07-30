@@ -255,6 +255,13 @@ def build_matrix(
         for requirement in policy["requirements"]
     ]
     if include_domains:
+        sections.validate_global_policies(
+            [
+                sections.read_policy(domain.CONFIG.section_policy),
+                sections.read_policy(transport.CONFIG.section_policy),
+                sections.read_policy(residual.SECTION_POLICY),
+            ]
+        )
         domain_requirements, _domain_coverage, domain_hash = domain.build(
             ledger,
             register,

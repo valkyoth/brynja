@@ -1314,6 +1314,7 @@
       ],
       "normative_sections": [
         {
+          "disposition": "not-applicable",
           "occurrences": {
             "MAY": 1,
             "MUST": 1,
@@ -1321,9 +1322,7 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS12-0083"
-          ],
+          "rationale": "RFC 6176 section 1.1 defines BCP 14 terminology and conventions rather than an independently implementable TLS 1.2 behavior; it remains reviewed context and is not assigned to a requirement.",
           "section": "1.1",
           "section_sha256": "17ac919da2a761a180e63974e165fe13ff1946da2f398b60b424b251a0ce7494"
         },
@@ -1754,6 +1753,7 @@
       ],
       "normative_sections": [
         {
+          "disposition": "not-applicable",
           "occurrences": {
             "MAY": 1,
             "MUST": 1,
@@ -1761,10 +1761,7 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0066",
-            "BRY-REQ-TLS13-0069"
-          ],
+          "rationale": "RFC 7301 section 2 defines BCP 14 terminology and conventions rather than independently implementable ALPN behavior; it remains reviewed context and is not assigned to a requirement.",
           "section": "2",
           "section_sha256": "68e5163c67c437878acd02488fdfae06427d5952f3fdd842ae775fa07646845a"
         },
@@ -1775,7 +1772,8 @@
             "MUST NOT": 2
           },
           "requirement_ids": [
-            "BRY-REQ-TLS13-0066"
+            "BRY-REQ-TLS13-0066",
+            "BRY-REQ-TLS13-0069"
           ],
           "section": "3.1",
           "section_sha256": "636c743fcda502bd6d3fe3fb56627ef5e8b1b964691af15cc49753bce5184e4c"
@@ -7536,6 +7534,7 @@
       ],
       "normative_sections": [
         {
+          "disposition": "not-applicable",
           "occurrences": {
             "MAY": 1,
             "MUST": 1,
@@ -7543,9 +7542,7 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-DTLS-1111"
-          ],
+          "rationale": "RFC 9853 section 2 defines BCP 14 terminology and conventions rather than independently implementable DTLS RRC behavior; it remains reviewed context and is not assigned to a requirement.",
           "section": "2",
           "section_sha256": "c6d5043897b79bde0787c02eb7c56306103e4498555d01bc37de1706892fd2b9"
         },
@@ -7646,12 +7643,11 @@
           "section_sha256": "c180dfde630a5de74023a079ca5f4f3af82db99893e5ee726f44dc570e63dc63"
         },
         {
+          "disposition": "caller-owned",
           "occurrences": {
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-DTLS-1111"
-          ],
+          "rationale": "RFC 9853 section 10.3.1 addresses IANA designated-expert administration rather than Brynja runtime behavior; registry reviewers own this guidance outside the DTLS implementation.",
           "section": "10.3.1",
           "section_sha256": "a06224818b97a63bd7c7578b02378957274436ec072b989a01e5fe1c7f45314a"
         }
@@ -7833,8 +7829,8 @@
     }
   ],
   "deferred_authority_count": 1,
-  "excluded_normative_section_count": 0,
-  "mapped_normative_section_count": 550,
+  "excluded_normative_section_count": 4,
+  "mapped_normative_section_count": 546,
   "normative_section_count": 550,
   "owner_milestone_count": 63,
   "owner_milestones": [
@@ -7902,7 +7898,7 @@
     "0.99.0",
     "0.99.1"
   ],
-  "policy_sha256": "96d3dffb78533ae0565006c89e815706c2c4ffa0c00c0a00b7f392d0450b9ae3",
+  "policy_sha256": "da884d3603a7fd689c87d4025f0f6b0fef915f380f8dd6f263ad3c5df195db4e",
   "requirement_count": 70,
   "schema": 2,
   "surface_count": 483,
@@ -9463,10 +9459,10 @@
       "coverage": "deferred",
       "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "deferred",
@@ -11319,55 +11315,55 @@
       "coverage": "deferred",
       "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-response.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.reserved-for-private-use.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.unassigned.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "requirement",

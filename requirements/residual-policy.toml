@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
 source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
-surface_register_sha256 = "895b8e187aa02bce1fda938f5c30e61661a7405b2c62d61d41933e1aee345945"
+surface_register_sha256 = "6fcc18b4730ba931963abd1057a42eac4cbd300b57e668b44d01de0ea8b7f704"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -153,7 +153,6 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.7",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.8",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.9",
-  "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.sequence-number-encryption-algorithms.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-authz.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-certificate-type.1",
@@ -886,7 +885,8 @@ id = "BRY-REQ-LEGACY-0300"
 domain = "legacy"
 owner = "H0.3.0"
 disposition = "legacy-only"
-sources = ["rfc:6101"]
+sources = ["rfc:6101", "rfc:7568"]
+revision = 2
 surface_ids = [
   "legacy.ssl3",
 ]
@@ -895,8 +895,11 @@ surface_ids = [
 id = "BRY-REQ-LEGACY-0400"
 domain = "legacy"
 owner = "H0.4.0"
-disposition = "legacy-only"
+disposition = "future-work"
 sources = ["rfc:6176"]
+lifecycle = "blocked"
+blocker = "legacy-non-rfc-sources"
+revision = 3
 surface_ids = [
   "legacy.ssl2",
 ]
@@ -905,8 +908,11 @@ surface_ids = [
 id = "BRY-REQ-LEGACY-0500"
 domain = "legacy"
 owner = "H0.5.0"
-disposition = "legacy-only"
-sources = ["rfc:7568"]
+disposition = "future-work"
+sources = []
+lifecycle = "blocked"
+blocker = "legacy-non-rfc-sources"
+revision = 3
 surface_ids = [
   "legacy.wtls",
 ]
@@ -915,8 +921,11 @@ surface_ids = [
 id = "BRY-REQ-LEGACY-0600"
 domain = "legacy"
 owner = "H0.6.0"
-disposition = "legacy-only"
-sources = ["rfc:7568"]
+disposition = "future-work"
+sources = []
+lifecycle = "blocked"
+blocker = "legacy-non-rfc-sources"
+revision = 3
 surface_ids = [
   "legacy.pct",
 ]
@@ -925,8 +934,11 @@ surface_ids = [
 id = "BRY-REQ-LEGACY-0700"
 domain = "legacy"
 owner = "H0.7.0"
-disposition = "legacy-only"
-sources = ["rfc:7568"]
+disposition = "future-work"
+sources = []
+lifecycle = "blocked"
+blocker = "legacy-non-rfc-sources"
+revision = 3
 surface_ids = [
   "legacy.snp",
 ]
@@ -1000,8 +1012,11 @@ surface_ids = [
 id = "BRY-REQ-LEGACYSSL1-0800"
 domain = "legacy"
 owner = "H0.8.0"
-disposition = "legacy-only"
-sources = ["rfc:7568"]
+disposition = "future-work"
+sources = []
+lifecycle = "blocked"
+blocker = "legacy-non-rfc-sources"
+revision = 2
 surface_ids = [
   "legacy.ssl1-research",
 ]
@@ -1098,11 +1113,13 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-RRCREG-0148"
-domain = "tls"
-owner = "0.148.0"
+domain = "dtls"
+owner = "0.111.1"
 disposition = "future-work"
-sources = ["iana:tls-parameters", "rfc:9853"]
+sources = ["iana:tls-extensiontype-values", "iana:tls-parameters"]
+revision = 2
 surface_ids = [
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
   "iana.tls-parameters.tls-rrc-message-types",
   "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
   "iana.tls-parameters.tls-rrc-message-types.path-drop.1",

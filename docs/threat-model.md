@@ -60,12 +60,14 @@ use-after-failure.
   activated graph and no path into facades, engines, or the FIPS module;
 - machine-readable protocol-surface classification so new or changed standards
   and IANA entries cannot remain silently unowned;
-- current RFC update closure and complete normative-requirement traceability,
-  with obsolete-authority, orphan, drift, and weakened-language failures;
+- current RFC update closure, globally reconciled normative-section decisions,
+  and complete requirement traceability, with cross-policy conflicts,
+  obsolete-authority, orphan, drift, and weakened-language failures;
 - current PKIX revocation and policy semantics, authoritative Must-Staple
   failure, signed OCSP authority over caller-owned cache metadata, pairwise and
-  domain-bound external PSKs, production key-log isolation, path-bound DTLS
-  return-routability, and terminal HPKE context invalidation and destruction;
+  domain-bound external PSKs, production key-log isolation, DTLS-owned
+  path-bound return-routability registries and state, source-blocked legacy
+  lifecycles, and terminal HPKE context invalidation and destruction;
 - certificate-bound FIPS module selection, mandatory service indicators,
   approved-only typestates, exact operational-environment matching, immutable
   validated artifacts, and fail-closed claim withdrawal or revalidation after

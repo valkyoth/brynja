@@ -6,7 +6,7 @@ source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a
 "BRY-REQ-APPLICATION-0130" = 2
 "BRY-REQ-CERTEXT-0146" = 1
 "BRY-REQ-CERTREG-0146" = 1
-"BRY-REQ-COMPOSE-0148" = 2
+"BRY-REQ-COMPOSE-0148" = 3
 "BRY-REQ-DNS-0140" = 2
 "BRY-REQ-ECH-0140" = 2
 "BRY-REQ-ECH-0141" = 2
@@ -22,12 +22,9 @@ source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a
 "BRY-REQ-HPKEX-1391" = 2
 "BRY-REQ-KEYLOGREG-0010" = 1
 "BRY-REQ-LEGACY-0100" = 2
-"BRY-REQ-LEGACY-0400" = 2
-"BRY-REQ-LEGACY-0500" = 2
-"BRY-REQ-LEGACY-0600" = 2
-"BRY-REQ-LEGACY-0700" = 2
+"BRY-REQ-LEGACY-0300" = 2
+"BRY-REQ-LEGACY-0400" = 3
 "BRY-REQ-LEGACY-0800" = 2
-"BRY-REQ-LEGACYSSL1-0800" = 1
 "BRY-REQ-OPERATIONS-0010" = 2
 "BRY-REQ-OPTIONAL-0136" = 2
 "BRY-REQ-OPTIONAL-0137" = 2
@@ -37,7 +34,6 @@ source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a
 "BRY-REQ-OPTIONAL-1461" = 2
 "BRY-REQ-PQ-0117" = 2
 "BRY-REQ-PQPKIX-0046" = 2
-"BRY-REQ-RRCREG-0148" = 1
 "BRY-REQ-TESTING-0010" = 2
 "BRY-REQ-TLS12EXT-0058" = 1
 "BRY-REQ-TLS12X-0058" = 2
@@ -80,27 +76,9 @@ rationale = "These explicitly enumerated rfc:7301 sections define the caller-own
 
 [[binding]]
 source_id = "rfc:7568"
-requirement_id = "BRY-REQ-LEGACY-0500"
+requirement_id = "BRY-REQ-LEGACY-0300"
 sections = ["3"]
-rationale = "These explicitly enumerated rfc:7568 sections define the isolated WTLS prohibition boundary; they are assigned only to BRY-REQ-LEGACY-0500, and no RFC-wide section inheritance is permitted."
-
-[[binding]]
-source_id = "rfc:7568"
-requirement_id = "BRY-REQ-LEGACY-0600"
-sections = ["3"]
-rationale = "These explicitly enumerated rfc:7568 sections define the isolated PCT prohibition boundary; they are assigned only to BRY-REQ-LEGACY-0600, and no RFC-wide section inheritance is permitted."
-
-[[binding]]
-source_id = "rfc:7568"
-requirement_id = "BRY-REQ-LEGACY-0700"
-sections = ["3"]
-rationale = "These explicitly enumerated rfc:7568 sections define the isolated SNP prohibition boundary; they are assigned only to BRY-REQ-LEGACY-0700, and no RFC-wide section inheritance is permitted."
-
-[[binding]]
-source_id = "rfc:7568"
-requirement_id = "BRY-REQ-LEGACYSSL1-0800"
-sections = ["3"]
-rationale = "These explicitly enumerated rfc:7568 sections define the repository-only SSL 1 research boundary; they are assigned only to BRY-REQ-LEGACYSSL1-0800, and no RFC-wide section inheritance is permitted."
+rationale = "RFC 7568 section 3 prohibits SSLv3 use and negotiation; it is assigned only to the SSLv3 isolation requirement and cannot provide authority for unrelated legacy protocols."
 
 [[binding]]
 source_id = "rfc:8447"
@@ -307,12 +285,6 @@ sections = ["2", "2.1", "2.3"]
 rationale = "These explicitly enumerated rfc:9850 sections define isolated test-only SSLKEYLOGFILE support; they are assigned only to BRY-REQ-TESTING-0010, and no RFC-wide section inheritance is permitted."
 
 [[binding]]
-source_id = "rfc:9853"
-requirement_id = "BRY-REQ-RRCREG-0148"
-sections = ["3", "3.1", "4", "5", "5.2", "5.3", "5.4", "5.5", "9", "10.3.1"]
-rationale = "These explicitly enumerated rfc:9853 sections define DTLS Return Routability Check registry handling; they are assigned only to BRY-REQ-RRCREG-0148, and no RFC-wide section inheritance is permitted."
-
-[[binding]]
 source_id = "rfc:9935"
 requirement_id = "BRY-REQ-PQPKIX-0046"
 sections = ["3", "5", "6", "8"]
@@ -413,12 +385,6 @@ source_id = "rfc:9850"
 section = "1.2"
 disposition = "not-applicable"
 rationale = "rfc:9850 section 1.2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
-
-[[exclusion]]
-source_id = "rfc:9853"
-section = "2"
-disposition = "not-applicable"
-rationale = "rfc:9853 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
 
 [[exclusion]]
 source_id = "rfc:9935"

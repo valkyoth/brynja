@@ -234,7 +234,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.7",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.8",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.9",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.sequence-number-encryption-algorithms.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-authz.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-certificate-type.1",
@@ -2681,6 +2680,7 @@
     },
     "BRY-REQ-LEGACY-0300": {
       "authority_roles": [
+        "current",
         "legacy"
       ],
       "decisions": [
@@ -2700,7 +2700,8 @@
         "H0.3.0"
       ],
       "sources": [
-        "rfc:6101"
+        "rfc:6101",
+        "rfc:7568"
       ],
       "targets": [
         "legacy-boundary:crates/brynja-legacy-ssl3/src/lib.rs"
@@ -2724,8 +2725,7 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
       "owners": [
         "H0.4.0"
@@ -2734,7 +2734,7 @@
         "rfc:6176"
       ],
       "targets": [
-        "legacy-boundary:crates/brynja-legacy-ssl2/src/lib.rs"
+        "blocker:requirements/authority-claims.toml#legacy-non-rfc-sources"
       ],
       "tests": [
         "planned:positive:tests/surface/legacy.rs#ssl2_isolation",
@@ -2742,9 +2742,7 @@
       ]
     },
     "BRY-REQ-LEGACY-0500": {
-      "authority_roles": [
-        "current"
-      ],
+      "authority_roles": [],
       "decisions": [
         "legacy.wtls"
       ],
@@ -2755,17 +2753,14 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
       "owners": [
         "H0.5.0"
       ],
-      "sources": [
-        "rfc:7568"
-      ],
+      "sources": [],
       "targets": [
-        "legacy-boundary:crates/brynja-legacy-wtls/src/lib.rs"
+        "blocker:requirements/authority-claims.toml#legacy-non-rfc-sources"
       ],
       "tests": [
         "planned:positive:tests/surface/legacy.rs#wtls_isolation",
@@ -2773,9 +2768,7 @@
       ]
     },
     "BRY-REQ-LEGACY-0600": {
-      "authority_roles": [
-        "current"
-      ],
+      "authority_roles": [],
       "decisions": [
         "legacy.pct"
       ],
@@ -2786,17 +2779,14 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
       "owners": [
         "H0.6.0"
       ],
-      "sources": [
-        "rfc:7568"
-      ],
+      "sources": [],
       "targets": [
-        "legacy-boundary:crates/brynja-legacy-pct/src/lib.rs"
+        "blocker:requirements/authority-claims.toml#legacy-non-rfc-sources"
       ],
       "tests": [
         "planned:positive:tests/surface/legacy.rs#pct_isolation",
@@ -2804,9 +2794,7 @@
       ]
     },
     "BRY-REQ-LEGACY-0700": {
-      "authority_roles": [
-        "current"
-      ],
+      "authority_roles": [],
       "decisions": [
         "legacy.snp"
       ],
@@ -2817,17 +2805,14 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
       "owners": [
         "H0.7.0"
       ],
-      "sources": [
-        "rfc:7568"
-      ],
+      "sources": [],
       "targets": [
-        "legacy-boundary:crates/brynja-legacy-snp/src/lib.rs"
+        "blocker:requirements/authority-claims.toml#legacy-non-rfc-sources"
       ],
       "tests": [
         "planned:positive:tests/surface/legacy.rs#snp_isolation",
@@ -2925,9 +2910,7 @@
       ]
     },
     "BRY-REQ-LEGACYSSL1-0800": {
-      "authority_roles": [
-        "current"
-      ],
+      "authority_roles": [],
       "decisions": [
         "legacy.ssl1-research"
       ],
@@ -2938,17 +2921,14 @@
       "invariants": [
         "resource-bound",
         "validation",
-        "work-bound",
-        "algorithm-admission"
+        "work-bound"
       ],
       "owners": [
         "H0.8.0"
       ],
-      "sources": [
-        "rfc:7568"
-      ],
+      "sources": [],
       "targets": [
-        "legacy-boundary:crates/brynja-legacy/src/lib.rs"
+        "blocker:requirements/authority-claims.toml#legacy-non-rfc-sources"
       ],
       "tests": [
         "planned:positive:tests/surface/legacy.rs#ssl1_research_isolation",
@@ -4145,6 +4125,7 @@
         "current"
       ],
       "decisions": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
         "iana.tls-parameters.tls-rrc-message-types",
         "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
         "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
@@ -4153,7 +4134,7 @@
         "iana.tls-parameters.tls-rrc-message-types.unassigned.1"
       ],
       "domains": [
-        "tls"
+        "dtls"
       ],
       "evidence": [],
       "invariants": [
@@ -4163,18 +4144,18 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.0"
+        "0.111.1"
       ],
       "sources": [
-        "iana:tls-parameters",
-        "rfc:9853"
+        "iana:tls-extensiontype-values",
+        "iana:tls-parameters"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-tls/src/rrc.rs"
+        "planned-symbol:crates/brynja-dtls-core/src/routability.rs#RrcMessageType"
       ],
       "tests": [
-        "planned:positive:tests/surface/rrc.rs#registry",
-        "planned:negative:tests/surface/rrc.rs#reject_invalid_and_exhausted"
+        "planned:positive:tests/requirements/dtls_routability.rs#registry",
+        "planned:negative:tests/requirements/dtls_routability.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-STD-0001": {
@@ -5910,12 +5891,9 @@
         "BRY-REQ-HPKEREG-0138",
         "BRY-REQ-HPKEX-1391",
         "BRY-REQ-KEYLOGREG-0010",
+        "BRY-REQ-LEGACY-0300",
         "BRY-REQ-LEGACY-0400",
-        "BRY-REQ-LEGACY-0500",
-        "BRY-REQ-LEGACY-0600",
-        "BRY-REQ-LEGACY-0700",
         "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-LEGACYSSL1-0800",
         "BRY-REQ-OCSP-0001",
         "BRY-REQ-OCSP-0002",
         "BRY-REQ-OCSP-0003",
@@ -7945,7 +7923,7 @@
         "BRY-REQ-COMPOSE-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RRCREG-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.sequence-number-encryption-algorithms.1": [
         "BRY-REQ-COMPOSE-0148"
@@ -8606,7 +8584,8 @@
         "BRY-REQ-DTLS-0114",
         "BRY-REQ-DTLS-0115",
         "BRY-REQ-DTLS-0116",
-        "BRY-REQ-DTLS-1111"
+        "BRY-REQ-DTLS-1111",
+        "BRY-REQ-RRCREG-0148"
       ],
       "ech": [
         "BRY-REQ-ECH-0140",
@@ -8699,7 +8678,6 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
-        "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0010",
         "BRY-REQ-TLS-0018",
@@ -8767,12 +8745,7 @@
         "BRY-REQ-ENC-0004",
         "BRY-REQ-LEGACY-0100",
         "BRY-REQ-LEGACY-0300",
-        "BRY-REQ-LEGACY-0400",
-        "BRY-REQ-LEGACY-0500",
-        "BRY-REQ-LEGACY-0600",
-        "BRY-REQ-LEGACY-0700",
         "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-LEGACYSSL1-0800",
         "BRY-REQ-OCSP-0001",
         "BRY-REQ-OCSP-0003",
         "BRY-REQ-OCSP-0005",
@@ -9452,7 +9425,8 @@
         "BRY-REQ-DTLS-0111"
       ],
       "0.111.1": [
-        "BRY-REQ-DTLS-1111"
+        "BRY-REQ-DTLS-1111",
+        "BRY-REQ-RRCREG-0148"
       ],
       "0.112.0": [
         "BRY-REQ-DTLS-0112"
@@ -9545,8 +9519,7 @@
       "0.148.0": [
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-IANA-0003",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-IANA-0003"
       ],
       "0.19.0": [
         "BRY-REQ-TLS-0002",
@@ -9872,6 +9845,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
       ],
       "iana:tls-parameters": [
@@ -10107,10 +10081,7 @@
         "BRY-REQ-TLS12-0087"
       ],
       "rfc:7568": [
-        "BRY-REQ-LEGACY-0500",
-        "BRY-REQ-LEGACY-0600",
-        "BRY-REQ-LEGACY-0700",
-        "BRY-REQ-LEGACYSSL1-0800"
+        "BRY-REQ-LEGACY-0300"
       ],
       "rfc:7627": [
         "BRY-REQ-TLS12-0084",
@@ -10368,8 +10339,7 @@
         "BRY-REQ-TLS-0092"
       ],
       "rfc:9853": [
-        "BRY-REQ-DTLS-1111",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-DTLS-1111"
       ],
       "rfc:9919": [
         "BRY-REQ-OCSP-0003",
@@ -10406,6 +10376,13 @@
       ],
       "actual-symbol:scripts/requirements_lib.py#ID_PATTERN": [
         "BRY-REQ-STD-0003"
+      ],
+      "blocker:requirements/authority-claims.toml#legacy-non-rfc-sources": [
+        "BRY-REQ-LEGACY-0400",
+        "BRY-REQ-LEGACY-0500",
+        "BRY-REQ-LEGACY-0600",
+        "BRY-REQ-LEGACY-0700",
+        "BRY-REQ-LEGACYSSL1-0800"
       ],
       "blocker:standards/source-policy.toml#ecdhe-ml-kem-groups": [
         "BRY-REQ-HYB-0001"
@@ -10472,15 +10449,6 @@
       "boundary:boundary:unsigned-x509": [
         "BRY-REQ-PKIX-0010"
       ],
-      "legacy-boundary:crates/brynja-legacy-pct/src/lib.rs": [
-        "BRY-REQ-LEGACY-0600"
-      ],
-      "legacy-boundary:crates/brynja-legacy-snp/src/lib.rs": [
-        "BRY-REQ-LEGACY-0700"
-      ],
-      "legacy-boundary:crates/brynja-legacy-ssl2/src/lib.rs": [
-        "BRY-REQ-LEGACY-0400"
-      ],
       "legacy-boundary:crates/brynja-legacy-ssl3/src/lib.rs": [
         "BRY-REQ-LEGACY-0300"
       ],
@@ -10490,12 +10458,8 @@
       "legacy-boundary:crates/brynja-legacy-tls11/src/lib.rs": [
         "BRY-REQ-LEGACY-0100"
       ],
-      "legacy-boundary:crates/brynja-legacy-wtls/src/lib.rs": [
-        "BRY-REQ-LEGACY-0500"
-      ],
       "legacy-boundary:crates/brynja-legacy/src/lib.rs": [
-        "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-LEGACYSSL1-0800"
+        "BRY-REQ-LEGACY-0800"
       ],
       "planned-symbol:crates/brynja-core/src/entropy.rs": [
         "BRY-REQ-ENTROPY-0014"
@@ -10571,6 +10535,9 @@
       ],
       "planned-symbol:crates/brynja-dtls-core/src/routability.rs#RoutabilityCheck": [
         "BRY-REQ-DTLS-1111"
+      ],
+      "planned-symbol:crates/brynja-dtls-core/src/routability.rs#RrcMessageType": [
+        "BRY-REQ-RRCREG-0148"
       ],
       "planned-symbol:crates/brynja-dtls-core/src/version.rs#VersionPolicy": [
         "BRY-REQ-DTLS-0103"
@@ -10725,9 +10692,6 @@
       ],
       "planned-symbol:crates/brynja-tls/src/router.rs#Router": [
         "BRY-REQ-TLS-0092"
-      ],
-      "planned-symbol:crates/brynja-tls/src/rrc.rs": [
-        "BRY-REQ-RRCREG-0148"
       ],
       "planned-symbol:crates/brynja-tls12/src/handshake.rs#EcdheHandshake": [
         "BRY-REQ-TLS12-0088"
@@ -10976,7 +10940,8 @@
         "BRY-REQ-DTLS-0106"
       ],
       "planned:negative:tests/requirements/dtls_routability.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-DTLS-1111"
+        "BRY-REQ-DTLS-1111",
+        "BRY-REQ-RRCREG-0148"
       ],
       "planned:negative:tests/requirements/dtls_router.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0115"
@@ -11256,9 +11221,6 @@
       "planned:negative:tests/surface/record_size_limit.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-OPTIONAL-0136"
       ],
-      "planned:negative:tests/surface/rrc.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-RRCREG-0148"
-      ],
       "planned:negative:tests/surface/smi_boundary.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-PKIXREG-0053"
       ],
@@ -11382,6 +11344,9 @@
       ],
       "planned:positive:tests/requirements/dtls_routability.rs#paths_and_rebinding": [
         "BRY-REQ-DTLS-1111"
+      ],
+      "planned:positive:tests/requirements/dtls_routability.rs#registry": [
+        "BRY-REQ-RRCREG-0148"
       ],
       "planned:positive:tests/requirements/dtls_router.rs#single_engine": [
         "BRY-REQ-DTLS-0115"
@@ -11706,9 +11671,6 @@
       ],
       "planned:positive:tests/surface/record_size_limit.rs#profile": [
         "BRY-REQ-OPTIONAL-0136"
-      ],
-      "planned:positive:tests/surface/rrc.rs#registry": [
-        "BRY-REQ-RRCREG-0148"
       ],
       "planned:positive:tests/surface/smi_boundary.rs#caller_owned": [
         "BRY-REQ-PKIXREG-0053"

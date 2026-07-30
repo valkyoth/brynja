@@ -68,6 +68,29 @@ def validate_policy(
         lib.fail(f"{path}: invalid normative-section policy")
 
 
+def validate_global_policies(policies: list[dict]) -> None:
+    """Reject contradictory section decisions across reviewed bundles."""
+    assignments: dict[tuple[str, str], set[str]] = {}
+    exclusions: dict[tuple[str, str], str] = {}
+    for policy in policies:
+        for binding in policy.get("binding", []):
+            for section in binding.get("sections", []):
+                key = (binding.get("source_id"), section)
+                if key in exclusions:
+                    lib.fail(f"section is both mapped and excluded: {key}")
+                assignments.setdefault(key, set()).add(
+                    binding.get("requirement_id")
+                )
+        for exclusion in policy.get("exclusion", []):
+            key = (exclusion.get("source_id"), exclusion.get("section"))
+            if key in assignments:
+                lib.fail(f"section is both mapped and excluded: {key}")
+            disposition = exclusion.get("disposition")
+            previous = exclusions.setdefault(key, disposition)
+            if previous != disposition:
+                lib.fail(f"section has conflicting exclusions: {key}")
+
+
 def apply(
     requirements: list[dict],
     authorities: dict[str, dict],

@@ -17,8 +17,14 @@ def roadmap_versions() -> set[str]:
     return set(re.findall(r"`(H?\d+\.\d+(?:\.\d+)?)`", text))
 
 
-def validate_sources(sources: object, ledger: dict, label: str) -> list[str]:
-    if not isinstance(sources, list) or not sources:
+def validate_sources(
+    sources: object,
+    ledger: dict,
+    label: str,
+    *,
+    allow_empty: bool = False,
+) -> list[str]:
+    if not isinstance(sources, list) or (not sources and not allow_empty):
         lib.fail(f"{label} requires normative sources")
     if len(sources) != len(set(sources)) or not all(
         isinstance(source, str) for source in sources
@@ -44,7 +50,7 @@ def validate_decision(
     versions: set[str],
     label: str,
 ) -> dict:
-    expected = {
+    required = {
         "code_target",
         "disposition",
         "domain",
@@ -53,7 +59,9 @@ def validate_decision(
         "sources",
         "test_target",
     }
-    if set(decision) != expected:
+    if not required <= set(decision) or set(decision) - required != (
+        {"source_blocker"} if "source_blocker" in decision else set()
+    ):
         lib.fail(f"{label} has unexpected decision fields")
     disposition = decision["disposition"]
     if disposition not in lib.DISPOSITIONS:
@@ -67,14 +75,23 @@ def validate_decision(
     rationale = decision["rationale"]
     if not isinstance(rationale, str) or len(rationale.strip()) < 20:
         lib.fail(f"{label} requires a review rationale")
-    return {
+    source_blocker = decision.get("source_blocker")
+    if source_blocker is not None and (
+        not isinstance(source_blocker, str)
+        or lib.ID_PATTERN.fullmatch(source_blocker) is None
+    ):
+        lib.fail(f"{label} has invalid source blocker")
+    result = {
         "code_target": lib.validate_target(
             decision["code_target"], f"{label} code"
         ),
         "disposition": disposition,
         "domain": domain,
         "normative_sources": validate_sources(
-            decision["sources"], ledger, label
+            decision["sources"],
+            ledger,
+            label,
+            allow_empty=source_blocker is not None,
         ),
         "owner": owner,
         "rationale": rationale,
@@ -82,6 +99,9 @@ def validate_decision(
             decision["test_target"], f"{label} test"
         ),
     }
+    if source_blocker is not None:
+        result["source_blocker"] = source_blocker
+    return result
 
 
 def registry_map(projected: list[dict]) -> dict[tuple[str, str], dict]:

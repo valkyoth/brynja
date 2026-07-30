@@ -1,7 +1,6 @@
 schema = 1
 milestone = "0.3.3"
 source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
-exclusion = []
 
 [revisions]
 "BRY-REQ-CRYPTO-0003" = 2
@@ -20,7 +19,7 @@ exclusion = []
 "BRY-REQ-OCSP-0002" = 2
 "BRY-REQ-OCSP-0003" = 2
 "BRY-REQ-OCSP-0004" = 2
-"BRY-REQ-OCSP-0005" = 2
+"BRY-REQ-OCSP-0005" = 3
 "BRY-REQ-OCSP-0006" = 2
 "BRY-REQ-PKIX-0001" = 2
 "BRY-REQ-PKIX-0002" = 2
@@ -198,7 +197,7 @@ rationale = "These explicitly enumerated rfc:6960 sections contain obligations r
 [[binding]]
 source_id = "rfc:6961"
 requirement_id = "BRY-REQ-OCSP-0005"
-sections = ["1.1", "2.2", "4.1"]
+sections = ["2.2", "4.1"]
 rationale = "These explicitly enumerated rfc:6961 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0005; the exact headings, anchors, and section hashes are resolved and drift-checked."
 
 [[binding]]
@@ -368,3 +367,9 @@ source_id = "rfc:9925"
 requirement_id = "BRY-REQ-PKIX-0010"
 sections = ["2", "3.1", "3.2", "3.3", "4", "5"]
 rationale = "These explicitly enumerated rfc:9925 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[exclusion]]
+source_id = "rfc:6961"
+section = "1.1"
+disposition = "not-applicable"
+rationale = "RFC 6961 section 1.1 defines BCP 14 terminology and conventions rather than an independently implementable OCSP behavior; it remains reviewed context and is not assigned to a requirement."

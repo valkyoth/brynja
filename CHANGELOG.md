@@ -13,11 +13,11 @@ Keep a Changelog and Semantic Versioning.
   residual requirements, bringing the deterministic matrix to 163 records.
 - Local-only checksum pins for final FIPS 203, SP 800-227, SP 800-90B, and
   SP 800-90C.
-- Exact residual coverage of 34 authorities, 193 normative RFC sections, and
+- Exact residual coverage of 33 authorities, 182 normative RFC sections, and
   all 741 surfaces left by the foundation, domain, and transport bundles.
 - A generated closure report mapping all 126 locked authorities, 205 roadmap
   rows, 4,422 protocol surfaces, and 163 requirements in both directions.
-- Twenty-one residual broken fixtures, bringing the requirement suite to 103
+- Twenty-two residual broken fixtures, bringing the requirement suite to 106
   positive and negative tests.
 
 ### Security
@@ -39,8 +39,12 @@ Keep a Changelog and Semantic Versioning.
   entropy phases now match their exact roadmap owners.
 - Two Medium pentest findings are remediated: all 741 residual surfaces are
   explicit, reciprocal, independently validated, and homogeneous by code/test
-  boundary; all 193 residual normative sections have one or more of 175 exact
-  mappings or one of 18 reviewed exclusions instead of RFC-wide inheritance.
+  boundary; all 182 residual normative sections have one or more of 165 exact
+  mappings or one of 17 reviewed exclusions instead of RFC-wide inheritance.
+- Three additional Medium retest findings are remediated: section decisions
+  reconcile globally across bundles, RFC 9853 RRC extension and registry
+  ownership is confined to the v0.111.1 DTLS boundary, and SSL 2, WTLS, PCT,
+  SNP, and SSL 1 requirements remain mechanically source-blocked.
 
 ## [0.3.4] - 2026-07-30
 

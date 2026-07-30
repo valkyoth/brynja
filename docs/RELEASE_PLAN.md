@@ -394,6 +394,9 @@ Deliverables:
 
 - populate every remaining optional, PQ, legacy, operational, source-rights,
   test-only, caller-owned, rejected, blocked, and presently pinned non-RFC rule;
+- reconcile section mappings and exclusions globally across every requirement
+  bundle, keep DTLS-only extensions and registries inside the DTLS boundary,
+  and bind source-blocked legacy surfaces to exact blocker requirements;
 - generate complete source-to-plan, plan-to-source, surface-to-requirement, and
   requirement-to-owner reports with explicit dependent-milestone refresh rules
   for mutable guidance and unavailable future standards;
@@ -406,7 +409,9 @@ Verification:
   rows, surface decisions, non-RFC ledgers, legacy packages, and blockers;
 - inject draft identifiers, future-source claims, rights gaps, stale mutable
   guidance, missing exclusions, orphan plans, premature implementation status,
-  and uncovered surfaces and require repository failure;
+  cross-policy section contradictions, wrong protocol ownership, actionable
+  source-blocked requirements, and uncovered surfaces and require repository
+  failure;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -414,6 +419,9 @@ Exit criteria:
 
 - the complete current planning baseline is closed without claiming unavailable
   standards, future code, mutable evidence, or legacy rights as complete;
+- RFC 9853 runtime and registry ownership is reachable through
+  `brynja-dtls-core`, RFC 7568 cannot authorize unrelated legacy protocols, and
+  every unavailable legacy source fails closed through its exact blocker;
 - `v0.3.5 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix

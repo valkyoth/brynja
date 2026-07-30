@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "5720018aa265c680c276899507f3d8ca4ae694be13abaef3e75f38ad5c685560",
+  "policy_sha256": "14d63a17cb8fbe0ca41f7f47f0e766788118a4f66e248ebb295aa1768bf74f3a",
   "schema": 2,
   "source_ledger_sha256": "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7",
   "surfaces": [
@@ -91565,18 +91565,17 @@
       "test_target": "tests/surface/extensions.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/extensions.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values",
-        "rfc:9846",
         "rfc:9853"
       ],
-      "owner": "0.148.0",
-      "rationale": "Registered extension values require an explicit context and composition decision before version-one completion.",
+      "owner": "0.111.1",
+      "rationale": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
       "record": {
         "attributes": {
           "date": "2023-11-28"
@@ -91599,7 +91598,7 @@
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1"
       },
-      "test_target": "tests/surface/extensions.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#registry"
     },
     {
       "code_target": "crates/brynja-tls/src/extensions.rs",
@@ -121048,36 +121047,36 @@
       "test_target": "tests/surface/psk_modes.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rrc.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types",
       "kind": "iana-registry",
       "normative_sources": [
         "iana:tls-parameters"
       ],
-      "owner": "0.148.0",
-      "rationale": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+      "owner": "0.111.1",
+      "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-rrc-message-types",
         "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc",
         "title": "TLS RRC Message Types"
       },
-      "test_target": "tests/surface/rrc.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rrc.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-parameters",
         "rfc:9853"
       ],
-      "owner": "0.148.0",
-      "rationale": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+      "owner": "0.111.1",
+      "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
       "record": {
         "attributes": {
           "date": "2025-08-12"
@@ -121099,20 +121098,20 @@
         "collection": "tls-parameters",
         "id": "tls-rrc-message-types"
       },
-      "test_target": "tests/surface/rrc.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rrc.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-parameters",
         "rfc:9853"
       ],
-      "owner": "0.148.0",
-      "rationale": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+      "owner": "0.111.1",
+      "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
       "record": {
         "attributes": {
           "date": "2025-08-12"
@@ -121134,20 +121133,20 @@
         "collection": "tls-parameters",
         "id": "tls-rrc-message-types"
       },
-      "test_target": "tests/surface/rrc.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rrc.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-response.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-parameters",
         "rfc:9853"
       ],
-      "owner": "0.148.0",
-      "rationale": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+      "owner": "0.111.1",
+      "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
       "record": {
         "attributes": {
           "date": "2025-08-12"
@@ -121169,20 +121168,20 @@
         "collection": "tls-parameters",
         "id": "tls-rrc-message-types"
       },
-      "test_target": "tests/surface/rrc.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rrc.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.reserved-for-private-use.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-parameters",
         "rfc:9853"
       ],
-      "owner": "0.148.0",
-      "rationale": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+      "owner": "0.111.1",
+      "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
       "record": {
         "attributes": {
           "date": "2025-08-12"
@@ -121204,19 +121203,19 @@
         "collection": "tls-parameters",
         "id": "tls-rrc-message-types"
       },
-      "test_target": "tests/surface/rrc.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rrc.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-rrc-message-types.unassigned.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-parameters"
       ],
-      "owner": "0.148.0",
-      "rationale": "Registered TLS RRC message values remain future work behind the optional-feature composition gate.",
+      "owner": "0.111.1",
+      "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
       "record": {
         "attributes": {
           "date": "2025-08-12"
@@ -121233,7 +121232,7 @@
         "collection": "tls-parameters",
         "id": "tls-rrc-message-types"
       },
-      "test_target": "tests/surface/rrc.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#registry"
     },
     {
       "code_target": "crates/brynja-crypto/src/algorithm.rs",
@@ -140664,46 +140663,43 @@
     },
     {
       "code_target": "crates/brynja-legacy-pct/src/lib.rs",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.pct",
       "kind": "semantic",
-      "normative_sources": [
-        "rfc:7568"
-      ],
+      "normative_sources": [],
       "owner": "H0.6.0",
-      "rationale": "PCT is confined to an independently packaged insecure legacy release line.",
+      "rationale": "PCT remains blocked until authenticated protocol-source provenance and rights are recorded.",
+      "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#pct_isolation"
     },
     {
       "code_target": "crates/brynja-legacy-snp/src/lib.rs",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.snp",
       "kind": "semantic",
-      "normative_sources": [
-        "rfc:7568"
-      ],
+      "normative_sources": [],
       "owner": "H0.7.0",
-      "rationale": "Secure Network Programming is confined to an independent insecure legacy package.",
+      "rationale": "Secure Network Programming remains blocked until authenticated protocol-source provenance and rights are recorded.",
+      "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#snp_isolation"
     },
     {
       "code_target": "crates/brynja-research-ssl1/src/lib.rs",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.ssl1-research",
       "kind": "semantic",
-      "normative_sources": [
-        "rfc:7568"
-      ],
+      "normative_sources": [],
       "owner": "H0.8.0",
-      "rationale": "SSL 1 is reconstruction research only and can never be a secure or published protocol product.",
+      "rationale": "SSL 1 reconstruction research remains source-blocked and can never become a secure or published protocol product.",
+      "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#ssl1_research_isolation"
     },
     {
       "code_target": "crates/brynja-legacy-ssl2/src/lib.rs",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.ssl2",
       "kind": "semantic",
@@ -140711,7 +140707,8 @@
         "rfc:6176"
       ],
       "owner": "H0.4.0",
-      "rationale": "SSL 2.0 is confined to an independently packaged insecure legacy release line.",
+      "rationale": "SSL 2.0 remains source-blocked before any independent insecure legacy release line can begin.",
+      "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#ssl2_isolation"
     },
     {
@@ -140721,10 +140718,11 @@
       "id": "legacy.ssl3",
       "kind": "semantic",
       "normative_sources": [
-        "rfc:6101"
+        "rfc:6101",
+        "rfc:7568"
       ],
       "owner": "H0.3.0",
-      "rationale": "SSL 3.0 is confined to an independently packaged insecure legacy release line.",
+      "rationale": "SSL 3.0 is confined to an independently packaged insecure legacy release line and remains prohibited by current TLS policy.",
       "test_target": "tests/surface/legacy.rs#ssl3_isolation"
     },
     {
@@ -140755,15 +140753,14 @@
     },
     {
       "code_target": "crates/brynja-legacy-wtls/src/lib.rs",
-      "disposition": "legacy-only",
+      "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.wtls",
       "kind": "semantic",
-      "normative_sources": [
-        "rfc:7568"
-      ],
+      "normative_sources": [],
       "owner": "H0.5.0",
-      "rationale": "WTLS research and implementation are confined to an independent insecure legacy package.",
+      "rationale": "WTLS research and implementation remain blocked until authenticated protocol-source provenance and rights are recorded.",
+      "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#wtls_isolation"
     },
     {

@@ -271,6 +271,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "2",
           "section_sha256": "4fa15b0405c43869a68d885b1c2a067c287037b42b8abcf7a9e7a184894b6468"
         },
@@ -278,6 +281,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "3",
           "section_sha256": "179b8059b5c219b48a2d8c87a607c8d88d9e2c9f5351b7ee7cc569d8e98618b8"
         },
@@ -285,6 +291,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "4",
           "section_sha256": "544480f37a2ddbe089017f8b9662aaf2d117207b88ac95799bf89e84506700c0"
         },
@@ -292,6 +301,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5",
           "section_sha256": "f68874df2d72877f25661c658e432be2b05a55fe30f9bcf90042dfcbba13f16e"
         }
@@ -413,6 +425,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "1.1",
           "section_sha256": "1d9f9a07cb6c659ac936e2da53f684958d24f529cea2f99fa11b9c771f0a172b"
         },
@@ -422,6 +438,9 @@
             "MUST": 14,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "1.2",
           "section_sha256": "ad94cb801ab3184b25d6b8d91115aab70be3f7ecf2fce8e7249924a8db3239f1"
         },
@@ -429,6 +448,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "2.1",
           "section_sha256": "f300c232557f847af53e0b4c9877c51ba469ca03fba71c6a61795206684c5b52"
         },
@@ -437,6 +459,9 @@
             "MAY": 1,
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "2.2",
           "section_sha256": "fac58d9c16cd21670ea4a248c864eadea8dbd2c75358086329e21dcf83af6674"
         },
@@ -446,6 +471,9 @@
             "MUST": 2,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "3",
           "section_sha256": "9a50e1eeacd3351d1bc7c678f4dd5d81c5dbfa5a4eda245516edae666f90b8d4"
         },
@@ -454,6 +482,9 @@
             "MAY": 2,
             "MUST": 13
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "3.1",
           "section_sha256": "e926365739f6c3dd4a94ffc57018a4596e353c94e38ae95178ad9a119e381c04"
         },
@@ -461,6 +492,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "3.3",
           "section_sha256": "e1338d86ee653972b1140178422222ee433dd18b57b75b69d9275e683621cc7a"
         },
@@ -470,6 +504,9 @@
             "MUST": 1,
             "SHOULD": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "4",
           "section_sha256": "e251ff9a07508e7f7b5139ba587b5310818f3b997262d5522145dbf63d3aa23e"
         },
@@ -479,6 +516,9 @@
             "MUST": 15,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "4.1",
           "section_sha256": "11a3f2f3e001e11e45fcf161fa4add8963e184b1a5255941acce8261c96ea932"
         },
@@ -486,6 +526,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "5",
           "section_sha256": "ff89fdb5b4b6e85d8863ae30fad573cf74b453e0e9fc2cbf7ece8b5a715c1ec7"
         },
@@ -494,6 +537,9 @@
             "MUST": 10,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "6",
           "section_sha256": "4652b7a98cdb1a15bea8b0b2e4f7b8ba3268ccaf55f0a3127b789c8aece056ad"
         },
@@ -502,6 +548,9 @@
             "MUST": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "8",
           "section_sha256": "c1b6b0af1d46872ee1380281a2f84d864726c35a1a9306c174f2a9f663613132"
         }
@@ -536,6 +585,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0003"
+          ],
           "section": "2",
           "section_sha256": "05e4ec18a04d6fcbf2fed2f77df19de9181bcbce6d746ba5d1c4cfd4d3664e54"
         },
@@ -543,6 +595,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0003"
+          ],
           "section": "3.1",
           "section_sha256": "86950f7bbf8c2a02b678640108cc7f4705d89627a091a9facd88beeae4f01f58"
         }
@@ -580,6 +635,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "1.4",
           "section_sha256": "5584a764e14488c8354f0c6be6de662bf00520cb01d626a687a200fd4e6e980a"
         },
@@ -588,6 +646,9 @@
             "MAY": 1,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "2",
           "section_sha256": "c339c7cfae69d17303238dcf00f00a0e496df3170e18d6244eb86ce71f913a31"
         },
@@ -598,6 +659,9 @@
             "MUST NOT": 4,
             "SHOULD": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "2.1",
           "section_sha256": "3bf34168383c4532ed065b0e1f2f378616341b464eeeed9a14ae08a9e8b2b842"
         },
@@ -605,6 +669,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "2.3",
           "section_sha256": "c131a4e73c72b8283ef3194aa549e2e9d4fbf45103b26c4cd058bfb21e502ead"
         },
@@ -613,6 +680,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "3",
           "section_sha256": "eb542031907293a0b7556ee7f8027bc16912d762a83eaa7f02a573dc84d8bc57"
         },
@@ -620,6 +690,9 @@
           "occurrences": {
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "3.1",
           "section_sha256": "d7501e3e2ef6df2dfcdaa23d631594b1adf34bf51c2824d21245e7dba0187703"
         },
@@ -629,6 +702,9 @@
             "MUST": 3,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "3.2",
           "section_sha256": "0c1f7ff4a8641e6bd272043fec96e4e6fc68df0bedb03628e2ec45b96aa37e3b"
         },
@@ -637,6 +713,9 @@
             "MAY": 1,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "3.2.1",
           "section_sha256": "9b65698daec25e17d1e328aff6ec28570957a4f603639163bc79d4af07290c0a"
         },
@@ -647,6 +726,9 @@
             "MUST NOT": 2,
             "SHOULD": 8
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "4",
           "section_sha256": "9c25fc16788e6b75db1f6a23d5a3d3fd78197212d1091297619a257375445fcc"
         },
@@ -656,6 +738,9 @@
             "MUST": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "6",
           "section_sha256": "16cf8eae21f9dc74e762cedb10bafd4dff2175bb9f0e69a23a974aa59ebc4e52"
         },
@@ -663,6 +748,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0007"
+          ],
           "section": "8",
           "section_sha256": "78ced85fe3f37cb9517821c3953c3f529297f072b8dc55b801edb943a36c2e4e"
         }
@@ -699,6 +787,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "1",
           "section_sha256": "42af4820c74d868f23e88d0cb88e5c0b45f913af17e398848b39a9d589c2c8f9"
         },
@@ -706,6 +797,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "3.3",
           "section_sha256": "5336f722a843c53e37513593f5cf75ea0ef7008ac33b55f8078f9def595dc726"
         },
@@ -713,6 +807,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1",
           "section_sha256": "291f20cb567d38a74fec38c04f87b63c0af6ce7c945b127acfd27daea0b1ffe3"
         },
@@ -721,6 +818,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.1.2",
           "section_sha256": "6577e45b9494e73a13b283f34a06ca7528ffd85543fe553d13de267844c06790"
         },
@@ -728,6 +828,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2",
           "section_sha256": "de21c7231e0e608dc49e9c08cd21ea600066210d8fecc7f9005db7aa875ec272"
         },
@@ -737,6 +840,9 @@
             "MUST": 2,
             "SHOULD": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.1",
           "section_sha256": "3ba674c74f4437134f39608c4a774749b3b005e0a53e4a80ce0064f22b4bb2ea"
         },
@@ -746,6 +852,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.2",
           "section_sha256": "5811e634abf5fdb26005c6038399023931ca62305a9058441ea67e17fafabba8"
         },
@@ -754,6 +863,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.3",
           "section_sha256": "11cd47469d88db594fdcf9d956dd58a09094a54bdf21cd8468b99c807e700fca"
         },
@@ -763,6 +875,9 @@
             "MUST": 6,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.4",
           "section_sha256": "2acbc2bf347fe288ee7267aad9a4282da808ad47d4ae14a470c2562e3fdfc75a"
         },
@@ -771,6 +886,10 @@
             "MUST": 4,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "4.1.2.5",
           "section_sha256": "eba8731eb9a1cd35197c2cd06435a0aab8d525b922f121f0ff4ef35ed9a0676d"
         },
@@ -778,6 +897,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.5.1",
           "section_sha256": "10f15f71931013f68f22c7214fd9c50cbeb80bd37fcccbbd6cb81ce479a250d8"
         },
@@ -786,6 +908,9 @@
             "MUST": 2,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.5.2",
           "section_sha256": "5dc0644e761630fb88a8631949aee085b19ebbfedfe27d5608b9c66d02034110"
         },
@@ -796,6 +921,9 @@
             "SHOULD": 2,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.6",
           "section_sha256": "b70fa26497f64b41a55fee2f1252f64d36ae15dffa6fbbe693e32633c03386ed"
         },
@@ -805,6 +933,9 @@
             "MUST NOT": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.8",
           "section_sha256": "e51c31c1aef47d72f690eaed599cbfe70e4b516fa675fb92da53bd81fe7b0663"
         },
@@ -812,6 +943,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.1.2.9",
           "section_sha256": "8ca8e4e2451b81777089d0ad9dee989b54663c04b746a3bbeeb1aff34244fa20"
         },
@@ -822,6 +956,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2",
           "section_sha256": "f178b434e828f3770e22de12080d121e90c9034aac56876c2639c86dab20faa5"
         },
@@ -831,6 +968,9 @@
             "MUST": 2,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.1",
           "section_sha256": "4670cfebb72ebbc40fa5b615d6f8f9de996a289d04ccf4e8b1cdbab7fa510eb5"
         },
@@ -839,6 +979,9 @@
             "MUST": 3,
             "SHOULD": 4
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.2",
           "section_sha256": "f171e1c3806d633c20423852d119398837f19c04900fc72f55af92230f0dc033"
         },
@@ -850,6 +993,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "4.2.1.3",
           "section_sha256": "598d0ee3a5cb1e2228028115a307ae6539babc58d672d399f38b87cf8337003c"
         },
@@ -861,6 +1008,10 @@
             "SHOULD": 6,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "4.2.1.4",
           "section_sha256": "a6eab48c3d1824251541ea2dc78893341b4e4f7e0a247f09f352de9957cce168"
         },
@@ -870,6 +1021,10 @@
             "MUST NOT": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "4.2.1.5",
           "section_sha256": "ff2f4c69185a6b9a5d660a540fef487f14e30a2fe7034d25c06349c717f0989e"
         },
@@ -880,6 +1035,10 @@
             "MUST NOT": 4,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "4.2.1.6",
           "section_sha256": "4a337a1b739e1d81c6b1044a10d53e7139ed2014db403bc14157ae5aa156f86a"
         },
@@ -888,6 +1047,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.7",
           "section_sha256": "c879e44d92c205cf0f26d2a383e437926814866b92d1227afa6828bdad4c1bfa"
         },
@@ -895,6 +1057,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.8",
           "section_sha256": "fbc5e3866dcf51228626a8ab70e320f7aa1ac05b39cd9cfaab56bec9aa4c5bc8"
         },
@@ -904,6 +1069,10 @@
             "MUST": 3,
             "MUST NOT": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "4.2.1.9",
           "section_sha256": "7158e48022547eee8eaa98e2fb179cb4ca21a32acaf7f84697d10771e5c25ab6"
         },
@@ -915,6 +1084,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.10",
           "section_sha256": "5a4ed77538c769c3e079783655e77b318538cdb3a7982f8362623f599e83fba2"
         },
@@ -924,6 +1096,10 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "4.2.1.11",
           "section_sha256": "14d0ef80dce8ac392ad6c482e979f6b90d2b3cf349b172faa9272fe27bd051f9"
         },
@@ -934,6 +1110,10 @@
             "MUST NOT": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "4.2.1.12",
           "section_sha256": "64fa84406e3889b93987e7fe0160e0d673dc4b01bd275a79f8481756e9f3b361"
         },
@@ -944,6 +1124,9 @@
             "SHOULD": 4,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.13",
           "section_sha256": "169a26106b77530636d1a1ce421018cad233f81726d219c348434891562d36a4"
         },
@@ -951,6 +1134,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.14",
           "section_sha256": "2fae45b663b78d3a9b51f44aaac9f57832d91092a5ea06a0e30c82eb8496e935"
         },
@@ -958,6 +1144,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.1.15",
           "section_sha256": "55b695aad1ec07008fce4bf0837a76f3bddcde002b43ab7e29b6beb601213e28"
         },
@@ -966,6 +1155,9 @@
             "MUST": 6,
             "SHOULD": 8
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.2.1",
           "section_sha256": "94c98a0878a051721451790e08940b307e0970bd11fb013c8b36b483f4d2531d"
         },
@@ -974,6 +1166,9 @@
             "MUST": 8,
             "SHOULD": 8
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "4.2.2.2",
           "section_sha256": "31d286b4575feb5be4d109061d5d9104c6cd1a598555e84e3cd876d1e76a479e"
         },
@@ -982,6 +1177,9 @@
             "MAY": 2,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5",
           "section_sha256": "702977ccc426f4ee483dc96945c7f0e7733e7b4ae8bce390f5e02d86fb9e9fde"
         },
@@ -989,6 +1187,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1",
           "section_sha256": "c242aba79062cb1e7f5361be69fc7cc0141a49014c6e58fe6270671931e626f5"
         },
@@ -997,6 +1198,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.1.2",
           "section_sha256": "694957db2bd487b8c75d8213b2c4b126a21b86227d9380c27e2fc37dfa3e720a"
         },
@@ -1006,6 +1210,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.1.3",
           "section_sha256": "bd720eccb86b9d218193fe8a169a0d7de12d3f4ee5fd5064a35e41f1665d0770"
         },
@@ -1013,6 +1220,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.2.1",
           "section_sha256": "85fdf4ee21964bc077e1d743a58d9cd589f77e1fd462900496bddce50e8c0eeb"
         },
@@ -1020,6 +1230,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.2.2",
           "section_sha256": "1f714d097b494651b70797fc6b98466baf1d70ae90df0b19f7026cf883730815"
         },
@@ -1027,6 +1240,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.2.3",
           "section_sha256": "284dd7f0c361f0832eb7116d9e3daa750344a8aafcc506731e9f856fa5238546"
         },
@@ -1034,6 +1250,9 @@
           "occurrences": {
             "MUST": 5
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.2.4",
           "section_sha256": "9aabc2205548cbf8cb18c0b87a82f4c731b492b794378a8ff1a1e030597b3b49"
         },
@@ -1042,6 +1261,9 @@
             "MUST": 6,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.2.5",
           "section_sha256": "a4e6acd8cbbdeee6bbff71f54f7cbb60a0f4f96f9ba96d62519a6cff9d0598ce"
         },
@@ -1049,6 +1271,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.1.2.6",
           "section_sha256": "7f55616fa1124f0420c5abeebd28840cb504a9a9bf5f3478f9fe51bac4dc4376"
         },
@@ -1056,6 +1281,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2",
           "section_sha256": "94b1eb962a8440a7d1ec6c633d946a52a7f0faa7254042f13999c46c6f365d78"
         },
@@ -1063,6 +1291,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2.1",
           "section_sha256": "8763ca64b273cad217e5e13df6b8a5c8001d5b89b41b767fa6408f3132b1f31f"
         },
@@ -1072,6 +1303,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2.2",
           "section_sha256": "3db8f4f6575bd0bbd69a2cd9fb8a482d2aec5151d4315c81fca402608097f1d7"
         },
@@ -1080,6 +1314,9 @@
             "MUST": 7,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2.3",
           "section_sha256": "faf691a7cb4197d6b99cb5a09828a0eca235bb81e226d080eda49aef907dcd91"
         },
@@ -1089,6 +1326,9 @@
             "MUST": 11,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2.4",
           "section_sha256": "df491e4ed6cdc13176c6333337f3694ada00806fb9b200444935e8f5a8ea6f2c"
         },
@@ -1097,6 +1337,9 @@
             "MUST": 13,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2.5",
           "section_sha256": "27fe3f6b7e7a8a9a1f6af6f15c5cd9622cdb1108641f15c338654f2b98bc2bea"
         },
@@ -1105,6 +1348,9 @@
             "MUST": 3,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2.6",
           "section_sha256": "068086fcbbaa7916793f73785f9e67c92765f7e6538cd13654e50d1ab72ad1ec"
         },
@@ -1114,6 +1360,9 @@
             "MUST NOT": 1,
             "SHOULD": 8
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.2.7",
           "section_sha256": "9df55afbe16085b87ecece76cfbf016aab1c8cce479d69ae1fa3fea38fdef4e7"
         },
@@ -1122,6 +1371,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.3",
           "section_sha256": "258f19c9e82e440b34906553c67f9618a301a35652113739fe6d16ee94fbbab5"
         },
@@ -1129,6 +1381,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.3.1",
           "section_sha256": "b2f6fe502f992a3ab3ce2df7f2941a1b90127dbe32191d96879073d5f6f54282"
         },
@@ -1137,6 +1392,9 @@
             "MUST": 2,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.3.2",
           "section_sha256": "d60397e6962dc50ac234d54c4a8b0167a018810937a41459f2813ae229cf1066"
         },
@@ -1144,6 +1402,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0008"
+          ],
           "section": "5.3.3",
           "section_sha256": "77cf323006f3f79eb9a44843fcb5e7eec4daa3d740864031de608e89e6e71bae"
         },
@@ -1151,6 +1412,12 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0003",
+            "BRY-REQ-PKIX-0004",
+            "BRY-REQ-PKIX-0006",
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "6",
           "section_sha256": "af38d505180221e9e65be5beac4a0bddfdc6105c91ae4fdbe935ba9dec6b9d61"
         },
@@ -1160,6 +1427,12 @@
             "MUST": 2,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0003",
+            "BRY-REQ-PKIX-0004",
+            "BRY-REQ-PKIX-0006",
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "6.1",
           "section_sha256": "fc3d3334899329bac93b92369a250f77e3e92d1295a4847f44c769fa984604a1"
         },
@@ -1167,6 +1440,11 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0004",
+            "BRY-REQ-PKIX-0006",
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "6.1.1",
           "section_sha256": "71fac0a75d88d268c3ae823f53cb44bf6a50b9ee1984e2e90866c285db4dfee7"
         },
@@ -1174,6 +1452,11 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0004",
+            "BRY-REQ-PKIX-0006",
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "6.1.2",
           "section_sha256": "19695fa92d1aa02586695b6bee18efc03b35b3fc4a5f4892cc65dc7966fdef2b"
         },
@@ -1181,6 +1464,11 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0004",
+            "BRY-REQ-PKIX-0006",
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "6.1.3",
           "section_sha256": "4b3b295dd98206bf9ab2b09d337c37cfceb56f49270d0e6649ffd74220bb0f0d"
         },
@@ -1188,6 +1476,11 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0004",
+            "BRY-REQ-PKIX-0006",
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "6.1.4",
           "section_sha256": "ecfcc7fa75de572d7a587e95d4f21d0f3a7bbb0035eb09b1fc3057aaba442992"
         },
@@ -1195,6 +1488,11 @@
           "occurrences": {
             "MAY": 4
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0003",
+            "BRY-REQ-PKIX-0006",
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "6.2",
           "section_sha256": "ab3c36460afa0cfb1556e4691a5be2f1f7aed239811181f0286710de54511b72"
         },
@@ -1202,6 +1500,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "6.3",
           "section_sha256": "f20444e019e13a6a41d1292b5c57dcf7e9446633d0da200880179194d9561f5c"
         },
@@ -1209,6 +1510,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "6.3.3",
           "section_sha256": "fdbc11883f073228fab7f1d53f31824264742acc1b96087df80c55a0edb3451f"
         },
@@ -1216,6 +1520,9 @@
           "occurrences": {
             "MUST": 6
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "7.1",
           "section_sha256": "d01ccc231b8f05007754736cc86b30e912b6749a1a2c73c64dcb5daff9a4bda4"
         },
@@ -1223,6 +1530,9 @@
           "occurrences": {
             "MUST": 5
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "7.2",
           "section_sha256": "e2444c9ccdb54b1a11f9d8a9da21f52754dfcb3a978780bfba6b0a85e3d60da0"
         },
@@ -1230,6 +1540,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "7.3",
           "section_sha256": "421bba409f55fb9cae1b100a2b42407f0540869ef59f4ce7ba2cf1e6b96613ec"
         },
@@ -1238,6 +1551,9 @@
             "MUST": 6,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "7.4",
           "section_sha256": "b24b202bb41d40f092872f2eeee9ede62483c9b635a69b0e9bf9764039acbf05"
         },
@@ -1245,6 +1561,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "7.5",
           "section_sha256": "31a0a16b82e35e12536f1036589b52bc3ad88c05389e5818a9efa5a8f0e9b9e3"
         },
@@ -1255,6 +1574,9 @@
             "SHOULD": 5,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0007"
+          ],
           "section": "8",
           "section_sha256": "9748132d56cf4b222d0fd3bf6098fc96e215d870bdfed71582c92e27c477a4f0"
         },
@@ -1264,6 +1586,9 @@
             "MUST NOT": 3,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "11.2",
           "section_sha256": "86776f72e7b5b683488d39049a5edae53dae44f390679a93d51555c19aa30e5e"
         }
@@ -1311,6 +1636,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "1.1",
           "section_sha256": "89e34d9ec429bd40c170f525fd15881dc4b0d396d36553d680af313762f42907"
         },
@@ -1319,6 +1648,9 @@
             "MAY": 2,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "2.1",
           "section_sha256": "71e47bd249f9f14c4ccb676822ddc8ce0017029dd8c67fd2eedd30c287168a81"
         },
@@ -1327,6 +1659,9 @@
             "MUST": 3,
             "MUST NOT": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "2.1.1",
           "section_sha256": "90db5225345ca30bd83ef52302e1d2fa794ce22890bfe2d67efde417b58e7388"
         },
@@ -1334,6 +1669,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "2.1.2",
           "section_sha256": "e4547622bc9b619606c3fcd92e5d75648983110e62a3ed5ed10da76314d35146"
         },
@@ -1343,6 +1681,9 @@
             "MUST": 2,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "2.2",
           "section_sha256": "ab438552755b6caf676225c06005f1e4829cb9e684f8a879a8fb77732fc97d4b"
         },
@@ -1353,6 +1694,9 @@
             "MUST NOT": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "3",
           "section_sha256": "0db42ba6157f2de1b44dc4601d5046b81ba3da1c09197b1bfffffd2a70ba6e4b"
         },
@@ -1360,6 +1704,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "8.2",
           "section_sha256": "3b053049c18921aa29c9e2fdd167dd359294ee5f690da575b9857087697004bf"
         }
@@ -1393,6 +1740,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "1.1",
           "section_sha256": "eb6997a4b197f57bf602b2b4c7eb414d3c5d28bc8212834cec3ff872c6b166e6"
         },
@@ -1400,6 +1750,9 @@
           "occurrences": {
             "MUST": 5
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "2",
           "section_sha256": "727262286140878d76bd3aaf03c18956bdfbe95a8e4a4058927d78b6e4b8597e"
         },
@@ -1408,6 +1761,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "3.1",
           "section_sha256": "79521b841f0b1ee1b54c09d5d0a042aa3c8886eabb062344302287f308869fec"
         },
@@ -1416,6 +1772,9 @@
             "MAY": 1,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "3.2",
           "section_sha256": "8b1f6d73266be21e2780b9f39eb6bc8421edbb4d6fe1f326bf9add6f16943c33"
         },
@@ -1423,6 +1782,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "3.3",
           "section_sha256": "066b73fc80360e751daa56b5f783e54dc24dca28d896b64f0fd319c3264d30b5"
         }
@@ -1464,6 +1826,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "1.1",
           "section_sha256": "eb6997a4b197f57bf602b2b4c7eb414d3c5d28bc8212834cec3ff872c6b166e6"
         },
@@ -1473,6 +1838,9 @@
             "MUST": 3,
             "SHOULD": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "2",
           "section_sha256": "f4a98278ddff5a21d1172cecc38e4f3b5aea405704a50de32971d5a8fadad908"
         },
@@ -1481,6 +1849,9 @@
             "MUST NOT": 1,
             "SHOULD": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "3",
           "section_sha256": "654c5433f53d4781d1c3d90bc286e880efe526be138773e134f682afb25b4767"
         },
@@ -1488,6 +1859,9 @@
           "occurrences": {
             "MUST": 5
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "4",
           "section_sha256": "386fe0aa217ce2ad53261ebdea693d004d6b42e115371159cedf87fec0da9b60"
         }
@@ -1529,6 +1903,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "1",
           "section_sha256": "22f6d3caed6ee3dd749cc8df2e2064021f8f445d2a68a4e12e99f9ba0e9185cc"
         },
@@ -1538,6 +1916,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "2",
           "section_sha256": "6cd5bca6e831acb3b133de86cf4d07f9a2f8c9a5648b60656d4a65a03ce1cafb"
         },
@@ -1546,6 +1927,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "3.1",
           "section_sha256": "7092f09d091bf4b4d00bb432f2db9d0201b6fa826d593f5eaf64ed6a9236e66d"
         },
@@ -1554,6 +1938,9 @@
             "MAY": 1,
             "MUST": 4
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "3.2",
           "section_sha256": "ab99fe994c93d7356a59a878a8971570f19d828b2fc64820f0d09f97db3f6a8b"
         }
@@ -1592,6 +1979,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0004"
+          ],
           "section": "2.1",
           "section_sha256": "0090977e0a2cacc841173585728f10d0a6fa0c3c19387c80b2afa7482c345170"
         },
@@ -1599,6 +1989,9 @@
           "occurrences": {
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0004"
+          ],
           "section": "3.3",
           "section_sha256": "82f79282e9b6eec9d9beb8a6eac2f33866ea36f576c2d96a7dd7f3c3652e07f3"
         }
@@ -1635,6 +2028,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "1.1.2",
           "section_sha256": "77ab6b3985b6f8d8c9afade6b7b1ff756b71de7d22d39fe7a7beaf781e80252a"
         },
@@ -1643,6 +2039,9 @@
             "MUST NOT": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2.3.1",
           "section_sha256": "f0818b362ea3c36bc80429d4fce2c83a1bdee7f6398654a7b791c631ae951b3b"
         },
@@ -1650,6 +2049,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2.3.2.1",
           "section_sha256": "35a201387cbb6db75f87e0bf836c74e4e05d9e7da264c7bb3824c7e6e3310d06"
         }
@@ -1686,6 +2088,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2",
           "section_sha256": "06cbbafe7c77f9589299bbcdb78738e255ec156734da41b6406156ad61ee578d"
         },
@@ -1694,6 +2099,9 @@
             "MUST": 6,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "3.1",
           "section_sha256": "55043b7a7ca80606f4bafea9bc869ad8c988a112f647f7b117e6e5c0684a56f1"
         },
@@ -1702,6 +2110,9 @@
             "MAY": 1,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "3.2",
           "section_sha256": "706ca87b4dfe7a398d1c3ea980d113d8a0264db518e13ba09e56d5000a667d2f"
         },
@@ -1710,6 +2121,9 @@
             "MAY": 1,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.1",
           "section_sha256": "5bf7f21429107281c345c264dc96f47dda6da8443e7c2449ad14359c27851dce"
         },
@@ -1719,6 +2133,9 @@
             "MUST": 4,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.2.1",
           "section_sha256": "9e287d3cd0dfc5f88d6d081b6926e80751e6e224e23d09aaf045756a7df8e903"
         },
@@ -1726,6 +2143,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.2.2",
           "section_sha256": "bdbe31219bbcca82d713ea82009c3fb82053dc35edfac6056cbb11960705a231"
         },
@@ -1733,6 +2153,9 @@
           "occurrences": {
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.2.3.1",
           "section_sha256": "2979679613d6b7d60b27479bda6ceda8c4171b205dfa89778a75233fc14a4caf"
         },
@@ -1740,6 +2163,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.2.3.2",
           "section_sha256": "bbdf2d4b67eb9149e2ad09ea8b505ca794eaeda864502925a231fe2306be6e23"
         },
@@ -1748,6 +2174,9 @@
             "MUST": 1,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.2.3.3",
           "section_sha256": "6100bc9d081527ec098fc6924bbc3f804ac61e09709e8f9ab3ec6a16ccc816f8"
         },
@@ -1755,6 +2184,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.2.3.4",
           "section_sha256": "a2b2d25e029518227efbfa7af063758c4e29355fc2804d267d90a4cc98e02d00"
         },
@@ -1762,6 +2194,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "5.2",
           "section_sha256": "ca12557cf032cc7cf9c50bdab161afd1744855208e8533e92924222c16014d6f"
         },
@@ -1771,6 +2206,9 @@
             "MUST": 2,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "5.3",
           "section_sha256": "2bc24f8fc5a62097285bb8832c8ff3e1587e745d7c630e77507923c2e7a4f253"
         },
@@ -1780,6 +2218,9 @@
             "MUST": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "5.4",
           "section_sha256": "c4e4f75aae7c3de8aa3c66bac860287cc8b64c3fa6222b1ba395b6b66005ce65"
         }
@@ -1816,6 +2257,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "1",
           "section_sha256": "067207d7d1623c8962fa2d06327be2d03befde9463083357fb032eca897d7f9f"
         },
@@ -1823,6 +2267,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "7",
           "section_sha256": "2ed8d41e899581d98e0736b2132c8727d373979777aa4adedd8d6df305fd2f6c"
         }
@@ -1855,6 +2302,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0002"
+          ],
           "section": "3",
           "section_sha256": "9523f892e1caf332bd337707c53f00c77fc7654b52f66069775fa91696a6ddb5"
         },
@@ -1862,6 +2312,9 @@
           "occurrences": {
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0002"
+          ],
           "section": "6",
           "section_sha256": "a5ef655fb3c53eca66f3f7f7910145df943155a1a04ab070ec7831a4ad2fd872"
         },
@@ -1870,6 +2323,9 @@
             "MUST": 8,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0002"
+          ],
           "section": "8",
           "section_sha256": "2891a094465091998bc79c08fcd38beedc91bdfc49623a45f0e693ca80b55823"
         },
@@ -1878,6 +2334,9 @@
             "MAY": 9,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0002"
+          ],
           "section": "9",
           "section_sha256": "23420fad3ac87604fe53805ec423a8af587b5936277a01a8d2391bd138107a89"
         },
@@ -1887,6 +2346,9 @@
             "MUST": 9,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0002"
+          ],
           "section": "10",
           "section_sha256": "a1afa0afbe584c82dceeb72a15d7bbde93b4fd43bd248910495da493089c483c"
         },
@@ -1896,6 +2358,9 @@
             "MUST": 2,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0002"
+          ],
           "section": "13",
           "section_sha256": "ceee1e43adabea859f42f28d65900b0db854b9ca6e5115212ed845db53f49fe2"
         },
@@ -1903,6 +2368,9 @@
           "occurrences": {
             "MUST": 7
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0002"
+          ],
           "section": "14",
           "section_sha256": "425ec82db9224c77913120f781c8e7c5fddf9904ec0a37d5595c9bcd7a779020"
         }
@@ -1935,6 +2403,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0004"
+          ],
           "section": "1.1",
           "section_sha256": "1d2e930081e90779429066029cbbe577aeb4f74a4c8ad3810dae9f8f14cff9a1"
         },
@@ -1944,6 +2415,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0004"
+          ],
           "section": "2",
           "section_sha256": "64e0353def2dd46587fca0b98b727562fd90da398ca57e9df34488e5405d755b"
         },
@@ -1952,6 +2426,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0004"
+          ],
           "section": "3",
           "section_sha256": "00b98ce5ee210575f96015ab031e95a5f45c36af8968a7b0b26e22b3a0e2814f"
         },
@@ -1959,6 +2436,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0004"
+          ],
           "section": "7.1",
           "section_sha256": "aa196f9d57b67ccad934f01acd0e2dc7eec8032f0f1edc88ded4cbf735ec9f1a"
         }
@@ -2014,6 +2494,9 @@
             "MUST": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "1.1",
           "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
         },
@@ -2025,6 +2508,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "1.2",
           "section_sha256": "fccabcb4d77b42a0ca89ba63c9aa4b421f794e5290b5dedca3684886be55c6f5"
         },
@@ -2036,6 +2522,9 @@
             "SHOULD": 3,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "3",
           "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
         },
@@ -2045,6 +2534,9 @@
             "MUST": 4,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "4",
           "section_sha256": "7dfa2bfffa7441265a215ed8931f1085b5eb01f54d2c4201792a15183d238e26"
         },
@@ -2055,6 +2547,9 @@
             "MUST NOT": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "5",
           "section_sha256": "755300a011d8eae73c6f0b3b7fd2d47ada39f9e4ff105906493bf1f16e6561a8"
         },
@@ -2062,6 +2557,9 @@
           "occurrences": {
             "MAY": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "6",
           "section_sha256": "08176ec5ef88982a8b467e72b2c3ec8bd6c3d155719cd5c88056212a7d6a84a5"
         },
@@ -2070,6 +2568,9 @@
             "MAY": 2,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "7",
           "section_sha256": "ffb0a83dd3c24b91cfb2e886bd6598d44d519489fbf7c1c0cac40cd410748933"
         },
@@ -2080,6 +2581,9 @@
             "MUST NOT": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "8",
           "section_sha256": "598870980c7ea2d138722d5fd75d26a0fafd7f9d4c7ee7ff5e19b28c1ad825b6"
         },
@@ -2087,6 +2591,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "9",
           "section_sha256": "1c19e8e6c0d49922fcb2b32a1ba63ebe61d520f92a007dcca10724b5a182798c"
         },
@@ -2095,6 +2602,9 @@
             "MUST": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "10.1",
           "section_sha256": "b25ab20f308958c4fe08efcb37495f5415e6307593c1edc65f37c219fd5906fa"
         },
@@ -2102,6 +2612,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "11.1",
           "section_sha256": "09fb0ea1346633b5cdc2ddbb28b89c49c127b5df93f5d37293ecb29ce2eeebe9"
         },
@@ -2109,6 +2622,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "11.3",
           "section_sha256": "2ae3026ad35287a685535e1fe34631fbed81817ada32c389e2b604f0f448df11"
         },
@@ -2116,6 +2632,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0006"
+          ],
           "section": "11.6",
           "section_sha256": "3f0df420c987956b1ed7e8119816cff01fd19d2e5ee99f72b80a7699a2a1e8eb"
         }
@@ -2152,6 +2671,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "1.1",
           "section_sha256": "50aa844e7fbc9c5e36d763e1e84f8ecd85e3f3a1603334fe590119738b8beaed"
         },
@@ -2162,6 +2684,9 @@
             "SHOULD": 4,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "3",
           "section_sha256": "acacb0db64922011c15b38069ff72d22284d6ec7745db5d6234425e91151f943"
         },
@@ -2169,6 +2694,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "5",
           "section_sha256": "1c039c13fb8f6533e398ae6f1279a137af3d1a84f6e2215315a66a9c3541137d"
         },
@@ -2176,6 +2704,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0001"
+          ],
           "section": "6",
           "section_sha256": "0ace05f9744f547a075de8aa7fe963f1dc1be09af953ecb2d6437561eae1a10c"
         }
@@ -2208,6 +2739,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "1.1",
           "section_sha256": "815942bac140a8f3fddbf89424200400f80b7283d0e40342b689a0868d419238"
         },
@@ -2215,6 +2749,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "2.1",
           "section_sha256": "e1cf04e6c5c36472a5fecce6320abd473b801744971c02f7f202fb158be9b53d"
         },
@@ -2224,6 +2761,9 @@
             "MUST": 5,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "2.2",
           "section_sha256": "e835196b6adaa318f87e40b21556d6a6a8f0f6c2beba94799c582253018c5817"
         },
@@ -2231,6 +2771,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "2.5",
           "section_sha256": "ee787b083a0935eda98d6647a23ee6a15b9464135d45e691fec8d1f27fe363f3"
         },
@@ -2238,6 +2781,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "2.6",
           "section_sha256": "4885a60199143ff206d80fd562b6a23b2a40480cc0750e6644e40d6410122fe6"
         },
@@ -2245,6 +2791,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "2.7",
           "section_sha256": "c0e3c8e6705d62f2e5844dbc5f76baafdad453e1a89f6753f35d8ca514e73b62"
         },
@@ -2252,6 +2801,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "3.1",
           "section_sha256": "e2c1c9a2fdee88f0164478fbd90f01bb5147dd1e82a03919e7e80a0ca60f4d6b"
         },
@@ -2261,6 +2813,9 @@
             "MUST": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.1.2",
           "section_sha256": "44d4e55bb61224b52325997aa3dc0ba1104f9272cac56ebf5ffcb15373d9b091"
         },
@@ -2269,6 +2824,9 @@
             "MAY": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.2.1",
           "section_sha256": "0226cb2790a0d3cbd539980ac7d986613072087f0a0d6c3c4fe861aa2fcd1272"
         },
@@ -2276,6 +2834,9 @@
           "occurrences": {
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.2.2.1",
           "section_sha256": "66eaa745f8b7f9bc4342530de66098423d34152a7727bafe691324a55c9e096c"
         },
@@ -2285,6 +2846,9 @@
             "MUST": 5,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.2.2.2",
           "section_sha256": "69738888bd4445776d591f30b89e48e94eff958f1a75fdba1861054f5a156c3f"
         },
@@ -2292,6 +2856,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.2.2.2.1",
           "section_sha256": "5916a7e02475e1dfaa6c0179fae58e269a361f160b4733f9804a34d92364b72c"
         },
@@ -2301,6 +2868,9 @@
             "MUST": 3,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.2.2.3",
           "section_sha256": "595d39d286a2aa673764d06fd94d810018813a5cd41f6d1d554d297b9a496ef0"
         },
@@ -2309,6 +2879,9 @@
             "MAY": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.3",
           "section_sha256": "d7891ae4ebc99292306a75a679a27491b875ca926f779fcbae727b50a82c1b89"
         },
@@ -2317,6 +2890,9 @@
             "MAY": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.4.3",
           "section_sha256": "8682e066b958b175df4852f660917ab37494e9535e627fbbb3a379cc4fb86b48"
         },
@@ -2325,6 +2901,9 @@
             "MAY": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.4.4",
           "section_sha256": "de363ce6fafce1fe341702c9b4c7f17194a128f896d81d41214b337ffa7189e0"
         },
@@ -2333,6 +2912,9 @@
             "MAY": 1,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.4.7.1",
           "section_sha256": "7d6fdb5c6c793da3f889ad50c0dc043086bf06f643d49f2c10ff638e3a960ae4"
         },
@@ -2341,6 +2923,9 @@
             "MAY": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.4.7.2.1",
           "section_sha256": "a91990e13ab80d80de063ceefe2e15776b3950760f273459f97b7c71b6318b71"
         },
@@ -2349,6 +2934,9 @@
             "MAY": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.4.7.2.2",
           "section_sha256": "a90a86bd9dae41b0cb04c0309361a750894e47ef8d4723da959c2e9a386ef036"
         },
@@ -2358,6 +2946,9 @@
             "MUST": 2,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "4.4.8",
           "section_sha256": "9040b66e451f9e7610a7a819237943364524d05a954567abee07440107fc7539"
         },
@@ -2365,6 +2956,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "5.1",
           "section_sha256": "040319c7f160da962aeddd12bdbfa4fe881c1797a565f82383def72f9fdc78ac"
         },
@@ -2373,6 +2967,9 @@
             "MUST": 2,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "5.1.1",
           "section_sha256": "acac6246b62756f7df18be0e1a31a9c1b9199425746ee36fa4792eaaf6b4ffae"
         },
@@ -2380,6 +2977,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "5.1.2",
           "section_sha256": "bf9b6af75f81e590944006776af62133cee112495691a3ea5045a5807232935d"
         },
@@ -2388,6 +2988,9 @@
             "MAY": 4,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "8",
           "section_sha256": "55acbce8650aae6a27c059f93c5c8b186b510d37a577e43e1d4655f0d36ff7ad"
         }
@@ -2420,6 +3023,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0005"
+          ],
           "section": "1.1",
           "section_sha256": "815942bac140a8f3fddbf89424200400f80b7283d0e40342b689a0868d419238"
         },
@@ -2430,6 +3036,9 @@
             "MUST NOT": 3,
             "SHOULD": 4
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0005"
+          ],
           "section": "2.2",
           "section_sha256": "d294222b6726d5488a20ac0b07e559531be6c8ead7d7019a8cb65d5e2dba29eb"
         },
@@ -2437,6 +3046,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0005"
+          ],
           "section": "4.1",
           "section_sha256": "8bbdb8483b30851a5dbb3486ab9a813f5e078ca099090d348602c059f4ee4cf3"
         }
@@ -2466,6 +3078,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "1.1",
           "section_sha256": "815942bac140a8f3fddbf89424200400f80b7283d0e40342b689a0868d419238"
         },
@@ -2473,6 +3088,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "2.1.4",
           "section_sha256": "56fbd86a20098f7e4facae0c1f3f8c3f0bd53eb4f3d31c6456c8cfc7ca55a82d"
         },
@@ -2482,6 +3100,9 @@
             "MUST": 4,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "3",
           "section_sha256": "aa1c2b0086e1dc6789911ae903aeb9750056c3609dee0400e3f21db8e9bac143"
         },
@@ -2490,6 +3111,9 @@
             "MAY": 4,
             "MUST": 14
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "3.1",
           "section_sha256": "647cee2e8e8696993c5100afc0cc9e08dc1065808819ade42c08363ed206fd4f"
         },
@@ -2498,6 +3122,9 @@
             "MAY": 2,
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "3.3",
           "section_sha256": "874bc4fb889c937daa00a214113e8107029df0fffde62b4ee98ffa8b7f28989f"
         },
@@ -2506,6 +3133,9 @@
             "MUST": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "3.3.1",
           "section_sha256": "85a6c379631e4b589d7f7f5017fa5a19badae3547815f4120f1a858055535e33"
         },
@@ -2514,6 +3144,9 @@
             "MUST": 3,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "3.5",
           "section_sha256": "300ec92b1cdd956bc5953f21b375377f1ac07a4ce9490ad1b2ed42417c0a3e8c"
         },
@@ -2521,6 +3154,9 @@
           "occurrences": {
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.1",
           "section_sha256": "3b6fb61831d9770fd300df14bbde011d87d992133405f2ee7ae10e7698571e1d"
         },
@@ -2531,6 +3167,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.6",
           "section_sha256": "f7b8f47373473466d0f3e4332cf69e400617068060d951045454f0fadb395def"
         },
@@ -2538,6 +3177,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "5.2",
           "section_sha256": "461c415614df8186140ad2fe7df3ad295231f6199f1f4d6f0b20e622202fa195"
         }
@@ -2579,6 +3221,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "1.1",
           "section_sha256": "815942bac140a8f3fddbf89424200400f80b7283d0e40342b689a0868d419238"
         },
@@ -2586,6 +3231,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "4",
           "section_sha256": "b8bbf1fb81dd5cffc126c538e3c10e6df88ececa14b609d375692ff85302e736"
         },
@@ -2593,6 +3241,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "6.2",
           "section_sha256": "45c433a2a29da15ea5a83fbd722a7be8b9094c81aa8f503d3ab6bddd6456f07b"
         }
@@ -2625,6 +3276,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "1",
           "section_sha256": "881cff28f1f746be1acf83ca06eb342b9188dde2f3dd01094e8cde8022f72df7"
         },
@@ -2636,6 +3290,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "2",
           "section_sha256": "3639d45735a5784a823459e07b29b5447c1a0e00efdd29af9f038443b07dac8c"
         },
@@ -2643,6 +3300,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "3",
           "section_sha256": "2311bed7f4503e747bf1edff26aa361c56af5dbaed4aa9e6f0517d6721098e74"
         },
@@ -2652,6 +3312,9 @@
             "MUST NOT": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "5.1",
           "section_sha256": "f5ed684897dfcbe26c165285e83ea86687faeea43ebd8679abcbe7c6f16c1192"
         },
@@ -2659,6 +3322,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "5.2",
           "section_sha256": "5a470c88327ebb3003dd45206fa9d800351ecddd10a6cd061b68d2bd8cde39f3"
         },
@@ -2666,6 +3332,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "5.3",
           "section_sha256": "7d3c06adaf6695583f829bdb91a55bde41796b48d63c8a10be466a28d78e3d93"
         },
@@ -2675,6 +3344,9 @@
             "MUST NOT": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "6",
           "section_sha256": "414c861aae8593f974dc820050260cec8a782f4b1b3465f2def2ab234c9f01fb"
         },
@@ -2683,6 +3355,9 @@
             "MAY": 1,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "7",
           "section_sha256": "c748c31a4f28e11ecff8be3f622f5d818b4828fd1f027b9c074579458fee16ed"
         },
@@ -2692,6 +3367,9 @@
             "MUST NOT": 1,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "8",
           "section_sha256": "c09b90b603ebdc1c979f3edd05a385cee4628b53623b81042ef821eaaed49158"
         },
@@ -2700,6 +3378,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "9",
           "section_sha256": "7d505969107f3b4e15567a4c9896e72fde8c9235b6d8856f39d9c4cb91abb92d"
         },
@@ -2707,6 +3388,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "10",
           "section_sha256": "76ba08018d14301ced85211d730aa7c771f7304d9482ef1c963d83676d0330ef"
         },
@@ -2714,6 +3398,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "11",
           "section_sha256": "606c547394afce1bd58fbc918bee54e623a480c89b488b5fecae3376bbf7c8d1"
         },
@@ -2721,6 +3408,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "12",
           "section_sha256": "5f922435800da8e95d1207b0913debff2226b74812a81806d282edfbb07a6000"
         },
@@ -2728,6 +3418,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-ENC-0003"
+          ],
           "section": "13",
           "section_sha256": "04348396f81e1a29e9584248b7d70f4d0ab8a3a1a9d093b812a5b475a1953923"
         }
@@ -2760,6 +3453,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "2.1",
           "section_sha256": "7485bb1ee1a7f2fd64e0e8273af3bfbf8cfc9a2f7174f58075b537ed85b87537"
         },
@@ -2770,6 +3466,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "3",
           "section_sha256": "25919d1036c0c6cc825bf3c9d3c4b8d8138de4e2938064c99438217cf94dfc5c"
         },
@@ -2778,6 +3477,9 @@
             "MUST": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4",
           "section_sha256": "c773131584eb46ba968895348ec36e62198a7da7c8c370b11dace06cb197e837"
         },
@@ -2786,6 +3488,9 @@
             "MAY": 2,
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.1",
           "section_sha256": "5266baa9c16df4cccbbedb3e5a83184d39f2d8d3dc511ec70317b28fbfa32e93"
         },
@@ -2793,6 +3498,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.2.1",
           "section_sha256": "6a7362712071b0e16b049bbdd7ede9bb1cfa712c451356e4080f38d52ec7dd2d"
         },
@@ -2800,6 +3508,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.2.2",
           "section_sha256": "8024dd0127da23494d28d7058b1f431258565ddb5433a62d42dfa244eb589088"
         },
@@ -2808,6 +3519,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.2.3",
           "section_sha256": "cc11ca635514137af00c305eaa488f0928f3854da49b4388cb3662963f012af1"
         },
@@ -2817,6 +3531,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.2.3.1",
           "section_sha256": "06c98408da7d66113f1ec901da73c28a4170e4de6bafd03701919c246a7b6922"
         },
@@ -2825,6 +3542,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.3.1",
           "section_sha256": "22bc8f053fdb04eb963ca0124c6e0101d9d86426d7bc2a997b0dca55395a74ee"
         },
@@ -2834,6 +3554,9 @@
             "SHOULD": 3,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.3.2",
           "section_sha256": "f8b34661480283663b020d042473e8a4fa54e53521731da340654af77eb996ba"
         },
@@ -2843,6 +3566,9 @@
             "MUST": 2,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0002"
+          ],
           "section": "4.3.3",
           "section_sha256": "e41ff883e34d518012fded8a1dc8bece7f16b5d71868e34b8f3b75ddb459b751"
         }
@@ -2884,6 +3610,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "2",
           "section_sha256": "1209f3635f571a65579b7c1a321a304d0f88ff71cf6b33461c17e1cd73fcfa24"
         },
@@ -2892,6 +3621,9 @@
             "MUST": 3,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "5",
           "section_sha256": "750b5b7b5a1d32a43ac442687710765ad34731fdd8203f0ec9369f00fc4e57a4"
         },
@@ -2899,6 +3631,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "6.1",
           "section_sha256": "893740e4e002f604fcf92ce2495d8e600b6647cba9eacf628b216e19ba45d63c"
         },
@@ -2906,6 +3641,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "6.2",
           "section_sha256": "6c9bde749b0f79fa4d2090c1b56b97a2ee37f517b37e14efb73d53f071e7a91c"
         },
@@ -2913,6 +3651,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "7",
           "section_sha256": "1898f69033559ce0269fedc9465c6e145e390b8045b435f094986c16c81073aa"
         },
@@ -2921,6 +3662,9 @@
             "MUST": 2,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "8.2",
           "section_sha256": "c3f007f2d9e306dc447999238cbbbc156c4f94027719111d741bc32d07d0b12a"
         }
@@ -2968,6 +3712,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011",
+            "BRY-REQ-ENC-0004"
+          ],
           "section": "1.1",
           "section_sha256": "fe8c3be0ccf331116a9aaf8ab04270b491793122fc32542a63fcbfcd76bc88ed"
         },
@@ -2976,6 +3724,9 @@
             "MUST": 14,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0011"
+          ],
           "section": "11.2",
           "section_sha256": "dbb891dd6cc5cf7ddec8cea5c0ba04e6f6a98430d4d3d9fbd02b1fad9fa90c9f"
         }
@@ -3018,6 +3769,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "2",
           "section_sha256": "e8c560466d22d85e9acd19476abc8d0c2ac9a67ca1e3beda92fa43fe08f32839"
         },
@@ -3026,6 +3780,9 @@
             "MUST": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "5.1",
           "section_sha256": "0a0f1cc51adef1cadc819a4c99d0c3db147a30a1ab49535841d4be1054b6a100"
         },
@@ -3034,6 +3791,9 @@
             "SHOULD": 3,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "8.3",
           "section_sha256": "f282df3f3298864ca114637bd91076d6e8ca3bebb20f467e25fc2dbc802e2a26"
         },
@@ -3041,6 +3801,9 @@
           "occurrences": {
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "8.5",
           "section_sha256": "3efe289e93e6deaa3548984a6889c7f90f05bda906c48f0cc44355c0e024b06c"
         },
@@ -3048,6 +3811,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "8.7",
           "section_sha256": "34e318988ab76cdac9a53f49d0c27bce8791df2029e5bb37dd55f1585dea084b"
         }
@@ -3089,6 +3855,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "2",
           "section_sha256": "dd7688c42bbe322ba13ce3812558224952665fde7fd7beaff8474144cf83370f"
         },
@@ -3096,6 +3866,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "3",
           "section_sha256": "4c6c2eed70fcff9d9e97109e30c1de16f92330645ccfb8eb483590b9c557d8b7"
         },
@@ -3104,6 +3877,9 @@
             "MAY": 1,
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "5",
           "section_sha256": "705576c9fd2f2dda168b97e660f5208c9b8a38d2c64c6bc3548f88655b1813a0"
         },
@@ -3111,6 +3887,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "6",
           "section_sha256": "f3d15279015699b48629a5a63df8ce38865057655036256b83f062877b266f0d"
         },
@@ -3118,6 +3897,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "8",
           "section_sha256": "b26a5b116daeb971132915311fbff7dd4a8c2b818e54d98d8261fb992411980b"
         }
@@ -3156,6 +3938,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0008",
+            "BRY-REQ-CRYPTO-0009"
+          ],
           "section": "1.1",
           "section_sha256": "793a06af55ea5ba1e3174801043408e6edd6c1b4bfb018c97029e4d13434dbb6"
         },
@@ -3163,6 +3949,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0008"
+          ],
           "section": "2.3",
           "section_sha256": "38e4ac748c7087fa45763f5b9bfbb65944446141769c4599f4e65920e2f1995b"
         },
@@ -3170,6 +3959,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0008"
+          ],
           "section": "2.4",
           "section_sha256": "c84ffb4192f4c9b4a864cbe40c9c7cee68d29bd192e10e5355a1e9366d5ce919"
         },
@@ -3178,6 +3970,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0008"
+          ],
           "section": "2.5",
           "section_sha256": "0e3334a14d7ae0c3725768fbbd55687b6d7abb2d20439d05270f3e8fa4c09024"
         },
@@ -3187,6 +3982,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0008"
+          ],
           "section": "2.6",
           "section_sha256": "0dd94828cbd94db33fa7e4ccd2c8b35d76d236c6536f495d264b5548c5f06591"
         },
@@ -3195,6 +3993,9 @@
             "MUST": 3,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0008"
+          ],
           "section": "4",
           "section_sha256": "abd751f6438beee2360ae0bd4abb5f85d7dafcf257551be3db604ace5a103765"
         }
@@ -3228,6 +4029,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "6",
           "section_sha256": "f8908b1e25fcbdc8c2bf547ba607e5f53ad5dad2d03f2e428328e9541dc685a1"
         }
@@ -3269,6 +4073,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "2",
           "section_sha256": "7a5514948a60b2958fdcaa66a8ff8b984f3522abc48629a0e08db199622b7a08"
         },
@@ -3276,6 +4083,9 @@
           "occurrences": {
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0010"
+          ],
           "section": "3",
           "section_sha256": "b9f4e2009973629b3afd86ff2fdddb19d405f29c7b9625d433b3d448f03db53a"
         }
@@ -3305,6 +4115,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "1.1",
           "section_sha256": "57e05ae50c74c720d9e71c0907a0137080adcc053974e872e83892aa786c3e4e"
         },
@@ -3312,6 +4125,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "2.2",
           "section_sha256": "b9a32d2d7a946fcb302b186d7faa2225412c7ab37aaf8f9dd77a6540a7d31882"
         },
@@ -3321,6 +4137,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "3",
           "section_sha256": "979733e2c4e48b773bdcd73cb0fd335b0a1e87d38a77c769b9b067ad49a22b59"
         },
@@ -3329,6 +4148,9 @@
             "MAY": 1,
             "MUST": 17
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "3.2",
           "section_sha256": "5bc2e5758f7c34147abf65576549ba9d5c33937dfc6cfe06aadec3c3d2fb3e10"
         },
@@ -3338,6 +4160,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4",
           "section_sha256": "4fd0607a7a5dcba1d60e0cf77cc3b231c38c143f710691ae1427c35da7c9eb5d"
         },
@@ -3347,6 +4172,9 @@
             "MUST": 3,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.1",
           "section_sha256": "2558f1dd3430e84d7e323edc30929cb99cf063443261f1197a9ca11fe4f81bfc"
         },
@@ -3354,6 +4182,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.2",
           "section_sha256": "8940b95b0638b0caf7cc21e8bb8bc621c6756a3c473984e7ae2a8338dff273f1"
         },
@@ -3362,6 +4193,9 @@
             "MUST": 5,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.2.1",
           "section_sha256": "93ac504f2a58270e3c9f422945afca3679f322eba1cf89df48a289d5c36ed138"
         },
@@ -3369,6 +4203,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.2.2",
           "section_sha256": "012169e7d11c953d629f0a6e8ec52f3b9a1209370ed0bfde853d311f78f35aed"
         },
@@ -3376,6 +4213,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.3",
           "section_sha256": "e4528a323ae7c3b630b16a86c0589cb3209ce3d524dedb82a3cffbc81a6aa5da"
         },
@@ -3384,6 +4224,9 @@
             "MUST": 2,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.4",
           "section_sha256": "896e2ba157ef3bf4842511806981a48f0961a54bdd479f00c55cc990f5e2b881"
         },
@@ -3391,6 +4234,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.7",
           "section_sha256": "753930da1184c0afc27de1b78322d279a019d607646165cd8d74528fb6c11e77"
         },
@@ -3401,6 +4247,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.8",
           "section_sha256": "f62359334233b1823fac6209c46358db589000e20c62d9a2cbc67b7c331c1661"
         },
@@ -3411,6 +4260,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.9",
           "section_sha256": "68e65630dc6121ca32612b77a71fd40a84b42a48c8918c763094def2d0152b10"
         },
@@ -3420,6 +4272,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.10",
           "section_sha256": "11a5829b6b9fb408cfaaf6ada90bf11a924c47c68204f27df709c33db96db830"
         },
@@ -3427,6 +4282,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "4.13",
           "section_sha256": "06a4bbf38648664090e27dd960711a103e4de1729103467e00086ba50881eb1b"
         },
@@ -3436,6 +4294,9 @@
             "MUST": 2,
             "SHOULD": 4
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "5",
           "section_sha256": "144121afb02d84da194f2c887f8eb2463b886dc4a3e18152b7406d354f3b3e22"
         },
@@ -3445,6 +4306,9 @@
             "MUST NOT": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "5.1",
           "section_sha256": "6f71fcf143aa6d571e772eab0ba168fb07093cdc0a14cf60350c9bcf996bdf10"
         },
@@ -3452,6 +4316,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "5.3",
           "section_sha256": "1635e3fbc87b4f6a3bd9a85a84ffc26c213ad0fa34740da293dfdbee5bd12f19"
         },
@@ -3459,6 +4326,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "5.5",
           "section_sha256": "be765d050be9093beb352d8e7320bf10774df1bbf4fac3c355840adb4aa3f3dd"
         },
@@ -3469,6 +4339,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "5.6",
           "section_sha256": "ab6592841105c31bb04e87454c8c469a4dcedea20cf8bccecc0c2796908ad287"
         },
@@ -3477,6 +4350,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "6",
           "section_sha256": "4a9dbccf6eaad1944148ce0e03b48b39eb7fac5b05451ba7013de2421613d032"
         },
@@ -3484,6 +4360,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "6.2",
           "section_sha256": "f461c36a49bc3c6519ef1a77e8bd13262f7d2e26ef28f1641734c68fd5b0f77f"
         },
@@ -3492,6 +4371,9 @@
             "MUST": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "6.4",
           "section_sha256": "6f731af04a3db3caf84f6c890e6db65e17e28766c71f3421d78af7677a8a8273"
         },
@@ -3502,6 +4384,9 @@
             "MUST NOT": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "6.5",
           "section_sha256": "232b4d9713286d004f430c879a87add9342f49ddeddb711f7ac4a490e17417ff"
         },
@@ -3512,6 +4397,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "7.1",
           "section_sha256": "00663c9a1fd1bcdf09cfe1746b49bf8d7285a9947f49f0c5f82e978ddb692bb5"
         },
@@ -3520,6 +4408,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "7.1.1",
           "section_sha256": "5e1f4f491445c3c4c6ab197bb7b26356dae2850934de18517f5e9c86efa6077f"
         },
@@ -3528,6 +4419,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "7.1.2",
           "section_sha256": "c2ae347fa128f9beb0121191236987f9f8ea736fabb8950d4574588ce7dd89a2"
         },
@@ -3535,6 +4429,9 @@
           "occurrences": {
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "7.2",
           "section_sha256": "5f1eb38e8292910b79c85b54ae97f741c8133c3849880ce94275c4894b1cf403"
         },
@@ -3543,6 +4440,9 @@
             "MUST": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "8.1.1",
           "section_sha256": "227c80bbd89710656452145b2be92adfc87db8630c1466a862c74e743d144437"
         },
@@ -3550,6 +4450,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "8.1.3",
           "section_sha256": "e3cf9f6142fe0b88f696804d732704bbdba10c5391924a722dcd68566a13e687"
         },
@@ -3557,6 +4460,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "8.1.4",
           "section_sha256": "ffc50c24305dc3c2f8faf20edd2c9caa8a60a033d272f17fbf4841fcb4be1df9"
         },
@@ -3565,6 +4471,9 @@
             "MAY": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "8.1.5",
           "section_sha256": "576ffcb52efe6a37382ecf75321a8afc9f43f1607edd96e9e43ec05195fc125b"
         },
@@ -3572,6 +4481,9 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "8.1.6",
           "section_sha256": "c9001404b196861bfe5cfad39c7d5832a62c223ad794feed5ee4bd5bbe2ffd86"
         },
@@ -3581,6 +4493,9 @@
             "MUST": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "8.2",
           "section_sha256": "288902e0ec6540faa27ca327dfb0e78d7d8db4d5b2d3ddf1c0f295bfcd944fbd"
         },
@@ -3589,6 +4504,9 @@
             "MUST": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "9",
           "section_sha256": "5e12eee067aa9307ad31303556f2501bc2f88f8b7892823ea2de26d922bc355f"
         },
@@ -3596,6 +4514,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "10.2.5",
           "section_sha256": "12b1fef1f6fa3b78a2f63997b404348ab28bb021bf66aed0cdc3e830063fba2e"
         },
@@ -3603,6 +4524,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CT-0001"
+          ],
           "section": "11.3",
           "section_sha256": "59e5eea4270d323fb09718d24d57ff3a0ee49a138b4814cea1604d9b56ab4665"
         }
@@ -3644,6 +4568,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012",
+            "BRY-REQ-PKIX-0004"
+          ],
           "section": "2",
           "section_sha256": "7a5514948a60b2958fdcaa66a8ff8b984f3522abc48629a0e08db199622b7a08"
         },
@@ -3653,6 +4581,9 @@
             "MUST": 5,
             "MUST NOT": 4
           },
+          "requirement_ids": [
+            "BRY-REQ-CRYPTO-0012"
+          ],
           "section": "3",
           "section_sha256": "a55fb7d06fa1061929ebcf3fd70d3a2e100e17ac9d244bb0de758d7106c8dc3f"
         }
@@ -3690,6 +4621,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "1.5",
           "section_sha256": "fda3a7b098362e160a9ae59b22a8bf5024f450b66439c0ae1b1dc73bc0f92ae3"
         },
@@ -3699,6 +4633,9 @@
             "MUST NOT": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2",
           "section_sha256": "76268c4ef70f4c4276dbe483ed51894cde87665d6fd65dd2606881dc6d81e0cd"
         },
@@ -3707,6 +4644,9 @@
             "MAY": 2,
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "3",
           "section_sha256": "f893096c05a494e3e14834764861205fd7e7944e987cc23f5bf941bfe8dfc6c4"
         },
@@ -3716,6 +4656,9 @@
             "MUST": 4,
             "SHOULD": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4.1",
           "section_sha256": "5be7efa4eba9991b550ed39c4adbdd5e2c812df4ead75dbc188c9ee29d95f0fc"
         },
@@ -3723,6 +4666,9 @@
           "occurrences": {
             "SHOULD": 5
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "5",
           "section_sha256": "1883744e4cb2376d449337ef02f4294b60f38e9035bbe45abe275f1bd2b1c3a2"
         },
@@ -3732,6 +4678,9 @@
             "MUST NOT": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "6.1.1",
           "section_sha256": "56c495ed91308ab1083a575f81df812924ec72e93733e1362379cb18d0c6c8da"
         },
@@ -3740,6 +4689,9 @@
             "MUST": 5,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "6.2",
           "section_sha256": "c35ddc2883d45d52f45d5ef064127a16e593d8456c906244a2f9853a10cda415"
         },
@@ -3747,6 +4699,9 @@
           "occurrences": {
             "MUST": 7
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "6.3",
           "section_sha256": "7e6fbcded31092869b4c5503c214b6e9ce08d53d9d270fc1bcd8080b90951c53"
         },
@@ -3755,6 +4710,9 @@
             "MUST": 3,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "6.5",
           "section_sha256": "1e463cbe29eed25ab7ea807281a65a0287e5da7925d0dac77cc7f74563ef9e23"
         },
@@ -3766,6 +4724,9 @@
             "SHOULD": 3,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "6.6",
           "section_sha256": "03d032cbc3d8ef9c427c07230b016c4464f89892ebd05ad06f143230402e84d6"
         },
@@ -3773,6 +4734,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "7.2",
           "section_sha256": "fcb815578a4ca590dbdd037afdc214da054347d91c156e2240078acad41dce43"
         },
@@ -3781,6 +4745,9 @@
             "MAY": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "7.6",
           "section_sha256": "f64d47761e84bcb1a12057d10021627e46326849fe3423f10ea29d4af2757ca6"
         }
@@ -3817,6 +4784,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002",
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "1.1",
           "section_sha256": "b5ba4b649e4919970fd116ee69d858b60aee00eb426c3215ecf1ee4ed783cc4b"
         },
@@ -3824,6 +4795,9 @@
           "occurrences": {
             "MAY": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2.2",
           "section_sha256": "eaa05dd408f67ff96986e3268925b3feb31fa01e411f292c7298bad563ff6df1"
         },
@@ -3832,6 +4806,9 @@
             "MUST": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2.3",
           "section_sha256": "aab9a8e2cdfc1081468e8a0cc12a5783cf891606c1d959379151ef3f6bdd3d4b"
         },
@@ -3839,6 +4816,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2.4",
           "section_sha256": "6b86a1b0ee9a705626a11e5c6b50251e9475b0d1f3f889af0cda77c8ba986777"
         },
@@ -3848,6 +4828,9 @@
             "MUST NOT": 1,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "2.5",
           "section_sha256": "985598275255ea90ddcea34c0d1d2717cbbf682263a5d2400bd0b74a9f4437a4"
         },
@@ -3855,6 +4838,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "3",
           "section_sha256": "a76b430511f6914a9f959eb95c6d1adff7995bcc26cf273239676e6d49517690"
         }
@@ -3892,6 +4878,10 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002",
+            "BRY-REQ-PKIX-0005"
+          ],
           "section": "2",
           "section_sha256": "a53055dec4fe0778fc165ebf28515a16305591435b15ae8e133c179d6b99c843"
         },
@@ -3900,6 +4890,9 @@
             "MUST": 3,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "3",
           "section_sha256": "432aaac227e1037720cb757e3d95ff1940a4322d8dcda1c8a3069140d90e27a1"
         },
@@ -3907,6 +4900,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "4",
           "section_sha256": "6622d66017a2310c28115da68196b8bba3ce9bca3952fb3868cea43975754667"
         },
@@ -3915,6 +4911,9 @@
             "MUST": 2,
             "MUST NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "5",
           "section_sha256": "771141e56b81acae65703369728d7ed0443586ce84e09d7e6bc4fb2942200806"
         },
@@ -3923,6 +4922,9 @@
             "MUST": 4,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0002"
+          ],
           "section": "6",
           "section_sha256": "efb1976e3325ba0788aef69a9abb582ec90a24dee96c15b0d6b3a8eaefedb754"
         }
@@ -3960,6 +4962,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0009"
+          ],
           "section": "1.1",
           "section_sha256": "b5ba4b649e4919970fd116ee69d858b60aee00eb426c3215ecf1ee4ed783cc4b"
         },
@@ -3968,6 +4973,9 @@
             "MUST": 3,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0009"
+          ],
           "section": "2",
           "section_sha256": "36bacb2e9954fbd205e479a73d3a9fb4be3a8e519d3ff425d3c67e0c1d1dce9b"
         },
@@ -3976,6 +4984,9 @@
             "MUST": 1,
             "MUST NOT": 6
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0009"
+          ],
           "section": "3",
           "section_sha256": "49303e5cbdaf98e018bdfc64b2d82856476130373ac6a443c863ab0a43bbd1bb"
         },
@@ -3983,6 +4994,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0009"
+          ],
           "section": "6",
           "section_sha256": "ce751f5e928c59ced86b7fffb1aacf86159de2af29be34311a287e81d5e20827"
         }
@@ -4019,6 +5033,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "2",
           "section_sha256": "4fa15b0405c43869a68d885b1c2a067c287037b42b8abcf7a9e7a184894b6468"
         },
@@ -4026,6 +5043,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "4",
           "section_sha256": "db38efaa666493703df0bb5c0421664a5fdf0259cbe0d63f0fb6b0a34525600b"
         },
@@ -4035,6 +5055,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "4.2",
           "section_sha256": "91b70afd9f927ba7b215156be641b9d85d78476ea7ca771f057bbe0ce7391db3"
         },
@@ -4042,6 +5065,9 @@
           "occurrences": {
             "MAY": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "5.1",
           "section_sha256": "ff908b915933ba74bcf2be5db3764696fa1e4f545a4b8c75e5a7449d63020645"
         },
@@ -4049,6 +5075,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "5.2",
           "section_sha256": "fa839a73cb76bba7ed42de4030cd66989db6710ff56dbf46329a09c2aef3d6b1"
         },
@@ -4056,6 +5085,9 @@
           "occurrences": {
             "MAY": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "5.5",
           "section_sha256": "31da2d6c50a663e9bc1e2b20089637d4f7615609626ccc2918ee6418cb03ebf7"
         },
@@ -4063,6 +5095,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "5.6",
           "section_sha256": "5490c16ea71e0b2c9c3f786615374267e085d9e24d1dbc720e3ecb2c542a34cc"
         },
@@ -4070,6 +5105,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "6",
           "section_sha256": "c8bd2427ce9e746ea8ab5e6743e673d3aae770a41511fb727e44b4f7c653c517"
         },
@@ -4077,6 +5115,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "6.1",
           "section_sha256": "1191b6076533cea61d2519b637533848e39b460098d4dfa85294db3457ec4232"
         },
@@ -4084,6 +5125,9 @@
           "occurrences": {
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "6.4",
           "section_sha256": "9b046da17ad7b81cbe90402c135e2bff74e7b3ab3c255484fb3282c5586afd47"
         },
@@ -4091,6 +5135,9 @@
           "occurrences": {
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0006"
+          ],
           "section": "6.5",
           "section_sha256": "af6c5ed1a5d97a2e4a27c0afb677ebddaa6575a3e6ade1728e851a74a677e405"
         }
@@ -4123,6 +5170,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "1.1",
           "section_sha256": "57e05ae50c74c720d9e71c0907a0137080adcc053974e872e83892aa786c3e4e"
         },
@@ -4131,6 +5181,9 @@
             "MAY": 1,
             "MUST": 5
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0001"
+          ],
           "section": "2.1",
           "section_sha256": "38d25aa772e4e3c431899a38d4c2af5dc4af0c17f3d2524b34b0317f2fe9913d"
         }
@@ -4163,6 +5216,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "2",
           "section_sha256": "14aca175411b615aab697cd597ac9f5890f49b5e368c74d318686f854d843552"
         },
@@ -4172,6 +5228,9 @@
             "MUST NOT": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "3.1.1",
           "section_sha256": "24784e87e5b038747738a149ae6670ac384961a41f5c75f84e3362c28cb046d3"
         },
@@ -4181,6 +5240,9 @@
             "MUST": 1,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "3.1.2",
           "section_sha256": "59d3d622d9a0cc99540d5f5cc565b9d8356d1cdb36ed35da56008e3778f40b94"
         },
@@ -4191,6 +5253,9 @@
             "SHOULD": 4,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "3.2.1",
           "section_sha256": "bc4263d3236965b473d8f3307a44499bacf181a9866d49ad9a6fb33253d910d6"
         },
@@ -4200,6 +5265,9 @@
             "MUST": 4,
             "SHOULD": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "3.2.2",
           "section_sha256": "2952bc357e7ebb4563fbdfbd67e6ac1b667106501151f5d80e80fd11c723f9ee"
         },
@@ -4208,6 +5276,9 @@
             "MAY": 1,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "3.2.3",
           "section_sha256": "476f6acfdaab78a84ff9cf8b44da277024f23452ef1eaa69f676986620517442"
         },
@@ -4216,6 +5287,9 @@
             "MUST": 4,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "3.2.4",
           "section_sha256": "692bba54183095f24d06b73b6e0103077e6bc3ab9792649a041be02a5d7cea8c"
         },
@@ -4225,6 +5299,9 @@
             "MUST": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "4.1",
           "section_sha256": "a31880715a608ef3333eabd21eee8616f00fbe9bd682bcc2538395b68c2a2f0e"
         },
@@ -4234,6 +5311,9 @@
             "MUST NOT": 2,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "4.2",
           "section_sha256": "0237798af51148f916f41cf69ff961e3804e2a88ce196399f6c41df7c1733547"
         },
@@ -4243,6 +5323,9 @@
             "MUST": 9,
             "SHOULD NOT": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "5",
           "section_sha256": "a8f4c88a7a6cab173d47c0e231ce1c80b8a22cda0717d316b4cabb24977ccfbd"
         },
@@ -4252,6 +5335,9 @@
             "MUST NOT": 1,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "6",
           "section_sha256": "9bf1f057d955d005c32f0290196a286376caba897dd8a98e556c22cba64c868e"
         },
@@ -4261,6 +5347,9 @@
             "MUST": 2,
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "7.1",
           "section_sha256": "1cabfa327ee89457e00f6afd021148fca5dd9f8ebc924bc1c0b3c3b5c175c881"
         },
@@ -4269,6 +5358,9 @@
             "MUST NOT": 2,
             "SHOULD": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "7.2",
           "section_sha256": "817f565058a1887061a9514d08efcb2bf226f33bc57939f6b8df16b59c8dae9b"
         },
@@ -4277,6 +5369,9 @@
             "MUST": 3,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "8.1",
           "section_sha256": "26d794edd8b2e60e1a6317ec37c288912ebafc1d396a9523e7c6381a9f81fc97"
         },
@@ -4284,6 +5379,9 @@
           "occurrences": {
             "MUST": 2
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "8.2",
           "section_sha256": "88160fd6b3cd5694e7df5665367708d4c6c38fcbc1767ce9121065e1e2b2af3c"
         },
@@ -4291,6 +5389,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "8.4",
           "section_sha256": "e5cbfaf76cfa1a9573840d3fd7f999195f514dbdbc7611dc0cc64cb8d830c48a"
         },
@@ -4299,6 +5400,9 @@
             "SHOULD": 2,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003"
+          ],
           "section": "8.5",
           "section_sha256": "9452e16dce2d8c6a26220da7cc364a4a6c60d4ff52e5acc93c82b25e0fc53370"
         },
@@ -4306,6 +5410,10 @@
           "occurrences": {
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-OCSP-0003",
+            "BRY-REQ-OCSP-0004"
+          ],
           "section": "10.2",
           "section_sha256": "39cac4d2bbdd6a34a3a8c0ec26f48e57575d69a61e1f20afcefa2cbe9aca0756"
         }
@@ -4343,6 +5451,9 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0010"
+          ],
           "section": "2",
           "section_sha256": "fd53b9228cc796e834c2b959b03bcce15992303b981dc1ee770dc736678501d7"
         },
@@ -4350,6 +5461,9 @@
           "occurrences": {
             "MUST": 3
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0010"
+          ],
           "section": "3.1",
           "section_sha256": "99766d424d69aa2e4e1f2381c360f030a0ab2a9367c6a07005691eb7e45e0c49"
         },
@@ -4358,6 +5472,9 @@
             "MAY": 3,
             "MUST": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0010"
+          ],
           "section": "3.2",
           "section_sha256": "a2c1c843de4ca989c33b399e265e96f5b33e452554bc068f77f91f94906f799f"
         },
@@ -4366,6 +5483,9 @@
             "SHOULD": 5,
             "SHOULD NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0010"
+          ],
           "section": "3.3",
           "section_sha256": "bc0e4b2a11ddae9bd343f3543661a36cf67180811a74c96a3a2d3824e3ac4fe9"
         },
@@ -4375,6 +5495,9 @@
             "MUST": 1,
             "MUST NOT": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0010"
+          ],
           "section": "4",
           "section_sha256": "cd06818cec08c4bed8408e1817c5e8cdf7e2e7166de8e8980610db88c63b4d8a"
         },
@@ -4382,6 +5505,9 @@
           "occurrences": {
             "SHOULD": 1
           },
+          "requirement_ids": [
+            "BRY-REQ-PKIX-0010"
+          ],
           "section": "5",
           "section_sha256": "d50f614f100262da708456359d90bf9dc1bf3db8de29265cc01e38def83382a4"
         }
@@ -4394,8 +5520,10 @@
     }
   ],
   "authority_count": 53,
+  "excluded_normative_section_count": 0,
+  "mapped_normative_section_count": 364,
   "normative_section_count": 364,
-  "policy_sha256": "ebc061bb8f8977d750c0446f27cbdb7a0c3b5f0588e37ab6093dc134f653f5a3",
+  "policy_sha256": "a43f8ea481de23adb12a5b0ad537e12696288c33131c7f80976b2b0c9d84135d",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3322,

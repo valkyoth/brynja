@@ -22,6 +22,9 @@ Keep a Changelog and Semantic Versioning.
 - A generated transport-coverage artifact and eight positive and
   broken-fixture tests for milestone, authority, role, binding, identity,
   surface, and reproducibility failures.
+- Reviewed domain and transport section policies that bind all 914 normative
+  RFC sections to exact requirements, extraction anchors, and section hashes,
+  plus seven dedicated positive and broken section-binding fixtures.
 
 ### Security
 
@@ -37,6 +40,11 @@ Keep a Changelog and Semantic Versioning.
 - Protocol-surface and requirement artifacts now bind the separate transport
   policies and reject missing owner milestones, authority drift, role swaps,
   duplicate identities, and stale projections.
+- The pentest's two Medium governance-integrity findings are remediated:
+  every linked surface must independently match authority and owner or use an
+  exact structured exception, and every normative section must have an
+  explicit requirement binding or reviewed disposition. External retest of
+  the remediated candidate is required before release.
 
 ## [0.3.3] - 2026-07-30
 

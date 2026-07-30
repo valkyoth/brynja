@@ -32,8 +32,9 @@ production-ready TLS implementation at `1.0.0`.
 Version `0.3.4` adds complete reviewed normative coverage for current and
 compatibility TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3. The
 generated matrix now contains 116 requirements; the transport bundle binds 70
-requirements to 40 exact authorities, 550 normative RFC sections, 63 future
-implementation milestones, and 480 applicable surfaces. It does **not**
+requirements to 40 exact authorities, all 550 normative RFC sections with
+exact requirement IDs, extraction anchors, and hashes, 63 future implementation
+milestones, and 480 applicable surfaces. It does **not**
 implement TLS and must not be used to secure network traffic.
 
 ## Install

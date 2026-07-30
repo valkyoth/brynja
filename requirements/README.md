@@ -21,6 +21,10 @@ Version v0.3.5 populates optional, legacy, operational, and residual domains.
   PKIX, OCSP, and CT. Each record adds exact authority roles, assurance
   invariants, a work bound, positive and negative planned tests, an evidence
   gap, and reviewed mapping rationale.
+- `domain-sections.toml` and `transport-sections.toml` explicitly bind every
+  uppercase normative RFC section to one or more requirements or an exact
+  reviewed disposition. They also carry the immutable requirement revisions
+  introduced by those semantic bindings.
 - `transport-scope.toml`, `transport-exceptions.toml`, and
   `../standards/transport-surfaces/*.toml` are the reviewed v0.3.4 inputs.
   They bind every transport authority, semantic implementation milestone,
@@ -30,14 +34,17 @@ Version v0.3.5 populates optional, legacy, operational, and residual domains.
   contract.
 - `matrix.json` resolves every source against the exact source-ledger and
   protocol-surface hashes, including RFC section hashes, status, errata, IANA
-  snapshot identity, and registry-record hashes.
+  snapshot identity, registry-record hashes, unique extraction anchors, and
+  per-requirement normative-section bindings.
 - `indexes.json` provides bidirectional source, decision, owner, target, test,
   and evidence mappings.
 - `coverage.md` is the generated human-readable lifecycle and scope report.
 - `domain-coverage.json` proves exact authority, normative-section, and
-  protocol-surface coverage for the v0.3.3 scope.
+  protocol-surface coverage for the v0.3.3 scope, including requirement IDs
+  for all 364 normative sections.
 - `transport-coverage.json` proves exact coverage of 40 authorities, 550
-  normative RFC sections, 63 owner milestones, and 480 transport surfaces.
+  normative RFC sections, 63 owner milestones, and 480 transport surfaces,
+  including requirement IDs or reviewed dispositions for every section.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim
@@ -69,6 +76,11 @@ cited with their exact current, compatibility, evidence, or exclusion role.
 Every one of the 3,322 selected surfaces must map to an owning requirement or
 an explicit later milestone. The only deferrals are the two ML-KEM surfaces
 owned by v0.3.5.
+Every linked surface must independently share both an admitted authority and
+the requirement owner. A legitimate cross-authority or cross-owner relation
+requires an exact structured exception naming the surface, authorities,
+expected owner, and reviewed rationale; free-form prose cannot bypass this
+check.
 
 The v0.3.4 `tls-dtls-quic` profile cites 40 authorities with exact current,
 compatibility, evidence, exclusion, or caller-owned roles. RFC 9850 and four
@@ -86,10 +98,11 @@ python3 scripts/check-requirements.py
 python3 scripts/test-requirements.py
 python3 scripts/test-requirement-domains.py
 python3 scripts/test-requirement-transports.py
+python3 scripts/test-requirement-sections.py
 python3 scripts/test-requirement-lifecycles.py
 ```
 
-The 74 broken-fixture and positive tests reject changed source hashes, invalid
+The 82 broken-fixture and positive tests reject changed source hashes, invalid
 sections, duplicate or malformed identifiers, obsolete-as-current authority,
 illegal lifecycle transitions, missing owners or targets, premature evidence,
 weakened SHOULD decisions, unknown surface decisions, stale generated output,
@@ -97,6 +110,10 @@ repository-escaping symlink targets, removed released identifiers, stale or
 gratuitous revisions, released-scope changes, protocol use of global mappings,
 unrelated semantic links, lifecycle/disposition or owner conflicts, and
 unsupported protocol implementation claims.
+Section fixtures additionally reject unmapped or non-normative sections,
+requirement/source mismatches, duplicate bindings, incomplete semantic
+revisions, and unreviewed exclusions while proving every extraction anchor and
+section hash.
 Domain fixtures additionally reject authority-role errors, missing surface
 groups, absent positive or negative tests, weak work bounds, missing assurance
 invariants, out-of-scope decisions, and nondeterministic domain evidence.
@@ -113,3 +130,4 @@ python3 scripts/check-requirements.py --write
 Generated artifacts must never be edited independently of `policy.json`,
 `domain-scope.toml`, `domains/*.toml`, `transport-scope.toml`,
 `transport-exceptions.toml`, and `../standards/transport-surfaces/*.toml`.
+The two `*-sections.toml` policies are reviewed inputs as well.

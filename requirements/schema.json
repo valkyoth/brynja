@@ -54,7 +54,17 @@
     "foundation",
     "tls-dtls-quic"
   ],
-  "schema": 3,
+  "schema": 4,
+  "section_binding_fields": [
+    "anchor",
+    "section",
+    "section_sha256"
+  ],
+  "section_dispositions": [
+    "caller-owned",
+    "excluded",
+    "not-applicable"
+  ],
   "strengths": [
     "INVARIANT",
     "MAY",

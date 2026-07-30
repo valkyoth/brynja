@@ -47,6 +47,8 @@ def test_current_repository() -> None:
     requirements, coverage, _digest = domain.build(ledger, register, versions)
     assert len(requirements) == 34
     assert coverage["authority_count"] == 53
+    assert coverage["mapped_normative_section_count"] == 364
+    assert coverage["excluded_normative_section_count"] == 0
     assert coverage["normative_section_count"] == 364
     assert coverage["surface_count"] == 3322
     assert standards.json_bytes(coverage) == lib.DOMAIN_COVERAGE.read_bytes()
@@ -256,6 +258,24 @@ def test_duplicate_surface_group_fails() -> None:
         register,
         requirement_map,
         domain.SURFACE_DOMAINS,
+    )
+
+
+def test_every_link_requires_authority_and_owner_consistency() -> None:
+    requirement, authorities, versions, surface_map, _register, allowed = (
+        validation_fixture()
+    )
+    broken = copy.deepcopy(requirement)
+    broken["decision_ids"].append("algorithm.aes")
+    broken["mapping_rationale"] += " cross-domain"
+    assert_fails(
+        "unrelated authorities",
+        domain.validate_requirement,
+        broken,
+        versions,
+        authorities,
+        surface_map,
+        allowed | {"algorithm.aes"},
     )
 
 

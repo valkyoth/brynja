@@ -31,6 +31,35 @@ DOMAIN_SURFACES = {
 }
 
 
+def validate_domain_exception_set(
+    requirements: list[dict],
+    surface_map: dict[str, dict],
+    exceptions: list[dict],
+) -> None:
+    configured = [
+        (item.get("requirement_id"), item.get("surface_id"))
+        for item in exceptions
+    ]
+    if len(configured) != len(set(configured)):
+        lib.fail("domain scope has duplicate surface-link exceptions")
+    actual = set()
+    for requirement in requirements:
+        authority_ids = {source["id"] for source in requirement["sources"]}
+        for surface_id in requirement["decision_ids"]:
+            surface = surface_map[surface_id]
+            if (
+                not authority_ids.intersection(surface["normative_sources"])
+                or surface["owner"] != requirement["owner"]
+            ):
+                actual.add((requirement["id"], surface_id))
+    if set(configured) != actual:
+        lib.fail(
+            "domain surface-link exception set differs: "
+            f"missing={sorted(actual - set(configured))}, "
+            f"stale={sorted(set(configured) - actual)}"
+        )
+
+
 def validate(
     requirement: dict,
     source: dict,
@@ -118,6 +147,7 @@ def validate_domain(
     sources: list[dict],
     surface_map: dict[str, dict],
     allowed_surfaces: set[str],
+    link_exceptions: list[dict] | None = None,
 ) -> None:
     requirement_id = requirement["id"]
     decision_ids = requirement["decision_ids"]
@@ -166,10 +196,39 @@ def validate_domain(
             f"{mismatched}"
         )
     authority_ids = {source["id"] for source in sources}
-    if not any(
-        authority_ids.intersection(item["normative_sources"])
-        for item in linked
-    ) and "cross-domain" not in rationale.lower():
-        lib.fail(
-            f"{requirement_id} unrelated domain mapping lacks cross-domain review"
-        )
+    exceptions = {
+        item["surface_id"]: item
+        for item in (link_exceptions or [])
+        if item["requirement_id"] == requirement_id
+    }
+    for item in linked:
+        related = authority_ids.intersection(item["normative_sources"])
+        owner_matches = item["owner"] == requirement["owner"]
+        if related and owner_matches:
+            continue
+        exception = exceptions.get(item["id"])
+        if exception is None:
+            reason = "authorities" if not related else "owner"
+            lib.fail(
+                f"{requirement_id} links a surface with unrelated {reason}: "
+                f"{item['id']}"
+            )
+        if (
+            set(exception)
+            != {
+                "authority_ids",
+                "expected_owner",
+                "rationale",
+                "requirement_id",
+                "surface_id",
+            }
+            or exception["expected_owner"] != item["owner"]
+            or not isinstance(exception["authority_ids"], list)
+            or not exception["authority_ids"]
+            or not set(exception["authority_ids"]).issubset(
+                item["normative_sources"]
+            )
+            or not isinstance(exception["rationale"], str)
+            or len(exception["rationale"].strip()) < 80
+        ):
+            lib.fail(f"{requirement_id} has malformed surface-link exception")

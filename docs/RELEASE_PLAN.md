@@ -365,9 +365,13 @@ Verification:
 
 - compare every TLS, DTLS, and QUIC-TLS source, registry, and planned milestone
   in both directions and regenerate projections byte-identically;
+- require an explicit requirement binding or reviewed disposition for every
+  normative RFC section, preserving its unique extraction anchor and exact
+  section hash;
 - inject missing messages, illegal contexts, registry drift, wrong-version
   reuse, obsolete authority, caller/protocol ownership swaps, ignored alerts,
-  and weakened security requirements and require failure;
+  unrelated multi-surface links, missing section bindings, and weakened
+  security requirements and require failure;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 

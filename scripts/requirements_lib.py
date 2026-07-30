@@ -166,7 +166,17 @@ def schema_document() -> dict:
             "foundation",
             "tls-dtls-quic",
         ],
-        "schema": 3,
+        "section_binding_fields": [
+            "anchor",
+            "section",
+            "section_sha256",
+        ],
+        "section_dispositions": [
+            "caller-owned",
+            "excluded",
+            "not-applicable",
+        ],
+        "schema": 4,
         "strengths": sorted(STRENGTHS),
         "target_kinds": [
             "actual-symbol",

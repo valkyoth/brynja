@@ -1,0 +1,819 @@
+schema = 1
+milestone = "0.3.4"
+source_ledger_sha256 = "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
+exclusion = []
+
+[revisions]
+"BRY-REQ-DTLS-0102" = 2
+"BRY-REQ-DTLS-0103" = 2
+"BRY-REQ-DTLS-0104" = 2
+"BRY-REQ-DTLS-0105" = 2
+"BRY-REQ-DTLS-0106" = 2
+"BRY-REQ-DTLS-0107" = 2
+"BRY-REQ-DTLS-0108" = 2
+"BRY-REQ-DTLS-0109" = 2
+"BRY-REQ-DTLS-0110" = 2
+"BRY-REQ-DTLS-0111" = 2
+"BRY-REQ-DTLS-0112" = 2
+"BRY-REQ-DTLS-0113" = 2
+"BRY-REQ-DTLS-0114" = 2
+"BRY-REQ-DTLS-0115" = 2
+"BRY-REQ-DTLS-0116" = 2
+"BRY-REQ-DTLS-1111" = 2
+"BRY-REQ-QUIC-0093" = 2
+"BRY-REQ-QUIC-0094" = 2
+"BRY-REQ-QUIC-0095" = 2
+"BRY-REQ-QUIC-0096" = 2
+"BRY-REQ-QUIC-0097" = 2
+"BRY-REQ-QUIC-0098" = 2
+"BRY-REQ-QUIC-0099" = 2
+"BRY-REQ-QUIC-0100" = 2
+"BRY-REQ-QUIC-0101" = 2
+"BRY-REQ-QUIC-0991" = 2
+"BRY-REQ-TLS-0005" = 2
+"BRY-REQ-TLS-0010" = 2
+"BRY-REQ-TLS-0018" = 2
+"BRY-REQ-TLS-0019" = 2
+"BRY-REQ-TLS-0068" = 2
+"BRY-REQ-TLS-0079" = 2
+"BRY-REQ-TLS-0092" = 2
+"BRY-REQ-TLS-0093" = 2
+"BRY-REQ-TLS12-0083" = 2
+"BRY-REQ-TLS12-0084" = 2
+"BRY-REQ-TLS12-0085" = 2
+"BRY-REQ-TLS12-0086" = 2
+"BRY-REQ-TLS12-0087" = 2
+"BRY-REQ-TLS12-0088" = 2
+"BRY-REQ-TLS12-0089" = 2
+"BRY-REQ-TLS12-0090" = 2
+"BRY-REQ-TLS12-0091" = 2
+"BRY-REQ-TLS12-0831" = 2
+"BRY-REQ-TLS13-0046" = 2
+"BRY-REQ-TLS13-0061" = 2
+"BRY-REQ-TLS13-0062" = 2
+"BRY-REQ-TLS13-0063" = 2
+"BRY-REQ-TLS13-0064" = 2
+"BRY-REQ-TLS13-0065" = 2
+"BRY-REQ-TLS13-0066" = 2
+"BRY-REQ-TLS13-0067" = 2
+"BRY-REQ-TLS13-0069" = 2
+"BRY-REQ-TLS13-0070" = 2
+"BRY-REQ-TLS13-0071" = 2
+"BRY-REQ-TLS13-0072" = 2
+"BRY-REQ-TLS13-0073" = 2
+"BRY-REQ-TLS13-0074" = 2
+"BRY-REQ-TLS13-0075" = 2
+"BRY-REQ-TLS13-0076" = 2
+"BRY-REQ-TLS13-0077" = 2
+"BRY-REQ-TLS13-0078" = 2
+"BRY-REQ-TLS13-0080" = 2
+"BRY-REQ-TLS13-0081" = 2
+"BRY-REQ-TLS13-0082" = 2
+"BRY-REQ-TLS13-0721" = 2
+"BRY-REQ-TLS13-0761" = 2
+"BRY-REQ-TLS13-0762" = 2
+"BRY-REQ-TLS13-0763" = 2
+
+[[binding]]
+source_id = "rfc:10015"
+requirement_id = "BRY-REQ-DTLS-0114"
+sections = ["1.1", "2", "3", "4", "5.2", "6"]
+rationale = "These explicitly enumerated rfc:10015 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0114; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:10015"
+requirement_id = "BRY-REQ-TLS12-0831"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:10015 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0831; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5077"
+requirement_id = "BRY-REQ-TLS12-0090"
+sections = ["2", "3.2", "3.3", "3.4", "4", "5.2", "5.7"]
+rationale = "These explicitly enumerated rfc:5077 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0090; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5077"
+requirement_id = "BRY-REQ-TLS13-0074"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:5077 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0074; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5077"
+requirement_id = "BRY-REQ-TLS13-0075"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:5077 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0075; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5246"
+requirement_id = "BRY-REQ-TLS12-0083"
+sections = ["1.1", "1.2", "4.7", "6.2.2", "6.2.3.2", "7.1", "7.2", "7.2.1", "7.2.2", "7.4.1.1", "7.4.7.1", "7.4.7.2", "9", "12"]
+rationale = "These explicitly enumerated rfc:5246 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0083; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5246"
+requirement_id = "BRY-REQ-TLS12-0084"
+sections = ["5", "6.1"]
+rationale = "These explicitly enumerated rfc:5246 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0084; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5246"
+requirement_id = "BRY-REQ-TLS12-0085"
+sections = ["6", "6.1", "6.2.1", "6.2.2", "6.2.3", "6.2.3.2", "6.2.3.3"]
+rationale = "These explicitly enumerated rfc:5246 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0085; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5246"
+requirement_id = "BRY-REQ-TLS12-0088"
+sections = ["4.7", "7.3", "7.4", "7.4.1.2", "7.4.1.3", "7.4.1.4", "7.4.1.4.1", "7.4.2", "7.4.3", "7.4.4", "7.4.5", "7.4.6", "7.4.7", "7.4.7.1", "7.4.7.2", "7.4.8", "7.4.9"]
+rationale = "These explicitly enumerated rfc:5246 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0088; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5246"
+requirement_id = "BRY-REQ-TLS12-0090"
+sections = ["7.4.1.2", "7.4.1.3", "7.4.9"]
+rationale = "These explicitly enumerated rfc:5246 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0090; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5288"
+requirement_id = "BRY-REQ-TLS12-0085"
+sections = ["2", "3", "4", "6.2"]
+rationale = "These explicitly enumerated rfc:5288 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0085; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5288"
+requirement_id = "BRY-REQ-TLS12-0089"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:5288 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0089; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5289"
+requirement_id = "BRY-REQ-TLS12-0085"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:5289 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0085; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5289"
+requirement_id = "BRY-REQ-TLS12-0089"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:5289 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0089; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5705"
+requirement_id = "BRY-REQ-TLS-0079"
+sections = ["2", "4", "5", "6"]
+rationale = "These explicitly enumerated rfc:5705 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0079; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5746"
+requirement_id = "BRY-REQ-TLS12-0087"
+sections = ["2", "3.4", "3.5", "3.6", "3.7", "4.1", "4.2", "4.3", "4.4", "4.5", "5"]
+rationale = "These explicitly enumerated rfc:5746 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0087; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5929"
+requirement_id = "BRY-REQ-TLS-0079"
+sections = ["10", "2", "3.1", "6", "7"]
+rationale = "These explicitly enumerated rfc:5929 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0079; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6066"
+requirement_id = "BRY-REQ-TLS13-0064"
+sections = ["1.1", "1.2", "10.1", "11.1", "11.3", "11.6", "3", "4", "5", "6", "7", "8", "9"]
+rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0064; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6066"
+requirement_id = "BRY-REQ-TLS13-0066"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0066; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6066"
+requirement_id = "BRY-REQ-TLS13-0069"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0069; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6066"
+requirement_id = "BRY-REQ-TLS13-0071"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0071; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6176"
+requirement_id = "BRY-REQ-TLS12-0083"
+sections = ["1.1", "3"]
+rationale = "These explicitly enumerated rfc:6176 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0083; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6347"
+requirement_id = "BRY-REQ-DTLS-0103"
+sections = ["1.1", "4.1", "4.1.1", "4.1.1.1", "4.1.2.1", "4.1.2.2", "4.1.2.5", "4.1.2.6", "4.1.2.7", "4.2.1", "4.2.2", "4.2.3", "4.2.4", "4.2.4.1", "4.2.5", "4.2.6", "4.2.7", "4.2.8", "5", "7"]
+rationale = "These explicitly enumerated rfc:6347 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0103; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6347"
+requirement_id = "BRY-REQ-DTLS-0107"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:6347 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0107; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6347"
+requirement_id = "BRY-REQ-DTLS-0114"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:6347 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0114; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6347"
+requirement_id = "BRY-REQ-DTLS-0115"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:6347 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0115; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6347"
+requirement_id = "BRY-REQ-DTLS-0116"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:6347 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0116; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6520"
+requirement_id = "BRY-REQ-TLS-0018"
+sections = ["1.2", "2", "3", "4", "5.2"]
+rationale = "These explicitly enumerated rfc:6520 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0018; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7301"
+requirement_id = "BRY-REQ-TLS13-0066"
+sections = ["2", "3.1", "3.2", "5"]
+rationale = "These explicitly enumerated rfc:7301 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0066; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7301"
+requirement_id = "BRY-REQ-TLS13-0069"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:7301 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0069; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7465"
+requirement_id = "BRY-REQ-TLS12-0083"
+sections = ["1.1", "2"]
+rationale = "These explicitly enumerated rfc:7465 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0083; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7507"
+requirement_id = "BRY-REQ-TLS12-0087"
+sections = ["1", "3", "4"]
+rationale = "These explicitly enumerated rfc:7507 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0087; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7627"
+requirement_id = "BRY-REQ-TLS12-0084"
+sections = ["2", "4", "5.1", "5.2", "5.3", "5.4", "6.4"]
+rationale = "These explicitly enumerated rfc:7627 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0084; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7627"
+requirement_id = "BRY-REQ-TLS12-0086"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:7627 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0086; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7627"
+requirement_id = "BRY-REQ-TLS12-0087"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:7627 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0087; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7685"
+requirement_id = "BRY-REQ-TLS13-0066"
+sections = ["2", "3"]
+rationale = "These explicitly enumerated rfc:7685 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0066; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7919"
+requirement_id = "BRY-REQ-TLS12-0083"
+sections = ["1.1", "10.2", "2", "3", "3.1", "4", "5.1", "6.1", "8.9", "9.1"]
+rationale = "These explicitly enumerated rfc:7919 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0083; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8422"
+requirement_id = "BRY-REQ-TLS12-0088"
+sections = ["1.1", "2", "2.1", "2.2", "2.3", "3", "3.1", "4", "5.1", "5.1.2", "5.10", "5.11", "5.2", "5.3", "5.4", "5.6", "5.9", "6"]
+rationale = "These explicitly enumerated rfc:8422 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0088; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8701"
+requirement_id = "BRY-REQ-TLS13-0066"
+sections = ["1.1", "3.1", "3.2", "4.1", "4.2", "5", "7"]
+rationale = "These explicitly enumerated rfc:8701 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0066; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8996"
+requirement_id = "BRY-REQ-TLS-0068"
+sections = ["1.2", "4", "5", "6"]
+rationale = "These explicitly enumerated rfc:8996 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0068; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9000"
+requirement_id = "BRY-REQ-QUIC-0093"
+sections = ["1.2", "10", "10.1", "10.1.2", "10.2", "10.2.1", "10.2.2", "10.2.3", "10.3", "10.3.1", "10.3.2", "10.3.3", "11", "11.1", "11.2", "12.2", "12.3", "12.4", "12.5", "13", "13.1", "13.2", "13.2.1", "13.2.2", "13.2.3", "13.2.5", "13.2.6", "13.2.7", "13.3", "13.4.1", "13.4.2", "13.4.2.1", "13.4.2.2", "14", "14.1", "14.2", "14.2.1", "14.3", "14.4", "15", "17.1", "17.2", "17.2.1", "17.2.2", "17.2.3", "17.2.4", "17.2.5", "17.2.5.1", "17.2.5.2", "17.2.5.3", "17.3.1", "17.4", "18.2", "19.10", "19.11", "19.12", "19.13", "19.14", "19.15", "19.16", "19.17", "19.18", "19.19", "19.20", "19.21", "19.3", "19.3.1", "19.4", "19.5", "19.6", "19.7", "19.8", "19.9", "2.1", "2.2", "2.3", "21.11", "21.12", "21.3", "21.4", "21.5", "21.5.3", "21.5.6", "21.6", "21.7", "21.9", "22.1.1", "22.1.2", "22.1.3", "22.1.4", "22.2", "22.3", "22.4", "22.5", "3.1", "3.2", "3.3", "3.5", "4", "4.1", "4.2", "4.4", "4.5", "4.6", "5.1", "5.1.1", "5.1.2", "5.2", "5.2.1", "5.2.2", "5.2.3", "6", "6.1", "6.2", "6.3", "7", "7.2", "7.3", "7.4", "7.4.1", "7.4.2", "7.5", "8", "8.1", "8.1.1", "8.1.2", "8.1.3", "8.1.4", "8.2", "8.2.1", "8.2.2", "8.2.3", "8.2.4", "9", "9.1", "9.2", "9.3", "9.3.2", "9.3.3", "9.4", "9.5", "9.6", "9.6.1", "9.6.2", "9.6.3", "9.7"]
+rationale = "These explicitly enumerated rfc:9000 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0093; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9000"
+requirement_id = "BRY-REQ-QUIC-0094"
+sections = ["7", "7.5", "17.2.2", "17.2.4", "17.2.5", "17.2.5.3", "19.6", "19.20"]
+rationale = "These explicitly enumerated rfc:9000 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0094; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9000"
+requirement_id = "BRY-REQ-QUIC-0097"
+sections = ["7.4", "7.4.1", "7.4.2", "18.2", "22.3"]
+rationale = "These explicitly enumerated rfc:9000 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0097; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9000"
+requirement_id = "BRY-REQ-QUIC-0099"
+sections = ["7.4.1", "17.2.3"]
+rationale = "These explicitly enumerated rfc:9000 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0099; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9000"
+requirement_id = "BRY-REQ-QUIC-0100"
+sections = ["7.5", "19.6", "21.7"]
+rationale = "These explicitly enumerated rfc:9000 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0100; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9000"
+requirement_id = "BRY-REQ-QUIC-0101"
+sections = ["3.5", "7.5", "13", "17.2.2", "17.2.5", "21.3", "21.6", "21.7", "21.9", "21.12"]
+rationale = "These explicitly enumerated rfc:9000 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0101; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0094"
+sections = ["2", "4", "4.1.2", "4.1.3", "4.1.4", "4.9", "4.9.1", "4.9.2", "4.9.3", "5.3", "5.4.1", "5.4.2", "5.5", "5.6", "5.7", "6", "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "7", "9.3", "9.4", "9.5", "9.6"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0094; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0095"
+sections = ["4.2", "4.3", "4.4", "4.7", "4.8", "8.1", "8.3", "8.4"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0095; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0096"
+sections = ["5.1", "5.2", "5.3", "5.4.1", "5.4.2", "5.5", "5.6", "5.7"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0096; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0097"
+sections = ["8.2"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0097; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0098"
+sections = ["4", "4.1.3", "4.1.4", "4.8"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0098; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0099"
+sections = ["4.1.2", "4.5", "4.9", "4.9.1", "4.9.2", "4.9.3"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0099; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0100"
+sections = ["4.1.3", "4.1.4"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0100; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0101"
+sections = ["2", "4", "4.6.1", "4.6.2", "4.8", "4.9", "5.7", "6.6", "7", "9.2", "9.3", "9.4", "9.5", "9.6"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0101; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9001"
+requirement_id = "BRY-REQ-QUIC-0991"
+sections = ["4.6.1", "4.6.2", "5.6", "9.2"]
+rationale = "These explicitly enumerated rfc:9001 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0991; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9002"
+requirement_id = "BRY-REQ-QUIC-0101"
+sections = ["2", "5.1", "5.2", "5.3", "6.1", "6.1.1", "6.1.2", "6.2", "6.2.1", "6.2.2", "6.2.2.1", "6.2.3", "6.2.4", "6.3", "6.4", "7", "7.2", "7.3.1", "7.3.2", "7.3.3", "7.4", "7.5", "7.6.2", "7.7", "7.8"]
+rationale = "These explicitly enumerated rfc:9002 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0101; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9146"
+requirement_id = "BRY-REQ-DTLS-0107"
+sections = ["2", "3", "5", "6", "8"]
+rationale = "These explicitly enumerated rfc:9146 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0107; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0102"
+sections = ["4.1", "4.3", "4.4", "5.1"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0102; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0103"
+sections = ["2", "4", "5", "14"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0103; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0104"
+sections = ["4", "4.1", "4.2.1", "4.2.2"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0104; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0105"
+sections = ["4.2.3"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0105; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0106"
+sections = ["4.5.1", "4.5.2", "4.5.3", "6.1"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0106; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0108"
+sections = ["9", "9.1"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0108; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0109"
+sections = ["5.2", "5.5"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0109; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0110"
+sections = ["5.8.1", "5.8.2", "5.8.3", "5.8.4", "7", "7.1", "7.2"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0110; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0111"
+sections = ["4.4", "5.1"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0111; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0112"
+sections = ["5", "5.3", "5.10", "5.11", "8"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0112; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0113"
+sections = ["5.6"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0113; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0115"
+sections = ["2", "14"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0115; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9147"
+requirement_id = "BRY-REQ-DTLS-0116"
+sections = ["11", "14"]
+rationale = "These explicitly enumerated rfc:9147 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0116; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9155"
+requirement_id = "BRY-REQ-TLS12-0831"
+sections = ["1", "1.1", "2", "3", "4", "5"]
+rationale = "These explicitly enumerated rfc:9155 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0831; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9257"
+requirement_id = "BRY-REQ-TLS13-0076"
+sections = ["2", "5.1", "5.2", "6", "6.1.1", "8"]
+rationale = "These explicitly enumerated rfc:9257 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0076; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9257"
+requirement_id = "BRY-REQ-TLS13-0762"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9257 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0762; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9258"
+requirement_id = "BRY-REQ-TLS13-0761"
+sections = ["1", "2", "4", "5.1", "8", "9"]
+rationale = "These explicitly enumerated rfc:9258 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0761; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9266"
+requirement_id = "BRY-REQ-TLS-0079"
+sections = ["1.1", "3", "4", "4.1", "4.2"]
+rationale = "These explicitly enumerated rfc:9266 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0079; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-DTLS-0103"
+sections = ["2", "3.1.1", "3.1.2", "3.1.3", "3.10", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9", "4.1", "4.2", "4.2.1", "4.4", "4.5", "4.6", "7.1", "7.4", "7.5", "8.2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0103; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-DTLS-0114"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0114; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-DTLS-0116"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-0116; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS-0068"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0068; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS-0092"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0092; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS-0093"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0093; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS12-0083"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0083; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS12-0089"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0089; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS12-0090"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0090; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS12-0091"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0091; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS13-0080"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0080; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9325"
+requirement_id = "BRY-REQ-TLS13-0082"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9325 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0082; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9369"
+requirement_id = "BRY-REQ-QUIC-0096"
+sections = ["2", "3", "4", "4.1", "5"]
+rationale = "These explicitly enumerated rfc:9369 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0096; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9369"
+requirement_id = "BRY-REQ-QUIC-0101"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9369 sections contain obligations reviewed as implementation input for BRY-REQ-QUIC-0101; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS-0005"
+sections = ["6", "6.1", "6.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0005; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS-0010"
+sections = ["4.7.3", "5.5", "7.1", "7.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS-0019"
+sections = ["1.1", "4.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0019; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS-0068"
+sections = ["1.2", "4.2.1", "4.3.1"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0068; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS-0079"
+sections = ["7.5"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0079; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS-0092"
+sections = ["1", "1.2", "2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0092; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS-0093"
+sections = ["9.3", "12.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0093; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS12-0086"
+sections = ["1.2", "4.3.1"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0086; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS12-0087"
+sections = ["1.2", "9.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS12-0087; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0061"
+sections = ["2", "4"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0061; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0062"
+sections = ["2", "4", "9.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0062; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0063"
+sections = ["5", "5.1", "5.2", "5.3", "5.4", "5.5"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0063; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0064"
+sections = ["4", "4.3", "4.4.1", "4.4.2", "4.5.1", "4.5.2", "4.5.3", "4.6", "4.7.1", "4.7.2", "4.7.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0064; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0065"
+sections = ["4", "4.5.3", "7.1", "7.2", "7.4.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0065; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0066"
+sections = ["4.2.2", "4.3.1", "4.3.2", "4.3.3", "4.3.4", "4.3.5", "4.3.7", "4.3.8", "4.3.8.1", "4.3.8.2", "4.3.9", "4.3.10", "4.3.11", "4.3.11.1", "4.3.11.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0066; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0067"
+sections = ["2.1", "4.2.4"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0067; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0069"
+sections = ["4.2.3", "4.4.1", "4.5.1", "4.5.2", "4.5.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0069; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0070"
+sections = ["4.3.3", "4.3.4", "4.3.5", "4.4.2", "4.5.1", "4.5.1.2", "4.5.1.3", "4.5.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0070; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0071"
+sections = ["4.5.1.1"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0071; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0072"
+sections = ["4.5.2", "4.5.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0072; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0073"
+sections = ["6", "6.1", "6.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0073; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0074"
+sections = ["2.2", "4.3.11", "4.3.11.1", "4.3.11.3", "4.7.1"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0074; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0075"
+sections = ["2.2", "4.3.11", "4.7.1"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0075; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0076"
+sections = ["2.2", "4.3.9", "4.3.11"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0076; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0077"
+sections = ["4.3.10", "4.6", "8", "8.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0077; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0078"
+sections = ["4.7.3", "7.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0078; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0080"
+sections = ["4.2.1", "9.1"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0080; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0081"
+sections = ["9.1", "9.2", "9.3"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0081; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0082"
+sections = ["9.3", "12.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0082; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9846"
+requirement_id = "BRY-REQ-TLS13-0721"
+sections = ["4.3.6", "4.7.2"]
+rationale = "These explicitly enumerated rfc:9846 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0721; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9852"
+requirement_id = "BRY-REQ-TLS-0068"
+sections = ["2", "4", "5"]
+rationale = "These explicitly enumerated rfc:9852 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0068; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9852"
+requirement_id = "BRY-REQ-TLS-0092"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9852 sections contain obligations reviewed as implementation input for BRY-REQ-TLS-0092; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9853"
+requirement_id = "BRY-REQ-DTLS-1111"
+sections = ["10.3.1", "2", "3", "3.1", "4", "5", "5.2", "5.3", "5.4", "5.5", "9"]
+rationale = "These explicitly enumerated rfc:9853 sections contain obligations reviewed as implementation input for BRY-REQ-DTLS-1111; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9963"
+requirement_id = "BRY-REQ-TLS13-0046"
+sections = ["2", "3", "4"]
+rationale = "These explicitly enumerated rfc:9963 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0046; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9973"
+requirement_id = "BRY-REQ-TLS13-0763"
+sections = ["2", "4", "5", "5.1", "7"]
+rationale = "These explicitly enumerated rfc:9973 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0763; the exact headings, anchors, and section hashes are resolved and drift-checked."

@@ -279,7 +279,7 @@ def build_matrix(
         "domain_policy_sha256": domain_hash,
         "policy_sha256": standards.sha256(standards.json_bytes(policy)),
         "requirements": requirements,
-        "schema": 3,
+        "schema": 4,
         "source_ledger_sha256": policy["source_ledger_sha256"],
         "surface_register_sha256": policy["surface_register_sha256"],
         "transport_policy_sha256": transport_hash,

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import requirements_bundle as bundle
 import requirements_lib as lib
+import requirements_sections as sections
 import standards_lib as standards
 import surface_lib as surfaces
 
@@ -30,6 +31,7 @@ CONFIG = bundle.Config(
     authority_roles=frozenset(AUTHORITY_ROLES),
     lifecycles=frozenset({"caller-owned", "planned", "rejected"}),
     require_owner_coverage=True,
+    section_policy=lib.DIRECTORY / "transport-sections.toml",
 )
 
 
@@ -138,7 +140,15 @@ def load_policy(ledger: dict | None = None) -> tuple[dict, list[dict], str]:
     requirements.extend(exception_document["requirement"])
     scope = bundle.read_toml(SCOPE)
     digest = standards.sha256(
-        standards.json_bytes({"documents": documents, "scope": scope})
+        standards.json_bytes(
+            {
+                "documents": documents,
+                "scope": scope,
+                "section_policy": sections.read_policy(
+                    CONFIG.section_policy
+                ),
+            }
+        )
     )
     expanded = []
     for raw in requirements:

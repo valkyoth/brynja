@@ -7,9 +7,10 @@ import tomllib
 from pathlib import Path
 from typing import NamedTuple
 
-import requirements_domain_coverage as domain_coverage
+import requirements_bundle_coverage as bundle_coverage
 import requirements_lib as lib
 import requirements_mapping as mapping
+import requirements_sections as sections
 import requirements_validation as validation
 import standards_lib as standards
 
@@ -24,6 +25,7 @@ class Config(NamedTuple):
     authority_roles: frozenset[str]
     lifecycles: frozenset[str]
     require_owner_coverage: bool = False
+    section_policy: Path | None = None
 
 
 INVARIANTS = {
@@ -94,6 +96,7 @@ SCOPE_OPTIONAL = {
     "owner_milestones",
     "surface_auto_requirements",
     "surface_defer_group",
+    "surface_link_exception",
 }
 
 
@@ -129,8 +132,19 @@ def all_authorities(config: Config, ledger: dict) -> dict[str, dict]:
 def load_policy(config: Config) -> tuple[dict, list[dict], str]:
     scope = read_toml(config.scope)
     documents = [read_toml(path) for path in config.policy_files]
+    section_document = (
+        sections.read_policy(config.section_policy)
+        if config.section_policy is not None
+        else None
+    )
     digest = standards.sha256(
-        standards.json_bytes({"documents": documents, "scope": scope})
+        standards.json_bytes(
+            {
+                "documents": documents,
+                "scope": scope,
+                "section_policy": section_document,
+            }
+        )
     )
     requirements = []
     for path, document in zip(config.policy_files, documents, strict=True):
@@ -317,6 +331,7 @@ def validate_requirement(
     authorities: dict[str, dict],
     surface_map: dict[str, dict],
     allowed_surfaces: set[str],
+    link_exceptions: list[dict] | None = None,
 ) -> dict:
     requirement_id = requirement.get("id")
     if set(requirement) != DOMAIN_FIELDS:
@@ -373,6 +388,7 @@ def validate_requirement(
         resolved,
         surface_map,
         allowed_surfaces,
+        link_exceptions,
     )
     return {**requirement, "sources": resolved}
 
@@ -407,12 +423,31 @@ def build(
             authorities,
             surface_map,
             allowed_surfaces,
+            scope.get("surface_link_exception"),
         )
         for requirement in raw_requirements
     ]
+    mapping.validate_domain_exception_set(
+        requirements,
+        surface_map,
+        scope.get("surface_link_exception", []),
+    )
     requirement_map = {item["id"]: item for item in requirements}
     if len(requirement_map) != len(requirements):
         lib.fail("domain requirement policy has duplicate stable IDs")
+    section_coverage = {}
+    if config.section_policy is not None:
+        section_policy = sections.read_policy(config.section_policy)
+        sections.validate_policy(
+            section_policy,
+            config.section_policy,
+            config.milestone,
+            standards.sha256(standards.json_bytes(ledger)),
+        )
+        requirements, section_coverage = sections.apply(
+            requirements, authorities, section_policy
+        )
+    requirement_map = {item["id"]: item for item in requirements}
     cited = {
         source["id"]
         for requirement in requirements
@@ -439,61 +474,17 @@ def build(
         lib.fail("domain scope has duplicate owner milestones")
     if owner_milestones - versions:
         lib.fail("domain scope has unknown owner milestones")
-    authority_records = []
-    for identifier, entry in sorted(authorities.items()):
-        record = {
-            "authority_role": entry.get("lifecycle", "current"),
-            "domains": entry["domains"],
-            "id": identifier,
-            "milestones": entry["milestones"],
-            "requirement_ids": sorted(
-                requirement["id"]
-                for requirement in requirements
-                if identifier in {
-                    source["id"] for source in requirement["sources"]
-                }
-            ),
-            "sha256": entry["sha256"],
-        }
-        if "number" in entry:
-            record["normative_sections"] = (
-                domain_coverage.normative_sections(entry)
-            )
-            record["status"] = entry["status"]
-        else:
-            record["role"] = entry["role"]
-        authority_records.append(record)
-    surfaces = domain_coverage.surface_assignments(
+    coverage = bundle_coverage.build(
+        config,
         scope,
+        authorities,
+        authority_deferrals,
+        owner_milestones,
         register,
+        requirements,
         requirement_map,
-        set(config.surface_domains), versions,
+        section_coverage,
+        versions,
+        policy_hash,
     )
-    coverage = {
-        "authorities": authority_records,
-        "authority_count": len(authority_records),
-        "normative_section_count": sum(
-            len(item.get("normative_sections", []))
-            for item in authority_records
-        ),
-        "policy_sha256": policy_hash,
-        "requirement_count": len(requirements),
-        "schema": 1,
-        "surface_count": len(surfaces),
-        "surfaces": surfaces,
-    }
-    if (
-        authority_deferrals
-        or owner_milestones
-        or scope.get("surface_defer_group")
-    ):
-        coverage.update(
-            {
-                "authority_deferrals": authority_deferrals,
-                "deferred_authority_count": len(authority_deferrals),
-                "owner_milestone_count": len(owner_milestones),
-                "owner_milestones": sorted(owner_milestones),
-                "schema": 2,
-            }
-        )
     return requirements, coverage, policy_hash

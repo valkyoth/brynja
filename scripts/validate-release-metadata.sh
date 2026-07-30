@@ -33,6 +33,7 @@ test -x scripts/check-requirements.py
 test -x scripts/test-requirements.py
 test -x scripts/test-requirement-domains.py
 test -x scripts/test-requirement-transports.py
+test -x scripts/test-requirement-sections.py
 test -x scripts/test-requirement-lifecycles.py
 test -x scripts/test-requirement-history.py
 test -f scripts/requirements_lib.py
@@ -41,6 +42,8 @@ test -f scripts/requirements_mapping.py
 test -f scripts/requirements_domain.py
 test -f scripts/requirements_domain_coverage.py
 test -f scripts/requirements_bundle.py
+test -f scripts/requirements_bundle_coverage.py
+test -f scripts/requirements_sections.py
 test -f scripts/requirements_transport.py
 test -f scripts/requirements_validation.py
 test -f scripts/requirements_test_support.py
@@ -61,6 +64,7 @@ test -s standards/protocol-surface-coverage.md
 test -s requirements/README.md
 test -s requirements/policy.json
 test -s requirements/domain-scope.toml
+test -s requirements/domain-sections.toml
 test -s requirements/domains/cryptography.toml
 test -s requirements/domains/encoding.toml
 test -s requirements/domains/pkix.toml
@@ -72,6 +76,7 @@ test -s requirements/indexes.json
 test -s requirements/coverage.md
 test -s requirements/domain-coverage.json
 test -s requirements/transport-scope.toml
+test -s requirements/transport-sections.toml
 test -s requirements/transport-exceptions.toml
 test -s requirements/transport-coverage.json
 test -s standards/transport-surfaces/tls.toml

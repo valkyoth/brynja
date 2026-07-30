@@ -1,6 +1,6 @@
 # Brynja 0.3.4 Release Notes
 
-Status: implementation complete; repository-owner pentest required
+Status: pentest findings remediated; repository-owner retest required
 
 Brynja 0.3.4 completes the TLS, DTLS, and QUIC-TLS normative-coverage
 pass. It does not implement TLS, cryptography, PKI, QUIC, DTLS, platform
@@ -24,7 +24,9 @@ milestones now has a dedicated semantic surface and requirement recording:
 
 The generated transport artifact covers 40 admitted authorities, 550 normative
 RFC sections, 63 owner milestones, and all 480 selected TLS, TLS 1.2, TLS 1.3,
-QUIC, and DTLS surfaces.
+QUIC, and DTLS surfaces. Every normative section now carries exact requirement
+IDs or a reviewed disposition, and every requirement-side binding preserves a
+unique extraction anchor and section SHA-256.
 
 ## Explicit Security Boundaries
 
@@ -56,6 +58,12 @@ duplicated stable identities, incomplete source closure, and nondeterministic
 evidence. Existing foundation, domain, history, lifecycle, standards, and
 surface fixtures continue to apply.
 
+Seven additional section-binding fixtures reject unmapped and non-normative
+sections, source/requirement mismatches, duplicate bindings, incomplete
+semantic revisions, and unreviewed exclusions. Per-surface domain validation
+now requires both authority and milestone-owner consistency for every link;
+the exact structured exception set is itself fail-closed.
+
 ## Publication
 
 Only `brynja 0.3.4` is selected for crates.io publication. All unchanged
@@ -67,9 +75,13 @@ checks, explicit tag authorization, and the exact signed tag at `HEAD`.
 
 ## Pentest
 
-The v0.3.4 repository-owner pentest has not started. This release note will be
-updated with the exact signed candidate, findings, remediation, and retest
-outcome before tagging.
+The repository owner pentested signed candidate
+`42869b4b85087bac647c11a08064189878346112` and reported two Medium
+governance-integrity findings. One permitted unrelated surfaces to hide behind
+a related link; the other inventoried normative sections without binding them
+to individual requirements. Both findings are remediated with regression
+fixtures and zero findings remain open. The changed candidate requires a clean
+external retest before this note and the permanent report can be marked PASS.
 
 ## Limitations
 

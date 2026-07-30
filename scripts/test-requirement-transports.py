@@ -44,6 +44,8 @@ def test_current_repository() -> None:
     assert len(requirements) == 70
     assert coverage["authority_count"] == 40
     assert coverage["deferred_authority_count"] == 1
+    assert coverage["mapped_normative_section_count"] == 550
+    assert coverage["excluded_normative_section_count"] == 0
     assert coverage["owner_milestone_count"] == 63
     assert coverage["surface_count"] == 480
     assert standards.json_bytes(coverage) == lib.TRANSPORT_COVERAGE.read_bytes()

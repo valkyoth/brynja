@@ -24,6 +24,7 @@ python3 scripts/check-requirements.py
 python3 scripts/test-requirements.py
 python3 scripts/test-requirement-domains.py
 python3 scripts/test-requirement-transports.py
+python3 scripts/test-requirement-sections.py
 python3 scripts/test-requirement-lifecycles.py
 python3 scripts/test-requirement-history.py
 if ! cmp -s README.md crates/brynja/README.md; then

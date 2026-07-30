@@ -5,6 +5,97 @@ surface_register_sha256 = "53959fcdbca6368ccd4996c435d54fca15b4cd85b24bde9029646
 source_domains = ["ct", "key-containers", "ocsp", "pkix", "public-key", "symmetric"]
 surface_domains = ["cryptography", "ct", "ocsp", "pki", "pkix"]
 
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-CRYPTO-0013"
+surface_id = "iana.tls-parameters.tls-kdf-ids"
+authority_ids = ["iana:tls-parameters", "rfc:9846"]
+expected_owner = "0.46.0"
+rationale = "The PKIX algorithm-admission milestone owns the decision, while this TLS registry subtree is referenced solely to deny unsupported KDF identifiers across the certificate and handshake boundary."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-ENC-0001"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The shared signed-certificate surface is owned by X.509 decoding, while the earlier DER milestone supplies its canonical encoding substrate without claiming certificate semantics."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-ENC-0002"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The shared signed-certificate surface is owned by X.509 decoding, while the earlier container milestone supplies bounded certificate and key framing without claiming validation semantics."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-OCSP-0002"
+surface_id = "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-tlsfeature.1"
+authority_ids = ["rfc:7633"]
+expected_owner = "0.53.0"
+rationale = "The SMI subtree is registry-owned by chain validation, while this exact TLS Feature child is interpreted only by the later Must-Staple policy milestone under RFC 7633."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-OCSP-0003"
+surface_id = "protocol.ocsp"
+authority_ids = ["rfc:9919"]
+expected_owner = "0.58.0"
+rationale = "The base OCSP semantic surface remains owned by core response validation, while this exact RFC 9919 message-profile requirement adds a later optional bounded encoding."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-OCSP-0004"
+surface_id = "protocol.ocsp"
+authority_ids = ["rfc:9919"]
+expected_owner = "0.58.0"
+rationale = "The base OCSP semantic surface remains owned by core response validation, while this exact RFC 9919 transport-profile requirement adds a later caller-owned exchange boundary."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-PKIX-0002"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The certificate format surface is frozen at decoding, while service-identity validation deliberately consumes the authenticated certificate representation at its independent policy milestone."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-PKIX-0003"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The certificate format surface is frozen at decoding, while bounded path construction consumes that representation under a later independent graph-processing milestone."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-PKIX-0005"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The certificate format surface is frozen at decoding, while name constraints consume authenticated names under a later independently bounded validation milestone."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-PKIX-0006"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The certificate format surface is frozen at decoding, while certificate-policy processing consumes authenticated extensions under a later bounded policy-graph milestone."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-PKIX-0007"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The certificate format surface is frozen at decoding, while trust-anchor and cross-signing policy consumes authenticated chains under a separate deployment-policy milestone."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-PKIX-0008"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The certificate format surface is frozen at decoding, while CRL and revocation processing consumes authenticated issuer state under its own bounded validation milestone."
+
+[[surface_link_exception]]
+requirement_id = "BRY-REQ-PKIX-0009"
+surface_id = "format.x509.signed"
+authority_ids = ["rfc:5280", "rfc:9525"]
+expected_owner = "0.50.0"
+rationale = "The certificate format surface is frozen at decoding, while noRevAvail processing consumes that representation under the distinct attribute-certificate exclusion milestone."
+
 [[surface_exclusion]]
 id = "algorithm.ml-kem"
 deferred_to = "0.3.5"

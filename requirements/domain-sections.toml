@@ -1,0 +1,370 @@
+schema = 1
+milestone = "0.3.3"
+source_ledger_sha256 = "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
+exclusion = []
+
+[revisions]
+"BRY-REQ-CRYPTO-0003" = 2
+"BRY-REQ-CRYPTO-0004" = 2
+"BRY-REQ-CRYPTO-0007" = 2
+"BRY-REQ-CRYPTO-0008" = 2
+"BRY-REQ-CRYPTO-0009" = 2
+"BRY-REQ-CRYPTO-0010" = 2
+"BRY-REQ-CRYPTO-0011" = 2
+"BRY-REQ-CRYPTO-0012" = 2
+"BRY-REQ-CT-0001" = 2
+"BRY-REQ-ENC-0002" = 2
+"BRY-REQ-ENC-0003" = 2
+"BRY-REQ-ENC-0004" = 2
+"BRY-REQ-OCSP-0001" = 2
+"BRY-REQ-OCSP-0002" = 2
+"BRY-REQ-OCSP-0003" = 2
+"BRY-REQ-OCSP-0004" = 2
+"BRY-REQ-OCSP-0005" = 2
+"BRY-REQ-OCSP-0006" = 2
+"BRY-REQ-PKIX-0001" = 2
+"BRY-REQ-PKIX-0002" = 2
+"BRY-REQ-PKIX-0003" = 2
+"BRY-REQ-PKIX-0004" = 2
+"BRY-REQ-PKIX-0005" = 2
+"BRY-REQ-PKIX-0006" = 2
+"BRY-REQ-PKIX-0007" = 2
+"BRY-REQ-PKIX-0008" = 2
+"BRY-REQ-PKIX-0009" = 2
+"BRY-REQ-PKIX-0010" = 2
+
+[[binding]]
+source_id = "rfc:10007"
+requirement_id = "BRY-REQ-PKIX-0008"
+sections = ["2", "3", "4", "5"]
+rationale = "These explicitly enumerated rfc:10007 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0008; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:4055"
+requirement_id = "BRY-REQ-CRYPTO-0011"
+sections = ["1.1", "1.2", "2.1", "2.2", "3", "3.1", "3.3", "4", "4.1", "5", "6", "8"]
+rationale = "These explicitly enumerated rfc:4055 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0011; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:4055"
+requirement_id = "BRY-REQ-PKIX-0004"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:4055 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:4231"
+requirement_id = "BRY-REQ-CRYPTO-0003"
+sections = ["2", "3.1"]
+rationale = "These explicitly enumerated rfc:4231 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0003; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5116"
+requirement_id = "BRY-REQ-CRYPTO-0007"
+sections = ["1.4", "2", "2.1", "2.3", "3", "3.1", "3.2", "3.2.1", "4", "6", "8"]
+rationale = "These explicitly enumerated rfc:5116 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0007; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5280"
+requirement_id = "BRY-REQ-PKIX-0001"
+sections = ["1", "3.3", "4.1", "4.1.1.2", "4.1.2", "4.1.2.1", "4.1.2.2", "4.1.2.3", "4.1.2.4", "4.1.2.5", "4.1.2.5.1", "4.1.2.5.2", "4.1.2.6", "4.1.2.8", "4.1.2.9", "4.2", "4.2.1.1", "4.2.1.2", "4.2.1.3", "4.2.1.4", "4.2.1.5", "4.2.1.6", "4.2.1.7", "4.2.1.8", "4.2.1.9", "4.2.1.10", "4.2.1.11", "4.2.1.12", "4.2.1.13", "4.2.1.14", "4.2.1.15", "4.2.2.1", "4.2.2.2", "11.2"]
+rationale = "These explicitly enumerated rfc:5280 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0001; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5280"
+requirement_id = "BRY-REQ-PKIX-0003"
+sections = ["6", "6.1", "6.2"]
+rationale = "These explicitly enumerated rfc:5280 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0003; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5280"
+requirement_id = "BRY-REQ-PKIX-0004"
+sections = ["4.1.2.5", "4.2.1.3", "4.2.1.9", "4.2.1.12", "6", "6.1", "6.1.1", "6.1.2", "6.1.3", "6.1.4"]
+rationale = "These explicitly enumerated rfc:5280 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5280"
+requirement_id = "BRY-REQ-PKIX-0005"
+sections = ["4.2.1.6", "7.1", "7.2", "7.3", "7.4", "7.5"]
+rationale = "These explicitly enumerated rfc:5280 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0005; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5280"
+requirement_id = "BRY-REQ-PKIX-0006"
+sections = ["4.2.1.4", "4.2.1.5", "4.2.1.11", "6", "6.1", "6.1.1", "6.1.2", "6.1.3", "6.1.4", "6.2", "6.3", "6.3.3"]
+rationale = "These explicitly enumerated rfc:5280 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0006; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5280"
+requirement_id = "BRY-REQ-PKIX-0007"
+sections = ["6", "6.1", "6.1.1", "6.1.2", "6.1.3", "6.1.4", "6.2", "8"]
+rationale = "These explicitly enumerated rfc:5280 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0007; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5280"
+requirement_id = "BRY-REQ-PKIX-0008"
+sections = ["5", "5.1", "5.1.1.2", "5.1.1.3", "5.1.2.1", "5.1.2.2", "5.1.2.3", "5.1.2.4", "5.1.2.5", "5.1.2.6", "5.2", "5.2.1", "5.2.2", "5.2.3", "5.2.4", "5.2.5", "5.2.6", "5.2.7", "5.3", "5.3.1", "5.3.2", "5.3.3"]
+rationale = "These explicitly enumerated rfc:5280 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0008; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5480"
+requirement_id = "BRY-REQ-CRYPTO-0010"
+sections = ["1.1", "2.1", "2.1.1", "2.1.2", "2.2", "3", "8.2"]
+rationale = "These explicitly enumerated rfc:5480 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5480"
+requirement_id = "BRY-REQ-PKIX-0004"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:5480 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5754"
+requirement_id = "BRY-REQ-OCSP-0001"
+sections = ["1.1", "2", "3.1", "3.2", "3.3"]
+rationale = "These explicitly enumerated rfc:5754 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0001; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5756"
+requirement_id = "BRY-REQ-CRYPTO-0011"
+sections = ["1.1", "2", "3", "4"]
+rationale = "These explicitly enumerated rfc:5756 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0011; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5758"
+requirement_id = "BRY-REQ-CRYPTO-0010"
+sections = ["1", "2", "3.1", "3.2"]
+rationale = "These explicitly enumerated rfc:5758 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5758"
+requirement_id = "BRY-REQ-PKIX-0004"
+sections = ["1"]
+rationale = "These explicitly enumerated rfc:5758 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5869"
+requirement_id = "BRY-REQ-CRYPTO-0004"
+sections = ["2.1", "3.3"]
+rationale = "These explicitly enumerated rfc:5869 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5890"
+requirement_id = "BRY-REQ-PKIX-0002"
+sections = ["1.1.2", "2.3.1", "2.3.2.1"]
+rationale = "These explicitly enumerated rfc:5890 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5891"
+requirement_id = "BRY-REQ-PKIX-0002"
+sections = ["2", "3.1", "3.2", "4.1", "4.2.1", "4.2.2", "4.2.3.1", "4.2.3.2", "4.2.3.3", "4.2.3.4", "5.2", "5.3", "5.4"]
+rationale = "These explicitly enumerated rfc:5891 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5892"
+requirement_id = "BRY-REQ-PKIX-0002"
+sections = ["1", "7"]
+rationale = "These explicitly enumerated rfc:5892 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5912"
+requirement_id = "BRY-REQ-ENC-0002"
+sections = ["10", "13", "14", "3", "6", "8", "9"]
+rationale = "These explicitly enumerated rfc:5912 sections contain obligations reviewed as implementation input for BRY-REQ-ENC-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:5958"
+requirement_id = "BRY-REQ-ENC-0004"
+sections = ["1.1", "2", "3", "7.1"]
+rationale = "These explicitly enumerated rfc:5958 sections contain obligations reviewed as implementation input for BRY-REQ-ENC-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6066"
+requirement_id = "BRY-REQ-OCSP-0006"
+sections = ["1.1", "1.2", "10.1", "11.1", "11.3", "11.6", "3", "4", "5", "6", "7", "8", "9"]
+rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0006; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6818"
+requirement_id = "BRY-REQ-PKIX-0001"
+sections = ["1.1", "3", "5", "6"]
+rationale = "These explicitly enumerated rfc:6818 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0001; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6960"
+requirement_id = "BRY-REQ-OCSP-0001"
+sections = ["1.1", "2.1", "2.2", "2.5", "2.6", "2.7", "3.1", "4.1.2", "4.2.1", "4.2.2.1", "4.2.2.2", "4.2.2.2.1", "4.2.2.3", "4.3", "4.4.3", "4.4.4", "4.4.7.1", "4.4.7.2.1", "4.4.7.2.2", "4.4.8", "5.1", "5.1.1", "5.1.2", "8"]
+rationale = "These explicitly enumerated rfc:6960 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0001; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6961"
+requirement_id = "BRY-REQ-OCSP-0005"
+sections = ["1.1", "2.2", "4.1"]
+rationale = "These explicitly enumerated rfc:6961 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0005; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6962"
+requirement_id = "BRY-REQ-CT-0001"
+sections = ["1.1", "2.1.4", "3", "3.1", "3.3", "3.3.1", "3.5", "4.1", "4.6", "5.2"]
+rationale = "These explicitly enumerated rfc:6962 sections contain obligations reviewed as implementation input for BRY-REQ-CT-0001; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:6979"
+requirement_id = "BRY-REQ-CRYPTO-0010"
+sections = ["1.1", "4", "6.2"]
+rationale = "These explicitly enumerated rfc:6979 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7468"
+requirement_id = "BRY-REQ-ENC-0003"
+sections = ["1", "10", "11", "12", "13", "2", "3", "5.1", "5.2", "5.3", "6", "7", "8", "9"]
+rationale = "These explicitly enumerated rfc:7468 sections contain obligations reviewed as implementation input for BRY-REQ-ENC-0003; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7633"
+requirement_id = "BRY-REQ-OCSP-0002"
+sections = ["2.1", "3", "4", "4.1", "4.2.1", "4.2.2", "4.2.3", "4.2.3.1", "4.3.1", "4.3.2", "4.3.3"]
+rationale = "These explicitly enumerated rfc:7633 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:7748"
+requirement_id = "BRY-REQ-CRYPTO-0010"
+sections = ["2", "5", "6.1", "6.2", "7", "8.2"]
+rationale = "These explicitly enumerated rfc:7748 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8017"
+requirement_id = "BRY-REQ-CRYPTO-0011"
+sections = ["1.1", "11.2"]
+rationale = "These explicitly enumerated rfc:8017 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0011; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8017"
+requirement_id = "BRY-REQ-ENC-0004"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:8017 sections contain obligations reviewed as implementation input for BRY-REQ-ENC-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8032"
+requirement_id = "BRY-REQ-CRYPTO-0012"
+sections = ["2", "5.1", "8.3", "8.5", "8.7"]
+rationale = "These explicitly enumerated rfc:8032 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0012; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8410"
+requirement_id = "BRY-REQ-CRYPTO-0012"
+sections = ["2", "3", "5", "6", "8"]
+rationale = "These explicitly enumerated rfc:8410 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0012; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8410"
+requirement_id = "BRY-REQ-PKIX-0004"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:8410 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8439"
+requirement_id = "BRY-REQ-CRYPTO-0008"
+sections = ["1.1", "2.3", "2.4", "2.5", "2.6", "4"]
+rationale = "These explicitly enumerated rfc:8439 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0008; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8439"
+requirement_id = "BRY-REQ-CRYPTO-0009"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:8439 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0009; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8753"
+requirement_id = "BRY-REQ-PKIX-0002"
+sections = ["6"]
+rationale = "These explicitly enumerated rfc:8753 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8813"
+requirement_id = "BRY-REQ-CRYPTO-0010"
+sections = ["2", "3"]
+rationale = "These explicitly enumerated rfc:8813 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9162"
+requirement_id = "BRY-REQ-CT-0001"
+sections = ["1.1", "10.2.5", "11.3", "2.2", "3", "3.2", "4", "4.1", "4.10", "4.13", "4.2", "4.2.1", "4.2.2", "4.3", "4.4", "4.7", "4.8", "4.9", "5", "5.1", "5.3", "5.5", "5.6", "6", "6.2", "6.4", "6.5", "7.1", "7.1.1", "7.1.2", "7.2", "8.1.1", "8.1.3", "8.1.4", "8.1.5", "8.1.6", "8.2", "9"]
+rationale = "These explicitly enumerated rfc:9162 sections contain obligations reviewed as implementation input for BRY-REQ-CT-0001; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9295"
+requirement_id = "BRY-REQ-CRYPTO-0012"
+sections = ["2", "3"]
+rationale = "These explicitly enumerated rfc:9295 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0012; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9295"
+requirement_id = "BRY-REQ-PKIX-0004"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9295 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9525"
+requirement_id = "BRY-REQ-PKIX-0002"
+sections = ["1.5", "2", "3", "4.1", "5", "6.1.1", "6.2", "6.3", "6.5", "6.6", "7.2", "7.6"]
+rationale = "These explicitly enumerated rfc:9525 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9549"
+requirement_id = "BRY-REQ-PKIX-0002"
+sections = ["1.1", "2.2", "2.3", "2.4", "2.5", "3"]
+rationale = "These explicitly enumerated rfc:9549 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9549"
+requirement_id = "BRY-REQ-PKIX-0005"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:9549 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0005; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9598"
+requirement_id = "BRY-REQ-PKIX-0002"
+sections = ["2", "3", "4", "5", "6"]
+rationale = "These explicitly enumerated rfc:9598 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0002; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9598"
+requirement_id = "BRY-REQ-PKIX-0005"
+sections = ["2"]
+rationale = "These explicitly enumerated rfc:9598 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0005; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9608"
+requirement_id = "BRY-REQ-PKIX-0009"
+sections = ["1.1", "2", "3", "6"]
+rationale = "These explicitly enumerated rfc:9608 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0009; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9618"
+requirement_id = "BRY-REQ-PKIX-0006"
+sections = ["2", "4", "4.2", "5.1", "5.2", "5.5", "5.6", "6", "6.1", "6.4", "6.5"]
+rationale = "These explicitly enumerated rfc:9618 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0006; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9654"
+requirement_id = "BRY-REQ-OCSP-0001"
+sections = ["1.1", "2.1"]
+rationale = "These explicitly enumerated rfc:9654 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0001; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9919"
+requirement_id = "BRY-REQ-OCSP-0003"
+sections = ["10.2", "2", "3.1.1", "3.1.2", "3.2.1", "3.2.2", "3.2.3", "3.2.4", "4.1", "4.2", "5", "6", "7.1", "7.2", "8.1", "8.2", "8.4", "8.5"]
+rationale = "These explicitly enumerated rfc:9919 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0003; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9919"
+requirement_id = "BRY-REQ-OCSP-0004"
+sections = ["10.2"]
+rationale = "These explicitly enumerated rfc:9919 sections contain obligations reviewed as implementation input for BRY-REQ-OCSP-0004; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:9925"
+requirement_id = "BRY-REQ-PKIX-0010"
+sections = ["2", "3.1", "3.2", "3.3", "4", "5"]
+rationale = "These explicitly enumerated rfc:9925 sections contain obligations reviewed as implementation input for BRY-REQ-PKIX-0010; the exact headings, anchors, and section hashes are resolved and drift-checked."

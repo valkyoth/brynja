@@ -144,7 +144,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.97.1`, the current stable patch release checked on 2026-07-27.
+to Rust `1.97.1`, the current stable patch release checked on 2026-07-30.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 

@@ -1,6 +1,6 @@
 # Brynja 0.3.3 Release Notes
 
-Status: implementation stop reached; awaiting pentest
+Status: pentest passed; awaiting green GitHub checks and tag authorization
 
 Brynja 0.3.3 completes the cryptography, encoding, and PKIX normative-coverage
 pass. It does not implement TLS, cryptography, PKI, QUIC, DTLS, platform
@@ -71,6 +71,13 @@ Legacy and repository-only packages remain unpublished.
 
 Publication requires a committed PASS pentest report, green hosted GitHub
 checks, explicit tag authorization, and the exact signed tag at `HEAD`.
+
+## Pentest
+
+The repository owner pentested signed implementation candidate
+`a5dd438159613da3b9869c37fe13c8f16b5a258b` and reported a green result with
+no findings. No remediation was required, zero findings remain open, and the
+permanent v0.3.3 report records `PASS`/`PASS`.
 
 ## Limitations
 

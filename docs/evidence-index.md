@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.3.3 implementation stop reached; awaiting pentest
+Status: v0.3.3 pentest passed; awaiting green GitHub checks and tag authorization
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

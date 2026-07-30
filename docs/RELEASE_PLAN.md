@@ -300,7 +300,7 @@ Exit criteria:
 
 ### v0.3.3 - Cryptography Encoding And PKIX Normative Coverage
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Populate and review every applicable normative statement and invariant for admitted primitives, arithmetic, DER, key and certificate formats, service identity, path processing, revocation, OCSP and Certificate Transparency; record explicit algorithm exclusions, current-versus-compatibility authority, positive and negative target tests, work bounds, and unresolved evidence.
 

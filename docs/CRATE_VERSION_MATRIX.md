@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.3.3 implementation stop reached; awaiting pentest
+Status: v0.3.3 pentest passed; awaiting green GitHub checks and tag authorization
 
 The `brynja` facade advances to `0.3.3`. Every unchanged modern supporting
 crate retains its published `0.1.0` version and is not republished. Legacy and

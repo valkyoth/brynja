@@ -35,6 +35,8 @@ Keep a Changelog and Semantic Versioning.
   the complete hybrid review at v0.3.5.
 - Five newly reported RFC Editor errata were reviewed as
   `track-not-applied`; no reported erratum was silently incorporated.
+- The repository-owner pentest passed the signed v0.3.3 implementation
+  candidate with zero findings and required no remediation.
 
 ## [0.3.2] - 2026-07-27
 

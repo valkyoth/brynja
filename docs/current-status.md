@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.3.3 implementation stop reached; awaiting pentest
+Status: v0.3.3 pentest passed; awaiting green GitHub checks and tag authorization
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -91,8 +91,7 @@ No `brynja-sanitization` package or dependency exists yet; its admission
 decision remains gated at v0.11.1.
 
 The v0.3.2 repository-owner pentest cycle reported no remaining vulnerability
-and
-one optional defense-in-depth improvement. Target validation now resolves
+and one optional defense-in-depth improvement. Target validation now resolves
 paths and rejects symlinks that escape the repository root. The subsequent
 retest found two medium release-assurance defects: lifecycle transitions and
 revisions were not bound to immutable history, and decision links could be
@@ -107,5 +106,10 @@ IANA sources at revision three. Ordinary CI now accepts only the exact current,
 committed `RETEST REQUIRED`/`PENDING` remediation state so hosted checks can
 run truthfully before retest, while all release and tag paths require
 `PASS`/`PASS`. The final repository-owner retest passed with zero open
-findings. The v0.3.3 pentest has not started; no tag or publication is
-authorized.
+findings.
+
+The repository owner pentested signed v0.3.3 implementation candidate
+`a5dd438159613da3b9869c37fe13c8f16b5a258b` and reported a green result with
+no findings. The permanent report records `PASS`, zero open findings, and
+`PASS` retest status. Tagging remains blocked until this report-bearing commit
+is green on GitHub and the user explicitly authorizes the tag.

@@ -20,6 +20,7 @@ python3 scripts/check-standards-ledger.py
 python3 scripts/test-standards-ledger.py
 python3 scripts/check-protocol-surfaces.py
 python3 scripts/test-protocol-surfaces.py
+python3 scripts/test-surface-security.py
 python3 scripts/check-requirements.py
 python3 scripts/test-requirements.py
 python3 scripts/test-requirement-domains.py

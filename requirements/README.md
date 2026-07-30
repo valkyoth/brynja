@@ -5,7 +5,7 @@ Status: v0.3.5 pentest remediation complete; retest required
 This directory turns exact standards authority into stable, reviewable
 requirements without claiming that planned protocol behavior exists. The
 matrix contains 12 foundation requirements, 34 cryptography, encoding, PKIX,
-OCSP, and CT requirements, 70 TLS, DTLS, and QUIC-TLS requirements, and 47
+OCSP, and CT requirements, 70 TLS, DTLS, and QUIC-TLS requirements, and 49
 optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and residual
 requirements.
 
@@ -24,8 +24,9 @@ requirements.
   gap, and reviewed mapping rationale.
 - `domain-sections.toml` and `transport-sections.toml` explicitly bind every
   uppercase normative RFC section to one or more requirements or an exact
-  reviewed disposition. They also carry the immutable requirement revisions
-  introduced by those semantic bindings.
+  reviewed disposition. Cross-bundle `delegated` decisions are valid only
+  when another bundle supplies the exact mapped or excluded owner. They also
+  carry immutable requirement revisions introduced by semantic bindings.
 - `transport-scope.toml`, `transport-exceptions.toml`, and
   `../standards/transport-surfaces/*.toml` are the reviewed v0.3.4 inputs.
   They bind every transport authority, semantic implementation milestone,
@@ -59,14 +60,14 @@ requirements.
   normative RFC sections, 63 owner milestones, and 483 transport surfaces,
   including requirement IDs or reviewed dispositions for every section.
 - `residual-coverage.json` proves exact coverage of 33 residual authorities,
-  182 normative RFC sections, and 741 previously uncovered surfaces, including
+  182 normative RFC sections, and 742 previously uncovered surfaces, including
   165 mapped sections, 17 explicit exclusions, and 266 exact section links.
 - Domain, transport, and residual section policies are reconciled globally so
   no section can be both mapped and excluded or carry conflicting exclusions.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
   requirement-to-owner reports across 126 authorities, 205 roadmap rows,
-  4,422 surfaces, and 163 requirements.
+  4,422 surfaces, and 165 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim
@@ -132,7 +133,7 @@ python3 scripts/test-requirement-lifecycles.py
 python3 scripts/test-requirement-residuals.py
 ```
 
-The 103 broken-fixture and positive tests reject changed source hashes, invalid
+The 108 broken-fixture and positive tests reject changed source hashes, invalid
 sections, duplicate or malformed identifiers, obsolete-as-current authority,
 illegal lifecycle transitions, missing owners or targets, premature evidence,
 weakened SHOULD decisions, unknown surface decisions, stale generated output,

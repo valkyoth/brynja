@@ -29,7 +29,7 @@ source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a
 "BRY-REQ-QUIC-0100" = 2
 "BRY-REQ-QUIC-0101" = 2
 "BRY-REQ-QUIC-0991" = 2
-"BRY-REQ-TLS-0005" = 2
+"BRY-REQ-TLS-0005" = 3
 "BRY-REQ-TLS-0010" = 2
 "BRY-REQ-TLS-0018" = 2
 "BRY-REQ-TLS-0019" = 2
@@ -51,13 +51,13 @@ source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a
 "BRY-REQ-TLS13-0061" = 2
 "BRY-REQ-TLS13-0062" = 2
 "BRY-REQ-TLS13-0063" = 2
-"BRY-REQ-TLS13-0064" = 2
+"BRY-REQ-TLS13-0064" = 3
 "BRY-REQ-TLS13-0065" = 2
-"BRY-REQ-TLS13-0066" = 3
+"BRY-REQ-TLS13-0066" = 4
 "BRY-REQ-TLS13-0067" = 2
-"BRY-REQ-TLS13-0069" = 3
+"BRY-REQ-TLS13-0069" = 4
 "BRY-REQ-TLS13-0070" = 2
-"BRY-REQ-TLS13-0071" = 2
+"BRY-REQ-TLS13-0071" = 3
 "BRY-REQ-TLS13-0072" = 2
 "BRY-REQ-TLS13-0073" = 2
 "BRY-REQ-TLS13-0074" = 2
@@ -178,26 +178,32 @@ rationale = "These explicitly enumerated rfc:5929 sections contain obligations r
 [[binding]]
 source_id = "rfc:6066"
 requirement_id = "BRY-REQ-TLS13-0064"
-sections = ["1.1", "1.2", "10.1", "11.1", "11.3", "11.6", "3", "4", "5", "6", "7", "8", "9"]
-rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0064; the exact headings, anchors, and section hashes are resolved and drift-checked."
+sections = ["1.1"]
+rationale = "RFC 6066 section 1.1 defines the cross-extension transcript and session-resumption invariants owned by the central handshake codec; facility-specific behavior remains with its exact owner."
 
 [[binding]]
 source_id = "rfc:6066"
 requirement_id = "BRY-REQ-TLS13-0066"
-sections = ["1.1"]
-rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0066; the exact headings, anchors, and section hashes are resolved and drift-checked."
+sections = ["3"]
+rationale = "RFC 6066 section 3 defines bounded SNI construction, duplicate rejection, hostname representation, and ClientHello offer behavior owned by the ClientHello implementation."
 
 [[binding]]
 source_id = "rfc:6066"
 requirement_id = "BRY-REQ-TLS13-0069"
-sections = ["1.1"]
-rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0069; the exact headings, anchors, and section hashes are resolved and drift-checked."
+sections = ["3", "11.1"]
+rationale = "RFC 6066 sections 3 and 11.1 define SNI selection, resumption binding, endpoint-identity separation, and security behavior owned by the authenticated server-flight milestone."
 
 [[binding]]
 source_id = "rfc:6066"
 requirement_id = "BRY-REQ-TLS13-0071"
-sections = ["1.1"]
-rationale = "These explicitly enumerated rfc:6066 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0071; the exact headings, anchors, and section hashes are resolved and drift-checked."
+sections = ["8", "11.6"]
+rationale = "RFC 6066 sections 8 and 11.6 define status_request transport, message ordering, bounded response handoff, failure behavior, and security considerations owned by the stapled-status milestone."
+
+[[binding]]
+source_id = "rfc:6066"
+requirement_id = "BRY-REQ-TLS-0005"
+sections = ["9"]
+rationale = "RFC 6066 section 9 defines extension-specific alert admission and wire behavior; the shared typed TLS failure requirement owns those alert semantics without claiming unrelated facilities."
 
 [[binding]]
 source_id = "rfc:6176"
@@ -816,6 +822,48 @@ source_id = "rfc:9973"
 requirement_id = "BRY-REQ-TLS13-0763"
 sections = ["2", "4", "5", "5.1", "7"]
 rationale = "These explicitly enumerated rfc:9973 sections contain obligations reviewed as implementation input for BRY-REQ-TLS13-0763; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[exclusion]]
+source_id = "rfc:6066"
+section = "1.2"
+disposition = "not-applicable"
+rationale = "RFC 6066 section 1.2 defines BCP 14 terminology rather than an independently implementable protocol behavior; it remains reviewed context and is not assigned to a requirement."
+
+[[exclusion]]
+source_id = "rfc:6066"
+section = "4"
+disposition = "excluded"
+rationale = "The deprecated max_fragment_length facility is excluded from the modern profile in favor of the separately owned Record Size Limit policy and must be rejected before negotiation."
+
+[[exclusion]]
+source_id = "rfc:6066"
+section = "5"
+disposition = "excluded"
+rationale = "Client certificate URL negotiation and network fetching are excluded to prevent peer-directed fetch, redirect, scheme, cache, SHA-1, and resource-control risks."
+
+[[exclusion]]
+source_id = "rfc:6066"
+section = "6"
+disposition = "excluded"
+rationale = "The legacy trusted_ca_keys indication is excluded from the modern profile; certificate authority selection uses the separately reviewed modern certificate-negotiation boundary."
+
+[[exclusion]]
+source_id = "rfc:6066"
+section = "7"
+disposition = "excluded"
+rationale = "Truncated HMAC negotiation is excluded from every modern Brynja profile and cannot alter record authentication strength, algorithm admission, or resumption state."
+
+[[exclusion]]
+source_id = "rfc:6066"
+section = "10.1"
+disposition = "excluded"
+rationale = "The PkiPath MIME registration is used only by the excluded client-certificate-URL facility and creates no supported parsing, fetching, or media-type behavior."
+
+[[exclusion]]
+source_id = "rfc:6066"
+section = "11.3"
+disposition = "excluded"
+rationale = "Client-certificate-URL security considerations belong to a facility excluded before negotiation, parsing, network effects, redirects, caching, or certificate validation."
 
 [[exclusion]]
 source_id = "rfc:6176"

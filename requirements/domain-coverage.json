@@ -2489,18 +2489,18 @@
       ],
       "normative_sections": [
         {
+          "disposition": "delegated",
           "occurrences": {
             "MAY": 1,
             "MUST": 2,
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 cross-extension transcript and resumption behavior is delegated to the transport handshake-codec requirement and is not claimed by the OCSP certificate-status target.",
           "section": "1.1",
           "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MAY": 1,
             "MUST": 1,
@@ -2508,13 +2508,12 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 terminology is reviewed and dispositioned by the transport section policy; the OCSP bundle delegates that non-behavioral context without claiming coverage.",
           "section": "1.2",
           "section_sha256": "fccabcb4d77b42a0ca89ba63c9aa4b421f794e5290b5dedca3684886be55c6f5"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MAY": 4,
             "MUST": 1,
@@ -2522,55 +2521,49 @@
             "SHOULD": 3,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 SNI behavior is delegated to the ClientHello and authenticated server-flight transport requirements and is not attributed to certificate-status negotiation.",
           "section": "3",
           "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MAY": 2,
             "MUST": 4,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 maximum-fragment-length behavior is delegated to the reviewed transport exclusion and explicit rejected-surface boundary rather than the OCSP implementation target.",
           "section": "4",
           "section_sha256": "7dfa2bfffa7441265a215ed8931f1085b5eb01f54d2c4201792a15183d238e26"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MAY": 7,
             "MUST": 6,
             "MUST NOT": 2,
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 client-certificate-URL behavior is delegated to the reviewed transport exclusion and rejected-surface boundary, preventing the OCSP target from claiming fetch controls.",
           "section": "5",
           "section_sha256": "755300a011d8eae73c6f0b3b7fd2d47ada39f9e4ff105906493bf1f16e6561a8"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MAY": 2
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 trusted-CA indication is delegated to the reviewed transport exclusion and rejected-surface boundary and has no certificate-status implementation ownership.",
           "section": "6",
           "section_sha256": "08176ec5ef88982a8b467e72b2c3ec8bd6c3d155719cd5c88056212a7d6a84a5"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MAY": 2,
             "MUST": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 truncated-HMAC behavior is delegated to the reviewed transport exclusion and rejected-surface boundary and cannot be laundered through an OCSP target.",
           "section": "7",
           "section_sha256": "ffb0a83dd3c24b91cfb2e886bd6598d44d519489fbf7c1c0cac40cd410748933"
         },
@@ -2588,43 +2581,39 @@
           "section_sha256": "598870980c7ea2d138722d5fd75d26a0fafd7f9d4c7ee7ff5e19b28c1ad825b6"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MUST NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 extension-alert behavior is delegated to the shared typed TLS failure requirement; the OCSP bundle does not claim wire-alert implementation coverage.",
           "section": "9",
           "section_sha256": "1c19e8e6c0d49922fcb2b32a1ba63ebe61d520f92a007dcca10724b5a182798c"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MUST": 2,
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 PkiPath MIME registration is delegated to the reviewed client-certificate-URL exclusion and rejected-surface boundary outside certificate-status negotiation.",
           "section": "10.1",
           "section_sha256": "b25ab20f308958c4fe08efcb37495f5415e6307593c1edc65f37c219fd5906fa"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "MUST": 2
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 SNI security considerations are delegated to the authenticated server-flight transport requirement and cannot appear as OCSP security-control evidence.",
           "section": "11.1",
           "section_sha256": "09fb0ea1346633b5cdc2ddbb28b89c49c127b5df93f5d37293ecb29ce2eeebe9"
         },
         {
+          "disposition": "delegated",
           "occurrences": {
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-OCSP-0006"
-          ],
+          "rationale": "RFC 6066 client-certificate-URL security considerations are delegated to the reviewed transport exclusion and rejected-surface boundary outside the OCSP target.",
           "section": "11.3",
           "section_sha256": "2ae3026ad35287a685535e1fe34631fbed81817ada32c389e2b604f0f448df11"
         },
@@ -5519,10 +5508,10 @@
     }
   ],
   "authority_count": 53,
-  "excluded_normative_section_count": 1,
-  "mapped_normative_section_count": 363,
+  "excluded_normative_section_count": 12,
+  "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "dadc8c947fee6cf5a5873e3fb42aaef25dfab9a741fd9d20c0b0a074a38e970a",
+  "policy_sha256": "a0f11df89c283e0e586e08cdab52038574936605ae2d3068d44c1e33cfb9050e",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3322,

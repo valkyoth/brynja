@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
 source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
-surface_register_sha256 = "6fcc18b4730ba931963abd1057a42eac4cbd300b57e668b44d01de0ea8b7f704"
+surface_register_sha256 = "c4b513c28ed5c6bf5ff013825afcfb6d601e86e1f17620338bbbe71ee3d1fd43"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -109,7 +109,6 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.certificate-authorities.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-authz.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-type.1",
-  "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
@@ -123,7 +122,6 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-id-hash.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-session-id.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.key-share.1",
-  "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.oid-filters.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.padding.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.password-salt.1",
@@ -176,8 +174,6 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
-  "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-  "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
@@ -199,6 +195,19 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.9",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.use-srtp.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.user-mapping.1",
+]
+
+[[surface_group]]
+id = "BRY-REQ-RFC6066X-0148"
+domain = "tls"
+owner = "0.148.0"
+disposition = "intentionally-rejected"
+sources = ["iana:tls-extensiontype-values"]
+surface_ids = [
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
 ]
 
 [[surface_group]]
@@ -1126,6 +1135,16 @@ surface_ids = [
   "iana.tls-parameters.tls-rrc-message-types.path-response.1",
   "iana.tls-parameters.tls-rrc-message-types.reserved-for-private-use.1",
   "iana.tls-parameters.tls-rrc-message-types.unassigned.1",
+]
+
+[[surface_group]]
+id = "BRY-REQ-RRCTYPE-0111"
+domain = "dtls"
+owner = "0.111.1"
+disposition = "future-work"
+sources = ["iana:tls-parameters"]
+surface_ids = [
+  "iana.tls-parameters.tls-parameters-5.return-routability-check.1",
 ]
 
 [[surface_group]]

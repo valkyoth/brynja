@@ -385,7 +385,7 @@ Exit criteria:
 
 Status: awaiting pentest
 
-Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
+Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, reject obsolete RFC 6066 facilities, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
 
 Goal: complete the **Optional Legacy And Residual Normative Closure** implementation stop without admitting or
 claiming adjacent capability.
@@ -395,8 +395,14 @@ Deliverables:
 - populate every remaining optional, PQ, legacy, operational, source-rights,
   test-only, caller-owned, rejected, blocked, and presently pinned non-RFC rule;
 - reconcile section mappings and exclusions globally across every requirement
-  bundle, keep DTLS-only extensions and registries inside the DTLS boundary,
-  and bind source-blocked legacy surfaces to exact blocker requirements;
+  bundle, require every cross-bundle delegation to resolve to an exact owner,
+  keep every DTLS RRC state, extension, content type, and registry surface
+  inside the DTLS boundary, and bind source-blocked legacy surfaces to exact
+  blocker requirements;
+- assign RFC 6066 sections only to their exact SNI, certificate-status,
+  status-transport, alert, terminology, or rejected-facility decision and
+  reject obsolete maximum-fragment-length, client-certificate-URL,
+  trusted-CA, and truncated-HMAC admission;
 - generate complete source-to-plan, plan-to-source, surface-to-requirement, and
   requirement-to-owner reports with explicit dependent-milestone refresh rules
   for mutable guidance and unavailable future standards;
@@ -410,8 +416,9 @@ Verification:
 - inject draft identifiers, future-source claims, rights gaps, stale mutable
   guidance, missing exclusions, orphan plans, premature implementation status,
   cross-policy section contradictions, wrong protocol ownership, actionable
-  source-blocked requirements, and uncovered surfaces and require repository
-  failure;
+  source-blocked requirements, orphaned section delegations, RFC 6066 semantic
+  laundering, stream-TLS RRC admission, and uncovered surfaces and require
+  repository failure;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -420,8 +427,10 @@ Exit criteria:
 - the complete current planning baseline is closed without claiming unavailable
   standards, future code, mutable evidence, or legacy rights as complete;
 - RFC 9853 runtime and registry ownership is reachable through
-  `brynja-dtls-core`, RFC 7568 cannot authorize unrelated legacy protocols, and
-  every unavailable legacy source fails closed through its exact blocker;
+  `brynja-dtls-core`, ContentType 27 is rejected outside negotiated DTLS RRC,
+  RFC 6066 cannot launder unrelated facilities through OCSP, RFC 7568 cannot
+  authorize unrelated legacy protocols, and every unavailable legacy source
+  fails closed through its exact blocker;
 - `v0.3.5 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
@@ -5718,7 +5727,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
+Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration and reject them before parsing or effects; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
 
 Goal: complete the **Generated Optional-Feature Composition Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -5728,6 +5737,9 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - exercise optional receive and send paths and cross-feature combinations before freezing APIs, then qualify downstream host and Aesynx adapters;
+- implement the exact RFC 6066 rejected-extension boundary and prove that
+  peer-directed certificate fetching, truncated authentication, legacy CA
+  indication, and deprecated fragment negotiation cannot become available;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -5735,6 +5747,9 @@ Verification:
 
 - generate and execute every pairwise feature and protocol-applicability case plus targeted ECH, authentication, resumption, hybrid, FIPS and compression higher-order combinations;
 - exercise ECH with hybrid ClientHello size, HRR, padding, transcript and downgrade, ECH with RPK, hybrid tickets, PSKs, resumption and zero-RTT, hybrid approved-only policy, rotating OCSP and SCT compression inputs, and configuration-time rejection of every forbidden combination;
+- inject all four rejected RFC 6066 extension identifiers in every stream TLS,
+  DTLS, resumption, imported-state, and configuration context and require
+  bounded rejection before allocation, fetching, cryptography, or state change;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 

@@ -61,13 +61,16 @@ use-after-failure.
 - machine-readable protocol-surface classification so new or changed standards
   and IANA entries cannot remain silently unowned;
 - current RFC update closure, globally reconciled normative-section decisions,
-  and complete requirement traceability, with cross-policy conflicts,
+  verified cross-bundle delegation, and complete requirement traceability,
+  with cross-policy conflicts, RFC 6066 semantic misbinding,
   obsolete-authority, orphan, drift, and weakened-language failures;
 - current PKIX revocation and policy semantics, authoritative Must-Staple
   failure, signed OCSP authority over caller-owned cache metadata, pairwise and
   domain-bound external PSKs, production key-log isolation, DTLS-owned
-  path-bound return-routability registries and state, source-blocked legacy
-  lifecycles, and terminal HPKE context invalidation and destruction;
+  path-bound return-routability state, extension, ContentType 27 and message
+  registries, explicit rejection of obsolete RFC 6066 facilities,
+  source-blocked legacy lifecycles, and terminal HPKE context invalidation and
+  destruction;
 - certificate-bound FIPS module selection, mandatory service indicators,
   approved-only typestates, exact operational-environment matching, immutable
   validated artifacts, and fail-closed claim withdrawal or revalidation after
@@ -83,7 +86,7 @@ proves stable requirement identity, lifecycle, mapping, and drift enforcement
 with a 12-requirement authority pilot. v0.3.3 adds 34 cryptography, encoding,
 PKIX, OCSP, and CT requirements. v0.3.4 adds 70 TLS, DTLS, and QUIC-TLS
 requirements with exact version, state, rejection, and caller-owned
-boundaries. v0.3.5 adds 47 optional, HPKE, ECH, ML-KEM, entropy, operational,
+boundaries. v0.3.5 adds 49 optional, HPKE, ECH, ML-KEM, entropy, operational,
 legacy, and residual requirements and closes every locked source, roadmap row,
 and protocol surface. None of these milestones implements protocol or
 cryptographic behavior. Planned, future-work, blocked, legacy, and

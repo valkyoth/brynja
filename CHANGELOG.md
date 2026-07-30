@@ -9,15 +9,15 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
-- Forty-seven optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and
-  residual requirements, bringing the deterministic matrix to 163 records.
+- Forty-nine optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and
+  residual requirements, bringing the deterministic matrix to 165 records.
 - Local-only checksum pins for final FIPS 203, SP 800-227, SP 800-90B, and
   SP 800-90C.
 - Exact residual coverage of 33 authorities, 182 normative RFC sections, and
-  all 741 surfaces left by the foundation, domain, and transport bundles.
+  all 742 surfaces left by the foundation, domain, and transport bundles.
 - A generated closure report mapping all 126 locked authorities, 205 roadmap
-  rows, 4,422 protocol surfaces, and 163 requirements in both directions.
-- Twenty-two residual broken fixtures, bringing the requirement suite to 106
+  rows, 4,422 protocol surfaces, and 165 requirements in both directions.
+- Twenty-two residual broken fixtures, bringing the requirement suite to 108
   positive and negative tests.
 
 ### Security
@@ -45,6 +45,11 @@ Keep a Changelog and Semantic Versioning.
   reconcile globally across bundles, RFC 9853 RRC extension and registry
   ownership is confined to the v0.111.1 DTLS boundary, and SSL 2, WTLS, PCT,
   SNP, and SSL 1 requirements remain mechanically source-blocked.
+- Two further Medium retest findings are remediated: RFC 9853 ContentType 27
+  is confined to a dedicated DTLS-only admission boundary, and RFC 6066
+  sections are split among exact SNI, status, alert, exclusion, and
+  cross-bundle delegation decisions instead of being attributed wholesale to
+  OCSP.
 
 ## [0.3.4] - 2026-07-30
 

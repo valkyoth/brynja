@@ -11,7 +11,7 @@ import requirements_lib as lib
 import standards_lib as standards
 
 
-DISPOSITIONS = {"caller-owned", "excluded", "not-applicable"}
+DISPOSITIONS = {"caller-owned", "delegated", "excluded", "not-applicable"}
 NORMATIVE = re.compile(r"\b(?:MUST NOT|SHOULD NOT|MUST|SHOULD|MAY)\b")
 
 
@@ -72,6 +72,7 @@ def validate_global_policies(policies: list[dict]) -> None:
     """Reject contradictory section decisions across reviewed bundles."""
     assignments: dict[tuple[str, str], set[str]] = {}
     exclusions: dict[tuple[str, str], str] = {}
+    delegations: set[tuple[str, str]] = set()
     for policy in policies:
         for binding in policy.get("binding", []):
             for section in binding.get("sections", []):
@@ -83,12 +84,51 @@ def validate_global_policies(policies: list[dict]) -> None:
                 )
         for exclusion in policy.get("exclusion", []):
             key = (exclusion.get("source_id"), exclusion.get("section"))
+            disposition = exclusion.get("disposition")
+            if disposition == "delegated":
+                delegations.add(key)
+                continue
             if key in assignments:
                 lib.fail(f"section is both mapped and excluded: {key}")
-            disposition = exclusion.get("disposition")
             previous = exclusions.setdefault(key, disposition)
             if previous != disposition:
                 lib.fail(f"section has conflicting exclusions: {key}")
+    orphaned = delegations - set(assignments) - set(exclusions)
+    if orphaned:
+        lib.fail(f"delegated sections lack a mapped owner: {sorted(orphaned)}")
+    rfc6066 = {
+        key[1]: value
+        for key, value in assignments.items()
+        if key[0] == "rfc:6066"
+    }
+    rfc6066_exclusions = {
+        key[1]: value
+        for key, value in exclusions.items()
+        if key[0] == "rfc:6066"
+    }
+    if rfc6066 or rfc6066_exclusions:
+        expected_assignments = {
+            "1.1": {"BRY-REQ-TLS13-0064"},
+            "3": {"BRY-REQ-TLS13-0066", "BRY-REQ-TLS13-0069"},
+            "8": {"BRY-REQ-OCSP-0006", "BRY-REQ-TLS13-0071"},
+            "9": {"BRY-REQ-TLS-0005"},
+            "11.1": {"BRY-REQ-TLS13-0069"},
+            "11.6": {"BRY-REQ-OCSP-0006", "BRY-REQ-TLS13-0071"},
+        }
+        expected_exclusions = {
+            "1.2": "not-applicable",
+            "4": "excluded",
+            "5": "excluded",
+            "6": "excluded",
+            "7": "excluded",
+            "10.1": "excluded",
+            "11.3": "excluded",
+        }
+        if (
+            rfc6066 != expected_assignments
+            or rfc6066_exclusions != expected_exclusions
+        ):
+            lib.fail("RFC 6066 semantic section assignments differ")
 
 
 def apply(

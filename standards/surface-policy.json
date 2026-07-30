@@ -1163,6 +1163,23 @@
   "entry_overrides": [
     {
       "decision": {
+        "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcContentType",
+        "disposition": "future-work",
+        "domain": "dtls",
+        "owner": "0.111.1",
+        "rationale": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
+        "sources": ["iana:tls-parameters", "rfc:9853"],
+        "test_target": "tests/requirements/dtls_routability.rs#reject_rrc_content_type_outside_dtls"
+      },
+      "selector": {
+        "collection": "tls-parameters",
+        "equals": "return_routability_check",
+        "field": "description",
+        "registry": "tls-parameters-5"
+      }
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
         "disposition": "future-work",
         "domain": "dtls",
@@ -1174,6 +1191,74 @@
       "selector": {
         "collection": "tls-extensiontype-values",
         "equals": "rrc",
+        "field": "name",
+        "registry": "tls-extensiontype-values-1"
+      }
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+        "disposition": "intentionally-rejected",
+        "domain": "tls",
+        "owner": "0.148.0",
+        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
+        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+      },
+      "selector": {
+        "collection": "tls-extensiontype-values",
+        "equals": "max_fragment_length",
+        "field": "name",
+        "registry": "tls-extensiontype-values-1"
+      }
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+        "disposition": "intentionally-rejected",
+        "domain": "tls",
+        "owner": "0.148.0",
+        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
+        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+      },
+      "selector": {
+        "collection": "tls-extensiontype-values",
+        "equals": "client_certificate_url",
+        "field": "name",
+        "registry": "tls-extensiontype-values-1"
+      }
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+        "disposition": "intentionally-rejected",
+        "domain": "tls",
+        "owner": "0.148.0",
+        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
+        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+      },
+      "selector": {
+        "collection": "tls-extensiontype-values",
+        "equals": "trusted_ca_keys",
+        "field": "name",
+        "registry": "tls-extensiontype-values-1"
+      }
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+        "disposition": "intentionally-rejected",
+        "domain": "tls",
+        "owner": "0.148.0",
+        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
+        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+      },
+      "selector": {
+        "collection": "tls-extensiontype-values",
+        "equals": "truncated_hmac",
         "field": "name",
         "registry": "tls-extensiontype-values-1"
       }

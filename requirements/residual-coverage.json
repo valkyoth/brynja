@@ -128,6 +128,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
       ],
@@ -154,7 +155,8 @@
       "requirement_ids": [
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
     },
@@ -2533,10 +2535,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "2696bcc0ec2371cfcac8013d6d53ca183d20b112ea0937ebaaa0251a5beb311b",
-  "requirement_count": 47,
+  "policy_sha256": "064588975c20b5d10ca4bb74eb1a678aadcd9d6d3e5a15d2b906d18acfc946f1",
+  "requirement_count": 49,
   "schema": 1,
-  "surface_count": 741,
+  "surface_count": 742,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -7004,11 +7006,11 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {
       "coverage": "requirement",
@@ -7132,11 +7134,11 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {
       "coverage": "requirement",
@@ -7572,19 +7574,19 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {
       "coverage": "requirement",
@@ -8153,6 +8155,14 @@
       "id": "iana.tls-parameters.tls-parameters-2.unassigned.4",
       "owner": "H0.8.0",
       "requirement_id": "BRY-REQ-LEGACY-0800"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "iana.tls-parameters.tls-parameters-5.return-routability-check.1",
+      "owner": "0.111.1",
+      "requirement_id": "BRY-REQ-RRCTYPE-0111"
     },
     {
       "coverage": "requirement",

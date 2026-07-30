@@ -10,7 +10,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import requirements_bundle as bundle  # noqa: E402
+import requirements_domain as domain  # noqa: E402
 import requirements_lib as lib  # noqa: E402
+import requirements_residual as residual  # noqa: E402
 import requirements_sections as sections  # noqa: E402
 import requirements_test_support as support  # noqa: E402
 import requirements_transport as transport  # noqa: E402
@@ -231,6 +233,53 @@ def test_global_exclusion_dispositions_must_agree() -> None:
         "section has conflicting exclusions",
         sections.validate_global_policies,
         [first, second],
+    )
+
+
+def test_global_delegation_requires_a_mapped_owner() -> None:
+    delegated = {
+        "binding": [],
+        "exclusion": [
+            {
+                "disposition": "delegated",
+                "section": "2",
+                "source_id": "rfc:8422",
+            }
+        ],
+    }
+    assert_fails(
+        "delegated sections lack a mapped owner",
+        sections.validate_global_policies,
+        [delegated],
+    )
+    owner = {
+        "binding": [
+            {
+                "requirement_id": "BRY-REQ-TLS12-0088",
+                "sections": ["2"],
+                "source_id": "rfc:8422",
+            }
+        ],
+        "exclusion": [],
+    }
+    sections.validate_global_policies([delegated, owner])
+
+
+def test_rfc6066_semantic_misbinding_fails() -> None:
+    policies = [
+        sections.read_policy(domain.CONFIG.section_policy),
+        sections.read_policy(transport.CONFIG.section_policy),
+        sections.read_policy(residual.SECTION_POLICY),
+    ]
+    sections.validate_global_policies(policies)
+    broken = copy.deepcopy(policies)
+    binding(
+        broken[0], "rfc:6066", "BRY-REQ-OCSP-0006"
+    )["sections"].append("3")
+    assert_fails(
+        "RFC 6066 semantic section assignments differ",
+        sections.validate_global_policies,
+        broken,
     )
 
 

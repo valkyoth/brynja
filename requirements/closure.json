@@ -319,7 +319,7 @@
       "requirement_ids": [
         "BRY-REQ-STD-0004"
       ],
-      "scope": "Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.",
+      "scope": "Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, reject obsolete RFC 6066 facilities, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.",
       "source_ids": [
         "iana:dns-parameters",
         "iana:hpke",
@@ -2809,7 +2809,8 @@
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-DTLS-1111",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "scope": "Implement RFC 9853 negotiation and authenticated basic and enhanced return-routability checks for CID-enabled DTLS 1.2 and DTLS 1.3, including path challenge, response and drop messages, unpredictable cookies, timers, pacing, anti-amplification, PMTU probes, rebinding and voluntary migration, buffered-data suspension, nested-rebinding behavior, unknown-message handling, and exact old/new path binding.",
       "source_ids": [],
@@ -3505,9 +3506,10 @@
       "requirement_ids": [
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-IANA-0003"
+        "BRY-REQ-IANA-0003",
+        "BRY-REQ-RFC6066X-0148"
       ],
-      "scope": "Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.",
+      "scope": "Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration and reject them before parsing or effects; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.",
       "source_ids": [],
       "title": "Generated Optional-Feature Composition Gate",
       "version": "0.148.0"
@@ -4062,7 +4064,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.certificate-authorities.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-authz.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-type.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
@@ -4076,7 +4077,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-id-hash.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-session-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.key-share.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.oid-filters.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.padding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.password-salt.1",
@@ -4129,8 +4129,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
@@ -5918,6 +5916,20 @@
     },
     {
       "decision_ids": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
+      ],
+      "id": "BRY-REQ-RFC6066X-0148",
+      "lifecycle": "rejected",
+      "owner": "0.148.0",
+      "source_ids": [
+        "iana:tls-extensiontype-values"
+      ]
+    },
+    {
+      "decision_ids": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
         "iana.tls-parameters.tls-rrc-message-types",
         "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
@@ -5931,6 +5943,17 @@
       "owner": "0.111.1",
       "source_ids": [
         "iana:tls-extensiontype-values",
+        "iana:tls-parameters"
+      ]
+    },
+    {
+      "decision_ids": [
+        "iana.tls-parameters.tls-parameters-5.return-routability-check.1"
+      ],
+      "id": "BRY-REQ-RRCTYPE-0111",
+      "lifecycle": "planned",
+      "owner": "0.111.1",
+      "source_ids": [
         "iana:tls-parameters"
       ]
     },
@@ -6020,6 +6043,7 @@
       "lifecycle": "planned",
       "owner": "0.5.0",
       "source_ids": [
+        "rfc:6066",
         "rfc:9846"
       ]
     },
@@ -6655,6 +6679,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS-0002",
         "BRY-REQ-TLS12EXT-0058"
@@ -6673,6 +6698,7 @@
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-LEGACY-0800",
         "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0001"
       ],
       "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
@@ -7586,6 +7612,7 @@
       ],
       "requirement_ids": [
         "BRY-REQ-OCSP-0006",
+        "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS13-0064",
         "BRY-REQ-TLS13-0066",
         "BRY-REQ-TLS13-0069",
@@ -26213,7 +26240,7 @@
     {
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
       "requirement_ids": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ]
     },
     {
@@ -26316,7 +26343,7 @@
     {
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
       "requirement_ids": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ]
     },
     {
@@ -26658,13 +26685,13 @@
     {
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
       "requirement_ids": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ]
     },
     {
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
       "requirement_ids": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ]
     },
     {
@@ -30356,7 +30383,7 @@
     {
       "id": "iana.tls-parameters.tls-parameters-5.return-routability-check.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0019"
+        "BRY-REQ-RRCTYPE-0111"
       ]
     },
     {

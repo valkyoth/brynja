@@ -190,7 +190,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.certificate-authorities.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-authz.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-type.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
@@ -204,7 +203,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-id-hash.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-session-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.key-share.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.oid-filters.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.padding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.password-salt.1",
@@ -257,8 +255,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
@@ -4120,6 +4116,40 @@
         "planned:negative:tests/surface/quic_boundary.rs#reject_invalid_and_exhausted"
       ]
     },
+    "BRY-REQ-RFC6066X-0148": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
+      ],
+      "domains": [
+        "tls"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "owners": [
+        "0.148.0"
+      ],
+      "sources": [
+        "iana:tls-extensiontype-values"
+      ],
+      "targets": [
+        "boundary:boundary:tls.0.148.0"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/rfc6066_exclusions.rs#legacy_extensions",
+        "planned:negative:tests/requirements/rfc6066_exclusions.rs#reject_invalid_and_exhausted"
+      ]
+    },
     "BRY-REQ-RRCREG-0148": {
       "authority_roles": [
         "current"
@@ -4155,6 +4185,37 @@
       ],
       "tests": [
         "planned:positive:tests/requirements/dtls_routability.rs#registry",
+        "planned:negative:tests/requirements/dtls_routability.rs#reject_invalid_and_exhausted"
+      ]
+    },
+    "BRY-REQ-RRCTYPE-0111": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.tls-parameters.tls-parameters-5.return-routability-check.1"
+      ],
+      "domains": [
+        "dtls"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "owners": [
+        "0.111.1"
+      ],
+      "sources": [
+        "iana:tls-parameters"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-dtls-core/src/routability.rs#RrcContentType"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/dtls_routability.rs#reject_rrc_content_type_outside_dtls",
         "planned:negative:tests/requirements/dtls_routability.rs#reject_invalid_and_exhausted"
       ]
     },
@@ -4338,6 +4399,7 @@
         "0.5.0"
       ],
       "sources": [
+        "rfc:6066",
         "rfc:9846"
       ],
       "targets": [
@@ -5926,7 +5988,9 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0010",
         "BRY-REQ-TLS-0019",
@@ -7779,7 +7843,7 @@
         "BRY-REQ-COMPOSE-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.compress-certificate.1": [
         "BRY-REQ-CERTEXT-0146"
@@ -7830,7 +7894,7 @@
         "BRY-REQ-COMPOSE-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.oid-filters.1": [
         "BRY-REQ-COMPOSE-0148"
@@ -7998,10 +8062,10 @@
         "BRY-REQ-COMPOSE-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1": [
-        "BRY-REQ-COMPOSE-0148"
+        "BRY-REQ-RFC6066X-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1": [
         "BRY-REQ-COMPOSE-0148"
@@ -8225,6 +8289,9 @@
       ],
       "iana.tls-parameters.tls-parameters-5": [
         "BRY-REQ-TLS-0019"
+      ],
+      "iana.tls-parameters.tls-parameters-5.return-routability-check.1": [
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "iana.tls-parameters.tls-parameters-6": [
         "BRY-REQ-TLS-0005"
@@ -8585,7 +8652,8 @@
         "BRY-REQ-DTLS-0115",
         "BRY-REQ-DTLS-0116",
         "BRY-REQ-DTLS-1111",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "ech": [
         "BRY-REQ-ECH-0140",
@@ -8678,6 +8746,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0010",
         "BRY-REQ-TLS-0018",
@@ -8925,7 +8994,9 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TESTING-0010",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0010",
@@ -9091,7 +9162,9 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TESTING-0010",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0010",
@@ -9190,7 +9263,9 @@
         "BRY-REQ-QUIC-0100",
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0018",
         "BRY-REQ-TLS-0019",
@@ -9337,7 +9412,9 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TESTING-0010",
         "BRY-REQ-TLS-0010",
         "BRY-REQ-TLS-0068",
@@ -9426,7 +9503,8 @@
       ],
       "0.111.1": [
         "BRY-REQ-DTLS-1111",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "0.112.0": [
         "BRY-REQ-DTLS-0112"
@@ -9519,7 +9597,8 @@
       "0.148.0": [
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-IANA-0003"
+        "BRY-REQ-IANA-0003",
+        "BRY-REQ-RFC6066X-0148"
       ],
       "0.19.0": [
         "BRY-REQ-TLS-0002",
@@ -9845,13 +9924,15 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
       ],
       "iana:tls-parameters": [
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "iana:trans": [
         "BRY-REQ-CTREG-0059"
@@ -10021,6 +10102,7 @@
       ],
       "rfc:6066": [
         "BRY-REQ-OCSP-0006",
+        "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS13-0064",
         "BRY-REQ-TLS13-0066",
         "BRY-REQ-TLS13-0069",
@@ -10431,7 +10513,8 @@
         "BRY-REQ-TLS-0018"
       ],
       "boundary:boundary:tls.0.148.0": [
-        "BRY-REQ-COMPOSEX-0148"
+        "BRY-REQ-COMPOSEX-0148",
+        "BRY-REQ-RFC6066X-0148"
       ],
       "boundary:boundary:tls12.0.58.0": [
         "BRY-REQ-TLS12EXT-0058",
@@ -10535,6 +10618,9 @@
       ],
       "planned-symbol:crates/brynja-dtls-core/src/routability.rs#RoutabilityCheck": [
         "BRY-REQ-DTLS-1111"
+      ],
+      "planned-symbol:crates/brynja-dtls-core/src/routability.rs#RrcContentType": [
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "planned-symbol:crates/brynja-dtls-core/src/routability.rs#RrcMessageType": [
         "BRY-REQ-RRCREG-0148"
@@ -10941,7 +11027,8 @@
       ],
       "planned:negative:tests/requirements/dtls_routability.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-1111",
-        "BRY-REQ-RRCREG-0148"
+        "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111"
       ],
       "planned:negative:tests/requirements/dtls_router.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0115"
@@ -11005,6 +11092,9 @@
       ],
       "planned:negative:tests/requirements/quic_resumption.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-QUIC-0099"
+      ],
+      "planned:negative:tests/requirements/rfc6066_exclusions.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-RFC6066X-0148"
       ],
       "planned:negative:tests/requirements/service_identity.rs#wildcards_unicode_and_cross_type_confusion": [
         "BRY-REQ-PKIX-0002"
@@ -11348,6 +11438,9 @@
       "planned:positive:tests/requirements/dtls_routability.rs#registry": [
         "BRY-REQ-RRCREG-0148"
       ],
+      "planned:positive:tests/requirements/dtls_routability.rs#reject_rrc_content_type_outside_dtls": [
+        "BRY-REQ-RRCTYPE-0111"
+      ],
       "planned:positive:tests/requirements/dtls_router.rs#single_engine": [
         "BRY-REQ-DTLS-0115"
       ],
@@ -11410,6 +11503,9 @@
       ],
       "planned:positive:tests/requirements/quic_resumption.rs#completion_confirmation": [
         "BRY-REQ-QUIC-0099"
+      ],
+      "planned:positive:tests/requirements/rfc6066_exclusions.rs#legacy_extensions": [
+        "BRY-REQ-RFC6066X-0148"
       ],
       "planned:positive:tests/requirements/service_identity.rs#typed_reference_identifiers": [
         "BRY-REQ-PKIX-0002"

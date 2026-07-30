@@ -7,7 +7,10 @@ id = "BRY-REQ-TLS-0005"
 owner = "0.5.0"
 lifecycle = "planned"
 decision_ids = ["iana.tls-parameters.tls-parameters-6"]
-sources = [{ id = "rfc:9846", authority_role = "current" }]
+sources = [
+  { id = "rfc:6066", authority_role = "current" },
+  { id = "rfc:9846", authority_role = "current" },
+]
 statement = "TLS alerts, close outcomes, local failures, provider failures, and exhaustion remain typed, non-secret, and protocol-version aware."
 invariants = ["failure-atomicity", "resource-bound", "validation", "version-separation"]
 target = "crates/brynja-core/src/error.rs#TlsFailure"

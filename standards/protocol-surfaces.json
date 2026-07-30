@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "14d63a17cb8fbe0ca41f7f47f0e766788118a4f66e248ebb295aa1768bf74f3a",
+  "policy_sha256": "793ce259112bb647da59bef6fdf83f84685c7d50e71dd748e9a108513418d90b",
   "schema": 2,
   "source_ledger_sha256": "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7",
   "surfaces": [
@@ -89734,18 +89734,17 @@
       "test_target": "tests/surface/extensions.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/extensions.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values",
-        "rfc:6066",
-        "rfc:9846"
+        "rfc:6066"
       ],
       "owner": "0.148.0",
-      "rationale": "Registered extension values require an explicit context and composition decision before version-one completion.",
+      "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
       "record": {
         "attributes": {},
         "fields": {
@@ -89766,7 +89765,7 @@
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1"
       },
-      "test_target": "tests/surface/extensions.rs#registry"
+      "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
     },
     {
       "code_target": "crates/brynja-tls/src/certificate_compression.rs",
@@ -90375,19 +90374,18 @@
       "test_target": "tests/surface/extensions.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/extensions.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values",
         "rfc:6066",
-        "rfc:8449",
-        "rfc:9846"
+        "rfc:8449"
       ],
       "owner": "0.148.0",
-      "rationale": "Registered extension values require an explicit context and composition decision before version-one completion.",
+      "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
       "record": {
         "attributes": {
           "updated": "2018-07-02"
@@ -90414,7 +90412,7 @@
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1"
       },
-      "test_target": "tests/surface/extensions.rs#registry"
+      "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
     },
     {
       "code_target": "crates/brynja-tls/src/extensions.rs",
@@ -92492,19 +92490,18 @@
       "test_target": "tests/surface/extensions.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/extensions.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values",
         "rfc:6066",
-        "rfc:9846",
         "rfc:9847"
       ],
       "owner": "0.148.0",
-      "rationale": "Registered extension values require an explicit context and composition decision before version-one completion.",
+      "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -92539,21 +92536,20 @@
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1"
       },
-      "test_target": "tests/surface/extensions.rs#registry"
+      "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
     },
     {
-      "code_target": "crates/brynja-tls/src/extensions.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values",
-        "rfc:6066",
-        "rfc:9846"
+        "rfc:6066"
       ],
       "owner": "0.148.0",
-      "rationale": "Registered extension values require an explicit context and composition decision before version-one completion.",
+      "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
       "record": {
         "attributes": {},
         "fields": {
@@ -92574,7 +92570,7 @@
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1"
       },
-      "test_target": "tests/surface/extensions.rs#registry"
+      "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
     },
     {
       "code_target": "crates/brynja-tls/src/extensions.rs",
@@ -114370,18 +114366,17 @@
       "test_target": "tests/surface/content_types.rs#registry"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcContentType",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-parameters-5.return-routability-check.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-parameters",
-        "rfc:9846",
         "rfc:9853"
       ],
-      "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "owner": "0.111.1",
+      "rationale": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
       "record": {
         "attributes": {
           "date": "2023-11-28",
@@ -114403,7 +114398,7 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "tests/requirements/dtls_routability.rs#reject_rrc_content_type_outside_dtls"
     },
     {
       "code_target": "crates/brynja-core/src/record.rs",

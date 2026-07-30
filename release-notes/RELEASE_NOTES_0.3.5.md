@@ -9,10 +9,10 @@ not be used to secure network traffic.
 
 ## Highlights
 
-- Adds 47 stable residual requirements, bringing the matrix to 163 records.
+- Adds 49 stable residual requirements, bringing the matrix to 165 records.
 - Covers 33 residual authorities and reviews 182 normative RFC sections
   through 165 exact mappings and 17 explicit exclusions.
-- Assigns all 741 surfaces left by the foundation, domain, and transport
+- Assigns all 742 surfaces left by the foundation, domain, and transport
   bundles, closing all 4,422 protocol surfaces.
 - Generates complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
@@ -66,7 +66,7 @@ previously copied one representative surface into a requirement while marking
 every group member covered, and RFC citations inherited every normative
 section without a reviewed semantic assignment.
 
-Every one of the 741 residual surfaces is now explicitly listed and linked
+Every one of the 742 residual surfaces is now explicitly listed and linked
 back from its requirement. Groups cannot cross code or test boundaries, and
 every member is independently checked for source, owner, disposition, and
 identity. Nine mixed groups were split into separate requirements.
@@ -84,6 +84,15 @@ only to `BRY-REQ-DTLS-1111`; its terminology and designated-expert sections
 are explicitly excluded or caller-owned. The RRC extension and message
 registry now share the `brynja-dtls-core` v0.111.1 boundary.
 
+A second remediation retest found that ContentType 27 still inherited the
+generic stream-TLS record owner and that RFC 6066 was semantically overbound
+to the OCSP target. ContentType 27 now has a dedicated DTLS-only requirement
+and an outside-DTLS rejection boundary. RFC 6066 sections now map only to the
+handshake codec, SNI, status transport, certificate-status, or alert owners
+that implement them; obsolete maximum-fragment-length, client-certificate-URL,
+trusted-CA, and truncated-HMAC facilities are explicit rejected surfaces.
+Cross-bundle delegation fails unless another bundle records the exact owner.
+
 RFC 7568 section 3 now maps only to the SSLv3 prohibition requirement. SSL 2,
 WTLS, PCT, SNP, and SSL 1 carry explicit source-blocker identities, blocked
 lifecycles, and exact authority-claim blocker targets until their actual
@@ -93,13 +102,15 @@ specifications pass provenance and rights review.
 
 The release candidate verifies:
 
-- 163 deterministic stable requirements;
+- 165 deterministic stable requirements;
 - all 126 locked source authorities;
 - all 205 roadmap rows;
 - all 4,422 protocol surfaces;
 - 182 residual normative RFC sections with exact anchors and hashes;
-- 106 requirement positive and broken-fixture tests, including 22 dedicated
+- 108 requirement positive and broken-fixture tests, including 22 dedicated
   residual-closure fixtures;
+- three dedicated surface-security fixtures covering DTLS RRC confinement and
+  RFC 6066 rejected-facility boundaries;
 - deterministic standards, surface, matrix, coverage, closure, package, and
   SBOM artifacts;
 - no external Cargo packages and `no_std` production packages;

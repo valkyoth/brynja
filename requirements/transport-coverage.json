@@ -1125,15 +1125,13 @@
             "SHOULD": 1
           },
           "requirement_ids": [
-            "BRY-REQ-TLS13-0064",
-            "BRY-REQ-TLS13-0066",
-            "BRY-REQ-TLS13-0069",
-            "BRY-REQ-TLS13-0071"
+            "BRY-REQ-TLS13-0064"
           ],
           "section": "1.1",
           "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
         },
         {
+          "disposition": "not-applicable",
           "occurrences": {
             "MAY": 1,
             "MUST": 1,
@@ -1141,9 +1139,7 @@
             "SHOULD": 1,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
-          ],
+          "rationale": "RFC 6066 section 1.2 defines BCP 14 terminology rather than an independently implementable protocol behavior; it remains reviewed context and is not assigned to a requirement.",
           "section": "1.2",
           "section_sha256": "fccabcb4d77b42a0ca89ba63c9aa4b421f794e5290b5dedca3684886be55c6f5"
         },
@@ -1156,54 +1152,51 @@
             "SHOULD NOT": 1
           },
           "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
+            "BRY-REQ-TLS13-0066",
+            "BRY-REQ-TLS13-0069"
           ],
           "section": "3",
           "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
         },
         {
+          "disposition": "excluded",
           "occurrences": {
             "MAY": 2,
             "MUST": 4,
             "SHOULD NOT": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
-          ],
+          "rationale": "The deprecated max_fragment_length facility is excluded from the modern profile in favor of the separately owned Record Size Limit policy and must be rejected before negotiation.",
           "section": "4",
           "section_sha256": "7dfa2bfffa7441265a215ed8931f1085b5eb01f54d2c4201792a15183d238e26"
         },
         {
+          "disposition": "excluded",
           "occurrences": {
             "MAY": 7,
             "MUST": 6,
             "MUST NOT": 2,
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
-          ],
+          "rationale": "Client certificate URL negotiation and network fetching are excluded to prevent peer-directed fetch, redirect, scheme, cache, SHA-1, and resource-control risks.",
           "section": "5",
           "section_sha256": "755300a011d8eae73c6f0b3b7fd2d47ada39f9e4ff105906493bf1f16e6561a8"
         },
         {
+          "disposition": "excluded",
           "occurrences": {
             "MAY": 2
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
-          ],
+          "rationale": "The legacy trusted_ca_keys indication is excluded from the modern profile; certificate authority selection uses the separately reviewed modern certificate-negotiation boundary.",
           "section": "6",
           "section_sha256": "08176ec5ef88982a8b467e72b2c3ec8bd6c3d155719cd5c88056212a7d6a84a5"
         },
         {
+          "disposition": "excluded",
           "occurrences": {
             "MAY": 2,
             "MUST": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
-          ],
+          "rationale": "Truncated HMAC negotiation is excluded from every modern Brynja profile and cannot alter record authentication strength, algorithm admission, or resumption state.",
           "section": "7",
           "section_sha256": "ffb0a83dd3c24b91cfb2e886bd6598d44d519489fbf7c1c0cac40cd410748933"
         },
@@ -1215,7 +1208,7 @@
             "SHOULD": 2
           },
           "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
+            "BRY-REQ-TLS13-0071"
           ],
           "section": "8",
           "section_sha256": "598870980c7ea2d138722d5fd75d26a0fafd7f9d4c7ee7ff5e19b28c1ad825b6"
@@ -1225,19 +1218,18 @@
             "MUST NOT": 1
           },
           "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
+            "BRY-REQ-TLS-0005"
           ],
           "section": "9",
           "section_sha256": "1c19e8e6c0d49922fcb2b32a1ba63ebe61d520f92a007dcca10724b5a182798c"
         },
         {
+          "disposition": "excluded",
           "occurrences": {
             "MUST": 2,
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
-          ],
+          "rationale": "The PkiPath MIME registration is used only by the excluded client-certificate-URL facility and creates no supported parsing, fetching, or media-type behavior.",
           "section": "10.1",
           "section_sha256": "b25ab20f308958c4fe08efcb37495f5415e6307593c1edc65f37c219fd5906fa"
         },
@@ -1246,18 +1238,17 @@
             "MUST": 2
           },
           "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
+            "BRY-REQ-TLS13-0069"
           ],
           "section": "11.1",
           "section_sha256": "09fb0ea1346633b5cdc2ddbb28b89c49c127b5df93f5d37293ecb29ce2eeebe9"
         },
         {
+          "disposition": "excluded",
           "occurrences": {
             "SHOULD": 1
           },
-          "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
-          ],
+          "rationale": "Client-certificate-URL security considerations belong to a facility excluded before negotiation, parsing, network effects, redirects, caching, or certificate validation.",
           "section": "11.3",
           "section_sha256": "2ae3026ad35287a685535e1fe34631fbed81817ada32c389e2b604f0f448df11"
         },
@@ -1266,13 +1257,14 @@
             "SHOULD": 1
           },
           "requirement_ids": [
-            "BRY-REQ-TLS13-0064"
+            "BRY-REQ-TLS13-0071"
           ],
           "section": "11.6",
           "section_sha256": "3f0df420c987956b1ed7e8119816cff01fd19d2e5ee99f72b80a7699a2a1e8eb"
         }
       ],
       "requirement_ids": [
+        "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS13-0064",
         "BRY-REQ-TLS13-0066",
         "BRY-REQ-TLS13-0069",
@@ -7829,8 +7821,8 @@
     }
   ],
   "deferred_authority_count": 1,
-  "excluded_normative_section_count": 4,
-  "mapped_normative_section_count": 546,
+  "excluded_normative_section_count": 11,
+  "mapped_normative_section_count": 539,
   "normative_section_count": 550,
   "owner_milestone_count": 63,
   "owner_milestones": [
@@ -7898,7 +7890,7 @@
     "0.99.0",
     "0.99.1"
   ],
-  "policy_sha256": "da884d3603a7fd689c87d4025f0f6b0fef915f380f8dd6f263ad3c5df195db4e",
+  "policy_sha256": "7258b37d4dc8610ab272bdfaa29c7897c83f9cbeef8bbe4931b049d36c5fa2ce",
   "requirement_count": 70,
   "schema": 2,
   "surface_count": 483,
@@ -9037,7 +9029,7 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
       "owner": "0.148.0",
@@ -9180,7 +9172,7 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
       "owner": "0.148.0",
@@ -9683,7 +9675,7 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
       "owner": "0.148.0",
@@ -9692,7 +9684,7 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "future-work",
+      "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
       "owner": "0.148.0",
@@ -10560,12 +10552,13 @@
       "requirement_id": "BRY-REQ-TLS-0019"
     },
     {
-      "coverage": "requirement",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
       "disposition": "future-work",
-      "domain": "tls",
+      "domain": "dtls",
       "id": "iana.tls-parameters.tls-parameters-5.return-routability-check.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0019"
+      "owner": "0.111.1",
+      "rationale": "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
     },
     {
       "coverage": "requirement",

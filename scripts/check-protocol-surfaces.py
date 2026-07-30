@@ -8,6 +8,7 @@ from pathlib import Path
 
 import standards_lib as standards
 import surface_lib as lib
+import surface_security
 
 
 def roadmap_versions() -> set[str]:
@@ -444,6 +445,8 @@ def build_register(
         lib.fail(
             "planning milestones must not classify any surface as implemented"
         )
+    if transport_surfaces:
+        surface_security.validate(surfaces)
     return {
         "policy_sha256": lib.policy_hash(
             {

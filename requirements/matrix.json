@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0633e8beb612ce3e0b6586c9f40da248ba2ee1ccb5a7b6ed099092694aed6574",
-  "domain_policy_sha256": "dadc8c947fee6cf5a5873e3fb42aaef25dfab9a741fd9d20c0b0a074a38e970a",
-  "policy_sha256": "3734d4adae14d6c2302851229fed5ddc9c6087afb1f30324ccd4ecf7b6120c53",
+  "domain_policy_sha256": "a0f11df89c283e0e586e08cdab52038574936605ae2d3068d44c1e33cfb9050e",
+  "policy_sha256": "9ce16df3c17ab109f340d004a115f02960a7dd5d20101e750d33abb1d00a126b",
   "requirements": [
     {
       "applicability": "delegate",
@@ -454,7 +454,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.certificate-authorities.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-authz.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-type.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
@@ -468,7 +467,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-id-hash.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-session-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.key-share.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.oid-filters.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.padding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.password-salt.1",
@@ -521,8 +519,6 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
@@ -562,7 +558,7 @@
       "owner": "0.148.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -12345,7 +12341,7 @@
       "owner": "0.136.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Negotiation only transports status data and never makes an unvalidated OCSP response or caller transport authoritative.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -12406,69 +12402,14 @@
           ],
           "sections": [
             {
-              "anchor": "1.1. Specific Extensions Covered The extensions described here focus on extending the functionality provided by the TLS protocol message formats. Other issues,",
-              "section": "1.1",
-              "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
-            },
-            {
-              "anchor": "1.2. Conventions Used in This Document The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMEND",
-              "section": "1.2",
-              "section_sha256": "fccabcb4d77b42a0ca89ba63c9aa4b421f794e5290b5dedca3684886be55c6f5"
-            },
-            {
-              "anchor": "10.1. pkipath MIME Type Registration MIME media type name: application MIME subtype name: pkix-pkipath Required parameters: none Optional parameters: version (d",
-              "section": "10.1",
-              "section_sha256": "b25ab20f308958c4fe08efcb37495f5415e6307593c1edc65f37c219fd5906fa"
-            },
-            {
-              "anchor": "11.1. Security Considerations for server_name If a single server hosts several domains, then clearly it is necessary for the owners of each domain to ensure tha",
-              "section": "11.1",
-              "section_sha256": "09fb0ea1346633b5cdc2ddbb28b89c49c127b5df93f5d37293ecb29ce2eeebe9"
-            },
-            {
-              "anchor": "11.3. Security Considerations for client_certificate_url Support for client_certificate_url involves the server's acting as a client in another URI-scheme-depen",
-              "section": "11.3",
-              "section_sha256": "2ae3026ad35287a685535e1fe34631fbed81817ada32c389e2b604f0f448df11"
-            },
-            {
               "anchor": "11.6. Security Considerations for status_request If a client requests an OCSP response, it must take into account that an attacker's server using a compromised",
               "section": "11.6",
               "section_sha256": "3f0df420c987956b1ed7e8119816cff01fd19d2e5ee99f72b80a7699a2a1e8eb"
             },
             {
-              "anchor": "3. Server Name Indication TLS does not provide a mechanism for a client to tell a server the name of the server it is contacting. It may be desirable for client",
-              "section": "3",
-              "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
-            },
-            {
-              "anchor": "4. Maximum Fragment Length Negotiation Without this extension, TLS specifies a fixed maximum plaintext fragment length of 2^14 bytes. It may be desirable for co",
-              "section": "4",
-              "section_sha256": "7dfa2bfffa7441265a215ed8931f1085b5eb01f54d2c4201792a15183d238e26"
-            },
-            {
-              "anchor": "5. Client Certificate URLs Without this extension, TLS specifies that when client authentication is performed, client certificates are sent by clients to server",
-              "section": "5",
-              "section_sha256": "755300a011d8eae73c6f0b3b7fd2d47ada39f9e4ff105906493bf1f16e6561a8"
-            },
-            {
-              "anchor": "6. Trusted CA Indication Constrained clients that, due to memory limitations, possess only a small number of CA root keys may wish to indicate to servers which",
-              "section": "6",
-              "section_sha256": "08176ec5ef88982a8b467e72b2c3ec8bd6c3d155719cd5c88056212a7d6a84a5"
-            },
-            {
-              "anchor": "7. Truncated HMAC Currently defined TLS cipher suites use the MAC construction HMAC [RFC2104] to authenticate record-layer communications. In TLS, the entire ou",
-              "section": "7",
-              "section_sha256": "ffb0a83dd3c24b91cfb2e886bd6598d44d519489fbf7c1c0cac40cd410748933"
-            },
-            {
               "anchor": "8. Certificate Status Request Constrained clients may wish to use a certificate-status protocol such as OCSP [RFC2560] to check the validity of server certifica",
               "section": "8",
               "section_sha256": "598870980c7ea2d138722d5fd75d26a0fafd7f9d4c7ee7ff5e19b28c1ad825b6"
-            },
-            {
-              "anchor": "9. Error Alerts Four new error alerts are defined for use with the TLS extensions defined in this document. To avoid \"breaking\" existing clients and servers, th",
-              "section": "9",
-              "section_sha256": "1c19e8e6c0d49922fcb2b32a1ba63ebe61d520f92a007dcca10724b5a182798c"
             }
           ],
           "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
@@ -19397,6 +19338,77 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
+      "applicability": "reject",
+      "decision": "exclude",
+      "decision_ids": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
+      ],
+      "deviation_rationale": null,
+      "domain": "tls",
+      "evidence": [],
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.0.",
+      "id": "BRY-REQ-RFC6066X-0148",
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "lifecycle": "rejected",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.148.0",
+      "profile": "optional-legacy-residual",
+      "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "collection": "tls-extensiontype-values",
+          "domains": [
+            "tls12",
+            "tls13",
+            "dtls",
+            "optional"
+          ],
+          "id": "iana:tls-extensiontype-values",
+          "kind": "iana",
+          "milestones": [
+            "0.3.0",
+            "0.3.1",
+            "0.3.4",
+            "0.3.5"
+          ],
+          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+        }
+      ],
+      "statement": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "boundary",
+          "target": "boundary:tls.0.148.0"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "tests/requirements/rfc6066_exclusions.rs#reject_invalid_and_exhausted"
+        }
+      ],
+      "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
+    },
+    {
       "applicability": "apply",
       "decision": "enforce",
       "decision_ids": [
@@ -19481,6 +19493,75 @@
           "polarity": "positive",
           "status": "planned",
           "target": "tests/requirements/dtls_routability.rs#registry"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "tests/requirements/dtls_routability.rs#reject_invalid_and_exhausted"
+        }
+      ],
+      "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "iana.tls-parameters.tls-parameters-5.return-routability-check.1"
+      ],
+      "deviation_rationale": null,
+      "domain": "dtls",
+      "evidence": [],
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.111.1.",
+      "id": "BRY-REQ-RRCTYPE-0111",
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "lifecycle": "planned",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.111.1",
+      "profile": "optional-legacy-residual",
+      "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "collection": "tls-parameters",
+          "domains": [
+            "standards",
+            "tls12",
+            "tls13",
+            "dtls",
+            "hybrid"
+          ],
+          "id": "iana:tls-parameters",
+          "kind": "iana",
+          "milestones": [
+            "0.3.0",
+            "0.3.1",
+            "0.3.4",
+            "0.120.0"
+          ],
+          "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+        }
+      ],
+      "statement": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "crates/brynja-dtls-core/src/routability.rs#RrcContentType"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "tests/requirements/dtls_routability.rs#reject_rrc_content_type_outside_dtls"
         },
         {
           "polarity": "negative",
@@ -20041,9 +20122,75 @@
       "owner": "0.5.0",
       "profile": "tls-dtls-quic",
       "residual": "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "ocsp",
+            "tls13"
+          ],
+          "errata": [
+            {
+              "disposition": "apply",
+              "id": 3283,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 4817,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 5658,
+              "status": "Reported"
+            }
+          ],
+          "id": "rfc:6066",
+          "kind": "rfc",
+          "milestones": [
+            "0.10.0",
+            "0.58.0",
+            "0.58.1",
+            "0.58.2",
+            "0.58.3",
+            "0.61.0",
+            "0.62.0",
+            "0.63.0",
+            "0.64.0",
+            "0.65.0",
+            "0.66.0",
+            "0.67.0",
+            "0.68.0",
+            "0.69.0",
+            "0.70.0",
+            "0.71.0",
+            "0.72.0",
+            "0.73.0",
+            "0.74.0",
+            "0.75.0",
+            "0.76.0",
+            "0.76.1",
+            "0.76.2",
+            "0.77.0",
+            "0.78.0",
+            "0.79.0",
+            "0.80.0",
+            "0.81.0",
+            "0.82.0"
+          ],
+          "sections": [
+            {
+              "anchor": "9. Error Alerts Four new error alerts are defined for use with the TLS extensions defined in this document. To avoid \"breaking\" existing clients and servers, th",
+              "section": "9",
+              "section_sha256": "1c19e8e6c0d49922fcb2b32a1ba63ebe61d520f92a007dcca10724b5a182798c"
+            }
+          ],
+          "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
+          "status": "PROPOSED STANDARD"
+        },
         {
           "authority_role": "current",
           "domains": [
@@ -25264,7 +25411,7 @@
       "owner": "0.64.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -25328,66 +25475,6 @@
               "anchor": "1.1. Specific Extensions Covered The extensions described here focus on extending the functionality provided by the TLS protocol message formats. Other issues,",
               "section": "1.1",
               "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
-            },
-            {
-              "anchor": "1.2. Conventions Used in This Document The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMEND",
-              "section": "1.2",
-              "section_sha256": "fccabcb4d77b42a0ca89ba63c9aa4b421f794e5290b5dedca3684886be55c6f5"
-            },
-            {
-              "anchor": "10.1. pkipath MIME Type Registration MIME media type name: application MIME subtype name: pkix-pkipath Required parameters: none Optional parameters: version (d",
-              "section": "10.1",
-              "section_sha256": "b25ab20f308958c4fe08efcb37495f5415e6307593c1edc65f37c219fd5906fa"
-            },
-            {
-              "anchor": "11.1. Security Considerations for server_name If a single server hosts several domains, then clearly it is necessary for the owners of each domain to ensure tha",
-              "section": "11.1",
-              "section_sha256": "09fb0ea1346633b5cdc2ddbb28b89c49c127b5df93f5d37293ecb29ce2eeebe9"
-            },
-            {
-              "anchor": "11.3. Security Considerations for client_certificate_url Support for client_certificate_url involves the server's acting as a client in another URI-scheme-depen",
-              "section": "11.3",
-              "section_sha256": "2ae3026ad35287a685535e1fe34631fbed81817ada32c389e2b604f0f448df11"
-            },
-            {
-              "anchor": "11.6. Security Considerations for status_request If a client requests an OCSP response, it must take into account that an attacker's server using a compromised",
-              "section": "11.6",
-              "section_sha256": "3f0df420c987956b1ed7e8119816cff01fd19d2e5ee99f72b80a7699a2a1e8eb"
-            },
-            {
-              "anchor": "3. Server Name Indication TLS does not provide a mechanism for a client to tell a server the name of the server it is contacting. It may be desirable for client",
-              "section": "3",
-              "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
-            },
-            {
-              "anchor": "4. Maximum Fragment Length Negotiation Without this extension, TLS specifies a fixed maximum plaintext fragment length of 2^14 bytes. It may be desirable for co",
-              "section": "4",
-              "section_sha256": "7dfa2bfffa7441265a215ed8931f1085b5eb01f54d2c4201792a15183d238e26"
-            },
-            {
-              "anchor": "5. Client Certificate URLs Without this extension, TLS specifies that when client authentication is performed, client certificates are sent by clients to server",
-              "section": "5",
-              "section_sha256": "755300a011d8eae73c6f0b3b7fd2d47ada39f9e4ff105906493bf1f16e6561a8"
-            },
-            {
-              "anchor": "6. Trusted CA Indication Constrained clients that, due to memory limitations, possess only a small number of CA root keys may wish to indicate to servers which",
-              "section": "6",
-              "section_sha256": "08176ec5ef88982a8b467e72b2c3ec8bd6c3d155719cd5c88056212a7d6a84a5"
-            },
-            {
-              "anchor": "7. Truncated HMAC Currently defined TLS cipher suites use the MAC construction HMAC [RFC2104] to authenticate record-layer communications. In TLS, the entire ou",
-              "section": "7",
-              "section_sha256": "ffb0a83dd3c24b91cfb2e886bd6598d44d519489fbf7c1c0cac40cd410748933"
-            },
-            {
-              "anchor": "8. Certificate Status Request Constrained clients may wish to use a certificate-status protocol such as OCSP [RFC2560] to check the validity of server certifica",
-              "section": "8",
-              "section_sha256": "598870980c7ea2d138722d5fd75d26a0fafd7f9d4c7ee7ff5e19b28c1ad825b6"
-            },
-            {
-              "anchor": "9. Error Alerts Four new error alerts are defined for use with the TLS extensions defined in this document. To avoid \"breaking\" existing clients and servers, th",
-              "section": "9",
-              "section_sha256": "1c19e8e6c0d49922fcb2b32a1ba63ebe61d520f92a007dcca10724b5a182798c"
             }
           ],
           "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
@@ -25711,7 +25798,7 @@
       "owner": "0.66.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -25772,9 +25859,9 @@
           ],
           "sections": [
             {
-              "anchor": "1.1. Specific Extensions Covered The extensions described here focus on extending the functionality provided by the TLS protocol message formats. Other issues,",
-              "section": "1.1",
-              "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
+              "anchor": "3. Server Name Indication TLS does not provide a mechanism for a client to tell a server the name of the server it is contacting. It may be desirable for client",
+              "section": "3",
+              "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
             }
           ],
           "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
@@ -26337,7 +26424,7 @@
       "owner": "0.69.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -26398,9 +26485,14 @@
           ],
           "sections": [
             {
-              "anchor": "1.1. Specific Extensions Covered The extensions described here focus on extending the functionality provided by the TLS protocol message formats. Other issues,",
-              "section": "1.1",
-              "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
+              "anchor": "11.1. Security Considerations for server_name If a single server hosts several domains, then clearly it is necessary for the owners of each domain to ensure tha",
+              "section": "11.1",
+              "section_sha256": "09fb0ea1346633b5cdc2ddbb28b89c49c127b5df93f5d37293ecb29ce2eeebe9"
+            },
+            {
+              "anchor": "3. Server Name Indication TLS does not provide a mechanism for a client to tell a server the name of the server it is contacting. It may be desirable for client",
+              "section": "3",
+              "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
             }
           ],
           "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
@@ -26759,7 +26851,7 @@
       "owner": "0.71.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -26820,9 +26912,14 @@
           ],
           "sections": [
             {
-              "anchor": "1.1. Specific Extensions Covered The extensions described here focus on extending the functionality provided by the TLS protocol message formats. Other issues,",
-              "section": "1.1",
-              "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
+              "anchor": "11.6. Security Considerations for status_request If a client requests an OCSP response, it must take into account that an attacker's server using a compromised",
+              "section": "11.6",
+              "section_sha256": "3f0df420c987956b1ed7e8119816cff01fd19d2e5ee99f72b80a7699a2a1e8eb"
+            },
+            {
+              "anchor": "8. Certificate Status Request Constrained clients may wish to use a certificate-status protocol such as OCSP [RFC2560] to check the validity of server certifica",
+              "section": "8",
+              "section_sha256": "598870980c7ea2d138722d5fd75d26a0fafd7f9d4c7ee7ff5e19b28c1ad825b6"
             }
           ],
           "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
@@ -29016,9 +29113,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "2696bcc0ec2371cfcac8013d6d53ca183d20b112ea0937ebaaa0251a5beb311b",
+  "residual_policy_sha256": "064588975c20b5d10ca4bb74eb1a678aadcd9d6d3e5a15d2b906d18acfc946f1",
   "schema": 5,
   "source_ledger_sha256": "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7",
-  "surface_register_sha256": "6fcc18b4730ba931963abd1057a42eac4cbd300b57e668b44d01de0ea8b7f704",
-  "transport_policy_sha256": "da884d3603a7fd689c87d4025f0f6b0fef915f380f8dd6f263ad3c5df195db4e"
+  "surface_register_sha256": "c4b513c28ed5c6bf5ff013825afcfb6d601e86e1f17620338bbbe71ee3d1fd43",
+  "transport_policy_sha256": "7258b37d4dc8610ab272bdfaa29c7897c83f9cbeef8bbe4931b049d36c5fa2ce"
 }

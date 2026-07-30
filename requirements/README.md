@@ -1,11 +1,11 @@
 # Normative Requirement Evidence
 
-Status: v0.3.5 complete pre-implementation normative closure
+Status: v0.3.5 pentest remediation complete; retest required
 
 This directory turns exact standards authority into stable, reviewable
 requirements without claiming that planned protocol behavior exists. The
 matrix contains 12 foundation requirements, 34 cryptography, encoding, PKIX,
-OCSP, and CT requirements, 70 TLS, DTLS, and QUIC-TLS requirements, and 38
+OCSP, and CT requirements, 70 TLS, DTLS, and QUIC-TLS requirements, and 47
 optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and residual
 requirements.
 
@@ -31,9 +31,14 @@ requirements.
   They bind every transport authority, semantic implementation milestone,
   intentional rejection, caller-owned boundary, registry group, and explicit
   deferral.
-- `residual-policy.toml` closes every surface not assigned by the foundation,
-  domain, or transport bundles and binds optional TLS, HPKE, ECH, ML-KEM,
-  entropy, operational, caller-owned, rejected, and legacy groups.
+- `residual-policy.toml` explicitly lists every surface not assigned by the
+  foundation, domain, or transport bundles and binds optional TLS, HPKE, ECH,
+  ML-KEM, entropy, operational, caller-owned, rejected, and legacy groups.
+  Every group has one code/test boundary, and every assigned surface must link
+  back from the resolved requirement.
+- `residual-sections.toml` assigns every residual normative RFC section to one
+  or more semantically reviewed requirements or an exact reviewed disposition.
+  No RFC-wide section inheritance is permitted.
 - `authority-claims.toml` records every local-source distribution boundary,
   every mutable registry and NIST refresh rule, every source-free roadmap
   boundary, and fail-closed hybrid, legacy-rights, and FIPS-validation
@@ -53,12 +58,13 @@ requirements.
 - `transport-coverage.json` proves exact coverage of 40 authorities, 550
   normative RFC sections, 63 owner milestones, and 483 transport surfaces,
   including requirement IDs or reviewed dispositions for every section.
-- `residual-coverage.json` proves exact coverage of 33 residual authorities,
-  182 normative RFC sections, and 741 previously uncovered surfaces.
+- `residual-coverage.json` proves exact coverage of 34 residual authorities,
+  193 normative RFC sections, and 741 previously uncovered surfaces, including
+  175 mapped sections, 18 explicit exclusions, and 279 exact section links.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
   requirement-to-owner reports across 126 authorities, 205 roadmap rows,
-  4,422 surfaces, and 154 requirements.
+  4,422 surfaces, and 163 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim
@@ -124,7 +130,7 @@ python3 scripts/test-requirement-lifecycles.py
 python3 scripts/test-requirement-residuals.py
 ```
 
-The 95 broken-fixture and positive tests reject changed source hashes, invalid
+The 103 broken-fixture and positive tests reject changed source hashes, invalid
 sections, duplicate or malformed identifiers, obsolete-as-current authority,
 illegal lifecycle transitions, missing owners or targets, premature evidence,
 weakened SHOULD decisions, unknown surface decisions, stale generated output,
@@ -143,9 +149,11 @@ Transport fixtures additionally reject missing milestone ownership,
 caller/protocol role swaps, authority or surface binding drift, duplicate
 stable identities, and nondeterministic transport evidence.
 Residual fixtures additionally reject draft or unknown authorities, missing or
-duplicate groups, orphaned sources and plans, rights gaps, stale mutable
-guidance, missing exclusions, broken blockers, and incomplete bidirectional
-closure.
+duplicate explicit surfaces, mixed implementation/test boundaries,
+non-representative source, code target, test target, owner or disposition
+drift, missing section bindings or exclusions, orphaned sources and plans,
+rights gaps, stale mutable guidance, broken blockers, and incomplete
+bidirectional closure.
 
 After a reviewed policy change, regenerate and inspect all projections:
 
@@ -155,5 +163,6 @@ python3 scripts/check-requirements.py --write
 
 Generated artifacts must never be edited independently of `policy.json`,
 `domain-scope.toml`, `domains/*.toml`, `transport-scope.toml`,
-`transport-exceptions.toml`, and `../standards/transport-surfaces/*.toml`.
-The two `*-sections.toml` policies are reviewed inputs as well.
+`transport-exceptions.toml`, `residual-policy.toml`,
+`residual-sections.toml`, and `../standards/transport-surfaces/*.toml`.
+All three `*-sections.toml` policies are reviewed inputs.

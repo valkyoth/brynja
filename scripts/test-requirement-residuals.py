@@ -30,10 +30,33 @@ SPEC.loader.exec_module(checker)
 assert_fails = support.assert_fails
 
 
-def inputs() -> tuple:
+def inputs(register: dict | None = None) -> tuple:
     ledger = lib.read_json(standards.LEDGER)
-    register = lib.read_json(surfaces.REGISTER)
+    modified_register = register is not None
+    register = register or lib.read_json(surfaces.REGISTER)
     versions = checker.roadmap_versions()
+    if modified_register:
+        matrix = lib.read_json(lib.MATRIX)["requirements"]
+        foundation_ids = {
+            item["id"] for item in lib.read_json(lib.POLICY)["requirements"]
+        }
+        foundation = [
+            item for item in matrix if item["id"] in foundation_ids
+        ]
+        existing = [
+            item
+            for item in matrix
+            if item.get("profile") != "optional-legacy-residual"
+        ]
+        return (
+            ledger,
+            register,
+            versions,
+            foundation,
+            lib.read_json(lib.DOMAIN_COVERAGE),
+            lib.read_json(lib.TRANSPORT_COVERAGE),
+            existing,
+        )
     foundation_matrix, _indexes = checker.build_matrix(
         previous=False, include_domains=False
     )
@@ -56,8 +79,16 @@ def inputs() -> tuple:
     )
 
 
-def residual_build(policy: dict | None = None) -> tuple:
-    return residual.build(*inputs(), policy=policy)
+def residual_build(
+    policy: dict | None = None,
+    register: dict | None = None,
+    section_policy: dict | None = None,
+) -> tuple:
+    return residual.build(
+        *inputs(register),
+        policy=policy,
+        section_policy=section_policy,
+    )
 
 
 def closure_build(claims: dict | None = None) -> dict:
@@ -78,10 +109,16 @@ def closure_build(claims: dict | None = None) -> dict:
 
 def test_current_residual_repository() -> None:
     requirements, coverage, _digest = residual_build()
-    assert len(requirements) == 38
-    assert coverage["authority_count"] == 33
-    assert coverage["normative_section_count"] == 182
+    assert len(requirements) == 47
+    assert coverage["authority_count"] == 34
+    assert coverage["normative_section_count"] == 193
+    assert coverage["mapped_normative_section_count"] == 175
     assert coverage["surface_count"] == 741
+    requirement_map = {item["id"]: item for item in requirements}
+    assert all(
+        item["id"] in requirement_map[item["requirement_id"]]["decision_ids"]
+        for item in coverage["surfaces"]
+    )
     assert standards.json_bytes(coverage) == lib.RESIDUAL_COVERAGE.read_bytes()
 
 
@@ -90,7 +127,7 @@ def test_current_bidirectional_closure() -> None:
     assert len(artifact["sources"]) == 126
     assert len(artifact["plans"]) == 205
     assert len(artifact["surfaces"]) == 4422
-    assert len(artifact["requirements"]) == 154
+    assert len(artifact["requirements"]) == 163
     assert len(artifact["local_rights"]) == 15
     assert len(artifact["mutable_authorities"]) == 13
     assert len(artifact["blockers"]) == 3
@@ -100,13 +137,85 @@ def test_current_bidirectional_closure() -> None:
 def test_missing_surface_group_fails() -> None:
     broken = copy.deepcopy(residual.read_policy())
     broken["surface_group"].pop()
-    assert_fails("residual surface groups differ", residual_build, broken)
+    assert_fails("residual surface identities differ", residual_build, broken)
 
 
 def test_duplicate_surface_group_fails() -> None:
     broken = copy.deepcopy(residual.read_policy())
     broken["surface_group"].append(copy.deepcopy(broken["surface_group"][0]))
     assert_fails("duplicate or malformed stable IDs", residual_build, broken)
+
+
+def test_repeated_explicit_surface_fails() -> None:
+    broken = copy.deepcopy(residual.read_policy())
+    broken["surface_group"][0]["surface_ids"].append(
+        broken["surface_group"][0]["surface_ids"][0]
+    )
+    assert_fails("malformed surface group", residual_build, broken)
+
+
+def mutated_nonrepresentative(field: str, value) -> tuple[dict, dict]:
+    register = copy.deepcopy(lib.read_json(surfaces.REGISTER))
+    policy = copy.deepcopy(residual.read_policy())
+    group = next(
+        item
+        for item in policy["surface_group"]
+        if item["id"] == "BRY-REQ-APPLICATION-0130"
+    )
+    target_id = group["surface_ids"][1]
+    target = next(item for item in register["surfaces"] if item["id"] == target_id)
+    target[field] = value
+    policy["surface_register_sha256"] = standards.sha256(
+        standards.json_bytes(register)
+    )
+    return register, policy
+
+
+def test_nonrepresentative_source_drift_fails() -> None:
+    register, policy = mutated_nonrepresentative(
+        "normative_sources", ["rfc:9954"]
+    )
+    assert_fails("unrelated surfaces", residual_build, policy, register)
+
+
+def test_nonrepresentative_code_target_drift_fails() -> None:
+    register, policy = mutated_nonrepresentative(
+        "code_target", "crates/brynja-tls/src/other.rs"
+    )
+    assert_fails(
+        "one implementation and test boundary",
+        residual_build,
+        policy,
+        register,
+    )
+
+
+def test_nonrepresentative_test_target_drift_fails() -> None:
+    register, policy = mutated_nonrepresentative(
+        "test_target", "tests/surface/alpn.rs#other"
+    )
+    assert_fails(
+        "one implementation and test boundary",
+        residual_build,
+        policy,
+        register,
+    )
+
+
+def test_nonrepresentative_owner_drift_fails() -> None:
+    register, policy = mutated_nonrepresentative("owner", "0.131.0")
+    assert_fails(
+        "contains incompatible surfaces", residual_build, policy, register
+    )
+
+
+def test_nonrepresentative_disposition_drift_fails() -> None:
+    register, policy = mutated_nonrepresentative(
+        "disposition", "future-work"
+    )
+    assert_fails(
+        "contains incompatible surfaces", residual_build, policy, register
+    )
 
 
 def test_orphan_source_fails() -> None:
@@ -124,10 +233,45 @@ def test_draft_identifier_fails() -> None:
     assert_fails("unknown authority", residual_build, broken)
 
 
+def test_missing_residual_section_binding_fails() -> None:
+    broken = copy.deepcopy(
+        residual.sections.read_policy(residual.SECTION_POLICY)
+    )
+    broken["binding"] = [
+        item
+        for item in broken["binding"]
+        if not (
+            item["requirement_id"] == "BRY-REQ-ECH-0142"
+            and item["source_id"] == "rfc:9180"
+        )
+    ]
+    assert_fails(
+        "normative requirement/source binding set differs",
+        residual_build,
+        None,
+        None,
+        broken,
+    )
+
+
+def test_missing_residual_section_exclusion_fails() -> None:
+    broken = copy.deepcopy(
+        residual.sections.read_policy(residual.SECTION_POLICY)
+    )
+    broken["exclusion"].pop()
+    assert_fails(
+        "unmapped normative sections",
+        residual_build,
+        None,
+        None,
+        broken,
+    )
+
+
 def test_premature_owner_fails() -> None:
     broken = copy.deepcopy(residual.read_policy())
     broken["surface_group"][0]["owner"] = "1.0.0"
-    assert_fails("residual surface groups differ", residual_build, broken)
+    assert_fails("contains incompatible surfaces", residual_build, broken)
 
 
 def test_missing_rights_record_fails() -> None:

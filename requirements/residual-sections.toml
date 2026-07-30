@@ -1,0 +1,433 @@
+schema = 1
+milestone = "0.3.5"
+source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
+
+[revisions]
+"BRY-REQ-APPLICATION-0130" = 2
+"BRY-REQ-CERTEXT-0146" = 1
+"BRY-REQ-CERTREG-0146" = 1
+"BRY-REQ-COMPOSE-0148" = 2
+"BRY-REQ-DNS-0140" = 2
+"BRY-REQ-ECH-0140" = 2
+"BRY-REQ-ECH-0141" = 2
+"BRY-REQ-ECH-0142" = 2
+"BRY-REQ-ECH-0143" = 2
+"BRY-REQ-ECH-1401" = 2
+"BRY-REQ-ECHEXT-0140" = 1
+"BRY-REQ-ECHREG-0140" = 1
+"BRY-REQ-HPKE-0138" = 2
+"BRY-REQ-HPKE-0139" = 2
+"BRY-REQ-HPKE-1391" = 2
+"BRY-REQ-HPKEREG-0138" = 1
+"BRY-REQ-HPKEX-1391" = 2
+"BRY-REQ-KEYLOGREG-0010" = 1
+"BRY-REQ-LEGACY-0100" = 2
+"BRY-REQ-LEGACY-0400" = 2
+"BRY-REQ-LEGACY-0500" = 2
+"BRY-REQ-LEGACY-0600" = 2
+"BRY-REQ-LEGACY-0700" = 2
+"BRY-REQ-LEGACY-0800" = 2
+"BRY-REQ-LEGACYSSL1-0800" = 1
+"BRY-REQ-OPERATIONS-0010" = 2
+"BRY-REQ-OPTIONAL-0136" = 2
+"BRY-REQ-OPTIONAL-0137" = 2
+"BRY-REQ-OPTIONAL-0144" = 2
+"BRY-REQ-OPTIONAL-0145" = 2
+"BRY-REQ-OPTIONAL-0146" = 2
+"BRY-REQ-OPTIONAL-1461" = 2
+"BRY-REQ-PQ-0117" = 2
+"BRY-REQ-PQPKIX-0046" = 2
+"BRY-REQ-RRCREG-0148" = 1
+"BRY-REQ-TESTING-0010" = 2
+"BRY-REQ-TLS12EXT-0058" = 1
+"BRY-REQ-TLS12X-0058" = 2
+
+[[binding]]
+source_id = "rfc:4346"
+requirement_id = "BRY-REQ-LEGACY-0100"
+sections = ["6", "6.1", "6.2.1", "6.2.3.2", "7.1", "7.2", "7.2.1", "7.2.2", "7.3", "7.4", "7.4.1.1", "7.4.1.2", "7.4.1.3", "7.4.2", "7.4.4", "7.4.5", "7.4.6", "7.4.7", "7.4.7.1", "7.4.7.2", "7.4.8", "7.4.9", "9", "12"]
+rationale = "These explicitly enumerated rfc:4346 sections define the isolated TLS 1.1 legacy engine; they are assigned only to BRY-REQ-LEGACY-0100, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:6176"
+requirement_id = "BRY-REQ-LEGACY-0400"
+sections = ["3"]
+rationale = "These explicitly enumerated rfc:6176 sections define the isolated SSL 2 prohibition boundary; they are assigned only to BRY-REQ-LEGACY-0400, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:6961"
+requirement_id = "BRY-REQ-TLS12EXT-0058"
+sections = ["2.2"]
+rationale = "These explicitly enumerated rfc:6961 sections define the status_request_v2 extension registry exclusion; they are assigned only to BRY-REQ-TLS12EXT-0058, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:6961"
+requirement_id = "BRY-REQ-TLS12X-0058"
+sections = ["2.2", "4.1"]
+rationale = "These explicitly enumerated rfc:6961 sections define the status_request_v2 protocol exclusion; they are assigned only to BRY-REQ-TLS12X-0058, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:7250"
+requirement_id = "BRY-REQ-OPTIONAL-0137"
+sections = ["3", "4.1", "4.2"]
+rationale = "These explicitly enumerated rfc:7250 sections define the Raw Public Key authentication profile; they are assigned only to BRY-REQ-OPTIONAL-0137, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:7301"
+requirement_id = "BRY-REQ-APPLICATION-0130"
+sections = ["3.1", "3.2", "5"]
+rationale = "These explicitly enumerated rfc:7301 sections define the caller-owned ALPN identifier and selection boundary; they are assigned only to BRY-REQ-APPLICATION-0130, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:7568"
+requirement_id = "BRY-REQ-LEGACY-0500"
+sections = ["3"]
+rationale = "These explicitly enumerated rfc:7568 sections define the isolated WTLS prohibition boundary; they are assigned only to BRY-REQ-LEGACY-0500, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:7568"
+requirement_id = "BRY-REQ-LEGACY-0600"
+sections = ["3"]
+rationale = "These explicitly enumerated rfc:7568 sections define the isolated PCT prohibition boundary; they are assigned only to BRY-REQ-LEGACY-0600, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:7568"
+requirement_id = "BRY-REQ-LEGACY-0700"
+sections = ["3"]
+rationale = "These explicitly enumerated rfc:7568 sections define the isolated SNP prohibition boundary; they are assigned only to BRY-REQ-LEGACY-0700, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:7568"
+requirement_id = "BRY-REQ-LEGACYSSL1-0800"
+sections = ["3"]
+rationale = "These explicitly enumerated rfc:7568 sections define the repository-only SSL 1 research boundary; they are assigned only to BRY-REQ-LEGACYSSL1-0800, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8447"
+requirement_id = "BRY-REQ-COMPOSE-0148"
+sections = ["12", "17"]
+rationale = "These explicitly enumerated rfc:8447 sections define TLS registry composition and recommendation policy; they are assigned only to BRY-REQ-COMPOSE-0148, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8447"
+requirement_id = "BRY-REQ-LEGACY-0800"
+sections = ["17"]
+rationale = "These explicitly enumerated rfc:8447 sections define legacy and discouraged TLS registry isolation; they are assigned only to BRY-REQ-LEGACY-0800, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8449"
+requirement_id = "BRY-REQ-OPTIONAL-0136"
+sections = ["4", "4.1", "5"]
+rationale = "These explicitly enumerated rfc:8449 sections define Record Size Limit negotiation and enforcement; they are assigned only to BRY-REQ-OPTIONAL-0136, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8879"
+requirement_id = "BRY-REQ-CERTEXT-0146"
+sections = ["3"]
+rationale = "These explicitly enumerated rfc:8879 sections define the certificate-compression extension registry decision; they are assigned only to BRY-REQ-CERTEXT-0146, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8879"
+requirement_id = "BRY-REQ-CERTREG-0146"
+sections = ["3"]
+rationale = "These explicitly enumerated rfc:8879 sections define certificate-compression algorithm registry handling; they are assigned only to BRY-REQ-CERTREG-0146, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8879"
+requirement_id = "BRY-REQ-OPTIONAL-0145"
+sections = ["4", "5"]
+rationale = "These explicitly enumerated rfc:8879 sections define bounded certificate decompression on receive; they are assigned only to BRY-REQ-OPTIONAL-0145, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8879"
+requirement_id = "BRY-REQ-OPTIONAL-0146"
+sections = ["4", "5"]
+rationale = "These explicitly enumerated rfc:8879 sections define precompressed certificate artifact validation; they are assigned only to BRY-REQ-OPTIONAL-0146, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:8879"
+requirement_id = "BRY-REQ-OPTIONAL-1461"
+sections = ["3", "4", "5"]
+rationale = "These explicitly enumerated rfc:8879 sections define certificate-compression send integration; they are assigned only to BRY-REQ-OPTIONAL-1461, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9180"
+requirement_id = "BRY-REQ-ECH-0141"
+sections = ["5", "5.1", "5.2", "7.1.1", "7.1.4", "9.2", "9.3", "9.4", "9.6", "9.7.1"]
+rationale = "These explicitly enumerated rfc:9180 sections define ECH client construction and HPKE use; they are assigned only to BRY-REQ-ECH-0141, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9180"
+requirement_id = "BRY-REQ-ECH-0142"
+sections = ["5", "5.1", "5.2", "7.1.1", "7.1.4", "9.2", "9.3", "9.4", "9.6", "9.7.1"]
+rationale = "These explicitly enumerated rfc:9180 sections define ECH server opening and confirmation behavior; they are assigned only to BRY-REQ-ECH-0142, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9180"
+requirement_id = "BRY-REQ-HPKE-0138"
+sections = ["4", "4.1", "5.1", "7.1.1", "7.1.2", "7.1.3", "7.1.4", "7.1.5", "7.2.1", "9.2", "9.2.3", "9.3", "9.4", "9.6"]
+rationale = "These explicitly enumerated rfc:9180 sections define the HPKE cryptographic and context foundation; they are assigned only to BRY-REQ-HPKE-0138, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9180"
+requirement_id = "BRY-REQ-HPKE-0139"
+sections = ["5", "5.1", "5.2", "9.7.1"]
+rationale = "These explicitly enumerated rfc:9180 sections define HPKE base-mode setup and encryption; they are assigned only to BRY-REQ-HPKE-0139, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9180"
+requirement_id = "BRY-REQ-HPKE-1391"
+sections = ["5.2", "5.3", "9.7.1"]
+rationale = "These explicitly enumerated rfc:9180 sections define HPKE export and context lifecycle; they are assigned only to BRY-REQ-HPKE-1391, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9180"
+requirement_id = "BRY-REQ-HPKEREG-0138"
+sections = ["4", "4.1", "7.1.1", "7.1.2", "7.1.3", "7.1.4", "7.1.5", "7.2.1", "9.2", "9.3", "9.4", "9.6"]
+rationale = "These explicitly enumerated rfc:9180 sections define HPKE KEM, KDF, and AEAD registry handling; they are assigned only to BRY-REQ-HPKEREG-0138, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9180"
+requirement_id = "BRY-REQ-HPKEX-1391"
+sections = ["5.1.2", "5.1.4", "9.1.1", "9.5"]
+rationale = "These explicitly enumerated rfc:9180 sections define the explicit rejection of non-base HPKE modes; they are assigned only to BRY-REQ-HPKEX-1391, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9345"
+requirement_id = "BRY-REQ-OPTIONAL-0144"
+sections = ["3", "4", "4.1.1", "4.1.2", "4.1.3", "4.2", "7.1", "7.4"]
+rationale = "These explicitly enumerated rfc:9345 sections define Delegated Credential validation and lifecycle; they are assigned only to BRY-REQ-OPTIONAL-0144, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9460"
+requirement_id = "BRY-REQ-DNS-0140"
+sections = ["1.3", "2.1", "2.2", "2.3", "2.4.1", "2.4.2", "2.4.3", "2.5.1", "2.5.2", "3", "3.1", "3.2", "4.1", "4.2", "4.2.1", "4.3", "4.4", "5", "5.1", "5.2", "6", "7", "7.1", "7.1.1", "7.1.2", "7.2", "7.3", "8", "9", "9.1", "9.2.2", "9.2.3", "9.3", "9.4", "9.5", "9.6", "10.1", "10.2", "11", "12", "14.3.1"]
+rationale = "These explicitly enumerated rfc:9460 sections define the caller-owned bounded DNS and SVCB service boundary; they are assigned only to BRY-REQ-DNS-0140, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9460"
+requirement_id = "BRY-REQ-ECH-0140"
+sections = ["9.2.2", "9.2.3", "9.4", "12"]
+rationale = "These explicitly enumerated rfc:9460 sections define ECH origin policy and deployment consistency; they are assigned only to BRY-REQ-ECH-0140, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9460"
+requirement_id = "BRY-REQ-ECH-1401"
+sections = ["3", "3.1", "5", "9.2.2", "9.2.3", "12"]
+rationale = "These explicitly enumerated rfc:9460 sections define ECH configuration acquisition, caching, and rotation; they are assigned only to BRY-REQ-ECH-1401, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9847"
+requirement_id = "BRY-REQ-COMPOSE-0148"
+sections = ["3", "3.1", "5", "7", "16"]
+rationale = "These explicitly enumerated rfc:9847 sections define TLS registry composition and recommendation policy; they are assigned only to BRY-REQ-COMPOSE-0148, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9847"
+requirement_id = "BRY-REQ-LEGACY-0800"
+sections = ["5"]
+rationale = "These explicitly enumerated rfc:9847 sections define legacy and discouraged TLS registry isolation; they are assigned only to BRY-REQ-LEGACY-0800, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9848"
+requirement_id = "BRY-REQ-ECH-0140"
+sections = ["3", "4", "5.1", "5.3", "6", "8"]
+rationale = "These explicitly enumerated rfc:9848 sections define ECH origin policy and deployment consistency; they are assigned only to BRY-REQ-ECH-0140, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9848"
+requirement_id = "BRY-REQ-ECH-0143"
+sections = ["5.1", "8"]
+rationale = "These explicitly enumerated rfc:9848 sections define ECH retry, HelloRetryRequest, and downgrade handling; they are assigned only to BRY-REQ-ECH-0143, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9848"
+requirement_id = "BRY-REQ-ECH-1401"
+sections = ["3", "4", "5.1", "5.3", "6", "8"]
+rationale = "These explicitly enumerated rfc:9848 sections define ECH configuration acquisition, caching, and rotation; they are assigned only to BRY-REQ-ECH-1401, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9849"
+requirement_id = "BRY-REQ-ECH-0140"
+sections = ["4", "4.1", "4.2", "5", "8.1", "8.1.1", "8.1.2", "9", "10.1", "10.4", "10.5", "10.7", "10.8"]
+rationale = "These explicitly enumerated rfc:9849 sections define ECH origin policy and deployment consistency; they are assigned only to BRY-REQ-ECH-0140, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9849"
+requirement_id = "BRY-REQ-ECH-0141"
+sections = ["5", "5.1", "6.1", "6.1.1", "6.1.2", "6.1.3", "6.1.4", "6.1.5", "6.1.6", "6.1.7", "6.1.8", "6.2.1", "6.2.2", "8.1", "8.1.1", "8.1.2", "9", "10.1", "10.4", "10.5", "10.7", "10.8"]
+rationale = "These explicitly enumerated rfc:9849 sections define ECH client construction and HPKE use; they are assigned only to BRY-REQ-ECH-0141, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9849"
+requirement_id = "BRY-REQ-ECH-0142"
+sections = ["5", "7", "7.1", "7.1.1", "7.2", "8.1", "8.1.1", "8.1.2", "9", "10.1", "10.4", "10.5", "10.7", "10.8"]
+rationale = "These explicitly enumerated rfc:9849 sections define ECH server opening and confirmation behavior; they are assigned only to BRY-REQ-ECH-0142, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9849"
+requirement_id = "BRY-REQ-ECH-0143"
+sections = ["6.1.4", "6.1.8", "7.1.1", "8.1.1", "10.8"]
+rationale = "These explicitly enumerated rfc:9849 sections define ECH retry, HelloRetryRequest, and downgrade handling; they are assigned only to BRY-REQ-ECH-0143, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9849"
+requirement_id = "BRY-REQ-ECH-1401"
+sections = ["4", "4.1", "4.2", "6.1.8", "8.1", "8.1.1", "9", "10.4"]
+rationale = "These explicitly enumerated rfc:9849 sections define ECH configuration acquisition, caching, and rotation; they are assigned only to BRY-REQ-ECH-1401, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9849"
+requirement_id = "BRY-REQ-ECHEXT-0140"
+sections = ["5"]
+rationale = "These explicitly enumerated rfc:9849 sections define the encrypted_client_hello extension registry decision; they are assigned only to BRY-REQ-ECHEXT-0140, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9849"
+requirement_id = "BRY-REQ-ECHREG-0140"
+sections = ["4.2", "6.2.2"]
+rationale = "These explicitly enumerated rfc:9849 sections define ECH configuration extension registry handling; they are assigned only to BRY-REQ-ECHREG-0140, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9850"
+requirement_id = "BRY-REQ-KEYLOGREG-0010"
+sections = ["2", "2.1", "2.3"]
+rationale = "These explicitly enumerated rfc:9850 sections define isolated SSLKEYLOGFILE label registry handling; they are assigned only to BRY-REQ-KEYLOGREG-0010, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9850"
+requirement_id = "BRY-REQ-OPERATIONS-0010"
+sections = ["1.1"]
+rationale = "These explicitly enumerated rfc:9850 sections define the production key-logging prohibition; they are assigned only to BRY-REQ-OPERATIONS-0010, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9850"
+requirement_id = "BRY-REQ-TESTING-0010"
+sections = ["2", "2.1", "2.3"]
+rationale = "These explicitly enumerated rfc:9850 sections define isolated test-only SSLKEYLOGFILE support; they are assigned only to BRY-REQ-TESTING-0010, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9853"
+requirement_id = "BRY-REQ-RRCREG-0148"
+sections = ["3", "3.1", "4", "5", "5.2", "5.3", "5.4", "5.5", "9", "10.3.1"]
+rationale = "These explicitly enumerated rfc:9853 sections define DTLS Return Routability Check registry handling; they are assigned only to BRY-REQ-RRCREG-0148, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9935"
+requirement_id = "BRY-REQ-PQPKIX-0046"
+sections = ["3", "5", "6", "8"]
+rationale = "These explicitly enumerated rfc:9935 sections define the explicit ML-KEM PKIX credential exclusion; they are assigned only to BRY-REQ-PQPKIX-0046, and no RFC-wide section inheritance is permitted."
+
+[[binding]]
+source_id = "rfc:9954"
+requirement_id = "BRY-REQ-PQ-0117"
+sections = ["2", "3.2", "5", "6"]
+rationale = "These explicitly enumerated rfc:9954 sections define ML-KEM and hybrid KEM construction constraints; they are assigned only to BRY-REQ-PQ-0117, and no RFC-wide section inheritance is permitted."
+
+[[exclusion]]
+source_id = "rfc:4346"
+section = "1.2"
+disposition = "not-applicable"
+rationale = "rfc:4346 section 1.2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:6176"
+section = "1.1"
+disposition = "not-applicable"
+rationale = "rfc:6176 section 1.1 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:6961"
+section = "1.1"
+disposition = "not-applicable"
+rationale = "rfc:6961 section 1.1 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:7250"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:7250 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:7301"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:7301 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:7568"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:7568 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:8447"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:8447 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:8449"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:8449 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:8879"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:8879 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9180"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:9180 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9345"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:9345 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9847"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:9847 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9848"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:9848 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9849"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:9849 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9850"
+section = "1.2"
+disposition = "not-applicable"
+rationale = "rfc:9850 section 1.2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9853"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:9853 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9935"
+section = "2"
+disposition = "not-applicable"
+rationale = "rfc:9935 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."
+
+[[exclusion]]
+source_id = "rfc:9954"
+section = "1.1"
+disposition = "not-applicable"
+rationale = "rfc:9954 section 1.1 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement."

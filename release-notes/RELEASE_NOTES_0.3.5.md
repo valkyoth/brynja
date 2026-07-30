@@ -9,8 +9,9 @@ not be used to secure network traffic.
 
 ## Highlights
 
-- Adds 38 stable residual requirements, bringing the matrix to 154 records.
-- Covers 33 residual authorities and 182 exact normative RFC sections.
+- Adds 47 stable residual requirements, bringing the matrix to 163 records.
+- Covers 34 residual authorities and reviews 193 normative RFC sections
+  through 175 exact mappings and 18 explicit exclusions.
 - Assigns all 741 surfaces left by the foundation, domain, and transport
   bundles, closing all 4,422 protocol surfaces.
 - Generates complete source-to-plan, plan-to-source,
@@ -58,16 +59,34 @@ the SP 800-140 series, CMVP manuals and implementation guidance, RFG and CMVP
 resolutions, validation wording, certificate status and caveats, laboratories,
 and tested operational environments. Brynja is not FIPS validated.
 
+## Pentest Remediation
+
+The initial pentest found two Medium traceability defects. Residual groups
+previously copied one representative surface into a requirement while marking
+every group member covered, and RFC citations inherited every normative
+section without a reviewed semantic assignment.
+
+Every one of the 741 residual surfaces is now explicitly listed and linked
+back from its requirement. Groups cannot cross code or test boundaries, and
+every member is independently checked for source, owner, disposition, and
+identity. Nine mixed groups were split into separate requirements.
+
+The new reviewed residual section policy assigns all 193 inventoried sections
+to exact requirements or explicit exclusions. Generated evidence records 279
+exact requirement links instead of 541 blanket associations. Twenty-one
+residual fixtures reproduce both findings and their non-representative
+variants. External remediation retest remains required.
+
 ## Verification
 
 The release candidate verifies:
 
-- 154 deterministic stable requirements;
+- 163 deterministic stable requirements;
 - all 126 locked source authorities;
 - all 205 roadmap rows;
 - all 4,422 protocol surfaces;
-- 182 residual normative RFC sections with exact anchors and hashes;
-- 95 requirement positive and broken-fixture tests, including 13 dedicated
+- 193 residual normative RFC sections with exact anchors and hashes;
+- 103 requirement positive and broken-fixture tests, including 21 dedicated
   residual-closure fixtures;
 - deterministic standards, surface, matrix, coverage, closure, package, and
   SBOM artifacts;
@@ -81,9 +100,9 @@ Only `brynja 0.3.5` is selected for crates.io publication. All unchanged
 supporting crates retain their independently published `0.1.0` versions and
 are not republished. Legacy and repository-only crates remain unpublished.
 
-Publication remains blocked until the repository owner completes the v0.3.5
-pentest, the committed report records `PASS`/`PASS` with zero open findings,
-GitHub checks are green, and the user explicitly authorizes tagging.
+Publication remains blocked until the repository owner passes the v0.3.5
+remediation retest, the committed report records `PASS`/`PASS` with zero open
+findings, GitHub checks are green, and the user explicitly authorizes tagging.
 
 ## Limitations
 

@@ -72,6 +72,9 @@ def apply(
     requirements: list[dict],
     authorities: dict[str, dict],
     policy: dict,
+    *,
+    minimum_revision: int = 2,
+    mapping_suffix: str | None = None,
 ) -> tuple[list[dict], dict[tuple[str, str], dict]]:
     requirement_map = {item["id"]: item for item in requirements}
     inventory = section_inventory(authorities)
@@ -141,7 +144,7 @@ def apply(
     if (
         set(policy["revisions"]) != bound_requirements
         or any(
-            not isinstance(value, int) or value < 2
+            not isinstance(value, int) or value < minimum_revision
             for value in policy["revisions"].values()
         )
     ):
@@ -186,8 +189,16 @@ def apply(
         revision = policy["revisions"].get(
             requirement["id"], requirement["revision"]
         )
+        mapping_rationale = requirement["mapping_rationale"]
+        if requirement["id"] in bound_requirements and mapping_suffix is not None:
+            mapping_rationale = f"{mapping_rationale} {mapping_suffix}"
         resolved.append(
-            {**requirement, "revision": revision, "sources": sources}
+            {
+                **requirement,
+                "mapping_rationale": mapping_rationale,
+                "revision": revision,
+                "sources": sources,
+            }
         )
     coverage = {
         key: (

@@ -12,6 +12,7 @@ import requirements_mapping as mapping
 import requirements_closure as closure
 import requirements_domain as domain
 import requirements_residual as residual
+import requirements_sections as sections
 import requirements_transport as transport
 import requirements_validation as validation
 import standards_lib as standards
@@ -280,7 +281,14 @@ def build_matrix(
             transport.load_policy(ledger)
         )
         residual_hash = standards.sha256(
-            standards.json_bytes(residual.read_policy())
+            standards.json_bytes(
+                {
+                    "policy": residual.read_policy(),
+                    "section_policy": sections.read_policy(
+                        residual.SECTION_POLICY
+                    ),
+                }
+            )
         )
     ids = [requirement["id"] for requirement in requirements]
     if len(ids) != len(set(ids)):

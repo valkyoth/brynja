@@ -19,6 +19,7 @@ TRACKED_INPUTS = (
     "requirements/transport-scope.toml",
     "requirements/policy.json",
     "requirements/residual-policy.toml",
+    "requirements/residual-sections.toml",
     "requirements/matrix.json",
     "standards/surface-policy.json",
     "standards/transport-surfaces",

@@ -109,12 +109,13 @@ silently treated as admitted transport authority.
 
 The v0.3.5 residual policy completes the pre-implementation closure. Final
 FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C join the local-only checksum
-manifest. Thirty-eight residual requirements bind 33 authorities and 182
-normative RFC sections while assigning every one of the 741 surfaces left by
-the earlier bundles. The generated closure proves that all 126 locked
-authorities, all 205 roadmap rows, all 4,422 surfaces, and all 154 requirements
-have bidirectional ownership. Local rights, mutable NIST and IANA refresh
-rules, and unavailable hybrid, legacy, and FIPS-validation authorities remain
+manifest. Forty-seven residual requirements bind 34 authorities and review
+193 normative RFC sections through 175 exact requirement mappings and 18
+explicit exclusions while assigning every one of the 741 surfaces left by the
+earlier bundles. The generated closure proves that all 126 locked authorities,
+all 205 roadmap rows, all 4,422 surfaces, and all 163 requirements have
+bidirectional ownership. Local rights, mutable NIST and IANA refresh rules,
+and unavailable hybrid, legacy, and FIPS-validation authorities remain
 machine-readable fail-closed records rather than capability claims.
 
 FIPS planning also snapshots the dated FIPS 140-3 CMVP Management Manual,

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.3.5 implementation stop reached; pentest required
+Status: v0.3.5 pentest findings remediated; retest required
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -109,21 +109,23 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 
 Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 
-- 38 new requirements bring the matrix to 154 stable records;
+- 47 new requirements bring the matrix to 163 stable records;
 - final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are added as
   local-only checksum-pinned authorities;
-- 33 residual authorities and 182 normative RFC sections bind to exact
-  requirements, extraction anchors, and hashes;
+- 34 residual authorities and 193 normative RFC sections are reviewed through
+  175 exact mappings and 18 explicit terminology or conventions exclusions;
 - all 741 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,422 surfaces;
 - the generated closure maps all 126 locked sources, all 205 roadmap rows, all
-  4,422 surfaces, and all 154 requirements in both directions;
+  4,422 surfaces, and all 163 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
-- thirteen new broken fixtures reject draft claims, missing or duplicate
-  groups, orphaned sources or plans, stale mutable guidance, source-rights
-  gaps, missing exclusions, and weakened hybrid, legacy, or FIPS blockers.
+- twenty-one residual fixtures reject draft claims, missing or duplicate
+  groups, unlinked or boundary-mixed surfaces, non-representative source,
+  target, owner or disposition drift, blanket section coverage, orphaned
+  sources or plans, stale mutable guidance, source-rights gaps, missing
+  exclusions, and weakened hybrid, legacy, or FIPS blockers.
 
 This remains governance and planning evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
@@ -165,4 +167,5 @@ every normative RFC section now has an exact requirement binding or reviewed
 disposition. The repository-owner retest was green with zero open findings.
 The permanent v0.3.4 report is `PASS`/`PASS`, and signed tag `v0.3.4` is
 published. The v0.3.5 implementation candidate now requires repository-owner
-pentest before release finalization.
+retest after two Medium traceability findings were remediated. The permanent
+report records `RETEST REQUIRED`/`PENDING` with zero open findings.

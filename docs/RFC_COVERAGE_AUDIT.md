@@ -27,9 +27,10 @@ authority binding, bidirectional mappings, and fail-closed pilot verification.
 v0.3.3 populates every currently scoped cryptography, encoding, PKIX, OCSP,
 and CT rule across 53 authorities and 3,322 surfaces. v0.3.4 populates 70 TLS,
 DTLS, and QUIC-TLS rules across 40 authorities, 550 normative sections, 63
-owner milestones, and 483 surfaces. v0.3.5 adds 38 optional, HPKE, ECH,
-ML-KEM, entropy, operational, legacy, and residual requirements across 33
-authorities, 182 normative sections, and 741 formerly uncovered surfaces.
+owner milestones, and 483 surfaces. v0.3.5 adds 47 optional, HPKE, ECH,
+ML-KEM, entropy, operational, legacy, and residual requirements across 34
+authorities, 193 reviewed normative sections, and 741 formerly uncovered
+surfaces.
 The complete closure covers 126 locked authorities, 205 roadmap rows, and
 4,422 surfaces. Planned targets become actual code, tests, and evidence only
 in their owning milestone.

@@ -37,7 +37,8 @@
       "requirement_ids": [
         "BRY-REQ-HPKE-0138",
         "BRY-REQ-HPKE-0139",
-        "BRY-REQ-HPKE-1391"
+        "BRY-REQ-HPKE-1391",
+        "BRY-REQ-HPKEREG-0138"
       ],
       "sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
     },
@@ -95,7 +96,7 @@
         "0.140.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-ECH-0140"
+        "BRY-REQ-ECHREG-0140"
       ],
       "sha256": "b481939a3ea685209a7026e508ba554d904ec5afc6439d29a2bc2e13b6053e98"
     },
@@ -118,13 +119,16 @@
       ],
       "requirement_ids": [
         "BRY-REQ-APPLICATION-0130",
+        "BRY-REQ-CERTEXT-0146",
+        "BRY-REQ-CERTREG-0146",
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
+        "BRY-REQ-ECHEXT-0140",
         "BRY-REQ-OPTIONAL-0136",
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
-        "BRY-REQ-TLS12X-0058"
+        "BRY-REQ-TLS12EXT-0058"
       ],
       "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
     },
@@ -147,9 +151,9 @@
         "0.120.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-COMPOSE-0148",
+        "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-OPERATIONS-0010"
+        "BRY-REQ-RRCREG-0148"
       ],
       "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
     },
@@ -325,11 +329,18 @@
       "normative_sections": [
         {
           "anchor": "1.2. Requirements Terminology In this document, the keywords \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHOULD\", \"SHOULD NOT\" and \"MAY\" are to be interpreted as described",
+          "disposition": "not-applicable",
+          "rationale": "rfc:4346 section 1.2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
+          "section": "1.2",
+          "section_sha256": "1503f4cc7102b3119343d1ebc1f5a4d1c3d544d09ea7121bbc95cad66f454d01"
+        },
+        {
+          "anchor": "12. IANA Considerations This document describes a number of new registries that have been created by IANA. We recommended that they be placed as individual regi",
           "requirement_ids": [
             "BRY-REQ-LEGACY-0100"
           ],
-          "section": "1.2",
-          "section_sha256": "1503f4cc7102b3119343d1ebc1f5a4d1c3d544d09ea7121bbc95cad66f454d01"
+          "section": "12",
+          "section_sha256": "e611ab72f054801b7ca75a0d67145f98cfc0f4489e9139a74713a5f5bcff3dba"
         },
         {
           "anchor": "6. The TLS Record Protocol The TLS Record Protocol is a layered protocol. At each layer, messages may include fields for length, description, and content. The R",
@@ -514,14 +525,6 @@
           ],
           "section": "9",
           "section_sha256": "4297f67ffaed6c8cac64cba6d8f44bd56eeead8df298bc953c5ed3217ecbe264"
-        },
-        {
-          "anchor": "12. IANA Considerations This document describes a number of new registries that have been created by IANA. We recommended that they be placed as individual regi",
-          "requirement_ids": [
-            "BRY-REQ-LEGACY-0100"
-          ],
-          "section": "12",
-          "section_sha256": "e611ab72f054801b7ca75a0d67145f98cfc0f4489e9139a74713a5f5bcff3dba"
         }
       ],
       "requirement_ids": [
@@ -549,7 +552,6 @@
         "H0.7.0",
         "H0.8.0"
       ],
-      "normative_sections": [],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0300"
       ],
@@ -575,7 +577,6 @@
         "H0.7.0",
         "H0.8.0"
       ],
-      "normative_sections": [],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0800"
       ],
@@ -629,9 +630,8 @@
       "normative_sections": [
         {
           "anchor": "1.1. Requirements Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY",
-          "requirement_ids": [
-            "BRY-REQ-LEGACY-0400"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:6176 section 1.1 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "1.1",
           "section_sha256": "17ac919da2a761a180e63974e165fe13ff1946da2f398b60b424b251a0ce7494"
         },
@@ -674,15 +674,15 @@
       "normative_sections": [
         {
           "anchor": "1.1. Requirements Language The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in t",
-          "requirement_ids": [
-            "BRY-REQ-TLS12X-0058"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:6961 section 1.1 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "1.1",
           "section_sha256": "815942bac140a8f3fddbf89424200400f80b7283d0e40342b689a0868d419238"
         },
         {
           "anchor": "2.2. Multiple Certificate Status Request Record Clients that support a certificate status protocol like OCSP may send the \"status_request_v2\" extension to the s",
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0058",
             "BRY-REQ-TLS12X-0058"
           ],
           "section": "2.2",
@@ -698,6 +698,7 @@
         }
       ],
       "requirement_ids": [
+        "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
       ],
       "sha256": "c33e7e30760c8852509fbdae89f2daf3efcc424d6a90651de048efd6685745db",
@@ -728,9 +729,8 @@
       "normative_sections": [
         {
           "anchor": "2. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in this document",
-          "requirement_ids": [
-            "BRY-REQ-OPTIONAL-0137"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:7250 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "022049118cf86695eddf2626a63f072d87e0e68c00ee6a7d54ccf9858d8264f1"
         },
@@ -809,9 +809,8 @@
       "normative_sections": [
         {
           "anchor": "2. Requirements Language The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in thi",
-          "requirement_ids": [
-            "BRY-REQ-APPLICATION-0130"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:7301 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "68e5163c67c437878acd02488fdfae06427d5952f3fdd842ae775fa07646845a"
         },
@@ -874,12 +873,8 @@
       "normative_sections": [
         {
           "anchor": "2. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in this document",
-          "requirement_ids": [
-            "BRY-REQ-LEGACY-0500",
-            "BRY-REQ-LEGACY-0600",
-            "BRY-REQ-LEGACY-0700",
-            "BRY-REQ-LEGACY-0800"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:7568 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "8e1cfab41d7ba2c2b60d43db6607510d84470b19cb3bcff9113c839e3c098768"
         },
@@ -889,7 +884,7 @@
             "BRY-REQ-LEGACY-0500",
             "BRY-REQ-LEGACY-0600",
             "BRY-REQ-LEGACY-0700",
-            "BRY-REQ-LEGACY-0800"
+            "BRY-REQ-LEGACYSSL1-0800"
           ],
           "section": "3",
           "section_sha256": "8b4cd0ed8e45011184d21b623a0cba6ef6ea3627dde1354234a5549f28f5e464"
@@ -899,7 +894,7 @@
         "BRY-REQ-LEGACY-0500",
         "BRY-REQ-LEGACY-0600",
         "BRY-REQ-LEGACY-0700",
-        "BRY-REQ-LEGACY-0800"
+        "BRY-REQ-LEGACYSSL1-0800"
       ],
       "sha256": "84e8adcafd4cde891e258342f9d5c3381f746d0ff40b196a8b83bb0b6a43c7d1",
       "status": "PROPOSED STANDARD"
@@ -925,19 +920,9 @@
       ],
       "normative_sections": [
         {
-          "anchor": "2. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIONA",
-          "requirement_ids": [
-            "BRY-REQ-COMPOSE-0148",
-            "BRY-REQ-LEGACY-0800"
-          ],
-          "section": "2",
-          "section_sha256": "7a5514948a60b2958fdcaa66a8ff8b984f3522abc48629a0e08db199622b7a08"
-        },
-        {
           "anchor": "12. TLS Exporter Labels Registry To aid those reviewers who start with the IANA registry, IANA has added: o The following note to the TLS Exporter Labels regist",
           "requirement_ids": [
-            "BRY-REQ-COMPOSE-0148",
-            "BRY-REQ-LEGACY-0800"
+            "BRY-REQ-COMPOSE-0148"
           ],
           "section": "12",
           "section_sha256": "5b136c77e30aac4bfd420414187ba606d87dd95d601ee72e7c6f677475441b85"
@@ -950,6 +935,13 @@
           ],
           "section": "17",
           "section_sha256": "8e4b9c25d84c88011e597eefdd2773f160c794df3096c0b763dfba28626e8c78"
+        },
+        {
+          "anchor": "2. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIONA",
+          "disposition": "not-applicable",
+          "rationale": "rfc:8447 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
+          "section": "2",
+          "section_sha256": "7a5514948a60b2958fdcaa66a8ff8b984f3522abc48629a0e08db199622b7a08"
         }
       ],
       "requirement_ids": [
@@ -978,9 +970,8 @@
       "normative_sections": [
         {
           "anchor": "2. Conventions and Definitions The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
-          "requirement_ids": [
-            "BRY-REQ-OPTIONAL-0136"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:8449 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "4fa15b0405c43869a68d885b1c2a067c287037b42b8abcf7a9e7a184894b6468"
         },
@@ -1045,19 +1036,16 @@
       "normative_sections": [
         {
           "anchor": "2. Notational Conventions The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", a",
-          "requirement_ids": [
-            "BRY-REQ-OPTIONAL-0145",
-            "BRY-REQ-OPTIONAL-0146",
-            "BRY-REQ-OPTIONAL-1461"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:8879 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "952391e42cdc3587871f00b7062331f87549b1488a784dae2a8102f1ee5ce96d"
         },
         {
           "anchor": "3. Negotiating Certificate Compression This extension is only supported with TLS 1.3 [RFC8446] and newer; if TLS 1.2 [RFC5246] or earlier is negotiated, the pee",
           "requirement_ids": [
-            "BRY-REQ-OPTIONAL-0145",
-            "BRY-REQ-OPTIONAL-0146",
+            "BRY-REQ-CERTEXT-0146",
+            "BRY-REQ-CERTREG-0146",
             "BRY-REQ-OPTIONAL-1461"
           ],
           "section": "3",
@@ -1085,6 +1073,8 @@
         }
       ],
       "requirement_ids": [
+        "BRY-REQ-CERTEXT-0146",
+        "BRY-REQ-CERTREG-0146",
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461"
@@ -1155,26 +1145,16 @@
       "normative_sections": [
         {
           "anchor": "2. Requirements Notation The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", an",
-          "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:9180 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "e7d8666b62c28d905204f2085431b8d3be7b5ee80ec7ef0d6e35b582337c7b70"
         },
         {
           "anchor": "4. Cryptographic Dependencies HPKE variants rely on the following primitives: * A key encapsulation mechanism (KEM): - GenerateKeyPair(): Randomized algorithm t",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "4",
           "section_sha256": "f6e3949902b3ee31531cd739605eefb65e6c5eabdc3623c47e5307383e19bf77"
@@ -1182,12 +1162,8 @@
         {
           "anchor": "4.1. DH-Based KEM (DHKEM) Suppose we are given a KDF, and a Diffie-Hellman (DH) group providing the following operations: * DH(skX, pkY): Perform a non-interact",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "4.1",
           "section_sha256": "0fd455de56c67728bb9ac967cb353ae629c5b6cd9e0c5c8095f5f7aa8446c393"
@@ -1197,10 +1173,7 @@
           "requirement_ids": [
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKE-0139"
           ],
           "section": "5",
           "section_sha256": "f2dfe38f975ddbdeba916cc3b7b014cb9ffe9ede6a8cc7eb7fcb761debea0388"
@@ -1211,9 +1184,7 @@
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKE-0139"
           ],
           "section": "5.1",
           "section_sha256": "feddd9b291996b9d7988c7695b10937328ba2ceff1de96cb3a0789e3a37e9c1f"
@@ -1221,11 +1192,6 @@
         {
           "anchor": "5.1.2. Authentication Using a Pre-Shared Key This variant extends the base mechanism by allowing the recipient to authenticate that the sender possessed a given",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
             "BRY-REQ-HPKEX-1391"
           ],
           "section": "5.1.2",
@@ -1234,11 +1200,6 @@
         {
           "anchor": "5.1.4. Authentication Using Both a PSK and an Asymmetric Key This mode is a straightforward combination of the PSK and authenticated modes. Like the PSK mode, a",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
             "BRY-REQ-HPKEX-1391"
           ],
           "section": "5.1.4",
@@ -1249,10 +1210,8 @@
           "requirement_ids": [
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
             "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKE-1391"
           ],
           "section": "5.2",
           "section_sha256": "cf756e62114fe8c2b868907461aa693b71229f70d376ec0fbbdfab78c71ce779"
@@ -1260,12 +1219,7 @@
         {
           "anchor": "5.3. Secret Export HPKE provides an interface for exporting secrets from the encryption context using a variable-length pseudorandom function (PRF), similar to",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKE-1391"
           ],
           "section": "5.3",
           "section_sha256": "787f4f223c34d697dc21e266c12cbe4cfcd5afd63fb87a950e88a1a0e561e553"
@@ -1276,9 +1230,7 @@
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "7.1.1",
           "section_sha256": "89eed8d94a1831f98588748710314012e95516ff70598562bfb6931c6bc863a4"
@@ -1286,12 +1238,8 @@
         {
           "anchor": "7.1.2. SerializePrivateKey and DeserializePrivateKey As per [SECG], P-256, P-384, and P-521 private keys are field elements in the scalar field of the curve bei",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "7.1.2",
           "section_sha256": "e17625e176b6837737022cf97315262c2b622491107e7f5cf174bd6ca78db220"
@@ -1299,12 +1247,8 @@
         {
           "anchor": "7.1.3. DeriveKeyPair The keys that DeriveKeyPair() produces have only as much entropy as the provided input keying material. For a given KEM, the ikm parameter",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "7.1.3",
           "section_sha256": "b0a15a6703425859b00052d7e00f13c3b809b09b4148e386e0722f1d2b6d1b45"
@@ -1315,9 +1259,7 @@
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "7.1.4",
           "section_sha256": "d6d84b91ff6ee2a0aca09e06f24571ba3722d32a7df992f6991e7ee0d3b037ba"
@@ -1325,12 +1267,8 @@
         {
           "anchor": "7.1.5. Future KEMs Section 9.2 lists security requirements on a KEM used within HPKE. The AuthEncap() and AuthDecap() functions are OPTIONAL. If a KEM algorithm",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "7.1.5",
           "section_sha256": "6504aee3299dab53c5363bef9c9b087937c4a1c31788a134a27223c465564bb4"
@@ -1338,12 +1276,8 @@
         {
           "anchor": "7.2.1. Input Length Restrictions This document defines LabeledExtract() and LabeledExpand() based on the KDFs listed above. These functions add prefixes to thei",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "7.2.1",
           "section_sha256": "bd63a081f9ab8bbdbdd5ad15622501e04d2c60858f439822e6b1e24e0d1a8ccd"
@@ -1351,11 +1285,6 @@
         {
           "anchor": "9.1.1. Key-Compromise Impersonation The DHKEM variants defined in this document are vulnerable to key- compromise impersonation attacks [BJM97], which means tha",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
             "BRY-REQ-HPKEX-1391"
           ],
           "section": "9.1.1",
@@ -1367,9 +1296,7 @@
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "9.2",
           "section_sha256": "8fce2cfaea6d2239180f7021f99ba8d044812e10bffd2b7dd319d9f44be3845f"
@@ -1377,12 +1304,7 @@
         {
           "anchor": "9.2.3. KEM Key Reuse An ikm input to DeriveKeyPair() (Section 7.1.3) MUST NOT be reused elsewhere, in particular not with DeriveKeyPair() of a different KEM. Th",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKE-0138"
           ],
           "section": "9.2.3",
           "section_sha256": "31b5b3e756792808de7eafe4597559a48713d8f7d9745126c7cbf2bf7a5a822a"
@@ -1393,9 +1315,7 @@
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "9.3",
           "section_sha256": "47a66fbc5999a6196c71e7cb3f0cef568a26ab09f67247bb1a56d731456cefb1"
@@ -1406,9 +1326,7 @@
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "9.4",
           "section_sha256": "dedeecfd3b5101658721e014fb6e9d218e76e357b283c124af975aef057d6939"
@@ -1416,11 +1334,6 @@
         {
           "anchor": "9.5. Pre-Shared Key Recommendations In the PSK and AuthPSK modes, the PSK MUST have at least 32 bytes of entropy and SHOULD be of length Nh bytes or longer. Usi",
           "requirement_ids": [
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
             "BRY-REQ-HPKEX-1391"
           ],
           "section": "9.5",
@@ -1432,9 +1345,7 @@
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
             "BRY-REQ-HPKE-0138",
-            "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKEREG-0138"
           ],
           "section": "9.6",
           "section_sha256": "3eccb3e7821720c2b0a052b0be293caf078bff1384826bbcbe367ba89accaacc"
@@ -1444,10 +1355,8 @@
           "requirement_ids": [
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-HPKE-0138",
             "BRY-REQ-HPKE-0139",
-            "BRY-REQ-HPKE-1391",
-            "BRY-REQ-HPKEX-1391"
+            "BRY-REQ-HPKE-1391"
           ],
           "section": "9.7.1",
           "section_sha256": "bd7c0c4e1ae6301df1389fa8186e6fefbd961adc61b8fa4a340c1715b6f16d44"
@@ -1459,6 +1368,7 @@
         "BRY-REQ-HPKE-0138",
         "BRY-REQ-HPKE-0139",
         "BRY-REQ-HPKE-1391",
+        "BRY-REQ-HPKEREG-0138",
         "BRY-REQ-HPKEX-1391"
       ],
       "sha256": "f45a8b7c30231b26d668b1e8168074e5ab514b174d656b67e859895117f1f8f6",
@@ -1483,9 +1393,8 @@
       "normative_sections": [
         {
           "anchor": "2. Conventions and Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
-          "requirement_ids": [
-            "BRY-REQ-OPTIONAL-0144"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:9345 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "2e6acba2ccae102014823bcbc3e47186f97b7c08617809b3ba6077efd30e1e78"
         },
@@ -1595,19 +1504,57 @@
         {
           "anchor": "1.3. Terminology Terminology in this document is based on the common case where the SVCB record is used to access a resource identified by a URI whose authority",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "1.3",
           "section_sha256": "9cfc07e0ce68621c2b8e8509cf89a5a19ae27777b3bcd70fd8d5e14a1cb84d56"
         },
         {
-          "anchor": "2.1. Zone-File Presentation Format The presentation format <RDATA> of the record ([RFC1035], Section 5.1) has the form: SvcPriority TargetName SvcParams The SVC",
+          "anchor": "10.1. Structuring Zones for Flexibility Each ServiceMode RRset can only serve a single scheme. The scheme is indicated by the owner name and the RR type. For th",
+          "requirement_ids": [
+            "BRY-REQ-DNS-0140"
+          ],
+          "section": "10.1",
+          "section_sha256": "488ed9ddccdfc24bab88ab8aacfa3603cbbd858e18c3e52561052bb7dfa8f8c2"
+        },
+        {
+          "anchor": "10.2. Structuring Zones for Performance To avoid a delay for clients using a non-conforming recursive resolver, domain owners SHOULD minimize the use of AliasMo",
+          "requirement_ids": [
+            "BRY-REQ-DNS-0140"
+          ],
+          "section": "10.2",
+          "section_sha256": "6ce572f7e0a6fb4181fea110fa302fc01f9239d8ee89d35dcdbe96847230717a"
+        },
+        {
+          "anchor": "11. Interaction with Other Standards This standard is intended to reduce connection latency and improve user privacy. Server operators implementing this standar",
+          "requirement_ids": [
+            "BRY-REQ-DNS-0140"
+          ],
+          "section": "11",
+          "section_sha256": "b6209fd47bc97b435acee983195365c0ccd607813164e81bfe880bd20af59ce0"
+        },
+        {
+          "anchor": "12. Security Considerations SVCB/HTTPS RRs permit distribution over untrusted channels, and clients are REQUIRED to verify that the alternative endpoint is auth",
           "requirement_ids": [
             "BRY-REQ-DNS-0140",
             "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-1401"
+          ],
+          "section": "12",
+          "section_sha256": "0dd0dcaf8f8fb74d420bd4cb297f2f1786d5e60939b0ac3f64f423a943459bda"
+        },
+        {
+          "anchor": "14.3.1. Procedure A registration MUST include the following fields: Number: Wire-format numeric identifier (range 0-65535) Name: Unique presentation name Meanin",
+          "requirement_ids": [
+            "BRY-REQ-DNS-0140"
+          ],
+          "section": "14.3.1",
+          "section_sha256": "4f1c3cc27810d7c49ab5f866628c8255328b1346fc616d90cdbc2859d1de9d69"
+        },
+        {
+          "anchor": "2.1. Zone-File Presentation Format The presentation format <RDATA> of the record ([RFC1035], Section 5.1) has the form: SvcPriority TargetName SvcParams The SVC",
+          "requirement_ids": [
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.1",
           "section_sha256": "94f9959dbcebdfb22ba82181f950a7a5f2e1a52a6ead6633d8685a4c0f0eac7a"
@@ -1615,9 +1562,7 @@
         {
           "anchor": "2.2. RDATA Wire Format The RDATA for the SVCB RR consists of: * a 2-octet field for SvcPriority as an integer in network byte order. * the uncompressed, fully q",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.2",
           "section_sha256": "9346b5ffaa210a5e88b25bc0002163aaa9870ad66c7ac156feb8150a2edc3fae"
@@ -1625,9 +1570,7 @@
         {
           "anchor": "2.3. SVCB Query Names When querying the SVCB RR, a service is translated into a QNAME by prepending the service name with a label indicating the scheme, prefixe",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.3",
           "section_sha256": "a1398f216e975b76fbb0b8b9aea0364df9c2a3344bcacc34033c87472a647166"
@@ -1635,9 +1578,7 @@
         {
           "anchor": "2.4.1. SvcPriority When SvcPriority is 0, the SVCB record is in AliasMode (Section 2.4.2). Otherwise, it is in ServiceMode (Section 2.4.3). Within a SVCB RRset,",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.4.1",
           "section_sha256": "a85cd8e062e16c93706b183e2d30c03ae247bf63c40da556e0ac0d9dfd001004"
@@ -1645,9 +1586,7 @@
         {
           "anchor": "2.4.2. AliasMode In AliasMode, the SVCB record aliases a service to a TargetName. SVCB RRsets SHOULD only have a single RR in AliasMode. If multiple AliasMode R",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.4.2",
           "section_sha256": "2fd7b5fd1b6f3620cec681339b74f028be62d856b0ed7e62ee50204022b69d1d"
@@ -1655,9 +1594,7 @@
         {
           "anchor": "2.4.3. ServiceMode In ServiceMode, the TargetName and SvcParams within each RR associate an alternative endpoint for the service with its connection parameters.",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.4.3",
           "section_sha256": "2e00c4bc118269aee6e9798ee12691cc9ca8092f7b5d91a13e03606796d7281a"
@@ -1665,9 +1602,7 @@
         {
           "anchor": "2.5.1. AliasMode For AliasMode SVCB RRs, a TargetName of \".\" indicates that the service is not available or does not exist. This indication is advisory: clients",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.5.1",
           "section_sha256": "5d5c3385b78e72603d649d0d91837a6f31913a4c761a3d1f11149604836e5aec"
@@ -1675,9 +1610,7 @@
         {
           "anchor": "2.5.2. ServiceMode For ServiceMode SVCB RRs, if TargetName has the value \".\", then the owner name of this record MUST be used as the effective TargetName. If th",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "2.5.2",
           "section_sha256": "d63e949ea027b227cccfe758b4f7c2ed35edf30dba1a6e6e44aaf98899e3db48"
@@ -1686,7 +1619,6 @@
           "anchor": "3. Client Behavior \"SVCB resolution\" is the process of enumerating and ordering the available endpoints for a service, as performed by the client. SVCB resoluti",
           "requirement_ids": [
             "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-1401"
           ],
           "section": "3",
@@ -1696,7 +1628,6 @@
           "anchor": "3.1. Handling Resolution Failures If DNS responses are cryptographically protected (e.g., using DNSSEC or TLS [DoT] [DoH]) and SVCB resolution fails due to an a",
           "requirement_ids": [
             "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-1401"
           ],
           "section": "3.1",
@@ -1705,9 +1636,7 @@
         {
           "anchor": "3.2. Clients Using a Proxy Clients using a domain-oriented transport proxy like HTTP CONNECT ([RFC7231], Section 4.3.6) or SOCKS5 [RFC1928] have the option of u",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "3.2",
           "section_sha256": "951fb125099e241e7304449cb52221b648eb61beb372405dbc47672c8a2990d4"
@@ -1715,9 +1644,7 @@
         {
           "anchor": "4.1. Authoritative Servers When replying to a SVCB query, authoritative DNS servers SHOULD return A, AAAA, and SVCB records in the Additional section for any Ta",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "4.1",
           "section_sha256": "cd2e00041ea268cd67ddabc12c9f3c3cdb2cbdee2ff5d8963d967bdaccfcdfac"
@@ -1725,9 +1652,7 @@
         {
           "anchor": "4.2. Recursive Resolvers Whether the recursive resolver is aware of SVCB or not, the normal response construction process used for unknown RR types [RFC3597] ge",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "4.2",
           "section_sha256": "74506a7042faf45699e4e8c4b03cfffa1e923cdda7bed107666a4de9de394aae"
@@ -1735,9 +1660,7 @@
         {
           "anchor": "4.2.1. DNS64 DNS64 resolvers synthesize responses to AAAA queries for names that only have an A record (Section 5.1.7 of [RFC6147]). SVCB-aware DNS64 resolvers",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "4.2.1",
           "section_sha256": "6d86a70c963dcf1dd2ffa8333b589d7e0ce2df4dbf6bd1686223a61e4a8d413c"
@@ -1745,9 +1668,7 @@
         {
           "anchor": "4.3. General Requirements Recursive resolvers MUST be able to convey SVCB records with unrecognized SvcParamKeys. Resolvers MAY accomplish this by treating the",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "4.3",
           "section_sha256": "ee1925419e7dd1e0369252497cb9c290375fbf58b6eb1786c17f2054d36456cd"
@@ -1755,9 +1676,7 @@
         {
           "anchor": "4.4. EDNS Client Subnet (ECS) The EDNS Client Subnet (ECS) option [RFC7871] allows recursive resolvers to request IP addresses that are suitable for a particula",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "4.4",
           "section_sha256": "3bd522791411ea3b014dd42f4d0343e22b5f638a8e8d92c24b7aadec74b2c1cc"
@@ -1766,7 +1685,6 @@
           "anchor": "5. Performance Optimizations For optimal performance (i.e., minimum connection setup time), clients SHOULD implement a client-side DNS cache. Responses in the A",
           "requirement_ids": [
             "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-1401"
           ],
           "section": "5",
@@ -1775,9 +1693,7 @@
         {
           "anchor": "5.1. Optimistic Pre-connection and Connection Reuse If an address response arrives before the corresponding SVCB response, the client MAY initiate a connection",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "5.1",
           "section_sha256": "b069f19224628eaed9ca3fdaf8156dfd0f7867f508dec2b2d96f73d66cfba117"
@@ -1785,9 +1701,7 @@
         {
           "anchor": "5.2. Generating and Using Incomplete Responses When following the procedure in Section 4.2, recursive resolvers MAY terminate the procedure early and produce a",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "5.2",
           "section_sha256": "d7aacd1a22067bc0e426444c85793b184e00a42420ffafaa41084936fc90ce77"
@@ -1795,9 +1709,7 @@
         {
           "anchor": "6. SVCB-Compatible RR Types An RR type is called \"SVCB-compatible\" if it permits an implementation that is identical to SVCB in its: * RDATA presentation format",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "6",
           "section_sha256": "18b89905a3322f050f4ef85c79deca36a358564c77e4ba45fc08dcb44db76e50"
@@ -1805,9 +1717,7 @@
         {
           "anchor": "7. Initial SvcParamKeys A few initial SvcParamKeys are defined here. These keys are useful for the \"https\" scheme, and most are expected to be generally applica",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "7",
           "section_sha256": "49ac3230c02fb2ac83670b81ce6e71a052cdfae5079c9aed119a032f99e5ba7c"
@@ -1815,9 +1725,7 @@
         {
           "anchor": "7.1. \"alpn\" and \"no-default-alpn\" The \"alpn\" and \"no-default-alpn\" SvcParamKeys together indicate the set of Application-Layer Protocol Negotiation (ALPN) proto",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "7.1",
           "section_sha256": "320b3c036792dda5cb3017de3935b52dbf9527323acff8b7d57a21c828e85a57"
@@ -1825,9 +1733,7 @@
         {
           "anchor": "7.1.1. Representation ALPNs are identified by their registered \"Identification Sequence\" (alpn-id), which is a sequence of 1-255 octets. alpn-id = 1*255OCTET Fo",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "7.1.1",
           "section_sha256": "069c5132f30445bbe1a165fddfee1ca5ae318fd57e34cb322b84f6ea4ea9acd3"
@@ -1835,9 +1741,7 @@
         {
           "anchor": "7.1.2. Use To establish a connection to the endpoint, clients MUST 1. Let SVCB-ALPN-Intersection be the set of protocols in the SVCB ALPN set that the client su",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "7.1.2",
           "section_sha256": "073a73c432251f44fbc872442a45e5bc084dd042e58299a75bb0fb6fecf2df64"
@@ -1845,9 +1749,7 @@
         {
           "anchor": "7.2. \"port\" The \"port\" SvcParamKey defines the TCP or UDP port that should be used to reach this alternative endpoint. If this key is not present, clients SHALL",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "7.2",
           "section_sha256": "17476199e913aafdb0f8d31d22d40eea04a6963bc2fa9592c438fc376cd8cb0a"
@@ -1855,9 +1757,7 @@
         {
           "anchor": "7.3. \"ipv4hint\" and \"ipv6hint\" The \"ipv4hint\" and \"ipv6hint\" keys convey IP addresses that clients MAY use to reach the service. If A and AAAA records for Targe",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "7.3",
           "section_sha256": "70dca2fc19e4ffaf17639fd572a65af303ff5b2f720869af29ef8fa92a0d0117"
@@ -1865,9 +1765,7 @@
         {
           "anchor": "8. ServiceMode RR Compatibility and Mandatory Keys In a ServiceMode RR, a SvcParamKey is considered \"mandatory\" if the RR will not function correctly for client",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "8",
           "section_sha256": "da5e17bc5cd743e81b49d421371f189ae4a3d7a569927be92476f3260e31d86d"
@@ -1875,9 +1773,7 @@
         {
           "anchor": "9. Using Service Bindings with HTTP The use of any protocol with SVCB requires a protocol-specific mapping specification. This section specifies the mapping for",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "9",
           "section_sha256": "76a1299e331546e2d882941511580185bb4384722a0c176d84da533ecfdf5c0a"
@@ -1885,9 +1781,7 @@
         {
           "anchor": "9.1. Query Names for HTTPS RRs The HTTPS RR uses Port Prefix Naming (Section 2.3), with one modification: if the scheme is \"https\" and the port is 443, then the",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "9.1",
           "section_sha256": "45e4172b77ec299ec424e56bc03169e12f16b726491b8d9415ca9771f55d429d"
@@ -1915,9 +1809,7 @@
         {
           "anchor": "9.3. Interaction with Alt-Svc Clients that implement support for both Alt-Svc and HTTPS records and are making a connection based on a cached Alt-Svc response S",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "9.3",
           "section_sha256": "a39e5c06f8e5a12d63fe0586b8771df981a906a5b1685f707e6fdf3ec7349076"
@@ -1926,8 +1818,7 @@
           "anchor": "9.4. Requiring Server Name Indication Clients MUST NOT use an HTTPS RR response unless the client supports the TLS Server Name Indication (SNI) extension and in",
           "requirement_ids": [
             "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0140"
           ],
           "section": "9.4",
           "section_sha256": "db089097c637a6816b9b47dad1cb3ca8ddecbfb2ae5201b895b0b57f1ea4b645"
@@ -1935,9 +1826,7 @@
         {
           "anchor": "9.5. HTTP Strict Transport Security (HSTS) An HTTPS RR directs the client to communicate with this host only over a secure transport, similar to HSTS [HSTS]. Pr",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "9.5",
           "section_sha256": "e07dc458f6077bb892bea90de98de11b14a936162f75778202be1474a7f4b0f4"
@@ -1945,62 +1834,10 @@
         {
           "anchor": "9.6. Use of HTTPS RRs in Other Protocols All HTTP connections to named origins are eligible to use HTTPS RRs, even when HTTP is used as part of another protocol",
           "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-DNS-0140"
           ],
           "section": "9.6",
           "section_sha256": "9adb7f98a2ec3251e2456b30fd39679d6c4dacf5348158dd8d95c855c7ee2916"
-        },
-        {
-          "anchor": "10.1. Structuring Zones for Flexibility Each ServiceMode RRset can only serve a single scheme. The scheme is indicated by the owner name and the RR type. For th",
-          "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "10.1",
-          "section_sha256": "488ed9ddccdfc24bab88ab8aacfa3603cbbd858e18c3e52561052bb7dfa8f8c2"
-        },
-        {
-          "anchor": "10.2. Structuring Zones for Performance To avoid a delay for clients using a non-conforming recursive resolver, domain owners SHOULD minimize the use of AliasMo",
-          "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "10.2",
-          "section_sha256": "6ce572f7e0a6fb4181fea110fa302fc01f9239d8ee89d35dcdbe96847230717a"
-        },
-        {
-          "anchor": "11. Interaction with Other Standards This standard is intended to reduce connection latency and improve user privacy. Server operators implementing this standar",
-          "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "11",
-          "section_sha256": "b6209fd47bc97b435acee983195365c0ccd607813164e81bfe880bd20af59ce0"
-        },
-        {
-          "anchor": "12. Security Considerations SVCB/HTTPS RRs permit distribution over untrusted channels, and clients are REQUIRED to verify that the alternative endpoint is auth",
-          "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "12",
-          "section_sha256": "0dd0dcaf8f8fb74d420bd4cb297f2f1786d5e60939b0ac3f64f423a943459bda"
-        },
-        {
-          "anchor": "14.3.1. Procedure A registration MUST include the following fields: Number: Wire-format numeric identifier (range 0-65535) Name: Unique presentation name Meanin",
-          "requirement_ids": [
-            "BRY-REQ-DNS-0140",
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "14.3.1",
-          "section_sha256": "4f1c3cc27810d7c49ab5f866628c8255328b1346fc616d90cdbc2859d1de9d69"
         }
       ],
       "requirement_ids": [
@@ -2026,19 +1863,24 @@
       ],
       "normative_sections": [
         {
-          "anchor": "2. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIONA",
+          "anchor": "16. Registration Requests Registration requests MUST be submitted in one of two ways: 1. By sending email to iana@iana.org; this email SHOULD use an appropriate",
           "requirement_ids": [
-            "BRY-REQ-COMPOSE-0148",
-            "BRY-REQ-LEGACY-0800"
+            "BRY-REQ-COMPOSE-0148"
           ],
+          "section": "16",
+          "section_sha256": "08c29786f49250c8f0624140a148b403615fccfa0776bf455754b730c861ff9d"
+        },
+        {
+          "anchor": "2. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIONA",
+          "disposition": "not-applicable",
+          "rationale": "rfc:9847 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "7a5514948a60b2958fdcaa66a8ff8b984f3522abc48629a0e08db199622b7a08"
         },
         {
           "anchor": "3. Updating \"Recommended\" Column's Values The instructions in this document update the \"Recommended\" column, originally added in [RFC8447] to add a third value,",
           "requirement_ids": [
-            "BRY-REQ-COMPOSE-0148",
-            "BRY-REQ-LEGACY-0800"
+            "BRY-REQ-COMPOSE-0148"
           ],
           "section": "3",
           "section_sha256": "46f58872504e9b9509d0fa888d465efbb65ce0b81e6a98c8fbe41958a69f7e72"
@@ -2046,8 +1888,7 @@
         {
           "anchor": "3.1. Recommended Note Existing registries have a note on the meaning of the \"Recommended\" column. For the registries discussed in the subsequent sections, this",
           "requirement_ids": [
-            "BRY-REQ-COMPOSE-0148",
-            "BRY-REQ-LEGACY-0800"
+            "BRY-REQ-COMPOSE-0148"
           ],
           "section": "3.1",
           "section_sha256": "7a2389c2905fdd7dcd9ddfbc7d881eb6dc071baaa7ace4c228f70ff0e9ae94c7"
@@ -2064,20 +1905,10 @@
         {
           "anchor": "7. TLS Exporter Labels Registry This document updates the registration procedure for the \"TLS Exporter Labels\" registry and updates the \"Recommended\" column all",
           "requirement_ids": [
-            "BRY-REQ-COMPOSE-0148",
-            "BRY-REQ-LEGACY-0800"
+            "BRY-REQ-COMPOSE-0148"
           ],
           "section": "7",
           "section_sha256": "6c2cf6ee713d519fd70bd64b77ba9f8af6f51cd648405e40a9d0bacf96ffbcc3"
-        },
-        {
-          "anchor": "16. Registration Requests Registration requests MUST be submitted in one of two ways: 1. By sending email to iana@iana.org; this email SHOULD use an appropriate",
-          "requirement_ids": [
-            "BRY-REQ-COMPOSE-0148",
-            "BRY-REQ-LEGACY-0800"
-          ],
-          "section": "16",
-          "section_sha256": "08c29786f49250c8f0624140a148b403615fccfa0776bf455754b730c861ff9d"
         }
       ],
       "requirement_ids": [
@@ -2105,11 +1936,8 @@
       "normative_sections": [
         {
           "anchor": "2. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIONA",
-          "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:9848 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "7a5514948a60b2958fdcaa66a8ff8b984f3522abc48629a0e08db199622b7a08"
         },
@@ -2117,7 +1945,6 @@
           "anchor": "3. SvcParam for ECH Configuration The \"ech\" SvcParamKey conveys the ECH configuration of an alternative endpoint. It is applicable to all schemes that use TLS-b",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "3",
@@ -2127,7 +1954,6 @@
           "anchor": "4. Requirements for Server Deployments When publishing a record containing an \"ech\" parameter, the publisher MUST ensure that all IP addresses of TargetName cor",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "4",
@@ -2147,7 +1973,6 @@
           "anchor": "5.3. Performance Optimizations Prior to retrieving the SVCB records, the client does not know whether they contain an \"ech\" parameter. As a latency optimization",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "5.3",
@@ -2157,7 +1982,6 @@
           "anchor": "6. Interaction with HTTP Alt-Svc HTTP clients that implement both HTTP Alt-Svc [RFC7838] and the HTTPS record type [SVCB] can use them together, provided that t",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "6",
@@ -2199,14 +2023,61 @@
       ],
       "normative_sections": [
         {
-          "anchor": "2. Conventions and Definitions The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
+          "anchor": "10.1. Security and Privacy Goals ECH considers two types of attackers: passive and active. Passive attackers can read packets from the network, but they cannot",
+          "requirement_ids": [
+            "BRY-REQ-ECH-0140",
+            "BRY-REQ-ECH-0141",
+            "BRY-REQ-ECH-0142"
+          ],
+          "section": "10.1",
+          "section_sha256": "484099095096c1c5580a0e30de51c804f190e7bc7a6bc2cbe078e90b55168f26"
+        },
+        {
+          "anchor": "10.4. Ignored Configuration Identifiers and Trial Decryption Ignoring configuration identifiers may be useful in scenarios where clients and client-facing serve",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
+          "section": "10.4",
+          "section_sha256": "2806c8ceeab62e158de0b911d206de85ce7b00b371a4a69f1858e0633c19f20c"
+        },
+        {
+          "anchor": "10.5. Outer ClientHello Any information that the client includes in the ClientHelloOuter is visible to passive observers. The client SHOULD NOT send values in t",
+          "requirement_ids": [
+            "BRY-REQ-ECH-0140",
+            "BRY-REQ-ECH-0141",
+            "BRY-REQ-ECH-0142"
+          ],
+          "section": "10.5",
+          "section_sha256": "f8dceae9995712d75275ca9afccd82d867d7d47153ea2fa65fe9bfbe0c40d900"
+        },
+        {
+          "anchor": "10.7. Related Privacy Leaks ECH requires encrypted DNS to be an effective privacy protection mechanism. However, verifying the server's identity from the Certif",
+          "requirement_ids": [
+            "BRY-REQ-ECH-0140",
+            "BRY-REQ-ECH-0141",
+            "BRY-REQ-ECH-0142"
+          ],
+          "section": "10.7",
+          "section_sha256": "4419a9e4bc0046f423b79722622013a3f6479bf00990b0ed1f9d1b8af6954415"
+        },
+        {
+          "anchor": "10.8. Cookies Section 4.2.2 of [RFC8446] defines a cookie value that servers may send in HelloRetryRequest for clients to echo in the second ClientHello. While",
+          "requirement_ids": [
+            "BRY-REQ-ECH-0140",
+            "BRY-REQ-ECH-0141",
+            "BRY-REQ-ECH-0142",
+            "BRY-REQ-ECH-0143"
+          ],
+          "section": "10.8",
+          "section_sha256": "31a8ef54ef41834c8be33d4a83160d3258d2675ad688ea28d9950e887ec03e97"
+        },
+        {
+          "anchor": "2. Conventions and Definitions The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
+          "disposition": "not-applicable",
+          "rationale": "rfc:9849 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "0e02277feba51bc0c21c08d9da8dfa643541178737723c28a10fab00b9c61ac0"
         },
@@ -2214,9 +2085,6 @@
           "anchor": "4. Encrypted ClientHello Configuration ECH uses Hybrid Public Key Encryption (HPKE) for public key encryption [HPKE]. The ECH configuration is defined by the fo",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "4",
@@ -2226,9 +2094,6 @@
           "anchor": "4.1. Configuration Identifiers A client-facing server has a set of known ECHConfig values with corresponding private keys. This set SHOULD contain the currently",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "4.1",
@@ -2238,10 +2103,8 @@
           "anchor": "4.2. Configuration Extensions ECH configuration extensions are used to provide room for additional functionality as needed. The format is as defined in Section",
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-1401",
+            "BRY-REQ-ECHREG-0140"
           ],
           "section": "4.2",
           "section_sha256": "81ece66ad6fd932f9841f96c3653f4e0b5d21668e7fdb3e179bd522daaa36436"
@@ -2252,8 +2115,7 @@
             "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECHEXT-0140"
           ],
           "section": "5",
           "section_sha256": "fcf0fddf9686e352db421c47772805677c6454c1f24d2f446e1ecf653a09ea3c"
@@ -2261,11 +2123,7 @@
         {
           "anchor": "5.1. Encoding the ClientHelloInner Before encrypting, the client pads and optionally compresses ClientHelloInner into an EncodedClientHelloInner structure, defi",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "5.1",
           "section_sha256": "185d60ee7aaa6d69c56889c655319ec64218cf2d3487d9b839789cd9224fb17d"
@@ -2273,11 +2131,7 @@
         {
           "anchor": "6.1. Offering ECH To offer ECH, the client first chooses a suitable ECHConfig from the server's ECHConfigList. To determine if a given ECHConfig is suitable, it",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.1",
           "section_sha256": "0532f386066d64e900580119e359cbb7918930063103141de4041fc099b7aeae"
@@ -2285,11 +2139,7 @@
         {
           "anchor": "6.1.1. Encrypting the ClientHello Given an EncodedClientHelloInner, an HPKE encryption context and enc value, and a partial ClientHelloOuterAAD, the client cons",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.1.1",
           "section_sha256": "8bb4f4463dac2c35be06fd62e8827fb3e70a096ae4aa925bb26e86d79c28cc49"
@@ -2297,11 +2147,7 @@
         {
           "anchor": "6.1.2. GREASE PSK When offering ECH, the client is not permitted to advertise PSK identities in the ClientHelloOuter. However, the client can send a \"pre_shared",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.1.2",
           "section_sha256": "67be21592c77a11f3fcc46b63fc77b46dae8cb78c3e19b85a338492f15936069"
@@ -2309,11 +2155,7 @@
         {
           "anchor": "6.1.3. Recommended Padding Scheme If the ClientHelloInner is encrypted without padding, then the length of the ClientHelloOuter.payload can leak information abo",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.1.3",
           "section_sha256": "7b5986566ff473f9b6d917c5c7db8e9c6aff45e98ea6949829175597a3d7a429"
@@ -2321,11 +2163,8 @@
         {
           "anchor": "6.1.4. Determining ECH Acceptance As described in Section 7, the server may either accept ECH and use ClientHelloInner or reject it and use ClientHelloOuter. Th",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0143"
           ],
           "section": "6.1.4",
           "section_sha256": "89ad2022fc85067ed275b2e0bd456965b7f397a184f691462cd339bfe7b59a37"
@@ -2333,11 +2172,7 @@
         {
           "anchor": "6.1.5. Handshaking with ClientHelloInner If the server accepts ECH, the client proceeds with the connection as in [RFC8446], with the following modifications: T",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.1.5",
           "section_sha256": "125578a3c49e2ed4805c00640f47a928a334dd031b4a998e759bd6d8ef62fe5e"
@@ -2345,11 +2180,7 @@
         {
           "anchor": "6.1.6. Handshaking with ClientHelloOuter If the server rejects ECH, the client proceeds with the handshake, authenticating for ECHConfig.contents.public_name as",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.1.6",
           "section_sha256": "10a6cf156c733b45c2850aabe637a9a3a0723a932c44ad35f772bf8d3a91f5ae"
@@ -2357,11 +2188,7 @@
         {
           "anchor": "6.1.7. Authenticating for the Public Name When the server rejects ECH, it continues with the handshake using the plaintext \"server_name\" extension instead (see",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.1.7",
           "section_sha256": "392a07b9ceb72de9e7cf00744a77df2398c420022a9f33737af3ce7a5165024d"
@@ -2369,9 +2196,7 @@
         {
           "anchor": "6.1.8. Impact of Retry on Future Connections Clients MAY use information learned from a rejected ECH for future connections to avoid repeatedly connecting to th",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
             "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
@@ -2381,11 +2206,7 @@
         {
           "anchor": "6.2.1. Client Greasing If the client attempts to connect to a server and does not have an ECHConfig structure available for the server, it SHOULD send a GREASE",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0141"
           ],
           "section": "6.2.1",
           "section_sha256": "627e753f4361e0a7c878f00a302c72e27c2a616d60b738ce3dbe493bc7e7eeb6"
@@ -2393,11 +2214,8 @@
         {
           "anchor": "6.2.2. Server Greasing Section 11.3 describes a set of Reserved extensions which will never be registered. These can be used by servers to \"grease\" the contents",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECHREG-0140"
           ],
           "section": "6.2.2",
           "section_sha256": "4106a46f5313e4dd900437fbdd8b0efacd51566f7b8e9fb221d2f79a4fdd2d9c"
@@ -2405,11 +2223,7 @@
         {
           "anchor": "7. Server Behavior As described in Section 3.1, servers can play two roles, either as the client-facing server or as the backend server. Depending on the server",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0142"
           ],
           "section": "7",
           "section_sha256": "ecf40b7e61ea353f1fd43a4e1b741a112747f454a6623002475f8e180e76bb59"
@@ -2417,11 +2231,7 @@
         {
           "anchor": "7.1. Client-Facing Server Upon receiving an \"encrypted_client_hello\" extension in an initial ClientHello, the client-facing server determines if it will accept",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0142"
           ],
           "section": "7.1",
           "section_sha256": "468cf02180af6e46cd766d928d99de39490623ed61d3962f3cf3234132609b49"
@@ -2429,11 +2239,8 @@
         {
           "anchor": "7.1.1. Processing ClientHello after HelloRetryRequest After sending or forwarding a HelloRetryRequest, the client-facing server does not repeat the steps in Sec",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0143"
           ],
           "section": "7.1.1",
           "section_sha256": "eb4bee7a49d9831ef7555b27063687b616a34c7aa951d025e482cd9afad3f44a"
@@ -2441,11 +2248,7 @@
         {
           "anchor": "7.2. Backend Server Upon receipt of an \"encrypted_client_hello\" extension of type inner in a ClientHello, if the backend server negotiates TLS 1.3 or higher, th",
           "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0142"
           ],
           "section": "7.2",
           "section_sha256": "1ca96d0114ef8926feba54c6d68e417ca108dab25b7981aa3d2f7ba351c567da"
@@ -2456,7 +2259,6 @@
             "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "8.1",
@@ -2479,9 +2281,7 @@
           "requirement_ids": [
             "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
+            "BRY-REQ-ECH-0142"
           ],
           "section": "8.1.2",
           "section_sha256": "aa19d2243dab6bacf395794edeb8556a94bb9c7c7377a30ac3c1fcb4599793af"
@@ -2492,71 +2292,10 @@
             "BRY-REQ-ECH-0140",
             "BRY-REQ-ECH-0141",
             "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
             "BRY-REQ-ECH-1401"
           ],
           "section": "9",
           "section_sha256": "b919ef1c6614d346a6c2a4a42a6e971c5a83071c72440c66f9d4bbdbe1d26459"
-        },
-        {
-          "anchor": "10.1. Security and Privacy Goals ECH considers two types of attackers: passive and active. Passive attackers can read packets from the network, but they cannot",
-          "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "10.1",
-          "section_sha256": "484099095096c1c5580a0e30de51c804f190e7bc7a6bc2cbe078e90b55168f26"
-        },
-        {
-          "anchor": "10.4. Ignored Configuration Identifiers and Trial Decryption Ignoring configuration identifiers may be useful in scenarios where clients and client-facing serve",
-          "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "10.4",
-          "section_sha256": "2806c8ceeab62e158de0b911d206de85ce7b00b371a4a69f1858e0633c19f20c"
-        },
-        {
-          "anchor": "10.5. Outer ClientHello Any information that the client includes in the ClientHelloOuter is visible to passive observers. The client SHOULD NOT send values in t",
-          "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "10.5",
-          "section_sha256": "f8dceae9995712d75275ca9afccd82d867d7d47153ea2fa65fe9bfbe0c40d900"
-        },
-        {
-          "anchor": "10.7. Related Privacy Leaks ECH requires encrypted DNS to be an effective privacy protection mechanism. However, verifying the server's identity from the Certif",
-          "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "10.7",
-          "section_sha256": "4419a9e4bc0046f423b79722622013a3f6479bf00990b0ed1f9d1b8af6954415"
-        },
-        {
-          "anchor": "10.8. Cookies Section 4.2.2 of [RFC8446] defines a cookie value that servers may send in HelloRetryRequest for clients to echo in the second ClientHello. While",
-          "requirement_ids": [
-            "BRY-REQ-ECH-0140",
-            "BRY-REQ-ECH-0141",
-            "BRY-REQ-ECH-0142",
-            "BRY-REQ-ECH-0143",
-            "BRY-REQ-ECH-1401"
-          ],
-          "section": "10.8",
-          "section_sha256": "31a8ef54ef41834c8be33d4a83160d3258d2675ad688ea28d9950e887ec03e97"
         }
       ],
       "requirement_ids": [
@@ -2564,7 +2303,9 @@
         "BRY-REQ-ECH-0141",
         "BRY-REQ-ECH-0142",
         "BRY-REQ-ECH-0143",
-        "BRY-REQ-ECH-1401"
+        "BRY-REQ-ECH-1401",
+        "BRY-REQ-ECHEXT-0140",
+        "BRY-REQ-ECHREG-0140"
       ],
       "sha256": "56cf7f40c41b2566bfe9c3df18e73cd649b7c0e33690439a43582a65a3b3a0cc",
       "status": "PROPOSED STANDARD"
@@ -2608,25 +2349,22 @@
         {
           "anchor": "1.1. Applicability Statement The artifact that this document describes -- if made available to entities other than endpoints -- completely undermines the core g",
           "requirement_ids": [
-            "BRY-REQ-OPERATIONS-0010",
-            "BRY-REQ-TESTING-0010"
+            "BRY-REQ-OPERATIONS-0010"
           ],
           "section": "1.1",
           "section_sha256": "f4835911929ef0ff08749f1605ef8c49cbf30705a102658299a540bd6dccbf03"
         },
         {
           "anchor": "1.2. Conventions The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIO",
-          "requirement_ids": [
-            "BRY-REQ-OPERATIONS-0010",
-            "BRY-REQ-TESTING-0010"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:9850 section 1.2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "1.2",
           "section_sha256": "0a4c0227fb3be72490f4b410072e7446cca112fbd5adb6055830fff086968c02"
         },
         {
           "anchor": "2. The SSLKEYLOGFILE Format A file in SSLKEYLOGFILE format is a text file. This document specifies the character encoding as UTF-8 [RFC3629]. Though the format",
           "requirement_ids": [
-            "BRY-REQ-OPERATIONS-0010",
+            "BRY-REQ-KEYLOGREG-0010",
             "BRY-REQ-TESTING-0010"
           ],
           "section": "2",
@@ -2635,7 +2373,7 @@
         {
           "anchor": "2.1. Secret Labels for TLS 1.3 An implementation of TLS 1.3 produces a number of values as part of the key schedule (see Section 7.1 of [TLS13]). If ECH was suc",
           "requirement_ids": [
-            "BRY-REQ-OPERATIONS-0010",
+            "BRY-REQ-KEYLOGREG-0010",
             "BRY-REQ-TESTING-0010"
           ],
           "section": "2.1",
@@ -2644,7 +2382,7 @@
         {
           "anchor": "2.3. Secret Labels for ECH With ECH [ECH], additional secrets are derived during the handshake to encrypt the Inner ClientHello message using Hybrid Public Key",
           "requirement_ids": [
-            "BRY-REQ-OPERATIONS-0010",
+            "BRY-REQ-KEYLOGREG-0010",
             "BRY-REQ-TESTING-0010"
           ],
           "section": "2.3",
@@ -2652,11 +2390,132 @@
         }
       ],
       "requirement_ids": [
+        "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-OPERATIONS-0010",
         "BRY-REQ-TESTING-0010"
       ],
       "sha256": "22dd50eb54705d89c282cfdc88dc17cd98f2f40452888ba0fd3a12028d158ad8",
       "status": "INFORMATIONAL"
+    },
+    {
+      "authority_role": "current",
+      "domains": [
+        "dtls"
+      ],
+      "errata": [],
+      "id": "rfc:9853",
+      "kind": "rfc",
+      "milestones": [
+        "0.102.0",
+        "0.103.0",
+        "0.104.0",
+        "0.105.0",
+        "0.106.0",
+        "0.107.0",
+        "0.108.0",
+        "0.109.0",
+        "0.110.0",
+        "0.111.0",
+        "0.112.0",
+        "0.113.0",
+        "0.114.0",
+        "0.115.0",
+        "0.116.0"
+      ],
+      "normative_sections": [
+        {
+          "anchor": "10.3.1. Designated Expert Instructions To enable a broadly informed review of registration decisions, it is recommended that multiple designated experts be appo",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "10.3.1",
+          "section_sha256": "a06224818b97a63bd7c7578b02378957274436ec072b989a01e5fe1c7f45314a"
+        },
+        {
+          "anchor": "2. Conventions and Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
+          "disposition": "not-applicable",
+          "rationale": "rfc:9853 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
+          "section": "2",
+          "section_sha256": "c6d5043897b79bde0787c02eb7c56306103e4498555d01bc37de1706892fd2b9"
+        },
+        {
+          "anchor": "3. RRC Extension The use of RRC is negotiated via the rrc extension. The rrc extension is only defined for DTLS 1.2 and 1.3. On connecting, a client wishing to",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "3",
+          "section_sha256": "6ca69d4b9074468c84f6bebeaa79f5cd5612ca22521da92563006e51abe3c30c"
+        },
+        {
+          "anchor": "3.1. RRC and CID Interplay RRC offers an in-protocol mechanism to perform peer address validation that complements the \"peer address update\" procedure described",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "3.1",
+          "section_sha256": "c0ad499d373ae56a67f148eba522e95e8f4318f718027b116d582be289c487fa"
+        },
+        {
+          "anchor": "4. Return Routability Check Message Types This document defines the return_routability_check content type (Figure 1) to carry Return Routability Check messages.",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "4",
+          "section_sha256": "545b30ff30cb1910257729c68b0f5400cd5be912e65f34525652b2631b3e5465"
+        },
+        {
+          "anchor": "5. Path Validation Procedure A receiver that observes the peer's address change MUST stop sending any buffered application data or limit the data sent to the un",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "5",
+          "section_sha256": "1bf6ae73c00cc0f04e9615a1263359442fb6643ae9678bc10ba9b654492def2f"
+        },
+        {
+          "anchor": "5.2. Enhanced The enhanced return routability check comprises the following steps: 1. The receiver (i.e., the initiator) creates a return_routability_check mess",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "5.2",
+          "section_sha256": "29a7f6f7c7afb650f73570b088a4e9e0086638f8599c8c79ed71f25b36578603"
+        },
+        {
+          "anchor": "5.3. Path Challenge Requirements * The initiator MAY send multiple return_routability_check messages of type path_challenge to account for packet loss on the pr",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "5.3",
+          "section_sha256": "db0ee3651707538f995f61d2588eea10531dc02acd2f5796bfe8165b505e990a"
+        },
+        {
+          "anchor": "5.4. Path Response/Drop Requirements * The responder MUST NOT delay sending an elicited path_response or path_drop messages. * The responder MUST send exactly o",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "5.4",
+          "section_sha256": "01eb06dffaf20ae842acd06107d6e63da6fe16ecfe4c39b1e12fcbe099e7d40e"
+        },
+        {
+          "anchor": "5.5. Timer Choice When setting T, implementations are cautioned that the new path could have a longer RTT than the original. In settings where there is external",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "5.5",
+          "section_sha256": "8ba4b7ae1fc937e4a3c0811b37adba54b9c344c523d097fe58ef9d41f333f1ea"
+        },
+        {
+          "anchor": "9. Privacy Considerations When using DTLS 1.3, peers SHOULD avoid using the same CID on multiple network paths, in particular when initiating connection migrati",
+          "requirement_ids": [
+            "BRY-REQ-RRCREG-0148"
+          ],
+          "section": "9",
+          "section_sha256": "c180dfde630a5de74023a079ca5f4f3af82db99893e5ee726f44dc570e63dc63"
+        }
+      ],
+      "requirement_ids": [
+        "BRY-REQ-RRCREG-0148"
+      ],
+      "sha256": "88b0e4322763defc5d9219d3f1405fb6d488f1c3101c4e60d5b36ff3fa8d70d0",
+      "status": "PROPOSED STANDARD"
     },
     {
       "authority_role": "exclusion",
@@ -2688,9 +2547,8 @@
       "normative_sections": [
         {
           "anchor": "2. Conventions and Definitions The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MA",
-          "requirement_ids": [
-            "BRY-REQ-PQPKIX-0046"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:9935 section 2 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "2",
           "section_sha256": "4fa15b0405c43869a68d885b1c2a067c287037b42b8abcf7a9e7a184894b6468"
         },
@@ -2752,9 +2610,8 @@
       "normative_sections": [
         {
           "anchor": "1.1. Terminology The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIO",
-          "requirement_ids": [
-            "BRY-REQ-PQ-0117"
-          ],
+          "disposition": "not-applicable",
+          "rationale": "rfc:9954 section 1.1 defines terminology or conventions rather than an independently implementable residual protocol behavior; it remains reviewed source context and is explicitly not inherited by a requirement.",
           "section": "1.1",
           "section_sha256": "701bc7953e01c86467ee85e97052c2d52c2312ffc54aa27ed90979f19da6f6d9"
         },
@@ -2798,11 +2655,11 @@
       "status": "INFORMATIONAL"
     }
   ],
-  "authority_count": 33,
-  "mapped_normative_section_count": 182,
-  "normative_section_count": 182,
-  "policy_sha256": "a75298871a0b523e74b82b9aeab8ff3d4d7f6742f43d5c857b96df1f15a6f041",
-  "requirement_count": 38,
+  "authority_count": 34,
+  "mapped_normative_section_count": 175,
+  "normative_section_count": 193,
+  "policy_sha256": "eeceb5608ddf3aea0e1130077dc2ba2a903ebf45a7cf1ce443d16682693b8a0a",
+  "requirement_count": 47,
   "schema": 1,
   "surface_count": 741,
   "surfaces": [
@@ -6172,7 +6029,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-aead-ids",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6180,7 +6037,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-aead-ids.0x0000.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6188,7 +6045,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-aead-ids.0x0001.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6196,7 +6053,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-aead-ids.0x0002.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6204,7 +6061,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-aead-ids.0x0003.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6212,7 +6069,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-aead-ids.0x0004-0xfffe.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6220,7 +6077,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-aead-ids.0xffff.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6228,7 +6085,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6236,7 +6093,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0000.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6244,7 +6101,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0001.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6252,7 +6109,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0002.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6260,7 +6117,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0003.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6268,7 +6125,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0004-0x000f.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6276,7 +6133,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0010.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6284,7 +6141,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0011.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6292,7 +6149,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0012.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6300,7 +6157,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0013.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6308,7 +6165,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kdf-ids.0x0014-0xffff.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6316,7 +6173,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6324,7 +6181,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0000.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6332,7 +6189,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0001-0x000f.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6340,7 +6197,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0010.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6348,7 +6205,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0011.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6356,7 +6213,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0012.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6364,7 +6221,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0013.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6372,7 +6229,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0014.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6380,7 +6237,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0015.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6388,7 +6245,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0016.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6396,7 +6253,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0017-0x001f.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6404,7 +6261,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0020.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6412,7 +6269,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0021.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6420,7 +6277,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0022.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6428,7 +6285,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0023-0x002f.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6436,7 +6293,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0030.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6444,7 +6301,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0031-0x003f.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6452,7 +6309,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0040.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6460,7 +6317,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0041.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6468,7 +6325,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0042.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6476,7 +6333,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0043-0x004f.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6484,7 +6341,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0050.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6492,7 +6349,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0051.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6500,7 +6357,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x0052-0x6479.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6508,7 +6365,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x647a.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6516,7 +6373,7 @@
       "domain": "hpke",
       "id": "iana.hpke.hpke-kem-ids.0x647b-0xffff.1",
       "owner": "0.138.0",
-      "requirement_id": "BRY-REQ-HPKE-0138"
+      "requirement_id": "BRY-REQ-HPKEREG-0138"
     },
     {
       "coverage": "requirement",
@@ -6524,7 +6381,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6532,7 +6389,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.1",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6540,7 +6397,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.10",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6548,7 +6405,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.11",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6556,7 +6413,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.12",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6564,7 +6421,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.13",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6572,7 +6429,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.14",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6580,7 +6437,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.15",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6588,7 +6445,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.16",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6596,7 +6453,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.2",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6604,7 +6461,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.3",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6612,7 +6469,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.4",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6620,7 +6477,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.5",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6628,7 +6485,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.6",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6636,7 +6493,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.7",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6644,7 +6501,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.8",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -6652,7 +6509,7 @@
       "domain": "ech",
       "id": "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.9",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHREG-0140"
     },
     {
       "coverage": "requirement",
@@ -7164,7 +7021,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTREG-0146"
     },
     {
       "coverage": "requirement",
@@ -7172,7 +7029,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.brotli.1",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTREG-0146"
     },
     {
       "coverage": "requirement",
@@ -7180,7 +7037,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.reserved-for-experimental-use.1",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTREG-0146"
     },
     {
       "coverage": "requirement",
@@ -7188,7 +7045,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.reserved.1",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTREG-0146"
     },
     {
       "coverage": "requirement",
@@ -7196,7 +7053,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.unassigned.1",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTREG-0146"
     },
     {
       "coverage": "requirement",
@@ -7204,7 +7061,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.zlib.1",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTREG-0146"
     },
     {
       "coverage": "requirement",
@@ -7212,7 +7069,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.zstd.1",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTREG-0146"
     },
     {
       "coverage": "requirement",
@@ -7284,7 +7141,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.compress-certificate.1",
       "owner": "0.146.0",
-      "requirement_id": "BRY-REQ-OPTIONAL-0146"
+      "requirement_id": "BRY-REQ-CERTEXT-0146"
     },
     {
       "coverage": "requirement",
@@ -7364,7 +7221,7 @@
       "domain": "ech",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.encrypted-client-hello.1",
       "owner": "0.140.0",
-      "requirement_id": "BRY-REQ-ECH-0140"
+      "requirement_id": "BRY-REQ-ECHEXT-0140"
     },
     {
       "coverage": "requirement",
@@ -7724,7 +7581,7 @@
       "domain": "tls12",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1",
       "owner": "0.58.0",
-      "requirement_id": "BRY-REQ-TLS12X-0058"
+      "requirement_id": "BRY-REQ-TLS12EXT-0058"
     },
     {
       "coverage": "requirement",
@@ -8476,7 +8333,7 @@
       "domain": "tls",
       "id": "iana.tls-parameters.tls-rrc-message-types",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
@@ -8484,7 +8341,7 @@
       "domain": "tls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
@@ -8492,7 +8349,7 @@
       "domain": "tls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
@@ -8500,7 +8357,7 @@
       "domain": "tls",
       "id": "iana.tls-parameters.tls-rrc-message-types.path-response.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
@@ -8508,7 +8365,7 @@
       "domain": "tls",
       "id": "iana.tls-parameters.tls-rrc-message-types.reserved-for-private-use.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
@@ -8516,7 +8373,7 @@
       "domain": "tls",
       "id": "iana.tls-parameters.tls-rrc-message-types.unassigned.1",
       "owner": "0.148.0",
-      "requirement_id": "BRY-REQ-COMPOSE-0148"
+      "requirement_id": "BRY-REQ-RRCREG-0148"
     },
     {
       "coverage": "requirement",
@@ -8524,7 +8381,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8532,7 +8389,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.early-exporter-secret.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8540,7 +8397,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.echconfig-used-for-construction-of-the-ech.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8548,7 +8405,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.exporter-secret-after-handshake.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8556,7 +8413,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.hpke-kem-shared-secret-used-in-the-ech.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8564,7 +8421,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.master-secret-in-tls-1-2-and-earlier.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8572,7 +8429,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.secret-for-client-early-data-records.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8580,7 +8437,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-client-handshake.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8588,7 +8445,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-client-records-post-handshake.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8596,7 +8453,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-server-handshake.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8604,7 +8461,7 @@
       "domain": "operations",
       "id": "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-server-records-post-handshake.1",
       "owner": "0.10.0",
-      "requirement_id": "BRY-REQ-OPERATIONS-0010"
+      "requirement_id": "BRY-REQ-KEYLOGREG-0010"
     },
     {
       "coverage": "requirement",
@@ -8628,7 +8485,7 @@
       "domain": "legacy",
       "id": "legacy.ssl1-research",
       "owner": "H0.8.0",
-      "requirement_id": "BRY-REQ-LEGACY-0800"
+      "requirement_id": "BRY-REQ-LEGACYSSL1-0800"
     },
     {
       "coverage": "requirement",

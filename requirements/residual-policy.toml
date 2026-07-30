@@ -9,13 +9,214 @@ domain = "application"
 owner = "0.130.0"
 disposition = "caller-owned"
 sources = ["iana:tls-extensiontype-values", "rfc:7301"]
+surface_ids = [
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x0a-0x0a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x1a-0x1a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x2a-0x2a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x3a-0x3a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x45-0x6f-0x51-eoq.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x4a-0x4a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x5a-0x5a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x63-0x6d-0x65-0x2d-0x74-0x6c-0x73-0x2f-0x31-acme-tls-1.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x2d-0x77-0x65-0x62-0x72-0x74-0x63-c-webrtc.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-0x61-0x70-coap.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-co.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x64-0x69-0x63-0x6f-0x6d-dicom.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x64-0x6f-0x71-doq.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x64-0x6f-0x74-dot.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x66-0x74-0x70-ftp.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x68-0x32-0x63-h2c.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x68-0x32-h2.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x68-0x33-h3.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x68-0x74-0x74-0x70-0x2f-0x30-0x2e-0x39-http-0-9.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x68-0x74-0x74-0x70-0x2f-0x31-0x2e-0x30-http-1-0.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x68-0x74-0x74-0x70-0x2f-0x31-0x2e-0x31-http-1-1.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x69-0x6d-0x61-0x70-imap.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x69-0x72-0x63-irc.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6a-0x6a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6d-0x61-0x6e-0x61-0x67-0x65-0x73-0x69-0x65-0x76-0x65-managesieve.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6d-0x71-0x74-0x74-mqtt.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x32-n-pamp-2.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x65-0x74-0x70-0x65-0x72-0x66-0x6d-0x65-0x74-0x65-0x72-0x2f-0x63-0x6f-0x6e-0x74-0x72-0x6f-0x6c-netperfmeter-control.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x65-0x74-0x70-0x65-0x72-0x66-0x6d-0x65-0x74-0x65-0x72-0x2f-0x64-0x61-0x74-0x61-netperfmeter-data.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x6e-0x73-0x70-nnsp.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x6e-0x74-0x70-nntp.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x74-0x73-0x6b-0x65-0x2f-0x31-ntske-1.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x70-0x6f-0x70-0x33-pop3.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x70-0x6f-0x73-0x74-0x67-0x72-0x65-0x73-0x71-0x6c-postgresql.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x72-0x61-0x64-0x69-0x75-0x73-0x2f-0x31-0x2e-0x30-radius-1-0.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x72-0x61-0x64-0x69-0x75-0x73-0x2f-0x31-0x2e-0x31-radius-1-1.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x69-0x70-0x2f-0x32-sip-2.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x6d-0x62-smb.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x31-spdy-1.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x32-spdy-2.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x33-spdy-3.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x74-0x75-0x6e-0x2e-0x6e-0x61-0x74-0x2d-0x64-0x69-0x73-0x63-0x6f-0x76-0x65-0x72-0x79-stun-nat-discovery.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x74-0x75-0x6e-0x2e-0x74-0x75-0x72-0x6e-stun-turn.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x75-0x6e-0x72-0x70-0x63-sunrpc.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x74-0x64-0x73-0x2f-0x38-0x2e-0x30-tds-8-0.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x77-0x65-0x62-0x72-0x74-0x63-webrtc.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x78-0x6d-0x70-0x70-0x2d-0x63-0x6c-0x69-0x65-0x6e-0x74-xmpp-client.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x78-0x6d-0x70-0x70-0x2d-0x73-0x65-0x72-0x76-0x65-0x72-xmpp-server.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x7a-0x7a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x8a-0x8a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x9a-0x9a.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0xaa-0xaa.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0xba-0xba.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0xca-0xca.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0xda-0xda.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0xea-0xea.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0xfa-0xfa.1",
+]
 
 [[surface_group]]
-id = "BRY-REQ-PQ-0117"
-domain = "cryptography"
-owner = "0.117.0"
+id = "BRY-REQ-CERTEXT-0146"
+domain = "tls"
+owner = "0.146.0"
 disposition = "future-work"
-sources = ["nist:NIST.FIPS.203.pdf", "nist:NIST.SP.800-227.pdf", "rfc:9954"]
+sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+surface_ids = [
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.compress-certificate.1",
+]
+
+[[surface_group]]
+id = "BRY-REQ-CERTREG-0146"
+domain = "tls"
+owner = "0.146.0"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+surface_ids = [
+  "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids",
+  "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.brotli.1",
+  "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.reserved-for-experimental-use.1",
+  "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.reserved.1",
+  "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.unassigned.1",
+  "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.zlib.1",
+  "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.zstd.1",
+]
+
+[[surface_group]]
+id = "BRY-REQ-COMPOSE-0148"
+domain = "tls"
+owner = "0.148.0"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "rfc:8447", "rfc:9847"]
+surface_ids = [
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.application-layer-protocol-negotiation.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.cached-info.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.cert-type.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.certificate-authorities.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-authz.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-type.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.delegated-credential.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.dnssec-chain.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.early-data.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.ec-point-formats.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.ech-outer-extensions.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.encrypt-then-mac.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.extended-main-secret.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-id-hash.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.external-session-id.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.key-share.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.oid-filters.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.padding.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.password-salt.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.pre-shared-key.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.psk-key-exchange-modes.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.pwd-clear.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.pwd-protect.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.quic-transport-parameters.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.record-size-limit.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.renegotiation-info.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.2",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.10",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.11",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.12",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.13",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.14",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.15",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.16",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.17",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.18",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.2",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.3",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.4",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.5",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.6",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.7",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.8",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved.9",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.sequence-number-encryption-algorithms.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-authz.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-certificate-type.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.server-name.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.session-ticket-renamed-from-sessionticket-tls.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.signature-algorithms-cert.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.signature-algorithms.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.signed-certificate-timestamp.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.srp.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.supported-ekt-ciphers.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.supported-groups-renamed-from-elliptic-curves.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.supported-versions.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.ticket-pinning.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.ticket-request.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.tlmsp-delegate.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.tlmsp-proxying.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.tlmsp.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-cert-with-extern-psk.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-flags.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.12",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.13",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.14",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.15",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.16",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.17",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.18",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.19",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.2",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.3",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.4",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.5",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.6",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.7",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.8",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.9",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.use-srtp.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.user-mapping.1",
+]
+
+[[surface_group]]
+id = "BRY-REQ-COMPOSEX-0148"
+domain = "tls"
+owner = "0.148.0"
+disposition = "intentionally-rejected"
+revision = 2
+sources = ["iana:tls-extensiontype-values"]
+surface_ids = [
+  "iana.tls-extensiontype-values.cachedinformationtype",
+  "iana.tls-extensiontype-values.cachedinformationtype.cert-req.1",
+  "iana.tls-extensiontype-values.cachedinformationtype.cert.1",
+  "iana.tls-extensiontype-values.cachedinformationtype.reserved-for-private-use.1",
+  "iana.tls-extensiontype-values.cachedinformationtype.reserved.1",
+  "iana.tls-extensiontype-values.cachedinformationtype.unassigned.1",
+]
 
 [[surface_group]]
 id = "BRY-REQ-DNS-0140"
@@ -23,20 +224,423 @@ domain = "dns"
 owner = "0.140.0"
 disposition = "caller-owned"
 sources = ["iana:dns-parameters", "rfc:9460"]
+surface_ids = [
+  "iana.dns-parameters.csync-flags",
+  "iana.dns-parameters.csync-flags.immediately-process-this-csync-record.1",
+  "iana.dns-parameters.csync-flags.require-a-soa-serial-number-greater-than-the-one-specified.1",
+  "iana.dns-parameters.csync-flags.unassigned.1",
+  "iana.dns-parameters.dhcid-rr-digest-type-codes",
+  "iana.dns-parameters.dhcid-rr-digest-type-codes.reserved.1",
+  "iana.dns-parameters.dhcid-rr-digest-type-codes.sha-256.1",
+  "iana.dns-parameters.dhcid-rr-digest-type-codes.unassigned.1",
+  "iana.dns-parameters.dns-catalog-zones",
+  "iana.dns-parameters.dns-catalog-zones.change-of-ownership.1",
+  "iana.dns-parameters.dns-catalog-zones.custom-properties.1",
+  "iana.dns-parameters.dns-catalog-zones.group.1",
+  "iana.dns-parameters.dns-catalog-zones.list-of-member-zones.1",
+  "iana.dns-parameters.dns-catalog-zones.schema-version.1",
+  "iana.dns-parameters.dns-dso-type-codes",
+  "iana.dns-parameters.dns-dso-type-codes.encryptionpadding.1",
+  "iana.dns-parameters.dns-dso-type-codes.keepalive.1",
+  "iana.dns-parameters.dns-dso-type-codes.push.1",
+  "iana.dns-parameters.dns-dso-type-codes.reconfirm.1",
+  "iana.dns-parameters.dns-dso-type-codes.reserved-for-experimental-local-use.1",
+  "iana.dns-parameters.dns-dso-type-codes.reserved-for-future-expansion.1",
+  "iana.dns-parameters.dns-dso-type-codes.reserved.1",
+  "iana.dns-parameters.dns-dso-type-codes.retrydelay.1",
+  "iana.dns-parameters.dns-dso-type-codes.subscribe.1",
+  "iana.dns-parameters.dns-dso-type-codes.unassigned-reserved-for-dso-session-management-tlvs.1",
+  "iana.dns-parameters.dns-dso-type-codes.unassigned.1",
+  "iana.dns-parameters.dns-dso-type-codes.unsubscribe.1",
+  "iana.dns-parameters.dns-parameters-10",
+  "iana.dns-parameters.dns-parameters-10.binary-label.1",
+  "iana.dns-parameters.dns-parameters-10.compressed-label-the-lower-6-bits-and-the-8-bits-from-next-octet-form-a-pointer-to-the-compression-target.1",
+  "iana.dns-parameters.dns-parameters-10.extended-label-type-the-lower-6-bits-of-this-type-section-3-indicate-the-type-of-label-in-use.1",
+  "iana.dns-parameters.dns-parameters-10.normal-label-lower-6-bits-is-the-length-of-the-label.1",
+  "iana.dns-parameters.dns-parameters-10.reserved-for-future-expansion.1",
+  "iana.dns-parameters.dns-parameters-10.unallocated.1",
+  "iana.dns-parameters.dns-parameters-11",
+  "iana.dns-parameters.dns-parameters-11.chain.1",
+  "iana.dns-parameters.dns-parameters-11.cookie.1",
+  "iana.dns-parameters.dns-parameters-11.dau.1",
+  "iana.dns-parameters.dns-parameters-11.deviceid.1",
+  "iana.dns-parameters.dns-parameters-11.dhu.1",
+  "iana.dns-parameters.dns-parameters-11.ede-extra-text-language.1",
+  "iana.dns-parameters.dns-parameters-11.edns-client-subnet.1",
+  "iana.dns-parameters.dns-parameters-11.edns-client-tag.1",
+  "iana.dns-parameters.dns-parameters-11.edns-expire.1",
+  "iana.dns-parameters.dns-parameters-11.edns-key-tag.1",
+  "iana.dns-parameters.dns-parameters-11.edns-server-tag.1",
+  "iana.dns-parameters.dns-parameters-11.edns-tcp-keepalive.1",
+  "iana.dns-parameters.dns-parameters-11.extended-dns-error.1",
+  "iana.dns-parameters.dns-parameters-11.filtering-contact.1",
+  "iana.dns-parameters.dns-parameters-11.filtering-db.1",
+  "iana.dns-parameters.dns-parameters-11.filtering-organization.1",
+  "iana.dns-parameters.dns-parameters-11.llq.1",
+  "iana.dns-parameters.dns-parameters-11.mqtype-query.1",
+  "iana.dns-parameters.dns-parameters-11.mqtype-response.1",
+  "iana.dns-parameters.dns-parameters-11.n3u.1",
+  "iana.dns-parameters.dns-parameters-11.nsid.1",
+  "iana.dns-parameters.dns-parameters-11.padding.1",
+  "iana.dns-parameters.dns-parameters-11.report-channel.1",
+  "iana.dns-parameters.dns-parameters-11.reserved-for-future-expansion.1",
+  "iana.dns-parameters.dns-parameters-11.reserved-for-local-experimental-use.1",
+  "iana.dns-parameters.dns-parameters-11.reserved.1",
+  "iana.dns-parameters.dns-parameters-11.reserved.2",
+  "iana.dns-parameters.dns-parameters-11.umbrella-ident.1",
+  "iana.dns-parameters.dns-parameters-11.unassigned.1",
+  "iana.dns-parameters.dns-parameters-11.unassigned.2",
+  "iana.dns-parameters.dns-parameters-11.unassigned.3",
+  "iana.dns-parameters.dns-parameters-11.update-lease.1",
+  "iana.dns-parameters.dns-parameters-11.zoneversion.1",
+  "iana.dns-parameters.dns-parameters-12",
+  "iana.dns-parameters.dns-parameters-12.authentic-data.1",
+  "iana.dns-parameters.dns-parameters-12.authoritative-answer.1",
+  "iana.dns-parameters.dns-parameters-12.checking-disabled.1",
+  "iana.dns-parameters.dns-parameters-12.recursion-available.1",
+  "iana.dns-parameters.dns-parameters-12.recursion-desired.1",
+  "iana.dns-parameters.dns-parameters-12.reserved.1",
+  "iana.dns-parameters.dns-parameters-12.truncated-response.1",
+  "iana.dns-parameters.dns-parameters-13",
+  "iana.dns-parameters.dns-parameters-13.compact-answers-ok.1",
+  "iana.dns-parameters.dns-parameters-13.delegation-extensions-temporary-registered-2026-07-20-expires-2027-07-20.1",
+  "iana.dns-parameters.dns-parameters-13.dnssec-answer-ok.1",
+  "iana.dns-parameters.dns-parameters-13.reserved.1",
+  "iana.dns-parameters.dns-parameters-14",
+  "iana.dns-parameters.dns-parameters-14.edns-version-0.1",
+  "iana.dns-parameters.dns-parameters-14.unassigned.1",
+  "iana.dns-parameters.dns-parameters-2",
+  "iana.dns-parameters.dns-parameters-2.chaos-ch.1",
+  "iana.dns-parameters.dns-parameters-2.hesiod-hs.1",
+  "iana.dns-parameters.dns-parameters-2.internet-in.1",
+  "iana.dns-parameters.dns-parameters-2.qclass-any.1",
+  "iana.dns-parameters.dns-parameters-2.qclass-none.1",
+  "iana.dns-parameters.dns-parameters-2.reserved-for-private-use.1",
+  "iana.dns-parameters.dns-parameters-2.reserved.1",
+  "iana.dns-parameters.dns-parameters-2.reserved.2",
+  "iana.dns-parameters.dns-parameters-2.unassigned.1",
+  "iana.dns-parameters.dns-parameters-2.unassigned.2",
+  "iana.dns-parameters.dns-parameters-2.unassigned.3",
+  "iana.dns-parameters.dns-parameters-4",
+  "iana.dns-parameters.dns-parameters-4.0.1",
+  "iana.dns-parameters.dns-parameters-4.100.1",
+  "iana.dns-parameters.dns-parameters-4.101.1",
+  "iana.dns-parameters.dns-parameters-4.102.1",
+  "iana.dns-parameters.dns-parameters-4.103.1",
+  "iana.dns-parameters.dns-parameters-4.104.1",
+  "iana.dns-parameters.dns-parameters-4.105.1",
+  "iana.dns-parameters.dns-parameters-4.106.1",
+  "iana.dns-parameters.dns-parameters-4.107.1",
+  "iana.dns-parameters.dns-parameters-4.110-127.1",
+  "iana.dns-parameters.dns-parameters-4.129-248.1",
+  "iana.dns-parameters.dns-parameters-4.265-32767.1",
+  "iana.dns-parameters.dns-parameters-4.32770-65279.1",
+  "iana.dns-parameters.dns-parameters-4.54.1",
+  "iana.dns-parameters.dns-parameters-4.65280-65534.1",
+  "iana.dns-parameters.dns-parameters-4.65535.1",
+  "iana.dns-parameters.dns-parameters-4.69-98.1",
+  "iana.dns-parameters.dns-parameters-4.99.1",
+  "iana.dns-parameters.dns-parameters-4.a-domain-name-pointer.1",
+  "iana.dns-parameters.dns-parameters-4.a-host-address.1",
+  "iana.dns-parameters.dns-parameters-4.a-mail-destination-obsolete-use-mx.1",
+  "iana.dns-parameters.dns-parameters-4.a-mail-forwarder-obsolete-use-mx.1",
+  "iana.dns-parameters.dns-parameters-4.a-mail-group-member-experimental.1",
+  "iana.dns-parameters.dns-parameters-4.a-mail-rename-domain-name-experimental.1",
+  "iana.dns-parameters.dns-parameters-4.a-mailbox-domain-name-experimental.1",
+  "iana.dns-parameters.dns-parameters-4.a-null-rr-experimental.1",
+  "iana.dns-parameters.dns-parameters-4.a-request-for-some-or-all-records-the-server-has-available.1",
+  "iana.dns-parameters.dns-parameters-4.a-well-known-service-description.1",
+  "iana.dns-parameters.dns-parameters-4.a6-obsolete-use-aaaa.1",
+  "iana.dns-parameters.dns-parameters-4.an-authoritative-name-server.1",
+  "iana.dns-parameters.dns-parameters-4.an-eui-48-address.1",
+  "iana.dns-parameters.dns-parameters-4.an-eui-64-address.1",
+  "iana.dns-parameters.dns-parameters-4.apl.1",
+  "iana.dns-parameters.dns-parameters-4.application-visibility-and-control.1",
+  "iana.dns-parameters.dns-parameters-4.atm-address.1",
+  "iana.dns-parameters.dns-parameters-4.automatic-multicast-tunneling-relay.1",
+  "iana.dns-parameters.dns-parameters-4.bp-convergence-layer-adapter.1",
+  "iana.dns-parameters.dns-parameters-4.bp-node-number.1",
+  "iana.dns-parameters.dns-parameters-4.cert.1",
+  "iana.dns-parameters.dns-parameters-4.certification-authority-restriction.1",
+  "iana.dns-parameters.dns-parameters-4.child-ds.1",
+  "iana.dns-parameters.dns-parameters-4.child-to-parent-synchronization.1",
+  "iana.dns-parameters.dns-parameters-4.delegation-signer.1",
+  "iana.dns-parameters.dns-parameters-4.dhcid.1",
+  "iana.dns-parameters.dns-parameters-4.digital-object-architecture.1",
+  "iana.dns-parameters.dns-parameters-4.dname.1",
+  "iana.dns-parameters.dns-parameters-4.dnskey-s-the-child-wants-reflected-in-ds.1",
+  "iana.dns-parameters.dns-parameters-4.dnskey.1",
+  "iana.dns-parameters.dns-parameters-4.dnssec-lookaside-validation-obsolete.1",
+  "iana.dns-parameters.dns-parameters-4.dnssec-trust-authorities.1",
+  "iana.dns-parameters.dns-parameters-4.endpoint-discovery-for-delegation-synchronization.1",
+  "iana.dns-parameters.dns-parameters-4.endpoint-identifier.1",
+  "iana.dns-parameters.dns-parameters-4.for-afs-data-base-location.1",
+  "iana.dns-parameters.dns-parameters-4.for-domain-name-pointer-nsap-style-deprecated.1",
+  "iana.dns-parameters.dns-parameters-4.for-isdn-address.1",
+  "iana.dns-parameters.dns-parameters-4.for-nsap-address-nsap-style-a-record-deprecated.1",
+  "iana.dns-parameters.dns-parameters-4.for-responsible-person.1",
+  "iana.dns-parameters.dns-parameters-4.for-route-through.1",
+  "iana.dns-parameters.dns-parameters-4.for-security-key.1",
+  "iana.dns-parameters.dns-parameters-4.for-security-signature.1",
+  "iana.dns-parameters.dns-parameters-4.for-x-25-psdn-address.1",
+  "iana.dns-parameters.dns-parameters-4.general-purpose-service-binding.1",
+  "iana.dns-parameters.dns-parameters-4.geographical-position.1",
+  "iana.dns-parameters.dns-parameters-4.hierarchical-host-identity-tag.1",
+  "iana.dns-parameters.dns-parameters-4.host-identity-protocol.1",
+  "iana.dns-parameters.dns-parameters-4.host-information.1",
+  "iana.dns-parameters.dns-parameters-4.incremental-transfer.1",
+  "iana.dns-parameters.dns-parameters-4.ip6-address.1",
+  "iana.dns-parameters.dns-parameters-4.ipseckey.1",
+  "iana.dns-parameters.dns-parameters-4.key-exchanger.1",
+  "iana.dns-parameters.dns-parameters-4.location-information.1",
+  "iana.dns-parameters.dns-parameters-4.mail-agent-rrs-obsolete-see-mx.1",
+  "iana.dns-parameters.dns-parameters-4.mail-exchange.1",
+  "iana.dns-parameters.dns-parameters-4.mailbox-or-mail-list-information.1",
+  "iana.dns-parameters.dns-parameters-4.mailbox-related-rrs-mb-mg-or-mr.1",
+  "iana.dns-parameters.dns-parameters-4.marks-the-start-of-a-zone-of-authority.1",
+  "iana.dns-parameters.dns-parameters-4.message-digest-over-zone-data.1",
+  "iana.dns-parameters.dns-parameters-4.naming-authority-pointer.1",
+  "iana.dns-parameters.dns-parameters-4.next-domain-obsolete.1",
+  "iana.dns-parameters.dns-parameters-4.nimrod-locator.1",
+  "iana.dns-parameters.dns-parameters-4.ninfo.1",
+  "iana.dns-parameters.dns-parameters-4.nsec.1",
+  "iana.dns-parameters.dns-parameters-4.nsec3.1",
+  "iana.dns-parameters.dns-parameters-4.nsec3param.1",
+  "iana.dns-parameters.dns-parameters-4.nxdomain-indicator-for-compact-denial-of-existence.1",
+  "iana.dns-parameters.dns-parameters-4.openpgp-key.1",
+  "iana.dns-parameters.dns-parameters-4.opt.1",
+  "iana.dns-parameters.dns-parameters-4.public-wallet-address.1",
+  "iana.dns-parameters.dns-parameters-4.resolver-information-as-key-value-pairs.1",
+  "iana.dns-parameters.dns-parameters-4.rkey.1",
+  "iana.dns-parameters.dns-parameters-4.rrsig.1",
+  "iana.dns-parameters.dns-parameters-4.s-mime-cert-association.1",
+  "iana.dns-parameters.dns-parameters-4.server-selection.1",
+  "iana.dns-parameters.dns-parameters-4.sink.1",
+  "iana.dns-parameters.dns-parameters-4.ssh-key-fingerprint.1",
+  "iana.dns-parameters.dns-parameters-4.svcb-compatible-type-for-use-with-http.1",
+  "iana.dns-parameters.dns-parameters-4.text-strings.1",
+  "iana.dns-parameters.dns-parameters-4.the-canonical-name-for-an-alias.1",
+  "iana.dns-parameters.dns-parameters-4.tlsa.1",
+  "iana.dns-parameters.dns-parameters-4.transaction-key.1",
+  "iana.dns-parameters.dns-parameters-4.transaction-signature.1",
+  "iana.dns-parameters.dns-parameters-4.transfer-of-an-entire-zone.1",
+  "iana.dns-parameters.dns-parameters-4.trust-anchor-link.1",
+  "iana.dns-parameters.dns-parameters-4.uas-broadcast-remote-identification.1",
+  "iana.dns-parameters.dns-parameters-4.uri.1",
+  "iana.dns-parameters.dns-parameters-4.x-400-mail-mapping-information.1",
+  "iana.dns-parameters.dns-parameters-5",
+  "iana.dns-parameters.dns-parameters-5.dns-stateful-operations-dso.1",
+  "iana.dns-parameters.dns-parameters-5.iquery-inverse-query-obsolete.1",
+  "iana.dns-parameters.dns-parameters-5.notify.1",
+  "iana.dns-parameters.dns-parameters-5.query.1",
+  "iana.dns-parameters.dns-parameters-5.status.1",
+  "iana.dns-parameters.dns-parameters-5.unassigned.1",
+  "iana.dns-parameters.dns-parameters-5.unassigned.2",
+  "iana.dns-parameters.dns-parameters-5.update.1",
+  "iana.dns-parameters.dns-parameters-6",
+  "iana.dns-parameters.dns-parameters-6.algorithm-not-supported.1",
+  "iana.dns-parameters.dns-parameters-6.bad-missing-server-cookie.1",
+  "iana.dns-parameters.dns-parameters-6.bad-opt-version.1",
+  "iana.dns-parameters.dns-parameters-6.bad-tkey-mode.1",
+  "iana.dns-parameters.dns-parameters-6.bad-truncation.1",
+  "iana.dns-parameters.dns-parameters-6.dso-type-not-implemented.1",
+  "iana.dns-parameters.dns-parameters-6.duplicate-key-name.1",
+  "iana.dns-parameters.dns-parameters-6.format-error.1",
+  "iana.dns-parameters.dns-parameters-6.key-not-recognized.1",
+  "iana.dns-parameters.dns-parameters-6.name-exists-when-it-should-not.1",
+  "iana.dns-parameters.dns-parameters-6.name-not-contained-in-zone.1",
+  "iana.dns-parameters.dns-parameters-6.no-error.1",
+  "iana.dns-parameters.dns-parameters-6.non-existent-domain.1",
+  "iana.dns-parameters.dns-parameters-6.not-authorized.1",
+  "iana.dns-parameters.dns-parameters-6.not-implemented.1",
+  "iana.dns-parameters.dns-parameters-6.query-refused.1",
+  "iana.dns-parameters.dns-parameters-6.reserved-can-be-allocated-by-standards-action.1",
+  "iana.dns-parameters.dns-parameters-6.reserved-for-private-use.1",
+  "iana.dns-parameters.dns-parameters-6.rr-set-exists-when-it-should-not.1",
+  "iana.dns-parameters.dns-parameters-6.rr-set-that-should-exist-does-not.1",
+  "iana.dns-parameters.dns-parameters-6.server-failure.1",
+  "iana.dns-parameters.dns-parameters-6.server-not-authoritative-for-zone.1",
+  "iana.dns-parameters.dns-parameters-6.signature-out-of-time-window.1",
+  "iana.dns-parameters.dns-parameters-6.tsig-signature-failure.1",
+  "iana.dns-parameters.dns-parameters-6.unassigned.1",
+  "iana.dns-parameters.dns-parameters-6.unassigned.2",
+  "iana.dns-parameters.dns-parameters-6.unassigned.3",
+  "iana.dns-parameters.dns-parameters-8",
+  "iana.dns-parameters.dns-parameters-8.andrews-file-service-v3-0-location-service.1",
+  "iana.dns-parameters.dns-parameters-8.dce-nca-root-cell-directory-node.1",
+  "iana.dns-parameters.dns-parameters-8.not-allocated-registry-closed.1",
+  "iana.dns-parameters.dns-parameters-8.reserved-for-private-use.1",
+  "iana.dns-parameters.dns-parameters-8.reserved-registry-closed.1",
+  "iana.dns-parameters.dns-parameters-8.reserved-registry-closed.2",
+  "iana.dns-parameters.dns-parameters-9",
+  "iana.dns-parameters.dns-parameters-9.reserved.1",
+  "iana.dns-parameters.dns-parameters-9.the-1-octet-htype-followed-by-hlen-octets-of-chaddr-from-a-dhcpv4-client-s-dhcprequest.1",
+  "iana.dns-parameters.dns-parameters-9.the-client-s-duid-i-e-the-data-octets-of-a-dhcpv6-client-s-client-identifier-option-or-the-duid-field-from-a-dhcpv4-client-s-client-identifier-option.1",
+  "iana.dns-parameters.dns-parameters-9.the-data-octets-i-e-the-type-and-client-identifier-fields-from-a-dhcpv4-client-s-client-identifier-option.1",
+  "iana.dns-parameters.dns-parameters-9.unassigned.1",
+  "iana.dns-parameters.dns-quic-error-codes",
+  "iana.dns-parameters.dns-quic-error-codes.alternative-error-code-used-for-tests.1",
+  "iana.dns-parameters.dns-quic-error-codes.closing-a-connection-for-excessive-load.1",
+  "iana.dns-parameters.dns-quic-error-codes.generic-protocol-violation.1",
+  "iana.dns-parameters.dns-quic-error-codes.implementation-error.1",
+  "iana.dns-parameters.dns-quic-error-codes.no-error-reason-specified.1",
+  "iana.dns-parameters.dns-quic-error-codes.no-error.1",
+  "iana.dns-parameters.dns-quic-error-codes.request-cancelled-by-client.1",
+  "iana.dns-parameters.dns-resolver-information-keys",
+  "iana.dns-parameters.dns-resolver-information-keys.lists-the-set-of-enabled-extended-dns-errors-it-must-be-an-info-code-decimal-value-in-the-extended-dns-error-codes-registry.1",
+  "iana.dns-parameters.dns-resolver-information-keys.provides-a-url-that-points-to-unstructured-resolver-information-that-is-used-for-troubleshooting.1",
+  "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-name-indicates-that-qname-minimisation-is-enabled.1",
+  "iana.dns-parameters.dsync-location-of-synchronization-endpoints",
+  "iana.dns-parameters.dsync-location-of-synchronization-endpoints.cds.1",
+  "iana.dns-parameters.dsync-location-of-synchronization-endpoints.csync.1",
+  "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.1",
+  "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.2",
+  "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.3",
+  "iana.dns-parameters.extended-dns-error-codes",
+  "iana.dns-parameters.extended-dns-error-codes.blocked.1",
+  "iana.dns-parameters.extended-dns-error-codes.cached-error.1",
+  "iana.dns-parameters.extended-dns-error-codes.censored.1",
+  "iana.dns-parameters.extended-dns-error-codes.dnskey-missing.1",
+  "iana.dns-parameters.extended-dns-error-codes.dnssec-bogus.1",
+  "iana.dns-parameters.extended-dns-error-codes.dnssec-indeterminate.1",
+  "iana.dns-parameters.extended-dns-error-codes.filtered.1",
+  "iana.dns-parameters.extended-dns-error-codes.forged-answer.1",
+  "iana.dns-parameters.extended-dns-error-codes.invalid-data.1",
+  "iana.dns-parameters.extended-dns-error-codes.invalid-query-type.1",
+  "iana.dns-parameters.extended-dns-error-codes.negative-trust-anchor.1",
+  "iana.dns-parameters.extended-dns-error-codes.network-error.1",
+  "iana.dns-parameters.extended-dns-error-codes.new-delegation-only.1",
+  "iana.dns-parameters.extended-dns-error-codes.no-reachable-authority.1",
+  "iana.dns-parameters.extended-dns-error-codes.no-zone-key-bit-set.1",
+  "iana.dns-parameters.extended-dns-error-codes.not-authoritative.1",
+  "iana.dns-parameters.extended-dns-error-codes.not-ready.1",
+  "iana.dns-parameters.extended-dns-error-codes.not-supported.1",
+  "iana.dns-parameters.extended-dns-error-codes.nsec-missing.1",
+  "iana.dns-parameters.extended-dns-error-codes.other-error.1",
+  "iana.dns-parameters.extended-dns-error-codes.over-quota.1",
+  "iana.dns-parameters.extended-dns-error-codes.prohibited.1",
+  "iana.dns-parameters.extended-dns-error-codes.rate-limited.1",
+  "iana.dns-parameters.extended-dns-error-codes.reserved-for-private-use.1",
+  "iana.dns-parameters.extended-dns-error-codes.rrsigs-missing.1",
+  "iana.dns-parameters.extended-dns-error-codes.signature-expired-before-valid.1",
+  "iana.dns-parameters.extended-dns-error-codes.signature-expired.1",
+  "iana.dns-parameters.extended-dns-error-codes.signature-not-yet-valid.1",
+  "iana.dns-parameters.extended-dns-error-codes.stale-answer.1",
+  "iana.dns-parameters.extended-dns-error-codes.stale-nxdomain-answer.1",
+  "iana.dns-parameters.extended-dns-error-codes.synthesized.1",
+  "iana.dns-parameters.extended-dns-error-codes.too-early.1",
+  "iana.dns-parameters.extended-dns-error-codes.unable-to-conform-to-policy.1",
+  "iana.dns-parameters.extended-dns-error-codes.unassigned.1",
+  "iana.dns-parameters.extended-dns-error-codes.unsupported-dnskey-algorithm.1",
+  "iana.dns-parameters.extended-dns-error-codes.unsupported-ds-digest-type.1",
+  "iana.dns-parameters.extended-dns-error-codes.unsupported-nsec3-iterations-value.1",
+  "iana.dns-parameters.server-cookie-methods",
+  "iana.dns-parameters.server-cookie-methods.unnamed.1",
+  "iana.dns-parameters.server-cookie-methods.unnamed.2",
+  "iana.dns-parameters.server-cookie-methods.unnamed.3",
+  "iana.dns-parameters.server-cookie-methods.unnamed.4",
+  "iana.dns-parameters.server-cookie-methods.unnamed.5",
+  "iana.dns-parameters.server-cookie-methods.unnamed.6",
+  "iana.dns-parameters.server-cookie-methods.unnamed.7",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acct.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acme-challenge.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dane.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.2",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dmarc.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dns.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.domainkey.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dsync.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.email.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ems.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.er.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.example.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.fax.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.for-sale.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ft.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.h323.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.http.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.https.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.iax.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ical-access.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ical-sched.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ifax.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.im.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ipv6.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ldap.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mms.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mta-sts.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ocsp.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.openpgpkey.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.pres.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.pstn.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.sctp.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.sctp.2",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.sctp.3",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.signal.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.signal.2",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.sip.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.sip.2",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.smimecert.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.sms.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.spf.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.splitdns-challenge.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.stun.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.stuns.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.sztp.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ta.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.2",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.3",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turns.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.2",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.3",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.4",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.unifmsg.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.validation-contactemail.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.validation-contactphone.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.vcard.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.videomsg.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.voice.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.voicemsg.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.vouch.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.vpim.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.web.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.xmpp.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.xmpp.2",
+  "iana.dns-parameters.zonemd-hash-algorithms",
+  "iana.dns-parameters.zonemd-hash-algorithms.reserved-for-private-use.1",
+  "iana.dns-parameters.zonemd-hash-algorithms.reserved.1",
+  "iana.dns-parameters.zonemd-hash-algorithms.reserved.2",
+  "iana.dns-parameters.zonemd-hash-algorithms.sha-384.1",
+  "iana.dns-parameters.zonemd-hash-algorithms.sha-512.1",
+  "iana.dns-parameters.zonemd-hash-algorithms.unassigned.1",
+  "iana.dns-parameters.zonemd-schemes",
+  "iana.dns-parameters.zonemd-schemes.reserved-for-private-use.1",
+  "iana.dns-parameters.zonemd-schemes.reserved.1",
+  "iana.dns-parameters.zonemd-schemes.reserved.2",
+  "iana.dns-parameters.zonemd-schemes.simple-zonemd-collation.1",
+  "iana.dns-parameters.zonemd-schemes.unassigned.1",
+  "iana.dns-parameters.zoneversion-type-values",
+  "iana.dns-parameters.zoneversion-type-values.reserved-for-private-use.1",
+  "iana.dns-parameters.zoneversion-type-values.reserved.1",
+  "iana.dns-parameters.zoneversion-type-values.soa-serial.1",
+  "iana.dns-parameters.zoneversion-type-values.unassigned.1",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ECH-0140"
 domain = "ech"
 owner = "0.140.0"
 disposition = "future-work"
-sources = ["iana:tls-ech-configuration-extensions", "rfc:9460", "rfc:9848", "rfc:9849"]
-
-[[surface_group]]
-id = "BRY-REQ-ECH-1401"
-domain = "ech"
-owner = "0.140.1"
-disposition = "future-work"
 sources = ["rfc:9460", "rfc:9848", "rfc:9849"]
+surface_ids = [
+  "protocol.ech",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ECH-0141"
@@ -44,6 +648,9 @@ domain = "ech"
 owner = "0.141.0"
 disposition = "future-work"
 sources = ["rfc:9180", "rfc:9849"]
+surface_ids = [
+  "protocol.ech.client-construction",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ECH-0142"
@@ -51,6 +658,9 @@ domain = "ech"
 owner = "0.142.0"
 disposition = "future-work"
 sources = ["rfc:9180", "rfc:9849"]
+surface_ids = [
+  "protocol.ech.server-opening",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ECH-0143"
@@ -58,6 +668,55 @@ domain = "ech"
 owner = "0.143.0"
 disposition = "future-work"
 sources = ["rfc:9848", "rfc:9849"]
+surface_ids = [
+  "protocol.ech.hrr-retry-rotation",
+]
+
+[[surface_group]]
+id = "BRY-REQ-ECH-1401"
+domain = "ech"
+owner = "0.140.1"
+disposition = "future-work"
+sources = ["rfc:9460", "rfc:9848", "rfc:9849"]
+surface_ids = [
+  "protocol.ech.configuration-bootstrap",
+]
+
+[[surface_group]]
+id = "BRY-REQ-ECHEXT-0140"
+domain = "ech"
+owner = "0.140.0"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "rfc:9849"]
+surface_ids = [
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.encrypted-client-hello.1",
+]
+
+[[surface_group]]
+id = "BRY-REQ-ECHREG-0140"
+domain = "ech"
+owner = "0.140.0"
+disposition = "future-work"
+sources = ["iana:tls-ech-configuration-extensions", "rfc:9849"]
+surface_ids = [
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.1",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.10",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.11",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.12",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.13",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.14",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.15",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.16",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.2",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.3",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.4",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.5",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.6",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.7",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.8",
+  "iana.tls-ech-configuration-extensions.tls-echconfig-extension.reserved.9",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ENTROPY-0014"
@@ -65,6 +724,9 @@ domain = "entropy"
 owner = "0.14.0"
 disposition = "future-work"
 sources = ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"]
+surface_ids = [
+  "facility.entropy.secure-random-contract",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ENTROPY-0124"
@@ -72,6 +734,9 @@ domain = "entropy"
 owner = "0.124.0"
 disposition = "future-work"
 sources = ["nist:NIST.SP.800-90B.pdf"]
+surface_ids = [
+  "facility.entropy.source-health",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ENTROPY-1241"
@@ -79,6 +744,9 @@ domain = "entropy"
 owner = "0.124.1"
 disposition = "future-work"
 sources = ["nist:NIST.SP.800-90Ar1.pdf"]
+surface_ids = [
+  "facility.entropy.drbg",
+]
 
 [[surface_group]]
 id = "BRY-REQ-ENTROPY-1242"
@@ -86,6 +754,9 @@ domain = "entropy"
 owner = "0.124.2"
 disposition = "future-work"
 sources = ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"]
+surface_ids = [
+  "facility.entropy.rbg-construction",
+]
 
 [[surface_group]]
 id = "BRY-REQ-HPKE-0138"
@@ -93,6 +764,9 @@ domain = "hpke"
 owner = "0.138.0"
 disposition = "future-work"
 sources = ["iana:hpke", "rfc:9180"]
+surface_ids = [
+  "protocol.hpke.context-foundation",
+]
 
 [[surface_group]]
 id = "BRY-REQ-HPKE-0139"
@@ -100,6 +774,9 @@ domain = "hpke"
 owner = "0.139.0"
 disposition = "future-work"
 sources = ["iana:hpke", "rfc:9180"]
+surface_ids = [
+  "protocol.hpke.base-mode",
+]
 
 [[surface_group]]
 id = "BRY-REQ-HPKE-1391"
@@ -107,6 +784,62 @@ domain = "hpke"
 owner = "0.139.1"
 disposition = "future-work"
 sources = ["iana:hpke", "rfc:9180"]
+surface_ids = [
+  "protocol.hpke.export-lifecycle",
+]
+
+[[surface_group]]
+id = "BRY-REQ-HPKEREG-0138"
+domain = "hpke"
+owner = "0.138.0"
+disposition = "future-work"
+sources = ["iana:hpke", "rfc:9180"]
+surface_ids = [
+  "iana.hpke.hpke-aead-ids",
+  "iana.hpke.hpke-aead-ids.0x0000.1",
+  "iana.hpke.hpke-aead-ids.0x0001.1",
+  "iana.hpke.hpke-aead-ids.0x0002.1",
+  "iana.hpke.hpke-aead-ids.0x0003.1",
+  "iana.hpke.hpke-aead-ids.0x0004-0xfffe.1",
+  "iana.hpke.hpke-aead-ids.0xffff.1",
+  "iana.hpke.hpke-kdf-ids",
+  "iana.hpke.hpke-kdf-ids.0x0000.1",
+  "iana.hpke.hpke-kdf-ids.0x0001.1",
+  "iana.hpke.hpke-kdf-ids.0x0002.1",
+  "iana.hpke.hpke-kdf-ids.0x0003.1",
+  "iana.hpke.hpke-kdf-ids.0x0004-0x000f.1",
+  "iana.hpke.hpke-kdf-ids.0x0010.1",
+  "iana.hpke.hpke-kdf-ids.0x0011.1",
+  "iana.hpke.hpke-kdf-ids.0x0012.1",
+  "iana.hpke.hpke-kdf-ids.0x0013.1",
+  "iana.hpke.hpke-kdf-ids.0x0014-0xffff.1",
+  "iana.hpke.hpke-kem-ids",
+  "iana.hpke.hpke-kem-ids.0x0000.1",
+  "iana.hpke.hpke-kem-ids.0x0001-0x000f.1",
+  "iana.hpke.hpke-kem-ids.0x0010.1",
+  "iana.hpke.hpke-kem-ids.0x0011.1",
+  "iana.hpke.hpke-kem-ids.0x0012.1",
+  "iana.hpke.hpke-kem-ids.0x0013.1",
+  "iana.hpke.hpke-kem-ids.0x0014.1",
+  "iana.hpke.hpke-kem-ids.0x0015.1",
+  "iana.hpke.hpke-kem-ids.0x0016.1",
+  "iana.hpke.hpke-kem-ids.0x0017-0x001f.1",
+  "iana.hpke.hpke-kem-ids.0x0020.1",
+  "iana.hpke.hpke-kem-ids.0x0021.1",
+  "iana.hpke.hpke-kem-ids.0x0022.1",
+  "iana.hpke.hpke-kem-ids.0x0023-0x002f.1",
+  "iana.hpke.hpke-kem-ids.0x0030.1",
+  "iana.hpke.hpke-kem-ids.0x0031-0x003f.1",
+  "iana.hpke.hpke-kem-ids.0x0040.1",
+  "iana.hpke.hpke-kem-ids.0x0041.1",
+  "iana.hpke.hpke-kem-ids.0x0042.1",
+  "iana.hpke.hpke-kem-ids.0x0043-0x004f.1",
+  "iana.hpke.hpke-kem-ids.0x0050.1",
+  "iana.hpke.hpke-kem-ids.0x0051.1",
+  "iana.hpke.hpke-kem-ids.0x0052-0x6479.1",
+  "iana.hpke.hpke-kem-ids.0x647a.1",
+  "iana.hpke.hpke-kem-ids.0x647b-0xffff.1",
+]
 
 [[surface_group]]
 id = "BRY-REQ-HPKEX-1391"
@@ -114,6 +847,29 @@ domain = "hpke"
 owner = "0.139.1"
 disposition = "intentionally-rejected"
 sources = ["rfc:9180"]
+surface_ids = [
+  "protocol.hpke.non-base-modes",
+]
+
+[[surface_group]]
+id = "BRY-REQ-KEYLOGREG-0010"
+domain = "operations"
+owner = "0.10.0"
+disposition = "intentionally-rejected"
+sources = ["iana:tls-parameters", "rfc:9850"]
+surface_ids = [
+  "iana.tls-parameters.tls-sslkeylogfile-labels",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.early-exporter-secret.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.echconfig-used-for-construction-of-the-ech.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.exporter-secret-after-handshake.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.hpke-kem-shared-secret-used-in-the-ech.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.master-secret-in-tls-1-2-and-earlier.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.secret-for-client-early-data-records.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-client-handshake.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-client-records-post-handshake.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-server-handshake.1",
+  "iana.tls-parameters.tls-sslkeylogfile-labels.secret-protecting-server-records-post-handshake.1",
+]
 
 [[surface_group]]
 id = "BRY-REQ-LEGACY-0100"
@@ -121,6 +877,9 @@ domain = "legacy"
 owner = "H0.1.0"
 disposition = "legacy-only"
 sources = ["rfc:4346"]
+surface_ids = [
+  "legacy.tls11",
+]
 
 [[surface_group]]
 id = "BRY-REQ-LEGACY-0300"
@@ -128,6 +887,9 @@ domain = "legacy"
 owner = "H0.3.0"
 disposition = "legacy-only"
 sources = ["rfc:6101"]
+surface_ids = [
+  "legacy.ssl3",
+]
 
 [[surface_group]]
 id = "BRY-REQ-LEGACY-0400"
@@ -135,6 +897,9 @@ domain = "legacy"
 owner = "H0.4.0"
 disposition = "legacy-only"
 sources = ["rfc:6176"]
+surface_ids = [
+  "legacy.ssl2",
+]
 
 [[surface_group]]
 id = "BRY-REQ-LEGACY-0500"
@@ -142,6 +907,9 @@ domain = "legacy"
 owner = "H0.5.0"
 disposition = "legacy-only"
 sources = ["rfc:7568"]
+surface_ids = [
+  "legacy.wtls",
+]
 
 [[surface_group]]
 id = "BRY-REQ-LEGACY-0600"
@@ -149,6 +917,9 @@ domain = "legacy"
 owner = "H0.6.0"
 disposition = "legacy-only"
 sources = ["rfc:7568"]
+surface_ids = [
+  "legacy.pct",
+]
 
 [[surface_group]]
 id = "BRY-REQ-LEGACY-0700"
@@ -156,34 +927,94 @@ domain = "legacy"
 owner = "H0.7.0"
 disposition = "legacy-only"
 sources = ["rfc:7568"]
+surface_ids = [
+  "legacy.snp",
+]
 
 [[surface_group]]
 id = "BRY-REQ-LEGACY-0800"
 domain = "legacy"
 owner = "H0.8.0"
 disposition = "legacy-only"
-sources = ["iana:tls-parameters", "rfc:6151", "rfc:7568", "rfc:8447", "rfc:9847"]
+sources = ["iana:tls-parameters", "rfc:6151", "rfc:8447", "rfc:9847"]
+surface_ids = [
+  "iana.tls-parameters.tls-parameters-10",
+  "iana.tls-parameters.tls-parameters-10.explicit-char2.1",
+  "iana.tls-parameters.tls-parameters-10.explicit-prime.1",
+  "iana.tls-parameters.tls-parameters-10.named-curve.1",
+  "iana.tls-parameters.tls-parameters-10.reserved-for-private-use.1",
+  "iana.tls-parameters.tls-parameters-10.unassigned.1",
+  "iana.tls-parameters.tls-parameters-10.unassigned.2",
+  "iana.tls-parameters.tls-parameters-16",
+  "iana.tls-parameters.tls-parameters-16.anonymous.1",
+  "iana.tls-parameters.tls-parameters-16.dsa.1",
+  "iana.tls-parameters.tls-parameters-16.ecdsa.1",
+  "iana.tls-parameters.tls-parameters-16.ed25519.1",
+  "iana.tls-parameters.tls-parameters-16.ed448.1",
+  "iana.tls-parameters.tls-parameters-16.gostr34102012-256.1",
+  "iana.tls-parameters.tls-parameters-16.gostr34102012-512.1",
+  "iana.tls-parameters.tls-parameters-16.reserved-for-private-use.1",
+  "iana.tls-parameters.tls-parameters-16.reserved.1",
+  "iana.tls-parameters.tls-parameters-16.reserved.2",
+  "iana.tls-parameters.tls-parameters-16.reserved.3",
+  "iana.tls-parameters.tls-parameters-16.rsa.1",
+  "iana.tls-parameters.tls-parameters-18",
+  "iana.tls-parameters.tls-parameters-18.intrinsic.1",
+  "iana.tls-parameters.tls-parameters-18.md5.1",
+  "iana.tls-parameters.tls-parameters-18.none.1",
+  "iana.tls-parameters.tls-parameters-18.reserved-for-private-use.1",
+  "iana.tls-parameters.tls-parameters-18.reserved.1",
+  "iana.tls-parameters.tls-parameters-18.reserved.2",
+  "iana.tls-parameters.tls-parameters-18.sha1.1",
+  "iana.tls-parameters.tls-parameters-18.sha224.1",
+  "iana.tls-parameters.tls-parameters-18.sha256.1",
+  "iana.tls-parameters.tls-parameters-18.sha384.1",
+  "iana.tls-parameters.tls-parameters-18.sha512.1",
+  "iana.tls-parameters.tls-parameters-2",
+  "iana.tls-parameters.tls-parameters-2.dss-ephemeral-dh-reserved.1",
+  "iana.tls-parameters.tls-parameters-2.dss-fixed-dh.1",
+  "iana.tls-parameters.tls-parameters-2.dss-sign.1",
+  "iana.tls-parameters.tls-parameters-2.ecdsa-fixed-ecdh.1",
+  "iana.tls-parameters.tls-parameters-2.ecdsa-sign.1",
+  "iana.tls-parameters.tls-parameters-2.fortezza-dms-reserved.1",
+  "iana.tls-parameters.tls-parameters-2.gost-sign256.1",
+  "iana.tls-parameters.tls-parameters-2.gost-sign512.1",
+  "iana.tls-parameters.tls-parameters-2.reserved-for-private-use.1",
+  "iana.tls-parameters.tls-parameters-2.rsa-ephemeral-dh-reserved.1",
+  "iana.tls-parameters.tls-parameters-2.rsa-fixed-dh.1",
+  "iana.tls-parameters.tls-parameters-2.rsa-fixed-ecdh.1",
+  "iana.tls-parameters.tls-parameters-2.rsa-sign.1",
+  "iana.tls-parameters.tls-parameters-2.unassigned.1",
+  "iana.tls-parameters.tls-parameters-2.unassigned.2",
+  "iana.tls-parameters.tls-parameters-2.unassigned.3",
+  "iana.tls-parameters.tls-parameters-2.unassigned.4",
+  "iana.tls-parameters.tls-parameters-9",
+  "iana.tls-parameters.tls-parameters-9.ansix962-compressed-char2.1",
+  "iana.tls-parameters.tls-parameters-9.ansix962-compressed-prime.1",
+  "iana.tls-parameters.tls-parameters-9.reserved-for-private-use.1",
+  "iana.tls-parameters.tls-parameters-9.unassigned.1",
+  "iana.tls-parameters.tls-parameters-9.uncompressed.1",
+]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACYSSL1-0800"
+domain = "legacy"
+owner = "H0.8.0"
+disposition = "legacy-only"
+sources = ["rfc:7568"]
+surface_ids = [
+  "legacy.ssl1-research",
+]
 
 [[surface_group]]
 id = "BRY-REQ-OPERATIONS-0010"
 domain = "operations"
 owner = "0.10.0"
 disposition = "intentionally-rejected"
-sources = ["iana:tls-parameters", "rfc:9850"]
-
-[[surface_group]]
-id = "BRY-REQ-PQPKIX-0046"
-domain = "pkix"
-owner = "0.46.0"
-disposition = "intentionally-rejected"
-sources = ["rfc:9935"]
-
-[[surface_group]]
-id = "BRY-REQ-TESTING-0010"
-domain = "testing"
-owner = "0.10.0"
-disposition = "future-work"
 sources = ["rfc:9850"]
+surface_ids = [
+  "facility.sslkeylogfile.production",
+]
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0136"
@@ -191,6 +1022,9 @@ domain = "tls"
 owner = "0.136.0"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "rfc:8449"]
+surface_ids = [
+  "facility.record-size-limit",
+]
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0137"
@@ -198,6 +1032,9 @@ domain = "tls"
 owner = "0.137.0"
 disposition = "future-work"
 sources = ["rfc:7250"]
+surface_ids = [
+  "format.raw-public-key",
+]
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0144"
@@ -205,6 +1042,9 @@ domain = "tls"
 owner = "0.144.0"
 disposition = "future-work"
 sources = ["rfc:9345"]
+surface_ids = [
+  "format.delegated-credential",
+]
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0145"
@@ -212,6 +1052,9 @@ domain = "tls"
 owner = "0.145.0"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+surface_ids = [
+  "facility.certificate-compression",
+]
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0146"
@@ -219,6 +1062,9 @@ domain = "tls"
 owner = "0.146.0"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+surface_ids = [
+  "facility.certificate-compression.artifact-validation",
+]
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-1461"
@@ -226,27 +1072,74 @@ domain = "tls"
 owner = "0.146.1"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+surface_ids = [
+  "facility.certificate-compression.send-integration",
+]
 
 [[surface_group]]
-id = "BRY-REQ-COMPOSE-0148"
+id = "BRY-REQ-PQ-0117"
+domain = "cryptography"
+owner = "0.117.0"
+disposition = "future-work"
+sources = ["nist:NIST.FIPS.203.pdf", "nist:NIST.SP.800-227.pdf", "rfc:9954"]
+surface_ids = [
+  "algorithm.ml-kem",
+]
+
+[[surface_group]]
+id = "BRY-REQ-PQPKIX-0046"
+domain = "pkix"
+owner = "0.46.0"
+disposition = "intentionally-rejected"
+sources = ["rfc:9935"]
+surface_ids = [
+  "format.ml-kem-pkix-credentials",
+]
+
+[[surface_group]]
+id = "BRY-REQ-RRCREG-0148"
 domain = "tls"
 owner = "0.148.0"
 disposition = "future-work"
-sources = ["iana:tls-extensiontype-values", "iana:tls-parameters", "rfc:8447", "rfc:9847"]
+sources = ["iana:tls-parameters", "rfc:9853"]
+surface_ids = [
+  "iana.tls-parameters.tls-rrc-message-types",
+  "iana.tls-parameters.tls-rrc-message-types.path-challenge.1",
+  "iana.tls-parameters.tls-rrc-message-types.path-drop.1",
+  "iana.tls-parameters.tls-rrc-message-types.path-response.1",
+  "iana.tls-parameters.tls-rrc-message-types.reserved-for-private-use.1",
+  "iana.tls-parameters.tls-rrc-message-types.unassigned.1",
+]
 
 [[surface_group]]
-id = "BRY-REQ-COMPOSEX-0148"
-domain = "tls"
-owner = "0.148.0"
+id = "BRY-REQ-TESTING-0010"
+domain = "testing"
+owner = "0.10.0"
+disposition = "future-work"
+sources = ["rfc:9850"]
+surface_ids = [
+  "facility.sslkeylogfile.test-support",
+]
+
+[[surface_group]]
+id = "BRY-REQ-TLS12EXT-0058"
+domain = "tls12"
+owner = "0.58.0"
 disposition = "intentionally-rejected"
-sources = ["iana:tls-extensiontype-values"]
+sources = ["iana:tls-extensiontype-values", "rfc:6961"]
+surface_ids = [
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1",
+]
 
 [[surface_group]]
 id = "BRY-REQ-TLS12X-0058"
 domain = "tls12"
 owner = "0.58.0"
 disposition = "intentionally-rejected"
-sources = ["iana:tls-extensiontype-values", "rfc:6961"]
+sources = ["rfc:6961"]
+surface_ids = [
+  "facility.status-request-v2",
+]
 
 [[registry_requirement]]
 id = "BRY-REQ-QUICREG-0094"

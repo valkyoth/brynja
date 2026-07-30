@@ -6,15 +6,23 @@ from __future__ import annotations
 import tomllib
 from collections import defaultdict
 
-import requirements_domain_coverage as domain_coverage
 import requirements_lib as lib
 import requirements_mapping as mapping
+import requirements_sections as sections
 import requirements_validation as validation
 import standards_lib as standards
 
 
 POLICY = lib.DIRECTORY / "residual-policy.toml"
-GROUP_FIELDS = {"disposition", "domain", "id", "owner", "sources"}
+SECTION_POLICY = lib.DIRECTORY / "residual-sections.toml"
+GROUP_FIELDS = {
+    "disposition",
+    "domain",
+    "id",
+    "owner",
+    "sources",
+    "surface_ids",
+}
 REGISTRY_FIELDS = {"id", "source", "surface"}
 DISPOSITION_LIFECYCLE = {
     "caller-owned": "caller-owned",
@@ -70,39 +78,15 @@ def resolve_source(identifier: str, sources: dict[str, dict]) -> dict:
         "sha256": entry["sha256"],
     }
     if entry["kind"] == "rfc":
-        records = [
-            {
-                "anchor": _anchor(text),
-                "section": section,
-                "section_sha256": lib.section_hash(text),
-            }
-            for section, text in _normative_sections(entry).items()
-        ]
         return {
             **common,
             "errata": entry["errata"],
-            "sections": records,
+            "sections": [],
             "status": entry["status"],
         }
     if entry["kind"] == "local":
         return {**common, "role": entry["role"]}
     return {**common, "collection": entry["id"]}
-
-
-def _normative_sections(entry: dict) -> dict[str, str]:
-    path = lib.ROOT / "rfc" / f"rfc{entry['number']}.txt"
-    return {
-        section: text
-        for section, text in lib.rfc_sections(path).items()
-        if domain_coverage.NORMATIVE.search(text)
-    }
-
-
-def _anchor(text: str) -> str:
-    value = text[:160].strip()
-    if len(value) < 20 or text.count(value) != 1:
-        lib.fail("residual normative section lacks a unique extraction anchor")
-    return value
 
 
 def covered_surface_ids(
@@ -172,6 +156,7 @@ def make_requirement(
     raw: dict,
     surface: dict,
     sources: dict[str, dict],
+    decision_ids: list[str],
     *,
     lifecycle: str | None = None,
 ) -> dict:
@@ -182,7 +167,7 @@ def make_requirement(
     requirement = {
         "applicability": applicability,
         "decision": decision,
-        "decision_ids": [surface["id"]],
+        "decision_ids": sorted(decision_ids),
         "deviation_rationale": None,
         "domain": surface["domain"],
         "evidence": [],
@@ -205,7 +190,7 @@ def make_requirement(
             "No protocol implementation, interoperability, audit, source-rights, "
             "or production-readiness claim is made by this planning requirement."
         ),
-        "revision": 1,
+        "revision": raw.get("revision", 1),
         "scope": "protocol",
         "sources": [resolve_source(item, sources) for item in raw["sources"]],
         "statement": surface["rationale"],
@@ -253,13 +238,18 @@ def validate_policy(
     groups = policy["surface_group"]
     for item in groups:
         if (
-            set(item) != GROUP_FIELDS
-            and set(item) != GROUP_FIELDS | {"lifecycle"}
+            not GROUP_FIELDS <= set(item)
+            or set(item) - GROUP_FIELDS - {"lifecycle", "revision"}
         ) or (
             item["owner"] not in versions
             or item["disposition"] not in DISPOSITION_LIFECYCLE
             or not isinstance(item["sources"], list)
             or not item["sources"]
+            or not isinstance(item["surface_ids"], list)
+            or not item["surface_ids"]
+            or len(item["surface_ids"]) != len(set(item["surface_ids"]))
+            or not isinstance(item.get("revision", 1), int)
+            or item.get("revision", 1) < 1
         ):
             lib.fail("residual policy has a malformed surface group")
     if any(set(item) != REGISTRY_FIELDS for item in policy["registry_requirement"]):
@@ -278,43 +268,67 @@ def build(
     transport: dict,
     existing_requirements: list[dict],
     policy: dict | None = None,
+    section_policy: dict | None = None,
 ) -> tuple[list[dict], dict, str]:
     policy = policy or read_policy()
+    section_policy = section_policy or sections.read_policy(SECTION_POLICY)
     validate_policy(policy, ledger, register, versions)
     surfaces = {item["id"]: item for item in register["surfaces"]}
     covered = covered_surface_ids(foundation, domain, transport)
     remaining = [item for item in register["surfaces"] if item["id"] not in covered]
-    by_group: dict[tuple[str, str, str], list[dict]] = defaultdict(list)
-    for surface in remaining:
-        by_group[(surface["domain"], surface["owner"], surface["disposition"])].append(surface)
-    configured = {
-        (item["domain"], item["owner"], item["disposition"]): item
+    remaining_ids = {item["id"] for item in remaining}
+    configured_ids = [
+        surface_id
         for item in policy["surface_group"]
-    }
-    if len(configured) != len(policy["surface_group"]) or set(configured) != set(by_group):
+        for surface_id in item["surface_ids"]
+    ]
+    if (
+        len(configured_ids) != len(set(configured_ids))
+        or set(configured_ids) != remaining_ids
+    ):
         lib.fail(
-            "residual surface groups differ: "
-            f"missing={sorted(set(by_group) - set(configured))}, "
-            f"stale={sorted(set(configured) - set(by_group))}"
+            "residual surface identities differ: "
+            f"missing={sorted(remaining_ids - set(configured_ids))}, "
+            f"stale={sorted(set(configured_ids) - remaining_ids)}"
         )
     authorities = source_map(ledger)
     requirements = []
     assignments = []
-    for key, raw in sorted(configured.items()):
-        candidates = by_group[key]
-        representative = next(
-            (item for item in candidates if item["kind"] == "semantic"),
-            candidates[0],
-        )
+    for raw in sorted(policy["surface_group"], key=lambda item: item["id"]):
+        key = (raw["domain"], raw["owner"], raw["disposition"])
+        candidates = [surfaces[surface_id] for surface_id in raw["surface_ids"]]
+        incompatible = [
+            item["id"]
+            for item in candidates
+            if (item["domain"], item["owner"], item["disposition"]) != key
+        ]
+        if incompatible:
+            lib.fail(f"{raw['id']} contains incompatible surfaces: {incompatible}")
         unknown = set(raw["sources"]) - set(authorities)
         if unknown:
             lib.fail(f"residual policy references unknown authority: {sorted(unknown)}")
-        if not set(raw["sources"]).intersection(representative["normative_sources"]):
-            lib.fail(f"{raw['id']} has no authority related to its representative")
+        unrelated = [
+            item["id"]
+            for item in candidates
+            if not set(raw["sources"]).intersection(item["normative_sources"])
+        ]
+        if unrelated:
+            lib.fail(f"{raw['id']} has unrelated surfaces: {unrelated}")
+        boundaries = {
+            (item["code_target"], item["test_target"]) for item in candidates
+        }
+        if len(boundaries) != 1:
+            lib.fail(f"{raw['id']} must use one implementation and test boundary")
+        representative = candidates[0]
         expected = raw.get("lifecycle", DISPOSITION_LIFECYCLE[key[2]])
         if key[2] not in mapping.EXPECTED_DISPOSITIONS[expected]:
             lib.fail(f"{raw['id']} lifecycle conflicts with its residual group")
-        requirement = make_requirement(raw, representative, authorities)
+        requirement = make_requirement(
+            raw,
+            representative,
+            authorities,
+            raw["surface_ids"],
+        )
         requirements.append(requirement)
         assignments.extend(
             {
@@ -336,11 +350,45 @@ def build(
                 {**raw, "sources": [raw["source"]]},
                 surface,
                 authorities,
+                [surface["id"]],
             )
         )
     ids = [item["id"] for item in requirements]
     if len(ids) != len(set(ids)):
         lib.fail("residual requirements have duplicate stable IDs")
+    residual_authority_ids = {
+        source["id"]
+        for requirement in requirements
+        for source in requirement["sources"]
+    }
+    residual_authorities = {
+        identifier: authorities[identifier]
+        for identifier in residual_authority_ids
+    }
+    sections.validate_policy(
+        section_policy,
+        SECTION_POLICY,
+        "0.3.5",
+        standards.sha256(standards.json_bytes(ledger)),
+    )
+    requirements, section_coverage = sections.apply(
+        requirements,
+        residual_authorities,
+        section_policy,
+        minimum_revision=1,
+        mapping_suffix=(
+            "Exact normative sections are assigned only by the reviewed "
+            "v0.3.5 residual section policy; RFC-wide inheritance is forbidden."
+        ),
+    )
+    requirement_map = {item["id"]: item for item in requirements}
+    for assignment in assignments:
+        linked = requirement_map[assignment["requirement_id"]]["decision_ids"]
+        if assignment["id"] not in linked:
+            lib.fail(
+                f"{assignment['id']} is not linked from "
+                f"{assignment['requirement_id']}"
+            )
     all_requirements = existing_requirements + requirements
     cited = set()
     for requirement in all_requirements:
@@ -353,44 +401,68 @@ def build(
     missing = set(authorities) - cited
     if missing:
         lib.fail(f"source-to-requirement closure is incomplete: {sorted(missing)}")
-    digest = standards.sha256(standards.json_bytes(policy))
-    coverage = _coverage(requirements, assignments, digest)
+    digest = standards.sha256(
+        standards.json_bytes(
+            {"policy": policy, "section_policy": section_policy}
+        )
+    )
+    coverage = _coverage(
+        requirements,
+        assignments,
+        digest,
+        section_coverage,
+        residual_authorities,
+    )
     return requirements, coverage, digest
 
 
-def _coverage(requirements: list[dict], assignments: list[dict], digest: str) -> dict:
+def _coverage(
+    requirements: list[dict],
+    assignments: list[dict],
+    digest: str,
+    section_coverage: dict[tuple[str, str], dict],
+    raw_authorities: dict[str, dict],
+) -> dict:
     by_source: dict[str, list[str]] = defaultdict(list)
     source_records = {}
     for requirement in requirements:
         for source in requirement["sources"]:
             by_source[source["id"]].append(requirement["id"])
-            source_records[source["id"]] = source
+            base = {key: value for key, value in source.items() if key != "sections"}
+            previous = source_records.setdefault(source["id"], base)
+            if previous != base:
+                lib.fail(f"residual authority identity differs: {source['id']}")
+    inventory = sections.section_inventory(raw_authorities)
     authorities = []
     for identifier, source in sorted(source_records.items()):
-        record = {
-            key: value
-            for key, value in source.items()
-            if key not in {"sections"}
-        }
+        record = dict(source)
         record["requirement_ids"] = sorted(set(by_source[identifier]))
-        if "sections" in source:
+        source_sections = {
+            section: decision
+            for (source_id, section), decision in section_coverage.items()
+            if source_id == identifier
+        }
+        if source_sections:
             record["normative_sections"] = [
                 {
-                    **section,
-                    "requirement_ids": record["requirement_ids"],
+                    "anchor": sections.anchor(inventory[(identifier, section)]),
+                    **decision,
+                    "section": section,
+                    "section_sha256": lib.section_hash(
+                        inventory[(identifier, section)]
+                    ),
                 }
-                for section in source["sections"]
+                for section, decision in sorted(source_sections.items())
             ]
         authorities.append(record)
+    mapped_sections = sum(
+        "requirement_ids" in decision for decision in section_coverage.values()
+    )
     return {
         "authorities": authorities,
         "authority_count": len(authorities),
-        "mapped_normative_section_count": sum(
-            len(item.get("normative_sections", [])) for item in authorities
-        ),
-        "normative_section_count": sum(
-            len(item.get("normative_sections", [])) for item in authorities
-        ),
+        "mapped_normative_section_count": mapped_sections,
+        "normative_section_count": len(section_coverage),
         "policy_sha256": digest,
         "requirement_count": len(requirements),
         "schema": 1,

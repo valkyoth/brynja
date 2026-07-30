@@ -9,15 +9,15 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
-- Thirty-eight optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and
-  residual requirements, bringing the deterministic matrix to 154 records.
+- Forty-seven optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and
+  residual requirements, bringing the deterministic matrix to 163 records.
 - Local-only checksum pins for final FIPS 203, SP 800-227, SP 800-90B, and
   SP 800-90C.
-- Exact residual coverage of 33 authorities, 182 normative RFC sections, and
+- Exact residual coverage of 34 authorities, 193 normative RFC sections, and
   all 741 surfaces left by the foundation, domain, and transport bundles.
 - A generated closure report mapping all 126 locked authorities, 205 roadmap
-  rows, 4,422 protocol surfaces, and 154 requirements in both directions.
-- Thirteen residual broken fixtures, bringing the requirement suite to 95
+  rows, 4,422 protocol surfaces, and 163 requirements in both directions.
+- Twenty-one residual broken fixtures, bringing the requirement suite to 103
   positive and negative tests.
 
 ### Security
@@ -37,6 +37,10 @@ Keep a Changelog and Semantic Versioning.
 - Raw Public Keys, Delegated Credentials, certificate-compression receive,
   artifact, and send phases, HPKE context/base/export phases, ECH phases, and
   entropy phases now match their exact roadmap owners.
+- Two Medium pentest findings are remediated: all 741 residual surfaces are
+  explicit, reciprocal, independently validated, and homogeneous by code/test
+  boundary; all 193 residual normative sections have one or more of 175 exact
+  mappings or one of 18 reviewed exclusions instead of RFC-wide inheritance.
 
 ## [0.3.4] - 2026-07-30
 

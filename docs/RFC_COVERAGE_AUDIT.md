@@ -2,7 +2,8 @@
 
 Status: source and surface traceability complete through v0.3.1; requirement
 foundation complete at v0.3.2; cryptography, encoding, and PKIX population
-complete at v0.3.3; remaining domains gated by v0.3.4 and v0.3.5
+complete at v0.3.3; TLS, DTLS, and QUIC-TLS population complete at v0.3.4;
+optional, legacy, operational, and residual domains gated by v0.3.5
 
 ## Scope And Method
 
@@ -24,10 +25,11 @@ This document records planning coverage, not protocol conformance. v0.3.2
 establishes stable machine-readable identifiers, lifecycle states, exact
 authority binding, bidirectional mappings, and fail-closed pilot verification.
 v0.3.3 populates every currently scoped cryptography, encoding, PKIX, OCSP,
-and CT rule across 53 authorities and 3,322 surfaces. Versions v0.3.4 and
-v0.3.5 must populate the remaining current, compatibility, optional, legacy,
-and residual rules; planned targets become actual code, tests, and evidence
-only in their owning milestone.
+and CT rule across 53 authorities and 3,322 surfaces. v0.3.4 populates 70 TLS,
+DTLS, and QUIC-TLS rules across 40 authorities, 550 normative sections, 63
+owner milestones, and 480 surfaces. v0.3.5 must populate optional, legacy,
+operational, and residual rules; planned targets become actual code, tests,
+and evidence only in their owning milestone.
 
 ## Coverage By Implementation Domain
 

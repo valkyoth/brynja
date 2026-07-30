@@ -32,6 +32,7 @@ test -x scripts/test-protocol-surfaces.py
 test -x scripts/check-requirements.py
 test -x scripts/test-requirements.py
 test -x scripts/test-requirement-domains.py
+test -x scripts/test-requirement-transports.py
 test -x scripts/test-requirement-lifecycles.py
 test -x scripts/test-requirement-history.py
 test -f scripts/requirements_lib.py
@@ -39,6 +40,8 @@ test -f scripts/requirements_history.py
 test -f scripts/requirements_mapping.py
 test -f scripts/requirements_domain.py
 test -f scripts/requirements_domain_coverage.py
+test -f scripts/requirements_bundle.py
+test -f scripts/requirements_transport.py
 test -f scripts/requirements_validation.py
 test -f scripts/requirements_test_support.py
 test -x scripts/update-standards-snapshots.py
@@ -68,6 +71,13 @@ test -s requirements/matrix.json
 test -s requirements/indexes.json
 test -s requirements/coverage.md
 test -s requirements/domain-coverage.json
+test -s requirements/transport-scope.toml
+test -s requirements/transport-exceptions.toml
+test -s requirements/transport-coverage.json
+test -s standards/transport-surfaces/tls.toml
+test -s standards/transport-surfaces/tls12.toml
+test -s standards/transport-surfaces/quic.toml
+test -s standards/transport-surfaces/dtls.toml
 test -f release-crates.toml
 cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml

@@ -1,0 +1,179 @@
+schema = 1
+milestone = "0.3.4"
+source_ledger_sha256 = "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
+
+[[surface]]
+id = "boundary.dtls.path-identity"
+requirement_id = "BRY-REQ-DTLS-0102"
+owner = "0.102.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls-core/src/path.rs#PathToken"
+test_target = "tests/requirements/dtls_path.rs#identity_separation"
+rationale = "Opaque caller-provided path tokens bind cookie, amplification, CID, migration, PMTU, timer, and datagram state without address interpretation."
+
+[[surface]]
+id = "state.dtls.version-negotiation"
+requirement_id = "BRY-REQ-DTLS-0103"
+owner = "0.103.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:6347", "rfc:9147", "rfc:9325"]
+code_target = "crates/brynja-dtls-core/src/version.rs#VersionPolicy"
+test_target = "tests/requirements/dtls_version.rs#one_pass_selection"
+rationale = "DTLS negotiation skips unknown offers, rejects recognized legacy versions, selects one engine, and preserves transcript plus opaque path identity."
+
+[[surface]]
+id = "state.dtls13.headers-epochs"
+requirement_id = "BRY-REQ-DTLS-0104"
+owner = "0.104.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls13/src/record.rs#UnifiedHeader"
+test_target = "tests/requirements/dtls13_header.rs#epochs_and_sequences"
+rationale = "DTLS 1.3 unified headers, epochs, compact sequence reconstruction, nonce construction, and exhaustion are checked before state mutation."
+
+[[surface]]
+id = "state.dtls13.record-number-encryption"
+requirement_id = "BRY-REQ-DTLS-0105"
+owner = "0.105.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls13/src/record_number.rs#RecordNumber"
+test_target = "tests/requirements/dtls13_record_number.rs#vectors_and_failures"
+rationale = "Record-number encryption authenticates reconstruction and never mutates replay state before successful record authentication."
+
+[[surface]]
+id = "state.dtls.replay-epoch-lifetime"
+requirement_id = "BRY-REQ-DTLS-0106"
+owner = "0.106.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls-core/src/replay.rs#ReplayEpochs"
+test_target = "tests/requirements/dtls_replay.rs#transactional_windows"
+rationale = "Replay windows and epoch keys have fixed bounds, transactional installation, bounded retention, and immediate obsolete-key destruction."
+
+[[surface]]
+id = "state.dtls12.connection-id"
+requirement_id = "BRY-REQ-DTLS-0107"
+owner = "0.107.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:6347", "rfc:9146"]
+code_target = "crates/brynja-dtls12/src/cid.rs#ConnectionId"
+test_target = "tests/requirements/dtls12_cid.rs#routing_and_privacy"
+rationale = "DTLS 1.2 CID negotiation preserves its version-specific record, routing, privacy, replay, migration, PMTU, and amplification invariants."
+
+[[surface]]
+id = "state.dtls13.connection-id-update"
+requirement_id = "BRY-REQ-DTLS-0108"
+owner = "0.108.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls13/src/cid.rs#ConnectionIdState"
+test_target = "tests/requirements/dtls13_cid.rs#bounded_updates"
+rationale = "DTLS 1.3 CID updates bound active and retired identifiers and preserve collision, privacy, replay, routing, rotation, path, and amplification state."
+
+[[surface]]
+id = "state.dtls.fragment-reassembly"
+requirement_id = "BRY-REQ-DTLS-0109"
+owner = "0.109.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls-core/src/fragment.rs#Reassembly"
+test_target = "tests/requirements/dtls_fragments.rs#overlap_and_bounds"
+rationale = "Handshake fragmentation and caller-workspace reassembly are bounded, transcript-canonical, duplicate-idempotent, and conflict-rejecting."
+
+[[surface]]
+id = "state.dtls.flights-acks-timers"
+requirement_id = "BRY-REQ-DTLS-0110"
+owner = "0.110.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls-core/src/flight.rs#FlightState"
+test_target = "tests/requirements/dtls_flights.rs#deterministic_retransmission"
+rationale = "Flights, ACKs, timer actions, retransmission caches, backoff, congestion, and path ownership are explicit, checked, and deterministic."
+
+[[surface]]
+id = "state.dtls.address-validation"
+requirement_id = "BRY-REQ-DTLS-0111"
+owner = "0.111.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls-core/src/amplification.rs#AddressValidation"
+test_target = "tests/requirements/dtls_amplification.rs#budgets_and_cookies"
+rationale = "Path-bound cookies, amplification budgets, PMTU policy, and cheap rejection precede expensive cryptography and cannot transfer between paths."
+
+[[surface]]
+id = "state.dtls.return-routability"
+requirement_id = "BRY-REQ-DTLS-1111"
+owner = "0.111.1"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9853"]
+code_target = "crates/brynja-dtls-core/src/routability.rs#RoutabilityCheck"
+test_target = "tests/requirements/dtls_routability.rs#paths_and_rebinding"
+rationale = "Return-routability checks authenticate path challenge, response, timers, pacing, buffering, rebinding, migration, PMTU, and exact path binding."
+
+[[surface]]
+id = "state.dtls13.handshake"
+requirement_id = "BRY-REQ-DTLS-0112"
+owner = "0.112.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls13/src/handshake.rs#Handshake"
+test_target = "tests/requirements/dtls13_handshake.rs#client_server_states"
+rationale = "DTLS 1.3 client and server states handle duplicates, key updates, terminal cleanup, provider cancellation, epochs, flights, and paths."
+
+[[surface]]
+id = "state.dtls13.early-data-exclusion"
+requirement_id = "BRY-REQ-DTLS-0113"
+owner = "0.113.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:9147"]
+code_target = "crates/brynja-dtls13/src/early_data.rs#EarlyDataExclusion"
+test_target = "tests/requirements/dtls13_early_data.rs#reject_all_paths"
+rationale = "DTLS 1.3 early data is never offered, accepted, derived, retained, or transcript-admitted, including reorder and duplicate cases."
+
+[[surface]]
+id = "state.dtls12.hardened-profile"
+requirement_id = "BRY-REQ-DTLS-0114"
+owner = "0.114.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:6347", "rfc:9325", "rfc:10015"]
+code_target = "crates/brynja-dtls12/src/policy.rs#HardenedProfile"
+test_target = "tests/requirements/dtls12_policy.rs#ecdhe_aead_only"
+rationale = "DTLS 1.2 uses only the hardened TLS 1.2 profile with isolated epoch, replay, ticket, path, downgrade, and deprecation state."
+
+[[surface]]
+id = "state.dtls.one-pass-router"
+requirement_id = "BRY-REQ-DTLS-0115"
+owner = "0.115.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:6347", "rfc:9147"]
+code_target = "crates/brynja-dtls/src/router.rs#Router"
+test_target = "tests/requirements/dtls_router.rs#single_engine"
+rationale = "The DTLS router selects one highest acceptable engine once and never retries or crosses transcript, path, credential, ticket, epoch, replay, CID, or secret state."
+
+[[surface]]
+id = "state.dtls.conformance-audit"
+requirement_id = "BRY-REQ-DTLS-0116"
+owner = "0.116.0"
+domain = "dtls"
+disposition = "future-work"
+sources = ["rfc:6347", "rfc:9147", "rfc:9325"]
+code_target = "tests/conformance/dtls.rs#DtlsAuditGate"
+test_target = "tests/conformance/dtls.rs#audit_regression"
+rationale = "DTLS requires loss, reorder, duplicate, fragmentation, replay, path, CID, version, load, fuzz, interoperability, and external-audit evidence."

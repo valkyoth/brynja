@@ -60,14 +60,74 @@ def bind(policy: dict, ledger: dict) -> None:
 
 def test_current_repository() -> None:
     register = checker.build_register()
-    assert register["schema"] == 1
-    assert len(register["surfaces"]) == 4346
+    assert register["schema"] == 2
+    assert len(register["surfaces"]) == 4409
     assert not any(
         surface["disposition"] == "implemented"
         for surface in register["surfaces"]
     )
     assert standards.json_bytes(register) == lib.REGISTER.read_bytes()
     assert lib.render_coverage(register) == lib.COVERAGE.read_bytes()
+
+
+def test_transport_milestones_are_exact_and_unique() -> None:
+    register = checker.build_register()
+    transport = [
+        surface
+        for surface in register["surfaces"]
+        if "requirement_id" in surface
+    ]
+    assert len(transport) == 63
+    assert len({surface["owner"] for surface in transport}) == 63
+    assert len({surface["requirement_id"] for surface in transport}) == 63
+    assert {surface["domain"] for surface in transport} == {
+        "dtls",
+        "quic",
+        "tls",
+        "tls12",
+        "tls13",
+    }
+
+
+def test_transport_policy_binding_drift_fails() -> None:
+    policy, ledger, _projected = inputs()
+    transport = checker.load_transport_policies()
+    transport[0]["source_ledger_sha256"] = "0" * 64
+    assert_fails(
+        "transport policy is not bound",
+        checker.build_register,
+        policy,
+        ledger,
+        transport,
+    )
+
+
+def test_duplicate_transport_surface_fails() -> None:
+    policy, ledger, _projected = inputs()
+    transport = checker.load_transport_policies()
+    transport[1]["surface"][0]["id"] = transport[0]["surface"][0]["id"]
+    assert_fails(
+        "duplicate or invalid transport surface ID",
+        checker.build_register,
+        policy,
+        ledger,
+        transport,
+    )
+
+
+def test_duplicate_transport_requirement_fails() -> None:
+    policy, ledger, _projected = inputs()
+    transport = checker.load_transport_policies()
+    transport[1]["surface"][0]["requirement_id"] = (
+        transport[0]["surface"][0]["requirement_id"]
+    )
+    assert_fails(
+        "duplicate or invalid transport requirement ID",
+        checker.build_register,
+        policy,
+        ledger,
+        transport,
+    )
 
 
 def test_generation_is_deterministic() -> None:

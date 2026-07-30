@@ -12,7 +12,7 @@ EXPECTED_DISPOSITIONS = {
     "evidenced": {"implemented"},
     "implemented": {"implemented"},
     "legacy": {"legacy-only"},
-    "planned": {"future-work"},
+    "planned": {"future-work", "safely-ignored"},
     "rejected": {"intentionally-rejected"},
     "tested": {"implemented"},
 }
@@ -22,6 +22,12 @@ DOMAIN_SURFACES = {
     "encoding": {"pkix"},
     "ocsp": {"ocsp", "pki", "pkix", "tls12"},
     "pkix": {"pkix"},
+    "tls": {"tls", "tls12", "tls13"},
+    "tls12": {"tls", "tls12"},
+    "tls13": {"tls", "tls13"},
+    "tls13-session": {"tls", "tls13"},
+    "quic": {"quic"},
+    "dtls": {"dtls", "tls"},
 }
 
 

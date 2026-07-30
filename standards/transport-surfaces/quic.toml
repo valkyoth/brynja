@@ -1,0 +1,102 @@
+schema = 1
+milestone = "0.3.4"
+source_ledger_sha256 = "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
+
+[[surface]]
+id = "boundary.quic.encryption-level-ownership"
+requirement_id = "BRY-REQ-QUIC-0094"
+owner = "0.94.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9000", "rfc:9001"]
+code_target = "crates/brynja-quic-tls/src/level.rs#EncryptionLevel"
+test_target = "tests/requirements/quic_ownership.rs#level_and_transport_boundary"
+rationale = "Brynja consumes ordered CRYPTO bytes and emits secret events while packet numbers, retransmission, loss, Retry, key phase, and transport remain caller-owned."
+
+[[surface]]
+id = "state.quic.tls-profile"
+requirement_id = "BRY-REQ-QUIC-0095"
+owner = "0.95.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9001"]
+code_target = "crates/brynja-quic-tls/src/profile.rs#QuicTlsProfile"
+test_target = "tests/requirements/quic_profile.rs#message_legality"
+rationale = "The recordless QUIC profile enforces encryption-level legality, required ALPN, secret events, and TLS-alert to CRYPTO_ERROR mapping."
+
+[[surface]]
+id = "boundary.quic.key-derivation"
+requirement_id = "BRY-REQ-QUIC-0096"
+owner = "0.96.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9001", "rfc:9369"]
+code_target = "crates/brynja-quic-tls/src/keys.rs#QuicKeyDerivation"
+test_target = "tests/requirements/quic_keys.rs#versioned_vectors"
+rationale = "TLS emits typed traffic secrets and an optional helper derives QUIC keys while Initial salts, packet protection, Retry, and key phase stay in transport."
+
+[[surface]]
+id = "boundary.quic.transport-parameters"
+requirement_id = "BRY-REQ-QUIC-0097"
+owner = "0.97.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9000", "rfc:9001"]
+code_target = "crates/brynja-quic-tls/src/parameters.rs#TransportParameters"
+test_target = "tests/requirements/quic_parameters.rs#syntactic_boundary"
+rationale = "Transport parameters receive bounded syntactic parsing and transcript binding while all transport-semantic enforcement remains caller-owned."
+
+[[surface]]
+id = "state.quic.sans-io-handshake"
+requirement_id = "BRY-REQ-QUIC-0098"
+owner = "0.98.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9001"]
+code_target = "crates/brynja-quic-tls/src/driver.rs#QuicHandshake"
+test_target = "tests/requirements/quic_driver.rs#levels_and_backpressure"
+rationale = "The QUIC handshake has deterministic per-level input, output, alert, provider, future-data, secret-event, backpressure, and late-data behavior."
+
+[[surface]]
+id = "state.quic.resumption-lifecycle"
+requirement_id = "BRY-REQ-QUIC-0099"
+owner = "0.99.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9000", "rfc:9001"]
+code_target = "crates/brynja-quic-tls/src/resumption.rs#QuicResumption"
+test_target = "tests/requirements/quic_resumption.rs#completion_confirmation"
+rationale = "Tickets distinguish TLS completion from QUIC confirmation and bind QUIC version, parameters, ALPN, application, deployment, privacy, and rotation state."
+
+[[surface]]
+id = "state.quic.zero-rtt"
+requirement_id = "BRY-REQ-QUIC-0991"
+owner = "0.99.1"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9001"]
+code_target = "crates/brynja-quic-tls/src/early_data.rs#QuicEarlyData"
+test_target = "tests/requirements/quic_early_data.rs#acceptance_and_rejection"
+rationale = "QUIC zero-RTT enforces its sentinel size, remembered parameters, application authorization, anti-replay, ticket use, and deterministic errors."
+
+[[surface]]
+id = "boundary.quic.crypto-reassembly-helper"
+requirement_id = "BRY-REQ-QUIC-0100"
+owner = "0.100.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9000", "rfc:9001"]
+code_target = "crates/brynja-quic-tls/src/reassembly.rs#CryptoReassembly"
+test_target = "tests/requirements/quic_reassembly.rs#bounds_and_conflicts"
+rationale = "The optional CRYPTO-offset reassembly helper is explicit, bounded, conflict-detecting, and never implements retransmission or loss recovery."
+
+[[surface]]
+id = "state.quic.conformance-audit"
+requirement_id = "BRY-REQ-QUIC-0101"
+owner = "0.101.0"
+domain = "quic"
+disposition = "future-work"
+sources = ["rfc:9000", "rfc:9001", "rfc:9002", "rfc:9369"]
+code_target = "tests/conformance/quic_tls.rs#QuicTlsAuditGate"
+test_target = "tests/conformance/quic_tls.rs#audit_regression"
+rationale = "QUIC-TLS requires versioned vectors, loss and reorder simulation, discard, zero-RTT, derivation, interoperability, ownership, fuzz, and external review."

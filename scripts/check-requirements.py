@@ -10,6 +10,7 @@ import requirements_lib as lib
 import requirements_history as history
 import requirements_mapping as mapping
 import requirements_domain as domain
+import requirements_transport as transport
 import requirements_validation as validation
 import standards_lib as standards
 import surface_lib as surfaces
@@ -257,8 +258,15 @@ def build_matrix(
             versions,
         )
         requirements.extend(domain_requirements)
+        transport_requirements, _transport_coverage, transport_hash = (
+            transport.build(ledger, register, versions)
+        )
+        requirements.extend(transport_requirements)
     else:
         _scope, _domain_requirements, domain_hash = domain.load_policy()
+        _scope, _transport_requirements, transport_hash = (
+            transport.load_policy(ledger)
+        )
     ids = [requirement["id"] for requirement in requirements]
     if len(ids) != len(set(ids)):
         lib.fail("requirement policy has duplicate stable IDs")
@@ -271,9 +279,10 @@ def build_matrix(
         "domain_policy_sha256": domain_hash,
         "policy_sha256": standards.sha256(standards.json_bytes(policy)),
         "requirements": requirements,
-        "schema": 2,
+        "schema": 3,
         "source_ledger_sha256": policy["source_ledger_sha256"],
         "surface_register_sha256": policy["surface_register_sha256"],
+        "transport_policy_sha256": transport_hash,
     }
     return matrix, lib.build_indexes(requirements)
 
@@ -288,9 +297,17 @@ def main() -> int:
         lib.read_json(surfaces.REGISTER),
         roadmap_versions(),
     )
+    _transport_requirements, transport_coverage, _transport_hash = (
+        transport.build(
+            lib.read_json(standards.LEDGER),
+            lib.read_json(surfaces.REGISTER),
+            roadmap_versions(),
+        )
+    )
     artifacts = {
         lib.COVERAGE: lib.render_coverage(matrix, indexes),
         lib.DOMAIN_COVERAGE: standards.json_bytes(domain_coverage),
+        lib.TRANSPORT_COVERAGE: standards.json_bytes(transport_coverage),
         lib.INDEXES: standards.json_bytes(indexes),
         lib.MATRIX: standards.json_bytes(matrix),
         lib.SCHEMA: standards.json_bytes(lib.schema_document()),

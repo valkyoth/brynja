@@ -1,6 +1,6 @@
 {
-  "policy_sha256": "5731201ef2924bb6bea851539188fc250936bc8cffea98e7feb47b40e3d448fe",
-  "schema": 1,
+  "policy_sha256": "48db004b5201b721c9636b8a254624e128ec9356808381c2160d9babb96ba4f7",
+  "schema": 2,
   "source_ledger_sha256": "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf",
   "surfaces": [
     {
@@ -204,6 +204,80 @@
       "owner": "0.24.0",
       "rationale": "Keccak-f[1600], SHA3-256, SHA3-512, SHAKE128, and SHAKE256 remain staged first-party work under the pinned current FIPS 202 authority.",
       "test_target": "tests/surface/primitives.rs#sha3_shake"
+    },
+    {
+      "code_target": "crates/brynja-dtls-core/src/path.rs#PathToken",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "boundary.dtls.path-identity",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.102.0",
+      "rationale": "Opaque caller-provided path tokens bind cookie, amplification, CID, migration, PMTU, timer, and datagram state without address interpretation.",
+      "requirement_id": "BRY-REQ-DTLS-0102",
+      "test_target": "tests/requirements/dtls_path.rs#identity_separation"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/reassembly.rs#CryptoReassembly",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "boundary.quic.crypto-reassembly-helper",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9000",
+        "rfc:9001"
+      ],
+      "owner": "0.100.0",
+      "rationale": "The optional CRYPTO-offset reassembly helper is explicit, bounded, conflict-detecting, and never implements retransmission or loss recovery.",
+      "requirement_id": "BRY-REQ-QUIC-0100",
+      "test_target": "tests/requirements/quic_reassembly.rs#bounds_and_conflicts"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/level.rs#EncryptionLevel",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "boundary.quic.encryption-level-ownership",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9000",
+        "rfc:9001"
+      ],
+      "owner": "0.94.0",
+      "rationale": "Brynja consumes ordered CRYPTO bytes and emits secret events while packet numbers, retransmission, loss, Retry, key phase, and transport remain caller-owned.",
+      "requirement_id": "BRY-REQ-QUIC-0094",
+      "test_target": "tests/requirements/quic_ownership.rs#level_and_transport_boundary"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/keys.rs#QuicKeyDerivation",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "boundary.quic.key-derivation",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9001",
+        "rfc:9369"
+      ],
+      "owner": "0.96.0",
+      "rationale": "TLS emits typed traffic secrets and an optional helper derives QUIC keys while Initial salts, packet protection, Retry, and key phase stay in transport.",
+      "requirement_id": "BRY-REQ-QUIC-0096",
+      "test_target": "tests/requirements/quic_keys.rs#versioned_vectors"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/parameters.rs#TransportParameters",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "boundary.quic.transport-parameters",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9000",
+        "rfc:9001"
+      ],
+      "owner": "0.97.0",
+      "rationale": "Transport parameters receive bounded syntactic parsing and transcript binding while all transport-semantic enforcement remains caller-owned.",
+      "requirement_id": "BRY-REQ-QUIC-0097",
+      "test_target": "tests/requirements/quic_parameters.rs#syntactic_boundary"
     },
     {
       "code_target": "crates/brynja-tls/src/certificate_compression.rs",
@@ -140733,6 +140807,873 @@
       "owner": "0.61.0",
       "rationale": "Current TLS 1.3 remains the primary future stream protocol and is not implemented by this release.",
       "test_target": "tests/surface/tls13.rs#protocol"
+    },
+    {
+      "code_target": "crates/brynja-dtls-core/src/amplification.rs#AddressValidation",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.address-validation",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.111.0",
+      "rationale": "Path-bound cookies, amplification budgets, PMTU policy, and cheap rejection precede expensive cryptography and cannot transfer between paths.",
+      "requirement_id": "BRY-REQ-DTLS-0111",
+      "test_target": "tests/requirements/dtls_amplification.rs#budgets_and_cookies"
+    },
+    {
+      "code_target": "tests/conformance/dtls.rs#DtlsAuditGate",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.conformance-audit",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6347",
+        "rfc:9147",
+        "rfc:9325"
+      ],
+      "owner": "0.116.0",
+      "rationale": "DTLS requires loss, reorder, duplicate, fragmentation, replay, path, CID, version, load, fuzz, interoperability, and external-audit evidence.",
+      "requirement_id": "BRY-REQ-DTLS-0116",
+      "test_target": "tests/conformance/dtls.rs#audit_regression"
+    },
+    {
+      "code_target": "crates/brynja-dtls-core/src/flight.rs#FlightState",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.flights-acks-timers",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.110.0",
+      "rationale": "Flights, ACKs, timer actions, retransmission caches, backoff, congestion, and path ownership are explicit, checked, and deterministic.",
+      "requirement_id": "BRY-REQ-DTLS-0110",
+      "test_target": "tests/requirements/dtls_flights.rs#deterministic_retransmission"
+    },
+    {
+      "code_target": "crates/brynja-dtls-core/src/fragment.rs#Reassembly",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.fragment-reassembly",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.109.0",
+      "rationale": "Handshake fragmentation and caller-workspace reassembly are bounded, transcript-canonical, duplicate-idempotent, and conflict-rejecting.",
+      "requirement_id": "BRY-REQ-DTLS-0109",
+      "test_target": "tests/requirements/dtls_fragments.rs#overlap_and_bounds"
+    },
+    {
+      "code_target": "crates/brynja-dtls/src/router.rs#Router",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.one-pass-router",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6347",
+        "rfc:9147"
+      ],
+      "owner": "0.115.0",
+      "rationale": "The DTLS router selects one highest acceptable engine once and never retries or crosses transcript, path, credential, ticket, epoch, replay, CID, or secret state.",
+      "requirement_id": "BRY-REQ-DTLS-0115",
+      "test_target": "tests/requirements/dtls_router.rs#single_engine"
+    },
+    {
+      "code_target": "crates/brynja-dtls-core/src/replay.rs#ReplayEpochs",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.replay-epoch-lifetime",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.106.0",
+      "rationale": "Replay windows and epoch keys have fixed bounds, transactional installation, bounded retention, and immediate obsolete-key destruction.",
+      "requirement_id": "BRY-REQ-DTLS-0106",
+      "test_target": "tests/requirements/dtls_replay.rs#transactional_windows"
+    },
+    {
+      "code_target": "crates/brynja-dtls-core/src/routability.rs#RoutabilityCheck",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.return-routability",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9853"
+      ],
+      "owner": "0.111.1",
+      "rationale": "Return-routability checks authenticate path challenge, response, timers, pacing, buffering, rebinding, migration, PMTU, and exact path binding.",
+      "requirement_id": "BRY-REQ-DTLS-1111",
+      "test_target": "tests/requirements/dtls_routability.rs#paths_and_rebinding"
+    },
+    {
+      "code_target": "crates/brynja-dtls-core/src/version.rs#VersionPolicy",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls.version-negotiation",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6347",
+        "rfc:9147",
+        "rfc:9325"
+      ],
+      "owner": "0.103.0",
+      "rationale": "DTLS negotiation skips unknown offers, rejects recognized legacy versions, selects one engine, and preserves transcript plus opaque path identity.",
+      "requirement_id": "BRY-REQ-DTLS-0103",
+      "test_target": "tests/requirements/dtls_version.rs#one_pass_selection"
+    },
+    {
+      "code_target": "crates/brynja-dtls12/src/cid.rs#ConnectionId",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls12.connection-id",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6347",
+        "rfc:9146"
+      ],
+      "owner": "0.107.0",
+      "rationale": "DTLS 1.2 CID negotiation preserves its version-specific record, routing, privacy, replay, migration, PMTU, and amplification invariants.",
+      "requirement_id": "BRY-REQ-DTLS-0107",
+      "test_target": "tests/requirements/dtls12_cid.rs#routing_and_privacy"
+    },
+    {
+      "code_target": "crates/brynja-dtls12/src/policy.rs#HardenedProfile",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls12.hardened-profile",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6347",
+        "rfc:9325",
+        "rfc:10015"
+      ],
+      "owner": "0.114.0",
+      "rationale": "DTLS 1.2 uses only the hardened TLS 1.2 profile with isolated epoch, replay, ticket, path, downgrade, and deprecation state.",
+      "requirement_id": "BRY-REQ-DTLS-0114",
+      "test_target": "tests/requirements/dtls12_policy.rs#ecdhe_aead_only"
+    },
+    {
+      "code_target": "crates/brynja-dtls13/src/cid.rs#ConnectionIdState",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls13.connection-id-update",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.108.0",
+      "rationale": "DTLS 1.3 CID updates bound active and retired identifiers and preserve collision, privacy, replay, routing, rotation, path, and amplification state.",
+      "requirement_id": "BRY-REQ-DTLS-0108",
+      "test_target": "tests/requirements/dtls13_cid.rs#bounded_updates"
+    },
+    {
+      "code_target": "crates/brynja-dtls13/src/early_data.rs#EarlyDataExclusion",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls13.early-data-exclusion",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.113.0",
+      "rationale": "DTLS 1.3 early data is never offered, accepted, derived, retained, or transcript-admitted, including reorder and duplicate cases.",
+      "requirement_id": "BRY-REQ-DTLS-0113",
+      "test_target": "tests/requirements/dtls13_early_data.rs#reject_all_paths"
+    },
+    {
+      "code_target": "crates/brynja-dtls13/src/handshake.rs#Handshake",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls13.handshake",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.112.0",
+      "rationale": "DTLS 1.3 client and server states handle duplicates, key updates, terminal cleanup, provider cancellation, epochs, flights, and paths.",
+      "requirement_id": "BRY-REQ-DTLS-0112",
+      "test_target": "tests/requirements/dtls13_handshake.rs#client_server_states"
+    },
+    {
+      "code_target": "crates/brynja-dtls13/src/record.rs#UnifiedHeader",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls13.headers-epochs",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.104.0",
+      "rationale": "DTLS 1.3 unified headers, epochs, compact sequence reconstruction, nonce construction, and exhaustion are checked before state mutation.",
+      "requirement_id": "BRY-REQ-DTLS-0104",
+      "test_target": "tests/requirements/dtls13_header.rs#epochs_and_sequences"
+    },
+    {
+      "code_target": "crates/brynja-dtls13/src/record_number.rs#RecordNumber",
+      "disposition": "future-work",
+      "domain": "dtls",
+      "id": "state.dtls13.record-number-encryption",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9147"
+      ],
+      "owner": "0.105.0",
+      "rationale": "Record-number encryption authenticates reconstruction and never mutates replay state before successful record authentication.",
+      "requirement_id": "BRY-REQ-DTLS-0105",
+      "test_target": "tests/requirements/dtls13_record_number.rs#vectors_and_failures"
+    },
+    {
+      "code_target": "tests/conformance/quic_tls.rs#QuicTlsAuditGate",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "state.quic.conformance-audit",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9000",
+        "rfc:9001",
+        "rfc:9002",
+        "rfc:9369"
+      ],
+      "owner": "0.101.0",
+      "rationale": "QUIC-TLS requires versioned vectors, loss and reorder simulation, discard, zero-RTT, derivation, interoperability, ownership, fuzz, and external review.",
+      "requirement_id": "BRY-REQ-QUIC-0101",
+      "test_target": "tests/conformance/quic_tls.rs#audit_regression"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/resumption.rs#QuicResumption",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "state.quic.resumption-lifecycle",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9000",
+        "rfc:9001"
+      ],
+      "owner": "0.99.0",
+      "rationale": "Tickets distinguish TLS completion from QUIC confirmation and bind QUIC version, parameters, ALPN, application, deployment, privacy, and rotation state.",
+      "requirement_id": "BRY-REQ-QUIC-0099",
+      "test_target": "tests/requirements/quic_resumption.rs#completion_confirmation"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/driver.rs#QuicHandshake",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "state.quic.sans-io-handshake",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9001"
+      ],
+      "owner": "0.98.0",
+      "rationale": "The QUIC handshake has deterministic per-level input, output, alert, provider, future-data, secret-event, backpressure, and late-data behavior.",
+      "requirement_id": "BRY-REQ-QUIC-0098",
+      "test_target": "tests/requirements/quic_driver.rs#levels_and_backpressure"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/profile.rs#QuicTlsProfile",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "state.quic.tls-profile",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9001"
+      ],
+      "owner": "0.95.0",
+      "rationale": "The recordless QUIC profile enforces encryption-level legality, required ALPN, secret events, and TLS-alert to CRYPTO_ERROR mapping.",
+      "requirement_id": "BRY-REQ-QUIC-0095",
+      "test_target": "tests/requirements/quic_profile.rs#message_legality"
+    },
+    {
+      "code_target": "crates/brynja-quic-tls/src/early_data.rs#QuicEarlyData",
+      "disposition": "future-work",
+      "domain": "quic",
+      "id": "state.quic.zero-rtt",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9001"
+      ],
+      "owner": "0.99.1",
+      "rationale": "QUIC zero-RTT enforces its sentinel size, remembered parameters, application authorization, anti-replay, ticket use, and deterministic errors.",
+      "requirement_id": "BRY-REQ-QUIC-0991",
+      "test_target": "tests/requirements/quic_early_data.rs#acceptance_and_rejection"
+    },
+    {
+      "code_target": "crates/brynja-tls-core/src/exporter.rs#Exporter",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "state.tls.exporters",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5705",
+        "rfc:5929",
+        "rfc:9266",
+        "rfc:9846"
+      ],
+      "owner": "0.79.0",
+      "rationale": "Exporters and channel bindings enforce exact labels, contexts, transcript and version rules before releasing typed secret output.",
+      "requirement_id": "BRY-REQ-TLS-0079",
+      "test_target": "tests/requirements/tls_exporter.rs#versioned_bindings"
+    },
+    {
+      "code_target": "crates/brynja-tls/src/router.rs#Router",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "state.tls.one-pass-router",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9325",
+        "rfc:9846",
+        "rfc:9852"
+      ],
+      "owner": "0.92.0",
+      "rationale": "The evergreen router selects one highest acceptable engine once and never retries or crosses transcript, credential, cache, PSK, ticket, or secret domains.",
+      "requirement_id": "BRY-REQ-TLS-0092",
+      "test_target": "tests/requirements/tls_router.rs#single_engine"
+    },
+    {
+      "code_target": "tests/conformance/tls_router.rs#RouterAuditGate",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "state.tls.routing-audit-gate",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9325",
+        "rfc:9846"
+      ],
+      "owner": "0.93.0",
+      "rationale": "Multi-version routing requires cross-version, downgrade, transcript, separation, no-retry, interoperability, fuzz, and external-audit evidence.",
+      "requirement_id": "BRY-REQ-TLS-0093",
+      "test_target": "tests/conformance/tls_router.rs#audit_regression"
+    },
+    {
+      "code_target": "crates/brynja-core/src/secret.rs#SecretState",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "state.tls.secret-lifetime",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.10.0",
+      "rationale": "Every TLS-family secret transition has explicit ownership, destruction, cancellation, and provider-failure behavior.",
+      "requirement_id": "BRY-REQ-TLS-0010",
+      "test_target": "tests/requirements/tls_secret_lifetime.rs#all_transitions"
+    },
+    {
+      "code_target": "crates/brynja-tls-core/src/version.rs#VersionPolicy",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "state.tls.version-negotiation",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:8996",
+        "rfc:9325",
+        "rfc:9846",
+        "rfc:9852"
+      ],
+      "owner": "0.68.0",
+      "rationale": "Version negotiation skips unknown offers, rejects recognized legacy versions, preserves transcript bytes, and selects one highest acceptable engine.",
+      "requirement_id": "BRY-REQ-TLS-0068",
+      "test_target": "tests/requirements/tls_version.rs#one_pass_selection"
+    },
+    {
+      "code_target": "tests/conformance/tls12.rs#Tls12AuditGate",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.audit-gate",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9325"
+      ],
+      "owner": "0.91.0",
+      "rationale": "TLS 1.2 retains independent disablement and cannot pass its milestone without a separate external audit and clean remediation retest.",
+      "requirement_id": "BRY-REQ-TLS12-0091",
+      "test_target": "tests/conformance/tls12.rs#audit_regression"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/policy.rs#DeprecationPolicy",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.deprecation-closure",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9155",
+        "rfc:10015"
+      ],
+      "owner": "0.83.1",
+      "rationale": "TLS and DTLS 1.2 never offer or select deprecated hashes, key exchange, certificate types, or imported forbidden state.",
+      "requirement_id": "BRY-REQ-TLS12-0831",
+      "test_target": "tests/requirements/tls12_deprecation.rs#forbidden_entries"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/handshake.rs#EcdheHandshake",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.ecdhe-handshake",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5246",
+        "rfc:8422"
+      ],
+      "owner": "0.88.0",
+      "rationale": "ECDHE ECDSA and RSA client and server handshakes are isolated, bounded, and entered only by the one-pass selector.",
+      "requirement_id": "BRY-REQ-TLS12-0088",
+      "test_target": "tests/requirements/tls12_handshake.rs#isolated_states"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/policy.rs#Tls12Policy",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.engine-policy",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5246",
+        "rfc:6176",
+        "rfc:7465",
+        "rfc:7919",
+        "rfc:9325"
+      ],
+      "owner": "0.83.0",
+      "rationale": "TLS 1.2 remains an isolated ECDHE-plus-AEAD engine that excludes obsolete protocol versions, algorithms, compression, renegotiation, and fallback.",
+      "requirement_id": "BRY-REQ-TLS12-0083",
+      "test_target": "tests/requirements/tls12_policy.rs#deny_by_default"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/schedule.rs#ExtendedMainSecret",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.extended-main-secret",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:7627",
+        "rfc:9846"
+      ],
+      "owner": "0.86.0",
+      "rationale": "Extended Main Secret is mandatory and binds the correct session hash, wire label, resumption consistency, indication, and failure behavior.",
+      "requirement_id": "BRY-REQ-TLS12-0086",
+      "test_target": "tests/requirements/tls12_ems.rs#transcript_binding"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/policy.rs#FeatureFreeze",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.feature-freeze",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9851"
+      ],
+      "owner": "0.83.2",
+      "rationale": "TLS 1.2 additions after the feature freeze fail closed except the exact authenticated security, ALPN, and exporter-label exceptions.",
+      "requirement_id": "BRY-REQ-TLS12-0832",
+      "test_target": "tests/requirements/tls12_feature_freeze.rs#registry_cutoff"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/schedule.rs#KeyBlock",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.prf-key-block",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5246",
+        "rfc:7627"
+      ],
+      "owner": "0.84.0",
+      "rationale": "The TLS 1.2 PRF and key block enforce Extended Main Secret inputs, exact labels, domain separation, length limits, and secret destruction.",
+      "requirement_id": "BRY-REQ-TLS12-0084",
+      "test_target": "tests/requirements/tls12_prf.rs#labels_and_lengths"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/record.rs#RecordState",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.record-protection",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5246",
+        "rfc:5288",
+        "rfc:5289",
+        "rfc:7905"
+      ],
+      "owner": "0.85.0",
+      "rationale": "TLS 1.2 AEAD records enforce nonce, additional-data, sequence, record-limit, fragmentation, and failure-atomic open invariants.",
+      "requirement_id": "BRY-REQ-TLS12-0085",
+      "test_target": "tests/requirements/tls12_record.rs#nonce_and_atomicity"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/resumption.rs#Resumption",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.resumption-interoperability",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5077",
+        "rfc:5246",
+        "rfc:9325"
+      ],
+      "owner": "0.90.0",
+      "rationale": "TLS 1.2 resumption binds protocol-specific ticket state, extension hardening, downgrade behavior, lifetime, rotation, and interoperability.",
+      "requirement_id": "BRY-REQ-TLS12-0090",
+      "test_target": "tests/requirements/tls12_resumption.rs#separation_and_interop"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/signaling.rs#SignalingPolicy",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.signaling-renegotiation",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5746",
+        "rfc:7507",
+        "rfc:7627",
+        "rfc:9846"
+      ],
+      "owner": "0.87.0",
+      "rationale": "Initial signaling cipher values and downgrade sentinels are context-checked while every subsequent renegotiation attempt is rejected.",
+      "requirement_id": "BRY-REQ-TLS12-0087",
+      "test_target": "tests/requirements/tls12_signaling.rs#scsv_and_no_renegotiation"
+    },
+    {
+      "code_target": "crates/brynja-tls12/src/suite.rs#SuiteProfile",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.suite-profile",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5288",
+        "rfc:5289",
+        "rfc:7905",
+        "rfc:9325"
+      ],
+      "owner": "0.89.0",
+      "rationale": "The hardened TLS 1.2 profile admits exactly six reviewed ECDHE and AEAD combinations and rejects all other suites.",
+      "requirement_id": "BRY-REQ-TLS12-0089",
+      "test_target": "tests/requirements/tls12_suites.rs#admission"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/terminal.rs#TerminalState",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.alerts-cancellation",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.73.0",
+      "rationale": "Alerts, close, illegal messages, backpressure, cancellation, and provider failure converge on deterministic terminal cleanup.",
+      "requirement_id": "BRY-REQ-TLS13-0073",
+      "test_target": "tests/requirements/tls13_terminal.rs#all_failures"
+    },
+    {
+      "code_target": "tests/conformance/tls13.rs#Tls13AuditGate",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.audit-gate",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9325",
+        "rfc:9846"
+      ],
+      "owner": "0.82.0",
+      "rationale": "The TLS 1.3 engine cannot pass its milestone until an external audit and clean remediation retest cover its complete profile.",
+      "requirement_id": "BRY-REQ-TLS13-0082",
+      "test_target": "tests/conformance/tls13.rs#audit_regression"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/server_flight.rs#ServerFlight",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.authenticated-server-flight",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6066",
+        "rfc:7301",
+        "rfc:9846"
+      ],
+      "owner": "0.69.0",
+      "rationale": "The server flight authenticates negotiation and certificates before application traffic while centralizing SNI and ALPN decisions.",
+      "requirement_id": "BRY-REQ-TLS13-0069",
+      "test_target": "tests/requirements/tls13_server_flight.rs#authenticated_transition"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/certificate.rs#IdentitySelection",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.certificate-selection",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.70.0",
+      "rationale": "Certificate negotiation applies signature, authority, OID-filter, public-key, resource, and deterministic external-signer constraints.",
+      "requirement_id": "BRY-REQ-TLS13-0070",
+      "test_target": "tests/requirements/tls13_certificate.rs#bounded_selection"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/finished.rs#FinishedState",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.client-authentication-finished",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.72.0",
+      "rationale": "Client authentication, CertificateVerify, and Finished permit application traffic only after authenticated transcript verification.",
+      "requirement_id": "BRY-REQ-TLS13-0072",
+      "test_target": "tests/requirements/tls13_finished.rs#authentication_boundary"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/client_hello.rs#ClientHello",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.client-hello",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6066",
+        "rfc:7301",
+        "rfc:7685",
+        "rfc:8701",
+        "rfc:9846"
+      ],
+      "owner": "0.66.0",
+      "rationale": "ClientHello construction and parsing are bounded, preserve original transcript bytes, and apply SNI, ALPN, GREASE, padding, and offer policy.",
+      "requirement_id": "BRY-REQ-TLS13-0066",
+      "test_target": "tests/requirements/tls13_client_hello.rs#offers"
+    },
+    {
+      "code_target": "tests/conformance/tls13.rs#Tls13Campaign",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.conformance",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:8448",
+        "rfc:9846"
+      ],
+      "owner": "0.81.0",
+      "rationale": "TLS 1.3 conformance requires vectors, truncation, fragmentation, independent peers, state-model, fuzz, and provider-fault evidence.",
+      "requirement_id": "BRY-REQ-TLS13-0081",
+      "test_target": "tests/conformance/tls13.rs#vectors_and_interop"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/psk.rs#ImportedPsk",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.external-psk-importer",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9258"
+      ],
+      "owner": "0.76.1",
+      "rationale": "Imported PSKs bind protocol, KDF, context, application, ALPN, and deployment domains and reject ambiguous or reused import state.",
+      "requirement_id": "BRY-REQ-TLS13-0761",
+      "test_target": "tests/requirements/tls13_psk_importer.rs#domain_separation"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/psk.rs#ExternalPskPolicy",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.external-psk-policy",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9257",
+        "rfc:9846"
+      ],
+      "owner": "0.76.0",
+      "rationale": "External PSKs remain distinct from resumption, require forward-secret modes, and fail without cross-profile fallback or identity ambiguity.",
+      "requirement_id": "BRY-REQ-TLS13-0076",
+      "test_target": "tests/requirements/tls13_external_psk.rs#policy"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/psk.rs#ProvisionedPsk",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.external-psk-provisioning",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9257"
+      ],
+      "owner": "0.76.2",
+      "rationale": "Provisioning enforces entropy, role, peer, node, identity, collision, privacy, rotation, and main-key destruction requirements.",
+      "requirement_id": "BRY-REQ-TLS13-0762",
+      "test_target": "tests/requirements/tls13_psk_provisioning.rs#roles_and_entropy"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/codec.rs#HandshakeCodec",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.handshake-codec",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6066",
+        "rfc:9846"
+      ],
+      "owner": "0.64.0",
+      "rationale": "Every TLS 1.3 handshake message and extension context has bounded canonical parsing, duplicate handling, ordering, and rejection behavior.",
+      "requirement_id": "BRY-REQ-TLS13-0064",
+      "test_target": "tests/requirements/tls13_codec.rs#all_contexts"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/retry.rs#HelloRetry",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.hello-retry-request",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:8448",
+        "rfc:9846"
+      ],
+      "owner": "0.67.0",
+      "rationale": "HelloRetryRequest enforces selected-group, cookie, second-ClientHello, message-hash, retry-count, and resource invariants.",
+      "requirement_id": "BRY-REQ-TLS13-0067",
+      "test_target": "tests/requirements/tls13_retry.rs#message_hash_and_cookie"
+    },
+    {
+      "code_target": "crates/brynja-tls13/src/key_update.rs#KeyUpdate",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.key-update",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.78.0",
+      "rationale": "KeyUpdate performs checked traffic-secret replacement, destroys obsolete keys immediately, and enforces request and record limits.",
+      "requirement_id": "BRY-REQ-TLS13-0078",
+      "test_target": "tests/requirements/tls13_key_update.rs#transition"
+    },
+    {
+      "code_target": "crates/brynja-tls13/src/record.rs#RecordState",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.record-protection",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.63.0",
+      "rationale": "TLS 1.3 record protection validates inner plaintext and sequence exhaustion before committing any externally visible state.",
+      "requirement_id": "BRY-REQ-TLS13-0063",
+      "test_target": "tests/requirements/tls13_record.rs#protection_boundaries"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/lib.rs#Handshake",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.recordless-boundary",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.61.0",
+      "rationale": "The TLS 1.3 handshake state machine remains record-independent and has explicit stream, QUIC, and DTLS ownership boundaries.",
+      "requirement_id": "BRY-REQ-TLS13-0061",
+      "test_target": "tests/requirements/tls13_recordless.rs#transport_separation"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/driver.rs#Driver",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.sans-io-driver",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.62.0",
+      "rationale": "All handshake effects are explicit deterministic actions with bounded input, output, provider, timer, cancellation, and terminal transitions.",
+      "requirement_id": "BRY-REQ-TLS13-0062",
+      "test_target": "tests/requirements/tls13_driver.rs#deterministic_actions"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/resumption.rs#StatefulTicket",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.stateful-resumption",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5077",
+        "rfc:9846"
+      ],
+      "owner": "0.74.0",
+      "rationale": "Stateful tickets and binders use separated identity, cache, deployment, lifetime, concurrency, rotation, and constant-work failure domains.",
+      "requirement_id": "BRY-REQ-TLS13-0074",
+      "test_target": "tests/requirements/tls13_stateful_ticket.rs#lifecycle"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/resumption.rs#StatelessTicket",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.stateless-resumption",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:5077",
+        "rfc:9846"
+      ],
+      "owner": "0.75.0",
+      "rationale": "Stateless ticket protection authenticates all protocol, identity, policy, timing, key-generation, and deployment-domain state.",
+      "requirement_id": "BRY-REQ-TLS13-0075",
+      "test_target": "tests/requirements/tls13_stateless_ticket.rs#envelope"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/certificate.rs#CertificateEvidence",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.status-sct-transport",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:6066",
+        "rfc:9846"
+      ],
+      "owner": "0.71.0",
+      "rationale": "Stapled OCSP and SCT bytes are bounded, context-checked, transcript-bound, and handed to admitted validation policy without interpretation drift.",
+      "requirement_id": "BRY-REQ-TLS13-0071",
+      "test_target": "tests/requirements/tls13_evidence.rs#bounded_handoff"
+    },
+    {
+      "code_target": "crates/brynja-tls13/src/suite.rs#SuiteProfile",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.suite-profile",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9325",
+        "rfc:9846"
+      ],
+      "owner": "0.80.0",
+      "rationale": "The initial TLS 1.3 profile admits exactly the three reviewed AEAD and hash combinations and rejects every other suite.",
+      "requirement_id": "BRY-REQ-TLS13-0080",
+      "test_target": "tests/requirements/tls13_suites.rs#admission"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/schedule.rs#KeySchedule",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.transcript-key-schedule",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.65.0",
+      "rationale": "Transcript and key-schedule transitions preserve exact bytes and destroy obsolete early, handshake, master, exporter, and resumption secrets.",
+      "requirement_id": "BRY-REQ-TLS13-0065",
+      "test_target": "tests/requirements/tls13_schedule.rs#transitions"
+    },
+    {
+      "code_target": "crates/brynja-tls13-handshake/src/early_data.rs#EarlyData",
+      "disposition": "future-work",
+      "domain": "tls13",
+      "id": "state.tls13.zero-rtt",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:9846"
+      ],
+      "owner": "0.77.0",
+      "rationale": "Zero-RTT is opt-in and binds atomic anti-replay, freshness, ticket, storage, secret, rejection, and application side-effect policy.",
+      "requirement_id": "BRY-REQ-TLS13-0077",
+      "test_target": "tests/requirements/tls13_early_data.rs#anti_replay"
     }
   ]
 }

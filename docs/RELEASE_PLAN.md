@@ -300,7 +300,7 @@ Exit criteria:
 
 ### v0.3.3 - Cryptography Encoding And PKIX Normative Coverage
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Populate and review every applicable normative statement and invariant for admitted primitives, arithmetic, DER, key and certificate formats, service identity, path processing, revocation, OCSP and Certificate Transparency; record explicit algorithm exclusions, current-versus-compatibility authority, positive and negative target tests, work bounds, and unresolved evidence.
 
@@ -344,7 +344,7 @@ Exit criteria:
 
 ### v0.3.4 - TLS DTLS And QUIC Normative Coverage
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Populate and review every applicable normative statement and invariant for current and compatibility TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2 and DTLS 1.3; map every message, extension, alert, registry value, state transition, transport boundary, intentional rejection and caller-owned responsibility to its milestone and target tests.
 

@@ -18,6 +18,7 @@ MATRIX = DIRECTORY / "matrix.json"
 INDEXES = DIRECTORY / "indexes.json"
 COVERAGE = DIRECTORY / "coverage.md"
 DOMAIN_COVERAGE = DIRECTORY / "domain-coverage.json"
+TRANSPORT_COVERAGE = DIRECTORY / "transport-coverage.json"
 ID_PATTERN = re.compile(r"BRY-REQ-[A-Z0-9]+-[0-9]{4}")
 SECTION_PATTERN = re.compile(r"^([0-9]+(?:\.[0-9]+)*)\.\s+(.+?)\s*$", re.MULTILINE)
 REPOSITORY_TARGET = re.compile(r"(?:crates|requirements|scripts|standards|tests)/[A-Za-z0-9_./-]+(?:#[A-Za-z0-9_.:-]+)?")
@@ -137,6 +138,7 @@ def schema_document() -> dict:
         "id_format": ID_PATTERN.pattern,
         "lifecycles": sorted(LIFECYCLES),
         "authority_roles": [
+            "caller-owned",
             "compatibility",
             "current",
             "evidence",
@@ -159,8 +161,12 @@ def schema_document() -> dict:
             "reviewed-domain",
             "reviewed-global",
         ],
-        "profiles": ["crypto-encoding-pkix", "foundation"],
-        "schema": 2,
+        "profiles": [
+            "crypto-encoding-pkix",
+            "foundation",
+            "tls-dtls-quic",
+        ],
+        "schema": 3,
         "strengths": sorted(STRENGTHS),
         "target_kinds": [
             "actual-symbol",
@@ -342,8 +348,9 @@ def render_coverage(matrix: dict, indexes: dict) -> bytes:
     lines.extend(
         [
             "",
-            "Cryptography, encoding, and PKIX are populated in v0.3.3. v0.3.4",
-            "and v0.3.5 populate transport, optional, legacy, and residual rules.",
+            "Cryptography, encoding, and PKIX are populated in v0.3.3. TLS,",
+            "DTLS, and QUIC-TLS are populated in v0.3.4. v0.3.5 completes",
+            "optional, legacy, operational, and residual rules.",
             "",
         ]
     )

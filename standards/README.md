@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: v0.3.3 reviewed cryptography, encoding, and PKIX coverage
+Status: v0.3.4 reviewed TLS, DTLS, and QUIC-TLS coverage
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -27,16 +27,21 @@ primitive is implemented.
 - `surface-policy.json` is the reviewed classification policy bound to the
   exact source-ledger hash. It records explicit semantic decisions, complete
   collection defaults, registry-specific rules, and exact entry overrides.
+- `transport-surfaces/*.toml` adds one reviewed semantic surface for each of
+  the 63 TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3
+  implementation milestones without changing registry classifications.
 - `protocol-surfaces.json` deterministically classifies every semantic
   decision, nested registry, and individual record in all eight pinned IANA
   collections with its disposition, source, owner, code target, test target,
-  and rationale.
+  and rationale. Transport rows additionally carry their stable requirement
+  identifiers.
 - `protocol-surface-coverage.md` is the generated human-readable count and
   domain summary. It is never edited independently of the JSON register.
 - `../requirements/` binds stable requirements to this exact ledger and
   surface register and generates lifecycle, traceability, domain, and coverage
-  evidence. v0.3.3 completes cryptography, encoding, PKIX, OCSP, and CT
-  population; v0.3.4 and v0.3.5 own the remaining domains.
+  evidence. v0.3.3 completes cryptography, encoding, PKIX, OCSP, and CT;
+  v0.3.4 completes TLS, DTLS, and QUIC-TLS; v0.3.5 owns optional, legacy,
+  operational, and residual population.
 
 The RFC and local NIST/ITU checksum manifests are trust pins, not outputs of a
 fetch. Their lock scripts validate existing pins and deliberately cannot
@@ -74,6 +79,7 @@ python3 scripts/test-protocol-surfaces.py
 python3 scripts/check-requirements.py
 python3 scripts/test-requirements.py
 python3 scripts/test-requirement-domains.py
+python3 scripts/test-requirement-transports.py
 python3 scripts/test-requirement-lifecycles.py
 ```
 
@@ -90,7 +96,7 @@ missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
 or stale generated JSON or Markdown. All 4,106 individual IANA records, 192
-nested registries, and 48 semantic decisions are represented; `future-work`
+nested registries, and 111 semantic decisions are represented; `future-work`
 does not claim implementation.
 
 The requirement checker additionally fails on changed ledger or surface hashes,
@@ -102,7 +108,9 @@ incorrect revisions, unrelated decision links, lifecycle/disposition or owner
 conflicts, protocol use of global mappings, released-scope changes, or stale
 generated artifacts. Its 12 foundation requirements exercise all eight
 lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
-encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces.
+encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces; 70
+transport requirements cover 40 authorities, 550 normative sections, 63
+implementation milestones, and 480 TLS, DTLS, and QUIC surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.

@@ -29,15 +29,16 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.3.3` adds complete reviewed normative coverage for the currently
-planned classical cryptography, encoding, key-container, PKIX, OCSP, and
-Certificate Transparency domains. The generated matrix now contains 46
-requirements bound to 53 exact authorities and 3,322 applicable surfaces. It
-does **not** implement TLS and must not be used to secure network traffic.
+Version `0.3.4` adds complete reviewed normative coverage for current and
+compatibility TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3. The
+generated matrix now contains 116 requirements; the transport bundle binds 70
+requirements to 40 exact authorities, 550 normative RFC sections, 63 future
+implementation milestones, and 480 applicable surfaces. It does **not**
+implement TLS and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.3.3` is a normative
+Brynja is not ready for application use. Version `0.3.4` is a normative
 requirement-planning release; it does not implement TLS. The dependency is:
 
 ```toml
@@ -87,9 +88,10 @@ publishes the facade last.
   classifies every pinned IANA record and explicit non-registry decision;
   the generated
   [requirement coverage](https://github.com/valkyoth/brynja/blob/main/requirements/coverage.md)
-  proves the lifecycle and mapping foundation plus v0.3.3 cryptography,
-  encoding, and PKIX domain coverage; v0.3.4 and v0.3.5 complete the remaining
-  protocol domains before implementation.
+  proves the lifecycle and mapping foundation, v0.3.3 cryptography, encoding,
+  and PKIX coverage, and v0.3.4 TLS, DTLS, and QUIC-TLS coverage; v0.3.5
+  completes optional, legacy, operational, and residual domains before
+  implementation.
 
 ## Workspace
 
@@ -188,7 +190,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.3.3
+scripts/release_crates.py --version 0.3.4
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

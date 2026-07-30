@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.3.3 pentest passed; awaiting green GitHub checks and tag authorization
+Status: v0.3.4 implementation complete; repository-owner pentest required
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -16,23 +16,27 @@ consistent in the same commit.
 | `standards/ERRATA.json` | Complete locked-RFC errata inventory and reviewed disposition | Ledger checker and networked release drift check |
 | `standards/source-ledger.json` | Deterministic joined inventory of every admitted authority and owner | Byte-for-byte regeneration and 28 positive/broken-fixture tests |
 | `standards/surface-policy.json` | Reviewed dispositions and ownership for semantic surfaces, complete IANA collections, nested registries, and exact entry overrides | Schema, source, owner, target, uniqueness, completeness, and override validation |
-| `standards/protocol-surfaces.json` | Deterministic classification of 4,346 semantic and registry surfaces | Byte-for-byte regeneration and 25 positive/broken-fixture tests |
+| `standards/transport-surfaces/*.toml` | Sixty-three reviewed TLS, DTLS, and QUIC-TLS implementation-milestone surfaces | Exact ledger binding, stable requirement identity, owner, source, target, and uniqueness validation |
+| `standards/protocol-surfaces.json` | Deterministic classification of 4,409 semantic and registry surfaces | Byte-for-byte regeneration and 29 positive/broken-fixture tests |
 | `standards/protocol-surface-coverage.md` | Human-readable disposition, kind, and domain counts | Generated and byte-compared with the machine register |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/domain-scope.toml`, `requirements/domains/*.toml` | Reviewed v0.3.3 authority, invariant, work-bound, test-polarity, surface-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, and completeness validation |
+| `requirements/transport-scope.toml`, `requirements/transport-exceptions.toml` | Reviewed v0.3.4 transport authority, owner, rejection, caller boundary, registry-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, completeness, and broken-fixture validation |
 | `requirements/schema.json` | Deterministic lifecycle and transition contract | Byte-for-byte regeneration |
-| `requirements/matrix.json` | Forty-six resolved requirements bound to exact source, section, errata, authority role, registry, surface, and immutable parent-history evidence | Byte-for-byte regeneration and 66 positive/broken-fixture tests |
+| `requirements/matrix.json` | 116 resolved requirements bound to exact source, section, errata, authority role, registry, surface, and immutable parent-history evidence | Byte-for-byte regeneration and 74 positive/broken-fixture tests |
 | `requirements/indexes.json` | Bidirectional source, decision, owner, target, test, and evidence mappings | Generated from and cross-checked against the matrix |
 | `requirements/coverage.md` | Human-readable pilot lifecycle, strength, scope, and index coverage | Generated and byte-compared with the machine evidence |
 | `requirements/domain-coverage.json` | Exact coverage of 53 cryptography/encoding/PKIX authorities, 364 normative RFC sections, and 3,322 selected surfaces | Deterministic generation, byte comparison, explicit deferral checks, and domain fixtures |
+| `requirements/transport-coverage.json` | Exact coverage of 40 transport authorities, 550 normative RFC sections, 63 owner milestones, and 480 selected surfaces | Deterministic generation, byte comparison, exact owner coverage, explicit deferral checks, and transport fixtures |
 | `package-policy.toml` | Complete package and dependency boundary | Workspace metadata validators and fixtures |
 | `github-release-controls.toml` | Protected release branch requirements | Local fixtures and authenticated live release check |
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |
 | `security/pentest/vX.Y.Z.md` | Permanent per-version pentest and remediation outcome | Release-readiness and report-history validators |
 
-The v0.3.0 ledger, v0.3.1 decisions, v0.3.2 matrix foundation, and v0.3.3
-cryptography/encoding/PKIX population are planning and governance evidence
-only. Remaining domain population occurs at v0.3.4 and v0.3.5, and protocol
+The v0.3.0 ledger, v0.3.1 decisions, v0.3.2 matrix foundation, v0.3.3
+cryptography/encoding/PKIX population, and v0.3.4 TLS/DTLS/QUIC-TLS
+population are planning and governance evidence only. Optional, legacy,
+operational, and residual population occurs at v0.3.5, and protocol
 implementation afterward. No ledger, surface, or planned
 protocol-requirement entry is an implementation, interoperability, security,
 or FIPS validation claim.

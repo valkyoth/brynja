@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.3.3 cryptography, encoding, and PKIX requirement enforcement
+Status: v0.3.4 TLS, DTLS, and QUIC-TLS requirement enforcement
 
 | Control | Foundation enforcement |
 | --- | --- |
@@ -14,8 +14,8 @@ Status: v0.3.3 cryptography, encoding, and PKIX requirement enforcement
 | Review size | Source files over 500 lines fail checks |
 | Toolchain | Pinned stable plus explicit MSRV matrix |
 | Standards | Exact HTTPS host/path and redirect allowlists, independently reviewed non-self-replacing pins, bounded responses, DTD/entity rejection, immutable RFC/NIST/ITU bytes, exact RFC-index and IANA snapshots, 290 reviewed errata decisions, lifecycle and milestone ownership, complete updated-by/obsoleted-by closure, deterministic ledger generation, broken fixtures, and release-time live drift rejection |
-| Protocol surfaces | Deterministic classification of every semantic decision, nested registry, and individual record across all eight pinned IANA collections with exact source-ledger binding, disposition, milestone, code target, test target, and broken-fixture enforcement; 48 semantic decisions include explicit SHA-3/SHAKE, GHASH, and ChaCha20 ownership |
-| Normative requirements | Forty-six stable identifiers bind exact source, section, status, errata, authority role, strength, applicability, decision, mapping scope, owner, lifecycle, revision, assurance invariants, work bound, residual risk, target, positive and negative tests, and evidence gap; 53 in-scope cryptography/encoding/PKIX authorities and 3,322 surfaces have deterministic bidirectional and domain coverage, while immutable history and broken fixtures reject omissions, drift, role errors, stale revisions, illegal transitions, unrelated mappings, weak bounds, missing anchors, repository-escaping targets, and premature claims |
+| Protocol surfaces | Deterministic classification of every semantic decision, nested registry, and individual record across all eight pinned IANA collections with exact source-ledger binding, disposition, milestone, code target, test target, and broken-fixture enforcement; 111 semantic decisions include 63 exact TLS, DTLS, and QUIC-TLS implementation-owner surfaces |
+| Normative requirements | 116 stable identifiers bind exact source, section, status, errata, authority role, strength, applicability, decision, mapping scope, owner, lifecycle, revision, assurance invariants, work bound, residual risk, target, positive and negative tests, and evidence gap; v0.3.3 covers 53 cryptography/encoding/PKIX authorities and 3,322 surfaces, while v0.3.4 covers 40 transport authorities, 550 normative sections, 63 owner milestones, and 480 surfaces; immutable history and broken fixtures reject omissions, drift, role errors, stale revisions, illegal transitions, unrelated mappings, weak bounds, missing anchors, repository-escaping targets, and premature claims |
 | Hybrid admission | Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track RFC and final IANA code points exist; drafts and private values are forbidden |
 | Release | Regular committed PASS/PASS report, zero open findings, report update against every parent carrying the report, clean GitHub, explicit tag authorization, exact signed annotated tag and subject, release notes, SBOM, and strict local gate required |
 | GitHub protection | Active machine-checked main ruleset requires signed linear history, review and CodeQL while retaining explicit accountable owner/admin bypass |

@@ -5,6 +5,39 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-07-30
+
+### Added
+
+- Sixty-three stable TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2, and
+  DTLS 1.3 semantic surfaces, one for every owning implementation milestone
+  from the shared secret contract through the DTLS audit gate.
+- Seventy transport requirements, bringing the deterministic matrix to 116
+  stable records and explicitly covering 40 authorities, 550 normative RFC
+  sections, and 480 transport surfaces.
+- Exact current, compatibility, evidence, exclusion, and caller-owned source
+  roles plus explicit requirements for Heartbeat, legacy TLS 1.3 PKCS1 client
+  signatures, post-handshake authentication, certificate-with-external-PSK,
+  and the QUIC transport boundary.
+- A generated transport-coverage artifact and eight positive and
+  broken-fixture tests for milestone, authority, role, binding, identity,
+  surface, and reproducibility failures.
+
+### Security
+
+- Every planned transport state transition has one stable owner, target
+  symbol, positive and negative test target, work bound, evidence gap, and
+  residual-risk statement without claiming protocol code exists.
+- QUIC packet, frame, recovery, congestion, Retry, migration, and transport
+  semantics remain mechanically caller-owned; TLS, TLS 1.2, TLS 1.3, DTLS,
+  and QUIC requirements cannot hide behind a generic cross-version mapping.
+- RFC 9850 key logging and four optional TLS facility groups remain explicit
+  v0.3.5 deferrals; the status_request_v2 exclusion remains bound to its
+  already reviewed v0.3.3 OCSP requirement.
+- Protocol-surface and requirement artifacts now bind the separate transport
+  policies and reject missing owner milestones, authority drift, role swaps,
+  duplicate identities, and stale projections.
+
 ## [0.3.3] - 2026-07-30
 
 ### Added

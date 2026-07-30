@@ -1,0 +1,146 @@
+schema = 1
+milestone = "0.3.4"
+source_ledger_sha256 = "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
+
+[[surface]]
+id = "state.tls12.engine-policy"
+requirement_id = "BRY-REQ-TLS12-0083"
+owner = "0.83.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:5246", "rfc:6176", "rfc:7465", "rfc:7919", "rfc:9325"]
+code_target = "crates/brynja-tls12/src/policy.rs#Tls12Policy"
+test_target = "tests/requirements/tls12_policy.rs#deny_by_default"
+rationale = "TLS 1.2 remains an isolated ECDHE-plus-AEAD engine that excludes obsolete protocol versions, algorithms, compression, renegotiation, and fallback."
+
+[[surface]]
+id = "state.tls12.deprecation-closure"
+requirement_id = "BRY-REQ-TLS12-0831"
+owner = "0.83.1"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:9155", "rfc:10015"]
+code_target = "crates/brynja-tls12/src/policy.rs#DeprecationPolicy"
+test_target = "tests/requirements/tls12_deprecation.rs#forbidden_entries"
+rationale = "TLS and DTLS 1.2 never offer or select deprecated hashes, key exchange, certificate types, or imported forbidden state."
+
+[[surface]]
+id = "state.tls12.feature-freeze"
+requirement_id = "BRY-REQ-TLS12-0832"
+owner = "0.83.2"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:9851"]
+code_target = "crates/brynja-tls12/src/policy.rs#FeatureFreeze"
+test_target = "tests/requirements/tls12_feature_freeze.rs#registry_cutoff"
+rationale = "TLS 1.2 additions after the feature freeze fail closed except the exact authenticated security, ALPN, and exporter-label exceptions."
+
+[[surface]]
+id = "state.tls12.prf-key-block"
+requirement_id = "BRY-REQ-TLS12-0084"
+owner = "0.84.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:5246", "rfc:7627"]
+code_target = "crates/brynja-tls12/src/schedule.rs#KeyBlock"
+test_target = "tests/requirements/tls12_prf.rs#labels_and_lengths"
+rationale = "The TLS 1.2 PRF and key block enforce Extended Main Secret inputs, exact labels, domain separation, length limits, and secret destruction."
+
+[[surface]]
+id = "state.tls12.record-protection"
+requirement_id = "BRY-REQ-TLS12-0085"
+owner = "0.85.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:5246", "rfc:5288", "rfc:5289", "rfc:7905"]
+code_target = "crates/brynja-tls12/src/record.rs#RecordState"
+test_target = "tests/requirements/tls12_record.rs#nonce_and_atomicity"
+rationale = "TLS 1.2 AEAD records enforce nonce, additional-data, sequence, record-limit, fragmentation, and failure-atomic open invariants."
+
+[[surface]]
+id = "state.tls12.extended-main-secret"
+requirement_id = "BRY-REQ-TLS12-0086"
+owner = "0.86.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:7627", "rfc:9846"]
+code_target = "crates/brynja-tls12/src/schedule.rs#ExtendedMainSecret"
+test_target = "tests/requirements/tls12_ems.rs#transcript_binding"
+rationale = "Extended Main Secret is mandatory and binds the correct session hash, wire label, resumption consistency, indication, and failure behavior."
+
+[[surface]]
+id = "state.tls12.signaling-renegotiation"
+requirement_id = "BRY-REQ-TLS12-0087"
+owner = "0.87.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:5746", "rfc:7507", "rfc:7627", "rfc:9846"]
+code_target = "crates/brynja-tls12/src/signaling.rs#SignalingPolicy"
+test_target = "tests/requirements/tls12_signaling.rs#scsv_and_no_renegotiation"
+rationale = "Initial signaling cipher values and downgrade sentinels are context-checked while every subsequent renegotiation attempt is rejected."
+
+[[surface]]
+id = "state.tls12.ecdhe-handshake"
+requirement_id = "BRY-REQ-TLS12-0088"
+owner = "0.88.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:5246", "rfc:8422"]
+code_target = "crates/brynja-tls12/src/handshake.rs#EcdheHandshake"
+test_target = "tests/requirements/tls12_handshake.rs#isolated_states"
+rationale = "ECDHE ECDSA and RSA client and server handshakes are isolated, bounded, and entered only by the one-pass selector."
+
+[[surface]]
+id = "state.tls12.suite-profile"
+requirement_id = "BRY-REQ-TLS12-0089"
+owner = "0.89.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:5288", "rfc:5289", "rfc:7905", "rfc:9325"]
+code_target = "crates/brynja-tls12/src/suite.rs#SuiteProfile"
+test_target = "tests/requirements/tls12_suites.rs#admission"
+rationale = "The hardened TLS 1.2 profile admits exactly six reviewed ECDHE and AEAD combinations and rejects all other suites."
+
+[[surface]]
+id = "state.tls12.resumption-interoperability"
+requirement_id = "BRY-REQ-TLS12-0090"
+owner = "0.90.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:5077", "rfc:5246", "rfc:9325"]
+code_target = "crates/brynja-tls12/src/resumption.rs#Resumption"
+test_target = "tests/requirements/tls12_resumption.rs#separation_and_interop"
+rationale = "TLS 1.2 resumption binds protocol-specific ticket state, extension hardening, downgrade behavior, lifetime, rotation, and interoperability."
+
+[[surface]]
+id = "state.tls12.audit-gate"
+requirement_id = "BRY-REQ-TLS12-0091"
+owner = "0.91.0"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:9325"]
+code_target = "tests/conformance/tls12.rs#Tls12AuditGate"
+test_target = "tests/conformance/tls12.rs#audit_regression"
+rationale = "TLS 1.2 retains independent disablement and cannot pass its milestone without a separate external audit and clean remediation retest."
+
+[[surface]]
+id = "state.tls.one-pass-router"
+requirement_id = "BRY-REQ-TLS-0092"
+owner = "0.92.0"
+domain = "tls"
+disposition = "future-work"
+sources = ["rfc:9325", "rfc:9846", "rfc:9852"]
+code_target = "crates/brynja-tls/src/router.rs#Router"
+test_target = "tests/requirements/tls_router.rs#single_engine"
+rationale = "The evergreen router selects one highest acceptable engine once and never retries or crosses transcript, credential, cache, PSK, ticket, or secret domains."
+
+[[surface]]
+id = "state.tls.routing-audit-gate"
+requirement_id = "BRY-REQ-TLS-0093"
+owner = "0.93.0"
+domain = "tls"
+disposition = "future-work"
+sources = ["rfc:9325", "rfc:9846"]
+code_target = "tests/conformance/tls_router.rs#RouterAuditGate"
+test_target = "tests/conformance/tls_router.rs#audit_regression"
+rationale = "Multi-version routing requires cross-version, downgrade, transcript, separation, no-retry, interoperability, fuzz, and external-audit evidence."

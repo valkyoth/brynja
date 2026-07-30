@@ -1,15 +1,15 @@
 # Crate Version Matrix
 
-Status: v0.3.3 pentest passed; awaiting green GitHub checks and tag authorization
+Status: v0.3.4 implementation complete; repository-owner pentest required
 
-The `brynja` facade advances to `0.3.3`. Every unchanged modern supporting
+The `brynja` facade advances to `0.3.4`. Every unchanged modern supporting
 crate retains its published `0.1.0` version and is not republished. Legacy and
 repository-only packages remain unpublished. Package publication does not
 imply protocol implementation or production readiness.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.3.3` | yes | Mandatory facade release for cryptography, encoding, and PKIX normative coverage |
+| `brynja` | `0.3.4` | yes | Mandatory facade release for TLS, DTLS, and QUIC-TLS normative coverage |
 | `brynja-core`, `brynja-crypto`, and `brynja-pki` | `0.1.0` | no | Published and unchanged |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | no | Published and unchanged |
 | `brynja-dtls`, `brynja-quic-tls`, and `brynja-platform` | `0.1.0` | no | Published and unchanged |
@@ -71,7 +71,7 @@ current committed PASS pentest report, user-confirmed green GitHub checks,
 complete versioned release gate, advisory and dependency-policy checks, SBOM,
 packages, and typed version confirmation. There is no production bypass.
 
-For `v0.3.3`, only `brynja 0.3.3` is selected. Its complete exact-pinned
+For `v0.3.4`, only `brynja 0.3.4` is selected. Its complete exact-pinned
 supporting closure is already available at `0.1.0`.
 
 ## Rust Compatibility

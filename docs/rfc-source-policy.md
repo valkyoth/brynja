@@ -96,8 +96,16 @@ key-container, PKIX, OCSP, and CT coverage. It binds 34 new requirements to all
 exclusion roles, hashes every applicable normative RFC section, and assigns
 all 3,322 selected surfaces or explicitly defers the two ML-KEM surfaces to
 v0.3.5. FIPS 202 and the in-force ITU-T X.690 (2021) plus Erratum 1 are
-local-only checksum-pinned authorities. Versions v0.3.4 and v0.3.5 populate
-the remaining normative domains.
+local-only checksum-pinned authorities. The following v0.3.4 transport pass
+and v0.3.5 residual pass populate the remaining normative domains.
+
+The v0.3.4 transport policy completes current and compatibility TLS, hardened
+TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3 coverage. Seventy requirements bind
+40 admitted authorities, 550 normative RFC sections, 63 exact implementation
+owner milestones, and 480 selected surfaces. Current, compatibility, evidence,
+exclusion, and caller-owned roles are distinct. RFC 9850 and optional TLS
+facility groups remain explicit v0.3.5 deferrals; no deferred source can be
+silently treated as admitted transport authority.
 
 FIPS planning also snapshots the dated FIPS 140-3 CMVP Management Manual,
 Implementation Guidance, RFG and CMVP resolutions, SP 800-140 supplemental

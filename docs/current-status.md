@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.3.3 pentest passed; awaiting green GitHub checks and tag authorization
+Status: v0.3.4 implementation complete; repository-owner pentest required
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -9,7 +9,7 @@ and no package, feature, build, profile, or configuration may imply otherwise.
 
 Signed releases v0.1.0 through v0.3.2 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
-classified protocol surfaces and the normative matrix foundation. The v0.3.3 candidate
+classified protocol surfaces and the normative matrix foundation. The v0.3.4 candidate
 advances only `brynja`; unchanged supporting crates remain at their
 independently published `0.1.0` versions and are not selected again.
 
@@ -82,10 +82,30 @@ Version 0.3.3 completes the cryptography, encoding, and PKIX population pass:
 - fifteen domain fixtures fail on authority, binding, coverage, lifecycle,
   ownership, test-polarity, invariant, work-bound, or reproducibility defects.
 
+Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
+
+- 63 semantic surfaces give every planned transport implementation milestone
+  one stable owner, code target, test target, source set, and rationale;
+- 70 new requirements bring the matrix to 116 stable records and cover all 40
+  admitted transport authorities, 550 normative RFC sections, and 480
+  selected transport surfaces;
+- source roles distinguish current, compatibility, evidence, exclusion, and
+  caller-owned authority, including explicit Heartbeat, legacy signature,
+  post-handshake-authentication, certificate-with-external-PSK, and QUIC
+  transport boundaries;
+- TLS, TLS 1.2, TLS 1.3, QUIC, and DTLS state and ownership mappings are
+  version-separated and include work bounds, positive and negative tests,
+  unresolved evidence, and residual risk;
+- RFC 9850 key logging and four optional TLS facility groups remain explicit
+  v0.3.5 deferrals, while status_request_v2 remains bound to the completed
+  v0.3.3 OCSP review; and
+- eight transport fixtures reject missing owners, binding drift, role swaps,
+  duplicate identities, omitted authorities, and nondeterministic output.
+
 This remains governance and planning evidence, not protocol implementation.
-v0.3.4 and v0.3.5 populate the remaining normative requirements before
-protocol work begins. Concrete ECDHE-ML-KEM groups remain blocked until both a
-final Standards Track RFC and final IANA values exist.
+v0.3.5 populates optional, legacy, operational, and residual requirements
+before protocol work begins. Concrete ECDHE-ML-KEM groups remain blocked until
+both a final Standards Track RFC and final IANA values exist.
 
 No `brynja-sanitization` package or dependency exists yet; its admission
 decision remains gated at v0.11.1.
@@ -108,8 +128,11 @@ run truthfully before retest, while all release and tag paths require
 `PASS`/`PASS`. The final repository-owner retest passed with zero open
 findings.
 
-The repository owner pentested signed v0.3.3 implementation candidate
-`a5dd438159613da3b9869c37fe13c8f16b5a258b` and reported a green result with
-no findings. The permanent report records `PASS`, zero open findings, and
-`PASS` retest status. Tagging remains blocked until this report-bearing commit
-is green on GitHub and the user explicitly authorizes the tag.
+The repository owner pentested the signed v0.3.3 implementation candidate and
+reported a green result with no findings. Its permanent report records `PASS`,
+zero open findings, and `PASS` retest status.
+
+The v0.3.4 implementation stop is complete locally. No v0.3.4 pentest result
+is claimed yet. The next authorized step is the repository-owner pentest
+against the signed candidate commit; release finalization, green GitHub checks,
+and explicit tag authorization follow only after the report is committed.

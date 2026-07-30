@@ -1,0 +1,121 @@
+schema = 1
+domain = "transport-exceptions"
+
+[[requirement]]
+domain = "tls"
+id = "BRY-REQ-TLS-0005"
+owner = "0.5.0"
+lifecycle = "planned"
+decision_ids = ["iana.tls-parameters.tls-parameters-6"]
+sources = [{ id = "rfc:9846", authority_role = "current" }]
+statement = "TLS alerts, close outcomes, local failures, provider failures, and exhaustion remain typed, non-secret, and protocol-version aware."
+invariants = ["failure-atomicity", "resource-bound", "validation", "version-separation"]
+target = "crates/brynja-core/src/error.rs#TlsFailure"
+positive_test = "tests/requirements/tls_failures.rs#typed_outcomes"
+negative_test = "tests/requirements/tls_failures.rs#reject_secret_and_ambiguous_errors"
+work_bound = "Failure construction, alert selection, formatting prohibition, cancellation, and cleanup consume fixed or explicitly bounded work."
+evidence_gap = "Executable alert and failure matrices, provider fault injection, and cross-version tests remain unresolved until v0.5.0."
+residual = "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones."
+mapping_rationale = "The shared TLS failure semantic surface owns the pre-implementation taxonomy used by every later transport engine while preserving exact version-specific wire behavior."
+
+[[requirement]]
+domain = "tls"
+id = "BRY-REQ-TLS-0019"
+owner = "0.19.0"
+lifecycle = "planned"
+decision_ids = ["iana.tls-parameters.tls-parameters-5"]
+sources = [{ id = "rfc:9846", authority_role = "current" }]
+statement = "TLS wire identifiers use closed typed domains, preserve unknown values where required, and deny unsupported values without ambiguous coercion."
+invariants = ["canonical-encoding", "resource-bound", "validation", "version-separation"]
+target = "crates/brynja-protocol/src/tls.rs#WirePolicy"
+positive_test = "tests/requirements/tls_wire.rs#known_and_unknown_values"
+negative_test = "tests/requirements/tls_wire.rs#reject_context_and_version_confusion"
+work_bound = "Identifier parsing, lookup, preservation, context checks, and failure selection are bounded by the enclosing message and registry domain."
+evidence_gap = "Executable registry projections, truncation tests, context matrices, and drift corpora remain unresolved until v0.19.0."
+residual = "Individual algorithms and facilities remain unavailable until their owning milestone changes the corresponding future-work decision."
+mapping_rationale = "The shared TLS wire-policy surface governs registry representation and fail-closed dispatch before individual version-specific protocol facilities are implemented."
+
+[[requirement]]
+domain = "tls"
+id = "BRY-REQ-TLS-0018"
+owner = "0.19.0"
+lifecycle = "rejected"
+decision_ids = ["facility.heartbeat"]
+sources = [{ id = "rfc:6520", authority_role = "exclusion" }]
+statement = "TLS and DTLS Heartbeat is excluded from every modern Brynja engine, facade, feature, configuration, and resumption state."
+invariants = ["resource-bound", "validation", "version-separation"]
+target = "boundary:tls-heartbeat-excluded"
+positive_test = "tests/requirements/tls_exclusions.rs#heartbeat_absent"
+negative_test = "tests/requirements/tls_exclusions.rs#reject_heartbeat_wire_values"
+work_bound = "Heartbeat recognition performs bounded identifier and context checks and rejects before allocation, echoing, cryptography, or state mutation."
+evidence_gap = "Executable feature-graph, wire, registry, resumption, and cross-version rejection tests remain unresolved until v0.19.0."
+residual = "Applications needing liveness must implement it above the authenticated application protocol without gaining access to TLS Heartbeat."
+mapping_rationale = "RFC 6520 is pinned solely as exclusion authority, and its semantic rejection surface owns every TLS registry entry classified intentionally rejected at the wire-policy milestone."
+
+[[requirement]]
+domain = "tls13"
+id = "BRY-REQ-TLS13-0046"
+owner = "0.46.0"
+lifecycle = "rejected"
+decision_ids = ["algorithm.legacy-pkcs1-client-signature"]
+sources = [{ id = "rfc:9963", authority_role = "exclusion" }]
+statement = "Legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points are excluded from the modern TLS 1.3 profile."
+invariants = ["algorithm-admission", "resource-bound", "validation", "version-separation"]
+target = "boundary:tls13-legacy-pkcs1-client-signatures"
+positive_test = "tests/requirements/tls13_exclusions.rs#legacy_pkcs1_absent"
+negative_test = "tests/requirements/tls13_exclusions.rs#reject_legacy_pkcs1_selection"
+work_bound = "Code-point recognition and rejection are bounded and occur before certificate selection, signing requests, or transcript-state mutation."
+evidence_gap = "Executable offer, selection, configuration, resumption, and import rejection matrices remain unresolved until v0.46.0."
+residual = "Compatibility with peers requiring these code points is deliberately unavailable in the modern TLS 1.3 engine."
+mapping_rationale = "RFC 9963 is retained only as exclusion authority and maps exactly to the legacy client-signature semantic surface owned by algorithm admission."
+
+[[requirement]]
+domain = "tls13"
+id = "BRY-REQ-TLS13-0721"
+owner = "0.72.0"
+lifecycle = "rejected"
+decision_ids = ["facility.tls13.post-handshake-authentication"]
+sources = [{ id = "rfc:9846", authority_role = "current" }]
+statement = "TLS 1.3 post-handshake client authentication is deliberately excluded from the version-one protocol profile."
+invariants = ["key-lifecycle", "resource-bound", "validation", "version-separation"]
+target = "boundary:tls13-post-handshake-authentication"
+positive_test = "tests/requirements/tls13_exclusions.rs#post_handshake_auth_absent"
+negative_test = "tests/requirements/tls13_exclusions.rs#reject_post_handshake_auth"
+work_bound = "Extension and message recognition reject in bounded work without creating authentication state, retaining transcript data, or requesting credentials."
+evidence_gap = "Executable configuration, offer, message-order, transcript, resumption, and cancellation rejection tests remain unresolved until v0.72.0."
+residual = "Applications requiring renewed authentication must establish a new connection or use an authenticated application-layer mechanism."
+mapping_rationale = "The TLS 1.3 authority permits this optional facility, but the reviewed semantic surface explicitly rejects it at the client-authentication milestone."
+
+[[requirement]]
+domain = "tls13"
+id = "BRY-REQ-TLS13-0763"
+owner = "0.76.2"
+lifecycle = "rejected"
+decision_ids = ["facility.external-psk.certificate-authentication"]
+sources = [{ id = "rfc:9973", authority_role = "exclusion" }]
+statement = "Certificate authentication combined with an external TLS 1.3 PSK is excluded from the version-one Brynja profile."
+invariants = ["algorithm-admission", "key-lifecycle", "resource-bound", "validation", "version-separation"]
+target = "boundary:tls13-certificate-with-external-psk"
+positive_test = "tests/requirements/tls13_exclusions.rs#certificate_psk_absent"
+negative_test = "tests/requirements/tls13_exclusions.rs#reject_certificate_psk_mode"
+work_bound = "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
+evidence_gap = "Executable offer, selection, binder, certificate, ticket, configuration, and fallback rejection tests remain unresolved until v0.76.2."
+residual = "Deployments must choose the admitted certificate-authenticated handshake or the separately provisioned external-PSK profile."
+mapping_rationale = "RFC 9973 is pinned solely as exclusion authority and maps exactly to the certificate-with-external-PSK semantic rejection surface."
+
+[[requirement]]
+domain = "quic"
+id = "BRY-REQ-QUIC-0093"
+owner = "0.94.0"
+lifecycle = "caller-owned"
+decision_ids = ["iana.quic.quic-frame-types"]
+sources = [{ id = "rfc:9000", authority_role = "caller-owned" }]
+statement = "QUIC packet, frame, stream, recovery, congestion, Retry, migration, and transport-state semantics remain owned by the caller."
+invariants = ["resource-bound", "validation", "version-separation", "work-bound"]
+target = "boundary:quic-transport-owned"
+positive_test = "tests/requirements/quic_ownership.rs#typed_transport_boundary"
+negative_test = "tests/requirements/quic_ownership.rs#reject_transport_semantic_claims"
+work_bound = "Brynja accepts only bounded ordered handshake bytes and typed transport inputs; transport processing cannot consume Brynja state implicitly."
+evidence_gap = "Executable API-boundary, feature-graph, packet-injection, recovery, version, and integration tests remain unresolved until v0.94.0."
+residual = "The caller must provide a correct and separately reviewed QUIC transport, loss-recovery, congestion-control, and path implementation."
+mapping_rationale = "RFC 9000 and the caller-owned QUIC frame registry establish the explicit transport boundary around Brynja's recordless TLS adapter."

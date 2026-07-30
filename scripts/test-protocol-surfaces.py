@@ -61,7 +61,7 @@ def bind(policy: dict, ledger: dict) -> None:
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
-    assert len(register["surfaces"]) == 4422
+    assert len(register["surfaces"]) == 4424
     assert not any(
         surface["disposition"] == "implemented"
         for surface in register["surfaces"]
@@ -77,9 +77,9 @@ def test_transport_milestones_are_exact_and_unique() -> None:
         for surface in register["surfaces"]
         if "requirement_id" in surface
     ]
-    assert len(transport) == 63
-    assert len({surface["owner"] for surface in transport}) == 63
-    assert len({surface["requirement_id"] for surface in transport}) == 63
+    assert len(transport) == 64
+    assert len({surface["owner"] for surface in transport}) == 64
+    assert len({surface["requirement_id"] for surface in transport}) == 64
     assert {surface["domain"] for surface in transport} == {
         "dtls",
         "quic",

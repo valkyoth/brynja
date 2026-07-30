@@ -68,7 +68,8 @@ use-after-failure.
   failure, signed OCSP authority over caller-owned cache metadata, pairwise and
   domain-bound external PSKs, production key-log isolation, DTLS-owned
   path-bound return-routability state, extension, ContentType 27 and message
-  registries, explicit rejection of obsolete RFC 6066 facilities,
+  registries, bounded RFC 6066 peer ClientHello ignore with separate
+  configuration rejection and TLS 1.2 ownership,
   source-blocked legacy lifecycles, and terminal HPKE context invalidation and
   destruction;
 - certificate-bound FIPS module selection, mandatory service indicators,

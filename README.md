@@ -30,11 +30,11 @@ is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
 Version `0.3.5` closes the complete pre-implementation normative baseline.
-The generated matrix contains 165 requirements and maps all 126 locked
-authorities and all 4,422 protocol surfaces. The residual bundle adds 49
+The generated matrix contains 167 requirements and maps all 126 locked
+authorities and all 4,424 protocol surfaces. The residual bundle adds 50
 optional, HPKE, ECH, ML-KEM, entropy, operational, and legacy requirements,
 reviews 182 normative RFC sections through 165 exact mappings and 17 explicit
-exclusions, assigns 742 formerly uncovered surfaces, and records globally
+exclusions, assigns 743 formerly uncovered surfaces, and records globally
 reconciled, fail-closed future, mutable, source-rights, and FIPS-validation
 blockers. It does **not** implement TLS and must not be used to secure network
 traffic.

@@ -17,7 +17,7 @@ RRC_IDS = {
     "iana.tls-parameters.tls-rrc-message-types.unassigned.1",
     "state.dtls.return-routability",
 }
-RFC6066_REJECTED_IDS = {
+RFC6066_WIRE_IDS = {
     "iana.tls-extensiontype-values.tls-extensiontype-values-1."
     "client-certificate-url.1",
     "iana.tls-extensiontype-values.tls-extensiontype-values-1."
@@ -27,6 +27,7 @@ RFC6066_REJECTED_IDS = {
     "iana.tls-extensiontype-values.tls-extensiontype-values-1."
     "trusted-ca-keys.1",
 }
+RFC6066_CONFIGURATION_ID = "facility.rfc6066-unsupported-configuration"
 
 
 def validate(surfaces: list[dict]) -> None:
@@ -59,17 +60,33 @@ def validate(surfaces: list[dict]) -> None:
     ):
         lib.fail("DTLS RRC content-type admission boundary drift")
 
-    if not RFC6066_REJECTED_IDS <= set(by_id):
-        lib.fail("RFC 6066 rejected surface set is incomplete")
-    for identifier in RFC6066_REJECTED_IDS:
+    if not RFC6066_WIRE_IDS <= set(by_id):
+        lib.fail("RFC 6066 wire surface set is incomplete")
+    for identifier in RFC6066_WIRE_IDS:
         surface = by_id[identifier]
         if (
             surface["domain"] != "tls"
-            or surface["owner"] != "0.148.0"
-            or surface["disposition"] != "intentionally-rejected"
+            or surface["owner"] != "0.64.0"
+            or surface["disposition"] != "safely-ignored"
             or surface["code_target"]
-            != "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension"
+            != "crates/brynja-tls-core/src/extensions.rs#"
+            "UnsupportedClientHelloExtension"
             or surface["test_target"]
-            != "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+            != "tests/requirements/rfc6066_wire.rs#"
+            "ignored_client_hello_bodies"
         ):
-            lib.fail(f"RFC 6066 rejected surface drift: {identifier}")
+            lib.fail(f"RFC 6066 wire surface drift: {identifier}")
+    configuration = by_id.get(RFC6066_CONFIGURATION_ID)
+    if (
+        configuration is None
+        or configuration["domain"] != "tls"
+        or configuration["owner"] != "0.148.0"
+        or configuration["disposition"] != "intentionally-rejected"
+        or configuration["code_target"]
+        != "crates/brynja-tls/src/configuration.rs#"
+        "UnsupportedLegacyExtensions"
+        or configuration["test_target"]
+        != "tests/requirements/rfc6066_configuration.rs#"
+        "legacy_extensions_absent"
+    ):
+        lib.fail("RFC 6066 configuration boundary drift")

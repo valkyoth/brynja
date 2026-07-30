@@ -1083,6 +1083,8 @@
       "authority_role": "current",
       "domains": [
         "ocsp",
+        "tls12",
+        "tls12-rfc6066",
         "tls13"
       ],
       "id": "rfc:6066",
@@ -1115,7 +1117,21 @@
         "0.79.0",
         "0.80.0",
         "0.81.0",
-        "0.82.0"
+        "0.82.0",
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.90.1",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
       ],
       "normative_sections": [
         {
@@ -1125,6 +1141,7 @@
             "SHOULD": 1
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0064"
           ],
           "section": "1.1",
@@ -1152,6 +1169,7 @@
             "SHOULD NOT": 1
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0066",
             "BRY-REQ-TLS13-0069"
           ],
@@ -1165,7 +1183,7 @@
             "MUST": 4,
             "SHOULD NOT": 1
           },
-          "rationale": "The deprecated max_fragment_length facility is excluded from the modern profile in favor of the separately owned Record Size Limit policy and must be rejected before negotiation.",
+          "rationale": "The deprecated max_fragment_length facility is excluded from configuration, offers, and negotiation in favor of Record Size Limit; a bounded peer ClientHello occurrence is ignored opaquely without parsing its body.",
           "section": "4",
           "section_sha256": "7dfa2bfffa7441265a215ed8931f1085b5eb01f54d2c4201792a15183d238e26"
         },
@@ -1177,7 +1195,7 @@
             "MUST NOT": 2,
             "SHOULD": 1
           },
-          "rationale": "Client certificate URL negotiation and network fetching are excluded to prevent peer-directed fetch, redirect, scheme, cache, SHA-1, and resource-control risks.",
+          "rationale": "Client certificate URL configuration, negotiation, and fetching are excluded; a bounded peer ClientHello occurrence is ignored opaquely without parsing its body or causing network, allocation, cache, or cryptographic effects.",
           "section": "5",
           "section_sha256": "755300a011d8eae73c6f0b3b7fd2d47ada39f9e4ff105906493bf1f16e6561a8"
         },
@@ -1186,7 +1204,7 @@
           "occurrences": {
             "MAY": 2
           },
-          "rationale": "The legacy trusted_ca_keys indication is excluded from the modern profile; certificate authority selection uses the separately reviewed modern certificate-negotiation boundary.",
+          "rationale": "The legacy trusted_ca_keys facility is excluded from configuration and negotiation; a bounded multi-version peer ClientHello occurrence is ignored opaquely while modern certificate-authority selection retains its separate owner.",
           "section": "6",
           "section_sha256": "08176ec5ef88982a8b467e72b2c3ec8bd6c3d155719cd5c88056212a7d6a84a5"
         },
@@ -1196,7 +1214,7 @@
             "MAY": 2,
             "MUST": 1
           },
-          "rationale": "Truncated HMAC negotiation is excluded from every modern Brynja profile and cannot alter record authentication strength, algorithm admission, or resumption state.",
+          "rationale": "Truncated HMAC configuration and negotiation are excluded from every modern profile; a bounded peer ClientHello occurrence is ignored opaquely and cannot alter authentication strength, admission, or resumption state.",
           "section": "7",
           "section_sha256": "ffb0a83dd3c24b91cfb2e886bd6598d44d519489fbf7c1c0cac40cd410748933"
         },
@@ -1208,6 +1226,7 @@
             "SHOULD": 2
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0071"
           ],
           "section": "8",
@@ -1229,7 +1248,7 @@
             "MUST": 2,
             "SHOULD": 1
           },
-          "rationale": "The PkiPath MIME registration is used only by the excluded client-certificate-URL facility and creates no supported parsing, fetching, or media-type behavior.",
+          "rationale": "The PkiPath MIME registration is used only by the configuration-excluded client-certificate-URL facility and creates no supported parsing, fetching, or media-type behavior.",
           "section": "10.1",
           "section_sha256": "b25ab20f308958c4fe08efcb37495f5415e6307593c1edc65f37c219fd5906fa"
         },
@@ -1238,6 +1257,7 @@
             "MUST": 2
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0069"
           ],
           "section": "11.1",
@@ -1248,7 +1268,7 @@
           "occurrences": {
             "SHOULD": 1
           },
-          "rationale": "Client-certificate-URL security considerations belong to a facility excluded before negotiation, parsing, network effects, redirects, caching, or certificate validation.",
+          "rationale": "Client-certificate-URL security considerations belong to a configuration-excluded facility; permitted peer ClientHello input is ignored without inner parsing, network effects, redirects, caching, or certificate validation.",
           "section": "11.3",
           "section_sha256": "2ae3026ad35287a685535e1fe34631fbed81817ada32c389e2b604f0f448df11"
         },
@@ -1257,6 +1277,7 @@
             "SHOULD": 1
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0071"
           ],
           "section": "11.6",
@@ -1265,6 +1286,7 @@
       ],
       "requirement_ids": [
         "BRY-REQ-TLS-0005",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS13-0064",
         "BRY-REQ-TLS13-0066",
         "BRY-REQ-TLS13-0069",
@@ -6733,6 +6755,7 @@
             "SHOULD": 3
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0066"
           ],
           "section": "4.2.2",
@@ -6770,6 +6793,7 @@
           },
           "requirement_ids": [
             "BRY-REQ-TLS-0019",
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0064"
           ],
           "section": "4.3",
@@ -6823,6 +6847,7 @@
             "SHOULD": 1
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0066",
             "BRY-REQ-TLS13-0070"
           ],
@@ -6932,6 +6957,7 @@
             "SHOULD NOT": 1
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0066",
             "BRY-REQ-TLS13-0074",
             "BRY-REQ-TLS13-0075",
@@ -7009,6 +7035,7 @@
             "MUST NOT": 2
           },
           "requirement_ids": [
+            "BRY-REQ-TLS12EXT-0901",
             "BRY-REQ-TLS13-0071"
           ],
           "section": "4.5.1.1",
@@ -7367,6 +7394,7 @@
         "BRY-REQ-TLS-0093",
         "BRY-REQ-TLS12-0086",
         "BRY-REQ-TLS12-0087",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS13-0061",
         "BRY-REQ-TLS13-0062",
         "BRY-REQ-TLS13-0063",
@@ -7824,7 +7852,7 @@
   "excluded_normative_section_count": 11,
   "mapped_normative_section_count": 539,
   "normative_section_count": 550,
-  "owner_milestone_count": 63,
+  "owner_milestone_count": 64,
   "owner_milestones": [
     "0.10.0",
     "0.100.0",
@@ -7879,6 +7907,7 @@
     "0.88.0",
     "0.89.0",
     "0.90.0",
+    "0.90.1",
     "0.91.0",
     "0.92.0",
     "0.93.0",
@@ -7890,10 +7919,10 @@
     "0.99.0",
     "0.99.1"
   ],
-  "policy_sha256": "7258b37d4dc8610ab272bdfaa29c7897c83f9cbeef8bbe4931b049d36c5fa2ce",
-  "requirement_count": 70,
+  "policy_sha256": "10ebc4ebd44884996ed49adc79ed26adccbd8db3fc3c78c0a3d6ad360f21de27",
+  "requirement_count": 71,
   "schema": 2,
-  "surface_count": 483,
+  "surface_count": 485,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -7994,6 +8023,15 @@
       "id": "facility.record-size-limit",
       "owner": "0.136.0",
       "rationale": "The optional Record Size Limit facility is normatively populated during the optional and residual v0.3.5 closure."
+    },
+    {
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "intentionally-rejected",
+      "domain": "tls",
+      "id": "facility.rfc6066-unsupported-configuration",
+      "owner": "0.148.0",
+      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -9029,11 +9067,11 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.64.0",
+      "rationale": "The four explicitly known unsupported RFC 6066 registry entries are shared handshake-codec wire surfaces closed by the v0.3.5 residual bundle, while the TLS 1.2 semantic engine state remains in transport coverage."
     },
     {
       "coverage": "deferred",
@@ -9172,11 +9210,11 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.64.0",
+      "rationale": "The four explicitly known unsupported RFC 6066 registry entries are shared handshake-codec wire surfaces closed by the v0.3.5 residual bundle, while the TLS 1.2 semantic engine state remains in transport coverage."
     },
     {
       "coverage": "deferred",
@@ -9675,20 +9713,20 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.64.0",
+      "rationale": "The four explicitly known unsupported RFC 6066 registry entries are shared handshake-codec wire surfaces closed by the v0.3.5 residual bundle, while the TLS 1.2 semantic engine state remains in transport coverage."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.64.0",
+      "rationale": "The four explicitly known unsupported RFC 6066 registry entries are shared handshake-codec wire surfaces closed by the v0.3.5 residual bundle, while the TLS 1.2 semantic engine state remains in transport coverage."
     },
     {
       "coverage": "deferred",
@@ -11693,6 +11731,14 @@
       "id": "state.tls12.resumption-interoperability",
       "owner": "0.90.0",
       "requirement_id": "BRY-REQ-TLS12-0090"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls12",
+      "id": "state.tls12.rfc6066-extensions",
+      "owner": "0.90.1",
+      "requirement_id": "BRY-REQ-TLS12EXT-0901"
     },
     {
       "coverage": "requirement",

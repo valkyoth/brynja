@@ -41,7 +41,7 @@ def test_dtls_rrc_boundary_drift_fails() -> None:
     )
 
 
-def test_rfc6066_rejection_boundary_drift_fails() -> None:
+def test_rfc6066_wire_boundary_drift_fails() -> None:
     broken = copy.deepcopy(current_surfaces())
     surface = next(
         item
@@ -50,9 +50,24 @@ def test_rfc6066_rejection_boundary_drift_fails() -> None:
         == "iana.tls-extensiontype-values.tls-extensiontype-values-1."
         "client-certificate-url.1"
     )
-    surface["disposition"] = "future-work"
+    surface["disposition"] = "intentionally-rejected"
     assert_fails(
-        "RFC 6066 rejected surface drift",
+        "RFC 6066 wire surface drift",
+        surface_security.validate,
+        broken,
+    )
+
+
+def test_rfc6066_configuration_boundary_drift_fails() -> None:
+    broken = copy.deepcopy(current_surfaces())
+    surface = next(
+        item
+        for item in broken
+        if item["id"] == "facility.rfc6066-unsupported-configuration"
+    )
+    surface["disposition"] = "safely-ignored"
+    assert_fails(
+        "RFC 6066 configuration boundary drift",
         surface_security.validate,
         broken,
     )

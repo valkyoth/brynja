@@ -29,6 +29,7 @@ DISPOSITION_LIFECYCLE = {
     "future-work": "planned",
     "intentionally-rejected": "rejected",
     "legacy-only": "legacy",
+    "safely-ignored": "planned",
 }
 
 

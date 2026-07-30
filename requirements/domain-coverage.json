@@ -2453,6 +2453,8 @@
       "authority_role": "current",
       "domains": [
         "ocsp",
+        "tls12",
+        "tls12-rfc6066",
         "tls13"
       ],
       "id": "rfc:6066",
@@ -2485,7 +2487,21 @@
         "0.79.0",
         "0.80.0",
         "0.81.0",
-        "0.82.0"
+        "0.82.0",
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.90.1",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
       ],
       "normative_sections": [
         {
@@ -2532,7 +2548,7 @@
             "MUST": 4,
             "SHOULD NOT": 1
           },
-          "rationale": "RFC 6066 maximum-fragment-length behavior is delegated to the reviewed transport exclusion and explicit rejected-surface boundary rather than the OCSP implementation target.",
+          "rationale": "RFC 6066 maximum-fragment-length behavior is delegated to the reviewed transport exclusion, bounded wire-ignore path, and separate configuration-rejection boundary rather than the OCSP implementation target.",
           "section": "4",
           "section_sha256": "7dfa2bfffa7441265a215ed8931f1085b5eb01f54d2c4201792a15183d238e26"
         },
@@ -2544,7 +2560,7 @@
             "MUST NOT": 2,
             "SHOULD": 1
           },
-          "rationale": "RFC 6066 client-certificate-URL behavior is delegated to the reviewed transport exclusion and rejected-surface boundary, preventing the OCSP target from claiming fetch controls.",
+          "rationale": "RFC 6066 client-certificate-URL behavior is delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary, preventing the OCSP target from claiming fetch controls.",
           "section": "5",
           "section_sha256": "755300a011d8eae73c6f0b3b7fd2d47ada39f9e4ff105906493bf1f16e6561a8"
         },
@@ -2553,7 +2569,7 @@
           "occurrences": {
             "MAY": 2
           },
-          "rationale": "RFC 6066 trusted-CA indication is delegated to the reviewed transport exclusion and rejected-surface boundary and has no certificate-status implementation ownership.",
+          "rationale": "RFC 6066 trusted-CA indication is delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary and has no certificate-status implementation ownership.",
           "section": "6",
           "section_sha256": "08176ec5ef88982a8b467e72b2c3ec8bd6c3d155719cd5c88056212a7d6a84a5"
         },
@@ -2563,7 +2579,7 @@
             "MAY": 2,
             "MUST": 1
           },
-          "rationale": "RFC 6066 truncated-HMAC behavior is delegated to the reviewed transport exclusion and rejected-surface boundary and cannot be laundered through an OCSP target.",
+          "rationale": "RFC 6066 truncated-HMAC behavior is delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary and cannot be laundered through an OCSP target.",
           "section": "7",
           "section_sha256": "ffb0a83dd3c24b91cfb2e886bd6598d44d519489fbf7c1c0cac40cd410748933"
         },
@@ -2595,7 +2611,7 @@
             "MUST": 2,
             "SHOULD": 1
           },
-          "rationale": "RFC 6066 PkiPath MIME registration is delegated to the reviewed client-certificate-URL exclusion and rejected-surface boundary outside certificate-status negotiation.",
+          "rationale": "RFC 6066 PkiPath MIME registration is delegated to the reviewed client-certificate-URL exclusion and configuration-rejection boundary outside certificate-status negotiation.",
           "section": "10.1",
           "section_sha256": "b25ab20f308958c4fe08efcb37495f5415e6307593c1edc65f37c219fd5906fa"
         },
@@ -2613,7 +2629,7 @@
           "occurrences": {
             "SHOULD": 1
           },
-          "rationale": "RFC 6066 client-certificate-URL security considerations are delegated to the reviewed transport exclusion and rejected-surface boundary outside the OCSP target.",
+          "rationale": "RFC 6066 client-certificate-URL security considerations are delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary outside the OCSP target.",
           "section": "11.3",
           "section_sha256": "2ae3026ad35287a685535e1fe34631fbed81817ada32c389e2b604f0f448df11"
         },
@@ -5511,7 +5527,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "a0f11df89c283e0e586e08cdab52038574936605ae2d3068d44c1e33cfb9050e",
+  "policy_sha256": "01607117c0f9e8cf69f89e3ca3074ea74b7b36a1e1e0ea86e1048376a9221648",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3322,

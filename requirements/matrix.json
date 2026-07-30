@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0633e8beb612ce3e0b6586c9f40da248ba2ee1ccb5a7b6ed099092694aed6574",
-  "domain_policy_sha256": "a0f11df89c283e0e586e08cdab52038574936605ae2d3068d44c1e33cfb9050e",
-  "policy_sha256": "9ce16df3c17ab109f340d004a115f02960a7dd5d20101e750d33abb1d00a126b",
+  "domain_policy_sha256": "01607117c0f9e8cf69f89e3ca3074ea74b7b36a1e1e0ea86e1048376a9221648",
+  "policy_sha256": "370c93aa71d0d0a7ea8abb17e2158e0a7f882361d6ba93063e4141ffc693b96d",
   "requirements": [
     {
       "applicability": "delegate",
@@ -12341,13 +12341,15 @@
       "owner": "0.136.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Negotiation only transports status data and never makes an unvalidated OCSP response or caller transport authoritative.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
           "authority_role": "current",
           "domains": [
             "ocsp",
+            "tls12",
+            "tls12-rfc6066",
             "tls13"
           ],
           "errata": [
@@ -12398,7 +12400,21 @@
             "0.79.0",
             "0.80.0",
             "0.81.0",
-            "0.82.0"
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.90.1",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
           ],
           "sections": [
             {
@@ -19341,16 +19357,13 @@
       "applicability": "reject",
       "decision": "exclude",
       "decision_ids": [
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
+        "facility.rfc6066-unsupported-configuration"
       ],
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
       "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.0.",
-      "id": "BRY-REQ-RFC6066X-0148",
+      "id": "BRY-REQ-RFC6066CFG-0148",
       "invariants": [
         "resource-bound",
         "validation",
@@ -19386,7 +19399,7 @@
           "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
         }
       ],
-      "statement": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
+      "statement": "Local configuration cannot enable, offer, echo, or negotiate unsupported RFC 6066 facilities even though bounded peer ClientHello inputs are safely ignored.",
       "strength": "INVARIANT",
       "targets": [
         {
@@ -19398,12 +19411,83 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+          "target": "tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/rfc6066_exclusions.rs#reject_invalid_and_exhausted"
+          "target": "tests/requirements/rfc6066_configuration.rs#reject_invalid_and_exhausted"
+        }
+      ],
+      "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
+      ],
+      "deviation_rationale": null,
+      "domain": "tls",
+      "evidence": [],
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.64.0.",
+      "id": "BRY-REQ-RFC6066X-0148",
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "lifecycle": "planned",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.64.0",
+      "profile": "optional-legacy-residual",
+      "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
+      "revision": 2,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "collection": "tls-extensiontype-values",
+          "domains": [
+            "tls12",
+            "tls13",
+            "dtls",
+            "optional"
+          ],
+          "id": "iana:tls-extensiontype-values",
+          "kind": "iana",
+          "milestones": [
+            "0.3.0",
+            "0.3.1",
+            "0.3.4",
+            "0.3.5"
+          ],
+          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+        }
+      ],
+      "statement": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "tests/requirements/rfc6066_wire.rs#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -20122,13 +20206,15 @@
       "owner": "0.5.0",
       "profile": "tls-dtls-quic",
       "residual": "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
           "authority_role": "current",
           "domains": [
             "ocsp",
+            "tls12",
+            "tls12-rfc6066",
             "tls13"
           ],
           "errata": [
@@ -20179,7 +20265,21 @@
             "0.79.0",
             "0.80.0",
             "0.81.0",
-            "0.82.0"
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.90.1",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
           ],
           "sections": [
             {
@@ -24785,6 +24885,253 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "state.tls12.rfc6066-extensions"
+      ],
+      "deviation_rationale": null,
+      "domain": "tls12",
+      "evidence": [],
+      "evidence_gap": "Executable vectors, state-model, fault, fuzz, interoperability, and audit evidence remain unresolved until 0.90.1.",
+      "id": "BRY-REQ-TLS12EXT-0901",
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "lifecycle": "planned",
+      "mapping_rationale": "This dedicated semantic surface binds the reviewed transport authority set to exactly one implementation milestone, protocol domain, planned symbol, and positive and negative verification pair.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.90.1",
+      "profile": "tls-dtls-quic",
+      "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "ocsp",
+            "tls12",
+            "tls12-rfc6066",
+            "tls13"
+          ],
+          "errata": [
+            {
+              "disposition": "apply",
+              "id": 3283,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 4817,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 5658,
+              "status": "Reported"
+            }
+          ],
+          "id": "rfc:6066",
+          "kind": "rfc",
+          "milestones": [
+            "0.10.0",
+            "0.58.0",
+            "0.58.1",
+            "0.58.2",
+            "0.58.3",
+            "0.61.0",
+            "0.62.0",
+            "0.63.0",
+            "0.64.0",
+            "0.65.0",
+            "0.66.0",
+            "0.67.0",
+            "0.68.0",
+            "0.69.0",
+            "0.70.0",
+            "0.71.0",
+            "0.72.0",
+            "0.73.0",
+            "0.74.0",
+            "0.75.0",
+            "0.76.0",
+            "0.76.1",
+            "0.76.2",
+            "0.77.0",
+            "0.78.0",
+            "0.79.0",
+            "0.80.0",
+            "0.81.0",
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.90.1",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
+          ],
+          "sections": [
+            {
+              "anchor": "1.1. Specific Extensions Covered The extensions described here focus on extending the functionality provided by the TLS protocol message formats. Other issues,",
+              "section": "1.1",
+              "section_sha256": "5b4bbb54e36a3c261b53a226c6cf5fc138c34c0ac6830e70793b9b96b70c5d7a"
+            },
+            {
+              "anchor": "11.1. Security Considerations for server_name If a single server hosts several domains, then clearly it is necessary for the owners of each domain to ensure tha",
+              "section": "11.1",
+              "section_sha256": "09fb0ea1346633b5cdc2ddbb28b89c49c127b5df93f5d37293ecb29ce2eeebe9"
+            },
+            {
+              "anchor": "11.6. Security Considerations for status_request If a client requests an OCSP response, it must take into account that an attacker's server using a compromised",
+              "section": "11.6",
+              "section_sha256": "3f0df420c987956b1ed7e8119816cff01fd19d2e5ee99f72b80a7699a2a1e8eb"
+            },
+            {
+              "anchor": "3. Server Name Indication TLS does not provide a mechanism for a client to tell a server the name of the server it is contacting. It may be desirable for client",
+              "section": "3",
+              "section_sha256": "30f377b530e6485bcbe6835d996e01c8cb30f6cce9a5c4957fbeb2052a284147"
+            },
+            {
+              "anchor": "8. Certificate Status Request Constrained clients may wish to use a certificate-status protocol such as OCSP [RFC2560] to check the validity of server certifica",
+              "section": "8",
+              "section_sha256": "598870980c7ea2d138722d5fd75d26a0fafd7f9d4c7ee7ff5e19b28c1ad825b6"
+            }
+          ],
+          "sha256": "6a33cceaa5e1b6518923d9d04ffaa738bad0417806b3c94a995484e140f5cbc0",
+          "status": "PROPOSED STANDARD"
+        },
+        {
+          "authority_role": "current",
+          "domains": [
+            "tls12",
+            "tls13",
+            "tls13-session"
+          ],
+          "errata": [
+            {
+              "disposition": "track-not-applied",
+              "id": 9040,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9042,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9043,
+              "status": "Reported"
+            }
+          ],
+          "id": "rfc:9846",
+          "kind": "rfc",
+          "milestones": [
+            "0.10.0",
+            "0.61.0",
+            "0.62.0",
+            "0.63.0",
+            "0.64.0",
+            "0.65.0",
+            "0.66.0",
+            "0.67.0",
+            "0.68.0",
+            "0.69.0",
+            "0.70.0",
+            "0.71.0",
+            "0.72.0",
+            "0.73.0",
+            "0.74.0",
+            "0.75.0",
+            "0.76.0",
+            "0.76.1",
+            "0.76.2",
+            "0.77.0",
+            "0.78.0",
+            "0.79.0",
+            "0.80.0",
+            "0.81.0",
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
+          ],
+          "sections": [
+            {
+              "anchor": "4.2.2. Client Hello When a client first connects to a server, it is REQUIRED to send the ClientHello as its first TLS message. The client will also send a Clien",
+              "section": "4.2.2",
+              "section_sha256": "7e07408affb1d0394cca9f98d5ee6968f267754044c967b08e18f301a87478fb"
+            },
+            {
+              "anchor": "4.3. Extensions A number of TLS messages contain tag-length-value encoded extensions structures. struct { ExtensionType extension_type; opaque extension_data<0.",
+              "section": "4.3",
+              "section_sha256": "c48bf4a1ab587a021d48d61d6a4dd3b8e639b72ca6cac1d6575043e454df2a6b"
+            },
+            {
+              "anchor": "4.3.11. Pre-Shared Key Extension The \"pre_shared_key\" extension is used to negotiate the identity of the pre-shared key to be used with a given handshake in ass",
+              "section": "4.3.11",
+              "section_sha256": "502ad864b16f4ced3228b25bad5e3c3d66d5e44a76a772ebea6f22f69240d585"
+            },
+            {
+              "anchor": "4.3.4. Certificate Authorities The \"certificate_authorities\" extension is used to indicate the certificate authorities (CAs) which an endpoint supports and whic",
+              "section": "4.3.4",
+              "section_sha256": "90f27d2bf0f03ca87d1ef45fb103d43a45ceb9531742d09ced2a2de089be5e63"
+            },
+            {
+              "anchor": "4.5.1.1. OCSP Status and SCT Extensions [RFC6066] and [RFC6961] provide extensions to negotiate the server sending OCSP responses to the client. In TLS 1.2 and",
+              "section": "4.5.1.1",
+              "section_sha256": "47acf6c381f4087d910a430f68693a8f84e74d5671b4e7155f61323b0f5af9e2"
+            }
+          ],
+          "sha256": "b1bee06a814f92ca4677c85b97519be53869b2bf8edc79ade955fb51c0402b17",
+          "status": "PROPOSED STANDARD"
+        }
+      ],
+      "statement": "TLS 1.2 owns version-specific SNI resumption binding, status_request negotiation, CertificateStatus handling, and safe unsupported ClientHello extension behavior.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls12/src/extensions.rs#Tls12Extensions"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "tests/requirements/tls12_rfc6066.rs#version_specific_semantics"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "tests/requirements/tls12_rfc6066.rs#reject_invalid_and_exhausted"
+        }
+      ],
+      "work_bound": "Parsing, state transitions, provider operations, retained bytes, retries, and output must consume explicit caller-owned budgets."
+    },
+    {
       "applicability": "reject",
       "decision": "exclude",
       "decision_ids": [
@@ -25411,13 +25758,15 @@
       "owner": "0.64.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
           "authority_role": "current",
           "domains": [
             "ocsp",
+            "tls12",
+            "tls12-rfc6066",
             "tls13"
           ],
           "errata": [
@@ -25468,7 +25817,21 @@
             "0.79.0",
             "0.80.0",
             "0.81.0",
-            "0.82.0"
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.90.1",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
           ],
           "sections": [
             {
@@ -25798,13 +26161,15 @@
       "owner": "0.66.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
           "authority_role": "current",
           "domains": [
             "ocsp",
+            "tls12",
+            "tls12-rfc6066",
             "tls13"
           ],
           "errata": [
@@ -25855,7 +26220,21 @@
             "0.79.0",
             "0.80.0",
             "0.81.0",
-            "0.82.0"
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.90.1",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
           ],
           "sections": [
             {
@@ -26424,13 +26803,15 @@
       "owner": "0.69.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
           "authority_role": "current",
           "domains": [
             "ocsp",
+            "tls12",
+            "tls12-rfc6066",
             "tls13"
           ],
           "errata": [
@@ -26481,7 +26862,21 @@
             "0.79.0",
             "0.80.0",
             "0.81.0",
-            "0.82.0"
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.90.1",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
           ],
           "sections": [
             {
@@ -26851,13 +27246,15 @@
       "owner": "0.71.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
           "authority_role": "current",
           "domains": [
             "ocsp",
+            "tls12",
+            "tls12-rfc6066",
             "tls13"
           ],
           "errata": [
@@ -26908,7 +27305,21 @@
             "0.79.0",
             "0.80.0",
             "0.81.0",
-            "0.82.0"
+            "0.82.0",
+            "0.83.0",
+            "0.83.1",
+            "0.83.2",
+            "0.84.0",
+            "0.85.0",
+            "0.86.0",
+            "0.87.0",
+            "0.88.0",
+            "0.89.0",
+            "0.90.0",
+            "0.90.1",
+            "0.91.0",
+            "0.92.0",
+            "0.93.0"
           ],
           "sections": [
             {
@@ -29113,9 +29524,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "064588975c20b5d10ca4bb74eb1a678aadcd9d6d3e5a15d2b906d18acfc946f1",
+  "residual_policy_sha256": "3036c00e403472db44596e22901cee55caf97130fed11a8cb6e8b788f9df226f",
   "schema": 5,
-  "source_ledger_sha256": "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7",
-  "surface_register_sha256": "c4b513c28ed5c6bf5ff013825afcfb6d601e86e1f17620338bbbe71ee3d1fd43",
-  "transport_policy_sha256": "7258b37d4dc8610ab272bdfaa29c7897c83f9cbeef8bbe4931b049d36c5fa2ce"
+  "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945",
+  "surface_register_sha256": "e1966e65f8f25eae76356130f97aa07d41b719fd253000c7c7511f73f494066c",
+  "transport_policy_sha256": "10ebc4ebd44884996ed49adc79ed26adccbd8db3fc3c78c0a3d6ad360f21de27"
 }

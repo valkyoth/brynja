@@ -385,7 +385,7 @@ Exit criteria:
 
 Status: awaiting pentest
 
-Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, reject obsolete RFC 6066 facilities, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
+Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, separate RFC 6066 wire-ignore behavior from configuration rejection, cover RFC 6066 independently in TLS 1.2, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
 
 Goal: complete the **Optional Legacy And Residual Normative Closure** implementation stop without admitting or
 claiming adjacent capability.
@@ -399,10 +399,11 @@ Deliverables:
   keep every DTLS RRC state, extension, content type, and registry surface
   inside the DTLS boundary, and bind source-blocked legacy surfaces to exact
   blocker requirements;
-- assign RFC 6066 sections only to their exact SNI, certificate-status,
-  status-transport, alert, terminology, or rejected-facility decision and
-  reject obsolete maximum-fragment-length, client-certificate-URL,
-  trusted-CA, and truncated-HMAC admission;
+- assign RFC 6066 sections only to exact TLS 1.2, TLS 1.3, SNI,
+  certificate-status, status-transport, alert, terminology, or excluded
+  facility decisions; safely ignore bounded unsupported peer ClientHello
+  bodies while rejecting configuration, offers, unsolicited responses,
+  echoes, negotiation, tickets, and imported-state admission;
 - generate complete source-to-plan, plan-to-source, surface-to-requirement, and
   requirement-to-owner reports with explicit dependent-milestone refresh rules
   for mutable guidance and unavailable future standards;
@@ -417,8 +418,9 @@ Verification:
   guidance, missing exclusions, orphan plans, premature implementation status,
   cross-policy section contradictions, wrong protocol ownership, actionable
   source-blocked requirements, orphaned section delegations, RFC 6066 semantic
-  laundering, stream-TLS RRC admission, and uncovered surfaces and require
-  repository failure;
+  laundering, missing TLS 1.2 ownership, wire/configuration conflation,
+  stream-TLS RRC admission, and uncovered surfaces and require repository
+  failure;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -428,9 +430,10 @@ Exit criteria:
   standards, future code, mutable evidence, or legacy rights as complete;
 - RFC 9853 runtime and registry ownership is reachable through
   `brynja-dtls-core`, ContentType 27 is rejected outside negotiated DTLS RRC,
-  RFC 6066 cannot launder unrelated facilities through OCSP, RFC 7568 cannot
-  authorize unrelated legacy protocols, and every unavailable legacy source
-  fails closed through its exact blocker;
+  RFC 6066 cannot launder unrelated facilities through OCSP or TLS 1.3, its
+  bounded peer ClientHello ignore path cannot enable local admission, RFC 7568
+  cannot authorize unrelated legacy protocols, and every unavailable legacy
+  source fails closed through its exact blocker;
 - `v0.3.5 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
@@ -2482,7 +2485,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement the complete TLS 1.3 handshake codec with duplicate, ordering, extension-context, unknown and GREASE extension, compatibility ChangeCipherSpec, and resource rules.
+Plan scope: Implement the complete TLS 1.3 handshake codec with duplicate, ordering, extension-context, unknown and GREASE extension, compatibility ChangeCipherSpec, and resource rules; bound known unsupported ClientHello extensions by outer framing and ignore opaque bodies without parsing, allocation, echo, negotiation, fetching, cryptography, or state mutation while rejecting unsolicited responses.
 
 Goal: complete the **TLS 1.3 Handshake Codec** implementation stop without admitting or
 claiming adjacent capability.
@@ -2491,6 +2494,9 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
+- keep known unsupported ClientHello extension bodies opaque after the outer
+  vector is bounded, and reject the same identifiers in unsolicited response
+  contexts;
 - separate early policy from post-engine routing while encoding record, transcript, HRR, certificate, PSK, ticket, secret, storage, effect, and failure invariants;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
@@ -2499,6 +2505,9 @@ Verification:
 
 - run RFC vectors, fragmentation, versions, GREASE, client and server selection, HRR, transcript, downgrade, ticket, PSK timing, storage atomicity, and peer matrices;
 - exercise premature routing, retry, cross-version state, replay, unknown PSKs, binder failure, crash consistency, zero-RTT races, key limits, and cleanup;
+- inject arbitrary known unsupported extension bodies and prove no inner
+  parsing, allocation, echo, negotiation, fetching, cryptography, or state
+  mutation occurs;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -3402,6 +3411,51 @@ Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
 - `v0.90.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+
+### v0.90.1 - TLS 1.2 RFC 6066 Extension Semantics
+
+Status: planned
+
+Plan scope: Implement TLS 1.2-specific SNI resumption association, status_request negotiation and CertificateStatus handling; bound and safely ignore unsupported peer ClientHello extensions without parsing their bodies, while rejecting unsolicited responses and keeping unsupported facilities absent from configuration, offers, echoes, negotiation, tickets, and imported state.
+
+Goal: complete the **TLS 1.2 RFC 6066 Extension Semantics** implementation stop
+without inheriting TLS 1.3 message targets or admitting unsupported RFC 6066
+facilities.
+
+Deliverables:
+
+- implement the TLS 1.2 SNI, resumption, status_request, CertificateStatus, and
+  extension-context state in `brynja-tls12`;
+- length-check the outer Extension vector, treat unsupported ClientHello
+  extension bodies as opaque, and ignore them without inner parsing,
+  allocation, echo, negotiation, fetching, cryptography, or state mutation;
+- reject unsolicited server responses and prohibit local configuration,
+  offers, tickets, resumption, and imported state from enabling
+  max_fragment_length, client_certificate_url, trusted_ca_keys, or
+  truncated_hmac; and
+- update requirements, threat model, controls, status, limitations, release
+  notes, and permanent evidence index.
+
+Verification:
+
+- test full and resumed TLS 1.2 handshakes with SNI association and
+  status_request carried in the TLS 1.2 CertificateStatus message;
+- inject empty, malformed, oversized-within-budget, duplicate, and arbitrary
+  bodies for all four unsupported ClientHello extension identifiers and prove
+  the bodies are not parsed, allocated, echoed, negotiated, fetched, or
+  retained;
+- reject every unsolicited response, configuration attempt, imported-state
+  reference, ticket reference, and cross-version transfer for the unsupported
+  facilities; and
+- pass repository checks, promised Rust versions and targets, dependency and
+  advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Exit criteria:
+
+- TLS 1.2 owns every applicable RFC 6066 obligation independently from TLS
+  1.3, and wire-level safe ignore is mechanically separate from local
+  configuration rejection;
+- `v0.90.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.91.0 - TLS 1.2 Audit Gate
 
@@ -5727,7 +5781,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration and reject them before parsing or effects; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
+Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration, offer, echo, negotiation, ticket, and imported state while preserving the v0.90.1 bounded peer ClientHello ignore path; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
 
 Goal: complete the **Generated Optional-Feature Composition Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -5737,9 +5791,10 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - exercise optional receive and send paths and cross-feature combinations before freezing APIs, then qualify downstream host and Aesynx adapters;
-- implement the exact RFC 6066 rejected-extension boundary and prove that
+- implement the exact RFC 6066 configuration-rejection boundary and prove that
   peer-directed certificate fetching, truncated authentication, legacy CA
-  indication, and deprecated fragment negotiation cannot become available;
+  indication, and deprecated fragment negotiation cannot become available,
+  without rejecting bounded unsupported ClientHello inputs;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -5747,9 +5802,11 @@ Verification:
 
 - generate and execute every pairwise feature and protocol-applicability case plus targeted ECH, authentication, resumption, hybrid, FIPS and compression higher-order combinations;
 - exercise ECH with hybrid ClientHello size, HRR, padding, transcript and downgrade, ECH with RPK, hybrid tickets, PSKs, resumption and zero-RTT, hybrid approved-only policy, rotating OCSP and SCT compression inputs, and configuration-time rejection of every forbidden combination;
-- inject all four rejected RFC 6066 extension identifiers in every stream TLS,
-  DTLS, resumption, imported-state, and configuration context and require
-  bounded rejection before allocation, fetching, cryptography, or state change;
+- inject all four unsupported RFC 6066 extension identifiers in every stream
+  TLS, DTLS, resumption, imported-state, and configuration context; require
+  bounded opaque ignore only for permitted peer ClientHello inputs and bounded
+  rejection for unsolicited responses and local admission before allocation,
+  fetching, cryptography, or state change;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 

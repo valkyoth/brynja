@@ -102,18 +102,18 @@ and v0.3.5 residual pass populate the remaining normative domains.
 The v0.3.4 transport policy completes current and compatibility TLS, hardened
 TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3 coverage. Seventy requirements bind
 40 admitted authorities, 550 normative RFC sections, 63 exact implementation
-owner milestones, and 483 selected surfaces. Current, compatibility, evidence,
+owner milestones, and 485 selected surfaces. Current, compatibility, evidence,
 exclusion, and caller-owned roles are distinct. RFC 9850 and optional TLS
 facility groups remain explicit v0.3.5 deferrals; no deferred source can be
 silently treated as admitted transport authority.
 
 The v0.3.5 residual policy completes the pre-implementation closure. Final
 FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C join the local-only checksum
-manifest. Forty-nine residual requirements bind 33 authorities and review
+manifest. Fifty residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
-explicit exclusions while assigning every one of the 742 surfaces left by the
+explicit exclusions while assigning every one of the 743 surfaces left by the
 earlier bundles. The generated closure proves that all 126 locked authorities,
-all 205 roadmap rows, all 4,422 surfaces, and all 165 requirements have
+all 206 roadmap rows, all 4,424 surfaces, and all 167 requirements have
 bidirectional ownership. Local rights, mutable NIST and IANA refresh rules,
 and unavailable hybrid, legacy, and FIPS-validation authorities remain
 machine-readable fail-closed records rather than capability claims.
@@ -124,8 +124,9 @@ bundle and excluded in another, duplicate exclusions must agree, and a
 delegated section is accepted only when another bundle records an exact mapped
 or excluded owner. RFC 9853 state, extension, ContentType 27, and message
 registry surfaces remain inside the DTLS v0.111.1 boundary. RFC 6066 sections
-are split among their exact SNI, certificate-status, status-transport, alert,
-terminology, and rejected-facility decisions. RFC 7568 section 3 is authority
+are split among their exact TLS 1.2, TLS 1.3, SNI, certificate-status,
+status-transport, alert, terminology, bounded wire-ignore, and
+configuration-rejection decisions. RFC 7568 section 3 is authority
 only for the SSLv3 prohibition.
 
 FIPS planning also snapshots the dated FIPS 140-3 CMVP Management Manual,

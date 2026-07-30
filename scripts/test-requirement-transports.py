@@ -41,13 +41,13 @@ def test_current_repository() -> None:
     requirements, coverage, _digest = transport.build(
         ledger, register, versions
     )
-    assert len(requirements) == 70
+    assert len(requirements) == 71
     assert coverage["authority_count"] == 40
     assert coverage["deferred_authority_count"] == 1
     assert coverage["mapped_normative_section_count"] == 539
     assert coverage["excluded_normative_section_count"] == 11
-    assert coverage["owner_milestone_count"] == 63
-    assert coverage["surface_count"] == 483
+    assert coverage["owner_milestone_count"] == 64
+    assert coverage["surface_count"] == 485
     assert standards.json_bytes(coverage) == lib.TRANSPORT_COVERAGE.read_bytes()
 
 
@@ -69,7 +69,7 @@ def test_every_transport_milestone_has_one_semantic_requirement() -> None:
         for item in register["surfaces"]
         if "requirement_id" in item
     ]
-    assert len(semantic) == 63
+    assert len(semantic) == 64
     assert {item["requirement_id"] for item in semantic} <= requirement_ids
     assert {item["owner"] for item in semantic} == set(
         coverage["owner_milestones"]

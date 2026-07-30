@@ -31,8 +31,8 @@ owner milestones, and 483 surfaces. v0.3.5 adds 49 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
 authorities, 182 reviewed normative sections, and 742 formerly uncovered
 surfaces.
-The complete closure covers 126 locked authorities, 205 roadmap rows, and
-4,422 surfaces. Planned targets become actual code, tests, and evidence only
+The complete closure covers 126 locked authorities, 206 roadmap rows, and
+4,424 surfaces. Planned targets become actual code, tests, and evidence only
 in their owning milestone.
 
 ## Coverage By Implementation Domain
@@ -65,8 +65,11 @@ The following are deliberate boundaries rather than omissions:
 - RFC 6961 status_request_v2 is rejected for the hardened TLS 1.2 v1
   profile; the RFC 6066 status_request facility remains admitted.
 - RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and
-  truncated_hmac are rejected before parsing or effects; Record Size Limit
-  and modern certificate-authority negotiation retain separate owners.
+  truncated_hmac remain absent from local configuration, offers, negotiation,
+  tickets, and imported state; bounded peer ClientHello bodies are safely
+  ignored without inner parsing or effects, while unsolicited responses are
+  rejected. Record Size Limit and modern certificate-authority negotiation
+  retain separate owners.
 - RFC 9853 ContentType 27, RRC extension, message registry, and state are
   admitted only by the DTLS v0.111.1 return-routability boundary and rejected
   in stream TLS.

@@ -26,12 +26,12 @@ Version 0.3.0 provides the exact source foundation:
 
 Version 0.3.1 adds explicit protocol-surface decisions:
 
-- 124 semantic decisions cover current and compatibility TLS, DTLS, QUIC-TLS,
+- 126 semantic decisions cover current and compatibility TLS, DTLS, QUIC-TLS,
   PKIX, OCSP, CT, HPKE, ECH, cryptographic algorithms, certificate and key
   formats, legacy protocols, and operational facilities;
 - all 192 nested registries and all 4,106 individual records across the eight
   pinned IANA collections receive a deterministic disposition;
-- every one of the 4,422 total surfaces records normative sources, owning
+- every one of the 4,424 total surfaces records normative sources, owning
   milestone, planned code target, planned test target, and rationale;
 - required exclusions explicitly cover Heartbeat, status_request_v2,
   production SSLKEYLOGFILE, TLS 1.3 post-handshake authentication,
@@ -84,10 +84,10 @@ Version 0.3.3 completes the cryptography, encoding, and PKIX population pass:
 
 Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 
-- 63 semantic surfaces give every planned transport implementation milestone
+- 64 semantic surfaces give every planned transport implementation milestone
   one stable owner, code target, test target, source set, and rationale;
-- 70 new requirements bring the matrix to 116 stable records and cover all 40
-  admitted transport authorities, 550 normative RFC sections, and 483
+- 71 new requirements bring the matrix to 117 stable records and cover all 40
+  admitted transport authorities, 550 normative RFC sections, and 485
   selected transport surfaces;
 - all 914 domain and transport normative RFC sections carry reviewed
   decisions: 909 exact mappings and five explicit dispositions with unique
@@ -109,15 +109,15 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 
 Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 
-- 49 new requirements bring the matrix to 165 stable records;
+- 50 new requirements bring the matrix to 167 stable records;
 - final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are added as
   local-only checksum-pinned authorities;
 - 33 residual authorities and 182 normative RFC sections are reviewed through
   165 exact mappings and 17 explicit dispositions;
-- all 742 surfaces left by the foundation, domain, and transport bundles are
-  assigned, producing complete coverage of all 4,422 surfaces;
-- the generated closure maps all 126 locked sources, all 205 roadmap rows, all
-  4,422 surfaces, and all 165 requirements in both directions;
+- all 743 surfaces left by the foundation, domain, and transport bundles are
+  assigned, producing complete coverage of all 4,424 surfaces;
+- the generated closure maps all 126 locked sources, all 206 roadmap rows, all
+  4,424 surfaces, and all 167 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
@@ -132,8 +132,9 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   owner;
 - the DTLS RRC state, extension, ContentType 27, and message registry are fixed
   at v0.111.1, while stream TLS must reject RRC admission;
-- RFC 6066 is split among exact SNI, status, alert, terminology, and rejected
-  legacy-facility decisions instead of being mapped wholesale to OCSP; and
+- RFC 6066 is split among exact TLS 1.2, TLS 1.3, SNI, status, alert,
+  terminology, bounded peer ClientHello ignore, and configuration-rejection
+  decisions instead of being mapped wholesale to OCSP; and
 - RFC 7568 section 3 is authority only for the SSLv3 prohibition boundary.
 
 This remains governance and planning evidence, not protocol implementation.

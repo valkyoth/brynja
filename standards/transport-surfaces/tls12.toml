@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
+source_ledger_sha256 = "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945"
 
 [[surface]]
 id = "state.tls12.engine-policy"
@@ -111,6 +111,17 @@ sources = ["rfc:5077", "rfc:5246", "rfc:9325"]
 code_target = "crates/brynja-tls12/src/resumption.rs#Resumption"
 test_target = "tests/requirements/tls12_resumption.rs#separation_and_interop"
 rationale = "TLS 1.2 resumption binds protocol-specific ticket state, extension hardening, downgrade behavior, lifetime, rotation, and interoperability."
+
+[[surface]]
+id = "state.tls12.rfc6066-extensions"
+requirement_id = "BRY-REQ-TLS12EXT-0901"
+owner = "0.90.1"
+domain = "tls12"
+disposition = "future-work"
+sources = ["rfc:6066", "rfc:9846"]
+code_target = "crates/brynja-tls12/src/extensions.rs#Tls12Extensions"
+test_target = "tests/requirements/tls12_rfc6066.rs#version_specific_semantics"
+rationale = "TLS 1.2 owns version-specific SNI resumption binding, status_request negotiation, CertificateStatus handling, and safe unsupported ClientHello extension behavior."
 
 [[surface]]
 id = "state.tls12.audit-gate"

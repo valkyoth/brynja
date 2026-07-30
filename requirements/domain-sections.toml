@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.3"
-source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
+source_ledger_sha256 = "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945"
 
 [revisions]
 "BRY-REQ-CRYPTO-0003" = 2
@@ -20,7 +20,7 @@ source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a
 "BRY-REQ-OCSP-0003" = 2
 "BRY-REQ-OCSP-0004" = 2
 "BRY-REQ-OCSP-0005" = 3
-"BRY-REQ-OCSP-0006" = 3
+"BRY-REQ-OCSP-0006" = 4
 "BRY-REQ-PKIX-0001" = 2
 "BRY-REQ-PKIX-0002" = 2
 "BRY-REQ-PKIX-0003" = 2
@@ -210,25 +210,25 @@ rationale = "RFC 6066 SNI behavior is delegated to the ClientHello and authentic
 source_id = "rfc:6066"
 section = "4"
 disposition = "delegated"
-rationale = "RFC 6066 maximum-fragment-length behavior is delegated to the reviewed transport exclusion and explicit rejected-surface boundary rather than the OCSP implementation target."
+rationale = "RFC 6066 maximum-fragment-length behavior is delegated to the reviewed transport exclusion, bounded wire-ignore path, and separate configuration-rejection boundary rather than the OCSP implementation target."
 
 [[exclusion]]
 source_id = "rfc:6066"
 section = "5"
 disposition = "delegated"
-rationale = "RFC 6066 client-certificate-URL behavior is delegated to the reviewed transport exclusion and rejected-surface boundary, preventing the OCSP target from claiming fetch controls."
+rationale = "RFC 6066 client-certificate-URL behavior is delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary, preventing the OCSP target from claiming fetch controls."
 
 [[exclusion]]
 source_id = "rfc:6066"
 section = "6"
 disposition = "delegated"
-rationale = "RFC 6066 trusted-CA indication is delegated to the reviewed transport exclusion and rejected-surface boundary and has no certificate-status implementation ownership."
+rationale = "RFC 6066 trusted-CA indication is delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary and has no certificate-status implementation ownership."
 
 [[exclusion]]
 source_id = "rfc:6066"
 section = "7"
 disposition = "delegated"
-rationale = "RFC 6066 truncated-HMAC behavior is delegated to the reviewed transport exclusion and rejected-surface boundary and cannot be laundered through an OCSP target."
+rationale = "RFC 6066 truncated-HMAC behavior is delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary and cannot be laundered through an OCSP target."
 
 [[exclusion]]
 source_id = "rfc:6066"
@@ -240,7 +240,7 @@ rationale = "RFC 6066 extension-alert behavior is delegated to the shared typed 
 source_id = "rfc:6066"
 section = "10.1"
 disposition = "delegated"
-rationale = "RFC 6066 PkiPath MIME registration is delegated to the reviewed client-certificate-URL exclusion and rejected-surface boundary outside certificate-status negotiation."
+rationale = "RFC 6066 PkiPath MIME registration is delegated to the reviewed client-certificate-URL exclusion and configuration-rejection boundary outside certificate-status negotiation."
 
 [[exclusion]]
 source_id = "rfc:6066"
@@ -252,7 +252,7 @@ rationale = "RFC 6066 SNI security considerations are delegated to the authentic
 source_id = "rfc:6066"
 section = "11.3"
 disposition = "delegated"
-rationale = "RFC 6066 client-certificate-URL security considerations are delegated to the reviewed transport exclusion and rejected-surface boundary outside the OCSP target."
+rationale = "RFC 6066 client-certificate-URL security considerations are delegated to the reviewed transport exclusion, bounded wire-ignore path, and configuration-rejection boundary outside the OCSP target."
 
 [[binding]]
 source_id = "rfc:6960"

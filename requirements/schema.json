@@ -63,6 +63,7 @@
   ],
   "section_dispositions": [
     "caller-owned",
+    "delegated",
     "excluded",
     "not-applicable"
   ],

@@ -21,7 +21,7 @@ requirement = support.requirement
 
 def test_current_repository() -> None:
     matrix, indexes = checker.build_matrix()
-    assert len(matrix["requirements"]) == 165
+    assert len(matrix["requirements"]) == 167
     assert {item["lifecycle"] for item in matrix["requirements"]} == lib.LIFECYCLES
     assert standards.json_bytes(matrix) == lib.MATRIX.read_bytes()
     assert standards.json_bytes(indexes) == lib.INDEXES.read_bytes()
@@ -31,6 +31,23 @@ def test_current_repository() -> None:
     assert lib.TRANSPORT_COVERAGE.is_file()
     assert lib.RESIDUAL_COVERAGE.is_file()
     assert lib.CLOSURE.is_file()
+
+
+def test_coverage_dispositions_are_declared_by_schema() -> None:
+    allowed = set(lib.schema_document()["section_dispositions"])
+    for path in (
+        lib.DOMAIN_COVERAGE,
+        lib.TRANSPORT_COVERAGE,
+        lib.RESIDUAL_COVERAGE,
+    ):
+        coverage = lib.read_json(path)
+        observed = {
+            section["disposition"]
+            for source in coverage["authorities"]
+            for section in source.get("normative_sections", [])
+            if "disposition" in section
+        }
+        assert observed <= allowed
 
 
 def test_generation_is_deterministic() -> None:

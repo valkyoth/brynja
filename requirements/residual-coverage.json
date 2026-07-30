@@ -128,6 +128,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
@@ -2535,10 +2536,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "064588975c20b5d10ca4bb74eb1a678aadcd9d6d3e5a15d2b906d18acfc946f1",
-  "requirement_count": 49,
+  "policy_sha256": "3036c00e403472db44596e22901cee55caf97130fed11a8cb6e8b788f9df226f",
+  "requirement_count": 50,
   "schema": 1,
-  "surface_count": 742,
+  "surface_count": 743,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -2611,6 +2612,14 @@
       "id": "facility.record-size-limit",
       "owner": "0.136.0",
       "requirement_id": "BRY-REQ-OPTIONAL-0136"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "intentionally-rejected",
+      "domain": "tls",
+      "id": "facility.rfc6066-unsupported-configuration",
+      "owner": "0.148.0",
+      "requirement_id": "BRY-REQ-RFC6066CFG-0148"
     },
     {
       "coverage": "requirement",
@@ -7006,10 +7015,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
-      "owner": "0.148.0",
+      "owner": "0.64.0",
       "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {
@@ -7134,10 +7143,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
-      "owner": "0.148.0",
+      "owner": "0.64.0",
       "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {
@@ -7574,18 +7583,18 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-      "owner": "0.148.0",
+      "owner": "0.64.0",
       "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
-      "owner": "0.148.0",
+      "owner": "0.64.0",
       "requirement_id": "BRY-REQ-RFC6066X-0148"
     },
     {

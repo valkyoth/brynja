@@ -319,7 +319,7 @@
       "requirement_ids": [
         "BRY-REQ-STD-0004"
       ],
-      "scope": "Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, reject obsolete RFC 6066 facilities, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.",
+      "scope": "Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, separate RFC 6066 wire-ignore behavior from configuration rejection, cover RFC 6066 independently in TLS 1.2, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.",
       "source_ids": [
         "iana:dns-parameters",
         "iana:hpke",
@@ -1604,9 +1604,10 @@
     {
       "boundary": null,
       "requirement_ids": [
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-TLS13-0064"
       ],
-      "scope": "Implement the complete TLS 1.3 handshake codec with duplicate, ordering, extension-context, unknown and GREASE extension, compatibility ChangeCipherSpec, and resource rules.",
+      "scope": "Implement the complete TLS 1.3 handshake codec with duplicate, ordering, extension-context, unknown and GREASE extension, compatibility ChangeCipherSpec, and resource rules; bound known unsupported ClientHello extensions by outer framing and ignore opaque bodies without parsing, allocation, echo, negotiation, fetching, cryptography, or state mutation while rejecting unsolicited responses.",
       "source_ids": [
         "rfc:6066",
         "rfc:6520",
@@ -2163,6 +2164,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2190,6 +2192,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2217,6 +2220,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2244,6 +2248,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2271,6 +2276,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2298,6 +2304,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2325,6 +2332,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2352,6 +2360,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2379,6 +2388,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2406,6 +2416,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2424,6 +2435,18 @@
     {
       "boundary": null,
       "requirement_ids": [
+        "BRY-REQ-TLS12EXT-0901"
+      ],
+      "scope": "Implement TLS 1.2-specific SNI resumption association, status_request negotiation and CertificateStatus handling; bound and safely ignore unsupported peer ClientHello extensions without parsing their bodies, while rejecting unsolicited responses and keeping unsupported facilities absent from configuration, offers, echoes, negotiation, tickets, and imported state.",
+      "source_ids": [
+        "rfc:6066"
+      ],
+      "title": "TLS 1.2 RFC 6066 Extension Semantics",
+      "version": "0.90.1"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
         "BRY-REQ-TLS12-0091"
       ],
       "scope": "Complete a separate TLS 1.2 external audit while retaining explicit configuration and independent disablement.",
@@ -2433,6 +2456,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2460,6 +2484,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -2487,6 +2512,7 @@
         "rfc:5288",
         "rfc:5289",
         "rfc:5746",
+        "rfc:6066",
         "rfc:6176",
         "rfc:7465",
         "rfc:7507",
@@ -3507,9 +3533,9 @@
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
         "BRY-REQ-IANA-0003",
-        "BRY-REQ-RFC6066X-0148"
+        "BRY-REQ-RFC6066CFG-0148"
       ],
-      "scope": "Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration and reject them before parsing or effects; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.",
+      "scope": "Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration, offer, echo, negotiation, ticket, and imported state while preserving the v0.90.1 bounded peer ClientHello ignore path; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.",
       "source_ids": [],
       "title": "Generated Optional-Feature Composition Gate",
       "version": "0.148.0"
@@ -5916,14 +5942,25 @@
     },
     {
       "decision_ids": [
+        "facility.rfc6066-unsupported-configuration"
+      ],
+      "id": "BRY-REQ-RFC6066CFG-0148",
+      "lifecycle": "rejected",
+      "owner": "0.148.0",
+      "source_ids": [
+        "iana:tls-extensiontype-values"
+      ]
+    },
+    {
+      "decision_ids": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
       ],
       "id": "BRY-REQ-RFC6066X-0148",
-      "lifecycle": "rejected",
-      "owner": "0.148.0",
+      "lifecycle": "planned",
+      "owner": "0.64.0",
       "source_ids": [
         "iana:tls-extensiontype-values"
       ]
@@ -6283,6 +6320,18 @@
       "source_ids": [
         "iana:tls-extensiontype-values",
         "rfc:6961"
+      ]
+    },
+    {
+      "decision_ids": [
+        "state.tls12.rfc6066-extensions"
+      ],
+      "id": "BRY-REQ-TLS12EXT-0901",
+      "lifecycle": "planned",
+      "owner": "0.90.1",
+      "source_ids": [
+        "rfc:6066",
+        "rfc:9846"
       ]
     },
     {
@@ -6679,6 +6728,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS-0002",
@@ -7608,11 +7658,26 @@
         "0.79.0",
         "0.80.0",
         "0.81.0",
-        "0.82.0"
+        "0.82.0",
+        "0.83.0",
+        "0.83.1",
+        "0.83.2",
+        "0.84.0",
+        "0.85.0",
+        "0.86.0",
+        "0.87.0",
+        "0.88.0",
+        "0.89.0",
+        "0.90.0",
+        "0.90.1",
+        "0.91.0",
+        "0.92.0",
+        "0.93.0"
       ],
       "requirement_ids": [
         "BRY-REQ-OCSP-0006",
         "BRY-REQ-TLS-0005",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS13-0064",
         "BRY-REQ-TLS13-0066",
         "BRY-REQ-TLS13-0069",
@@ -8978,6 +9043,7 @@
         "BRY-REQ-TLS-0093",
         "BRY-REQ-TLS12-0086",
         "BRY-REQ-TLS12-0087",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS13-0061",
         "BRY-REQ-TLS13-0062",
         "BRY-REQ-TLS13-0063",
@@ -9464,6 +9530,12 @@
       "id": "facility.record-size-limit",
       "requirement_ids": [
         "BRY-REQ-OPTIONAL-0136"
+      ]
+    },
+    {
+      "id": "facility.rfc6066-unsupported-configuration",
+      "requirement_ids": [
+        "BRY-REQ-RFC6066CFG-0148"
       ]
     },
     {
@@ -35680,6 +35752,12 @@
       "id": "state.tls12.resumption-interoperability",
       "requirement_ids": [
         "BRY-REQ-TLS12-0090"
+      ]
+    },
+    {
+      "id": "state.tls12.rfc6066-extensions",
+      "requirement_ids": [
+        "BRY-REQ-TLS12EXT-0901"
       ]
     },
     {

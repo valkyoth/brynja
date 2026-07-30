@@ -283,6 +283,23 @@ def test_rfc6066_semantic_misbinding_fails() -> None:
     )
 
 
+def test_rfc6066_tls12_owner_removal_fails() -> None:
+    policies = [
+        sections.read_policy(domain.CONFIG.section_policy),
+        sections.read_policy(transport.CONFIG.section_policy),
+        sections.read_policy(residual.SECTION_POLICY),
+    ]
+    broken = copy.deepcopy(policies)
+    binding(
+        broken[1], "rfc:6066", "BRY-REQ-TLS12EXT-0901"
+    )["sections"].remove("3")
+    assert_fails(
+        "RFC 6066 semantic section assignments differ",
+        sections.validate_global_policies,
+        broken,
+    )
+
+
 def main() -> int:
     count = support.run_tests(globals())
     print(f"{count} normative-section tests passed")

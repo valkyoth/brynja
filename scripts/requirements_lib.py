@@ -43,6 +43,14 @@ LIFECYCLES = {
     "rejected",
     "tested",
 }
+SECTION_DISPOSITIONS = frozenset(
+    {
+        "caller-owned",
+        "delegated",
+        "excluded",
+        "not-applicable",
+    }
+)
 TRANSITIONS = {
     "blocked": ["planned"],
     "caller-owned": ["planned"],
@@ -174,11 +182,7 @@ def schema_document() -> dict:
             "section",
             "section_sha256",
         ],
-        "section_dispositions": [
-            "caller-owned",
-            "excluded",
-            "not-applicable",
-        ],
+        "section_dispositions": sorted(SECTION_DISPOSITIONS),
         "schema": 5,
         "strengths": sorted(STRENGTHS),
         "target_kinds": [

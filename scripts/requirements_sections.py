@@ -11,7 +11,7 @@ import requirements_lib as lib
 import standards_lib as standards
 
 
-DISPOSITIONS = {"caller-owned", "delegated", "excluded", "not-applicable"}
+DISPOSITIONS = lib.SECTION_DISPOSITIONS
 NORMATIVE = re.compile(r"\b(?:MUST NOT|SHOULD NOT|MUST|SHOULD|MAY)\b")
 
 
@@ -108,12 +108,24 @@ def validate_global_policies(policies: list[dict]) -> None:
     }
     if rfc6066 or rfc6066_exclusions:
         expected_assignments = {
-            "1.1": {"BRY-REQ-TLS13-0064"},
-            "3": {"BRY-REQ-TLS13-0066", "BRY-REQ-TLS13-0069"},
-            "8": {"BRY-REQ-OCSP-0006", "BRY-REQ-TLS13-0071"},
+            "1.1": {"BRY-REQ-TLS12EXT-0901", "BRY-REQ-TLS13-0064"},
+            "3": {
+                "BRY-REQ-TLS12EXT-0901",
+                "BRY-REQ-TLS13-0066",
+                "BRY-REQ-TLS13-0069",
+            },
+            "8": {
+                "BRY-REQ-OCSP-0006",
+                "BRY-REQ-TLS12EXT-0901",
+                "BRY-REQ-TLS13-0071",
+            },
             "9": {"BRY-REQ-TLS-0005"},
-            "11.1": {"BRY-REQ-TLS13-0069"},
-            "11.6": {"BRY-REQ-OCSP-0006", "BRY-REQ-TLS13-0071"},
+            "11.1": {"BRY-REQ-TLS12EXT-0901", "BRY-REQ-TLS13-0069"},
+            "11.6": {
+                "BRY-REQ-OCSP-0006",
+                "BRY-REQ-TLS12EXT-0901",
+                "BRY-REQ-TLS13-0071",
+            },
         }
         expected_exclusions = {
             "1.2": "not-applicable",
@@ -136,7 +148,7 @@ def apply(
     authorities: dict[str, dict],
     policy: dict,
     *,
-    minimum_revision: int = 2,
+    minimum_revision: int = 1,
     mapping_suffix: str | None = None,
 ) -> tuple[list[dict], dict[tuple[str, str], dict]]:
     requirement_map = {item["id"]: item for item in requirements}

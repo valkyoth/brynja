@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
-surface_register_sha256 = "c4b513c28ed5c6bf5ff013825afcfb6d601e86e1f17620338bbbe71ee3d1fd43"
+source_ledger_sha256 = "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945"
+surface_register_sha256 = "e1966e65f8f25eae76356130f97aa07d41b719fd253000c7c7511f73f494066c"
 source_domains = ["dtls", "quic", "tls12", "tls13", "tls13-session"]
 surface_domains = ["dtls", "quic", "tls", "tls12", "tls13"]
 surface_auto_requirements = true
@@ -13,7 +13,7 @@ owner_milestones = [
   "0.73.0", "0.74.0", "0.75.0", "0.76.0", "0.76.1", "0.76.2",
   "0.77.0", "0.78.0", "0.79.0", "0.80.0", "0.81.0", "0.82.0",
   "0.83.0", "0.83.1", "0.83.2", "0.84.0", "0.85.0", "0.86.0",
-  "0.87.0", "0.88.0", "0.89.0", "0.90.0", "0.91.0", "0.92.0",
+  "0.87.0", "0.88.0", "0.89.0", "0.90.0", "0.90.1", "0.91.0", "0.92.0",
   "0.93.0", "0.94.0", "0.95.0", "0.96.0", "0.97.0", "0.98.0",
   "0.99.0", "0.99.1", "0.100.0", "0.101.0", "0.102.0",
   "0.103.0", "0.104.0", "0.105.0", "0.106.0", "0.107.0",
@@ -67,6 +67,12 @@ domain = "tls"
 owner = "0.148.0"
 deferred_to = "0.3.5"
 rationale = "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+
+[[surface_defer_group]]
+domain = "tls"
+owner = "0.64.0"
+deferred_to = "0.3.5"
+rationale = "The four explicitly known unsupported RFC 6066 registry entries are shared handshake-codec wire surfaces closed by the v0.3.5 residual bundle, while the TLS 1.2 semantic engine state remains in transport coverage."
 
 [[surface_defer_group]]
 domain = "dtls"

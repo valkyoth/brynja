@@ -4116,15 +4116,12 @@
         "planned:negative:tests/surface/quic_boundary.rs#reject_invalid_and_exhausted"
       ]
     },
-    "BRY-REQ-RFC6066X-0148": {
+    "BRY-REQ-RFC6066CFG-0148": {
       "authority_roles": [
         "current"
       ],
       "decisions": [
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
-        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
+        "facility.rfc6066-unsupported-configuration"
       ],
       "domains": [
         "tls"
@@ -4146,8 +4143,42 @@
         "boundary:boundary:tls.0.148.0"
       ],
       "tests": [
-        "planned:positive:tests/requirements/rfc6066_exclusions.rs#legacy_extensions",
-        "planned:negative:tests/requirements/rfc6066_exclusions.rs#reject_invalid_and_exhausted"
+        "planned:positive:tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent",
+        "planned:negative:tests/requirements/rfc6066_configuration.rs#reject_invalid_and_exhausted"
+      ]
+    },
+    "BRY-REQ-RFC6066X-0148": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.max-fragment-length.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1"
+      ],
+      "domains": [
+        "tls"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "owners": [
+        "0.64.0"
+      ],
+      "sources": [
+        "iana:tls-extensiontype-values"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies",
+        "planned:negative:tests/requirements/rfc6066_wire.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-RRCREG-0148": {
@@ -5029,6 +5060,38 @@
       "tests": [
         "planned:positive:tests/surface/status_request_v2.rs#extension",
         "planned:negative:tests/surface/status_request_v2.rs#reject_invalid_and_exhausted"
+      ]
+    },
+    "BRY-REQ-TLS12EXT-0901": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "state.tls12.rfc6066-extensions"
+      ],
+      "domains": [
+        "tls12"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "owners": [
+        "0.90.1"
+      ],
+      "sources": [
+        "rfc:6066",
+        "rfc:9846"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-tls12/src/extensions.rs#Tls12Extensions"
+      ],
+      "tests": [
+        "planned:positive:tests/requirements/tls12_rfc6066.rs#version_specific_semantics",
+        "planned:negative:tests/requirements/tls12_rfc6066.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-TLS12X-0058": {
@@ -5988,6 +6051,7 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111",
@@ -6008,6 +6072,7 @@
         "BRY-REQ-TLS12-0831",
         "BRY-REQ-TLS12-0832",
         "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS13-0061",
         "BRY-REQ-TLS13-0062",
         "BRY-REQ-TLS13-0063",
@@ -6147,6 +6212,9 @@
       ],
       "facility.record-size-limit": [
         "BRY-REQ-OPTIONAL-0136"
+      ],
+      "facility.rfc6066-unsupported-configuration": [
+        "BRY-REQ-RFC6066CFG-0148"
       ],
       "facility.sslkeylogfile.production": [
         "BRY-REQ-OPERATIONS-0010"
@@ -8535,6 +8603,9 @@
       "state.tls12.resumption-interoperability": [
         "BRY-REQ-TLS12-0090"
       ],
+      "state.tls12.rfc6066-extensions": [
+        "BRY-REQ-TLS12EXT-0901"
+      ],
       "state.tls12.signaling-renegotiation": [
         "BRY-REQ-TLS12-0087"
       ],
@@ -8746,6 +8817,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0010",
@@ -8769,6 +8841,7 @@
         "BRY-REQ-TLS12-0831",
         "BRY-REQ-TLS12-0832",
         "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS12X-0058"
       ],
       "tls13": [
@@ -8994,6 +9067,7 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111",
@@ -9018,6 +9092,7 @@
         "BRY-REQ-TLS12-0831",
         "BRY-REQ-TLS12-0832",
         "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS12X-0058",
         "BRY-REQ-TLS13-0046",
         "BRY-REQ-TLS13-0061",
@@ -9162,6 +9237,7 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111",
@@ -9186,6 +9262,7 @@
         "BRY-REQ-TLS12-0831",
         "BRY-REQ-TLS12-0832",
         "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS12X-0058",
         "BRY-REQ-TLS13-0046",
         "BRY-REQ-TLS13-0061",
@@ -9263,6 +9340,7 @@
         "BRY-REQ-QUIC-0100",
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111",
@@ -9281,6 +9359,7 @@
         "BRY-REQ-TLS12-0831",
         "BRY-REQ-TLS12-0832",
         "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS12X-0058",
         "BRY-REQ-TLS13-0046",
         "BRY-REQ-TLS13-0061",
@@ -9412,6 +9491,7 @@
         "BRY-REQ-QUIC-0101",
         "BRY-REQ-QUIC-0991",
         "BRY-REQ-QUICREG-0094",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111",
@@ -9433,6 +9513,7 @@
         "BRY-REQ-TLS12-0831",
         "BRY-REQ-TLS12-0832",
         "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS12X-0058",
         "BRY-REQ-TLS13-0061",
         "BRY-REQ-TLS13-0062",
@@ -9598,7 +9679,7 @@
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
         "BRY-REQ-IANA-0003",
-        "BRY-REQ-RFC6066X-0148"
+        "BRY-REQ-RFC6066CFG-0148"
       ],
       "0.19.0": [
         "BRY-REQ-TLS-0002",
@@ -9728,6 +9809,7 @@
         "BRY-REQ-TLS13-0063"
       ],
       "0.64.0": [
+        "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-TLS13-0064"
       ],
       "0.65.0": [
@@ -9822,6 +9904,9 @@
       ],
       "0.90.0": [
         "BRY-REQ-TLS12-0090"
+      ],
+      "0.90.1": [
+        "BRY-REQ-TLS12EXT-0901"
       ],
       "0.91.0": [
         "BRY-REQ-TLS12-0091"
@@ -9924,6 +10009,7 @@
         "BRY-REQ-OPTIONAL-0145",
         "BRY-REQ-OPTIONAL-0146",
         "BRY-REQ-OPTIONAL-1461",
+        "BRY-REQ-RFC6066CFG-0148",
         "BRY-REQ-RFC6066X-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
@@ -10103,6 +10189,7 @@
       "rfc:6066": [
         "BRY-REQ-OCSP-0006",
         "BRY-REQ-TLS-0005",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS13-0064",
         "BRY-REQ-TLS13-0066",
         "BRY-REQ-TLS13-0069",
@@ -10368,6 +10455,7 @@
         "BRY-REQ-TLS-0093",
         "BRY-REQ-TLS12-0086",
         "BRY-REQ-TLS12-0087",
+        "BRY-REQ-TLS12EXT-0901",
         "BRY-REQ-TLS13-0061",
         "BRY-REQ-TLS13-0062",
         "BRY-REQ-TLS13-0063",
@@ -10514,7 +10602,7 @@
       ],
       "boundary:boundary:tls.0.148.0": [
         "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-RFC6066X-0148"
+        "BRY-REQ-RFC6066CFG-0148"
       ],
       "boundary:boundary:tls12.0.58.0": [
         "BRY-REQ-TLS12EXT-0058",
@@ -10751,6 +10839,9 @@
       "planned-symbol:crates/brynja-tls-core/src/exporter.rs#Exporter": [
         "BRY-REQ-TLS-0079"
       ],
+      "planned-symbol:crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension": [
+        "BRY-REQ-RFC6066X-0148"
+      ],
       "planned-symbol:crates/brynja-tls-core/src/version.rs#VersionPolicy": [
         "BRY-REQ-TLS-0068"
       ],
@@ -10778,6 +10869,9 @@
       ],
       "planned-symbol:crates/brynja-tls/src/router.rs#Router": [
         "BRY-REQ-TLS-0092"
+      ],
+      "planned-symbol:crates/brynja-tls12/src/extensions.rs#Tls12Extensions": [
+        "BRY-REQ-TLS12EXT-0901"
       ],
       "planned-symbol:crates/brynja-tls12/src/handshake.rs#EcdheHandshake": [
         "BRY-REQ-TLS12-0088"
@@ -11093,7 +11187,10 @@
       "planned:negative:tests/requirements/quic_resumption.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-QUIC-0099"
       ],
-      "planned:negative:tests/requirements/rfc6066_exclusions.rs#reject_invalid_and_exhausted": [
+      "planned:negative:tests/requirements/rfc6066_configuration.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-RFC6066CFG-0148"
+      ],
+      "planned:negative:tests/requirements/rfc6066_wire.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-RFC6066X-0148"
       ],
       "planned:negative:tests/requirements/service_identity.rs#wildcards_unicode_and_cross_type_confusion": [
@@ -11122,6 +11219,9 @@
       ],
       "planned:negative:tests/requirements/tls12_resumption.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS12-0090"
+      ],
+      "planned:negative:tests/requirements/tls12_rfc6066.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-TLS12EXT-0901"
       ],
       "planned:negative:tests/requirements/tls12_signaling.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS12-0087"
@@ -11504,7 +11604,10 @@
       "planned:positive:tests/requirements/quic_resumption.rs#completion_confirmation": [
         "BRY-REQ-QUIC-0099"
       ],
-      "planned:positive:tests/requirements/rfc6066_exclusions.rs#legacy_extensions": [
+      "planned:positive:tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent": [
+        "BRY-REQ-RFC6066CFG-0148"
+      ],
+      "planned:positive:tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies": [
         "BRY-REQ-RFC6066X-0148"
       ],
       "planned:positive:tests/requirements/service_identity.rs#typed_reference_identifiers": [
@@ -11533,6 +11636,9 @@
       ],
       "planned:positive:tests/requirements/tls12_resumption.rs#separation_and_interop": [
         "BRY-REQ-TLS12-0090"
+      ],
+      "planned:positive:tests/requirements/tls12_rfc6066.rs#version_specific_semantics": [
+        "BRY-REQ-TLS12EXT-0901"
       ],
       "planned:positive:tests/requirements/tls12_signaling.rs#scsv_and_no_renegotiation": [
         "BRY-REQ-TLS12-0087"

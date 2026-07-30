@@ -808,6 +808,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-tls/src/configuration.rs#UnsupportedLegacyExtensions",
+        "disposition": "intentionally-rejected",
+        "domain": "tls",
+        "owner": "0.148.0",
+        "rationale": "Local configuration cannot enable, offer, echo, or negotiate unsupported RFC 6066 facilities even though bounded peer ClientHello inputs are safely ignored.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
+        "test_target": "tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent"
+      },
+      "id": "facility.rfc6066-unsupported-configuration"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-tls/src/extensions.rs",
         "disposition": "safely-ignored",
         "domain": "tls",
@@ -1197,13 +1209,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
-        "disposition": "intentionally-rejected",
+        "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
+        "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.148.0",
-        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
-        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
-        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+        "owner": "0.64.0",
+        "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
+        "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
       },
       "selector": {
         "collection": "tls-extensiontype-values",
@@ -1214,13 +1226,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
-        "disposition": "intentionally-rejected",
+        "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
+        "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.148.0",
-        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
-        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
-        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+        "owner": "0.64.0",
+        "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
+        "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
       },
       "selector": {
         "collection": "tls-extensiontype-values",
@@ -1231,13 +1243,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
-        "disposition": "intentionally-rejected",
+        "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
+        "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.148.0",
-        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
-        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
-        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+        "owner": "0.64.0",
+        "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
+        "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
       },
       "selector": {
         "collection": "tls-extensiontype-values",
@@ -1248,13 +1260,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/rejected_rfc6066.rs#LegacyExtension",
-        "disposition": "intentionally-rejected",
+        "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
+        "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.148.0",
-        "rationale": "Obsolete RFC 6066 facilities are absent from the modern profile and rejected before parsing, allocation, fetching, or cryptographic state changes.",
-        "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
-        "test_target": "tests/requirements/rfc6066_exclusions.rs#legacy_extensions"
+        "owner": "0.64.0",
+        "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
+        "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
+        "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
       },
       "selector": {
         "collection": "tls-extensiontype-values",
@@ -1537,5 +1549,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
+  "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945"
 }

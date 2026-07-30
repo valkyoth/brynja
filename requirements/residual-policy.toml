@@ -1,0 +1,264 @@
+schema = 1
+milestone = "0.3.5"
+source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
+surface_register_sha256 = "895b8e187aa02bce1fda938f5c30e61661a7405b2c62d61d41933e1aee345945"
+
+[[surface_group]]
+id = "BRY-REQ-APPLICATION-0130"
+domain = "application"
+owner = "0.130.0"
+disposition = "caller-owned"
+sources = ["iana:tls-extensiontype-values", "rfc:7301"]
+
+[[surface_group]]
+id = "BRY-REQ-PQ-0117"
+domain = "cryptography"
+owner = "0.117.0"
+disposition = "future-work"
+sources = ["nist:NIST.FIPS.203.pdf", "nist:NIST.SP.800-227.pdf", "rfc:9954"]
+
+[[surface_group]]
+id = "BRY-REQ-DNS-0140"
+domain = "dns"
+owner = "0.140.0"
+disposition = "caller-owned"
+sources = ["iana:dns-parameters", "rfc:9460"]
+
+[[surface_group]]
+id = "BRY-REQ-ECH-0140"
+domain = "ech"
+owner = "0.140.0"
+disposition = "future-work"
+sources = ["iana:tls-ech-configuration-extensions", "rfc:9460", "rfc:9848", "rfc:9849"]
+
+[[surface_group]]
+id = "BRY-REQ-ECH-1401"
+domain = "ech"
+owner = "0.140.1"
+disposition = "future-work"
+sources = ["rfc:9460", "rfc:9848", "rfc:9849"]
+
+[[surface_group]]
+id = "BRY-REQ-ECH-0141"
+domain = "ech"
+owner = "0.141.0"
+disposition = "future-work"
+sources = ["rfc:9180", "rfc:9849"]
+
+[[surface_group]]
+id = "BRY-REQ-ECH-0142"
+domain = "ech"
+owner = "0.142.0"
+disposition = "future-work"
+sources = ["rfc:9180", "rfc:9849"]
+
+[[surface_group]]
+id = "BRY-REQ-ECH-0143"
+domain = "ech"
+owner = "0.143.0"
+disposition = "future-work"
+sources = ["rfc:9848", "rfc:9849"]
+
+[[surface_group]]
+id = "BRY-REQ-ENTROPY-0014"
+domain = "entropy"
+owner = "0.14.0"
+disposition = "future-work"
+sources = ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"]
+
+[[surface_group]]
+id = "BRY-REQ-ENTROPY-0124"
+domain = "entropy"
+owner = "0.124.0"
+disposition = "future-work"
+sources = ["nist:NIST.SP.800-90B.pdf"]
+
+[[surface_group]]
+id = "BRY-REQ-ENTROPY-1241"
+domain = "entropy"
+owner = "0.124.1"
+disposition = "future-work"
+sources = ["nist:NIST.SP.800-90Ar1.pdf"]
+
+[[surface_group]]
+id = "BRY-REQ-ENTROPY-1242"
+domain = "entropy"
+owner = "0.124.2"
+disposition = "future-work"
+sources = ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"]
+
+[[surface_group]]
+id = "BRY-REQ-HPKE-0138"
+domain = "hpke"
+owner = "0.138.0"
+disposition = "future-work"
+sources = ["iana:hpke", "rfc:9180"]
+
+[[surface_group]]
+id = "BRY-REQ-HPKE-0139"
+domain = "hpke"
+owner = "0.139.0"
+disposition = "future-work"
+sources = ["iana:hpke", "rfc:9180"]
+
+[[surface_group]]
+id = "BRY-REQ-HPKE-1391"
+domain = "hpke"
+owner = "0.139.1"
+disposition = "future-work"
+sources = ["iana:hpke", "rfc:9180"]
+
+[[surface_group]]
+id = "BRY-REQ-HPKEX-1391"
+domain = "hpke"
+owner = "0.139.1"
+disposition = "intentionally-rejected"
+sources = ["rfc:9180"]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACY-0100"
+domain = "legacy"
+owner = "H0.1.0"
+disposition = "legacy-only"
+sources = ["rfc:4346"]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACY-0300"
+domain = "legacy"
+owner = "H0.3.0"
+disposition = "legacy-only"
+sources = ["rfc:6101"]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACY-0400"
+domain = "legacy"
+owner = "H0.4.0"
+disposition = "legacy-only"
+sources = ["rfc:6176"]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACY-0500"
+domain = "legacy"
+owner = "H0.5.0"
+disposition = "legacy-only"
+sources = ["rfc:7568"]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACY-0600"
+domain = "legacy"
+owner = "H0.6.0"
+disposition = "legacy-only"
+sources = ["rfc:7568"]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACY-0700"
+domain = "legacy"
+owner = "H0.7.0"
+disposition = "legacy-only"
+sources = ["rfc:7568"]
+
+[[surface_group]]
+id = "BRY-REQ-LEGACY-0800"
+domain = "legacy"
+owner = "H0.8.0"
+disposition = "legacy-only"
+sources = ["iana:tls-parameters", "rfc:6151", "rfc:7568", "rfc:8447", "rfc:9847"]
+
+[[surface_group]]
+id = "BRY-REQ-OPERATIONS-0010"
+domain = "operations"
+owner = "0.10.0"
+disposition = "intentionally-rejected"
+sources = ["iana:tls-parameters", "rfc:9850"]
+
+[[surface_group]]
+id = "BRY-REQ-PQPKIX-0046"
+domain = "pkix"
+owner = "0.46.0"
+disposition = "intentionally-rejected"
+sources = ["rfc:9935"]
+
+[[surface_group]]
+id = "BRY-REQ-TESTING-0010"
+domain = "testing"
+owner = "0.10.0"
+disposition = "future-work"
+sources = ["rfc:9850"]
+
+[[surface_group]]
+id = "BRY-REQ-OPTIONAL-0136"
+domain = "tls"
+owner = "0.136.0"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "rfc:8449"]
+
+[[surface_group]]
+id = "BRY-REQ-OPTIONAL-0137"
+domain = "tls"
+owner = "0.137.0"
+disposition = "future-work"
+sources = ["rfc:7250"]
+
+[[surface_group]]
+id = "BRY-REQ-OPTIONAL-0144"
+domain = "tls"
+owner = "0.144.0"
+disposition = "future-work"
+sources = ["rfc:9345"]
+
+[[surface_group]]
+id = "BRY-REQ-OPTIONAL-0145"
+domain = "tls"
+owner = "0.145.0"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+
+[[surface_group]]
+id = "BRY-REQ-OPTIONAL-0146"
+domain = "tls"
+owner = "0.146.0"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+
+[[surface_group]]
+id = "BRY-REQ-OPTIONAL-1461"
+domain = "tls"
+owner = "0.146.1"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "rfc:8879"]
+
+[[surface_group]]
+id = "BRY-REQ-COMPOSE-0148"
+domain = "tls"
+owner = "0.148.0"
+disposition = "future-work"
+sources = ["iana:tls-extensiontype-values", "iana:tls-parameters", "rfc:8447", "rfc:9847"]
+
+[[surface_group]]
+id = "BRY-REQ-COMPOSEX-0148"
+domain = "tls"
+owner = "0.148.0"
+disposition = "intentionally-rejected"
+sources = ["iana:tls-extensiontype-values"]
+
+[[surface_group]]
+id = "BRY-REQ-TLS12X-0058"
+domain = "tls12"
+owner = "0.58.0"
+disposition = "intentionally-rejected"
+sources = ["iana:tls-extensiontype-values", "rfc:6961"]
+
+[[registry_requirement]]
+id = "BRY-REQ-QUICREG-0094"
+source = "iana:quic"
+surface = "iana.quic.quic-transport"
+
+[[registry_requirement]]
+id = "BRY-REQ-CTREG-0059"
+source = "iana:trans"
+surface = "iana.trans.trans-error-types"
+
+[[registry_requirement]]
+id = "BRY-REQ-PKIXREG-0053"
+source = "iana:smi-numbers"
+surface = "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7"

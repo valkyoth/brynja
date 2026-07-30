@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
-surface_register_sha256 = "53959fcdbca6368ccd4996c435d54fca15b4cd85b24bde9029646594e6171b18"
+source_ledger_sha256 = "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
+surface_register_sha256 = "895b8e187aa02bce1fda938f5c30e61661a7405b2c62d61d41933e1aee345945"
 source_domains = ["dtls", "quic", "tls12", "tls13", "tls13-session"]
 surface_domains = ["dtls", "quic", "tls", "tls12", "tls13"]
 surface_auto_requirements = true
@@ -30,19 +30,37 @@ rationale = "SSLKEYLOGFILE is an operational test-support-only facility whose co
 domain = "tls"
 owner = "0.136.0"
 deferred_to = "0.3.5"
+rationale = "The optional Record Size Limit facility is normatively populated during the optional and residual v0.3.5 closure."
+
+[[surface_defer_group]]
+domain = "tls"
+owner = "0.137.0"
+deferred_to = "0.3.5"
+rationale = "The optional Raw Public Key facility is normatively populated during the optional and residual v0.3.5 closure."
+
+[[surface_defer_group]]
+domain = "tls"
+owner = "0.144.0"
+deferred_to = "0.3.5"
 rationale = "The optional delegated-credential facility is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
 owner = "0.145.0"
 deferred_to = "0.3.5"
-rationale = "The optional certificate-compression facility is normatively populated during the optional and residual v0.3.5 closure."
+rationale = "The optional certificate-decompression receive provider is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
 owner = "0.146.0"
 deferred_to = "0.3.5"
-rationale = "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+rationale = "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
+
+[[surface_defer_group]]
+domain = "tls"
+owner = "0.146.1"
+deferred_to = "0.3.5"
+rationale = "Certificate-compression send integration is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"

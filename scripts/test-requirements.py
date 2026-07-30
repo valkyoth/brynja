@@ -21,7 +21,7 @@ requirement = support.requirement
 
 def test_current_repository() -> None:
     matrix, indexes = checker.build_matrix()
-    assert len(matrix["requirements"]) == 116
+    assert len(matrix["requirements"]) == 154
     assert {item["lifecycle"] for item in matrix["requirements"]} == lib.LIFECYCLES
     assert standards.json_bytes(matrix) == lib.MATRIX.read_bytes()
     assert standards.json_bytes(indexes) == lib.INDEXES.read_bytes()
@@ -29,6 +29,8 @@ def test_current_repository() -> None:
     assert lib.render_coverage(matrix, indexes) == lib.COVERAGE.read_bytes()
     assert lib.DOMAIN_COVERAGE.is_file()
     assert lib.TRANSPORT_COVERAGE.is_file()
+    assert lib.RESIDUAL_COVERAGE.is_file()
+    assert lib.CLOSURE.is_file()
 
 
 def test_generation_is_deterministic() -> None:

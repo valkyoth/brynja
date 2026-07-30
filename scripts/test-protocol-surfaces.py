@@ -61,7 +61,7 @@ def bind(policy: dict, ledger: dict) -> None:
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
-    assert len(register["surfaces"]) == 4409
+    assert len(register["surfaces"]) == 4422
     assert not any(
         surface["disposition"] == "implemented"
         for surface in register["surfaces"]

@@ -344,7 +344,7 @@ Exit criteria:
 
 ### v0.3.4 - TLS DTLS And QUIC Normative Coverage
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Populate and review every applicable normative statement and invariant for current and compatibility TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2 and DTLS 1.3; map every message, extension, alert, registry value, state transition, transport boundary, intentional rejection and caller-owned responsibility to its milestone and target tests.
 
@@ -383,7 +383,7 @@ Exit criteria:
 
 ### v0.3.5 - Optional Legacy And Residual Normative Closure
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
 

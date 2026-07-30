@@ -9,7 +9,9 @@ import re
 import requirements_lib as lib
 import requirements_history as history
 import requirements_mapping as mapping
+import requirements_closure as closure
 import requirements_domain as domain
+import requirements_residual as residual
 import requirements_transport as transport
 import requirements_validation as validation
 import standards_lib as standards
@@ -262,10 +264,23 @@ def build_matrix(
             transport.build(ledger, register, versions)
         )
         requirements.extend(transport_requirements)
+        residual_requirements, _residual_coverage, residual_hash = residual.build(
+            ledger,
+            register,
+            versions,
+            requirements[: len(policy["requirements"])],
+            _domain_coverage,
+            _transport_coverage,
+            requirements,
+        )
+        requirements.extend(residual_requirements)
     else:
         _scope, _domain_requirements, domain_hash = domain.load_policy()
         _scope, _transport_requirements, transport_hash = (
             transport.load_policy(ledger)
+        )
+        residual_hash = standards.sha256(
+            standards.json_bytes(residual.read_policy())
         )
     ids = [requirement["id"] for requirement in requirements]
     if len(ids) != len(set(ids)):
@@ -276,10 +291,14 @@ def build_matrix(
             previous = history.load_matrix()
         history.validate(previous, requirements, validate_transition)
     matrix = {
+        "closure_policy_sha256": standards.sha256(
+            standards.json_bytes(closure.read_claims())
+        ),
         "domain_policy_sha256": domain_hash,
         "policy_sha256": standards.sha256(standards.json_bytes(policy)),
         "requirements": requirements,
-        "schema": 4,
+        "residual_policy_sha256": residual_hash,
+        "schema": 5,
         "source_ledger_sha256": policy["source_ledger_sha256"],
         "surface_register_sha256": policy["surface_register_sha256"],
         "transport_policy_sha256": transport_hash,
@@ -304,12 +323,46 @@ def main() -> int:
             roadmap_versions(),
         )
     )
+    foundation_ids = {
+        item["id"] for item in lib.read_json(lib.POLICY)["requirements"]
+    }
+    existing = matrix["requirements"][:]
+    residual_ids = {
+        item["id"]
+        for item in residual.read_policy()["surface_group"]
+        + residual.read_policy()["registry_requirement"]
+    }
+    existing = [item for item in existing if item["id"] not in residual_ids]
+    _residual_requirements, residual_coverage, _residual_hash = residual.build(
+        lib.read_json(standards.LEDGER),
+        lib.read_json(surfaces.REGISTER),
+        roadmap_versions(),
+        [
+            item
+            for item in matrix["requirements"]
+            if item["id"] in foundation_ids
+        ],
+        domain_coverage,
+        transport_coverage,
+        existing,
+    )
+    closure_artifact = closure.build(
+        lib.read_json(standards.LEDGER),
+        lib.read_json(surfaces.REGISTER),
+        matrix,
+        domain_coverage,
+        transport_coverage,
+        residual_coverage,
+        foundation_ids,
+    )
     artifacts = {
+        lib.CLOSURE: standards.json_bytes(closure_artifact),
         lib.COVERAGE: lib.render_coverage(matrix, indexes),
         lib.DOMAIN_COVERAGE: standards.json_bytes(domain_coverage),
         lib.TRANSPORT_COVERAGE: standards.json_bytes(transport_coverage),
         lib.INDEXES: standards.json_bytes(indexes),
         lib.MATRIX: standards.json_bytes(matrix),
+        lib.RESIDUAL_COVERAGE: standards.json_bytes(residual_coverage),
         lib.SCHEMA: standards.json_bytes(lib.schema_document()),
     }
     if args.write:

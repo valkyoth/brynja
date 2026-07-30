@@ -135,8 +135,8 @@
   ],
   "integrity": {
     "errata_sha256": "7c62be3e760edbc05b844a000f29df5c5a8bff42f9a43d59bf78c53290f3090e",
-    "local_source_manifest_sha256": "128ccb64a75cbe9db3c916534100b9515d830b549980872b2dcbc38478d831cd",
-    "pin_provenance": "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh.",
+    "local_source_manifest_sha256": "ea541f798e0d24360b3127829d41b253602ea282febc07a6719154e1b25f112a",
+    "pin_provenance": "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh.",
     "rfc_index_projection_sha256": "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674",
     "rfc_source_manifest_sha256": "d6644cc4fe1083491221a3bc9f2076da966e662075fd209b974c86112724b00d"
   },
@@ -263,6 +263,23 @@
     },
     {
       "domains": [
+        "hybrid"
+      ],
+      "filename": "NIST.FIPS.203.pdf",
+      "milestones": [
+        "0.117.0",
+        "0.118.0",
+        "0.119.0",
+        "0.120.0",
+        "0.121.0",
+        "0.122.0"
+      ],
+      "role": "ml-kem",
+      "sha256": "fe1f12f32a7e44ec9fdebbf400cda843a40b506dee676725234dc6f7923b6cac",
+      "url": "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf"
+    },
+    {
+      "domains": [
         "symmetric"
       ],
       "filename": "NIST.SP.800-107r1.pdf",
@@ -306,6 +323,23 @@
       "role": "elliptic-curves",
       "sha256": "53c7cf3340528aaa0a7bbeaef947f2099568192367d4341a7d4abceb55f78432",
       "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf"
+    },
+    {
+      "domains": [
+        "hybrid"
+      ],
+      "filename": "NIST.SP.800-227.pdf",
+      "milestones": [
+        "0.117.0",
+        "0.118.0",
+        "0.119.0",
+        "0.120.0",
+        "0.121.0",
+        "0.122.0"
+      ],
+      "role": "kem-guidance",
+      "sha256": "41e427a461c1ae0ceed2a68dc29507400983d1d495c35631306d0f4803ca4614",
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-227.pdf"
     },
     {
       "domains": [
@@ -361,12 +395,48 @@
       "milestones": [
         "0.14.0",
         "0.124.0",
+        "0.124.1",
+        "0.124.2",
         "0.125.0",
         "0.126.0"
       ],
       "role": "random-bit-generation",
       "sha256": "d58e3dac4aaa5971c9a6a20a9bd5c13e2f1930cd1a199c0c00f768e7327355e2",
       "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90Ar1.pdf"
+    },
+    {
+      "domains": [
+        "entropy"
+      ],
+      "filename": "NIST.SP.800-90B.pdf",
+      "milestones": [
+        "0.14.0",
+        "0.124.0",
+        "0.124.1",
+        "0.124.2",
+        "0.125.0",
+        "0.126.0"
+      ],
+      "role": "entropy-source",
+      "sha256": "9b0dd77131ade3617a91cd8457fa09e0dc354c273bb2220a6afeaca16e5defe7",
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf"
+    },
+    {
+      "domains": [
+        "entropy"
+      ],
+      "filename": "NIST.SP.800-90C.pdf",
+      "milestones": [
+        "0.14.0",
+        "0.124.0",
+        "0.124.1",
+        "0.124.2",
+        "0.125.0",
+        "0.126.0"
+      ],
+      "role": "rbg-construction",
+      "sha256": "22dc2de903b2fe602fa0729c38b9512927ad96ef5669a3da8a0ffb4d22c8e6d8",
+      "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90C.pdf"
     }
   ],
   "registries": [
@@ -4679,6 +4749,7 @@
         "0.139.0",
         "0.139.1",
         "0.140.0",
+        "0.140.1",
         "0.141.0",
         "0.142.0",
         "0.143.0"
@@ -4995,6 +5066,7 @@
       "lifecycle": "caller-owned",
       "milestones": [
         "0.140.0",
+        "0.140.1",
         "0.141.0",
         "0.142.0",
         "0.143.0"
@@ -5339,6 +5411,7 @@
       "lifecycle": "current",
       "milestones": [
         "0.140.0",
+        "0.140.1",
         "0.141.0",
         "0.142.0",
         "0.143.0"
@@ -5364,6 +5437,7 @@
       "lifecycle": "current",
       "milestones": [
         "0.140.0",
+        "0.140.1",
         "0.141.0",
         "0.142.0",
         "0.143.0"

@@ -7902,10 +7902,10 @@
     "0.99.0",
     "0.99.1"
   ],
-  "policy_sha256": "a08802d4a050bdb721777a09d23bc341f4802123e64eaa9fe68672b733c80208",
+  "policy_sha256": "96d3dffb78533ae0565006c89e815706c2c4ffa0c00c0a00b7f392d0450b9ae3",
   "requirement_count": 70,
   "schema": 2,
-  "surface_count": 480,
+  "surface_count": 483,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -7961,8 +7961,26 @@
       "disposition": "future-work",
       "domain": "tls",
       "id": "facility.certificate-compression",
+      "owner": "0.145.0",
+      "rationale": "The optional certificate-decompression receive provider is normatively populated during the optional and residual v0.3.5 closure."
+    },
+    {
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "facility.certificate-compression.artifact-validation",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
+    },
+    {
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "facility.certificate-compression.send-integration",
+      "owner": "0.146.1",
+      "rationale": "Certificate-compression send integration is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "requirement",
@@ -7979,6 +7997,15 @@
       "id": "facility.heartbeat",
       "owner": "0.19.0",
       "requirement_id": "BRY-REQ-TLS-0018"
+    },
+    {
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "facility.record-size-limit",
+      "owner": "0.136.0",
+      "rationale": "The optional Record Size Limit facility is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8011,8 +8038,8 @@
       "disposition": "future-work",
       "domain": "tls",
       "id": "format.delegated-credential",
-      "owner": "0.145.0",
-      "rationale": "The optional certificate-compression facility is normatively populated during the optional and residual v0.3.5 closure."
+      "owner": "0.144.0",
+      "rationale": "The optional delegated-credential facility is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8020,8 +8047,8 @@
       "disposition": "future-work",
       "domain": "tls",
       "id": "format.raw-public-key",
-      "owner": "0.136.0",
-      "rationale": "The optional delegated-credential facility is normatively populated during the optional and residual v0.3.5 closure."
+      "owner": "0.137.0",
+      "rationale": "The optional Raw Public Key facility is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "requirement",
@@ -8892,7 +8919,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8901,7 +8928,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.brotli.1",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8910,7 +8937,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.reserved-for-experimental-use.1",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8919,7 +8946,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.reserved.1",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8928,7 +8955,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.unassigned.1",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8937,7 +8964,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.zlib.1",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -8946,7 +8973,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-certificate-compression-algorithm-ids.zstd.1",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",
@@ -9027,7 +9054,7 @@
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.compress-certificate.1",
       "owner": "0.146.0",
-      "rationale": "Encrypted ClientHello and its related registry surfaces are normatively populated during the optional v0.3.5 closure."
+      "rationale": "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
     },
     {
       "coverage": "deferred",

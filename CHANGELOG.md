@@ -5,6 +5,39 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-07-30
+
+### Added
+
+- Thirty-eight optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and
+  residual requirements, bringing the deterministic matrix to 154 records.
+- Local-only checksum pins for final FIPS 203, SP 800-227, SP 800-90B, and
+  SP 800-90C.
+- Exact residual coverage of 33 authorities, 182 normative RFC sections, and
+  all 741 surfaces left by the foundation, domain, and transport bundles.
+- A generated closure report mapping all 126 locked authorities, 205 roadmap
+  rows, 4,422 protocol surfaces, and 154 requirements in both directions.
+- Thirteen residual broken fixtures, bringing the requirement suite to 95
+  positive and negative tests.
+
+### Security
+
+- Concrete ECDHE-ML-KEM groups remain blocked because the current IANA values
+  are provisional and the group specification is not yet a final RFC; drafts
+  and private code points cannot satisfy the gate.
+- Non-RFC legacy implementations remain blocked on authenticated source bytes,
+  hashes, errata, redistribution rights, cipher decisions, isolation review,
+  and a separate pentest.
+- FIPS validation milestones remain blocked on a dated, rights-reviewed FIPS,
+  ISO, CMVP, laboratory, certificate, caveat, and operational-environment
+  baseline; no current package or profile claims FIPS validation.
+- Every local NIST/ITU authority has an explicit local-only distribution
+  record, while all eight IANA registries and five mutable NIST publication
+  pages have dependent-milestone refresh owners.
+- Raw Public Keys, Delegated Credentials, certificate-compression receive,
+  artifact, and send phases, HPKE context/base/export phases, ECH phases, and
+  entropy phases now match their exact roadmap owners.
+
 ## [0.3.4] - 2026-07-30
 
 ### Added

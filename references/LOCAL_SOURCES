@@ -2,11 +2,15 @@
 NIST.FIPS.180-4.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf sha2
 NIST.FIPS.197-upd1.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf aes
 NIST.FIPS.202.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf sha3-shake
+NIST.FIPS.203.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf ml-kem
 NIST.SP.800-38D.pdf https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf gcm-ghash
 NIST.FIPS.186-5.pdf https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf signatures
 NIST.SP.800-186.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf elliptic-curves
 NIST.SP.800-56Ar3.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar3.pdf key-establishment
 NIST.SP.800-90Ar1.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90Ar1.pdf random-bit-generation
+NIST.SP.800-90B.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf entropy-source
+NIST.SP.800-90C.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90C.pdf rbg-construction
+NIST.SP.800-227.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-227.pdf kem-guidance
 NIST.SP.800-107r1.pdf https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-107r1.pdf hash-usage
 ITU-T.X.690-202102.pdf https://www.itu.int/rec/dologin_pub.asp?id=T-REC-X.690-202102-I%21%21PDF-E&lang=e&type=items der
 ITU-T.X.690-202109-Err1.pdf https://www.itu.int/rec/dologin_pub.asp?id=T-REC-X.690-202109-I%21Err1%21PDF-E&lang=e&type=items der-erratum

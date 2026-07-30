@@ -71,7 +71,7 @@ use-after-failure.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.3.4
+## Non-Goals At 0.3.5
 
 No transport security or interoperability guarantee exists. The current Rust
 code is still package scaffolding. v0.3.0 inventories and locks source
@@ -81,7 +81,9 @@ proves stable requirement identity, lifecycle, mapping, and drift enforcement
 with a 12-requirement authority pilot. v0.3.3 adds 34 cryptography, encoding,
 PKIX, OCSP, and CT requirements. v0.3.4 adds 70 TLS, DTLS, and QUIC-TLS
 requirements with exact version, state, rejection, and caller-owned
-boundaries. Neither milestone implements protocol or cryptographic behavior.
-Optional, legacy, operational, residual, and hybrid population remains owned
-by v0.3.5. Planned, future-work, and governance-tool implementation states are
-not protocol implementation claims.
+boundaries. v0.3.5 adds 38 optional, HPKE, ECH, ML-KEM, entropy, operational,
+legacy, and residual requirements and closes every locked source, roadmap row,
+and protocol surface. None of these milestones implements protocol or
+cryptographic behavior. Planned, future-work, blocked, legacy, and
+governance-tool implementation states are not protocol implementation or FIPS
+validation claims.

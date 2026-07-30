@@ -1,0 +1,218 @@
+schema = 1
+milestone = "0.3.5"
+reviewed_at = "2026-07-30"
+
+[[plan_boundary]]
+class = "repository-governance"
+versions = ["0.1.0", "0.2.0", "0.4.0"]
+rationale = "These repository, release, and assurance-harness milestones are governed by local security invariants and tooling policy rather than a protocol authority."
+
+[[plan_boundary]]
+class = "internal-security-design"
+versions = [
+  "0.6.0", "0.7.0", "0.8.0", "0.9.0", "0.11.0", "0.11.1",
+  "0.11.2", "0.12.0", "0.13.0", "0.15.0", "0.16.0", "0.17.0",
+  "0.18.0", "0.18.1", "0.47.0", "0.60.0", "0.127.0", "0.127.1",
+  "0.128.0", "0.129.0", "0.130.1", "0.131.0", "0.131.1",
+  "0.132.0", "0.132.1", "0.132.2", "0.133.0", "0.135.0",
+  "0.135.1", "0.147.0", "0.149.0", "0.150.0", "0.151.0",
+  "0.152.0", "0.153.0", "0.154.0", "0.155.0", "0.156.0",
+  "0.157.0", "0.158.0", "0.159.0", "0.160.0", "0.161.0",
+  "0.162.0", "1.0.0"
+]
+rationale = "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+
+[[plan_boundary]]
+class = "authority-blocked"
+versions = [
+  "0.123.0", "0.123.1", "0.134.0", "0.134.1", "0.134.2", "0.134.3"
+]
+blocker = "fips-validation-baseline"
+rationale = "These validation milestones require a dated, rights-reviewed FIPS 140-3, ISO, CMVP, laboratory, certificate, and operational-environment baseline that must be frozen at the dependent implementation stop."
+
+[[local_right]]
+authority = "itu:ITU-T.X.690-202102.pdf"
+distribution = "local-only"
+review = "Official ITU material is checksum pinned but excluded from Git, crates.io packages, and project-license coverage pending explicit redistribution review."
+
+[[local_right]]
+authority = "itu:ITU-T.X.690-202109-Err1.pdf"
+distribution = "local-only"
+review = "Official ITU erratum material is checksum pinned but excluded from Git, crates.io packages, and project-license coverage pending explicit redistribution review."
+
+[[local_right]]
+authority = "nist:NIST.FIPS.180-4.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.FIPS.186-5.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.FIPS.197-upd1.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.FIPS.202.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.FIPS.203.pdf"
+distribution = "local-only"
+review = "Official NIST bytes and their current planning-note status are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-107r1.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-186.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-227.pdf"
+distribution = "local-only"
+review = "Official final KEM guidance is checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-38D.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-56Ar3.pdf"
+distribution = "local-only"
+review = "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-90Ar1.pdf"
+distribution = "local-only"
+review = "Official current DRBG guidance is checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-90B.pdf"
+distribution = "local-only"
+review = "Official final entropy-source guidance is checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "nist:NIST.SP.800-90C.pdf"
+distribution = "local-only"
+review = "Official final RBG-construction guidance is checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[mutable_authority]]
+authority = "nist:NIST.FIPS.203.pdf"
+owner = "0.117.0"
+status = "refresh-required"
+url = "https://csrc.nist.gov/pubs/fips/203/final"
+rationale = "The publication page carries a planning note and mutable errata spreadsheet; every ML-KEM implementation freeze must review both without silently changing the pinned PDF baseline."
+
+[[mutable_authority]]
+authority = "nist:NIST.SP.800-227.pdf"
+owner = "0.118.0"
+status = "refresh-required"
+url = "https://csrc.nist.gov/pubs/sp/800/227/final"
+rationale = "KEM implementation guidance and related CMVP applicability must be refreshed at the key-generation and encapsulation milestone."
+
+[[mutable_authority]]
+authority = "nist:NIST.SP.800-90Ar1.pdf"
+owner = "0.124.1"
+status = "refresh-required"
+url = "https://csrc.nist.gov/pubs/sp/800/90/a/r1/final"
+rationale = "The in-force DRBG recommendation and CMVP supplemental references must be rechecked before mechanism selection."
+
+[[mutable_authority]]
+authority = "nist:NIST.SP.800-90B.pdf"
+owner = "0.124.0"
+status = "refresh-required"
+url = "https://csrc.nist.gov/pubs/sp/800/90/b/final"
+rationale = "Entropy-source guidance, errata, ESV expectations, and operational-environment applicability are mutable implementation inputs."
+
+[[mutable_authority]]
+authority = "nist:NIST.SP.800-90C.pdf"
+owner = "0.124.2"
+status = "refresh-required"
+url = "https://csrc.nist.gov/pubs/sp/800/90/c/final"
+rationale = "RBG construction guidance and CMVP supplemental references must be refreshed before selecting the final construction."
+
+[[mutable_authority]]
+authority = "iana:dns-parameters"
+owner = "0.140.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
+rationale = "The mutable registry is checksum snapshotted and must be refreshed and semantically reviewed at every dependent ECH implementation freeze."
+
+[[mutable_authority]]
+authority = "iana:hpke"
+owner = "0.138.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/hpke/hpke.xml"
+rationale = "The mutable registry is checksum snapshotted and must be refreshed and semantically reviewed at every dependent HPKE implementation freeze."
+
+[[mutable_authority]]
+authority = "iana:quic"
+owner = "0.94.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/quic/quic.xml"
+rationale = "The mutable registry is checksum snapshotted and must be refreshed and semantically reviewed at every dependent QUIC implementation freeze."
+
+[[mutable_authority]]
+authority = "iana:smi-numbers"
+owner = "0.53.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
+rationale = "The mutable registry is checksum snapshotted and must be refreshed and semantically reviewed at every dependent PKIX implementation freeze."
+
+[[mutable_authority]]
+authority = "iana:tls-ech-configuration-extensions"
+owner = "0.140.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/tls-ech-configuration-extensions/tls-ech-configuration-extensions.xml"
+rationale = "The mutable registry is checksum snapshotted and must be refreshed and semantically reviewed at every dependent ECH implementation freeze."
+
+[[mutable_authority]]
+authority = "iana:tls-extensiontype-values"
+owner = "0.136.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml"
+rationale = "The mutable registry is checksum snapshotted and must be refreshed and semantically reviewed at every dependent optional-TLS implementation freeze."
+
+[[mutable_authority]]
+authority = "iana:tls-parameters"
+owner = "0.120.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
+rationale = "The mutable registry must be refreshed without admitting provisional hybrid identifiers before a final Standards Track RFC and final assignments exist."
+
+[[mutable_authority]]
+authority = "iana:trans"
+owner = "0.59.0"
+status = "refresh-required"
+url = "https://www.iana.org/assignments/trans/trans.xml"
+rationale = "The mutable registry is checksum snapshotted and must be refreshed and semantically reviewed at every dependent Certificate Transparency implementation freeze."
+
+[[blocker]]
+id = "ecdhe-ml-kem-groups"
+owner = "0.120.0"
+status = "blocked"
+surface = "algorithm.ecdhe-ml-kem"
+rationale = "No concrete hybrid group is admitted until a final Standards Track RFC and final non-provisional IANA assignments both exist; drafts and private values are forbidden."
+
+[[blocker]]
+id = "legacy-non-rfc-sources"
+owner = "H0.1.0"
+status = "blocked"
+surfaces = ["legacy.ssl2", "legacy.wtls", "legacy.pct", "legacy.snp", "legacy.ssl1-research"]
+rationale = "Each non-RFC legacy specification requires authenticated provenance, exact bytes, hashes, errata, redistribution-rights review, cipher decisions, and a separate insecure-package pentest before implementation."
+
+[[blocker]]
+id = "fips-validation-baseline"
+owner = "0.123.0"
+status = "blocked"
+versions = ["0.123.0", "0.123.1", "0.134.0", "0.134.1", "0.134.2", "0.134.3"]
+rationale = "FIPS 140-3, applicable ISO material, SP 800-140 series, CMVP manuals, implementation guidance, RFG and CMVP resolutions, validation wording, certificate status, caveats, and operational environments require a dated rights-reviewed baseline at the dependent milestone."

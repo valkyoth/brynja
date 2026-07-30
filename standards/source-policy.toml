@@ -4,7 +4,7 @@ version = 1
 [review]
 checked_at = "2026-07-30"
 owner = "Brynja standards review"
-pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh."
+pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh."
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
 rfc_index_sha256 = "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674"
 errata = "https://errata.rfc-editor.org/search/"
@@ -149,7 +149,7 @@ local = []
 id = "hybrid"
 milestones = ["0.117.0", "0.118.0", "0.119.0", "0.120.0", "0.121.0", "0.122.0"]
 rfcs = [9935, 9954]
-local = []
+local = ["NIST.FIPS.203.pdf", "NIST.SP.800-227.pdf"]
 
 [[domain]]
 id = "hpke"
@@ -159,7 +159,7 @@ local = []
 
 [[domain]]
 id = "ech"
-milestones = ["0.140.0", "0.141.0", "0.142.0", "0.143.0"]
+milestones = ["0.140.0", "0.140.1", "0.141.0", "0.142.0", "0.143.0"]
 rfcs = [9180, 9460, 9848, 9849]
 local = []
 
@@ -177,9 +177,9 @@ local = []
 
 [[domain]]
 id = "entropy"
-milestones = ["0.14.0", "0.124.0", "0.125.0", "0.126.0"]
+milestones = ["0.14.0", "0.124.0", "0.124.1", "0.124.2", "0.125.0", "0.126.0"]
 rfcs = []
-local = ["NIST.SP.800-90Ar1.pdf"]
+local = ["NIST.SP.800-90Ar1.pdf", "NIST.SP.800-90B.pdf", "NIST.SP.800-90C.pdf"]
 
 [[closure_exclusion]]
 source = 2246

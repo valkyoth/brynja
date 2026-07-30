@@ -560,6 +560,18 @@
         "disposition": "future-work",
         "domain": "hpke",
         "owner": "0.138.0",
+        "rationale": "HPKE KEM and context derivation remain bounded cryptographic foundations downstream of validated provider ports.",
+        "sources": ["rfc:9180", "iana:hpke"],
+        "test_target": "tests/surface/hpke.rs#context_foundation"
+      },
+      "id": "protocol.hpke.context-foundation"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-crypto/src/hpke.rs",
+        "disposition": "future-work",
+        "domain": "hpke",
+        "owner": "0.139.0",
         "rationale": "HPKE base mode is the only admitted mode and remains future bounded cryptographic work.",
         "sources": ["rfc:9180", "iana:hpke"],
         "test_target": "tests/surface/hpke.rs#base_mode"
@@ -571,12 +583,24 @@
         "code_target": "crates/brynja-crypto/src/hpke.rs",
         "disposition": "intentionally-rejected",
         "domain": "hpke",
-        "owner": "0.138.0",
+        "owner": "0.139.1",
         "rationale": "HPKE authenticated and PSK modes are excluded from the version-one API and composition model.",
         "sources": ["rfc:9180"],
         "test_target": "tests/surface/hpke.rs#non_base_rejected"
       },
       "id": "protocol.hpke.non-base-modes"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-crypto/src/hpke.rs",
+        "disposition": "future-work",
+        "domain": "hpke",
+        "owner": "0.139.1",
+        "rationale": "HPKE export and context lifecycle require bounded output, role separation, exhaustion closure, cancellation, and immediate secret destruction.",
+        "sources": ["rfc:9180", "iana:hpke"],
+        "test_target": "tests/surface/hpke.rs#export_lifecycle"
+      },
+      "id": "protocol.hpke.export-lifecycle"
     },
     {
       "decision": {
@@ -589,6 +613,54 @@
         "test_target": "tests/surface/ech.rs#protocol"
       },
       "id": "protocol.ech"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls13/src/ech.rs",
+        "disposition": "future-work",
+        "domain": "ech",
+        "owner": "0.140.1",
+        "rationale": "ECH configuration bootstrap and cache lifecycle require bounded hostile parsing, typed provenance, mandatory-extension handling, expiry, and rotation.",
+        "sources": ["rfc:9848", "rfc:9849", "rfc:9460"],
+        "test_target": "tests/surface/ech.rs#configuration_bootstrap"
+      },
+      "id": "protocol.ech.configuration-bootstrap"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls13/src/ech.rs",
+        "disposition": "future-work",
+        "domain": "ech",
+        "owner": "0.141.0",
+        "rationale": "ECH client construction requires exact inner and outer messages, AAD, padding, transcript preservation, GREASE, and resource policy.",
+        "sources": ["rfc:9180", "rfc:9849"],
+        "test_target": "tests/surface/ech.rs#client_construction"
+      },
+      "id": "protocol.ech.client-construction"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls13/src/ech.rs",
+        "disposition": "future-work",
+        "domain": "ech",
+        "owner": "0.142.0",
+        "rationale": "ECH server opening requires configuration lookup, uniform HPKE rejection, consistency checks, acceptance confirmation, and bound identity selection.",
+        "sources": ["rfc:9180", "rfc:9849"],
+        "test_target": "tests/surface/ech.rs#server_opening"
+      },
+      "id": "protocol.ech.server-opening"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls13/src/ech.rs",
+        "disposition": "future-work",
+        "domain": "ech",
+        "owner": "0.143.0",
+        "rationale": "ECH retry and rotation require exact HelloRetryRequest transcript invariants, retry authority, generation changes, and downgrade detection.",
+        "sources": ["rfc:9848", "rfc:9849"],
+        "test_target": "tests/surface/ech.rs#hrr_retry_rotation"
+      },
+      "id": "protocol.ech.hrr-retry-rotation"
     },
     {
       "decision": {
@@ -688,15 +760,51 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-tls/src/record_size_limit.rs",
+        "disposition": "future-work",
+        "domain": "tls",
+        "owner": "0.136.0",
+        "rationale": "Record Size Limit requires directional negotiation, fragmentation and buffering limits, peer-violation handling, and interoperability evidence.",
+        "sources": ["rfc:8449", "iana:tls-extensiontype-values"],
+        "test_target": "tests/surface/record_size_limit.rs#profile"
+      },
+      "id": "facility.record-size-limit"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls/src/certificate_compression.rs",
+        "disposition": "future-work",
+        "domain": "tls",
+        "owner": "0.145.0",
+        "rationale": "Certificate decompression remains hostile pre-authentication work behind a caller-owned bounded receive provider.",
+        "sources": ["rfc:8879", "iana:tls-extensiontype-values"],
+        "test_target": "tests/surface/certificate_compression.rs#receive_provider"
+      },
+      "id": "facility.certificate-compression"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-tls/src/certificate_compression.rs",
         "disposition": "future-work",
         "domain": "tls",
         "owner": "0.146.0",
-        "rationale": "Certificate compression algorithms remain caller-owned bounded providers with validated artifacts.",
+        "rationale": "Precompressed certificate artifacts require bounded decompression, canonical byte comparison, complete input binding, and rotation invalidation.",
         "sources": ["rfc:8879", "iana:tls-extensiontype-values"],
-        "test_target": "tests/surface/certificate_compression.rs#providers"
+        "test_target": "tests/surface/certificate_compression.rs#artifact_validation"
       },
-      "id": "facility.certificate-compression"
+      "id": "facility.certificate-compression.artifact-validation"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-tls/src/certificate_compression.rs",
+        "disposition": "future-work",
+        "domain": "tls",
+        "owner": "0.146.1",
+        "rationale": "Certificate compression sending requires peer negotiation, current validated artifacts, exact transcript bytes, and fail-closed fallback policy.",
+        "sources": ["rfc:8879", "iana:tls-extensiontype-values"],
+        "test_target": "tests/surface/certificate_compression.rs#send_integration"
+      },
+      "id": "facility.certificate-compression.send-integration"
     },
     {
       "decision": {
@@ -715,7 +823,7 @@
         "code_target": "crates/brynja-tls/src/raw_public_key.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.136.0",
+        "owner": "0.137.0",
         "rationale": "Raw public keys remain an opt-in authentication profile separate from X.509 trust processing.",
         "sources": ["rfc:7250"],
         "test_target": "tests/surface/raw_public_keys.rs#profile"
@@ -727,7 +835,7 @@
         "code_target": "crates/brynja-tls/src/delegated_credentials.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.145.0",
+        "owner": "0.144.0",
         "rationale": "Delegated credentials require strict lifetime, algorithm, transcript, and certificate binding.",
         "sources": ["rfc:9345"],
         "test_target": "tests/surface/delegated_credentials.rs#profile"
@@ -885,10 +993,58 @@
         "domain": "cryptography",
         "owner": "0.117.0",
         "rationale": "ML-KEM remains future first-party key-establishment work subject to FIPS 203 and transition policy.",
-        "sources": ["rfc:9935", "rfc:9954"],
+        "sources": ["nist:NIST.FIPS.203.pdf", "nist:NIST.SP.800-227.pdf", "rfc:9954"],
         "test_target": "tests/surface/primitives.rs#ml_kem"
       },
       "id": "algorithm.ml-kem"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-core/src/entropy.rs",
+        "disposition": "future-work",
+        "domain": "entropy",
+        "owner": "0.14.0",
+        "rationale": "Secure-random contracts require explicit caller and provider duties without implying that an arbitrary random source is validated entropy.",
+        "sources": ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"],
+        "test_target": "tests/surface/entropy.rs#contract"
+      },
+      "id": "facility.entropy.secure-random-contract"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-fips-module/src/entropy.rs",
+        "disposition": "future-work",
+        "domain": "entropy",
+        "owner": "0.124.0",
+        "rationale": "FIPS entropy-source admission requires exact construction, operational environment, assessment, health tests, and catastrophic failure handling.",
+        "sources": ["nist:NIST.SP.800-90B.pdf"],
+        "test_target": "tests/surface/entropy.rs#source_health"
+      },
+      "id": "facility.entropy.source-health"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-fips-module/src/drbg.rs",
+        "disposition": "future-work",
+        "domain": "entropy",
+        "owner": "0.124.1",
+        "rationale": "The selected SP 800-90A DRBG requires complete instantiate, generate, reseed, uninstantiate, state-protection, and catastrophic-error behavior.",
+        "sources": ["nist:NIST.SP.800-90Ar1.pdf"],
+        "test_target": "tests/surface/entropy.rs#drbg"
+      },
+      "id": "facility.entropy.drbg"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-fips-module/src/rbg.rs",
+        "disposition": "future-work",
+        "domain": "entropy",
+        "owner": "0.124.2",
+        "rationale": "The selected SP 800-90C RBG construction requires exact source and DRBG topology, reseed chains, health propagation, and service boundaries.",
+        "sources": ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"],
+        "test_target": "tests/surface/entropy.rs#rbg_construction"
+      },
+      "id": "facility.entropy.rbg-construction"
     },
     {
       "decision": {
@@ -1274,5 +1430,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "c7d0e37d4fcfef61d4ba03caaa70f0158546ae0cf01e08a9639ed67ec616b5cf"
+  "source_ledger_sha256": "85ec6744dcf4fcaf43dc4d36e0e27dd737bebb868378072cc8f28a3a10ade0f7"
 }

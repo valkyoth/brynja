@@ -1,21 +1,21 @@
 # Current Status
 
-Status: v0.3.4 pentest and remediation retest passed; awaiting green CI
+Status: v0.3.5 implementation stop reached; pentest required
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
 must not be used to secure network traffic. Brynja is not FIPS 140-3 validated,
 and no package, feature, build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.3.2 established the workspace, hardened
+Signed releases v0.1.0 through v0.3.4 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
-classified protocol surfaces and the normative matrix foundation. The v0.3.4 candidate
-advances only `brynja`; unchanged supporting crates remain at their
+classified protocol surfaces and the normative matrix foundation. The v0.3.5
+candidate advances only `brynja`; unchanged supporting crates remain at their
 independently published `0.1.0` versions and are not selected again.
 
 Version 0.3.0 provides the exact source foundation:
 
-- 103 locked RFCs and eleven local NIST/ITU authorities map to lifecycle, domain,
+- 103 locked RFCs and fifteen local NIST/ITU authorities map to lifecycle, domain,
   and roadmap ownership;
 - RFC status and update/obsolescence relationships are closed or explicitly
   excluded;
@@ -26,12 +26,12 @@ Version 0.3.0 provides the exact source foundation:
 
 Version 0.3.1 adds explicit protocol-surface decisions:
 
-- 48 semantic decisions cover current and compatibility TLS, DTLS, QUIC-TLS,
+- 124 semantic decisions cover current and compatibility TLS, DTLS, QUIC-TLS,
   PKIX, OCSP, CT, HPKE, ECH, cryptographic algorithms, certificate and key
   formats, legacy protocols, and operational facilities;
 - all 192 nested registries and all 4,106 individual records across the eight
   pinned IANA collections receive a deterministic disposition;
-- every one of the 4,346 total surfaces records normative sources, owning
+- every one of the 4,422 total surfaces records normative sources, owning
   milestone, planned code target, planned test target, and rationale;
 - required exclusions explicitly cover Heartbeat, status_request_v2,
   production SSLKEYLOGFILE, TLS 1.3 post-handshake authentication,
@@ -87,7 +87,7 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 - 63 semantic surfaces give every planned transport implementation milestone
   one stable owner, code target, test target, source set, and rationale;
 - 70 new requirements bring the matrix to 116 stable records and cover all 40
-  admitted transport authorities, 550 normative RFC sections, and 480
+  admitted transport authorities, 550 normative RFC sections, and 483
   selected transport surfaces;
 - all 914 domain and transport normative RFC sections now carry exact
   requirement IDs, unique extraction anchors, and section hashes, with zero
@@ -107,10 +107,29 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
   unmapped or non-normative sections, source/requirement mismatch, incomplete
   semantic revisions, unreviewed exclusions, and nondeterministic output.
 
+Version 0.3.5 completes the optional, legacy, operational, and residual pass:
+
+- 38 new requirements bring the matrix to 154 stable records;
+- final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are added as
+  local-only checksum-pinned authorities;
+- 33 residual authorities and 182 normative RFC sections bind to exact
+  requirements, extraction anchors, and hashes;
+- all 741 surfaces left by the foundation, domain, and transport bundles are
+  assigned, producing complete coverage of all 4,422 surfaces;
+- the generated closure maps all 126 locked sources, all 205 roadmap rows, all
+  4,422 surfaces, and all 154 requirements in both directions;
+- local redistribution boundaries, all eight mutable registries, five mutable
+  NIST publication pages, source-free plan rows, and dependent refresh owners
+  are explicit; and
+- thirteen new broken fixtures reject draft claims, missing or duplicate
+  groups, orphaned sources or plans, stale mutable guidance, source-rights
+  gaps, missing exclusions, and weakened hybrid, legacy, or FIPS blockers.
+
 This remains governance and planning evidence, not protocol implementation.
-v0.3.5 populates optional, legacy, operational, and residual requirements
-before protocol work begins. Concrete ECDHE-ML-KEM groups remain blocked until
-both a final Standards Track RFC and final IANA values exist.
+Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
+RFC and final IANA values exist. Non-RFC legacy implementations remain blocked
+until exact source provenance and rights are authenticated. FIPS validation
+milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
 No `brynja-sanitization` package or dependency exists yet; its admission
 decision remains gated at v0.11.1.
@@ -144,5 +163,6 @@ governance-integrity findings. Both were remediated in signed commit
 independent authority and owner check or an exact structured exception, and
 every normative RFC section now has an exact requirement binding or reviewed
 disposition. The repository-owner retest was green with zero open findings.
-The permanent v0.3.4 report is `PASS`/`PASS`; the next step is green hosted
-GitHub checks followed by explicit user authorization to tag.
+The permanent v0.3.4 report is `PASS`/`PASS`, and signed tag `v0.3.4` is
+published. The v0.3.5 implementation candidate now requires repository-owner
+pentest before release finalization.

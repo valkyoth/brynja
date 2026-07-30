@@ -52,9 +52,10 @@
   "profiles": [
     "crypto-encoding-pkix",
     "foundation",
+    "optional-legacy-residual",
     "tls-dtls-quic"
   ],
-  "schema": 4,
+  "schema": 5,
   "section_binding_fields": [
     "anchor",
     "section",

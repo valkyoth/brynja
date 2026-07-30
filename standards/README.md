@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: v0.3.4 reviewed TLS, DTLS, and QUIC-TLS coverage
+Status: v0.3.5 complete reviewed pre-implementation source closure
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -40,8 +40,8 @@ primitive is implemented.
 - `../requirements/` binds stable requirements to this exact ledger and
   surface register and generates lifecycle, traceability, domain, and coverage
   evidence. v0.3.3 completes cryptography, encoding, PKIX, OCSP, and CT;
-  v0.3.4 completes TLS, DTLS, and QUIC-TLS; v0.3.5 owns optional, legacy,
-  operational, and residual population.
+  v0.3.4 completes TLS, DTLS, and QUIC-TLS; v0.3.5 closes optional, legacy,
+  operational, entropy, HPKE, ECH, ML-KEM, and residual population.
 
 The RFC and local NIST/ITU checksum manifests are trust pins, not outputs of a
 fetch. Their lock scripts validate existing pins and deliberately cannot
@@ -96,7 +96,7 @@ missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
 or stale generated JSON or Markdown. All 4,106 individual IANA records, 192
-nested registries, and 111 semantic decisions are represented; `future-work`
+nested registries, and 124 semantic decisions are represented; `future-work`
 does not claim implementation.
 
 The requirement checker additionally fails on changed ledger or surface hashes,
@@ -110,7 +110,10 @@ generated artifacts. Its 12 foundation requirements exercise all eight
 lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
 encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces; 70
 transport requirements cover 40 authorities, 550 normative sections, 63
-implementation milestones, and 480 TLS, DTLS, and QUIC surfaces.
+implementation milestones, and 483 TLS, DTLS, and QUIC surfaces. Thirty-eight
+v0.3.5 residual requirements cover 33 authorities, 182 normative sections,
+and all 741 formerly uncovered surfaces, producing complete closure across all
+126 sources and 4,422 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -138,3 +141,8 @@ Concrete ECDHE-ML-KEM groups remain fail-closed at milestone `0.120.0`.
 RFC 9954 supplies only the generic construction; a final Standards Track RFC
 and final IANA code points are both required. Drafts and private code points
 cannot satisfy the blocker.
+
+Final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are checksum-pinned
+local-only authorities. Their publication pages, planning notes, errata, and
+CMVP applicability remain mutable and must be refreshed at their dependent
+milestones without silently replacing the reviewed baseline.

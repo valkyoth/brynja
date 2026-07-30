@@ -1,6 +1,6 @@
 # External Reference Provenance
 
-Status: v0.3.3 cryptography, DER, and PKIX authority inventory
+Status: v0.3.5 complete pre-implementation external-authority inventory
 
 These non-RFC sources are required for first-party cryptography, PKI, or
 legacy-protocol research. They default to local-only under
@@ -22,11 +22,11 @@ inspected local bytes are pinned by `LOCAL_SHA256SUMS`.
 | FIPS 140-3, ISO/IEC 19790:2012, and ISO/IEC 24759:2017 | module requirements and test assertions | FIPS local-only; ISO documents local-only licensed inputs with independently recorded provenance |
 | NIST SP 800-140 and SP 800-140A through 140F | CMVP derived tests, documentation, security policy, approved functions, SSP establishment, authentication, and non-invasive guidance | local-only dated submission baseline; recheck online supplemental lists |
 | Current FIPS 140-3 CMVP Management Manual, Implementation Guidance, RFG and CMVP resolutions | validation process and current interpretations | mutable official sources require retrieval timestamps, hashes, change review, and a pinned submission baseline |
-| NIST SP 800-90B and SP 800-90C | entropy sources, health tests, and RBG constructions | local-only; bind exact editions and errata to ESV and module evidence |
+| NIST SP 800-90B and SP 800-90C | entropy sources, health tests, and RBG constructions | downloaded and checksum-pinned local-only; bind exact editions and errata to ESV and module evidence |
 | CMVP ESVTS guidance and production evidence | SP 800-90B entropy and SP 800-90C RBG validation | record dated protocol, tool, environment, validation identifiers, and caveats; demo results never support a claim |
 | NIST SP 800-52 Rev. 2 and successors | approved TLS deployment profile | local-only; the 2026 revision process and final successor must be reviewed before profile freeze |
 | NIST SP 800-131A Rev. 2, SP 800-133 Rev. 2, and SP 800-56C Rev. 2 | transitions, key generation, and key derivation | local-only; current CMVP supplemental lists govern approval |
-| NIST FIPS 203 and SP 800-227 | ML-KEM and KEM use | local-only; errata, CMVP approval, and final TLS group standards remain separate gates |
+| NIST FIPS 203 and SP 800-227 | ML-KEM and KEM use | downloaded and checksum-pinned local-only; errata, CMVP approval, and final TLS group standards remain separate gates |
 | NIST CAVP vector archives | algorithm known-answer tests | review each archive before tracking |
 | ITU-T X.690 (02/2021) and Erratum 1 (09/2021) | ASN.1 BER/CER/DER | downloaded local-only from the current in-force ITU publication; the erratum is mandatory |
 | ITU-T X.509 | certificate model | local-only licensed standard; RFC 5280 drives Internet PKI |

@@ -1,14 +1,14 @@
 [release]
-version = "0.3.4"
+version = "0.3.5"
 policy = "independent"
 stage = "public"
 
 [crates."brynja"]
-previous_version = "0.3.3"
-version = "0.3.4"
+previous_version = "0.3.4"
+version = "0.3.5"
 change = "code"
 publish = true
-reason = "Mandatory facade release for TLS, DTLS, and QUIC-TLS normative coverage; it adds no protocol implementation."
+reason = "Mandatory facade release for optional, legacy, operational, and residual normative closure; it adds no protocol implementation."
 
 [crates."brynja-core"]
 previous_version = "0.1.0"

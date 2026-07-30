@@ -14,9 +14,11 @@ AUTO = object()
 TRACKED_INPUTS = (
     "requirements/domain-scope.toml",
     "requirements/domains",
+    "requirements/authority-claims.toml",
     "requirements/transport-exceptions.toml",
     "requirements/transport-scope.toml",
     "requirements/policy.json",
+    "requirements/residual-policy.toml",
     "requirements/matrix.json",
     "standards/surface-policy.json",
     "standards/transport-surfaces",
@@ -69,7 +71,7 @@ def load_matrix(ref: str | None = None) -> dict | None:
         lib.fail(f"{ref} requirement matrix is invalid JSON: {error}")
     if (
         not isinstance(value, dict)
-        or value.get("schema") not in {1, 2, 3, 4}
+        or value.get("schema") not in {1, 2, 3, 4, 5}
         or not isinstance(value.get("requirements"), list)
     ):
         lib.fail(f"{ref} requirement matrix has an invalid schema")

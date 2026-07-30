@@ -19,6 +19,8 @@ INDEXES = DIRECTORY / "indexes.json"
 COVERAGE = DIRECTORY / "coverage.md"
 DOMAIN_COVERAGE = DIRECTORY / "domain-coverage.json"
 TRANSPORT_COVERAGE = DIRECTORY / "transport-coverage.json"
+RESIDUAL_COVERAGE = DIRECTORY / "residual-coverage.json"
+CLOSURE = DIRECTORY / "closure.json"
 ID_PATTERN = re.compile(r"BRY-REQ-[A-Z0-9]+-[0-9]{4}")
 SECTION_PATTERN = re.compile(r"^([0-9]+(?:\.[0-9]+)*)\.\s+(.+?)\s*$", re.MULTILINE)
 REPOSITORY_TARGET = re.compile(r"(?:crates|requirements|scripts|standards|tests)/[A-Za-z0-9_./-]+(?:#[A-Za-z0-9_.:-]+)?")
@@ -164,6 +166,7 @@ def schema_document() -> dict:
         "profiles": [
             "crypto-encoding-pkix",
             "foundation",
+            "optional-legacy-residual",
             "tls-dtls-quic",
         ],
         "section_binding_fields": [
@@ -176,7 +179,7 @@ def schema_document() -> dict:
             "excluded",
             "not-applicable",
         ],
-        "schema": 4,
+        "schema": 5,
         "strengths": sorted(STRENGTHS),
         "target_kinds": [
             "actual-symbol",
@@ -360,7 +363,8 @@ def render_coverage(matrix: dict, indexes: dict) -> bytes:
             "",
             "Cryptography, encoding, and PKIX are populated in v0.3.3. TLS,",
             "DTLS, and QUIC-TLS are populated in v0.3.4. v0.3.5 completes",
-            "optional, legacy, operational, and residual rules.",
+            "optional, HPKE, ECH, ML-KEM, entropy, legacy, operational, and",
+            "residual closure across every locked source and surface.",
             "",
         ]
     )

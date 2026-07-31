@@ -72,7 +72,8 @@ The release candidate includes:
   positive and broken fixtures;
 - deterministic byte-for-byte assurance evidence generation;
 - a fail-closed independent cryptography and protocol review-status register
-  in the root, published facade, and every applicable component README;
+  in the root, published facade, and every applicable component README,
+  including an explicit statement that no FIPS 140-3 validation exists;
 - exact CI membership checks for all three OS-less targets;
 - Cargo-manifest exclusion checks for every external assurance tool;
 - simultaneous process-output exhaustion and timeout tests;

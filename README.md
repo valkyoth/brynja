@@ -107,7 +107,11 @@ table. Passing the project's own tests, CI, Kani, Miri, sanitizers, fuzzing,
 differential testing, or release pentests does not, by itself,
 constitute independent cryptographic or protocol verification.
 
-| Component | Cryptographic or protocol scope | Independently verified |
+FIPS validation is a separate official claim. Brynja has no FIPS 140-3
+validation, certificate, validated module, approved security policy, or
+certificate-bound operational-environment claim.
+
+| Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
@@ -118,6 +122,7 @@ constitute independent cryptographic or protocol verification.
 | `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |
 | `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
+| Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
 None of these components are implemented yet—see [Workspace](#workspace)
 below. This table exists so independent-review status remains visible and

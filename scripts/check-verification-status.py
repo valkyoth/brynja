@@ -20,6 +20,7 @@ ROOT_ROWS = (
     "| `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |",
     "| `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |",
     "| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |",
+    "| Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |",
 )
 SCOPED_ROWS = {
     Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
@@ -88,6 +89,16 @@ def validate_document(path: Path, text: str, required_rows: tuple[str, ...]) -> 
         ):
             if phrase not in prose:
                 raise VerificationStatusError(f"missing disclaimer phrase: {phrase}")
+        if path in ROOT_READMES:
+            for phrase in (
+                "FIPS validation is a separate official claim",
+                "no FIPS 140-3 validation",
+                "certificate-bound operational-environment claim",
+            ):
+                if phrase not in prose:
+                    raise VerificationStatusError(
+                        f"missing FIPS disclaimer phrase: {phrase}"
+                    )
         for row in required_rows:
             if row not in section:
                 raise VerificationStatusError(f"missing required status row: {row}")

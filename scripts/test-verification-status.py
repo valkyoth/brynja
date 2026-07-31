@@ -35,6 +35,11 @@ SUPPORT = """# support
 This crate does not implement cryptographic or protocol code. Only a named
 independent reviewer and linked review evidence can change status.
 """
+ROOT = (
+    BASE
+    + "\nFIPS validation is a separate official claim. Brynja has no FIPS 140-3 "
+    "validation and no certificate-bound operational-environment claim.\n"
+)
 
 
 def must_fail(text: str, expected: str) -> None:
@@ -49,6 +54,7 @@ def must_fail(text: str, expected: str) -> None:
 
 def main() -> int:
     MODULE.validate_document(Path("fixture.md"), BASE, (ROW,))
+    MODULE.validate_document(Path("README.md"), ROOT, (ROW,))
     must_fail(BASE.replace(MODULE.HEADING, "## Status"), "heading")
     must_fail(BASE.replace("named independent reviewer", "reviewer"), "disclaimer")
     must_fail(BASE.replace(ROW, ""), "status row")
@@ -57,6 +63,17 @@ def main() -> int:
         + "| `other` | Other protocol | ✅ Verified |\n",
         "named independent reviewer",
     )
+    try:
+        MODULE.validate_document(
+            Path("README.md"),
+            ROOT.replace("no FIPS 140-3 validation", "no validation"),
+            (ROW,),
+        )
+    except MODULE.VerificationStatusError as error:
+        if "no FIPS 140-3 validation" not in str(error):
+            raise
+    else:
+        raise AssertionError("root FIPS disclaimer regression unexpectedly passed")
     MODULE.validate_checkmarks(
         "| `example` | Example protocol | "
         "✅ Independently verified by Alice Example — "

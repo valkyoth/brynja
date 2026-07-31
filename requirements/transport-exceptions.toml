@@ -5,7 +5,7 @@ domain = "transport-exceptions"
 domain = "tls"
 id = "BRY-REQ-TLS-0005"
 owner = "0.5.0"
-lifecycle = "tested"
+lifecycle = "evidenced"
 decision_ids = ["iana.tls-parameters.tls-parameters-6"]
 sources = [
   { id = "rfc:6066", authority_role = "current" },
@@ -17,7 +17,8 @@ target = "crates/brynja-core/src/error.rs#TlsFailure"
 positive_test = "crates/brynja-core/tests/tls_failures.rs#typed_outcomes"
 negative_test = "crates/brynja-core/tests/tls_failures.rs#reject_secret_and_ambiguous_errors"
 work_bound = "Failure construction, alert selection, formatting prohibition, cancellation, and cleanup consume fixed or explicitly bounded work."
-evidence_gap = "Executable tests are linked and passing; independent pentest evidence remains unresolved until the v0.5.0 implementation stop is reviewed."
+evidence = ["security/pentest/v0.5.0.md#Findings"]
+evidence_gap = "The scoped tests and release pentest are complete; independent protocol review, interoperability, and engine evidence remain outside this value-domain claim."
 residual = "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones."
 mapping_rationale = "The shared TLS failure semantic surface owns the pre-implementation taxonomy used by every later transport engine while preserving exact version-specific wire behavior."
 

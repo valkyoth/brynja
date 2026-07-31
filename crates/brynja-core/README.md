@@ -54,9 +54,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.5"
 ```
 
-The `0.2.0` package is selected for publication with Brynja v0.5.0 after the
-version-specific pentest, a committed PASS report, green GitHub checks, and
-explicit tag authorization required by the
+The `0.2.0` package is selected for publication with Brynja v0.5.0. Its
+committed pentest report is `PASS`/`PASS`; publication still requires green
+GitHub checks and explicit tag authorization under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

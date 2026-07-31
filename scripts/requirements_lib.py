@@ -23,7 +23,10 @@ RESIDUAL_COVERAGE = DIRECTORY / "residual-coverage.json"
 CLOSURE = DIRECTORY / "closure.json"
 ID_PATTERN = re.compile(r"BRY-REQ-[A-Z0-9]+-[0-9]{4}")
 SECTION_PATTERN = re.compile(r"^([0-9]+(?:\.[0-9]+)*)\.\s+(.+?)\s*$", re.MULTILINE)
-REPOSITORY_TARGET = re.compile(r"(?:crates|requirements|scripts|standards|tests)/[A-Za-z0-9_./-]+(?:#[A-Za-z0-9_.:-]+)?")
+REPOSITORY_TARGET = re.compile(
+    r"(?:crates|requirements|scripts|security|standards|tests)/"
+    r"[A-Za-z0-9_./-]+(?:#[A-Za-z0-9_.:-]+)?"
+)
 STRENGTHS = {
     "INVARIANT",
     "MAY",

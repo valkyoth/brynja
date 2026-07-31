@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.5.0 implementation stop reached; pentest required
+Status: v0.5.0 pentest passed; awaiting green GitHub CI
 
 | Control | Foundation enforcement |
 | --- | --- |

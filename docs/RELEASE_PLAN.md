@@ -505,7 +505,7 @@ Exit criteria:
 
 ### v0.5.0 - Error Alert And Exhaustion Domains
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Freeze non-secret error, alert, close, provider-failure, and resource-exhaustion domains; prohibit secret-bearing formatting and ambiguous failure collapse.
 

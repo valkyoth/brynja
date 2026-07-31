@@ -28,6 +28,9 @@ Keep a Changelog and Semantic Versioning.
 - The alert registry is the only protocol surface marked implemented. TLS,
   DTLS, cryptography, PKI, providers, independent verification, production
   readiness, and FIPS validation remain explicitly unclaimed.
+- The repository-owner pentest of the signed implementation candidate passed
+  with no findings; the permanent report records `PASS`/`PASS` and zero open
+  findings.
 
 ## [0.4.0] - 2026-07-31
 

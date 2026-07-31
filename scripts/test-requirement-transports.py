@@ -48,6 +48,14 @@ def test_current_repository() -> None:
     assert coverage["excluded_normative_section_count"] == 11
     assert coverage["owner_milestone_count"] == 64
     assert coverage["surface_count"] == 485
+    failure_domain = next(
+        item for item in requirements if item["id"] == "BRY-REQ-TLS-0005"
+    )
+    assert failure_domain["lifecycle"] == "evidenced"
+    assert failure_domain["evidence"] == [
+        "security/pentest/v0.5.0.md#Findings"
+    ]
+    assert all(test["status"] == "actual" for test in failure_domain["tests"])
     assert standards.json_bytes(coverage) == lib.TRANSPORT_COVERAGE.read_bytes()
 
 

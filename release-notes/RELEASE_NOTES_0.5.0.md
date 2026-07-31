@@ -1,6 +1,6 @@
 # Brynja 0.5.0 Release Notes
 
-Status: implementation stop reached; pentest required
+Status: pentest passed; awaiting green GitHub checks
 
 Brynja 0.5.0 implements the first shared protocol value domains. It does not
 implement TLS, DTLS, QUIC-TLS, cryptography, PKI, or platform providers and
@@ -58,9 +58,10 @@ patches at `0.1.1`, and the mandatory `brynja 0.5.0` facade. `brynja-crypto`
 remains unchanged at `0.1.0`; legacy and repository-only packages remain
 unpublished. The guarded publisher enforces exact pins and dependency order.
 
-Publication remains blocked until the repository owner pentests this exact
-implementation stop, the permanent report records `PASS`/`PASS`, GitHub is
-green, and the user explicitly authorizes tagging.
+The repository owner pentested the signed implementation stop and reported no
+findings. The permanent report records `PASS`/`PASS` with zero open findings.
+Publication remains blocked until GitHub is green and the user explicitly
+authorizes tagging.
 
 ## Limitations
 

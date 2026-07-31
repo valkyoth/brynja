@@ -30,7 +30,14 @@ CONFIG = bundle.Config(
     surface_domains=frozenset(SURFACE_DOMAINS),
     authority_roles=frozenset(AUTHORITY_ROLES),
     lifecycles=frozenset(
-        {"caller-owned", "implemented", "planned", "rejected", "tested"}
+        {
+            "caller-owned",
+            "evidenced",
+            "implemented",
+            "planned",
+            "rejected",
+            "tested",
+        }
     ),
     require_owner_coverage=True,
     section_policy=lib.DIRECTORY / "transport-sections.toml",
@@ -130,7 +137,11 @@ def load_policy(ledger: dict | None = None) -> tuple[dict, list[dict], str]:
         lib.fail("transport exception policy has invalid fields")
     exception_fields = bundle.RAW_FIELDS | {"domain"}
     if any(
-        set(requirement) != exception_fields
+        frozenset(requirement)
+        not in {
+            frozenset(exception_fields),
+            frozenset(exception_fields | {"evidence"}),
+        }
         for requirement in exception_document["requirement"]
     ):
         lib.fail("transport exception policy has invalid requirement fields")
@@ -158,11 +169,13 @@ def load_policy(ledger: dict | None = None) -> tuple[dict, list[dict], str]:
         applicability, decision = lib.LIFECYCLE_DECISIONS[lifecycle]
         if lifecycle in {"caller-owned", "rejected"}:
             target_kind = "boundary"
-        elif lifecycle in {"implemented", "tested"}:
+        elif lifecycle in {"evidenced", "implemented", "tested"}:
             target_kind = "actual-symbol"
         else:
             target_kind = "planned-symbol"
-        test_status = "actual" if lifecycle == "tested" else "planned"
+        test_status = (
+            "actual" if lifecycle in {"evidenced", "tested"} else "planned"
+        )
         expanded.append(
             {
                 "applicability": applicability,
@@ -177,7 +190,7 @@ def load_policy(ledger: dict | None = None) -> tuple[dict, list[dict], str]:
                     for entry in document["surface"]
                     if entry["requirement_id"] == raw["id"]
                 ),
-                "evidence": [],
+                "evidence": raw.get("evidence", []),
                 "evidence_gap": raw["evidence_gap"],
                 "id": raw["id"],
                 "invariants": raw["invariants"],

@@ -4419,7 +4419,9 @@
       "domains": [
         "tls"
       ],
-      "evidence": [],
+      "evidence": [
+        "security/pentest/v0.5.0.md#Findings"
+      ],
       "invariants": [
         "failure-atomicity",
         "resource-bound",
@@ -8878,6 +8880,9 @@
       ],
       "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength": [
         "BRY-REQ-STD-0001"
+      ],
+      "security/pentest/v0.5.0.md#Findings": [
+        "BRY-REQ-TLS-0005"
       ]
     },
     "invariants": {

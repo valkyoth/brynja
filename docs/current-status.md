@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.5.0 implementation stop reached; pentest required
+Status: v0.5.0 pentest passed; awaiting green GitHub CI
 
 Brynja has implemented only shared alert and non-secret failure value domains.
 It still has no TLS state machine, cryptography, PKI, QUIC-TLS, DTLS engine,
@@ -239,5 +239,9 @@ independent-review/FIPS disclosures address the complete assessment. The
 repository owner retested signed commit
 `62ad878cf2e536fec43cab99d42c6943cab905d5` and reported it green with no
 remaining finding. The permanent v0.4.0 report records `PASS`/`PASS` with zero
-open findings, and signed tag `v0.4.0` is published. The v0.5.0 implementation
-stop now requires its independent release pentest.
+open findings, and signed tag `v0.4.0` is published. The repository owner
+pentested signed v0.5.0 implementation candidate
+`20305afe423d8a6142abe15bd0357546b3f8d41c` and reported it green with no
+findings. Its permanent report records `PASS`/`PASS` with zero open findings.
+The candidate now awaits green hosted GitHub checks before explicit tag
+authorization.

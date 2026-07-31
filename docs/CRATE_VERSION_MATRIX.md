@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.5.0 implementation stop reached; pentest required
+Status: v0.5.0 pentest passed; awaiting green GitHub CI
 
 The `brynja` facade advances to `0.5.0`. `brynja-core` advances to `0.2.0` for
 the new value domains; every published modern package whose exact internal pin

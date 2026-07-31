@@ -20191,8 +20191,10 @@
       ],
       "deviation_rationale": null,
       "domain": "tls",
-      "evidence": [],
-      "evidence_gap": "Executable tests are linked and passing; independent pentest evidence remains unresolved until the v0.5.0 implementation stop is reviewed.",
+      "evidence": [
+        "security/pentest/v0.5.0.md#Findings"
+      ],
+      "evidence_gap": "The scoped tests and release pentest are complete; independent protocol review, interoperability, and engine evidence remain outside this value-domain claim.",
       "id": "BRY-REQ-TLS-0005",
       "invariants": [
         "failure-atomicity",
@@ -20200,13 +20202,13 @@
         "validation",
         "version-separation"
       ],
-      "lifecycle": "tested",
+      "lifecycle": "evidenced",
       "mapping_rationale": "The shared TLS failure semantic surface owns the pre-implementation taxonomy used by every later transport engine while preserving exact version-specific wire behavior.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.5.0",
       "profile": "tls-dtls-quic",
       "residual": "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -29528,5 +29530,5 @@
   "schema": 5,
   "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945",
   "surface_register_sha256": "a058c550e8316c458875f03f96f4419b04a3ab58290718d016563e309f6ebacb",
-  "transport_policy_sha256": "356b4ba25a9f9a3ab205673d12e2e874ca576087e326f5bc36e996a2712fc712"
+  "transport_policy_sha256": "84cf7c1f45e85b5236346b5ed1d8d57f26c7b4f2cdd36efa625ee1291d9e8ecb"
 }

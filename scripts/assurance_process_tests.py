@@ -54,6 +54,23 @@ def run_fixture(
     )
 
 
+def wait_for_path(path: Path, timeout_seconds: float) -> bool:
+    deadline = time.monotonic() + timeout_seconds
+    while time.monotonic() < deadline:
+        if path.exists():
+            return True
+        time.sleep(0.01)
+    return path.exists()
+
+
+def test_path_wait_has_a_bounded_failure() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        missing = Path(directory) / "missing"
+        started = time.monotonic()
+        assert not wait_for_path(missing, 0.05)
+        assert time.monotonic() - started < 1
+
+
 def test_process_timeout_fails() -> None:
     with fails_with("timed out"):
         run_fixture("hang", 0.05, 1024)
@@ -140,8 +157,7 @@ def test_detached_posix_descendant_is_not_claimed_as_contained() -> None:
                 1024,
                 str(marker),
             )
-        time.sleep(0.5)
-        assert marker.exists()
+        assert wait_for_path(marker, 5)
 
 
 def tests() -> list:

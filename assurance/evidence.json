@@ -41,7 +41,7 @@
     "scripts/assurance_mutation.py": "c805404cb359177c837bb8118174167edf964ec4443b20a0e73bebc0fce75c59",
     "scripts/assurance_policy.py": "c17e740af9053c9b0ef64a652be77ffa32b3ab90688f8ea280937898b582b222",
     "scripts/assurance_process.py": "8560a0ce290ef2aa41f8cda36a17845a9920ffcb75e449b86e287081c65cf2de",
-    "scripts/assurance_process_tests.py": "bcdc9c8dfa7901aa58855a3f4911651b99262a468e9d357b22fadd464e21c6b3",
+    "scripts/assurance_process_tests.py": "e63b93ee20e5dc8ffb12f80c0d98cf6ef05cc0ce853be02a72401b2394acbbd2",
     "scripts/assurance_process_tree.py": "73eb16d00f46d2835962c1986664c46009a24f1626749f5142746add154225ef",
     "scripts/check-assurance.py": "617b4a35ba7f95ac37405a4a5bfae216a65eed79a212d232cb0ec7e1d3aa90b7",
     "scripts/check-bare-metal.sh": "16f431dc854104e4dfc24724eadf76187d44b732b84fce99abe5fe87bcf00423",

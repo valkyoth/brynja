@@ -20192,7 +20192,7 @@
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
-      "evidence_gap": "The implementation exists, while linked executable-test status and independent pentest evidence remain unresolved at this transition.",
+      "evidence_gap": "Executable tests are linked and passing; independent pentest evidence remains unresolved until the v0.5.0 implementation stop is reviewed.",
       "id": "BRY-REQ-TLS-0005",
       "invariants": [
         "failure-atomicity",
@@ -20200,13 +20200,13 @@
         "validation",
         "version-separation"
       ],
-      "lifecycle": "implemented",
+      "lifecycle": "tested",
       "mapping_rationale": "The shared TLS failure semantic surface owns the pre-implementation taxonomy used by every later transport engine while preserving exact version-specific wire behavior.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.5.0",
       "profile": "tls-dtls-quic",
       "residual": "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -20389,12 +20389,12 @@
       "tests": [
         {
           "polarity": "positive",
-          "status": "planned",
+          "status": "actual",
           "target": "crates/brynja-core/tests/tls_failures.rs#typed_outcomes"
         },
         {
           "polarity": "negative",
-          "status": "planned",
+          "status": "actual",
           "target": "crates/brynja-core/tests/tls_failures.rs#reject_secret_and_ambiguous_errors"
         }
       ],
@@ -29528,5 +29528,5 @@
   "schema": 5,
   "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945",
   "surface_register_sha256": "a058c550e8316c458875f03f96f4419b04a3ab58290718d016563e309f6ebacb",
-  "transport_policy_sha256": "da08baef87fcd81b71f1479be575e6fe34979d96c2f486965ff0efee13be829b"
+  "transport_policy_sha256": "356b4ba25a9f9a3ab205673d12e2e874ca576087e326f5bc36e996a2712fc712"
 }

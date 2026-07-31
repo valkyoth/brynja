@@ -5,6 +5,30 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-31
+
+### Added
+
+- Exhaustive TLS AlertDescription classification across all 256 registry
+  bytes, preserving assigned, reserved, and unassigned identities.
+- Protocol-version-aware assigned alerts with derived semantic class and
+  hardened severity.
+- Distinct orderly-close, cancellation, alert-failure, local-failure,
+  provider-failure, and resource-exhaustion domains in `brynja-core 0.2.0`.
+- Positive, negative, exhaustive, representation-bound, and compile-fail tests
+  linked to the tested `BRY-REQ-TLS-0005` requirement.
+
+### Security
+
+- Failure envelopes accept no arbitrary text, bytes, provider-native codes,
+  cryptographic material, or numeric limits and implement neither `Debug` nor
+  `Display`.
+- Close and cancellation cannot be ambiguously collapsed into `TlsFailure`;
+  only error-class alerts can become alert failures.
+- The alert registry is the only protocol surface marked implemented. TLS,
+  DTLS, cryptography, PKI, providers, independent verification, production
+  readiness, and FIPS validation remain explicitly unclaimed.
+
 ## [0.4.0] - 2026-07-31
 
 ### Added

@@ -87,10 +87,12 @@ or exploit a verifier/toolchain mismatch to create a false proof claim.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.4.0
+## Non-Goals At 0.5.0
 
-No transport security or interoperability guarantee exists. The current Rust
-code is still package scaffolding. v0.3.0 inventories and locks source
+No transport security or interoperability guarantee exists. The only protocol
+code is a set of allocation-free shared alert and failure value domains;
+there is no parser, record layer, handshake, provider implementation, PKI, or
+cryptography. v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
 proves stable requirement identity, lifecycle, mapping, and drift enforcement
@@ -101,8 +103,10 @@ boundaries. v0.3.5 adds 50 optional, HPKE, ECH, ML-KEM, entropy, operational,
 legacy, and residual requirements and closes every locked source, roadmap row,
 and protocol surface. v0.4.0 adds assurance policy, runners, and OS-less compile
 evidence but no protocol corpus, differential backend, Kani proof harness, or
-assurance campaign result. None of these milestones implements protocol or
-cryptographic behavior. Planned, future-work, blocked, legacy,
+assurance campaign result. v0.5.0 classifies the alert registry, admits
+assigned alerts by protocol version, and separates close, cancellation,
+local, provider, and resource-exhaustion outcomes without wire or state-machine
+behavior. Planned, future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS
 validation claims.

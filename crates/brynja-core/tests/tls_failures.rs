@@ -2,8 +2,8 @@
 
 use brynja_core::{
     Alert, AlertDescription, AlertFailure, AlertOrigin, Cancellation, CloseOutcome,
-    ExhaustionPhase, LocalFailure, ProtocolVersion, ProviderFailure, ProviderFailureKind,
-    ProviderOperation, ResourceExhaustion, ResourceKind, TlsFailure,
+    ExhaustionPhase, FailureKind, LocalFailure, ProtocolVersion, ProviderFailure,
+    ProviderFailureKind, ProviderOperation, ResourceExhaustion, ResourceKind, TlsFailure,
 };
 
 fn admitted(description: AlertDescription) -> Option<Alert> {
@@ -22,6 +22,11 @@ fn typed_outcomes() {
     if let (Some(failure_alert), Some(close_alert), Some(cancel_alert)) = alerts {
         let alert_failure = AlertFailure::from_alert(failure_alert);
         assert!(alert_failure.is_some());
+        if let Some(failure) = alert_failure {
+            let tls_failure = TlsFailure::alert(failure);
+            assert_eq!(tls_failure.version(), ProtocolVersion::Tls13);
+            assert!(matches!(tls_failure.kind(), FailureKind::Alert(_)));
+        }
         assert!(AlertFailure::from_alert(close_alert).is_none());
         assert!(AlertFailure::from_alert(cancel_alert).is_none());
         assert!(CloseOutcome::from_alert(close_alert).is_some());
@@ -33,19 +38,20 @@ fn typed_outcomes() {
 
 #[test]
 fn reject_secret_and_ambiguous_errors() {
-    let local = TlsFailure::Local(LocalFailure::InvalidInput);
-    let provider = TlsFailure::Provider(ProviderFailure::new(
-        ProviderOperation::Aead,
-        ProviderFailureKind::InvalidOutput,
-    ));
-    let exhausted = TlsFailure::Exhausted(ResourceExhaustion::new(
-        ResourceKind::Workspace,
-        ExhaustionPhase::Handshake,
-    ));
+    let local = TlsFailure::local(ProtocolVersion::Tls13, LocalFailure::InvalidInput);
+    let provider = TlsFailure::provider(
+        ProtocolVersion::Tls13,
+        ProviderFailure::new(ProviderOperation::Aead, ProviderFailureKind::InvalidOutput),
+    );
+    let exhausted = TlsFailure::exhausted(
+        ProtocolVersion::Tls13,
+        ResourceExhaustion::new(ResourceKind::Workspace, ExhaustionPhase::Handshake),
+    );
 
-    assert!(matches!(local, TlsFailure::Local(_)));
-    assert!(matches!(provider, TlsFailure::Provider(_)));
-    assert!(matches!(exhausted, TlsFailure::Exhausted(_)));
+    assert!(matches!(local.kind(), FailureKind::Local(_)));
+    assert!(matches!(provider.kind(), FailureKind::Provider(_)));
+    assert!(matches!(exhausted.kind(), FailureKind::Exhausted(_)));
+    assert_eq!(local.version(), ProtocolVersion::Tls13);
     assert!(::core::mem::size_of::<TlsFailure>() <= 4);
 }
 

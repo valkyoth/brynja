@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.4.0 pentest passed; awaiting green GitHub CI
+Status: v0.5.0 implementation stop reached; pentest required
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -19,6 +19,7 @@ consistent in the same commit.
 | `standards/transport-surfaces/*.toml` | Sixty-four reviewed TLS, DTLS, and QUIC-TLS implementation-milestone surfaces | Exact ledger binding, stable requirement identity, owner, source, target, and uniqueness validation |
 | `standards/protocol-surfaces.json` | Deterministic classification of 4,424 semantic and registry surfaces | Byte-for-byte regeneration and 30 positive/broken-fixture tests |
 | `standards/protocol-surface-coverage.md` | Human-readable disposition, kind, and domain counts | Generated and byte-compared with the machine register |
+| `crates/brynja-core/src/{alert,close,error,exhaustion,provider,version}.rs` | v0.5.0 allocation-free alert, outcome, and failure domains | Rust type privacy, no formatting traits, fixed-work constructors, Clippy, `no_std`, integration tests, and compile-fail doctests |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/domain-scope.toml`, `requirements/domains/*.toml` | Reviewed v0.3.3 authority, invariant, work-bound, test-polarity, surface-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, and completeness validation |
 | `requirements/domain-sections.toml` | Reviewed per-requirement bindings for all 364 domain normative RFC sections | Exact source/requirement pairs, semantic revisions, extraction anchors, section hashes, and explicit disposition validation |
@@ -45,7 +46,7 @@ consistent in the same commit.
 The v0.3.0 ledger, v0.3.1 decisions, v0.3.2 matrix foundation, v0.3.3
 cryptography/encoding/PKIX population, v0.3.4 TLS/DTLS/QUIC-TLS population,
 and v0.3.5 optional, legacy, operational, and residual closure are planning
-and governance evidence only. Protocol implementation occurs afterward. No
-ledger, surface, or planned
-protocol-requirement entry is an implementation, interoperability, security,
-or FIPS validation claim.
+and governance evidence only. v0.5.0 implements only the alert and failure
+value domains recorded above. No other ledger, surface, or planned protocol
+requirement entry is an implementation, interoperability, independent-review,
+security, or FIPS validation claim.

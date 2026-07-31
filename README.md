@@ -29,26 +29,22 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.4.0` establishes the first-party assurance harness and true
-bare-metal compile matrix on top of the complete 167-requirement,
-126-authority, 4,424-surface normative baseline. Deterministic mutation and
-external-process differential runners enforce input, output, case, timeout,
-process-containment preconditions, canonical-result, and replay bounds. The
-complete workspace builds for three OS-less targets, and exact Kani, Miri,
-sanitizer, AFL++, and honggfuzz source pins remain outside every Cargo
-manifest. It does **not** implement TLS and must not be used to secure network
-traffic.
+Version `0.5.0` implements the first shared protocol value domains: exhaustive
+TLS/DTLS alert-registry classification, version-aware admitted alerts, distinct
+orderly-close and cancellation outcomes, and non-secret local, provider, and
+resource-exhaustion failures. The domains are allocation-free and intentionally
+cannot be formatted as `Debug` or `Display`. It does **not** implement a TLS
+state machine or cryptography and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.4.0` is an assurance
-infrastructure release; it does not implement TLS. Its pentest and remediation
-retest are complete, and the release candidate awaits green GitHub checks
-before explicit tag authorization. The dependency is:
+Brynja is not ready for application use. Version `0.5.0` is at implementation
+stop and requires its release pentest; it does not implement TLS. The
+dependency after release will be:
 
 ```toml
 [dependencies]
-brynja = "0.4"
+brynja = "0.5"
 ```
 
 Every official release tag publishes the `brynja` facade at the tag version.
@@ -133,17 +129,17 @@ certificate-bound operational-environment claim.
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
-None of these components are implemented yet—see [Workspace](#workspace)
-below. This table exists so independent-review status remains visible and
-cannot be mistaken for implementation, testing, formal proof, pentest, or
-production-readiness status.
+Only the shared alert and failure value domains described for `brynja-core`
+are implemented. No cryptographic primitive, PKI processor, or protocol engine
+in this table is implemented. Independent-review status cannot be inferred
+from implementation, testing, formal proof, pentest, or release status.
 
 ## Workspace
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Foundation only |
-| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Foundation only |
+| `brynja` | Modern production facade | Exposes v0.5 value domains; no TLS engine |
+| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Alert and failure domains implemented |
 | `brynja-crypto` | First-party hashes, MACs, AEADs, KDFs, RSA, and ECC | Foundation only |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
@@ -198,7 +194,7 @@ tooling is stale.
 
 Kani does not set the crate compiler baseline. Its compiler-sensitive proof
 path is separately pinned to `cargo-kani 0.67.0` with Rust `1.90.0`, following
-the documented `base64-ng` model. v0.4.0 admits no Kani proof harness, so the
+the documented `base64-ng` model. v0.5.0 admits no Kani proof harness, so the
 successful policy check is not formal-verification evidence.
 
 | Rust toolchain | Required evidence |
@@ -247,7 +243,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.4.0
+scripts/release_crates.py --version 0.5.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

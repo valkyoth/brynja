@@ -12,9 +12,11 @@ pub mod exhaustion;
 pub mod provider;
 pub mod version;
 
-pub use alert::{Alert, AlertClass, AlertCode, AlertDescription, AlertOrigin, AlertSeverity};
+pub use alert::{
+    Alert, AlertClass, AlertCode, AlertCodeClass, AlertDescription, AlertOrigin, AlertSeverity,
+};
 pub use close::{Cancellation, CloseOutcome};
-pub use error::{AlertFailure, LocalFailure, TlsFailure};
+pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use provider::{ProviderFailure, ProviderFailureKind, ProviderOperation};
 pub use version::{ProtocolFamily, ProtocolVersion};

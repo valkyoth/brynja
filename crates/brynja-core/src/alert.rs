@@ -68,18 +68,26 @@ pub enum AlertDescription {
     EchRequired,
 }
 
-/// Classification of every byte in the TLS AlertDescription registry.
+/// One byte in the TLS AlertDescription registry.
 ///
-/// Reserved and unassigned codes remain distinguishable and cannot be
-/// mistaken for assigned alerts.
+/// The byte is private so callers cannot construct a contradictory registry
+/// category. Use [`Self::class`] to inspect its exact current classification.
+///
+/// ```compile_fail
+/// let _ = brynja_core::AlertCode(0);
+/// ```
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub enum AlertCode {
+pub struct AlertCode(u8);
+
+/// The current registry category of an [`AlertCode`].
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub enum AlertCodeClass {
     /// A currently assigned description.
     Assigned(AlertDescription),
     /// An explicitly reserved registry code.
-    Reserved(u8),
+    Reserved,
     /// A currently unassigned registry code.
-    Unassigned(u8),
+    Unassigned,
 }
 
 /// The party that selected or received an alert.
@@ -198,39 +206,51 @@ impl AlertCode {
     /// Classifies every possible registry byte without ambiguous coercion.
     #[must_use]
     pub const fn classify(code: u8) -> Self {
-        match code {
-            0 => Self::Assigned(AlertDescription::CloseNotify),
-            10 => Self::Assigned(AlertDescription::UnexpectedMessage),
-            20 => Self::Assigned(AlertDescription::BadRecordMac),
-            22 => Self::Assigned(AlertDescription::RecordOverflow),
-            40 => Self::Assigned(AlertDescription::HandshakeFailure),
-            42 => Self::Assigned(AlertDescription::BadCertificate),
-            43 => Self::Assigned(AlertDescription::UnsupportedCertificate),
-            44 => Self::Assigned(AlertDescription::CertificateRevoked),
-            45 => Self::Assigned(AlertDescription::CertificateExpired),
-            46 => Self::Assigned(AlertDescription::CertificateUnknown),
-            47 => Self::Assigned(AlertDescription::IllegalParameter),
-            48 => Self::Assigned(AlertDescription::UnknownCa),
-            49 => Self::Assigned(AlertDescription::AccessDenied),
-            50 => Self::Assigned(AlertDescription::DecodeError),
-            51 => Self::Assigned(AlertDescription::DecryptError),
-            52 => Self::Assigned(AlertDescription::TooManyCidsRequested),
-            70 => Self::Assigned(AlertDescription::ProtocolVersion),
-            71 => Self::Assigned(AlertDescription::InsufficientSecurity),
-            80 => Self::Assigned(AlertDescription::InternalError),
-            86 => Self::Assigned(AlertDescription::InappropriateFallback),
-            90 => Self::Assigned(AlertDescription::UserCanceled),
-            109 => Self::Assigned(AlertDescription::MissingExtension),
-            110 => Self::Assigned(AlertDescription::UnsupportedExtension),
-            112 => Self::Assigned(AlertDescription::UnrecognizedName),
-            113 => Self::Assigned(AlertDescription::BadCertificateStatusResponse),
-            115 => Self::Assigned(AlertDescription::UnknownPskIdentity),
-            116 => Self::Assigned(AlertDescription::CertificateRequired),
-            117 => Self::Assigned(AlertDescription::GeneralError),
-            120 => Self::Assigned(AlertDescription::NoApplicationProtocol),
-            121 => Self::Assigned(AlertDescription::EchRequired),
-            21 | 30 | 41 | 60 | 100 | 111 | 114 => Self::Reserved(code),
-            _ => Self::Unassigned(code),
+        Self(code)
+    }
+
+    /// Returns the exact registry byte.
+    #[must_use]
+    pub const fn code(self) -> u8 {
+        self.0
+    }
+
+    /// Returns the exact current registry category.
+    #[must_use]
+    pub const fn class(self) -> AlertCodeClass {
+        match self.0 {
+            0 => AlertCodeClass::Assigned(AlertDescription::CloseNotify),
+            10 => AlertCodeClass::Assigned(AlertDescription::UnexpectedMessage),
+            20 => AlertCodeClass::Assigned(AlertDescription::BadRecordMac),
+            22 => AlertCodeClass::Assigned(AlertDescription::RecordOverflow),
+            40 => AlertCodeClass::Assigned(AlertDescription::HandshakeFailure),
+            42 => AlertCodeClass::Assigned(AlertDescription::BadCertificate),
+            43 => AlertCodeClass::Assigned(AlertDescription::UnsupportedCertificate),
+            44 => AlertCodeClass::Assigned(AlertDescription::CertificateRevoked),
+            45 => AlertCodeClass::Assigned(AlertDescription::CertificateExpired),
+            46 => AlertCodeClass::Assigned(AlertDescription::CertificateUnknown),
+            47 => AlertCodeClass::Assigned(AlertDescription::IllegalParameter),
+            48 => AlertCodeClass::Assigned(AlertDescription::UnknownCa),
+            49 => AlertCodeClass::Assigned(AlertDescription::AccessDenied),
+            50 => AlertCodeClass::Assigned(AlertDescription::DecodeError),
+            51 => AlertCodeClass::Assigned(AlertDescription::DecryptError),
+            52 => AlertCodeClass::Assigned(AlertDescription::TooManyCidsRequested),
+            70 => AlertCodeClass::Assigned(AlertDescription::ProtocolVersion),
+            71 => AlertCodeClass::Assigned(AlertDescription::InsufficientSecurity),
+            80 => AlertCodeClass::Assigned(AlertDescription::InternalError),
+            86 => AlertCodeClass::Assigned(AlertDescription::InappropriateFallback),
+            90 => AlertCodeClass::Assigned(AlertDescription::UserCanceled),
+            109 => AlertCodeClass::Assigned(AlertDescription::MissingExtension),
+            110 => AlertCodeClass::Assigned(AlertDescription::UnsupportedExtension),
+            112 => AlertCodeClass::Assigned(AlertDescription::UnrecognizedName),
+            113 => AlertCodeClass::Assigned(AlertDescription::BadCertificateStatusResponse),
+            115 => AlertCodeClass::Assigned(AlertDescription::UnknownPskIdentity),
+            116 => AlertCodeClass::Assigned(AlertDescription::CertificateRequired),
+            117 => AlertCodeClass::Assigned(AlertDescription::GeneralError),
+            120 => AlertCodeClass::Assigned(AlertDescription::NoApplicationProtocol),
+            121 => AlertCodeClass::Assigned(AlertDescription::EchRequired),
+            21 | 30 | 41 | 60 | 100 | 111 | 114 => AlertCodeClass::Reserved,
+            _ => AlertCodeClass::Unassigned,
         }
     }
 }

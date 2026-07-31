@@ -1,17 +1,18 @@
 # Current Status
 
-Status: v0.4.0 pentest passed; awaiting green GitHub CI
+Status: v0.5.0 implementation stop reached; pentest required
 
-Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
-protocol implementation. The Rust workspace remains package scaffolding and
-must not be used to secure network traffic. Brynja is not FIPS 140-3 validated,
-and no package, feature, build, profile, or configuration may imply otherwise.
+Brynja has implemented only shared alert and non-secret failure value domains.
+It still has no TLS state machine, cryptography, PKI, QUIC-TLS, DTLS engine,
+platform provider, or legacy protocol implementation and must not be used to
+secure network traffic. Brynja is not FIPS 140-3 validated, and no package,
+feature, build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.3.5 established the workspace, hardened
+Signed releases v0.1.0 through v0.4.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
-classified protocol surfaces and the normative matrix foundation. The v0.4.0
-candidate advances only `brynja`; unchanged supporting crates remain at their
-independently published `0.1.0` versions and are not selected again.
+classified protocol surfaces and the normative matrix foundation, and added
+the assurance harness. The v0.5.0 candidate selects `brynja-core 0.2.0`, eight
+dependency-only modern support patches at `0.1.1`, and `brynja 0.5.0`.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -166,7 +167,22 @@ Version 0.4.0 establishes assurance infrastructure without protocol code:
   limitation, native-host CI, Windows startup constant, bounded input,
   streaming corpus, and exact local/remote probe timeout checks.
 
-This remains governance and planning evidence, not protocol implementation.
+Version 0.5.0 implements the first shared protocol value domains:
+
+- all 256 TLS AlertDescription bytes classify as assigned, reserved, or
+  unassigned without lossy coercion;
+- assigned alerts carry a concrete TLS 1.2, TLS 1.3, DTLS 1.2, or DTLS 1.3
+  identity and fail closed on version-specific misuse;
+- orderly close and explicit cancellation are distinct from alert failures;
+- local, provider, and resource-exhaustion failures carry only closed enums,
+  with no strings, byte payloads, provider-native codes, or numeric limits;
+- failure envelopes implement neither `Debug` nor `Display`, and compile-fail
+  tests prevent accidental formatting or secret-payload constructors; and
+- `BRY-REQ-TLS-0005` and the alert registry surface now point to actual code
+  and tests through immutable `implemented` and `tested` revisions.
+
+Everything beyond those value domains remains governance and planning
+evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
 RFC and final IANA values exist. Non-RFC legacy requirements carry
 machine-checked blocked lifecycles and exact blocker targets until source
@@ -223,5 +239,5 @@ independent-review/FIPS disclosures address the complete assessment. The
 repository owner retested signed commit
 `62ad878cf2e536fec43cab99d42c6943cab905d5` and reported it green with no
 remaining finding. The permanent v0.4.0 report records `PASS`/`PASS` with zero
-open findings. The candidate now awaits green hosted GitHub checks before
-explicit tag authorization.
+open findings, and signed tag `v0.4.0` is published. The v0.5.0 implementation
+stop now requires its independent release pentest.

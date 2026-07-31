@@ -91,11 +91,23 @@ def expected_publish(entry: dict) -> list[str]:
 
 def validate_target(name: str, package: dict) -> None:
     targets = package.get("targets", [])
-    if len(targets) != 1:
-        raise ValueError(f"{name} must contain exactly one library target")
-    target = targets[0]
+    libraries = [target for target in targets if target.get("kind") == ["lib"]]
+    if len(libraries) != 1:
+        raise ValueError(f"{name} target must be a library only")
+    target = libraries[0]
     if target.get("kind") != ["lib"] or target.get("crate_types") != ["lib"]:
         raise ValueError(f"{name} target must be a library only")
+    for extra in targets:
+        if extra is target:
+            continue
+        source = Path(extra.get("src_path", "")).resolve()
+        expected_tests = (ROOT / "crates" / name / "tests").resolve()
+        if (
+            extra.get("kind") != ["test"]
+            or extra.get("crate_types") != ["bin"]
+            or expected_tests not in source.parents
+        ):
+            raise ValueError(f"{name} may contain only library and integration-test targets")
     if package.get("edition") != "2024":
         raise ValueError(f"{name} must use Rust edition 2024")
     if package.get("rust_version") != "1.90":

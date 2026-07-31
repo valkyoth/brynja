@@ -1,7 +1,8 @@
 //! Alert registry and version-admission tests.
 
 use brynja_core::{
-    Alert, AlertClass, AlertCode, AlertDescription, AlertOrigin, AlertSeverity, ProtocolVersion,
+    Alert, AlertClass, AlertCode, AlertCodeClass, AlertDescription, AlertOrigin, AlertSeverity,
+    ProtocolVersion,
 };
 
 const ASSIGNED: [AlertDescription; 30] = [
@@ -41,18 +42,33 @@ const ASSIGNED: [AlertDescription; 30] = [
 fn registry() {
     for description in ASSIGNED {
         assert_eq!(
-            AlertCode::classify(description.code()),
-            AlertCode::Assigned(description)
+            AlertCode::classify(description.code()).class(),
+            AlertCodeClass::Assigned(description)
         );
     }
 
     for code in [21_u8, 30, 41, 60, 100, 111, 114] {
-        assert_eq!(AlertCode::classify(code), AlertCode::Reserved(code));
+        let classified = AlertCode::classify(code);
+        assert_eq!(classified.code(), code);
+        assert_eq!(classified.class(), AlertCodeClass::Reserved);
     }
 
     let classified = (u8::MIN..=u8::MAX).map(AlertCode::classify).count();
     assert_eq!(classified, 256);
-    assert_eq!(AlertCode::classify(255), AlertCode::Unassigned(255));
+    let assigned = (u8::MIN..=u8::MAX)
+        .map(AlertCode::classify)
+        .filter(|code| matches!(code.class(), AlertCodeClass::Assigned(_)))
+        .count();
+    let reserved = (u8::MIN..=u8::MAX)
+        .map(AlertCode::classify)
+        .filter(|code| matches!(code.class(), AlertCodeClass::Reserved))
+        .count();
+    let unassigned = (u8::MIN..=u8::MAX)
+        .map(AlertCode::classify)
+        .filter(|code| matches!(code.class(), AlertCodeClass::Unassigned))
+        .count();
+    assert_eq!((assigned, reserved, unassigned), (30, 7, 219));
+    assert_eq!(AlertCode::classify(255).class(), AlertCodeClass::Unassigned);
 }
 
 #[test]

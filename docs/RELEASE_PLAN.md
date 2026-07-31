@@ -438,7 +438,7 @@ Exit criteria:
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Establish first-party mutation and differential harnesses, true bare-metal targets, and pinned external assurance-tool policy without adding third-party crates to repository Cargo manifests.
 
@@ -505,37 +505,52 @@ Exit criteria:
 
 ### v0.5.0 - Error Alert And Exhaustion Domains
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Freeze non-secret error, alert, close, provider-failure, and resource-exhaustion domains; prohibit secret-bearing formatting and ambiguous failure collapse.
 
-Goal: complete the **Error Alert And Exhaustion Domains** implementation stop without admitting or
-claiming adjacent capability.
+Goal: freeze the shared allocation-free outcome taxonomy consumed by later
+TLS and DTLS engines without implementing framing, state transitions,
+cryptography, providers, or numeric budget policy early.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects,
-  mandatory zeroization, version-neutral framing, provider failure,
-  secret-free errors, and a one-way production-to-test-support boundary;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- classify all 256 TLS AlertDescription bytes as assigned, reserved, or
+  unassigned from the pinned IANA registry without ambiguous coercion;
+- define concrete TLS 1.2, TLS 1.3, DTLS 1.2, and DTLS 1.3 identities and
+  fail-closed admission for version-specific assigned alerts;
+- keep orderly close, explicit cancellation, alert failure, local failure,
+  provider failure, and resource exhaustion as distinct types;
+- prevent failure envelopes from carrying arbitrary strings, byte payloads,
+  provider-native codes, numeric limits, or `Debug`/`Display` formatting;
+- retain numeric bounds, wire encoding, terminal protocol state, provider
+  capabilities, and zeroization mechanics for their owning later milestones;
+- transition `BRY-REQ-TLS-0005` through immutable `implemented` and `tested`
+  revisions and mark only the alert registry surface implemented;
+- publish `brynja-core 0.2.0`, dependency-only patch releases for its changed
+  exact-pinned modern closure, and the mandatory `brynja 0.5.0` facade.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency
-  inversion, cancellation, optimization, cache and DMA duties, terminal states,
-  and broken production graphs containing RFC 9850 labels or hooks;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- exhaustively classify the 256-byte registry and verify every assigned and
+  reserved value, semantic class, fixed severity, and version exception;
+- run positive and negative typed-outcome, close/cancellation separation,
+  provider-category, exhaustion, representation-bound, and compile-fail
+  formatting/payload tests;
+- verify `no_std`, no allocation, no unsafe code, no external dependency,
+  fixed work, all promised Rust versions and targets, package ordering,
+  documentation, SBOM, advisory policy, and protocol isolation;
+- run the full first-party assurance and repository gates, then obtain the
+  required external release pentest.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe,
-  platform-independent, reviewably destroys owned secrets, and cannot log
-  production traffic secrets;
+- all v0.5 domains are deterministic, fixed-work, platform-independent,
+  secret-free by construction, and cannot collapse close or cancellation into
+  a failure;
+- the requirement and registry artifacts identify the implementation and its
+  linked tests without claiming independent review, interoperability, TLS
+  operation, cryptographic verification, or FIPS validation;
 - `v0.5.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.6.0 - Bounded Numeric And Resource Domains

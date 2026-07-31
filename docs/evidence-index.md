@@ -40,7 +40,7 @@ consistent in the same commit.
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |
 | `security/pentest/vX.Y.Z.md` | Permanent per-version pentest and remediation outcome | Release-readiness and report-history validators |
 | `assurance/policy.toml` | Bounded first-party mutation and differential contracts, three OS-less targets, separate stable/Kani toolchains, and five exact external assurance-tool pins | Schema, bounds, target, workflow, manifest-isolation, pin, source-kind, owner, and broken-fixture validation |
-| `assurance/evidence.json` | Deterministic binding of assurance policy, runners, process-tree and bounded-input controls, CI, stable/Kani toolchain documentation, and every Cargo manifest | Byte-for-byte regeneration and 40 positive/broken assurance fixtures |
+| `assurance/evidence.json` | Deterministic binding of assurance policy, runners, process-containment preconditions, bounded-input controls, native-host CI, stable/Kani toolchain documentation, and every Cargo manifest | Byte-for-byte regeneration and 43 positive/broken assurance fixtures |
 
 The v0.3.0 ledger, v0.3.1 decisions, v0.3.2 matrix foundation, v0.3.3
 cryptography/encoding/PKIX population, v0.3.4 TLS/DTLS/QUIC-TLS population,

@@ -26,11 +26,19 @@ difference between implementations fails closed. Campaigns must use at least
 two independently maintained implementations and record exact executable
 hashes separately.
 
-Each adapter starts in an isolated POSIX session or a suspended Windows process
-assigned to a kill-on-close Job Object before it can execute. The complete
-process tree is terminated on direct-parent completion, timeout, output
-overflow, or abnormal cleanup, so descendants cannot retain output pipes or
-outlive the adapter boundary.
+On Windows, each adapter starts suspended and enters a kill-on-close Job Object
+before it can execute; native Windows CI exercises this path. On POSIX, the
+runner starts a separate session and kills its process group, but a hostile
+descendant can call `setsid()` and leave that group. The POSIX group is
+therefore cooperative defense-in-depth, not complete tree containment.
+
+Hostile POSIX execution fails closed unless `--tree-containment` names an
+externally enforced `linux-cgroup-v2`, `pid-namespace`, `container-vm`, or
+`fork-setsid-denied-sandbox` boundary. The option is a launcher contract, not
+proof that containment exists; campaigns must retain configuration and
+operational evidence for the named boundary. A loudly named test-only
+cooperative mode is available only to the internal fixture API and is rejected
+by production command-line runners.
 
 Harness input is public test data, never a secret. The runners do not claim to
 provide an OS sandbox: every campaign launcher must independently deny network

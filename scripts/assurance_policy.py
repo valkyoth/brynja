@@ -130,7 +130,7 @@ def validate_harness(harness: dict) -> None:
         or harness["network_isolation"] != "external-sandbox-required"
         or harness["input_class"] != "public-test-data-only"
         or harness["process_tree_termination"]
-        != "posix-session-or-windows-kill-on-close-job"
+        != "hostile-posix-external-containment-windows-job"
         or harness["corpus_input"]
         != "descriptor-bound-no-follow-limit-plus-one-streaming"
     ):
@@ -261,6 +261,9 @@ def validate_workflow(workflow: str) -> None:
     command = "run: cargo check --workspace --all-features --target ${{ matrix.target }}"
     if workflow.count(command) != 1:
         fail("CI bare-metal target command drifted")
+    platform_command = "run: python scripts/test-assurance.py"
+    if workflow.count(platform_command) != 1:
+        fail("native host assurance test command drifted")
 
 
 def validate_manifest_text(contents: str, tools: list[dict], label: str) -> None:
@@ -331,6 +334,7 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "scripts" / "assurance_io.py",
         ROOT / "scripts" / "assurance_process.py",
         ROOT / "scripts" / "assurance_process_tree.py",
+        ROOT / "scripts" / "assurance_process_tests.py",
         ROOT / "scripts" / "assurance_policy.py",
         ROOT / "scripts" / "assurance-fixture-adapter.py",
         ROOT / "scripts" / "test-assurance.py",

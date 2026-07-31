@@ -13,6 +13,7 @@ from pathlib import Path
 import assurance_policy as assurance
 from assurance_io import iter_bounded_corpus
 from assurance_process import run_bounded
+from assurance_process_tree import EXTERNAL_POSIX_CONTAINMENT, WINDOWS_JOB_OBJECT
 
 
 CLASSES = {"accept", "reject", "unsupported"}
@@ -47,8 +48,18 @@ def run_adapter(
     case: bytes,
     timeout_seconds: float,
     maximum_output: int,
+    tree_containment: str | None,
+    *,
+    allow_test_only_containment: bool = False,
 ) -> dict[str, str]:
-    result = run_bounded(command, case, timeout_seconds, maximum_output)
+    result = run_bounded(
+        command,
+        case,
+        timeout_seconds,
+        maximum_output,
+        tree_containment,
+        allow_test_only_containment=allow_test_only_containment,
+    )
     if result.returncode != 0:
         raise RuntimeError("differential adapter failed")
     return parse_result(result.stdout)
@@ -59,13 +70,23 @@ def compare(
     cases: Iterable[bytes],
     timeout_seconds: float,
     maximum_output: int,
+    tree_containment: str | None,
+    *,
+    allow_test_only_containment: bool = False,
 ) -> int:
     if len(commands) < 2 or len({tuple(command) for command in commands}) < 2:
         raise RuntimeError("differential run requires two distinct adapters")
     compared = 0
     for case in cases:
         results = [
-            run_adapter(command, case, timeout_seconds, maximum_output)
+            run_adapter(
+                command,
+                case,
+                timeout_seconds,
+                maximum_output,
+                tree_containment,
+                allow_test_only_containment=allow_test_only_containment,
+            )
             for command in commands
         ]
         if any(result != results[0] for result in results[1:]):
@@ -81,6 +102,10 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cases", required=True)
     parser.add_argument("--adapter", action="append", required=True)
+    parser.add_argument(
+        "--tree-containment",
+        choices=sorted((*EXTERNAL_POSIX_CONTAINMENT, WINDOWS_JOB_OBJECT)),
+    )
     args = parser.parse_args()
     policy = assurance.read_policy()
     limits = policy["harness"]
@@ -99,6 +124,7 @@ def main() -> int:
             cases,
             limits["timeout_milliseconds"] / 1000,
             limits["maximum_output_bytes"],
+            args.tree_containment,
         )
     except RuntimeError as error:
         raise SystemExit(str(error)) from error

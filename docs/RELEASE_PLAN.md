@@ -455,10 +455,11 @@ Deliverables:
   network/filesystem/process sandbox duty;
 - require two distinct independently maintained process adapters for
   differential evidence and fail on timeout, crash, excess output,
-  noncanonical result, unsupported class, or semantic mismatch; start each
-  adapter in an isolated POSIX session or suspended Windows kill-on-close Job
-  Object and terminate the complete tree on completion, timeout, overflow, or
-  abnormal cleanup;
+  noncanonical result, unsupported class, or semantic mismatch; place Windows
+  adapters in a suspended kill-on-close Job Object before execution, use
+  POSIX sessions only as cooperative cleanup, and fail closed for hostile
+  POSIX execution unless its launcher declares enforced cgroup v2, PID
+  namespace, container/VM, or fork-and-`setsid`-denied containment;
 - compile the complete all-feature workspace on
   `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and
   `x86_64-unknown-none` without implying runtime, entropy, platform, or Aesynx
@@ -480,7 +481,9 @@ Verification:
   target, wrong Kani pairing, unpinned tool, workflow, dependency, evidence,
   release-state, local target-probe timeout, and remote tag-probe timeout
   fixtures, plus parent-exit pipe retention, descendant timeout, descendant
-  output flood, descendant survival, limit-plus-one and oversized input,
+  output flood, cooperative descendant survival, detached POSIX escape,
+  absent external-containment rejection, Windows suspended-start constant,
+  native Linux/macOS/Windows execution, limit-plus-one and oversized input,
   symlink or reparse input, corpus-count, one-case streaming, and exact
   streamed-mutation equivalence regressions;
 - inspect source locks, clean archives, permissions, tag assumptions, stable
@@ -492,10 +495,12 @@ Verification:
 Exit criteria:
 
 - repository evidence and enforcement agree, every deliberate violation fails,
-  descendants cannot escape time or output limits, input allocation and corpus
-  residency remain bounded before parsing, the three OS-less targets compile,
-  ordinary Cargo graphs remain first-party only, and policy-only Kani status
-  cannot be mistaken for a completed proof;
+  Windows descendants remain Job-owned, hostile POSIX execution is rejected
+  without an external containment contract, the cooperative POSIX limitation
+  is tested and disclosed, input allocation and corpus residency remain
+  bounded before parsing, the three OS-less targets compile, ordinary Cargo
+  graphs remain first-party only, and policy-only Kani status cannot be
+  mistaken for a completed proof;
 - `v0.4.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.5.0 - Error Alert And Exhaustion Domains

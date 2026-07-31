@@ -8,10 +8,8 @@ import itertools
 import json
 import os
 import stat
-import subprocess
 import sys
 import tempfile
-import time
 from contextlib import contextmanager
 from pathlib import Path
 from unittest import mock
@@ -20,8 +18,9 @@ import assurance_differential as differential
 import assurance_io
 import assurance_mutation as mutation
 import assurance_policy as assurance
+import assurance_process_tests
+import assurance_process_tree as process_tree
 from assurance_process import run_bounded
-from assurance_process_tree import popen_tree_options
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -43,6 +42,44 @@ def command(mode: str, *arguments: str) -> list[str]:
     return [sys.executable, str(ADAPTER), mode, *arguments]
 
 
+def fixture_containment() -> str | None:
+    if os.name == "nt":
+        return None
+    return process_tree.TEST_ONLY_POSIX_GROUP
+
+
+def run_fixture(
+    mode: str,
+    timeout_seconds: float,
+    maximum_output: int,
+    *arguments: str,
+):
+    return run_bounded(
+        command(mode, *arguments),
+        b"",
+        timeout_seconds,
+        maximum_output,
+        fixture_containment(),
+        allow_test_only_containment=True,
+    )
+
+
+def compare_fixture(
+    commands: list[list[str]],
+    cases,
+    timeout_seconds: float,
+    maximum_output: int,
+) -> int:
+    return differential.compare(
+        commands,
+        cases,
+        timeout_seconds,
+        maximum_output,
+        fixture_containment(),
+        allow_test_only_containment=True,
+    )
+
+
 def test_policy_and_evidence_are_deterministic() -> None:
     policy = assurance.read_policy()
     first = assurance.json_bytes(assurance.build_evidence(policy))
@@ -62,6 +99,17 @@ def test_process_tree_policy_drift_fails() -> None:
     policy["harness"]["process_tree_termination"] = "immediate-child-only"
     with fails_with("security controls were weakened"):
         assurance.validate_policy(policy)
+
+
+def test_missing_native_assurance_ci_fails() -> None:
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    broken = workflow.replace(
+        "      - name: Test assurance platform boundary\n"
+        "        run: python scripts/test-assurance.py\n",
+        "",
+    )
+    with fails_with("native host assurance test command drifted"):
+        assurance.validate_workflow(broken)
 
 
 def test_corpus_input_policy_drift_fails() -> None:
@@ -286,7 +334,7 @@ def test_unknown_result_field_fails() -> None:
 
 
 def test_differential_agreement_passes() -> None:
-    count = differential.compare(
+    count = compare_fixture(
         [command("echo"), command("echo-alt")],
         [b"", b"\x00\xff"],
         1,
@@ -304,12 +352,21 @@ def test_differential_cases_are_consumed_one_at_a_time() -> None:
         events.append("load-2")
         yield b"two"
 
-    def adapter(_command, case, _timeout, _maximum):
+    def adapter(
+        _command,
+        case,
+        _timeout,
+        _maximum,
+        _containment,
+        *,
+        allow_test_only_containment,
+    ):
+        assert allow_test_only_containment
         events.append(f"run-{case.decode()}")
         return {"class": "accept", "output": case.hex()}
 
     with mock.patch.object(differential, "run_adapter", side_effect=adapter):
-        assert differential.compare(
+        assert compare_fixture(
             [["first"], ["second"]],
             cases(),
             1,
@@ -327,19 +384,19 @@ def test_differential_cases_are_consumed_one_at_a_time() -> None:
 
 def test_duplicate_adapter_fails() -> None:
     with fails_with("two distinct adapters"):
-        differential.compare([command("echo"), command("echo")], [b""], 1, 1024)
+        compare_fixture([command("echo"), command("echo")], [b""], 1, 1024)
 
 
 def test_empty_differential_corpus_fails() -> None:
     with fails_with("at least one case"):
-        differential.compare(
+        compare_fixture(
             [command("echo"), command("echo-alt")], [], 1, 1024
         )
 
 
 def test_differential_mismatch_fails() -> None:
     with fails_with("differential mismatch"):
-        differential.compare(
+        compare_fixture(
             [command("echo"), command("diverge")],
             [b"case"],
             1,
@@ -349,62 +406,14 @@ def test_differential_mismatch_fails() -> None:
 
 def test_adapter_failure_fails() -> None:
     with fails_with("adapter failed"):
-        differential.run_adapter(command("fail"), b"", 1, 1024)
-
-
-def test_process_timeout_fails() -> None:
-    with fails_with("timed out"):
-        run_bounded(command("hang"), b"", 0.05, 1024)
-
-
-def test_process_output_bound_fails() -> None:
-    with fails_with("exceeded output bound"):
-        run_bounded(command("flood"), b"", 1, 64)
-
-
-def test_process_tree_platform_isolation_is_enabled() -> None:
-    options = popen_tree_options()
-    if os.name == "nt":
-        flags = options["creationflags"]
-        assert isinstance(flags, int)
-        assert flags & subprocess.CREATE_SUSPENDED
-    else:
-        assert options == {"start_new_session": True}
-
-
-def test_parent_exit_with_descendant_pipe_is_bounded() -> None:
-    started = time.monotonic()
-    result = run_bounded(command("descendant-hold"), b"", 0.2, 1024)
-    assert result.returncode == 0
-    assert time.monotonic() - started < 1
-
-
-def test_descendant_timeout_is_bounded() -> None:
-    started = time.monotonic()
-    with fails_with("timed out"):
-        run_bounded(command("descendant-timeout"), b"", 0.05, 1024)
-    assert time.monotonic() - started < 1
-
-
-def test_descendant_output_is_bounded() -> None:
-    started = time.monotonic()
-    with fails_with("exceeded output bound"):
-        run_bounded(command("descendant-flood"), b"", 1, 64)
-    assert time.monotonic() - started < 1
-
-
-def test_descendant_cannot_survive_parent_termination() -> None:
-    with tempfile.TemporaryDirectory() as directory:
-        marker = Path(directory) / "escaped"
-        with fails_with("timed out"):
-            run_bounded(
-                command("descendant-marker", str(marker)),
-                b"",
-                0.05,
-                1024,
-            )
-        time.sleep(0.5)
-        assert not marker.exists()
+        differential.run_adapter(
+            command("fail"),
+            b"",
+            1,
+            1024,
+            fixture_containment(),
+            allow_test_only_containment=True,
+        )
 
 
 def test_release_version_ordering() -> None:
@@ -418,6 +427,7 @@ def main() -> int:
         for name, value in sorted(globals().items())
         if name.startswith("test_") and callable(value)
     ]
+    tests.extend(assurance_process_tests.tests())
     for test in tests:
         test()
     print(f"{len(tests)} assurance policy and harness tests passed")

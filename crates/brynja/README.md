@@ -33,10 +33,11 @@ Version `0.4.0` establishes the first-party assurance harness and true
 bare-metal compile matrix on top of the complete 167-requirement,
 126-authority, 4,424-surface normative baseline. Deterministic mutation and
 external-process differential runners enforce input, output, case, timeout,
-process-tree, canonical-result, and replay bounds. The complete workspace
-builds for three OS-less targets, and exact Kani, Miri, sanitizer, AFL++, and
-honggfuzz source pins remain outside every Cargo manifest. It does **not**
-implement TLS and must not be used to secure network traffic.
+process-containment preconditions, canonical-result, and replay bounds. The
+complete workspace builds for three OS-less targets, and exact Kani, Miri,
+sanitizer, AFL++, and honggfuzz source pins remain outside every Cargo
+manifest. It does **not** implement TLS and must not be used to secure network
+traffic.
 
 ## Install
 
@@ -83,12 +84,14 @@ publishes the facade last.
   become too large to review safely.
 - Assurance runners are first-party, deterministic, bounded, and shell-free.
   Inputs use descriptor-bound, no-follow, limit-plus-one reads and differential
-  corpora and generated mutation cases stream one at a time. Adapters run in
-  isolated POSIX sessions or Windows kill-on-close Job Objects, and the entire
-  tree is terminated on completion, timeout, overflow, or cleanup failure.
-  External campaign launchers must provide OS sandboxing. Kani uses its
-  separately documented Rust 1.90.0 verifier pairing while release code stays
-  on latest stable Rust; policy-only status is never a proof claim.
+  corpora and generated mutation cases stream one at a time. Windows uses a
+  suspended-start kill-on-close Job Object. A POSIX process group is only
+  cooperative cleanup: hostile execution fails closed unless the launcher
+  declares enforced cgroup, PID-namespace, container/VM, or fork-and-setsid
+  denial. That declaration is a launcher contract, not sandbox evidence.
+  External campaign launchers must provide and record OS containment. Kani uses
+  its separately documented Rust 1.90.0 verifier pairing while release code
+  stays on latest stable Rust; policy-only status is never a proof claim.
 - A feature being compiled is never evidence that a protocol is implemented,
   secure, interoperable, audited, or production-ready.
 - The locked RFC closure and its roadmap mapping are recorded in the

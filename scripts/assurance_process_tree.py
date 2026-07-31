@@ -9,6 +9,19 @@ import subprocess
 import threading
 
 
+CREATE_SUSPENDED = 0x00000004
+WINDOWS_JOB_OBJECT = "windows-job-object"
+TEST_ONLY_POSIX_GROUP = "test-only-cooperative-posix-process-group"
+EXTERNAL_POSIX_CONTAINMENT = frozenset(
+    {
+        "linux-cgroup-v2",
+        "pid-namespace",
+        "container-vm",
+        "fork-setsid-denied-sandbox",
+    }
+)
+
+
 if os.name == "nt":
     import ctypes
     from ctypes import wintypes
@@ -74,18 +87,38 @@ if os.name == "nt":
 
 
 def popen_tree_options() -> dict[str, object]:
-    """Return platform options that prevent an adapter escaping before attach."""
+    """Return platform process-group or suspended Job Object startup options."""
     if os.name == "nt":
         return {
             "creationflags": (
-                subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_SUSPENDED
+                subprocess.CREATE_NEW_PROCESS_GROUP | CREATE_SUSPENDED
             )
         }
     return {"start_new_session": True}
 
 
+def validate_tree_containment(
+    mode: str | None,
+    *,
+    allow_test_only: bool = False,
+) -> str:
+    """Require enforced containment for hostile POSIX adapter execution."""
+    if os.name == "nt":
+        if mode not in (None, WINDOWS_JOB_OBJECT):
+            raise RuntimeError("Windows adapters require Job Object containment")
+        return WINDOWS_JOB_OBJECT
+    if mode in EXTERNAL_POSIX_CONTAINMENT:
+        return mode
+    if allow_test_only and mode == TEST_ONLY_POSIX_GROUP:
+        return mode
+    raise RuntimeError(
+        "hostile POSIX adapter execution requires externally enforced "
+        "cgroup/PID-namespace/container/VM/fork-denied containment"
+    )
+
+
 class ProcessTree:
-    """Own and terminate a complete adapter process tree."""
+    """Own the platform process boundary used by an assurance adapter."""
 
     def __init__(self, process: subprocess.Popen[bytes]) -> None:
         self.process = process
@@ -122,7 +155,7 @@ class ProcessTree:
         raise RuntimeError(message)
 
     def kill(self) -> None:
-        """Terminate the owned process tree once."""
+        """Terminate the owned Job Object or cooperative POSIX process group."""
         with self._lock:
             if self._terminated:
                 return

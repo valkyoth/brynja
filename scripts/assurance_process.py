@@ -10,7 +10,11 @@ import time
 from dataclasses import dataclass
 from typing import BinaryIO
 
-from assurance_process_tree import ProcessTree, popen_tree_options
+from assurance_process_tree import (
+    ProcessTree,
+    popen_tree_options,
+    validate_tree_containment,
+)
 
 
 @dataclass(frozen=True)
@@ -51,12 +55,19 @@ def run_bounded(
     payload: bytes,
     timeout_seconds: float,
     maximum_output: int,
+    tree_containment: str | None,
+    *,
+    allow_test_only_containment: bool = False,
 ) -> ProcessResult:
     """Run without a shell and cap each output stream while it is produced."""
     if not command:
         raise RuntimeError("assurance command is empty")
     if timeout_seconds <= 0 or maximum_output < 0:
         raise RuntimeError("assurance process bounds are invalid")
+    validate_tree_containment(
+        tree_containment,
+        allow_test_only=allow_test_only_containment,
+    )
     with tempfile.TemporaryFile() as input_file:
         input_file.write(payload)
         input_file.seek(0)

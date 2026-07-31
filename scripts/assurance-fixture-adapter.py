@@ -16,6 +16,7 @@ DESCENDANT = (
     "descendant-timeout",
     "descendant-flood",
     "descendant-marker",
+    "descendant-detached-marker",
 )
 
 
@@ -26,7 +27,7 @@ def spawn_descendant(mode: str, marker: str | None) -> None:
             "sys.stdout.write('x'*4096);sys.stdout.flush();time.sleep(2)"
         )
         arguments = [sys.executable, "-c", code]
-    elif mode == "descendant-marker":
+    elif mode in ("descendant-marker", "descendant-detached-marker"):
         if marker is None:
             raise RuntimeError("descendant marker path is required")
         code = (
@@ -36,7 +37,11 @@ def spawn_descendant(mode: str, marker: str | None) -> None:
         arguments = [sys.executable, "-c", code, str(Path(marker))]
     else:
         arguments = [sys.executable, "-c", "import time;time.sleep(2)"]
-    subprocess.Popen(arguments, shell=False)
+    subprocess.Popen(
+        arguments,
+        shell=False,
+        start_new_session=mode == "descendant-detached-marker",
+    )
 
 
 def main() -> int:

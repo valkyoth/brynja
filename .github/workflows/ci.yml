@@ -57,6 +57,8 @@ jobs:
         run: scripts/ci_install_rust.sh
       - name: Test workspace
         run: cargo test --workspace --all-features
+      - name: Test assurance platform boundary
+        run: python scripts/test-assurance.py
 
   rust-version:
     name: Rust ${{ matrix.rust }}

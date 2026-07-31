@@ -29,10 +29,13 @@ noncanonical results, invalid classes, duplicate adapters, and differences
 fail closed.
 
 Processes are launched without a shell, and stdout and stderr are bounded
-concurrently while produced. Each adapter starts in an isolated POSIX session
-or a suspended Windows process assigned to a kill-on-close Job Object before
-execution. Direct-parent completion, timeout, overflow, and cleanup terminate
-the complete tree, including descendants holding output pipes.
+concurrently while produced. Windows adapters start suspended and enter a
+kill-on-close Job Object before execution. POSIX sessions and process groups
+bound cooperative descendants, but a hostile descendant can detach with
+`setsid()`. The production runners therefore fail closed on POSIX unless the
+launcher declares enforced cgroup v2, PID namespace, container/VM, or
+fork-and-`setsid`-denied containment. This declaration is a launcher contract,
+not evidence that the runner created a sandbox.
 
 Seeds and corpus entries use descriptor-bound, no-follow or reparse-point
 rejecting, limit-plus-one reads from already-open regular files. Corpus
@@ -78,7 +81,7 @@ v0.155.0 completes their claim and residual-gap register.
 
 The release candidate includes:
 
-- 40 assurance policy, mutation, differential, process, input, target, and
+- 43 assurance policy, mutation, differential, process, input, target, and
   tool-pin positive and broken fixtures;
 - deterministic byte-for-byte assurance evidence generation;
 - a fail-closed independent cryptography and protocol review-status register
@@ -90,8 +93,10 @@ The release candidate includes:
 - exact CI membership checks for all three OS-less targets;
 - Cargo-manifest exclusion checks for every external assurance tool;
 - simultaneous process-output exhaustion and timeout tests;
-- parent-exit pipe retention, descendant timeout, descendant output flood, and
-  post-termination descendant-survival tests;
+- parent-exit pipe retention, descendant timeout, descendant output flood,
+  cooperative descendant-survival, detached POSIX escape, missing external
+  containment, and Windows suspended-start tests;
+- native Linux, macOS, and Windows execution of the platform assurance suite;
 - limit-plus-one file-read, oversized-file, symlink/reparse, bounded
   enumeration, and one-case corpus-streaming tests;
 - explicit 30-second bounds on local Rust target and remote Git tag probes;
@@ -115,6 +120,8 @@ GitHub checks are green, and the user explicitly authorizes tagging.
 
 This milestone establishes harness and compile infrastructure, not successful
 protocol fuzzing, differential interoperability, Kani proof, Miri, sanitizer,
-side-channel, or cryptographic campaign evidence. Every later implementation
-must add scoped corpora, independent adapters, proofs, campaign reports,
-residual gaps, and external review at its owning milestone.
+side-channel, cryptographic campaign evidence, or a POSIX sandbox. A declared
+external POSIX containment mode remains the campaign launcher's responsibility
+and must be recorded with campaign evidence. Every later implementation must
+add scoped corpora, independent adapters, proofs, campaign reports, residual
+gaps, and external review at its owning milestone.

@@ -18,7 +18,7 @@ deterministic_replay = true
 network_isolation = "external-sandbox-required"
 input_class = "public-test-data-only"
 automatic_failure_persistence = false
-process_tree_termination = "posix-session-or-windows-kill-on-close-job"
+process_tree_termination = "hostile-posix-external-containment-windows-job"
 corpus_input = "descriptor-bound-no-follow-limit-plus-one-streaming"
 
 [mutation]

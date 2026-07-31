@@ -12,6 +12,7 @@ from pathlib import Path
 import assurance_policy as assurance
 from assurance_io import read_bounded_regular
 from assurance_process import run_bounded
+from assurance_process_tree import EXTERNAL_POSIX_CONTAINMENT, WINDOWS_JOB_OBJECT
 
 
 def mutation_cases(
@@ -86,8 +87,15 @@ def run_case(
     case: bytes,
     timeout_seconds: float,
     maximum_output: int,
+    tree_containment: str | None,
 ) -> tuple[int, bytes, bytes]:
-    result = run_bounded(command, case, timeout_seconds, maximum_output)
+    result = run_bounded(
+        command,
+        case,
+        timeout_seconds,
+        maximum_output,
+        tree_containment,
+    )
     return result.returncode, result.stdout, result.stderr
 
 
@@ -95,6 +103,10 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", required=True)
     parser.add_argument("--replay-index", type=int)
+    parser.add_argument(
+        "--tree-containment",
+        choices=sorted((*EXTERNAL_POSIX_CONTAINMENT, WINDOWS_JOB_OBJECT)),
+    )
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     if not args.command:
@@ -127,6 +139,7 @@ def main() -> int:
             case,
             limits["timeout_milliseconds"] / 1000,
             limits["maximum_output_bytes"],
+            args.tree_containment,
         )
         if returncode != 0:
             digest = hashlib.sha256(case).hexdigest()

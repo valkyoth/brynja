@@ -52,6 +52,9 @@ test -x scripts/check-assurance.py
 test -x scripts/test-assurance.py
 test -x scripts/assurance_mutation.py
 test -x scripts/assurance_differential.py
+test -x scripts/assurance_io.py
+test -x scripts/assurance_process.py
+test -x scripts/assurance_process_tree.py
 test -x scripts/check-bare-metal.sh
 test -x scripts/check-kani.sh
 test -x scripts/check-commit-classification.py

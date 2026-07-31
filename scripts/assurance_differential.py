@@ -7,9 +7,11 @@ import argparse
 import hashlib
 import json
 import shlex
+from collections.abc import Iterable
 from pathlib import Path
 
 import assurance_policy as assurance
+from assurance_io import iter_bounded_corpus
 from assurance_process import run_bounded
 
 
@@ -54,14 +56,12 @@ def run_adapter(
 
 def compare(
     commands: list[list[str]],
-    cases: list[bytes],
+    cases: Iterable[bytes],
     timeout_seconds: float,
     maximum_output: int,
 ) -> int:
     if len(commands) < 2 or len({tuple(command) for command in commands}) < 2:
         raise RuntimeError("differential run requires two distinct adapters")
-    if not cases:
-        raise RuntimeError("differential run requires at least one case")
     compared = 0
     for case in cases:
         results = [
@@ -72,6 +72,8 @@ def compare(
             digest = hashlib.sha256(case).hexdigest()
             raise RuntimeError(f"differential mismatch sha256={digest}")
         compared += 1
+    if compared == 0:
+        raise RuntimeError("differential run requires at least one case")
     return compared
 
 
@@ -86,18 +88,20 @@ def main() -> int:
     if any(not command for command in commands):
         raise SystemExit("adapter command cannot be empty")
     root = Path(args.cases)
-    paths = sorted(path for path in root.iterdir() if path.is_file())
-    if len(paths) > limits["maximum_cases"]:
-        raise SystemExit("case corpus exceeds policy bound")
-    cases = [path.read_bytes() for path in paths]
-    if any(len(case) > limits["maximum_input_bytes"] for case in cases):
-        raise SystemExit("case exceeds policy input bound")
-    count = compare(
-        commands,
-        cases,
-        limits["timeout_milliseconds"] / 1000,
-        limits["maximum_output_bytes"],
-    )
+    try:
+        cases = iter_bounded_corpus(
+            root,
+            limits["maximum_cases"],
+            limits["maximum_input_bytes"],
+        )
+        count = compare(
+            commands,
+            cases,
+            limits["timeout_milliseconds"] / 1000,
+            limits["maximum_output_bytes"],
+        )
+    except RuntimeError as error:
+        raise SystemExit(str(error)) from error
     print(
         json.dumps(
             {"adapters": len(commands), "cases": count},

@@ -107,6 +107,8 @@ def validate_harness(harness: dict) -> None:
             "network_isolation",
             "input_class",
             "automatic_failure_persistence",
+            "process_tree_termination",
+            "corpus_input",
         },
         "harness",
     )
@@ -127,6 +129,10 @@ def validate_harness(harness: dict) -> None:
         or harness["automatic_failure_persistence"]
         or harness["network_isolation"] != "external-sandbox-required"
         or harness["input_class"] != "public-test-data-only"
+        or harness["process_tree_termination"]
+        != "posix-session-or-windows-kill-on-close-job"
+        or harness["corpus_input"]
+        != "descriptor-bound-no-follow-limit-plus-one-streaming"
     ):
         fail("harness security controls were weakened")
 
@@ -298,6 +304,9 @@ def validate_repository(policy: dict) -> None:
     for relative in (
         policy["mutation"]["runner"],
         policy["differential"]["runner"],
+        "scripts/assurance_io.py",
+        "scripts/assurance_process.py",
+        "scripts/assurance_process_tree.py",
         "scripts/check-bare-metal.sh",
         "scripts/check-assurance.py",
         "scripts/test-assurance.py",
@@ -319,7 +328,12 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "docs" / "KANI.md",
         ROOT / "scripts" / "assurance_mutation.py",
         ROOT / "scripts" / "assurance_differential.py",
+        ROOT / "scripts" / "assurance_io.py",
         ROOT / "scripts" / "assurance_process.py",
+        ROOT / "scripts" / "assurance_process_tree.py",
+        ROOT / "scripts" / "assurance_policy.py",
+        ROOT / "scripts" / "assurance-fixture-adapter.py",
+        ROOT / "scripts" / "test-assurance.py",
         ROOT / "scripts" / "check-assurance.py",
         ROOT / "scripts" / "check-bare-metal.sh",
         ROOT / "scripts" / "check-kani.sh",

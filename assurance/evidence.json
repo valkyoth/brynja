@@ -8,7 +8,7 @@
   "inputs": {
     ".github/workflows/ci.yml": "22ca5fa4493f1b271b335838307b963271535eafdd9b5565feeaffb0e87fdc51",
     "Cargo.toml": "0160ee8468c4b9a5bb32fa9a7d27891562fd6ce36f56f4fc6717da747e53206f",
-    "assurance/policy.toml": "a9b4e2967d2f182b4928c6dd3d6778c4a1231bb22d582e8dd0e413765ed05d94",
+    "assurance/policy.toml": "a118e147a90703015f149e24b3bc6523cd0d28e02eeb63970c5569094836aa86",
     "crates/brynja-core/Cargo.toml": "942c62955371e36b652914fd196f97edd3c2b8d93a039ba55edf59bba6ca98a0",
     "crates/brynja-crypto/Cargo.toml": "b38089139d958f6178bedc3cd7cfe18785663fbe44b09bbd9ea1508150aaa6f6",
     "crates/brynja-dtls/Cargo.toml": "b9e97e658b5ad4a26a3516a8cfdc19903a48c8d99f1da3579e88bdeb6ecf7d74",
@@ -35,15 +35,20 @@
     "crates/brynja/Cargo.toml": "a91cc42d944cb1cd5009850154626fa3599dcfe167e8365ac65fc854d0646e7d",
     "docs/KANI.md": "faf8ff6bb60ba18512acb30eb8ba428826e9a18d0076173fb19d1630f1722794",
     "rust-toolchain.toml": "7c2f0a64d6cb4c7b9fb3dc70adbcdb8727a1396367605a09e29bee276044dc23",
-    "scripts/assurance_differential.py": "ec412896517ac801d1661059cefa2449110dc16757dfcd8608f57ab5e3fae01f",
-    "scripts/assurance_mutation.py": "5a7db2099f538ea82d579f6110ba8de5c2c72051672494e6048b130d82c00130",
-    "scripts/assurance_process.py": "ac44f9ebfbaf375b4a4c5889013da146de67bf8de730d4c6aa2a712f76356e00",
+    "scripts/assurance-fixture-adapter.py": "72faeeef8d03f709357c169943613c99a0d17d3b913f89ba931672f56255706f",
+    "scripts/assurance_differential.py": "688e6427f982a37e6ad3e22e847d3f15a3f2f4684e0ee5f06f8615ba7984acba",
+    "scripts/assurance_io.py": "8f48170eef745d1d45d969c53f48eac8d72cae8bd1c04bb82c835f7bc7a9e020",
+    "scripts/assurance_mutation.py": "cc9044305798e9472204167a1dcb993b3b71f76b355905a27c2ff671865773ef",
+    "scripts/assurance_policy.py": "25eda647c7bbaefe8f22fb435c49366dbdfaf9558f39d408dd18adbe8e004399",
+    "scripts/assurance_process.py": "68e0a89d0d94af021767440d39593c1a1aed5fefcd77c4b0afdd14970bd44be7",
+    "scripts/assurance_process_tree.py": "5e54b6be0eb39ceaafab2ba4d3fcb2fcb1ee9884276936042dac7b97a413e20a",
     "scripts/check-assurance.py": "617b4a35ba7f95ac37405a4a5bfae216a65eed79a212d232cb0ec7e1d3aa90b7",
     "scripts/check-bare-metal.sh": "16f431dc854104e4dfc24724eadf76187d44b732b84fce99abe5fe87bcf00423",
-    "scripts/check-kani.sh": "36b125f529992d8491a8b87f1db023eee28c2dbca17c5c1107b0148d31620565"
+    "scripts/check-kani.sh": "36b125f529992d8491a8b87f1db023eee28c2dbca17c5c1107b0148d31620565",
+    "scripts/test-assurance.py": "481efddbb86d7a7db4b003aca1a291fa186d3e8be4a598ed2c94d36536d510b1"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "a9b4e2967d2f182b4928c6dd3d6778c4a1231bb22d582e8dd0e413765ed05d94",
+  "policy_sha256": "a118e147a90703015f149e24b3bc6523cd0d28e02eeb63970c5569094836aa86",
   "schema": 1,
   "tools": [
     {

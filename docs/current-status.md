@@ -144,9 +144,14 @@ Version 0.4.0 establishes assurance infrastructure without protocol code:
 - differential adapters consume bounded public test bytes over raw standard
   input and return canonical JSON, with fail-closed crash, timeout, output,
   class, encoding, and mismatch handling;
-- process execution never invokes a shell and caps both output streams while
-  they are produced; campaign launchers retain an explicit duty to supply OS
-  network, filesystem, process, and device isolation;
+- seed and corpus files use descriptor-bound, no-follow, limit-plus-one reads,
+  corpus enumeration is case-bounded, and differential and generated mutation
+  execution hold only one case at a time;
+- process execution never invokes a shell, uses isolated POSIX sessions or
+  suspended-start Windows kill-on-close Job Objects, terminates the complete
+  tree on every exit path, and caps both output streams while produced;
+  campaign launchers retain an explicit duty to supply OS network, filesystem,
+  process, and device isolation;
 - CI and the local release gate compile the complete all-feature workspace for
   `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and
   `x86_64-unknown-none`;
@@ -156,8 +161,8 @@ Version 0.4.0 establishes assurance infrastructure without protocol code:
   documented compatible Rust 1.90.0 verifier pairing; no Kani proof harness is
   admitted or claimed at this milestone; and
 - deterministic assurance evidence binds policy, runners, CI, and every Cargo
-  manifest, with 26 positive and broken fixtures, including exact timeout
-  checks for local Rust target and remote Git tag probes.
+  manifest, with 40 positive and broken fixtures, including descendant escape,
+  bounded input, streaming corpus, and exact local/remote probe timeout checks.
 
 This remains governance and planning evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track

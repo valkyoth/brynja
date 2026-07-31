@@ -5,16 +5,56 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 import time
+from pathlib import Path
+
+
+DESCENDANT = (
+    "descendant-hold",
+    "descendant-timeout",
+    "descendant-flood",
+    "descendant-marker",
+)
+
+
+def spawn_descendant(mode: str, marker: str | None) -> None:
+    if mode == "descendant-flood":
+        code = (
+            "import sys,time;"
+            "sys.stdout.write('x'*4096);sys.stdout.flush();time.sleep(2)"
+        )
+        arguments = [sys.executable, "-c", code]
+    elif mode == "descendant-marker":
+        if marker is None:
+            raise RuntimeError("descendant marker path is required")
+        code = (
+            "import pathlib,sys,time;"
+            "time.sleep(0.3);pathlib.Path(sys.argv[1]).write_text('escaped')"
+        )
+        arguments = [sys.executable, "-c", code, str(Path(marker))]
+    else:
+        arguments = [sys.executable, "-c", "import time;time.sleep(2)"]
+    subprocess.Popen(arguments, shell=False)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "mode",
-        choices=("echo", "echo-alt", "reject", "diverge", "fail", "hang", "flood"),
+        choices=(
+            "echo",
+            "echo-alt",
+            "reject",
+            "diverge",
+            "fail",
+            "hang",
+            "flood",
+            *DESCENDANT,
+        ),
     )
+    parser.add_argument("marker", nargs="?")
     args = parser.parse_args()
     payload = sys.stdin.buffer.read()
     if args.mode == "fail":
@@ -23,6 +63,12 @@ def main() -> int:
         time.sleep(2)
     if args.mode == "flood":
         sys.stdout.write("x" * 4096)
+        return 0
+    if args.mode in DESCENDANT:
+        spawn_descendant(args.mode, args.marker)
+        if args.mode == "descendant-hold":
+            return 0
+        time.sleep(2)
         return 0
     output = payload.hex()
     result_class = "accept"

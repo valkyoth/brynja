@@ -26,9 +26,21 @@ difference between implementations fails closed. Campaigns must use at least
 two independently maintained implementations and record exact executable
 hashes separately.
 
+Each adapter starts in an isolated POSIX session or a suspended Windows process
+assigned to a kill-on-close Job Object before it can execute. The complete
+process tree is terminated on direct-parent completion, timeout, output
+overflow, or abnormal cleanup, so descendants cannot retain output pipes or
+outlive the adapter boundary.
+
 Harness input is public test data, never a secret. The runners do not claim to
 provide an OS sandbox: every campaign launcher must independently deny network
 access and unwanted filesystem, process, and device capabilities.
+
+Seed and corpus inputs are opened before inspection, must be regular files, and
+reject symlinks or Windows reparse points. Reads request at most the configured
+limit plus one byte, corpus enumeration stops at the case limit, and
+differential and generated mutation cases execute one at a time rather than
+being accumulated in memory.
 
 Repository assurance probes are bounded as well: local Rust target discovery
 and each remote Git tag query have an explicit 30-second timeout. Expiration

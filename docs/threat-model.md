@@ -76,9 +76,12 @@ or exploit a verifier/toolchain mismatch to create a false proof claim.
   source-blocked legacy lifecycles, and terminal HPKE context invalidation and
   destruction;
 - deterministic bounded mutation and external-process differential execution
-  with no shell, simultaneous output caps, canonical result parsing, explicit
-  replay identity, at least two distinct adapters, exact external tool pins,
-  separate release/Kani compiler pairings, and caller-enforced OS sandboxing;
+  with no shell, descriptor-bound limit-plus-one input reads, one-case corpus
+  streaming, isolated POSIX sessions or Windows kill-on-close Job Objects,
+  complete process-tree termination, simultaneous output caps, canonical
+  result parsing, explicit replay identity, at least two distinct adapters,
+  exact external tool pins, separate release/Kani compiler pairings, and
+  caller-enforced OS sandboxing;
 - certificate-bound FIPS module selection, mandatory service indicators,
   approved-only typestates, exact operational-environment matching, immutable
   validated artifacts, and fail-closed claim withdrawal or revalidation after

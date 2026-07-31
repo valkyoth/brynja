@@ -449,11 +449,16 @@ Deliverables:
 
 - freeze a raw-stdin, canonical-JSON adapter protocol with deterministic
   mutation order, exact replay indexes, bounded input, output, case count, and
-  timeout, no shell execution, no automatic failure-input persistence, and an
-  explicit external network/filesystem/process sandbox duty;
+  timeout, descriptor-bound no-follow limit-plus-one file reads, one-case
+  corpus and mutation streaming, no shell execution, no automatic
+  failure-input persistence, and an explicit external
+  network/filesystem/process sandbox duty;
 - require two distinct independently maintained process adapters for
   differential evidence and fail on timeout, crash, excess output,
-  noncanonical result, unsupported class, or semantic mismatch;
+  noncanonical result, unsupported class, or semantic mismatch; start each
+  adapter in an isolated POSIX session or suspended Windows kill-on-close Job
+  Object and terminate the complete tree on completion, timeout, overflow, or
+  abnormal cleanup;
 - compile the complete all-feature workspace on
   `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and
   `x86_64-unknown-none` without implying runtime, entropy, platform, or Aesynx
@@ -474,7 +479,10 @@ Verification:
   adapter, mismatch, crash, timeout, output-exhaustion, weak-bound, duplicate
   target, wrong Kani pairing, unpinned tool, workflow, dependency, evidence,
   release-state, local target-probe timeout, and remote tag-probe timeout
-  fixtures;
+  fixtures, plus parent-exit pipe retention, descendant timeout, descendant
+  output flood, descendant survival, limit-plus-one and oversized input,
+  symlink or reparse input, corpus-count, one-case streaming, and exact
+  streamed-mutation equivalence regressions;
 - inspect source locks, clean archives, permissions, tag assumptions, stable
   versus verifier toolchains, external tool pins, OS-less target availability,
   ledger completeness, and reproducibility;
@@ -484,8 +492,10 @@ Verification:
 Exit criteria:
 
 - repository evidence and enforcement agree, every deliberate violation fails,
-  the three OS-less targets compile, ordinary Cargo graphs remain first-party
-  only, and policy-only Kani status cannot be mistaken for a completed proof;
+  descendants cannot escape time or output limits, input allocation and corpus
+  residency remain bounded before parsing, the three OS-less targets compile,
+  ordinary Cargo graphs remain first-party only, and policy-only Kani status
+  cannot be mistaken for a completed proof;
 - `v0.4.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.5.0 - Error Alert And Exhaustion Domains

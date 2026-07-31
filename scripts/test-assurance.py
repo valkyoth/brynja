@@ -4,16 +4,24 @@
 from __future__ import annotations
 
 import copy
+import itertools
 import json
+import os
+import stat
+import subprocess
 import sys
+import tempfile
+import time
 from contextlib import contextmanager
 from pathlib import Path
 from unittest import mock
 
 import assurance_differential as differential
+import assurance_io
 import assurance_mutation as mutation
 import assurance_policy as assurance
 from assurance_process import run_bounded
+from assurance_process_tree import popen_tree_options
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -31,8 +39,8 @@ def fails_with(message: str):
         raise AssertionError(f"expected failure containing {message!r}")
 
 
-def command(mode: str) -> list[str]:
-    return [sys.executable, str(ADAPTER), mode]
+def command(mode: str, *arguments: str) -> list[str]:
+    return [sys.executable, str(ADAPTER), mode, *arguments]
 
 
 def test_policy_and_evidence_are_deterministic() -> None:
@@ -45,6 +53,20 @@ def test_policy_and_evidence_are_deterministic() -> None:
 def test_weakened_harness_fails() -> None:
     policy = copy.deepcopy(assurance.read_policy())
     policy["harness"]["shell_execution"] = True
+    with fails_with("security controls were weakened"):
+        assurance.validate_policy(policy)
+
+
+def test_process_tree_policy_drift_fails() -> None:
+    policy = copy.deepcopy(assurance.read_policy())
+    policy["harness"]["process_tree_termination"] = "immediate-child-only"
+    with fails_with("security controls were weakened"):
+        assurance.validate_policy(policy)
+
+
+def test_corpus_input_policy_drift_fails() -> None:
+    policy = copy.deepcopy(assurance.read_policy())
+    policy["harness"]["corpus_input"] = "read-whole-corpus"
     with fails_with("security controls were weakened"):
         assurance.validate_policy(policy)
 
@@ -141,6 +163,97 @@ def test_mutations_never_exceed_input_bound() -> None:
     assert all(len(case) <= 2 for case in cases)
 
 
+def test_streamed_mutations_match_exact_deduplicated_order() -> None:
+    def reference(seed: bytes) -> list[bytes]:
+        candidates = [b"", seed]
+        candidates.extend(seed[:end] for end in range(len(seed)))
+        candidates.extend(
+            seed[:offset] + seed[offset + 1 :] for offset in range(len(seed))
+        )
+        candidates.extend(
+            seed[:offset]
+            + bytes([value ^ (1 << bit)])
+            + seed[offset + 1 :]
+            for offset, value in enumerate(seed)
+            for bit in range(8)
+        )
+        candidates.extend(
+            seed[:offset] + inserted + seed[offset:]
+            for inserted in (b"\x00", b"\xff")
+            for offset in range(len(seed) + 1)
+        )
+        return list(dict.fromkeys(candidates))
+
+    for length in range(5):
+        for values in itertools.product((0x00, 0x01, 0xFF), repeat=length):
+            seed = bytes(values)
+            assert list(mutation.mutation_cases(seed, 10_000, 16)) == reference(
+                seed
+            )
+
+
+def test_bounded_file_read_uses_limit_plus_one() -> None:
+    handle = mock.MagicMock()
+    handle.__enter__.return_value = handle
+    handle.fileno.return_value = 7
+    handle.read.return_value = b"bounded"
+    metadata = mock.Mock(st_mode=stat.S_IFREG, st_size=7)
+    with (
+        mock.patch.object(assurance_io, "_open_regular", return_value=handle),
+        mock.patch.object(assurance_io.os, "fstat", return_value=metadata),
+    ):
+        assert assurance_io.read_bounded_regular(Path("case"), 8) == b"bounded"
+    handle.read.assert_called_once_with(9)
+
+
+def test_oversized_file_fails_before_read() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "oversized"
+        path.write_bytes(b"x" * 65)
+        with fails_with("exceeds policy input bound"):
+            assurance_io.read_bounded_regular(path, 64)
+
+
+def test_symlink_case_fails_closed() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        target = Path(directory) / "target"
+        link = Path(directory) / "link"
+        target.write_bytes(b"case")
+        try:
+            link.symlink_to(target)
+        except OSError:
+            return
+        with fails_with("securely open"):
+            assurance_io.read_bounded_regular(link, 64)
+
+
+def test_corpus_count_is_bounded_during_enumeration() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        for index in range(3):
+            (root / str(index)).write_bytes(b"case")
+        with fails_with("corpus exceeds policy bound"):
+            list(assurance_io.iter_bounded_corpus(root, 2, 64))
+
+
+def test_symlink_corpus_directory_fails_closed() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        corpus = root / "corpus"
+        link = root / "link"
+        corpus.mkdir()
+        (corpus / "case").write_bytes(b"case")
+        try:
+            link.symlink_to(corpus, target_is_directory=True)
+        except OSError:
+            return
+        try:
+            list(assurance_io.iter_bounded_corpus(link, 2, 64))
+        except RuntimeError:
+            return
+        raise AssertionError("symlink corpus unexpectedly passed")
+
+
 def test_canonical_result_parses() -> None:
     raw = b'{"class":"accept","output":"00ff"}'
     assert differential.parse_result(raw) == {
@@ -182,6 +295,36 @@ def test_differential_agreement_passes() -> None:
     assert count == 2
 
 
+def test_differential_cases_are_consumed_one_at_a_time() -> None:
+    events: list[str] = []
+
+    def cases():
+        events.append("load-1")
+        yield b"one"
+        events.append("load-2")
+        yield b"two"
+
+    def adapter(_command, case, _timeout, _maximum):
+        events.append(f"run-{case.decode()}")
+        return {"class": "accept", "output": case.hex()}
+
+    with mock.patch.object(differential, "run_adapter", side_effect=adapter):
+        assert differential.compare(
+            [["first"], ["second"]],
+            cases(),
+            1,
+            64,
+        ) == 2
+    assert events == [
+        "load-1",
+        "run-one",
+        "run-one",
+        "load-2",
+        "run-two",
+        "run-two",
+    ]
+
+
 def test_duplicate_adapter_fails() -> None:
     with fails_with("two distinct adapters"):
         differential.compare([command("echo"), command("echo")], [b""], 1, 1024)
@@ -217,6 +360,51 @@ def test_process_timeout_fails() -> None:
 def test_process_output_bound_fails() -> None:
     with fails_with("exceeded output bound"):
         run_bounded(command("flood"), b"", 1, 64)
+
+
+def test_process_tree_platform_isolation_is_enabled() -> None:
+    options = popen_tree_options()
+    if os.name == "nt":
+        flags = options["creationflags"]
+        assert isinstance(flags, int)
+        assert flags & subprocess.CREATE_SUSPENDED
+    else:
+        assert options == {"start_new_session": True}
+
+
+def test_parent_exit_with_descendant_pipe_is_bounded() -> None:
+    started = time.monotonic()
+    result = run_bounded(command("descendant-hold"), b"", 0.2, 1024)
+    assert result.returncode == 0
+    assert time.monotonic() - started < 1
+
+
+def test_descendant_timeout_is_bounded() -> None:
+    started = time.monotonic()
+    with fails_with("timed out"):
+        run_bounded(command("descendant-timeout"), b"", 0.05, 1024)
+    assert time.monotonic() - started < 1
+
+
+def test_descendant_output_is_bounded() -> None:
+    started = time.monotonic()
+    with fails_with("exceeded output bound"):
+        run_bounded(command("descendant-flood"), b"", 1, 64)
+    assert time.monotonic() - started < 1
+
+
+def test_descendant_cannot_survive_parent_termination() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        marker = Path(directory) / "escaped"
+        with fails_with("timed out"):
+            run_bounded(
+                command("descendant-marker", str(marker)),
+                b"",
+                0.05,
+                1024,
+            )
+        time.sleep(0.5)
+        assert not marker.exists()
 
 
 def test_release_version_ordering() -> None:

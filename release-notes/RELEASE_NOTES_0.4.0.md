@@ -29,9 +29,19 @@ noncanonical results, invalid classes, duplicate adapters, and differences
 fail closed.
 
 Processes are launched without a shell, and stdout and stderr are bounded
-concurrently while produced. The runners do not claim to provide an OS
-sandbox; campaign launchers must independently deny network access and
-unwanted filesystem, process, and device capabilities.
+concurrently while produced. Each adapter starts in an isolated POSIX session
+or a suspended Windows process assigned to a kill-on-close Job Object before
+execution. Direct-parent completion, timeout, overflow, and cleanup terminate
+the complete tree, including descendants holding output pipes.
+
+Seeds and corpus entries use descriptor-bound, no-follow or reparse-point
+rejecting, limit-plus-one reads from already-open regular files. Corpus
+enumeration is case-bounded and differential cases execute one at a time, so
+policy limits apply before allocation and total corpus size is not resident in
+memory. Generated mutation cases likewise execute one at a time while
+preserving the original exact deduplicated order. The runners do not claim to
+provide an OS sandbox; campaign launchers must independently deny network
+access and unwanted filesystem, process, and device capabilities.
 
 ## Bare-Metal Matrix
 
@@ -68,8 +78,8 @@ v0.155.0 completes their claim and residual-gap register.
 
 The release candidate includes:
 
-- 26 assurance policy, mutation, differential, process, target, and tool-pin
-  positive and broken fixtures;
+- 40 assurance policy, mutation, differential, process, input, target, and
+  tool-pin positive and broken fixtures;
 - deterministic byte-for-byte assurance evidence generation;
 - a fail-closed independent cryptography and protocol review-status register
   in the root, published facade, and every applicable component README,
@@ -80,6 +90,10 @@ The release candidate includes:
 - exact CI membership checks for all three OS-less targets;
 - Cargo-manifest exclusion checks for every external assurance tool;
 - simultaneous process-output exhaustion and timeout tests;
+- parent-exit pipe retention, descendant timeout, descendant output flood, and
+  post-termination descendant-survival tests;
+- limit-plus-one file-read, oversized-file, symlink/reparse, bounded
+  enumeration, and one-case corpus-streaming tests;
 - explicit 30-second bounds on local Rust target and remote Git tag probes;
 - the existing 167-requirement, 126-authority, and 4,424-surface normative
   baseline;

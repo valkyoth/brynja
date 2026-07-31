@@ -29,7 +29,9 @@ CONFIG = bundle.Config(
     source_domains=frozenset(SOURCE_DOMAINS),
     surface_domains=frozenset(SURFACE_DOMAINS),
     authority_roles=frozenset(AUTHORITY_ROLES),
-    lifecycles=frozenset({"caller-owned", "planned", "rejected"}),
+    lifecycles=frozenset(
+        {"caller-owned", "implemented", "planned", "rejected", "tested"}
+    ),
     require_owner_coverage=True,
     section_policy=lib.DIRECTORY / "transport-sections.toml",
 )
@@ -154,11 +156,13 @@ def load_policy(ledger: dict | None = None) -> tuple[dict, list[dict], str]:
     for raw in requirements:
         lifecycle = raw["lifecycle"]
         applicability, decision = lib.LIFECYCLE_DECISIONS[lifecycle]
-        target_kind = (
-            "boundary"
-            if lifecycle in {"caller-owned", "rejected"}
-            else "planned-symbol"
-        )
+        if lifecycle in {"caller-owned", "rejected"}:
+            target_kind = "boundary"
+        elif lifecycle in {"implemented", "tested"}:
+            target_kind = "actual-symbol"
+        else:
+            target_kind = "planned-symbol"
+        test_status = "actual" if lifecycle == "tested" else "planned"
         expanded.append(
             {
                 "applicability": applicability,
@@ -192,12 +196,12 @@ def load_policy(ledger: dict | None = None) -> tuple[dict, list[dict], str]:
                 "tests": [
                     {
                         "polarity": "positive",
-                        "status": "planned",
+                        "status": test_status,
                         "target": raw["positive_test"],
                     },
                     {
                         "polarity": "negative",
-                        "status": "planned",
+                        "status": test_status,
                         "target": raw["negative_test"],
                     },
                 ],

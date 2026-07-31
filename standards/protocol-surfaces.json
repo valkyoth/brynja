@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "5e6745fe81a2a1089e569337d137c1aa956cf514a7e915989b0c35b3bb2867d3",
+  "policy_sha256": "e386804cec8d1bac99c367a4271b67a5f772c87193b04736502b7c9d9504085c",
   "schema": 2,
   "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945",
   "surfaces": [
@@ -114556,7 +114556,7 @@
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6",
       "kind": "iana-registry",
@@ -114572,11 +114572,11 @@
         "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc",
         "title": "TLS Alerts"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.access-denied.1",
       "kind": "iana-entry",
@@ -114606,11 +114606,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.bad-certificate-hash-value-reserved.1",
       "kind": "iana-entry",
@@ -114646,11 +114646,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.bad-certificate-status-response.1",
       "kind": "iana-entry",
@@ -114679,11 +114679,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.bad-certificate.1",
       "kind": "iana-entry",
@@ -114713,11 +114713,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.bad-record-mac.1",
       "kind": "iana-entry",
@@ -114747,11 +114747,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.certificate-expired.1",
       "kind": "iana-entry",
@@ -114781,11 +114781,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.certificate-required.1",
       "kind": "iana-entry",
@@ -114816,11 +114816,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.certificate-revoked.1",
       "kind": "iana-entry",
@@ -114850,11 +114850,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.certificate-unknown.1",
       "kind": "iana-entry",
@@ -114884,11 +114884,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.certificate-unobtainable-reserved.1",
       "kind": "iana-entry",
@@ -114924,11 +114924,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.close-notify.1",
       "kind": "iana-entry",
@@ -114962,11 +114962,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.decode-error.1",
       "kind": "iana-entry",
@@ -114996,11 +114996,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.decompression-failure-reserved.1",
       "kind": "iana-entry",
@@ -115031,11 +115031,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.decrypt-error.1",
       "kind": "iana-entry",
@@ -115065,11 +115065,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.decryption-failed-reserved.1",
       "kind": "iana-entry",
@@ -115100,11 +115100,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.ech-required.1",
       "kind": "iana-entry",
@@ -115136,11 +115136,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.export-restriction-reserved.1",
       "kind": "iana-entry",
@@ -115171,11 +115171,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.general-error.1",
       "kind": "iana-entry",
@@ -115205,11 +115205,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.handshake-failure.1",
       "kind": "iana-entry",
@@ -115239,11 +115239,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.illegal-parameter.1",
       "kind": "iana-entry",
@@ -115273,11 +115273,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.inappropriate-fallback.1",
       "kind": "iana-entry",
@@ -115308,11 +115308,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.insufficient-security.1",
       "kind": "iana-entry",
@@ -115342,11 +115342,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.internal-error.1",
       "kind": "iana-entry",
@@ -115376,11 +115376,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.missing-extension.1",
       "kind": "iana-entry",
@@ -115411,11 +115411,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.no-application-protocol.1",
       "kind": "iana-entry",
@@ -115451,11 +115451,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.no-certificate-reserved.1",
       "kind": "iana-entry",
@@ -115486,11 +115486,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.no-renegotiation-reserved.1",
       "kind": "iana-entry",
@@ -115521,11 +115521,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.protocol-version.1",
       "kind": "iana-entry",
@@ -115555,11 +115555,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.record-overflow.1",
       "kind": "iana-entry",
@@ -115589,11 +115589,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.too-many-cids-requested.1",
       "kind": "iana-entry",
@@ -115625,11 +115625,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.1",
       "kind": "iana-entry",
@@ -115651,11 +115651,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.10",
       "kind": "iana-entry",
@@ -115677,11 +115677,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.11",
       "kind": "iana-entry",
@@ -115703,11 +115703,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.12",
       "kind": "iana-entry",
@@ -115729,11 +115729,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.13",
       "kind": "iana-entry",
@@ -115755,11 +115755,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.2",
       "kind": "iana-entry",
@@ -115781,11 +115781,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.3",
       "kind": "iana-entry",
@@ -115807,11 +115807,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.4",
       "kind": "iana-entry",
@@ -115833,11 +115833,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.5",
       "kind": "iana-entry",
@@ -115859,11 +115859,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.6",
       "kind": "iana-entry",
@@ -115885,11 +115885,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.7",
       "kind": "iana-entry",
@@ -115911,11 +115911,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.8",
       "kind": "iana-entry",
@@ -115937,11 +115937,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unassigned.9",
       "kind": "iana-entry",
@@ -115963,11 +115963,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unexpected-message.1",
       "kind": "iana-entry",
@@ -115997,11 +115997,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unknown-ca.1",
       "kind": "iana-entry",
@@ -116031,11 +116031,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unknown-psk-identity.1",
       "kind": "iana-entry",
@@ -116063,11 +116063,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unrecognized-name.1",
       "kind": "iana-entry",
@@ -116096,11 +116096,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unsupported-certificate.1",
       "kind": "iana-entry",
@@ -116130,11 +116130,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.unsupported-extension.1",
       "kind": "iana-entry",
@@ -116164,11 +116164,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-6.user-canceled.1",
       "kind": "iana-entry",
@@ -116198,7 +116198,7 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-6"
       },
-      "test_target": "tests/surface/alerts.rs#registry"
+      "test_target": "crates/brynja-core/tests/alerts.rs#registry"
     },
     {
       "code_target": "crates/brynja-tls13-handshake/src/message.rs",

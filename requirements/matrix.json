@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0633e8beb612ce3e0b6586c9f40da248ba2ee1ccb5a7b6ed099092694aed6574",
-  "domain_policy_sha256": "01607117c0f9e8cf69f89e3ca3074ea74b7b36a1e1e0ea86e1048376a9221648",
-  "policy_sha256": "370c93aa71d0d0a7ea8abb17e2158e0a7f882361d6ba93063e4141ffc693b96d",
+  "domain_policy_sha256": "f856319a78161796425ff774d81ddc965382dbd17261411e19160892fc97fa01",
+  "policy_sha256": "1dcc5d29258740ca59ec103356eacb2da4f9da1e05d0d72e2b86b4957ea63d55",
   "requirements": [
     {
       "applicability": "delegate",
@@ -20192,7 +20192,7 @@
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
-      "evidence_gap": "Executable alert and failure matrices, provider fault injection, and cross-version tests remain unresolved until v0.5.0.",
+      "evidence_gap": "The implementation exists, while linked executable-test status and independent pentest evidence remain unresolved at this transition.",
       "id": "BRY-REQ-TLS-0005",
       "invariants": [
         "failure-atomicity",
@@ -20200,13 +20200,13 @@
         "validation",
         "version-separation"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The shared TLS failure semantic surface owns the pre-implementation taxonomy used by every later transport engine while preserving exact version-specific wire behavior.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.5.0",
       "profile": "tls-dtls-quic",
       "residual": "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -20382,7 +20382,7 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-core/src/error.rs#TlsFailure"
         }
       ],
@@ -20390,12 +20390,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/tls_failures.rs#typed_outcomes"
+          "target": "crates/brynja-core/tests/tls_failures.rs#typed_outcomes"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/tls_failures.rs#reject_secret_and_ambiguous_errors"
+          "target": "crates/brynja-core/tests/tls_failures.rs#reject_secret_and_ambiguous_errors"
         }
       ],
       "work_bound": "Failure construction, alert selection, formatting prohibition, cancellation, and cleanup consume fixed or explicitly bounded work."
@@ -29524,9 +29524,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "3036c00e403472db44596e22901cee55caf97130fed11a8cb6e8b788f9df226f",
+  "residual_policy_sha256": "874469ff83e4c5b38afa96ca5ac161cbece6680414a4e44c4ede2f47da9612bc",
   "schema": 5,
   "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945",
-  "surface_register_sha256": "e1966e65f8f25eae76356130f97aa07d41b719fd253000c7c7511f73f494066c",
-  "transport_policy_sha256": "10ebc4ebd44884996ed49adc79ed26adccbd8db3fc3c78c0a3d6ad360f21de27"
+  "surface_register_sha256": "a058c550e8316c458875f03f96f4419b04a3ab58290718d016563e309f6ebacb",
+  "transport_policy_sha256": "da08baef87fcd81b71f1479be575e6fe34979d96c2f486965ff0efee13be829b"
 }

@@ -18,7 +18,7 @@
         {
           "decision": {
             "code_target": "crates/brynja-core/src/alert.rs",
-            "disposition": "future-work",
+            "disposition": "implemented",
             "domain": "tls",
             "owner": "0.5.0",
             "rationale": "TLS and DTLS alerts require a typed exhaustive domain before any protocol state machine is admitted.",
@@ -26,7 +26,7 @@
               "iana:tls-parameters",
               "rfc:9846"
             ],
-            "test_target": "tests/surface/alerts.rs#registry"
+            "test_target": "crates/brynja-core/tests/alerts.rs#registry"
           },
           "ids": [
             "tls-parameters-6"

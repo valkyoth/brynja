@@ -183,12 +183,6 @@ def validate_requirement(
         lib.fail(f"{requirement_id} has absent or unknown owner")
     if requirement["scope"] not in {"governance", "protocol"}:
         lib.fail(f"{requirement_id} has unknown scope")
-    if requirement["scope"] == "protocol" and requirement["lifecycle"] in {
-        "evidenced",
-        "implemented",
-        "tested",
-    }:
-        lib.fail(f"{requirement_id} prematurely claims protocol implementation")
     if not isinstance(requirement["statement"], str) or len(
         requirement["statement"].strip()
     ) < 30:

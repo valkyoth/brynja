@@ -4434,11 +4434,11 @@
         "rfc:9846"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-core/src/error.rs#TlsFailure"
+        "actual-symbol:crates/brynja-core/src/error.rs#TlsFailure"
       ],
       "tests": [
-        "planned:positive:tests/requirements/tls_failures.rs#typed_outcomes",
-        "planned:negative:tests/requirements/tls_failures.rs#reject_secret_and_ambiguous_errors"
+        "planned:positive:crates/brynja-core/tests/tls_failures.rs#typed_outcomes",
+        "planned:negative:crates/brynja-core/tests/tls_failures.rs#reject_secret_and_ambiguous_errors"
       ]
     },
     "BRY-REQ-TLS-0010": {
@@ -10535,6 +10535,9 @@
       ]
     },
     "targets": {
+      "actual-symbol:crates/brynja-core/src/error.rs#TlsFailure": [
+        "BRY-REQ-TLS-0005"
+      ],
       "actual-symbol:scripts/check-requirements.py#resolve_source": [
         "BRY-REQ-IANA-0001"
       ],
@@ -10634,9 +10637,6 @@
       ],
       "planned-symbol:crates/brynja-core/src/entropy.rs": [
         "BRY-REQ-ENTROPY-0014"
-      ],
-      "planned-symbol:crates/brynja-core/src/error.rs#TlsFailure": [
-        "BRY-REQ-TLS-0005"
       ],
       "planned-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
@@ -11007,6 +11007,9 @@
       "actual:scripts/test-requirements.py#test_missing_residual_fails": [
         "BRY-REQ-STD-0002"
       ],
+      "planned:negative:crates/brynja-core/tests/tls_failures.rs#reject_secret_and_ambiguous_errors": [
+        "BRY-REQ-TLS-0005"
+      ],
       "planned:negative:tests/conformance/dtls.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0116"
       ],
@@ -11304,9 +11307,6 @@
       "planned:negative:tests/requirements/tls_exporter.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0079"
       ],
-      "planned:negative:tests/requirements/tls_failures.rs#reject_secret_and_ambiguous_errors": [
-        "BRY-REQ-TLS-0005"
-      ],
       "planned:negative:tests/requirements/tls_router.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0092"
       ],
@@ -11417,6 +11417,9 @@
       "planned:negative:tests/surface/status_request_v2.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
+      ],
+      "planned:positive:crates/brynja-core/tests/tls_failures.rs#typed_outcomes": [
+        "BRY-REQ-TLS-0005"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"
@@ -11720,9 +11723,6 @@
       ],
       "planned:positive:tests/requirements/tls_exporter.rs#versioned_bindings": [
         "BRY-REQ-TLS-0079"
-      ],
-      "planned:positive:tests/requirements/tls_failures.rs#typed_outcomes": [
-        "BRY-REQ-TLS-0005"
       ],
       "planned:positive:tests/requirements/tls_router.rs#single_engine": [
         "BRY-REQ-TLS-0092"

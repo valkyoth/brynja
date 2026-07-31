@@ -441,10 +441,20 @@ def build_register(
     ids = [surface["id"] for surface in surfaces]
     if len(ids) != len(set(ids)):
         lib.fail("generated protocol surface IDs are not unique")
-    if any(surface["disposition"] == "implemented" for surface in surfaces):
-        lib.fail(
-            "planning milestones must not classify any surface as implemented"
-        )
+    for surface in surfaces:
+        if surface["disposition"] != "implemented":
+            continue
+        for field in ("code_target", "test_target"):
+            target, separator, anchor = surface[field].partition("#")
+            path = (lib.ROOT / target).resolve()
+            try:
+                path.relative_to(lib.ROOT.resolve())
+            except ValueError:
+                lib.fail(f"implemented surface target leaves repository: {target}")
+            if not path.is_file() or (field == "test_target" and (not separator or not anchor)):
+                lib.fail(f"implemented surface lacks actual {field}: {surface['id']}")
+            if separator and anchor not in path.read_text(encoding="utf-8"):
+                lib.fail(f"implemented surface target anchor is absent: {surface['id']}")
     if transport_surfaces:
         surface_security.validate(surfaces)
     return {

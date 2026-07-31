@@ -62,9 +62,15 @@ def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
     assert len(register["surfaces"]) == 4424
-    assert not any(
-        surface["disposition"] == "implemented"
+    implemented = {
+        surface["id"]
         for surface in register["surfaces"]
+        if surface["disposition"] == "implemented"
+    }
+    assert len(implemented) == 51
+    assert all(
+        surface_id.startswith("iana.tls-parameters.tls-parameters-6")
+        for surface_id in implemented
     )
     assert standards.json_bytes(register) == lib.REGISTER.read_bytes()
     assert lib.render_coverage(register) == lib.COVERAGE.read_bytes()
@@ -266,12 +272,12 @@ def test_unknown_disposition_fails() -> None:
     )
 
 
-def test_implemented_claim_fails() -> None:
+def test_implemented_claim_requires_actual_targets() -> None:
     policy, ledger, _ = inputs()
     broken = copy.deepcopy(policy)
     broken["decisions"][0]["decision"]["disposition"] = "implemented"
     assert_fails(
-        "must not classify any surface as implemented",
+        "implemented surface lacks actual",
         checker.build_register,
         broken,
         ledger,

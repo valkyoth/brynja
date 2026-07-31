@@ -254,15 +254,15 @@ def test_all_declared_lifecycle_transitions_pass() -> None:
             checker.validate_transition(previous, current)
 
 
-def test_protocol_implementation_claim_fails() -> None:
+def test_protocol_implementation_claim_requires_actual_target() -> None:
     policy, ledger, register = inputs()
     broken = copy.deepcopy(policy)
     item = requirement(broken, "BRY-REQ-TLS-0001")
     item["lifecycle"] = "implemented"
     item["targets"][0]["kind"] = "actual-symbol"
-    item["targets"][0]["target"] = "scripts/check-requirements.py#build_matrix"
+    item["targets"][0]["target"] = "tests/missing.rs#missing"
     assert_fails(
-        "prematurely claims protocol implementation",
+        "actual target is missing",
         checker.build_matrix,
         broken,
         ledger,

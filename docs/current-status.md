@@ -156,7 +156,8 @@ Version 0.4.0 establishes assurance infrastructure without protocol code:
   documented compatible Rust 1.90.0 verifier pairing; no Kani proof harness is
   admitted or claimed at this milestone; and
 - deterministic assurance evidence binds policy, runners, CI, and every Cargo
-  manifest, with 24 positive and broken fixtures.
+  manifest, with 26 positive and broken fixtures, including exact timeout
+  checks for local Rust target and remote Git tag probes.
 
 This remains governance and planning evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track

@@ -30,6 +30,10 @@ Harness input is public test data, never a secret. The runners do not claim to
 provide an OS sandbox: every campaign launcher must independently deny network
 access and unwanted filesystem, process, and device capabilities.
 
+Repository assurance probes are bounded as well: local Rust target discovery
+and each remote Git tag query have an explicit 30-second timeout. Expiration
+fails the check instead of leaving development or release automation hanging.
+
 Mutation order is deterministic and deduplicated. The runner covers the empty
 case, original input, every bounded truncation, byte deletion, bit flip, and
 zero/`0xff` insertion until the policy case limit. A failing case is identified

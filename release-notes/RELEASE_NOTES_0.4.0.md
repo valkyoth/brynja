@@ -68,15 +68,19 @@ v0.155.0 completes their claim and residual-gap register.
 
 The release candidate includes:
 
-- 24 assurance policy, mutation, differential, process, target, and tool-pin
+- 26 assurance policy, mutation, differential, process, target, and tool-pin
   positive and broken fixtures;
 - deterministic byte-for-byte assurance evidence generation;
 - a fail-closed independent cryptography and protocol review-status register
   in the root, published facade, and every applicable component README,
   including an explicit statement that no FIPS 140-3 validation exists;
+- prospective commit classification that prevents documentation, policy,
+  evidence, test, or tooling-only remediation from masquerading as a Rust
+  `fix:` or pentest-code change;
 - exact CI membership checks for all three OS-less targets;
 - Cargo-manifest exclusion checks for every external assurance tool;
 - simultaneous process-output exhaustion and timeout tests;
+- explicit 30-second bounds on local Rust target and remote Git tag probes;
 - the existing 167-requirement, 126-authority, and 4,424-surface normative
   baseline;
 - no external Cargo packages and `no_std` production packages;

@@ -8,6 +8,7 @@ import json
 import sys
 from contextlib import contextmanager
 from pathlib import Path
+from unittest import mock
 
 import assurance_differential as differential
 import assurance_mutation as mutation
@@ -94,6 +95,31 @@ def test_tool_in_cargo_manifest_fails() -> None:
             tools,
             "fixture/Cargo.toml",
         )
+
+
+def test_rust_target_probe_is_time_bounded() -> None:
+    targets = "\n".join(assurance.TARGETS)
+    with mock.patch.object(
+        assurance.subprocess, "check_output", return_value=targets
+    ) as check:
+        assurance.validate_repository(assurance.read_policy())
+    assert check.call_args.kwargs["timeout"] == (
+        assurance.SUBPROCESS_TIMEOUT_SECONDS
+    )
+
+
+def test_upstream_tag_probe_is_time_bounded() -> None:
+    policy = copy.deepcopy(assurance.read_policy())
+    tool = next(item for item in policy["tools"] if item["id"] == "kani")
+    policy["tools"] = [tool]
+    output = f"{tool['revision']}\trefs/tags/{tool['tag']}\n"
+    with mock.patch.object(
+        assurance.subprocess, "check_output", return_value=output
+    ) as check:
+        assurance.network_check(policy)
+    assert check.call_args.kwargs["timeout"] == (
+        assurance.SUBPROCESS_TIMEOUT_SECONDS
+    )
 
 
 def test_mutations_are_deterministic_and_cover_boundaries() -> None:

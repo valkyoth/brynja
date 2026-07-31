@@ -4,6 +4,8 @@ set -eu
 cargo fmt --all --check
 scripts/check_shell_syntax.sh
 scripts/check_doc_links.sh
+python3 scripts/check-commit-classification.py
+python3 scripts/test-commit-classification.py
 python3 scripts/check-verification-status.py
 python3 scripts/test-verification-status.py
 python3 scripts/check-release-plan.py

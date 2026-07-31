@@ -460,7 +460,8 @@ Deliverables:
   support;
 - pin Kani, Miri, sanitizers, AFL++, and honggfuzz by exact version and
   upstream revision without adding them to any Cargo manifest; keep stable
-  release Rust separate from the documented Rust 1.90.0 Kani verifier pairing;
+  release Rust separate from the documented Rust 1.90.0 Kani verifier pairing,
+  and bound local tool and remote source probes with explicit timeouts;
 - generate deterministic evidence binding the policy, workflows, harness
   scripts, and every Cargo manifest and reject policy, pin, workflow, target,
   dependency, or generated-evidence drift with broken fixtures;
@@ -472,7 +473,8 @@ Verification:
 - exercise deterministic mutation, replay, canonical result, independent
   adapter, mismatch, crash, timeout, output-exhaustion, weak-bound, duplicate
   target, wrong Kani pairing, unpinned tool, workflow, dependency, evidence,
-  and release-state fixtures;
+  release-state, local target-probe timeout, and remote tag-probe timeout
+  fixtures;
 - inspect source locks, clean archives, permissions, tag assumptions, stable
   versus verifier toolchains, external tool pins, OS-less target availability,
   ledger completeness, and reproducibility;

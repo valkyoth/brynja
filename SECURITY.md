@@ -45,6 +45,22 @@ strict PASS gate.
 The report format and disclosure rules are documented in
 [`security/pentest/README.md`](security/pentest/README.md).
 
+## Security Change Classification
+
+Commit subjects must describe the artifact that changed. A subject beginning
+with `fix:` or presenting itself as a pentest-code remediation is reserved for
+a commit that changes `crates/**/*.rs`. Documentation, standards,
+requirements, evidence, release-governance, tests, and tooling-only changes
+use an accurate `docs:`, `chore(scope):`, or `test(scope):` subject even when
+they close a pentest finding. The permanent pentest report records the finding
+and result without turning a traceability or policy correction into an implied
+shipped-code security fix.
+
+Signed historical release commits are not rewritten. This classification
+policy applies prospectively, and any historical ambiguous subject is
+disclosed in the owning permanent pentest report. The local and CI checks
+enforce this classification against each new `HEAD`.
+
 ## Dependency Policy
 
 Third-party Cargo crates are forbidden. A future exception requires a dedicated

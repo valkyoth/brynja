@@ -20,6 +20,7 @@ TARGETS = (
     "x86_64-unknown-none",
 )
 TOOL_IDS = ("aflplusplus", "honggfuzz", "kani", "miri", "rust-sanitizers")
+SUBPROCESS_TIMEOUT_SECONDS = 30
 TOOL_MANIFEST_TOKENS = {
     "aflplusplus": ("afl", "aflplusplus"),
     "honggfuzz": ("honggfuzz",),
@@ -278,7 +279,10 @@ def validate_repository(policy: dict) -> None:
     validate_workflow(workflow)
     rust_targets = set(
         subprocess.check_output(
-            ["rustc", "--print", "target-list"], cwd=ROOT, text=True
+            ["rustc", "--print", "target-list"],
+            cwd=ROOT,
+            text=True,
+            timeout=SUBPROCESS_TIMEOUT_SECONDS,
         ).splitlines()
     )
     for target in TARGETS:
@@ -354,6 +358,7 @@ def network_check(policy: dict) -> None:
             ["git", "ls-remote", "--tags", "--refs", tool["source"]],
             cwd=ROOT,
             text=True,
+            timeout=SUBPROCESS_TIMEOUT_SECONDS,
         )
         refs = {
             ref.removeprefix("refs/tags/"): revision

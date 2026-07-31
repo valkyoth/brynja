@@ -383,7 +383,7 @@ Exit criteria:
 
 ### v0.3.5 - Optional Legacy And Residual Normative Closure
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, separate RFC 6066 wire-ignore behavior from configuration rejection, cover RFC 6066 independently in TLS 1.2, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
 
@@ -438,7 +438,7 @@ Exit criteria:
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Establish first-party mutation and differential harnesses, true bare-metal targets, and pinned external assurance-tool policy without adding third-party crates to repository Cargo manifests.
 
@@ -447,22 +447,43 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- make policy executable through generated traceability, fail-closed scripts, broken fixtures, immutable evidence, ownership, and release boundaries;
+- freeze a raw-stdin, canonical-JSON adapter protocol with deterministic
+  mutation order, exact replay indexes, bounded input, output, case count, and
+  timeout, no shell execution, no automatic failure-input persistence, and an
+  explicit external network/filesystem/process sandbox duty;
+- require two distinct independently maintained process adapters for
+  differential evidence and fail on timeout, crash, excess output,
+  noncanonical result, unsupported class, or semantic mismatch;
+- compile the complete all-feature workspace on
+  `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and
+  `x86_64-unknown-none` without implying runtime, entropy, platform, or Aesynx
+  support;
+- pin Kani, Miri, sanitizers, AFL++, and honggfuzz by exact version and
+  upstream revision without adding them to any Cargo manifest; keep stable
+  release Rust separate from the documented Rust 1.90.0 Kani verifier pairing;
+- generate deterministic evidence binding the policy, workflows, harness
+  scripts, and every Cargo manifest and reject policy, pin, workflow, target,
+  dependency, or generated-evidence drift with broken fixtures;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- exercise positive and broken dependency, metadata, standards-ledger, workflow, isolation, evidence, and release-state fixtures;
-- inspect source locks, clean archives, permissions, tag assumptions, tool pinning, ledger completeness, and reproducibility;
+- exercise deterministic mutation, replay, canonical result, independent
+  adapter, mismatch, crash, timeout, output-exhaustion, weak-bound, duplicate
+  target, wrong Kani pairing, unpinned tool, workflow, dependency, evidence,
+  and release-state fixtures;
+- inspect source locks, clean archives, permissions, tag assumptions, stable
+  versus verifier toolchains, external tool pins, OS-less target availability,
+  ledger completeness, and reproducibility;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- repository evidence and enforcement agree and every deliberate violation fails before release;
+- repository evidence and enforcement agree, every deliberate violation fails,
+  the three OS-less targets compile, ordinary Cargo graphs remain first-party
+  only, and policy-only Kani status cannot be mistaken for a completed proof;
 - `v0.4.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.5.0 - Error Alert And Exhaustion Domains

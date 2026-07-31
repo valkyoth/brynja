@@ -14,3 +14,14 @@ it with its packaged lockfile; a version or checksum mismatch fails closed.
 
 Every promised stable toolchain is checked explicitly. Nightly tools may add
 evidence but cannot be required to build published crates.
+
+Kani follows a separate verifier pairing because it is compiler-integration
+sensitive. The active release toolchain remains Rust `1.97.1`, while
+`cargo-kani 0.67.0` is pinned to the documented compatible Rust
+`1.90.0-x86_64-unknown-linux-gnu` execution toolchain. This does not lower the
+crate MSRV, hold back stable Rust, or turn policy-only status into proof.
+
+`assurance/policy.toml` additionally pins Kani, AFL++, honggfuzz, Miri, and
+sanitizers by exact source revision. These tools are external to Cargo
+manifests. Ordinary builds do not download or execute them; each owning
+milestone must recheck upstream state and record exact campaign evidence.

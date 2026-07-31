@@ -5,6 +5,33 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-31
+
+### Added
+
+- A first-party deterministic mutation runner covering empty, original,
+  truncation, deletion, bit-flip, and zero/`0xff` insertion cases with exact
+  replay indexes and SHA-256 failure identities.
+- A canonical raw-stdin differential protocol requiring at least two distinct
+  process adapters and rejecting crash, timeout, output exhaustion, malformed
+  JSON, noncanonical hex, unsupported classes, and semantic mismatch.
+- OS-less all-feature workspace checks for ARMv7E-M, RV32IMAC, and x86_64.
+- Deterministic assurance evidence binding policy, runners, CI, and every Cargo
+  manifest, with 24 positive and broken fixtures.
+
+### Security
+
+- Child processes run without a shell and both output streams are capped while
+  produced. Inputs are explicitly public test data, and campaign launchers
+  must provide OS network, filesystem, process, and device isolation.
+- Kani 0.67.0, AFL++ 5.02c, honggfuzz 2.6, Miri, and Rust sanitizers have exact
+  upstream source revisions and cannot enter repository Cargo manifests.
+- Stable Rust 1.97.1 remains the release compiler; Kani 0.67.0 uses a separate
+  compatible Rust 1.90.0 verifier pairing. No proof harness is admitted, and
+  policy-only status cannot be claimed as formal verification.
+- Bare-metal compilation does not claim startup, allocation, interrupts,
+  entropy, time, transport, storage, emulator, hardware, or Aesynx support.
+
 ## [0.3.5] - 2026-07-31
 
 ### Added

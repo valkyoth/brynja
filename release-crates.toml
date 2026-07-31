@@ -1,14 +1,14 @@
 [release]
-version = "0.3.5"
+version = "0.4.0"
 policy = "independent"
 stage = "public"
 
 [crates."brynja"]
-previous_version = "0.3.4"
-version = "0.3.5"
+previous_version = "0.3.5"
+version = "0.4.0"
 change = "code"
 publish = true
-reason = "Mandatory facade release for optional, legacy, operational, and residual normative closure; it adds no protocol implementation."
+reason = "Mandatory facade release for the first-party assurance harness, pinned verifier policy, and OS-less target matrix; it adds no protocol implementation."
 
 [crates."brynja-core"]
 previous_version = "0.1.0"

@@ -31,7 +31,10 @@ weakened SHOULD requirements, unsigned or contradictory-revocation
 certificates, suppressed Must-Staple failures, DTLS path hijacking during CID
 migration, forged OCSP cache metadata, external-PSK role or peer misbinding,
 production secret logging, and HPKE replay, loss, role confusion, or
-use-after-failure.
+use-after-failure. Assurance infrastructure additionally assumes hostile
+corpora and adapters that hang, crash, flood output, emit malformed or
+noncanonical results, disagree silently, attempt shell or capability escape,
+or exploit a verifier/toolchain mismatch to create a false proof claim.
 
 ## Required Controls
 
@@ -72,12 +75,16 @@ use-after-failure.
   configuration rejection and TLS 1.2 ownership,
   source-blocked legacy lifecycles, and terminal HPKE context invalidation and
   destruction;
+- deterministic bounded mutation and external-process differential execution
+  with no shell, simultaneous output caps, canonical result parsing, explicit
+  replay identity, at least two distinct adapters, exact external tool pins,
+  separate release/Kani compiler pairings, and caller-enforced OS sandboxing;
 - certificate-bound FIPS module selection, mandatory service indicators,
   approved-only typestates, exact operational-environment matching, immutable
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.3.5
+## Non-Goals At 0.4.0
 
 No transport security or interoperability guarantee exists. The current Rust
 code is still package scaffolding. v0.3.0 inventories and locks source
@@ -87,9 +94,12 @@ proves stable requirement identity, lifecycle, mapping, and drift enforcement
 with a 12-requirement authority pilot. v0.3.3 adds 34 cryptography, encoding,
 PKIX, OCSP, and CT requirements. v0.3.4 adds 70 TLS, DTLS, and QUIC-TLS
 requirements with exact version, state, rejection, and caller-owned
-boundaries. v0.3.5 adds 49 optional, HPKE, ECH, ML-KEM, entropy, operational,
+boundaries. v0.3.5 adds 50 optional, HPKE, ECH, ML-KEM, entropy, operational,
 legacy, and residual requirements and closes every locked source, roadmap row,
-and protocol surface. None of these milestones implements protocol or
-cryptographic behavior. Planned, future-work, blocked, legacy, and
-governance-tool implementation states are not protocol implementation or FIPS
+and protocol surface. v0.4.0 adds assurance policy, runners, and OS-less compile
+evidence but no protocol corpus, differential backend, Kani proof harness, or
+assurance campaign result. None of these milestones implements protocol or
+cryptographic behavior. Planned, future-work, blocked, legacy,
+governance-tool, and policy-only assurance states are not protocol
+implementation, formal verification, bare-metal runtime support, or FIPS
 validation claims.

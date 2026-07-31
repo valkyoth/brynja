@@ -1,15 +1,15 @@
 # Current Status
 
-Status: v0.3.5 pentest passed; awaiting green CI
+Status: v0.4.0 implementation stop; pentest required
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
 must not be used to secure network traffic. Brynja is not FIPS 140-3 validated,
 and no package, feature, build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.3.4 established the workspace, hardened
+Signed releases v0.1.0 through v0.3.5 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
-classified protocol surfaces and the normative matrix foundation. The v0.3.5
+classified protocol surfaces and the normative matrix foundation. The v0.4.0
 candidate advances only `brynja`; unchanged supporting crates remain at their
 independently published `0.1.0` versions and are not selected again.
 
@@ -137,6 +137,27 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   decisions instead of being mapped wholesale to OCSP; and
 - RFC 7568 section 3 is authority only for the SSLv3 prohibition boundary.
 
+Version 0.4.0 establishes assurance infrastructure without protocol code:
+
+- bounded first-party mutation covers empty, original, truncation, deletion,
+  bit-flip, and zero/`0xff` insertion cases in deterministic replay order;
+- differential adapters consume bounded public test bytes over raw standard
+  input and return canonical JSON, with fail-closed crash, timeout, output,
+  class, encoding, and mismatch handling;
+- process execution never invokes a shell and caps both output streams while
+  they are produced; campaign launchers retain an explicit duty to supply OS
+  network, filesystem, process, and device isolation;
+- CI and the local release gate compile the complete all-feature workspace for
+  `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and
+  `x86_64-unknown-none`;
+- exact source pins cover Kani 0.67.0, AFL++ 5.02c, honggfuzz 2.6, and the
+  separately pinned Miri/sanitizer nightly without adding a Cargo dependency;
+- stable Rust 1.97.1 remains the release compiler while Kani 0.67.0 uses the
+  documented compatible Rust 1.90.0 verifier pairing; no Kani proof harness is
+  admitted or claimed at this milestone; and
+- deterministic assurance evidence binds policy, runners, CI, and every Cargo
+  manifest, with 24 positive and broken fixtures.
+
 This remains governance and planning evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
 RFC and final IANA values exist. Non-RFC legacy requirements carry
@@ -182,5 +203,6 @@ governance-integrity findings, all of which were remediated. The repository
 owner retested signed commit
 `0d1203bd1c2640e40edb31d7ff18bf20833140a2` and reported it green with no
 remaining finding. The permanent v0.3.5 report records `PASS`/`PASS` with zero
-open findings; the release now awaits green hosted GitHub checks and explicit
-user authorization before tagging.
+open findings, and signed tag `v0.3.5` is published. The v0.4.0 implementation
+stop now requires repository-owner pentest before any release-candidate report,
+green-CI wait, or tag authorization.

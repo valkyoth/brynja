@@ -1,15 +1,15 @@
 # Crate Version Matrix
 
-Status: v0.3.5 pentest passed; awaiting green CI
+Status: v0.4.0 implementation stop; pentest required
 
-The `brynja` facade advances to `0.3.5`. Every unchanged modern supporting
+The `brynja` facade advances to `0.4.0`. Every unchanged modern supporting
 crate retains its published `0.1.0` version and is not republished. Legacy and
 repository-only packages remain unpublished. Package publication does not
 imply protocol implementation or production readiness.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.3.5` | yes | Mandatory facade release for optional, legacy, operational, and residual normative closure |
+| `brynja` | `0.4.0` | yes | Mandatory facade release for assurance harness, verifier policy, and OS-less target evidence |
 | `brynja-core`, `brynja-crypto`, and `brynja-pki` | `0.1.0` | no | Published and unchanged |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.0` | no | Published and unchanged |
 | `brynja-dtls`, `brynja-quic-tls`, and `brynja-platform` | `0.1.0` | no | Published and unchanged |
@@ -71,7 +71,7 @@ current committed PASS pentest report, user-confirmed green GitHub checks,
 complete versioned release gate, advisory and dependency-policy checks, SBOM,
 packages, and typed version confirmation. There is no production bypass.
 
-For `v0.3.5`, only `brynja 0.3.5` is selected. Its complete exact-pinned
+For `v0.4.0`, only `brynja 0.4.0` is selected. Its complete exact-pinned
 supporting closure is already available at `0.1.0`.
 
 ## Rust Compatibility
@@ -79,4 +79,5 @@ supporting closure is already available at `0.1.0`.
 | Rust | Evidence |
 | --- | --- |
 | `1.90.0` through `1.97.0` | Workspace all-feature compatibility check on each listed stable release |
-| `1.97.1` | Full release gate and all target checks |
+| `1.97.1` | Full release gate, host targets, and three OS-less all-feature targets |
+| Kani Rust `1.90.0` | Separate verifier pairing for `cargo-kani 0.67.0`; not a release compiler or proof result at v0.4.0 |

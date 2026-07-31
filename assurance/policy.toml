@@ -1,0 +1,113 @@
+[schema]
+version = 1
+milestone = "0.4.0"
+
+[toolchains]
+release = "1.97.1"
+msrv = "1.90.0"
+kani = "1.90.0-x86_64-unknown-linux-gnu"
+
+[harness]
+protocol = "brynja-stdin-json-v1"
+maximum_input_bytes = 1048576
+maximum_output_bytes = 1048576
+maximum_cases = 4096
+timeout_milliseconds = 5000
+shell_execution = false
+deterministic_replay = true
+network_isolation = "external-sandbox-required"
+input_class = "public-test-data-only"
+automatic_failure_persistence = false
+
+[mutation]
+runner = "scripts/assurance_mutation.py"
+algorithm = "brynja-deterministic-mutation-v1"
+operators = [
+  "empty",
+  "original",
+  "truncate",
+  "delete-byte",
+  "flip-bit",
+  "insert-zero",
+  "insert-ff",
+]
+
+[differential]
+runner = "scripts/assurance_differential.py"
+minimum_independent_implementations = 2
+result_fields = ["class", "output"]
+result_classes = ["accept", "reject", "unsupported"]
+canonical_json = true
+
+[[bare_metal_targets]]
+triple = "thumbv7em-none-eabi"
+architecture = "armv7e-m"
+class = "os-less"
+features = "all"
+
+[[bare_metal_targets]]
+triple = "riscv32imac-unknown-none-elf"
+architecture = "riscv32imac"
+class = "os-less"
+features = "all"
+
+[[bare_metal_targets]]
+triple = "x86_64-unknown-none"
+architecture = "x86_64"
+class = "os-less"
+features = "all"
+
+[[tools]]
+id = "kani"
+source_kind = "git-tag"
+source = "https://github.com/model-checking/kani.git"
+version = "0.67.0"
+tag = "kani-0.67.0"
+revision = "4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d"
+owner = "0.155.0"
+use = "bounded formal verification"
+execution_toolchain = "1.90.0-x86_64-unknown-linux-gnu"
+
+[[tools]]
+id = "aflplusplus"
+source_kind = "git-tag"
+source = "https://github.com/AFLplusplus/AFLplusplus.git"
+version = "5.02c"
+tag = "v5.02c"
+revision = "011cd189801830253c66ecd3cd6919ec01b46c34"
+owner = "0.156.0"
+use = "external process-level mutation and instrumentation"
+execution_toolchain = "external-native"
+
+[[tools]]
+id = "honggfuzz"
+source_kind = "git-tag"
+source = "https://github.com/google/honggfuzz.git"
+version = "2.6"
+tag = "2.6"
+revision = "83a8415a372d84dcc69ac1e2c2f152190bcf76d1"
+owner = "0.156.0"
+use = "independent external process-level mutation"
+execution_toolchain = "external-native"
+
+[[tools]]
+id = "miri"
+source_kind = "rustup-component"
+source = "https://static.rust-lang.org/dist"
+version = "nightly-2026-07-26"
+tag = "miri"
+revision = "008fa22ce3f8d3c8dfaca2e6486043c2b21851eb"
+owner = "0.157.0"
+use = "undefined-behavior evidence"
+execution_toolchain = "nightly-2026-07-26"
+
+[[tools]]
+id = "rust-sanitizers"
+source_kind = "rust-toolchain"
+source = "https://static.rust-lang.org/dist"
+version = "nightly-2026-07-26"
+tag = "compiler-rt"
+revision = "008fa22ce3f8d3c8dfaca2e6486043c2b21851eb"
+owner = "0.157.0"
+use = "address, leak, memory, and thread sanitizer evidence"
+execution_toolchain = "nightly-2026-07-26"

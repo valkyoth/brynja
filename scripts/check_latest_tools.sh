@@ -26,6 +26,7 @@ for tool in cargo-deny cargo-audit cargo-sbom; do
 done
 
 scripts/install-ci-tools.sh --verify-only
+python3 scripts/check-assurance.py --network
 
 failed=0
 for workflow in .github/workflows/*.yml; do

@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+"""Bounded external-process differential runner for raw byte cases."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import shlex
+from pathlib import Path
+
+import assurance_policy as assurance
+from assurance_process import run_bounded
+
+
+CLASSES = {"accept", "reject", "unsupported"}
+
+
+def parse_result(raw: bytes) -> dict[str, str]:
+    try:
+        text = raw.decode("utf-8")
+        value = json.loads(text)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise RuntimeError("adapter result is not UTF-8 JSON") from error
+    if not isinstance(value, dict) or set(value) != {"class", "output"}:
+        raise RuntimeError("adapter result fields drifted")
+    if value["class"] not in CLASSES:
+        raise RuntimeError("adapter result class is invalid")
+    output = value["output"]
+    if (
+        not isinstance(output, str)
+        or len(output) % 2 != 0
+        or output.lower() != output
+        or any(character not in "0123456789abcdef" for character in output)
+    ):
+        raise RuntimeError("adapter output is not canonical lowercase hex")
+    canonical = json.dumps(value, sort_keys=True, separators=(",", ":"))
+    if text != canonical:
+        raise RuntimeError("adapter result is not canonical JSON")
+    return value
+
+
+def run_adapter(
+    command: list[str],
+    case: bytes,
+    timeout_seconds: float,
+    maximum_output: int,
+) -> dict[str, str]:
+    result = run_bounded(command, case, timeout_seconds, maximum_output)
+    if result.returncode != 0:
+        raise RuntimeError("differential adapter failed")
+    return parse_result(result.stdout)
+
+
+def compare(
+    commands: list[list[str]],
+    cases: list[bytes],
+    timeout_seconds: float,
+    maximum_output: int,
+) -> int:
+    if len(commands) < 2 or len({tuple(command) for command in commands}) < 2:
+        raise RuntimeError("differential run requires two distinct adapters")
+    if not cases:
+        raise RuntimeError("differential run requires at least one case")
+    compared = 0
+    for case in cases:
+        results = [
+            run_adapter(command, case, timeout_seconds, maximum_output)
+            for command in commands
+        ]
+        if any(result != results[0] for result in results[1:]):
+            digest = hashlib.sha256(case).hexdigest()
+            raise RuntimeError(f"differential mismatch sha256={digest}")
+        compared += 1
+    return compared
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cases", required=True)
+    parser.add_argument("--adapter", action="append", required=True)
+    args = parser.parse_args()
+    policy = assurance.read_policy()
+    limits = policy["harness"]
+    commands = [shlex.split(command) for command in args.adapter]
+    if any(not command for command in commands):
+        raise SystemExit("adapter command cannot be empty")
+    root = Path(args.cases)
+    paths = sorted(path for path in root.iterdir() if path.is_file())
+    if len(paths) > limits["maximum_cases"]:
+        raise SystemExit("case corpus exceeds policy bound")
+    cases = [path.read_bytes() for path in paths]
+    if any(len(case) > limits["maximum_input_bytes"] for case in cases):
+        raise SystemExit("case exceeds policy input bound")
+    count = compare(
+        commands,
+        cases,
+        limits["timeout_milliseconds"] / 1000,
+        limits["maximum_output_bytes"],
+    )
+    print(
+        json.dumps(
+            {"adapters": len(commands), "cases": count},
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

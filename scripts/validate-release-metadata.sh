@@ -48,6 +48,18 @@ test -f scripts/requirements_transport.py
 test -f scripts/requirements_validation.py
 test -f scripts/requirements_test_support.py
 test -x scripts/update-standards-snapshots.py
+test -x scripts/check-assurance.py
+test -x scripts/test-assurance.py
+test -x scripts/assurance_mutation.py
+test -x scripts/assurance_differential.py
+test -x scripts/check-bare-metal.sh
+test -x scripts/check-kani.sh
+test -f scripts/assurance_policy.py
+test -f scripts/assurance_process.py
+test -s assurance/policy.toml
+test -s assurance/evidence.json
+test -s assurance/README.md
+test -s docs/KANI.md
 test -f scripts/release_policy.py
 test -x scripts/test-release-crates.py
 test -x scripts/test-release-readiness.sh
@@ -86,6 +98,8 @@ test -s standards/transport-surfaces/dtls.toml
 test -f release-crates.toml
 cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml
+grep -q 'python3 scripts/check-assurance.py' scripts/checks.sh
+grep -q 'scripts/check-kani.sh' scripts/checks.sh
 python3 -c '
 from pathlib import Path
 workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")

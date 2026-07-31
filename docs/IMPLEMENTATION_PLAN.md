@@ -234,6 +234,9 @@ without emitting secrets or application data.
 
 The repository will maintain:
 
+- the v0.4.0 bounded first-party raw-stdin mutation and canonical-JSON
+  differential harness contract, deterministic evidence, and ARMv7E-M,
+  RV32IMAC, and x86_64 OS-less compile matrix;
 - official RFC, NIST, and algorithm vectors with source provenance;
 - generated exhaustive tests for small domains;
 - deterministic mutation, corpus replay, and stdin harness binaries driven by
@@ -299,6 +302,13 @@ The repository will maintain:
   incomplete `brynja-fips` configuration;
 - pinned external Kani, Miri, sanitizer, process-level fuzz, and equivalent
   assurance tools that do not weaken repository Cargo dependency policy.
+
+Stable release Rust and verifier Rust are separate evidence dimensions.
+Brynja releases on the latest pinned stable compiler and supports its complete
+promised stable matrix. Kani follows the documented compatible pairing used by
+`base64-ng`: currently `cargo-kani 0.67.0` with Rust 1.90.0. A policy check or
+incompatible-tool skip is not a proof, never holds back stable Rust, and cannot
+support a formal-verification claim before scoped harnesses and results exist.
 
 ## Security Review Loop
 

@@ -29,24 +29,23 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.3.5` closes the complete pre-implementation normative baseline.
-The generated matrix contains 167 requirements and maps all 126 locked
-authorities and all 4,424 protocol surfaces. The residual bundle adds 50
-optional, HPKE, ECH, ML-KEM, entropy, operational, and legacy requirements,
-reviews 182 normative RFC sections through 165 exact mappings and 17 explicit
-exclusions, assigns 743 formerly uncovered surfaces, and records globally
-reconciled, fail-closed future, mutable, source-rights, and FIPS-validation
-blockers. It does **not** implement TLS and must not be used to secure network
-traffic.
+Version `0.4.0` establishes the first-party assurance harness and true
+bare-metal compile matrix on top of the complete 167-requirement,
+126-authority, 4,424-surface normative baseline. Deterministic mutation and
+external-process differential runners enforce input, output, case, timeout,
+canonical-result, and replay bounds. The complete workspace builds for three
+OS-less targets, and exact Kani, Miri, sanitizer, AFL++, and honggfuzz source
+pins remain outside every Cargo manifest. It does **not** implement TLS and
+must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.3.5` is a normative
-requirement-planning release; it does not implement TLS. The dependency is:
+Brynja is not ready for application use. Version `0.4.0` is an assurance
+infrastructure release; it does not implement TLS. The dependency is:
 
 ```toml
 [dependencies]
-brynja = "0.3"
+brynja = "0.4"
 ```
 
 Every official release tag publishes the `brynja` facade at the tag version.
@@ -82,6 +81,10 @@ publishes the facade last.
   validation claim; the current project is not FIPS validated.
 - Source files are limited to 500 lines and milestones are split before they
   become too large to review safely.
+- Assurance runners are first-party, deterministic, bounded, and shell-free.
+  External campaign launchers must provide OS sandboxing. Kani uses its
+  separately documented Rust 1.90.0 verifier pairing while release code stays
+  on latest stable Rust; policy-only status is never a proof claim.
 - A feature being compiled is never evidence that a protocol is implemented,
   secure, interoperable, audited, or production-ready.
 - The locked RFC closure and its roadmap mapping are recorded in the
@@ -136,6 +139,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | License | `MIT OR Apache-2.0` |
 | MSRV | Rust `1.90.0` |
 | Pinned stable toolchain | Rust `1.97.1` |
+| Kani verifier pairing | `cargo-kani 0.67.0` on Rust `1.90.0`; separate evidence only |
 | Default target | `no_std` |
 | Third-party crates | Forbidden |
 | First-party companion crates | Conditional adapter-only admission review |
@@ -148,9 +152,14 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.97.1`, the current stable patch release checked on 2026-07-30.
+to Rust `1.97.1`, the current stable patch release checked on 2026-07-31.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
+
+Kani does not set the crate compiler baseline. Its compiler-sensitive proof
+path is separately pinned to `cargo-kani 0.67.0` with Rust `1.90.0`, following
+the documented `base64-ng` model. v0.4.0 admits no Kani proof harness, so the
+successful policy check is not formal-verification evidence.
 
 | Rust toolchain | Required evidence |
 | --- | --- |
@@ -176,6 +185,10 @@ scripts/checks.sh
 scripts/check-rust-version-matrix.sh
 scripts/release_crates.py --check
 scripts/release_crates.py --package-check
+python3 scripts/check-assurance.py
+python3 scripts/test-assurance.py
+scripts/check-bare-metal.sh
+scripts/check-kani.sh
 scripts/check-github-release-controls.py
 python3 scripts/check-standards-ledger.py
 python3 scripts/check-protocol-surfaces.py
@@ -192,7 +205,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.3.5
+scripts/release_crates.py --version 0.4.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,
@@ -215,3 +228,5 @@ occurs only after GitHub is green and the user explicitly requests it.
 - [Machine-readable standards evidence](https://github.com/valkyoth/brynja/blob/main/standards/README.md)
 - [Normative requirement evidence](https://github.com/valkyoth/brynja/blob/main/requirements/README.md)
 - [Permanent evidence index](https://github.com/valkyoth/brynja/blob/main/docs/evidence-index.md)
+- [Assurance harness policy](https://github.com/valkyoth/brynja/blob/main/assurance/README.md)
+- [Kani verifier policy](https://github.com/valkyoth/brynja/blob/main/docs/KANI.md)

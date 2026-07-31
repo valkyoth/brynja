@@ -1,0 +1,85 @@
+{
+  "bare_metal_targets": [
+    "riscv32imac-unknown-none-elf",
+    "thumbv7em-none-eabi",
+    "x86_64-unknown-none"
+  ],
+  "harness_protocol": "brynja-stdin-json-v1",
+  "inputs": {
+    ".github/workflows/ci.yml": "22ca5fa4493f1b271b335838307b963271535eafdd9b5565feeaffb0e87fdc51",
+    "Cargo.toml": "0160ee8468c4b9a5bb32fa9a7d27891562fd6ce36f56f4fc6717da747e53206f",
+    "assurance/policy.toml": "a9b4e2967d2f182b4928c6dd3d6778c4a1231bb22d582e8dd0e413765ed05d94",
+    "crates/brynja-core/Cargo.toml": "942c62955371e36b652914fd196f97edd3c2b8d93a039ba55edf59bba6ca98a0",
+    "crates/brynja-crypto/Cargo.toml": "b38089139d958f6178bedc3cd7cfe18785663fbe44b09bbd9ea1508150aaa6f6",
+    "crates/brynja-dtls/Cargo.toml": "b9e97e658b5ad4a26a3516a8cfdc19903a48c8d99f1da3579e88bdeb6ecf7d74",
+    "crates/brynja-interop/Cargo.toml": "5105aaaf822e07c68949c8a1672ffec3dc959c86d1069753a148257468de98cd",
+    "crates/brynja-legacy-pct/Cargo.toml": "f7d938e341441f901c069b75f5270385d1d036b186e458100c94a106da2c39bc",
+    "crates/brynja-legacy-snp/Cargo.toml": "6371419a6dc6ab58c6937e26831394ca49b6d268fe3caecc29da384260854406",
+    "crates/brynja-legacy-ssl2/Cargo.toml": "a4f0816b74343ed661d909cb2dabd5af704723c248817cd98689be8cf656e154",
+    "crates/brynja-legacy-ssl3/Cargo.toml": "733cf1949e1b6e9c23c6f890f9e5ffada35e9a13a81458636beeb46a0b31b900",
+    "crates/brynja-legacy-tls10/Cargo.toml": "048b275a6e6576cc82e859f86b04d93c907e0186217e2945344d51363ea9218e",
+    "crates/brynja-legacy-tls11/Cargo.toml": "85e7f8cdc636fb272fdbc5ce92b1bbec2e32efdf44a34ea95fd92995135b19bb",
+    "crates/brynja-legacy-wtls/Cargo.toml": "a530b8c301d0fa6252f269064f318dbb7e5508168f522af9b3f2aaf3bd03c64e",
+    "crates/brynja-legacy/Cargo.toml": "31c7d03b89d15498aa4f5e15e81f03e6276084678cf2d5cff847d50d94bfb3c0",
+    "crates/brynja-pki/Cargo.toml": "adf17abede761e708b387f2c62333b065bc6d28ea46ec95613ce7ef12db26c6d",
+    "crates/brynja-platform/Cargo.toml": "8525f77270f31fdd151f8a81385401cdca6c926d9044a1fd31c0835fed7ca71b",
+    "crates/brynja-proofs/Cargo.toml": "703a8acc6a02caf32113c57a4a21b215d6c6c6aeff1e3acd577f023cfd03ef11",
+    "crates/brynja-quic-tls/Cargo.toml": "93ec40442fc48f8502ba1c0c53b8eec83e330276e859ccbc9fb6b84f133db958",
+    "crates/brynja-research-ssl1/Cargo.toml": "9dd425622b9a714280ca530ad52aa6cc9999d4938eb7b16ee08af9707ccc2ba8",
+    "crates/brynja-test-support/Cargo.toml": "e97d6900f49c992b5a8d77a31733ffec64d22c3dba94a7b16e991182a0e4acd9",
+    "crates/brynja-tls/Cargo.toml": "06d0ef649b4a871be60cac66a7c1c8ec793bedb5760300d3f3691759e7479754",
+    "crates/brynja-tls12/Cargo.toml": "98afb993f6915ff7beccd86b2749bc2062bd6172c1a4952a9e8ca63a187e9f30",
+    "crates/brynja-tls13-handshake/Cargo.toml": "b0b5b170db297b70c9b7797ba2080ebbf07ca15e7d4458d85ab63a80c8067b9e",
+    "crates/brynja-tls13/Cargo.toml": "2aabd70483c9cb26018fbee50f44c42e2360d9816565a3dcb58f4bd92c6c6993",
+    "crates/brynja-xtask/Cargo.toml": "e178b328289b523b7dc0a9d994cf5409ae54a44ba4198092c520ee45f1247d50",
+    "crates/brynja/Cargo.toml": "a91cc42d944cb1cd5009850154626fa3599dcfe167e8365ac65fc854d0646e7d",
+    "docs/KANI.md": "faf8ff6bb60ba18512acb30eb8ba428826e9a18d0076173fb19d1630f1722794",
+    "rust-toolchain.toml": "7c2f0a64d6cb4c7b9fb3dc70adbcdb8727a1396367605a09e29bee276044dc23",
+    "scripts/assurance_differential.py": "ec412896517ac801d1661059cefa2449110dc16757dfcd8608f57ab5e3fae01f",
+    "scripts/assurance_mutation.py": "5a7db2099f538ea82d579f6110ba8de5c2c72051672494e6048b130d82c00130",
+    "scripts/assurance_process.py": "ac44f9ebfbaf375b4a4c5889013da146de67bf8de730d4c6aa2a712f76356e00",
+    "scripts/check-assurance.py": "617b4a35ba7f95ac37405a4a5bfae216a65eed79a212d232cb0ec7e1d3aa90b7",
+    "scripts/check-bare-metal.sh": "16f431dc854104e4dfc24724eadf76187d44b732b84fce99abe5fe87bcf00423",
+    "scripts/check-kani.sh": "36b125f529992d8491a8b87f1db023eee28c2dbca17c5c1107b0148d31620565"
+  },
+  "milestone": "0.4.0",
+  "policy_sha256": "a9b4e2967d2f182b4928c6dd3d6778c4a1231bb22d582e8dd0e413765ed05d94",
+  "schema": 1,
+  "tools": [
+    {
+      "id": "aflplusplus",
+      "owner": "0.156.0",
+      "revision": "011cd189801830253c66ecd3cd6919ec01b46c34",
+      "source_kind": "git-tag",
+      "version": "5.02c"
+    },
+    {
+      "id": "honggfuzz",
+      "owner": "0.156.0",
+      "revision": "83a8415a372d84dcc69ac1e2c2f152190bcf76d1",
+      "source_kind": "git-tag",
+      "version": "2.6"
+    },
+    {
+      "id": "kani",
+      "owner": "0.155.0",
+      "revision": "4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d",
+      "source_kind": "git-tag",
+      "version": "0.67.0"
+    },
+    {
+      "id": "miri",
+      "owner": "0.157.0",
+      "revision": "008fa22ce3f8d3c8dfaca2e6486043c2b21851eb",
+      "source_kind": "rustup-component",
+      "version": "nightly-2026-07-26"
+    },
+    {
+      "id": "rust-sanitizers",
+      "owner": "0.157.0",
+      "revision": "008fa22ce3f8d3c8dfaca2e6486043c2b21851eb",
+      "source_kind": "rust-toolchain",
+      "version": "nightly-2026-07-26"
+    }
+  ]
+}

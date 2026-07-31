@@ -54,6 +54,8 @@ test -x scripts/assurance_mutation.py
 test -x scripts/assurance_differential.py
 test -x scripts/check-bare-metal.sh
 test -x scripts/check-kani.sh
+test -x scripts/check-verification-status.py
+test -x scripts/test-verification-status.py
 test -f scripts/assurance_policy.py
 test -f scripts/assurance_process.py
 test -s assurance/policy.toml
@@ -100,6 +102,8 @@ cmp -s README.md crates/brynja/README.md
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml
 grep -q 'python3 scripts/check-assurance.py' scripts/checks.sh
 grep -q 'scripts/check-kani.sh' scripts/checks.sh
+grep -q 'python3 scripts/check-verification-status.py' scripts/checks.sh
+grep -q 'python3 scripts/test-verification-status.py' scripts/checks.sh
 python3 -c '
 from pathlib import Path
 workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")

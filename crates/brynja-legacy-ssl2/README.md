@@ -30,6 +30,20 @@ controlled-interoperability boundary. It must never be used for new deployments
 or general network endpoints. In `0.1.0` it establishes a compile-time boundary
 only and does not implement SSL 2.0.
 
+## Cryptography Verification Status
+
+No SSL 2.0 code in this crate has been independently reviewed. This component
+only moves from ❌ to ✅ when a named independent reviewer signs off and the
+evidence is linked from its status entry. Project tests, CI, Kani, Miri,
+fuzzing, and pentesting do not by themselves constitute independent
+verification. Independent verification would not make SSL 2.0 secure.
+
+| Component | Protocol scope | Independently verified |
+| --- | --- | --- |
+| `brynja-legacy-ssl2` | SSL 2.0 controlled-interoperability engine | ❌ Not verified |
+
+The component is not implemented yet.
+
 Most application users will eventually depend on the modern facade:
 
 ```toml

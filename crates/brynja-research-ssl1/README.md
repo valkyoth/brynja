@@ -30,6 +30,21 @@ provenance-research boundary. It can never expose a secure transport API,
 accept production credentials, or be published by default. In `0.1.0` it
 establishes the compile-time boundary only.
 
+## Cryptography Verification Status
+
+No reconstructed SSL 1.0 code in this crate has been independently reviewed.
+This component only moves from ❌ to ✅ when a named independent reviewer signs
+off and the evidence is linked from its status entry. Project tests, CI, Kani,
+Miri, fuzzing, and pentesting do not by themselves constitute independent
+verification. Independent verification could never authorize a secure
+transport claim for this research crate.
+
+| Component | Protocol scope | Independently verified |
+| --- | --- | --- |
+| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
+
+The component is not implemented yet.
+
 Most application users will eventually depend on the modern facade:
 
 ```toml

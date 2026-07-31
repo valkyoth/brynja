@@ -98,6 +98,32 @@ publishes the facade last.
   cryptography, encoding, PKIX, TLS, DTLS, QUIC-TLS, optional, HPKE, ECH,
   entropy, legacy, operational, and residual domains before implementation.
 
+## Cryptography Verification Status
+
+No cryptographic or protocol code in this repository has been independently
+reviewed. A component only moves from ❌ to ✅ when a named independent
+reviewer signs off and that evidence is linked from its status entry in this
+table. Passing the project's own tests, CI, Kani, Miri, sanitizers, fuzzing,
+differential testing, or release pentests does not, by itself,
+constitute independent cryptographic or protocol verification.
+
+| Component | Cryptographic or protocol scope | Independently verified |
+| --- | --- | --- |
+| `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
+| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
+| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |
+| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |
+| `brynja-tls13` / `brynja-tls13-handshake` | TLS 1.3 record and handshake engine | ❌ Not verified |
+| `brynja-quic-tls` | QUIC/TLS handshake integration | ❌ Not verified |
+| `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |
+| `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |
+| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
+
+None of these components are implemented yet—see [Workspace](#workspace)
+below. This table exists so independent-review status remains visible and
+cannot be mistaken for implementation, testing, formal proof, pentest, or
+production-readiness status.
+
 ## Workspace
 
 | Package | Role | Current status |
@@ -185,6 +211,8 @@ scripts/checks.sh
 scripts/check-rust-version-matrix.sh
 scripts/release_crates.py --check
 scripts/release_crates.py --package-check
+python3 scripts/check-verification-status.py
+python3 scripts/test-verification-status.py
 python3 scripts/check-assurance.py
 python3 scripts/test-assurance.py
 scripts/check-bare-metal.sh

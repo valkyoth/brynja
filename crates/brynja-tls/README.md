@@ -31,6 +31,20 @@ version-selection boundary. Version-specific protocol state remains in
 this package establishes a compile-time boundary only; it does not provide a
 working TLS implementation.
 
+## Cryptography Verification Status
+
+No protocol code in this crate has been independently reviewed. This component
+only moves from ❌ to ✅ when a named independent reviewer signs off and the
+evidence is linked from its status entry. Project tests, CI, Kani, Miri,
+fuzzing, and pentesting do not by themselves constitute independent
+verification.
+
+| Component | Protocol scope | Independently verified |
+| --- | --- | --- |
+| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |
+
+The component is not implemented yet.
+
 Most application users will eventually depend on the modern facade:
 
 ```toml

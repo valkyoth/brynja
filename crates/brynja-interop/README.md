@@ -29,6 +29,14 @@
 establishes a compile-time boundary only; it does not provide a working TLS,
 cryptographic, PKI, platform, or legacy-protocol implementation.
 
+## Cryptography Verification Status
+
+This repository-only crate does not implement cryptographic or protocol code,
+so it has no component status row. Interoperability and differential-test
+results do not independently verify a component. Only a named independent
+reviewer and linked review evidence can change a component's
+independent-verification status.
+
 Most application users will eventually depend on the modern facade:
 
 ```toml
@@ -43,4 +51,3 @@ committed PASS pentest report, and green GitHub checks in the
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,
 platform-portability, and modern/legacy isolation policies apply here.
-

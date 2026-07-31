@@ -29,6 +29,20 @@
 establishes a compile-time boundary only; it does not provide a working TLS,
 cryptographic, PKI, platform, or legacy-protocol implementation.
 
+## Cryptography Verification Status
+
+No cryptographic code in this crate has been independently reviewed. This
+component only moves from ❌ to ✅ when a named independent reviewer signs off
+and the evidence is linked from its status entry. Project tests, CI, Kani,
+Miri, fuzzing, and pentesting do not by themselves constitute independent
+verification.
+
+| Component | Cryptographic scope | Independently verified |
+| --- | --- | --- |
+| `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
+
+The component is not implemented yet.
+
 Most application users will eventually depend on the modern facade:
 
 ```toml
@@ -43,4 +57,3 @@ committed PASS pentest report, and green GitHub checks in the
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,
 platform-portability, and modern/legacy isolation policies apply here.
-

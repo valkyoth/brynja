@@ -29,6 +29,20 @@
 `0.1.0` it establishes that compile-time boundary only; it does not provide a
 working TLS, cryptographic, PKI, or platform implementation.
 
+## Cryptography Verification Status
+
+No protocol code in this crate has been independently reviewed. This component
+only moves from ❌ to ✅ when a named independent reviewer signs off and the
+evidence is linked from its status entry. Project tests, CI, Kani, Miri,
+fuzzing, and pentesting do not by themselves constitute independent
+verification.
+
+| Component | Protocol scope | Independently verified |
+| --- | --- | --- |
+| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |
+
+The component is not implemented yet.
+
 Most application users will eventually depend on the evergreen facade:
 
 ```toml

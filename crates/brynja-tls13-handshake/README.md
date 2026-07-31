@@ -29,6 +29,20 @@
 shared by stream TLS and QUIC. In `0.1.0` it establishes that compile-time
 boundary only; it does not provide a working protocol implementation.
 
+## Cryptography Verification Status
+
+No protocol code in this crate has been independently reviewed. This component
+only moves from ❌ to ✅ when a named independent reviewer signs off and the
+evidence is linked from its status entry. Project tests, CI, Kani, Miri,
+fuzzing, and pentesting do not by themselves constitute independent
+verification.
+
+| Component | Protocol scope | Independently verified |
+| --- | --- | --- |
+| `brynja-tls13-handshake` | Record-independent TLS 1.3 handshake engine | ❌ Not verified |
+
+The component is not implemented yet.
+
 Most application users will eventually depend on the evergreen facade:
 
 ```toml

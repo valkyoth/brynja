@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.4.0 implementation stop; pentest required
+Status: v0.4.0 pentest passed; awaiting green GitHub CI
 
 Brynja still has no TLS, cryptographic, PKI, QUIC, DTLS, platform, or legacy
 protocol implementation. The Rust workspace remains package scaffolding and
@@ -211,6 +211,17 @@ governance-integrity findings, all of which were remediated. The repository
 owner retested signed commit
 `0d1203bd1c2640e40edb31d7ff18bf20833140a2` and reported it green with no
 remaining finding. The permanent v0.3.5 report records `PASS`/`PASS` with zero
-open findings, and signed tag `v0.3.5` is published. The v0.4.0 implementation
-stop now requires repository-owner pentest before any release-candidate report,
-green-CI wait, or tag authorization.
+open findings, and signed tag `v0.3.5` is published.
+
+The v0.4.0 assessment cycle reported one Medium governance-integrity finding,
+one accepted Low architectural risk, one Low tooling-availability finding,
+and four Medium resource, containment, and Windows-availability findings.
+Bounded subprocess probes, descriptor-bound input allocation, streaming
+corpora, cooperative POSIX limitation disclosure, fail-closed hostile POSIX
+containment contracts, Windows Job Object startup, native-host CI, and
+independent-review/FIPS disclosures address the complete assessment. The
+repository owner retested signed commit
+`62ad878cf2e536fec43cab99d42c6943cab905d5` and reported it green with no
+remaining finding. The permanent v0.4.0 report records `PASS`/`PASS` with zero
+open findings. The candidate now awaits green hosted GitHub checks before
+explicit tag authorization.

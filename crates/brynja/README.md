@@ -42,7 +42,9 @@ traffic.
 ## Install
 
 Brynja is not ready for application use. Version `0.4.0` is an assurance
-infrastructure release; it does not implement TLS. The dependency is:
+infrastructure release; it does not implement TLS. Its pentest and remediation
+retest are complete, and the release candidate awaits green GitHub checks
+before explicit tag authorization. The dependency is:
 
 ```toml
 [dependencies]

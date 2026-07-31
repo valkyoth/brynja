@@ -438,7 +438,7 @@ Exit criteria:
 
 ### v0.4.0 - Assurance Harness And Bare-Metal Matrix
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Establish first-party mutation and differential harnesses, true bare-metal targets, and pinned external assurance-tool policy without adding third-party crates to repository Cargo manifests.
 

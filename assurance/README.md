@@ -1,6 +1,6 @@
 # Assurance Harness And Bare-Metal Matrix
 
-Status: v0.4.0 implementation stop; pentest required
+Status: v0.4.0 pentest passed; awaiting green GitHub CI
 
 This directory freezes the first-party assurance boundary before protocol or
 cryptographic implementation begins. It is infrastructure evidence, not proof

@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.4.0 assurance infrastructure enforced; pentest required
+Status: v0.4.0 assurance infrastructure enforced; awaiting green GitHub CI
 
 | Control | Foundation enforcement |
 | --- | --- |

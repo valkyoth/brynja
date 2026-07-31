@@ -1,6 +1,6 @@
 # Brynja 0.4.0 Release Notes
 
-Status: implementation stop reached; pentest required
+Status: pentest and remediation retest passed; awaiting green GitHub checks
 
 Brynja 0.4.0 establishes first-party assurance infrastructure and a true
 OS-less compile matrix. It does not implement TLS, cryptography, PKI, QUIC,
@@ -112,9 +112,10 @@ Only `brynja 0.4.0` is selected for crates.io publication. All unchanged
 supporting crates retain their independently published `0.1.0` versions and
 are not republished. Legacy and repository-only crates remain unpublished.
 
-Publication remains blocked until the repository-owner pentest is complete,
-the permanent committed report records `PASS`/`PASS` with zero open findings,
-GitHub checks are green, and the user explicitly authorizes tagging.
+The repository-owner pentest and remediation retest are complete, and the
+permanent report records `PASS`/`PASS` with zero open findings. Publication
+remains blocked until GitHub checks are green and the user explicitly
+authorizes tagging.
 
 ## Limitations
 

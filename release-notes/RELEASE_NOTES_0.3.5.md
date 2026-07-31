@@ -1,6 +1,6 @@
 # Brynja 0.3.5 Release Notes
 
-Date: 2026-07-30
+Date: 2026-07-31
 
 Brynja 0.3.5 completes the optional, legacy, operational, and residual
 normative closure that precedes implementation. It does not implement TLS,
@@ -9,14 +9,14 @@ not be used to secure network traffic.
 
 ## Highlights
 
-- Adds 49 stable residual requirements, bringing the matrix to 165 records.
+- Adds 50 stable residual requirements, bringing the matrix to 167 records.
 - Covers 33 residual authorities and reviews 182 normative RFC sections
   through 165 exact mappings and 17 explicit exclusions.
-- Assigns all 742 surfaces left by the foundation, domain, and transport
-  bundles, closing all 4,422 protocol surfaces.
+- Assigns all 743 surfaces left by the foundation, domain, and transport
+  bundles, closing all 4,424 protocol surfaces.
 - Generates complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
-  requirement-to-owner reports across 126 authorities and 205 roadmap rows.
+  requirement-to-owner reports across 126 authorities and 206 roadmap rows.
 - Pins final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C as local-only
   checksum-locked authorities.
 - Adds explicit local-rights, mutable-authority refresh, hybrid, legacy, and
@@ -66,7 +66,7 @@ previously copied one representative surface into a requirement while marking
 every group member covered, and RFC citations inherited every normative
 section without a reviewed semantic assignment.
 
-Every one of the 742 residual surfaces is now explicitly listed and linked
+Every one of the 743 residual surfaces is now explicitly listed and linked
 back from its requirement. Groups cannot cross code or test boundaries, and
 every member is independently checked for source, owner, disposition, and
 identity. Nine mixed groups were split into separate requirements.
@@ -75,7 +75,7 @@ The new reviewed residual section policy assigns all 182 inventoried sections
 to exact requirements or explicit exclusions. Generated evidence records 266
 exact requirement links instead of 541 blanket associations. Twenty-two
 residual fixtures reproduce both findings and their non-representative
-variants. External remediation retest remains required.
+variants.
 
 A subsequent retest found three additional Medium integrity defects. Global
 reconciliation now prevents any domain, transport, or residual policy from
@@ -98,19 +98,32 @@ WTLS, PCT, SNP, and SSL 1 carry explicit source-blocker identities, blocked
 lifecycles, and exact authority-claim blocker targets until their actual
 specifications pass provenance and rights review.
 
+A third remediation retest found three final Medium integrity defects. Known
+unsupported RFC 6066 ClientHello extensions now follow a bounded opaque
+wire-ignore path while configuration and unsolicited responses remain
+rejected. RFC 6066 has an independent TLS 1.2 engine owner at the new v0.90.1
+implementation stop as well as exact TLS 1.3 and facility owners. The shared
+section-disposition definition now includes `delegated`, and a schema-contract
+fixture proves that every emitted disposition is declared.
+
+The repository owner retested signed remediation commit
+`0d1203bd1c2640e40edb31d7ff18bf20833140a2` and reported it green with no
+remaining finding. All ten Medium findings are closed, and the permanent
+report records `PASS`/`PASS` with zero open findings.
+
 ## Verification
 
 The release candidate verifies:
 
-- 165 deterministic stable requirements;
+- 167 deterministic stable requirements;
 - all 126 locked source authorities;
-- all 205 roadmap rows;
-- all 4,422 protocol surfaces;
+- all 206 roadmap rows;
+- all 4,424 protocol surfaces;
 - 182 residual normative RFC sections with exact anchors and hashes;
-- 108 requirement positive and broken-fixture tests, including 22 dedicated
+- 110 requirement positive and broken-fixture tests, including 22 dedicated
   residual-closure fixtures;
-- three dedicated surface-security fixtures covering DTLS RRC confinement and
-  RFC 6066 rejected-facility boundaries;
+- four dedicated surface-security fixtures covering DTLS RRC confinement,
+  RFC 6066 wire/configuration boundaries, and schema-declared dispositions;
 - deterministic standards, surface, matrix, coverage, closure, package, and
   SBOM artifacts;
 - no external Cargo packages and `no_std` production packages;
@@ -123,9 +136,9 @@ Only `brynja 0.3.5` is selected for crates.io publication. All unchanged
 supporting crates retain their independently published `0.1.0` versions and
 are not republished. Legacy and repository-only crates remain unpublished.
 
-Publication remains blocked until the repository owner passes the v0.3.5
-remediation retest, the committed report records `PASS`/`PASS` with zero open
-findings, GitHub checks are green, and the user explicitly authorizes tagging.
+Publication remains blocked until this `PASS`/`PASS` report and the release
+documentation are committed, GitHub checks are green, and the user explicitly
+authorizes tagging.
 
 ## Limitations
 

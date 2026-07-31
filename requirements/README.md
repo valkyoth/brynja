@@ -1,6 +1,6 @@
 # Normative Requirement Evidence
 
-Status: v0.3.5 pentest remediation complete; retest required
+Status: v0.3.5 pentest passed; awaiting green CI
 
 This directory turns exact standards authority into stable, reviewable
 requirements without claiming that planned protocol behavior exists. The

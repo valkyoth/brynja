@@ -383,7 +383,7 @@ Exit criteria:
 
 ### v0.3.5 - Optional Legacy And Residual Normative Closure
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Populate HPKE, ECH, ML-KEM and hybrid, optional TLS facilities, legacy protocol, operational and presently pinned non-RFC requirements; represent unavailable future or mutable authorities as fail-closed blockers owned by their dependent milestone; reconcile exact cross-bundle section ownership, confine every RFC 9853 RRC surface to DTLS, separate RFC 6066 wire-ignore behavior from configuration rejection, cover RFC 6066 independently in TLS 1.2, and reject every orphan, duplicate, stale, obsolete-as-current, silently weakened or uncovered planned surface before cryptographic or protocol implementation begins.
 

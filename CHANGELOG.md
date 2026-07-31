@@ -5,19 +5,19 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
-## [0.3.5] - 2026-07-30
+## [0.3.5] - 2026-07-31
 
 ### Added
 
-- Forty-nine optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and
-  residual requirements, bringing the deterministic matrix to 165 records.
+- Fifty optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and
+  residual requirements, bringing the deterministic matrix to 167 records.
 - Local-only checksum pins for final FIPS 203, SP 800-227, SP 800-90B, and
   SP 800-90C.
 - Exact residual coverage of 33 authorities, 182 normative RFC sections, and
-  all 742 surfaces left by the foundation, domain, and transport bundles.
-- A generated closure report mapping all 126 locked authorities, 205 roadmap
-  rows, 4,422 protocol surfaces, and 165 requirements in both directions.
-- Twenty-two residual broken fixtures, bringing the requirement suite to 108
+  all 743 surfaces left by the foundation, domain, and transport bundles.
+- A generated closure report mapping all 126 locked authorities, 206 roadmap
+  rows, 4,424 protocol surfaces, and 167 requirements in both directions.
+- Twenty-two residual broken fixtures, bringing the requirement suite to 110
   positive and negative tests.
 
 ### Security
@@ -50,6 +50,13 @@ Keep a Changelog and Semantic Versioning.
   sections are split among exact SNI, status, alert, exclusion, and
   cross-bundle delegation decisions instead of being attributed wholesale to
   OCSP.
+- Three final Medium retest findings are remediated: unsupported RFC 6066 peer
+  ClientHello extensions use a bounded opaque ignore path distinct from
+  rejected local configuration and unsolicited responses; RFC 6066 has an
+  independent TLS 1.2 owner at v0.90.1; and generated `delegated` section
+  evidence is declared and contract-tested against the schema.
+- The repository-owner retest of the complete ten-finding remediation passed
+  with zero open findings; the permanent v0.3.5 report is `PASS`/`PASS`.
 
 ## [0.3.4] - 2026-07-30
 

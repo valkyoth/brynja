@@ -116,7 +116,7 @@ def test_current_residual_repository() -> None:
     assert coverage["authority_count"] == 33
     assert coverage["normative_section_count"] == 182
     assert coverage["mapped_normative_section_count"] == 165
-    assert coverage["surface_count"] == 743
+    assert coverage["surface_count"] == 763
     requirement_map = {item["id"]: item for item in requirements}
     assert all(
         item["id"] in requirement_map[item["requirement_id"]]["decision_ids"]
@@ -129,7 +129,7 @@ def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 126
     assert len(artifact["plans"]) == 206
-    assert len(artifact["surfaces"]) == 4424
+    assert len(artifact["surfaces"]) == 4444
     assert len(artifact["requirements"]) == 167
     assert len(artifact["local_rights"]) == 15
     assert len(artifact["mutable_authorities"]) == 13

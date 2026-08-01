@@ -17,7 +17,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5"
+      "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5"
     },
     {
       "authority_role": "current",
@@ -2536,10 +2536,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "874469ff83e4c5b38afa96ca5ac161cbece6680414a4e44c4ede2f47da9612bc",
+  "policy_sha256": "b0566705ec0df20a2f366a18e5b743f86b0d576f014a3af2e54428e7df97120a",
   "requirement_count": 50,
   "schema": 1,
-  "surface_count": 743,
+  "surface_count": 763,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -2668,6 +2668,30 @@
       "id": "format.raw-public-key",
       "owner": "0.137.0",
       "requirement_id": "BRY-REQ-OPTIONAL-0137"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.contact-uri-schemes",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.contact-uri-schemes.mailto.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.contact-uri-schemes.tel.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
     },
     {
       "coverage": "requirement",
@@ -3162,6 +3186,14 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.dns-parameters-11.reserved.2",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-11.structured-dns-error.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },
@@ -4849,6 +4881,14 @@
       "coverage": "requirement",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-error-codes.blocked-by-upstream-dns-server.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.extended-dns-error-codes.blocked.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
@@ -5138,6 +5178,126 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.extended-dns-error-codes.unsupported-nsec3-iterations-value.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.2",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.3",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.4",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.5",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.6",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.7",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.8",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.indicates-the-language-of-the-j-and-o-fields-as-defined-in.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.integer-representing-the-sub-error-code-for-this-dns-filtering-case.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.the-contact-details-of-the-it-infosec-team-to-report-misclassified-dns-filtering.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.utf-8-encoded-human-friendly-name-of-the-organization-that-filtered-this-particular-dns-query.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.utf-8-encoded-textual-justification-for-a-particular-dns-filtering.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },

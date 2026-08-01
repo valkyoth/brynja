@@ -1,6 +1,6 @@
 # Normative Requirement Evidence
 
-Status: complete pre-implementation normative baseline carried into v0.4.0
+Status: complete normative baseline carried through v0.6.0; no v0.6 protocol claim
 
 This directory turns exact standards authority into stable, reviewable
 requirements without claiming that planned protocol behavior exists. The
@@ -60,14 +60,14 @@ requirements.
   normative RFC sections, 64 owner milestones, and 485 transport surfaces,
   including requirement IDs or reviewed dispositions for every section.
 - `residual-coverage.json` proves exact coverage of 33 residual authorities,
-  182 normative RFC sections, and 743 previously uncovered surfaces, including
+  182 normative RFC sections, and 763 previously uncovered surfaces, including
   165 mapped sections, 17 explicit exclusions, and 266 exact section links.
 - Domain, transport, and residual section policies are reconciled globally so
   no section can be both mapped and excluded or carry conflicting exclusions.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
   requirement-to-owner reports across 126 authorities, 206 roadmap rows,
-  4,424 surfaces, and 167 requirements.
+  4,444 surfaces, and 167 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim
@@ -112,8 +112,11 @@ status_request_v2 remains mapped to its v0.3.3 OCSP review. Every one of the 63
 planned transport implementation milestones has one stable semantic surface
 and requirement.
 
-The v0.3.5 `optional-legacy-residual` profile resolves all earlier deferrals
-and every remaining surface without admitting future code. FIPS 203,
+The `optional-legacy-residual` profile resolves all earlier deferrals and every
+remaining surface without admitting future code. The 2026-08-01 reviewed IANA
+DNS refresh added twenty caller-owned surfaces to `BRY-REQ-DNS-0140` and
+advanced that released requirement to revision three; provisional draft
+references do not become implementation authority. FIPS 203,
 SP 800-227, SP 800-90B, and SP 800-90C are local-only checksum-pinned
 authorities. Concrete ECDHE-ML-KEM groups, unauthenticated legacy
 specifications, and the mutable FIPS validation baseline remain explicit

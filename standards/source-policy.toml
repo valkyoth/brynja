@@ -2,9 +2,9 @@
 version = 1
 
 [review]
-checked_at = "2026-07-30"
+checked_at = "2026-08-01"
 owner = "Brynja standards review"
-pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh."
+pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.140.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh."
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
 rfc_index_sha256 = "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674"
 errata = "https://errata.rfc-editor.org/search/"
@@ -69,7 +69,7 @@ milestones = ["0.3.0", "0.3.1", "0.3.3", "0.48.0"]
 [[registry]]
 id = "dns-parameters"
 url = "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
-expected_sha256 = "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5"
+expected_sha256 = "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5"
 domains = ["ech"]
 milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
 

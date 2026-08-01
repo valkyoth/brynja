@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: v0.3.5 complete reviewed pre-implementation source closure
+Status: reviewed source closure carried through v0.6.0
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -28,7 +28,7 @@ primitive is implemented.
   exact source-ledger hash. It records explicit semantic decisions, complete
   collection defaults, registry-specific rules, and exact entry overrides.
 - `transport-surfaces/*.toml` adds one reviewed semantic surface for each of
-  the 63 TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3
+  the 64 TLS, hardened TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3
   implementation milestones without changing registry classifications.
 - `protocol-surfaces.json` deterministically classifies every semantic
   decision, nested registry, and individual record in all eight pinned IANA
@@ -95,9 +95,10 @@ The surface checker additionally fails on a changed source-ledger hash,
 missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
-or stale generated JSON or Markdown. All 4,106 individual IANA records, 192
-nested registries, and 124 semantic decisions are represented; `future-work`
-does not claim implementation.
+or stale generated JSON or Markdown. All 4,123 individual IANA records, 195
+nested registries, and 126 semantic decisions are represented; `future-work`
+does not claim implementation. An `implemented` disposition is admitted only
+when current code, tests, and requirement evidence support that exact surface.
 
 The requirement checker additionally fails on changed ledger or surface hashes,
 invalid RFC sections or anchors, obsolete-as-current sources, unknown or
@@ -110,11 +111,11 @@ generated artifacts. Its 12 foundation requirements exercise all eight
 lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
 encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces; 70
 transport requirements cover 40 authorities, 550 normative sections, 63
-implementation milestones, and 483 TLS, DTLS, and QUIC surfaces. Forty-nine
-v0.3.5 residual requirements cover 33 authorities, 182 reviewed normative
-sections, and all 742 formerly uncovered surfaces. The residual section policy
+implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty
+residual requirements cover 33 authorities, 182 reviewed normative sections,
+and all 763 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 126 sources and 4,422 surfaces.
+closure across all 126 sources and 4,444 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -137,6 +138,12 @@ upstream channel; manually update the policy pin and its provenance; then run
 `--write`, review the semantic and byte diff, regenerate the ledger, pass all
 tests, and commit the pin plus evidence together. The same pin-first process
 applies to new RFC, NIST, and ITU source bytes.
+
+The 2026-08-01 reviewed refresh accepted the official 2026-07-31 IANA DNS
+Parameters snapshot. Its three new registries and seventeen new entries are
+explicitly caller-owned by v0.140.0. Provisional Structured DNS Error draft
+references in that registry are evidence of registry state, not admitted
+implementation authority.
 
 Concrete ECDHE-ML-KEM groups remain fail-closed at milestone `0.120.0`.
 RFC 9954 supplies only the generic construction; a final Standards Track RFC

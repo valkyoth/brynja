@@ -136,7 +136,7 @@
   "integrity": {
     "errata_sha256": "7c62be3e760edbc05b844a000f29df5c5a8bff42f9a43d59bf78c53290f3090e",
     "local_source_manifest_sha256": "ea541f798e0d24360b3127829d41b253602ea282febc07a6719154e1b25f112a",
-    "pin_provenance": "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied; pins remain separate from every later refresh.",
+    "pin_provenance": "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.140.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh.",
     "rfc_index_projection_sha256": "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674",
     "rfc_source_manifest_sha256": "d6644cc4fe1083491221a3bc9f2076da966e662075fd209b974c86112724b00d"
   },
@@ -580,9 +580,9 @@
         "0.3.5",
         "0.140.0"
       ],
-      "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+      "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
       "title": "Domain Name System (DNS) Parameters",
-      "updated": "2026-07-20",
+      "updated": "2026-07-31",
       "url": "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
     }
   ],

@@ -505,7 +505,7 @@ Exit criteria:
 
 ### v0.5.0 - Error Alert And Exhaustion Domains
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Freeze non-secret error, alert, close, provider-failure, and resource-exhaustion domains; prohibit secret-bearing formatting and ambiguous failure collapse.
 
@@ -555,31 +555,59 @@ Exit criteria:
 
 ### v0.6.0 - Bounded Numeric And Resource Domains
 
-Status: planned
+Status: awaiting pentest
 
-Plan scope: Introduce checked bounded integers, counts, lengths, sequence numbers, epochs, and immutable resource and work budgets.
+Plan scope: Add private-field compile-time bounded `u64`/`usize` values with checked arithmetic, distinct count and byte-length types with fail-closed pointer-width conversion, non-wrapping protocol-neutral sequence and epoch values, and explicit immutable resource/work budgets whose typed exhaustion errors reveal no limit values; retain parsing, mutable accounting, wire widths, direction-specific state, and protocol behavior for later owners.
 
-Goal: complete the **Bounded Numeric And Resource Domains** implementation stop without admitting or
-claiming adjacent capability.
+Goal: freeze the allocation-free numeric and limit-policy vocabulary consumed
+by later codecs and engines without implementing framing, state machines,
+mutable accounting, allocation, cryptography, or provider behavior early.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- provide private-field `BoundedU64<MAX>` and `BoundedUsize<MAX>` types with
+  fallible construction and checked addition, subtraction, and multiplication;
+- keep bounded item counts and byte lengths as distinct types, including
+  fail-closed conversion from platform-independent `u64` values to `usize`;
+- provide protocol-neutral sequence-number and 16-bit epoch values that
+  advance monotonically and return typed exhaustion instead of wrapping;
+- define explicit immutable resource and work budgets without defaults,
+  setters, allocation, mutable counters, or numeric values in exhaustion
+  errors;
+- retain direction-specific state, record limits, wire widths, parsing,
+  accounting, arena ownership, zeroization, and protocol transitions for their
+  owning later milestones;
+- preserve every later protocol requirement and surface as future work: v0.6
+  is a source-free foundation boundary and does not claim TLS/DTLS sequence or
+  epoch behavior;
+- publish `brynja-core 0.3.0`, dependency-only patch releases for its changed
+  exact-pinned modern closure, and the mandatory `brynja 0.6.0` facade;
+- update the threat model, controls, status, limitations, release notes, and
+  permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- exhaustively compare small-domain checked arithmetic, sequence advances, and
+  epoch advances with primitive checked operations;
+- test zero, exact maximum, above-maximum, primitive overflow, underflow,
+  pointer-width conversion, zero budgets, every resource dimension, immutable
+  no-mutation behavior, storage bounds, and sequence/epoch exhaustion;
+- run compile-fail tests for count/length confusion and accidental formatting
+  of bounded values or budgets;
+- verify `no_std`, no allocation, no unsafe code, no external dependencies,
+  every promised Rust version and OS-less target, exact package ordering,
+  documentation, SBOM, advisory policy, and modern/legacy isolation;
+- run the full first-party assurance and repository gates, then obtain the
+  required external release pentest.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- all v0.6 numeric operations fail closed without wraparound, budgets are
+  explicit and immutable, errors remain limit-value-free, and source and test
+  files stay below 500 lines;
+- documentation and generated closure evidence do not claim a parser,
+  protocol state, secret ownership, formal proof, independent review,
+  interoperability, production readiness, or FIPS validation;
 - `v0.6.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.7.0 - Borrowed Read Cursor

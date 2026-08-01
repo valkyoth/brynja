@@ -25,38 +25,40 @@
 
 # brynja-core
 
-`brynja-core 0.2.0` provides Brynja's allocation-free v0.5 alert and failure
-value domains. It classifies every TLS AlertDescription registry byte without
-coercing reserved or unassigned values, admits assigned alerts by concrete TLS
-or DTLS version, and keeps orderly close, cancellation, local failure,
-provider failure, and resource exhaustion distinct.
+`brynja-core 0.3.0` adds Brynja's allocation-free v0.6 checked numeric and
+resource foundations to the v0.5 alert and failure value domains. It provides
+compile-time bounded `u64`/`usize` values, semantically distinct counts and
+lengths, non-wrapping sequence numbers and epochs, and immutable explicit
+resource and work budgets.
 
-Failure envelopes contain only closed enums. They intentionally implement
-neither `Debug` nor `Display`, accept no arbitrary strings or byte payloads,
-and expose no numeric resource limits. This is not a TLS state machine,
-cryptographic implementation, PKI processor, provider implementation, or
-production-ready transport.
+Every arithmetic operation is checked independently of build profile.
+Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
+the existing typed, limit-value-free exhaustion result without mutating the
+budget. Numeric values and budget types intentionally implement neither
+`Debug` nor `Display`. This is not a TLS state machine, cryptographic
+implementation, PKI processor, provider implementation, or production-ready
+transport.
 
 ## Protocol Verification Status
 
-The alert and failure domains have not been independently reviewed. Project
-tests, CI, Kani, Miri, fuzzing, and pentesting do not by themselves constitute
-independent protocol verification.
+The alert, failure, numeric, and budget domains have not been independently
+reviewed. Project tests, CI, Kani, Miri, fuzzing, and pentesting do not by
+themselves constitute independent protocol verification.
 
 | Component | Protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Alert registry, close, cancellation, and failure value domains | ❌ Not verified |
+| `brynja-core` | Alert, failure, bounded numeric, sequence, epoch, and budget value domains | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.5"
+brynja = "0.6"
 ```
 
-The `0.2.0` package is selected for publication with Brynja v0.5.0. Its
-committed pentest report is `PASS`/`PASS`; publication still requires green
-GitHub checks and explicit tag authorization under the
+The `0.3.0` package is selected for publication with Brynja v0.6.0. The
+implementation stop requires its repository-owner pentest before publication
+can proceed under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

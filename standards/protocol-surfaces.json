@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "e386804cec8d1bac99c367a4271b67a5f772c87193b04736502b7c9d9504085c",
+  "policy_sha256": "48946034a11afd4012984d38400602c3f3fdb958cd6fbdc273c7110d49407b0b",
   "schema": 2,
-  "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945",
+  "source_ledger_sha256": "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -594,6 +594,92 @@
       "code_target": "crates/brynja-platform/src/dns.rs",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.contact-uri-schemes",
+      "kind": "iana-registry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "contact-uri-schemes",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
+        "title": "Contact URI Schemes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.contact-uri-schemes.mailto.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "meaning": "Internet mail",
+          "name": "mailto"
+        },
+        "references": [
+          {
+            "data": "rfc6068",
+            "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "contact-uri-schemes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.contact-uri-schemes.tel.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "meaning": "Telephone Number",
+          "name": "tel"
+        },
+        "references": [
+          {
+            "data": "rfc3966",
+            "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "contact-uri-schemes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.csync-flags",
       "kind": "iana-registry",
       "normative_sources": [
@@ -605,7 +691,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "csync-flags",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "Child Synchronization (CSYNC) Flags"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -720,7 +806,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dhcid-rr-digest-type-codes",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DHCID RR Digest Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -828,7 +914,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-catalog-zones",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS Catalog Zones Properties"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1018,7 +1104,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-dso-type-codes",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DSO Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1443,7 +1529,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-10",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS Label Types"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1661,7 +1747,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-11",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS EDNS0 Option Codes (OPT)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -2581,6 +2667,40 @@
       "code_target": "crates/brynja-platform/src/dns.rs",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-11.structured-dns-error.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "description": "Structured DNS Error",
+          "status": "Standard",
+          "value": "26"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "dns-parameters-11"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.dns-parameters-11.umbrella-ident.1",
       "kind": "iana-entry",
       "normative_sources": [
@@ -2631,7 +2751,7 @@
         "attributes": {},
         "fields": {
           "description": "Unassigned",
-          "value": "26-20291"
+          "value": "27-20291"
         },
         "references": []
       },
@@ -2776,7 +2896,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-12",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS Header Flags"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3030,7 +3150,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-13",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "EDNS Header Flags (16 bits)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3188,7 +3308,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-14",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "EDNS version Number (8 bits)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3265,7 +3385,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-2",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS CLASSes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3620,7 +3740,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-4",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "Resource Record (RR) TYPEs"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -7337,7 +7457,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-5",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS OpCodes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -7597,7 +7717,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-6",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS RCODEs"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -8470,7 +8590,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-8",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "AFSDB RR Subtype"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -8677,7 +8797,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-9",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DHCID RR Identifier Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -8852,7 +8972,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-quic-error-codes",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS-over-QUIC Error Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9131,7 +9251,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-resolver-information-keys",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS Resolver Information Keys"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9250,7 +9370,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dsync-location-of-synchronization-endpoints",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DSYNC: Location of Synchronization Endpoints"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9437,8 +9557,41 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "extended-dns-error-codes",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "Extended DNS Error Codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-error-codes.blocked-by-upstream-dns-server.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "description": "Blocked by Upstream DNS Server",
+          "value": "35"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-error-codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
     },
@@ -10560,7 +10713,7 @@
         "attributes": {},
         "fields": {
           "description": "Unassigned",
-          "value": "35-49151"
+          "value": "36-49151"
         },
         "references": []
       },
@@ -10673,6 +10826,481 @@
       "code_target": "crates/brynja-platform/src/dns.rs",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes",
+      "kind": "iana-registry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
+        "title": "Extended DNS Sub-Error Codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "ede": "Not used",
+          "meaning": "Reserved",
+          "number": "0"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.2",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "ede": "\"Blocked\", \"Blocked by Upstream DNS Server\", \"Filtered\"",
+          "meaning": "Malware",
+          "number": "1"
+        },
+        "references": [
+          {
+            "data": "rfc5901",
+            "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.3",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "ede": "\"Blocked\", \"Blocked by Upstream DNS Server\", \"Filtered\"",
+          "meaning": "Phishing",
+          "number": "2"
+        },
+        "references": [
+          {
+            "data": "rfc5901",
+            "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.4",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "ede": "\"Blocked\", \"Blocked by Upstream DNS Server\", \"Filtered\"",
+          "meaning": "Spam",
+          "number": "3"
+        },
+        "references": [
+          {
+            "data": "rfc4949",
+            "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.5",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "ede": "\"Blocked\", \"Blocked by Upstream DNS Server\", \"Filtered\"",
+          "meaning": "Spyware",
+          "number": "4"
+        },
+        "references": [
+          {
+            "data": "rfc4949",
+            "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.6",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "ede": "\"Blocked\"",
+          "meaning": "Network operator policy",
+          "number": "5"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.7",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "ede": "\"Blocked\"",
+          "meaning": "DNS operator policy",
+          "number": "6"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.8",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {},
+        "fields": {
+          "ede": "",
+          "meaning": "Unassigned",
+          "number": "7-255"
+        },
+        "references": []
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extended-dns-sub-error-codes"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names",
+      "kind": "iana-registry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extra-text-json-names",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
+        "title": "EXTRA-TEXT JSON Names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.indicates-the-language-of-the-j-and-o-fields-as-defined-in.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "description": "Indicates the language of the \"j\" and \"o\" fields as defined in",
+          "meaning": "language",
+          "name": "l"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extra-text-json-names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.integer-representing-the-sub-error-code-for-this-dns-filtering-case.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "description": "Integer representing the sub-error code for this DNS filtering case",
+          "meaning": "sub-error",
+          "name": "s"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extra-text-json-names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.the-contact-details-of-the-it-infosec-team-to-report-misclassified-dns-filtering.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "description": "The contact details of the IT/InfoSec team to report misclassified DNS filtering",
+          "meaning": "contact",
+          "name": "c"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extra-text-json-names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.utf-8-encoded-human-friendly-name-of-the-organization-that-filtered-this-particular-dns-query.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "description": "UTF-8-encoded human-friendly name of the organization that filtered this particular DNS query",
+          "meaning": "organization",
+          "name": "o"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extra-text-json-names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.extra-text-json-names.utf-8-encoded-textual-justification-for-a-particular-dns-filtering.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-07-31"
+        },
+        "fields": {
+          "description": "UTF-8-encoded textual justification for a particular DNS filtering",
+          "meaning": "justification",
+          "name": "j"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-dnsop-structured-dns-error-27",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "extra-text-json-names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.server-cookie-methods",
       "kind": "iana-registry",
       "normative_sources": [
@@ -10684,7 +11312,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "server-cookie-methods",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "DNS Server Cookie Methods"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -10923,7 +11551,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "underscored-globally-scoped-dns-node-names",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "Underscored and Globally Scoped DNS Node Names"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -13247,7 +13875,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zonemd-hash-algorithms",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "ZONEMD Hash Algorithms"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -13464,7 +14092,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zonemd-schemes",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "ZONEMD Schemes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -13647,7 +14275,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zoneversion-type-values",
-        "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5",
+        "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5",
         "title": "ZONEVERSION TYPE Values"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"

@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0633e8beb612ce3e0b6586c9f40da248ba2ee1ccb5a7b6ed099092694aed6574",
-  "domain_policy_sha256": "f856319a78161796425ff774d81ddc965382dbd17261411e19160892fc97fa01",
-  "policy_sha256": "1dcc5d29258740ca59ec103356eacb2da4f9da1e05d0d72e2b86b4957ea63d55",
+  "domain_policy_sha256": "ecf1b9ff4583ee31510738bc7299670c34f2c9002c3a47f2f697b68db00fb9c0",
+  "policy_sha256": "ad13e4717c3c248e94390da95366c24ec59e06d85f03d20391155467f059538d",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3432,6 +3432,9 @@
       "applicability": "delegate",
       "decision": "delegate",
       "decision_ids": [
+        "iana.dns-parameters.contact-uri-schemes",
+        "iana.dns-parameters.contact-uri-schemes.mailto.1",
+        "iana.dns-parameters.contact-uri-schemes.tel.1",
         "iana.dns-parameters.csync-flags",
         "iana.dns-parameters.csync-flags.immediately-process-this-csync-record.1",
         "iana.dns-parameters.csync-flags.require-a-soa-serial-number-greater-than-the-one-specified.1",
@@ -3494,6 +3497,7 @@
         "iana.dns-parameters.dns-parameters-11.reserved-for-local-experimental-use.1",
         "iana.dns-parameters.dns-parameters-11.reserved.1",
         "iana.dns-parameters.dns-parameters-11.reserved.2",
+        "iana.dns-parameters.dns-parameters-11.structured-dns-error.1",
         "iana.dns-parameters.dns-parameters-11.umbrella-ident.1",
         "iana.dns-parameters.dns-parameters-11.unassigned.1",
         "iana.dns-parameters.dns-parameters-11.unassigned.2",
@@ -3704,6 +3708,7 @@
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.2",
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.3",
         "iana.dns-parameters.extended-dns-error-codes",
+        "iana.dns-parameters.extended-dns-error-codes.blocked-by-upstream-dns-server.1",
         "iana.dns-parameters.extended-dns-error-codes.blocked.1",
         "iana.dns-parameters.extended-dns-error-codes.cached-error.1",
         "iana.dns-parameters.extended-dns-error-codes.censored.1",
@@ -3741,6 +3746,21 @@
         "iana.dns-parameters.extended-dns-error-codes.unsupported-dnskey-algorithm.1",
         "iana.dns-parameters.extended-dns-error-codes.unsupported-ds-digest-type.1",
         "iana.dns-parameters.extended-dns-error-codes.unsupported-nsec3-iterations-value.1",
+        "iana.dns-parameters.extended-dns-sub-error-codes",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.1",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.2",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.3",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.4",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.5",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.6",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.7",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.8",
+        "iana.dns-parameters.extra-text-json-names",
+        "iana.dns-parameters.extra-text-json-names.indicates-the-language-of-the-j-and-o-fields-as-defined-in.1",
+        "iana.dns-parameters.extra-text-json-names.integer-representing-the-sub-error-code-for-this-dns-filtering-case.1",
+        "iana.dns-parameters.extra-text-json-names.the-contact-details-of-the-it-infosec-team-to-report-misclassified-dns-filtering.1",
+        "iana.dns-parameters.extra-text-json-names.utf-8-encoded-human-friendly-name-of-the-organization-that-filtered-this-particular-dns-query.1",
+        "iana.dns-parameters.extra-text-json-names.utf-8-encoded-textual-justification-for-a-particular-dns-filtering.1",
         "iana.dns-parameters.server-cookie-methods",
         "iana.dns-parameters.server-cookie-methods.unnamed.1",
         "iana.dns-parameters.server-cookie-methods.unnamed.2",
@@ -3854,7 +3874,7 @@
       "owner": "0.140.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -3871,7 +3891,7 @@
             "0.3.5",
             "0.140.0"
           ],
-          "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5"
+          "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5"
         },
         {
           "authority_role": "caller-owned",
@@ -29526,9 +29546,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "874469ff83e4c5b38afa96ca5ac161cbece6680414a4e44c4ede2f47da9612bc",
+  "residual_policy_sha256": "b0566705ec0df20a2f366a18e5b743f86b0d576f014a3af2e54428e7df97120a",
   "schema": 5,
-  "source_ledger_sha256": "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945",
-  "surface_register_sha256": "a058c550e8316c458875f03f96f4419b04a3ab58290718d016563e309f6ebacb",
-  "transport_policy_sha256": "84cf7c1f45e85b5236346b5ed1d8d57f26c7b4f2cdd36efa625ee1291d9e8ecb"
+  "source_ledger_sha256": "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70",
+  "surface_register_sha256": "65a2aec3a5b62c3174268c53728bf21fb2bc6a9c90aebe03c76ba8856abaee8b",
+  "transport_policy_sha256": "61ae1aaf889cd52fc93571ce392f1031faade3c8bc058309ad020b978dd679b7"
 }

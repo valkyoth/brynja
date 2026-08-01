@@ -1,18 +1,19 @@
 # Current Status
 
-Status: v0.5.0 pentest passed; awaiting green GitHub CI
+Status: v0.6.0 implementation stop reached; awaiting pentest
 
-Brynja has implemented only shared alert and non-secret failure value domains.
-It still has no TLS state machine, cryptography, PKI, QUIC-TLS, DTLS engine,
-platform provider, or legacy protocol implementation and must not be used to
-secure network traffic. Brynja is not FIPS 140-3 validated, and no package,
-feature, build, profile, or configuration may imply otherwise.
+Brynja has implemented only shared alert/failure and bounded numeric/resource
+value domains. It still has no TLS state machine, cryptography, PKI, QUIC-TLS,
+DTLS engine, platform provider, or legacy protocol implementation and must not
+be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
+package, feature, build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.4.0 established the workspace, hardened
+Signed releases v0.1.0 through v0.5.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
-the assurance harness. The v0.5.0 candidate selects `brynja-core 0.2.0`, eight
-dependency-only modern support patches at `0.1.1`, and `brynja 0.5.0`.
+the assurance harness and first value domains. The v0.6.0 candidate selects
+`brynja-core 0.3.0`, eight dependency-only modern support patches at `0.1.2`,
+and `brynja 0.6.0`.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -181,7 +182,29 @@ Version 0.5.0 implements the first shared protocol value domains:
 - `BRY-REQ-TLS-0005` and the alert registry surface now point to actual code
   and tests through immutable `implemented` and `tested` revisions.
 
-Everything beyond those value domains remains governance and planning
+Version 0.6.0 adds bounded numeric and resource foundations:
+
+- `BoundedU64<MAX>` and `BoundedUsize<MAX>` use private fields, fallible
+  construction, and checked addition, subtraction, and multiplication;
+- `Count<MAX>` and `Length<MAX>` remain different Rust types, while `u64` to
+  `usize` conversion fails closed when the target pointer width is too small;
+- protocol-neutral `SequenceNumber<MAX>` and `Epoch<MAX>` advance without
+  wraparound and return typed exhaustion at their inclusive maxima;
+- `ResourceBudget` names seven resource dimensions with explicit immutable
+  limits, while `WorkBudget` carries an explicit `u64` work-unit limit;
+- budget checks do not mutate either operand and return the existing typed
+  `ResourceExhaustion` without embedding numeric limits;
+- small-domain arithmetic and advance matrices are exhaustively checked, with
+  additional boundary, representation, zero-budget, and compile-fail tests;
+- the reviewed 2026-07-31 IANA DNS snapshot adds three registries and
+  seventeen entries, all explicitly caller-owned by v0.140.0, bringing the
+  current register to 4,444 surfaces without admitting provisional draft text
+  or advancing a protocol implementation claim; and
+- no protocol surface or normative protocol requirement advances because
+  these types are source-free shared foundations; later wire widths,
+  direction-specific state, parsers, and engines remain future work.
+
+Everything beyond those foundation domains remains governance and planning
 evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
 RFC and final IANA values exist. Non-RFC legacy requirements carry
@@ -243,5 +266,6 @@ open findings, and signed tag `v0.4.0` is published. The repository owner
 pentested signed v0.5.0 implementation candidate
 `20305afe423d8a6142abe15bd0357546b3f8d41c` and reported it green with no
 findings. Its permanent report records `PASS`/`PASS` with zero open findings.
-The candidate now awaits green hosted GitHub checks before explicit tag
-authorization.
+The hosted checks passed after one documented assurance-test timing correction,
+and signed tag `v0.5.0` is published. The v0.6.0 implementation stop now
+requires its repository-owner pentest before release preparation continues.

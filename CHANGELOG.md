@@ -5,6 +5,35 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-01
+
+### Added
+
+- Private-field bounded `u64` and `usize` values with fallible construction
+  and checked addition, subtraction, and multiplication.
+- Semantically distinct bounded counts and byte lengths with fail-closed
+  `u64`-to-`usize` conversion.
+- Protocol-neutral sequence-number and 16-bit epoch values that return typed
+  exhaustion instead of wrapping.
+- Explicit immutable resource and work budgets with no defaults or setters.
+- Exhaustive small-domain arithmetic/advance matrices plus boundary,
+  representation, no-mutation, zero-budget, and compile-fail tests.
+- Reviewed the 2026-07-31 IANA DNS Parameters refresh and classified its three
+  new registries and seventeen entries as caller-owned v0.140.0 surfaces.
+
+### Security
+
+- Primitive overflow, configured-bound violations, underflow, pointer-width
+  truncation, and monotonic-value exhaustion all fail closed in every profile.
+- Count/length confusion is rejected by the type system, and numeric values
+  and budgets implement neither `Debug` nor `Display`.
+- Budget failures preserve resource class and operation phase without carrying
+  configured numeric limits.
+- No TLS/DTLS record, sequence, epoch, parser, mutable accounting, protocol,
+  independent-review, production, or FIPS-validation claim is advanced.
+- Provisional draft references carried by IANA registry records are not
+  admitted as implementation authority.
+
 ## [0.5.0] - 2026-07-31
 
 ### Added

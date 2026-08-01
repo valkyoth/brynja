@@ -35,6 +35,10 @@ use-after-failure. Assurance infrastructure additionally assumes hostile
 corpora and adapters that hang, crash, flood output, emit malformed or
 noncanonical results, disagree silently, attempt shell or capability escape,
 or exploit a verifier/toolchain mismatch to create a false proof claim.
+Foundation-domain attackers additionally try to overflow or underflow numeric
+state, force platform-width truncation, confuse item counts with byte lengths,
+wrap sequence numbers or epochs, select accidental unlimited defaults, mutate
+limit policy during an operation, or extract configured limits through errors.
 
 ## Required Controls
 
@@ -47,6 +51,9 @@ or exploit a verifier/toolchain mismatch to create a false proof claim.
 - transcript and negotiation binding with downgrade and cross-protocol checks;
 - constant-time secret operations and explicit secret lifetime/erasure;
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;
+- private-field bounded numeric values, checked arithmetic in every profile,
+  semantically separate quantities, non-wrapping monotonic values, explicit
+  immutable budgets, and limit-value-free exhaustion errors;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
@@ -87,12 +94,13 @@ or exploit a verifier/toolchain mismatch to create a false proof claim.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.5.0
+## Non-Goals At 0.6.0
 
 No transport security or interoperability guarantee exists. The only protocol
-code is a set of allocation-free shared alert and failure value domains;
-there is no parser, record layer, handshake, provider implementation, PKI, or
-cryptography. v0.3.0 inventories and locks source
+code consists of allocation-free shared alert/failure and bounded
+numeric/resource value domains; there is no parser, record layer, mutable
+accounting state, handshake, provider implementation, PKI, or cryptography.
+v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
 proves stable requirement identity, lifecycle, mapping, and drift enforcement
@@ -106,7 +114,10 @@ evidence but no protocol corpus, differential backend, Kani proof harness, or
 assurance campaign result. v0.5.0 classifies the alert registry, admits
 assigned alerts by protocol version, and separates close, cancellation,
 local, provider, and resource-exhaustion outcomes without wire or state-machine
-behavior. Planned, future-work, blocked, legacy,
+behavior. v0.6.0 adds checked bounded arithmetic, distinct counts and lengths,
+non-wrapping protocol-neutral sequence/epoch values, and immutable explicit
+resource/work limits without claiming direction-specific state or wire
+semantics. Planned, future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS
 validation claims.

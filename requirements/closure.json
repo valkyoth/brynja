@@ -356,7 +356,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Introduce checked bounded integers, counts, lengths, sequence numbers, epochs, and immutable resource and work budgets.",
+      "scope": "Add private-field compile-time bounded `u64`/`usize` values with checked arithmetic, distinct count and byte-length types with fail-closed pointer-width conversion, non-wrapping protocol-neutral sequence and epoch values, and explicit immutable resource/work budgets whose typed exhaustion errors reveal no limit values; retain parsing, mutable accounting, wire widths, direction-specific state, and protocol behavior for later owners.",
       "source_ids": [],
       "title": "Bounded Numeric And Resource Domains",
       "version": "0.6.0"
@@ -4385,6 +4385,9 @@
     },
     {
       "decision_ids": [
+        "iana.dns-parameters.contact-uri-schemes",
+        "iana.dns-parameters.contact-uri-schemes.mailto.1",
+        "iana.dns-parameters.contact-uri-schemes.tel.1",
         "iana.dns-parameters.csync-flags",
         "iana.dns-parameters.csync-flags.immediately-process-this-csync-record.1",
         "iana.dns-parameters.csync-flags.require-a-soa-serial-number-greater-than-the-one-specified.1",
@@ -4447,6 +4450,7 @@
         "iana.dns-parameters.dns-parameters-11.reserved-for-local-experimental-use.1",
         "iana.dns-parameters.dns-parameters-11.reserved.1",
         "iana.dns-parameters.dns-parameters-11.reserved.2",
+        "iana.dns-parameters.dns-parameters-11.structured-dns-error.1",
         "iana.dns-parameters.dns-parameters-11.umbrella-ident.1",
         "iana.dns-parameters.dns-parameters-11.unassigned.1",
         "iana.dns-parameters.dns-parameters-11.unassigned.2",
@@ -4657,6 +4661,7 @@
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.2",
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.3",
         "iana.dns-parameters.extended-dns-error-codes",
+        "iana.dns-parameters.extended-dns-error-codes.blocked-by-upstream-dns-server.1",
         "iana.dns-parameters.extended-dns-error-codes.blocked.1",
         "iana.dns-parameters.extended-dns-error-codes.cached-error.1",
         "iana.dns-parameters.extended-dns-error-codes.censored.1",
@@ -4694,6 +4699,21 @@
         "iana.dns-parameters.extended-dns-error-codes.unsupported-dnskey-algorithm.1",
         "iana.dns-parameters.extended-dns-error-codes.unsupported-ds-digest-type.1",
         "iana.dns-parameters.extended-dns-error-codes.unsupported-nsec3-iterations-value.1",
+        "iana.dns-parameters.extended-dns-sub-error-codes",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.1",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.2",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.3",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.4",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.5",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.6",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.7",
+        "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.8",
+        "iana.dns-parameters.extra-text-json-names",
+        "iana.dns-parameters.extra-text-json-names.indicates-the-language-of-the-j-and-o-fields-as-defined-in.1",
+        "iana.dns-parameters.extra-text-json-names.integer-representing-the-sub-error-code-for-this-dns-filtering-case.1",
+        "iana.dns-parameters.extra-text-json-names.the-contact-details-of-the-it-infosec-team-to-report-misclassified-dns-filtering.1",
+        "iana.dns-parameters.extra-text-json-names.utf-8-encoded-human-friendly-name-of-the-organization-that-filtered-this-particular-dns-query.1",
+        "iana.dns-parameters.extra-text-json-names.utf-8-encoded-textual-justification-for-a-particular-dns-filtering.1",
         "iana.dns-parameters.server-cookie-methods",
         "iana.dns-parameters.server-cookie-methods.unnamed.1",
         "iana.dns-parameters.server-cookie-methods.unnamed.2",
@@ -6649,7 +6669,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "a4be09a964e7f9cee8cac216ea307c5d1c114aca454770b64ee63c0a21d2e0a5"
+      "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5"
     },
     {
       "id": "iana:hpke",
@@ -9611,6 +9631,24 @@
       ]
     },
     {
+      "id": "iana.dns-parameters.contact-uri-schemes",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.contact-uri-schemes.mailto.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.contact-uri-schemes.tel.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
       "id": "iana.dns-parameters.csync-flags",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
@@ -9978,6 +10016,12 @@
     },
     {
       "id": "iana.dns-parameters.dns-parameters-11.reserved.2",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.dns-parameters-11.structured-dns-error.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]
@@ -11243,6 +11287,12 @@
       ]
     },
     {
+      "id": "iana.dns-parameters.extended-dns-error-codes.blocked-by-upstream-dns-server.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
       "id": "iana.dns-parameters.extended-dns-error-codes.blocked.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
@@ -11460,6 +11510,96 @@
     },
     {
       "id": "iana.dns-parameters.extended-dns-error-codes.unsupported-nsec3-iterations-value.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.2",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.3",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.4",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.5",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.6",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.7",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.8",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extra-text-json-names",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extra-text-json-names.indicates-the-language-of-the-j-and-o-fields-as-defined-in.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extra-text-json-names.integer-representing-the-sub-error-code-for-this-dns-filtering-case.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extra-text-json-names.the-contact-details-of-the-it-infosec-team-to-report-misclassified-dns-filtering.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extra-text-json-names.utf-8-encoded-human-friendly-name-of-the-organization-that-filtered-this-particular-dns-query.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.extra-text-json-names.utf-8-encoded-textual-justification-for-a-particular-dns-filtering.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]

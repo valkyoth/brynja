@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "0ceeed99ba2525b0094d151ba12ee5efd4884ac542b26c59326d4d1adc316945"
-surface_register_sha256 = "a058c550e8316c458875f03f96f4419b04a3ab58290718d016563e309f6ebacb"
+source_ledger_sha256 = "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70"
+surface_register_sha256 = "65a2aec3a5b62c3174268c53728bf21fb2bc6a9c90aebe03c76ba8856abaee8b"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -244,6 +244,9 @@ owner = "0.140.0"
 disposition = "caller-owned"
 sources = ["iana:dns-parameters", "rfc:9460"]
 surface_ids = [
+  "iana.dns-parameters.contact-uri-schemes",
+  "iana.dns-parameters.contact-uri-schemes.mailto.1",
+  "iana.dns-parameters.contact-uri-schemes.tel.1",
   "iana.dns-parameters.csync-flags",
   "iana.dns-parameters.csync-flags.immediately-process-this-csync-record.1",
   "iana.dns-parameters.csync-flags.require-a-soa-serial-number-greater-than-the-one-specified.1",
@@ -306,6 +309,7 @@ surface_ids = [
   "iana.dns-parameters.dns-parameters-11.reserved-for-local-experimental-use.1",
   "iana.dns-parameters.dns-parameters-11.reserved.1",
   "iana.dns-parameters.dns-parameters-11.reserved.2",
+  "iana.dns-parameters.dns-parameters-11.structured-dns-error.1",
   "iana.dns-parameters.dns-parameters-11.umbrella-ident.1",
   "iana.dns-parameters.dns-parameters-11.unassigned.1",
   "iana.dns-parameters.dns-parameters-11.unassigned.2",
@@ -516,6 +520,7 @@ surface_ids = [
   "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.2",
   "iana.dns-parameters.dsync-location-of-synchronization-endpoints.unnamed.3",
   "iana.dns-parameters.extended-dns-error-codes",
+  "iana.dns-parameters.extended-dns-error-codes.blocked-by-upstream-dns-server.1",
   "iana.dns-parameters.extended-dns-error-codes.blocked.1",
   "iana.dns-parameters.extended-dns-error-codes.cached-error.1",
   "iana.dns-parameters.extended-dns-error-codes.censored.1",
@@ -553,6 +558,21 @@ surface_ids = [
   "iana.dns-parameters.extended-dns-error-codes.unsupported-dnskey-algorithm.1",
   "iana.dns-parameters.extended-dns-error-codes.unsupported-ds-digest-type.1",
   "iana.dns-parameters.extended-dns-error-codes.unsupported-nsec3-iterations-value.1",
+  "iana.dns-parameters.extended-dns-sub-error-codes",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.1",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.2",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.3",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.4",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.5",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.6",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.7",
+  "iana.dns-parameters.extended-dns-sub-error-codes.unnamed.8",
+  "iana.dns-parameters.extra-text-json-names",
+  "iana.dns-parameters.extra-text-json-names.indicates-the-language-of-the-j-and-o-fields-as-defined-in.1",
+  "iana.dns-parameters.extra-text-json-names.integer-representing-the-sub-error-code-for-this-dns-filtering-case.1",
+  "iana.dns-parameters.extra-text-json-names.the-contact-details-of-the-it-infosec-team-to-report-misclassified-dns-filtering.1",
+  "iana.dns-parameters.extra-text-json-names.utf-8-encoded-human-friendly-name-of-the-organization-that-filtered-this-particular-dns-query.1",
+  "iana.dns-parameters.extra-text-json-names.utf-8-encoded-textual-justification-for-a-particular-dns-filtering.1",
   "iana.dns-parameters.server-cookie-methods",
   "iana.dns-parameters.server-cookie-methods.unnamed.1",
   "iana.dns-parameters.server-cookie-methods.unnamed.2",

@@ -25,7 +25,7 @@
 
 # brynja-platform
 
-`brynja-platform 0.1.1` repins its exact `brynja-core 0.2.0` dependency. It
+`brynja-platform 0.1.2` repins its exact `brynja-core 0.3.0` dependency. It
 remains a compile-time boundary only and does not provide a working TLS,
 cryptographic, PKI, platform, or legacy-protocol implementation.
 
@@ -33,11 +33,11 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.5"
+brynja = "0.6"
 ```
 
-This dependency-only patch is selected for publication with v0.5.0 after the
-current committed PASS pentest report and green GitHub checks required by the
+This dependency-only patch is selected for publication with v0.6.0 after the
+required pentest, committed PASS report, and green GitHub checks required by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

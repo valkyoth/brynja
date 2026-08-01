@@ -29,10 +29,10 @@ and CT rule across 53 authorities and 3,322 surfaces. v0.3.4 populates 70 TLS,
 DTLS, and QUIC-TLS rules across 40 authorities, 550 normative sections, 63
 owner milestones, and 483 surfaces. v0.3.5 adds 49 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
-authorities, 182 reviewed normative sections, and 742 formerly uncovered
+authorities, 182 reviewed normative sections, and 763 formerly uncovered
 surfaces.
 The complete closure covers 126 locked authorities, 206 roadmap rows, and
-4,424 surfaces. Planned targets become actual code, tests, and evidence only
+4,444 surfaces. Planned targets become actual code, tests, and evidence only
 in their owning milestone.
 
 ## Coverage By Implementation Domain

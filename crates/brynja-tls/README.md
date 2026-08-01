@@ -28,7 +28,7 @@
 `brynja-tls` is Brynja's evergreen modern TLS facade and one-pass
 version-selection boundary. Version-specific protocol state remains in
 `brynja-tls12`, `brynja-tls13`, and future version-named packages. Version
-`0.1.1` only repins its exact v0.5 dependencies; it does not provide a
+`0.1.2` only repins its exact v0.6 dependencies; it does not provide a
 working TLS implementation.
 
 ## Cryptography Verification Status
@@ -49,11 +49,11 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.5"
+brynja = "0.6"
 ```
 
-This dependency-only patch is selected for publication with v0.5.0 after the
-current committed PASS pentest report and green GitHub checks required by the
+This dependency-only patch is selected for publication with v0.6.0 after the
+required pentest, committed PASS report, and green GitHub checks required by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

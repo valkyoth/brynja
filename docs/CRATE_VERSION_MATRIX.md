@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.6.0 pentest remediation complete; awaiting retest
+Status: v0.6.0 pentest and retest passed; awaiting GitHub
 
 The `brynja` facade advances to `0.6.0`. `brynja-core` advances to `0.3.0` for
 the bounded numeric and budget domains; every published modern package whose

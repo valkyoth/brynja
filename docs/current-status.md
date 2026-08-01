@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.6.0 pentest remediation complete; awaiting retest
+Status: v0.6.0 pentest and retest passed; awaiting GitHub
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains. It still has no TLS state machine, cryptography, PKI, QUIC-TLS,
@@ -277,5 +277,8 @@ findings. A follow-up assessment found that repeated named setters still used
 last-write-wins behavior. Every setter is now single-assignment and returns a
 typed `Duplicate(domain)` error; `build()` returns typed `Incomplete(domain)`
 errors. Exhaustive tests cover duplicate and missing assignment for all seven
-domains. The permanent report remains `RETEST REQUIRED`/`PENDING` with zero
-open local findings until the repository owner confirms the retest.
+domains. The repository owner retested signed candidate
+`89d4d7a930c89e2b6788554941389ca0d83cf999` and reported it green with no
+remaining finding. The permanent report records `PASS`/`PASS` and zero open
+findings; release now awaits the final committed candidate and green GitHub
+checks.

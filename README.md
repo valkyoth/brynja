@@ -39,9 +39,9 @@ cryptography and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.6.0` is at implementation
-stop with pentest remediation awaiting retest; it does not implement TLS. The
-dependency after release will be:
+Brynja is not ready for application use. Version `0.6.0` passed its
+repository-owner pentest and retest but still awaits green hosted release
+checks; it does not implement TLS. The dependency after release will be:
 
 ```toml
 [dependencies]

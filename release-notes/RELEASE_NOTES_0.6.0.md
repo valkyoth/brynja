@@ -1,6 +1,6 @@
 # Brynja 0.6.0 Release Notes
 
-Status: pentest remediation complete; awaiting retest
+Status: pentest and retest passed; awaiting GitHub
 
 Brynja 0.6.0 implements bounded numeric and resource value foundations. It
 does not implement TLS, DTLS, QUIC-TLS, cryptography, PKI, mutable resource
@@ -68,15 +68,17 @@ transposition risk in the original seven-argument resource-budget constructor
 and a Low diagnostic gap in the fixed, valueless `NumericError` enum. The
 constructor has been replaced by named fail-closed construction, future
 overlong positional APIs are denied by workspace Clippy policy, and
-`NumericError` now safely implements `Debug`. Local remediation is complete;
-external retest remains required.
+`NumericError` now safely implements `Debug`. That initial remediation was the
+subject of the follow-up assessment below.
 
 A follow-up assessment found that the first named-builder remediation still
 allowed a later call to the same setter to replace a restrictive limit. All
 seven setters now reject repeated assignment with `Duplicate(domain)`, while
 `build()` identifies an omitted limit with `Incomplete(domain)`. Exhaustive
-regression tests cover both failure classes for every resource domain. Local
-remediation is complete; external retest remains required.
+regression tests cover both failure classes for every resource domain. The
+repository owner retested signed candidate
+`89d4d7a930c89e2b6788554941389ca0d83cf999` and reported it green with no
+remaining finding.
 
 The requirements and surface registers intentionally do not mark TLS or DTLS
 sequence, epoch, record, or resource behavior implemented. Version 0.6.0 is a
@@ -97,8 +99,8 @@ patches at `0.1.2`, and the mandatory `brynja 0.6.0` facade. `brynja-crypto`
 remains unchanged at `0.1.0`; legacy and repository-only packages remain
 unpublished. The guarded publisher enforces exact pins and dependency order.
 
-Publication remains blocked until the repository-owner pentest is complete,
-its permanent report is committed, GitHub is green, and the user explicitly
+Publication remains blocked until this permanent `PASS`/`PASS` report and the
+final release evidence are committed, GitHub is green, and the user explicitly
 authorizes tagging.
 
 ## Limitations

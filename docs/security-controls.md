@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.6.0 pentest remediation complete; awaiting retest
+Status: v0.6.0 pentest and retest passed; awaiting GitHub
 
 | Control | Foundation enforcement |
 | --- | --- |

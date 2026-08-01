@@ -41,6 +41,8 @@ Keep a Changelog and Semantic Versioning.
   independent-review, production, or FIPS-validation claim is advanced.
 - Provisional draft references carried by IANA registry records are not
   admitted as implementation authority.
+- The repository-owner pentest and follow-up retest passed with all three
+  reported API-design findings closed and zero open findings.
 
 ## [0.5.0] - 2026-07-31
 

@@ -53,7 +53,8 @@ limit policy during an operation, or extract configured limits through errors.
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;
 - private-field bounded numeric values, checked arithmetic in every profile,
   semantically separate quantities, non-wrapping monotonic values, explicit
-  immutable budgets, and limit-value-free exhaustion errors;
+  immutable single-assignment budgets with typed duplicate and incomplete
+  construction failures, and limit-value-free exhaustion errors;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;

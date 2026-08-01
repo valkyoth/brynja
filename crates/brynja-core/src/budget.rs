@@ -37,11 +37,21 @@ impl ResourceDomain {
     }
 }
 
+/// A closed, limit-value-free resource-budget construction failure.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[non_exhaustive]
+pub enum BudgetBuildError {
+    /// A resource domain was assigned more than once.
+    Duplicate(ResourceDomain),
+    /// A resource domain had no explicit assignment.
+    Incomplete(ResourceDomain),
+}
+
 /// A named, fail-closed builder for [`ResourceBudget`].
 ///
-/// Each limit has a distinct setter so call sites cannot silently transpose
-/// positional arguments. [`Self::build`] returns `None` until every domain has
-/// an explicit limit.
+/// Each limit has a distinct single-assignment setter so call sites cannot
+/// silently transpose positional arguments or overwrite an earlier limit.
+/// [`Self::build`] rejects the first domain without an explicit limit.
 #[must_use = "the builder must be completed with ResourceBudgetBuilder::build"]
 pub struct ResourceBudgetBuilder {
     input_bytes: Option<usize>,
@@ -65,77 +75,128 @@ impl ResourceBudgetBuilder {
     };
 
     /// Sets the input-byte limit.
-    pub const fn input_bytes(mut self, limit: usize) -> Self {
-        self.input_bytes = Some(limit);
-        self
+    pub const fn input_bytes(mut self, limit: usize) -> Result<Self, BudgetBuildError> {
+        if self.input_bytes.is_some() {
+            Err(BudgetBuildError::Duplicate(ResourceDomain::InputBytes))
+        } else {
+            self.input_bytes = Some(limit);
+            Ok(self)
+        }
     }
 
     /// Sets the output-byte limit.
-    pub const fn output_bytes(mut self, limit: usize) -> Self {
-        self.output_bytes = Some(limit);
-        self
+    pub const fn output_bytes(mut self, limit: usize) -> Result<Self, BudgetBuildError> {
+        if self.output_bytes.is_some() {
+            Err(BudgetBuildError::Duplicate(ResourceDomain::OutputBytes))
+        } else {
+            self.output_bytes = Some(limit);
+            Ok(self)
+        }
     }
 
     /// Sets the caller-owned workspace-byte limit.
-    pub const fn workspace_bytes(mut self, limit: usize) -> Self {
-        self.workspace_bytes = Some(limit);
-        self
+    pub const fn workspace_bytes(mut self, limit: usize) -> Result<Self, BudgetBuildError> {
+        if self.workspace_bytes.is_some() {
+            Err(BudgetBuildError::Duplicate(ResourceDomain::WorkspaceBytes))
+        } else {
+            self.workspace_bytes = Some(limit);
+            Ok(self)
+        }
     }
 
     /// Sets the retained-state-item limit.
-    pub const fn state_items(mut self, limit: usize) -> Self {
-        self.state_items = Some(limit);
-        self
+    pub const fn state_items(mut self, limit: usize) -> Result<Self, BudgetBuildError> {
+        if self.state_items.is_some() {
+            Err(BudgetBuildError::Duplicate(ResourceDomain::StateItems))
+        } else {
+            self.state_items = Some(limit);
+            Ok(self)
+        }
     }
 
     /// Sets the queued-item limit.
-    pub const fn queue_items(mut self, limit: usize) -> Self {
-        self.queue_items = Some(limit);
-        self
+    pub const fn queue_items(mut self, limit: usize) -> Result<Self, BudgetBuildError> {
+        if self.queue_items.is_some() {
+            Err(BudgetBuildError::Duplicate(ResourceDomain::QueueItems))
+        } else {
+            self.queue_items = Some(limit);
+            Ok(self)
+        }
     }
 
     /// Sets the certificate-byte limit.
-    pub const fn certificate_bytes(mut self, limit: usize) -> Self {
-        self.certificate_bytes = Some(limit);
-        self
+    pub const fn certificate_bytes(mut self, limit: usize) -> Result<Self, BudgetBuildError> {
+        if self.certificate_bytes.is_some() {
+            Err(BudgetBuildError::Duplicate(
+                ResourceDomain::CertificateBytes,
+            ))
+        } else {
+            self.certificate_bytes = Some(limit);
+            Ok(self)
+        }
     }
 
     /// Sets the provider-operation limit.
-    pub const fn provider_operations(mut self, limit: usize) -> Self {
-        self.provider_operations = Some(limit);
-        self
+    pub const fn provider_operations(mut self, limit: usize) -> Result<Self, BudgetBuildError> {
+        if self.provider_operations.is_some() {
+            Err(BudgetBuildError::Duplicate(
+                ResourceDomain::ProviderOperations,
+            ))
+        } else {
+            self.provider_operations = Some(limit);
+            Ok(self)
+        }
     }
 
     /// Builds a budget only when every resource domain was named explicitly.
-    pub const fn build(self) -> Option<ResourceBudget> {
-        match (
-            self.input_bytes,
-            self.output_bytes,
-            self.workspace_bytes,
-            self.state_items,
-            self.queue_items,
-            self.certificate_bytes,
-            self.provider_operations,
-        ) {
-            (
-                Some(input_bytes),
-                Some(output_bytes),
-                Some(workspace_bytes),
-                Some(state_items),
-                Some(queue_items),
-                Some(certificate_bytes),
-                Some(provider_operations),
-            ) => Some(ResourceBudget {
-                input_bytes,
-                output_bytes,
-                workspace_bytes,
-                state_items,
-                queue_items,
-                certificate_bytes,
-                provider_operations,
-            }),
-            _ => None,
-        }
+    pub const fn build(self) -> Result<ResourceBudget, BudgetBuildError> {
+        let input_bytes = match self.input_bytes {
+            Some(limit) => limit,
+            None => return Err(BudgetBuildError::Incomplete(ResourceDomain::InputBytes)),
+        };
+        let output_bytes = match self.output_bytes {
+            Some(limit) => limit,
+            None => return Err(BudgetBuildError::Incomplete(ResourceDomain::OutputBytes)),
+        };
+        let workspace_bytes = match self.workspace_bytes {
+            Some(limit) => limit,
+            None => {
+                return Err(BudgetBuildError::Incomplete(ResourceDomain::WorkspaceBytes));
+            }
+        };
+        let state_items = match self.state_items {
+            Some(limit) => limit,
+            None => return Err(BudgetBuildError::Incomplete(ResourceDomain::StateItems)),
+        };
+        let queue_items = match self.queue_items {
+            Some(limit) => limit,
+            None => return Err(BudgetBuildError::Incomplete(ResourceDomain::QueueItems)),
+        };
+        let certificate_bytes = match self.certificate_bytes {
+            Some(limit) => limit,
+            None => {
+                return Err(BudgetBuildError::Incomplete(
+                    ResourceDomain::CertificateBytes,
+                ));
+            }
+        };
+        let provider_operations = match self.provider_operations {
+            Some(limit) => limit,
+            None => {
+                return Err(BudgetBuildError::Incomplete(
+                    ResourceDomain::ProviderOperations,
+                ));
+            }
+        };
+        Ok(ResourceBudget {
+            input_bytes,
+            output_bytes,
+            workspace_bytes,
+            state_items,
+            queue_items,
+            certificate_bytes,
+            provider_operations,
+        })
     }
 }
 
@@ -147,16 +208,18 @@ impl ResourceBudgetBuilder {
 /// enter the returned error.
 ///
 /// ```compile_fail
-/// let budget = brynja_core::ResourceBudget::builder()
-///     .input_bytes(1)
-///     .output_bytes(1)
-///     .workspace_bytes(1)
-///     .state_items(1)
-///     .queue_items(1)
-///     .certificate_bytes(1)
-///     .provider_operations(1)
-///     .build();
-/// if let Some(budget) = budget {
+/// fn budget() -> Result<brynja_core::ResourceBudget, brynja_core::BudgetBuildError> {
+///     brynja_core::ResourceBudget::builder()
+///         .input_bytes(1)?
+///         .output_bytes(1)?
+///         .workspace_bytes(1)?
+///         .state_items(1)?
+///         .queue_items(1)?
+///         .certificate_bytes(1)?
+///         .provider_operations(1)?
+///         .build()
+/// }
+/// if let Ok(budget) = budget() {
 ///     println!("{budget:?}");
 /// }
 /// ```

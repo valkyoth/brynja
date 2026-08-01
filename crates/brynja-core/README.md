@@ -34,12 +34,13 @@ resource and work budgets.
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
 the existing typed, limit-value-free exhaustion result without mutating the
-budget. Every resource limit is supplied through a named builder method, and
-an incomplete builder fails closed. Numeric values and budget types
-intentionally implement neither `Debug` nor `Display`; the fixed, valueless
-`NumericError` enum implements `Debug` for safe diagnostics. This is not a TLS
-state machine, cryptographic implementation, PKI processor, provider
-implementation, or production-ready transport.
+budget. Every resource limit is supplied exactly once through a named builder
+method; duplicate and incomplete assignments fail with a typed domain-specific
+error. Numeric values and budget types intentionally implement neither `Debug`
+nor `Display`; the fixed, valueless `NumericError` enum implements `Debug` for
+safe diagnostics. This is not a TLS state machine, cryptographic
+implementation, PKI processor, provider implementation, or production-ready
+transport.
 
 ## Protocol Verification Status
 

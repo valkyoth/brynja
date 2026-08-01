@@ -32,10 +32,10 @@ production-ready TLS implementation at `1.0.0`.
 Version `0.6.0` adds checked bounded integers, distinct counts and lengths,
 non-wrapping sequence numbers and epochs, and immutable caller-selected
 resource and work budgets to the existing alert and failure domains. These
-foundations are allocation-free, require named construction for every resource
-limit, expose no hidden defaults, and keep numeric limits out of failure
-envelopes. They do **not** implement a TLS state machine or cryptography and
-must not be used to secure network traffic.
+foundations are allocation-free, require exactly one named assignment for
+every resource limit, expose no hidden defaults, and keep numeric limits out
+of failure envelopes. They do **not** implement a TLS state machine or
+cryptography and must not be used to secure network traffic.
 
 ## Install
 

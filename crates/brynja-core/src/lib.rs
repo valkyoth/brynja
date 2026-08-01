@@ -19,7 +19,9 @@ pub mod version;
 pub use alert::{
     Alert, AlertClass, AlertCode, AlertCodeClass, AlertDescription, AlertOrigin, AlertSeverity,
 };
-pub use budget::{ResourceBudget, ResourceBudgetBuilder, ResourceDomain, WorkBudget};
+pub use budget::{
+    BudgetBuildError, ResourceBudget, ResourceBudgetBuilder, ResourceDomain, WorkBudget,
+};
 pub use close::{Cancellation, CloseOutcome};
 pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};

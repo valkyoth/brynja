@@ -34,6 +34,9 @@ Keep a Changelog and Semantic Versioning.
   positional APIs through workspace Clippy policy.
 - Added safe `Debug` diagnostics for the closed, valueless `NumericError` enum
   while bounded values and budget types remain non-formattable.
+- Made every named resource-budget setter single-assignment and return a typed
+  `Duplicate(domain)` error instead of silently replacing an earlier limit;
+  incomplete builds now return typed `Incomplete(domain)` errors.
 - No TLS/DTLS record, sequence, epoch, parser, mutable accounting, protocol,
   independent-review, production, or FIPS-validation claim is advanced.
 - Provisional draft references carried by IANA registry records are not

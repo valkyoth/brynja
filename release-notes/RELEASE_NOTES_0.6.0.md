@@ -33,9 +33,11 @@ transitions remain assigned to later version-specific milestones.
 
 `ResourceBudget` carries explicit limits for input bytes, output bytes,
 workspace bytes, retained state items, queue items, certificate bytes, and
-provider operations. Every limit uses a named builder method, and construction
-fails closed until all seven domains are present. `WorkBudget` carries an
-explicit `u64` work-unit limit. Neither budget provides a default or setter.
+provider operations. Every limit uses a single-assignment named builder method;
+duplicates return a typed domain error, and construction fails closed with a
+typed error until all seven domains are present. `WorkBudget` carries an
+explicit `u64` work-unit limit. Neither budget provides a default or mutable
+setter.
 
 Budget checks are read-only and return the existing typed
 `ResourceExhaustion` domain. The error identifies only the resource class and
@@ -51,8 +53,9 @@ The implementation includes:
   epoch matrices compared with primitive checked operations;
 - exact zero, maximum, above-maximum, underflow, primitive-overflow,
   pointer-width, and exhaustion checks;
-- every resource dimension, zero-budget, exact-limit, over-limit,
-  every-missing-builder-field, no-mutation, and limit-value-free error checks;
+- every resource dimension, zero-budget, exact-limit, over-limit, duplicate
+  assignment, every-missing-builder-field, no-mutation, and limit-value-free
+  error checks;
 - storage-size tests proving bounded values carry no hidden allocation or
   bound metadata;
 - compile-fail doctests for count/length confusion and accidental formatting;
@@ -67,6 +70,13 @@ constructor has been replaced by named fail-closed construction, future
 overlong positional APIs are denied by workspace Clippy policy, and
 `NumericError` now safely implements `Debug`. Local remediation is complete;
 external retest remains required.
+
+A follow-up assessment found that the first named-builder remediation still
+allowed a later call to the same setter to replace a restrictive limit. All
+seven setters now reject repeated assignment with `Duplicate(domain)`, while
+`build()` identifies an omitted limit with `Incomplete(domain)`. Exhaustive
+regression tests cover both failure classes for every resource domain. Local
+remediation is complete; external retest remains required.
 
 The requirements and surface registers intentionally do not mark TLS or DTLS
 sequence, epoch, record, or resource behavior implemented. Version 0.6.0 is a

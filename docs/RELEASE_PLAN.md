@@ -572,8 +572,9 @@ Deliverables:
 - provide protocol-neutral sequence-number and 16-bit epoch values that
   advance monotonically and return typed exhaustion instead of wrapping;
 - define explicit immutable resource and work budgets through named
-  construction without positional transposition, defaults, setters,
-  allocation, mutable counters, or numeric values in exhaustion errors;
+  single-assignment construction without positional transposition, duplicate
+  overwrite, defaults, mutable setters, allocation, mutable counters, or
+  numeric values in exhaustion errors;
 - retain direction-specific state, record limits, wire widths, parsing,
   accounting, arena ownership, zeroization, and protocol transitions for their
   owning later milestones;
@@ -591,8 +592,9 @@ Verification:
   epoch advances with primitive checked operations;
 - test zero, exact maximum, above-maximum, primitive overflow, underflow,
   pointer-width conversion, zero budgets, every resource dimension, every
-  missing named-builder field, positional-constructor rejection, immutable
-  no-mutation behavior, storage bounds, and sequence/epoch exhaustion;
+  duplicate and missing named-builder field, positional-constructor rejection,
+  immutable no-mutation behavior, storage bounds, and sequence/epoch
+  exhaustion;
 - run compile-fail tests for count/length confusion and accidental formatting
   of bounded values or budgets;
 - verify `no_std`, no allocation, no unsafe code, no external dependencies,

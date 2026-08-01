@@ -191,8 +191,9 @@ Version 0.6.0 adds bounded numeric and resource foundations:
 - protocol-neutral `SequenceNumber<MAX>` and `Epoch<MAX>` advance without
   wraparound and return typed exhaustion at their inclusive maxima;
 - `ResourceBudget` names seven resource dimensions through a fail-closed
-  builder that requires every limit, while `WorkBudget` carries an explicit
-  `u64` work-unit limit;
+  builder that requires exactly one assignment per limit and returns typed
+  duplicate or incomplete-domain errors, while `WorkBudget` carries an
+  explicit `u64` work-unit limit;
 - budget checks do not mutate either operand and return the existing typed
   `ResourceExhaustion` without embedding numeric limits;
 - small-domain arithmetic and advance matrices are exhaustively checked, with
@@ -272,5 +273,9 @@ and signed tag `v0.5.0` is published. The v0.6.0 assessment found one Medium
 positional-budget-construction footgun and one Low diagnostic-ergonomics gap.
 Named fail-closed budget construction, a workspace-wide overlong-argument
 lint, safe `NumericError` debugging, and regression tests remediate both
-findings. The permanent report is `RETEST REQUIRED`/`PENDING` with zero open
-local findings until the repository owner confirms the retest.
+findings. A follow-up assessment found that repeated named setters still used
+last-write-wins behavior. Every setter is now single-assignment and returns a
+typed `Duplicate(domain)` error; `build()` returns typed `Incomplete(domain)`
+errors. Exhaustive tests cover duplicate and missing assignment for all seven
+domains. The permanent report remains `RETEST REQUIRED`/`PENDING` with zero
+open local findings until the repository owner confirms the retest.

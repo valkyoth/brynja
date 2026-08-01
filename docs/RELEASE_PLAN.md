@@ -571,9 +571,9 @@ Deliverables:
   fail-closed conversion from platform-independent `u64` values to `usize`;
 - provide protocol-neutral sequence-number and 16-bit epoch values that
   advance monotonically and return typed exhaustion instead of wrapping;
-- define explicit immutable resource and work budgets without defaults,
-  setters, allocation, mutable counters, or numeric values in exhaustion
-  errors;
+- define explicit immutable resource and work budgets through named
+  construction without positional transposition, defaults, setters,
+  allocation, mutable counters, or numeric values in exhaustion errors;
 - retain direction-specific state, record limits, wire widths, parsing,
   accounting, arena ownership, zeroization, and protocol transitions for their
   owning later milestones;
@@ -590,7 +590,8 @@ Verification:
 - exhaustively compare small-domain checked arithmetic, sequence advances, and
   epoch advances with primitive checked operations;
 - test zero, exact maximum, above-maximum, primitive overflow, underflow,
-  pointer-width conversion, zero budgets, every resource dimension, immutable
+  pointer-width conversion, zero budgets, every resource dimension, every
+  missing named-builder field, positional-constructor rejection, immutable
   no-mutation behavior, storage bounds, and sequence/epoch exhaustion;
 - run compile-fail tests for count/length confusion and accidental formatting
   of bounded values or budgets;

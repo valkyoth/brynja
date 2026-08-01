@@ -5,7 +5,7 @@ use core::convert::TryFrom;
 /// A closed, non-secret reason that a checked numeric operation failed.
 ///
 /// The error deliberately carries neither the rejected value nor its bound.
-#[derive(Clone, Copy, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[non_exhaustive]
 pub enum NumericError {
     /// A value exceeded the type-level maximum.

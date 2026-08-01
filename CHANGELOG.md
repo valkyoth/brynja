@@ -29,6 +29,11 @@ Keep a Changelog and Semantic Versioning.
   and budgets implement neither `Debug` nor `Display`.
 - Budget failures preserve resource class and operation phase without carrying
   configured numeric limits.
+- Replaced the seven-argument resource-budget constructor with a named builder
+  that fails closed until every domain is supplied, and deny future overlong
+  positional APIs through workspace Clippy policy.
+- Added safe `Debug` diagnostics for the closed, valueless `NumericError` enum
+  while bounded values and budget types remain non-formattable.
 - No TLS/DTLS record, sequence, epoch, parser, mutable accounting, protocol,
   independent-review, production, or FIPS-validation claim is advanced.
 - Provisional draft references carried by IANA registry records are not

@@ -34,10 +34,12 @@ resource and work budgets.
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
 the existing typed, limit-value-free exhaustion result without mutating the
-budget. Numeric values and budget types intentionally implement neither
-`Debug` nor `Display`. This is not a TLS state machine, cryptographic
-implementation, PKI processor, provider implementation, or production-ready
-transport.
+budget. Every resource limit is supplied through a named builder method, and
+an incomplete builder fails closed. Numeric values and budget types
+intentionally implement neither `Debug` nor `Display`; the fixed, valueless
+`NumericError` enum implements `Debug` for safe diagnostics. This is not a TLS
+state machine, cryptographic implementation, PKI processor, provider
+implementation, or production-ready transport.
 
 ## Protocol Verification Status
 
@@ -56,9 +58,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.6"
 ```
 
-The `0.3.0` package is selected for publication with Brynja v0.6.0. The
-implementation stop requires its repository-owner pentest before publication
-can proceed under the
+The `0.3.0` package is selected for publication with Brynja v0.6.0. Pentest
+remediation is complete and requires repository-owner retest before
+publication can proceed under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

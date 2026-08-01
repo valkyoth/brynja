@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.6.0 implementation stop reached; awaiting pentest
+Status: v0.6.0 pentest remediation complete; awaiting retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains. It still has no TLS state machine, cryptography, PKI, QUIC-TLS,
@@ -190,8 +190,9 @@ Version 0.6.0 adds bounded numeric and resource foundations:
   `usize` conversion fails closed when the target pointer width is too small;
 - protocol-neutral `SequenceNumber<MAX>` and `Epoch<MAX>` advance without
   wraparound and return typed exhaustion at their inclusive maxima;
-- `ResourceBudget` names seven resource dimensions with explicit immutable
-  limits, while `WorkBudget` carries an explicit `u64` work-unit limit;
+- `ResourceBudget` names seven resource dimensions through a fail-closed
+  builder that requires every limit, while `WorkBudget` carries an explicit
+  `u64` work-unit limit;
 - budget checks do not mutate either operand and return the existing typed
   `ResourceExhaustion` without embedding numeric limits;
 - small-domain arithmetic and advance matrices are exhaustively checked, with
@@ -267,5 +268,9 @@ pentested signed v0.5.0 implementation candidate
 `20305afe423d8a6142abe15bd0357546b3f8d41c` and reported it green with no
 findings. Its permanent report records `PASS`/`PASS` with zero open findings.
 The hosted checks passed after one documented assurance-test timing correction,
-and signed tag `v0.5.0` is published. The v0.6.0 implementation stop now
-requires its repository-owner pentest before release preparation continues.
+and signed tag `v0.5.0` is published. The v0.6.0 assessment found one Medium
+positional-budget-construction footgun and one Low diagnostic-ergonomics gap.
+Named fail-closed budget construction, a workspace-wide overlong-argument
+lint, safe `NumericError` debugging, and regression tests remediate both
+findings. The permanent report is `RETEST REQUIRED`/`PENDING` with zero open
+local findings until the repository owner confirms the retest.

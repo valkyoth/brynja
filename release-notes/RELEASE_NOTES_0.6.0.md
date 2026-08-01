@@ -1,6 +1,6 @@
 # Brynja 0.6.0 Release Notes
 
-Status: implementation stop reached; awaiting pentest
+Status: pentest remediation complete; awaiting retest
 
 Brynja 0.6.0 implements bounded numeric and resource value foundations. It
 does not implement TLS, DTLS, QUIC-TLS, cryptography, PKI, mutable resource
@@ -33,8 +33,9 @@ transitions remain assigned to later version-specific milestones.
 
 `ResourceBudget` carries explicit limits for input bytes, output bytes,
 workspace bytes, retained state items, queue items, certificate bytes, and
-provider operations. `WorkBudget` carries an explicit `u64` work-unit limit.
-Neither type provides a default or setter.
+provider operations. Every limit uses a named builder method, and construction
+fails closed until all seven domains are present. `WorkBudget` carries an
+explicit `u64` work-unit limit. Neither budget provides a default or setter.
 
 Budget checks are read-only and return the existing typed
 `ResourceExhaustion` domain. The error identifies only the resource class and
@@ -51,13 +52,21 @@ The implementation includes:
 - exact zero, maximum, above-maximum, underflow, primitive-overflow,
   pointer-width, and exhaustion checks;
 - every resource dimension, zero-budget, exact-limit, over-limit,
-  no-mutation, and limit-value-free error checks;
+  every-missing-builder-field, no-mutation, and limit-value-free error checks;
 - storage-size tests proving bounded values carry no hidden allocation or
   bound metadata;
 - compile-fail doctests for count/length confusion and accidental formatting;
 - `no_std`, no external dependencies, forbidden unsafe code, and the existing
   Rust 1.90.0 through 1.97.1 and OS-less target gates; and
 - source and test files below the 500-line review limit.
+
+The repository-owner assessment found a Medium positional-argument
+transposition risk in the original seven-argument resource-budget constructor
+and a Low diagnostic gap in the fixed, valueless `NumericError` enum. The
+constructor has been replaced by named fail-closed construction, future
+overlong positional APIs are denied by workspace Clippy policy, and
+`NumericError` now safely implements `Debug`. Local remediation is complete;
+external retest remains required.
 
 The requirements and surface registers intentionally do not mark TLS or DTLS
 sequence, epoch, record, or resource behavior implemented. Version 0.6.0 is a

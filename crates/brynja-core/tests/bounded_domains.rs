@@ -26,6 +26,8 @@ const CONST_EPOCH: Epoch<4> = match Epoch::new(2) {
 
 #[test]
 fn bounded_integer_boundaries_are_exact() {
+    assert_eq!(format!("{:?}", NumericError::Overflow), "Overflow");
+
     for raw in 0_u64..=260 {
         let value = BoundedU64::<255>::new(raw);
         assert_eq!(value.is_ok(), raw <= 255);
@@ -282,7 +284,19 @@ fn primitive_maximum_sequence_and_epoch_exhaust_exactly() {
 
 #[test]
 fn every_resource_budget_dimension_is_exact_and_immutable() {
-    let budget = ResourceBudget::new(1, 2, 3, 4, 5, 6, 7);
+    let budget = ResourceBudget::builder()
+        .input_bytes(1)
+        .output_bytes(2)
+        .workspace_bytes(3)
+        .state_items(4)
+        .queue_items(5)
+        .certificate_bytes(6)
+        .provider_operations(7)
+        .build();
+    assert!(budget.is_some());
+    let Some(budget) = budget else {
+        return;
+    };
     let cases = [
         (ResourceDomain::InputBytes, ResourceKind::Input, 1),
         (ResourceDomain::OutputBytes, ResourceKind::Output, 2),
@@ -316,7 +330,97 @@ fn every_resource_budget_dimension_is_exact_and_immutable() {
         }
     }
 
-    assert!(budget == ResourceBudget::new(1, 2, 3, 4, 5, 6, 7));
+    let rebuilt = ResourceBudget::builder()
+        .input_bytes(1)
+        .output_bytes(2)
+        .workspace_bytes(3)
+        .state_items(4)
+        .queue_items(5)
+        .certificate_bytes(6)
+        .provider_operations(7)
+        .build();
+    assert!(rebuilt == Some(budget));
+}
+
+#[test]
+fn resource_budget_requires_every_named_domain() {
+    assert!(
+        ResourceBudget::builder()
+            .output_bytes(2)
+            .workspace_bytes(3)
+            .state_items(4)
+            .queue_items(5)
+            .certificate_bytes(6)
+            .provider_operations(7)
+            .build()
+            .is_none()
+    );
+    assert!(
+        ResourceBudget::builder()
+            .input_bytes(1)
+            .workspace_bytes(3)
+            .state_items(4)
+            .queue_items(5)
+            .certificate_bytes(6)
+            .provider_operations(7)
+            .build()
+            .is_none()
+    );
+    assert!(
+        ResourceBudget::builder()
+            .input_bytes(1)
+            .output_bytes(2)
+            .state_items(4)
+            .queue_items(5)
+            .certificate_bytes(6)
+            .provider_operations(7)
+            .build()
+            .is_none()
+    );
+    assert!(
+        ResourceBudget::builder()
+            .input_bytes(1)
+            .output_bytes(2)
+            .workspace_bytes(3)
+            .queue_items(5)
+            .certificate_bytes(6)
+            .provider_operations(7)
+            .build()
+            .is_none()
+    );
+    assert!(
+        ResourceBudget::builder()
+            .input_bytes(1)
+            .output_bytes(2)
+            .workspace_bytes(3)
+            .state_items(4)
+            .certificate_bytes(6)
+            .provider_operations(7)
+            .build()
+            .is_none()
+    );
+    assert!(
+        ResourceBudget::builder()
+            .input_bytes(1)
+            .output_bytes(2)
+            .workspace_bytes(3)
+            .state_items(4)
+            .queue_items(5)
+            .provider_operations(7)
+            .build()
+            .is_none()
+    );
+    assert!(
+        ResourceBudget::builder()
+            .input_bytes(1)
+            .output_bytes(2)
+            .workspace_bytes(3)
+            .state_items(4)
+            .queue_items(5)
+            .certificate_bytes(6)
+            .build()
+            .is_none()
+    );
 }
 
 #[test]
@@ -337,7 +441,19 @@ fn work_budget_is_exact_limit_value_free_and_immutable() {
 
 #[test]
 fn zero_budgets_admit_only_zero() {
-    let resources = ResourceBudget::new(0, 0, 0, 0, 0, 0, 0);
+    let resources = ResourceBudget::builder()
+        .input_bytes(0)
+        .output_bytes(0)
+        .workspace_bytes(0)
+        .state_items(0)
+        .queue_items(0)
+        .certificate_bytes(0)
+        .provider_operations(0)
+        .build();
+    assert!(resources.is_some());
+    let Some(resources) = resources else {
+        return;
+    };
     let domains = [
         ResourceDomain::InputBytes,
         ResourceDomain::OutputBytes,

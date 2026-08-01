@@ -26,6 +26,7 @@ indexing_slicing = "forbid"
 arithmetic_side_effects = "forbid"
 cast_possible_truncation = "forbid"
 cast_sign_loss = "forbid"
+too_many_arguments = "forbid"
 
 [profile.release]
 overflow-checks = true

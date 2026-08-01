@@ -1,6 +1,6 @@
 # Brynja 0.6.0 Release Notes
 
-Status: pentest and retest passed; awaiting GitHub
+Status: released
 
 Brynja 0.6.0 implements bounded numeric and resource value foundations. It
 does not implement TLS, DTLS, QUIC-TLS, cryptography, PKI, mutable resource
@@ -99,9 +99,12 @@ patches at `0.1.2`, and the mandatory `brynja 0.6.0` facade. `brynja-crypto`
 remains unchanged at `0.1.0`; legacy and repository-only packages remain
 unpublished. The guarded publisher enforces exact pins and dependency order.
 
-Publication remains blocked until this permanent `PASS`/`PASS` report and the
-final release evidence are committed, GitHub is green, and the user explicitly
-authorizes tagging.
+The signed `v0.6.0` tag passed hosted checks. The guarded publisher then
+rejected the proper `Brynja v0.6.0` tag capitalization because its validator
+admitted only historical lowercase subjects. The repository owner completed
+the already-validated ten-crate sequence manually. The post-release tooling
+fix accepts both branded and historical lowercase signed subjects without
+changing the published crate contents or publication selection.
 
 ## Limitations
 

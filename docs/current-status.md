@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.6.0 pentest and retest passed; awaiting GitHub
+Status: v0.6.0 released
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains. It still has no TLS state machine, cryptography, PKI, QUIC-TLS,
@@ -8,10 +8,10 @@ DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.5.0 established the workspace, hardened
+Signed releases v0.1.0 through v0.6.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
-the assurance harness and first value domains. The v0.6.0 candidate selects
+the assurance harness and first value domains. The v0.6.0 release published
 `brynja-core 0.3.0`, eight dependency-only modern support patches at `0.1.2`,
 and `brynja 0.6.0`.
 

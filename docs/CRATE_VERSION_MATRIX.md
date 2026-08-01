@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.6.0 pentest and retest passed; awaiting GitHub
+Status: v0.6.0 released
 
 The `brynja` facade advances to `0.6.0`. `brynja-core` advances to `0.3.0` for
 the bounded numeric and budget domains; every published modern package whose
@@ -73,7 +73,9 @@ changes. Until admission, it is absent from the release manifest and workspace.
 Actual publication requires a clean worktree, matching release tag at `HEAD`,
 current committed PASS pentest report, user-confirmed green GitHub checks,
 complete versioned release gate, advisory and dependency-policy checks, SBOM,
-packages, and typed version confirmation. There is no production bypass.
+packages, and typed version confirmation. Signed tag subjects may use the
+proper `Brynja vX.Y.Z` capitalization or the historical lowercase project
+name. There is no production bypass.
 
 For `v0.6.0`, publication order is `brynja-core 0.3.0`, `brynja-pki 0.1.2`,
 `brynja-platform 0.1.2`, `brynja-tls13-handshake 0.1.2`, `brynja-tls12

@@ -555,7 +555,7 @@ Exit criteria:
 
 ### v0.6.0 - Bounded Numeric And Resource Domains
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Add private-field compile-time bounded `u64`/`usize` values with checked arithmetic, distinct count and byte-length types with fail-closed pointer-width conversion, non-wrapping protocol-neutral sequence and epoch values, and explicit immutable resource/work budgets whose typed exhaustion errors reveal no limit values; retain parsing, mutable accounting, wire widths, direction-specific state, and protocol behavior for later owners.
 

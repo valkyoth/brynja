@@ -40,8 +40,8 @@ cryptography and must not be used to secure network traffic.
 ## Install
 
 Brynja is not ready for application use. Version `0.6.0` passed its
-repository-owner pentest and retest but still awaits green hosted release
-checks; it does not implement TLS. The dependency after release will be:
+repository-owner pentest, retest, and hosted release checks and is published;
+it does not implement TLS. The dependency is:
 
 ```toml
 [dependencies]
@@ -250,7 +250,9 @@ scripts/release_crates.py --version 0.6.0
 
 It reruns the complete release gate, publishes changed dependencies in order,
 waits for crates.io indexing between dependent packages, and publishes
-`brynja` last.
+`brynja` last. Publication accepts signed annotated tag subjects using the
+proper project capitalization, `Brynja vX.Y.Z`, and retains compatibility with
+the historical lowercase `brynja vX.Y.Z` form.
 
 At each implementation stop, the user pentests the release candidate. The
 implementation and current versioned PASS report are committed together. Any

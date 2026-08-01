@@ -83,9 +83,11 @@ for parent in $parents; do
     fi
 done
 
-if git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
+if test -n "$publish_tag"; then
     test "$publish_tag" = "$version" ||
-        fail "tag already exists: ${version}"
+        fail "publish tag context must match release version: ${version}"
+    git rev-parse -q --verify "refs/tags/${version}" >/dev/null ||
+        fail "publish tag context requires existing tag: ${version}"
     test "$(git cat-file -t "refs/tags/${version}")" = "tag" ||
         fail "publish tag ${version} must be an annotated signed tag"
     git verify-tag "$version" >/dev/null 2>&1 ||
@@ -95,8 +97,14 @@ if git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
             --format='%(contents:subject)' \
             "refs/tags/${version}"
     )"
-    test "$tag_subject" = "brynja ${version}" ||
-        fail "publish tag ${version} subject must be: brynja ${version}"
+    case "$tag_subject" in
+        "Brynja ${version}" | "brynja ${version}") ;;
+        *)
+            message="publish tag ${version} subject must be: Brynja ${version}"
+            message="${message} (historical lowercase brynja is also accepted)"
+            fail "$message"
+            ;;
+    esac
     tag_target="$(
         git cat-file -p "refs/tags/${version}" |
             sed -n 's/^object //p' |
@@ -108,8 +116,6 @@ if git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
     head_commit="$(git rev-parse HEAD)"
     test "$tag_commit" = "$head_commit" ||
         fail "publish tag ${version} does not point at HEAD"
-elif test -n "$publish_tag"; then
-    fail "publish tag context requires existing tag: ${version}"
 fi
 
 if test "$pending" = true; then

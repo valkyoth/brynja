@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.6.0 pentest and retest passed; awaiting GitHub
+Status: v0.6.0 released
 
 | Control | Foundation enforcement |
 | --- | --- |
@@ -23,7 +23,7 @@ Status: v0.6.0 pentest and retest passed; awaiting GitHub
 | Normative requirements | 167 stable identifiers bind exact source, section, status, errata, authority role, strength, applicability, decision, mapping scope, owner, lifecycle, revision, assurance invariants, work bound, residual risk, target, positive and negative tests, and evidence gap; the generated closure covers all 126 authorities, 206 roadmap rows, and 4,444 surfaces, including 50 residual requirements, 33 residual authorities, 182 reviewed residual normative sections, 165 mapped sections, 17 explicit exclusions, and 763 formerly uncovered surfaces; immutable history and 110 requirement fixtures plus four surface-security fixtures reject omissions, undeclared evidence dispositions, orphaned cross-bundle delegations, semantic RFC 6066 laundering, TLS 1.2 authority omissions, wire/configuration conflation, non-reciprocal or boundary-mixed surface groups, wrong protocol ownership, actionable source-blocked legacy requirements, blanket section inheritance, drift, role errors, stale revisions, illegal transitions, unrelated mappings, weak bounds, missing anchors, rights gaps, stale mutable guidance, orphaned plans, repository-escaping targets, and premature claims |
 | Authority refresh and rights | Every local NIST/ITU source is local-only with an explicit distribution review; all eight mutable IANA registries and five dependent NIST publication pages have exact refresh owners; unavailable hybrid, legacy-source-rights, and FIPS-validation baselines remain machine-readable blockers |
 | Hybrid admission | Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track RFC and final IANA code points exist; drafts and private values are forbidden |
-| Release | Regular committed PASS/PASS report, zero open findings, report update against every parent carrying the report, clean GitHub, explicit tag authorization, exact signed annotated tag and subject, release notes, SBOM, and strict local gate required |
+| Release | Regular committed PASS/PASS report, zero open findings, report update against every parent carrying the report, clean GitHub, explicit tag authorization, exact signed annotated tag with branded or historical lowercase project-name subject, release notes, SBOM, and strict publisher-context local gate required |
 | GitHub protection | Active machine-checked main ruleset requires signed linear history, review and CodeQL while retaining explicit accountable owner/admin bypass |
 | CI | Read-only permissions, full-SHA action pins, live release-control verification, Clippy enforcement for both all-feature and no-default-feature configurations, and fail-closed acceptance of only current committed PASS/PASS or remediation-stage RETEST REQUIRED/PENDING pentest reports |
 | CodeQL | GitHub Default setup; no advanced workflow |

@@ -252,8 +252,18 @@ repository="$(make_fixture wrong-tag-subject)"
     write_report
     commit_report
     sign_tag "release v0.2.0"
-    assert_fails_with "subject must be: brynja v0.2.0" \
+    assert_fails_with "subject must be: Brynja v0.2.0" \
         env BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
+        scripts/validate-release-readiness.sh v0.2.0
+)
+
+repository="$(make_fixture branded-tag-subject)"
+(
+    cd "$repository"
+    write_report
+    commit_report
+    sign_tag "Brynja v0.2.0"
+    BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
         scripts/validate-release-readiness.sh v0.2.0
 )
 
@@ -263,9 +273,19 @@ repository="$(make_fixture tag-flow)"
     write_report
     commit_report
     sign_tag
-    assert_fails_with "tag already exists: v0.2.0" \
-        scripts/validate-release-readiness.sh v0.2.0
+    scripts/validate-release-readiness.sh v0.2.0
     BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
+        scripts/validate-release-readiness.sh v0.2.0
+)
+
+repository="$(make_fixture mismatched-publish-context)"
+(
+    cd "$repository"
+    write_report
+    commit_report
+    sign_tag
+    assert_fails_with "publish tag context must match release version" \
+        env BRYNJA_RELEASE_PUBLISH_TAG=v0.2.1 \
         scripts/validate-release-readiness.sh v0.2.0
 )
 

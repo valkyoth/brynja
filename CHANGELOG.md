@@ -5,6 +5,13 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Release publication now accepts the properly capitalized signed tag subject
+  `Brynja vX.Y.Z` while retaining compatibility with historical lowercase
+  `brynja vX.Y.Z` tags; strict tag checks remain confined to the publisher's
+  explicit publish context.
+
 ## [0.6.0] - 2026-08-01
 
 ### Added

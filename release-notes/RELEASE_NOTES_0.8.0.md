@@ -24,6 +24,12 @@ caller-buffer byte and the cursor position unchanged. Multiple parts supplied
 to one call are one transaction; separate successful calls are intentionally
 separate transactions and are not rolled back together.
 
+The repository-owner assessment confirmed that a successful `checked_end`
+preflight currently makes each following mutable range lookup infallible. The
+cursor now asserts that relationship in debug builds and retains the existing
+fail-closed optional-range fallback in release builds so future refactors make
+invariant erosion visible without adding a panic path to production behavior.
+
 `written()` exposes only an immutable borrow of the successful prefix.
 `finish(self)` consumes the cursor and returns the original caller buffer only
 when its capacity was used exactly; otherwise it returns `TrailingCapacity`

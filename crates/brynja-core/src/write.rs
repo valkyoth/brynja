@@ -91,6 +91,7 @@ impl<'output> WriteCursor<'output> {
     /// cursor position unchanged.
     pub fn write(&mut self, input: &[u8]) -> Result<(), WriteError> {
         let end = self.checked_end(input.len())?;
+        debug_assert!(self.output.get(self.position..end).is_some());
         let destination = match self.output.get_mut(self.position..end) {
             Some(destination) => destination,
             None => return Err(WriteError::InsufficientCapacity),
@@ -115,6 +116,7 @@ impl<'output> WriteCursor<'output> {
             };
         }
         let end = self.checked_end(total)?;
+        debug_assert!(self.output.get(self.position..end).is_some());
         let destination = match self.output.get_mut(self.position..end) {
             Some(destination) => destination,
             None => return Err(WriteError::InsufficientCapacity),
@@ -133,6 +135,7 @@ impl<'output> WriteCursor<'output> {
     /// without allocation. It does not define protocol padding semantics.
     pub fn write_repeated(&mut self, byte: u8, length: usize) -> Result<(), WriteError> {
         let end = self.checked_end(length)?;
+        debug_assert!(self.output.get(self.position..end).is_some());
         let destination = match self.output.get_mut(self.position..end) {
             Some(destination) => destination,
             None => return Err(WriteError::InsufficientCapacity),

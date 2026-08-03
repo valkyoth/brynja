@@ -21,6 +21,9 @@ Keep a Changelog and Semantic Versioning.
 
 - Every operation checks its complete destination before changing any byte;
   capacity or arithmetic failure preserves the full output and cursor position.
+- Debug builds assert that each mutable destination lookup remains reachable
+  after successful preflight, while release builds retain the fail-closed
+  optional-range fallback.
 - Multi-part writes preflight the overflow-safe aggregate length before copying
   their first part, so one call is one mutation transaction.
 - Cursor state is private, non-clonable, non-copyable, non-formattable, and

@@ -1,14 +1,14 @@
 //! Security-first, dependency-free `no_std` TLS facade.
 //!
-//! This release exposes checked numeric/resource domains and transactional
-//! borrowed input and caller-buffer output cursors. It does not yet provide a
-//! TLS connection API.
+//! This release exposes checked numeric/resource domains, transactional
+//! borrowed cursors, and an exact caller-owned workspace/arena model. It does
+//! not yet provide a TLS connection API.
 
 #![no_std]
 
 /// Whether this package provides its planned implementation.
 ///
-/// The transactional-write milestone intentionally reports `false`.
+/// The caller-owned-workspace milestone intentionally reports `false`.
 pub const IMPLEMENTED: bool = false;
 
 pub use brynja_core as core;
@@ -33,6 +33,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::core::WRITE_CURSOR_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::core::WORKSPACE_ARENAS_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

@@ -1,21 +1,21 @@
 [release]
-version = "0.8.0"
+version = "0.9.0"
 policy = "independent"
 stage = "public"
 
 [crates."brynja"]
-previous_version = "0.7.0"
-version = "0.8.0"
+previous_version = "0.8.0"
+version = "0.9.0"
 change = "code"
 publish = true
-reason = "Mandatory facade release exposing the v0.8 transactional caller-buffer write cursor and prior foundation domains."
+reason = "Mandatory facade release exposing the v0.9 exact caller-owned workspace and arena model and prior foundation domains."
 
 [crates."brynja-core"]
-previous_version = "0.4.0"
-version = "0.5.0"
+previous_version = "0.5.0"
+version = "0.6.0"
 change = "code"
 publish = true
-reason = "Add the allocation-free v0.8 transactional caller-buffer write cursor with exhaustive complete-buffer no-mutation tests."
+reason = "Add the allocation-free v0.9 exact caller-owned workspace partition and monotonic arena accounting model."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.0"
@@ -25,60 +25,60 @@ publish = false
 reason = "No brynja-crypto package change; retain the published 0.1.0 boundary."
 
 [crates."brynja-pki"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the published dependency boundary to brynja-core 0.5.0; PKI remains unimplemented."
+reason = "Repin the published dependency boundary to brynja-core 0.6.0; PKI remains unimplemented."
 
 [crates."brynja-tls"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the modern router boundary to the v0.8 core and version-engine package graph; the router remains unimplemented."
+reason = "Repin the modern router boundary to the v0.9 core and version-engine package graph; the router remains unimplemented."
 
 [crates."brynja-tls12"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the TLS 1.2 boundary to brynja-core 0.5.0 and brynja-pki 0.1.4; the engine remains unimplemented."
+reason = "Repin the TLS 1.2 boundary to brynja-core 0.6.0 and brynja-pki 0.1.5; the engine remains unimplemented."
 
 [crates."brynja-tls13"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the TLS 1.3 stream boundary to brynja-core 0.5.0 and brynja-tls13-handshake 0.1.4; the engine remains unimplemented."
+reason = "Repin the TLS 1.3 stream boundary to brynja-core 0.6.0 and brynja-tls13-handshake 0.1.5; the engine remains unimplemented."
 
 [crates."brynja-tls13-handshake"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the record-independent handshake boundary to brynja-core 0.5.0 and brynja-pki 0.1.4; the engine remains unimplemented."
+reason = "Repin the record-independent handshake boundary to brynja-core 0.6.0 and brynja-pki 0.1.5; the engine remains unimplemented."
 
 [crates."brynja-quic-tls"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the QUIC-TLS adapter boundary to brynja-core 0.5.0 and brynja-tls13-handshake 0.1.4; the adapter remains unimplemented."
+reason = "Repin the QUIC-TLS adapter boundary to brynja-core 0.6.0 and brynja-tls13-handshake 0.1.5; the adapter remains unimplemented."
 
 [crates."brynja-dtls"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the DTLS boundary to brynja-core 0.5.0 and brynja-pki 0.1.4; the engine remains unimplemented."
+reason = "Repin the DTLS boundary to brynja-core 0.6.0 and brynja-pki 0.1.5; the engine remains unimplemented."
 
 [crates."brynja-platform"]
-previous_version = "0.1.3"
-version = "0.1.4"
+previous_version = "0.1.4"
+version = "0.1.5"
 change = "dependency"
 publish = true
-reason = "Repin the platform adapter boundary to brynja-core 0.5.0; provider implementations remain future work."
+reason = "Repin the platform adapter boundary to brynja-core 0.6.0; provider implementations remain future work."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"

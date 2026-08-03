@@ -25,9 +25,9 @@
 
 # brynja-core
 
-`brynja-core 0.5.0` adds Brynja's allocation-free v0.8 transactional write
-cursor to the borrowed read cursor and alert, failure, checked numeric,
-sequence, epoch, and immutable budget value domains from earlier milestones.
+`brynja-core 0.6.0` adds Brynja's allocation-free v0.9 exact caller-owned
+workspace and monotonic arena model to the transactional read/write cursors and
+value domains from earlier milestones.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
@@ -43,30 +43,36 @@ or formattable, and its value-free errors reveal no input, offset, requested
 length, or available length. `WriteCursor` exclusively borrows caller output
 and preflights complete single-slice, multi-part, and repeated-byte operations
 before changing any byte. Failure preserves the complete buffer and position;
-exact completion consumes the cursor. This is not integer encoding, TLS
-framing, a protocol parser, a TLS state machine, cryptography, PKI, a provider,
-secret destruction, or a production-ready transport.
+exact completion consumes the cursor. `Workspace` safe-splits one exact-size
+caller buffer into named secret, plaintext, transcript, certificate, and output
+arenas. Sealed zero-sized domain markers prevent the five simultaneous handles
+from being swapped. Complete monotonic allocations track used, remaining,
+high-water, and successful non-empty allocation count; rejection preserves both
+bytes and telemetry. Allocated bytes retain their caller contents and must be
+initialized before use. This is not integer encoding, TLS framing, a protocol
+parser, a TLS state machine, cryptography, PKI, a provider, secret ownership or
+destruction, or a production-ready transport.
 
 ## Protocol Verification Status
 
-The alert, failure, numeric, budget, and cursor domains have not been
+The alert, failure, numeric, budget, cursor, workspace, and arena domains have not been
 independently reviewed. Project tests, CI, Kani, Miri, fuzzing, and pentesting
 do not by themselves constitute independent protocol verification.
 
 | Component | Protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Alert, failure, bounded numeric, sequence, epoch, budget, and transactional read/write cursor domains | ❌ Not verified |
+| `brynja-core` | Alert, failure, bounded numeric, sequence, epoch, budget, transactional cursor, and exact workspace/arena domains | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.8"
+brynja = "0.9"
 ```
 
-The `0.5.0` package is selected for publication with Brynja v0.8.0. The
-repository-owner pentest and retest passed; publication still requires green
-hosted release checks under the
+The `0.6.0` package is selected for publication with Brynja v0.9.0. The
+candidate requires repository-owner pentesting and green hosted release checks
+under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

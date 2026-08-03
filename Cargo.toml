@@ -35,16 +35,16 @@ codegen-units = 1
 lto = "fat"
 
 [workspace.dependencies]
-brynja-core = { path = "crates/brynja-core", version = "=0.5.0" }
+brynja-core = { path = "crates/brynja-core", version = "=0.6.0" }
 brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.0" }
-brynja-pki = { path = "crates/brynja-pki", version = "=0.1.4" }
-brynja-tls = { path = "crates/brynja-tls", version = "=0.1.4" }
-brynja-tls12 = { path = "crates/brynja-tls12", version = "=0.1.4" }
-brynja-tls13 = { path = "crates/brynja-tls13", version = "=0.1.4" }
-brynja-tls13-handshake = { path = "crates/brynja-tls13-handshake", version = "=0.1.4" }
-brynja-dtls = { path = "crates/brynja-dtls", version = "=0.1.4" }
-brynja-platform = { path = "crates/brynja-platform", version = "=0.1.4" }
-brynja-quic-tls = { path = "crates/brynja-quic-tls", version = "=0.1.4" }
+brynja-pki = { path = "crates/brynja-pki", version = "=0.1.5" }
+brynja-tls = { path = "crates/brynja-tls", version = "=0.1.5" }
+brynja-tls12 = { path = "crates/brynja-tls12", version = "=0.1.5" }
+brynja-tls13 = { path = "crates/brynja-tls13", version = "=0.1.5" }
+brynja-tls13-handshake = { path = "crates/brynja-tls13-handshake", version = "=0.1.5" }
+brynja-dtls = { path = "crates/brynja-dtls", version = "=0.1.5" }
+brynja-platform = { path = "crates/brynja-platform", version = "=0.1.5" }
+brynja-quic-tls = { path = "crates/brynja-quic-tls", version = "=0.1.5" }
 brynja-legacy-pct = { path = "crates/brynja-legacy-pct", version = "=0.1.0" }
 brynja-legacy-snp = { path = "crates/brynja-legacy-snp", version = "=0.1.0" }
 brynja-legacy-ssl2 = { path = "crates/brynja-legacy-ssl2", version = "=0.1.0" }

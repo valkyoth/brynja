@@ -26,7 +26,7 @@
 # brynja-tls12
 
 `brynja-tls12` is the version-specific hardened TLS 1.2 engine boundary.
-Version `0.1.4` only repins its exact v0.8 dependencies; it does not provide a
+Version `0.1.5` only repins its exact v0.9 dependencies; it does not provide a
 working TLS, cryptographic, PKI, or platform implementation.
 
 ## Cryptography Verification Status
@@ -47,12 +47,12 @@ Most application users will eventually depend on the evergreen facade:
 
 ```toml
 [dependencies]
-brynja = "0.8"
+brynja = "0.9"
 ```
 
-This dependency-only patch is selected for publication with v0.8.0. The
-repository-owner pentest and retest passed; publication still requires green
-hosted release checks under the
+This dependency-only patch is selected for publication with v0.9.0. The
+candidate requires repository-owner pentesting and green hosted release checks
+under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

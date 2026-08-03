@@ -1,21 +1,22 @@
 # Current Status
 
-Status: v0.8.0 pentest and retest passed; awaiting GitHub
+Status: v0.9.0 implementation complete; pentest required
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
-caller-buffer write cursors. It still has no integer encoding, TLS framing or
-parser, TLS state machine, cryptography, PKI, QUIC-TLS, DTLS engine, platform
-provider, or legacy protocol implementation and must not be used to secure
+caller-buffer write cursors and an exact caller-owned workspace partition. It
+still has no integer encoding, TLS framing or parser, TLS state machine,
+cryptography, PKI, QUIC-TLS, DTLS engine, platform provider, secret-destruction
+contract, or legacy protocol implementation and must not be used to secure
 network traffic. Brynja is not FIPS 140-3 validated, and no package, feature,
 build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.7.0 established the workspace, hardened
+Signed releases v0.1.0 through v0.8.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
-the assurance harness and first value and cursor domains. The v0.8.0 candidate
-selects `brynja-core 0.5.0`, eight dependency-only modern support patches at
-`0.1.4`, and `brynja 0.8.0`.
+the assurance harness and first value and cursor domains. The v0.9.0 candidate
+selects `brynja-core 0.6.0`, eight dependency-only modern support patches at
+`0.1.5`, and `brynja 0.9.0`.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -250,6 +251,33 @@ Version 0.8.0 adds transactional caller-buffer output construction:
   is a source-free buffer foundation; integer encoding, framing, patching,
   arenas, overlap policy, secrets, and protocol state remain future work.
 
+Version 0.9.0 adds exact caller-owned workspace partitioning:
+
+- `WorkspaceLayoutBuilder` requires explicit single assignments for secret,
+  plaintext, transcript, certificate, and output capacities and rejects every
+  duplicate, omission, and aggregate-length overflow;
+- `Workspace` accepts exactly one caller-owned mutable slice whose length must
+  equal the layout total, then safe-splits every byte once into five named
+  domains without admitting independent potentially overlapping buffers;
+- empty arenas may share boundary addresses but contain no bytes, while named
+  simultaneous borrows permit the non-empty domains to be used together under
+  Rust's exclusive-aliasing rules and sealed zero-sized domain markers prevent
+  secret, plaintext, transcript, certificate, and output handles from being
+  swapped;
+- each private `Arena` admits only monotonic complete-range allocation and
+  exposes capacity, used, remaining, high-water, and successful non-empty
+  allocation-count telemetry;
+- overflow and capacity failure preserve all storage and accounting, empty
+  allocations do not change accounting, and successful allocations retain
+  caller bytes for mandatory initialization by the caller;
+- exhaustive small-layout and every-position/request tests cover domain
+  identity, pointer identity, isolation, overflow, exhaustion, zero lengths,
+  sentinel preservation, value-free errors, and compile-fail lifetime and
+  formatting constraints; and
+- no protocol surface or normative protocol requirement advances because this
+  is a source-free storage foundation; release, reuse, zeroization, secret
+  ownership and destruction, framing, and protocol state remain future work.
+
 Everything beyond those foundation domains remains governance and planning
 evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
@@ -345,5 +373,5 @@ three proven range invariants visible while retaining fail-closed release
 fallbacks. The repository owner retested signed remediation candidate
 `79027316d1d023b0f55870d8371b22a2c536a7ae` and reported it green with no
 remaining finding. The permanent report records `PASS`/`PASS` with zero open
-findings; release now awaits the final committed candidate and green GitHub
-checks.
+findings, and the signed `v0.8.0` tag is complete. The v0.9.0 exact workspace
+and arena candidate is now ready for repository-owner pentesting.

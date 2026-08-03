@@ -27,7 +27,7 @@
 
 `brynja-quic-tls` consumes the record-independent
 `brynja-tls13-handshake` boundary without depending on stream TLS records or
-the multi-version TLS router. Version `0.1.4` only repins its exact v0.8
+the multi-version TLS router. Version `0.1.5` only repins its exact v0.9
 dependencies; it does not provide a working QUIC/TLS implementation.
 
 ## Cryptography Verification Status
@@ -48,12 +48,12 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.8"
+brynja = "0.9"
 ```
 
-This dependency-only patch is selected for publication with v0.8.0. The
-repository-owner pentest and retest passed; publication still requires green
-hosted release checks under the
+This dependency-only patch is selected for publication with v0.9.0. The
+candidate requires repository-owner pentesting and green hosted release checks
+under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

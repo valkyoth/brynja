@@ -112,15 +112,16 @@ mutable aliasing, or output-derived diagnostics.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.8.0
+## Non-Goals At 0.9.0
 
 No transport security or interoperability guarantee exists. The only protocol
 code consists of allocation-free shared alert/failure, bounded
 numeric/resource value domains, and protocol-neutral borrowed read and
-transactional caller-buffer write cursors; there is no integer encoder or
-decoder, framing layer, protocol parser, record layer, mutable accounting
-state, arena model, secret ownership, handshake, provider implementation, PKI,
-or cryptography.
+transactional caller-buffer write cursors, and an exact caller-owned workspace
+partition with monotonic arena accounting; there is no integer encoder or
+decoder, framing layer, protocol parser, record layer, arena release or reuse,
+secret ownership or destruction, handshake, provider implementation, PKI, or
+cryptography.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
@@ -142,7 +143,10 @@ semantics. v0.7.0 adds exact transactional borrowed input consumption without
 claiming framing, parsing, secret ownership, or protocol behavior. v0.8.0 adds
 complete-operation-preflight caller-buffer writes without claiming integer
 encoding, compound rollback across separate successful calls, arenas, overlap
-policy, secret destruction, framing, or protocol behavior. Planned,
+policy, secret destruction, framing, or protocol behavior. v0.9.0 safely
+partitions one exact caller buffer into five named disjoint domains and adds
+monotonic allocation telemetry without claiming release, reuse, zeroization,
+secret ownership, framing, or protocol behavior. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

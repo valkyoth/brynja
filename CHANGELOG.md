@@ -5,6 +5,33 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-08-03
+
+### Added
+
+- Exact caller-owned workspace partitioning across named secret, plaintext,
+  transcript, certificate, and output arenas.
+- Monotonic complete-range arena allocation with capacity, used, remaining,
+  high-water, and successful non-empty allocation-count telemetry.
+- Exhaustive small-layout, every-domain duplicate/omission,
+  every-position/request, overflow, exhaustion, zero-length, sentinel,
+  pointer-identity, domain-isolation, diagnostic, and compile-fail tests.
+
+### Security
+
+- One exact backing slice is safe-split once in fixed named order, eliminating
+  caller-selected independent-buffer overlap and provenance decisions.
+- Sealed zero-sized domain markers make simultaneous arena handles distinct
+  Rust types and reject accidental secret/output or other domain swaps.
+- Both backing-length mismatch directions and every rejected allocation leave
+  caller bytes and accounting unchanged.
+- Workspace and arena state is private, non-clonable, non-formattable, and
+  lifetime-bound to the exclusive caller buffer; errors carry no capacity,
+  offset, request, count, byte, string, or provider-native values.
+- Allocated bytes retain caller contents and require initialization. No
+  release, reuse, zeroization, destruction, protocol, independent-review,
+  production, or FIPS-validation claim is advanced.
+
 ## [0.8.0] - 2026-08-03
 
 ### Added

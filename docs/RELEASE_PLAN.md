@@ -753,7 +753,7 @@ Exit criteria:
 
 ### v0.8.0 - Transactional Write Cursor
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement caller-buffer write cursors with transactional encode-or-no-mutation behavior.
 
@@ -823,31 +823,77 @@ Exit criteria:
 
 ### v0.9.0 - Caller-Owned Workspace And Arena Model
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Define caller-owned workspaces and non-overlapping secret, plaintext, transcript, certificate, and output arenas with overlap rules, high-water tracking, and allocation counters.
 
-Goal: complete the **Caller-Owned Workspace And Arena Model** implementation stop without admitting or
-claiming adjacent capability.
+Goal: freeze one exact allocation-free partition and monotonic allocation
+contract for protocol-neutral caller storage without implementing erasure,
+reuse, encoding, parsing, cryptography, or protocol state early.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- provide a named single-assignment `WorkspaceLayoutBuilder` requiring explicit
+  byte capacities for secret, plaintext, transcript, certificate, and output
+  domains, rejecting every duplicate, omission, and aggregate `usize` overflow;
+- require one caller-owned mutable backing slice whose length exactly equals
+  the checked layout total, reject both short and oversized slices before
+  mutation, and partition every byte once in fixed named order;
+- use only safe slice splitting so distinct domains are structurally
+  non-overlapping; permit equal boundaries only for empty ranges, which contain
+  no byte and therefore cannot overlap;
+- provide private-field, non-clonable, non-formattable `Arena` values with
+  named individual access and simultaneous named borrows of all five disjoint
+  domains, using sealed zero-sized compile-time domain markers so named arena
+  handles have different Rust types and cannot be accidentally swapped;
+- admit only monotonic complete-range allocation: successful non-empty
+  allocations consume disjoint ranges and advance once, empty allocations do
+  not affect accounting, and arithmetic overflow or capacity failure changes
+  neither bytes nor accounting;
+- expose fixed capacity, used and remaining bytes, monotonic high-water mark,
+  and successful non-empty allocation count per arena without including those
+  values in errors or automatic diagnostics;
+- state explicitly that returned ranges retain caller bytes, that callers must
+  initialize them before use, and that this milestone provides no release,
+  rewind, ownership, erasure, destruction, or secret-lifecycle guarantee;
+- retain integer encoding, framing, mutable reclamation, secret lifetime and
+  destruction, providers, protocol parsing, cryptography, and state machines
+  for their separately versioned owners;
+- publish `brynja-core 0.6.0`, dependency-only `0.1.5` patches for its changed
+  exact-pinned modern closure, and the mandatory `brynja 0.9.0` facade;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- exhaust every small five-domain layout and every arena position/request pair,
+  including zero-length domains and allocations, exact exhaustion, one-byte
+  overrun, and `usize::MAX` end and aggregate overflow;
+- prove every duplicate and omitted domain fails with a typed arena identity,
+  both backing-length mismatch directions preserve sentinel bytes, and every
+  failed allocation preserves used, remaining, high-water, count, and storage;
+- verify exact backing and allocation pointer identity, fixed partition order,
+  simultaneous named disjoint use, compile-time domain-swap rejection, retained
+  caller contents, zero marker overhead, and byte-for-byte domain isolation
+  after distinct sentinel writes;
+- run compile-fail doctests for formatting and outside mutation during the
+  exclusive workspace borrow, and enforce no indexing, panic, unsafe,
+  allocation, external dependency, secret-value diagnostics, or source file
+  above 500 lines;
+- prove no protocol surface or normative protocol requirement advances because
+  the arena model is a source-free foundation, with zeroization and destruction
+  remaining explicitly deferred to v0.10.0 and v0.11.0;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- every workspace byte belongs to exactly one named arena, every successful
+  non-empty allocation belongs to exactly one disjoint monotonic range, and
+  every rejection is byte- and accounting-transactional;
+- no API or documentation claims release, reuse, zeroization, secret ownership,
+  integer framing, protocol behavior, interoperability, independent review,
+  production readiness, or FIPS validation;
 - `v0.9.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.10.0 - Secret Lifetime And Destruction Contract

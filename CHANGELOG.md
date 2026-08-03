@@ -21,6 +21,8 @@ Keep a Changelog and Semantic Versioning.
 - Failed reads never advance the cursor or change its remaining input.
 - Cursor state is private, non-clonable, non-copyable, non-formattable, and
   bound to the caller input lifetime; no read path uses unchecked indexing.
+- Remaining-input accessors assert the internal position invariant in debug
+  builds while retaining fail-safe, panic-free release behavior.
 - Read errors are closed and value-free: they contain no bytes, offsets,
   requested lengths, available lengths, strings, or allocation.
 - No framing, integer decoding, protocol parsing, secret ownership,
@@ -28,6 +30,8 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Replaced the hosted-macOS-sensitive detached-descendant timeout fixture with
+  an ordered handshake that proves survival only after process-group cleanup.
 - Release publication now accepts the properly capitalized signed tag subject
   `Brynja vX.Y.Z` while retaining compatibility with historical lowercase
   `brynja vX.Y.Z` tags; strict tag checks remain confined to the publisher's

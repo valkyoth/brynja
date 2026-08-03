@@ -66,6 +66,7 @@ impl<'input> ReadCursor<'input> {
 
     /// Returns the number of bytes that remain unconsumed.
     pub const fn remaining_len(&self) -> usize {
+        debug_assert!(self.position <= self.input.len());
         self.input.len().saturating_sub(self.position)
     }
 
@@ -76,6 +77,7 @@ impl<'input> ReadCursor<'input> {
 
     /// Borrows the unconsumed suffix without advancing the cursor.
     pub fn remaining(&self) -> &'input [u8] {
+        debug_assert!(self.position <= self.input.len());
         match self.input.get(self.position..) {
             Some(remaining) => remaining,
             None => &[],

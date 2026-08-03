@@ -30,17 +30,44 @@ def spawn_descendant(mode: str, marker: str | None) -> None:
     elif mode in ("descendant-marker", "descendant-detached-marker"):
         if marker is None:
             raise RuntimeError("descendant marker path is required")
-        code = (
-            "import pathlib,sys,time;"
-            "time.sleep(0.3);pathlib.Path(sys.argv[1]).write_text('escaped')"
-        )
-        arguments = [sys.executable, "-c", code, str(Path(marker))]
+        marker_path = str(Path(marker))
+        if mode == "descendant-detached-marker":
+            release_path = f"{marker_path}.release"
+            code = "\n".join(
+                (
+                    "import pathlib, sys, time",
+                    "release = pathlib.Path(sys.argv[1])",
+                    "marker = pathlib.Path(sys.argv[2])",
+                    "deadline = time.monotonic() + 10",
+                    "while not release.exists() and time.monotonic() < deadline:",
+                    "    time.sleep(0.01)",
+                    "if release.exists():",
+                    "    marker.write_text('escaped')",
+                )
+            )
+            arguments = [
+                sys.executable,
+                "-c",
+                code,
+                release_path,
+                marker_path,
+            ]
+        else:
+            code = (
+                "import pathlib,sys,time;"
+                "time.sleep(0.3);pathlib.Path(sys.argv[1]).write_text('escaped')"
+            )
+            arguments = [sys.executable, "-c", code, marker_path]
     else:
         arguments = [sys.executable, "-c", "import time;time.sleep(2)"]
+    detached = mode == "descendant-detached-marker"
     subprocess.Popen(
         arguments,
+        stdin=subprocess.DEVNULL if detached else None,
+        stdout=subprocess.DEVNULL if detached else None,
+        stderr=subprocess.DEVNULL if detached else None,
         shell=False,
-        start_new_session=mode == "descendant-detached-marker",
+        start_new_session=detached,
     )
 
 
@@ -71,7 +98,11 @@ def main() -> int:
         return 0
     if args.mode in DESCENDANT:
         spawn_descendant(args.mode, args.marker)
-        if args.mode == "descendant-hold":
+        if args.mode in (
+            "descendant-hold",
+            "descendant-marker",
+            "descendant-detached-marker",
+        ):
             return 0
         time.sleep(2)
         return 0

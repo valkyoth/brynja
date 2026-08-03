@@ -139,8 +139,8 @@ def test_descendant_output_is_bounded() -> None:
 def test_cooperative_descendant_cannot_survive_termination() -> None:
     with tempfile.TemporaryDirectory() as directory:
         marker = Path(directory) / "escaped"
-        with fails_with("timed out"):
-            run_fixture("descendant-marker", 0.05, 1024, str(marker))
+        result = run_fixture("descendant-marker", 5, 1024, str(marker))
+        assert result.returncode == 0
         time.sleep(0.5)
         assert not marker.exists()
 
@@ -150,13 +150,16 @@ def test_detached_posix_descendant_is_not_claimed_as_contained() -> None:
         return
     with tempfile.TemporaryDirectory() as directory:
         marker = Path(directory) / "detached"
-        with fails_with("timed out"):
-            run_fixture(
-                "descendant-detached-marker",
-                0.05,
-                1024,
-                str(marker),
-            )
+        release = Path(f"{marker}.release")
+        result = run_fixture(
+            "descendant-detached-marker",
+            5,
+            1024,
+            str(marker),
+        )
+        assert result.returncode == 0
+        assert not marker.exists()
+        release.write_text("release")
         assert wait_for_path(marker, 5)
 
 

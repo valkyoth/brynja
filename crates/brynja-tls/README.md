@@ -53,7 +53,7 @@ brynja = "0.10"
 ```
 
 This dependency-only patch is selected for publication with v0.10.0. The
-repository-owner pentest and green hosted release checks remain required under
+repository-owner retest and green hosted release checks remain required under
 the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

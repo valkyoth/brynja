@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 implementation stop reached; repository-owner pentest required
+Status: v0.10.0 pentest remediation complete; repository-owner retest required
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -299,6 +299,17 @@ key logging:
   compile-fail clone/format constraints are tested; and
 - the post-v0.10 five-milestone public-checkpoint cadence and every intervening
   internal stop are mechanically classified by the release-plan validator.
+
+The repository-owner v0.10.0 assessment found one Medium failure-observability
+gap: target failure reached through either Drop implementation was discarded
+because Drop cannot return `DestructionOutcome`. `SecretDestructor` now
+requires a platform-specific `handle_drop_failure`; both Drop paths deliver the
+closed failure there after attempting every configured target. New tests cover
+failed partial-initialization and live-state drops, exact handler cause, kind,
+and target, single notification, and complete target attempts. The assessment's
+informational self-attestation observation remains the explicit v0.11 emitted-
+code/hardware-evidence blocker. Local remediation is green with zero open
+findings; repository-owner retest remains required.
 
 The repository-owner v0.9.0 assessment of signed candidate
 `fb3307a17a578daa7bd2e9f0adca4537b5e91ff8` confirmed that caller bytes remain

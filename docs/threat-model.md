@@ -88,8 +88,9 @@ false local-memory erasure assertions, or production reachability of the RFC
   initialization and proven complete-region destruction are implemented;
 - affine secret initialization with exact complete-write transition,
   single-consumption destruction completion, all-target cleanup attempts,
-  terminal failure on any incomplete duty, and no concrete byte backing until
-  the reviewed complete-region destruction primitive exists;
+  returned terminal failure on explicit transitions, mandatory durable or
+  fail-stop notification for a failure reached through `Drop`, and no concrete
+  byte backing until the reviewed complete-region destruction primitive exists;
 - RFC 9850 traffic-secret logging only in a separately compiled, unpublished
   test-support package that production packages and features cannot reach;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;

@@ -1,6 +1,6 @@
 # Brynja 0.10.0 Release Notes
 
-Status: implementation stop reached; repository-owner pentest required
+Status: pentest remediation complete; repository-owner retest required
 
 Brynja 0.10.0 implements an abstract secret-lifetime and destruction-duty
 contract plus isolated RFC 9850 test support. It does not implement a
@@ -31,6 +31,14 @@ configured duty in fixed order even if an earlier duty fails. Completion is
 single-consumption; any failed duty produces a terminal failure carrying only
 the first closed target identity.
 
+Explicit transitions return that failure. Because Rust `Drop` cannot return a
+value, every `SecretDestructor` must provide `handle_drop_failure`. Failed
+partial-initialization and live-state drops invoke it with the closed failure
+after attempting every configured target. The handler must synchronously make
+the failure durable or initiate the platform's fail-stop response; returning is
+a security assertion that silent continuation is impossible under the declared
+operating contract.
+
 An implementation returning `DestructionComplete` makes a security assertion
 that its complete target duty succeeded. Brynja 0.10.0 intentionally provides
 no concrete production local-memory destructor, so no test, safe fill, debug
@@ -54,6 +62,7 @@ optional, feature, target-specific, publishable, or resolved-graph smuggling.
 - partial initialization and live-state drop duties are observed explicitly;
 - replacement destroys the old state before admitting new initialization;
 - all destruction targets are attempted after individual target failures;
+- failed drops in both lifecycle phases notify the mandatory terminal handler;
 - compile-fail documentation rejects secret-state cloning and formatting;
 - every RFC 9850 label, every line ending, canonical output, empty secrets,
   closed diagnostics, and every short output capacity are tested; and
@@ -81,9 +90,19 @@ support patches at `0.1.6`, and mandatory `brynja 0.10.0` last.
 `brynja-crypto` remains unchanged at `0.1.0`; legacy and repository-only
 packages remain unpublished.
 
-Publication is blocked until the repository-owner pentest passes, the report
-is committed, GitHub is green, and the user explicitly authorizes the signed
-release tag.
+Publication is blocked until the repository-owner retest passes, the report is
+committed as PASS/PASS, GitHub is green, and the user explicitly authorizes the
+signed release tag.
+
+## Pentest Disposition
+
+The repository-owner assessment found one Medium defect: failures reached
+through partial-initialization or live-state `Drop` were discarded after the
+destruction duties ran. The mandatory `handle_drop_failure` contract and
+two-phase failing-Drop regression test described above remediate the issue.
+The assessment also retained the self-attested destructor-completion boundary
+as informational and load-bearing for v0.11.0. Local remediation is green with
+zero open findings; repository-owner retest remains pending.
 
 ## Verification Status
 

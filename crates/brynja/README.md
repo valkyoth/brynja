@@ -33,6 +33,9 @@ Version `0.10.0` adds an abstract, affine secret-lifetime contract. A secret
 state exists only after exact complete initialization; cancellation, errors,
 exhaustion, provider failure, replacement, obsolescence, and drop run explicit
 local-memory, external-store, accelerator, cache, and DMA destruction duties.
+Because `Drop` cannot return a failure, every destructor must also provide a
+mandatory platform-specific failure handler; a failed drop is delivered there
+after every configured duty has been attempted and cannot be silently ignored.
 No byte-backed production secret owner exists yet: v0.11.0 must first supply
 the reviewed complete-region destruction primitive. RFC 9850 key-log encoding
 exists only in the unpublished `brynja-test-support` package and is
@@ -42,9 +45,9 @@ must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.10.0` has reached its
-implementation stop and requires a repository-owner pentest; it does not
-implement TLS.
+Brynja is not ready for application use. Version `0.10.0` has completed local
+remediation of its repository-owner pentest finding and requires external
+retest; it does not implement TLS.
 After release, the dependency will be:
 
 ```toml

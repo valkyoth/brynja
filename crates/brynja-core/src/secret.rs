@@ -201,12 +201,14 @@ impl<'a, D: SecretDestructor> SecretInitialization<'a, D> {
 
 impl<D: SecretDestructor> Drop for SecretInitialization<'_, D> {
     fn drop(&mut self) {
-        if let Some(destructor) = self.destructor.take() {
-            let _ = run_destruction(
+        if let Some(destructor) = self.destructor.take()
+            && let DestructionOutcome::Failed(failure) = run_destruction(
                 destructor,
                 self.targets,
                 DestructionCause::InitializationFailure,
-            );
+            )
+        {
+            destructor.handle_drop_failure(failure);
         }
     }
 }
@@ -273,8 +275,11 @@ impl<'a, D: SecretDestructor> SecretState<'a, D> {
 
 impl<D: SecretDestructor> Drop for SecretState<'_, D> {
     fn drop(&mut self) {
-        if let Some(destructor) = self.destructor.take() {
-            let _ = run_destruction(destructor, self.targets, DestructionCause::Drop);
+        if let Some(destructor) = self.destructor.take()
+            && let DestructionOutcome::Failed(failure) =
+                run_destruction(destructor, self.targets, DestructionCause::Drop)
+        {
+            destructor.handle_drop_failure(failure);
         }
     }
 }

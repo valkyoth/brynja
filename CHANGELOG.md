@@ -32,8 +32,10 @@ Keep a Changelog and Semantic Versioning.
   diagnostics, and impossible to construct before complete initialization.
 - No local-memory erasure claim is made before the separately gated v0.11.0
   primitive and emitted-code evidence.
-- Repository-owner pentest is required before this candidate can be tagged or
-  published.
+- Destruction failure reached through `Drop` is delivered to a mandatory
+  platform-specific durable/fail-stop handler instead of being discarded.
+- Repository-owner retest of the locally remediated finding is required before
+  this candidate can be tagged or published.
 
 ## [0.9.0] - 2026-08-03
 

@@ -58,7 +58,11 @@ complete initialization can produce the non-clonable, non-formattable abstract
 `SecretState`. Every partial-init exit, live drop, explicit obsolescence, or
 replacement invokes configured local-memory, external-store, accelerator,
 cache, and DMA duties. Every configured duty is attempted; any failed duty
-produces a terminal failure. The state contains no secret bytes and exposes no
+produces a terminal failure. Explicit transitions return that failure. Because
+`Drop` cannot return it, `SecretDestructor::handle_drop_failure` must make it
+durable or initiate a platform fail-stop response before returning; returning
+is itself a security assertion that silent continuation is impossible under
+the operating contract. The state contains no secret bytes and exposes no
 read operation. A destructor completion token is a security assertion by its
 caller, not proof of erasure, and this crate intentionally supplies no
 production local-memory destructor before v0.11.0. This is not integer
@@ -84,8 +88,8 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.10"
 ```
 
-The `0.7.0` package is selected for publication with Brynja v0.10.0. The
-implementation stop is complete; repository-owner pentest and green hosted
+The `0.7.0` package is selected for publication with Brynja v0.10.0. Pentest
+remediation is complete locally; repository-owner retest and green hosted
 release checks remain required under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

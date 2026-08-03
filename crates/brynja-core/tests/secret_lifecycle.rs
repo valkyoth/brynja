@@ -1,10 +1,10 @@
 //! Secret-lifetime contract transition and destruction-duty tests.
 
 use brynja_core::{
-    DestructionCause, DestructionFailureKind, DestructionOutcome, DestructionTarget,
-    DestructionTargets, InitializationTransition, ProviderFailure, ProviderFailureKind,
-    ProviderOperation, ReplacementTransition, SecretContractError, SecretDestructor,
-    SecretInitialization, SecretLifecycleContract, TargetDestructionStatus,
+    DestructionCause, DestructionFailure, DestructionFailureKind, DestructionOutcome,
+    DestructionTarget, DestructionTargets, InitializationTransition, ProviderFailure,
+    ProviderFailureKind, ProviderOperation, ReplacementTransition, SecretContractError,
+    SecretDestructor, SecretInitialization, SecretLifecycleContract, TargetDestructionStatus,
 };
 
 #[derive(Default)]
@@ -16,6 +16,10 @@ struct Recorder {
     dma: usize,
     fail: Option<DestructionTarget>,
     last_cause: Option<DestructionCause>,
+    drop_failures: usize,
+    drop_failure_cause: Option<DestructionCause>,
+    drop_failure_kind: Option<DestructionFailureKind>,
+    drop_failure_target: Option<DestructionTarget>,
 }
 
 impl Recorder {
@@ -55,6 +59,13 @@ impl SecretDestructor for Recorder {
         } else {
             TargetDestructionStatus::Complete
         }
+    }
+
+    fn handle_drop_failure(&mut self, failure: DestructionFailure) {
+        Self::increment(&mut self.drop_failures);
+        self.drop_failure_cause = Some(failure.cause());
+        self.drop_failure_kind = Some(failure.kind());
+        self.drop_failure_target = failure.target();
     }
 }
 
@@ -303,6 +314,53 @@ fn target_failure_attempts_every_duty_and_is_terminal() {
         DestructionOutcome::Complete(_) => return assert!(core::hint::black_box(false)),
     }
     assert_eq!(recorder.total(), 5);
+}
+
+#[test]
+fn failing_drop_notifies_the_mandatory_terminal_handler() {
+    let mut partial = Recorder {
+        fail: Some(DestructionTarget::Cache),
+        ..Recorder::default()
+    };
+    {
+        let policy = contract(2, DestructionTargets::all());
+        let initialization = SecretInitialization::begin(policy, &mut partial);
+        drop(initialization);
+    }
+    assert_eq!(partial.total(), 5);
+    assert_eq!(partial.drop_failures, 1);
+    assert_eq!(
+        partial.drop_failure_cause,
+        Some(DestructionCause::InitializationFailure)
+    );
+    assert_eq!(
+        partial.drop_failure_kind,
+        Some(DestructionFailureKind::TargetFailed)
+    );
+    assert_eq!(partial.drop_failure_target, Some(DestructionTarget::Cache));
+
+    let mut readable = Recorder {
+        fail: Some(DestructionTarget::Dma),
+        ..Recorder::default()
+    };
+    {
+        let policy = contract(1, DestructionTargets::all());
+        let initialization = SecretInitialization::begin(policy, &mut readable);
+        match initialization.acknowledge_write(1) {
+            InitializationTransition::Readable(owner) => drop(owner),
+            InitializationTransition::Incomplete(_) | InitializationTransition::Failed(_) => {
+                return assert!(core::hint::black_box(false));
+            }
+        }
+    }
+    assert_eq!(readable.total(), 5);
+    assert_eq!(readable.drop_failures, 1);
+    assert_eq!(readable.drop_failure_cause, Some(DestructionCause::Drop));
+    assert_eq!(
+        readable.drop_failure_kind,
+        Some(DestructionFailureKind::TargetFailed)
+    );
+    assert_eq!(readable.drop_failure_target, Some(DestructionTarget::Dma));
 }
 
 #[test]

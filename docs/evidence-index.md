@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.9.0 pentest and retest passed; awaiting green GitHub checks
+Status: v0.10.0 implementation stop reached; repository-owner pentest required
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -24,6 +24,8 @@ consistent in the same commit.
 | `crates/brynja-core/src/read.rs`, `crates/brynja-core/tests/read_cursor.rs` | v0.7.0 protocol-neutral borrowed input consumption | Exact dynamic/typed/array reads, every-position and every-length matrices, truncation at every composite-read byte, every trailing suffix, end-offset overflow, zero-length boundaries, failure no-mutation, explicit debug-build position invariants, borrow identity, compact storage, no indexing, `no_std`, and compile-fail lifetime/clone/formatting tests |
 | `crates/brynja-core/src/write.rs`, `crates/brynja-core/tests/write_cursor.rs` | v0.8.0 protocol-neutral transactional caller-buffer output | Complete-range single-slice/repeated-byte and aggregate-part preflight, debug-asserted post-preflight range invariants with fail-closed release fallbacks, every-position and request matrix, whole-buffer sentinel preservation on failure, ordering, overflow, zero-length, empty-output, exact completion, exclusive borrow, output identity, compact storage, no indexing, `no_std`, and compile-fail alias/clone/formatting tests |
 | `crates/brynja-core/src/{arena_domain,workspace}.rs`, `crates/brynja-core/tests/workspace.rs` | v0.9.0 exact caller-owned workspace partition and monotonic arena allocation | Named single-assignment five-domain layout, exact checked aggregate and backing length, safe fixed-order slice splitting, sealed zero-sized compile-time domain identities, named simultaneous disjoint borrows, monotonic complete-range allocation, per-arena capacity/used/remaining/high-water/count telemetry, every-domain duplicate/omission rejection, exhaustive small-layout and every-position/request matrices, overflow/exhaustion/zero-length/sentinel/pointer-identity/isolation/representation/value-free-error tests, `no_std`, no indexing, and compile-fail alias/domain-swap/formatting tests |
+| `crates/brynja-core/src/{secret,secret_destruction}.rs`, `crates/brynja-core/tests/secret_lifecycle.rs` | v0.10.0 abstract secret lifetime and destruction-duty contract | Exact complete-initialization transition, every partial and early-exit boundary, replacement/obsolescence/drop, all-target cleanup attempts, single-consumption completion, terminal failure, secret-free errors, no concrete byte backing, `no_std`, no allocation, and compile-fail clone/format tests |
+| `crates/brynja-test-support/src/keylog.rs`, `crates/brynja-test-support/tests/keylog.rs`, `scripts/test-workspace-metadata.py` | v0.10.0 RFC 9850 repository-only key-log support | Exact ten-label and three-ending encoding, whole-line transactional preflight, every short output, closed diagnostics, permanent non-publication, and production dependency/feature/resolved-graph rejection fixtures |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/domain-scope.toml`, `requirements/domains/*.toml` | Reviewed v0.3.3 authority, invariant, work-bound, test-polarity, surface-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, and completeness validation |
 | `requirements/domain-sections.toml` | Reviewed per-requirement bindings for all 364 domain normative RFC sections | Exact source/requirement pairs, semantic revisions, extraction anchors, section hashes, and explicit disposition validation |
@@ -53,7 +55,8 @@ and v0.3.5 optional, legacy, operational, and residual closure are planning
 and governance evidence only. v0.5.0 implements the alert and failure value
 domains, v0.6.0 adds the source-free bounded numeric/resource foundations, and
 v0.7.0 adds only the source-free borrowed read cursor, v0.8.0 adds only the
-source-free transactional write cursor, and v0.9.0 adds only the exact
-caller-owned workspace and monotonic arena model recorded above. No other ledger,
-surface, or planned protocol requirement entry is an implementation,
+source-free transactional write cursor, v0.9.0 adds only the exact
+caller-owned workspace and monotonic arena model, and v0.10.0 adds only the
+abstract secret-lifetime contract and isolated test key logger recorded above.
+No other ledger, surface, or planned protocol requirement entry is an implementation,
 interoperability, independent-review, security, or FIPS validation claim.

@@ -4382,8 +4382,8 @@
         "actual-symbol:crates/brynja-test-support/src/keylog.rs"
       ],
       "tests": [
-        "planned:positive:crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex",
-        "planned:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted"
+        "actual:positive:crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex",
+        "actual:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-TLS-0001": {
@@ -4490,8 +4490,8 @@
         "actual-symbol:crates/brynja-core/src/secret.rs#SecretState"
       ],
       "tests": [
-        "planned:positive:crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact",
-        "planned:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted"
+        "actual:positive:crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact",
+        "actual:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-TLS-0018": {
@@ -11083,17 +11083,27 @@
       ]
     },
     "tests": {
+      "actual:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-TLS-0010"
+      ],
       "actual:negative:crates/brynja-core/tests/tls_failures.rs#reject_secret_and_ambiguous_errors": [
         "BRY-REQ-TLS-0005"
       ],
       "actual:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-KEYLOGREG-0010"
+        "BRY-REQ-KEYLOGREG-0010",
+        "BRY-REQ-TESTING-0010"
       ],
       "actual:negative:scripts/test-workspace-metadata.py#reject_invalid_and_exhausted": [
         "BRY-REQ-OPERATIONS-0010"
       ],
+      "actual:positive:crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact": [
+        "BRY-REQ-TLS-0010"
+      ],
       "actual:positive:crates/brynja-core/tests/tls_failures.rs#typed_outcomes": [
         "BRY-REQ-TLS-0005"
+      ],
+      "actual:positive:crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex": [
+        "BRY-REQ-TESTING-0010"
       ],
       "actual:positive:crates/brynja-test-support/tests/keylog.rs#every_pinned_label_encodes_one_exact_line": [
         "BRY-REQ-KEYLOGREG-0010"
@@ -11109,12 +11119,6 @@
       ],
       "actual:scripts/test-requirements.py#test_missing_residual_fails": [
         "BRY-REQ-STD-0002"
-      ],
-      "planned:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-TLS-0010"
-      ],
-      "planned:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-TESTING-0010"
       ],
       "planned:negative:tests/conformance/dtls.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0116"
@@ -11515,12 +11519,6 @@
       "planned:negative:tests/surface/status_request_v2.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
-      ],
-      "planned:positive:crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact": [
-        "BRY-REQ-TLS-0010"
-      ],
-      "planned:positive:crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex": [
-        "BRY-REQ-TESTING-0010"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"

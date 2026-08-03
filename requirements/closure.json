@@ -6063,7 +6063,7 @@
         "facility.sslkeylogfile.test-support"
       ],
       "id": "BRY-REQ-TESTING-0010",
-      "lifecycle": "implemented",
+      "lifecycle": "tested",
       "owner": "0.10.0",
       "source_ids": [
         "rfc:9850"
@@ -6109,7 +6109,7 @@
         "state.tls.secret-lifetime"
       ],
       "id": "BRY-REQ-TLS-0010",
-      "lifecycle": "implemented",
+      "lifecycle": "tested",
       "owner": "0.10.0",
       "source_ids": [
         "rfc:9846"

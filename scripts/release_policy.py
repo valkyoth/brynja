@@ -63,6 +63,10 @@ SEMVER = re.compile(
     r"^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)"
     r"(?:-rc\.(0|[1-9][0-9]*))?$"
 )
+VERSION_ROW = re.compile(
+    r"^\| `(0\.[0-9]+\.[0-9]+|1\.0\.0(?:-rc\.[0-9]+)?)` \|",
+    re.MULTILINE,
+)
 
 
 @dataclass(frozen=True)
@@ -106,6 +110,81 @@ def parse_version(raw: str) -> Version:
         int(patch),
         None if rc is None else int(rc),
     )
+
+
+def milestone_class(raw: str) -> str:
+    """Classify one roadmap milestone under the post-v0.10 cadence."""
+
+    version = parse_version(raw)
+    if version.major == 1:
+        return "public"
+    if version.major != 0:
+        raise RuntimeError(f"unsupported roadmap major version: {raw}")
+    if version.minor <= 10:
+        return "public"
+    if version.patch == 0 and version.minor % 5 == 0:
+        return "public"
+    return "internal"
+
+
+def roadmap_range(baseline: str, milestone: str) -> list[str]:
+    """Return the exact ordered roadmap delta after a public baseline."""
+
+    versions = VERSION_ROW.findall(
+        (ROOT / "docs" / "VERSION_PLAN.md").read_text(encoding="utf-8")
+    )
+    try:
+        start = versions.index(baseline) + 1
+        end = versions.index(milestone) + 1
+    except ValueError as error:
+        raise RuntimeError("release baseline and milestone must be roadmap rows") from error
+    if start > end:
+        raise RuntimeError("release milestone must follow its public baseline")
+    return versions[start:end]
+
+
+def validate_release_context(release: dict, crates: dict) -> tuple[str, str]:
+    """Validate public-checkpoint or empty internal-stop release context."""
+
+    version = release.get("version")
+    milestone = release.get("milestone")
+    baseline = release.get("baseline")
+    cumulative = release.get("cumulative_milestones")
+    stage = release.get("stage")
+    exceptional = release.get("exceptional")
+    reason = release.get("exception_reason")
+    if not all(isinstance(value, str) for value in (version, milestone, baseline, reason)):
+        raise RuntimeError("release context has incomplete version metadata")
+    parse_version(version)
+    parse_version(milestone)
+    parse_version(baseline)
+    expected = roadmap_range(baseline, milestone)
+    if cumulative != expected:
+        raise RuntimeError(
+            "cumulative_milestones must equal the exact roadmap delta: "
+            f"{expected}"
+        )
+    if not isinstance(exceptional, bool):
+        raise RuntimeError("release exceptional must be true or false")
+    scheduled = milestone_class(milestone) == "public"
+    selected = [name for name, entry in crates.items() if entry.get("publish")]
+    if stage == "internal":
+        if scheduled or exceptional:
+            raise RuntimeError("internal stage requires a non-checkpoint milestone")
+        if version != baseline:
+            raise RuntimeError("internal stage must retain the public facade version")
+        if selected:
+            raise RuntimeError("internal stage must have an empty publication selection")
+    elif stage == "public":
+        if not scheduled and not exceptional:
+            raise RuntimeError("early public checkpoint requires exceptional=true")
+        if exceptional and not reason.strip():
+            raise RuntimeError("exceptional public checkpoint requires a reason")
+        if version != milestone:
+            raise RuntimeError("public facade version must equal milestone and tag version")
+    else:
+        raise RuntimeError("release stage must be public or internal")
+    return version, stage
 
 
 def load_toml(path: Path) -> dict:
@@ -155,6 +234,24 @@ def validate_repository_entry(name: str, entry: dict) -> None:
         raise RuntimeError(f"{name} is repository-only and must remain unpublished")
     if change != "repository" or publish:
         raise RuntimeError(f"{name} must use change=repository and publish=false")
+
+
+def validate_internal_entry(name: str, entry: dict) -> None:
+    """Require an internal-stop entry to retain versions and publish nothing."""
+
+    previous, change, publish = validate_common(name, entry)
+    if publish:
+        raise RuntimeError("internal stage must have an empty publication selection")
+    if name in REPOSITORY_ONLY:
+        validate_repository_entry(name, entry)
+        return
+    if previous == "unpublished":
+        if change != "unpublished":
+            raise RuntimeError(f"{name} unadmitted internal entry must stay unpublished")
+    elif entry["version"] != previous:
+        raise RuntimeError(f"{name} internal stage must retain version {previous}")
+    if change in {"initial", "repository"}:
+        raise RuntimeError(f"{name} has invalid internal change kind {change}")
 
 
 def validate_facade_entry(entry: dict, release: str) -> None:
@@ -215,26 +312,20 @@ def release_plan(path: Path = DEFAULT_PLAN) -> dict:
     plan = load_toml(path)
     release = plan.get("release", {})
     crates = plan.get("crates", {})
-    version = release.get("version")
-    stage = release.get("stage")
     if release.get("policy") != "independent":
         raise RuntimeError("release policy must be independent")
-    if not isinstance(version, str):
-        raise RuntimeError("release-crates.toml is missing [release].version")
-    parse_version(version)
-    if stage != "public":
-        raise RuntimeError(
-            "every release tag is public and must publish the brynja facade"
-        )
     if set(crates) != set(PUBLISH_ORDER):
         raise RuntimeError(
             "release inventory differs from PUBLISH_ORDER: "
             f"missing={sorted(set(PUBLISH_ORDER) - set(crates))}, "
             f"extra={sorted(set(crates) - set(PUBLISH_ORDER))}"
         )
+    version, stage = validate_release_context(release, crates)
     for name, entry in crates.items():
-        if name == FACADE:
+        if stage == "public" and name == FACADE:
             validate_facade_entry(entry, version)
+        elif stage == "internal":
+            validate_internal_entry(name, entry)
         else:
             validate_support_entry(name, entry)
     return {"version": version, "stage": stage, "crates": crates}

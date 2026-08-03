@@ -61,7 +61,7 @@ def expanded_surface(entry: dict, roles: dict[str, str]) -> dict:
         ),
         "id": identifier,
         "invariants": invariants,
-        "lifecycle": "implemented"
+        "lifecycle": "tested"
         if entry["disposition"] == "implemented"
         else "planned",
         "mapping_rationale": (

@@ -20028,20 +20028,20 @@
       "deviation_rationale": null,
       "domain": "testing",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.10.0.",
+      "evidence_gap": "Executable boundary tests are linked and passing; independent review remains unresolved at this implementation stop.",
       "id": "BRY-REQ-TESTING-0010",
       "invariants": [
         "resource-bound",
         "validation",
         "work-bound"
       ],
-      "lifecycle": "implemented",
+      "lifecycle": "tested",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -20111,12 +20111,12 @@
       "tests": [
         {
           "polarity": "positive",
-          "status": "planned",
+          "status": "actual",
           "target": "crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex"
         },
         {
           "polarity": "negative",
-          "status": "planned",
+          "status": "actual",
           "target": "crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted"
         }
       ],
@@ -20439,13 +20439,13 @@
         "work-bound",
         "key-lifecycle"
       ],
-      "lifecycle": "implemented",
+      "lifecycle": "tested",
       "mapping_rationale": "This dedicated semantic surface binds the reviewed transport authority set to exactly one implementation milestone, protocol domain, planned symbol, and positive and negative verification pair.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.10.0",
       "profile": "tls-dtls-quic",
       "residual": "The abstract contract and executable verification are complete; byte-backed ownership, interoperability, and independent review remain outside this milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -20551,12 +20551,12 @@
       "tests": [
         {
           "polarity": "positive",
-          "status": "planned",
+          "status": "actual",
           "target": "crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact"
         },
         {
           "polarity": "negative",
-          "status": "planned",
+          "status": "actual",
           "target": "crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted"
         }
       ],
@@ -29546,9 +29546,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "022d06b7e8db5f260b57fa0115c437cdb7efd5951ad00ef5f7a7a0a1475b1671",
+  "residual_policy_sha256": "19e4089cddeb02a40a80b72c6962a86e4bfa1ec9e7c597a13e54f18cf7e097a4",
   "schema": 5,
   "source_ledger_sha256": "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70",
   "surface_register_sha256": "3e0944a587933ec77fe99a10d522836a58eb9c9025bb9e5780ebafc1e637af58",
-  "transport_policy_sha256": "15a102ca3534ae210881e417aae25ea2bb96feddc5dfabe94c9cbc8e0e727a71"
+  "transport_policy_sha256": "ea300968ad093ed66f0849d6a831a5181ad5aa4073cdcd48d9a5c01ecc09eabd"
 }

@@ -11,8 +11,6 @@ import requirements_mapping as mapping
 import requirements_sections as sections
 import requirements_validation as validation
 import standards_lib as standards
-
-
 POLICY = lib.DIRECTORY / "residual-policy.toml"
 SECTION_POLICY = lib.DIRECTORY / "residual-sections.toml"
 GROUP_FIELDS = {
@@ -32,16 +30,12 @@ DISPOSITION_LIFECYCLE = {
     "legacy-only": "legacy",
     "safely-ignored": "planned",
 }
-
-
 def read_policy() -> dict:
     try:
         with POLICY.open("rb") as handle:
             return tomllib.load(handle)
     except tomllib.TOMLDecodeError as error:
         lib.fail(f"{POLICY}: invalid residual policy: {error}")
-
-
 def source_map(ledger: dict) -> dict[str, dict]:
     result = {
         f"rfc:{entry['number']}": {**entry, "kind": "rfc"}
@@ -65,8 +59,6 @@ def source_map(ledger: dict) -> dict[str, dict]:
         }
     )
     return result
-
-
 def resolve_source(identifier: str, sources: dict[str, dict]) -> dict:
     entry = sources.get(identifier)
     if entry is None:

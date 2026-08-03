@@ -29,25 +29,27 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.9.0` adds one exact caller-owned workspace partition over named
-secret, plaintext, transcript, certificate, and output arenas. Safe slice
-splitting makes the domains structurally non-overlapping, sealed marker types
-prevent arena-handle swaps, and monotonic complete-range allocations track used
-bytes, remaining capacity, high-water, and successful non-empty allocation
-counts. It builds on the transactional
-read/write cursors and existing value domains. These foundations do **not**
-implement secret destruction, TLS framing, a protocol state machine, or
-cryptography and must not be used to secure network traffic.
+Version `0.10.0` adds an abstract, affine secret-lifetime contract. A secret
+state exists only after exact complete initialization; cancellation, errors,
+exhaustion, provider failure, replacement, obsolescence, and drop run explicit
+local-memory, external-store, accelerator, cache, and DMA destruction duties.
+No byte-backed production secret owner exists yet: v0.11.0 must first supply
+the reviewed complete-region destruction primitive. RFC 9850 key-log encoding
+exists only in the unpublished `brynja-test-support` package and is
+mechanically unreachable from production package graphs. These foundations do
+**not** implement TLS framing, a protocol state machine, or cryptography and
+must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.9.0` has passed its
-repository-owner pentest and retest; it does not implement TLS.
+Brynja is not ready for application use. Version `0.10.0` has reached its
+implementation stop and requires a repository-owner pentest; it does not
+implement TLS.
 After release, the dependency will be:
 
 ```toml
 [dependencies]
-brynja = "0.9"
+brynja = "0.10"
 ```
 
 Every official release tag publishes the `brynja` facade at the tag version.
@@ -77,10 +79,11 @@ publishes the facade last.
   protocol engine, legacy engine, or FIPS module.
 - Every production crate is `no_std` by default. Platform services enter
   through explicit caller-provided interfaces.
-- v0.9 arena domain names classify raw caller storage only. `SecretDomain` is
-  not a secret owner, `CertificateDomain` is not private-key storage, and no
-  arena may carry sensitive material until v0.10 typed complete initialization
-  and the v0.11 proven destruction primitive exist.
+- v0.9 arena domain names classify raw caller storage only. v0.10 adds an
+  abstract secret-state contract, but it deliberately cannot own bytes.
+  `SecretDomain` is not a secret owner, `CertificateDomain` is not private-key
+  storage, and no arena may carry sensitive material until the v0.11 proven
+  destruction primitive exists.
 - FIPS 140-3 support is planned through separate `brynja-fips-module` and
   `brynja-fips` packages, not a boolean Cargo feature. Only an exact issued,
   certificate-bound module and tested operational environment may carry a
@@ -137,9 +140,10 @@ certificate-bound operational-environment claim.
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
 Only the shared alert/failure, bounded numeric/resource, borrowed read,
-transactional caller-buffer write, and exact workspace/arena foundations
-described for `brynja-core` are implemented. No cryptographic primitive, PKI
-processor, protocol parser, or protocol engine in this table is implemented.
+transactional caller-buffer write, exact workspace/arena, and abstract secret
+lifetime foundations described for `brynja-core` are implemented. No
+cryptographic primitive, PKI processor, protocol parser, or protocol engine in
+this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
 formal proof, pentest, or release status.
 
@@ -147,8 +151,8 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes v0.9 foundation domains; no TLS engine |
-| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Alert, failure, numeric, budget, transactional cursor, and exact workspace/arena domains implemented |
+| `brynja` | Modern production facade | Exposes v0.10 foundation domains; no TLS engine |
+| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus abstract secret lifecycle/destruction duties implemented |
 | `brynja-crypto` | First-party hashes, MACs, AEADs, KDFs, RSA, and ECC | Foundation only |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
@@ -161,7 +165,8 @@ formal proof, pentest, or release status.
 | Future `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | Not admitted |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
-| Repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
+| `brynja-test-support` | RFC 9850 test-only key-log encoder and future fixtures | Implemented, unpublished, production-unreachable |
+| Other repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
 
 See the [legacy protocol plan](https://github.com/valkyoth/brynja/blob/main/docs/LEGACY_PROTOCOL_PLAN.md)
 for the independent warning, containment, audit, and pentest line required for
@@ -203,7 +208,7 @@ tooling is stale.
 
 Kani does not set the crate compiler baseline. Its compiler-sensitive proof
 path is separately pinned to `cargo-kani 0.67.0` with Rust `1.90.0`, following
-the documented `base64-ng` model. v0.9.0 admits no Kani proof harness, so the
+the documented `base64-ng` model. v0.10.0 admits no Kani proof harness, so the
 successful policy check is not formal-verification evidence.
 
 | Rust toolchain | Required evidence |
@@ -252,7 +257,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.9.0
+scripts/release_crates.py --version 0.10.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

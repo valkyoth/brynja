@@ -1,22 +1,23 @@
 # Current Status
 
-Status: v0.9.0 pentest and retest passed; awaiting green GitHub checks
+Status: v0.10.0 implementation stop reached; repository-owner pentest required
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
-caller-buffer write cursors and an exact caller-owned workspace partition. It
-still has no integer encoding, TLS framing or parser, TLS state machine,
-cryptography, PKI, QUIC-TLS, DTLS engine, platform provider, secret-destruction
-contract, or legacy protocol implementation and must not be used to secure
-network traffic. Brynja is not FIPS 140-3 validated, and no package, feature,
-build, profile, or configuration may imply otherwise.
+caller-buffer write cursors, an exact caller-owned workspace partition, and an
+abstract secret-lifetime/destruction-duty contract. It still has no byte-backed
+production secret owner, integer encoding, TLS framing or parser, TLS state
+machine, cryptography, PKI, QUIC-TLS, DTLS engine, platform provider, or legacy
+protocol implementation and must not be used to secure network traffic. Brynja
+is not FIPS 140-3 validated, and no package, feature, build, profile, or
+configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.8.0 established the workspace, hardened
+Signed releases v0.1.0 through v0.9.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
-the assurance harness and first value and cursor domains. The v0.9.0 candidate
-selects `brynja-core 0.6.0`, eight dependency-only modern support patches at
-`0.1.5`, and `brynja 0.9.0`.
+the assurance harness and first value, cursor, and workspace domains. The
+v0.10.0 candidate selects `brynja-core 0.7.0`, eight dependency-only modern
+support patches at `0.1.6`, and `brynja 0.10.0`.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -278,6 +279,27 @@ Version 0.9.0 adds exact caller-owned workspace partitioning:
   is a source-free storage foundation; release, reuse, zeroization, secret
   ownership and destruction, framing, and protocol state remain future work.
 
+Version 0.10.0 adds the abstract secret-lifetime contract and isolated test
+key logging:
+
+- private affine initialization can transition to an abstract secret state
+  only after exact complete write acknowledgments;
+- cancellation, exhaustion, provider failure, initialization failure,
+  replacement, obsolescence, and drop invoke configured local-memory,
+  external-store, accelerator, cache, and DMA destruction duties;
+- all configured duties are attempted, completion tokens are consumed once,
+  and any failed duty produces a terminal failure without secret values;
+- no secret bytes, reads, backing storage, or production local-memory
+  destructor exist, so the v0.11.0 zeroization primitive remains mandatory;
+- RFC 9850 key-log lines are encoded transactionally only in the permanently
+  unpublished `brynja-test-support` crate; production dependency and feature
+  graphs are mechanically prohibited from reaching it;
+- exact initialization boundaries, every early exit, replacement/drop,
+  every destruction target, line labels/endings, short buffers, isolation, and
+  compile-fail clone/format constraints are tested; and
+- the post-v0.10 five-milestone public-checkpoint cadence and every intervening
+  internal stop are mechanically classified by the release-plan validator.
+
 The repository-owner v0.9.0 assessment of signed candidate
 `fb3307a17a578daa7bd2e9f0adca4537b5e91ff8` confirmed that caller bytes remain
 after arena drop and are returned unchanged by allocation. The report correctly
@@ -291,7 +313,7 @@ a secret owner, prohibit private keys in `CertificateDomain`, prohibit
 sensitive consumption before v0.10 typed complete-initialization states and the
 v0.11 proven destruction primitive, and require early-return initialization
 tests for every future consumer. Both findings are closed for this source-free
-release with no code claiming erasure; external retest remains pending.
+release with no code claiming erasure; the repository-owner retest passed.
 
 Everything beyond those foundation domains remains governance and planning
 evidence, not protocol implementation.
@@ -389,5 +411,6 @@ fallbacks. The repository owner retested signed remediation candidate
 `79027316d1d023b0f55870d8371b22a2c536a7ae` and reported it green with no
 remaining finding. The permanent report records `PASS`/`PASS` with zero open
 findings, and the signed `v0.8.0` tag is complete. The v0.9.0 exact workspace
-and arena assessment dispositions are committed with zero open findings and
-now require repository-owner retest.
+and arena assessment passed retest with zero open findings; signed tag
+`v0.9.0` is complete. The v0.10.0 secret-lifetime implementation stop now
+requires repository-owner pentest.

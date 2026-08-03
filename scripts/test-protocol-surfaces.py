@@ -9,8 +9,6 @@ import json
 import sys
 import tempfile
 from pathlib import Path
-
-
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import standards_lib as standards  # noqa: E402
 import surface_lib as lib  # noqa: E402

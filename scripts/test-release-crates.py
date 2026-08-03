@@ -10,6 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import release_policy as policy  # noqa: E402
 import release_crates as publisher  # noqa: E402
+import release_train_tests as train_tests  # noqa: E402
 
 
 def entry(
@@ -35,7 +36,16 @@ def public_plan() -> dict:
     for name in policy.REPOSITORY_ONLY:
         crates[name] = entry("unpublished", "0.3.0", "repository", False)
     crates[policy.FACADE] = entry("0.3.0", "0.4.0", "code", True)
-    return {"version": "0.4.0", "stage": "public", "crates": crates}
+    return {
+        "version": "0.4.0",
+        "milestone": "0.4.0",
+        "baseline": "0.3.5",
+        "cumulative_milestones": ["0.4.0"],
+        "stage": "public",
+        "exceptional": False,
+        "exception_reason": "",
+        "crates": crates,
+    }
 
 
 def package(name: str, version: str, dependencies: tuple[str, ...] = ()) -> dict:
@@ -93,21 +103,26 @@ def test_facade_always_publishes_at_release_version() -> None:
     )
 
 
-def test_foundation_stage_is_rejected() -> None:
+def test_unknown_stage_is_rejected() -> None:
     plan = public_plan()
     plan["stage"] = "foundation"
     original_load = policy.load_toml
     policy.load_toml = lambda _path: {
         "release": {
             "version": plan["version"],
+            "milestone": plan["milestone"],
+            "baseline": plan["baseline"],
+            "cumulative_milestones": plan["cumulative_milestones"],
             "policy": "independent",
             "stage": plan["stage"],
+            "exceptional": plan["exceptional"],
+            "exception_reason": plan["exception_reason"],
         },
         "crates": plan["crates"],
     }
     try:
         assert_fails(
-            "every release tag is public",
+            "release stage must be public or internal",
             policy.release_plan,
             Path("ignored.toml"),
         )
@@ -381,7 +396,10 @@ def run_tests() -> None:
     tests = (
         test_current_repository_plan,
         test_facade_always_publishes_at_release_version,
-        test_foundation_stage_is_rejected,
+        test_unknown_stage_is_rejected,
+        train_tests.test_internal_stop_requires_empty_publication,
+        train_tests.test_checkpoint_requires_exact_cumulative_range,
+        train_tests.test_early_public_checkpoint_requires_exception_reason,
         test_facade_cannot_be_publish_false,
         test_facade_version_must_advance,
         test_initial_publication_is_explicit,

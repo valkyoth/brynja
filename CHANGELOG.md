@@ -5,6 +5,36 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.10.0] - Unreleased
+
+### Added
+
+- Abstract affine secret initialization and live-state contracts with exact
+  complete-write transition and no byte-backed production owner.
+- Explicit local-memory, external-store, accelerator, cache, and DMA
+  destruction duties for every early exit, replacement, obsolescence, and
+  drop.
+- Repository-only RFC 9850 key-log encoding with complete-line transactional
+  writes and mechanically enforced production-graph isolation.
+- Tested requirement and protocol-surface evidence for secret lifetime,
+  test-only key logging, and the production key-log prohibition.
+
+### Changed
+
+- Advance `brynja-core` to `0.7.0`, the eight changed exact-pinned modern
+  support packages to `0.1.6`, and the facade to `0.10.0`.
+- Mechanically classify post-v0.10 roadmap milestones as internal stops or
+  each-fifth-minor cumulative public checkpoints.
+
+### Security
+
+- Secret states remain non-clonable, non-formattable, secret-free in
+  diagnostics, and impossible to construct before complete initialization.
+- No local-memory erasure claim is made before the separately gated v0.11.0
+  primitive and emitted-code evidence.
+- Repository-owner pentest is required before this candidate can be tagged or
+  published.
+
 ## [0.9.0] - 2026-08-03
 
 ### Added

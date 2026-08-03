@@ -823,7 +823,7 @@ Exit criteria:
 
 ### v0.9.0 - Caller-Owned Workspace And Arena Model
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Define caller-owned workspaces and non-overlapping secret, plaintext, transcript, certificate, and output arenas with overlap rules, high-water tracking, and allocation counters.
 
@@ -898,7 +898,7 @@ Exit criteria:
 
 ### v0.10.0 - Secret Lifetime And Destruction Contract
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Define non-cloneable and non-serializable secret ownership, transition, error, cancellation, provider-failure and drop destruction, immediate obsolete-secret cleanup, external-store and accelerator duties, a mandatory production guarantee for the complete owned memory region, and RFC 9850 key logging only in a separately compiled test-support artifact that cannot enter production packages or features.
 

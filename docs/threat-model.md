@@ -52,6 +52,11 @@ reuse caller storage containing prior connection material, read a retained-byte
 allocation before complete initialization, treat `SecretDomain` as a secret
 owner or erasure guarantee, store private keys in the certificate arena, or
 infer destruction from an ordinary safe fill, debug canary, or drop.
+Secret-lifecycle attackers additionally attempt partial-initialization escape,
+duplicate completion, missed destruction on error or replacement, early
+termination after one failed destruction target, value-bearing diagnostics,
+false local-memory erasure assertions, or production reachability of the RFC
+9850 traffic-secret key logger.
 
 ## Required Controls
 
@@ -81,6 +86,12 @@ infer destruction from an ordinary safe fill, debug canary, or drop.
   complete-range allocation, retained-byte initialization duties, and an
   explicit prohibition on secret-bearing consumption until typed complete
   initialization and proven complete-region destruction are implemented;
+- affine secret initialization with exact complete-write transition,
+  single-consumption destruction completion, all-target cleanup attempts,
+  terminal failure on any incomplete duty, and no concrete byte backing until
+  the reviewed complete-region destruction primitive exists;
+- RFC 9850 traffic-secret logging only in a separately compiled, unpublished
+  test-support package that production packages and features cannot reach;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
@@ -121,15 +132,16 @@ infer destruction from an ordinary safe fill, debug canary, or drop.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.9.0
+## Non-Goals At 0.10.0
 
 No transport security or interoperability guarantee exists. The only protocol
 code consists of allocation-free shared alert/failure, bounded
 numeric/resource value domains, and protocol-neutral borrowed read and
-transactional caller-buffer write cursors, and an exact caller-owned workspace
-partition with monotonic arena accounting; there is no integer encoder or
-decoder, framing layer, protocol parser, record layer, arena release or reuse,
-secret ownership or destruction, handshake, provider implementation, PKI, or
+transactional caller-buffer write cursors, an exact caller-owned workspace
+partition with monotonic arena accounting, and an abstract secret-lifetime
+contract; there is no concrete secret-byte backing or proven local-memory
+erasure, integer encoder or decoder, framing layer, protocol parser, record
+layer, arena release or reuse, handshake, provider implementation, PKI, or
 cryptography.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
@@ -155,7 +167,10 @@ encoding, compound rollback across separate successful calls, arenas, overlap
 policy, secret destruction, framing, or protocol behavior. v0.9.0 safely
 partitions one exact caller buffer into five named disjoint domains and adds
 monotonic allocation telemetry without claiming release, reuse, zeroization,
-secret ownership, framing, or protocol behavior. Planned,
+secret ownership, framing, or protocol behavior. v0.10.0 adds only abstract
+complete-initialization and destruction-duty states plus repository-only RFC
+9850 test support; it makes no byte-erasure, protocol, interoperability,
+independent-review, or production claim. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

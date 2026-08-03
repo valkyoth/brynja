@@ -1187,9 +1187,9 @@ id = "BRY-REQ-TESTING-0010"
 domain = "testing"
 owner = "0.10.0"
 disposition = "implemented"
-verified = false
-lifecycle = "implemented"
-revision = 3
+verified = true
+lifecycle = "tested"
+revision = 4
 sources = ["rfc:9850"]
 surface_ids = [
   "facility.sslkeylogfile.test-support",

@@ -25,9 +25,17 @@
 
 # brynja-test-support
 
-`brynja-test-support` is a narrowly scoped Brynja workspace package. In `0.1.0` it
-establishes a compile-time boundary only; it does not provide a working TLS,
-cryptographic, PKI, platform, or legacy-protocol implementation.
+`brynja-test-support` is a narrowly scoped, permanently unpublished Brynja
+workspace package. In `0.1.0` it provides the RFC 9850 key-log line encoder
+used by repository tests. All ten pinned IANA labels and LF, CRLF, and CR line
+endings are explicit. Writes preflight the complete line and preserve the
+complete output buffer on every capacity or input rejection.
+
+No production package depends on this crate, and workspace policy rejects any
+normal, optional, feature, target, or resolved production-graph edge to it. It
+does not provide TLS, cryptography, PKI, a platform provider, or a legacy
+protocol implementation. Key-log output reveals traffic secrets by design and
+is therefore prohibited from every production package and feature.
 
 ## Cryptography Verification Status
 
@@ -41,13 +49,11 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.1"
+brynja = "0.10"
 ```
 
-This package is currently marked `publish = false`. Publication requires the
-version-specific deliverables, verification, documentation, a current
-committed PASS pentest report, and green GitHub checks in the
-[release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
+This package is marked `publish = false` permanently. It is repository-only
+test infrastructure and is not part of any crates.io publication set.
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,
 platform-portability, and modern/legacy isolation policies apply here.

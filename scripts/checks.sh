@@ -3,6 +3,7 @@ set -eu
 
 cargo fmt --all --check
 scripts/check_shell_syntax.sh
+scripts/test-shell-syntax.sh
 scripts/check_doc_links.sh
 python3 scripts/check-commit-classification.py
 python3 scripts/test-commit-classification.py

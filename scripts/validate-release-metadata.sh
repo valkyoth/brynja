@@ -71,6 +71,8 @@ test -f scripts/release_policy.py
 test -f scripts/release_change_policy.py
 test -x scripts/test-release-crates.py
 test -x scripts/test-release-readiness.sh
+test -x scripts/check_shell_syntax.sh
+test -x scripts/test-shell-syntax.sh
 test -x scripts/check-github-release-controls.py
 test -x scripts/test-github-release-controls.py
 test -x scripts/validate-current-pentest.sh
@@ -114,9 +116,17 @@ grep -q 'python3 scripts/check-commit-classification.py' scripts/checks.sh
 grep -q 'python3 scripts/test-commit-classification.py' scripts/checks.sh
 grep -q 'python3 scripts/check-verification-status.py' scripts/checks.sh
 grep -q 'python3 scripts/test-verification-status.py' scripts/checks.sh
+grep -q 'scripts/test-shell-syntax.sh' scripts/checks.sh
 python3 -c '
 from pathlib import Path
 workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")
+checkout = """      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+"""
+if checkout not in workflow:
+    raise SystemExit("repository gate requires complete history and release tags")
 step = """      - name: Validate protected release controls
         env:
           GH_TOKEN: ${{ github.token }}

@@ -6,7 +6,7 @@
   ],
   "harness_protocol": "brynja-stdin-json-v1",
   "inputs": {
-    ".github/workflows/ci.yml": "c73c5e6a5105628f4a83b36fa1b78c470a8f5dc7f14b916bbbfc3a0d21c9fbf7",
+    ".github/workflows/ci.yml": "9b94b08e64e302b46cdb2ab3e1dcd7840ab699d687ecb2e64b2db12c900c7686",
     "Cargo.toml": "c729f25bd77d70dd6694de5ea7fbbe33afc34082c908c22f9e5b5f55c7ac99fe",
     "assurance/policy.toml": "08542f002bc4a11fa5b7c5328009c8c7eb6ac5905bce31ef6917bc4d1e87ab08",
     "crates/brynja-core/Cargo.toml": "42c16a2d8c432fe0ff4264bb46ab1f6b06f768cdd2b0ca978b3c8551a286e704",

@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.7.0 awaiting pentest
+Status: v0.7.0 pentest and retest passed; awaiting GitHub
 
 The `brynja` facade advances to `0.7.0`. `brynja-core` advances to `0.4.0` for
 the borrowed read cursor; every published modern package whose exact internal

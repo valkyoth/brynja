@@ -61,8 +61,8 @@ brynja = "0.7"
 ```
 
 The `0.4.0` package is selected for publication with Brynja v0.7.0. The
-candidate requires its repository-owner pentest and green hosted checks under
-the
+repository-owner pentest and retest passed; publication still requires green
+hosted release checks under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

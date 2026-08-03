@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.7.0 awaiting pentest
+Status: v0.7.0 pentest and retest passed; awaiting GitHub
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

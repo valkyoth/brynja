@@ -616,7 +616,7 @@ Exit criteria:
 
 ### v0.7.0 - Borrowed Read Cursor
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement a borrowed read cursor with exact consumption, truncation-at-every-byte coverage, and no indexing panics.
 

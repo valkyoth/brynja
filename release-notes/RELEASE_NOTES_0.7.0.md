@@ -1,6 +1,6 @@
 # Brynja 0.7.0 Release Notes
 
-Status: implementation complete; awaiting pentest
+Status: pentest and retest passed; awaiting GitHub
 
 Brynja 0.7.0 implements a protocol-neutral borrowed read cursor. It does not
 implement TLS framing, integer decoding, a protocol parser, a state machine,
@@ -59,6 +59,22 @@ and OS-less targets, `no_std`, modern/legacy isolation, source and requirement
 reproducibility, assurance policy, package contents, SBOM, dependency policy,
 advisories, and live standards/tool drift.
 
+The repository-owner assessment of signed candidate
+`784bfce7ae3c68f6ad9fee0e69058bee3c2a678a` found no exploitable cursor
+defect. It recorded one Low defense-in-depth observation about the internal
+position invariant; both remaining-input accessors now assert that invariant
+in debug builds while preserving fail-safe release behavior. The assessment
+confirmed the fixed-array conversion failure branch as intentional defensive
+code and retained parser-level adversarial fuzzing as a release requirement
+for the first concrete framed parser.
+
+Hosted macOS CI exposed a timing race in the detached-descendant assurance
+fixture. An ordered release handshake now proves the descendant survives only
+after process-group cleanup instead of depending on a 50 ms Python startup
+window. The repository owner retested signed remediation candidate
+`13adb4b4d5d5eca97b40381fc41533ba5723e69b` and reported it green with no
+remaining finding.
+
 ## Requirements And Protocol Claims
 
 The read cursor is a source-free shared foundation. No protocol surface or
@@ -80,9 +96,9 @@ remains unchanged at `0.1.0`; legacy and repository-only packages remain
 unpublished. The guarded publisher enforces exact pins, dependency order, and
 the facade-last rule.
 
-Publication remains blocked until the repository-owner pentest is complete,
-the permanent report is committed as `PASS`/`PASS`, GitHub is green, and the
-user explicitly authorizes the signed release tag.
+Publication remains blocked until this permanent `PASS`/`PASS` report and the
+final release evidence are committed, GitHub is green, and the user explicitly
+authorizes the signed release tag.
 
 ## Limitations
 

@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.7.0 awaiting pentest
+Status: v0.7.0 pentest and retest passed; awaiting GitHub
 
 | Control | Foundation enforcement |
 | --- | --- |

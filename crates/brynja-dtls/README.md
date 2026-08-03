@@ -50,8 +50,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.7"
 ```
 
-This dependency-only patch is selected for publication with v0.7.0 after the
-required pentest, committed PASS report, and green GitHub checks required by the
+This dependency-only patch is selected for publication with v0.7.0. The
+pentest and retest passed; publication still requires green GitHub checks
+under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

@@ -27,6 +27,8 @@ Keep a Changelog and Semantic Versioning.
   requested lengths, available lengths, strings, or allocation.
 - No framing, integer decoding, protocol parsing, secret ownership,
   independent review, production, or FIPS-validation claim is advanced.
+- The repository-owner pentest and retest passed with the defense-in-depth
+  cursor observation closed and zero open findings.
 
 ### Fixed
 

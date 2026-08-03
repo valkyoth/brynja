@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.7.0 awaiting pentest
+Status: v0.7.0 pentest and retest passed; awaiting GitHub
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus a protocol-neutral borrowed read cursor. It still has no
@@ -302,5 +302,16 @@ domains. The repository owner retested signed candidate
 `89d4d7a930c89e2b6788554941389ca0d83cf999` and reported it green with no
 remaining finding. The permanent report records `PASS`/`PASS` and zero open
 findings. Signed tag `v0.6.0` and the intended ten-crate publication are
-complete. The v0.7.0 implementation candidate now awaits repository-owner
-pentesting.
+complete. The v0.7.0 assessment of signed implementation candidate
+`784bfce7ae3c68f6ad9fee0e69058bee3c2a678a` found no exploitable cursor
+defect and one Low defense-in-depth observation about an implicit internal
+position invariant. Debug-build assertions now make that invariant explicit.
+The assessment also retained the fail-closed fixed-array conversion branch and
+required parser-level adversarial fuzzing when the first concrete framed
+parser is implemented. Hosted macOS CI exposed and the remediation corrected
+a timing-racy detached-descendant assurance fixture. The repository owner
+retested signed remediation candidate
+`13adb4b4d5d5eca97b40381fc41533ba5723e69b` and reported it green with no
+remaining finding. The permanent report records `PASS`/`PASS` and zero open
+findings; release now awaits the final committed candidate and green GitHub
+checks.

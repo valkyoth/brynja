@@ -2,17 +2,24 @@
 
 Status: normative planning document
 
-Every Brynja milestone is independently reviewable, testable, pentestable, and
-safe to stop. [VERSION_PLAN.md](VERSION_PLAN.md) defines exact titles, scopes,
-and ordering; this document repeats them and automated checks reject drift.
+Every Brynja milestone is independently reviewable, testable, and safe to
+stop. Milestones through `v0.10.0` retain the original one-version release
+cadence. After the signed `v0.10.0` tag, small internal implementation stops
+are grouped into five-minor release trains so pentesting, tagging, and
+crates.io publication happen at meaningful integration boundaries instead of
+after every commit. [VERSION_PLAN.md](VERSION_PLAN.md) defines exact titles,
+scopes, and ordering; this document repeats them and automated checks reject
+drift.
 
 ## Release Principles
 
-Every release requires generated normative traceability, explicit resource,
-secret, storage, effect, dependency and failure boundaries, adversarial tests,
-documented limitations, no third-party crates in repository Cargo manifests,
-`no_std` evidence, SBOM comparison, clean CI and CodeQL Default, and an
-up-to-date committed pentest report.
+Every public release checkpoint requires generated normative traceability,
+explicit resource, secret, storage, effect, dependency and failure boundaries,
+adversarial tests, documented limitations, no third-party crates in repository
+Cargo manifests, `no_std` evidence, SBOM comparison, clean CI and CodeQL
+Default, and an up-to-date committed pentest report. Internal milestones retain
+all applicable implementation and verification requirements but do not create
+a release report, tag, or crates.io publication.
 
 Early negotiation policy is separate from final routing. Optional modules remain
 downstream of validated provider ports and pass a composition gate before public
@@ -33,12 +40,72 @@ Every section contains Status, Plan scope, Goal, Deliverables, Verification, and
 Exit criteria. Repository checks are additive and one stop never admits adjacent
 capability.
 
-## Simple Pentest, CI, And Tag Flow
+## Five-Minor Release Trains
 
-Each version uses one report at `security/pentest/vX.Y.Z[-rc.N].md`:
+Milestone classification is mechanical and fail-closed:
 
-1. Complete the version scope and local verification, then stop and ask the
-   user for pentest.
+- `v0.1.0` through `v0.10.0`, including their historical patch milestones,
+  retain the original per-milestone release process;
+- after `v0.10.0`, `v0.N.0` is a scheduled public release checkpoint when
+  `N` is divisible by five: `v0.15.0`, `v0.20.0`, and so on through
+  `v0.160.0`;
+- every other `v0` milestone after `v0.10.0`, including patch-numbered roadmap
+  rows such as `v0.11.1`, is an internal implementation stop; and
+- `v1.0.0-rc.1` and `v1.0.0` are always public release checkpoints.
+
+An internal implementation stop completes its exact scope, tests, evidence,
+documentation delta, and ordinary GitHub CI in a signed commit. It updates the
+cumulative unreleased record but creates no release pentest report, signed tag,
+GitHub Release, or crates.io publication. Its roadmap number is an ordering and
+scope identifier, not a promise that the `brynja` crate or any supporting crate
+will publish that version.
+
+A scheduled checkpoint covers the complete cumulative delta since the most
+recent public tag, including every internal and patch milestone in that train.
+For example, `v0.15.0` reviews `v0.11.0`, `v0.11.1`, `v0.11.2`, `v0.12.0`,
+`v0.13.0`, `v0.14.0`, and `v0.15.0` together. The public `brynja` crate may
+therefore jump directly from `0.10.0` to `0.15.0`; omitted roadmap identifiers
+were never published crate releases.
+
+Before `v0.11.0` begins, repository tooling must mechanically classify the
+current milestone, reject tags and non-empty publication selections for an
+internal stop, and require the complete public gate at a scheduled or
+exceptional release checkpoint.
+
+## Exceptional Pentest Trigger
+
+The five-minor cadence is a maximum planned interval, not permission to defer a
+material security concern. An exceptional pentest is mandatory when requested
+by the repository owner, when a material finding or incident remains open, when
+an early public release is proposed, or when the milestone security review
+documents that waiting for the scheduled checkpoint would make the cumulative
+scope unsafe or unreviewable. That decision must explicitly consider:
+
+- unsafe code, FFI, assembly, secret destruction, entropy, constant-time code,
+  cryptographic arithmetic or primitives;
+- attacker-controlled nested parsing, allocation or resource accounting,
+  certificate/path validation, record protection, protocol state, key
+  schedules, authentication, resumption, early data, or anti-replay;
+- FIPS module identity or claims, validated artifacts, legacy protocols, or a
+  new externally exposed package/API boundary;
+- unresolved assurance gaps and interactions spanning more than one of those
+  boundaries; and
+- any proposed prerelease, crates.io upload, public tag, or externally usable
+  validation claim before the next scheduled checkpoint.
+
+An exceptional pentest of an internal stop does not automatically authorize a
+tag or publication. Its findings and regressions remain in the cumulative
+train, and the next scheduled checkpoint still pentests the integrated delta.
+An emergency public patch or deliberately early public release must instead
+run the complete release flow below and becomes the new public baseline.
+
+## Simple Pentest, CI, Tag, And Publication Flow
+
+Each scheduled or exceptional public release uses one report at
+`security/pentest/vX.Y.Z[-rc.N].md`:
+
+1. Complete the cumulative checkpoint scope and local verification, then stop
+   and ask the user for pentest.
 2. Keep the report current while findings are fixed and retested. If no finding
    exists, record that explicitly.
 3. Commit the implementation and PASS report together. The report must state
@@ -47,6 +114,8 @@ Each version uses one report at `security/pentest/vX.Y.Z[-rc.N].md`:
 5. If GitHub exposes a problem, fix it, update the same report, commit both,
    push, and wait for green again.
 6. Create the tag only after the user explicitly confirms that GitHub is green.
+7. Publish only the release manifest's selected crates in dependency order,
+   with the `brynja` facade mandatory and last.
 
 The report does not contain a self-referential commit hash. The gate instead
 proves that the versioned report is committed at `HEAD`, matches the worktree,
@@ -61,14 +130,17 @@ additional fail-closed rules for repository-only packages.
 `release-crates.toml` records every package's previous version, planned
 version, change class, publication decision, and reason.
 
-- every official modern release tag publishes the `brynja` facade at exactly
-  the tag version, even when the release only advances its dependency pins or
-  release-facing metadata;
+- every scheduled or exceptional modern release tag publishes the `brynja`
+  facade at exactly the tag version, even when the release only advances its
+  dependency pins or release-facing metadata;
+- internal implementation stops publish no crate and cannot select a facade or
+  supporting package in `release-crates.toml`;
 - the initial public release publishes every modern package required by the
   facade, including optional normal dependencies, before the facade;
-- supporting crates publish only for an explicit initial release, code or API
-  work, an API-compatible bug fix, a required internal dependency-pin change,
-  or immutable crates.io metadata correction;
+- at a public checkpoint, supporting crates publish only when their cumulative
+  delta since the last public tag contains an explicit initial release, code or
+  API work, an API-compatible bug fix, a required internal dependency-pin
+  change, or immutable crates.io metadata correction;
 - unchanged supporting crates retain their previous independent versions and
   are not republished;
 - changed dependencies publish and become available first, and `brynja`
@@ -751,6 +823,9 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- make the post-`v0.10.0` internal/checkpoint classifier, empty internal
+  publication plan, exceptional trigger, cumulative pentest scope, and
+  facade/tag equality mechanically enforceable before `v0.11.0` begins;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -758,6 +833,10 @@ Verification:
 
 - run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
 - test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- reject an internal milestone that creates a release report, tag, GitHub
+  Release, crates.io selection, or facade publication, and reject a scheduled
+  checkpoint that omits any cumulative milestone, PASS report, selected-crate
+  delta, or facade-last publication rule;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -793,7 +872,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.11.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.11.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.11.1 - Sanitization Adapter Admission Review
 
@@ -836,19 +915,20 @@ Verification:
   error, cancellation, panic-unwind, optimization, and complete-capacity cases;
 - exercise negative dependency-direction, modern/legacy isolation, orphan
   wrapper, FIPS-boundary, version-drift, advisory, and unsupported-target
-  fixtures, then pass repository policy, SBOM, documentation, and pentest gates.
+  fixtures, then pass repository policy, SBOM, documentation, internal-stop,
+  and exceptional-trigger gates.
 
 Exit criteria:
 
 - a committed, evidence-backed admit-or-reject decision preserves every Brynja
   destruction and isolation invariant without adding a production dependency;
-- `v0.11.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.11.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.11.2 - Optional Brynja Sanitization Adapter
 
 Status: planned
 
-Plan scope: Conditional on the v0.11.1 admission decision, implement and independently publish a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.
+Plan scope: Conditional on the v0.11.1 admission decision, implement and prepare for separate publication at the next scheduled or exceptional release checkpoint a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.
 
 Goal: provide an explicitly selected first-party sanitization integration
 without making Brynja depend on it or creating a weaker legacy destruction
@@ -856,9 +936,10 @@ domain.
 
 Deliverables:
 
-- if admitted, add the separately versioned and separately published
-  `brynja-sanitization` package with adapter-owned secret wrappers and narrow
-  conversions over frozen `brynja-core` contracts;
+- if admitted, add the separately versioned `brynja-sanitization` package with
+  adapter-owned secret wrappers and narrow conversions over frozen
+  `brynja-core` contracts, but defer crates.io publication to the next
+  scheduled or exceptional release checkpoint;
 - exact-pin the admitted `sanitization` release with default features disabled,
   expose no feature that activates `zeroize` or another third-party crate, and
   require a new admission review before any version or feature change;
@@ -887,15 +968,16 @@ Verification:
 - inspect Cargo metadata, feature resolution, lockfile, SBOM, package contents,
   crates.io order, and negative fixtures for version drift, default-feature
   activation, `zeroize`, third-party crates, and FIPS-boundary contamination;
-- pass the full repository, documentation, advisory, isolation, release, and
-  pentest gates with the independent-crate publication policy enforced.
+- pass the full repository, documentation, advisory, isolation, internal-stop,
+  and exceptional-trigger gates; validate the future independent-crate
+  publication plan without uploading it.
 
 Exit criteria:
 
 - either the optional adapter is independently usable with identical modern and
   legacy guarantees and no core or FIPS dependency, or a documented
   fail-closed non-admission leaves the production graph unchanged;
-- `v0.11.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.11.2 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.12.0 - Constant-Time Foundation
 
@@ -924,7 +1006,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.12.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.12.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.13.0 - Provider Capabilities And Opaque Handles
 
@@ -953,7 +1035,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.13.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.13.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.14.0 - Entropy And Secure-Random Contracts
 
@@ -982,7 +1064,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.14.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.14.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.15.0 - Wall And Monotonic Clock Contracts
 
@@ -1011,7 +1093,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.15.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.15.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.16.0 - Pending Operations And Accelerator Lifecycle
 
@@ -1040,7 +1122,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.16.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.16.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.17.0 - FIPS-Aware Provider Architecture
 
@@ -1069,7 +1151,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.17.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.17.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.18.0 - Mandatory Security Outcome Authority Contract
 
@@ -1105,7 +1187,7 @@ Exit criteria:
 
 - every security decision and completion is authoritative, mandatory, and
   unambiguous without relying on an audit or informational path;
-- `v0.18.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.18.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.18.1 - Bounded Observational Security Event Schema
 
@@ -1141,7 +1223,7 @@ Exit criteria:
 
 - events are bounded audit duplicates whose absence or loss cannot change or
   obscure any security outcome;
-- `v0.18.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.18.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.19.0 - TLS And DTLS Record Framing
 
@@ -1170,7 +1252,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.19.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.19.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.20.0 - Bounded DER Reader
 
@@ -1199,7 +1281,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.20.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.20.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.21.0 - Canonical ASN.1 Primitives
 
@@ -1228,7 +1310,7 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- `v0.21.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.21.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 1: First-Party Cryptography, Identity Formats, And PKI
 
@@ -1267,7 +1349,7 @@ Exit criteria:
 - admitted and rejected algorithms have complete registry decisions, and every
   admitted algorithm has functional, caller-buffer, lifecycle, resource, and
   side-channel evidence before downstream use;
-- `v0.22.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.22.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.23.0 - SHA-384 And SHA-512
 
@@ -1296,7 +1378,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.23.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.23.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.24.0 - Keccak SHA-3 And SHAKE
 
@@ -1325,7 +1407,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.24.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.24.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - HMAC
 
@@ -1354,7 +1436,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.25.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.25.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.26.0 - HKDF And TLS Labels
 
@@ -1383,7 +1465,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.26.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.26.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.27.0 - Portable AES
 
@@ -1412,7 +1494,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.27.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.27.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.28.0 - GHASH
 
@@ -1441,7 +1523,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.28.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.28.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.29.0 - AES-GCM
 
@@ -1470,7 +1552,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.29.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.29.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.30.0 - ChaCha20
 
@@ -1499,7 +1581,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.30.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.30.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.31.0 - Poly1305 And ChaCha20-Poly1305
 
@@ -1528,7 +1610,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.31.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.31.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.32.0 - Fixed-Limb RSA Arithmetic
 
@@ -1557,7 +1639,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.32.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.32.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.33.0 - Prime-Field And ECC Arithmetic
 
@@ -1586,7 +1668,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.33.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.33.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.34.0 - X25519 Field And Ladder
 
@@ -1615,7 +1697,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.34.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.34.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.35.0 - X25519 ECDH Lifecycle
 
@@ -1644,7 +1726,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.35.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.35.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.36.0 - P-256 Group Operations
 
@@ -1673,7 +1755,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.36.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.36.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.37.0 - P-256 ECDH Lifecycle
 
@@ -1702,7 +1784,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.37.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.37.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.38.0 - P-256 ECDSA
 
@@ -1731,7 +1813,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.38.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.38.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.39.0 - P-384 Group Operations
 
@@ -1760,7 +1842,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.39.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.39.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.40.0 - P-384 ECDH Lifecycle
 
@@ -1789,7 +1871,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.40.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.40.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.41.0 - P-384 ECDSA
 
@@ -1818,7 +1900,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.41.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.41.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.42.0 - RSA-PSS Verification
 
@@ -1847,7 +1929,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.42.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.42.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.43.0 - RSA PKCS1 v1.5 Verification
 
@@ -1876,7 +1958,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.43.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.43.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.44.0 - RSA-PSS Private Operations
 
@@ -1905,7 +1987,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.44.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.44.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.45.0 - Ed25519
 
@@ -1934,7 +2016,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.45.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.45.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.46.0 - Version-One Algorithm Decisions
 
@@ -1963,7 +2045,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.46.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.46.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.47.0 - Cryptographic Substrate Audit Gate
 
@@ -1992,7 +2074,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.47.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.47.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.48.0 - PEM Base64 And Chain Containers
 
@@ -2021,7 +2103,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.48.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.48.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.49.0 - Private-Key Input Formats
 
@@ -2050,7 +2132,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.49.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.49.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.50.0 - X.509 Decoder
 
@@ -2079,7 +2161,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.50.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.50.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.51.0 - Service Identity And Extensions
 
@@ -2108,7 +2190,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.51.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.51.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.52.0 - Bounded Path Construction
 
@@ -2137,7 +2219,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.52.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.52.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.53.0 - Core Chain Validation
 
@@ -2166,7 +2248,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.53.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.53.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.54.0 - Name Constraints
 
@@ -2195,7 +2277,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.54.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.54.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.55.0 - Certificate Policy Processing
 
@@ -2224,7 +2306,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.55.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.55.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.56.0 - Trust Anchors Cross-Signing And Algorithms
 
@@ -2253,7 +2335,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.56.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.56.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.57.0 - CRL Validation
 
@@ -2282,7 +2364,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.57.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.57.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.57.1 - No-Revocation-Available Certificate Policy
 
@@ -2316,7 +2398,7 @@ Exit criteria:
 
 - revocation is skipped only under the exact RFC 9608 certificate profile and
   an explicit relying-party decision;
-- `v0.57.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.57.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.58.0 - OCSP Validation
 
@@ -2345,7 +2427,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.58.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.58.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.58.1 - TLS Feature Must-Staple Enforcement
 
@@ -2379,7 +2461,7 @@ Exit criteria:
 
 - every admitted TLS Feature declaration is either satisfied by applicable
   validated evidence or terminates authentication unambiguously;
-- `v0.58.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.58.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.58.2 - Lightweight OCSP Message Profile
 
@@ -2415,7 +2497,7 @@ Exit criteria:
 
 - the optional high-volume message profile cannot emit SHA-1 requests, process
   stale status, or bypass ordinary OCSP authentication;
-- `v0.58.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.58.2 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.58.3 - Lightweight OCSP Sans-I/O Transport And Cache Profile
 
@@ -2451,7 +2533,7 @@ Exit criteria:
 - the caller can implement RFC 9919 transport and caching through deterministic
   typed effects, while Brynja performs no network access and unsigned metadata
   never overrides signed revocation evidence;
-- `v0.58.3 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.58.3 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.59.0 - Versioned Certificate Transparency Contract
 
@@ -2480,7 +2562,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.59.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.59.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.60.0 - PKI Audit Gate
 
@@ -2509,7 +2591,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.60.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.60.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ## Phase 2: Shared Handshake, Internal Sans-I/O, And Modern TLS
 
@@ -2542,7 +2624,7 @@ Verification:
 Exit criteria:
 
 - stream TLS and QUIC share one handshake, DTLS retains independent state, and internal effects remain unstable until optional composition completes;
-- `v0.61.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.61.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.62.0 - Internal Sans-I/O Execution Contract
 
@@ -2571,7 +2653,7 @@ Verification:
 Exit criteria:
 
 - stream TLS and QUIC share one handshake, DTLS retains independent state, and internal effects remain unstable until optional composition completes;
-- `v0.62.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.62.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.63.0 - TLS 1.3 Record Protection
 
@@ -2600,7 +2682,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.63.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.63.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.64.0 - TLS 1.3 Handshake Codec
 
@@ -2635,7 +2717,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.64.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.64.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.65.0 - Transcript And Key Schedule
 
@@ -2664,7 +2746,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.65.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.65.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.66.0 - ClientHello Construction And Offers
 
@@ -2693,7 +2775,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.66.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.66.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.67.0 - HelloRetryRequest And Cookies
 
@@ -2722,7 +2804,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.67.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.67.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.68.0 - TLS Version Negotiation Codec And Policy
 
@@ -2751,7 +2833,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.68.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.68.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.69.0 - TLS 1.3 Authenticated Server Flight
 
@@ -2780,7 +2862,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.69.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.69.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.70.0 - Certificate Negotiation And Selection
 
@@ -2809,7 +2891,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.70.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.70.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.71.0 - Stapled Status And SCT Transport
 
@@ -2838,7 +2920,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.71.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.71.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.72.0 - Client Authentication And Finished
 
@@ -2867,7 +2949,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.72.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.72.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.73.0 - Alerts Closure And Cancellation
 
@@ -2896,7 +2978,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.73.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.73.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.74.0 - Stateful Tickets And Resumption PSKs
 
@@ -2925,7 +3007,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.74.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.74.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.75.0 - Stateless Ticket Protection
 
@@ -2954,7 +3036,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.75.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.75.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.76.0 - TLS 1.3-Profile External PSK Policy
 
@@ -2986,7 +3068,7 @@ Exit criteria:
 
 - external PSKs are confined to TLS 1.3-derived profiles, require DHE, and
   cannot silently fall back or enter hardened TLS 1.2 or DTLS 1.2;
-- `v0.76.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.76.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.76.1 - External PSK Importer And Domain Separation
 
@@ -3019,7 +3101,7 @@ Exit criteria:
 
 - provisioned PSK material cannot cross an admitted domain without explicit,
   importer-enforced separation;
-- `v0.76.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.76.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.76.2 - External PSK Provisioning And Role Security
 
@@ -3056,7 +3138,7 @@ Exit criteria:
 - every admitted external PSK has reviewable strength, provenance, role, peer,
   domain, lifetime, and destruction policy with no silent group or combined-
   certificate mode;
-- `v0.76.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.76.2 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.77.0 - Zero-RTT
 
@@ -3085,7 +3167,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.77.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.77.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.78.0 - TLS KeyUpdate
 
@@ -3114,7 +3196,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.78.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.78.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.79.0 - Exporters And TLS-Exporter Channel Binding
 
@@ -3143,7 +3225,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.79.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.79.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.80.0 - TLS 1.3 Suite Completion
 
@@ -3172,7 +3254,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.80.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.80.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.81.0 - TLS 1.3 Conformance And Interoperability
 
@@ -3201,7 +3283,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.81.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.81.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.82.0 - TLS 1.3 Audit Gate
 
@@ -3230,7 +3312,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.82.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.82.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.83.0 - TLS 1.2 Engine And Policy Boundary
 
@@ -3259,7 +3341,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.83.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.83.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.83.1 - Current TLS And DTLS 1.2 Deprecation Closure
 
@@ -3293,7 +3375,7 @@ Exit criteria:
 
 - obsolete 1.2 key exchange and signature mechanisms are unreachable across
   configuration, negotiation, authentication, resumption, and import;
-- `v0.83.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.83.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.83.2 - TLS 1.2 Feature-Freeze Enforcement
 
@@ -3328,7 +3410,7 @@ Exit criteria:
 
 - TLS 1.2 remains a closed hardened compatibility profile whose only post-freeze
   changes are authenticated RFC 9851 exceptions;
-- `v0.83.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.83.2 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.84.0 - TLS 1.2 PRF And Key Block
 
@@ -3357,7 +3439,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.84.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.84.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.85.0 - TLS 1.2 Record Nonces And Protection
 
@@ -3386,7 +3468,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.85.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.85.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.86.0 - TLS 1.2 Extended Main Secret Transcript Binding
 
@@ -3415,7 +3497,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.86.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.86.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.87.0 - TLS 1.2 Signaling And Renegotiation Semantics
 
@@ -3444,7 +3526,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.87.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.87.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.88.0 - TLS 1.2 ECDHE State Machines
 
@@ -3473,7 +3555,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.88.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.88.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.89.0 - TLS 1.2 Suite Completion
 
@@ -3502,7 +3584,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.89.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.89.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.90.0 - TLS 1.2 Resumption And Interoperability
 
@@ -3531,7 +3613,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.90.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.90.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.90.1 - TLS 1.2 RFC 6066 Extension Semantics
 
@@ -3576,7 +3658,7 @@ Exit criteria:
 - TLS 1.2 owns every applicable RFC 6066 obligation independently from TLS
   1.3, and wire-level safe ignore is mechanically separate from local
   configuration rejection;
-- `v0.90.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.90.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.91.0 - TLS 1.2 Audit Gate
 
@@ -3605,7 +3687,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.91.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.91.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.92.0 - Integrated Evergreen One-Pass TLS Router
 
@@ -3634,7 +3716,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.92.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.92.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.93.0 - Modern Multi-Version Routing Audit Gate
 
@@ -3663,7 +3745,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.93.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.93.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 3: QUIC TLS, DTLS, And Post-Quantum Work
 
@@ -3696,7 +3778,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.94.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.94.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.95.0 - QUIC-Specific TLS Profile
 
@@ -3725,7 +3807,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.95.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.95.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.96.0 - QUIC Key-Derivation Boundary
 
@@ -3754,7 +3836,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.96.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.96.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.97.0 - QUIC Transport Parameters
 
@@ -3783,7 +3865,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.97.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.97.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.98.0 - QUIC Sans-I/O Handshake
 
@@ -3812,7 +3894,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.98.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.98.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.99.0 - QUIC Resumption Lifecycle
 
@@ -3845,7 +3927,7 @@ Exit criteria:
 
 - QUIC resumption preserves explicit completion and confirmation, exact ticket
   binding, non-reuse, and transport-owned packet state;
-- `v0.99.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.99.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.99.1 - QUIC Zero-RTT Profile
 
@@ -3878,7 +3960,7 @@ Exit criteria:
 
 - QUIC zero-RTT is explicitly accepted or rejected with anti-replay and
   transport ownership preserved;
-- `v0.99.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.99.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.100.0 - Optional QUIC CRYPTO Reassembly Helper
 
@@ -3907,7 +3989,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.100.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.100.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.101.0 - QUIC Conformance And Audit
 
@@ -3936,7 +4018,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.101.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.101.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.102.0 - DTLS Path Identity Contract
 
@@ -3965,7 +4047,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.102.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.102.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.103.0 - DTLS Version Negotiation Codec And Policy
 
@@ -3994,7 +4076,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.103.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.103.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.104.0 - DTLS Unified Headers And Epochs
 
@@ -4023,7 +4105,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.104.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.104.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.105.0 - DTLS Record-Number Encryption
 
@@ -4052,7 +4134,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.105.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.105.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.106.0 - DTLS Replay And Epoch-Key Lifetimes
 
@@ -4081,7 +4163,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.106.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.106.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.107.0 - DTLS 1.2 Connection IDs
 
@@ -4110,7 +4192,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.107.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.107.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.108.0 - DTLS 1.3 Connection-ID Updates
 
@@ -4139,7 +4221,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.108.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.108.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.109.0 - DTLS Fragmentation And Reassembly
 
@@ -4168,7 +4250,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.109.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.109.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.110.0 - DTLS Flights ACKs And Timers
 
@@ -4197,7 +4279,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.110.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.110.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.111.0 - DTLS Address Validation And Amplification Defense
 
@@ -4226,7 +4308,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.111.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.111.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.111.1 - DTLS Return Routability Check
 
@@ -4262,7 +4344,7 @@ Exit criteria:
 
 - every CID path change is either validated by the selected RFC 9853 procedure
   or remains bound to the prior path without application-data leakage;
-- `v0.111.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.111.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.112.0 - DTLS 1.3 State Machines
 
@@ -4291,7 +4373,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.112.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.112.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.113.0 - DTLS 1.3 Early-Data Exclusion
 
@@ -4320,7 +4402,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.113.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.113.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.114.0 - Hardened DTLS 1.2
 
@@ -4349,7 +4431,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.114.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.114.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.115.0 - Integrated One-Pass DTLS Router
 
@@ -4378,7 +4460,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.115.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.115.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.116.0 - DTLS Conformance And Audit
 
@@ -4407,7 +4489,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.116.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.116.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.117.0 - ML-KEM Arithmetic And Encoding
 
@@ -4436,7 +4518,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.117.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.117.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.118.0 - ML-KEM Key Generation And Encapsulation
 
@@ -4465,7 +4547,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.118.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.118.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.119.0 - ML-KEM Decapsulation And Implicit Rejection
 
@@ -4494,7 +4576,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.119.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.119.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.120.0 - Standard Hybrid Groups
 
@@ -4523,7 +4605,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.120.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.120.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.121.0 - Hybrid Protocol Integration
 
@@ -4552,7 +4634,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.121.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.121.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.122.0 - PQ Standards And Audit Gate
 
@@ -4581,7 +4663,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.122.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.122.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 4: FIPS Module Instantiation, Validation, And TLS Profile
 
@@ -4619,7 +4701,7 @@ Exit criteria:
 
 - the Level 1 target and every applicable requirement have dated, owned,
   testable evidence obligations without a validation claim;
-- `v0.123.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.123.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.123.1 - FIPS Module Architecture Freeze
 
@@ -4652,7 +4734,7 @@ Exit criteria:
 
 - a separately publishable Level 1 module architecture is frozen without a
   premature artifact or validation claim;
-- `v0.123.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.123.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.124.0 - SP 800-90B Entropy Source And Health Tests
 
@@ -4685,7 +4767,7 @@ Exit criteria:
 
 - every admitted entropy source has bounded behavior and complete SP 800-90B
   evidence tied to its operational environment;
-- `v0.124.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.124.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.124.1 - SP 800-90A DRBG Implementation
 
@@ -4718,7 +4800,7 @@ Exit criteria:
 
 - the final DRBG implementation is bounded, testable, zeroizing, and ready for
   an exact SP 800-90C construction;
-- `v0.124.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.124.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.124.2 - SP 800-90C RBG Construction
 
@@ -4751,7 +4833,7 @@ Exit criteria:
 
 - one exact RBG construction connects validated entropy assumptions to the
   module random service without ambiguous substitutions;
-- `v0.124.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.124.2 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.125.0 - Approved Provider And Mandatory Service Indicator
 
@@ -4789,7 +4871,7 @@ Exit criteria:
 
 - every service result carries mandatory approval status independently of audit
   delivery, while architectural boundaries and catastrophic-latch semantics are preserved;
-- `v0.125.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.125.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.126.0 - SSP Lifecycle And Zeroization Services
 
@@ -4826,7 +4908,7 @@ Exit criteria:
 
 - every SSP has a reviewed, testable lifetime and destruction path, and callers
   receive a mandatory secret-free completion result independently of auditing;
-- `v0.126.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.126.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.127.0 - Module Integrity And Pre-Operational Self-Tests
 
@@ -4859,7 +4941,7 @@ Exit criteria:
 
 - complete-image integrity and pre-operational tests block every service until
   success and fail deterministically under every injected fault;
-- `v0.127.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.127.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.127.1 - Conditional Self-Tests And Permanent Failure State
 
@@ -4892,7 +4974,7 @@ Exit criteria:
 
 - conditional testing and the permanent module error state are complete,
   irreversible where required, and never misused for connection policy;
-- `v0.127.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.127.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.128.0 - FIPS Observational Security Event Integration
 
@@ -4936,7 +5018,7 @@ Exit criteria:
 
 - module events are non-authoritative audit duplicates that may be absent without
   obscuring any mandatory service, state, latch, zeroization, or destruction outcome;
-- `v0.128.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.128.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.129.0 - Exact FIPS Module Artifact Freeze
 
@@ -4970,7 +5052,7 @@ Verification:
 Exit criteria:
 
 - one final artifact identity is reproducible and every later validation datum is mechanically bound to it;
-- `v0.129.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.129.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.130.0 - ACVTS And CAVP Evidence
 
@@ -5007,7 +5089,7 @@ Exit criteria:
 
 - every claimed approved implementation and dispatch path has traceable
   production validation evidence bound to the exact frozen module artifact;
-- `v0.130.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.130.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.130.1 - ESV Entropy And RBG Validation Evidence
 
@@ -5040,7 +5122,7 @@ Exit criteria:
 
 - every entropy and RBG claim has production validation evidence tied to the
   exact module and operational environment;
-- `v0.130.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.130.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.131.0 - CMVP Security Policy And Public Documentation
 
@@ -5073,7 +5155,7 @@ Exit criteria:
 
 - the complete public security policy is certificate-ready, exact-artifact
   bound, internally consistent, and free of unsupported claims;
-- `v0.131.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.131.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.131.1 - CMVP Test Evidence And Lab Submission Package
 
@@ -5106,7 +5188,7 @@ Exit criteria:
 
 - the accredited lab receives one complete, reproducible, internally consistent
   evidence package for the exact module artifact;
-- `v0.131.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.131.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.132.0 - Accredited FIPS Lab Evaluation And Findings
 
@@ -5139,7 +5221,7 @@ Exit criteria:
 
 - evaluation is complete for the submitted identity, every finding is recorded,
   and no validation claim has been made;
-- `v0.132.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.132.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.132.1 - FIPS Evaluation Remediation And Clean Retest
 
@@ -5172,7 +5254,7 @@ Exit criteria:
 
 - the final submitted identity has a clean accredited-lab retest and complete
   remediation evidence with no unresolved finding;
-- `v0.132.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.132.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.132.2 - FIPS Certificate Issuance Caveat And Claim Gate
 
@@ -5205,7 +5287,7 @@ Exit criteria:
 
 - only the exact issued module can carry the exact permitted certificate-bound
   claim, and all other builds fail closed to a non-validated status;
-- `v0.132.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.132.2 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.133.0 - Boundary And Package Audit
 
@@ -5243,7 +5325,7 @@ Exit criteria:
 - every shipped package has an exact reviewed closure, and no optional,
   legacy, experimental, or ordinary path can contaminate or impersonate
   the validated module;
-- `v0.133.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.133.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.134.0 - Approved-Only TLS Operating Profile
 
@@ -5280,7 +5362,7 @@ Exit criteria:
 
 - the TLS profile admits only certificate-bound approved services and reports
   every service outcome without confusing connection and module failure;
-- `v0.134.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.134.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.134.1 - Validated Module Manifest And Operational-Environment Selection
 
@@ -5313,21 +5395,23 @@ Exit criteria:
 
 - module selection succeeds only for one exact validated artifact in an
   explicitly listed operational environment;
-- `v0.134.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.134.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.134.2 - Ergonomic Brynja FIPS Facade And Misconfiguration Gate
 
 Status: planned
 
-Plan scope: Publish a separate no_std brynja-fips facade with obvious client and server constructors that require a validated-module handle and select the approved-only TLS profile, exact provider, DRBG, algorithms, strengths, certificate policy, resumption, PSK, and early-data rules from the manifest; expose only permitted choices, provide authoritative readiness and per-service results, prohibit a boolean Cargo fips feature, generic-provider injection, silent fallback, and any FIPS claim from ordinary brynja configuration, and compile-fail every mixed or incomplete configuration.
+Plan scope: Implement and prepare for separate publication at the next scheduled or exceptional release checkpoint a no_std brynja-fips facade with obvious client and server constructors that require a validated-module handle and select the approved-only TLS profile, exact provider, DRBG, algorithms, strengths, certificate policy, resumption, PSK, and early-data rules from the manifest; expose only permitted choices, provide authoritative readiness and per-service results, prohibit a boolean Cargo fips feature, generic-provider injection, silent fallback, and any FIPS claim from ordinary brynja configuration, and compile-fail every mixed or incomplete configuration.
 
 Goal: complete the **Ergonomic Brynja FIPS Facade And Misconfiguration Gate** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
-- publish the separate brynja-fips facade and minimal typed client and server
-  builders that require a validated module and approved identity and trust inputs;
+- implement the separate brynja-fips facade and minimal typed client and server
+  builders that require a validated module and approved identity and trust
+  inputs, while deferring crates.io publication to the next scheduled or
+  exceptional release checkpoint;
 - derive closed algorithm and policy choices from the certificate-bound
   manifest while keeping ordinary brynja and optional modules outside the claim;
 - update requirements, threat model, controls, status, limitations, release
@@ -5347,7 +5431,7 @@ Exit criteria:
 
 - users select FIPS through one obvious separate facade that is easy to use
   correctly and impossible to use for an unsupported validation claim;
-- `v0.134.2 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.134.2 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.134.3 - FIPS Deployment Claim Update And Revalidation Lifecycle
 
@@ -5380,7 +5464,7 @@ Exit criteria:
 
 - operators can keep the exact validation claim true over deployment and
   lifecycle changes, or automatically lose the claim safely when it is not;
-- `v0.134.3 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.134.3 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 5: Optional Modules, Composition, Stable Integration, Assurance, And General Availability
 
@@ -5413,7 +5497,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.135.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.135.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.135.1 - Identity Trust And Transparency Rotation
 
@@ -5446,7 +5530,7 @@ Exit criteria:
 
 - identity and trust state rotates atomically with explicit in-flight,
   rollback, and compromise behavior;
-- `v0.135.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.135.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.136.0 - Record Size Limit
 
@@ -5475,7 +5559,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.136.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.136.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.137.0 - Raw Public Keys
 
@@ -5504,7 +5588,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.137.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.137.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.138.0 - HPKE KEM And Context Foundation
 
@@ -5533,7 +5617,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.138.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.138.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.139.0 - HPKE Base Mode
 
@@ -5562,7 +5646,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.139.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.139.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.139.1 - HPKE Secret Export And Context Lifecycle
 
@@ -5598,7 +5682,7 @@ Exit criteria:
 
 - the complete admitted HPKE base-mode context interface includes bounded
   export and deterministic destruction, and no unsupported mode is reachable;
-- `v0.139.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.139.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.140.0 - ECH Origin And Downgrade Policy
 
@@ -5627,7 +5711,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.140.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.140.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.140.1 - ECH Configuration Bootstrap And Cache Lifecycle
 
@@ -5660,7 +5744,7 @@ Exit criteria:
 
 - ECH configuration state is bounded, origin-bound, freshness-aware, and
   deterministically selected without protocol-owned network access;
-- `v0.140.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.140.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.141.0 - ECH Client Construction
 
@@ -5689,7 +5773,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.141.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.141.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.142.0 - ECH Server Opening And Acceptance
 
@@ -5718,7 +5802,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.142.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.142.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.143.0 - ECH HRR Retry And Rotation
 
@@ -5747,7 +5831,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.143.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.143.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.144.0 - Delegated Credentials
 
@@ -5776,7 +5860,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.144.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.144.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.145.0 - Certificate Compression Receive Provider
 
@@ -5805,7 +5889,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.145.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.145.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.146.0 - Precompressed Certificate Artifact Validation
 
@@ -5834,7 +5918,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.146.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.146.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.146.1 - Certificate Compression Send Negotiation And Transcript Integration
 
@@ -5867,7 +5951,7 @@ Exit criteria:
 
 - send compression uses only current validated artifacts with exact transcript,
   direction, identity, and policy binding;
-- `v0.146.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.146.1 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.147.0 - Validated FIPS Closure Preservation Gate
 
@@ -5896,7 +5980,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.147.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.147.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.148.0 - Generated Optional-Feature Composition Gate
 
@@ -5934,7 +6018,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.148.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.148.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.149.0 - Facade Configuration Typestates
 
@@ -5963,7 +6047,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.149.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.149.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.150.0 - Versioned Stable Sans-I/O V1 API
 
@@ -6000,7 +6084,7 @@ Exit criteria:
 - every V1 security outcome is authoritative in exhaustive mandatory state or
   results, every unhandled mandatory action fails closed, and only bounded
   observational SecurityEvent audit values are non-exhaustive;
-- `v0.150.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.150.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.151.0 - Caller-Provided Host Capability Integration
 
@@ -6029,7 +6113,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.151.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.151.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.152.0 - Zero-Allocation And Resource Proof
 
@@ -6058,7 +6142,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.152.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.152.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.153.0 - Aesynx ABI And Emulator Qualification
 
@@ -6087,7 +6171,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.153.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.153.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.154.0 - Protocol State And Resource Formal Harnesses
 
@@ -6119,7 +6203,7 @@ Verification:
 Exit criteria:
 
 - protocol, resource, zeroization, X.509-budget, and pending-token proof claims name exact harnesses, bounds, assumptions, and implementations;
-- `v0.154.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.154.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.155.0 - Cryptographic Formal Coverage And Residual-Gap Gate
 
@@ -6168,7 +6252,7 @@ Exit criteria:
   assumptions, widths, production evidence, and residual gaps, with no
   reduced-to-production-width equivalence claim, and the machine-readable
   register completely represents the reviewed claim set;
-- `v0.155.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.155.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.156.0 - External-Process Fuzz And Differential Campaign
 
@@ -6197,7 +6281,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.156.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.156.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.157.0 - Memory And Side-Channel Evidence
 
@@ -6226,7 +6310,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.157.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.157.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.158.0 - Sustained Platform And Hostile-Load Qualification
 
@@ -6255,7 +6339,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.158.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.158.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.159.0 - Consolidated External Audits
 
@@ -6284,7 +6368,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.159.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.159.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.160.0 - Audit Remediation And Clean Retest
 
@@ -6313,7 +6397,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.160.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.160.0 scheduled release checkpoint reached. Run the cumulative pentest, commit the PASS report, obtain green GitHub, then create the signed tag and publish the selected crates.`
 
 ### v0.161.0 - Public API Requirements And Documentation Freeze
 
@@ -6342,7 +6426,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.161.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.161.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.162.0 - Clean-Room Release Rehearsal
 
@@ -6371,7 +6455,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.162.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
+- `v0.162.0 internal implementation stop reached. Commit the verified scope without a release pentest, tag, or crates.io publication unless an exceptional trigger applies.`
 
 ### v1.0.0-rc.1 - Exact Production Candidate
 

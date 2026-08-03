@@ -448,7 +448,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Conditional on the v0.11.1 admission decision, implement and independently publish a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.",
+      "scope": "Conditional on the v0.11.1 admission decision, implement and prepare for separate publication at the next scheduled or exceptional release checkpoint a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.",
       "source_ids": [],
       "title": "Optional Brynja Sanitization Adapter",
       "version": "0.11.2"
@@ -3265,7 +3265,7 @@
         "rationale": "These validation milestones require a dated, rights-reviewed FIPS 140-3, ISO, CMVP, laboratory, certificate, and operational-environment baseline that must be frozen at the dependent implementation stop."
       },
       "requirement_ids": [],
-      "scope": "Publish a separate no_std brynja-fips facade with obvious client and server constructors that require a validated-module handle and select the approved-only TLS profile, exact provider, DRBG, algorithms, strengths, certificate policy, resumption, PSK, and early-data rules from the manifest; expose only permitted choices, provide authoritative readiness and per-service results, prohibit a boolean Cargo fips feature, generic-provider injection, silent fallback, and any FIPS claim from ordinary brynja configuration, and compile-fail every mixed or incomplete configuration.",
+      "scope": "Implement and prepare for separate publication at the next scheduled or exceptional release checkpoint a no_std brynja-fips facade with obvious client and server constructors that require a validated-module handle and select the approved-only TLS profile, exact provider, DRBG, algorithms, strengths, certificate policy, resumption, PSK, and early-data rules from the manifest; expose only permitted choices, provide authoritative readiness and per-service results, prohibit a boolean Cargo fips feature, generic-provider injection, silent fallback, and any FIPS claim from ordinary brynja configuration, and compile-fail every mixed or incomplete configuration.",
       "source_ids": [],
       "title": "Ergonomic Brynja FIPS Facade And Misconfiguration Gate",
       "version": "0.134.2"

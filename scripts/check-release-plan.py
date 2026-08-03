@@ -22,6 +22,21 @@ FIELDS = (
     "Exit criteria:",
 )
 
+INTERNAL_EXIT = (
+    "`{version} internal implementation stop reached. Commit the verified "
+    "scope without a release pentest, tag, or crates.io publication unless "
+    "an exceptional trigger applies.`"
+)
+CHECKPOINT_EXIT = (
+    "`{version} scheduled release checkpoint reached. Run the cumulative "
+    "pentest, commit the PASS report, obtain green GitHub, then create the "
+    "signed tag and publish the selected crates.`"
+)
+HISTORICAL_EXIT = (
+    "`{version} implementation stop reached. Run pentest for this release "
+    "candidate and commit the updated report.`"
+)
+
 
 def expected_versions() -> list[str]:
     patch_releases = {
@@ -55,6 +70,29 @@ def expected_versions() -> list[str]:
         )
     versions.extend(["v1.0.0-rc.1", "v1.0.0"])
     return versions
+
+
+def is_scheduled_checkpoint(version: str) -> bool:
+    """Classify public checkpoints after the historical v0.10.0 boundary."""
+    if version.startswith("v1."):
+        return True
+    major, minor, patch = version.removeprefix("v").split(".")
+    if major != "0":
+        raise ValueError(f"unsupported release-plan version: {version}")
+    minor_number = int(minor)
+    patch_number = int(patch)
+    if minor_number <= 10:
+        return True
+    return patch_number == 0 and minor_number % 5 == 0
+
+
+def expected_exit(version: str) -> str:
+    if version.startswith("v1.") or version.removeprefix("v").split(".")[1] in {
+        str(number) for number in range(1, 11)
+    }:
+        return HISTORICAL_EXIT.format(version=version)
+    template = CHECKPOINT_EXIT if is_scheduled_checkpoint(version) else INTERNAL_EXIT
+    return template.format(version=version)
 
 
 def version_entries(path: Path) -> list[tuple[str, str, str]]:
@@ -131,18 +169,22 @@ def validate(release_path: Path, version_path: Path) -> None:
             raise ValueError(f"{version} requires at least three verification classes")
         exit_body = section.split("Exit criteria:", 1)[1]
         if sum(line.startswith("- ") for line in exit_body.splitlines()) < 2:
-            raise ValueError(f"{version} requires evidence and pentest exit criteria")
+            raise ValueError(f"{version} requires evidence and cadence exit criteria")
 
-        exit_text = (
-            f"`{version} implementation stop reached. "
-            "Run pentest for this release candidate and commit the updated report.`"
-        )
+        exit_text = expected_exit(version)
         if section.count(exit_text) != 1:
-            raise ValueError(f"{version} is missing its exact pentest exit")
+            release_class = (
+                "scheduled checkpoint"
+                if is_scheduled_checkpoint(version)
+                else "internal implementation stop"
+            )
+            raise ValueError(f"{version} is missing its exact {release_class} exit")
 
+    checkpoints = sum(is_scheduled_checkpoint(version) for version in versions)
     print(
         f"release and version plans have {len(matches)} ordered, "
-        "scope-locked, pentest-gated sections"
+        f"scope-locked sections: {checkpoints} public checkpoints and "
+        f"{len(matches) - checkpoints} internal stops"
     )
 
 

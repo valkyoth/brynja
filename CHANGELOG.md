@@ -5,6 +5,18 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Beginning after signed `v0.10.0`, group internal implementation stops into
+  five-minor release trains: scheduled cumulative pentest, signed tag, and
+  crates.io publication checkpoints occur at `v0.15.0`, `v0.20.0`, and every
+  fifth minor through `v0.160.0`; exceptional security and early-release
+  triggers remain fail-closed.
+- Internal roadmap milestones and patch rows require their complete tests,
+  evidence, documentation, signed commit, and ordinary CI but create no
+  release report, tag, or crate publication. Plan validation mechanically
+  distinguishes all 47 public checkpoints from 151 internal stops.
+
 ## [0.7.0] - 2026-08-03
 
 ### Added

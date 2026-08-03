@@ -32,7 +32,21 @@ fi
 cp docs/RELEASE_PLAN.md "$release_tmp"
 sed -i '0,/Run pentest for this release candidate and commit the updated report\./s//Run review./' "$release_tmp"
 if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
-    echo "release plan validator accepted a missing pentest exit" >&2
+    echo "release plan validator accepted a missing historical checkpoint exit" >&2
+    exit 1
+fi
+
+cp docs/RELEASE_PLAN.md "$release_tmp"
+sed -i '0,/v0\.11\.0 internal implementation stop reached/{s/internal implementation stop reached/internal release reached/;}' "$release_tmp"
+if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
+    echo "release plan validator accepted an invalid internal-stop exit" >&2
+    exit 1
+fi
+
+cp docs/RELEASE_PLAN.md "$release_tmp"
+sed -i '0,/v0\.15\.0 scheduled release checkpoint reached/{s/scheduled release checkpoint reached/internal implementation stop reached/;}' "$release_tmp"
+if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
+    echo "release plan validator accepted an invalid scheduled-checkpoint exit" >&2
     exit 1
 fi
 

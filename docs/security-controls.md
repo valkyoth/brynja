@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.10.0 pentest remediation complete; repository-owner retest required
+Status: v0.10.0 pentest and remediation retest passed; awaiting green GitHub checks
 
 | Control | Foundation enforcement |
 | --- | --- |

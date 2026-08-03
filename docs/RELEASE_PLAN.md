@@ -898,7 +898,7 @@ Exit criteria:
 
 ### v0.10.0 - Secret Lifetime And Destruction Contract
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Define non-cloneable and non-serializable secret ownership, transition, error, cancellation, provider-failure and drop destruction, immediate obsolete-secret cleanup, external-store and accelerator duties, a mandatory production guarantee for the complete owned memory region, and RFC 9850 key logging only in a separately compiled test-support artifact that cannot enter production packages or features.
 

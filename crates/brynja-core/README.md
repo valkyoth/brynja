@@ -88,9 +88,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.10"
 ```
 
-The `0.7.0` package is selected for publication with Brynja v0.10.0. Pentest
-remediation is complete locally; repository-owner retest and green hosted
-release checks remain required under the
+The `0.7.0` package is selected for publication with Brynja v0.10.0. The
+repository-owner pentest and remediation retest passed; green hosted release
+checks remain required under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

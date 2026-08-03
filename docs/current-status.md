@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 pentest remediation complete; repository-owner retest required
+Status: v0.10.0 pentest and remediation retest passed; awaiting green GitHub checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -308,8 +308,8 @@ closed failure there after attempting every configured target. New tests cover
 failed partial-initialization and live-state drops, exact handler cause, kind,
 and target, single notification, and complete target attempts. The assessment's
 informational self-attestation observation remains the explicit v0.11 emitted-
-code/hardware-evidence blocker. Local remediation is green with zero open
-findings; repository-owner retest remains required.
+code/hardware-evidence blocker. The repository owner retested signed remediation
+candidate `1818f36` and reported it green with zero open findings.
 
 The repository-owner v0.9.0 assessment of signed candidate
 `fb3307a17a578daa7bd2e9f0adca4537b5e91ff8` confirmed that caller bytes remain
@@ -423,5 +423,5 @@ fallbacks. The repository owner retested signed remediation candidate
 remaining finding. The permanent report records `PASS`/`PASS` with zero open
 findings, and the signed `v0.8.0` tag is complete. The v0.9.0 exact workspace
 and arena assessment passed retest with zero open findings; signed tag
-`v0.9.0` is complete. The v0.10.0 secret-lifetime implementation stop now
-requires repository-owner pentest.
+`v0.9.0` is complete. The v0.10.0 pentest and remediation retest passed with
+zero open findings; the final candidate now awaits green hosted checks.

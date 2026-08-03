@@ -45,9 +45,9 @@ must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.10.0` has completed local
-remediation of its repository-owner pentest finding and requires external
-retest; it does not implement TLS.
+Brynja is not ready for application use. Version `0.10.0` has passed its
+repository-owner pentest and remediation retest and awaits green hosted release
+checks; it does not implement TLS.
 After release, the dependency will be:
 
 ```toml

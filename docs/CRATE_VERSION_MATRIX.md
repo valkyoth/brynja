@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 pentest remediation complete; repository-owner retest required
+Status: v0.10.0 pentest and remediation retest passed; awaiting green GitHub checks
 
 The `brynja` facade advances to `0.10.0`. `brynja-core` advances to `0.7.0` for
 the abstract secret-lifetime and destruction-duty contract; every published

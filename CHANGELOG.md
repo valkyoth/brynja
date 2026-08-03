@@ -5,7 +5,7 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
-## [0.10.0] - Unreleased
+## [0.10.0] - 2026-08-03
 
 ### Added
 
@@ -34,8 +34,9 @@ Keep a Changelog and Semantic Versioning.
   primitive and emitted-code evidence.
 - Destruction failure reached through `Drop` is delivered to a mandatory
   platform-specific durable/fail-stop handler instead of being discarded.
-- Repository-owner retest of the locally remediated finding is required before
-  this candidate can be tagged or published.
+- The repository-owner retest passed with the Medium Drop-failure finding
+  closed, the informational v0.11 evidence blocker retained, and zero open
+  findings.
 
 ## [0.9.0] - 2026-08-03
 

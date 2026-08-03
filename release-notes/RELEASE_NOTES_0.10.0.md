@@ -1,6 +1,6 @@
 # Brynja 0.10.0 Release Notes
 
-Status: pentest remediation complete; repository-owner retest required
+Status: pentest and remediation retest passed; awaiting green GitHub checks
 
 Brynja 0.10.0 implements an abstract secret-lifetime and destruction-duty
 contract plus isolated RFC 9850 test support. It does not implement a
@@ -90,9 +90,8 @@ support patches at `0.1.6`, and mandatory `brynja 0.10.0` last.
 `brynja-crypto` remains unchanged at `0.1.0`; legacy and repository-only
 packages remain unpublished.
 
-Publication is blocked until the repository-owner retest passes, the report is
-committed as PASS/PASS, GitHub is green, and the user explicitly authorizes the
-signed release tag.
+Publication is blocked until the committed PASS/PASS report and final candidate
+pass GitHub, and the user explicitly authorizes the signed release tag.
 
 ## Pentest Disposition
 
@@ -101,8 +100,9 @@ through partial-initialization or live-state `Drop` were discarded after the
 destruction duties ran. The mandatory `handle_drop_failure` contract and
 two-phase failing-Drop regression test described above remediate the issue.
 The assessment also retained the self-attested destructor-completion boundary
-as informational and load-bearing for v0.11.0. Local remediation is green with
-zero open findings; repository-owner retest remains pending.
+as informational and load-bearing for v0.11.0. The repository owner retested
+signed remediation candidate `1818f36` and reported it green with zero open
+findings. The permanent report records `PASS`/`PASS`.
 
 ## Verification Status
 

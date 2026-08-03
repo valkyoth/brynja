@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 pentest remediation complete; repository-owner retest required
+Status: v0.10.0 pentest and remediation retest passed; awaiting green GitHub checks
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

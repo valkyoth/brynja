@@ -31,6 +31,11 @@ Keep a Changelog and Semantic Versioning.
 - Allocated bytes retain caller contents and require initialization. No
   release, reuse, zeroization, destruction, protocol, independent-review,
   production, or FIPS-validation claim is advanced.
+- Pentesting confirmed the documented drop-remanence and retained-allocation
+  boundaries. `SecretDomain` now states that it is not a secret owner,
+  `CertificateDomain` rejects private-key semantics, and v0.10 explicitly
+  requires typed complete initialization while v0.11 retains the unsafe-policy
+  and emitted-code gate for optimization-resistant destruction.
 
 ## [0.8.0] - 2026-08-03
 

@@ -47,6 +47,11 @@ attackers additionally force capacity and aggregate-length failures after
 valid prefixes, split data across empty and non-empty parts, and attempt to
 observe partial mutation, outside-buffer writes, stale cursor advancement,
 mutable aliasing, or output-derived diagnostics.
+Workspace attackers additionally attempt to confuse named arena domains,
+reuse caller storage containing prior connection material, read a retained-byte
+allocation before complete initialization, treat `SecretDomain` as a secret
+owner or erasure guarantee, store private keys in the certificate arena, or
+infer destruction from an ordinary safe fill, debug canary, or drop.
 
 ## Required Controls
 
@@ -72,6 +77,10 @@ mutable aliasing, or output-derived diagnostics.
   mutation and advancement, byte-for-byte failure preservation, consuming
   exact-capacity completion, no cursor cloning or formatting, and value-free
   write errors;
+- exact caller-workspace partitioning with compile-time domain separation,
+  complete-range allocation, retained-byte initialization duties, and an
+  explicit prohibition on secret-bearing consumption until typed complete
+  initialization and proven complete-region destruction are implemented;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;

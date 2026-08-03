@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.9.0 implementation complete; pentest required
+Status: v0.9.0 pentest dispositions complete; retest required
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

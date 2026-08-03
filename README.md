@@ -41,9 +41,9 @@ cryptography and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.9.0` is ready for its
-repository-owner pentest but does not implement TLS. After release, the
-dependency will be:
+Brynja is not ready for application use. Version `0.9.0` has completed pentest
+dispositions and awaits repository-owner retest; it does not implement TLS.
+After release, the dependency will be:
 
 ```toml
 [dependencies]
@@ -77,6 +77,10 @@ publishes the facade last.
   protocol engine, legacy engine, or FIPS module.
 - Every production crate is `no_std` by default. Platform services enter
   through explicit caller-provided interfaces.
+- v0.9 arena domain names classify raw caller storage only. `SecretDomain` is
+  not a secret owner, `CertificateDomain` is not private-key storage, and no
+  arena may carry sensitive material until v0.10 typed complete initialization
+  and the v0.11 proven destruction primitive exist.
 - FIPS 140-3 support is planned through separate `brynja-fips-module` and
   `brynja-fips` packages, not a boolean Cargo feature. Only an exact issued,
   certificate-bound module and tested operational environment may carry a

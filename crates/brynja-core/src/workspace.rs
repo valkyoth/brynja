@@ -213,7 +213,10 @@ impl Default for WorkspaceLayoutBuilder {
 ///
 /// This type does not implement `Clone`, `Copy`, `Debug`, or `Display`. It does
 /// not own secrets and makes no erasure guarantee; secret destruction is a
-/// separate lifecycle contract.
+/// separate lifecycle contract. In particular, [`SecretDomain`] is only a
+/// compile-time storage classification in this release. It does not authorize
+/// sensitive use before the future initialization, lifetime, and proven
+/// zeroization contracts are implemented.
 #[must_use = "arena accounting must remain live while its allocations are used"]
 pub struct Arena<'storage, Domain: ArenaDomain> {
     storage: &'storage mut [u8],
@@ -268,8 +271,10 @@ impl<'storage, Domain: ArenaDomain> Arena<'storage, Domain> {
     /// Allocates one complete, disjoint byte range.
     ///
     /// The returned bytes retain their previous contents. A caller must
-    /// initialize them before use. Overflow or exhaustion leaves all arena
-    /// accounting and storage unchanged.
+    /// initialize the complete range before reading it. Debug canaries cannot
+    /// prove that property, so future secret-bearing consumers require a typed
+    /// complete-initialization transition and error-path tests. Overflow or
+    /// exhaustion leaves all arena accounting and storage unchanged.
     pub fn allocate(&mut self, length: usize) -> Result<&mut [u8], ArenaError> {
         let end = match self.position.checked_add(length) {
             Some(end) => end,

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.9.0 implementation complete; pentest required
+Status: v0.9.0 pentest dispositions complete; retest required
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -278,6 +278,21 @@ Version 0.9.0 adds exact caller-owned workspace partitioning:
   is a source-free storage foundation; release, reuse, zeroization, secret
   ownership and destruction, framing, and protocol state remain future work.
 
+The repository-owner v0.9.0 assessment of signed candidate
+`fb3307a17a578daa7bd2e9f0adca4537b5e91ff8` confirmed that caller bytes remain
+after arena drop and are returned unchanged by allocation. The report correctly
+classified both behaviors as deliberate documented deferrals rather than a
+safe-Rust memory-safety defect. A plain safe fill or `black_box` cannot support
+a zeroization claim, while the suggested volatile store requires the explicit
+unsafe-policy and emitted-code review already owned by v0.11.0.
+
+The dispositions now make `SecretDomain` a storage classification rather than
+a secret owner, prohibit private keys in `CertificateDomain`, prohibit
+sensitive consumption before v0.10 typed complete-initialization states and the
+v0.11 proven destruction primitive, and require early-return initialization
+tests for every future consumer. Both findings are closed for this source-free
+release with no code claiming erasure; external retest remains pending.
+
 Everything beyond those foundation domains remains governance and planning
 evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
@@ -374,4 +389,5 @@ fallbacks. The repository owner retested signed remediation candidate
 `79027316d1d023b0f55870d8371b22a2c536a7ae` and reported it green with no
 remaining finding. The permanent report records `PASS`/`PASS` with zero open
 findings, and the signed `v0.8.0` tag is complete. The v0.9.0 exact workspace
-and arena candidate is now ready for repository-owner pentesting.
+and arena assessment dispositions are committed with zero open findings and
+now require repository-owner retest.

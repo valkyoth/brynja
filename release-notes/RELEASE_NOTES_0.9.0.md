@@ -1,6 +1,6 @@
 # Brynja 0.9.0 Release Notes
 
-Status: implementation complete; pentest required
+Status: pentest dispositions complete; retest required
 
 Brynja 0.9.0 implements a protocol-neutral caller-owned workspace partition
 and monotonic arena allocator. It does not implement integer encoding, TLS
@@ -94,6 +94,31 @@ harnesses are not independent cryptographic or protocol verification. Brynja
 has no FIPS 140-3 validation, certificate, approved module, or validated
 operational-environment claim.
 
+## Pentest Dispositions
+
+The repository owner assessed signed candidate
+`fb3307a17a578daa7bd2e9f0adca4537b5e91ff8` and confirmed two documented
+remanence boundaries: arena drop does not erase caller-owned storage, and a
+successful allocation returns retained caller bytes rather than clearing them.
+
+Neither observation is a memory-safety defect in this source-free milestone,
+and silently adding an ordinary safe fill or `black_box` would not provide
+optimization-resistant zeroization. Volatile stores require unsafe code and
+therefore remain gated by the explicit v0.11.0 policy amendment, isolation,
+MIR/LLVM/assembly evidence, target review, and external audit.
+
+The remediation strengthens the enforceable roadmap boundary instead:
+`SecretDomain` is only a raw storage classification, `CertificateDomain` is
+not private-key storage, and sensitive consumers are prohibited until v0.10.0
+provides typed complete-initialization and lifetime states and v0.11.0 provides
+the proven complete-region destruction primitive. Future consumers must test
+every partial-write and early-return path; a debug canary may supplement those
+tests but cannot replace the typed transition or zeroization evidence.
+
+Both findings are closed for v0.9.0 with zero open findings. The permanent
+report remains `RETEST REQUIRED`/`PENDING` until the repository owner confirms
+the dispositions.
+
 ## Publication Set
 
 The candidate selects `brynja-core 0.6.0`, eight dependency-only modern
@@ -102,9 +127,9 @@ support patches at `0.1.5`, and the mandatory `brynja 0.9.0` facade.
 packages remain unpublished. The guarded publisher enforces exact pins,
 dependency order, and the facade-last rule.
 
-Publication remains blocked until the repository owner completes pentesting,
-the permanent `PASS`/`PASS` report and any remediation are committed, GitHub is
-green, and the user explicitly authorizes the signed release tag.
+Publication remains blocked until the repository owner reports a clean retest,
+the permanent report records `PASS`/`PASS`, GitHub is green, and the user
+explicitly authorizes the signed release tag.
 
 ## Limitations
 

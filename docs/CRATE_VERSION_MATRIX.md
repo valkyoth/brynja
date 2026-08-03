@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.9.0 implementation complete; pentest required
+Status: v0.9.0 pentest dispositions complete; retest required
 
 The `brynja` facade advances to `0.9.0`. `brynja-core` advances to `0.6.0` for
 the exact caller-owned workspace and monotonic arena model; every published

@@ -49,9 +49,12 @@ arenas. Sealed zero-sized domain markers prevent the five simultaneous handles
 from being swapped. Complete monotonic allocations track used, remaining,
 high-water, and successful non-empty allocation count; rejection preserves both
 bytes and telemetry. Allocated bytes retain their caller contents and must be
-initialized before use. This is not integer encoding, TLS framing, a protocol
-parser, a TLS state machine, cryptography, PKI, a provider, secret ownership or
-destruction, or a production-ready transport.
+initialized completely before any read. `SecretDomain` is only a storage
+classification, and `CertificateDomain` is not private-key storage. Sensitive
+use is prohibited until the v0.10 lifetime contract and v0.11 proven
+destruction primitive exist. This is not integer encoding, TLS framing, a
+protocol parser, a TLS state machine, cryptography, PKI, a provider, secret
+ownership or destruction, or a production-ready transport.
 
 ## Protocol Verification Status
 
@@ -70,9 +73,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.9"
 ```
 
-The `0.6.0` package is selected for publication with Brynja v0.9.0. The
-candidate requires repository-owner pentesting and green hosted release checks
-under the
+The `0.6.0` package is selected for publication with Brynja v0.9.0. Pentest
+dispositions are complete and require repository-owner retest before green
+hosted release checks under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

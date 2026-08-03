@@ -907,9 +907,22 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- define private non-cloneable, non-serializable, and non-formattable secret
+  owner states separately from the v0.9 raw `SecretDomain` storage marker;
+- make retained caller bytes enter a write-only initialization state and permit
+  transition to a readable secret owner only after the complete owned region is
+  explicitly initialized, with no partial-initialization escape on error,
+  cancellation, exhaustion, or provider failure;
+- define immediate obsolete-secret and drop-destruction effects, terminal
+  failure behavior, and single-consumption completion duties for local memory,
+  external stores, accelerators, caches, and DMA-visible regions;
+- prohibit any concrete production secret backing from using the raw v0.9
+  arena as an ownership or erasure mechanism until the v0.11.0 primitive has
+  approved unsafe policy, store-survival evidence, and exact target coverage;
+- keep RFC 9850 key logging only in a separately compiled test-support artifact
+  that no production package, feature, or resolved graph can reach;
+- preserve secret-free errors and deterministic transition outcomes without
+  bytes, keys, offsets, lengths, native provider detail, or arbitrary strings;
 - make the post-`v0.10.0` internal/checkpoint classifier, empty internal
   publication plan, exceptional trigger, cumulative pentest scope, and
   facade/tag equality mechanically enforceable before `v0.11.0` begins;
@@ -918,8 +931,15 @@ Deliverables:
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- exhaust every initialization boundary and early-return path, proving no read,
+  formatting, serialization, clone, output, or owner transition exists before
+  the complete region is initialized;
+- test obsolete-key, replacement, error, cancellation, provider failure, drop,
+  external-store, accelerator, cache, and DMA destruction duties with exact
+  single-consumption completion tokens and terminal failure states;
+- prove debug canaries and ordinary safe fills are test aids rather than
+  production zeroization evidence, and reject any concrete production backing
+  that lacks the v0.11.0 primitive and emitted-code evidence;
 - reject an internal milestone that creates a release report, tag, GitHub
   Release, crates.io selection, or facade publication, and reject a scheduled
   checkpoint that omits any cumulative milestone, PASS report, selected-crate
@@ -929,7 +949,9 @@ Verification:
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- the secret lifecycle and initialization contract is deterministic and
+  fail-closed, while no concrete production secret owner can be constructed
+  before reviewed complete-region destruction exists;
 - `v0.10.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.11.0 - Owned-Memory Zeroization Primitive

@@ -41,7 +41,11 @@ pub trait ArenaDomain: sealed::Sealed {
     const KIND: ArenaKind;
 }
 
-/// Compile-time identity of a secret arena.
+/// Compile-time identity of storage reserved for future secret owners.
+///
+/// This marker classifies bytes but does not provide secret ownership,
+/// initialization, erasure, or destruction. Sensitive use remains prohibited
+/// until the separately reviewed lifetime and zeroization contracts exist.
 pub enum SecretDomain {}
 
 /// Compile-time identity of a plaintext arena.
@@ -50,7 +54,10 @@ pub enum PlaintextDomain {}
 /// Compile-time identity of a transcript arena.
 pub enum TranscriptDomain {}
 
-/// Compile-time identity of a certificate arena.
+/// Compile-time identity of a certificate and trust-path arena.
+///
+/// This domain is not private-key storage. Private-key material requires the
+/// future secret-owner contract rather than a certificate-arena allocation.
 pub enum CertificateDomain {}
 
 /// Compile-time identity of an output arena.

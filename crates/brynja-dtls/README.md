@@ -50,9 +50,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.10"
 ```
 
-This dependency-only patch is selected for publication with v0.10.0. The
-repository-owner pentest and remediation retest passed; green hosted release
-checks remain required under the
+This dependency-only patch was published with v0.10.0 after its pentest,
+remediation retest, and hosted checks passed. It remains at `0.1.6` during the
+v0.11.0 development milestone under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

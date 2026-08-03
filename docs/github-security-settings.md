@@ -16,7 +16,8 @@ CODEOWNER review, approval by someone other than the last pusher, and clean
 CodeQL results at all alert severities. The repository owner and organization
 administrators retain explicit always-bypass authority so the documented
 owner-driven release workflow remains possible; bypass use is a security-
-relevant action and does not replace pentest, green CI, or signed-tag gates.
+relevant action and does not replace the applicable automated tag gate, green
+CI and CodeQL, signed tag, or checkpoint pentest.
 
 CODEOWNERS explicitly protects Cargo state, dependency and GitHub-control
 policy, workflows, RFC evidence, release scripts, and security reports. GitHub

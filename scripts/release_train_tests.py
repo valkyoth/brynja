@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import release_policy as policy
+import release_crates as publisher
 
 
 def assert_fails(expected: str, function, *args) -> None:
@@ -23,10 +24,79 @@ def selections(*selected: str) -> dict[str, dict[str, bool]]:
     }
 
 
+def entry(previous: str, version: str, change: str, publish: bool) -> dict:
+    return {
+        "previous_version": previous,
+        "version": version,
+        "change": change,
+        "publish": publish,
+        "reason": "test fixture",
+    }
+
+
+def test_internal_facade_advances_without_publication() -> None:
+    policy.validate_internal_facade_entry(
+        entry("0.10.0", "0.11.0", "code", False),
+        "0.11.0",
+    )
+    policy.validate_internal_facade_entry(
+        entry("0.11.0", "0.11.1", "metadata", False),
+        "0.11.1",
+    )
+    assert_fails(
+        "must match milestone",
+        policy.validate_internal_facade_entry,
+        entry("0.10.0", "0.10.0", "code", False),
+        "0.11.0",
+    )
+    assert_fails(
+        "empty publication selection",
+        policy.validate_internal_facade_entry,
+        entry("0.10.0", "0.11.0", "code", True),
+        "0.11.0",
+    )
+    assert_fails(
+        "previous version must be prior milestone",
+        policy.validate_internal_facade_entry,
+        entry("0.9.0", "0.11.0", "code", False),
+        "0.11.0",
+    )
+
+
+def test_future_checkpoint_uses_complete_generic_tag_gate() -> None:
+    calls = []
+    original_run = publisher.run
+    publisher.run = lambda command, **kwargs: calls.append((command, kwargs))
+    try:
+        publisher.run_preflight(
+            "0.15.0",
+            dry_run=False,
+            release_tag_at_head=True,
+        )
+    finally:
+        publisher.run = original_run
+    assert calls[0] == (
+        ["scripts/tag_gate.sh", "v0.15.0"],
+        {
+            "dry_run": False,
+            "extra_env": {"BRYNJA_RELEASE_PUBLISH_TAG": "v0.15.0"},
+        },
+    )
+
+
+def test_internal_stage_refuses_crates_io_publication() -> None:
+    assert_fails(
+        "refusing crates.io publication",
+        publisher.require_public_stage,
+        "internal",
+    )
+    publisher.require_public_stage("public")
+
+
 def test_internal_stop_requires_empty_publication() -> None:
     crates = selections()
     context = {
-        "version": "0.10.0",
+        "version": "0.11.0",
         "milestone": "0.11.0",
         "baseline": "0.10.0",
         "cumulative_milestones": ["0.11.0"],
@@ -35,6 +105,14 @@ def test_internal_stop_requires_empty_publication() -> None:
         "exception_reason": "",
     }
     policy.validate_release_context(context, crates)
+    context["version"] = "0.10.0"
+    assert_fails(
+        "must equal milestone tag version",
+        policy.validate_release_context,
+        context,
+        crates,
+    )
+    context["version"] = "0.11.0"
     crates["brynja-core"]["publish"] = True
     assert_fails(
         "empty publication selection",

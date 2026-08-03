@@ -1,26 +1,26 @@
 [release]
-version = "0.10.0"
-milestone = "0.10.0"
-baseline = "0.9.0"
-cumulative_milestones = ["0.10.0"]
+version = "0.11.0"
+milestone = "0.11.0"
+baseline = "0.10.0"
+cumulative_milestones = ["0.11.0"]
 policy = "independent"
-stage = "public"
+stage = "internal"
 exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.9.0"
-version = "0.10.0"
-change = "code"
-publish = true
-reason = "Mandatory facade release exposing the v0.10 secret-lifetime contract, isolated test-only key logging, and prior foundation domains."
+previous_version = "0.10.0"
+version = "0.11.0"
+change = "metadata"
+publish = false
+reason = "Advance the signed development milestone to v0.11.0 without crates.io publication; the owned-memory zeroization scope remains in progress."
 
 [crates."brynja-core"]
-previous_version = "0.6.0"
+previous_version = "0.7.0"
 version = "0.7.0"
-change = "code"
-publish = true
-reason = "Add the allocation-free v0.10 abstract secret-lifetime and complete destruction-duty contract without concrete secret backing."
+change = "metadata"
+publish = false
+reason = "Retain the published 0.7.0 version while carrying the cumulative development-tag documentation delta to the next checkpoint."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.0"
@@ -30,60 +30,60 @@ publish = false
 reason = "No brynja-crypto package change; retain the published 0.1.0 boundary."
 
 [crates."brynja-pki"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the published dependency boundary to brynja-core 0.7.0; PKI remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; PKI remains unimplemented."
 
 [crates."brynja-tls"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the modern router boundary to the v0.10 core and version-engine package graph; the router remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; the router remains unimplemented."
 
 [crates."brynja-tls12"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the TLS 1.2 boundary to brynja-core 0.7.0 and brynja-pki 0.1.6; the engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; the TLS 1.2 engine remains unimplemented."
 
 [crates."brynja-tls13"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the TLS 1.3 stream boundary to brynja-core 0.7.0 and brynja-tls13-handshake 0.1.6; the engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; the TLS 1.3 engine remains unimplemented."
 
 [crates."brynja-tls13-handshake"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the record-independent handshake boundary to brynja-core 0.7.0 and brynja-pki 0.1.6; the engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; the handshake engine remains unimplemented."
 
 [crates."brynja-quic-tls"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the QUIC-TLS adapter boundary to brynja-core 0.7.0 and brynja-tls13-handshake 0.1.6; the adapter remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; the QUIC-TLS adapter remains unimplemented."
 
 [crates."brynja-dtls"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the DTLS boundary to brynja-core 0.7.0 and brynja-pki 0.1.6; the engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; the DTLS engine remains unimplemented."
 
 [crates."brynja-platform"]
-previous_version = "0.1.5"
+previous_version = "0.1.6"
 version = "0.1.6"
-change = "dependency"
-publish = true
-reason = "Repin the platform adapter boundary to brynja-core 0.7.0; provider implementations remain future work."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; providers remain future work."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"

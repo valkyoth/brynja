@@ -1,6 +1,6 @@
 # Assurance Harness And Bare-Metal Matrix
 
-Status: v0.4.0 pentest passed; awaiting green GitHub CI
+Status: v0.4.0 assurance foundation released; maintained by current tag gates
 
 This directory freezes the first-party assurance boundary before protocol or
 cryptographic implementation begins. It is infrastructure evidence, not proof

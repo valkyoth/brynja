@@ -72,6 +72,30 @@ test -n "$(field_value Tester)" ||
 test -n "$(field_value Scope)" ||
     fail "pentest report requires a Scope"
 
+if test -s release-crates.toml; then
+    context="$(
+        python3 -c \
+            'import tomllib; r = tomllib.load(open("release-crates.toml", "rb"))["release"]; print("|".join((r.get("version", ""), r.get("baseline", ""), r.get("stage", "public"))))'
+    )"
+    IFS='|' read -r planned_version baseline stage <<EOF
+${context}
+EOF
+    minor="$(printf '%s\n' "$planned_version" | cut -d. -f2)"
+    if test "$planned_version" = "${version#v}" &&
+        test "$stage" = "public" && test "${minor:-0}" -gt 10; then
+        baseline_tag="v${baseline}"
+        test "$(field_value Baseline)" = "$baseline_tag" ||
+            fail "pentest report baseline must be ${baseline_tag}"
+        scope_value="$(field_value Scope)"
+        case "$scope_value" in
+            *"${baseline_tag}"*"${version}"*) ;;
+            *)
+                fail "pentest report Scope must cover changes from ${baseline_tag} through ${version}"
+                ;;
+        esac
+    fi
+fi
+
 parents="$(git rev-parse HEAD^@ 2>/dev/null || true)"
 for parent in $parents; do
     if git cat-file -e "${parent}:${report}" 2>/dev/null; then
@@ -116,6 +140,8 @@ if test -n "$publish_tag"; then
     head_commit="$(git rev-parse HEAD)"
     test "$tag_commit" = "$head_commit" ||
         fail "publish tag ${version} does not point at HEAD"
+elif git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
+    fail "pre-tag release readiness requires absent tag: ${version}"
 fi
 
 if test "$pending" = true; then

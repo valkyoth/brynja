@@ -100,7 +100,11 @@ def run_preflight(
         else None
     )
     if gate is None:
-        run(["scripts/checks.sh"], dry_run=dry_run)
+        run(
+            ["scripts/tag_gate.sh", f"v{version}"],
+            dry_run=dry_run,
+            extra_env=environment,
+        )
     else:
         run(
             [str(gate.relative_to(ROOT))],
@@ -119,6 +123,13 @@ def selected_steps(start_at: str | None, steps: tuple[str, ...]) -> tuple[str, .
     if start_at not in steps:
         raise RuntimeError(f"{start_at} is not selected for this release")
     return steps[steps.index(start_at):]
+
+
+def require_public_stage(stage: str) -> None:
+    if stage != "public":
+        raise RuntimeError(
+            "refusing crates.io publication for an internal development milestone"
+        )
 
 
 def wait_for_index(package: str, version: str, *, dry_run: bool) -> None:
@@ -248,6 +259,15 @@ def main() -> int:
             require_clean_tree(dry_run=False)
             package_check(steps)
             return 0
+
+        if plan["stage"] == "internal":
+            if args.dry_run:
+                print(
+                    f"Development milestone {version} selects no crates.io "
+                    "publication."
+                )
+                return 0
+            require_public_stage(plan["stage"])
 
         require_clean_tree(dry_run=args.dry_run)
         tag_at_head = check_release_tag(version, dry_run=args.dry_run)

@@ -10,6 +10,12 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
+from release_change_policy import (
+    REPOSITORY_ONLY,
+    changed_packages as cumulative_changed_packages,
+    validate_cumulative_changes,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PLAN = ROOT / "release-crates.toml"
@@ -23,15 +29,6 @@ CHANGE_KINDS = (
     "unchanged",
     "unpublished",
     "repository",
-)
-REPOSITORY_ONLY = frozenset(
-    {
-        "brynja-interop",
-        "brynja-proofs",
-        "brynja-research-ssl1",
-        "brynja-test-support",
-        "brynja-xtask",
-    }
 )
 PUBLISH_ORDER = (
     "brynja-core",
@@ -143,6 +140,21 @@ def roadmap_range(baseline: str, milestone: str) -> list[str]:
     return versions[start:end]
 
 
+def roadmap_predecessor(milestone: str) -> str:
+    """Return the immediately preceding roadmap tag version."""
+
+    versions = VERSION_ROW.findall(
+        (ROOT / "docs" / "VERSION_PLAN.md").read_text(encoding="utf-8")
+    )
+    try:
+        index = versions.index(milestone)
+    except ValueError as error:
+        raise RuntimeError("release milestone must be a roadmap row") from error
+    if index == 0:
+        return "unpublished"
+    return versions[index - 1]
+
+
 def validate_release_context(release: dict, crates: dict) -> tuple[str, str]:
     """Validate public-checkpoint or empty internal-stop release context."""
 
@@ -171,8 +183,8 @@ def validate_release_context(release: dict, crates: dict) -> tuple[str, str]:
     if stage == "internal":
         if scheduled or exceptional:
             raise RuntimeError("internal stage requires a non-checkpoint milestone")
-        if version != baseline:
-            raise RuntimeError("internal stage must retain the public facade version")
+        if version != milestone:
+            raise RuntimeError("development facade version must equal milestone tag version")
         if selected:
             raise RuntimeError("internal stage must have an empty publication selection")
     elif stage == "public":
@@ -254,6 +266,23 @@ def validate_internal_entry(name: str, entry: dict) -> None:
         raise RuntimeError(f"{name} has invalid internal change kind {change}")
 
 
+def validate_internal_facade_entry(entry: dict, milestone: str) -> None:
+    """Advance the facade at every signed tag without publishing it."""
+
+    previous, change, publish = validate_common(FACADE, entry)
+    if entry["version"] != milestone:
+        raise RuntimeError(f"{FACADE} version must match milestone {milestone}")
+    expected_previous = roadmap_predecessor(milestone)
+    if previous != expected_previous:
+        raise RuntimeError(
+            f"{FACADE} previous version must be prior milestone {expected_previous}"
+        )
+    if publish:
+        raise RuntimeError("internal stage must have an empty publication selection")
+    if change in {"unchanged", "unpublished", "repository", "initial"}:
+        raise RuntimeError(f"{FACADE} must advance at every signed milestone tag")
+
+
 def validate_facade_entry(entry: dict, release: str) -> None:
     previous, change, publish = validate_common(FACADE, entry)
     if entry["version"] != release:
@@ -268,6 +297,12 @@ def validate_facade_entry(entry: dict, release: str) -> None:
     elif previous == "unpublished":
         raise RuntimeError(f"{FACADE} first publication must use change=initial")
     else:
+        expected_previous = roadmap_predecessor(release)
+        if previous != expected_previous:
+            raise RuntimeError(
+                f"{FACADE} previous version must be prior milestone "
+                f"{expected_previous}"
+            )
         old = parse_version(previous)
         if parse_version(release).sort_key() <= old.sort_key():
             raise RuntimeError(f"{FACADE} release version must advance")
@@ -324,11 +359,21 @@ def release_plan(path: Path = DEFAULT_PLAN) -> dict:
     for name, entry in crates.items():
         if stage == "public" and name == FACADE:
             validate_facade_entry(entry, version)
+        elif stage == "internal" and name == FACADE:
+            validate_internal_facade_entry(entry, version)
         elif stage == "internal":
             validate_internal_entry(name, entry)
         else:
             validate_support_entry(name, entry)
-    return {"version": version, "stage": stage, "crates": crates}
+    return {
+        "version": version,
+        "milestone": release["milestone"],
+        "baseline": release["baseline"],
+        "cumulative_milestones": release["cumulative_milestones"],
+        "stage": stage,
+        "exceptional": release["exceptional"],
+        "crates": crates,
+    }
 
 
 def package_is_publishable(package: dict) -> bool:
@@ -385,7 +430,12 @@ def verify_repository(packages: dict[str, dict], plan: dict) -> None:
 
 def validate_repository(path: Path = DEFAULT_PLAN) -> dict:
     plan = release_plan(path)
-    verify_repository(workspace_packages(cargo_metadata()), plan)
+    packages = workspace_packages(cargo_metadata())
+    verify_repository(packages, plan)
+    validate_cumulative_changes(
+        plan,
+        cumulative_changed_packages(packages, plan["baseline"]),
+    )
     return plan
 
 

@@ -15,8 +15,10 @@ validator rejects numbering, ordering, title, or scope drift.
 Every milestone retains `no_std` production packages, no third-party crates in
 repository Cargo manifests, bounded hostile-input and pre-authentication work,
 mandatory owned-region secret destruction, adversarial tests, supported Rust
-and target evidence, SBOM, an up-to-date committed PASS pentest report, clean
-GitHub CI, and explicit user authorization before tagging.
+and target evidence, SBOM, the complete automated tag gate, clean GitHub and
+CodeQL, and explicit user authorization before the immutable signed tag.
+Scheduled or exceptional public checkpoints additionally require an up-to-date
+committed cumulative PASS pentest report before tagging and publication.
 
 Protocol and optional-module dependency direction is downstream from frozen
 interfaces and validated provider ports. Early negotiation policy is distinct
@@ -30,13 +32,13 @@ symbolic proofs, limb-count-parameterized proofs, reduced-width exhaustive
 models, and production-width vector or differential evidence; residual gaps
 remain explicit and reduced-width evidence never claims full-width equivalence.
 
-Every official release tag publishes the `brynja` facade at the tag version,
-including the foundation release. Supporting crates retain independent SemVer
-lines and publish only when their package or exact internal dependency
-requirements change; the initial release publishes the complete modern closure
-required by the facade. Repository-only crates never publish, changed
-dependencies publish first, and the facade publishes last. `release-crates.toml` and
-`scripts/release_crates.py` enforce this policy for every release candidate.
+Every signed tag advances the `brynja` facade manifest to the tag version.
+Only scheduled or exceptional public checkpoints publish the facade and its
+selected dependency closure to crates.io. Supporting crates retain independent
+SemVer lines and publish only when their cumulative package or exact internal
+dependency requirements change. Repository-only crates never publish, changed
+dependencies publish first, and the facade publishes last.
+`release-crates.toml` and `scripts/release_crates.py` enforce this policy.
 
 ## TLS Package And Retirement Rule
 
@@ -59,13 +61,16 @@ modern package is explicitly deprecated and never forwards to legacy code.
 
 Generated standards scope and upstream dependency direction precede implementation.
 
-Beginning after the signed `v0.10.0` tag, these version labels identify small
-ordered implementation scopes rather than promising one crates.io release per
-row. Scheduled public pentest/tag/publication checkpoints occur every fifth
-minor version (`v0.15.0`, `v0.20.0`, and so on); patch rows remain internal.
-Exceptional pentest and early-release triggers, `v1.0.0-rc.1`, and `v1.0.0`
-are defined by [RELEASE_PLAN.md](RELEASE_PLAN.md). Public `brynja` crate
-versions match their signed tags; supporting crates retain independent SemVer.
+Beginning after the signed `v0.10.0` tag, every row advances the `brynja`
+manifest and receives its ordinary signed `vX.Y.Z` tag after the complete
+automated gate and green GitHub and CodeQL. Scheduled public pentest and
+crates.io checkpoints occur every fifth minor version (`v0.15.0`, `v0.20.0`,
+and so on); patch rows remain tagged development milestones inside their
+existing range. Each checkpoint pentests backwards over all changes after the
+previous public tag through the new candidate: v0.10.0 to v0.15.0, then
+v0.15.0 to v0.20.0, and so forth. Exceptional pentest and early-release
+triggers, `v1.0.0-rc.1`, and `v1.0.0` are defined by
+[RELEASE_PLAN.md](RELEASE_PLAN.md). Supporting crates retain independent SemVer.
 
 | Version | Milestone | Exclusive scope and completion context |
 | --- | --- | --- |

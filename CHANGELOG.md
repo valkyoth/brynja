@@ -5,6 +5,15 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Advance the development facade to `0.11.0` and adopt signed tags for every
+  automated-tested milestone while reserving routine cumulative pentests and
+  crates.io publication for each fifth-minor public checkpoint.
+- Bind every future checkpoint report to the backwards-looking change range
+  after its prior public tag through the new candidate, beginning with
+  v0.10.0 through v0.15.0 and then v0.15.0 through v0.20.0.
+
 ## [0.10.0] - 2026-08-03
 
 ### Added
@@ -23,7 +32,7 @@ Keep a Changelog and Semantic Versioning.
 
 - Advance `brynja-core` to `0.7.0`, the eight changed exact-pinned modern
   support packages to `0.1.6`, and the facade to `0.10.0`.
-- Mechanically classify post-v0.10 roadmap milestones as internal stops or
+- Mechanically classify post-v0.10 roadmap tags as development milestones or
   each-fifth-minor cumulative public checkpoints.
 
 ### Security
@@ -103,15 +112,16 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
-- Beginning after signed `v0.10.0`, group internal implementation stops into
-  five-minor release trains: scheduled cumulative pentest, signed tag, and
-  crates.io publication checkpoints occur at `v0.15.0`, `v0.20.0`, and every
-  fifth minor through `v0.160.0`; exceptional security and early-release
-  triggers remain fail-closed.
-- Internal roadmap milestones and patch rows require their complete tests,
-  evidence, documentation, signed commit, and ordinary CI but create no
-  release report, tag, or crate publication. Plan validation mechanically
-  distinguishes all 47 public checkpoints from 151 internal stops.
+- Beginning after signed `v0.10.0`, group ordinary pentesting and crates.io
+  publication into five-minor release trains while retaining a signed tag for
+  every roadmap version. Scheduled cumulative checkpoints occur at `v0.15.0`,
+  `v0.20.0`, and every fifth minor through `v0.160.0`; exceptional security and
+  early-release triggers remain fail-closed.
+- Development milestones and patch rows require their complete tests,
+  evidence, documentation, signed commit, full automated tag gate, and green
+  GitHub and CodeQL before tagging, but create no scheduled release report or
+  crate publication. Plan validation mechanically distinguishes all 47 public
+  checkpoints from 151 tagged development milestones.
 
 ## [0.7.0] - 2026-08-03
 

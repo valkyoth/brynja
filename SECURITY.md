@@ -20,18 +20,27 @@ scripts/generate-sbom.sh --check
 GitHub CodeQL Default setup should be enabled. Do not add an advanced CodeQL
 workflow while Default setup is active.
 
-## Release Gate
+## Tag And Release Gates
 
-Every release requires one matching permanent report at
-`security/pentest/vX.Y.Z[-rc.N].md`. When implementation stops, the user
-pentests the release candidate and the report is kept current throughout
-findings, fixes, and retests. The implementation and PASS report may be
-committed together.
+Every completed roadmap version passes the complete automated tag gate in a
+signed commit, waits for green GitHub and CodeQL, and receives an immutable
+signed tag only after explicit user authorization. Development milestones
+between public checkpoints require no scheduled pentest report and publish no
+crate.
+
+Every scheduled or exceptional public checkpoint requires one matching
+permanent report at `security/pentest/vX.Y.Z[-rc.N].md`. The report's
+`Baseline` is the preceding public tag, and `Scope` names the backwards-looking
+change range from that tag through the current candidate. Thus v0.15.0 reviews
+all changes after v0.10.0 through v0.15.0; v0.20.0 reviews all changes after
+v0.15.0 through v0.20.0. The report is kept current throughout findings,
+fixes, and retests, and the implementation and PASS report may be committed
+together.
 
 That candidate commit is pushed and allowed to complete GitHub CI. If CI
 requires a change, the code and report are updated and committed together, then
-CI runs again. The tag is created only after the user explicitly confirms that
-GitHub is green. The gate requires a clean worktree, a report committed at
+CI runs again. The public-checkpoint tag is created only after the user
+explicitly confirms that GitHub and CodeQL are green. The gate requires a clean worktree, a report committed at
 `HEAD`, `Status: PASS`, `Open-Findings: 0`, and `Retest: PASS`. Once a report
 exists, a later repository-changing commit is rejected unless it also updates
 the report.
@@ -39,8 +48,10 @@ the report.
 Ordinary CI may validate a current committed remediation candidate with
 `Status: RETEST REQUIRED`, `Open-Findings: 0`, and `Retest: PENDING`. This
 state allows the checks needed before external retest to become green but is
-not release authorization. The dedicated release and tag paths always use the
-strict PASS gate.
+not release authorization. The dedicated public release path always uses the
+strict PASS gate. An off-cycle security assessment may add a report to a
+development milestone, but does not itself authorize crates.io publication or
+replace the next cumulative checkpoint assessment.
 
 The report format and disclosure rules are documented in
 [`security/pentest/README.md`](security/pentest/README.md).

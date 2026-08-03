@@ -1,6 +1,6 @@
 # Brynja 0.10.0 Release Notes
 
-Status: pentest and remediation retest passed; awaiting green GitHub checks
+Status: released; pentest, remediation retest, hosted checks, signed tag, and crates.io publication complete
 
 Brynja 0.10.0 implements an abstract secret-lifetime and destruction-duty
 contract plus isolated RFC 9850 test support. It does not implement a
@@ -75,13 +75,15 @@ package contents, SBOM, dependency policy, advisories, and documentation.
 
 ## Release Cadence Boundary
 
-This is the last release under the original per-milestone pentest, tag, and
-publication cadence. After signed v0.10.0, non-checkpoint roadmap versions are
-internal implementation stops and each fifth minor version (`0.15.0`,
-`0.20.0`, and so on) is a scheduled cumulative pentest/tag/crates.io
-checkpoint. Patch-numbered roadmap versions belong to the range beginning at
-their minor version. Exceptional security, compatibility, or publication
-triggers remain available.
+This is the last release under the original per-version pentest and publication
+cadence. After signed v0.10.0, every roadmap version retains its signed tag,
+complete automated gate, and green GitHub and CodeQL requirement, while each
+fifth minor version (`0.15.0`, `0.20.0`, and so on) is a scheduled cumulative
+pentest and crates.io checkpoint. Patch-numbered roadmap versions belong to the
+range beginning at their minor version. The v0.15.0 pentest reviews all changes
+after v0.10.0 through v0.15.0; v0.20.0 reviews all changes after v0.15.0 through
+v0.20.0. Exceptional security, compatibility, or publication triggers remain
+available.
 
 ## Publication Set
 

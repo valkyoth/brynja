@@ -23,14 +23,16 @@ FIELDS = (
 )
 
 INTERNAL_EXIT = (
-    "`{version} internal implementation stop reached. Commit the verified "
-    "scope without a release pentest, tag, or crates.io publication unless "
-    "an exceptional trigger applies.`"
+    "`{version} development milestone reached. Commit the verified scope, "
+    "obtain green GitHub and CodeQL, then create the signed tag without a "
+    "scheduled pentest or crates.io publication unless an exceptional "
+    "trigger applies.`"
 )
 CHECKPOINT_EXIT = (
-    "`{version} scheduled release checkpoint reached. Run the cumulative "
-    "pentest, commit the PASS report, obtain green GitHub, then create the "
-    "signed tag and publish the selected crates.`"
+    "`{version} scheduled release checkpoint reached. Pentest all changes "
+    "after the previous public tag through this candidate, commit the PASS "
+    "report, obtain green GitHub and CodeQL, then create the signed tag and "
+    "publish the selected crates.`"
 )
 HISTORICAL_EXIT = (
     "`{version} implementation stop reached. Run pentest for this release "
@@ -176,7 +178,7 @@ def validate(release_path: Path, version_path: Path) -> None:
             release_class = (
                 "scheduled checkpoint"
                 if is_scheduled_checkpoint(version)
-                else "internal implementation stop"
+                else "development milestone"
             )
             raise ValueError(f"{version} is missing its exact {release_class} exit")
 
@@ -184,7 +186,7 @@ def validate(release_path: Path, version_path: Path) -> None:
     print(
         f"release and version plans have {len(matches)} ordered, "
         f"scope-locked sections: {checkpoints} public checkpoints and "
-        f"{len(matches) - checkpoints} internal stops"
+        f"{len(matches) - checkpoints} tagged development milestones"
     )
 
 

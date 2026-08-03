@@ -37,7 +37,7 @@ if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/nul
 fi
 
 cp docs/RELEASE_PLAN.md "$release_tmp"
-sed -i '0,/v0\.11\.0 internal implementation stop reached/{s/internal implementation stop reached/internal release reached/;}' "$release_tmp"
+sed -i '0,/v0\.11\.0 development milestone reached/{s/development milestone reached/internal release reached/;}' "$release_tmp"
 if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
     echo "release plan validator accepted an invalid internal-stop exit" >&2
     exit 1

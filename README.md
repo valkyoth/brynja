@@ -29,6 +29,13 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
+> **Development status:** Brynja is pre-1.0, incomplete, and not ready to
+> secure application traffic. Every version receives an immutable signed tag
+> only after the complete automated gate and green GitHub and CodeQL. Scheduled
+> pentesting and crates.io publication occur at the cumulative checkpoints
+> described below; a tag without a matching committed pentest report was not a
+> scheduled pentest checkpoint.
+
 Version `0.10.0` adds an abstract, affine secret-lifetime contract. A secret
 state exists only after exact complete initialization; cancellation, errors,
 exhaustion, provider failure, replacement, obsolescence, and drop run explicit
@@ -43,24 +50,49 @@ mechanically unreachable from production package graphs. These foundations do
 **not** implement TLS framing, a protocol state machine, or cryptography and
 must not be used to secure network traffic.
 
+## Development Tags And Pentesting
+
+The `brynja` facade version advances at every roadmap milestone, including
+patch milestones, and each completed milestone receives the ordinary signed
+`vX.Y.Z` tag after its signed commit passes the complete local gate and GitHub
+and CodeQL are green. Development tags between public checkpoints are not
+published to crates.io. Supporting crates keep independent versions and are
+published only when their cumulative changes require it at a checkpoint.
+
+Pentests look backwards over the complete change range between public
+checkpoints. The v0.15.0 assessment covers all changes after signed public tag
+v0.10.0 through the exact v0.15.0 candidate, including every v0.11.0-v0.14.0
+and patch milestone. The v0.20.0 assessment then covers all changes after
+v0.15.0 through v0.20.0, and the same pattern continues every fifth minor
+version. Each checkpoint report records its previous public tag as `Baseline`
+and names both ends of the reviewed range in `Scope`. Material security changes
+can require an earlier exceptional pentest; that does not weaken the next
+scheduled cumulative review.
+
+Permanent outcomes are committed under
+[`security/pentest/`](https://github.com/valkyoth/brynja/tree/main/security/pentest).
+These reports make the assessed versions and ranges explicit; automated tests,
+CI, CodeQL, fuzzing, Miri, or Kani are valuable evidence but are not themselves
+an independent pentest.
+
 ## Install
 
-Brynja is not ready for application use. Version `0.10.0` has passed its
-repository-owner pentest and remediation retest and awaits green hosted release
-checks; it does not implement TLS.
-After release, the dependency will be:
+Brynja is not ready for application use and does not implement TLS. The latest
+crates.io checkpoint is `0.10.0`; the repository is preparing the tagged
+v0.11.0 development milestone without crates.io publication. The published
+dependency is:
 
 ```toml
 [dependencies]
 brynja = "0.10"
 ```
 
-Every official release tag publishes the `brynja` facade at the tag version.
-Supporting crates keep independent versions and are published only when they
-change; unchanged support crates are not republished. The initial release also
-publishes the complete modern dependency closure required by the facade. The
-guarded publisher validates and packages the exact set in dependency order and
-publishes the facade last.
+Every tag advances the `brynja` facade manifest to the tag version. Only
+scheduled or exceptional public checkpoint tags publish it to crates.io.
+Supporting crates keep independent versions and are published only when their
+cumulative package or exact-pin changes require it; unchanged support crates
+are not republished. The guarded publisher validates and packages the exact
+selected set in dependency order and publishes the facade last.
 
 ## Design Boundaries
 
@@ -250,17 +282,21 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
+scripts/tag_gate.sh v0.11.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a
-release. GitHub CodeQL uses Default setup; this repository intentionally does
+signed tag. `scripts/tag_gate.sh vX.Y.Z` runs the complete automated tag gate
+and applies the stage-specific final check: development milestones require no
+scheduled pentest, while public checkpoints require their cumulative PASS
+report. GitHub CodeQL uses Default setup; this repository intentionally does
 not add an advanced CodeQL workflow.
 
-After the exact green candidate is tagged, the interactive crates.io publisher
-is:
+After an exact green public-checkpoint candidate is pentested and tagged, the
+interactive crates.io publisher is, for example:
 
 ```bash
-scripts/release_crates.py --version 0.10.0
+scripts/release_crates.py --version 0.15.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,
@@ -269,10 +305,11 @@ waits for crates.io indexing between dependent packages, and publishes
 proper project capitalization, `Brynja vX.Y.Z`, and retains compatibility with
 the historical lowercase `brynja vX.Y.Z` form.
 
-At each implementation stop, the user pentests the release candidate. The
-implementation and current versioned PASS report are committed together. Any
-later CI-driven fix must update that report in the same commit, and tagging
-occurs only after GitHub is green and the user explicitly requests it.
+Every milestone waits for green GitHub and CodeQL before the user authorizes
+its signed tag. At scheduled or exceptional public checkpoints, the
+implementation and cumulative versioned PASS report are committed together.
+Any later CI-driven fix must update that report in the same commit before the
+candidate can be tagged and published.
 
 ## Documentation
 

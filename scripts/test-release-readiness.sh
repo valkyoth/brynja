@@ -90,6 +90,18 @@ repository="$(make_fixture missing-report)"
         scripts/validate-release-readiness.sh v0.2.0
 )
 
+repository="$(make_fixture internal-milestone-without-report)"
+(
+    cd "$repository"
+    printf '[release]\nversion = "0.11.0"\nmilestone = "0.11.0"\nstage = "internal"\n' \
+        >release-crates.toml
+    git add release-crates.toml
+    git commit -q -m "chore: enter internal milestone"
+    scripts/validate-current-pentest.sh
+    assert_fails_with "missing required pentest report" \
+        scripts/validate-current-pentest.sh --required
+)
+
 repository="$(make_fixture uncommitted-report)"
 (
     cd "$repository"
@@ -272,10 +284,43 @@ repository="$(make_fixture tag-flow)"
     cd "$repository"
     write_report
     commit_report
-    sign_tag
     scripts/validate-release-readiness.sh v0.2.0
+    sign_tag
+    assert_fails_with "pre-tag release readiness requires absent tag" \
+        scripts/validate-release-readiness.sh v0.2.0
     BRYNJA_RELEASE_PUBLISH_TAG=v0.2.0 \
         scripts/validate-release-readiness.sh v0.2.0
+)
+
+repository="$(make_fixture cumulative-baseline)"
+(
+    cd "$repository"
+    printf '[release]\nversion = "0.15.0"\nbaseline = "0.10.0"\nstage = "public"\n' \
+        >release-crates.toml
+    mkdir -p security/pentest
+    cat >security/pentest/v0.15.0.md <<EOF
+Version: v0.15.0
+Baseline: v0.10.0
+Status: PASS
+Open-Findings: 0
+Retest: PASS
+Date: 2026-08-03
+Tester: Brynja release fixture
+Scope: Cumulative changes after v0.10.0 through the v0.15.0 candidate.
+
+## Findings
+
+No findings.
+EOF
+    git add release-crates.toml security/pentest/v0.15.0.md
+    git commit -q -m "docs: record cumulative checkpoint"
+    scripts/validate-release-readiness.sh v0.15.0
+    sed -i 's/Baseline: v0.10.0/Baseline: v0.9.0/' \
+        security/pentest/v0.15.0.md
+    git add security/pentest/v0.15.0.md
+    git commit -q -m "docs: break cumulative baseline"
+    assert_fails_with "baseline must be v0.10.0" \
+        scripts/validate-release-readiness.sh v0.15.0
 )
 
 repository="$(make_fixture mismatched-publish-context)"

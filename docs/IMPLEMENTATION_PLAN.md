@@ -34,9 +34,12 @@ test count, or interoperability alone never establishes that claim.
   certificate chain, fragment, and work unit has a caller-visible bound.
 - Production admission requires reviewed zeroization of complete owned secret
   memory regions; a weaker owned-region claim cannot pass the `1.0.0` gate.
-- Every release stops for pentest; implementation and the current report are
-  committed together, GitHub must become green, and tagging requires explicit
-  user authorization.
+- Every version completes the automated tag gate, is committed with all of its
+  evidence, waits for green GitHub and CodeQL, and requires explicit user
+  authorization before its immutable signed tag. Every fifth-minor public
+  checkpoint, exceptional high-risk checkpoint, production candidate, and
+  major trust gate additionally stops for pentest and commits the current
+  cumulative report before tagging or crates.io publication.
 
 ## Workspace Architecture
 
@@ -312,14 +315,18 @@ support a formal-verification claim before scoped harnesses and results exist.
 
 ## Security Review Loop
 
-For each version: implement only the listed scope, update requirements and
-threat model, add adversarial tests, run local checks, produce an SBOM, review
-all source-file lengths and unsafe/dependency surfaces, write release notes,
-stop, and ask the user for pentest. Keep the versioned report current while
-findings are fixed and retested. Commit implementation and the final PASS
-report together, then wait for green GitHub CI. Any CI-driven fix must update
-the report in the same commit and pass CI again before the user authorizes the
-tag.
+For each version: advance the `brynja` facade to the roadmap version, implement
+only the listed scope, update requirements and threat model, add adversarial
+tests, run the complete automated tag gate, produce an SBOM, review all
+source-file lengths and unsafe/dependency surfaces, write release notes, commit
+all files, and wait for green GitHub and CodeQL before the user authorizes the
+signed tag. Development milestones stop there without crates.io publication.
+At each scheduled or exceptional public checkpoint, ask the user for a
+backwards-looking pentest of every change after the prior public tag through the
+current candidate. Keep that report current while findings are fixed and
+retested; commit implementation and the final PASS report together. Any later
+CI-driven fix must update the report in the same commit and pass CI again before
+tagging and publication.
 
 ## Platform Strategy
 

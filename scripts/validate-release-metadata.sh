@@ -68,11 +68,14 @@ test -s assurance/evidence.json
 test -s assurance/README.md
 test -s docs/KANI.md
 test -f scripts/release_policy.py
+test -f scripts/release_change_policy.py
 test -x scripts/test-release-crates.py
 test -x scripts/test-release-readiness.sh
 test -x scripts/check-github-release-controls.py
 test -x scripts/test-github-release-controls.py
 test -x scripts/validate-current-pentest.sh
+test -x scripts/validate-development-milestone.sh
+test -x scripts/tag_gate.sh
 test -x scripts/install-ci-tools.sh
 test -s scripts/ci-tools.lock
 test -f security/pentest/README.md

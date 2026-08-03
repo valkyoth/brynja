@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 pentest and remediation retest passed; awaiting green GitHub checks
+Status: v0.10.0 tagged and published; v0.11.0 development milestone in progress
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -12,12 +12,21 @@ protocol implementation and must not be used to secure network traffic. Brynja
 is not FIPS 140-3 validated, and no package, feature, build, profile, or
 configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.9.0 established the workspace, hardened
+Signed releases v0.1.0 through v0.10.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
-the assurance harness and first value, cursor, and workspace domains. The
-v0.10.0 candidate selects `brynja-core 0.7.0`, eight dependency-only modern
-support patches at `0.1.6`, and `brynja 0.10.0`.
+the assurance harness and first value, cursor, workspace, and abstract secret
+lifetime domains. The v0.10.0 checkpoint published `brynja-core 0.7.0`, eight
+dependency-only modern support patches at `0.1.6`, and `brynja 0.10.0`.
+The facade now advances to `0.11.0` for the next signed development tag while
+all crates.io publication selections remain empty.
+
+Every roadmap version now completes the full automated tag gate and waits for
+green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
+publication occur at each fifth-minor public checkpoint. The v0.15.0 pentest
+will review all changes after v0.10.0 through v0.15.0; the v0.20.0 pentest will
+review all changes after v0.15.0 through v0.20.0. Intermediate patch and minor
+tags remain inside that cumulative change range.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -297,8 +306,9 @@ key logging:
 - exact initialization boundaries, every early exit, replacement/drop,
   every destruction target, line labels/endings, short buffers, isolation, and
   compile-fail clone/format constraints are tested; and
-- the post-v0.10 five-milestone public-checkpoint cadence and every intervening
-  internal stop are mechanically classified by the release-plan validator.
+- the post-v0.10 five-minor public-checkpoint cadence and every intervening
+  tagged development milestone are mechanically classified by the release-plan
+  validator.
 
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded
@@ -424,4 +434,5 @@ remaining finding. The permanent report records `PASS`/`PASS` with zero open
 findings, and the signed `v0.8.0` tag is complete. The v0.9.0 exact workspace
 and arena assessment passed retest with zero open findings; signed tag
 `v0.9.0` is complete. The v0.10.0 pentest and remediation retest passed with
-zero open findings; the final candidate now awaits green hosted checks.
+zero open findings; its hosted checks, signed tag, and selected crates.io
+publication are complete.

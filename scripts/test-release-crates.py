@@ -35,7 +35,7 @@ def public_plan() -> dict:
     }
     for name in policy.REPOSITORY_ONLY:
         crates[name] = entry("unpublished", "0.3.0", "repository", False)
-    crates[policy.FACADE] = entry("0.3.0", "0.4.0", "code", True)
+    crates[policy.FACADE] = entry("0.3.5", "0.4.0", "code", True)
     return {
         "version": "0.4.0",
         "milestone": "0.4.0",
@@ -142,7 +142,7 @@ def test_facade_cannot_be_publish_false() -> None:
 
 def test_facade_version_must_advance() -> None:
     assert_fails(
-        "release version must advance",
+        "previous version must be prior milestone",
         policy.validate_facade_entry,
         entry("0.5.0", "0.4.0", "code", True),
         "0.4.0",
@@ -226,6 +226,18 @@ def test_publish_plan_skips_unchanged_and_repository_crates() -> None:
     plan = public_plan()
     plan["crates"]["brynja-core"] = entry("0.3.0", "0.4.0", "code", True)
     assert policy.publish_plan(plan) == ("brynja-core", policy.FACADE)
+
+
+def test_cumulative_package_delta_cannot_be_lost() -> None:
+    plan = public_plan()
+    assert_fails(
+        "changed after v0.3.5 but is marked unchanged",
+        policy.validate_cumulative_changes,
+        plan,
+        {"brynja-core"},
+    )
+    plan["crates"]["brynja-core"] = entry("0.3.0", "0.4.0", "code", True)
+    policy.validate_cumulative_changes(plan, {"brynja-core"})
 
 
 def test_manifest_version_must_match_plan() -> None:
@@ -396,6 +408,7 @@ def run_tests() -> None:
     tests = (
         test_current_repository_plan,
         test_facade_always_publishes_at_release_version,
+        train_tests.test_internal_facade_advances_without_publication,
         test_unknown_stage_is_rejected,
         train_tests.test_internal_stop_requires_empty_publication,
         train_tests.test_checkpoint_requires_exact_cumulative_range,
@@ -409,6 +422,7 @@ def run_tests() -> None:
         test_repository_crates_can_never_publish,
         test_product_crate_cannot_claim_repository_only,
         test_publish_plan_skips_unchanged_and_repository_crates,
+        test_cumulative_package_delta_cannot_be_lost,
         test_manifest_version_must_match_plan,
         test_internal_dependency_pins_are_exact,
         test_publish_cannot_depend_on_unpublished_crate,
@@ -417,6 +431,8 @@ def run_tests() -> None:
         test_dependency_order_is_checked,
         test_release_candidates_parse_structurally,
         test_post_tag_preflight_supplies_guarded_context,
+        train_tests.test_future_checkpoint_uses_complete_generic_tag_gate,
+        train_tests.test_internal_stage_refuses_crates_io_publication,
         test_resume_must_select_a_published_crate,
         test_package_check_builds_without_uploading,
         test_package_check_lists_files_without_uploading,

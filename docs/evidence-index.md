@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 pentest and remediation retest passed; awaiting green GitHub checks
+Status: v0.10.0 tagged and published; v0.11.0 development milestone in progress
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -45,7 +45,7 @@ consistent in the same commit.
 | `package-policy.toml` | Complete package and dependency boundary | Workspace metadata validators and fixtures |
 | `github-release-controls.toml` | Protected release branch requirements | Local fixtures and authenticated live release check |
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |
-| `security/pentest/vX.Y.Z.md` | Permanent per-version pentest and remediation outcome | Release-readiness and report-history validators |
+| `security/pentest/vX.Y.Z.md` | Permanent scheduled or exceptional checkpoint outcome with previous-public-tag baseline and cumulative change scope | Stage-aware release-readiness, range, and report-history validators |
 | `assurance/policy.toml` | Bounded first-party mutation and differential contracts, three OS-less targets, separate stable/Kani toolchains, and five exact external assurance-tool pins | Schema, bounds, target, workflow, manifest-isolation, pin, source-kind, owner, and broken-fixture validation |
 | `assurance/evidence.json` | Deterministic binding of assurance policy, runners, process-containment preconditions, bounded-input controls, native-host CI, stable/Kani toolchain documentation, and every Cargo manifest | Byte-for-byte regeneration and 44 positive/broken assurance fixtures |
 

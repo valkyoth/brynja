@@ -7,10 +7,10 @@ id = "state.tls.secret-lifetime"
 requirement_id = "BRY-REQ-TLS-0010"
 owner = "0.10.0"
 domain = "tls"
-disposition = "future-work"
+disposition = "implemented"
 sources = ["rfc:9846"]
 code_target = "crates/brynja-core/src/secret.rs#SecretState"
-test_target = "tests/requirements/tls_secret_lifetime.rs#all_transitions"
+test_target = "crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact"
 rationale = "Every TLS-family secret transition has explicit ownership, destruction, cancellation, and provider-failure behavior."
 
 [[surface]]

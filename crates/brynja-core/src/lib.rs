@@ -15,6 +15,8 @@ pub mod numeric;
 pub mod provider;
 pub mod quantity;
 pub mod read;
+pub mod secret;
+pub mod secret_destruction;
 pub mod sequence;
 pub mod version;
 pub mod workspace;
@@ -37,6 +39,15 @@ pub use numeric::{BoundedU64, BoundedUsize, NumericError};
 pub use provider::{ProviderFailure, ProviderFailureKind, ProviderOperation};
 pub use quantity::{Count, Length};
 pub use read::{ReadCursor, ReadError};
+pub use secret::{
+    InitializationTransition, ReplacementTransition, SecretContractError, SecretInitialization,
+    SecretLifecycleContract, SecretState,
+};
+pub use secret_destruction::{
+    DestructionCause, DestructionComplete, DestructionFailure, DestructionFailureKind,
+    DestructionOutcome, DestructionTarget, DestructionTargets, SecretDestructor,
+    TargetDestructionStatus,
+};
 pub use sequence::{Epoch, SequenceNumber};
 pub use version::{ProtocolFamily, ProtocolVersion};
 pub use workspace::{
@@ -65,6 +76,9 @@ pub const WRITE_CURSOR_IMPLEMENTED: bool = true;
 /// Whether the v0.9 exact caller-owned workspace and arena model is implemented.
 pub const WORKSPACE_ARENAS_IMPLEMENTED: bool = true;
 
+/// Whether the v0.10 abstract secret-lifetime contract is implemented.
+pub const SECRET_LIFETIME_CONTRACT_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -75,5 +89,8 @@ mod tests {
         assert!(::core::hint::black_box(super::READ_CURSOR_IMPLEMENTED));
         assert!(::core::hint::black_box(super::WRITE_CURSOR_IMPLEMENTED));
         assert!(::core::hint::black_box(super::WORKSPACE_ARENAS_IMPLEMENTED));
+        assert!(::core::hint::black_box(
+            super::SECRET_LIFETIME_CONTRACT_IMPLEMENTED
+        ));
     }
 }

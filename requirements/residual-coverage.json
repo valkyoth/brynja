@@ -2536,7 +2536,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "b0566705ec0df20a2f366a18e5b743f86b0d576f014a3af2e54428e7df97120a",
+  "policy_sha256": "022d06b7e8db5f260b57fa0115c437cdb7efd5951ad00ef5f7a7a0a1475b1671",
   "requirement_count": 50,
   "schema": 1,
   "surface_count": 763,
@@ -2631,7 +2631,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "testing",
       "id": "facility.sslkeylogfile.test-support",
       "owner": "0.10.0",

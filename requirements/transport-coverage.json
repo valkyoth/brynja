@@ -7919,7 +7919,7 @@
     "0.99.0",
     "0.99.1"
   ],
-  "policy_sha256": "61ae1aaf889cd52fc93571ce392f1031faade3c8bc058309ad020b978dd679b7",
+  "policy_sha256": "15a102ca3534ae210881e417aae25ea2bb96feddc5dfabe94c9cbc8e0e727a71",
   "requirement_count": 71,
   "schema": 2,
   "surface_count": 485,
@@ -11646,7 +11646,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "state.tls.secret-lifetime",
       "owner": "0.10.0",

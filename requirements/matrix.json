@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0633e8beb612ce3e0b6586c9f40da248ba2ee1ccb5a7b6ed099092694aed6574",
-  "domain_policy_sha256": "ecf1b9ff4583ee31510738bc7299670c34f2c9002c3a47f2f697b68db00fb9c0",
-  "policy_sha256": "ad13e4717c3c248e94390da95366c24ec59e06d85f03d20391155467f059538d",
+  "domain_policy_sha256": "ff09f6cf736cc87cc98fe5b18b488f44a3396fb9b4a825a0116e26d1c6ffc17d",
+  "policy_sha256": "68d63c09564ab736ca04d41a5afb2dc720fd38035d55cb1d30d4ca72b32cfe8b",
   "requirements": [
     {
       "applicability": "delegate",
@@ -10590,7 +10590,7 @@
       "deviation_rationale": null,
       "domain": "operations",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.10.0.",
+      "evidence_gap": "Executable boundary tests are linked and passing; independent review remains unresolved at this implementation stop.",
       "id": "BRY-REQ-KEYLOGREG-0010",
       "invariants": [
         "resource-bound",
@@ -10603,7 +10603,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -10693,13 +10693,13 @@
       "tests": [
         {
           "polarity": "positive",
-          "status": "planned",
-          "target": "tests/surface/keylog.rs#production_isolation"
+          "status": "actual",
+          "target": "crates/brynja-test-support/tests/keylog.rs#every_pinned_label_encodes_one_exact_line"
         },
         {
           "polarity": "negative",
-          "status": "planned",
-          "target": "tests/surface/keylog.rs#reject_invalid_and_exhausted"
+          "status": "actual",
+          "target": "crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -12483,7 +12483,7 @@
       "deviation_rationale": null,
       "domain": "operations",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.10.0.",
+      "evidence_gap": "Executable boundary tests are linked and passing; independent review remains unresolved at this implementation stop.",
       "id": "BRY-REQ-OPERATIONS-0010",
       "invariants": [
         "resource-bound",
@@ -12496,7 +12496,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -12556,13 +12556,13 @@
       "tests": [
         {
           "polarity": "positive",
-          "status": "planned",
-          "target": "tests/surface/keylog.rs#production_rejected"
+          "status": "actual",
+          "target": "scripts/test-workspace-metadata.py#test_keylog_isolation"
         },
         {
           "polarity": "negative",
-          "status": "planned",
-          "target": "tests/surface/keylog.rs#reject_invalid_and_exhausted"
+          "status": "actual",
+          "target": "scripts/test-workspace-metadata.py#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -20035,13 +20035,13 @@
         "validation",
         "work-bound"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -20104,7 +20104,7 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-test-support/src/keylog.rs"
         }
       ],
@@ -20112,12 +20112,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/surface/keylog.rs#test_support_isolated"
+          "target": "crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/surface/keylog.rs#reject_invalid_and_exhausted"
+          "target": "crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -20439,13 +20439,13 @@
         "work-bound",
         "key-lifecycle"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "This dedicated semantic surface binds the reviewed transport authority set to exactly one implementation milestone, protocol domain, planned symbol, and positive and negative verification pair.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.10.0",
       "profile": "tls-dtls-quic",
-      "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "residual": "The abstract contract and executable verification are complete; byte-backed ownership, interoperability, and independent review remain outside this milestone.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -20544,7 +20544,7 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-core/src/secret.rs#SecretState"
         }
       ],
@@ -20552,12 +20552,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/tls_secret_lifetime.rs#all_transitions"
+          "target": "crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/tls_secret_lifetime.rs#reject_invalid_and_exhausted"
+          "target": "crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Parsing, state transitions, provider operations, retained bytes, retries, and output must consume explicit caller-owned budgets."
@@ -29546,9 +29546,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "b0566705ec0df20a2f366a18e5b743f86b0d576f014a3af2e54428e7df97120a",
+  "residual_policy_sha256": "022d06b7e8db5f260b57fa0115c437cdb7efd5951ad00ef5f7a7a0a1475b1671",
   "schema": 5,
   "source_ledger_sha256": "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70",
-  "surface_register_sha256": "65a2aec3a5b62c3174268c53728bf21fb2bc6a9c90aebe03c76ba8856abaee8b",
-  "transport_policy_sha256": "61ae1aaf889cd52fc93571ce392f1031faade3c8bc058309ad020b978dd679b7"
+  "surface_register_sha256": "3e0944a587933ec77fe99a10d522836a58eb9c9025bb9e5780ebafc1e637af58",
+  "transport_policy_sha256": "15a102ca3534ae210881e417aae25ea2bb96feddc5dfabe94c9cbc8e0e727a71"
 }

@@ -322,6 +322,50 @@ def test_resolved_isolation(all_features: dict, no_default: dict) -> None:
     )
 
 
+def test_keylog_isolation(baseline: dict) -> None:
+    support = package(baseline, "brynja-test-support")
+    if support["publish"] != [] or support["dependencies"]:
+        raise AssertionError("test-support key logging is not repository-isolated")
+    support_id = package_id(baseline, "brynja-test-support")
+    for owner in (
+        "brynja",
+        "brynja-core",
+        "brynja-crypto",
+        "brynja-pki",
+        "brynja-platform",
+        "brynja-tls",
+        "brynja-tls12",
+        "brynja-tls13",
+        "brynja-tls13-handshake",
+        "brynja-dtls",
+        "brynja-quic-tls",
+    ):
+        if any(item["pkg"] == support_id for item in node(baseline, owner)["deps"]):
+            raise AssertionError(f"production package reaches key logging: {owner}")
+
+
+def reject_invalid_and_exhausted(baseline: dict) -> None:
+    published = copy.deepcopy(baseline)
+    package(published, "brynja-test-support")["publish"] = ["crates-io"]
+    require_rejection(
+        published,
+        "all-features",
+        "publication class is not enforced",
+        "publishable key-log test support",
+    )
+
+    production_edge = copy.deepcopy(baseline)
+    node(production_edge, "brynja")["deps"].append(
+        graph_dependency(production_edge, "brynja", "brynja-test-support")
+    )
+    require_rejection(
+        production_edge,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "production key-log dependency smuggling",
+    )
+
+
 def main() -> int:
     no_default = metadata("--no-default-features")
     all_features = metadata("--all-features")
@@ -331,7 +375,9 @@ def main() -> int:
     test_dependency_contracts(all_features)
     test_feature_contracts(all_features)
     test_resolved_isolation(all_features, no_default)
-    print("workspace policy rejects 21 package-class and feature-graph regressions")
+    test_keylog_isolation(all_features)
+    reject_invalid_and_exhausted(all_features)
+    print("workspace policy rejects 23 package-class and feature-graph regressions")
     return 0
 
 

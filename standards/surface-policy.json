@@ -173,7 +173,7 @@
               "iana:tls-parameters",
               "rfc:9850"
             ],
-            "test_target": "tests/surface/keylog.rs#production_isolation"
+            "test_target": "crates/brynja-test-support/tests/keylog.rs#every_pinned_label_encodes_one_exact_line"
           },
           "ids": [
             "tls-sslkeylogfile-labels"
@@ -694,19 +694,19 @@
         "owner": "0.10.0",
         "rationale": "Production SSLKEYLOGFILE export is forbidden because it defeats the secret-lifetime contract.",
         "sources": ["rfc:9850"],
-        "test_target": "tests/surface/keylog.rs#production_rejected"
+        "test_target": "scripts/test-workspace-metadata.py#test_keylog_isolation"
       },
       "id": "facility.sslkeylogfile.production"
     },
     {
       "decision": {
         "code_target": "crates/brynja-test-support/src/keylog.rs",
-        "disposition": "future-work",
+        "disposition": "implemented",
         "domain": "testing",
         "owner": "0.10.0",
         "rationale": "Key logging may exist only in separately compiled repository test support that cannot enter production packages.",
         "sources": ["rfc:9850"],
-        "test_target": "tests/surface/keylog.rs#test_support_isolated"
+        "test_target": "crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex"
       },
       "id": "facility.sslkeylogfile.test-support"
     },

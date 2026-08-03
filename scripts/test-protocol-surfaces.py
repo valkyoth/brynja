@@ -67,9 +67,14 @@ def test_current_repository() -> None:
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 51
+    assert len(implemented) == 53
     assert all(
         surface_id.startswith("iana.tls-parameters.tls-parameters-6")
+        or surface_id
+        in {
+            "facility.sslkeylogfile.test-support",
+            "state.tls.secret-lifetime",
+        }
         for surface_id in implemented
     )
     assert standards.json_bytes(register) == lib.REGISTER.read_bytes()
@@ -187,7 +192,7 @@ def test_mandatory_explicit_decisions() -> None:
         "facility.heartbeat": "intentionally-rejected",
         "facility.status-request-v2": "intentionally-rejected",
         "facility.sslkeylogfile.production": "intentionally-rejected",
-        "facility.sslkeylogfile.test-support": "future-work",
+        "facility.sslkeylogfile.test-support": "implemented",
         "facility.tls13.post-handshake-authentication":
             "intentionally-rejected",
         "facility.external-psk.certificate-authentication":

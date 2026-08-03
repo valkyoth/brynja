@@ -2638,8 +2638,8 @@
         "boundary:boundary:operations.0.10.0"
       ],
       "tests": [
-        "planned:positive:tests/surface/keylog.rs#production_isolation",
-        "planned:negative:tests/surface/keylog.rs#reject_invalid_and_exhausted"
+        "actual:positive:crates/brynja-test-support/tests/keylog.rs#every_pinned_label_encodes_one_exact_line",
+        "actual:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-LEG-0001": {
@@ -3167,8 +3167,8 @@
         "boundary:boundary:operations.0.10.0"
       ],
       "tests": [
-        "planned:positive:tests/surface/keylog.rs#production_rejected",
-        "planned:negative:tests/surface/keylog.rs#reject_invalid_and_exhausted"
+        "actual:positive:scripts/test-workspace-metadata.py#test_keylog_isolation",
+        "actual:negative:scripts/test-workspace-metadata.py#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-OPTIONAL-0136": {
@@ -4379,11 +4379,11 @@
         "rfc:9850"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-test-support/src/keylog.rs"
+        "actual-symbol:crates/brynja-test-support/src/keylog.rs"
       ],
       "tests": [
-        "planned:positive:tests/surface/keylog.rs#test_support_isolated",
-        "planned:negative:tests/surface/keylog.rs#reject_invalid_and_exhausted"
+        "planned:positive:crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex",
+        "planned:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-TLS-0001": {
@@ -4487,11 +4487,11 @@
         "rfc:9846"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-core/src/secret.rs#SecretState"
+        "actual-symbol:crates/brynja-core/src/secret.rs#SecretState"
       ],
       "tests": [
-        "planned:positive:tests/requirements/tls_secret_lifetime.rs#all_transitions",
-        "planned:negative:tests/requirements/tls_secret_lifetime.rs#reject_invalid_and_exhausted"
+        "planned:positive:crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact",
+        "planned:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-TLS-0018": {
@@ -10623,6 +10623,12 @@
       "actual-symbol:crates/brynja-core/src/error.rs#TlsFailure": [
         "BRY-REQ-TLS-0005"
       ],
+      "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
+        "BRY-REQ-TLS-0010"
+      ],
+      "actual-symbol:crates/brynja-test-support/src/keylog.rs": [
+        "BRY-REQ-TESTING-0010"
+      ],
       "actual-symbol:scripts/check-requirements.py#resolve_source": [
         "BRY-REQ-IANA-0001"
       ],
@@ -10722,9 +10728,6 @@
       ],
       "planned-symbol:crates/brynja-core/src/entropy.rs": [
         "BRY-REQ-ENTROPY-0014"
-      ],
-      "planned-symbol:crates/brynja-core/src/secret.rs#SecretState": [
-        "BRY-REQ-TLS-0010"
       ],
       "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes": [
         "BRY-REQ-CRYPTO-0005"
@@ -10918,9 +10921,6 @@
       "planned-symbol:crates/brynja-quic-tls/src/resumption.rs#QuicResumption": [
         "BRY-REQ-QUIC-0099"
       ],
-      "planned-symbol:crates/brynja-test-support/src/keylog.rs": [
-        "BRY-REQ-TESTING-0010"
-      ],
       "planned-symbol:crates/brynja-tls-core/src/exporter.rs#Exporter": [
         "BRY-REQ-TLS-0079"
       ],
@@ -11086,8 +11086,20 @@
       "actual:negative:crates/brynja-core/tests/tls_failures.rs#reject_secret_and_ambiguous_errors": [
         "BRY-REQ-TLS-0005"
       ],
+      "actual:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-KEYLOGREG-0010"
+      ],
+      "actual:negative:scripts/test-workspace-metadata.py#reject_invalid_and_exhausted": [
+        "BRY-REQ-OPERATIONS-0010"
+      ],
       "actual:positive:crates/brynja-core/tests/tls_failures.rs#typed_outcomes": [
         "BRY-REQ-TLS-0005"
+      ],
+      "actual:positive:crates/brynja-test-support/tests/keylog.rs#every_pinned_label_encodes_one_exact_line": [
+        "BRY-REQ-KEYLOGREG-0010"
+      ],
+      "actual:positive:scripts/test-workspace-metadata.py#test_keylog_isolation": [
+        "BRY-REQ-OPERATIONS-0010"
       ],
       "actual:scripts/test-requirements.py#test_iana_source_drift_changes_matrix": [
         "BRY-REQ-IANA-0001"
@@ -11097,6 +11109,12 @@
       ],
       "actual:scripts/test-requirements.py#test_missing_residual_fails": [
         "BRY-REQ-STD-0002"
+      ],
+      "planned:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-TLS-0010"
+      ],
+      "planned:negative:crates/brynja-test-support/tests/keylog.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-TESTING-0010"
       ],
       "planned:negative:tests/conformance/dtls.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0116"
@@ -11398,9 +11416,6 @@
       "planned:negative:tests/requirements/tls_router.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0092"
       ],
-      "planned:negative:tests/requirements/tls_secret_lifetime.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-TLS-0010"
-      ],
       "planned:negative:tests/requirements/tls_version.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0068"
       ],
@@ -11467,11 +11482,6 @@
       "planned:negative:tests/surface/hpke_registry.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-HPKEREG-0138"
       ],
-      "planned:negative:tests/surface/keylog.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-KEYLOGREG-0010",
-        "BRY-REQ-OPERATIONS-0010",
-        "BRY-REQ-TESTING-0010"
-      ],
       "planned:negative:tests/surface/legacy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-LEGACY-0100",
         "BRY-REQ-LEGACY-0300",
@@ -11505,6 +11515,12 @@
       "planned:negative:tests/surface/status_request_v2.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
+      ],
+      "planned:positive:crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact": [
+        "BRY-REQ-TLS-0010"
+      ],
+      "planned:positive:crates/brynja-test-support/tests/keylog.rs#canonical_example_has_single_spaces_and_uppercase_hex": [
+        "BRY-REQ-TESTING-0010"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"
@@ -11812,9 +11828,6 @@
       "planned:positive:tests/requirements/tls_router.rs#single_engine": [
         "BRY-REQ-TLS-0092"
       ],
-      "planned:positive:tests/requirements/tls_secret_lifetime.rs#all_transitions": [
-        "BRY-REQ-TLS-0010"
-      ],
       "planned:positive:tests/requirements/tls_version.rs#one_pass_selection": [
         "BRY-REQ-TLS-0068"
       ],
@@ -11910,15 +11923,6 @@
       ],
       "planned:positive:tests/surface/hpke_registry.rs#registry": [
         "BRY-REQ-HPKEREG-0138"
-      ],
-      "planned:positive:tests/surface/keylog.rs#production_isolation": [
-        "BRY-REQ-KEYLOGREG-0010"
-      ],
-      "planned:positive:tests/surface/keylog.rs#production_rejected": [
-        "BRY-REQ-OPERATIONS-0010"
-      ],
-      "planned:positive:tests/surface/keylog.rs#test_support_isolated": [
-        "BRY-REQ-TESTING-0010"
       ],
       "planned:positive:tests/surface/legacy.rs#pct_isolation": [
         "BRY-REQ-LEGACY-0600"

@@ -28,6 +28,7 @@ DISPOSITION_LIFECYCLE = {
     "caller-owned": "caller-owned",
     "future-work": "planned",
     "intentionally-rejected": "rejected",
+    "implemented": "tested",
     "legacy-only": "legacy",
     "safely-ignored": "planned",
 }
@@ -126,6 +127,8 @@ def _target(lifecycle: str, surface: dict) -> dict:
     if lifecycle in {"caller-owned", "rejected"}:
         label = surface["domain"].replace("_", "-")
         return {"kind": "boundary", "target": f"boundary:{label}.{surface['owner']}"}
+    if lifecycle in {"evidenced", "implemented", "tested"}:
+        return {"kind": "actual-symbol", "target": surface["code_target"]}
     return {"kind": "planned-symbol", "target": surface["code_target"]}
 
 
@@ -140,17 +143,17 @@ def _invariants(domain: str, lifecycle: str) -> list[str]:
     return values
 
 
-def _tests(surface: dict) -> list[dict]:
+def _tests(surface: dict, verified: bool) -> list[dict]:
     path, _separator, _anchor_value = surface["test_target"].partition("#")
     return [
         {
             "polarity": "positive",
-            "status": "planned",
+            "status": "actual" if verified else "planned",
             "target": surface["test_target"],
         },
         {
             "polarity": "negative",
-            "status": "planned",
+            "status": "actual" if verified else "planned",
             "target": f"{path}#reject_invalid_and_exhausted",
         },
     ]
@@ -176,7 +179,10 @@ def make_requirement(
         "domain": surface["domain"],
         "evidence": [],
         "evidence_gap": (
-            "Executable vectors, fault campaigns, interoperability, and "
+            "Executable boundary tests are linked and passing; independent "
+            "review remains unresolved at this implementation stop."
+            if raw.get("verified", False)
+            else "Executable vectors, fault campaigns, interoperability, and "
             f"independent audit evidence remain unresolved until {surface['owner']}."
         ),
         "id": raw["id"],
@@ -203,7 +209,7 @@ def make_requirement(
             lifecycle,
             {**surface, "source_blocker": raw.get("blocker")},
         )],
-        "tests": _tests(surface),
+        "tests": _tests(surface, raw.get("verified", False)),
         "work_bound": (
             "Inputs, parsing, retained bytes, retries, provider operations, "
             "state transitions, and outputs require explicit caller-owned ceilings."
@@ -248,7 +254,7 @@ def validate_policy(
             not GROUP_FIELDS <= set(item)
             or set(item)
             - GROUP_FIELDS
-            - {"blocker", "lifecycle", "revision"}
+            - {"blocker", "lifecycle", "revision", "verified"}
         ) or (
             item["owner"] not in versions
             or item["disposition"] not in DISPOSITION_LIFECYCLE
@@ -262,6 +268,7 @@ def validate_policy(
             or len(item["surface_ids"]) != len(set(item["surface_ids"]))
             or not isinstance(item.get("revision", 1), int)
             or item.get("revision", 1) < 1
+            or not isinstance(item.get("verified", False), bool)
             or (
                 (item.get("lifecycle") == "blocked")
                 != isinstance(item.get("blocker"), str)

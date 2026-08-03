@@ -61,7 +61,9 @@ def expanded_surface(entry: dict, roles: dict[str, str]) -> dict:
         ),
         "id": identifier,
         "invariants": invariants,
-        "lifecycle": "planned",
+        "lifecycle": "implemented"
+        if entry["disposition"] == "implemented"
+        else "planned",
         "mapping_rationale": (
             "This dedicated semantic surface binds the reviewed transport "
             "authority set to exactly one implementation milestone, protocol "
@@ -71,8 +73,12 @@ def expanded_surface(entry: dict, roles: dict[str, str]) -> dict:
         "owner": entry["owner"],
         "positive_test": entry["test_target"],
         "residual": (
-            "Implementation, executable verification, interoperability, and "
-            "external review remain future work at the owning milestone."
+            "The abstract contract and executable verification are complete; "
+            "byte-backed ownership, interoperability, and independent review "
+            "remain outside this milestone."
+            if entry["disposition"] == "implemented"
+            else "Implementation, executable verification, interoperability, "
+            "and external review remain future work at the owning milestone."
         ),
         "sources": [
             {"authority_role": roles[source], "id": source}
@@ -121,7 +127,7 @@ def load_policy(ledger: dict | None = None) -> tuple[dict, list[dict], str]:
             or not document["surface"]
             or any(
                 set(entry) != surface_fields
-                or entry["disposition"] != "future-work"
+                or entry["disposition"] not in {"future-work", "implemented"}
                 or not isinstance(entry["sources"], list)
                 or not entry["sources"]
                 or any(source not in roles for source in entry["sources"])

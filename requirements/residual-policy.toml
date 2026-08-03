@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
 source_ledger_sha256 = "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70"
-surface_register_sha256 = "65a2aec3a5b62c3174268c53728bf21fb2bc6a9c90aebe03c76ba8856abaee8b"
+surface_register_sha256 = "3e0944a587933ec77fe99a10d522836a58eb9c9025bb9e5780ebafc1e637af58"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -895,6 +895,8 @@ id = "BRY-REQ-KEYLOGREG-0010"
 domain = "operations"
 owner = "0.10.0"
 disposition = "intentionally-rejected"
+verified = true
+revision = 2
 sources = ["iana:tls-parameters", "rfc:9850"]
 surface_ids = [
   "iana.tls-parameters.tls-sslkeylogfile-labels",
@@ -1066,6 +1068,8 @@ id = "BRY-REQ-OPERATIONS-0010"
 domain = "operations"
 owner = "0.10.0"
 disposition = "intentionally-rejected"
+verified = true
+revision = 3
 sources = ["rfc:9850"]
 surface_ids = [
   "facility.sslkeylogfile.production",
@@ -1182,7 +1186,10 @@ surface_ids = [
 id = "BRY-REQ-TESTING-0010"
 domain = "testing"
 owner = "0.10.0"
-disposition = "future-work"
+disposition = "implemented"
+verified = false
+lifecycle = "implemented"
+revision = 3
 sources = ["rfc:9850"]
 surface_ids = [
   "facility.sslkeylogfile.test-support",

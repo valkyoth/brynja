@@ -25,9 +25,9 @@
 
 # brynja-core
 
-`brynja-core 0.4.0` adds Brynja's allocation-free v0.7 borrowed read cursor to
-the alert, failure, checked numeric, sequence, epoch, and immutable budget
-value domains from earlier milestones.
+`brynja-core 0.5.0` adds Brynja's allocation-free v0.8 transactional write
+cursor to the borrowed read cursor and alert, failure, checked numeric,
+sequence, epoch, and immutable budget value domains from earlier milestones.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
@@ -40,8 +40,12 @@ safe diagnostics. `ReadCursor` borrows caller input, advances only after an
 exact checked range is available, returns borrowed slices and array references,
 and consumes itself when `finish` checks for trailing data. It is not clonable
 or formattable, and its value-free errors reveal no input, offset, requested
-length, or available length. This is not TLS framing, a protocol parser, a TLS
-state machine, cryptography, PKI, a provider, or a production-ready transport.
+length, or available length. `WriteCursor` exclusively borrows caller output
+and preflights complete single-slice, multi-part, and repeated-byte operations
+before changing any byte. Failure preserves the complete buffer and position;
+exact completion consumes the cursor. This is not integer encoding, TLS
+framing, a protocol parser, a TLS state machine, cryptography, PKI, a provider,
+secret destruction, or a production-ready transport.
 
 ## Protocol Verification Status
 
@@ -51,18 +55,17 @@ do not by themselves constitute independent protocol verification.
 
 | Component | Protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Alert, failure, bounded numeric, sequence, epoch, budget, and borrowed cursor domains | ❌ Not verified |
+| `brynja-core` | Alert, failure, bounded numeric, sequence, epoch, budget, and transactional read/write cursor domains | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.7"
+brynja = "0.8"
 ```
 
-The `0.4.0` package is selected for publication with Brynja v0.7.0. The
-repository-owner pentest and retest passed; publication still requires green
-hosted release checks under the
+The `0.5.0` package is selected for publication with Brynja v0.8.0. The
+release candidate awaits its repository-owner pentest under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

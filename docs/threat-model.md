@@ -42,7 +42,11 @@ limit policy during an operation, or extract configured limits through errors.
 Cursor attackers additionally supply every possible truncation boundary,
 oversized lengths that overflow end offsets, valid prefixes with trailing
 bytes, and read sequences intended to advance state after failure, fork parser
-state, escape caller lifetimes, or disclose input through diagnostics.
+state, escape caller lifetimes, or disclose input through diagnostics. Output
+attackers additionally force capacity and aggregate-length failures after
+valid prefixes, split data across empty and non-empty parts, and attempt to
+observe partial mutation, outside-buffer writes, stale cursor advancement,
+mutable aliasing, or output-derived diagnostics.
 
 ## Required Controls
 
@@ -61,8 +65,13 @@ state, escape caller lifetimes, or disclose input through diagnostics.
   construction failures, and limit-value-free exhaustion errors;
 - private-field borrowed cursors with checked end offsets, bounds-checked slice
   access, exact success-only advancement, unchanged state on every failure,
-  explicit trailing-data rejection, caller-bound output lifetimes, no cursor
+  explicit trailing-data rejection, caller-bound input lifetimes, no cursor
   cloning or formatting, and value-free read errors;
+- private-field caller-buffer write cursors with exclusive output lifetimes,
+  checked complete-range and aggregate-part preflight, exact success-only
+  mutation and advancement, byte-for-byte failure preservation, consuming
+  exact-capacity completion, no cursor cloning or formatting, and value-free
+  write errors;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
@@ -103,14 +112,15 @@ state, escape caller lifetimes, or disclose input through diagnostics.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.7.0
+## Non-Goals At 0.8.0
 
 No transport security or interoperability guarantee exists. The only protocol
 code consists of allocation-free shared alert/failure, bounded
-numeric/resource value domains, and a protocol-neutral borrowed read cursor;
-there is no integer decoder, framing layer, protocol parser, record layer,
-mutable accounting state, handshake, provider implementation, PKI, or
-cryptography.
+numeric/resource value domains, and protocol-neutral borrowed read and
+transactional caller-buffer write cursors; there is no integer encoder or
+decoder, framing layer, protocol parser, record layer, mutable accounting
+state, arena model, secret ownership, handshake, provider implementation, PKI,
+or cryptography.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
@@ -129,7 +139,10 @@ behavior. v0.6.0 adds checked bounded arithmetic, distinct counts and lengths,
 non-wrapping protocol-neutral sequence/epoch values, and immutable explicit
 resource/work limits without claiming direction-specific state or wire
 semantics. v0.7.0 adds exact transactional borrowed input consumption without
-claiming framing, parsing, secret ownership, or protocol behavior. Planned,
+claiming framing, parsing, secret ownership, or protocol behavior. v0.8.0 adds
+complete-operation-preflight caller-buffer writes without claiming integer
+encoding, compound rollback across separate successful calls, arenas, overlap
+policy, secret destruction, framing, or protocol behavior. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

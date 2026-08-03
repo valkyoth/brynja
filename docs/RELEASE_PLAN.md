@@ -688,7 +688,7 @@ Exit criteria:
 
 ### v0.7.0 - Borrowed Read Cursor
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement a borrowed read cursor with exact consumption, truncation-at-every-byte coverage, and no indexing panics.
 
@@ -753,31 +753,72 @@ Exit criteria:
 
 ### v0.8.0 - Transactional Write Cursor
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement caller-buffer write cursors with transactional encode-or-no-mutation behavior.
 
-Goal: complete the **Transactional Write Cursor** implementation stop without admitting or
-claiming adjacent capability.
+Goal: freeze the allocation-free, protocol-neutral caller-buffer output
+primitive used by later codecs, with complete-operation preflight and no
+partial mutation on failure, without implementing integer encoding, framing,
+arenas, secret ownership, or protocol state early.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- provide a private-field `WriteCursor<'output>` that exclusively borrows a
+  caller-owned mutable byte slice and stores only that slice and its position;
+- preflight every complete single-slice, multi-part, and repeated-byte write
+  before changing output, then advance only after the whole operation succeeds;
+- treat all slices supplied to one multi-part call as one transaction, checking
+  their aggregate length with overflow-safe arithmetic before the first copy;
+- expose position, remaining capacity, immutable written-prefix inspection,
+  finished state, and a consuming exact-capacity completion check;
+- keep the cursor non-`Clone`, non-`Copy`, non-formattable, and `must_use`, and
+  prevent safe caller access to the exclusively borrowed output while active;
+- return only closed value-free `InsufficientCapacity`, `LengthOverflow`, and
+  `TrailingCapacity` categories without bytes, offsets, lengths, strings,
+  allocation, or provider detail;
+- state explicitly that separate successful calls are separate transactions
+  and that the cursor neither owns nor destroys secrets;
+- retain integer encoding, canonical formats, nested framing, patching,
+  caller-owned arenas, overlap policy, mutable accounting, secret destruction,
+  protocol parsing, and state transitions for their later milestones;
+- publish `brynja-core 0.5.0`, dependency-only `0.1.4` patches for its changed
+  exact-pinned modern closure, and the mandatory `brynja 0.8.0` facade;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- exhaust every start position and requested length around bounded output,
+  proving exact success and byte-for-byte buffer plus position preservation on
+  insufficient capacity;
+- test multi-part ordering, empty parts, complete preflight, repeated bytes,
+  `usize` end-offset overflow, zero-length writes at every boundary, empty
+  output, exact completion, output identity, and compact storage;
+- run compile-fail doctests for cursor cloning, formatting, and accessing the
+  caller's mutably borrowed output while the cursor remains live;
+- enforce the no-indexing, no-panic, no-unsafe, no-allocation, no-external-
+  dependency, `no_std`, 500-line, and valueless-error boundaries through
+  workspace lints, resolved-graph policy, representation checks, and OS-less
+  builds;
+- prove no protocol surface or normative protocol requirement advances because
+  this is a source-free buffer foundation, and retain all adjacent capabilities
+  under their existing owners;
 - pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+  advisory policy, SBOM, packages, documentation, protocol isolation, and the
+  complete first-party assurance gate;
+- obtain the required external release pentest.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- every admitted output operation is deterministic and failure-transactional:
+  a rejected operation changes neither any output byte nor cursor position;
+- cursor construction performs no write, successful operations affect only
+  their exact destination, and safe Rust preserves the exclusive caller-buffer
+  borrow for the cursor lifetime;
+- no documentation, requirement, or protocol surface claims integer encoding,
+  framing, parsing, arenas, secret destruction, interoperability, independent
+  review, formal proof, production readiness, or FIPS validation;
 - `v0.8.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.9.0 - Caller-Owned Workspace And Arena Model

@@ -16,6 +16,7 @@ pub mod quantity;
 pub mod read;
 pub mod sequence;
 pub mod version;
+pub mod write;
 
 pub use alert::{
     Alert, AlertClass, AlertCode, AlertCodeClass, AlertDescription, AlertOrigin, AlertSeverity,
@@ -32,6 +33,7 @@ pub use quantity::{Count, Length};
 pub use read::{ReadCursor, ReadError};
 pub use sequence::{Epoch, SequenceNumber};
 pub use version::{ProtocolFamily, ProtocolVersion};
+pub use write::{WriteCursor, WriteError};
 
 /// Whether this package provides its planned implementation.
 ///
@@ -47,6 +49,9 @@ pub const BOUNDED_DOMAINS_IMPLEMENTED: bool = true;
 /// Whether the v0.7 transactional borrowed read cursor is implemented.
 pub const READ_CURSOR_IMPLEMENTED: bool = true;
 
+/// Whether the v0.8 transactional caller-buffer write cursor is implemented.
+pub const WRITE_CURSOR_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -55,5 +60,6 @@ mod tests {
         assert!(::core::hint::black_box(super::FAILURE_DOMAINS_IMPLEMENTED));
         assert!(::core::hint::black_box(super::BOUNDED_DOMAINS_IMPLEMENTED));
         assert!(::core::hint::black_box(super::READ_CURSOR_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::WRITE_CURSOR_IMPLEMENTED));
     }
 }

@@ -5,6 +5,30 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-08-03
+
+### Added
+
+- Allocation-free `WriteCursor<'output>` exclusively borrowing caller-owned
+  mutable output.
+- Transactional single-slice, multi-part, and repeated-byte writes with exact
+  consuming completion and immutable written-prefix inspection.
+- Exhaustive every-position/request, whole-buffer no-mutation, aggregate-part,
+  overflow, zero-length, empty-output, identity, representation, and
+  compile-fail tests.
+
+### Security
+
+- Every operation checks its complete destination before changing any byte;
+  capacity or arithmetic failure preserves the full output and cursor position.
+- Multi-part writes preflight the overflow-safe aggregate length before copying
+  their first part, so one call is one mutation transaction.
+- Cursor state is private, non-clonable, non-copyable, non-formattable, and
+  holds an exclusive borrow that prevents safe outside output mutation.
+- Write errors are closed and value-free. No integer encoding, framing, arena,
+  secret-destruction, protocol, production, independent-review, or FIPS claim
+  is advanced.
+
 ### Changed
 
 - Beginning after signed `v0.10.0`, group internal implementation stops into

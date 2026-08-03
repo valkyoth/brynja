@@ -1,13 +1,14 @@
 //! Security-first, dependency-free `no_std` TLS facade.
 //!
 //! This release exposes checked numeric/resource domains and transactional
-//! borrowed input consumption. It does not yet provide a TLS connection API.
+//! borrowed input and caller-buffer output cursors. It does not yet provide a
+//! TLS connection API.
 
 #![no_std]
 
 /// Whether this package provides its planned implementation.
 ///
-/// The borrowed-read milestone intentionally reports `false`.
+/// The transactional-write milestone intentionally reports `false`.
 pub const IMPLEMENTED: bool = false;
 
 pub use brynja_core as core;
@@ -30,7 +31,11 @@ mod tests {
         assert!(::core::hint::black_box(
             super::core::READ_CURSOR_IMPLEMENTED
         ));
-        let cursor = super::core::ReadCursor::new(&[]);
-        assert_eq!(cursor.finish(), Ok(()));
+        assert!(::core::hint::black_box(
+            super::core::WRITE_CURSOR_IMPLEMENTED
+        ));
+        let mut output = [];
+        let cursor = super::core::WriteCursor::new(&mut output);
+        assert_eq!(cursor.finish().map(|finished| finished.len()), Ok(0));
     }
 }

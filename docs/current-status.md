@@ -1,20 +1,21 @@
 # Current Status
 
-Status: v0.7.0 pentest and retest passed; awaiting GitHub
+Status: v0.8.0 implementation complete; awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
-value domains plus a protocol-neutral borrowed read cursor. It still has no
-TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS, DTLS
-engine, platform provider, or legacy protocol implementation and must not be
-used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
-package, feature, build, profile, or configuration may imply otherwise.
+value domains plus protocol-neutral borrowed read and transactional
+caller-buffer write cursors. It still has no integer encoding, TLS framing or
+parser, TLS state machine, cryptography, PKI, QUIC-TLS, DTLS engine, platform
+provider, or legacy protocol implementation and must not be used to secure
+network traffic. Brynja is not FIPS 140-3 validated, and no package, feature,
+build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.6.0 established the workspace, hardened
+Signed releases v0.1.0 through v0.7.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
-the assurance harness and first value domains. The v0.7.0 candidate selects
-`brynja-core 0.4.0`, eight dependency-only modern support patches at `0.1.3`,
-and `brynja 0.7.0`.
+the assurance harness and first value and cursor domains. The v0.8.0 candidate
+selects `brynja-core 0.5.0`, eight dependency-only modern support patches at
+`0.1.4`, and `brynja 0.8.0`.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -227,6 +228,28 @@ Version 0.7.0 adds borrowed input consumption:
   is a source-free cursor foundation; integer decoding, framing, parsers,
   writes, arenas, secret ownership, and state machines remain future work.
 
+Version 0.8.0 adds transactional caller-buffer output construction:
+
+- `WriteCursor<'output>` exclusively borrows caller-owned mutable bytes and
+  stores only that slice plus a private position without allocation;
+- every single-slice, multi-part, and repeated-byte operation preflights its
+  complete destination before changing the first byte;
+- multi-part writes check aggregate-length arithmetic and capacity first, then
+  preserve source order as one mutation transaction;
+- capacity and end-offset failures preserve every output byte and the cursor
+  position, while success changes only the exact destination and advances
+  exactly once;
+- immutable prefix inspection and consuming exact-capacity completion expose
+  no mutable alias while the cursor remains active;
+- the cursor is non-`Clone`, non-`Copy`, non-formattable, and `must_use`, and
+  compile-fail tests enforce its exclusive output lifetime;
+- `WriteError` contains only `InsufficientCapacity`, `LengthOverflow`, or
+  `TrailingCapacity`, with no bytes, offsets, lengths, strings, or allocation;
+  and
+- no protocol surface or normative protocol requirement advances because this
+  is a source-free buffer foundation; integer encoding, framing, patching,
+  arenas, overlap policy, secrets, and protocol state remain future work.
+
 Everything beyond those foundation domains remains governance and planning
 evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
@@ -313,5 +336,5 @@ a timing-racy detached-descendant assurance fixture. The repository owner
 retested signed remediation candidate
 `13adb4b4d5d5eca97b40381fc41533ba5723e69b` and reported it green with no
 remaining finding. The permanent report records `PASS`/`PASS` and zero open
-findings; release now awaits the final committed candidate and green GitHub
-checks.
+findings. The signed `v0.7.0` tag is complete; v0.8.0 now awaits its separate
+repository-owner pentest.

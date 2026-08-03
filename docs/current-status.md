@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.9.0 pentest dispositions complete; retest required
+Status: v0.9.0 pentest and retest passed; awaiting green GitHub checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional

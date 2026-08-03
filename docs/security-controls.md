@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.9.0 pentest dispositions complete; retest required
+Status: v0.9.0 pentest and retest passed; awaiting green GitHub checks
 
 | Control | Foundation enforcement |
 | --- | --- |

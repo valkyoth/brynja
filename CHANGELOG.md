@@ -36,6 +36,8 @@ Keep a Changelog and Semantic Versioning.
   `CertificateDomain` rejects private-key semantics, and v0.10 explicitly
   requires typed complete initialization while v0.11 retains the unsafe-policy
   and emitted-code gate for optimization-resistant destruction.
+- The repository-owner retest passed with both observations closed and zero
+  open findings.
 
 ## [0.8.0] - 2026-08-03
 

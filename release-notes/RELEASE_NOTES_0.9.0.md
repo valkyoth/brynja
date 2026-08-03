@@ -1,6 +1,6 @@
 # Brynja 0.9.0 Release Notes
 
-Status: pentest dispositions complete; retest required
+Status: pentest and retest passed; awaiting green GitHub checks
 
 Brynja 0.9.0 implements a protocol-neutral caller-owned workspace partition
 and monotonic arena allocator. It does not implement integer encoding, TLS
@@ -115,9 +115,10 @@ the proven complete-region destruction primitive. Future consumers must test
 every partial-write and early-return path; a debug canary may supplement those
 tests but cannot replace the typed transition or zeroization evidence.
 
-Both findings are closed for v0.9.0 with zero open findings. The permanent
-report remains `RETEST REQUIRED`/`PENDING` until the repository owner confirms
-the dispositions.
+Both findings are closed for v0.9.0 with zero open findings. The repository
+owner retested signed disposition candidate
+`2526e1a67d847128870862833c5e0c2713d454f9` and reported it green. The
+permanent report records `PASS`/`PASS`.
 
 ## Publication Set
 
@@ -127,9 +128,8 @@ support patches at `0.1.5`, and the mandatory `brynja 0.9.0` facade.
 packages remain unpublished. The guarded publisher enforces exact pins,
 dependency order, and the facade-last rule.
 
-Publication remains blocked until the repository owner reports a clean retest,
-the permanent report records `PASS`/`PASS`, GitHub is green, and the user
-explicitly authorizes the signed release tag.
+Publication remains blocked until GitHub is green and the user explicitly
+authorizes the signed release tag.
 
 ## Limitations
 

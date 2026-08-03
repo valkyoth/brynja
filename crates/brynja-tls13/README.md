@@ -26,7 +26,7 @@
 # brynja-tls13
 
 `brynja-tls13` is the version-specific TLS 1.3 stream engine boundary. In
-`0.1.2` only repins its exact v0.6 dependencies; it does not provide a
+`0.1.3` only repins its exact v0.7 dependencies; it does not provide a
 working TLS, cryptographic, PKI, or platform implementation.
 
 ## Cryptography Verification Status
@@ -47,10 +47,10 @@ Most application users will eventually depend on the evergreen facade:
 
 ```toml
 [dependencies]
-brynja = "0.6"
+brynja = "0.7"
 ```
 
-This dependency-only patch is selected for publication with v0.6.0 after the
+This dependency-only patch is selected for publication with v0.7.0 after the
 required pentest, committed PASS report, and green GitHub checks required by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

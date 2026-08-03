@@ -39,6 +39,10 @@ Foundation-domain attackers additionally try to overflow or underflow numeric
 state, force platform-width truncation, confuse item counts with byte lengths,
 wrap sequence numbers or epochs, select accidental unlimited defaults, mutate
 limit policy during an operation, or extract configured limits through errors.
+Cursor attackers additionally supply every possible truncation boundary,
+oversized lengths that overflow end offsets, valid prefixes with trailing
+bytes, and read sequences intended to advance state after failure, fork parser
+state, escape caller lifetimes, or disclose input through diagnostics.
 
 ## Required Controls
 
@@ -55,6 +59,10 @@ limit policy during an operation, or extract configured limits through errors.
   semantically separate quantities, non-wrapping monotonic values, explicit
   immutable single-assignment budgets with typed duplicate and incomplete
   construction failures, and limit-value-free exhaustion errors;
+- private-field borrowed cursors with checked end offsets, bounds-checked slice
+  access, exact success-only advancement, unchanged state on every failure,
+  explicit trailing-data rejection, caller-bound output lifetimes, no cursor
+  cloning or formatting, and value-free read errors;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
@@ -95,12 +103,14 @@ limit policy during an operation, or extract configured limits through errors.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.6.0
+## Non-Goals At 0.7.0
 
 No transport security or interoperability guarantee exists. The only protocol
-code consists of allocation-free shared alert/failure and bounded
-numeric/resource value domains; there is no parser, record layer, mutable
-accounting state, handshake, provider implementation, PKI, or cryptography.
+code consists of allocation-free shared alert/failure, bounded
+numeric/resource value domains, and a protocol-neutral borrowed read cursor;
+there is no integer decoder, framing layer, protocol parser, record layer,
+mutable accounting state, handshake, provider implementation, PKI, or
+cryptography.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
@@ -118,7 +128,9 @@ local, provider, and resource-exhaustion outcomes without wire or state-machine
 behavior. v0.6.0 adds checked bounded arithmetic, distinct counts and lengths,
 non-wrapping protocol-neutral sequence/epoch values, and immutable explicit
 resource/work limits without claiming direction-specific state or wire
-semantics. Planned, future-work, blocked, legacy,
+semantics. v0.7.0 adds exact transactional borrowed input consumption without
+claiming framing, parsing, secret ownership, or protocol behavior. Planned,
+future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS
 validation claims.

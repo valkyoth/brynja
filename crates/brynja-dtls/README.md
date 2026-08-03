@@ -25,7 +25,7 @@
 
 # brynja-dtls
 
-`brynja-dtls 0.1.2` only repins its exact v0.6 dependencies. It remains a
+`brynja-dtls 0.1.3` only repins its exact v0.7 dependencies. It remains a
 compile-time boundary and does not provide a working TLS,
 cryptographic, PKI, platform, or legacy-protocol implementation.
 
@@ -47,10 +47,10 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.6"
+brynja = "0.7"
 ```
 
-This dependency-only patch is selected for publication with v0.6.0 after the
+This dependency-only patch is selected for publication with v0.7.0 after the
 required pentest, committed PASS report, and green GitHub checks required by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

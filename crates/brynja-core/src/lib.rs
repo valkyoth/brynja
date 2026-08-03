@@ -13,6 +13,7 @@ pub mod exhaustion;
 pub mod numeric;
 pub mod provider;
 pub mod quantity;
+pub mod read;
 pub mod sequence;
 pub mod version;
 
@@ -28,6 +29,7 @@ pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
 pub use provider::{ProviderFailure, ProviderFailureKind, ProviderOperation};
 pub use quantity::{Count, Length};
+pub use read::{ReadCursor, ReadError};
 pub use sequence::{Epoch, SequenceNumber};
 pub use version::{ProtocolFamily, ProtocolVersion};
 
@@ -42,6 +44,9 @@ pub const FAILURE_DOMAINS_IMPLEMENTED: bool = true;
 /// Whether the v0.6 bounded numeric and immutable budget domains are implemented.
 pub const BOUNDED_DOMAINS_IMPLEMENTED: bool = true;
 
+/// Whether the v0.7 transactional borrowed read cursor is implemented.
+pub const READ_CURSOR_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -49,5 +54,6 @@ mod tests {
         assert!(!::core::hint::black_box(super::IMPLEMENTED));
         assert!(::core::hint::black_box(super::FAILURE_DOMAINS_IMPLEMENTED));
         assert!(::core::hint::black_box(super::BOUNDED_DOMAINS_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::READ_CURSOR_IMPLEMENTED));
     }
 }

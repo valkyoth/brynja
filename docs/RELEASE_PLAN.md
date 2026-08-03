@@ -145,8 +145,9 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - make policy executable through generated traceability, fail-closed scripts, broken fixtures, immutable evidence, ownership, and release boundaries;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- record that no normative protocol requirement advances, and update the threat
+  model, controls, status, limitations, release notes, and permanent evidence
+  index.
 
 Verification:
 
@@ -615,31 +616,67 @@ Exit criteria:
 
 ### v0.7.0 - Borrowed Read Cursor
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement a borrowed read cursor with exact consumption, truncation-at-every-byte coverage, and no indexing panics.
 
-Goal: complete the **Borrowed Read Cursor** implementation stop without admitting or
-claiming adjacent capability.
+Goal: freeze the allocation-free, protocol-neutral borrowed input primitive
+used by later codecs without implementing integer decoding, nested framing,
+protocol parsing, write-side mutation, arenas, secret ownership, or state
+machines early.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- provide a private-field `ReadCursor<'input>` that borrows immutable
+  caller-owned bytes and stores only the input slice and current position;
+- borrow and consume exact dynamic lengths, typed `Length<MAX>` values, and
+  fixed-size arrays without allocation, unsafe code, or indexing;
+- compute end offsets with checked arithmetic and leave position and remaining
+  input unchanged after every overflow, truncation, or conversion failure;
+- expose position, remaining length, remaining borrowed suffix, and explicit
+  consuming `finish()` semantics that reject trailing data;
+- keep the cursor non-`Clone`, non-`Copy`, non-formattable, and `must_use` so
+  parser forks, accidental byte diagnostics, and ignored cursor state remain
+  review-visible;
+- return only closed value-free `Truncated`, `LengthOverflow`, and
+  `TrailingData` categories without input bytes, offsets, requested lengths,
+  available lengths, strings, allocation, or provider details;
+- retain integer decoding, canonical encoding, nested framing, transactional
+  writes, caller arenas, mutable resource accounting, zeroization ownership,
+  protocol parsing, and state transitions for their owning later milestones;
+- publish `brynja-core 0.4.0`, dependency-only `0.1.3` patches for its changed
+  exact-pinned modern closure, and the mandatory `brynja 0.7.0` facade;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- test a composite exact read at every truncation byte and reject every
+  trailing suffix through explicit completion;
+- exhaust every input position and requested length around a bounded fixture,
+  proving exact advancement on success and unchanged position/suffix on
+  truncation;
+- test `usize` end-offset overflow, zero-length reads at every boundary, typed
+  lengths, fixed arrays, empty input, borrow identity, and compact storage;
+- run compile-fail doctests for cursor cloning, byte formatting, and returned
+  borrows escaping the caller-owned input lifetime;
+- enforce the no-indexing, no-panic, no-unsafe, no-allocation, no-external-
+  dependency, `no_std`, 500-line, and valueless-error boundaries with workspace
+  lints, resolved-graph policy, representation checks, and OS-less builds;
+- verify every promised Rust version, host/target matrix, documentation,
+  package order, SBOM, standards drift, advisory policy, modern/legacy
+  isolation, and the complete first-party assurance gate;
+- obtain the required external release pentest.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- every admitted cursor operation is deterministic, borrowed, exact, and
+  failure-transactional across hostile lengths and truncated input;
+- the cursor owns no secret and makes no zeroization claim; later owners remain
+  responsible for copied/decoded secret material and caller-buffer erasure;
+- no documentation, requirement, or protocol surface claims framing, parsing,
+  interoperability, independent review, formal proof, production readiness, or
+  FIPS validation;
 - `v0.7.0 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
 ### v0.8.0 - Transactional Write Cursor

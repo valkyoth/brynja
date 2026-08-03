@@ -1,22 +1,22 @@
 # Crate Version Matrix
 
-Status: v0.6.0 released
+Status: v0.7.0 awaiting pentest
 
-The `brynja` facade advances to `0.6.0`. `brynja-core` advances to `0.3.0` for
-the bounded numeric and budget domains; every published modern package whose
-exact internal pin changes advances to `0.1.2`. `brynja-crypto` remains
+The `brynja` facade advances to `0.7.0`. `brynja-core` advances to `0.4.0` for
+the borrowed read cursor; every published modern package whose exact internal
+pin changes advances to `0.1.3`. `brynja-crypto` remains
 unchanged at `0.1.0`.
 Legacy and repository-only packages remain unpublished. Package publication
 does not imply a TLS implementation or production readiness.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.6.0` | yes | Mandatory facade release exposing the v0.6 foundation domains |
-| `brynja-core` | `0.3.0` | yes | Alert/failure plus bounded numeric, count, length, sequence, epoch, and budget domains |
+| `brynja` | `0.7.0` | yes | Mandatory facade release exposing the v0.7 foundation domains |
+| `brynja-core` | `0.4.0` | yes | Prior value domains plus transactional borrowed input consumption |
 | `brynja-crypto` | `0.1.0` | no | Published and unchanged |
-| `brynja-pki`, `brynja-platform` | `0.1.2` | yes | Exact dependency pin changed; functionality remains a boundary |
-| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.2` | yes | Exact dependency pins changed; engines remain unimplemented |
-| `brynja-dtls`, `brynja-quic-tls` | `0.1.2` | yes | Exact dependency pins changed; engines/adapters remain unimplemented |
+| `brynja-pki`, `brynja-platform` | `0.1.3` | yes | Exact dependency pin changed; functionality remains a boundary |
+| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.3` | yes | Exact dependency pins changed; engines remain unimplemented |
+| `brynja-dtls`, `brynja-quic-tls` | `0.1.3` | yes | Exact dependency pins changed; engines/adapters remain unimplemented |
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
@@ -77,10 +77,10 @@ packages, and typed version confirmation. Signed tag subjects may use the
 proper `Brynja vX.Y.Z` capitalization or the historical lowercase project
 name. There is no production bypass.
 
-For `v0.6.0`, publication order is `brynja-core 0.3.0`, `brynja-pki 0.1.2`,
-`brynja-platform 0.1.2`, `brynja-tls13-handshake 0.1.2`, `brynja-tls12
-0.1.2`, `brynja-tls13 0.1.2`, `brynja-tls 0.1.2`, `brynja-dtls 0.1.2`,
-`brynja-quic-tls 0.1.2`, and finally `brynja 0.6.0`. The publisher waits for
+For `v0.7.0`, publication order is `brynja-core 0.4.0`, `brynja-pki 0.1.3`,
+`brynja-platform 0.1.3`, `brynja-tls13-handshake 0.1.3`, `brynja-tls12
+0.1.3`, `brynja-tls13 0.1.3`, `brynja-tls 0.1.3`, `brynja-dtls 0.1.3`,
+`brynja-quic-tls 0.1.3`, and finally `brynja 0.7.0`. The publisher waits for
 each new dependency to be indexed before continuing.
 
 ## Rust Compatibility
@@ -89,4 +89,4 @@ each new dependency to be indexed before continuing.
 | --- | --- |
 | `1.90.0` through `1.97.0` | Workspace all-feature compatibility check on each listed stable release |
 | `1.97.1` | Full release gate, host targets, and three OS-less all-feature targets |
-| Kani Rust `1.90.0` | Separate verifier pairing for `cargo-kani 0.67.0`; not a release compiler or proof result at v0.6.0 |
+| Kani Rust `1.90.0` | Separate verifier pairing for `cargo-kani 0.67.0`; not a release compiler or proof result at v0.7.0 |

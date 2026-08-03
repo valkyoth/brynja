@@ -29,23 +29,23 @@ Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
 is being developed in small reviewable milestones toward a serious
 production-ready TLS implementation at `1.0.0`.
 
-Version `0.6.0` adds checked bounded integers, distinct counts and lengths,
-non-wrapping sequence numbers and epochs, and immutable caller-selected
-resource and work budgets to the existing alert and failure domains. These
-foundations are allocation-free, require exactly one named assignment for
-every resource limit, expose no hidden defaults, and keep numeric limits out
-of failure envelopes. They do **not** implement a TLS state machine or
-cryptography and must not be used to secure network traffic.
+Version `0.7.0` adds an allocation-free `ReadCursor` over caller-owned bytes.
+Every read either borrows and consumes exactly the requested range or leaves
+the cursor unchanged; checked end offsets, slice `get`, and explicit `finish`
+reject overflow, truncation, and trailing data without indexing. It builds on
+the existing alert, failure, bounded numeric, sequence, epoch, and immutable
+budget domains. These foundations do **not** implement TLS framing, a protocol
+state machine, or cryptography and must not be used to secure network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.6.0` passed its
-repository-owner pentest, retest, and hosted release checks and is published;
-it does not implement TLS. The dependency is:
+Brynja is not ready for application use. Version `0.7.0` is awaiting its
+required repository-owner pentest and does not implement TLS. After release,
+the dependency will be:
 
 ```toml
 [dependencies]
-brynja = "0.6"
+brynja = "0.7"
 ```
 
 Every official release tag publishes the `brynja` facade at the tag version.
@@ -130,18 +130,18 @@ certificate-bound operational-environment claim.
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
-Only the shared alert/failure and bounded numeric/resource foundations
-described for `brynja-core` are implemented. No cryptographic primitive, PKI
-processor, or protocol engine in this table is implemented. Independent-review
-status cannot be inferred from implementation, testing, formal proof, pentest,
-or release status.
+Only the shared alert/failure, bounded numeric/resource, and borrowed read
+cursor foundations described for `brynja-core` are implemented. No
+cryptographic primitive, PKI processor, protocol parser, or protocol engine in
+this table is implemented. Independent-review status cannot be inferred from
+implementation, testing, formal proof, pentest, or release status.
 
 ## Workspace
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes v0.6 foundation domains; no TLS engine |
-| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Alert, failure, numeric, sequence, epoch, and budget domains implemented |
+| `brynja` | Modern production facade | Exposes v0.7 foundation domains; no TLS engine |
+| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Alert, failure, numeric, budget, and borrowed read cursor domains implemented |
 | `brynja-crypto` | First-party hashes, MACs, AEADs, KDFs, RSA, and ECC | Foundation only |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
@@ -190,13 +190,13 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.97.1`, the current stable patch release checked on 2026-08-01.
+to Rust `1.97.1`, the current stable patch release checked on 2026-08-03.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 
 Kani does not set the crate compiler baseline. Its compiler-sensitive proof
 path is separately pinned to `cargo-kani 0.67.0` with Rust `1.90.0`, following
-the documented `base64-ng` model. v0.6.0 admits no Kani proof harness, so the
+the documented `base64-ng` model. v0.7.0 admits no Kani proof harness, so the
 successful policy check is not formal-verification evidence.
 
 | Rust toolchain | Required evidence |
@@ -245,7 +245,7 @@ After the exact green candidate is tagged, the interactive crates.io publisher
 is:
 
 ```bash
-scripts/release_crates.py --version 0.6.0
+scripts/release_crates.py --version 0.7.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

@@ -1,19 +1,20 @@
 # Current Status
 
-Status: v0.6.0 released
+Status: v0.7.0 awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
-value domains. It still has no TLS state machine, cryptography, PKI, QUIC-TLS,
-DTLS engine, platform provider, or legacy protocol implementation and must not
-be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
+value domains plus a protocol-neutral borrowed read cursor. It still has no
+TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS, DTLS
+engine, platform provider, or legacy protocol implementation and must not be
+used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
 
 Signed releases v0.1.0 through v0.6.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
-the assurance harness and first value domains. The v0.6.0 release published
-`brynja-core 0.3.0`, eight dependency-only modern support patches at `0.1.2`,
-and `brynja 0.6.0`.
+the assurance harness and first value domains. The v0.7.0 candidate selects
+`brynja-core 0.4.0`, eight dependency-only modern support patches at `0.1.3`,
+and `brynja 0.7.0`.
 
 Version 0.3.0 provides the exact source foundation:
 
@@ -206,6 +207,26 @@ Version 0.6.0 adds bounded numeric and resource foundations:
   these types are source-free shared foundations; later wire widths,
   direction-specific state, parsers, and engines remain future work.
 
+Version 0.7.0 adds borrowed input consumption:
+
+- `ReadCursor<'input>` stores only a caller-owned immutable byte-slice borrow
+  and a private position, performs no allocation, and exposes no mutable input;
+- dynamic, typed `Length<MAX>`, and fixed-array reads compute their end offset
+  with checked arithmetic and use bounds-checked slice access without indexing;
+- success advances by exactly the requested length, while overflow,
+  truncation, and fixed-array conversion failure leave position and remaining
+  input unchanged;
+- explicit consuming `finish()` rejects every trailing suffix, while an
+  exhaustive composite fixture rejects truncation at every byte boundary;
+- the cursor is non-`Clone`, non-`Copy`, non-formattable, and `must_use`, and
+  compile-fail tests bind those API constraints and the caller-input lifetime;
+- `ReadError` carries only `Truncated`, `LengthOverflow`, or `TrailingData`,
+  with no bytes, offsets, requested/available lengths, strings, or allocation;
+  and
+- no protocol surface or normative protocol requirement advances because this
+  is a source-free cursor foundation; integer decoding, framing, parsers,
+  writes, arenas, secret ownership, and state machines remain future work.
+
 Everything beyond those foundation domains remains governance and planning
 evidence, not protocol implementation.
 Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
@@ -280,5 +301,6 @@ errors. Exhaustive tests cover duplicate and missing assignment for all seven
 domains. The repository owner retested signed candidate
 `89d4d7a930c89e2b6788554941389ca0d83cf999` and reported it green with no
 remaining finding. The permanent report records `PASS`/`PASS` and zero open
-findings; release now awaits the final committed candidate and green GitHub
-checks.
+findings. Signed tag `v0.6.0` and the intended ten-crate publication are
+complete. The v0.7.0 implementation candidate now awaits repository-owner
+pentesting.

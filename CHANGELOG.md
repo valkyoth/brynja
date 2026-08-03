@@ -5,6 +5,27 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-08-03
+
+### Added
+
+- Allocation-free `ReadCursor<'input>` borrowing caller-owned immutable bytes.
+- Exact dynamic, typed `Length<MAX>`, and fixed-array reads with checked end
+  offsets and explicit consuming trailing-data validation.
+- Exhaustive every-position/request, every-truncation-byte, trailing-suffix,
+  overflow, zero-length, borrow-identity, representation, and compile-fail
+  tests.
+
+### Security
+
+- Failed reads never advance the cursor or change its remaining input.
+- Cursor state is private, non-clonable, non-copyable, non-formattable, and
+  bound to the caller input lifetime; no read path uses unchecked indexing.
+- Read errors are closed and value-free: they contain no bytes, offsets,
+  requested lengths, available lengths, strings, or allocation.
+- No framing, integer decoding, protocol parsing, secret ownership,
+  independent review, production, or FIPS-validation claim is advanced.
+
 ### Fixed
 
 - Release publication now accepts the properly capitalized signed tag subject

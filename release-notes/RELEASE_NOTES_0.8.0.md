@@ -1,6 +1,6 @@
 # Brynja 0.8.0 Release Notes
 
-Status: implementation complete; awaiting pentest
+Status: pentest and retest passed; awaiting GitHub
 
 Brynja 0.8.0 implements a protocol-neutral transactional caller-buffer write
 cursor. It does not implement integer encoding, TLS framing, a protocol parser,
@@ -74,6 +74,19 @@ and OS-less targets, `no_std`, modern/legacy isolation, source and requirement
 reproducibility, assurance policy, package contents, SBOM, dependency policy,
 advisories, documentation, and live standards/tool drift.
 
+The repository-owner assessment of signed candidate
+`ebabb656697a5a98ac01a79b801c012daa31ca24` found no exploitable cursor
+defect. It recorded the intentionally excluded zeroization responsibility as
+informational and one Low defense-in-depth observation about the mutable range
+lookups following successful preflight. All three operations now assert their
+proven destination invariant in debug builds while preserving the
+bounds-checked, fail-closed release fallback.
+
+The repository owner retested signed remediation candidate
+`79027316d1d023b0f55870d8371b22a2c536a7ae` and reported it green with no
+remaining finding. The permanent report records `PASS`/`PASS` and zero open
+findings.
+
 ## Requirements And Protocol Claims
 
 The write cursor is a source-free shared foundation. No protocol surface or
@@ -95,9 +108,9 @@ support patches at `0.1.4`, and the mandatory `brynja 0.8.0` facade.
 packages remain unpublished. The guarded publisher enforces exact pins,
 dependency order, and the facade-last rule.
 
-Publication remains blocked until the repository-owner pentest and any retest
-produce a committed current `PASS`/`PASS` report, GitHub is green, and the user
-explicitly authorizes the signed release tag.
+Publication remains blocked until this permanent `PASS`/`PASS` report and the
+final release evidence are committed, GitHub is green, and the user explicitly
+authorizes the signed release tag.
 
 ## Limitations
 

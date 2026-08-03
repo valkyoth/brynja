@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.8.0 implementation complete; awaiting pentest
+Status: v0.8.0 pentest and retest passed; awaiting GitHub
 
 | Control | Foundation enforcement |
 | --- | --- |

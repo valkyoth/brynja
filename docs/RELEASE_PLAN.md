@@ -753,7 +753,7 @@ Exit criteria:
 
 ### v0.8.0 - Transactional Write Cursor
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement caller-buffer write cursors with transactional encode-or-no-mutation behavior.
 

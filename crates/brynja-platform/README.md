@@ -37,7 +37,8 @@ brynja = "0.8"
 ```
 
 This dependency-only patch is selected for publication with v0.8.0. The
-release candidate awaits its repository-owner pentest under the
+repository-owner pentest and retest passed; publication still requires green
+hosted release checks under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

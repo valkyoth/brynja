@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.8.0 implementation complete; awaiting pentest
+Status: v0.8.0 pentest and retest passed; awaiting GitHub
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -336,5 +336,14 @@ a timing-racy detached-descendant assurance fixture. The repository owner
 retested signed remediation candidate
 `13adb4b4d5d5eca97b40381fc41533ba5723e69b` and reported it green with no
 remaining finding. The permanent report records `PASS`/`PASS` and zero open
-findings. The signed `v0.7.0` tag is complete; v0.8.0 now awaits its separate
-repository-owner pentest.
+findings. The signed `v0.7.0` tag is complete. The v0.8.0 assessment of signed
+implementation candidate `ebabb656697a5a98ac01a79b801c012daa31ca24` found no
+exploitable cursor defect. It recorded the intentional no-zeroization boundary as
+informational and one Low defense-in-depth observation about silently
+unreachable post-preflight range fallbacks. Debug assertions now make all
+three proven range invariants visible while retaining fail-closed release
+fallbacks. The repository owner retested signed remediation candidate
+`79027316d1d023b0f55870d8371b22a2c536a7ae` and reported it green with no
+remaining finding. The permanent report records `PASS`/`PASS` with zero open
+findings; release now awaits the final committed candidate and green GitHub
+checks.

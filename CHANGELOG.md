@@ -31,6 +31,8 @@ Keep a Changelog and Semantic Versioning.
 - Write errors are closed and value-free. No integer encoding, framing, arena,
   secret-destruction, protocol, production, independent-review, or FIPS claim
   is advanced.
+- The repository-owner pentest and retest passed with the post-preflight
+  invariant observation closed and zero open findings.
 
 ### Changed
 

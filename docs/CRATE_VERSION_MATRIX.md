@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.8.0 implementation complete; awaiting pentest
+Status: v0.8.0 pentest and retest passed; awaiting GitHub
 
 The `brynja` facade advances to `0.8.0`. `brynja-core` advances to `0.5.0` for
 the transactional caller-buffer write cursor; every published modern package

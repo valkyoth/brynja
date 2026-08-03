@@ -40,9 +40,9 @@ network traffic.
 
 ## Install
 
-Brynja is not ready for application use. Version `0.8.0` is awaiting its
-repository-owner pentest and does not implement TLS. After release, the
-dependency will be:
+Brynja is not ready for application use. Version `0.8.0` passed its
+repository-owner pentest and retest but still awaits green hosted release
+checks; it does not implement TLS. After release, the dependency will be:
 
 ```toml
 [dependencies]

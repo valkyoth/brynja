@@ -84,7 +84,7 @@ optimized LLVM/assembly inspection for word and fixed 32-byte equality,
 selection, swap, and the compiler barrier. The checker rejects panic and
 variable-work library calls, target-specific conditional branches in non-array
 witnesses, forward/non-public array branches, direct RV32 Choice-register
-memory addressing, and missing barrier fences. Five negative target-assembly
+branches or memory addressing, and missing barrier fences. Six negative target-assembly
 fixtures reproduce branch, address, and loop-classification regressions. The
 witness is deliberately small and reproducible; it is not a proof of every
 monomorphization, a

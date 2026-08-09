@@ -14,9 +14,10 @@ Keep a Changelog and Semantic Versioning.
   compile-fail tests; a hash-locked source policy with fourteen negative fixtures;
   and optimized LLVM/assembly witnesses across ten stable compilers and nine
   promised targets with five evidence-policy fixtures.
-- Add target-aware assembly function-body inspection and five negative fixtures
+- Add target-aware assembly function-body inspection and six negative fixtures
   for RV32 secret branches and secret-indexed loads, non-public fixed-array
-  branches, and x86_64/AArch64 conditional branches.
+  branches including a backward direct-`Choice` classifier bypass, and
+  x86_64/AArch64 conditional branches.
 - Add the versionless post-1.0 hash-ecosystem plan and the updated Brynja
   project image.
 - Implement separately selected `brynja-sanitization 0.1.0` with opaque

@@ -116,8 +116,11 @@ symbols but not function bodies. The source now barriers each expanded mask
 before XOR/AND selection, and the gate rejects target-specific conditional
 branches and direct RV32 secret-address operands in every concrete root.
 Permanent negative fixtures cover RV32, x86_64, and AArch64 regressions. Local
-remediation is green; the exact signed remediation candidate still requires
-repository-owner retest before v0.12.0 may be tagged.
+remediation is green. Retest then found that a synthetic backward fixed-array
+branch directly on the RV32 `Choice` register could bypass the loop classifier;
+the validator and a sixth fixture now close that assurance gap. The exact
+signed follow-up candidate still requires repository-owner retest before
+v0.12.0 may be tagged.
 
 ## Development Tags And Pentesting
 

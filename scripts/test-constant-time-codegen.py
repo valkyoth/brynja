@@ -31,9 +31,15 @@ def test() -> None:
     )
     require_rejection(
         "swap_bytes",
-        "\tbne\ta2, a3, .Lsecret\n.Lsecret:\n\tret\n",
+        "\tbne\ta0, a1, .Lsecret\n.Lsecret:\n\tret\n",
         "riscv32imac-unknown-none-elf",
         "non-public forward",
+    )
+    require_rejection(
+        "select_bytes",
+        ".Lsecret:\n\tbltz\ta3, .Lsecret\n\tret\n",
+        "riscv32imac-unknown-none-elf",
+        "secret Choice register",
     )
     require_rejection(
         "select_u64",
@@ -57,4 +63,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("constant-time codegen rejects five branch and secret-address regressions")
+    print("constant-time codegen rejects six branch and secret-address regressions")

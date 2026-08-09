@@ -88,7 +88,7 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
   policy, mask optimization barriers, and optimized LLVM plus target-specific
   function-body assembly witnesses across every supported stable compiler and
   promised target; non-array conditional branches, non-public array branches,
-  and direct RV32 Choice-register memory addresses fail closed; these are
+  and direct RV32 Choice-register branches or memory addresses fail closed; these are
   bounded implementation controls, not
   formal proof, statistical timing evidence, arbitrary-composition coverage, or
   a microarchitectural guarantee;

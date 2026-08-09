@@ -103,9 +103,9 @@ branches on RV32. Every expanded mask now crosses the non-inlined optimization
 barrier before XOR/AND selection, including array selection and swap. The
 architecture-aware evidence gate inspects each function body, rejects
 conditional branches outside proven public fixed-array backedges, rejects
-direct RV32 `Choice`-register memory addresses, and retains five negative
-assembly fixtures. Local remediation passes all compiler and target lanes; the
-repository-owner retest remains pending.
+direct RV32 `Choice`-register branches and memory addresses, and retains six
+negative assembly fixtures. Local remediation passes all compiler and target
+lanes; the repository-owner retest remains pending.
 
 ## Cryptography Verification Status
 

@@ -174,7 +174,15 @@ def validate_assembly_body(function: str, body: str, target: str) -> None:
     if function not in FIXED_ARRAY_FUNCTIONS and branches:
         fail(f"{function} contains a conditional {target} branch")
     for branch in branches:
-        target_label = branch_target(branch.group(0))
+        line = branch.group(0)
+        if target.startswith("riscv"):
+            secret_register = RISCV_SECRET_CHOICE_REGISTER.get(function)
+            if secret_register is not None and re.search(
+                rf"\b{re.escape(secret_register)}\b", line
+            ):
+                fail(f"{function} branches directly on the secret Choice register")
+
+        target_label = branch_target(line)
         prior = body[: branch.start()]
         if re.search(rf"^\s*{re.escape(target_label)}:\s*$", prior, re.MULTILINE) is None:
             fail(f"{function} contains a non-public forward assembly branch")

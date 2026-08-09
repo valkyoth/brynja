@@ -64,7 +64,11 @@ test count, or interoperability alone never establishes that claim.
 ```text
 brynja
 ├── brynja-core
-├── brynja-crypto (portable scalar reference and provider contracts)
+├── brynja-hash-core (future reusable no_std hash interfaces)
+├── brynja-hash-sha2 (future SHA-2 scalar ownership shared with TLS)
+├── brynja-hash-sha3 (future SHA-3/SHAKE scalar ownership shared with ML-KEM)
+├── brynja-mac-hmac (future reusable HMAC ownership)
+├── brynja-crypto (provider contracts, compositions, and non-hash primitives)
 ├── future optional brynja-crypto-cpu (zero-dependency no_std ISA kernels)
 ├── future optional brynja-crypto-cpu-std (std detection adapter only)
 ├── future brynja-fips-module (exact validated artifact; never a feature)
@@ -120,9 +124,17 @@ anti-replay, and policy outcomes remain authoritative in exhaustive mandatory
 results, single-consumption completion tokens, and engine state even when every
 event is ignored or dropped.
 
-`brynja-crypto` owns every portable scalar reference and the sealed backend
-contract. `brynja-crypto-cpu` is an optional downstream `no_std` implementation
-package: it may contain only separately admitted ISA kernels, static
+Portable scalar ownership belongs to the smallest semantic family crate.
+Before cryptographic implementation begins, SHA-2 is assigned to
+`brynja-hash-sha2`, SHA-3/SHAKE to `brynja-hash-sha3`, and HMAC to
+`brynja-mac-hmac`; `brynja-hash-core` owns only their narrow interfaces.
+`brynja-crypto` owns provider contracts, compositions, and scalar primitives
+that do not yet justify a smaller family, and consumes the exact family symbols
+rather than copying them. The post-1.0 standalone hashing expansion is
+described in [POST_1_0_HASH_PLAN.md](POST_1_0_HASH_PLAN.md).
+
+`brynja-crypto-cpu` is an optional downstream `no_std` implementation package:
+it may contain only separately admitted ISA kernels, static
 target-feature selection, capability-token validation, KAT health, quarantine,
 and backend reporting. `brynja-crypto-cpu-std` is a still narrower opt-in host
 adapter that may use standard-library CPU detection and initialization but
@@ -210,8 +222,9 @@ pentest, and release line. Code never changes classification silently in place.
    format-safe, allocation-free audit-event schema with optional caller
    timestamps and later enrichment, deterministic ordering, bounded capacity,
    saturating dropped-event accounting, and non-correlating identifiers.
-3. Implement and independently audit cryptographic primitives from official
-   vectors outward, always completing the portable scalar reference before its
+3. Freeze reusable hash-family ownership before SHA-256, then implement and
+   independently audit cryptographic primitives from official vectors outward,
+   always completing the portable scalar reference before its
    acceleration patches. Admit exact x86_64 SHA/AES/carry-less/vector bundles on
    local AMD and observed-feature AWS Intel, exact AArch64 crypto/vector bundles
    on Apple M2 and AWS Arm, and exact ratified RISC-V crypto/vector bundles only

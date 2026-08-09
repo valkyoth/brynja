@@ -59,7 +59,15 @@ transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
 
 CPU acceleration follows an equally strict downstream boundary.
-`brynja-crypto` owns portable scalar references and sealed backend contracts.
+Portable scalar references belong to the smallest semantic family. Before the
+first hash implementation, `brynja-hash-core` owns only fixed-output and XOF
+interfaces, `brynja-hash-sha2` owns SHA-2, `brynja-hash-sha3` owns SHA-3 and
+SHAKE, and `brynja-mac-hmac` owns HMAC. `brynja-crypto` consumes those exact
+symbols and owns provider contracts, compositions, and scalar primitives not
+yet split into a narrower reviewed family. This prepares the versionless
+[post-1.0 hashing plan](POST_1_0_HASH_PLAN.md) without adding the future facade
+or catalogue to the v1 graph.
+
 Future `brynja-crypto-cpu` is an optional zero-dependency `no_std` package for
 separately admitted, hashed ISA kernels, compile-time selection, capability
 tokens, KAT health, quarantine and reporting. Future

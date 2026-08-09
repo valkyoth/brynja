@@ -1569,7 +1569,7 @@ Import-only RSA and exact AEAD caller-buffer behavior precede audit gates.
 
 Status: planned
 
-Plan scope: Implement streaming and fixed-message SHA-256 with official vectors, boundary lengths, and exhaustion handling.
+Plan scope: Freeze the reusable no_std `brynja-hash-core` interface and `brynja-hash-sha2` family boundary, then implement streaming and fixed-message SHA-256 with official vectors, boundary lengths, and exhaustion handling; make `brynja-crypto`, TLS, PKI, and later FIPS consumers use that exact implementation without exposing the post-1.0 standalone facade or admitting unrelated hash families.
 
 Goal: complete the **SHA-256** implementation stop without admitting or
 claiming adjacent capability.
@@ -1654,7 +1654,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement SHA-384 and SHA-512 with official vectors and checked length and exhaustion behavior.
+Plan scope: Extend the reusable `brynja-hash-sha2` family with SHA-384 and SHA-512 using official vectors and checked length and exhaustion behavior; preserve one compression, padding, streaming, CPU-backend, and provider ownership model that later standalone SHA-2 variants can reuse without duplicating TLS cryptography.
 
 Goal: complete the **SHA-384 And SHA-512** implementation stop without admitting or
 claiming adjacent capability.
@@ -1708,7 +1708,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement Keccak-f[1600], SHA3-256 and SHA3-512, and SHAKE128 and SHAKE256 as the required ML-KEM foundation.
+Plan scope: Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement SHA3-256, SHA3-512, SHAKE128, and SHAKE256 as the required ML-KEM foundation; keep domain-separated fixed-output and XOF interfaces extensible for post-1.0 variants without exposing a raw permutation or duplicating protocol cryptography.
 
 Goal: complete the **Keccak SHA-3 And SHAKE** implementation stop without admitting or
 claiming adjacent capability.
@@ -1762,7 +1762,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests.
+Plan scope: Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types so later standalone hashing reuses rather than copies the construction.
 
 Goal: complete the **HMAC** implementation stop without admitting or
 claiming adjacent capability.

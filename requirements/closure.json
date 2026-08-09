@@ -628,7 +628,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0001"
       ],
-      "scope": "Implement streaming and fixed-message SHA-256 with official vectors, boundary lengths, and exhaustion handling.",
+      "scope": "Freeze the reusable no_std `brynja-hash-core` interface and `brynja-hash-sha2` family boundary, then implement streaming and fixed-message SHA-256 with official vectors, boundary lengths, and exhaustion handling; make `brynja-crypto`, TLS, PKI, and later FIPS consumers use that exact implementation without exposing the post-1.0 standalone facade or admitting unrelated hash families.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -669,7 +669,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement SHA-384 and SHA-512 with official vectors and checked length and exhaustion behavior.",
+      "scope": "Extend the reusable `brynja-hash-sha2` family with SHA-384 and SHA-512 using official vectors and checked length and exhaustion behavior; preserve one compression, padding, streaming, CPU-backend, and provider ownership model that later standalone SHA-2 variants can reuse without duplicating TLS cryptography.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -701,7 +701,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002"
       ],
-      "scope": "Implement Keccak-f[1600], SHA3-256 and SHA3-512, and SHAKE128 and SHAKE256 as the required ML-KEM foundation.",
+      "scope": "Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement SHA3-256, SHA3-512, SHAKE128, and SHAKE256 as the required ML-KEM foundation; keep domain-separated fixed-output and XOF interfaces extensible for post-1.0 variants without exposing a raw permutation or duplicating protocol cryptography.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -733,7 +733,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0003"
       ],
-      "scope": "Implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests.",
+      "scope": "Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types so later standalone hashing reuses rather than copies the construction.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",

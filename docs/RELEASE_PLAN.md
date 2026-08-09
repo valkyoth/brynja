@@ -35,6 +35,15 @@ or production-width vector and differential evidence. Reduced-width evidence
 never establishes production-width equivalence, and every residual proof gap is
 published through the final v0.155.0 coverage gate.
 
+Portable scalar cryptography precedes acceleration. CPU candidates live only
+in the optional first-party `no_std` backend package; standard-library runtime
+detection lives in a separate opt-in adapter. Exact feature evidence, direct
+KATs, health and quarantine, scalar differentials, native AMD, Intel, Apple
+and AWS Arm measurements, qualifying RISC-V evidence, per-compiler emitted
+code and side-channel results, and explicit FIPS disposition precede
+activation. QEMU and cross-builds are supplemental. An unavailable or slower
+path remains visibly candidate, rejected or scalar-only.
+
 ## Required Milestone Contract
 
 Every section contains Status, Plan scope, Goal, Deliverables, Verification, and
@@ -66,8 +75,9 @@ their cumulative change.
 A scheduled checkpoint pentests backwards over the complete change delta from
 the previous public tag through the new candidate. Thus `v0.15.0` compares and
 reviews the changes after `v0.10.0` through `v0.15.0`, including tagged
-milestones `v0.11.0`, `v0.11.1`, `v0.11.2`, `v0.12.0`, `v0.13.0`, and
-`v0.14.0`. The next checkpoint reviews changes after `v0.15.0` through
+milestones `v0.11.0`, `v0.11.1`, `v0.11.2`, `v0.12.0`, `v0.13.0`,
+`v0.13.1`, `v0.13.2`, `v0.13.3`, and `v0.14.0`. The next checkpoint reviews
+changes after `v0.15.0` through
 `v0.20.0`, and so on. The public `brynja` crate may therefore jump directly
 from `0.10.0` to `0.15.0`; intervening tags identify tested source milestones,
 not crates.io releases.
@@ -1186,6 +1196,81 @@ Exit criteria:
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
 - `v0.13.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.13.1 - CPU Backend Capability And Dispatch Contract
+
+Status: planned
+
+Plan scope: Before any cryptographic primitive exists, freeze first-party scalar, opportunistic-accelerated, required-accelerated, and validated-module backend policies; separate candidate detection from admitted activation; define exact feature-bundle evidence, non-forgeable thread-bound capability tokens, backend identity, per-operation dispatch, startup known-answer tests, health generations, quarantine, fail-closed required mode, and secret-free reporting so safe code cannot execute an unsupported instruction or silently change service approval.
+
+Goal: freeze the CPU-backend security contract before an ISA-specific implementation can constrain cryptographic APIs or provider ownership.
+
+Deliverables:
+
+- define sealed backend identifiers, exact operation and feature bundles, candidate and active states, scalar, opportunistic, required and validated policies, and value-free unavailable, unhealthy and quarantined results;
+- define safe compiler-proven construction, a separately reviewed platform-evidence boundary, thread and CPU-migration rules, KAT generations, permanent quarantine, explicit initialization, and non-recursive scalar fallback;
+- bind backend and service-approval reporting to mandatory provider results while keeping reports secret-free, observational, allocation-free and incapable of authorizing work.
+
+Verification:
+
+- compile-fail forged tokens, cross-thread movement, feature-bundle mismatch, unsupported operations, generic-provider injection and validated-policy substitution;
+- model concurrent first use, recursion, panic, cancellation, fork or runtime cloning, KAT failure, quarantine generation changes, required-mode failure and opportunistic scalar fallback;
+- pass no_std, no-atomics, supported Rust matrix, package-isolation, documentation, threat-model and FIPS-boundary checks with no ISA code admitted.
+
+Exit criteria:
+
+- safe callers cannot reach an unsupported instruction and every fallback or required-mode refusal is explicit in authoritative state;
+- `v0.13.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.13.2 - CPU Acceleration Package And Unsafe Boundary
+
+Status: planned
+
+Plan scope: Freeze future `brynja-crypto-cpu` as an optional zero-dependency `no_std` package for isolated ISA kernels and static selection, and future `brynja-crypto-cpu-std` as a separate opt-in `std` runtime-detection adapter; keep scalar `brynja-crypto`, every protocol engine, default feature, bare-metal graph, and ordinary facade independent of both, keep the std adapter outside `brynja-fips-module`, and require a separately hashed, versioned, under-500-line unsafe-intrinsic or assembly boundary for every admitted backend without authorizing any implementation yet.
+
+Goal: make ISA code and host runtime detection independently selectable and auditable without weakening the scalar, no_std, dependency or FIPS closures.
+
+Deliverables:
+
+- reserve and classify the two packages, dependency directions, empty default features, publication roles, facade opt-in edge, scalar ownership and exact FIPS inclusion and exclusion rules;
+- specify per-backend source modules, exact hash inventory, local unsafe allowances, instruction and ABI preconditions, safe wrapper invariants, maximum file size and amendment process;
+- prohibit third-party detection crates, build-time source inclusion, implicit std, OS entropy or other platform services, and feature unification that changes a validated artifact.
+
+Verification:
+
+- use broken manifests and package graphs to test default, no-default, all-feature, bare-metal, ordinary facade, legacy, std-adapter and future FIPS isolation;
+- reject unclassified intrinsics, assembly, FFI, local lint escapes, unhashed source, oversized modules, dependency cycles, std leakage and an activated backend without its contract;
+- package and docs-test both reserved boundaries across the Rust and target matrix while proving the current production graph and unsafe inventory remain unchanged.
+
+Exit criteria:
+
+- package and unsafe-policy enforcement can admit one exact future backend without granting authority to any sibling backend or std adapter;
+- `v0.13.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.13.3 - Native CPU Evidence And Performance Admission Harness
+
+Status: planned
+
+Plan scope: Establish reproducible backend evidence manifests, forced-backend and unsupported-feature processes, KAT and quarantine fault injection, scalar differential corpora, emitted-code and side-channel capture, code-size and latency budgets, and benchmark admission thresholds across local AMD x86_64, an observed-feature AWS Intel x86_64 instance, Apple M2, AWS AArch64, and the available RISC-V cloud host; record CPU, microcode, OS, compiler, flags, frequency policy, and feature evidence, treat emulation as supplemental only, and leave an unavailable or unmeasured backend unadmitted rather than blocking portable scalar support.
+
+Goal: make correctness, security and useful performance—not architecture labels—the admission criteria for every optimized backend.
+
+Deliverables:
+
+- define a machine-readable evidence schema for CPU identity, observed features, microcode or firmware, OS, compiler, flags, runner ownership, clock and frequency policy, operation, size distribution and raw result hashes;
+- implement first-party forced-backend, negative unsupported-instruction, KAT fault, quarantine, scalar differential, emitted-code, code-size, cold-start, latency, throughput and side-channel harness contracts;
+- register the local AMD and M2 lanes, AWS Intel and Arm lanes selected by observed features rather than product name, the slow RISC-V lane, and QEMU only as supplemental instruction coverage.
+
+Verification:
+
+- validate schema regeneration, provenance, stale-run rejection, missing feature evidence, fabricated native labels, mixed CPUs, noisy or non-finite measurements and benchmark-order bias;
+- run scalar and mock-backend positive, mismatch, unsupported, quarantine, concurrency and required-mode fixtures on std, no_std, no-atomics and emulated targets;
+- prove an unavailable Intel instance, non-qualifying RISC-V ISA or unreachable runner produces an explicit unadmitted result without creating a false support claim or blocking scalar builds.
+
+Exit criteria:
+
+- every future backend has a reproducible route to native admission and emulation cannot satisfy native performance or side-channel evidence;
+- `v0.13.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.14.0 - Entropy And Secure-Random Contracts
 
 Status: planned
@@ -1277,7 +1362,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze approved and non-approved service separation, self-test and permanent-failure hooks, dispatch, service indicators, SSP boundaries, deterministic module-build expectations, operational-environment assumptions, and sealed-provider exclusions without making a validation claim.
+Plan scope: Freeze approved and non-approved service separation, self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, service indicators, SSP boundaries, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.
 
 Goal: complete the **FIPS-Aware Provider Architecture** implementation stop without admitting or
 claiming adjacent capability.
@@ -1287,6 +1372,9 @@ Deliverables:
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
 - freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- bind every future approved CPU implementation and dispatch path to an exact
+  module-owned symbol, KAT, catastrophic-failure behavior and operational
+  environment, excluding ordinary std-adapter and opportunistic selection;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -1500,6 +1588,56 @@ Exit criteria:
   side-channel evidence before downstream use;
 - `v0.22.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.22.1 - SHA-256 x86_64 And AArch64 Acceleration
+
+Status: planned
+
+Plan scope: Add separately forced and reported SHA-256 backends using exact x86_64 SHA-extension bundles on AMD and Intel and exact AArch64 SHA2 bundles on Apple M2 and AWS Arm; preserve the scalar state and digest API, streaming and fixed-message equivalence, checked length and exhaustion behavior, safe std and static no_std dispatch, startup KAT quarantine, and per-compiler constant-time and emitted-code evidence without claiming register erasure.
+
+Goal: accelerate SHA-256 on the available AMD, Intel, Apple and AWS Arm lanes without changing its portable semantics or widening its cleanup claims.
+
+Deliverables:
+
+- implement isolated x86_64 SHA-extension and AArch64 SHA2 compression backends behind the frozen per-operation contract and exact feature bundles;
+- retain scalar ownership of padding, checked bit length, streaming state, finalization and exhaustion while exposing forced backend and actual-backend reporting;
+- add backend-specific startup KATs, health generations, quarantine, no_std static selection, opt-in std detection and explicit register, spill and context-switch residuals.
+
+Verification:
+
+- run official vectors, every padding boundary, arbitrary chunk partitions, fixed-versus-streaming, maximum-length and exhaustion differentials through each direct backend;
+- run unsupported-feature negative processes, KAT and corruption fault injection, dispatch precedence, quarantine, required mode and scalar fallback on local AMD, observed-feature AWS Intel, M2 and AWS Arm;
+- inspect MIR, LLVM and assembly and collect constant-time, code-size, cold-start and representative TLS transcript and HMAC-size performance evidence across the supported compiler matrix.
+
+Exit criteria:
+
+- each admitted path is byte-identical to scalar, measurably useful on its named native lanes and unreachable without exact feature evidence;
+- `v0.22.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.22.2 - SHA-256 RISC-V Acceleration Candidate
+
+Status: planned
+
+Plan scope: Implement a first-party RISC-V SHA-256 backend only for an exact ratified scalar-crypto or vector-crypto feature bundle expressible across the supported Rust line; run it on the available RISC-V host when its observed ISA qualifies, otherwise retain it as a non-dispatchable candidate with emulator and generated-code evidence, keep scalar fallback authoritative, and prohibit an accelerated support claim until matching native correctness, performance, and side-channel evidence exists.
+
+Goal: prepare honest RISC-V SHA-256 acceleration without treating generic RISC-V, RVV presence or emulation as proof of a cryptographic instruction path.
+
+Deliverables:
+
+- select and document exact ratified RISC-V feature bundles, compiler and assembler support, ABI and vector-state assumptions, and the stable-Rust compatibility strategy;
+- implement the isolated candidate, forced direct entry, KAT, health and static-token integration while leaving automatic activation disabled until admission evidence exists;
+- preserve scalar support on every RISC-V target and publish candidate, admitted or unavailable status with the observed cloud-host ISA and residual gaps.
+
+Verification:
+
+- run official vectors, chunking, boundary, exhaustion and scalar differential corpora under cross-build and QEMU instruction coverage;
+- inspect generated code on every supported compiler and run unsupported-feature images in isolated processes so safe selection cannot issue an unavailable instruction;
+- when the cloud host qualifies, collect native correctness, timing and performance evidence; otherwise verify that reporting remains non-admitted and dispatch remains scalar.
+
+Exit criteria:
+
+- the candidate is either natively admitted with complete evidence or remains mechanically non-dispatchable with no RISC-V acceleration claim;
+- `v0.22.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.23.0 - SHA-384 And SHA-512
 
 Status: planned
@@ -1529,6 +1667,31 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.23.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.23.1 - SHA-384 And SHA-512 CPU Acceleration
+
+Status: planned
+
+Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V SHA-384/SHA-512 backends using exact specialized or parallel feature bundles; require byte-for-byte scalar equivalence for every chunking and boundary, forced-path KAT and quarantine behavior, safe static and runtime selection, native AMD, Intel, M2, AWS Arm, and available qualifying RISC-V evidence, and an explicit scalar decision wherever a backend is unavailable or fails the frozen performance margin.
+
+Goal: accelerate the SHA-512 family only where an exact native backend improves the TLS and signature workloads that use it.
+
+Deliverables:
+
+- implement separately identified specialized-instruction or parallel SHA-512-family kernels without changing scalar padding, truncation, streaming or exhaustion ownership;
+- bind each operation and message-size admission range to exact x86_64, AArch64 or RISC-V feature evidence, KAT state and dispatch reporting;
+- record reviewed scalar-only decisions for unavailable ISA support, poor short-message performance, compiler incompatibility or incomplete side-channel evidence.
+
+Verification:
+
+- differential-test official SHA-384 and SHA-512 vectors, every block and padding boundary, arbitrary chunking, truncation and exhaustion through every forced path;
+- exercise native AMD, observed-feature Intel, M2, AWS Arm and qualifying RISC-V paths plus unsupported, KAT failure, quarantine and required-mode processes;
+- inspect per-compiler emitted code and measure transcript, HMAC, certificate-signature and long-stream sizes without averaging unsupported paths into an admission result.
+
+Exit criteria:
+
+- every CPU family has an explicit evidenced backend or scalar-only decision and no wider ISA is admitted merely because it is available;
+- `v0.23.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.24.0 - Keccak SHA-3 And SHAKE
 
 Status: planned
@@ -1557,6 +1720,31 @@ Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.24.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.1 - Keccak SHA-3 And SHAKE CPU Acceleration
+
+Status: planned
+
+Plan scope: Add architecture-specific Keccak-f[1600], SHA3, and SHAKE backends for admitted x86_64, AArch64, and RISC-V vector or bit-manipulation bundles only where native benchmarks justify them; preserve domain separation, absorb, squeeze, permutation, and arbitrary-output equivalence, force every backend and tail path, and record scalar-only decisions for CPUs or operations that do not beat the portable implementation.
+
+Goal: improve SHA-3, SHAKE and later ML-KEM workloads without weakening Keccak domain or variable-output correctness.
+
+Deliverables:
+
+- implement isolated permutation backends and parallel lanes only for exact, reviewed feature bundles and operation-size ranges;
+- retain scalar sponge state, domain suffix, padding, absorb and squeeze accounting as the semantic reference and expose each direct permutation symbol to tests;
+- integrate KAT, quarantine, static no_std and opt-in std selection while keeping candidate and active backend reporting distinct.
+
+Verification:
+
+- run official permutation, SHA3 and SHAKE vectors, zero and long output, partial absorb and squeeze, every rate boundary and scalar differential corpus;
+- force each width, lane count and tail, inject permutation and KAT faults, and test unsupported features, quarantine, required mode and scalar fallback;
+- collect native AMD, Intel, M2, AWS Arm and qualifying RISC-V emitted-code, side-channel and performance evidence for hash and ML-KEM-size workloads.
+
+Exit criteria:
+
+- every admitted permutation is domain-correct, scalar-equivalent and useful for its declared operation and length range;
+- `v0.24.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - HMAC
 
@@ -1645,6 +1833,56 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.27.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.27.1 - AES x86_64 And AArch64 Acceleration
+
+Status: planned
+
+Plan scope: Add isolated AES-128 and AES-256 encrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain the portable constant-time implementation, typed key ownership, identical round and key-schedule semantics, startup KAT quarantine, no_std static selection, opt-in std runtime selection, and exact per-backend side-channel and destruction residuals.
+
+Goal: admit hardware AES on the available x86_64 and AArch64 systems while preserving the portable implementation as the semantic and unsupported-target fallback.
+
+Deliverables:
+
+- implement isolated AES-NI, benchmark-qualified VAES and AArch64 AES encrypt and key-schedule paths with exact feature bundles and operation identities;
+- bind secret key ownership, expanded-key destruction, KAT state, health generation and backend reporting to the existing AES API without exposing raw backend selection through safe protocol configuration;
+- define single-block, parallel-block and message-size dispatch ranges from native evidence rather than ISA width and document all register, spill and termination exclusions.
+
+Verification:
+
+- run official AES-128 and AES-256 vectors, key-schedule and round differentials, every admitted block count, overlap contract and injected backend corruption;
+- exercise local AMD, observed-feature AWS Intel, M2 and AWS Arm runtime and static selection, unsupported-feature processes, quarantine, required mode and scalar fallback;
+- inspect MIR, LLVM and assembly and collect constant-time, cache, branch, code-size, initialization and performance evidence for every supported compiler and target path.
+
+Exit criteria:
+
+- each admitted AES backend is exact-feature guarded, scalar-equivalent, independently healthy and measurably useful on its named native systems;
+- `v0.27.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.27.2 - AES RISC-V Acceleration Candidate
+
+Status: planned
+
+Plan scope: Add RISC-V AES backends for exact ratified scalar-crypto or vector-crypto bundles only when the supported compiler line and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission, while every unsupported RISC-V build remains portable scalar without an acceleration claim.
+
+Goal: prepare RISC-V AES acceleration without conflating generic RV64, the base vector extension and the exact AES crypto extensions.
+
+Deliverables:
+
+- freeze exact scalar and vector AES extension bundles, stable compiler compatibility, ABI and vector-state assumptions, and candidate versus admitted status;
+- implement isolated candidate key-schedule and encrypt paths, direct tests, KAT health and static selection without enabling automatic dispatch prematurely;
+- keep portable AES available on every RISC-V build and make absent native evidence or insufficient performance an explicit non-admission.
+
+Verification:
+
+- run official vectors, round and key-schedule differentials, block-count and overlap cases under cross-build and QEMU coverage;
+- inspect every supported compiler's output and test safe negative selection on images lacking one required feature;
+- run on the RISC-V cloud host when its ISA qualifies and otherwise prove the candidate cannot become active or be reported as supported.
+
+Exit criteria:
+
+- RISC-V AES is natively evidenced before admission and all other RISC-V deployments stay visibly scalar;
+- `v0.27.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.28.0 - GHASH
 
 Status: planned
@@ -1673,6 +1911,31 @@ Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.28.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.28.1 - GHASH CPU Acceleration
+
+Status: planned
+
+Plan scope: Add exact x86_64 carry-less multiplication, AArch64 PMULL, and qualifying RISC-V crypto/vector GHASH backends with identical field representation, reduction, incremental boundaries, and finalization; test every backend independently and paired with scalar AES, require native correctness, timing, and performance evidence, and keep feature detection, activation, KAT health, and FIPS identity explicit.
+
+Goal: accelerate GHASH without hiding field-representation conversions, reduction errors or backend pairing assumptions inside AES-GCM.
+
+Deliverables:
+
+- implement isolated PCLMUL or VPCLMUL, PMULL and qualifying RISC-V multiplication and reduction paths with exact representation contracts;
+- preserve bounded incremental state, length accounting, block and tail behavior, KAT health, quarantine and actual-backend reporting;
+- define independent GHASH admission so an AES backend cannot implicitly activate an untested multiplication path.
+
+Verification:
+
+- run official and generated field multiplication, reduction, associativity reference, incremental partition, zero, maximum and tail differentials for each direct path;
+- pair every GHASH backend with scalar AES, inject faults, exercise unsupported bundles, quarantine and scalar fallback, and reject mismatched representations;
+- collect native AMD, Intel, M2, AWS Arm and qualifying RISC-V emitted-code, timing, cache, branch and performance evidence.
+
+Exit criteria:
+
+- every active GHASH path is independently admitted and representation-equivalent before AES-GCM may pair with it;
+- `v0.28.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.29.0 - AES-GCM
 
@@ -1703,6 +1966,31 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.29.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.29.1 - Integrated Accelerated AES-GCM
+
+Status: planned
+
+Plan scope: Integrate only admitted AES and GHASH backend pairs into an accelerated AES-GCM provider with per-operation dispatch, preserving nonce and use limits, exact in-place or disjoint buffer rules, partial-overlap rejection, authenticate-before-release, complete failure atomicity, cancellation, output equivalence, and scalar fallback; benchmark combined rather than component speed and prohibit mixed, unhealthy, or unvalidated pairings.
+
+Goal: obtain real record-level AES-GCM performance without letting component acceleration weaken AEAD transactional security.
+
+Deliverables:
+
+- define an immutable compatible-pair register and combined backend identity covering AES, GHASH, operation, feature bundle, KAT generations and FIPS disposition;
+- implement seal and open paths that complete every fallible precondition before mutation and stage or authenticate as required to preserve complete failure atomicity;
+- add combined KAT, quarantine propagation, required-mode behavior, cancellation and actual-pair reporting with no implicit mixed-generation fallback.
+
+Verification:
+
+- run official AEAD vectors, nonce and use exhaustion, every AAD, plaintext and tag boundary, exact in-place, disjoint, partial-overlap and unchanged-failure matrices for each forced pair;
+- inject AES, GHASH, KAT, generation, cancellation and tag faults and prove no unauthenticated plaintext or partial output becomes caller-visible;
+- benchmark complete TLS-sized seal and open operations on AMD, Intel, M2, AWS Arm and qualifying RISC-V rather than admitting from isolated component throughput.
+
+Exit criteria:
+
+- every accelerated pair preserves scalar AEAD semantics and exceeds the frozen end-to-end margin on its declared native range;
+- `v0.29.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.30.0 - ChaCha20
 
 Status: planned
@@ -1732,6 +2020,31 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.30.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
+### v0.30.1 - ChaCha20 CPU Acceleration
+
+Status: planned
+
+Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes.
+
+Goal: use parallel vector lanes where they benefit ChaCha20 while retaining exact scalar counter and exhaustion behavior.
+
+Deliverables:
+
+- implement isolated fixed-width parallel block backends for exact x86_64, AArch64 and qualifying RISC-V bundles;
+- preserve scalar ownership of counter preflight, nonce formation, tails, overlap and all-or-no-operation exhaustion checks;
+- bind operation size to benchmark-admitted dispatch ranges, KAT state, quarantine and visible backend identity.
+
+Verification:
+
+- run official vectors, quarter-round references, every counter boundary, block count, tail length, exact overlap and exhaustion differential through every forced width;
+- exercise unsupported bundles, KAT and data-path faults, quarantine, required mode and scalar fallback on native and supplemental emulated lanes;
+- inspect emitted code and collect timing and performance evidence for short records, common TLS records and long streams without frequency-biased width selection.
+
+Exit criteria:
+
+- every active width is scalar-equivalent and measurably beneficial over its complete admitted size range;
+- `v0.30.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.31.0 - Poly1305 And ChaCha20-Poly1305
 
 Status: planned
@@ -1760,6 +2073,31 @@ Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.31.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.31.1 - Poly1305 And ChaCha20-Poly1305 CPU Acceleration
+
+Status: planned
+
+Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with a compatible admitted ChaCha20 path; preserve one-time-key handling, canonical reduction, constant-time tag verification, exact buffer aliasing rules, authenticate-before-release, complete failure atomicity, startup and continuous backend health policy, and scalar equivalence for every message and tail length.
+
+Goal: accelerate the complete ChaCha20-Poly1305 AEAD while keeping the one-time authenticator key and failure paths inside the existing secret and transactional contracts.
+
+Deliverables:
+
+- implement isolated Poly1305 arithmetic backends with exact limb representation, reduction, carry and final-tag contracts and architecture-specific identities;
+- define compatible ChaCha20 and Poly1305 pairings, key derivation and destruction, KAT generations, quarantine propagation and required-mode behavior;
+- integrate seal and open without exposing unauthenticated plaintext, partial failure output or a backend-dependent diagnostic.
+
+Verification:
+
+- run official Poly1305 and AEAD vectors, carry and reduction boundaries, every message and tail length, AAD partition, nonce, use-limit, overlap and unchanged-failure differential;
+- fault-inject either component, KAT, health generation, tag, cancellation and scalar retry and verify one-time keys and staged plaintext follow exact destruction duties;
+- collect per-compiler emitted-code, constant-time, code-size and end-to-end native performance evidence across AMD, Intel, M2, AWS Arm and qualifying RISC-V.
+
+Exit criteria:
+
+- admitted component pairs are scalar-equivalent, failure-atomic, independently reportable and useful at representative TLS sizes;
+- `v0.31.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.32.0 - Fixed-Limb RSA Arithmetic
 
@@ -1877,6 +2215,31 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.35.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
+### v0.35.1 - X25519 CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and, where the frozen margin and constant-time evidence pass, add fixed-schedule x86_64, AArch64, and qualifying RISC-V X25519 field and ladder backends; preserve clamping, canonical input policy, low-order and all-zero rejection, ephemeral lifecycle, immediate scalar destruction, and exact provider-token binding, and retain scalar for any CPU family whose optimized path is not independently evidenced.
+
+Goal: optimize X25519 handshakes without changing its fixed ladder, input rejection or ephemeral-key lifecycle.
+
+Deliverables:
+
+- implement isolated field multiplication, squaring, reduction and ladder kernels only for exact feature bundles that retain a fixed schedule;
+- reuse the scalar encoding, clamping, low-order, all-zero, key-consistency, lifecycle and provider-token authorities around each optimized kernel;
+- register separate ECDH backend identities, KATs, health state, quarantine, static and runtime selection and scalar-only decisions.
+
+Verification:
+
+- run official vectors, iterative vectors, field and ladder differentials, non-canonical and low-order inputs, all-zero results, imported-key consistency and lifecycle cases;
+- inspect full optimized ladders for secret-dependent control, indexing, instructions, memory access and compiler transformations across every admitted compiler;
+- benchmark and side-channel test on AMD, Intel, M2, AWS Arm and qualifying RISC-V, including forced backend faults, quarantine and fallback.
+
+Exit criteria:
+
+- each admitted X25519 path retains the complete scalar security contract and independent native evidence;
+- `v0.35.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.36.0 - P-256 Group Operations
 
 Status: planned
@@ -1963,6 +2326,31 @@ Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.38.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.38.1 - P-256 CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and admit isolated x86_64, AArch64, and qualifying RISC-V P-256 field, group, scalar-multiplication, ECDH, and ECDSA backends only with complete-formula, scalar-range, nonce, strict-encoding, low-S, lifecycle, differential, fault, and per-target constant-time evidence; signing and verification backend identities remain explicit and independently quarantinable.
+
+Goal: optimize P-256 operations as separate field, group, ECDH, signing and verification paths without hiding algorithm-specific failures behind one CPU label.
+
+Deliverables:
+
+- implement isolated fixed-width field and group kernels and separately identify scalar multiplication, ECDH, signing and verification operation paths;
+- preserve complete formulas, point validation, scalar range, nonce policy, strict signatures, low-S decision, secret destruction and provider-token binding;
+- define KATs, pairwise signing tests, fault detection, health and quarantine per operation and scalar-only decisions for paths failing evidence or performance gates.
+
+Verification:
+
+- run official group, ECDH and ECDSA vectors, exceptional points, invalid encodings, boundary scalars, nonce faults, malformed signatures and scalar differentials;
+- use proof harnesses and emitted-code, cache, branch and statistical testing for field carries, reductions, complete group operations and secret scalar schedules;
+- collect native AMD, Intel, M2, AWS Arm and qualifying RISC-V correctness and operation-specific performance evidence with forced faults and quarantine.
+
+Exit criteria:
+
+- no P-256 operation inherits admission from a different operation and every secret path retains fixed-schedule evidence;
+- `v0.38.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.39.0 - P-384 Group Operations
 
@@ -2051,6 +2439,31 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.41.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.41.1 - P-384 CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and admit isolated x86_64, AArch64, and qualifying RISC-V P-384 field, group, scalar-multiplication, ECDH, and ECDSA backends under the same complete-formula, strict-encoding, nonce, lifecycle, differential, fault, and side-channel duties as scalar; record a reviewed scalar-only decision wherever code size, latency, or evidence does not justify acceleration.
+
+Goal: optimize P-384 only where the larger field and operation mix produce a defensible native benefit without weakening its reviewed arithmetic.
+
+Deliverables:
+
+- implement separately identified field, group, scalar-multiplication, ECDH, signing and verification paths for exact feature bundles;
+- preserve canonical point and scalar handling, complete formulas, strict signature encoding, nonce policy, destruction and provider binding;
+- define per-operation KAT, health, fault and quarantine behavior plus code-size and stack budgets suitable for no_std deployments.
+
+Verification:
+
+- run official group, ECDH and ECDSA vectors, exceptional points, invalid encodings, scalar and nonce boundaries and arithmetic differentials;
+- apply proof, emitted-code, constant-time, cache, branch, stack and fault-injection evidence to each secret operation;
+- benchmark native AMD, Intel, M2, AWS Arm and qualifying RISC-V operations and retain scalar where the frozen margin or resource ceiling fails.
+
+Exit criteria:
+
+- every P-384 CPU path is independently useful and evidenced or explicitly rejected in favor of scalar;
+- `v0.41.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.42.0 - RSA-PSS Verification
 
 Status: planned
@@ -2138,6 +2551,31 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.44.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.44.1 - RSA CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and admit architecture-specific fixed-limb multiplication, squaring, reduction, and exponentiation backends for x86_64, AArch64, and qualifying RISC-V without changing modulus policy, imported-key validation, blinding, fixed schedule, CRT consistency, fault detection, or intermediate destruction; verification and private-operation paths remain distinct and every optimized symbol receives arithmetic proof and native side-channel evidence.
+
+Goal: improve RSA verification and blinded private operations without introducing attacker-selected widths, unblinded shortcuts or architecture-dependent validation.
+
+Deliverables:
+
+- implement exact-width arithmetic kernels with fixed limb counts and distinct verification and private-operation backend identities;
+- retain scalar modulus, exponent, key-import, blinding, CRT, recombination, fault-detection, destruction and external-signer contracts;
+- bind each optimized symbol to carry, borrow, multiplication, reduction and conversion proofs, KAT or pairwise tests, health and quarantine.
+
+Verification:
+
+- run official RSA-PSS and PKCS1 verification vectors, private-operation round trips, malformed keys, CRT inconsistencies, injected faults and scalar arithmetic differentials;
+- prove fixed widths and schedules, inspect emitted code and collect timing, cache, branch, stack and destruction-residual evidence across admitted compilers;
+- benchmark separate public and private operations on AMD, Intel, M2, AWS Arm and qualifying RISC-V and reject paths that trade security or resource ceilings for speed.
+
+Exit criteria:
+
+- accelerated RSA cannot bypass blinding, validation or fault detection and each arithmetic symbol has traceable proof and native evidence;
+- `v0.44.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.45.0 - Ed25519
 
 Status: planned
@@ -2166,6 +2604,31 @@ Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.45.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+
+### v0.45.1 - Ed25519 CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519 field, scalar, and group backends only when canonical encoding, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence remain identical; otherwise retain the portable implementation and record the decision.
+
+Goal: optimize Ed25519 without accepting a faster but weaker verification equation, encoding policy or secret-scalar schedule.
+
+Deliverables:
+
+- implement isolated field, scalar and group kernels with explicit signing and verification operation identities;
+- preserve canonical point and scalar encodings, small-order rejection, malleability rules, nonce and secret lifecycle and destruction duties;
+- add operation-specific KATs, health, fault injection, quarantine, backend reporting and reviewed scalar-only outcomes.
+
+Verification:
+
+- run official vectors, non-canonical encodings, small-order points, scalar boundaries, malleability corpus, signing and verification differentials and injected faults;
+- inspect every secret schedule and memory access with emitted-code, cache, branch and statistical tests across supported compilers;
+- benchmark native AMD, Intel, M2, AWS Arm and qualifying RISC-V signing and verification separately and enforce code-size and stack ceilings.
+
+Exit criteria:
+
+- no optimized verification path weakens canonical or subgroup policy and every signing path retains fixed-schedule evidence;
+- `v0.45.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.46.0 - Version-One Algorithm Decisions
 
@@ -2196,11 +2659,36 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.46.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.46.1 - Cross-Backend Performance And Admission Gate
+
+Status: planned
+
+Plan scope: Before the cryptographic-substrate audit, reconcile every implemented primitive and operation against the scalar reference and CPU-backend register; require an explicit admitted, candidate, rejected, or scalar-only decision for AMD x86_64, observed-feature AWS Intel x86_64, Apple M2, AWS AArch64, and RISC-V, verify dispatch precedence, required-mode failure, KAT and quarantine, no_std and std package isolation, code size, latency, throughput, side-channel and native-hardware evidence, and prohibit any backend whose exact symbol, feature bundle, residual risk, or FIPS disposition is missing.
+
+Goal: close the entire pre-PQ CPU-backend surface before independent cryptographic review and protocol consumption.
+
+Deliverables:
+
+- generate a machine-readable register for every primitive, operation, implementation symbol, CPU family, feature bundle, size range, status, proof, native evidence, residual risk and FIPS disposition;
+- reconcile scalar, static no_std, opt-in std, opportunistic, required and validated policies, dispatch precedence, KAT generations, quarantine propagation and backend reporting;
+- freeze benchmark thresholds, code-size and stack ceilings, native runner freshness, compiler coverage and explicit candidate, rejected and scalar-only decisions.
+
+Verification:
+
+- schema-check completeness and uniqueness and use broken fixtures for orphan symbols, missing CPUs, stale evidence, unqualified emulation, absent scalar reference, hidden fallback and FIPS ambiguity;
+- execute forced backend, unsupported feature, KAT failure, quarantine, concurrency, required-mode and scalar fallback matrices across every admitted primitive and package graph;
+- rerun native AMD, Intel, M2, AWS Arm and available RISC-V correctness, side-channel and representative TLS workload measurements under the supported compiler matrix.
+
+Exit criteria:
+
+- no implemented cryptographic operation or CPU family has an unclassified acceleration status and only complete native evidence can produce admission;
+- `v0.46.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.47.0 - Cryptographic Substrate Audit Gate
 
 Status: planned
 
-Plan scope: Complete independent cryptographic-substrate review, per-target constant-time and zeroization evidence, and remediation before PKI or TLS consumption.
+Plan scope: Complete independent cryptographic-substrate review of every scalar primitive, admitted and candidate CPU implementation symbol, dispatcher, capability token, KAT and quarantine path, optional std adapter, unsafe boundary, per-target constant-time and zeroization claim, and residual gap; remediate findings before PKI or TLS consumption.
 
 Goal: complete the **Cryptographic Substrate Audit Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -4727,6 +5215,56 @@ Exit criteria:
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
 - `v0.119.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.119.1 - ML-KEM x86_64 And AArch64 Acceleration
+
+Status: planned
+
+Plan scope: Add isolated, benchmark-admitted x86_64 and AArch64 ML-KEM NTT, inverse-NTT, polynomial, sampling, encoding, key-generation, encapsulation, and decapsulation backends for AMD, observed-feature AWS Intel, Apple M2, and AWS Arm; preserve FIPS 203 and errata behavior, canonical encodings, randomness and stack bounds, constant-time implicit rejection, complete secret destruction, per-parameter KATs, scalar differentials, and backend-specific side-channel evidence.
+
+Goal: accelerate complete ML-KEM operations on the available x86_64 and AArch64 systems without optimizing away canonical decoding or implicit rejection.
+
+Deliverables:
+
+- implement separately identified NTT, inverse-NTT, polynomial, sampling and encoding kernels and compose exact key-generation, encapsulation and decapsulation backend identities;
+- preserve all ML-KEM-512, ML-KEM-768 and ML-KEM-1024 parameter, randomness, stack, canonical encoding, implicit-rejection, failure and destruction contracts;
+- add per-parameter KAT, health, quarantine, static and runtime dispatch and explicit feature and size-range evidence for AMD, Intel, M2 and AWS Arm.
+
+Verification:
+
+- run FIPS 203 and errata vectors, scalar differentials, NTT round trips, reduction boundaries, malformed keys and ciphertexts, implicit rejection and every parameter set through direct kernels and complete operations;
+- use proof harnesses, emitted-code, cache, branch, statistical, stack and destruction-residual evidence for secret-dependent paths and failure equivalence;
+- fault-inject each component and KAT and benchmark complete key generation, encapsulation and decapsulation natively rather than admitting from isolated NTT throughput.
+
+Exit criteria:
+
+- each admitted complete ML-KEM operation is scalar-equivalent, constant-time on its secret failure path and natively useful on its declared CPU family;
+- `v0.119.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.119.2 - ML-KEM RISC-V Acceleration Candidate
+
+Status: planned
+
+Plan scope: Add a RISC-V ML-KEM backend only for an exact ratified vector or crypto feature bundle supported by the compiler matrix, and require native qualification on the available RISC-V host when its observed ISA matches; otherwise keep it non-dispatchable with generated-code and emulator evidence, retain scalar ML-KEM support, and make the missing native acceleration evidence explicit through the final platform gate.
+
+Goal: prepare useful RISC-V ML-KEM acceleration while keeping generic RISC-V support scalar and truthful about unavailable vector hardware.
+
+Deliverables:
+
+- freeze the exact RISC-V feature, vector-length, ABI, OS vector-state and stable-compiler contract for every candidate kernel;
+- implement isolated NTT, polynomial and complete-operation candidates with forced entry, parameter KATs, health, quarantine and static tokens but no unsupported automatic activation;
+- record observed cloud-host capabilities, candidate or admitted status, emulator limits and the native evidence still required by final qualification.
+
+Verification:
+
+- run all parameter vectors, scalar differentials, malformed input, implicit rejection, component faults, stack ceilings and direct candidate paths under cross-build and QEMU coverage;
+- inspect supported-compiler code generation and execute negative images missing individual required features to prove safe selection remains scalar;
+- when the RISC-V host qualifies, collect native correctness, constant-time and end-to-end performance evidence; otherwise enforce non-dispatchable status through the final evidence register.
+
+Exit criteria:
+
+- RISC-V ML-KEM acceleration is either natively admitted or remains an explicit candidate that cannot be selected or described as accelerated support;
+- `v0.119.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.120.0 - Standard Hybrid Groups
 
 Status: planned
@@ -6436,7 +6974,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete Miri and sanitizer evidence plus compiler and target constant-time assembly, owned-region zeroization-store survival, cache and branch, and statistical side-channel matrices.
+Plan scope: Complete Miri and sanitizer evidence plus compiler, target and CPU-backend constant-time assembly, owned-region zeroization-store survival, cache and branch, statistical side-channel, spill and register-residual matrices; test every forced scalar and accelerated path without extending owned-memory destruction claims to registers or OS context state.
 
 Goal: complete the **Memory And Side-Channel Evidence** implementation stop without admitting or
 claiming adjacent capability.
@@ -6465,7 +7003,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load; separately qualify every claimed FIPS artifact only on its certificate-listed operational environments and dispatch paths.
+Plan scope: Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load; sustain native AMD x86_64, observed-feature AWS Intel x86_64, Apple M2, AWS AArch64, and qualifying RISC-V scalar and admitted acceleration lanes with explicit candidate status where hardware is absent; separately qualify every claimed FIPS artifact only on its certificate-listed operational environments and exact dispatch paths.
 
 Goal: complete the **Sustained Platform And Hostile-Load Qualification** implementation stop without admitting or
 claiming adjacent capability.

@@ -11,12 +11,33 @@ Status: policy
 | Compile | Bare metal | `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and `x86_64-unknown-none` all-feature workspace checks |
 | Contract | Aesynx | Stable adapter contract plus executable target-ABI or emulator harness required for v1 |
 
+## Planned Native CPU-Acceleration Evidence
+
+| Architecture lane | Available native evidence | Admission rule |
+| --- | --- | --- |
+| AMD x86_64 | Local AMD system | Record exact CPUID, microcode, OS, compiler and feature bundle; admit only forced paths measured on that CPU |
+| Intel x86_64 | AWS Intel instance selected by observed CPUID | Instance-family marketing is not evidence; absent SHA, AES, carry-less, AVX2, VAES or AVX-512 features leave the corresponding path unadmitted |
+| Apple AArch64 | Apple M2 macOS system | Record exact Apple CPU, macOS, compiler and AArch64 crypto/vector features; do not generalize M2 evidence to every Arm system |
+| Server AArch64 | AWS Arm system | Record exact Graviton or successor CPU and observed features independently from Apple evidence |
+| RISC-V | Available slow cloud host | Generic RISC-V and base RVV do not imply crypto extensions; admit only an exact ratified scalar-crypto or vector-crypto bundle seen on matching native hardware |
+
+Every lane runs scalar as the portable baseline. `brynja-crypto-cpu` remains an
+optional `no_std` backend package; a separate `brynja-crypto-cpu-std` adapter
+may provide opt-in runtime detection on supported host systems. OS-less targets
+use compiler-proven target features or an explicitly reviewed capability token.
+Cross-compilation and QEMU prove build and supplemental instruction behavior,
+not native performance, microarchitecture-specific side channels, CPU feature
+detection, or production support. An unavailable or non-qualifying machine
+produces a visible candidate or scalar-only result rather than a support claim.
+
 Compilation is not a complete support claim. Production support later requires
 native interoperability, entropy/time integration, lifecycle tests, packaging,
 and platform-specific security review. Protocol-facing traits live in upstream
 `no_std` interface crates; `brynja-platform` is a downstream implementer and is
 never required by a protocol engine. Core packages may not inspect the OS or
-assume `std`.
+assume `std`. The planned std CPU-detection adapter is a separate downstream
+package, not a core or protocol dependency, and provides no entropy, clock,
+transport, storage or generic OS integration.
 
 The v0.4.0 bare-metal matrix proves only that the complete crate graph remains
 OS-less and `no_std` compatible. It supplies no allocator, startup, interrupts,

@@ -17,13 +17,18 @@ test count, or interoperability alone never establishes that claim.
   `libfuzzer-sys`; pinned external process tools drive first-party harness
   binaries. Adding any assurance crate requires an explicit future policy
   change and can never affect a shipped package graph.
-- `no_std` production crates with no assumed allocator, OS, socket, clock,
-  filesystem, or entropy source.
+- Portable production cores remain `no_std` with no assumed allocator, OS,
+  socket, clock, filesystem, entropy source, or runtime CPU detector. A future
+  separately selected `brynja-crypto-cpu-std` adapter may use `std` only for
+  CPU feature detection and dispatch initialization; it cannot enter default,
+  bare-metal, protocol-engine, entropy, or validated-module graphs.
 - No Rust source file over 500 lines. Split modules before 450 lines so tests
   and review changes have room.
 - Unsafe Rust is denied by default. The v0.11.0 exception permits one
   machine-inventoried volatile-store block in one private module; every other
-  unsafe site, assembly, and FFI boundary remains forbidden.
+  unsafe site, assembly, and FFI boundary remains forbidden until the v0.13.2
+  package and policy boundary exists and a later primitive-specific milestone
+  separately hashes, reviews, tests, pentests, and admits one exact CPU kernel.
 - Modern and legacy engines have separate packages, APIs, configuration,
   state machines, caches, ticket keys, and connection paths.
 - Every legacy implementation package uses the
@@ -47,7 +52,9 @@ test count, or interoperability alone never establishes that claim.
 ```text
 brynja
 ├── brynja-core
-├── brynja-crypto
+├── brynja-crypto (portable scalar reference and provider contracts)
+├── future optional brynja-crypto-cpu (zero-dependency no_std ISA kernels)
+├── future optional brynja-crypto-cpu-std (std detection adapter only)
 ├── future brynja-fips-module (exact validated artifact; never a feature)
 ├── future brynja-fips (downstream approved-only selection facade)
 ├── brynja-pki
@@ -97,6 +104,20 @@ anti-replay, and policy outcomes remain authoritative in exhaustive mandatory
 results, single-consumption completion tokens, and engine state even when every
 event is ignored or dropped.
 
+`brynja-crypto` owns every portable scalar reference and the sealed backend
+contract. `brynja-crypto-cpu` is an optional downstream `no_std` implementation
+package: it may contain only separately admitted ISA kernels, static
+target-feature selection, capability-token validation, KAT health, quarantine,
+and backend reporting. `brynja-crypto-cpu-std` is a still narrower opt-in host
+adapter that may use standard-library CPU detection and initialization but
+provides no entropy, clock, transport, storage, allocator-dependent algorithm,
+or protocol behavior. Candidate detection never equals activation. Safe code
+can activate only an exact feature bundle that passed its own KAT; required
+acceleration fails closed and opportunistic mode reports scalar fallback.
+Neither package is an implicit dependency or default feature. A validated FIPS
+module links only the exact CPU symbols and dispatch table frozen into its own
+artifact; the ordinary std adapter stays outside that boundary.
+
 FIPS support uses package and type boundaries, not an additive Cargo feature.
 `brynja-fips-module` is the exact cryptographic module artifact submitted for
 validation. The separate `brynja-fips` facade remains outside that boundary and
@@ -143,23 +164,33 @@ pentest, and release line. Code never changes classification silently in place.
 2. Freeze production owned-memory zeroization; review and, only if admitted,
    add the optional downstream `brynja-sanitization` adapter without changing
    the mandatory core primitive; then freeze constant-time operations;
-   separate entropy from secure randomness and wall from monotonic time;
-   define pending-provider effects; and design the FIPS-aware provider boundary
-   without making a validation claim. Freeze authoritative mandatory security
-   outcomes first, then a secret-free, format-safe, allocation-free audit-event
-   schema with optional caller timestamps and later enrichment, deterministic
-   ordering, bounded capacity, saturating dropped-event accounting, and
-   non-correlating identifiers.
+   freeze provider and CPU-backend capability types before any cryptographic
+   implementation; isolate the future no_std CPU package from its std-only
+   detector; establish forced-backend, KAT, quarantine, native-hardware and
+   performance-evidence contracts; then separate entropy from secure randomness
+   and wall from monotonic time, define pending-provider effects, and design the
+   FIPS-aware provider boundary without making a validation claim. Freeze
+   authoritative mandatory security outcomes first, then a secret-free,
+   format-safe, allocation-free audit-event schema with optional caller
+   timestamps and later enrichment, deterministic ordering, bounded capacity,
+   saturating dropped-event accounting, and non-correlating identifiers.
 3. Implement and independently audit cryptographic primitives from official
-   vectors outward with per-compiler and per-target constant-time evidence. Each
-   arithmetic or cryptographic milestone introduces its applicable proof harness
-   beside the implementation; v0.155.0 completes coverage and publishes gaps
-   rather than introducing the models for the first time. Classify claims as
-   symbolic full-width, sound limb-count-parameterized, or reduced-width
-   algorithm/harness validation, and treat production-width vectors and
-   differentials as evidence rather than proof of equivalence. At v0.155.0,
-   generate a deterministic machine-readable register mapping each primitive,
-   exact implementation symbol, property, supported width or parameter,
+   vectors outward, always completing the portable scalar reference before its
+   acceleration patches. Admit exact x86_64 SHA/AES/carry-less/vector bundles on
+   local AMD and observed-feature AWS Intel, exact AArch64 crypto/vector bundles
+   on Apple M2 and AWS Arm, and exact ratified RISC-V crypto/vector bundles only
+   after matching native evidence; generic RISC-V remains scalar and QEMU never
+   substitutes for hardware qualification. Every CPU path retains per-compiler
+   constant-time, emitted-code, KAT, quarantine, differential, performance and
+   residual-risk evidence. Each arithmetic or cryptographic milestone
+   introduces its applicable proof harness beside the implementation; v0.155.0
+   completes coverage and publishes gaps rather than introducing the models for
+   the first time. Classify claims as symbolic full-width, sound
+   limb-count-parameterized, or reduced-width algorithm/harness validation, and
+   treat production-width vectors and differentials as evidence rather than
+   proof of equivalence. At v0.155.0, generate a deterministic machine-readable
+   register mapping each primitive and scalar or accelerated implementation
+   symbol, property, supported width or parameter, exact CPU feature bundle,
    verification method, evidence, assumptions, and residual gaps.
    RSA signing accepts validated imported keys; first-party RSA key generation
    is outside v1.
@@ -242,6 +273,16 @@ The repository will maintain:
   differential harness contract, deterministic evidence, and ARMv7E-M,
   RV32IMAC, and x86_64 OS-less compile matrix;
 - official RFC, NIST, and algorithm vectors with source provenance;
+- direct forced-backend tests for every scalar and accelerated symbol, exact
+  feature-bundle positive and negative processes, startup and concurrent KATs,
+  health-generation and quarantine fault injection, required-mode refusal,
+  opportunistic scalar fallback, and secret-free actual-backend reporting;
+- reproducible native CPU evidence from local AMD x86_64, an AWS Intel x86_64
+  host selected by observed features, Apple M2, AWS AArch64, and the available
+  RISC-V host, with CPU, microcode or firmware, OS, compiler, flags, frequency
+  policy and raw-result hashes; QEMU and cross-builds remain supplemental;
+- per-operation code-size, stack, cold-start, latency and throughput thresholds
+  over representative TLS message sizes so a wider ISA is never assumed faster;
 - generated exhaustive tests for small domains;
 - deterministic mutation, corpus replay, and stdin harness binaries driven by
   pinned external process tools; `cargo-fuzz` and `libfuzzer-sys` are excluded;
@@ -341,7 +382,12 @@ enter through narrow upstream traits that `brynja-platform` may implement;
 protocol engines never depend on that downstream crate. For v1, host and kernel
 applications provide entropy implementations and Brynja ships no built-in OS
 entropy FFI. Linux, Windows, BSD, macOS, Android, iOS, and bare-metal remain
-outside protocol conditional logic. Aesynx requires a stable adapter contract
+outside protocol conditional logic. The optional `brynja-crypto-cpu-std`
+adapter is the sole planned exception for standard-library CPU feature
+detection; it is not a general platform crate, remains outside default and FIPS
+graphs, and cannot create CPU evidence the host did not report. OS-less builds
+use compiler-proven target features or an explicitly reviewed, non-forgeable
+platform token. Aesynx requires a stable adapter contract
 and executable target-ABI or emulator gate
 for v1; real-hardware qualification may follow without weakening that contract.
 An ordinary caller entropy implementation never inherits FIPS validation.

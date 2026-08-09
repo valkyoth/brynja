@@ -24,6 +24,9 @@ Keep a Changelog and Semantic Versioning.
 - Add the adapter to the package, release, archive, version-matrix, SBOM, and
   documentation inventories while deferring its first publication to a public
   checkpoint.
+- Expand the future roadmap with scalar-first, per-primitive CPU acceleration
+  milestones; separate no_std ISA kernels from opt-in std detection; and name
+  native AMD, AWS Intel, Apple M2, AWS Arm, and qualifying RISC-V evidence lanes.
 
 ### Security
 
@@ -33,6 +36,10 @@ Keep a Changelog and Semantic Versioning.
   wrapper around external unsafe secret-storage code is a material boundary.
 - Preserve fail-closed re-review on upstream version, source, checksum,
   feature, dependency, unsafe, advisory, target, ownership, or FIPS drift.
+- Require exact CPU feature bundles, forced backend differentials, KAT health
+  and quarantine, native performance and side-channel evidence, honest
+  candidate status, scalar fallback, isolated unsafe review, and exact FIPS
+  implementation-symbol and operational-environment ownership.
 
 ## [0.11.1] - 2026-08-09
 

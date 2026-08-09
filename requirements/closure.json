@@ -476,6 +476,39 @@
       "version": "0.13.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Before any cryptographic primitive exists, freeze first-party scalar, opportunistic-accelerated, required-accelerated, and validated-module backend policies; separate candidate detection from admitted activation; define exact feature-bundle evidence, non-forgeable thread-bound capability tokens, backend identity, per-operation dispatch, startup known-answer tests, health generations, quarantine, fail-closed required mode, and secret-free reporting so safe code cannot execute an unsupported instruction or silently change service approval.",
+      "source_ids": [],
+      "title": "CPU Backend Capability And Dispatch Contract",
+      "version": "0.13.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Freeze future `brynja-crypto-cpu` as an optional zero-dependency `no_std` package for isolated ISA kernels and static selection, and future `brynja-crypto-cpu-std` as a separate opt-in `std` runtime-detection adapter; keep scalar `brynja-crypto`, every protocol engine, default feature, bare-metal graph, and ordinary facade independent of both, keep the std adapter outside `brynja-fips-module`, and require a separately hashed, versioned, under-500-line unsafe-intrinsic or assembly boundary for every admitted backend without authorizing any implementation yet.",
+      "source_ids": [],
+      "title": "CPU Acceleration Package And Unsafe Boundary",
+      "version": "0.13.2"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Establish reproducible backend evidence manifests, forced-backend and unsupported-feature processes, KAT and quarantine fault injection, scalar differential corpora, emitted-code and side-channel capture, code-size and latency budgets, and benchmark admission thresholds across local AMD x86_64, an observed-feature AWS Intel x86_64 instance, Apple M2, AWS AArch64, and the available RISC-V cloud host; record CPU, microcode, OS, compiler, flags, frequency policy, and feature evidence, treat emulation as supplemental only, and leave an unavailable or unmeasured backend unadmitted rather than blocking portable scalar support.",
+      "source_ids": [],
+      "title": "Native CPU Evidence And Performance Admission Harness",
+      "version": "0.13.3"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-ENTROPY-0014"
@@ -517,7 +550,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Freeze approved and non-approved service separation, self-test and permanent-failure hooks, dispatch, service indicators, SSP boundaries, deterministic module-build expectations, operational-environment assumptions, and sealed-provider exclusions without making a validation claim.",
+      "scope": "Freeze approved and non-approved service separation, self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, service indicators, SSP boundaries, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.",
       "source_ids": [],
       "title": "FIPS-Aware Provider Architecture",
       "version": "0.17.0"
@@ -612,6 +645,28 @@
       "version": "0.22.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add separately forced and reported SHA-256 backends using exact x86_64 SHA-extension bundles on AMD and Intel and exact AArch64 SHA2 bundles on Apple M2 and AWS Arm; preserve the scalar state and digest API, streaming and fixed-message equivalence, checked length and exhaustion behavior, safe std and static no_std dispatch, startup KAT quarantine, and per-compiler constant-time and emitted-code evidence without claiming register erasure.",
+      "source_ids": [],
+      "title": "SHA-256 x86_64 And AArch64 Acceleration",
+      "version": "0.22.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement a first-party RISC-V SHA-256 backend only for an exact ratified scalar-crypto or vector-crypto feature bundle expressible across the supported Rust line; run it on the available RISC-V host when its observed ISA qualifies, otherwise retain it as a non-dispatchable candidate with emulator and generated-code evidence, keep scalar fallback authoritative, and prohibit an accelerated support claim until matching native correctness, performance, and side-channel evidence exists.",
+      "source_ids": [],
+      "title": "SHA-256 RISC-V Acceleration Candidate",
+      "version": "0.22.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [],
       "scope": "Implement SHA-384 and SHA-512 with official vectors and checked length and exhaustion behavior.",
@@ -629,6 +684,17 @@
       ],
       "title": "SHA-384 And SHA-512",
       "version": "0.23.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V SHA-384/SHA-512 backends using exact specialized or parallel feature bundles; require byte-for-byte scalar equivalence for every chunking and boundary, forced-path KAT and quarantine behavior, safe static and runtime selection, native AMD, Intel, M2, AWS Arm, and available qualifying RISC-V evidence, and an explicit scalar decision wherever a backend is unavailable or fails the frozen performance margin.",
+      "source_ids": [],
+      "title": "SHA-384 And SHA-512 CPU Acceleration",
+      "version": "0.23.1"
     },
     {
       "boundary": null,
@@ -650,6 +716,17 @@
       ],
       "title": "Keccak SHA-3 And SHAKE",
       "version": "0.24.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add architecture-specific Keccak-f[1600], SHA3, and SHAKE backends for admitted x86_64, AArch64, and RISC-V vector or bit-manipulation bundles only where native benchmarks justify them; preserve domain separation, absorb, squeeze, permutation, and arbitrary-output equivalence, force every backend and tail path, and record scalar-only decisions for CPUs or operations that do not beat the portable implementation.",
+      "source_ids": [],
+      "title": "Keccak SHA-3 And SHAKE CPU Acceleration",
+      "version": "0.24.1"
     },
     {
       "boundary": null,
@@ -715,6 +792,28 @@
       "version": "0.27.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add isolated AES-128 and AES-256 encrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain the portable constant-time implementation, typed key ownership, identical round and key-schedule semantics, startup KAT quarantine, no_std static selection, opt-in std runtime selection, and exact per-backend side-channel and destruction residuals.",
+      "source_ids": [],
+      "title": "AES x86_64 And AArch64 Acceleration",
+      "version": "0.27.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add RISC-V AES backends for exact ratified scalar-crypto or vector-crypto bundles only when the supported compiler line and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission, while every unsupported RISC-V build remains portable scalar without an acceleration claim.",
+      "source_ids": [],
+      "title": "AES RISC-V Acceleration Candidate",
+      "version": "0.27.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0006"
@@ -734,6 +833,17 @@
       ],
       "title": "GHASH",
       "version": "0.28.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add exact x86_64 carry-less multiplication, AArch64 PMULL, and qualifying RISC-V crypto/vector GHASH backends with identical field representation, reduction, incremental boundaries, and finalization; test every backend independently and paired with scalar AES, require native correctness, timing, and performance evidence, and keep feature detection, activation, KAT health, and FIPS identity explicit.",
+      "source_ids": [],
+      "title": "GHASH CPU Acceleration",
+      "version": "0.28.1"
     },
     {
       "boundary": null,
@@ -757,6 +867,17 @@
       "version": "0.29.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Integrate only admitted AES and GHASH backend pairs into an accelerated AES-GCM provider with per-operation dispatch, preserving nonce and use limits, exact in-place or disjoint buffer rules, partial-overlap rejection, authenticate-before-release, complete failure atomicity, cancellation, output equivalence, and scalar fallback; benchmark combined rather than component speed and prohibit mixed, unhealthy, or unvalidated pairings.",
+      "source_ids": [],
+      "title": "Integrated Accelerated AES-GCM",
+      "version": "0.29.1"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0008"
@@ -778,6 +899,17 @@
       "version": "0.30.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes.",
+      "source_ids": [],
+      "title": "ChaCha20 CPU Acceleration",
+      "version": "0.30.1"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0009"
@@ -797,6 +929,17 @@
       ],
       "title": "Poly1305 And ChaCha20-Poly1305",
       "version": "0.31.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with a compatible admitted ChaCha20 path; preserve one-time-key handling, canonical reduction, constant-time tag verification, exact buffer aliasing rules, authenticate-before-release, complete failure atomicity, startup and continuous backend health policy, and scalar equivalence for every message and tail length.",
+      "source_ids": [],
+      "title": "Poly1305 And ChaCha20-Poly1305 CPU Acceleration",
+      "version": "0.31.1"
     },
     {
       "boundary": null,
@@ -897,6 +1040,17 @@
       "version": "0.35.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and, where the frozen margin and constant-time evidence pass, add fixed-schedule x86_64, AArch64, and qualifying RISC-V X25519 field and ladder backends; preserve clamping, canonical input policy, low-order and all-zero rejection, ephemeral lifecycle, immediate scalar destruction, and exact provider-token binding, and retain scalar for any CPU family whose optimized path is not independently evidenced.",
+      "source_ids": [],
+      "title": "X25519 CPU Acceleration",
+      "version": "0.35.1"
+    },
+    {
       "boundary": null,
       "requirement_ids": [],
       "scope": "Implement P-256 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors; introduce point-rejection, scalar-range, group-exception, and canonicalization proof harnesses beside the implementation.",
@@ -969,6 +1123,17 @@
       "version": "0.38.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and admit isolated x86_64, AArch64, and qualifying RISC-V P-256 field, group, scalar-multiplication, ECDH, and ECDSA backends only with complete-formula, scalar-range, nonce, strict-encoding, low-S, lifecycle, differential, fault, and per-target constant-time evidence; signing and verification backend identities remain explicit and independently quarantinable.",
+      "source_ids": [],
+      "title": "P-256 CPU Acceleration",
+      "version": "0.38.1"
+    },
+    {
       "boundary": null,
       "requirement_ids": [],
       "scope": "Implement P-384 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors; introduce point-rejection, scalar-range, group-exception, and canonicalization proof harnesses beside the implementation.",
@@ -1039,6 +1204,17 @@
       ],
       "title": "P-384 ECDSA",
       "version": "0.41.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and admit isolated x86_64, AArch64, and qualifying RISC-V P-384 field, group, scalar-multiplication, ECDH, and ECDSA backends under the same complete-formula, strict-encoding, nonce, lifecycle, differential, fault, and side-channel duties as scalar; record a reviewed scalar-only decision wherever code size, latency, or evidence does not justify acceleration.",
+      "source_ids": [],
+      "title": "P-384 CPU Acceleration",
+      "version": "0.41.1"
     },
     {
       "boundary": null,
@@ -1115,6 +1291,17 @@
       "version": "0.44.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and admit architecture-specific fixed-limb multiplication, squaring, reduction, and exponentiation backends for x86_64, AArch64, and qualifying RISC-V without changing modulus policy, imported-key validation, blinding, fixed schedule, CRT consistency, fault detection, or intermediate destruction; verification and private-operation paths remain distinct and every optimized symbol receives arithmetic proof and native side-channel evidence.",
+      "source_ids": [],
+      "title": "RSA CPU Acceleration",
+      "version": "0.44.1"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0012"
@@ -1141,6 +1328,17 @@
       "version": "0.45.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519 field, scalar, and group backends only when canonical encoding, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence remain identical; otherwise retain the portable implementation and record the decision.",
+      "source_ids": [],
+      "title": "Ed25519 CPU Acceleration",
+      "version": "0.45.1"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0013",
@@ -1159,7 +1357,18 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Complete independent cryptographic-substrate review, per-target constant-time and zeroization evidence, and remediation before PKI or TLS consumption.",
+      "scope": "Before the cryptographic-substrate audit, reconcile every implemented primitive and operation against the scalar reference and CPU-backend register; require an explicit admitted, candidate, rejected, or scalar-only decision for AMD x86_64, observed-feature AWS Intel x86_64, Apple M2, AWS AArch64, and RISC-V, verify dispatch precedence, required-mode failure, KAT and quarantine, no_std and std package isolation, code size, latency, throughput, side-channel and native-hardware evidence, and prohibit any backend whose exact symbol, feature bundle, residual risk, or FIPS disposition is missing.",
+      "source_ids": [],
+      "title": "Cross-Backend Performance And Admission Gate",
+      "version": "0.46.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Complete independent cryptographic-substrate review of every scalar primitive, admitted and candidate CPU implementation symbol, dispatcher, capability token, KAT and quarantine path, optional std adapter, unsafe boundary, per-target constant-time and zeroization claim, and residual gap; remediate findings before PKI or TLS consumption.",
       "source_ids": [],
       "title": "Cryptographic Substrate Audit Gate",
       "version": "0.47.0"
@@ -2970,6 +3179,28 @@
       "version": "0.119.0"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add isolated, benchmark-admitted x86_64 and AArch64 ML-KEM NTT, inverse-NTT, polynomial, sampling, encoding, key-generation, encapsulation, and decapsulation backends for AMD, observed-feature AWS Intel, Apple M2, and AWS Arm; preserve FIPS 203 and errata behavior, canonical encodings, randomness and stack bounds, constant-time implicit rejection, complete secret destruction, per-parameter KATs, scalar differentials, and backend-specific side-channel evidence.",
+      "source_ids": [],
+      "title": "ML-KEM x86_64 And AArch64 Acceleration",
+      "version": "0.119.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add a RISC-V ML-KEM backend only for an exact ratified vector or crypto feature bundle supported by the compiler matrix, and require native qualification on the available RISC-V host when its observed ISA matches; otherwise keep it non-dispatchable with generated-code and emulator evidence, retain scalar ML-KEM support, and make the missing native acceleration evidence explicit through the final platform gate.",
+      "source_ids": [],
+      "title": "ML-KEM RISC-V Acceleration Candidate",
+      "version": "0.119.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-HYB-0001"
@@ -3634,7 +3865,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Complete Miri and sanitizer evidence plus compiler and target constant-time assembly, owned-region zeroization-store survival, cache and branch, and statistical side-channel matrices.",
+      "scope": "Complete Miri and sanitizer evidence plus compiler, target and CPU-backend constant-time assembly, owned-region zeroization-store survival, cache and branch, statistical side-channel, spill and register-residual matrices; test every forced scalar and accelerated path without extending owned-memory destruction claims to registers or OS context state.",
       "source_ids": [],
       "title": "Memory And Side-Channel Evidence",
       "version": "0.157.0"
@@ -3645,7 +3876,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load; separately qualify every claimed FIPS artifact only on its certificate-listed operational environments and dispatch paths.",
+      "scope": "Sustain Linux, Windows, macOS, BSD, Android, iOS, bare-metal, and Aesynx ABI or emulator qualification under concurrency, provider failure, resource exhaustion, and hostile load; sustain native AMD x86_64, observed-feature AWS Intel x86_64, Apple M2, AWS AArch64, and qualifying RISC-V scalar and admitted acceleration lanes with explicit candidate status where hardware is absent; separately qualify every claimed FIPS artifact only on its certificate-listed operational environments and exact dispatch paths.",
       "source_ids": [],
       "title": "Sustained Platform And Hostile-Load Qualification",
       "version": "0.158.0"

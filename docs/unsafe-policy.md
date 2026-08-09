@@ -21,6 +21,29 @@ Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
 
+## Planned CPU-Acceleration Boundary Is Not Yet Approved
+
+Versions 0.13.1 through 0.13.3 plan capability, package, evidence and test
+contracts only. They do not permit another unsafe site. Later
+primitive-specific acceleration milestones may request exact intrinsics or
+assembly inside the separately classified `brynja-crypto-cpu` package. Each
+request must identify the primitive and operation, exact source symbol and
+hash, compiler and CPU feature bundle, ABI and vector-state assumptions, safe
+wrapper preconditions, register and spill residuals, scalar reference,
+known-answer test, quarantine behavior, native hardware, side-channel and
+performance evidence, and FIPS disposition. Approval for one symbol never
+extends to another architecture, primitive, operation or compiler path.
+
+The optional `brynja-crypto-cpu-std` package may later request only the smallest
+boundary needed for first-party runtime feature detection where safe standard
+library macros are insufficient. It may not contain a cryptographic kernel,
+entropy or general OS integration. Compile-time `target_feature` evidence and
+safe standard-library detection remain preferred. A public platform-attestation
+constructor is unsafe by contract, thread-bound unless CPU migration is proven
+safe, and cannot bypass a direct backend KAT. Until the applicable milestone
+amends the machine inventory and passes its exceptional external review, the
+current scanner must continue to reject all such code.
+
 ## v0.11.0 Volatile-Store Exception
 
 Necessity: ordinary safe assignment or slice filling may be removed when the

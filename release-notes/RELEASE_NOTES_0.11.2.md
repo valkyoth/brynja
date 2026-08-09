@@ -7,6 +7,16 @@ v0.11.1. It advances the `brynja` facade to 0.11.2, selects no crate for
 crates.io publication, and remains in the cumulative release train ending at
 v0.15.0.
 
+This candidate also reconciles the future implementation roadmap before the
+cryptographic phase begins. Portable scalar implementations remain the no_std
+default. Future ISA kernels live in a separate optional no_std CPU package,
+standard-library runtime detection lives in a narrower opt-in adapter, and
+each primitive receives bounded architecture-specific implementation and
+qualification stops rather than one oversized SIMD milestone. Native evidence
+is planned for local AMD x86_64, observed-feature AWS Intel x86_64, Apple M2,
+AWS AArch64, and qualifying RISC-V hardware; QEMU remains supplemental and an
+unavailable feature bundle remains an explicit candidate or scalar-only path.
+
 ## Adapter Boundary
 
 The new separately publishable `brynja-sanitization 0.1.0` package exact-pins

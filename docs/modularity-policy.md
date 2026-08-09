@@ -49,6 +49,20 @@ cannot alter an older engine in place. DTLS may reuse reviewed codecs,
 transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
 
+CPU acceleration follows an equally strict downstream boundary.
+`brynja-crypto` owns portable scalar references and sealed backend contracts.
+Future `brynja-crypto-cpu` is an optional zero-dependency `no_std` package for
+separately admitted, hashed ISA kernels, compile-time selection, capability
+tokens, KAT health, quarantine and reporting. Future
+`brynja-crypto-cpu-std` may use `std` only for CPU feature detection and
+dispatch initialization. It cannot provide entropy or other OS services and
+cannot enter a default, protocol-engine, bare-metal or validated-module graph.
+No CPU package or feature may alter scalar public type layout or protocol
+semantics. Candidate detection is not activation; required acceleration fails
+closed, opportunistic fallback is explicit, and every FIPS artifact owns its
+exact implementation symbols, dispatch table and operational-environment
+evidence without inheriting the ordinary std adapter.
+
 Supersession alone never makes a TLS version legacy. Reclassification needs
 a dedicated numbered security-boundary release, standards and cryptographic
 evidence, removal from every modern dependency and negotiation path, and a

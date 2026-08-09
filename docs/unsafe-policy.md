@@ -32,8 +32,9 @@ it is not presented as cache, DMA, atomic, or inter-thread synchronization.
 Safe alternatives considered and rejected for the production claim are
 ordinary assignment, `slice::fill`, `ptr::write_bytes`, and `black_box`; none
 provides the admitted volatile-store guarantee. A third-party zeroization crate
-is forbidden, and the optional first-party `sanitization` adapter remains a
-separate v0.11.1 admission question rather than Brynja's core guarantee.
+is forbidden. The v0.11.1 review admits exact first-party
+`sanitization 2.0.3` only for a future separate adapter; it does not become
+Brynja's core guarantee.
 
 The unsafe invariant is deliberately small: the raw pointer is derived from a
 live exclusive `&mut u8`, is aligned, remains inside the same Rust allocation,
@@ -78,9 +79,9 @@ reported class and fixtures retain all four comment/nested-attribute variants.
 The repository-owner retest of signed follow-up remediation commit
 `88a6c73d3b2ad055702aede3858b1e7ecc8d24aa` passed with zero open findings.
 
-The v0.11.1 review treats unsafe code inside the exact `sanitization` release as
-part of the adapter's inherited trusted computing base. Admission requires the
-same necessity, invariant, Miri, emitted-code, target, and external-review
-evidence expected of a local exception. Approval applies only to the separately
+The v0.11.1 review records unsafe code inside exact `sanitization 2.0.3` as
+part of the adapter's inherited trusted computing base. Its necessity,
+invariants, Miri, emitted-code, target, and external-review evidence are
+recorded in the admission artifact. Approval applies only to the separately
 selected `brynja-sanitization` adapter and does not authorize additional unsafe
 code or replace Brynja's mandatory v0.11.0 primitive.

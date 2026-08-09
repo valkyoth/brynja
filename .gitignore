@@ -1,5 +1,6 @@
 # Rust build output
 /target/
+/assurance/sanitization-admission/target/
 /fuzz/target/
 /fuzz/artifacts/
 /fuzz/corpus/
@@ -59,4 +60,3 @@ Thumbs.db
 *.swo
 .idea/
 .vscode/
-

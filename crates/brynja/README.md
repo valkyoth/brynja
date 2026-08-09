@@ -36,20 +36,19 @@ production-ready TLS implementation at `1.0.0`.
 > described below; a tag without a matching committed pentest report was not a
 > scheduled pentest checkpoint.
 
-Version `0.11.0` adds affine ownership for one complete caller-owned secret
-region. Admission first clears all previous bytes, initialization is write-only
-and sequential, readable ownership exists only after exact completion, and
-explicit clear, incomplete exits, and `Drop` execute a per-byte volatile zero
-store plus a compiler barrier. The only unsafe block is isolated in one private
-module and is bound to MIR, LLVM IR, assembly, Miri, sanitizer, compiler, and
-target checks. The guarantee covers the exclusively borrowed Rust allocation;
-it explicitly excludes registers, copies, caches, DMA-visible copies, dumps,
-suspend images, physical-memory remanence, concurrent access, `mem::forget`,
-and process termination. The first unsafe secret-destruction boundary required
-an exceptional v0.11.0 pentest before tagging; its remediation retest passed
-with zero open findings, while the milestone still selects no crate for
-publication. These foundations do **not** implement TLS framing, a protocol
-state machine, or cryptography and must not be used to secure network traffic.
+Version `0.11.1` completes an evidence-backed admission review of the latest
+stable first-party `sanitization 2.0.3` package. It conditionally admits that
+exact release only for a separately selected protocol-neutral
+`brynja-sanitization` adapter at v0.11.2, with default features disabled, no
+activated third-party crate, adapter-owned wrappers, no legacy split, and
+complete exclusion from facades, engines, defaults, and the FIPS module. No
+adapter or production dependency is added at v0.11.1. Brynja's v0.11.0 affine
+owned-region primitive remains mandatory and authoritative. See the
+[admission review](https://github.com/valkyoth/brynja/blob/main/docs/sanitization-admission-review.md)
+for package hashes, unsafe inventory, target evidence, residual risks, and
+re-review triggers. These foundations do **not** implement TLS framing, a
+protocol state machine, or cryptography and must not be used to secure network
+traffic.
 
 ## Development Tags And Pentesting
 
@@ -80,7 +79,7 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the repository is preparing the tagged
-v0.11.0 development milestone without crates.io publication. The published
+v0.11.1 development milestone without crates.io publication. The published
 dependency is:
 
 ```toml
@@ -108,9 +107,9 @@ selected set in dependency order and publishes the facade last.
   existing engine package or automatically make its predecessor legacy.
 - Runtime and build dependencies are forbidden. Any future exception requires
   a dedicated adapter crate, written admission review, tests, and release gate.
-- Versions `0.11.1` and `0.11.2` evaluate and conditionally implement one
-  separately selected `brynja-sanitization` adapter to the first-party
-  `sanitization` crate. It uses an exact pin with default features disabled,
+- Version `0.11.1` admits exact `sanitization 2.0.3` for conditional v0.11.2
+  implementation of one separately selected `brynja-sanitization` adapter. It
+  uses an exact pin with default features disabled,
   never activates `zeroize`, and is not a dependency or feature of a facade,
   protocol engine, legacy engine, or FIPS module.
 - Every production crate is `no_std` by default. Platform services enter
@@ -199,7 +198,7 @@ formal proof, pentest, or release status.
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| Future `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | Not admitted |
+| Future `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | Exact `sanitization 2.0.3` admitted for conditional v0.11.2 implementation; package absent |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | `brynja-test-support` | RFC 9850 test-only key-log encoder and future fixtures | Implemented, unpublished, production-unreachable |
@@ -229,7 +228,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Kani verifier pairing | `cargo-kani 0.67.0` on Rust `1.90.0`; separate evidence only |
 | Default target | `no_std` |
 | Third-party crates | Forbidden |
-| First-party companion crates | Conditional adapter-only admission review |
+| First-party companion crates | Exact `sanitization 2.0.3` admitted only for the future optional adapter; current graph remains empty |
 | Unsafe Rust | One v0.11 volatile-store block admitted in a private module; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
@@ -289,7 +288,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.11.0
+scripts/tag_gate.sh v0.11.1
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

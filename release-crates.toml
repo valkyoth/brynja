@@ -1,19 +1,19 @@
 [release]
-version = "0.11.0"
-milestone = "0.11.0"
+version = "0.11.1"
+milestone = "0.11.1"
 baseline = "0.10.0"
-cumulative_milestones = ["0.11.0"]
+cumulative_milestones = ["0.11.0", "0.11.1"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "v0.11.0 introduces Brynja's first isolated unsafe block and production owned-secret-memory destruction primitive, requiring an exceptional assessment before its development tag."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.10.0"
-version = "0.11.0"
-change = "code"
+previous_version = "0.11.0"
+version = "0.11.1"
+change = "metadata"
 publish = false
-reason = "Advance the facade for the completed v0.11.0 owned-memory zeroization milestone without crates.io publication."
+reason = "Advance the facade for the completed v0.11.1 sanitization admission review without crates.io publication or a production dependency."
 
 [crates."brynja-core"]
 previous_version = "0.7.0"

@@ -23,8 +23,8 @@ package therefore requires an explicit reviewed policy change.
 The conditional `brynja-sanitization` package is a downstream integration
 boundary, never a feature or dependency of `brynja`, `brynja-core`,
 `brynja-crypto`, `brynja-pki`, a modern or legacy engine, or
-`brynja-fips-module`. It may be admitted only after v0.11.1 approves the exact
-latest stable first-party `sanitization` package, and then must exact-pin it
+`brynja-fips-module`. v0.11.1 admits exact first-party
+`sanitization 2.0.3` only for this boundary; implementation must exact-pin it
 with default features disabled and no activated `zeroize` or other third-party
 crate. Adapter-owned wrappers bridge the contracts without violating Rust's
 orphan rules. The same protocol-neutral package serves modern and legacy

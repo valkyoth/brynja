@@ -972,7 +972,7 @@ Exit criteria:
 
 ### v0.11.0 - Owned-Memory Zeroization Primitive
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: After explicit unsafe-policy approval, implement the smallest isolated first-party primitive needed to preserve zeroization stores through optimization; define proof obligations, cache and DMA completion duties, MIR, LLVM and assembly evidence for every supported compiler and target, and precise exclusions for registers, copies, dumps, and physical memory.
 
@@ -1021,7 +1021,7 @@ Exit criteria:
 
 ### v0.11.1 - Sanitization Adapter Admission Review
 
-Status: planned
+Status: awaiting green CI
 
 Plan scope: Audit the latest stable first-party `sanitization` crate against Brynja's MSRV, `no_std`, license, unsafe, target, complete-owned-region destruction, feature, dependency, advisory, optimization-evidence, and FIPS-boundary policies; compare one protocol-neutral adapter with a legacy-specific split, require an activated graph with no `zeroize` or other third-party crate, and record a fail-closed admit-or-reject decision without changing any Brynja production dependency graph.
 

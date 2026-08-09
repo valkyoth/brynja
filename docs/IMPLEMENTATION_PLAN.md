@@ -105,9 +105,9 @@ a certificate-bound manifest and matching validated-module handle. Ordinary
 `brynja` configuration can never acquire a FIPS claim through feature unification.
 
 `brynja-sanitization` is a conditional, separately selected downstream adapter,
-not a feature or dependency of any Brynja facade or protocol engine. Admission
-requires the v0.11.1 review of the latest stable first-party `sanitization`
-release; implementation at v0.11.2 uses an exact pin, disables default
+not a feature or dependency of any Brynja facade or protocol engine. The
+v0.11.1 review admits exact first-party `sanitization 2.0.3` for this boundary
+only; implementation at v0.11.2 uses an exact pin, disables default
 features, and rejects any activated `zeroize` or other third-party dependency.
 Adapter-owned wrappers avoid orphan-rule workarounds. One protocol-neutral
 adapter serves modern and legacy applications with the same destruction

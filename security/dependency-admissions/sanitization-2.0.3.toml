@@ -1,0 +1,142 @@
+[schema]
+version = 1
+milestone = "0.11.1"
+reviewed_on = "2026-08-09"
+
+[decision]
+status = "admitted-for-v0.11.2-adapter-only"
+production_graph_changed = false
+adapter = "brynja-sanitization"
+adapter_milestone = "0.11.2"
+legacy_adapter = "rejected"
+fips_boundary = "excluded"
+
+[package]
+name = "sanitization"
+version = "2.0.3"
+registry = "https://crates.io"
+repository = "https://github.com/valkyoth/sanitization"
+release_tag = "v2.0.3"
+source_commit_sha1 = "ffcb211cd931c6966b2e767ce5edffa4b47c4f07"
+reviewed_code_commit_sha1 = "d9578b20a5e0ad9c9226648773409466f662e3b6"
+package_sha256 = "75e43f2762b31232062e8ba7bfbdfcbd33c80c43bf7a306a7e195c3c4f734e0f"
+license = "MIT OR Apache-2.0"
+edition = "2021"
+rust_version = "1.90"
+no_std = true
+build_script = false
+native_links = false
+
+[selection]
+default_features = false
+features = []
+direct_runtime_dependencies = []
+resolved_runtime_packages = ["sanitization"]
+prohibited_packages = ["zeroize", "sanitization-derive", "serde", "subtle"]
+prohibited_features = [
+  "alloc",
+  "asm-compare",
+  "cache-flush",
+  "canary-check",
+  "derive",
+  "guard-pages",
+  "hardware-secrets",
+  "memory-lock",
+  "multi-pass-clear",
+  "page-seal",
+  "profile-guarded-native",
+  "profile-hardened-linux",
+  "profile-hardened-native",
+  "random-canary",
+  "register-scrub",
+  "require-fork-exclusion",
+  "serde",
+  "split-secret",
+  "std",
+  "strict-canary-check",
+  "strict-compare",
+  "subtle-interop",
+  "wasm-compat",
+  "zeroize-interop",
+]
+
+[unsafe_inventory]
+selected_feature_tcb_files = ["src/wipe_backend.rs", "src/owned.rs"]
+selected_feature_boundaries = [
+  "wipe_backend volatile erasure and zero-valid primitive marker",
+  "owned::consume_once atomic exclusive-access implementation",
+]
+disabled_feature_tcb_files = [
+  "src/canary.rs",
+  "src/mapped/guard_pages.rs",
+  "src/mapped/memory_lock_native.rs",
+  "src/mapped/memory_lock_wasm.rs",
+  "src/platform.rs",
+]
+local_unsafe_authorized = false
+
+[verification]
+compilers = [
+  "1.90.0",
+  "1.91.0",
+  "1.92.0",
+  "1.93.0",
+  "1.94.0",
+  "1.95.0",
+  "1.96.0",
+  "1.96.1",
+  "1.97.0",
+  "1.97.1",
+]
+targets = [
+  "x86_64-unknown-linux-gnu",
+  "x86_64-pc-windows-msvc",
+  "x86_64-unknown-freebsd",
+  "x86_64-apple-darwin",
+  "aarch64-linux-android",
+  "aarch64-apple-ios",
+  "thumbv7em-none-eabi",
+  "riscv32imac-unknown-none-elf",
+  "x86_64-unknown-none",
+]
+additional_compile_only_targets = ["wasm32-unknown-unknown"]
+upstream_pentest = "security/pentest/v2.0.3.md: PASS on 2026-07-21"
+advisory_result = "cargo audit: zero advisories on 2026-08-09"
+policy_result = "cargo deny advisories/bans/licenses/sources: pass on 2026-08-09"
+codegen_evidence = "upstream MIR/LLVM IR/assembly matrix plus Brynja v0.11.0 comparison"
+candidate_fixture = "assurance/sanitization-admission"
+
+[adapter_boundary]
+owned_wrapper = "SanitizedSecret<N>"
+upstream_storage = "sanitization::SecretBytes<N>"
+explicit_dependency_selection = true
+implicit_conversions = false
+foreign_trait_implementations = false
+facade_feature = false
+engine_dependency = false
+default_activation = false
+modern_and_legacy_shared = true
+core_destruction_remains_authoritative = true
+non_empty_storage = true
+
+[rereview]
+conditions = [
+  "new sanitization release or package checksum",
+  "source commit, license, MSRV, feature, dependency, unsafe, target, advisory, or guarantee drift",
+  "any selected feature or default-feature activation",
+  "any facade, engine, legacy engine, default feature, or FIPS-module dependency path",
+  "any new conversion, ownership, allocation, or destruction behavior",
+  "any upstream security finding affecting the selected package",
+]
+failure_action = "withhold or remove brynja-sanitization without changing brynja-core destruction"
+
+[residual_risk]
+items = [
+  "independent upstream review is not a Brynja review or FIPS validation",
+  "unsafe upstream code remains an inherited adapter trusted-computing-base boundary",
+  "drop does not run after abort, forced termination, mem::forget, or equivalent lifecycle bypass",
+  "Rust moves, compiler spills, registers, caches, DMA, dumps, swap, hibernation, privileged inspection, and physical attacks remain outside the ordinary-RAM wipe claim",
+  "WASM volatile erasure has weaker runtime semantics than native volatile stores",
+  "Miri and Kani evidence does not prove native OS behavior, real concurrency, or universal emitted code",
+  "the optional adapter cannot satisfy or imply FIPS SSP destruction or certificate coverage",
+]

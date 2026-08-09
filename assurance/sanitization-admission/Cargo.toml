@@ -1,0 +1,20 @@
+[workspace]
+
+[package]
+name = "brynja-sanitization-admission-fixture"
+version = "0.0.0"
+edition = "2021"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+sanitization = { version = "=2.0.3", default-features = false }
+
+[lints.rust]
+unsafe_code = "forbid"
+unsafe_op_in_unsafe_fn = "forbid"
+
+[lints.clippy]
+panic = "forbid"
+unwrap_used = "forbid"
+expect_used = "forbid"

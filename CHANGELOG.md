@@ -5,6 +5,35 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Commit an exact, machine-readable admission record and reviewer-facing audit
+  for first-party `sanitization 2.0.3`, including source/package hashes,
+  features, graph, unsafe inventory, target evidence, advisories, upstream
+  pentest, residual risks, and re-review conditions.
+- Add an independent candidate wrapper with six behavior tests and one
+  compile-fail test, eight broken policy fixtures, and release-gate online
+  crates.io freshness, package-archive, compiler, and target verification.
+
+### Changed
+
+- Advance the development facade to `0.11.1` without publishing a crate or
+  adding `sanitization` to any Brynja production manifest or lockfile.
+- Conditionally admit one future protocol-neutral `brynja-sanitization`
+  adapter at v0.11.2 with an exact pin, default features disabled,
+  adapter-owned wrappers, explicit selection, and no legacy split.
+
+### Security
+
+- Keep Brynja's v0.11.0 owned-region destruction primitive mandatory and
+  authoritative; the optional adapter cannot become an engine dependency or
+  weaken protocol destruction duties.
+- Exclude the adapter from all facades, engines, defaults, implicit
+  conversions, and the FIPS validated-module closure. Upstream independent
+  review remains evidence, not Brynja verification or FIPS validation.
+
+## [0.11.0] - 2026-08-09
+
 ### Changed
 
 - Advance the development facade to `0.11.0` and adopt signed tags for every

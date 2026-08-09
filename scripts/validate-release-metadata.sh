@@ -81,6 +81,16 @@ test -x scripts/check-zeroization-miri.sh
 test -x scripts/check-zeroization-sanitizer.sh
 test -f scripts/zeroization_evidence.py
 test -s assurance/zeroization-matrix.toml
+test -x scripts/check-sanitization-admission.py
+test -x scripts/test-sanitization-admission.py
+test -x scripts/check-sanitization-candidate.sh
+test -f scripts/sanitization_admission.py
+test -s security/dependency-admissions/sanitization-2.0.3.toml
+test -s docs/sanitization-admission-review.md
+test -s assurance/sanitization-admission/Cargo.toml
+test -s assurance/sanitization-admission/Cargo.lock
+test -s assurance/sanitization-admission/src/lib.rs
+test -s assurance/sanitization-admission/tests/behavior.rs
 test -x scripts/check_shell_syntax.sh
 test -x scripts/test-shell-syntax.sh
 test -x scripts/check-github-release-controls.py
@@ -131,7 +141,12 @@ grep -q 'python3 scripts/check-unsafe-policy.py' scripts/checks.sh
 grep -q 'python3 scripts/test-unsafe-policy.py' scripts/checks.sh
 grep -q 'python3 scripts/check-zeroization-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/test-zeroization-evidence.py' scripts/checks.sh
+grep -q 'python3 scripts/check-sanitization-admission.py' scripts/checks.sh
+grep -q 'python3 scripts/test-sanitization-admission.py' scripts/checks.sh
+grep -q 'scripts/check-sanitization-candidate.sh' scripts/checks.sh
 grep -q 'scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
+grep -q 'scripts/check-sanitization-admission.py --online' scripts/tag_gate.sh
+grep -q 'scripts/check-sanitization-candidate.sh --matrix' scripts/tag_gate.sh
 python3 -c '
 from pathlib import Path
 workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")

@@ -13,6 +13,8 @@ scripts/update-standards-snapshots.py --check
 scripts/release_crates.py --check
 scripts/check-rust-version-matrix.sh
 scripts/check_latest_tools.sh
+scripts/check-sanitization-admission.py --online
+scripts/check-sanitization-candidate.sh --matrix
 scripts/check-github-release-controls.py
 cargo deny check
 cargo audit --deny warnings

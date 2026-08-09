@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 tagged and published; v0.11.0 pentest PASS, awaiting hosted checks and signed tag
+Status: v0.10.0 tagged and published; v0.11.0 tagged; v0.11.1 implemented, awaiting hosted checks and signed tag
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -28,6 +28,7 @@ consistent in the same commit.
 | `crates/brynja-core/src/{secret_memory,secret_memory_volatile}.rs`, `crates/brynja-core/tests/secret_memory.rs` | v0.11.0 affine owned-region zeroization | Clear-before-initialization, every complete and incomplete boundary, failure-atomic writes, read admission only after exact completion, explicit and Drop clearing, closed errors, exclusive borrow, no cloning/formatting, `no_std`, and direct complete-region tests |
 | `docs/unsafe-policy.md`, `scripts/{unsafe_policy,check-unsafe-policy,test-unsafe-policy}.py`, workspace target policy | v0.11.0 single unsafe exception | SHA-256-pinned private-module bytes, exact allowance/block/volatile call/pointer derivation/safety proof/compiler barrier, classified fixed library targets, regular non-symlink source inventory, and intentionally broad rejection of every complete low-level/code-inclusion identifier even in comments or nested attributes, with eleven broken fixtures |
 | `assurance/zeroization-matrix.toml`, `scripts/check-zeroization-{evidence.py,codegen.sh,miri.sh,sanitizer.sh}` | v0.11.0 optimization and memory-safety evidence | MIR volatile-call, LLVM volatile-zero-store, target assembly byte-store, ten stable compiler, nine target, pinned Miri, pinned AddressSanitizer, and exact exclusion enforcement |
+| `security/dependency-admissions/sanitization-2.0.3.toml`, `docs/sanitization-admission-review.md`, `assurance/sanitization-admission`, `scripts/{sanitization_admission,check-sanitization-admission,test-sanitization-admission}.py`, `scripts/check-sanitization-candidate.sh` | v0.11.1 exact first-party sanitization admission | Package/source identity and hashes, exact no-feature one-package graph, unsafe and residual-risk inventory, Rust/target evidence, adapter/core/FIPS isolation, six behavior tests, one compile-fail test, eight broken fixtures, and release-gate crates.io freshness/archive plus compiler/target-matrix verification |
 | `crates/brynja-test-support/src/keylog.rs`, `crates/brynja-test-support/tests/keylog.rs`, `scripts/test-workspace-metadata.py` | v0.10.0 RFC 9850 repository-only key-log support | Exact ten-label and three-ending encoding, whole-line transactional preflight, every short output, closed diagnostics, permanent non-publication, and production dependency/feature/resolved-graph rejection fixtures |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/domain-scope.toml`, `requirements/domains/*.toml` | Reviewed v0.3.3 authority, invariant, work-bound, test-polarity, surface-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, and completeness validation |
@@ -63,6 +64,8 @@ source-free transactional write cursor, v0.9.0 adds only the exact
 caller-owned workspace and monotonic arena model, and v0.10.0 adds only the
 abstract secret-lifetime contract and isolated test key logger recorded above.
 v0.11.0 adds only the exclusively borrowed owned-region primitive and its exact
-local-allocation clearing evidence.
+local-allocation clearing evidence. v0.11.1 admits exact `sanitization 2.0.3`
+only for conditional implementation of a separately selected adapter at
+v0.11.2; it adds no package or production dependency.
 No other ledger, surface, or planned protocol requirement entry is an implementation,
 interoperability, independent-review, security, or FIPS validation claim.

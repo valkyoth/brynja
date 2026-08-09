@@ -1,10 +1,10 @@
 # Security Controls
 
-Status: v0.10.0 tagged and published; v0.11.0 pentest PASS, awaiting hosted checks and signed tag
+Status: v0.10.0 tagged and published; v0.11.0 tagged; v0.11.1 implemented, awaiting hosted checks and signed tag
 
 | Control | Foundation enforcement |
 | --- | --- |
-| Dependency surface | Cargo manifests and `cargo metadata` must contain no external packages |
+| Dependency surface | Cargo manifests and `cargo metadata` contain no external packages; exact `sanitization 2.0.3` is admitted only for a future separately selected adapter, with package/source hashes, no default or selected feature, a one-package runtime graph, inherited unsafe inventory, online freshness, and broken-fixture enforcement |
 | CI tool provenance | Exact versions and independently pinned `.crate` SHA-256 hashes are verified before installing security and SBOM tools |
 | Unsafe Rust | Workspace lint denies it by default; a machine inventory permits exactly one documented volatile-store block in one private v0.11 module and rejects every other allowance, unsafe block/item, assembly, or FFI site |
 | `no_std` | Every package declares `#![no_std]` |

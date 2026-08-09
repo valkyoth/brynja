@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Status: v0.10.0 tagged and published; v0.11.0 pentest PASS, awaiting hosted checks and signed tag
+Status: v0.10.0 tagged and published; v0.11.0 tagged; v0.11.1 implemented, awaiting hosted checks and signed tag
 
-The `brynja` facade advances to `0.11.0` for the current signed development
+The `brynja` facade advances to `0.11.1` for the current signed development
 line but is not selected for crates.io publication. The latest public
 checkpoint remains `brynja 0.10.0`, `brynja-core 0.7.0`, eight modern support
 packages at `0.1.6`, and `brynja-crypto 0.1.0`. Supporting, legacy, and
@@ -12,8 +12,8 @@ production readiness.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.11.0` | no | Development tag version; latest crates.io checkpoint is `0.10.0` |
-| `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while completed v0.11 zeroization code awaits its development tag |
+| `brynja` | `0.11.1` | no | Development tag version; latest crates.io checkpoint is `0.10.0` |
+| `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while cumulative v0.11 zeroization code remains unreleased on crates.io |
 | `brynja-crypto` | `0.1.0` | no | Published and unchanged |
 | `brynja-pki`, `brynja-platform` | `0.1.6` | no | Published boundaries retained; functionality remains unimplemented |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.6` | no | Published boundaries retained; engines remain unimplemented |
@@ -21,7 +21,7 @@ production readiness.
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
-| Future `brynja-sanitization` | not admitted | no | Conditional downstream adapter after v0.11.1 review |
+| Future `brynja-sanitization` | not yet implemented | no | Exact `sanitization 2.0.3` admitted for conditional v0.11.2 implementation; absent from workspace and release manifest |
 
 ## Enforced crates.io Release Policy
 
@@ -69,9 +69,10 @@ is immutable and bound to its exact certificate, artifact hashes, caveats, and
 tested operational environments. Any changed module is a different artifact
 and cannot reuse the validation claim.
 
-If v0.11.1 admits it, `brynja-sanitization` also uses an independent SemVer
+The admitted future `brynja-sanitization` package uses an independent SemVer
 line and publishes only when its adapter code or exact `sanitization` pin
-changes. Until admission, it is absent from the release manifest and workspace.
+changes. Until conditional implementation at v0.11.2 passes its gates, it is
+absent from the release manifest and workspace.
 
 Every tag requires a clean worktree, signed commit, complete automated tag
 gate, user-confirmed green GitHub and CodeQL, and explicit authorization.

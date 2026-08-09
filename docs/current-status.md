@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 tagged and published; v0.11.0 pentest PASS, awaiting hosted checks and signed tag
+Status: v0.10.0 tagged and published; v0.11.0 tagged; v0.11.1 implemented, awaiting hosted checks and signed tag
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -18,12 +18,12 @@ classified protocol surfaces and the normative matrix foundation, and added
 the assurance harness and first value, cursor, workspace, and abstract secret
 lifetime domains. The v0.10.0 checkpoint published `brynja-core 0.7.0`, eight
 dependency-only modern support patches at `0.1.6`, and `brynja 0.10.0`.
-The facade now advances to `0.11.0` for the next signed development tag while
-all crates.io publication selections remain empty.
-Because v0.11.0 introduces the first isolated unsafe secret-destruction
-boundary, it received an exceptional pentest. The repository-owner remediation
-retest passed with zero open findings; the signed tag now awaits green hosted
-GitHub and CodeQL checks.
+Signed v0.11.0 introduced the first isolated unsafe secret-destruction
+boundary and completed its exceptional pentest with zero open findings. The
+facade now advances to `0.11.1` for the next signed development tag while all
+crates.io publication selections remain empty. The v0.11.1 work is a
+review-only dependency-admission decision and does not trigger a scheduled or
+exceptional pentest by itself.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -341,6 +341,27 @@ Version 0.11.0 adds the owned-memory zeroization primitive:
   suspend images, physical-memory remanence, concurrent access, forgotten
   owners, abort, and process or power termination.
 
+Version 0.11.1 completes the sanitization adapter admission review:
+
+- the latest stable first-party release is pinned as `sanitization 2.0.3`,
+  source commit `ffcb211cd931c6966b2e767ce5edffa4b47c4f07`, package SHA-256
+  `75e43f2762b31232062e8ba7bfbdfcbd33c80c43bf7a306a7e195c3c4f734e0f`,
+  Rust 1.90, and MIT OR Apache-2.0;
+- an isolated exact-pin candidate with default features disabled resolves only
+  `sanitization`, with no `zeroize`, derive, serde, subtle, or other runtime
+  dependency, and compiles across all ten supported Rust versions, nine
+  promised targets, and the explicitly weaker WASM compatibility target;
+- the selected-feature inherited unsafe inventory, upstream pentest, advisory
+  result, emitted-code evidence, target tiers, and residual limits are recorded
+  in both machine-readable and reviewer-facing evidence;
+- one protocol-neutral future `brynja-sanitization` adapter is admitted for
+  conditional v0.11.2 implementation; a legacy-specific split, facade or
+  engine feature, default activation, implicit conversion, and ownership
+  ambiguity are rejected; and
+- `brynja-core` remains the mandatory authoritative protocol destruction path,
+  while the optional adapter stays outside every FIPS validated-module closure
+  and cannot satisfy or imply a validation claim.
+
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded
 because Drop cannot return `DestructionOutcome`. `SecretDestructor` now
@@ -375,8 +396,10 @@ machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
-No `brynja-sanitization` package or dependency exists yet; its admission
-decision remains gated at v0.11.1.
+No `brynja-sanitization` package or dependency exists yet. Exact
+`sanitization 2.0.3` is admitted only for conditional adapter implementation at
+v0.11.2; any source, package, feature, dependency, unsafe, advisory, target,
+guarantee, ownership, engine, facade, or FIPS-boundary drift forces re-review.
 
 The v0.3.2 repository-owner pentest cycle reported no remaining vulnerability
 and one optional defense-in-depth improvement. Target validation now resolves

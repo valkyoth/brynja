@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70"
-surface_register_sha256 = "3e0944a587933ec77fe99a10d522836a58eb9c9025bb9e5780ebafc1e637af58"
+source_ledger_sha256 = "a90755dc170ee9bbce71daa7a4182b54be143c66bfb8d3ca7f680d3f4a19ad88"
+surface_register_sha256 = "dd30d84cbb452f5a0ae2a49c969f5d8da665f6594d0a230d352f337d2a28f48c"
 source_domains = ["dtls", "quic", "tls12", "tls13", "tls13-session"]
 surface_domains = ["dtls", "quic", "tls", "tls12", "tls13"]
 surface_auto_requirements = true

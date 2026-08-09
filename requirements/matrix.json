@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0633e8beb612ce3e0b6586c9f40da248ba2ee1ccb5a7b6ed099092694aed6574",
-  "domain_policy_sha256": "ff09f6cf736cc87cc98fe5b18b488f44a3396fb9b4a825a0116e26d1c6ffc17d",
-  "policy_sha256": "68d63c09564ab736ca04d41a5afb2dc720fd38035d55cb1d30d4ca72b32cfe8b",
+  "domain_policy_sha256": "b5ecee95f863bde2701c39fe6a7c4617d24c3ee1f262666de562974f1cfecc1a",
+  "policy_sha256": "fd43b15729740fd43ad8ef56bea7f2628827e4a34abad9cd2eb865675c9d9c82",
   "requirements": [
     {
       "applicability": "delegate",
@@ -17,15 +17,15 @@
       "mapping_scope": "exact-source",
       "owner": "0.130.0",
       "residual": "Brynja owns bounded opaque transport and exact transcript binding but not the selected application's semantics.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
         "disposition": "caller-owned",
         "kind": "iana",
-        "record_sha256": "f37a0aaf535252f5a74aa27556066ee54ab177bbc975969271aadc3b4c25c891",
+        "record_sha256": "edfafb9330fd059db5560ac58d8ea1a8bc6d575d246d827692f637a584be8797",
         "registry": "alpn-protocol-ids",
-        "snapshot_sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305",
+        "snapshot_sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
         "surface_id": "iana.tls-extensiontype-values.alpn-protocol-ids"
       },
       "statement": "ALPN protocol identifiers are transported opaquely and their application behavior remains caller-owned.",
@@ -85,6 +85,7 @@
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x72-0x61-0x64-0x69-0x75-0x73-0x2f-0x31-0x2e-0x31-radius-1-1.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x69-0x70-0x2f-0x32-sip-2.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x6d-0x62-smb.1",
+        "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x6e-0x69-0x66-0x71-0x2f-0x31-snifq-1.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x31-spdy-1.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x32-spdy-2.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x33-spdy-3.1",
@@ -121,7 +122,7 @@
       "owner": "0.130.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -141,7 +142,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -250,7 +251,7 @@
       "owner": "0.146.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -270,7 +271,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -361,7 +362,7 @@
       "owner": "0.146.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -381,7 +382,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -558,7 +559,7 @@
       "owner": "0.148.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -578,7 +579,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -708,7 +709,7 @@
       "owner": "0.148.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -728,7 +729,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         }
       ],
       "statement": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
@@ -3874,7 +3875,7 @@
       "owner": "0.140.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -3891,7 +3892,7 @@
             "0.3.5",
             "0.140.0"
           ],
-          "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5"
+          "sha256": "1785efcd8c9207b3d47f92e1f568fec4772f8f4a12aae771ff785aaca1b15e29"
         },
         {
           "authority_role": "caller-owned",
@@ -8393,7 +8394,7 @@
       "owner": "0.140.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -8413,7 +8414,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -10505,15 +10506,15 @@
       "mapping_scope": "exact-source",
       "owner": "0.130.0",
       "residual": "Brynja still validates ALPN wire bounds and negotiation context while application protocol semantics stay external.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
         "disposition": "caller-owned",
         "kind": "iana",
-        "record_sha256": "f37a0aaf535252f5a74aa27556066ee54ab177bbc975969271aadc3b4c25c891",
+        "record_sha256": "edfafb9330fd059db5560ac58d8ea1a8bc6d575d246d827692f637a584be8797",
         "registry": "alpn-protocol-ids",
-        "snapshot_sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305",
+        "snapshot_sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
         "surface_id": "iana.tls-extensiontype-values.alpn-protocol-ids"
       },
       "statement": "Registered ALPN identifiers are transported opaquely while their application meaning remains outside Brynja's protocol ownership.",
@@ -10545,7 +10546,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.148.0",
       "residual": "Private-use values never become interoperable defaults and must remain explicitly configured and collision-scoped.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
@@ -10553,7 +10554,7 @@
         "kind": "iana",
         "record_sha256": "ab13d6b33840ce6c1644e009dc6f2e4aab234a42b6d996ce4ff2a70577e94c66",
         "registry": "tls-extensiontype-values-1",
-        "snapshot_sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305",
+        "snapshot_sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
         "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
       },
       "statement": "Private-use registry values remain caller-owned and cannot satisfy public interoperability or standards admission.",
@@ -12590,7 +12591,7 @@
       "owner": "0.136.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -12610,7 +12611,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -12895,7 +12896,7 @@
       "owner": "0.145.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -12915,7 +12916,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -13005,7 +13006,7 @@
       "owner": "0.146.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -13025,7 +13026,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -13115,7 +13116,7 @@
       "owner": "0.146.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -13135,7 +13136,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -19396,7 +19397,7 @@
       "owner": "0.148.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -19416,7 +19417,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         }
       ],
       "statement": "Local configuration cannot enable, offer, echo, or negotiate unsupported RFC 6066 facilities even though bounded peer ClientHello inputs are safely ignored.",
@@ -19467,7 +19468,7 @@
       "owner": "0.64.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -19487,7 +19488,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         }
       ],
       "statement": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
@@ -19541,7 +19542,7 @@
       "owner": "0.111.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -19561,7 +19562,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "current",
@@ -20177,7 +20178,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.19.0",
       "residual": "Every modern stream and datagram parser must retain an explicit negative test for negotiation and content.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
@@ -20185,7 +20186,7 @@
         "kind": "iana",
         "record_sha256": "4bc716f3aebdf0c14656d60d125f46a303adf4634c57a7b8a45cf5d70ef1d754",
         "registry": "tls-extensiontype-values-1",
-        "snapshot_sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305",
+        "snapshot_sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
         "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       },
       "statement": "The registered Heartbeat extension is excluded from every modern Brynja TLS and DTLS profile.",
@@ -24830,7 +24831,7 @@
       "owner": "0.58.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -24850,7 +24851,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+          "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
         },
         {
           "authority_role": "exclusion",
@@ -29546,9 +29547,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "19e4089cddeb02a40a80b72c6962a86e4bfa1ec9e7c597a13e54f18cf7e097a4",
+  "residual_policy_sha256": "2e27dae1334eb0c92bcb5f6cafd94beee161b52f53e6ffea98b20eb60f28343f",
   "schema": 5,
-  "source_ledger_sha256": "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70",
-  "surface_register_sha256": "3e0944a587933ec77fe99a10d522836a58eb9c9025bb9e5780ebafc1e637af58",
-  "transport_policy_sha256": "ea300968ad093ed66f0849d6a831a5181ad5aa4073cdcd48d9a5c01ecc09eabd"
+  "source_ledger_sha256": "a90755dc170ee9bbce71daa7a4182b54be143c66bfb8d3ca7f680d3f4a19ad88",
+  "surface_register_sha256": "dd30d84cbb452f5a0ae2a49c969f5d8da665f6594d0a230d352f337d2a28f48c",
+  "transport_policy_sha256": "f99653894e2e9f7e8da88d913e0dcc65fc32eec17d60f24afb9873464760fe2b"
 }

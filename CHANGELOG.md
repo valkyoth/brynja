@@ -13,6 +13,9 @@ Keep a Changelog and Semantic Versioning.
 - Bind every future checkpoint report to the backwards-looking change range
   after its prior public tag through the new candidate, beginning with
   v0.10.0 through v0.15.0 and then v0.15.0 through v0.20.0.
+- Refresh the reviewed IANA TLS ExtensionType and DNS Parameters pins for one
+  caller-owned provisional ALPN entry and three reference-only changes, without
+  admitting draft/RFC implementation authority or executable behavior.
 
 ### Added
 
@@ -35,7 +38,8 @@ Keep a Changelog and Semantic Versioning.
   approved module and, after retest exposed comment-separated and nested-
   attribute variants, replacing syntax-shaped matching with broad fail-closed
   low-level/code-inclusion identifier rejection, fixed library targets, and
-  non-symlink source confinement; another external retest remains required.
+  non-symlink source confinement; the repository-owner retest of signed commit
+  `88a6c73d3b2ad055702aede3858b1e7ecc8d24aa` passed with zero open findings.
 
 ## [0.10.0] - 2026-08-03
 

@@ -17,7 +17,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "ac0239770236c3cbf720228c8414e96c0e23780d59ad48251fdacdec723483b5"
+      "sha256": "1785efcd8c9207b3d47f92e1f568fec4772f8f4a12aae771ff785aaca1b15e29"
     },
     {
       "authority_role": "current",
@@ -133,7 +133,7 @@
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
       ],
-      "sha256": "d6fca9de288e8ca54c0d832ef1e2e0baa5e67e2b240c5db7144e76354b502305"
+      "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
     },
     {
       "authority_role": "current",
@@ -2536,10 +2536,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "19e4089cddeb02a40a80b72c6962a86e4bfa1ec9e7c597a13e54f18cf7e097a4",
+  "policy_sha256": "2e27dae1334eb0c92bcb5f6cafd94beee161b52f53e6ffea98b20eb60f28343f",
   "requirement_count": 50,
   "schema": 1,
-  "surface_count": 763,
+  "surface_count": 764,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -6858,6 +6858,14 @@
       "disposition": "caller-owned",
       "domain": "application",
       "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x6d-0x62-smb.1",
+      "owner": "0.130.0",
+      "requirement_id": "BRY-REQ-APPLICATION-0130"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "application",
+      "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x6e-0x69-0x66-0x71-0x2f-0x31-snifq-1.1",
       "owner": "0.130.0",
       "requirement_id": "BRY-REQ-APPLICATION-0130"
     },

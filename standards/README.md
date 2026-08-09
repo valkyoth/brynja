@@ -95,7 +95,7 @@ The surface checker additionally fails on a changed source-ledger hash,
 missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
-or stale generated JSON or Markdown. All 4,123 individual IANA records, 195
+or stale generated JSON or Markdown. All 4,124 individual IANA records, 195
 nested registries, and 126 semantic decisions are represented; `future-work`
 does not claim implementation. An `implemented` disposition is admitted only
 when current code, tests, and requirement evidence support that exact surface.
@@ -113,9 +113,9 @@ encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces; 70
 transport requirements cover 40 authorities, 550 normative sections, 63
 implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty
 residual requirements cover 33 authorities, 182 reviewed normative sections,
-and all 763 formerly uncovered surfaces. The residual section policy
+and all 764 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 126 sources and 4,444 surfaces.
+closure across all 126 sources and 4,445 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -144,6 +144,12 @@ Parameters snapshot. Its three new registries and seventeen new entries are
 explicitly caller-owned by v0.140.0. Provisional Structured DNS Error draft
 references in that registry are evidence of registry state, not admitted
 implementation authority.
+
+The 2026-08-09 reviewed refresh accepted one new provisional `snifq/1` ALPN
+entry as caller-owned v0.130.0 registry state and three DNS reference-only
+updates from drafts to RFC 10029 and RFC 10023. It adds no executable behavior,
+does not admit the referenced drafts or RFCs into Brynja protocol scope, and
+advances affected immutable requirement revisions.
 
 Concrete ECDHE-ML-KEM groups remain fail-closed at milestone `0.120.0`.
 RFC 9954 supplies only the generic construction; a final Standards Track RFC

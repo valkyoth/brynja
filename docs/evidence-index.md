@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 tagged and published; v0.11.0 awaiting exceptional pentest
+Status: v0.10.0 tagged and published; v0.11.0 pentest PASS, awaiting hosted checks and signed tag
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -17,7 +17,7 @@ consistent in the same commit.
 | `standards/source-ledger.json` | Deterministic joined inventory of every admitted authority and owner | Byte-for-byte regeneration and 28 positive/broken-fixture tests |
 | `standards/surface-policy.json` | Reviewed dispositions and ownership for semantic surfaces, complete IANA collections, nested registries, and exact entry overrides | Schema, source, owner, target, uniqueness, completeness, and override validation |
 | `standards/transport-surfaces/*.toml` | Sixty-four reviewed TLS, DTLS, and QUIC-TLS implementation-milestone surfaces | Exact ledger binding, stable requirement identity, owner, source, target, and uniqueness validation |
-| `standards/protocol-surfaces.json` | Deterministic classification of 4,444 semantic and registry surfaces | Byte-for-byte regeneration and 30 positive/broken-fixture tests |
+| `standards/protocol-surfaces.json` | Deterministic classification of 4,445 semantic and registry surfaces | Byte-for-byte regeneration and 30 positive/broken-fixture tests |
 | `standards/protocol-surface-coverage.md` | Human-readable disposition, kind, and domain counts | Generated and byte-compared with the machine register |
 | `crates/brynja-core/src/{alert,close,error,exhaustion,provider,version}.rs` | v0.5.0 allocation-free alert, outcome, and failure domains | Rust type privacy, no formatting traits, fixed-work constructors, Clippy, `no_std`, integration tests, and compile-fail doctests |
 | `crates/brynja-core/src/{numeric,quantity,sequence,budget}.rs`, `crates/brynja-core/tests/{bounded_domains,budgets}.rs` | v0.6.0 checked bounded integers, counts, lengths, sequences, epochs, and immutable resource/work budgets | Exhaustive small-domain operation matrices, zero/exact/overflow/underflow/exhaustion boundaries, pointer-width checks, every-domain duplicate and incomplete assignment rejection, positional-constructor rejection, safe valueless-error diagnostics, no-mutation and representation tests, Clippy, `no_std`, and compile-fail doctests |
@@ -34,7 +34,7 @@ consistent in the same commit.
 | `requirements/domain-sections.toml` | Reviewed per-requirement bindings for all 364 domain normative RFC sections | Exact source/requirement pairs, semantic revisions, extraction anchors, section hashes, and explicit disposition validation |
 | `requirements/transport-scope.toml`, `requirements/transport-exceptions.toml` | Reviewed v0.3.4 transport authority, owner, rejection, caller boundary, registry-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, completeness, and broken-fixture validation |
 | `requirements/transport-sections.toml` | Reviewed per-requirement bindings for all 550 transport normative RFC sections | Exact source/requirement pairs, semantic revisions, extraction anchors, section hashes, and explicit disposition validation |
-| `requirements/residual-policy.toml` | Reviewed optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and residual surface groups with all 763 surface identities explicit | Exact per-surface source, owner, lifecycle, disposition, reciprocal requirement link, homogeneous code/test boundary, and prior-coverage complement validation |
+| `requirements/residual-policy.toml` | Reviewed optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and residual surface groups with all 764 surface identities explicit | Exact per-surface source, owner, lifecycle, disposition, reciprocal requirement link, homogeneous code/test boundary, and prior-coverage complement validation |
 | `requirements/residual-sections.toml` | Reviewed per-requirement bindings or explicit dispositions for all 182 residual normative RFC sections | Exact source/requirement pairs, semantic revisions, extraction anchors, section hashes, explicit exclusion validation, and global reconciliation with domain and transport policies |
 | `requirements/authority-claims.toml` | Local distribution rights, mutable-authority refresh rules, source-free plan boundaries, and hybrid, legacy, and FIPS blockers | Exact authority, roadmap, surface, owner, URL, status, rights, blocker, and completeness validation |
 | `requirements/schema.json` | Deterministic lifecycle and transition contract | Byte-for-byte regeneration |
@@ -43,8 +43,8 @@ consistent in the same commit.
 | `requirements/coverage.md` | Human-readable pilot lifecycle, strength, scope, and index coverage | Generated and byte-compared with the machine evidence |
 | `requirements/domain-coverage.json` | Exact coverage of 53 cryptography/encoding/PKIX authorities, 364 normative RFC sections, and 3,322 selected surfaces | Deterministic generation, byte comparison, 352 mapped sections, eleven cross-bundle delegations, one explicit exclusion, exact hashes, and domain fixtures |
 | `requirements/transport-coverage.json` | Exact coverage of 40 transport authorities, 550 normative RFC sections, 64 owner milestones, and 485 selected surfaces | Deterministic generation, byte comparison, 539 mapped sections, eleven explicit dispositions, exact DTLS RRC and RFC 6066 ownership, and transport fixtures |
-| `requirements/residual-coverage.json` | Exact coverage of 33 residual authorities, 182 normative RFC sections, and 763 formerly uncovered surfaces | Deterministic generation, byte comparison, explicit-surface complement proof, 165 exact section mappings, 17 reviewed exclusions, exact anchors and hashes, and 22 residual fixtures |
-| `requirements/closure.json` | Bidirectional closure across 126 sources, 206 roadmap rows, 4,444 surfaces, and 167 requirements | Complete source-to-plan, plan-to-source, source-to-requirement, reciprocal surface-to-requirement, requirement-to-owner, rights, refresh, and blocker validation |
+| `requirements/residual-coverage.json` | Exact coverage of 33 residual authorities, 182 normative RFC sections, and 764 formerly uncovered surfaces | Deterministic generation, byte comparison, explicit-surface complement proof, 165 exact section mappings, 17 reviewed exclusions, exact anchors and hashes, and 22 residual fixtures |
+| `requirements/closure.json` | Bidirectional closure across 126 sources, 206 roadmap rows, 4,445 surfaces, and 167 requirements | Complete source-to-plan, plan-to-source, source-to-requirement, reciprocal surface-to-requirement, requirement-to-owner, rights, refresh, and blocker validation |
 | `package-policy.toml` | Complete package and dependency boundary | Workspace metadata validators and fixtures |
 | `github-release-controls.toml` | Protected release branch requirements | Local fixtures and authenticated live release check |
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |

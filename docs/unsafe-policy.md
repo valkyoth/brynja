@@ -75,6 +75,8 @@ that comments between Rust tokens and `path` nested inside `cfg_attr` could
 still evade syntax-shaped regular expressions. The scanner therefore no longer
 models syntax or whitespace: broad identifier rejection closes the entire
 reported class and fixtures retain all four comment/nested-attribute variants.
+The repository-owner retest of signed follow-up remediation commit
+`88a6c73d3b2ad055702aede3858b1e7ecc8d24aa` passed with zero open findings.
 
 The v0.11.1 review treats unsafe code inside the exact `sanitization` release as
 part of the adapter's inherited trusted computing base. Admission requires the

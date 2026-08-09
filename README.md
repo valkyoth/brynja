@@ -45,9 +45,10 @@ module and is bound to MIR, LLVM IR, assembly, Miri, sanitizer, compiler, and
 target checks. The guarantee covers the exclusively borrowed Rust allocation;
 it explicitly excludes registers, copies, caches, DMA-visible copies, dumps,
 suspend images, physical-memory remanence, concurrent access, `mem::forget`,
-and process termination. The first unsafe secret-destruction boundary requires
-an exceptional v0.11.0 pentest before tagging, while still selecting no crate
-for publication. These foundations do **not** implement TLS framing, a protocol
+and process termination. The first unsafe secret-destruction boundary required
+an exceptional v0.11.0 pentest before tagging; its remediation retest passed
+with zero open findings, while the milestone still selects no crate for
+publication. These foundations do **not** implement TLS framing, a protocol
 state machine, or cryptography and must not be used to secure network traffic.
 
 ## Development Tags And Pentesting

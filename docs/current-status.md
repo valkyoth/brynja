@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 tagged and published; v0.11.0 awaiting exceptional pentest
+Status: v0.10.0 tagged and published; v0.11.0 pentest PASS, awaiting hosted checks and signed tag
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -21,7 +21,9 @@ dependency-only modern support patches at `0.1.6`, and `brynja 0.10.0`.
 The facade now advances to `0.11.0` for the next signed development tag while
 all crates.io publication selections remain empty.
 Because v0.11.0 introduces the first isolated unsafe secret-destruction
-boundary, its signed tag is exceptionally blocked on a committed PASS pentest.
+boundary, it received an exceptional pentest. The repository-owner remediation
+retest passed with zero open findings; the signed tag now awaits green hosted
+GitHub and CodeQL checks.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -215,8 +217,12 @@ Version 0.6.0 adds bounded numeric and resource foundations:
   additional boundary, representation, zero-budget, and compile-fail tests;
 - the reviewed 2026-07-31 IANA DNS snapshot adds three registries and
   seventeen entries, all explicitly caller-owned by v0.140.0, bringing the
-  current register to 4,444 surfaces without admitting provisional draft text
-  or advancing a protocol implementation claim; and
+  then-current register to 4,444 surfaces without admitting provisional draft
+  text or advancing a protocol implementation claim;
+- the reviewed 2026-08-09 refresh adds only one caller-owned provisional
+  `snifq/1` ALPN record and three DNS reference updates, bringing the current
+  register to 4,445 surfaces without admitting draft or RFC implementation
+  authority; and
 - no protocol surface or normative protocol requirement advances because
   these types are source-free shared foundations; later wire widths,
   direction-specific state, parsers, and engines remain future work.

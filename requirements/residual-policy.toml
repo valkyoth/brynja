@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "3057f79b8fa46082467442bc088a16b763d2882415c29804e43261f331f7db70"
-surface_register_sha256 = "3e0944a587933ec77fe99a10d522836a58eb9c9025bb9e5780ebafc1e637af58"
+source_ledger_sha256 = "a90755dc170ee9bbce71daa7a4182b54be143c66bfb8d3ca7f680d3f4a19ad88"
+surface_register_sha256 = "dd30d84cbb452f5a0ae2a49c969f5d8da665f6594d0a230d352f337d2a28f48c"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -48,6 +48,7 @@ surface_ids = [
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x72-0x61-0x64-0x69-0x75-0x73-0x2f-0x31-0x2e-0x31-radius-1-1.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x69-0x70-0x2f-0x32-sip-2.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x6d-0x62-smb.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x6e-0x69-0x66-0x71-0x2f-0x31-snifq-1.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x31-spdy-1.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x32-spdy-2.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x73-0x70-0x64-0x79-0x2f-0x33-spdy-3.1",
@@ -202,7 +203,7 @@ id = "BRY-REQ-RFC6066X-0148"
 domain = "tls"
 owner = "0.64.0"
 disposition = "safely-ignored"
-revision = 2
+revision = 3
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
@@ -216,6 +217,7 @@ id = "BRY-REQ-RFC6066CFG-0148"
 domain = "tls"
 owner = "0.148.0"
 disposition = "intentionally-rejected"
+revision = 2
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "facility.rfc6066-unsupported-configuration",
@@ -226,7 +228,7 @@ id = "BRY-REQ-COMPOSEX-0148"
 domain = "tls"
 owner = "0.148.0"
 disposition = "intentionally-rejected"
-revision = 2
+revision = 3
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.cachedinformationtype",
@@ -1161,7 +1163,7 @@ domain = "dtls"
 owner = "0.111.1"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "iana:tls-parameters"]
-revision = 2
+revision = 3
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
   "iana.tls-parameters.tls-rrc-message-types",

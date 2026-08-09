@@ -1,6 +1,6 @@
 # Brynja v0.11.0 Development Milestone
 
-Status: remediation complete; exceptional pentest retest required; not yet tagged
+Status: exceptional pentest PASS; awaiting hosted checks and signed tag
 
 Brynja v0.11.0 is the first tagged development milestone in the five-minor
 release train ending at public checkpoint v0.15.0. It advances the `brynja`
@@ -44,7 +44,20 @@ still escaped syntax-shaped patterns. The final policy deliberately rejects
 every complete low-level or code-inclusion identifier outside the hash-pinned
 module, even in comments or nested attributes, and confines library targets and
 source paths. Eleven regression fixtures cover the original and follow-up
-reproductions. Local remediation is complete and awaits another owner retest.
+reproductions. The repository owner retested signed remediation commit
+`88a6c73d3b2ad055702aede3858b1e7ecc8d24aa` and reported a green result with
+zero open findings.
+
+## Standards Freshness
+
+Final release checks detected and reviewed two official IANA registry updates.
+The TLS ExtensionType snapshot adds one provisional `snifq/1` ALPN entry,
+classified as caller-owned at v0.130.0. The DNS Parameters snapshot changes
+three existing references from drafts to RFC 10029 and RFC 10023 without
+changing allocations. The refreshed pins, immutable requirement revisions,
+and generated evidence cover 4,445 surfaces. No draft or newly referenced RFC
+is admitted as Brynja implementation authority, and no executable code or
+crates.io publication selection changes.
 
 ## Cumulative Pentest Coverage
 

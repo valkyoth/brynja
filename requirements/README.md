@@ -76,7 +76,7 @@ RFC, NIST, FIPS, or independent-verification evidence.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
   requirement-to-owner reports across 126 authorities, 206 roadmap rows,
-  4,444 surfaces, and 167 requirements.
+  4,445 surfaces, and 167 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim
@@ -125,7 +125,10 @@ The `optional-legacy-residual` profile resolves all earlier deferrals and every
 remaining surface without admitting future code. The 2026-08-01 reviewed IANA
 DNS refresh added twenty caller-owned surfaces to `BRY-REQ-DNS-0140` and
 advanced that released requirement to revision three; provisional draft
-references do not become implementation authority. FIPS 203,
+references do not become implementation authority. The 2026-08-09 refresh
+adds one caller-owned provisional `snifq/1` ALPN surface and updates three DNS
+references without admitting any draft or newly referenced RFC into Brynja's
+protocol scope. FIPS 203,
 SP 800-227, SP 800-90B, and SP 800-90C are local-only checksum-pinned
 authorities. Concrete ECDHE-ML-KEM groups, unauthenticated legacy
 specifications, and the mutable FIPS validation baseline remain explicit

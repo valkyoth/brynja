@@ -1095,7 +1095,7 @@ Exit criteria:
 
 ### v0.11.2 - Optional Brynja Sanitization Adapter
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Conditional on the v0.11.1 admission decision, implement and prepare for separate publication at the next scheduled or exceptional release checkpoint a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.
 
@@ -1146,6 +1146,8 @@ Exit criteria:
 - either the optional adapter is independently usable with identical modern and
   legacy guarantees and no core or FIPS dependency, or a documented
   fail-closed non-admission leaves the production graph unchanged;
+- the exceptional repository-owner assessment records PASS/PASS with zero open
+  findings in `security/pentest/v0.11.2.md`;
 - `v0.11.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.12.0 - Constant-Time Foundation

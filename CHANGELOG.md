@@ -33,6 +33,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Record the exceptional v0.11.2 repository-owner assessment as PASS/PASS with
+  no findings and zero open findings; retain the adapter in the later
+  v0.10.0-through-v0.15.0 cumulative assessment scope.
 - Keep `brynja-core` authoritative for protocol-region destruction and require
   explicit copies whose two owners clear their storage independently.
 - Require an exceptional v0.11.2 assessment because the first production

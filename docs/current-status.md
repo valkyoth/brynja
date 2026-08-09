@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 implemented, awaiting exceptional assessment
+Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 assessment PASS, awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -391,9 +391,9 @@ Version 0.11.2 implements the admitted optional adapter:
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,
-v0.11.2 requires an exceptional assessment and PASS retest before its signed
-development tag. It remains in the later v0.10.0-through-v0.15.0 cumulative
-assessment scope.
+v0.11.2 received an exceptional assessment; it passed with zero findings and
+zero open findings. Its signed development tag now awaits green GitHub and
+CodeQL, and it remains in the later v0.10.0-through-v0.15.0 cumulative scope.
 
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded

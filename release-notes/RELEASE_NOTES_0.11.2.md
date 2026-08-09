@@ -1,6 +1,6 @@
 # Brynja v0.11.2 Development Milestone
 
-Status: implemented; awaiting exceptional assessment
+Status: exceptional assessment PASS; awaiting green GitHub and CodeQL
 
 Brynja v0.11.2 implements the optional sanitization adapter admitted at
 v0.11.1. It advances the `brynja` facade to 0.11.2, selects no crate for
@@ -78,9 +78,11 @@ physical attacks remains outside the claim.
 ## Release Process
 
 The first production wrapper around external unsafe secret-storage code is a
-material boundary, so v0.11.2 requires an exceptional assessment, remediation
-of any findings, a PASS retest, and a committed report before tagging. It is
-still an internal development milestone with zero crates.io selections. After
-the signed candidate commit passes the complete local gate and GitHub and
-CodeQL are green, the immutable signed `v0.11.2` tag may be created. The work
-also remains in the later v0.10.0-through-v0.15.0 cumulative review scope.
+material boundary, so v0.11.2 received an exceptional repository-owner
+assessment. The result was PASS/PASS with zero findings and zero open findings;
+the permanent report is committed at `security/pentest/v0.11.2.md`. It remains
+an internal development milestone with zero crates.io selections. After the
+exact signed release-preparation commit passes the complete local gate and
+GitHub and CodeQL are green, the immutable signed `v0.11.2` tag may be created.
+The work also remains in the later v0.10.0-through-v0.15.0 cumulative review
+scope.

@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 implemented, awaiting exceptional assessment
+Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 assessment PASS, awaiting green CI
 
 | Control | Foundation enforcement |
 | --- | --- |

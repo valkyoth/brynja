@@ -58,6 +58,13 @@ with zero open findings. The permanent
 records the finding, remediation, limits, and exact evidence; no affected code
 ever entered the production graph.
 
+The exceptional v0.11.2 repository-owner assessment of the production adapter
+passed with no findings and zero open findings. Its permanent
+[v0.11.2 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.11.2.md)
+records the assessed implementation commit, scope, exact release evidence, and
+residual risks. v0.11.2 remains in the cumulative v0.10.0-through-v0.15.0
+checkpoint scope and publishes no crate.
+
 ## Development Tags And Pentesting
 
 The `brynja` facade version advances at every roadmap milestone, including

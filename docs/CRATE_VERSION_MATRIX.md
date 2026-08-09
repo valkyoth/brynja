@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 implemented, awaiting exceptional assessment
+Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 assessment PASS, awaiting green CI
 
 The `brynja` facade advances to `0.11.2` for the current signed development
 line but is not selected for crates.io publication. The latest public
@@ -10,9 +10,9 @@ repository-only package versions remain unchanged during this development
 milestone. Package publication does not imply a TLS implementation or
 production readiness.
 
-The new adapter is a material production secret-storage boundary, so v0.11.2
-requires an exceptional assessment before tagging. Its internal stage selects
-zero crates for publication even after that assessment passes.
+The new adapter is a material production secret-storage boundary. Its
+exceptional assessment passed with zero findings; the internal stage selects
+zero crates for publication and tagging remains gated on green CI and CodeQL.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

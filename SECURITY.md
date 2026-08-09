@@ -26,9 +26,11 @@ Every completed roadmap version passes the complete automated tag gate in a
 signed commit, waits for green GitHub and CodeQL, and receives an immutable
 signed tag only after explicit user authorization. Development milestones
 between public checkpoints require no scheduled pentest report and publish no
-crate.
+crate. A development milestone with an exceptional trigger requires its own
+PASS report before tagging but still publishes no crate.
 
-Every scheduled or exceptional public checkpoint requires one matching
+Every scheduled public checkpoint, exceptional development milestone, or
+exceptional public checkpoint requires one matching
 permanent report at `security/pentest/vX.Y.Z[-rc.N].md`. The report's
 `Baseline` is the preceding public tag, and `Scope` names the backwards-looking
 change range from that tag through the current candidate. Thus v0.15.0 reviews

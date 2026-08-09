@@ -1,6 +1,6 @@
 # Assurance Harness And Bare-Metal Matrix
 
-Status: v0.4.0 assurance foundation released; maintained by current tag gates
+Status: v0.4.0 assurance foundation released; v0.11.0 narrow dynamic evidence added
 
 This directory freezes the first-party assurance boundary before protocol or
 cryptographic implementation begins. It is infrastructure evidence, not proof
@@ -69,11 +69,14 @@ These are OS-less compile claims only. They do not provide entropy, time,
 transport, storage, allocation, interrupts, startup code, or an Aesynx support
 claim.
 
-The tool entries are source-policy pins. Ordinary builds do not download or
-execute them, and no tool may enter a repository Cargo manifest. The owning
-later milestone must independently verify installation, executable hashes,
-configuration, evidence, limitations, and current upstream status before
-making any assurance claim.
+The tool entries are exact source-policy pins, and no tool may enter a
+repository Cargo manifest. Kani and the process fuzzers remain policy-only
+until their owning later milestones. Version 0.11.0 executes the pinned Miri
+and AddressSanitizer toolchain only against the owned-region zeroization tests;
+that narrow evidence does not establish constant-time behavior, physical
+erasure, protocol security, or independent verification. The latest-tools gate
+compares both nightly tools to the current official Rust nightly manifest and
+requires Miri to be available for the evidence host.
 
 Run:
 
@@ -81,4 +84,6 @@ Run:
 python3 scripts/check-assurance.py
 python3 scripts/test-assurance.py
 scripts/check-bare-metal.sh
+scripts/check-zeroization-miri.sh
+scripts/check-zeroization-sanitizer.sh
 ```

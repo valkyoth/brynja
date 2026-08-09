@@ -102,6 +102,19 @@ repository="$(make_fixture internal-milestone-without-report)"
         scripts/validate-current-pentest.sh --required
 )
 
+repository="$(make_fixture exceptional-internal-without-report)"
+(
+    cd "$repository"
+    printf '[release]\nversion = "0.11.0"\nmilestone = "0.11.0"\nstage = "internal"\nexceptional = true\n' \
+        >release-crates.toml
+    git add release-crates.toml
+    git commit -q -m "chore: enter exceptional internal milestone"
+    output="$(scripts/validate-current-pentest.sh)"
+    grep -Fq "no exceptional pentest report yet for v0.11.0" <<<"$output"
+    assert_fails_with "missing required pentest report" \
+        scripts/validate-current-pentest.sh --required
+)
+
 repository="$(make_fixture uncommitted-report)"
 (
     cd "$repository"

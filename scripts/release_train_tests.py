@@ -122,6 +122,27 @@ def test_internal_stop_requires_empty_publication() -> None:
     )
 
 
+def test_internal_exception_requires_review_but_not_publication() -> None:
+    context = {
+        "version": "0.11.0",
+        "milestone": "0.11.0",
+        "baseline": "0.10.0",
+        "cumulative_milestones": ["0.11.0"],
+        "stage": "internal",
+        "exceptional": True,
+        "exception_reason": "First isolated unsafe secret-destruction boundary.",
+    }
+    crates = selections()
+    policy.validate_release_context(context, crates)
+    context["exception_reason"] = ""
+    assert_fails(
+        "requires a reason",
+        policy.validate_release_context,
+        context,
+        crates,
+    )
+
+
 def test_checkpoint_requires_exact_cumulative_range() -> None:
     context = {
         "version": "0.15.0",

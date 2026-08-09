@@ -1,16 +1,16 @@
 # Current Status
 
-Status: v0.10.0 tagged and published; v0.11.0 development milestone in progress
+Status: v0.10.0 tagged and published; v0.11.0 awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
-caller-buffer write cursors, an exact caller-owned workspace partition, and an
-abstract secret-lifetime/destruction-duty contract. It still has no byte-backed
-production secret owner, integer encoding, TLS framing or parser, TLS state
-machine, cryptography, PKI, QUIC-TLS, DTLS engine, platform provider, or legacy
-protocol implementation and must not be used to secure network traffic. Brynja
-is not FIPS 140-3 validated, and no package, feature, build, profile, or
-configuration may imply otherwise.
+caller-buffer write cursors, an exact caller-owned workspace partition, an
+abstract secret-lifetime contract, and a byte-backed exclusive borrowed secret
+region with complete-region volatile clearing. It still has no integer
+encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
+DTLS engine, platform provider, or legacy protocol implementation and must not
+be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
+package, feature, build, profile, or configuration may imply otherwise.
 
 Signed releases v0.1.0 through v0.10.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
@@ -20,6 +20,8 @@ lifetime domains. The v0.10.0 checkpoint published `brynja-core 0.7.0`, eight
 dependency-only modern support patches at `0.1.6`, and `brynja 0.10.0`.
 The facade now advances to `0.11.0` for the next signed development tag while
 all crates.io publication selections remain empty.
+Because v0.11.0 introduces the first isolated unsafe secret-destruction
+boundary, its signed tag is exceptionally blocked on a committed PASS pentest.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -298,8 +300,9 @@ key logging:
   external-store, accelerator, cache, and DMA destruction duties;
 - all configured duties are attempted, completion tokens are consumed once,
   and any failed duty produces a terminal failure without secret values;
-- no secret bytes, reads, backing storage, or production local-memory
-  destructor exist, so the v0.11.0 zeroization primitive remains mandatory;
+- v0.10.0 supplied no secret bytes, reads, backing storage, or production
+  local-memory destructor, making the v0.11.0 zeroization primitive its
+  mandatory next step;
 - RFC 9850 key-log lines are encoded transactionally only in the permanently
   unpublished `brynja-test-support` crate; production dependency and feature
   graphs are mechanically prohibited from reaching it;
@@ -309,6 +312,28 @@ key logging:
 - the post-v0.10 five-minor public-checkpoint cadence and every intervening
   tagged development milestone are mechanically classified by the release-plan
   validator.
+
+Version 0.11.0 adds the owned-memory zeroization primitive:
+
+- `SecretRegionInitialization` exclusively borrows one non-empty caller region,
+  clears every prior byte at admission, accepts only sequential failure-atomic
+  writes, and cannot expose the region before exact complete initialization;
+- `OwnedSecretRegion` is affine, non-clonable, non-formattable, read-only to its
+  caller, and clears the complete allocation on explicit clear or `Drop`;
+- incomplete finish, failed initialization, and initialization `Drop` clear the
+  complete allocation before the caller can regain access;
+- one private module contains the only approved unsafe block, derives each raw
+  pointer from a live exclusive byte reference, performs one volatile zero
+  store, retains no pointer, and ends with a compiler barrier;
+- policy fixtures reject any second unsafe allowance, block, item, assembly, or
+  FFI site, and source files remain below the review-size limit;
+- MIR, LLVM IR, and assembly checks pass for Rust 1.90.0 through 1.97.1 on the
+  host and Rust 1.97.1 across all nine promised OS and bare-metal targets;
+- pinned Miri and AddressSanitizer pass all owned-memory tests; and
+- the guarantee is explicitly limited to the exclusively borrowed Rust
+  allocation, excluding registers, copies, caches, DMA-visible copies, dumps,
+  suspend images, physical-memory remanence, concurrent access, forgotten
+  owners, abort, and process or power termination.
 
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded

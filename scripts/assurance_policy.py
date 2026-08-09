@@ -8,6 +8,7 @@ import json
 import re
 import subprocess
 import tomllib
+import urllib.request
 from pathlib import Path
 
 
@@ -21,6 +22,7 @@ TARGETS = (
 )
 TOOL_IDS = ("aflplusplus", "honggfuzz", "kani", "miri", "rust-sanitizers")
 SUBPROCESS_TIMEOUT_SECONDS = 30
+MAXIMUM_NIGHTLY_MANIFEST_BYTES = 4 * 1024 * 1024
 TOOL_MANIFEST_TOKENS = {
     "aflplusplus": ("afl", "aflplusplus"),
     "honggfuzz": ("honggfuzz",),
@@ -286,6 +288,13 @@ def validate_repository(policy: dict) -> None:
         encoding="utf-8"
     )
     validate_workflow(workflow)
+    nightly = next(tool for tool in policy["tools"] if tool["id"] == "miri")
+    install = (
+        f"run: rustup toolchain install {nightly['version']} --profile minimal "
+        "--component miri,rust-src"
+    )
+    if workflow.count(install) != 1:
+        fail("CI zeroization nightly installation drifted")
     rust_targets = set(
         subprocess.check_output(
             ["rustc", "--print", "target-list"],
@@ -314,6 +323,13 @@ def validate_repository(policy: dict) -> None:
         "scripts/check-assurance.py",
         "scripts/test-assurance.py",
         "scripts/check-kani.sh",
+        "scripts/check-unsafe-policy.py",
+        "scripts/test-unsafe-policy.py",
+        "scripts/check-zeroization-codegen.sh",
+        "scripts/check-zeroization-evidence.py",
+        "scripts/test-zeroization-evidence.py",
+        "scripts/check-zeroization-miri.sh",
+        "scripts/check-zeroization-sanitizer.sh",
     ):
         path = ROOT / relative
         if not path.is_file() or path.is_symlink():
@@ -329,6 +345,11 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / ".github" / "workflows" / "ci.yml",
         ROOT / "rust-toolchain.toml",
         ROOT / "docs" / "KANI.md",
+        ROOT / "docs" / "unsafe-policy.md",
+        ROOT / "assurance" / "zeroization-matrix.toml",
+        ROOT / "crates" / "brynja-core" / "src" / "secret_memory.rs",
+        ROOT / "crates" / "brynja-core" / "src" / "secret_memory_volatile.rs",
+        ROOT / "crates" / "brynja-core" / "tests" / "secret_memory.rs",
         ROOT / "scripts" / "assurance_mutation.py",
         ROOT / "scripts" / "assurance_differential.py",
         ROOT / "scripts" / "assurance_io.py",
@@ -341,6 +362,15 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "scripts" / "check-assurance.py",
         ROOT / "scripts" / "check-bare-metal.sh",
         ROOT / "scripts" / "check-kani.sh",
+        ROOT / "scripts" / "unsafe_policy.py",
+        ROOT / "scripts" / "check-unsafe-policy.py",
+        ROOT / "scripts" / "test-unsafe-policy.py",
+        ROOT / "scripts" / "zeroization_evidence.py",
+        ROOT / "scripts" / "check-zeroization-codegen.sh",
+        ROOT / "scripts" / "check-zeroization-evidence.py",
+        ROOT / "scripts" / "test-zeroization-evidence.py",
+        ROOT / "scripts" / "check-zeroization-miri.sh",
+        ROOT / "scripts" / "check-zeroization-sanitizer.sh",
         *cargo_manifests(),
     ]
     return {
@@ -402,6 +432,29 @@ def network_check(policy: dict) -> None:
             fail(
                 f"{tool['id']} pin is stale: "
                 f"{tool['version']} is not latest {latest}"
+            )
+    with urllib.request.urlopen(
+        "https://static.rust-lang.org/dist/channel-rust-nightly.toml",
+        timeout=SUBPROCESS_TIMEOUT_SECONDS,
+    ) as response:
+        nightly_bytes = response.read(MAXIMUM_NIGHTLY_MANIFEST_BYTES + 1)
+    if len(nightly_bytes) > MAXIMUM_NIGHTLY_MANIFEST_BYTES:
+        fail("official Rust nightly manifest exceeds the bounded input limit")
+    nightly_manifest = tomllib.loads(nightly_bytes.decode("utf-8"))
+    nightly_version = f"nightly-{nightly_manifest['date']}"
+    rust_revision = nightly_manifest["pkg"]["rust"]["git_commit_hash"]
+    miri_target = nightly_manifest["pkg"]["miri-preview"]["target"].get(
+        "x86_64-unknown-linux-gnu"
+    )
+    if not miri_target or miri_target.get("available") is not True:
+        fail("latest nightly does not provide Miri for the evidence host")
+    for tool in policy["tools"]:
+        if tool["source_kind"] not in {"rust-toolchain", "rustup-component"}:
+            continue
+        if tool["version"] != nightly_version or tool["revision"] != rust_revision:
+            fail(
+                f"{tool['id']} pin is stale: {tool['version']} does not match "
+                f"latest {nightly_version} at {rust_revision}"
             )
 
 

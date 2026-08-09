@@ -5,22 +5,22 @@ baseline = "0.10.0"
 cumulative_milestones = ["0.11.0"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "v0.11.0 introduces Brynja's first isolated unsafe block and production owned-secret-memory destruction primitive, requiring an exceptional assessment before its development tag."
 
 [crates."brynja"]
 previous_version = "0.10.0"
 version = "0.11.0"
-change = "metadata"
+change = "code"
 publish = false
-reason = "Advance the signed development milestone to v0.11.0 without crates.io publication; the owned-memory zeroization scope remains in progress."
+reason = "Advance the facade for the completed v0.11.0 owned-memory zeroization milestone without crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.7.0"
 version = "0.7.0"
-change = "metadata"
+change = "code"
 publish = false
-reason = "Retain the published 0.7.0 version while carrying the cumulative development-tag documentation delta to the next checkpoint."
+reason = "Retain published 0.7.0 while carrying the cumulative owned-memory zeroization implementation to the v0.15.0 checkpoint."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.0"

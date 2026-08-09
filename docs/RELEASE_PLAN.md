@@ -972,7 +972,7 @@ Exit criteria:
 
 ### v0.11.0 - Owned-Memory Zeroization Primitive
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: After explicit unsafe-policy approval, implement the smallest isolated first-party primitive needed to preserve zeroization stores through optimization; define proof obligations, cache and DMA completion duties, MIR, LLVM and assembly evidence for every supported compiler and target, and precise exclusions for registers, copies, dumps, and physical memory.
 
@@ -981,22 +981,42 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- isolate one per-byte volatile zero store behind a safe exclusive-slice API,
+  retain the final compiler barrier, and mechanically reject unsafe code,
+  assembly, or FFI outside that private module;
+- add affine write-only initialization and readable owned-region states that
+  clear old bytes at admission, reject incomplete read transition, preserve
+  failed-write state, and clear the complete allocation on every explicit and
+  `Drop` exit;
+- define the exact local-allocation claim, separate cache and DMA completion
+  duties, and exclusions for registers, copies, caches, DMA-visible copies,
+  dumps, suspend images, physical memory, concurrency, forgotten owners, and
+  termination;
 - update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+  notes, exceptional-pentest policy, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- exhaust direct-clear lengths, every complete and incomplete initialization
+  split, overflow, capacity failure, old-byte admission, partial Drop, owner
+  Drop, explicit clear, compile-fail clone/format, `no_std`, and no-mutation
+  behavior;
+- require the volatile call in MIR, volatile zero store in LLVM IR, and byte
+  store in assembly across Rust 1.90.0 through 1.97.1 and all nine promised
+  targets, plus pinned Miri and AddressSanitizer execution;
+- reject any second unsafe allowance/block/item, unproved pointer derivation,
+  assembly, FFI, weakened claim, missing exclusion, skipped exceptional report,
+  or accidental crate publication;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- the upstream foundation is deterministic, hostile-input safe,
+  platform-independent, and reviewably clears the complete exclusively borrowed
+  allocation without extending that claim to platform-owned copies or effects;
+- the exceptional trigger is active: commit a PASS report for the exact
+  candidate before green GitHub and CodeQL may authorize its signed tag;
 - `v0.11.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.11.1 - Sanitization Adapter Admission Review

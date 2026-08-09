@@ -12,7 +12,7 @@ homepage = "https://github.com/valkyoth/brynja"
 repository = "https://github.com/valkyoth/brynja"
 
 [workspace.lints.rust]
-unsafe_code = "forbid"
+unsafe_code = "deny"
 unsafe_op_in_unsafe_fn = "forbid"
 unused_must_use = "deny"
 missing_docs = "deny"

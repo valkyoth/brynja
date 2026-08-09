@@ -9,6 +9,15 @@ OCSP, and CT requirements, 71 TLS, DTLS, and QUIC-TLS requirements, and 50
 optional, HPKE, ECH, ML-KEM, entropy, operational, legacy, and residual
 requirements.
 
+Version 0.11.0's owned-memory zeroization primitive is a first-party
+implementation control, not a protocol or standards conformance claim. It
+therefore advances no normative requirement lifecycle. Its machine-readable
+claim and exact exclusions live in `../assurance/zeroization-matrix.toml`; its
+implementation, tests, emitted-code checks, Miri/AddressSanitizer runs, and
+exceptional-pentest evidence are indexed from `../docs/evidence-index.md`.
+This separation prevents source-free memory behavior from being mislabeled as
+RFC, NIST, FIPS, or independent-verification evidence.
+
 ## Artifacts
 
 - `policy.json` is the reviewed input. Each stable identifier records exact

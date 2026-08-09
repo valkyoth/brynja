@@ -25,9 +25,10 @@
 
 # brynja-core
 
-`brynja-core 0.7.0` adds Brynja's allocation-free v0.10 abstract secret
-lifetime and destruction-duty contract to the transactional cursors,
-caller-owned workspace, and value domains from earlier milestones.
+`brynja-core 0.7.0` now carries the cumulative v0.11 owned-memory zeroization
+implementation alongside the v0.10 abstract secret-lifetime contract and the
+transactional foundations from earlier milestones. The package version remains
+`0.7.0` until the v0.15.0 public checkpoint.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
@@ -65,21 +66,35 @@ is itself a security assertion that silent continuation is impossible under
 the operating contract. The state contains no secret bytes and exposes no
 read operation. A destructor completion token is a security assertion by its
 caller, not proof of erasure, and this crate intentionally supplies no
-production local-memory destructor before v0.11.0. This is not integer
-encoding, TLS framing, a
-protocol parser, a TLS state machine, cryptography, PKI, a provider, secret
-ownership or destruction, or a production-ready transport.
+production local-memory destructor before v0.11.0.
+
+v0.11 adds `SecretRegionInitialization` and `OwnedSecretRegion` around one
+non-empty, exclusively borrowed caller allocation. Admission clears all prior
+bytes; sequential writes are failure-atomic; only exact complete initialization
+becomes readable; and incomplete finish, initialization Drop, explicit owner
+clear, and owner Drop clear the entire allocation through a per-byte volatile
+zero store plus compiler barrier. One private 23-line module contains the only
+unsafe block. Repository policy rejects every other unsafe site, while CI
+checks MIR, LLVM IR, and assembly for Rust 1.90.0 through 1.97.1 and all nine
+promised targets, then runs the secret-memory tests under pinned Miri and
+AddressSanitizer. The guarantee stops at that Rust allocation: registers,
+copies, caches, DMA-visible copies, dumps, suspend images, physical memory,
+concurrent access, forgotten owners, and terminated processes remain outside
+scope and need platform-specific duties. This is not integer encoding, TLS
+framing, a protocol parser, a TLS state machine, cryptography, PKI, a provider,
+or a production-ready transport.
 
 ## Protocol Verification Status
 
-The alert, failure, numeric, budget, cursor, workspace, arena, and abstract
-secret-lifecycle domains have not been independently reviewed. Project tests,
+The alert, failure, numeric, budget, cursor, workspace, arena, abstract
+secret-lifecycle, and owned-region zeroization domains have not been
+independently reviewed. Project tests,
 CI, Kani, Miri, fuzzing, and pentesting do not by themselves constitute
 independent protocol verification.
 
 | Component | Protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Alert, failure, numeric, budget, cursor, workspace/arena, and abstract secret-lifecycle domains | ❌ Not verified |
+| `brynja-core` | Alert, failure, numeric, budget, cursor, workspace/arena, abstract secret lifecycle, and owned-region zeroization | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -90,7 +105,7 @@ brynja = "0.10"
 
 The `0.7.0` package was published with Brynja v0.10.0 after its pentest,
 remediation retest, and hosted checks passed. It remains at `0.7.0` during the
-v0.11.0 development milestone under the
+v0.11.0 exceptional development milestone under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

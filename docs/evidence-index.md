@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 tagged and published; v0.11.0 development milestone in progress
+Status: v0.10.0 tagged and published; v0.11.0 awaiting exceptional pentest
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -25,6 +25,9 @@ consistent in the same commit.
 | `crates/brynja-core/src/write.rs`, `crates/brynja-core/tests/write_cursor.rs` | v0.8.0 protocol-neutral transactional caller-buffer output | Complete-range single-slice/repeated-byte and aggregate-part preflight, debug-asserted post-preflight range invariants with fail-closed release fallbacks, every-position and request matrix, whole-buffer sentinel preservation on failure, ordering, overflow, zero-length, empty-output, exact completion, exclusive borrow, output identity, compact storage, no indexing, `no_std`, and compile-fail alias/clone/formatting tests |
 | `crates/brynja-core/src/{arena_domain,workspace}.rs`, `crates/brynja-core/tests/workspace.rs` | v0.9.0 exact caller-owned workspace partition and monotonic arena allocation | Named single-assignment five-domain layout, exact checked aggregate and backing length, safe fixed-order slice splitting, sealed zero-sized compile-time domain identities, named simultaneous disjoint borrows, monotonic complete-range allocation, per-arena capacity/used/remaining/high-water/count telemetry, every-domain duplicate/omission rejection, exhaustive small-layout and every-position/request matrices, overflow/exhaustion/zero-length/sentinel/pointer-identity/isolation/representation/value-free-error tests, `no_std`, no indexing, and compile-fail alias/domain-swap/formatting tests |
 | `crates/brynja-core/src/{secret,secret_destruction}.rs`, `crates/brynja-core/tests/secret_lifecycle.rs` | v0.10.0 abstract secret lifetime and destruction-duty contract | Exact complete-initialization transition, every partial and early-exit boundary, replacement/obsolescence/drop, all-target cleanup attempts, single-consumption completion, returned explicit failures, mandatory failed-Drop handler notification in both lifecycle phases, secret-free errors, no concrete byte backing, `no_std`, no allocation, and compile-fail clone/format tests |
+| `crates/brynja-core/src/{secret_memory,secret_memory_volatile}.rs`, `crates/brynja-core/tests/secret_memory.rs` | v0.11.0 affine owned-region zeroization | Clear-before-initialization, every complete and incomplete boundary, failure-atomic writes, read admission only after exact completion, explicit and Drop clearing, closed errors, exclusive borrow, no cloning/formatting, `no_std`, and direct complete-region tests |
+| `docs/unsafe-policy.md`, `scripts/{unsafe_policy,check-unsafe-policy,test-unsafe-policy}.py` | v0.11.0 single unsafe exception | Exact private-module, allowance, block, volatile call, pointer derivation, safety-proof, compiler-barrier, no-assembly, no-FFI, and broken-fixture enforcement |
+| `assurance/zeroization-matrix.toml`, `scripts/check-zeroization-{evidence.py,codegen.sh,miri.sh,sanitizer.sh}` | v0.11.0 optimization and memory-safety evidence | MIR volatile-call, LLVM volatile-zero-store, target assembly byte-store, ten stable compiler, nine target, pinned Miri, pinned AddressSanitizer, and exact exclusion enforcement |
 | `crates/brynja-test-support/src/keylog.rs`, `crates/brynja-test-support/tests/keylog.rs`, `scripts/test-workspace-metadata.py` | v0.10.0 RFC 9850 repository-only key-log support | Exact ten-label and three-ending encoding, whole-line transactional preflight, every short output, closed diagnostics, permanent non-publication, and production dependency/feature/resolved-graph rejection fixtures |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/domain-scope.toml`, `requirements/domains/*.toml` | Reviewed v0.3.3 authority, invariant, work-bound, test-polarity, surface-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, and completeness validation |
@@ -48,6 +51,7 @@ consistent in the same commit.
 | `security/pentest/vX.Y.Z.md` | Permanent scheduled or exceptional checkpoint outcome with previous-public-tag baseline and cumulative change scope | Stage-aware release-readiness, range, and report-history validators |
 | `assurance/policy.toml` | Bounded first-party mutation and differential contracts, three OS-less targets, separate stable/Kani toolchains, and five exact external assurance-tool pins | Schema, bounds, target, workflow, manifest-isolation, pin, source-kind, owner, and broken-fixture validation |
 | `assurance/evidence.json` | Deterministic binding of assurance policy, runners, process-containment preconditions, bounded-input controls, native-host CI, stable/Kani toolchain documentation, and every Cargo manifest | Byte-for-byte regeneration and 44 positive/broken assurance fixtures |
+| `security/pentest/v0.11.0.md` | Exceptional review of the first unsafe owned-memory destruction boundary | Required PASS/PASS committed-report gate before the v0.11.0 development tag; no crates.io publication; scope remains included in v0.15.0 cumulative review |
 
 The v0.3.0 ledger, v0.3.1 decisions, v0.3.2 matrix foundation, v0.3.3
 cryptography/encoding/PKIX population, v0.3.4 TLS/DTLS/QUIC-TLS population,
@@ -58,5 +62,7 @@ v0.7.0 adds only the source-free borrowed read cursor, v0.8.0 adds only the
 source-free transactional write cursor, v0.9.0 adds only the exact
 caller-owned workspace and monotonic arena model, and v0.10.0 adds only the
 abstract secret-lifetime contract and isolated test key logger recorded above.
+v0.11.0 adds only the exclusively borrowed owned-region primitive and its exact
+local-allocation clearing evidence.
 No other ledger, surface, or planned protocol requirement entry is an implementation,
 interoperability, independent-review, security, or FIPS validation claim.

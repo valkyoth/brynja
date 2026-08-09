@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 tagged and published; v0.11.0 development milestone in progress
+Status: v0.10.0 tagged and published; v0.11.0 awaiting exceptional pentest
 
 The `brynja` facade advances to `0.11.0` for the current signed development
 line but is not selected for crates.io publication. The latest public
@@ -13,7 +13,7 @@ production readiness.
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
 | `brynja` | `0.11.0` | no | Development tag version; latest crates.io checkpoint is `0.10.0` |
-| `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while v0.11 work is in progress |
+| `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while completed v0.11 zeroization code awaits its exceptional pentest and tag |
 | `brynja-crypto` | `0.1.0` | no | Published and unchanged |
 | `brynja-pki`, `brynja-platform` | `0.1.6` | no | Published boundaries retained; functionality remains unimplemented |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.6` | no | Published boundaries retained; engines remain unimplemented |
@@ -34,8 +34,9 @@ accidentally publishable repository-only package.
 
 Every signed modern `vX.Y.Z` or `vX.Y.Z-rc.N` tag advances the `brynja`
 manifest to exactly `X.Y.Z` or `X.Y.Z-rc.N`. A development tag selects no
-crates.io packages. At scheduled or exceptional public checkpoints, the facade
-must publish and remain the final crate in the publication sequence.
+crates.io packages, including an exceptionally pentested development tag. At
+scheduled or deliberately early public checkpoints, the facade must publish
+and remain the final crate in the publication sequence.
 
 Supporting crates use independent versions and are published only when their
 own package changes or an internal dependency must move outside the currently
@@ -91,6 +92,6 @@ each new dependency to be indexed before continuing.
 
 | Rust | Evidence |
 | --- | --- |
-| `1.90.0` through `1.97.0` | Workspace all-feature compatibility check on each listed stable release |
-| `1.97.1` | Full release gate, host targets, and three OS-less all-feature targets |
+| `1.90.0` through `1.97.0` | Workspace all-feature compatibility plus host MIR/LLVM/assembly zeroization check on each listed stable release |
+| `1.97.1` | Full release gate, every promised target, and MIR/LLVM/assembly zeroization checks across all nine targets |
 | Kani Rust `1.90.0` | Separate verifier pairing for `cargo-kani 0.67.0`; not a release compiler or proof result at v0.10.0 |

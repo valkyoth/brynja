@@ -17,6 +17,8 @@ pub mod quantity;
 pub mod read;
 pub mod secret;
 pub mod secret_destruction;
+pub mod secret_memory;
+mod secret_memory_volatile;
 pub mod sequence;
 pub mod version;
 pub mod workspace;
@@ -47,6 +49,10 @@ pub use secret_destruction::{
     DestructionCause, DestructionComplete, DestructionFailure, DestructionFailureKind,
     DestructionOutcome, DestructionTarget, DestructionTargets, SecretDestructor,
     TargetDestructionStatus,
+};
+pub use secret_memory::{
+    OwnedRegionClearComplete, OwnedSecretRegion, SecretMemoryError, SecretRegionInitialization,
+    clear_owned_region,
 };
 pub use sequence::{Epoch, SequenceNumber};
 pub use version::{ProtocolFamily, ProtocolVersion};
@@ -79,6 +85,9 @@ pub const WORKSPACE_ARENAS_IMPLEMENTED: bool = true;
 /// Whether the v0.10 abstract secret-lifetime contract is implemented.
 pub const SECRET_LIFETIME_CONTRACT_IMPLEMENTED: bool = true;
 
+/// Whether the v0.11 owned-memory zeroization primitive is implemented.
+pub const OWNED_MEMORY_ZEROIZATION_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -91,6 +100,9 @@ mod tests {
         assert!(::core::hint::black_box(super::WORKSPACE_ARENAS_IMPLEMENTED));
         assert!(::core::hint::black_box(
             super::SECRET_LIFETIME_CONTRACT_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::OWNED_MEMORY_ZEROIZATION_IMPLEMENTED
         ));
     }
 }

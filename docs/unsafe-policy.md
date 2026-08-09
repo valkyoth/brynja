@@ -1,8 +1,11 @@
 # Unsafe Rust Policy
 
-Status: unsafe forbidden
+Status: one v0.11.0 exception approved; every other unsafe site forbidden
 
-Workspace lints forbid unsafe code. No exception exists in `0.1.0`.
+Workspace lints deny unsafe code by default. Repository policy permits exactly
+one documented block in the private
+`crates/brynja-core/src/secret_memory_volatile.rs` module and rejects unsafe
+blocks, unsafe items, local lint allowances, assembly, and FFI everywhere else.
 
 A future exception requires a versioned milestone, written necessity analysis,
 safe alternative analysis, isolated module or crate, documented invariants,
@@ -10,13 +13,47 @@ Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
 
-Production admission requires reviewed destruction of every complete owned
-secret memory region. The planned zeroization milestone may justify only the
-smallest isolated primitive needed to preserve stores through optimization.
-Its proof must cover every supported compiler and target plus platform cache
-and DMA completion duties. Claims must disclose limits for registers, copies,
-crash dumps, and physical memory, but a weaker owned-region guarantee cannot
-pass the `1.0.0` gate. This paragraph does not itself authorize unsafe code.
+## v0.11.0 Volatile-Store Exception
+
+Necessity: ordinary safe assignment or slice filling may be removed when the
+compiler proves that the bytes are never read again. The exception calls
+`core::ptr::write_volatile` once per byte so the stores are externally
+observable compiler events. A final compiler fence is a compiler barrier only;
+it is not presented as cache, DMA, atomic, or inter-thread synchronization.
+
+Safe alternatives considered and rejected for the production claim are
+ordinary assignment, `slice::fill`, `ptr::write_bytes`, and `black_box`; none
+provides the admitted volatile-store guarantee. A third-party zeroization crate
+is forbidden, and the optional first-party `sanitization` adapter remains a
+separate v0.11.1 admission question rather than Brynja's core guarantee.
+
+The unsafe invariant is deliberately small: the raw pointer is derived from a
+live exclusive `&mut u8`, is aligned, remains inside the same Rust allocation,
+is written exactly once, and is never retained or offset. The safe API accepts
+only an exclusive mutable slice. It clears the complete region before
+initialization, exposes no read before exact completion, and clears the complete
+region on every explicit and Drop exit that Rust executes.
+
+MIR must retain the volatile call, LLVM IR must contain a volatile zero store,
+and target assembly must contain a byte store. The matrix covers Rust 1.90.0
+through 1.97.1 on x86_64 Linux and Rust 1.97.1 across Linux, Windows, FreeBSD,
+macOS, Android, iOS, ARMv7E-M, RV32IMAC, and x86_64 bare metal. Pinned Miri and
+AddressSanitizer execute every secret-memory integration test. Any compiler,
+target, code, invariant, lint, or evidence change reopens this exception.
+
+The claim covers only the bytes of the complete exclusively borrowed Rust
+allocation when the clearing call returns. It excludes registers, caller- or
+compiler-created copies, CPU and device caches, DMA-visible copies, crash dumps,
+suspend images, physical-memory remanence, concurrent access, `mem::forget`,
+abort, and process or power termination. External stores, accelerators, caches,
+and DMA completion remain mandatory separate `SecretDestructor` duties. No
+FIPS validation, independent verification, or whole-system erasure claim is
+created.
+
+Because this is the first unsafe secret-destruction boundary, v0.11.0 is an
+exceptional development milestone: it requires a committed PASS pentest before
+tagging but still publishes no crates. The v0.15.0 cumulative checkpoint must
+review it again with every change after v0.10.0.
 
 The v0.11.1 review treats unsafe code inside the exact `sanitization` release as
 part of the adapter's inherited trusted computing base. Admission requires the

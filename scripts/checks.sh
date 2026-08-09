@@ -4,6 +4,11 @@ set -eu
 cargo fmt --all --check
 scripts/check_shell_syntax.sh
 scripts/test-shell-syntax.sh
+python3 scripts/check-unsafe-policy.py
+python3 scripts/test-unsafe-policy.py
+python3 scripts/check-zeroization-evidence.py
+python3 scripts/test-zeroization-evidence.py
+scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 scripts/check_doc_links.sh
 python3 scripts/check-commit-classification.py
 python3 scripts/test-commit-classification.py

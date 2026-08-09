@@ -36,19 +36,19 @@ production-ready TLS implementation at `1.0.0`.
 > described below; a tag without a matching committed pentest report was not a
 > scheduled pentest checkpoint.
 
-Version `0.10.0` adds an abstract, affine secret-lifetime contract. A secret
-state exists only after exact complete initialization; cancellation, errors,
-exhaustion, provider failure, replacement, obsolescence, and drop run explicit
-local-memory, external-store, accelerator, cache, and DMA destruction duties.
-Because `Drop` cannot return a failure, every destructor must also provide a
-mandatory platform-specific failure handler; a failed drop is delivered there
-after every configured duty has been attempted and cannot be silently ignored.
-No byte-backed production secret owner exists yet: v0.11.0 must first supply
-the reviewed complete-region destruction primitive. RFC 9850 key-log encoding
-exists only in the unpublished `brynja-test-support` package and is
-mechanically unreachable from production package graphs. These foundations do
-**not** implement TLS framing, a protocol state machine, or cryptography and
-must not be used to secure network traffic.
+Version `0.11.0` adds affine ownership for one complete caller-owned secret
+region. Admission first clears all previous bytes, initialization is write-only
+and sequential, readable ownership exists only after exact completion, and
+explicit clear, incomplete exits, and `Drop` execute a per-byte volatile zero
+store plus a compiler barrier. The only unsafe block is isolated in one private
+module and is bound to MIR, LLVM IR, assembly, Miri, sanitizer, compiler, and
+target checks. The guarantee covers the exclusively borrowed Rust allocation;
+it explicitly excludes registers, copies, caches, DMA-visible copies, dumps,
+suspend images, physical-memory remanence, concurrent access, `mem::forget`,
+and process termination. The first unsafe secret-destruction boundary requires
+an exceptional v0.11.0 pentest before tagging, while still selecting no crate
+for publication. These foundations do **not** implement TLS framing, a protocol
+state machine, or cryptography and must not be used to secure network traffic.
 
 ## Development Tags And Pentesting
 
@@ -114,11 +114,11 @@ selected set in dependency order and publishes the facade last.
   protocol engine, legacy engine, or FIPS module.
 - Every production crate is `no_std` by default. Platform services enter
   through explicit caller-provided interfaces.
-- v0.9 arena domain names classify raw caller storage only. v0.10 adds an
-  abstract secret-state contract, but it deliberately cannot own bytes.
-  `SecretDomain` is not a secret owner, `CertificateDomain` is not private-key
-  storage, and no arena may carry sensitive material until the v0.11 proven
-  destruction primitive exists.
+- v0.9 arena domain names classify raw caller storage only. v0.10 adds the
+  abstract destruction-duty contract. v0.11 adds a separate exclusive borrowed
+  region owner with exact initialization and volatile complete-region clearing;
+  a raw `SecretDomain` arena is not automatically that owner and
+  `CertificateDomain` is not private-key storage.
 - FIPS 140-3 support is planned through separate `brynja-fips-module` and
   `brynja-fips` packages, not a boolean Cargo feature. Only an exact issued,
   certificate-bound module and tested operational environment may carry a
@@ -175,8 +175,9 @@ certificate-bound operational-environment claim.
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
 Only the shared alert/failure, bounded numeric/resource, borrowed read,
-transactional caller-buffer write, exact workspace/arena, and abstract secret
-lifetime foundations described for `brynja-core` are implemented. No
+transactional caller-buffer write, exact workspace/arena, abstract secret
+lifetime, and owned-region zeroization foundations described for `brynja-core`
+are implemented. No
 cryptographic primitive, PKI processor, protocol parser, or protocol engine in
 this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
@@ -186,8 +187,8 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes v0.10 foundation domains; no TLS engine |
-| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus abstract secret lifecycle/destruction duties implemented |
+| `brynja` | Modern production facade | Exposes v0.11 foundation domains; no TLS engine |
+| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus affine owned-region zeroization implemented |
 | `brynja-crypto` | First-party hashes, MACs, AEADs, KDFs, RSA, and ECC | Foundation only |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
@@ -228,7 +229,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Default target | `no_std` |
 | Third-party crates | Forbidden |
 | First-party companion crates | Conditional adapter-only admission review |
-| Unsafe Rust | Forbidden until a versioned, audited exception is approved |
+| Unsafe Rust | One v0.11 volatile-store block admitted in a private module; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
 | FIPS 140-3 status | Planned Level 1 software-module path; not validated |
@@ -237,7 +238,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.97.1`, the current stable patch release checked on 2026-08-03.
+to Rust `1.97.1`, the current stable patch release checked on 2026-08-09.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 
@@ -276,6 +277,11 @@ python3 scripts/check-assurance.py
 python3 scripts/test-assurance.py
 scripts/check-bare-metal.sh
 scripts/check-kani.sh
+python3 scripts/check-unsafe-policy.py
+python3 scripts/check-zeroization-evidence.py
+scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+scripts/check-zeroization-miri.sh
+scripts/check-zeroization-sanitizer.sh
 scripts/check-github-release-controls.py
 python3 scripts/check-standards-ledger.py
 python3 scripts/check-protocol-surfaces.py
@@ -287,10 +293,11 @@ scripts/tag_gate.sh v0.11.0
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a
 signed tag. `scripts/tag_gate.sh vX.Y.Z` runs the complete automated tag gate
-and applies the stage-specific final check: development milestones require no
-scheduled pentest, while public checkpoints require their cumulative PASS
-report. GitHub CodeQL uses Default setup; this repository intentionally does
-not add an advanced CodeQL workflow.
+and applies the stage-specific final check: ordinary development milestones
+require no scheduled pentest, exceptional development milestones require their
+PASS report without publication, and public checkpoints require their
+cumulative PASS report. GitHub CodeQL uses Default setup; this repository
+intentionally does not add an advanced CodeQL workflow.
 
 After an exact green public-checkpoint candidate is pentested and tagged, the
 interactive crates.io publisher is, for example:

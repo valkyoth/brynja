@@ -21,8 +21,9 @@ test count, or interoperability alone never establishes that claim.
   filesystem, or entropy source.
 - No Rust source file over 500 lines. Split modules before 450 lines so tests
   and review changes have room.
-- Unsafe Rust remains forbidden until a versioned need, proof obligation,
-  isolated crate/module, audit, and explicit policy change are approved.
+- Unsafe Rust is denied by default. The v0.11.0 exception permits one
+  machine-inventoried volatile-store block in one private module; every other
+  unsafe site, assembly, and FFI boundary remains forbidden.
 - Modern and legacy engines have separate packages, APIs, configuration,
   state machines, caches, ticket keys, and connection paths.
 - Every legacy implementation package uses the

@@ -14,6 +14,24 @@ Keep a Changelog and Semantic Versioning.
   after its prior public tag through the new candidate, beginning with
   v0.10.0 through v0.15.0 and then v0.15.0 through v0.20.0.
 
+### Added
+
+- Affine write-only initialization and readable ownership for one complete
+  exclusively borrowed caller secret region.
+- Complete-region volatile clearing on admission, incomplete finish, both Drop
+  paths, and explicit owner clear, with failure-atomic sequential writes.
+- Machine-enforced single-unsafe-block policy and MIR, LLVM IR, assembly, Miri,
+  AddressSanitizer, ten-compiler, and nine-target verification.
+
+### Security
+
+- The zeroization claim is limited to the exclusively borrowed Rust allocation
+  and excludes registers, copies, caches, DMA-visible copies, dumps, suspend
+  images, physical memory, concurrent access, forgotten owners, and termination.
+- v0.11.0 requires an exceptional committed PASS pentest before its signed
+  development tag because it introduces the first unsafe secret-destruction
+  boundary; it still selects no package for crates.io publication.
+
 ## [0.10.0] - 2026-08-03
 
 ### Added

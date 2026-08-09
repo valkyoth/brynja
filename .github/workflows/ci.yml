@@ -75,6 +75,8 @@ jobs:
         run: rustup toolchain install ${{ matrix.rust }} --profile minimal
       - name: Check complete workspace
         run: cargo +${{ matrix.rust }} check --workspace --all-features
+      - name: Verify zeroization emitted code
+        run: scripts/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
 
   target:
     name: no_std target (${{ matrix.target }})
@@ -100,3 +102,19 @@ jobs:
         run: rustup target add ${{ matrix.target }}
       - name: Check complete workspace
         run: cargo check --workspace --all-features --target ${{ matrix.target }}
+      - name: Verify zeroization emitted code
+        run: scripts/check-zeroization-codegen.sh 1.97.1 "${{ matrix.target }}"
+
+  zeroization-unsafe:
+    name: Zeroization Miri and sanitizer evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install pinned nightly assurance toolchain
+        run: rustup toolchain install nightly-2026-08-09 --profile minimal --component miri,rust-src
+      - name: Run zeroization under Miri
+        run: scripts/check-zeroization-miri.sh
+      - name: Run zeroization under AddressSanitizer
+        run: scripts/check-zeroization-sanitizer.sh

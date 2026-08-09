@@ -181,8 +181,10 @@ def validate_release_context(release: dict, crates: dict) -> tuple[str, str]:
     scheduled = milestone_class(milestone) == "public"
     selected = [name for name, entry in crates.items() if entry.get("publish")]
     if stage == "internal":
-        if scheduled or exceptional:
+        if scheduled:
             raise RuntimeError("internal stage requires a non-checkpoint milestone")
+        if exceptional and not reason.strip():
+            raise RuntimeError("exceptional development milestone requires a reason")
         if version != milestone:
             raise RuntimeError("development facade version must equal milestone tag version")
         if selected:

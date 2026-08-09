@@ -411,6 +411,7 @@ def run_tests() -> None:
         train_tests.test_internal_facade_advances_without_publication,
         test_unknown_stage_is_rejected,
         train_tests.test_internal_stop_requires_empty_publication,
+        train_tests.test_internal_exception_requires_review_but_not_publication,
         train_tests.test_checkpoint_requires_exact_cumulative_range,
         train_tests.test_early_public_checkpoint_requires_exception_reason,
         test_facade_cannot_be_publish_false,

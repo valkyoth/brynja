@@ -71,6 +71,16 @@ test -f scripts/release_policy.py
 test -f scripts/release_change_policy.py
 test -x scripts/test-release-crates.py
 test -x scripts/test-release-readiness.sh
+test -x scripts/check-unsafe-policy.py
+test -x scripts/test-unsafe-policy.py
+test -f scripts/unsafe_policy.py
+test -x scripts/check-zeroization-codegen.sh
+test -x scripts/check-zeroization-evidence.py
+test -x scripts/test-zeroization-evidence.py
+test -x scripts/check-zeroization-miri.sh
+test -x scripts/check-zeroization-sanitizer.sh
+test -f scripts/zeroization_evidence.py
+test -s assurance/zeroization-matrix.toml
 test -x scripts/check_shell_syntax.sh
 test -x scripts/test-shell-syntax.sh
 test -x scripts/check-github-release-controls.py
@@ -117,6 +127,11 @@ grep -q 'python3 scripts/test-commit-classification.py' scripts/checks.sh
 grep -q 'python3 scripts/check-verification-status.py' scripts/checks.sh
 grep -q 'python3 scripts/test-verification-status.py' scripts/checks.sh
 grep -q 'scripts/test-shell-syntax.sh' scripts/checks.sh
+grep -q 'python3 scripts/check-unsafe-policy.py' scripts/checks.sh
+grep -q 'python3 scripts/test-unsafe-policy.py' scripts/checks.sh
+grep -q 'python3 scripts/check-zeroization-evidence.py' scripts/checks.sh
+grep -q 'python3 scripts/test-zeroization-evidence.py' scripts/checks.sh
+grep -q 'scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
 python3 -c '
 from pathlib import Path
 workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")

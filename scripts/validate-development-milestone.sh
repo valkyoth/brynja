@@ -20,9 +20,9 @@ scripts/release_crates.py --check
 
 context="$(
     python3 -c \
-        'import tomllib; r = tomllib.load(open("release-crates.toml", "rb"))["release"]; print("|".join((r["version"], r["milestone"], r["stage"])))'
+        'import tomllib; r = tomllib.load(open("release-crates.toml", "rb"))["release"]; print("|".join((r["version"], r["milestone"], r["stage"], str(r.get("exceptional", False)).lower())))'
 )"
-IFS='|' read -r planned_version milestone stage <<EOF
+IFS='|' read -r planned_version milestone stage exceptional <<EOF
 ${context}
 EOF
 
@@ -42,7 +42,10 @@ if git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
 fi
 
 report="security/pentest/${version}.md"
-if test -e "$report"; then
+if test "$exceptional" = "true"; then
+    scripts/validate-current-pentest.sh --required
+    echo "${version} has the mandatory exceptional committed PASS pentest report"
+elif test -e "$report"; then
     scripts/validate-current-pentest.sh --required
     echo "${version} has an exceptional committed PASS pentest report"
 else

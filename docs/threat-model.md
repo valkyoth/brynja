@@ -57,6 +57,12 @@ duplicate completion, missed destruction on error or replacement, early
 termination after one failed destruction target, value-bearing diagnostics,
 false local-memory erasure assertions, or production reachability of the RFC
 9850 traffic-secret key logger.
+Owned-memory attackers additionally try to elide clearing stores through
+optimization, escape the one approved unsafe block, read partial initialization,
+retain prior caller bytes, overrun a region, create mutable aliases, confuse a
+returned local-memory completion with cache or DMA completion, or extend the
+claim to registers, copies, dumps, suspend images, physical memory, forgotten
+owners, concurrency, and termination.
 
 ## Required Controls
 
@@ -89,8 +95,14 @@ false local-memory erasure assertions, or production reachability of the RFC
 - affine secret initialization with exact complete-write transition,
   single-consumption destruction completion, all-target cleanup attempts,
   returned terminal failure on explicit transitions, mandatory durable or
-  fail-stop notification for a failure reached through `Drop`, and no concrete
-  byte backing until the reviewed complete-region destruction primitive exists;
+  fail-stop notification for a failure reached through `Drop`; the abstract
+  state remains byte-free while only the v0.11 owned-region state may back it;
+- exclusive borrowed secret-region ownership that clears prior bytes before
+  write-only sequential initialization, exposes read access only after exact
+  completion, clears the complete region on explicit and Drop exits, confines
+  one volatile store to one private unsafe module, verifies emitted code at MIR,
+  LLVM IR, and assembly levels, and keeps cache, DMA, copy, dump, physical, and
+  termination duties outside the local-allocation completion claim;
 - RFC 9850 traffic-secret logging only in a separately compiled, unpublished
   test-support package that production packages and features cannot reach;
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
@@ -133,16 +145,18 @@ false local-memory erasure assertions, or production reachability of the RFC
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.10.0
+## Non-Goals At 0.11.0
 
 No transport security or interoperability guarantee exists. The only protocol
 code consists of allocation-free shared alert/failure, bounded
 numeric/resource value domains, and protocol-neutral borrowed read and
 transactional caller-buffer write cursors, an exact caller-owned workspace
-partition with monotonic arena accounting, and an abstract secret-lifetime
-contract; there is no concrete secret-byte backing or proven local-memory
-erasure, integer encoder or decoder, framing layer, protocol parser, record
-layer, arena release or reuse, handshake, provider implementation, PKI, or
+partition with monotonic arena accounting, an abstract secret-lifetime
+contract, and exclusive caller-owned secret-region clearing. There is no cache,
+DMA, register, copy, dump, suspend-image, physical-memory, forgotten-owner, or
+termination erasure guarantee, integer encoder or decoder, framing layer,
+protocol parser, record layer, arena release or reuse, handshake, provider
+implementation, PKI, or
 cryptography.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
@@ -170,8 +184,10 @@ partitions one exact caller buffer into five named disjoint domains and adds
 monotonic allocation telemetry without claiming release, reuse, zeroization,
 secret ownership, framing, or protocol behavior. v0.10.0 adds only abstract
 complete-initialization and destruction-duty states plus repository-only RFC
-9850 test support; it makes no byte-erasure, protocol, interoperability,
-independent-review, or production claim. Planned,
+9850 test support. v0.11.0 adds only the complete exclusively borrowed Rust
+allocation clearing primitive and affine byte-backed region states; it makes no
+platform-wide erasure, protocol, interoperability, independent-review, FIPS, or
+production claim. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

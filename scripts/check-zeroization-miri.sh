@@ -9,3 +9,9 @@ CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     -p brynja-core \
     --test secret_memory \
     --target x86_64-unknown-linux-gnu
+
+CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+    cargo +nightly-2026-08-09 miri test \
+    -p brynja-sanitization \
+    --test behavior \
+    --target x86_64-unknown-linux-gnu

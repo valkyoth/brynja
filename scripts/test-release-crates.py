@@ -409,6 +409,7 @@ def run_tests() -> None:
         test_current_repository_plan,
         test_facade_always_publishes_at_release_version,
         train_tests.test_internal_facade_advances_without_publication,
+        train_tests.test_new_publishable_adapter_can_be_held_for_checkpoint,
         test_unknown_stage_is_rejected,
         train_tests.test_internal_stop_requires_empty_publication,
         train_tests.test_internal_exception_requires_review_but_not_publication,

@@ -23,7 +23,15 @@ MODERN_CLASSES = frozenset(
 )
 LEGACY_CLASSES = frozenset({"legacy-facade", "legacy-engine"})
 PRIVATE_CLASSES = frozenset({"repository-only", "research-only"})
-ALL_CLASSES = MODERN_CLASSES | LEGACY_CLASSES | PRIVATE_CLASSES
+ADAPTER_CLASSES = frozenset({"security-adapter"})
+ALL_CLASSES = MODERN_CLASSES | LEGACY_CLASSES | PRIVATE_CLASSES | ADAPTER_CLASSES
+EXTERNAL = {
+    "sanitization": {
+        "version": "2.0.3",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "owner": "brynja-sanitization",
+    }
+}
 AMBIGUOUS_LEGACY_NAMES = frozenset(
     {
         "brynja-pct",
@@ -75,13 +83,22 @@ def workspace_packages(document: dict) -> tuple[dict[str, dict], dict[str, str]]
     by_name = {package["name"]: package for package in by_id.values()}
     if len(by_name) != len(by_id):
         raise ValueError("workspace package names are not unique")
-    if len(document.get("packages", [])) != len(by_id):
-        external = sorted(
-            package["name"]
-            for package in document["packages"]
-            if package["id"] not in members
+    external = {
+        package["name"]: package
+        for package in document.get("packages", [])
+        if package["id"] not in members
+    }
+    if set(external) != set(EXTERNAL):
+        raise ValueError(
+            "external packages entered the resolved graph: "
+            f"expected={sorted(EXTERNAL)}, actual={sorted(external)}"
         )
-        raise ValueError(f"external packages entered the resolved graph: {external}")
+    for name, expected in EXTERNAL.items():
+        package = external[name]
+        if package.get("version") != expected["version"]:
+            raise ValueError(f"admitted external version drifted for {name}")
+        if package.get("source") != expected["source"]:
+            raise ValueError(f"admitted external source drifted for {name}")
     return by_name, {name: package["id"] for name, package in by_name.items()}
 
 
@@ -147,7 +164,16 @@ def validate_dependencies(
         )
     for dependency in dependencies:
         dependency_name = dependency["name"]
-        if dependency.get("source") is not None or dependency.get("path") is None:
+        external = dependency_name in EXTERNAL
+        if external:
+            expected_external = EXTERNAL[dependency_name]
+            if name != expected_external["owner"]:
+                raise ValueError(f"external dependency owner drifted: {name} -> {dependency_name}")
+            if dependency.get("source") != expected_external["source"]:
+                raise ValueError(f"admitted external source drifted for {dependency_name}")
+            if dependency.get("path") is not None:
+                raise ValueError(f"admitted external path override: {dependency_name}")
+        elif dependency.get("source") is not None or dependency.get("path") is None:
             raise ValueError(f"external dependency: {name} -> {dependency_name}")
         if dependency.get("kind") is not None or dependency.get("target") is not None:
             raise ValueError(f"{name} has a non-production dependency")
@@ -155,9 +181,10 @@ def validate_dependencies(
             raise ValueError(f"{name} optionality drifted for {dependency_name}")
         if dependency.get("features") != []:
             raise ValueError(f"{name} directly enables features on {dependency_name}")
-        if dependency.get("uses_default_features") is not True:
+        if dependency.get("uses_default_features") is not (not external):
             raise ValueError(f"{name} default-feature policy drifted for {dependency_name}")
-        expected_req = f"={packages[dependency_name]['version']}"
+        version = EXTERNAL[dependency_name]["version"] if external else packages[dependency_name]["version"]
+        expected_req = f"={version}"
         if dependency.get("req") != expected_req:
             raise ValueError(
                 f"{name} must pin {dependency_name} to {expected_req}"
@@ -281,6 +308,26 @@ def validate_resolved_mode(
         raise ValueError("QUIC reaches stream TLS or its multi-version router")
     if "brynja-tls13-handshake" not in quic:
         raise ValueError("QUIC does not reach the recordless TLS 1.3 handshake")
+    adapter = reachable_names("brynja-sanitization", names, packages_by_id, edges)
+    if adapter != {"brynja-sanitization", "brynja-core", "sanitization"}:
+        raise ValueError("sanitization adapter resolved graph drifted")
+    sanitization_id = next(
+        package_id
+        for package_id, package in packages_by_id.items()
+        if package["name"] == "sanitization"
+    )
+    owners = {
+        packages_by_id[owner]["name"]
+        for owner, dependencies in edges.items()
+        if sanitization_id in dependencies
+    }
+    if owners != {"brynja-sanitization"}:
+        raise ValueError("sanitization external dependency escaped its adapter")
+    external_node = nodes.get(sanitization_id)
+    if external_node is None or external_node.get("features") != []:
+        raise ValueError("sanitization activated an unadmitted feature")
+    if edges.get(sanitization_id, set()):
+        raise ValueError("sanitization activated a transitive package")
 
 
 def parse_args() -> argparse.Namespace:
@@ -313,7 +360,7 @@ def main() -> int:
     )
     print(
         f"{args.mode} graph enforces {len(packages)} classified packages, "
-        "zero external dependencies, and modern/legacy isolation"
+        "one exact adapter-owned first-party external package, and modern/legacy isolation"
     )
     return 0
 

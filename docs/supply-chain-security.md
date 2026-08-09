@@ -7,9 +7,9 @@ Brynja admits no third-party Cargo crates. `Cargo.lock`, Cargo metadata,
 enter unnoticed. Git and unknown registry sources are denied. GitHub Actions
 are pinned to full commit SHAs and checked online before release.
 
-The only admitted future external production dependency is conditional and
-first-party: the separate downstream `brynja-sanitization` adapter may
-exact-pin reviewed `sanitization 2.0.3` with default features disabled. Its
+The only admitted external production dependency is first-party: the separate
+downstream `brynja-sanitization` adapter exact-pins reviewed
+`sanitization 2.0.3` with default features disabled. Its
 activated graph must contain no `zeroize`, derive, serde, subtle, or other
 third-party crate, and no
 Brynja facade, engine, default feature, or FIPS module may depend on it. Version,

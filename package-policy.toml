@@ -67,6 +67,12 @@ publish = "crates-io"
 required = ["brynja-core", "brynja-tls13-handshake"]
 optional = {}
 
+[packages.brynja-sanitization]
+class = "security-adapter"
+publish = "crates-io"
+required = ["brynja-core", "sanitization"]
+optional = {}
+
 [packages.brynja-legacy]
 class = "legacy-facade"
 publish = "blocked"

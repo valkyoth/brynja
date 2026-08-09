@@ -18,6 +18,7 @@ def copy_fixture(destination: Path) -> None:
         Path("Cargo.toml"),
         Path("Cargo.lock"),
         Path("release-crates.toml"),
+        Path("crates/brynja-sanitization/Cargo.toml"),
         Path("assurance/sanitization-admission/Cargo.toml"),
         Path("assurance/sanitization-admission/Cargo.lock"),
         Path("assurance/sanitization-admission/src/lib.rs"),
@@ -73,7 +74,7 @@ def test() -> None:
 
         manifest = root / "crates/brynja/Cargo.toml"
         replace(manifest, "[dependencies]", "[dependencies]\nsanitization = \"=2.0.3\"")
-        require_rejection(root, "production dependency")
+        require_rejection(root, "escaped adapter")
         copy_fixture(root)
 
         candidate = root / "assurance/sanitization-admission/Cargo.toml"
@@ -87,7 +88,7 @@ def test() -> None:
         copy_fixture(root)
 
         release = root / "release-crates.toml"
-        replace(release, 'cumulative_milestones = ["0.11.0", "0.11.1"]',
+        replace(release, 'cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2"]',
                 'cumulative_milestones = ["0.11.1"]')
         require_rejection(root, "cumulative milestone")
         copy_fixture(root)

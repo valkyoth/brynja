@@ -41,6 +41,7 @@ PUBLISH_ORDER = (
     "brynja-tls",
     "brynja-dtls",
     "brynja-quic-tls",
+    "brynja-sanitization",
     "brynja-legacy-pct",
     "brynja-legacy-snp",
     "brynja-legacy-ssl2",
@@ -260,8 +261,10 @@ def validate_internal_entry(name: str, entry: dict) -> None:
         validate_repository_entry(name, entry)
         return
     if previous == "unpublished":
-        if change != "unpublished":
-            raise RuntimeError(f"{name} unadmitted internal entry must stay unpublished")
+        if change not in {"unpublished", "code"}:
+            raise RuntimeError(
+                f"{name} new internal entry must be unpublished or reviewed code"
+            )
     elif entry["version"] != previous:
         raise RuntimeError(f"{name} internal stage must retain version {previous}")
     if change in {"initial", "repository"}:

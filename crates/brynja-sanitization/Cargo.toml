@@ -1,0 +1,21 @@
+[package]
+name = "brynja-sanitization"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Optional no_std secret-storage adapter for Brynja"
+publish = ["crates-io"]
+
+[features]
+default = []
+
+[dependencies]
+brynja-core.workspace = true
+sanitization.workspace = true
+
+[lints]
+workspace = true

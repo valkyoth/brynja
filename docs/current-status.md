@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 tagged and published; v0.11.0 tagged; v0.11.1 implemented, awaiting hosted checks and signed tag
+Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 implemented, awaiting exceptional assessment
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -20,7 +20,7 @@ lifetime domains. The v0.10.0 checkpoint published `brynja-core 0.7.0`, eight
 dependency-only modern support patches at `0.1.6`, and `brynja 0.10.0`.
 Signed v0.11.0 introduced the first isolated unsafe secret-destruction
 boundary and completed its exceptional pentest with zero open findings. The
-facade now advances to `0.11.1` for the next signed development tag while all
+facade now advances to `0.11.2` for the next signed development tag while all
 crates.io publication selections remain empty. The v0.11.1 work is a
 review-only dependency-admission decision and does not trigger a scheduled or
 exceptional pentest by itself.
@@ -370,6 +370,31 @@ Version 0.11.1 completes the sanitization adapter admission review:
   publication, while its permanent PASS report is committed under
   `security/pentest/v0.11.1.md`.
 
+Version 0.11.2 implements the admitted optional adapter:
+
+- `brynja-sanitization 0.1.0` is a separately publishable `no_std` package
+  with exact `sanitization 2.0.3`, default features disabled, and no resolved
+  transitive package;
+- `SanitizedSecret<N>` owns upstream fixed storage behind a non-copyable,
+  non-converting wrapper with redacted `Debug`, closure-scoped inspection,
+  payload-free source failure, transactional replacement, explicit clear, and
+  named exact-length copies to and from `brynja-core` regions;
+- the same type serves modern and legacy downstream callers. No facade,
+  protocol engine, legacy engine, platform crate, default feature, all-feature
+  aggregate, or FIPS validated-module closure can activate the adapter;
+- workspace, lockfile, release, package, and SBOM policy admit only the exact
+  reviewed external package and reject pin, source, default-feature, feature,
+  transitive-package, `zeroize`, owner, and reachability drift; and
+- behavior, failure-position, replacement, capacity, cancellation/unwind,
+  differential, compile-fail, Rust 1.90.0-1.97.1, promised-target, Miri, and
+  MIR/LLVM/assembly evidence cover the adapter boundary.
+
+The package is held from crates.io until a public checkpoint. Because this is
+the first production adapter around external unsafe secret-storage code,
+v0.11.2 requires an exceptional assessment and PASS retest before its signed
+development tag. It remains in the later v0.10.0-through-v0.15.0 cumulative
+assessment scope.
+
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded
 because Drop cannot return `DestructionOutcome`. `SecretDestructor` now
@@ -404,10 +429,10 @@ machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
-No `brynja-sanitization` package or dependency exists yet. Exact
-`sanitization 2.0.3` is admitted only for conditional adapter implementation at
-v0.11.2; any source, package, feature, dependency, unsafe, advisory, target,
-guarantee, ownership, engine, facade, or FIPS-boundary drift forces re-review.
+`brynja-sanitization` now uses exact `sanitization 2.0.3` only under the frozen
+adapter boundary. Any source, package, feature, dependency, unsafe, advisory,
+target, guarantee, ownership, engine, facade, or FIPS-boundary drift forces
+re-review and fail-closed withholding or removal.
 
 The v0.3.2 repository-owner pentest cycle reported no remaining vulnerability
 and one optional defense-in-depth improvement. Target validation now resolves

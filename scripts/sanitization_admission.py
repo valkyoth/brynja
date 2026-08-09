@@ -202,15 +202,31 @@ def dependency_names(manifest: dict) -> set[str]:
     return names
 
 
-def validate_production_absence(root: Path) -> None:
+def validate_production_state(root: Path) -> None:
     manifests = [root / "Cargo.toml", *sorted((root / "crates").glob("*/Cargo.toml"))]
     for path in manifests:
         names = dependency_names(read_toml(path))
-        require(PACKAGE not in names, f"v0.11.1 production dependency found in {path}")
+        allowed = path == root / "Cargo.toml" or path == root / "crates/brynja-sanitization/Cargo.toml"
+        if allowed:
+            continue
+        require(PACKAGE not in names, f"sanitization dependency escaped adapter into {path}")
         require("zeroize" not in names, f"prohibited zeroize dependency found in {path}")
-    lock = (root / "Cargo.lock").read_text(encoding="utf-8")
-    require(f'name = "{PACKAGE}"' not in lock, "sanitization entered the workspace lockfile")
-    require('name = "zeroize"' not in lock, "zeroize entered the workspace lockfile")
+    adapter = read_toml(root / "crates/brynja-sanitization/Cargo.toml")
+    dependency = table(adapter, "dependencies").get(PACKAGE)
+    require(dependency == {"workspace": True}, "adapter dependency selection drift")
+    workspace_dependency = table(read_toml(root / "Cargo.toml"), "workspace").get("dependencies", {}).get(PACKAGE)
+    require(workspace_dependency == {"version": "=2.0.3", "default-features": False},
+            "workspace sanitization dependency selection drift")
+    packages = read_toml(root / "Cargo.lock").get("package", [])
+    selected = [entry for entry in packages if entry.get("name") == PACKAGE]
+    require(len(selected) == 1, "workspace lock must contain one sanitization package")
+    require(selected[0].get("version") == VERSION and
+            selected[0].get("checksum") == PACKAGE_SHA256,
+            "workspace sanitization lock identity drift")
+    require(selected[0].get("dependencies") in (None, []),
+            "workspace sanitization selection activated a package")
+    require(all(entry.get("name") != "zeroize" for entry in packages),
+            "zeroize entered the workspace lockfile")
 
 
 def validate_candidate(root: Path) -> None:
@@ -265,17 +281,17 @@ def validate_candidate(root: Path) -> None:
 def validate_release_state(root: Path) -> None:
     release = read_toml(root / "release-crates.toml")
     metadata = table(release, "release")
-    require(metadata.get("version") == "0.11.1" and metadata.get("milestone") == "0.11.1",
-            "release metadata is not v0.11.1")
+    require(metadata.get("version") == "0.11.2" and metadata.get("milestone") == "0.11.2",
+            "release metadata is not v0.11.2")
     require(metadata.get("baseline") == "0.10.0", "cumulative baseline drift")
-    require(metadata.get("cumulative_milestones") == ["0.11.0", "0.11.1"],
+    require(metadata.get("cumulative_milestones") == ["0.11.0", "0.11.1", "0.11.2"],
             "cumulative milestone range drift")
-    require(metadata.get("stage") == "internal", "v0.11.1 must remain internal")
+    require(metadata.get("stage") == "internal", "v0.11.2 must remain internal")
     require(metadata.get("exceptional") is True,
-            "assessed v0.11.1 must remain exceptional")
-    require("Medium secret-bearing error-remanence finding" in
+            "material v0.11.2 boundary must remain exceptional")
+    require("external unsafe secret-storage" in
             metadata.get("exception_reason", ""),
-            "v0.11.1 exceptional reason must bind the remediated finding")
+            "v0.11.2 exceptional reason must bind the production boundary")
 
 
 def archive_member(archive: tarfile.TarFile, suffix: str) -> bytes:
@@ -356,7 +372,7 @@ def validate_online() -> None:
 def validate(root: Path, package_archive: Path | None = None, online: bool = False) -> None:
     validate_record(root)
     validate_document(root)
-    validate_production_absence(root)
+    validate_production_state(root)
     validate_candidate(root)
     validate_release_state(root)
     if package_archive is not None:

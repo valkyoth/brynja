@@ -108,7 +108,7 @@ owners, concurrency, and termination.
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
-- deterministic builds, pinned CI actions, zero dependencies, SBOMs, and
+- deterministic builds, pinned CI actions, zero third-party dependencies, SBOMs, and
   a current committed pentest report that must change with every later release
   candidate fix;
 - explicit package classes and exact no-default and all-feature graph policy so

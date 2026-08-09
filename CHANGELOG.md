@@ -7,6 +7,37 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement separately selected `brynja-sanitization 0.1.0` with opaque
+  fixed-size ownership, closed source failures, transactional replacement,
+  redacted diagnostics, explicit clear, and named exact-length copies to and
+  from Brynja owned regions.
+- Add behavior, every-failure-position, capacity, unwind, differential, and
+  compile-fail tests plus Miri and adapter-level MIR/LLVM/assembly evidence.
+- Admit exactly one external resolved package in machine policy: first-party
+  `sanitization 2.0.3`, owned only by the adapter, with no enabled feature or
+  transitive dependency.
+
+### Changed
+
+- Advance the development facade to `0.11.2` without crates.io publication or
+  any facade, engine, default-feature, legacy-specific, or FIPS activation.
+- Add the adapter to the package, release, archive, version-matrix, SBOM, and
+  documentation inventories while deferring its first publication to a public
+  checkpoint.
+
+### Security
+
+- Keep `brynja-core` authoritative for protocol-region destruction and require
+  explicit copies whose two owners clear their storage independently.
+- Require an exceptional v0.11.2 assessment because the first production
+  wrapper around external unsafe secret-storage code is a material boundary.
+- Preserve fail-closed re-review on upstream version, source, checksum,
+  feature, dependency, unsafe, advisory, target, ownership, or FIPS drift.
+
+## [0.11.1] - 2026-08-09
+
+### Added
+
 - Commit an exact, machine-readable admission record and reviewer-facing audit
   for first-party `sanitization 2.0.3`, including source/package hashes,
   features, graph, unsafe inventory, target evidence, advisories, upstream

@@ -1075,7 +1075,7 @@ Exit criteria:
 
 ### v0.11.2 - Optional Brynja Sanitization Adapter
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Conditional on the v0.11.1 admission decision, implement and prepare for separate publication at the next scheduled or exceptional release checkpoint a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.
 

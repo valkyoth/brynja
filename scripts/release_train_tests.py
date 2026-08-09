@@ -49,6 +49,19 @@ def test_internal_facade_advances_without_publication() -> None:
         entry("0.10.0", "0.10.0", "code", False),
         "0.11.0",
     )
+
+
+def test_new_publishable_adapter_can_be_held_for_checkpoint() -> None:
+    policy.validate_internal_entry(
+        "brynja-sanitization",
+        entry("unpublished", "0.1.0", "code", False),
+    )
+    assert_fails(
+        "must be unpublished or reviewed code",
+        policy.validate_internal_entry,
+        "brynja-sanitization",
+        entry("unpublished", "0.1.0", "metadata", False),
+    )
     assert_fails(
         "empty publication selection",
         policy.validate_internal_facade_entry,

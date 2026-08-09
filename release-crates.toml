@@ -1,19 +1,19 @@
 [release]
-version = "0.11.1"
-milestone = "0.11.1"
+version = "0.11.2"
+milestone = "0.11.2"
 baseline = "0.10.0"
-cumulative_milestones = ["0.11.0", "0.11.1"]
+cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "The v0.11.1 candidate admission boundary received an exceptional repository-owner assessment; one Medium secret-bearing error-remanence finding was remediated and retested PASS before tagging."
+exception_reason = "The first production adapter around an external unsafe secret-storage implementation is a material security-boundary change requiring an exceptional assessment before tagging."
 
 [crates."brynja"]
-previous_version = "0.11.0"
-version = "0.11.1"
-change = "metadata"
+previous_version = "0.11.1"
+version = "0.11.2"
+change = "code"
 publish = false
-reason = "Advance the facade for the completed v0.11.1 sanitization admission review without crates.io publication or a production dependency."
+reason = "Advance the facade for the completed v0.11.2 optional sanitization adapter without activating or re-exporting it and without crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.7.0"
@@ -70,6 +70,13 @@ version = "0.1.6"
 change = "metadata"
 publish = false
 reason = "Retain published 0.1.6 while carrying the cumulative development-tag documentation delta; the QUIC-TLS adapter remains unimplemented."
+
+[crates."brynja-sanitization"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Implement the separately selected exact-pinned sanitization adapter; hold its first publication for a future cumulative public checkpoint."
 
 [crates."brynja-dtls"]
 previous_version = "0.1.6"

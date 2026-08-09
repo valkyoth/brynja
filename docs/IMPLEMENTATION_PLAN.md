@@ -104,7 +104,7 @@ offers the easy client and server entry points, but it constructs them only from
 a certificate-bound manifest and matching validated-module handle. Ordinary
 `brynja` configuration can never acquire a FIPS claim through feature unification.
 
-`brynja-sanitization` is a conditional, separately selected downstream adapter,
+`brynja-sanitization` is a separately selected downstream adapter,
 not a feature or dependency of any Brynja facade or protocol engine. The
 v0.11.1 review admits exact first-party `sanitization 2.0.3` for this boundary
 only; implementation at v0.11.2 uses an exact pin, disables default

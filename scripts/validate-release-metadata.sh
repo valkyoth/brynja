@@ -75,6 +75,7 @@ test -x scripts/check-unsafe-policy.py
 test -x scripts/test-unsafe-policy.py
 test -f scripts/unsafe_policy.py
 test -x scripts/check-zeroization-codegen.sh
+test -x scripts/check-sanitization-adapter-codegen.sh
 test -x scripts/check-zeroization-evidence.py
 test -x scripts/test-zeroization-evidence.py
 test -x scripts/check-zeroization-miri.sh
@@ -145,6 +146,7 @@ grep -q 'python3 scripts/check-sanitization-admission.py' scripts/checks.sh
 grep -q 'python3 scripts/test-sanitization-admission.py' scripts/checks.sh
 grep -q 'scripts/check-sanitization-candidate.sh' scripts/checks.sh
 grep -q 'scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
+grep -q 'scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
 grep -q 'scripts/check-sanitization-admission.py --online' scripts/tag_gate.sh
 grep -q 'scripts/check-sanitization-candidate.sh --matrix' scripts/tag_gate.sh
 python3 -c '

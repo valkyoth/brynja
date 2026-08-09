@@ -17,10 +17,24 @@ while IFS= read -r source; do
     }
 done < <(find crates -mindepth 2 -maxdepth 2 -name Cargo.toml -printf '%h/src/lib.rs\n' | sort)
 
-if grep -q '^source = ' Cargo.lock; then
-    echo "Cargo.lock contains a third-party source" >&2
-    exit 1
-fi
+python3 - <<'PY'
+import tomllib
+packages = tomllib.load(open("Cargo.lock", "rb")).get("package", [])
+external = [p for p in packages if "source" in p]
+if len(external) != 1:
+    raise SystemExit(f"Cargo.lock must contain exactly one admitted external package: {external}")
+package = external[0]
+expected = {
+    "name": "sanitization",
+    "version": "2.0.3",
+    "source": "registry+https://github.com/rust-lang/crates.io-index",
+    "checksum": "75e43f2762b31232062e8ba7bfbdfcbd33c80c43bf7a306a7e195c3c4f734e0f",
+}
+if any(package.get(key) != value for key, value in expected.items()):
+    raise SystemExit(f"Cargo.lock admitted package identity drifted: {package}")
+if package.get("dependencies"):
+    raise SystemExit("Cargo.lock sanitization selection gained a dependency")
+PY
 
 metadata_no_default="$(mktemp "${TMPDIR:-/tmp}/brynja-metadata-none.XXXXXX")"
 metadata_all="$(mktemp "${TMPDIR:-/tmp}/brynja-metadata-all.XXXXXX")"

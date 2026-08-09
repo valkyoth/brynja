@@ -33,7 +33,7 @@ Safe alternatives considered and rejected for the production claim are
 ordinary assignment, `slice::fill`, `ptr::write_bytes`, and `black_box`; none
 provides the admitted volatile-store guarantee. A third-party zeroization crate
 is forbidden. The v0.11.1 review admits exact first-party
-`sanitization 2.0.3` only for a future separate adapter; it does not become
+`sanitization 2.0.3` only for the separate v0.11.2 adapter; it does not become
 Brynja's core guarantee.
 
 The unsafe invariant is deliberately small: the raw pointer is derived from a

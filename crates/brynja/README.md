@@ -36,14 +36,13 @@ production-ready TLS implementation at `1.0.0`.
 > described below; a tag without a matching committed pentest report was not a
 > scheduled pentest checkpoint.
 
-Version `0.11.1` completes an evidence-backed admission review of the latest
-stable first-party `sanitization 2.0.3` package. It conditionally admits that
-exact release only for a separately selected protocol-neutral
-`brynja-sanitization` adapter at v0.11.2, with default features disabled, no
-activated third-party crate, adapter-owned wrappers, no legacy split, and
-complete exclusion from facades, engines, defaults, and the FIPS module. No
-adapter or production dependency is added at v0.11.1. Brynja's v0.11.0 affine
-owned-region primitive remains mandatory and authoritative. See the
+Version `0.11.2` implements the separately selected, protocol-neutral
+`brynja-sanitization 0.1.0` adapter admitted at v0.11.1. It exact-pins
+first-party `sanitization 2.0.3`, disables every upstream feature, activates no
+transitive package, owns opaque fixed-size wrappers, and provides only explicit
+copies to and from Brynja's caller-owned regions. It is absent from every
+facade, engine, default feature, and FIPS module closure. Brynja's v0.11.0
+affine owned-region primitive remains mandatory and authoritative. See the
 [admission review](https://github.com/valkyoth/brynja/blob/main/docs/sanitization-admission-review.md)
 for package hashes, unsafe inventory, target evidence, residual risks, and
 re-review triggers. These foundations do **not** implement TLS framing, a
@@ -88,7 +87,7 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the repository is preparing the tagged
-v0.11.1 development milestone without crates.io publication. The published
+v0.11.2 development milestone without crates.io publication. The published
 dependency is:
 
 ```toml
@@ -116,8 +115,8 @@ selected set in dependency order and publishes the facade last.
   existing engine package or automatically make its predecessor legacy.
 - Runtime and build dependencies are forbidden. Any future exception requires
   a dedicated adapter crate, written admission review, tests, and release gate.
-- Version `0.11.1` admits exact `sanitization 2.0.3` for conditional v0.11.2
-  implementation of one separately selected `brynja-sanitization` adapter. It
+- Version `0.11.2` implements one separately selected
+  `brynja-sanitization` adapter over admitted exact `sanitization 2.0.3`. It
   uses an exact pin with default features disabled,
   never activates `zeroize`, and is not a dependency or feature of a facade,
   protocol engine, legacy engine, or FIPS module.
@@ -179,6 +178,7 @@ certificate-bound operational-environment claim.
 | `brynja-tls13` / `brynja-tls13-handshake` | TLS 1.3 record and handshake engine | ❌ Not verified |
 | `brynja-quic-tls` | QUIC/TLS handshake integration | ❌ Not verified |
 | `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |
+| `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |
 | `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
@@ -186,7 +186,7 @@ certificate-bound operational-environment claim.
 Only the shared alert/failure, bounded numeric/resource, borrowed read,
 transactional caller-buffer write, exact workspace/arena, abstract secret
 lifetime, and owned-region zeroization foundations described for `brynja-core`
-are implemented. No
+plus the separately selected sanitization adapter are implemented. No
 cryptographic primitive, PKI processor, protocol parser, or protocol engine in
 this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
@@ -207,7 +207,7 @@ formal proof, pentest, or release status.
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| Future `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | Exact `sanitization 2.0.3` admitted for conditional v0.11.2 implementation; package absent |
+| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 implemented over exact `sanitization 2.0.3`; separately selected and not yet published |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | `brynja-test-support` | RFC 9850 test-only key-log encoder and future fixtures | Implemented, unpublished, production-unreachable |
@@ -237,7 +237,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Kani verifier pairing | `cargo-kani 0.67.0` on Rust `1.90.0`; separate evidence only |
 | Default target | `no_std` |
 | Third-party crates | Forbidden |
-| First-party companion crates | Exact `sanitization 2.0.3` admitted only for the future optional adapter; current graph remains empty |
+| First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter with no feature or transitive package |
 | Unsafe Rust | One v0.11 volatile-store block admitted in a private module; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
@@ -289,6 +289,7 @@ scripts/check-kani.sh
 python3 scripts/check-unsafe-policy.py
 python3 scripts/check-zeroization-evidence.py
 scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 scripts/check-zeroization-miri.sh
 scripts/check-zeroization-sanitizer.sh
 scripts/check-github-release-controls.py
@@ -297,7 +298,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.11.1
+scripts/tag_gate.sh v0.11.2
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

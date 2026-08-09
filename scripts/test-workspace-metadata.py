@@ -242,6 +242,46 @@ def test_dependency_contracts(baseline: dict) -> None:
         "an undeclared legacy-to-modern dependency",
     )
 
+    wrong_admitted_pin = copy.deepcopy(baseline)
+    dependency(wrong_admitted_pin, "brynja-sanitization", "sanitization")["req"] = "^2"
+    require_rejection(
+        wrong_admitted_pin,
+        "all-features",
+        "must pin sanitization to =2.0.3",
+        "a floating sanitization adapter pin",
+    )
+
+    admitted_defaults = copy.deepcopy(baseline)
+    dependency(admitted_defaults, "brynja-sanitization", "sanitization")[
+        "uses_default_features"
+    ] = True
+    require_rejection(
+        admitted_defaults,
+        "all-features",
+        "default-feature policy drifted for sanitization",
+        "sanitization upstream defaults",
+    )
+
+    admitted_feature = copy.deepcopy(baseline)
+    dependency(admitted_feature, "brynja-sanitization", "sanitization")["features"] = [
+        "zeroize-interop"
+    ]
+    require_rejection(
+        admitted_feature,
+        "all-features",
+        "directly enables features on sanitization",
+        "sanitization feature activation",
+    )
+
+    version_drift = copy.deepcopy(baseline)
+    package(version_drift, "sanitization")["version"] = "2.0.4"
+    require_rejection(
+        version_drift,
+        "all-features",
+        "admitted external version drifted",
+        "sanitization package version drift",
+    )
+
 
 def test_feature_contracts(baseline: dict) -> None:
     modern_feature = copy.deepcopy(baseline)
@@ -332,6 +372,26 @@ def test_resolved_isolation(all_features: dict, no_default: dict) -> None:
         "optional DTLS activation without a feature",
     )
 
+    facade_adapter = copy.deepcopy(all_features)
+    node(facade_adapter, "brynja")["deps"].append(
+        graph_dependency(facade_adapter, "brynja", "brynja-sanitization")
+    )
+    require_rejection(
+        facade_adapter,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "facade activation of the sanitization adapter",
+    )
+
+    upstream_feature = copy.deepcopy(all_features)
+    node(upstream_feature, "sanitization")["features"] = ["zeroize-interop"]
+    require_rejection(
+        upstream_feature,
+        "all-features",
+        "sanitization activated an unadmitted feature",
+        "resolved upstream feature activation",
+    )
+
 
 def test_keylog_isolation(baseline: dict) -> None:
     support = package(baseline, "brynja-test-support")
@@ -388,7 +448,7 @@ def main() -> int:
     test_resolved_isolation(all_features, no_default)
     test_keylog_isolation(all_features)
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 24 package-class and feature-graph regressions")
+    print("workspace policy rejects 30 package-class, external-admission, and feature-graph regressions")
     return 0
 
 

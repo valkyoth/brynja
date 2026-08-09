@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Status: v0.10.0 tagged and published; v0.11.0 tagged; v0.11.1 implemented, awaiting hosted checks and signed tag
+Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 implemented, awaiting exceptional assessment
 
-The `brynja` facade advances to `0.11.1` for the current signed development
+The `brynja` facade advances to `0.11.2` for the current signed development
 line but is not selected for crates.io publication. The latest public
 checkpoint remains `brynja 0.10.0`, `brynja-core 0.7.0`, eight modern support
 packages at `0.1.6`, and `brynja-crypto 0.1.0`. Supporting, legacy, and
@@ -10,13 +10,13 @@ repository-only package versions remain unchanged during this development
 milestone. Package publication does not imply a TLS implementation or
 production readiness.
 
-The v0.11.1 milestone has an exceptional committed PASS pentest report after
-remediation and green retest. That evidence does not change its internal stage:
-the release plan still selects zero crates for publication.
+The new adapter is a material production secret-storage boundary, so v0.11.2
+requires an exceptional assessment before tagging. Its internal stage selects
+zero crates for publication even after that assessment passes.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.11.1` | no | Development tag version; latest crates.io checkpoint is `0.10.0` |
+| `brynja` | `0.11.2` | no | Development tag version; latest crates.io checkpoint is `0.10.0` |
 | `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while cumulative v0.11 zeroization code remains unreleased on crates.io |
 | `brynja-crypto` | `0.1.0` | no | Published and unchanged |
 | `brynja-pki`, `brynja-platform` | `0.1.6` | no | Published boundaries retained; functionality remains unimplemented |
@@ -25,7 +25,7 @@ the release plan still selects zero crates for publication.
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
-| Future `brynja-sanitization` | not yet implemented | no | Exact `sanitization 2.0.3` admitted for conditional v0.11.2 implementation; absent from workspace and release manifest |
+| `brynja-sanitization` | `0.1.0` | no | Implemented separately over exact `sanitization 2.0.3`; first publication deferred to a cumulative public checkpoint |
 
 ## Enforced crates.io Release Policy
 
@@ -73,10 +73,10 @@ is immutable and bound to its exact certificate, artifact hashes, caveats, and
 tested operational environments. Any changed module is a different artifact
 and cannot reuse the validation claim.
 
-The admitted future `brynja-sanitization` package uses an independent SemVer
+The `brynja-sanitization` package uses an independent SemVer
 line and publishes only when its adapter code or exact `sanitization` pin
-changes. Until conditional implementation at v0.11.2 passes its gates, it is
-absent from the release manifest and workspace.
+changes. Its v0.1.0 implementation is present but held from crates.io during
+the v0.11.2 internal milestone.
 
 Every tag requires a clean worktree, signed commit, complete automated tag
 gate, user-confirmed green GitHub and CodeQL, and explicit authorization.

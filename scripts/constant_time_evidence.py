@@ -107,3 +107,5 @@ def validate(root: Path) -> None:
     )
     if command not in checks:
         fail("ordinary checks omit latest-host constant-time evidence")
+    if "python3 scripts/test-constant-time-codegen.py" not in checks:
+        fail("ordinary checks omit constant-time assembly regression fixtures")

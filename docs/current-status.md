@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 awaiting exceptional pentest
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 remediation awaiting retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -26,8 +26,10 @@ v0.11.1 admitted the optional sanitization adapter and v0.11.2 implemented it;
 both exceptional assessments are permanently recorded with zero open findings.
 The facade now advances to `0.12.0` for the completed constant-time foundation
 while all crates.io publication selections remain empty. Because this is the
-first reusable timing-sensitive primitive boundary, the development tag awaits
-an exceptional pentest and its committed PASS/PASS report.
+first reusable timing-sensitive primitive boundary, its initial exceptional
+pentest found one High RV32 branch-timing flaw. Local remediation passes; the
+development tag awaits repository-owner retest and a committed PASS/PASS
+report.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -404,16 +406,25 @@ Version 0.12.0 implements the constant-time foundation:
 - exhaustive byte-pair, word-boundary, selection, swap, array-length and
   mismatch-position tests are joined by compile-fail API examples;
 - hash-locked source policy rejects branch, dynamic-slice, fallible-surface,
-  representation, inventory, barrier, and source-byte drift with twelve broken
+  representation, inventory, barrier, and source-byte drift with fourteen broken
   fixtures; and
 - optimized LLVM and assembly witnesses cover Rust 1.90.0 through 1.97.1 and
   nine promised targets through a machine-checked matrix and five broken
   evidence fixtures. These bounded witnesses are not formal proof, timing
   measurement, independent review, or a microarchitectural guarantee.
 
+The initial assessment demonstrated that the source mask formula became LLVM
+`select`, then secret-dependent RV32 branches, while the old assembly checker
+validated symbols but not their bodies. Remediation barriers each expanded
+mask before XOR/AND selection, always inlines word selection into the witness,
+and inspects concrete function bodies with target-specific branch rules. Five
+new assembly regressions reject RV32 secret branches and secret-indexed loads,
+fixed-array forward branches, and x86_64/AArch64 secret branches. The permanent
+report records `RETEST REQUIRED`/`PENDING` until external confirmation.
+
 Dynamic slices, secret-dependent lengths, signed values, arbitrary downstream
 composition, and protocol-level timing remain outside v0.12.0. The milestone
-selects no crates.io publication and awaits its exceptional assessment.
+selects no crates.io publication and awaits its remediation retest.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

@@ -85,8 +85,11 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
 - normalized private decision and mask representations, one explicitly named
   public declassification, fixed-width unsigned-word and compile-time-array
   equality/selection/swap, exhaustive functional tests, hash-locked source
-  policy, and optimized LLVM/assembly witnesses across every supported stable
-  compiler and promised target; these are bounded implementation controls, not
+  policy, mask optimization barriers, and optimized LLVM plus target-specific
+  function-body assembly witnesses across every supported stable compiler and
+  promised target; non-array conditional branches, non-public array branches,
+  and direct RV32 Choice-register memory addresses fail closed; these are
+  bounded implementation controls, not
   formal proof, statistical timing evidence, arbitrary-composition coverage, or
   a microarchitectural guarantee;
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;

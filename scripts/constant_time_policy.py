@@ -18,8 +18,8 @@ SOURCES = (
 )
 EXPECTED_SHA256 = {
     Path("barrier.rs"): "6f51ea95d5494f6bb803f08ef7c22f6f52db7c70f286cd3330a569d7e8ed6374",
-    Path("bytes.rs"): "ad382577a66a8616c25e5a61277f3d72a8b87ccac80efdc9dabe21b94a153763",
-    Path("choice.rs"): "d7f60a09ab46944f062fbad3635e4747ccd2b32bbbdbee5ba63fd0a8a4538017",
+    Path("bytes.rs"): "f95bb9edf6ca01f3734bc843c82f4f84a5dc8624bead5b14c5c751d9d5e8b75d",
+    Path("choice.rs"): "846e876f5f749f361acc5a731e4d2a047b117bddec15a88aa01ce3a6a0dc0a4b",
     Path("mod.rs"): "1956066f0e4b8e25b97ad6742b325f47c02d1763b95049d5390d824b5df830bf",
     Path("word.rs"): "1d904a5fcc9ad7050b9027374cb76efa87c95dee9fb9eaa1c6965a9d2827123f",
 }
@@ -100,6 +100,14 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     )
     if len(representations) != 2:
         fail("choice or mask representation became forgeable or variable-width")
+    if choice_code.count("super::compiler_barrier(self.") != 6:
+        fail("constant-time word-mask optimization barriers drifted")
+    if choice_code.count("#[inline(always)]") != 6:
+        fail("constant-time word selection inlining contract drifted")
+    if choice_code.count("if_false ^ ((if_false ^ if_true) & mask)") != 6:
+        fail("constant-time word selection formula drifted")
+    if bytes_code.count("super::compiler_barrier(choice.mask().u8())") != 2:
+        fail("constant-time array-mask optimization barriers drifted")
 
     barrier_code = sources[Path("barrier.rs")][1]
     if barrier_code.count("compiler_fence(Ordering::SeqCst)") != 2:

@@ -94,6 +94,24 @@ def test() -> None:
         require_rejection(root, "word coverage drift")
         copy_fixture(root)
 
+        choice = root / constant_time_policy.SOURCE_ROOT / "choice.rs"
+        replace(
+            choice,
+            "let mask = super::compiler_barrier(self.u32());",
+            "let mask = self.u32();",
+        )
+        require_rejection(root, "word-mask optimization barriers")
+        copy_fixture(root)
+
+        byte_source = root / constant_time_policy.SOURCE_ROOT / "bytes.rs"
+        replace(
+            byte_source,
+            "let mask = super::compiler_barrier(choice.mask().u8());",
+            "let mask = choice.mask().u8();",
+        )
+        require_rejection(root, "array-mask optimization barriers")
+        copy_fixture(root)
+
         byte_source = root / constant_time_policy.SOURCE_ROOT / "bytes.rs"
         replace(byte_source, "other.iter()", "other.iter().take(N)")
         require_rejection(root, "fixed-array iteration")
@@ -106,4 +124,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("constant-time policy rejects twelve control, width, trait, barrier, coverage, and hash regressions")
+    print("constant-time policy rejects fourteen control, width, trait, barrier, coverage, and hash regressions")

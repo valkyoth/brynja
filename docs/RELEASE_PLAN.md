@@ -1185,6 +1185,10 @@ Verification:
 - inspect fixed-work 32-byte and word roots in optimized LLVM IR and assembly
   across Rust 1.90.0 through 1.97.1 and every promised target, permitting only
   a public-width-32 loop where a target does not unroll an array pass;
+- inspect each concrete assembly function body with target-specific branch
+  rules, reject direct RV32 Choice-register memory addressing, and retain
+  negative fixtures for secret branches, secret-indexed loads, and public-loop
+  classification;
 - preserve `no_std`, no-allocation, no-new-unsafe, dependency, modern/legacy,
   zeroization, and source-file-size boundaries;
 - pass repository checks, promised Rust versions and targets, dependency and
@@ -1197,6 +1201,9 @@ Exit criteria:
   without extending that evidence into a proof or independent verification;
 - the exceptional trigger is active: commit a PASS report for the exact
   candidate before green GitHub and CodeQL may authorize its signed tag;
+- any assessment finding keeps the tag blocked until remediation passes the
+  complete compiler/target matrix and the repository owner reports a green
+  retest;
 - `v0.12.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.13.0 - Provider Capabilities And Opaque Handles

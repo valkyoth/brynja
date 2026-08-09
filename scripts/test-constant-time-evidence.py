@@ -71,8 +71,17 @@ def test() -> None:
         checks = root / "scripts/checks.sh"
         replace(checks, "scripts/check-constant-time-codegen.sh", "scripts/omitted-codegen.sh")
         require_rejection(root, "ordinary checks omit")
+        copy_fixture(root)
+
+        checks = root / "scripts/checks.sh"
+        replace(
+            checks,
+            "python3 scripts/test-constant-time-codegen.py",
+            "python3 scripts/omitted-codegen-fixtures.py",
+        )
+        require_rejection(root, "assembly regression fixtures")
 
 
 if __name__ == "__main__":
     test()
-    print("constant-time evidence rejects five claim, coverage, CI, and local-gate regressions")
+    print("constant-time evidence rejects six claim, coverage, CI, and local-gate regressions")

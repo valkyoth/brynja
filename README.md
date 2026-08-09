@@ -110,6 +110,15 @@ records the assessed implementation commit, scope, exact release evidence, and
 residual risks. v0.11.2 remains in the cumulative v0.10.0-through-v0.15.0
 checkpoint scope and publishes no crate.
 
+The initial v0.12.0 pentest found a High RV32 timing flaw: LLVM selection was
+lowered into branches controlled by `Choice`, while the assembly gate inspected
+symbols but not function bodies. The source now barriers each expanded mask
+before XOR/AND selection, and the gate rejects target-specific conditional
+branches and direct RV32 secret-address operands in every concrete root.
+Permanent negative fixtures cover RV32, x86_64, and AArch64 regressions. Local
+remediation is green; the exact signed remediation candidate still requires
+repository-owner retest before v0.12.0 may be tagged.
+
 ## Development Tags And Pentesting
 
 The `brynja` facade version advances at every roadmap milestone, including
@@ -374,6 +383,7 @@ python3 scripts/test-first-party-rust-crypto.py
 python3 scripts/check-constant-time.py
 python3 scripts/test-constant-time.py
 scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+python3 scripts/test-constant-time-codegen.py
 python3 scripts/check-constant-time-evidence.py
 python3 scripts/test-constant-time-evidence.py
 python3 scripts/check-zeroization-evidence.py

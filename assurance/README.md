@@ -82,9 +82,12 @@ Version 0.12.0 adds a standalone `no_std` constant-time code-generation
 witness, a machine-readable ten-compiler/nine-target evidence matrix, and
 optimized LLVM/assembly inspection for word and fixed 32-byte equality,
 selection, swap, and the compiler barrier. The checker rejects panic and
-variable-work library calls, secret-dependent branches in word witnesses,
-non-public loop bounds, and missing barrier fences. The witness is deliberately
-small and reproducible; it is not a proof of every monomorphization, a
+variable-work library calls, target-specific conditional branches in non-array
+witnesses, forward/non-public array branches, direct RV32 Choice-register
+memory addressing, and missing barrier fences. Five negative target-assembly
+fixtures reproduce branch, address, and loop-classification regressions. The
+witness is deliberately small and reproducible; it is not a proof of every
+monomorphization, a
 statistical timing test, independent review, or a claim about caches,
 speculation, power, electromagnetic leakage, or another microarchitecture.
 
@@ -99,6 +102,7 @@ scripts/check-zeroization-sanitizer.sh
 python3 scripts/check-constant-time.py
 python3 scripts/test-constant-time.py
 scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+python3 scripts/test-constant-time-codegen.py
 python3 scripts/check-constant-time-evidence.py
 python3 scripts/test-constant-time-evidence.py
 ```

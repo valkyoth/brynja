@@ -11,6 +11,7 @@ python3 scripts/test-first-party-rust-crypto.py
 python3 scripts/check-constant-time.py
 python3 scripts/test-constant-time.py
 scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+python3 scripts/test-constant-time-codegen.py
 python3 scripts/check-constant-time-evidence.py
 python3 scripts/test-constant-time-evidence.py
 python3 scripts/check-zeroization-evidence.py

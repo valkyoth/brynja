@@ -1,12 +1,12 @@
 # Brynja v0.12.0 Development Milestone
 
-Status: implementation complete; awaiting exceptional pentest
+Status: remediation complete; awaiting pentest retest
 
 Brynja v0.12.0 implements the first reusable constant-time foundation in
 `brynja-core`, advances the `brynja` facade to 0.12.0, and selects no crate for
 crates.io publication. Because constant-time code is an explicit material
-security trigger, the candidate requires an exceptional pentest before its
-signed development tag.
+security trigger, the candidate requires a green exceptional-assessment retest
+before its signed development tag.
 
 ## Implemented
 
@@ -28,11 +28,29 @@ signed development tag.
   mismatch position, empty arrays, and representation invariants;
 - compile-fail documentation for ordinary equality, formatting, and mask
   construction;
-- a hash-locked source policy with twelve negative fixtures; and
+- a hash-locked source policy with fourteen negative fixtures; and
 - optimized LLVM IR and assembly equality, selection, and swap witnesses for
   all six unsigned widths plus fixed 32-byte arrays and the compiler barrier
   across Rust 1.90.0 through 1.97.1 and the nine promised targets, with a
-  machine-checked evidence matrix and five negative fixtures.
+  machine-checked evidence matrix, six matrix/binding fixtures, and five
+  target-assembly regression fixtures.
+
+## Pentest Finding And Remediation
+
+The initial exceptional assessment found one High timing vulnerability on
+RV32. LLVM converted word masking into `select`, then rustc 1.97.1 emitted
+secret-dependent branches and, for `u128`, choice-dependent load addresses.
+The old assembly gate verified function labels but did not inspect their
+bodies.
+
+Every expanded word and array mask now crosses the non-inlined optimization
+barrier before XOR/AND selection. Word selectors are always inlined into their
+evidence roots. The validator extracts each concrete function body and rejects
+target-specific conditional branches outside a backward fixed-array public
+loop; RV32 also rejects direct memory operands based on the ABI `Choice`
+register. Permanent fixtures reproduce the original branch and secret-address
+classes plus x86_64, AArch64, and fixed-loop classification regressions. Local
+verification passes; repository-owner retest remains pending.
 
 ## Current Limits
 
@@ -50,6 +68,5 @@ verification, and is not FIPS 140-3 validated.
 v0.12.0 is an internal development milestone in the cumulative range after
 v0.10.0 through v0.15.0 and selects no crates for crates.io publication. Its
 first constant-time code meets the exceptional-pentest trigger. Only after the
-assessment and any remediation are committed with a PASS/PASS report, the full
-gate passes, and GitHub and CodeQL are green may the signed `v0.12.0` tag be
-created.
+remediation retest is green and committed with a PASS/PASS report, the full gate
+passes, and GitHub and CodeQL are green may the signed `v0.12.0` tag be created.

@@ -98,6 +98,15 @@ not a formal proof, statistical timing test, or microarchitectural guarantee.
 Dynamic slices, secret-dependent lengths, signed values, and protocol-level
 constant-time claims remain outside this foundation.
 
+The initial v0.12 pentest found that LLVM selection became secret-dependent
+branches on RV32. Every expanded mask now crosses the non-inlined optimization
+barrier before XOR/AND selection, including array selection and swap. The
+architecture-aware evidence gate inspects each function body, rejects
+conditional branches outside proven public fixed-array backedges, rejects
+direct RV32 `Choice`-register memory addresses, and retains five negative
+assembly fixtures. Local remediation passes all compiler and target lanes; the
+repository-owner retest remains pending.
+
 ## Cryptography Verification Status
 
 The constant-time foundation and the earlier core domains have not been

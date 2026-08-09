@@ -116,37 +116,49 @@ impl CtMask {
 
     /// Selects one byte without exposing the raw mask.
     #[must_use]
-    pub const fn select_u8(self, if_false: u8, if_true: u8) -> u8 {
-        (if_false & !self.u8()) | (if_true & self.u8())
+    #[inline(always)]
+    pub fn select_u8(self, if_false: u8, if_true: u8) -> u8 {
+        let mask = super::compiler_barrier(self.u8());
+        if_false ^ ((if_false ^ if_true) & mask)
     }
 
     /// Selects one 16-bit word without exposing the raw mask.
     #[must_use]
+    #[inline(always)]
     pub fn select_u16(self, if_false: u16, if_true: u16) -> u16 {
-        (if_false & !self.u16()) | (if_true & self.u16())
+        let mask = super::compiler_barrier(self.u16());
+        if_false ^ ((if_false ^ if_true) & mask)
     }
 
     /// Selects one 32-bit word without exposing the raw mask.
     #[must_use]
+    #[inline(always)]
     pub fn select_u32(self, if_false: u32, if_true: u32) -> u32 {
-        (if_false & !self.u32()) | (if_true & self.u32())
+        let mask = super::compiler_barrier(self.u32());
+        if_false ^ ((if_false ^ if_true) & mask)
     }
 
     /// Selects one 64-bit word without exposing the raw mask.
     #[must_use]
+    #[inline(always)]
     pub fn select_u64(self, if_false: u64, if_true: u64) -> u64 {
-        (if_false & !self.u64()) | (if_true & self.u64())
+        let mask = super::compiler_barrier(self.u64());
+        if_false ^ ((if_false ^ if_true) & mask)
     }
 
     /// Selects one 128-bit word without exposing the raw mask.
     #[must_use]
+    #[inline(always)]
     pub fn select_u128(self, if_false: u128, if_true: u128) -> u128 {
-        (if_false & !self.u128()) | (if_true & self.u128())
+        let mask = super::compiler_barrier(self.u128());
+        if_false ^ ((if_false ^ if_true) & mask)
     }
 
     /// Selects one pointer-width word without exposing the raw mask.
     #[must_use]
+    #[inline(always)]
     pub fn select_usize(self, if_false: usize, if_true: usize) -> usize {
-        (if_false & !self.usize()) | (if_true & self.usize())
+        let mask = super::compiler_barrier(self.usize());
+        if_false ^ ((if_false ^ if_true) & mask)
     }
 }

@@ -29,5 +29,5 @@ mapfile -t assembly_files < <(find "$codegen_dir" -type f -name 'brynja_constant
     exit 1
 }
 
-python3 scripts/constant_time_codegen.py "${llvm_files[0]}" "${assembly_files[0]}"
+python3 scripts/constant_time_codegen.py "${llvm_files[0]}" "${assembly_files[0]}" "$target"
 echo "constant-time evidence roots preserve fixed work in LLVM and $target assembly under ${toolchain#+}"

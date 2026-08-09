@@ -11,9 +11,12 @@ Keep a Changelog and Semantic Versioning.
   equality, conditional selection, conditional swap, and a compiler barrier for
   every unsigned word width and compile-time-sized byte arrays.
 - Add exhaustive byte-pair, word-boundary, array mismatch-position, and
-  compile-fail tests; a hash-locked source policy with twelve negative fixtures;
+  compile-fail tests; a hash-locked source policy with fourteen negative fixtures;
   and optimized LLVM/assembly witnesses across ten stable compilers and nine
   promised targets with five evidence-policy fixtures.
+- Add target-aware assembly function-body inspection and five negative fixtures
+  for RV32 secret branches and secret-indexed loads, non-public fixed-array
+  branches, and x86_64/AArch64 conditional branches.
 - Add the versionless post-1.0 hash-ecosystem plan and the updated Brynja
   project image.
 - Implement separately selected `brynja-sanitization 0.1.0` with opaque
@@ -48,6 +51,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Remediate the pentest's High RV32 timing finding by passing every expanded
+  word and array mask through the non-inlined optimization barrier before
+  XOR/AND selection; record zero locally open findings and keep the tag blocked
+  pending repository-owner retest.
 - Keep decision and mask construction private, expose one explicitly named
   public declassification, forbid ordinary equality/formatting, dynamic slices,
   secret-dependent lengths, and fallible surfaces in the v0.12 boundary, and

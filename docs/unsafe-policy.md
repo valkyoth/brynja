@@ -6,6 +6,13 @@ Workspace lints deny unsafe code by default. Repository policy permits exactly
 one documented block in the private
 `crates/brynja-core/src/secret_memory_volatile.rs` module and rejects unsafe
 blocks, unsafe items, local lint allowances, assembly, and FFI everywhere else.
+The approved module is pinned by SHA-256. Any byte change reopens review before
+semantic checks run. Every other Rust source is rejected if it contains an
+`unsafe` token, an `allow(unsafe_code)` or `expect(unsafe_code)` override, any
+whitespace form of `extern` or an assembly macro, or `include!`-based code
+injection. Explicit `#[path]` module injection is forbidden, library targets
+must resolve to their classified `src/lib.rs`, and Rust sources must be regular
+files beneath non-symlink package directories.
 
 A future exception requires a versioned milestone, written necessity analysis,
 safe alternative analysis, isolated module or crate, documented invariants,
@@ -54,6 +61,14 @@ Because this is the first unsafe secret-destruction boundary, v0.11.0 is an
 exceptional development milestone: it requires a committed PASS pentest before
 tagging but still publishes no crates. The v0.15.0 cumulative checkpoint must
 review it again with every change after v0.10.0.
+
+The initial v0.11.0 assessment found that the earlier semantic scanner could
+accept extra operations inside the approved block and whitespace-varied FFI
+combined with a lint expectation elsewhere. The production implementation did
+not contain either bypass. Exact module-byte pinning, comprehensive token and
+override rejection, code-inclusion rejection, and regression fixtures now
+close the policy-control gap. Any future approved-module change must update the
+pin as an explicit security review event rather than silently widening scope.
 
 The v0.11.1 review treats unsafe code inside the exact `sanitization` release as
 part of the adapter's inherited trusted computing base. Admission requires the

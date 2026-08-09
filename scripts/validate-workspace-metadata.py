@@ -97,6 +97,9 @@ def validate_target(name: str, package: dict) -> None:
     target = libraries[0]
     if target.get("kind") != ["lib"] or target.get("crate_types") != ["lib"]:
         raise ValueError(f"{name} target must be a library only")
+    expected_library = (ROOT / "crates" / name / "src" / "lib.rs").resolve()
+    if Path(target.get("src_path", "")).resolve() != expected_library:
+        raise ValueError(f"{name} library source escaped its classified package")
     for extra in targets:
         if extra is target:
             continue

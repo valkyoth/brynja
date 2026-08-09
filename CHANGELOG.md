@@ -31,6 +31,10 @@ Keep a Changelog and Semantic Versioning.
 - v0.11.0 requires an exceptional committed PASS pentest before its signed
   development tag because it introduces the first unsafe secret-destruction
   boundary; it still selects no package for crates.io publication.
+- Closed the initial pentest's unsafe-policy bypass by SHA-256 pinning the exact
+  approved module and rejecting unsafe tokens, lint overrides, whitespace-
+  varied FFI/assembly, symlinked Rust sources, and code inclusion everywhere
+  else, with reproduced regression fixtures; external retest remains required.
 
 ## [0.10.0] - 2026-08-03
 

@@ -1,6 +1,6 @@
 # Brynja v0.11.0 Development Milestone
 
-Status: implementation complete; exceptional pentest required; not yet tagged
+Status: remediation complete; exceptional pentest retest required; not yet tagged
 
 Brynja v0.11.0 is the first tagged development milestone in the five-minor
 release train ending at public checkpoint v0.15.0. It advances the `brynja`
@@ -35,6 +35,15 @@ DMA-visible copies, dumps, suspend images, physical-memory remanence,
 concurrent access, `mem::forget`, abort, and process or power termination are
 excluded. Platform cache, DMA, external-store, and accelerator completion
 remain separate destruction duties.
+
+The initial exceptional assessment found a Medium bypass in the repository's
+unsafe-policy scanner, not in the production zeroization implementation. The
+approved unsafe module is now pinned by exact SHA-256, any byte change reopens
+review, and every other Rust source rejects all unsafe tokens, unsafe-code
+allow/expect overrides, whitespace-varied FFI or assembly syntax, symlinked
+source, and `include!` code injection. Regression fixtures reproduce the two
+reported bypass classes and additional assembly and inclusion variants. Local
+remediation is complete and awaits repository-owner retest.
 
 ## Cumulative Pentest Coverage
 

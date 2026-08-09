@@ -167,6 +167,17 @@ def test_manifest_classes(baseline: dict) -> None:
         "a binary product target",
     )
 
+    escaped_library = copy.deepcopy(baseline)
+    package(escaped_library, "brynja-core")["targets"][0]["src_path"] = (
+        "/tmp/unreviewed-brynja-core.rs"
+    )
+    require_rejection(
+        escaped_library,
+        "all-features",
+        "library source escaped its classified package",
+        "a library source outside the unsafe inventory",
+    )
+
     wrong_repository = copy.deepcopy(baseline)
     package(wrong_repository, "brynja-core")["repository"] = (
         "https://example.invalid/brynja"
@@ -377,7 +388,7 @@ def main() -> int:
     test_resolved_isolation(all_features, no_default)
     test_keylog_isolation(all_features)
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 23 package-class and feature-graph regressions")
+    print("workspace policy rejects 24 package-class and feature-graph regressions")
     return 0
 
 

@@ -3,15 +3,25 @@
 
 from __future__ import annotations
 
+import hashlib
 import re
 from pathlib import Path
 
 
 ALLOWED = Path("crates/brynja-core/src/secret_memory_volatile.rs")
+EXPECTED_ALLOWED_SHA256 = (
+    "2746e34bfd55c80def2acf6afdfd6798d"
+    "51291ea4255732e26a360d17d43dfb1"
+)
 UNSAFE_BLOCK = re.compile(r"\bunsafe\s*\{")
 UNSAFE_ITEM = re.compile(r"\bunsafe\s+(?:fn|impl|trait)\b")
 UNSAFE_ALLOW = "allow(unsafe_code)"
-FORBIDDEN_LOW_LEVEL = ("asm!", "global_asm!", "naked_asm!", 'extern "')
+UNSAFE_TOKEN = re.compile(r"\bunsafe\b")
+UNSAFE_OVERRIDE = re.compile(
+    r"#\s*\[\s*(?:allow|expect)\s*\(\s*unsafe_code\b"
+)
+FFI_OR_ASM = re.compile(r"\bextern\b|\b(?:asm|global_asm|naked_asm)\s*!")
+CODE_INJECTION = re.compile(r"\binclude\s*!|#\s*\[\s*path\s*=")
 
 
 class UnsafePolicyError(RuntimeError):
@@ -35,19 +45,27 @@ def validate(root: Path) -> None:
         fail("approved volatile-store module is missing")
 
     for path in sources:
+        crates_root = root / "crates"
+        relative_source = path.relative_to(crates_root)
+        current = crates_root
+        parent_is_symlink = False
+        for component in relative_source.parts[:-1]:
+            current /= component
+            parent_is_symlink = parent_is_symlink or current.is_symlink()
+        if not path.is_file() or path.is_symlink() or parent_is_symlink:
+            fail(f"Rust source must be a regular non-symlink file: {path}")
         text = path.read_text(encoding="utf-8")
         relative = path.relative_to(root)
-        for token in FORBIDDEN_LOW_LEVEL:
-            if token in text:
-                fail(f"assembly or FFI remains unapproved: {relative}")
         if path == allowed_path:
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            if digest != EXPECTED_ALLOWED_SHA256:
+                fail("approved unsafe module changed; reopen security review")
             validate_allowed(text)
-        elif (
-            UNSAFE_ALLOW in text
-            or UNSAFE_BLOCK.search(text) is not None
-            or UNSAFE_ITEM.search(text) is not None
+        elif any(
+            pattern.search(text) is not None
+            for pattern in (UNSAFE_TOKEN, UNSAFE_OVERRIDE, FFI_OR_ASM, CODE_INJECTION)
         ):
-            fail(f"unsafe Rust escaped the approved module: {relative}")
+            fail(f"unapproved unsafe, FFI, assembly, or code inclusion: {relative}")
 
     library = (root / "crates/brynja-core/src/lib.rs").read_text(encoding="utf-8")
     if library.count("mod secret_memory_volatile;") != 1:

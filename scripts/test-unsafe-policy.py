@@ -3,24 +3,14 @@
 
 from __future__ import annotations
 
+import shutil
 import tempfile
 from pathlib import Path
 
 import unsafe_policy
 
 
-VALID = """//! Isolated implementation.
-use core::sync::atomic::{Ordering, compiler_fence};
-#[allow(unsafe_code)]
-pub(crate) fn zeroize_region_volatile(region: &mut [u8]) {
-    for byte in region {
-        let destination = core::ptr::from_mut(byte);
-        // SAFETY: fixture proof.
-        unsafe { core::ptr::write_volatile(destination, 0_u8) };
-    }
-    compiler_fence(Ordering::SeqCst);
-}
-"""
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def fixture(root: Path) -> None:
@@ -32,7 +22,10 @@ def fixture(root: Path) -> None:
     (source / "lib.rs").write_text(
         "mod secret_memory_volatile;\npub mod safe {}\n", encoding="utf-8"
     )
-    (source / "secret_memory_volatile.rs").write_text(VALID, encoding="utf-8")
+    shutil.copyfile(
+        ROOT / unsafe_policy.ALLOWED,
+        source / "secret_memory_volatile.rs",
+    )
 
 
 def require_rejection(root: Path, expected: str) -> None:
@@ -61,18 +54,54 @@ def test() -> None:
         extra.write_text(
             "#[allow(unsafe_code)] fn escaped() { unsafe {} }\n", encoding="utf-8"
         )
-        require_rejection(root, "escaped the approved module")
+        require_rejection(root, "unapproved unsafe")
+        extra.unlink()
+
+        extra.write_text(
+            """#![deny(unsafe_code)]
+#[expect(unsafe_code)]
+unsafe extern    "C" {
+    pub safe fn unreviewed_native_entry();
+}
+pub fn reachable_from_safe_rust() { unreviewed_native_entry(); }
+""",
+            encoding="utf-8",
+        )
+        require_rejection(root, "unapproved unsafe")
+        extra.unlink()
+
+        extra.write_text(
+            "pub fn escaped() { core::arch::asm \n ! (\"nop\"); }\n",
+            encoding="utf-8",
+        )
+        require_rejection(root, "assembly")
+        extra.unlink()
+
+        extra.write_text('include ! ("generated.inc");\n', encoding="utf-8")
+        require_rejection(root, "code inclusion")
+        extra.unlink()
+
+        extra.write_text(
+            '#[path = "/tmp/unreviewed.rs"] mod unreviewed;\n',
+            encoding="utf-8",
+        )
+        require_rejection(root, "code inclusion")
         extra.unlink()
 
         allowed = root / unsafe_policy.ALLOWED
-        allowed.write_text(VALID.replace("// SAFETY:", "// Proof:"), encoding="utf-8")
-        require_rejection(root, "local safety proof")
-        allowed.write_text(VALID.replace("write_volatile", "write"), encoding="utf-8")
-        require_rejection(root, "volatile-store call site")
-        allowed.write_text(VALID + "fn machine() { asm!() }\n", encoding="utf-8")
-        require_rejection(root, "assembly or FFI")
+        allowed.write_text(
+            allowed.read_text(encoding="utf-8").replace(
+                "unsafe { core::ptr::write_volatile(destination, 0_u8) };",
+                "unsafe {\n"
+                "            core::ptr::write_volatile(destination, 0_u8);\n"
+                "            core::ptr::write_volatile(destination, 0_u8);\n"
+                "        }",
+            ),
+            encoding="utf-8",
+        )
+        require_rejection(root, "approved unsafe module changed")
 
 
 if __name__ == "__main__":
     test()
-    print("unsafe policy rejects five exception-boundary regressions")
+    print("unsafe policy rejects seven exception-boundary regressions")

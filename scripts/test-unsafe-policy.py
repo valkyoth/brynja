@@ -54,7 +54,7 @@ def test() -> None:
         extra.write_text(
             "#[allow(unsafe_code)] fn escaped() { unsafe {} }\n", encoding="utf-8"
         )
-        require_rejection(root, "unapproved unsafe")
+        require_rejection(root, "unapproved low-level")
         extra.unlink()
 
         extra.write_text(
@@ -67,25 +67,59 @@ pub fn reachable_from_safe_rust() { unreviewed_native_entry(); }
 """,
             encoding="utf-8",
         )
-        require_rejection(root, "unapproved unsafe")
+        require_rejection(root, "unapproved low-level")
         extra.unlink()
 
         extra.write_text(
             "pub fn escaped() { core::arch::asm \n ! (\"nop\"); }\n",
             encoding="utf-8",
         )
-        require_rejection(root, "assembly")
+        require_rejection(root, "unapproved low-level")
         extra.unlink()
 
         extra.write_text('include ! ("generated.inc");\n', encoding="utf-8")
-        require_rejection(root, "code inclusion")
+        require_rejection(root, "code-inclusion")
         extra.unlink()
 
         extra.write_text(
             '#[path = "/tmp/unreviewed.rs"] mod unreviewed;\n',
             encoding="utf-8",
         )
-        require_rejection(root, "code inclusion")
+        require_rejection(root, "code-inclusion")
+        extra.unlink()
+
+        extra.write_text(
+            """#![deny(unsafe_code)]
+#[expect /* comment-separated control */ (unsafe_code)]
+mod injected {
+    core::arch::global_asm /* comment-separated control */ !("ret");
+}
+""",
+            encoding="utf-8",
+        )
+        require_rejection(root, "unapproved low-level")
+        extra.unlink()
+
+        extra.write_text(
+            '#[cfg_attr(all(), path = "/tmp/unreviewed.rs")] mod escaped;\n',
+            encoding="utf-8",
+        )
+        require_rejection(root, "code-inclusion")
+        extra.unlink()
+
+        extra.write_text(
+            '#[path /* comment-separated control */ = "/tmp/unreviewed.rs"] '
+            "mod escaped;\n",
+            encoding="utf-8",
+        )
+        require_rejection(root, "code-inclusion")
+        extra.unlink()
+
+        extra.write_text(
+            'include /* comment-separated control */ !("unreviewed.inc");\n',
+            encoding="utf-8",
+        )
+        require_rejection(root, "code-inclusion")
         extra.unlink()
 
         allowed = root / unsafe_policy.ALLOWED
@@ -104,4 +138,4 @@ pub fn reachable_from_safe_rust() { unreviewed_native_entry(); }
 
 if __name__ == "__main__":
     test()
-    print("unsafe policy rejects seven exception-boundary regressions")
+    print("unsafe policy rejects eleven exception-boundary regressions")

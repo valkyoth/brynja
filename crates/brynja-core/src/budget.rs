@@ -16,7 +16,7 @@ pub enum ResourceDomain {
     StateItems,
     /// Items retained in a queue.
     QueueItems,
-    /// Certificate and trust-path bytes.
+    /// Certificate and trust-chain bytes.
     CertificateBytes,
     /// Provider operations admitted for one bounded action.
     ProviderOperations,

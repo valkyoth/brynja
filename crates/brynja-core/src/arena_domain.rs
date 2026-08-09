@@ -10,7 +10,7 @@ pub enum ArenaKind {
     Plaintext,
     /// Canonical protocol transcript bytes.
     Transcript,
-    /// Certificate and trust-path working bytes.
+    /// Certificate and trust-chain working bytes.
     Certificate,
     /// Encoded protocol output bytes.
     Output,
@@ -54,7 +54,7 @@ pub enum PlaintextDomain {}
 /// Compile-time identity of a transcript arena.
 pub enum TranscriptDomain {}
 
-/// Compile-time identity of a certificate and trust-path arena.
+/// Compile-time identity of a certificate and trust-chain arena.
 ///
 /// This domain is not private-key storage. Private-key material requires the
 /// future secret-owner contract rather than a certificate-arena allocation.

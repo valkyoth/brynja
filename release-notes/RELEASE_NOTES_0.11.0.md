@@ -38,12 +38,13 @@ remain separate destruction duties.
 
 The initial exceptional assessment found a Medium bypass in the repository's
 unsafe-policy scanner, not in the production zeroization implementation. The
-approved unsafe module is now pinned by exact SHA-256, any byte change reopens
-review, and every other Rust source rejects all unsafe tokens, unsafe-code
-allow/expect overrides, whitespace-varied FFI or assembly syntax, symlinked
-source, and `include!` code injection. Regression fixtures reproduce the two
-reported bypass classes and additional assembly and inclusion variants. Local
-remediation is complete and awaits repository-owner retest.
+first remediation pinned the approved module and closed the submitted cases;
+retest then found comment-separated tokens and nested `cfg_attr(path=...)`
+still escaped syntax-shaped patterns. The final policy deliberately rejects
+every complete low-level or code-inclusion identifier outside the hash-pinned
+module, even in comments or nested attributes, and confines library targets and
+source paths. Eleven regression fixtures cover the original and follow-up
+reproductions. Local remediation is complete and awaits another owner retest.
 
 ## Cumulative Pentest Coverage
 

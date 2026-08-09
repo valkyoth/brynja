@@ -1,7 +1,7 @@
 //! Explicit facade for isolated legacy protocol packages.
 //!
 //! No feature is enabled by default. Legacy engines must never share a
-//! negotiation path, session cache, or ticket keys with modern Brynja.
+//! negotiation route, session cache, or ticket keys with modern Brynja.
 
 #![no_std]
 

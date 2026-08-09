@@ -123,7 +123,7 @@ pub trait SecretDestructor {
     ///
     /// The implementation must synchronously make the failure durable or
     /// initiate its platform-specific fail-stop response before returning.
-    /// Examples include latching permanent-error state, recording a bounded
+    /// Examples cover latching permanent-error state, recording a bounded
     /// secret-free metric, resetting an embedded target, or aborting a hosted
     /// process. Returning is a security assertion that silent continuation is
     /// impossible under the caller's operating contract.

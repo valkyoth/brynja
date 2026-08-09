@@ -273,7 +273,7 @@ impl<'storage, Domain: ArenaDomain> Arena<'storage, Domain> {
     /// The returned bytes retain their previous contents. A caller must
     /// initialize the complete range before reading it. Debug canaries cannot
     /// prove that property, so future secret-bearing consumers require a typed
-    /// complete-initialization transition and error-path tests. Overflow or
+    /// complete-initialization transition and error-route tests. Overflow or
     /// exhaustion leaves all arena accounting and storage unchanged.
     pub fn allocate(&mut self, length: usize) -> Result<&mut [u8], ArenaError> {
         let end = match self.position.checked_add(length) {

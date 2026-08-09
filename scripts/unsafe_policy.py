@@ -16,12 +16,9 @@ EXPECTED_ALLOWED_SHA256 = (
 UNSAFE_BLOCK = re.compile(r"\bunsafe\s*\{")
 UNSAFE_ITEM = re.compile(r"\bunsafe\s+(?:fn|impl|trait)\b")
 UNSAFE_ALLOW = "allow(unsafe_code)"
-UNSAFE_TOKEN = re.compile(r"\bunsafe\b")
-UNSAFE_OVERRIDE = re.compile(
-    r"#\s*\[\s*(?:allow|expect)\s*\(\s*unsafe_code\b"
+FORBIDDEN_IDENTIFIER = re.compile(
+    r"\b(?:unsafe|unsafe_code|extern|asm|global_asm|llvm_asm|naked_asm|include|path)\b"
 )
-FFI_OR_ASM = re.compile(r"\bextern\b|\b(?:asm|global_asm|naked_asm)\s*!")
-CODE_INJECTION = re.compile(r"\binclude\s*!|#\s*\[\s*path\s*=")
 
 
 class UnsafePolicyError(RuntimeError):
@@ -61,11 +58,8 @@ def validate(root: Path) -> None:
             if digest != EXPECTED_ALLOWED_SHA256:
                 fail("approved unsafe module changed; reopen security review")
             validate_allowed(text)
-        elif any(
-            pattern.search(text) is not None
-            for pattern in (UNSAFE_TOKEN, UNSAFE_OVERRIDE, FFI_OR_ASM, CODE_INJECTION)
-        ):
-            fail(f"unapproved unsafe, FFI, assembly, or code inclusion: {relative}")
+        elif FORBIDDEN_IDENTIFIER.search(text) is not None:
+            fail(f"unapproved low-level or code-inclusion token: {relative}")
 
     library = (root / "crates/brynja-core/src/lib.rs").read_text(encoding="utf-8")
     if library.count("mod secret_memory_volatile;") != 1:

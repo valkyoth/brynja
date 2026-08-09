@@ -7,12 +7,13 @@ one documented block in the private
 `crates/brynja-core/src/secret_memory_volatile.rs` module and rejects unsafe
 blocks, unsafe items, local lint allowances, assembly, and FFI everywhere else.
 The approved module is pinned by SHA-256. Any byte change reopens review before
-semantic checks run. Every other Rust source is rejected if it contains an
-`unsafe` token, an `allow(unsafe_code)` or `expect(unsafe_code)` override, any
-whitespace form of `extern` or an assembly macro, or `include!`-based code
-injection. Explicit `#[path]` module injection is forbidden, library targets
-must resolve to their classified `src/lib.rs`, and Rust sources must be regular
-files beneath non-symlink package directories.
+semantic checks run. Every other Rust source is rejected if it contains any
+complete identifier in the fail-closed set `unsafe`, `unsafe_code`, `extern`,
+`asm`, `global_asm`, `llvm_asm`, `naked_asm`, `include`, or `path`. This broad
+rule intentionally also matches comments and ordinary identifiers, so Rust
+comments cannot be used as token whitespace and nested attributes cannot hide
+code inclusion. Library targets must resolve to their classified `src/lib.rs`,
+and Rust sources must be regular files beneath non-symlink package directories.
 
 A future exception requires a versioned milestone, written necessity analysis,
 safe alternative analysis, isolated module or crate, documented invariants,
@@ -69,6 +70,11 @@ not contain either bypass. Exact module-byte pinning, comprehensive token and
 override rejection, code-inclusion rejection, and regression fixtures now
 close the policy-control gap. Any future approved-module change must update the
 pin as an explicit security review event rather than silently widening scope.
+The first retest confirmed those submitted reproductions were closed but found
+that comments between Rust tokens and `path` nested inside `cfg_attr` could
+still evade syntax-shaped regular expressions. The scanner therefore no longer
+models syntax or whitespace: broad identifier rejection closes the entire
+reported class and fixtures retain all four comment/nested-attribute variants.
 
 The v0.11.1 review treats unsafe code inside the exact `sanitization` release as
 part of the adapter's inherited trusted computing base. Admission requires the

@@ -14,7 +14,7 @@ pub enum ResourceKind {
     State,
     /// A bounded queue.
     Queue,
-    /// A certificate or trust-path bound.
+    /// A certificate or trust-chain bound.
     Certificate,
     /// A provider-owned resource.
     Provider,

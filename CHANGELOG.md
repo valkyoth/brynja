@@ -32,9 +32,10 @@ Keep a Changelog and Semantic Versioning.
   development tag because it introduces the first unsafe secret-destruction
   boundary; it still selects no package for crates.io publication.
 - Closed the initial pentest's unsafe-policy bypass by SHA-256 pinning the exact
-  approved module and rejecting unsafe tokens, lint overrides, whitespace-
-  varied FFI/assembly, symlinked Rust sources, and code inclusion everywhere
-  else, with reproduced regression fixtures; external retest remains required.
+  approved module and, after retest exposed comment-separated and nested-
+  attribute variants, replacing syntax-shaped matching with broad fail-closed
+  low-level/code-inclusion identifier rejection, fixed library targets, and
+  non-symlink source confinement; another external retest remains required.
 
 ## [0.10.0] - 2026-08-03
 

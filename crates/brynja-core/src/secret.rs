@@ -151,7 +151,7 @@ impl<'a, D: SecretDestructor> SecretInitialization<'a, D> {
 
     /// Acknowledges a contiguous write that already completed successfully.
     ///
-    /// Exact completion is the only path to [`SecretState`]. An overrun is a
+    /// Exact completion is the only route to [`SecretState`]. An overrun is a
     /// terminal initialization failure and immediately runs all destruction
     /// duties. A zero-byte acknowledgement remains incomplete.
     pub fn acknowledge_write(mut self, bytes: usize) -> InitializationTransition<'a, D> {

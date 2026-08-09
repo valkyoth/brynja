@@ -1186,9 +1186,10 @@ Verification:
   across Rust 1.90.0 through 1.97.1 and every promised target, permitting only
   a public-width-32 loop where a target does not unroll an array pass;
 - inspect each concrete assembly function body with target-specific branch
-  rules, reject direct RV32 Choice-register branches and memory addressing, and retain
-  negative fixtures for secret branches, secret-indexed loads, and public-loop
-  classification;
+  rules, canonicalize RV32 numeric argument-register aliases, classify all
+  eighteen base, pseudo, and compressed conditional forms, reject direct
+  Choice-register branches and memory addressing, and retain negative fixtures
+  for secret branches, secret-indexed loads, aliases, and public-loop classification;
 - preserve `no_std`, no-allocation, no-new-unsafe, dependency, modern/legacy,
   zeroization, and source-file-size boundaries;
 - pass repository checks, promised Rust versions and targets, dependency and

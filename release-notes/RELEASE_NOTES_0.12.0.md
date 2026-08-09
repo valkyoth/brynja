@@ -32,8 +32,8 @@ before its signed development tag.
 - optimized LLVM IR and assembly equality, selection, and swap witnesses for
   all six unsigned widths plus fixed 32-byte arrays and the compiler barrier
   across Rust 1.90.0 through 1.97.1 and the nine promised targets, with a
-  machine-checked evidence matrix, six matrix/binding fixtures, and six
-  target-assembly regression fixtures.
+  machine-checked evidence matrix, six matrix/binding fixtures, all eighteen
+  RISC-V conditional forms, and ten focused target-assembly regression fixtures.
 
 ## Pentest Finding And Remediation
 
@@ -57,8 +57,16 @@ side channel: a synthetic backward fixed-array branch directly on the RV32
 ABI `Choice` register passed as a public loop. The validator now rejects direct
 `Choice`-register branches before classifying a backedge, and the sixth fixture
 reproduces that exact bypass. Transitive register-taint analysis remains
-outside the bounded emitted-code claim. Repository-owner retest of the signed
-follow-up candidate remains pending.
+outside the bounded emitted-code claim. That signed follow-up candidate then
+underwent another repository-owner retest.
+
+A second retest found another Medium assurance-control bypass, not an active
+code side channel: numeric argument-register aliases, omitted `bgt`-family
+pseudoinstructions, compressed conditional branches, and numeric aliases in
+memory operands could evade the textual scanner. The gate now canonicalizes
+`x10` through `x17`, classifies all eighteen RISC-V conditional forms, covers
+compressed integer loads/stores, and reproduces all four variants. The
+repository-owner retest of the signed third candidate remains pending.
 
 ## Current Limits
 

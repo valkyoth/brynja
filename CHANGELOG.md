@@ -18,6 +18,9 @@ Keep a Changelog and Semantic Versioning.
   for RV32 secret branches and secret-indexed loads, non-public fixed-array
   branches including a backward direct-`Choice` classifier bypass, and
   x86_64/AArch64 conditional branches.
+- Canonicalize RISC-V numeric argument-register aliases, classify all eighteen
+  base, pseudo, and compressed conditional forms, and retain ten focused
+  negative branch/address fixtures.
 - Add the versionless post-1.0 hash-ecosystem plan and the updated Brynja
   project image.
 - Implement separately selected `brynja-sanitization 0.1.0` with opaque

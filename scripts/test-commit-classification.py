@@ -42,6 +42,14 @@ def main() -> int:
         "chore(requirements): close RFC ownership gaps",
         ("requirements/coverage.md",),
     )
+    MODULE.validate(
+        "test(constant-time): close RISC-V assembly classifier gaps",
+        (
+            "scripts/constant_time_codegen.py",
+            "scripts/test-constant-time-codegen.py",
+            "security/pentest/v0.12.0.md",
+        ),
+    )
     print("commit-classification broken fixtures: PASS")
     return 0
 

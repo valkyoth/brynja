@@ -17,6 +17,50 @@ def require_rejection(function: str, body: str, target: str, expected: str) -> N
 
 
 def test() -> None:
+    riscv_conditional_mnemonics = (
+        "beq",
+        "bne",
+        "blt",
+        "bge",
+        "bltu",
+        "bgeu",
+        "beqz",
+        "bnez",
+        "bltz",
+        "bgez",
+        "blez",
+        "bgtz",
+        "bgt",
+        "ble",
+        "bgtu",
+        "bleu",
+        "c.beqz",
+        "c.bnez",
+    )
+    if (
+        constant_time_codegen.RISCV_CONDITIONAL_MNEMONICS
+        != riscv_conditional_mnemonics
+    ):
+        raise AssertionError("RISC-V conditional-branch classification drifted")
+    one_register = {
+        "beqz",
+        "bnez",
+        "bltz",
+        "bgez",
+        "blez",
+        "bgtz",
+        "c.beqz",
+        "c.bnez",
+    }
+    for mnemonic in riscv_conditional_mnemonics:
+        operands = "a0, .Lsecret" if mnemonic in one_register else "a0, a1, .Lsecret"
+        require_rejection(
+            "select_u32",
+            f"\t{mnemonic}\t{operands}\n.Lsecret:\n\tret\n",
+            "riscv32imac-unknown-none-elf",
+            "conditional",
+        )
+
     require_rejection(
         "select_u32",
         "\tbltz\ta2, .Lsecret\n.Lsecret:\n\tret\n",
@@ -37,9 +81,33 @@ def test() -> None:
     )
     require_rejection(
         "select_bytes",
-        ".Lsecret:\n\tbltz\ta3, .Lsecret\n\tret\n",
+        ".Lsecret:\n\tBLTZ\tA3, .Lsecret\n\tret\n",
         "riscv32imac-unknown-none-elf",
         "secret Choice register",
+    )
+    require_rejection(
+        "select_bytes",
+        ".Lsecret:\n\tbltz\tx13, .Lsecret\n\tret\n",
+        "riscv32imac-unknown-none-elf",
+        "secret Choice register",
+    )
+    require_rejection(
+        "select_bytes",
+        ".Lsecret:\n\tbgt\ta3, a0, .Lsecret\n\tret\n",
+        "riscv32imac-unknown-none-elf",
+        "secret Choice register",
+    )
+    require_rejection(
+        "select_bytes",
+        ".Lsecret:\n\tc.bnez\ta3, .Lsecret\n\tret\n",
+        "riscv32imac-unknown-none-elf",
+        "secret Choice register",
+    )
+    require_rejection(
+        "select_bytes",
+        "\tlw\ta0, 0(x13)\n\tret\n",
+        "riscv32imac-unknown-none-elf",
+        "memory address",
     )
     require_rejection(
         "select_u64",
@@ -63,4 +131,7 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("constant-time codegen rejects six branch and secret-address regressions")
+    print(
+        "constant-time codegen rejects all 18 RISC-V conditional forms "
+        "and ten focused branch/address regressions"
+    )

@@ -35,9 +35,29 @@ FUNCTIONS = (
 FORBIDDEN_CALL = re.compile(r"(?:mem(?:cmp|chr)|bcmp|panic|bounds_check)", re.IGNORECASE)
 BRANCH = re.compile(r"^\s*(?:br|switch|invoke)\b", re.MULTILINE)
 FIXED_ARRAY_FUNCTIONS = {"equal_bytes", "select_bytes", "swap_bytes"}
+RISCV_CONDITIONAL_MNEMONICS = (
+    "beq",
+    "bne",
+    "blt",
+    "bge",
+    "bltu",
+    "bgeu",
+    "beqz",
+    "bnez",
+    "bltz",
+    "bgez",
+    "blez",
+    "bgtz",
+    "bgt",
+    "ble",
+    "bgtu",
+    "bleu",
+    "c.beqz",
+    "c.bnez",
+)
 RISCV_CONDITIONAL_BRANCH = re.compile(
-    r"^\s*b(?:eq|ne|lt|ge|ltu|geu|eqz|nez|ltz|gez|lez|gtz)\b[^\n]*",
-    re.MULTILINE,
+    rf"^\s*(?:{'|'.join(re.escape(value) for value in RISCV_CONDITIONAL_MNEMONICS)})\b[^\n]*",
+    re.MULTILINE | re.IGNORECASE,
 )
 X86_CONDITIONAL_BRANCH = re.compile(
     r"^\s*(?:j(?:a|ae|b|be|c|cxz|e|ecxz|g|ge|l|le|na|nae|nb|nbe|nc|ne|ng|nge|nl|nle|no|np|ns|nz|o|p|pe|po|rcxz|s|z)|loop(?:e|ne|z|nz)?)\b[^\n]*",
@@ -67,6 +87,10 @@ RISCV_SECRET_CHOICE_REGISTER = {
     "select_bytes": "a3",
     "swap_bytes": "a2",
 }
+RISCV_ARGUMENT_REGISTER_ALIASES = {
+    f"x{10 + index}": f"a{index}" for index in range(8)
+}
+RISCV_NUMERIC_ARGUMENT_REGISTER = re.compile(r"\bx1[0-7]\b", re.IGNORECASE)
 
 
 class CodegenError(RuntimeError):
@@ -169,7 +193,17 @@ def branch_target(line: str) -> str:
     return target.rstrip(",")
 
 
+def canonicalize_riscv_registers(body: str) -> str:
+    return RISCV_NUMERIC_ARGUMENT_REGISTER.sub(
+        lambda match: RISCV_ARGUMENT_REGISTER_ALIASES[match.group(0).lower()],
+        body,
+    )
+
+
 def validate_assembly_body(function: str, body: str, target: str) -> None:
+    if target.startswith("riscv"):
+        body = canonicalize_riscv_registers(body)
+
     branches = list(conditional_branch_pattern(target).finditer(body))
     if function not in FIXED_ARRAY_FUNCTIONS and branches:
         fail(f"{function} contains a conditional {target} branch")
@@ -178,7 +212,7 @@ def validate_assembly_body(function: str, body: str, target: str) -> None:
         if target.startswith("riscv"):
             secret_register = RISCV_SECRET_CHOICE_REGISTER.get(function)
             if secret_register is not None and re.search(
-                rf"\b{re.escape(secret_register)}\b", line
+                rf"\b{re.escape(secret_register)}\b", line, re.IGNORECASE
             ):
                 fail(f"{function} branches directly on the secret Choice register")
 
@@ -190,8 +224,8 @@ def validate_assembly_body(function: str, body: str, target: str) -> None:
     if target.startswith("riscv") and function in RISCV_SECRET_CHOICE_REGISTER:
         register = RISCV_SECRET_CHOICE_REGISTER[function]
         secret_address = re.compile(
-            rf"^\s*(?:l(?:b|bu|h|hu|w|d)|s(?:b|h|w|d))\s+[^\n]*\([^)]*\b{register}\b[^)]*\)",
-            re.MULTILINE,
+            rf"^\s*(?:c\.)?(?:l(?:b|bu|h|hu|w|d)|s(?:b|h|w|d))\s+[^\n]*\([^)]*\b{register}\b[^)]*\)",
+            re.MULTILINE | re.IGNORECASE,
         )
         if secret_address.search(body) is not None:
             fail(f"{function} uses the secret Choice register as a memory address")

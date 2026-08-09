@@ -104,8 +104,11 @@ barrier before XOR/AND selection, including array selection and swap. The
 architecture-aware evidence gate inspects each function body, rejects
 conditional branches outside proven public fixed-array backedges, rejects
 direct RV32 `Choice`-register branches and memory addresses, and retains six
-negative assembly fixtures. Local remediation passes all compiler and target
-lanes; the repository-owner retest remains pending.
+negative assembly fixtures. Retest then found numeric register aliases and
+omitted pseudo/compressed branches. The gate now canonicalizes RISC-V argument
+registers, covers all eighteen conditional forms, and retains ten focused
+negative fixtures. Local remediation passes all compiler and target lanes; the
+repository-owner retest remains pending.
 
 ## Cryptography Verification Status
 

@@ -1,24 +1,27 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 assessment PASS, awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 in development
 
-The `brynja` facade advances to `0.11.2` for the current signed development
-line but is not selected for crates.io publication. The latest public
+The `brynja` facade advances to `0.12.0` for the current development line but
+is not selected for crates.io publication. The latest signed development tag
+is v0.11.2 and the latest public
 checkpoint remains `brynja 0.10.0`, `brynja-core 0.7.0`, eight modern support
 packages at `0.1.6`, and `brynja-crypto 0.1.0`. Supporting, legacy, and
 repository-only package versions remain unchanged during this development
 milestone. Package publication does not imply a TLS implementation or
 production readiness.
 
-The new adapter is a material production secret-storage boundary. Its
-exceptional assessment passed with zero findings; the internal stage selects
-zero crates for publication and tagging remains gated on green CI and CodeQL.
+The optional adapter is a material production secret-storage boundary. Its
+exceptional v0.11.2 assessment passed with zero findings. The v0.12.0 internal
+stage selects zero crates for publication; its constant-time implementation is
+still in progress and any future tag remains gated on the completed scope,
+green CI, and green CodeQL.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.11.2` | no | Development tag version; latest crates.io checkpoint is `0.10.0` |
+| `brynja` | `0.12.0` | no | Current development version; latest signed tag is `v0.11.2` and latest crates.io checkpoint is `0.10.0` |
 | `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while cumulative v0.11 zeroization code remains unreleased on crates.io |
-| `brynja-crypto` | `0.1.0` | no | Published and unchanged |
+| `brynja-crypto` | `0.1.0` | no | Published code boundary retained; shared documentation clarifies its provider/composition role above future leaf-family crates |
 | `brynja-pki`, `brynja-platform` | `0.1.6` | no | Published boundaries retained; functionality remains unimplemented |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.6` | no | Published boundaries retained; engines remain unimplemented |
 | `brynja-dtls`, `brynja-quic-tls` | `0.1.6` | no | Published boundaries retained; engines/adapters remain unimplemented |
@@ -76,7 +79,7 @@ and cannot reuse the validation claim.
 The `brynja-sanitization` package uses an independent SemVer
 line and publishes only when its adapter code or exact `sanitization` pin
 changes. Its v0.1.0 implementation is present but held from crates.io during
-the v0.11.2 internal milestone.
+the current v0.12.0 internal development line.
 
 Every tag requires a clean worktree, signed commit, complete automated tag
 gate, user-confirmed green GitHub and CodeQL, and explicit authorization.

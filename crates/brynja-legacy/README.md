@@ -1,6 +1,6 @@
 <p align="center">
-  <b>Security-first, dependency-free, no_std TLS in Rust.</b><br>
-  Built in small audited releases with strict modern/legacy protocol isolation.
+  <b>Security-first, first-party Rust, no_std cryptography and secure protocols.</b><br>
+  Built in small reviewable releases with strict modern, legacy, and research isolation.
 </p>
 
 <div align="center">
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja Rust TLS crate overview">
+    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 

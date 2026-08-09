@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 assessment PASS, awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 in development
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

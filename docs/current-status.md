@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0 and v0.11.1 tagged; v0.11.2 assessment PASS, awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 in development
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -19,11 +19,12 @@ the assurance harness and first value, cursor, workspace, and abstract secret
 lifetime domains. The v0.10.0 checkpoint published `brynja-core 0.7.0`, eight
 dependency-only modern support patches at `0.1.6`, and `brynja 0.10.0`.
 Signed v0.11.0 introduced the first isolated unsafe secret-destruction
-boundary and completed its exceptional pentest with zero open findings. The
-facade now advances to `0.11.2` for the next signed development tag while all
-crates.io publication selections remain empty. The v0.11.1 work is a
-review-only dependency-admission decision and does not trigger a scheduled or
-exceptional pentest by itself.
+boundary and completed its exceptional pentest with zero open findings.
+v0.11.1 admitted the optional sanitization adapter and v0.11.2 implemented it;
+both exceptional assessments are permanently recorded with zero open findings.
+The facade now advances to `0.12.0` for the constant-time-foundation development
+line while all crates.io publication selections remain empty. That
+implementation remains in progress and is not claimed complete here.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -392,8 +393,9 @@ Version 0.11.2 implements the admitted optional adapter:
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,
 v0.11.2 received an exceptional assessment; it passed with zero findings and
-zero open findings. Its signed development tag now awaits green GitHub and
-CodeQL, and it remains in the later v0.10.0-through-v0.15.0 cumulative scope.
+zero open findings. Its signed development tag was created after green GitHub
+and CodeQL, and it remains in the later v0.10.0-through-v0.15.0 cumulative
+scope.
 
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded

@@ -1,6 +1,6 @@
 <p align="center">
-  <b>Security-first, dependency-free, no_std TLS in Rust.</b><br>
-  Built in small audited releases with strict modern/legacy protocol isolation.
+  <b>Security-first, first-party Rust, no_std cryptography and secure protocols.</b><br>
+  Built in small reviewable releases with strict modern, legacy, and research isolation.
 </p>
 
 <div align="center">
@@ -19,15 +19,19 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja Rust TLS crate overview">
+    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
 # brynja
 
-Brynja is a security-first, dependency-free, `no_std` TLS project in Rust. It
-is being developed in small reviewable milestones toward a serious
-production-ready TLS implementation at `1.0.0`.
+Brynja is a security-first, first-party Rust, `no_std` cryptography and
+secure-protocol ecosystem. Its first production goal remains a serious
+production-ready TLS implementation at `1.0.0`; its primitive boundaries are
+being designed so later standalone cryptographic families can reuse the exact
+same reviewed implementations. The core cryptographic and protocol graph uses
+only Brynja-owned Rust code; explicitly isolated companion adapters follow
+their separately documented dependency policy.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and not ready to
 > secure application traffic. Every version receives an immutable signed tag
@@ -36,7 +40,42 @@ production-ready TLS implementation at `1.0.0`.
 > described below; a tag without a matching committed pentest report was not a
 > scheduled pentest checkpoint.
 
-Version `0.11.2` implements the separately selected, protocol-neutral
+## Project Direction
+
+The roadmap through `1.0.0` remains TLS-first. Standalone hashing does not
+expand or delay the v1 TLS claim. SHA-2, SHA-3, SHAKE, and HMAC are already
+required by TLS, PKI, and ML-KEM, so their planned implementation ownership now
+lives in small reusable family crates instead of private copies inside a
+protocol crate.
+
+| Boundary | Responsibility |
+| --- | --- |
+| `brynja-hash-core` | Small fixed-output and XOF interfaces; no algorithm or protocol |
+| `brynja-hash-sha2` / `brynja-hash-sha3` | Portable family implementations reused by standalone callers and Brynja protocols |
+| `brynja-mac-hmac` | Keyed HMAC construction with MAC-specific types and verification |
+| `brynja-crypto` | Provider contracts, algorithm policy and composition, AEADs, KDFs, RSA, ECC, and integration of exact primitive-family implementations |
+| `brynja` | TLS-first facade; a future hash convenience surface remains default-off and curated |
+
+`brynja-crypto` therefore remains essential. It is the protocol-facing
+cryptographic substrate above the small leaf-family crates; those crates never
+depend on TLS or pull the complete crypto graph. This direction prevents both
+duplicate SHA implementations and a standalone hash user acquiring every
+Brynja algorithm.
+
+After `1.0.0`, Brynja may expand into separately selectable modern, legacy,
+utility, and research hashing families. Checksums and MACs remain distinct from
+cryptographic hashes, legacy algorithms remain visibly isolated, and the main
+facade will never gain an `all-hashes` feature. The versionless
+[post-1.0 hashing plan](https://github.com/valkyoth/brynja/blob/main/docs/POST_1_0_HASH_PLAN.md)
+contains the full candidate inventory, missing families, crate graph,
+implementation order, and security gates. It is planning only: no listed
+algorithm is implemented, admitted, independently verified, or FIPS validated
+by appearing there.
+
+The current `0.12.0` development line begins the constant-time foundation;
+that milestone is still in progress and no constant-time primitive is claimed
+complete by this documentation change. Version `0.11.2` implemented the
+separately selected, protocol-neutral
 `brynja-sanitization 0.1.0` adapter admitted at v0.11.1. It exact-pins
 first-party `sanitization 2.0.3`, disables every upstream feature, activates no
 transitive package, owns opaque fixed-size wrappers, and provides only explicit
@@ -93,9 +132,9 @@ an independent pentest.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-crates.io checkpoint is `0.10.0`; the repository is preparing the tagged
-v0.11.2 development milestone without crates.io publication. The published
-dependency is:
+crates.io checkpoint is `0.10.0`; the latest signed development milestone is
+v0.11.2, which was intentionally not published to crates.io. The repository is
+now developing v0.12.0. The published dependency is:
 
 ```toml
 [dependencies]
@@ -117,6 +156,11 @@ selected set in dependency order and publishes the facade last.
   links, vendors, calls, or delegates those duties to C, C++, Objective-C,
   OpenSSL, BoringSSL, AWS-LC, a system cryptographic library, or another
   foreign/native cryptographic module.
+- Portable scalar primitives belong to the smallest reusable semantic family:
+  SHA-2 in `brynja-hash-sha2`, SHA-3/SHAKE in `brynja-hash-sha3`, and HMAC in
+  `brynja-mac-hmac`. `brynja-crypto` consumes those exact symbols and retains
+  provider, composition, policy, AEAD, KDF, RSA, ECC, and other unsplit
+  cryptographic responsibilities; it never reimplements a family privately.
 - The modern `brynja` facade can never enable SSL or other legacy
   protocols through its features.
 - Legacy implementations live in explicitly named packages and use
@@ -186,7 +230,8 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
-| `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
+| Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
+| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
 | `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |
 | `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |
@@ -213,7 +258,10 @@ formal proof, pentest, or release status.
 | --- | --- | --- |
 | `brynja` | Modern production facade | Exposes v0.11 foundation domains; no TLS engine |
 | `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus affine owned-region zeroization implemented |
-| `brynja-crypto` | First-party hashes, MACs, AEADs, KDFs, RSA, and ECC | Foundation only |
+| Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
+| Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
+| Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
+| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Foundation only |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
 | `brynja-tls13` | Version-specific TLS 1.3 stream engine | Foundation only |
@@ -316,7 +364,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.11.2
+scripts/tag_gate.sh v0.12.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

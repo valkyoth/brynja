@@ -7,6 +7,8 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add the versionless post-1.0 hash-ecosystem plan and the updated Brynja
+  project image.
 - Implement separately selected `brynja-sanitization 0.1.0` with opaque
   fixed-size ownership, closed source failures, transactional replacement,
   redacted diagnostics, explicit clear, and named exact-length copies to and
@@ -19,6 +21,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Open the v0.12.0 constant-time-foundation development line without claiming
+  its implementation complete or selecting any crate for publication.
+- Clarify in the shared package header and main README that Brynja is a
+  TLS-first cryptography and secure-protocol ecosystem, with reusable leaf
+  hash/MAC families below the still-essential `brynja-crypto` provider and
+  composition layer.
 - Advance the development facade to `0.11.2` without crates.io publication or
   any facade, engine, default-feature, legacy-specific, or FIPS activation.
 - Add the adapter to the package, release, archive, version-matrix, SBOM, and

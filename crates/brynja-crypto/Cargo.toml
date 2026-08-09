@@ -7,7 +7,7 @@ license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
-description = "First-party cryptographic primitives for Brynja"
+description = "Cryptographic provider, policy, and composition layer for Brynja"
 publish = ["crates-io"]
 
 [features]

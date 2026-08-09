@@ -11,7 +11,8 @@ from pathlib import Path
 HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
-    "| `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
+    "| Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |",
+    "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
     "| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |",
     "| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |",
@@ -24,7 +25,7 @@ ROOT_ROWS = (
     "| Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |",
 )
 SCOPED_ROWS = {
-    Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
+    Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     Path("crates/brynja-pki/README.md"): "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
     Path("crates/brynja-tls/README.md"): "| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |",
     Path("crates/brynja-tls12/README.md"): "| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |",

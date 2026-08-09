@@ -88,14 +88,14 @@ def test() -> None:
         copy_fixture(root)
 
         release = root / "release-crates.toml"
-        replace(release, 'cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2"]',
+        replace(release, 'cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0"]',
                 'cumulative_milestones = ["0.11.1"]')
         require_rejection(root, "cumulative milestone")
         copy_fixture(root)
 
         release = root / "release-crates.toml"
-        replace(release, "exceptional = true", "exceptional = false")
-        require_rejection(root, "must remain exceptional")
+        replace(release, 'milestone = "0.12.0"', 'milestone = "0.11.2"')
+        require_rejection(root, "version and milestone")
         copy_fixture(root)
 
         document = root / "docs/sanitization-admission-review.md"
@@ -115,4 +115,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("sanitization admission rejects eleven identity, graph, error-boundary, exceptional-state, feature, FIPS, and drift regressions")
+    print("sanitization admission rejects eleven identity, graph, error-boundary, release-history, feature, FIPS, and drift regressions")

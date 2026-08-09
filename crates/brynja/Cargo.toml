@@ -1,13 +1,13 @@
 [package]
 name = "brynja"
-version = "0.11.2"
+version = "0.12.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
-description = "Security-first no_std TLS facade"
+description = "Security-first no_std cryptography and secure-protocol facade"
 publish = ["crates-io"]
 
 [features]

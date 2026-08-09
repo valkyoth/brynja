@@ -281,17 +281,13 @@ def validate_candidate(root: Path) -> None:
 def validate_release_state(root: Path) -> None:
     release = read_toml(root / "release-crates.toml")
     metadata = table(release, "release")
-    require(metadata.get("version") == "0.11.2" and metadata.get("milestone") == "0.11.2",
-            "release metadata is not v0.11.2")
+    require(metadata.get("version") == metadata.get("milestone"),
+            "release version and milestone differ")
     require(metadata.get("baseline") == "0.10.0", "cumulative baseline drift")
-    require(metadata.get("cumulative_milestones") == ["0.11.0", "0.11.1", "0.11.2"],
-            "cumulative milestone range drift")
-    require(metadata.get("stage") == "internal", "v0.11.2 must remain internal")
-    require(metadata.get("exceptional") is True,
-            "material v0.11.2 boundary must remain exceptional")
-    require("external unsafe secret-storage" in
-            metadata.get("exception_reason", ""),
-            "v0.11.2 exceptional reason must bind the production boundary")
+    milestones = metadata.get("cumulative_milestones")
+    require(isinstance(milestones, list) and
+            milestones[:3] == ["0.11.0", "0.11.1", "0.11.2"],
+            "cumulative milestone history lost the v0.11.2 adapter boundary")
 
 
 def archive_member(archive: tarfile.TarFile, suffix: str) -> bytes:

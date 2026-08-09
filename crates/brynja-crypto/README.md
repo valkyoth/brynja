@@ -1,6 +1,6 @@
 <p align="center">
-  <b>Security-first, dependency-free, no_std TLS in Rust.</b><br>
-  Built in small audited releases with strict modern/legacy protocol isolation.
+  <b>Security-first, first-party Rust, no_std cryptography and secure protocols.</b><br>
+  Built in small reviewable releases with strict modern, legacy, and research isolation.
 </p>
 
 <div align="center">
@@ -19,15 +19,23 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja Rust TLS crate overview">
+    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
 # brynja-crypto
 
-`brynja-crypto` is a narrowly scoped Brynja workspace package. In `0.1.0` it
-establishes a compile-time boundary only; it does not provide a working TLS,
-cryptographic, PKI, platform, or legacy-protocol implementation.
+`brynja-crypto` is Brynja's protocol-facing cryptographic provider, policy,
+and composition boundary. Future reusable leaf crates own individual hash,
+XOF, and MAC families; `brynja-crypto` consumes their exact implementations
+and combines them with AEAD, KDF, RSA, ECC, provider, and cryptographic policy
+for protocol callers. The
+dependency direction is always from `brynja-crypto` to the leaf families, never
+back toward TLS or the full cryptographic graph.
+
+In `0.1.0` this package establishes a compile-time boundary only; it does not
+provide a working TLS, cryptographic, PKI, platform, or legacy-protocol
+implementation.
 
 ## Cryptography Verification Status
 
@@ -39,7 +47,7 @@ verification.
 
 | Component | Cryptographic scope | Independently verified |
 | --- | --- | --- |
-| `brynja-crypto` | Hashes, MACs, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
+| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
 The component is not implemented yet.
 
@@ -50,10 +58,11 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.1"
 ```
 
-This package is currently marked `publish = false`. Publication requires the
-version-specific deliverables, verification, documentation, a current
-committed PASS pentest report, and green GitHub checks in the
+This published package is not selected again during the current internal
+development milestone. A future publication requires the version-specific
+deliverables, verification, documentation, a current committed cumulative
+PASS pentest report, and green GitHub checks in the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
+The project-wide first-party-cryptography, `no_std`, 500-line source-file,
 platform-portability, and modern/legacy isolation policies apply here.

@@ -211,7 +211,9 @@ pentest, and release line. Code never changes classification silently in place.
    features cannot reach.
 2. Freeze production owned-memory zeroization; review and, only if admitted,
    add the optional downstream `brynja-sanitization` adapter without changing
-   the mandatory core primitive; then freeze constant-time operations;
+   the mandatory core primitive; then freeze constant-time operations over
+   unsigned words and compile-time-sized byte arrays with one named public
+   declassification boundary and per-compiler/per-target emitted-code evidence;
    freeze provider and CPU-backend capability types before any cryptographic
    implementation; isolate the future no_std CPU package from its std-only
    detector; establish forced-backend, KAT, quarantine, native-hardware and

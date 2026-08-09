@@ -9,6 +9,7 @@ pub mod alert;
 pub mod arena_domain;
 pub mod budget;
 pub mod close;
+pub mod constant_time;
 pub mod error;
 pub mod exhaustion;
 pub mod numeric;
@@ -35,6 +36,9 @@ pub use budget::{
     BudgetBuildError, ResourceBudget, ResourceBudgetBuilder, ResourceDomain, WorkBudget,
 };
 pub use close::{Cancellation, CloseOutcome};
+pub use constant_time::{
+    Choice, ConditionalSelect, ConditionalSwap, ConstantTimeEq, CtMask, compiler_barrier,
+};
 pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
@@ -62,9 +66,10 @@ pub use workspace::{
 };
 pub use write::{WriteCursor, WriteError};
 
-/// Whether this package provides its planned implementation.
+/// Whether this package provides its complete planned protocol implementation.
 ///
-/// The foundation release intentionally reports `false`.
+/// This remains `false`; individual completed foundation domains have explicit
+/// flags below.
 pub const IMPLEMENTED: bool = false;
 
 /// Whether the v0.5 failure and alert value domains are implemented.
@@ -88,10 +93,13 @@ pub const SECRET_LIFETIME_CONTRACT_IMPLEMENTED: bool = true;
 /// Whether the v0.11 owned-memory zeroization primitive is implemented.
 pub const OWNED_MEMORY_ZEROIZATION_IMPLEMENTED: bool = true;
 
+/// Whether the v0.12 constant-time foundation is implemented.
+pub const CONSTANT_TIME_FOUNDATION_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
-    fn foundation_does_not_claim_implementation() {
+    fn package_claims_only_completed_foundation_domains() {
         assert!(!::core::hint::black_box(super::IMPLEMENTED));
         assert!(::core::hint::black_box(super::FAILURE_DOMAINS_IMPLEMENTED));
         assert!(::core::hint::black_box(super::BOUNDED_DOMAINS_IMPLEMENTED));
@@ -103,6 +111,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::OWNED_MEMORY_ZEROIZATION_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::CONSTANT_TIME_FOUNDATION_IMPLEMENTED
         ));
     }
 }

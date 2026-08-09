@@ -25,10 +25,11 @@
 
 # brynja-core
 
-`brynja-core 0.7.0` now carries the cumulative v0.11 owned-memory zeroization
-implementation alongside the v0.10 abstract secret-lifetime contract and the
-transactional foundations from earlier milestones. The package version remains
-`0.7.0` until the v0.15.0 public checkpoint.
+`brynja-core 0.7.0` now carries the cumulative v0.12 constant-time foundation
+alongside the v0.11 owned-memory zeroization implementation, the v0.10 abstract
+secret-lifetime contract, and the transactional foundations from earlier
+milestones. The package version remains `0.7.0` until the v0.15.0 public
+checkpoint.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
@@ -84,17 +85,30 @@ scope and need platform-specific duties. This is not integer encoding, TLS
 framing, a protocol parser, a TLS state machine, cryptography, PKI, a provider,
 or a production-ready transport.
 
-## Protocol Verification Status
+v0.12 adds normalized one-byte `Choice` and `CtMask` values; constant-time
+equality, conditional selection, and conditional swap for every unsigned word
+width and compile-time-sized byte array; and an explicit compiler barrier.
+Private representations prevent mask forging, ordinary equality and formatting
+are unavailable, and `Choice::expose_public` is the single named
+declassification boundary. Exhaustive byte-pair tests, word-boundary tests,
+array mismatch-position tests, compile-fail examples, a hash-locked source
+policy, and optimized LLVM/assembly witnesses cover Rust 1.90.0 through 1.97.1
+and all nine promised targets. The emitted-code evidence is a bounded witness,
+not a formal proof, statistical timing test, or microarchitectural guarantee.
+Dynamic slices, secret-dependent lengths, signed values, and protocol-level
+constant-time claims remain outside this foundation.
 
-The alert, failure, numeric, budget, cursor, workspace, arena, abstract
-secret-lifecycle, and owned-region zeroization domains have not been
-independently reviewed. Project tests,
-CI, Kani, Miri, fuzzing, and pentesting do not by themselves constitute
-independent protocol verification.
+## Cryptography Verification Status
 
-| Component | Protocol scope | Independently verified |
+The constant-time foundation and the earlier core domains have not been
+independently reviewed. A component only moves from ❌ to ✅ when a named
+independent reviewer signs off and linked review evidence is recorded. Project
+tests, CI, Kani, Miri, fuzzing, and pentesting do not by themselves constitute
+independent cryptographic or protocol verification.
+
+| Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Alert, failure, numeric, budget, cursor, workspace/arena, abstract secret lifecycle, and owned-region zeroization | ❌ Not verified |
+| `brynja-core` | Constant-time choice, masks, equality, selection, swap, and compiler barrier | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -105,8 +119,10 @@ brynja = "0.10"
 
 The `0.7.0` package was published with Brynja v0.10.0 after its pentest,
 remediation retest, and hosted checks passed. It remains at `0.7.0` during the
-v0.11.0 exceptional development milestone under the
+v0.12.0 exceptional development milestone and is not selected for publication
+under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
-The project-wide no-third-party-crates, `no_std`, 500-line source-file,
-platform-portability, and modern/legacy isolation policies apply here.
+The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line
+source-file, platform-portability, and modern/legacy isolation policies apply
+here.

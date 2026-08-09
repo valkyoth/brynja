@@ -1152,7 +1152,7 @@ Exit criteria:
 
 ### v0.12.0 - Constant-Time Foundation
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement constant-time equality, choice and mask types, conditional select and swap, fixed-width secret operations, compiler barriers, and rules forbidding secret-dependent control flow, indexing, loop counts, and error timing.
 
@@ -1161,22 +1161,42 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement opaque normalized `Choice` and full-width `CtMask` values without
+  ordinary equality, formatting, hashing, ordering, or raw-mask exposure;
+- implement infallible constant-time equality, conditional selection, and
+  conditional swap for every unsigned word width and compile-time byte array,
+  with one explicit final-decision declassification API;
+- provide an explicit compiler/optimization barrier while documenting that it
+  does not itself prove downstream code generation, timing, synchronization,
+  or destruction;
+- confine fixed-array passes, reject value-dependent control flow, dynamic
+  byte slices, indexed access, variable error surfaces, representation drift,
+  and barrier weakening through reviewed source hashes and broken fixtures;
+- update threat model, controls, status, limitations, release notes, and
+  permanent evidence index without claiming a cryptographic algorithm.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- exhaust all 65,536 byte-equality and byte-selection pairs, both choices for
+  every unsigned width, zero-length and fixed-array equality, every mismatch
+  position, selection and swap, representation size, and barrier identity;
+- compile-fail ordinary decision equality, formatting, and mask construction;
+  run twelve source-policy regressions and five evidence-matrix regressions;
+- inspect fixed-work 32-byte and word roots in optimized LLVM IR and assembly
+  across Rust 1.90.0 through 1.97.1 and every promised target, permitting only
+  a public-width-32 loop where a target does not unroll an array pass;
+- preserve `no_std`, no-allocation, no-new-unsafe, dependency, modern/legacy,
+  zeroization, and source-file-size boundaries;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- the fixed-width foundation is deterministic, infallible, allocation-free,
+  platform-independent, and carries exact source and emitted-code evidence
+  without extending that evidence into a proof or independent verification;
+- the exceptional trigger is active: commit a PASS report for the exact
+  candidate before green GitHub and CodeQL may authorize its signed tag;
 - `v0.12.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.13.0 - Provider Capabilities And Opaque Handles

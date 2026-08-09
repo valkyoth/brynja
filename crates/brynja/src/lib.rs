@@ -1,15 +1,16 @@
-//! Security-first, dependency-free `no_std` TLS facade.
+//! Security-first, first-party Rust `no_std` cryptography and protocol facade.
 //!
 //! This release exposes checked numeric/resource domains, transactional
-//! borrowed cursors, caller-owned workspaces, and an abstract secret-lifetime
-//! contract. It does not yet provide byte-backed secret ownership or a TLS
-//! connection API.
+//! borrowed cursors, caller-owned workspaces, secret-lifetime and owned-memory
+//! foundations, and fixed-width constant-time operations. It does not provide
+//! a TLS connection API or cryptographic algorithm.
 
 #![no_std]
 
-/// Whether this package provides its planned implementation.
+/// Whether this facade provides its complete planned protocol implementation.
 ///
-/// The secret-lifetime-contract milestone intentionally reports `false`.
+/// This remains `false`; the exposed completed core foundations have explicit
+/// flags.
 pub const IMPLEMENTED: bool = false;
 
 pub use brynja_core as core;
@@ -27,7 +28,7 @@ pub use brynja_quic_tls as quic_tls;
 #[cfg(test)]
 mod tests {
     #[test]
-    fn policy_release_does_not_claim_implementation() {
+    fn facade_claims_only_completed_foundation_domains() {
         assert!(!::core::hint::black_box(super::IMPLEMENTED));
         assert!(::core::hint::black_box(
             super::core::READ_CURSOR_IMPLEMENTED
@@ -40,6 +41,12 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::core::SECRET_LIFETIME_CONTRACT_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::core::OWNED_MEMORY_ZEROIZATION_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::core::CONSTANT_TIME_FOUNDATION_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

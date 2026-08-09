@@ -1,12 +1,14 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 in development
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
 caller-buffer write cursors, an exact caller-owned workspace partition, an
 abstract secret-lifetime contract, and a byte-backed exclusive borrowed secret
-region with complete-region volatile clearing. It still has no integer
+region with complete-region volatile clearing, plus fixed-width constant-time
+choice, mask, equality, selection, swap, and compiler-barrier operations. It
+still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
@@ -22,9 +24,10 @@ Signed v0.11.0 introduced the first isolated unsafe secret-destruction
 boundary and completed its exceptional pentest with zero open findings.
 v0.11.1 admitted the optional sanitization adapter and v0.11.2 implemented it;
 both exceptional assessments are permanently recorded with zero open findings.
-The facade now advances to `0.12.0` for the constant-time-foundation development
-line while all crates.io publication selections remain empty. That
-implementation remains in progress and is not claimed complete here.
+The facade now advances to `0.12.0` for the completed constant-time foundation
+while all crates.io publication selections remain empty. Because this is the
+first reusable timing-sensitive primitive boundary, the development tag awaits
+an exceptional pentest and its committed PASS/PASS report.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -389,6 +392,28 @@ Version 0.11.2 implements the admitted optional adapter:
 - behavior, failure-position, replacement, capacity, cancellation/unwind,
   differential, compile-fail, Rust 1.90.0-1.97.1, promised-target, Miri, and
   MIR/LLVM/assembly evidence cover the adapter boundary.
+
+Version 0.12.0 implements the constant-time foundation:
+
+- private one-byte `Choice` and `CtMask` values normalize decisions and prevent
+  callers from forging masks; ordinary equality and formatting are unavailable,
+  while `Choice::expose_public` is the single named declassification boundary;
+- `ConstantTimeEq`, `ConditionalSelect`, and `ConditionalSwap` cover all
+  unsigned word widths and compile-time-sized byte arrays without allocation,
+  operating-system services, third-party dependencies, or new unsafe code;
+- exhaustive byte-pair, word-boundary, selection, swap, array-length and
+  mismatch-position tests are joined by compile-fail API examples;
+- hash-locked source policy rejects branch, dynamic-slice, fallible-surface,
+  representation, inventory, barrier, and source-byte drift with twelve broken
+  fixtures; and
+- optimized LLVM and assembly witnesses cover Rust 1.90.0 through 1.97.1 and
+  nine promised targets through a machine-checked matrix and five broken
+  evidence fixtures. These bounded witnesses are not formal proof, timing
+  measurement, independent review, or a microarchitectural guarantee.
+
+Dynamic slices, secret-dependent lengths, signed values, arbitrary downstream
+composition, and protocol-level timing remain outside v0.12.0. The milestone
+selects no crates.io publication and awaits its exceptional assessment.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

@@ -63,6 +63,10 @@ retain prior caller bytes, overrun a region, create mutable aliases, confuse a
 returned local-memory completion with cache or DMA completion, or extend the
 claim to registers, copies, dumps, suspend images, physical memory, forgotten
 owners, concurrency, and termination.
+Constant-time attackers additionally attempt to forge noncanonical decisions
+or masks, trigger secret-dependent branches or early exits, exploit dynamic
+lengths, observe accidental declassification, or rely on compiler lowering that
+reintroduces variable work on a supported toolchain or target.
 Supply-chain attackers additionally try to replace a planned first-party Rust
 primitive or FIPS service with a C/native wrapper, vendor object, build-script
 download, system cryptographic provider, rustls built-in provider, misleading
@@ -78,6 +82,13 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
 - typed states that cannot emit application data before authentication;
 - transcript and negotiation binding with downgrade and cross-protocol checks;
 - constant-time secret operations and explicit secret lifetime/erasure;
+- normalized private decision and mask representations, one explicitly named
+  public declassification, fixed-width unsigned-word and compile-time-array
+  equality/selection/swap, exhaustive functional tests, hash-locked source
+  policy, and optimized LLVM/assembly witnesses across every supported stable
+  compiler and promised target; these are bounded implementation controls, not
+  formal proof, statistical timing evidence, arbitrary-composition coverage, or
+  a microarchitectural guarantee;
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;
 - private-field bounded numeric values, checked arithmetic in every profile,
   semantically separate quantities, non-wrapping monotonic values, explicit

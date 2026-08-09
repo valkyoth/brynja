@@ -1,0 +1,17 @@
+[package]
+name = "brynja-constant-time-codegen-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-core = { path = "../../crates/brynja-core", version = "=0.7.0" }
+
+[workspace]
+
+[profile.release]
+overflow-checks = true
+panic = "abort"
+codegen-units = 1
+lto = "fat"

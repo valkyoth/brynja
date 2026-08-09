@@ -1,6 +1,6 @@
 # Assurance Harness And Bare-Metal Matrix
 
-Status: v0.4.0 assurance foundation released; v0.11.0 narrow dynamic evidence added
+Status: v0.4.0 assurance foundation released; v0.12.0 constant-time emitted-code evidence added
 
 This directory freezes the first-party assurance boundary before protocol or
 cryptographic implementation begins. It is infrastructure evidence, not proof
@@ -78,6 +78,16 @@ erasure, protocol security, or independent verification. The latest-tools gate
 compares both nightly tools to the current official Rust nightly manifest and
 requires Miri to be available for the evidence host.
 
+Version 0.12.0 adds a standalone `no_std` constant-time code-generation
+witness, a machine-readable ten-compiler/nine-target evidence matrix, and
+optimized LLVM/assembly inspection for word and fixed 32-byte equality,
+selection, swap, and the compiler barrier. The checker rejects panic and
+variable-work library calls, secret-dependent branches in word witnesses,
+non-public loop bounds, and missing barrier fences. The witness is deliberately
+small and reproducible; it is not a proof of every monomorphization, a
+statistical timing test, independent review, or a claim about caches,
+speculation, power, electromagnetic leakage, or another microarchitecture.
+
 Run:
 
 ```bash
@@ -86,4 +96,9 @@ python3 scripts/test-assurance.py
 scripts/check-bare-metal.sh
 scripts/check-zeroization-miri.sh
 scripts/check-zeroization-sanitizer.sh
+python3 scripts/check-constant-time.py
+python3 scripts/test-constant-time.py
+scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+python3 scripts/check-constant-time-evidence.py
+python3 scripts/test-constant-time-evidence.py
 ```

@@ -1,0 +1,47 @@
+[schema]
+version = 1
+milestone = "0.12.0"
+
+[claim]
+scope = "unsigned-words-and-compile-time-byte-arrays"
+operations = ["equality", "conditional-select", "conditional-swap", "compiler-barrier"]
+array_witness_width = 32
+artifacts = ["source-policy", "llvm-ir", "assembly"]
+declassification = "Choice::expose_public"
+
+[coverage]
+compilers = [
+  "1.90.0",
+  "1.91.0",
+  "1.92.0",
+  "1.93.0",
+  "1.94.0",
+  "1.95.0",
+  "1.96.0",
+  "1.96.1",
+  "1.97.0",
+  "1.97.1",
+]
+compiler_target = "x86_64-unknown-linux-gnu"
+target_compiler = "1.97.1"
+targets = [
+  "x86_64-unknown-linux-gnu",
+  "x86_64-pc-windows-msvc",
+  "x86_64-unknown-freebsd",
+  "x86_64-apple-darwin",
+  "aarch64-linux-android",
+  "aarch64-apple-ios",
+  "thumbv7em-none-eabi",
+  "riscv32imac-unknown-none-elf",
+  "x86_64-unknown-none",
+]
+
+[limits]
+values = [
+  "source-and-emitted-code-evidence-is-not-a-proof",
+  "no-microarchitectural-or-statistical-timing-claim",
+  "no-cache-register-copy-or-physical-erasure-claim",
+  "no-variable-length-operation-claim",
+  "downstream-codegen-requires-separate-evidence",
+  "declassification-before-final-decision-can-leak",
+]

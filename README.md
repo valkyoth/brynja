@@ -72,9 +72,15 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.12.0` development line begins the constant-time foundation;
-that milestone is still in progress and no constant-time primitive is claimed
-complete by this documentation change. Version `0.11.2` implemented the
+The current `0.12.0` development line implements Brynja's first constant-time
+foundation in `brynja-core`: normalized one-byte `Choice` and `CtMask` values,
+constant-time equality, conditional selection and swap for unsigned words and
+compile-time-sized byte arrays, and an explicit compiler barrier. The source
+policy, exhaustive byte tests, compile-fail API tests, and optimized LLVM and
+assembly witnesses cover every supported Rust release and promised target.
+This is implementation evidence, not a mathematical proof, timing measurement,
+independent cryptographic review, or guarantee for an arbitrary downstream
+composition. Version `0.11.2` implemented the
 separately selected, protocol-neutral
 `brynja-sanitization 0.1.0` adapter admitted at v0.11.1. It exact-pins
 first-party `sanitization 2.0.3`, disables every upstream feature, activates no
@@ -204,6 +210,11 @@ selected set in dependency order and publishes the facade last.
   stays on latest stable Rust; policy-only status is never a proof claim.
 - A feature being compiled is never evidence that a protocol is implemented,
   secure, interoperable, audited, or production-ready.
+- The v0.12 constant-time API is intentionally limited to unsigned fixed-width
+  words and compile-time-sized byte arrays. It has one explicitly named public
+  declassification operation; dynamic slices, secret-dependent lengths,
+  protocol-level timing claims, and platform microarchitectural guarantees are
+  outside this foundation.
 - The locked RFC closure and its roadmap mapping are recorded in the
   [RFC coverage audit](https://github.com/valkyoth/brynja/blob/main/docs/RFC_COVERAGE_AUDIT.md);
   the generated
@@ -230,6 +241,7 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
+| `brynja-core` | Constant-time choice, masks, equality, selection, swap, and compiler barrier | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
@@ -245,8 +257,9 @@ certificate-bound operational-environment claim.
 
 Only the shared alert/failure, bounded numeric/resource, borrowed read,
 transactional caller-buffer write, exact workspace/arena, abstract secret
-lifetime, and owned-region zeroization foundations described for `brynja-core`
-plus the separately selected sanitization adapter are implemented. No
+lifetime, owned-region zeroization, and fixed-width constant-time foundations
+described for `brynja-core` plus the separately selected sanitization adapter
+are implemented. No
 cryptographic primitive, PKI processor, protocol parser, or protocol engine in
 this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
@@ -256,8 +269,8 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes v0.11 foundation domains; no TLS engine |
-| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus affine owned-region zeroization implemented |
+| `brynja` | Modern production facade | Exposes cumulative v0.12 foundation domains; no TLS engine |
+| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus affine owned-region zeroization and fixed-width constant-time operations implemented |
 | Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
 | Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
@@ -333,6 +346,11 @@ successful policy check is not formal-verification evidence.
 | `1.97.0` | Workspace all-feature compatibility check |
 | `1.97.1` | Full format, lint, test, platform, policy, docs, package, and security gate |
 
+The v0.12 constant-time emitted-code witness additionally runs on every listed
+stable compiler for the x86_64 Linux host and on all nine promised targets with
+Rust 1.97.1. This matrix is compiler evidence for the bounded witness, not a
+timing or independent-verification claim.
+
 Patch releases are listed separately when they are stable releases that the
 project promises to support. The authoritative matrix is
 [CRATE_VERSION_MATRIX.md](https://github.com/valkyoth/brynja/blob/main/docs/CRATE_VERSION_MATRIX.md).
@@ -353,6 +371,11 @@ scripts/check-kani.sh
 python3 scripts/check-unsafe-policy.py
 python3 scripts/check-first-party-rust-crypto.py
 python3 scripts/test-first-party-rust-crypto.py
+python3 scripts/check-constant-time.py
+python3 scripts/test-constant-time.py
+scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+python3 scripts/check-constant-time-evidence.py
+python3 scripts/test-constant-time-evidence.py
 python3 scripts/check-zeroization-evidence.py
 scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu

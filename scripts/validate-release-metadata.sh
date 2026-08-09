@@ -77,6 +77,23 @@ test -f scripts/unsafe_policy.py
 test -x scripts/check-first-party-rust-crypto.py
 test -x scripts/test-first-party-rust-crypto.py
 test -f scripts/first_party_rust_crypto.py
+test -x scripts/check-constant-time.py
+test -x scripts/test-constant-time.py
+test -f scripts/constant_time_policy.py
+test -x scripts/check-constant-time-codegen.sh
+test -x scripts/constant_time_codegen.py
+test -x scripts/check-constant-time-evidence.py
+test -x scripts/test-constant-time-evidence.py
+test -f scripts/constant_time_evidence.py
+test -s assurance/constant-time-matrix.toml
+test -s assurance/constant-time-codegen/Cargo.toml
+test -s assurance/constant-time-codegen/Cargo.lock
+test -s assurance/constant-time-codegen/src/lib.rs
+grep -q 'python3 scripts/check-constant-time.py' scripts/checks.sh
+grep -q 'python3 scripts/test-constant-time.py' scripts/checks.sh
+grep -q 'scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
+grep -q 'python3 scripts/check-constant-time-evidence.py' scripts/checks.sh
+grep -q 'python3 scripts/test-constant-time-evidence.py' scripts/checks.sh
 test -s docs/first-party-rust-cryptography.md
 test -x scripts/check-zeroization-codegen.sh
 test -x scripts/check-sanitization-adapter-codegen.sh

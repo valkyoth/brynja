@@ -77,6 +77,8 @@ jobs:
         run: cargo +${{ matrix.rust }} check --workspace --all-features
       - name: Verify zeroization emitted code
         run: scripts/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
+      - name: Verify constant-time emitted code
+        run: scripts/check-constant-time-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
 
   target:
     name: no_std target (${{ matrix.target }})
@@ -104,6 +106,8 @@ jobs:
         run: cargo check --workspace --all-features --target ${{ matrix.target }}
       - name: Verify zeroization emitted code
         run: scripts/check-zeroization-codegen.sh 1.97.1 "${{ matrix.target }}"
+      - name: Verify constant-time emitted code
+        run: scripts/check-constant-time-codegen.sh 1.97.1 "${{ matrix.target }}"
 
   zeroization-unsafe:
     name: Zeroization Miri and sanitizer evidence

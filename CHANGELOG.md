@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement private normalized `Choice` and `CtMask` values plus constant-time
+  equality, conditional selection, conditional swap, and a compiler barrier for
+  every unsigned word width and compile-time-sized byte arrays.
+- Add exhaustive byte-pair, word-boundary, array mismatch-position, and
+  compile-fail tests; a hash-locked source policy with twelve negative fixtures;
+  and optimized LLVM/assembly witnesses across ten stable compilers and nine
+  promised targets with five evidence-policy fixtures.
 - Add the versionless post-1.0 hash-ecosystem plan and the updated Brynja
   project image.
 - Implement separately selected `brynja-sanitization 0.1.0` with opaque
@@ -21,8 +28,8 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
-- Open the v0.12.0 constant-time-foundation development line without claiming
-  its implementation complete or selecting any crate for publication.
+- Complete the v0.12.0 constant-time foundation without selecting any crate for
+  publication; require its exceptional assessment before the signed tag.
 - Clarify in the shared package header and main README that Brynja is a
   TLS-first cryptography and secure-protocol ecosystem, with reusable leaf
   hash/MAC families below the still-essential `brynja-crypto` provider and
@@ -41,6 +48,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Keep decision and mask construction private, expose one explicitly named
+  public declassification, forbid ordinary equality/formatting, dynamic slices,
+  secret-dependent lengths, and fallible surfaces in the v0.12 boundary, and
+  document that emitted code is evidence rather than proof or a
+  microarchitectural guarantee.
 - Record the exceptional v0.11.2 repository-owner assessment as PASS/PASS with
   no findings and zero open findings; retain the adapter in the later
   v0.10.0-through-v0.15.0 cumulative assessment scope.

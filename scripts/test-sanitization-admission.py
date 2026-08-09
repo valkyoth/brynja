@@ -95,8 +95,18 @@ def test() -> None:
         document = root / "docs/sanitization-admission-review.md"
         replace(document, "forces a new admission review", "permits silent updates")
         require_rejection(root, "forces a new admission review")
+        copy_fixture(root)
+
+        candidate = root / "assurance/sanitization-admission/src/lib.rs"
+        replace(candidate, "try_from_fallible(", "try_from_fallible<E>(")
+        require_rejection(root, "arbitrary source error")
+        copy_fixture(root)
+
+        candidate = root / "assurance/sanitization-admission/src/lib.rs"
+        replace(candidate, "try_replace_from_fallible(", "try_replace_from_fallible<E>(")
+        require_rejection(root, "arbitrary source error")
 
 
 if __name__ == "__main__":
     test()
-    print("sanitization admission rejects eight identity, graph, feature, FIPS, and drift regressions")
+    print("sanitization admission rejects ten identity, graph, error-boundary, feature, FIPS, and drift regressions")

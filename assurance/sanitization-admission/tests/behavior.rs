@@ -1,4 +1,4 @@
-use brynja_sanitization_admission_fixture::{CandidateError, CandidateSecret};
+use brynja_sanitization_admission_fixture::{CandidateError, CandidateSecret, SourceFailure};
 use std::{format, panic};
 
 fn visible(secret: &CandidateSecret<4>) -> [u8; 4] {
@@ -31,7 +31,7 @@ fn explicit_clear_covers_the_complete_fixed_storage() {
 fn failed_construction_returns_only_a_closed_error() {
     let result = CandidateSecret::<4>::try_from_fallible(|index| {
         if index == 2 {
-            Err([0xA5; 16])
+            Err(SourceFailure)
         } else {
             Ok(index as u8)
         }
@@ -45,7 +45,7 @@ fn failed_replacement_preserves_the_old_value() {
     let before = visible(&secret);
     let replaced = secret.try_replace_from_fallible(|index| {
         if index == 3 {
-            Err(())
+            Err(SourceFailure)
         } else {
             Ok(0xA0 + index as u8)
         }
@@ -59,7 +59,7 @@ fn unwinding_replacement_preserves_the_old_value() {
     let mut secret = candidate();
     let before = visible(&secret);
     let unwind = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-        let _ = secret.try_replace_from_fallible::<()>(|index| {
+        let _ = secret.try_replace_from_fallible(|index| {
             if index == 2 {
                 panic::panic_any(());
             }

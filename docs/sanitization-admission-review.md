@@ -65,9 +65,10 @@ or count their guarantees as adapter guarantees.
 The independent, unpublished fixture under
 `assurance/sanitization-admission` instantiates the exact manifest and an
 opaque, non-empty, adapter-owned fixed-size wrapper without joining the Brynja
-workspace. Six behavior tests and a compile-fail test cover explicit complete
-clear, closed initialization failure, transactional replacement failure, panic
-unwind, redaction, empty-storage rejection, and non-clonability. The tag gate
+workspace. Six behavior tests and three compile-fail tests cover explicit
+complete clear, closed initialization failure, transactional replacement failure, panic
+unwind, redaction, empty-storage rejection, non-clonability, and rejection of
+rich error payloads at both fallible API boundaries. The tag gate
 rebuilds this fixture across the full compiler and target matrix.
 
 ## Unsafe And Destruction Review
@@ -117,6 +118,10 @@ the following:
   orphan-rule workaround, and provides no blanket or implicit conversion;
 - conversion into or out of Brynja protocol storage is explicit and
   caller-auditable; storage ownership cannot be shared or ambiguous;
+- fallible byte sources return only a Brynja-owned, zero-sized
+  `SourceFailure`; callers clear source-specific sensitive error state before
+  collapsing it, and no arbitrary error payload may cross or be discarded at
+  the adapter boundary;
 - modern and legacy applications use the same wrapper contract while their
   engines, credentials, state, caches, and tickets remain isolated;
 - `brynja-core` stays mandatory and authoritative for every protocol-owned
@@ -129,6 +134,12 @@ The adapter itself may depend on the exact `sanitization` release and the
 narrow frozen `brynja-core` contracts needed for explicit transfer. No Brynja
 facade, core, provider, modern engine, or legacy engine may depend back on the
 adapter.
+
+This closed error rule remediates the v0.11.1 review finding that the initial
+candidate accepted generic errors and could normally drop a secret-bearing
+error payload. The finding never reached the production graph; the candidate
+and admission validator now make that API shape a compile-time and policy
+failure.
 
 ## Compatibility And Target Evidence
 

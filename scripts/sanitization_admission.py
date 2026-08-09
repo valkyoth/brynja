@@ -162,6 +162,9 @@ def validate_record(root: Path) -> dict:
             "admitted upstream storage surface drift")
     require(boundary.get("non_empty_storage") is True,
             "adapter storage must reject empty ownership")
+    require(boundary.get("source_failure_type") ==
+            "closed payload-free brynja-owned SourceFailure",
+            "adapter must reject arbitrary source error payloads")
     require(len(rereview.get("conditions", [])) >= 6, "re-review conditions are incomplete")
     require("withhold or remove" in rereview.get("failure_action", ""),
             "failed re-review must fail closed")
@@ -237,8 +240,26 @@ def validate_candidate(root: Path) -> None:
             "candidate no_std or unsafe boundary drift")
     for prohibited in ("impl From", "impl Into", "impl core::ops::Deref", "pub inner"):
         require(prohibited not in source, f"candidate exposes prohibited boundary {prohibited}")
-    for required in ("CandidateSecret", "SecretBytes", "EmptySecret", "SourceFailure"):
+    for prohibited in (
+        "try_from_fallible<E>",
+        "try_replace_from_fallible<E>",
+        "map_err(|_error|",
+    ):
+        require(prohibited not in source,
+                f"candidate accepts or discards an arbitrary source error: {prohibited}")
+    for required in (
+        "CandidateSecret",
+        "SecretBytes",
+        "EmptySecret",
+        "pub struct SourceFailure;",
+        "Result<u8, SourceFailure>",
+        "map_err(|SourceFailure| CandidateError::SourceFailure)",
+    ):
         require(required in source, f"candidate missing frozen behavior {required}")
+    require(source.count("Result<u8, SourceFailure>") == 2,
+            "both fallible candidate APIs must require SourceFailure")
+    require(source.count("map_err(|SourceFailure| CandidateError::SourceFailure)") == 2,
+            "both fallible candidate APIs must map the closed error explicitly")
 
 
 def validate_release_state(root: Path) -> None:

@@ -24,6 +24,13 @@ workspace. The tag gate also queries crates.io, validates the immutable package
 archive, and rebuilds the fixture matrix, so a newer release or checksum drift
 fails closed and requires re-review.
 
+The post-implementation security review found that the first candidate API
+accepted arbitrary fallible-source error payloads and discarded them without
+zeroization. The remediated boundary accepts only the payload-free Brynja-owned
+`SourceFailure`; compile-fail tests reject rich errors for construction and
+replacement, and the admission validator rejects a return to a generic error.
+The affected fixture was never part of the production dependency graph.
+
 ## Frozen Boundary
 
 The decision permits v0.11.2 to conditionally implement one separately

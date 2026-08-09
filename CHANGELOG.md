@@ -11,8 +11,8 @@ Keep a Changelog and Semantic Versioning.
   for first-party `sanitization 2.0.3`, including source/package hashes,
   features, graph, unsafe inventory, target evidence, advisories, upstream
   pentest, residual risks, and re-review conditions.
-- Add an independent candidate wrapper with six behavior tests and one
-  compile-fail test, eight broken policy fixtures, and release-gate online
+- Add an independent candidate wrapper with six behavior tests and three
+  compile-fail tests, ten broken policy fixtures, and release-gate online
   crates.io freshness, package-archive, compiler, and target verification.
 
 ### Changed
@@ -31,6 +31,11 @@ Keep a Changelog and Semantic Versioning.
 - Exclude the adapter from all facades, engines, defaults, implicit
   conversions, and the FIPS validated-module closure. Upstream independent
   review remains evidence, not Brynja verification or FIPS validation.
+- Remediate the candidate fixture's secret-bearing error-remanence finding by
+  replacing arbitrary generic source errors with a payload-free Brynja-owned
+  `SourceFailure`, rejecting rich errors at compile time, and making policy
+  validation fail on generic error acceptance. The fixture was never in the
+  production graph.
 
 ## [0.11.0] - 2026-08-09
 

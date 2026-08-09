@@ -118,6 +118,7 @@ default_activation = false
 modern_and_legacy_shared = true
 core_destruction_remains_authoritative = true
 non_empty_storage = true
+source_failure_type = "closed payload-free brynja-owned SourceFailure"
 
 [rereview]
 conditions = [

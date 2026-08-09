@@ -11,6 +11,13 @@
 use core::fmt;
 use sanitization::SecretBytes;
 
+/// Payload-free failure accepted from a caller-provided byte source.
+///
+/// Callers must clear any source-specific sensitive error state before
+/// collapsing it into this closed boundary value.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct SourceFailure;
+
 /// Closed failure from the review-only candidate boundary.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CandidateError {
@@ -46,26 +53,41 @@ impl<const N: usize> CandidateSecret<N> {
         })
     }
 
-    /// Fallible direct construction with closed error mapping.
-    pub fn try_from_fallible<E>(
-        make_byte: impl FnMut(usize) -> Result<u8, E>,
+    /// Fallible direct construction with a payload-free source error.
+    ///
+    /// Rich or secret-bearing source errors cannot cross this boundary.
+    ///
+    /// ```compile_fail
+    /// use brynja_sanitization_admission_fixture::CandidateSecret;
+    ///
+    /// let _ = CandidateSecret::<4>::try_from_fallible(|_| Err([0xA5; 16]));
+    /// ```
+    pub fn try_from_fallible(
+        make_byte: impl FnMut(usize) -> Result<u8, SourceFailure>,
     ) -> Result<Self, CandidateError> {
         if N == 0 {
             return Err(CandidateError::EmptySecret);
         }
         SecretBytes::try_from_fn(make_byte)
             .map(|inner| Self { inner })
-            .map_err(|_error| CandidateError::SourceFailure)
+            .map_err(|SourceFailure| CandidateError::SourceFailure)
     }
 
     /// Replace transactionally after a complete candidate is ready.
-    pub fn try_replace_from_fallible<E>(
+    ///
+    /// ```compile_fail
+    /// use brynja_sanitization_admission_fixture::CandidateSecret;
+    ///
+    /// let mut secret = CandidateSecret::<4>::try_from_fn(|_| 1).unwrap();
+    /// let _ = secret.try_replace_from_fallible(|_| Err([0xA5; 16]));
+    /// ```
+    pub fn try_replace_from_fallible(
         &mut self,
-        make_byte: impl FnMut(usize) -> Result<u8, E>,
+        make_byte: impl FnMut(usize) -> Result<u8, SourceFailure>,
     ) -> Result<(), CandidateError> {
         self.inner
             .try_replace_from_fn(make_byte)
-            .map_err(|_error| CandidateError::SourceFailure)
+            .map_err(|SourceFailure| CandidateError::SourceFailure)
     }
 
     /// Inspect through a closure without returning a borrow.

@@ -10,6 +10,10 @@ repository-only package versions remain unchanged during this development
 milestone. Package publication does not imply a TLS implementation or
 production readiness.
 
+The v0.11.1 milestone has an exceptional committed PASS pentest report after
+remediation and green retest. That evidence does not change its internal stage:
+the release plan still selects zero crates for publication.
+
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
 | `brynja` | `0.11.1` | no | Development tag version; latest crates.io checkpoint is `0.10.0` |

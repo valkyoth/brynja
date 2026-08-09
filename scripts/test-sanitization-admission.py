@@ -92,6 +92,11 @@ def test() -> None:
         require_rejection(root, "cumulative milestone")
         copy_fixture(root)
 
+        release = root / "release-crates.toml"
+        replace(release, "exceptional = true", "exceptional = false")
+        require_rejection(root, "must remain exceptional")
+        copy_fixture(root)
+
         document = root / "docs/sanitization-admission-review.md"
         replace(document, "forces a new admission review", "permits silent updates")
         require_rejection(root, "forces a new admission review")
@@ -109,4 +114,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("sanitization admission rejects ten identity, graph, error-boundary, feature, FIPS, and drift regressions")
+    print("sanitization admission rejects eleven identity, graph, error-boundary, exceptional-state, feature, FIPS, and drift regressions")

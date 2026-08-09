@@ -271,7 +271,11 @@ def validate_release_state(root: Path) -> None:
     require(metadata.get("cumulative_milestones") == ["0.11.0", "0.11.1"],
             "cumulative milestone range drift")
     require(metadata.get("stage") == "internal", "v0.11.1 must remain internal")
-    require(metadata.get("exceptional") is False, "review-only v0.11.1 is not exceptional")
+    require(metadata.get("exceptional") is True,
+            "assessed v0.11.1 must remain exceptional")
+    require("Medium secret-bearing error-remanence finding" in
+            metadata.get("exception_reason", ""),
+            "v0.11.1 exceptional reason must bind the remediated finding")
 
 
 def archive_member(archive: tarfile.TarFile, suffix: str) -> bytes:

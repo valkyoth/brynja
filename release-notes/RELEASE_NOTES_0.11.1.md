@@ -30,6 +30,8 @@ zeroization. The remediated boundary accepts only the payload-free Brynja-owned
 `SourceFailure`; compile-fail tests reject rich errors for construction and
 replacement, and the admission validator rejects a return to a generic error.
 The affected fixture was never part of the production dependency graph.
+The repository-owner retest of signed remediation commit
+`cd1c881d2eb6c9aa925f1527a326330c1cf3b80a` passed with zero open findings.
 
 ## Frozen Boundary
 
@@ -62,9 +64,8 @@ verification of Brynja and is not FIPS validation.
 
 ## Release Process
 
-v0.11.1 is an ordinary internal development tag: no scheduled pentest and no
-crates.io publication occur unless an exceptional trigger arises. After the
-signed implementation commit passes the complete local gate and GitHub and
-CodeQL are green, the immutable signed `v0.11.1` tag may be created. All changes
-remain in the backwards-looking v0.10.0-through-v0.15.0 cumulative pentest
-scope.
+v0.11.1 is an internal development tag with an exceptional committed PASS
+pentest report and no crates.io publication. After the signed release-candidate
+commit passes the complete local gate and GitHub and CodeQL are green, the
+immutable signed `v0.11.1` tag may be created. All changes remain in the
+backwards-looking v0.10.0-through-v0.15.0 cumulative pentest scope.

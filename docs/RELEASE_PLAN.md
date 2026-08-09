@@ -1067,6 +1067,10 @@ Exit criteria:
 
 - a committed, evidence-backed admit-or-reject decision preserves every Brynja
   destruction and isolation invariant without adding a production dependency;
+- the exceptional assessment is complete: its one Medium error-payload
+  remanence finding is closed by signed remediation, the repository-owner
+  retest is PASS with zero open findings, and the permanent report is committed
+  for the exact candidate before tagging;
 - `v0.11.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.11.2 - Optional Brynja Sanitization Adapter

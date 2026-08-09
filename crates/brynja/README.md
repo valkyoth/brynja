@@ -50,6 +50,15 @@ re-review triggers. These foundations do **not** implement TLS framing, a
 protocol state machine, or cryptography and must not be used to secure network
 traffic.
 
+An exceptional v0.11.1 repository-owner assessment found that the initial
+review fixture accepted and discarded arbitrary source-error payloads. The
+remediated boundary accepts only a payload-free Brynja-owned error, and the
+retest of signed commit `cd1c881d2eb6c9aa925f1527a326330c1cf3b80a` passed
+with zero open findings. The permanent
+[v0.11.1 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.11.1.md)
+records the finding, remediation, limits, and exact evidence; no affected code
+ever entered the production graph.
+
 ## Development Tags And Pentesting
 
 The `brynja` facade version advances at every roadmap milestone, including

@@ -12,7 +12,7 @@ Keep a Changelog and Semantic Versioning.
   features, graph, unsafe inventory, target evidence, advisories, upstream
   pentest, residual risks, and re-review conditions.
 - Add an independent candidate wrapper with six behavior tests and three
-  compile-fail tests, ten broken policy fixtures, and release-gate online
+  compile-fail tests, eleven broken policy fixtures, and release-gate online
   crates.io freshness, package-archive, compiler, and target verification.
 
 ### Changed
@@ -36,6 +36,9 @@ Keep a Changelog and Semantic Versioning.
   `SourceFailure`, rejecting rich errors at compile time, and making policy
   validation fail on generic error acceptance. The fixture was never in the
   production graph.
+- Record the repository-owner PASS retest of signed remediation commit
+  `cd1c881d2eb6c9aa925f1527a326330c1cf3b80a` with zero open findings; v0.11.1
+  remains an internal tag with no crates.io publication selection.
 
 ## [0.11.0] - 2026-08-09
 

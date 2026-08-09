@@ -361,6 +361,14 @@ Version 0.11.1 completes the sanitization adapter admission review:
 - `brynja-core` remains the mandatory authoritative protocol destruction path,
   while the optional adapter stays outside every FIPS validated-module closure
   and cannot satisfy or imply a validation claim.
+- an exceptional repository-owner assessment found the initial review fixture
+  could discard arbitrary secret-bearing source errors without clearing their
+  payload; signed remediation `cd1c881d2eb6c9aa925f1527a326330c1cf3b80a`
+  replaced that boundary with a zero-sized `SourceFailure`, and the retest
+  passed with zero open findings; and
+- the milestone remains an internal tag with zero crates selected for
+  publication, while its permanent PASS report is committed under
+  `security/pentest/v0.11.1.md`.
 
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded

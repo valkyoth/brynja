@@ -5,8 +5,8 @@ baseline = "0.10.0"
 cumulative_milestones = ["0.11.0", "0.11.1"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "The v0.11.1 candidate admission boundary received an exceptional repository-owner assessment; one Medium secret-bearing error-remanence finding was remediated and retested PASS before tagging."
 
 [crates."brynja"]
 previous_version = "0.11.0"

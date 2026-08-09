@@ -79,6 +79,7 @@ def expected_versions() -> list[str]:
         139: (1,),
         140: (1,),
         146: (1,),
+        151: (1, 2, 3, 4),
     }
     versions = []
     for number in range(1, 163):

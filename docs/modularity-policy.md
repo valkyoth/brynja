@@ -20,6 +20,15 @@ optional feature edges, publication class, and resolved no-default and
 all-feature graph expectations. Adding, renaming, publishing, or connecting a
 package therefore requires an explicit reviewed policy change.
 
+The first-party Rust cryptography golden rule applies across every package and
+companion adapter. No Brynja cryptographic or FIPS service may be implemented
+by a foreign source file, native object or library, build script, foreign ABI,
+or external software cryptographic provider. First-party intrinsics and inline
+assembly remain separately reviewed Rust-owned CPU symbols; they do not admit
+external assembly or vendor modules. The machine policy in
+`first-party-rust-cryptography.md` rejects native implementation edges before
+ordinary build and graph checks run.
+
 The `brynja-sanitization` package is a downstream integration
 boundary, never a feature or dependency of `brynja`, `brynja-core`,
 `brynja-crypto`, `brynja-pki`, a modern or legacy engine, or
@@ -62,6 +71,18 @@ semantics. Candidate detection is not activation; required acceleration fails
 closed, opportunistic fallback is explicit, and every FIPS artifact owns its
 exact implementation symbols, dispatch table and operational-environment
 evidence without inheriting the ordinary std adapter.
+
+Future `brynja-rustls` and `brynja-tokio` are explicit downstream companion
+packages in separately locked integration workspaces. They are never
+dependencies, features, or re-exports of `brynja`, its engines, crypto
+packages, legacy packages, defaults, bare-metal graph, or validated module.
+Their narrowly admitted pure-Rust rustls or Tokio dependencies are integration
+API exceptions only: each adapter owns an exact feature allowlist, dependency
+closure, freshness review, advisory policy, SBOM, and native-code rejection.
+`brynja-rustls` disables built-in rustls providers and fills every advertised
+operation with Brynja cryptography; `brynja-tokio` wraps Brynja TLS rather than
+rustls or a raw AEAD stream. Neither exception permits an external
+cryptographic implementation anywhere in the project.
 
 Supersession alone never makes a TLS version legacy. Reclassification needs
 a dedicated numbered security-boundary release, standards and cryptographic

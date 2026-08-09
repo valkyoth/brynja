@@ -63,6 +63,10 @@ retain prior caller bytes, overrun a region, create mutable aliases, confuse a
 returned local-memory completion with cache or DMA completion, or extend the
 claim to registers, copies, dumps, suspend images, physical memory, forgotten
 owners, concurrency, and termination.
+Supply-chain attackers additionally try to replace a planned first-party Rust
+primitive or FIPS service with a C/native wrapper, vendor object, build-script
+download, system cryptographic provider, rustls built-in provider, misleading
+pure-Rust facade, or optional adapter dependency that enters a core graph.
 
 ## Required Controls
 
@@ -108,9 +112,15 @@ owners, concurrency, and termination.
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
-- deterministic builds, pinned CI actions, zero third-party dependencies, SBOMs, and
-  a current committed pentest report that must change with every later release
-  candidate fix;
+- deterministic builds, pinned CI actions, zero third-party dependencies in
+  every core graph, isolated exact dependency closures for separately selected
+  ecosystem adapters, SBOMs, and a current committed pentest report that must
+  change with every later release candidate fix;
+- a permanent machine-enforced first-party Rust cryptography rule rejecting
+  foreign cryptographic source, objects, libraries, build scripts, native-link
+  metadata, foreign ABIs, delegated software providers, and FIPS wrappers,
+  while allowing only separately gated first-party Rust intrinsics or inline
+  assembly as exact Brynja CPU implementation symbols;
 - explicit package classes and exact no-default and all-feature graph policy so
   optional features cannot smuggle legacy, research, tooling, or platform code
   across a product boundary;

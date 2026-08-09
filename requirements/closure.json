@@ -3810,6 +3810,50 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
+      "scope": "Freeze separately locked downstream companion workspaces for future brynja-rustls and brynja-tokio packages; keep both absent from the core workspace lockfile and every brynja facade, engine, crypto, default, all-features, legacy, bare-metal and FIPS-module edge; admit third-party Rust dependencies only inside the adapter that implements their API, with exact minimal features, freshness, advisory, license, MSRV, SBOM and native-code closure policy; and make the first-party Rust cryptography golden rule permanent and machine-enforced without implementing either adapter yet.",
+      "source_ids": [],
+      "title": "Optional Ecosystem Adapter And Dependency Boundary",
+      "version": "0.151.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement and prepare for separate publication brynja-rustls as an explicitly selected rustls custom provider backed completely by Brynja primitives, groups, cipher suites, signature verification, signing, secure randomness and key loading; use rustls with defaults and built-in providers disabled, never enable rustls's fips feature or resolve or delegate to AWS-LC, ring or another cryptographic provider, distinguish rustls TLS evidence from Brynja TLS evidence, and report no FIPS status from ordinary Brynja.",
+      "source_ids": [],
+      "title": "Brynja Rustls Custom Provider Adapter",
+      "version": "0.151.2"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement and prepare for separate publication brynja-tokio with connector, acceptor and TlsStream types that implement Tokio AsyncRead and AsyncWrite over the stable Brynja TLS EngineV1 contract; use caller-owned bounded buffers and minimal Tokio I/O features, preserve full-duplex progress, partial-write, wakeup, cancellation, backpressure, flush, close_notify and shutdown semantics, and forbid raw AEAD-over-stream framing, tokio-rustls and every second TLS or cryptographic implementation.",
+      "source_ids": [],
+      "title": "Brynja Tokio TLS Stream Adapter",
+      "version": "0.151.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Qualify brynja-rustls and brynja-tokio dependency direction, exact lockfiles, feature allowlists, native-code absence, package archives, SBOMs, MSRV/latest-stable compatibility, cancellation and hostile-I/O behavior, independent-peer interoperability and framework upgrades; prove the main Brynja graph remains byte-for-byte independent of both; keep both outside brynja-fips-module; and permit any later adapter-level approved-operation claim only through an exact certificate-bound module handle, numbered review and applicable operational-environment evidence without enabling rustls's fips feature or changing the validated artifact.",
+      "source_ids": [],
+      "title": "Ecosystem Adapter Isolation And Interoperability Gate",
+      "version": "0.151.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
       "scope": "Prove the caller-owned zero-allocation profile with exact workspace sizes, non-overlapping arenas, stack ceilings, concurrency limits, and hostile-load budgets.",
       "source_ids": [],
       "title": "Zero-Allocation And Resource Proof",

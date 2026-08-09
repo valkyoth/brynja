@@ -12,13 +12,23 @@ validator rejects numbering, ordering, title, or scope drift.
 
 ## Admission Rules For Every Version
 
-Every milestone retains `no_std` production packages, no third-party crates in
-repository Cargo manifests, bounded hostile-input and pre-authentication work,
+Every milestone retains `no_std` core production packages, no third-party crate
+in the core workspace or any facade, engine, crypto, default, legacy,
+bare-metal or FIPS graph, bounded hostile-input and pre-authentication work,
 mandatory owned-region secret destruction, adversarial tests, supported Rust
 and target evidence, SBOM, the complete automated tag gate, clean GitHub and
 CodeQL, and explicit user authorization before the immutable signed tag.
 Scheduled or exceptional public checkpoints additionally require an up-to-date
 committed cumulative PASS pentest report before tagging and publication.
+
+The permanent golden rule is stronger than dependency isolation: every Brynja
+cryptographic and FIPS service is implemented from first-party Rust source,
+never a C or foreign/native cryptographic module or wrapper. Separately gated
+first-party intrinsics or inline assembly may implement exact CPU symbols;
+external assembly, objects, libraries, foreign ABIs and delegated software
+cryptographic providers are forbidden. Future rustls and Tokio companion
+adapters may own separately locked pure-Rust framework API dependencies, but
+remain downstream and cannot weaken this rule or enter the core graphs.
 
 Protocol and optional-module dependency direction is downstream from frozen
 interfaces and validated provider ports. Early negotiation policy is distinct
@@ -327,6 +337,10 @@ Receive and send compression, post-validation closure, and cross-feature composi
 | `0.149.0` | Facade Configuration Typestates | After every planned v1 optional module has exercised the internal effects model, freeze ordinary brynja typestates for exact versions, integrated one-pass routing, suites, trust, RPK, ECH, delegated credentials, compression, resources, revocation, PSK, zero-RTT, Certificate Transparency, and providers, and separately freeze brynja-fips typestates around the certificate-bound validated-module handle and closed approved-only profile; neither facade re-exports raw cryptography or admits a legacy range. |
 | `0.150.0` | Versioned Stable Sans-I/O V1 API | Freeze EngineV1, EventV1, and ActionV1 with exhaustive mandatory entropy, signing, storage, timer, path-validation, OCSP transport and cache, decompression, trust, revocation-feature, external-PSK provisioning, CT-version, HPKE-context, provider, transport, service-approval, external-destruction, authentication, ECH, early-data, anti-replay, and policy results; applications cannot wildcard-ignore mandatory effects, and unhandled or mismatched effects fail closed; new mandatory effects require V2 interfaces and a major SemVer release; only bounded secret-free observational SecurityEvent values are non-exhaustive, and ignoring every such event still leaves accepted, rejected, approved, non-approved, and destruction-complete states unambiguous through mandatory state and results. |
 | `0.151.0` | Caller-Provided Host Capability Integration | Keep protocol-facing contracts upstream and require caller-provided entropy and OS integration for v1; provide no built-in OS entropy FFI. Supply reviewed examples for safe std clocks, transport and storage and for caller or kernel entropy, while documenting that any future Windows, macOS, BSD, mobile, or bare-metal unsafe adapter requires its own crate, versioned unsafe and FFI milestone, audit, and platform evidence. |
+| `0.151.1` | Optional Ecosystem Adapter And Dependency Boundary | Freeze separately locked downstream companion workspaces for future brynja-rustls and brynja-tokio packages; keep both absent from the core workspace lockfile and every brynja facade, engine, crypto, default, all-features, legacy, bare-metal and FIPS-module edge; admit third-party Rust dependencies only inside the adapter that implements their API, with exact minimal features, freshness, advisory, license, MSRV, SBOM and native-code closure policy; and make the first-party Rust cryptography golden rule permanent and machine-enforced without implementing either adapter yet. |
+| `0.151.2` | Brynja Rustls Custom Provider Adapter | Implement and prepare for separate publication brynja-rustls as an explicitly selected rustls custom provider backed completely by Brynja primitives, groups, cipher suites, signature verification, signing, secure randomness and key loading; use rustls with defaults and built-in providers disabled, never enable rustls's fips feature or resolve or delegate to AWS-LC, ring or another cryptographic provider, distinguish rustls TLS evidence from Brynja TLS evidence, and report no FIPS status from ordinary Brynja. |
+| `0.151.3` | Brynja Tokio TLS Stream Adapter | Implement and prepare for separate publication brynja-tokio with connector, acceptor and TlsStream types that implement Tokio AsyncRead and AsyncWrite over the stable Brynja TLS EngineV1 contract; use caller-owned bounded buffers and minimal Tokio I/O features, preserve full-duplex progress, partial-write, wakeup, cancellation, backpressure, flush, close_notify and shutdown semantics, and forbid raw AEAD-over-stream framing, tokio-rustls and every second TLS or cryptographic implementation. |
+| `0.151.4` | Ecosystem Adapter Isolation And Interoperability Gate | Qualify brynja-rustls and brynja-tokio dependency direction, exact lockfiles, feature allowlists, native-code absence, package archives, SBOMs, MSRV/latest-stable compatibility, cancellation and hostile-I/O behavior, independent-peer interoperability and framework upgrades; prove the main Brynja graph remains byte-for-byte independent of both; keep both outside brynja-fips-module; and permit any later adapter-level approved-operation claim only through an exact certificate-bound module handle, numbered review and applicable operational-environment evidence without enabling rustls's fips feature or changing the validated artifact. |
 | `0.152.0` | Zero-Allocation And Resource Proof | Prove the caller-owned zero-allocation profile with exact workspace sizes, non-overlapping arenas, stack ceilings, concurrency limits, and hostile-load budgets. |
 | `0.153.0` | Aesynx ABI And Emulator Qualification | Make the stable Aesynx adapter contract a v1 requirement and pass an executable target-ABI or emulator harness for entropy, randomness, time, transport, storage, acceleration, boot-to-handshake, and lifecycle behavior; allow real-hardware qualification after v1 without weakening the contract. |
 | `0.154.0` | Protocol State And Resource Formal Harnesses | Complete Kani or equivalent harnesses for cursors, lengths, state reachability, exhaustion, replay, transactional transitions, one-pass selectors, secret-release invariants, zeroization and obsolete-key transitions, X.509 path-work and policy-graph ceilings, DTLS return-routability path binding, HPKE context invalidation, and single-consumption pending-operation tokens using pinned external tools. |

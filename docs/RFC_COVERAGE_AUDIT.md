@@ -31,7 +31,7 @@ owner milestones, and 483 surfaces. v0.3.5 adds 49 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
 authorities, 182 reviewed normative sections, and 764 formerly uncovered
 surfaces.
-The complete closure covers 126 locked authorities, 206 roadmap rows, and
+The complete closure covers 126 locked authorities, 223 roadmap rows, and
 4,445 surfaces. Planned targets become actual code, tests, and evidence only
 in their owning milestone.
 

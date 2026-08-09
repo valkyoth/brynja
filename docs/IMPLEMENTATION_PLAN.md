@@ -12,11 +12,23 @@ test count, or interoperability alone never establishes that claim.
 ## Non-Negotiable Constraints
 
 - Rust `1.90.0` MSRV and current stable Rust for full release evidence.
-- No third-party runtime, build, development, fuzz, test, or tooling crates in
-  repository Cargo manifests. Brynja does not use `cargo-fuzz` or
-  `libfuzzer-sys`; pinned external process tools drive first-party harness
-  binaries. Adding any assurance crate requires an explicit future policy
-  change and can never affect a shipped package graph.
+- **Golden rule:** every Brynja cryptographic primitive, construction, key
+  operation, protocol cryptographic operation, CPU backend, and FIPS module
+  service is implemented from first-party Rust source. Brynja never wraps,
+  links, vendors, calls, or delegates those duties to C, C++, Objective-C,
+  OpenSSL, LibreSSL, BoringSSL, AWS-LC, mbedTLS, wolfCrypt, SymCrypt, a system
+  cryptographic library, or any other foreign/native cryptographic module.
+  First-party Rust intrinsics or inline assembly remain separately gated unsafe
+  implementations; external assembly, objects, archives, and shared libraries
+  are forbidden.
+- The core workspace admits no third-party runtime, build, development, fuzz,
+  test, or tooling crates in Cargo manifests. Brynja does not use `cargo-fuzz`
+  or `libfuzzer-sys`; pinned external process tools drive first-party harness
+  binaries. Future downstream `brynja-rustls` and `brynja-tokio` companion
+  packages may admit only the exact pure-Rust ecosystem interfaces they
+  implement through separately locked, reviewed adapter graphs. Those adapters
+  can never enter the main workspace lockfile, a Brynja facade, engine, crypto,
+  default, bare-metal, legacy, or validated-module graph.
 - Portable production cores remain `no_std` with no assumed allocator, OS,
   socket, clock, filesystem, entropy source, or runtime CPU detector. A future
   separately selected `brynja-crypto-cpu-std` adapter may use `std` only for
@@ -68,6 +80,10 @@ brynja
 ├── optional brynja-platform (downstream implementations only)
 └── future brynja-sanitization (explicit downstream adapter only)
 
+future downstream companion integration workspaces (never brynja dependencies)
+├── brynja-rustls (Brynja cryptography as a rustls custom provider)
+└── brynja-tokio (Tokio AsyncRead/AsyncWrite over Brynja TLS)
+
 brynja-legacy (never a brynja dependency)
 ├── brynja-legacy-tls11
 ├── brynja-legacy-tls10
@@ -118,12 +134,32 @@ Neither package is an implicit dependency or default feature. A validated FIPS
 module links only the exact CPU symbols and dispatch table frozen into its own
 artifact; the ordinary std adapter stays outside that boundary.
 
+The separately selected `brynja-rustls` companion fills rustls's custom
+provider only with Brynja implementations. It disables rustls defaults and
+must never enable or resolve AWS-LC, ring, rustls's `fips` feature, or another
+cryptographic provider. It uses rustls's TLS engine and therefore does not
+pretend to exercise Brynja's TLS engine. The separately selected
+`brynja-tokio` companion instead wraps Brynja's stable Sans-I/O TLS engine in
+Tokio connector, acceptor, and stream types. It never invents a raw
+AEAD-over-TCP protocol and never depends on `tokio-rustls`. Both adapters own
+minimal exact dependency and feature allowlists, independent lockfiles, SBOMs,
+advisory checks, native-code closure checks, and interoperability tests. Their
+dependency direction is strictly downstream: no Brynja package re-exports,
+features, or depends on either adapter.
+
 FIPS support uses package and type boundaries, not an additive Cargo feature.
 `brynja-fips-module` is the exact cryptographic module artifact submitted for
 validation. The separate `brynja-fips` facade remains outside that boundary and
 offers the easy client and server entry points, but it constructs them only from
 a certificate-bound manifest and matching validated-module handle. Ordinary
 `brynja` configuration can never acquire a FIPS claim through feature unification.
+The module contains only first-party Rust implementations and the exact
+separately admitted first-party Rust CPU symbols frozen into that artifact; it
+never becomes a wrapper for AWS-LC, OpenSSL, a system provider, or another
+validated module. An ecosystem adapter remains outside the module and cannot
+report approved operation until a later numbered review proves the exact
+certificate, service, configuration, artifact, and operational-environment
+claim without changing the module.
 
 `brynja-sanitization` is a separately selected downstream adapter,
 not a feature or dependency of any Brynja facade or protocol engine. The

@@ -27,6 +27,9 @@ Keep a Changelog and Semantic Versioning.
 - Expand the future roadmap with scalar-first, per-primitive CPU acceleration
   milestones; separate no_std ISA kernels from opt-in std detection; and name
   native AMD, AWS Intel, Apple M2, AWS Arm, and qualifying RISC-V evidence lanes.
+- Establish the permanent first-party Rust cryptography golden rule and plan
+  separately locked downstream `brynja-rustls` and `brynja-tokio` companion
+  adapters without admitting either dependency to the core workspace.
 
 ### Security
 
@@ -40,6 +43,10 @@ Keep a Changelog and Semantic Versioning.
   and quarantine, native performance and side-channel evidence, honest
   candidate status, scalar fallback, isolated unsafe review, and exact FIPS
   implementation-symbol and operational-environment ownership.
+- Reject C and other foreign/native cryptographic implementations, wrappers,
+  vendor libraries, source and binary artifacts, package build scripts, Cargo
+  native-link metadata, foreign ABIs, and external-module FIPS substitutions
+  through policy, CI, and nine permanent broken fixtures.
 
 ## [0.11.1] - 2026-08-09
 

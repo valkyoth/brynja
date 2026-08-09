@@ -17,6 +17,21 @@ is planned for local AMD x86_64, observed-feature AWS Intel x86_64, Apple M2,
 AWS AArch64, and qualifying RISC-V hardware; QEMU remains supplemental and an
 unavailable feature bundle remains an explicit candidate or scalar-only path.
 
+The roadmap now also makes first-party Rust cryptography the permanent golden
+rule. Every Brynja primitive, construction, key operation, protocol
+cryptographic operation, CPU backend, and FIPS module service must be a
+Brynja-owned Rust implementation rather than a C/native wrapper or delegated
+software provider. Machine checks reject foreign source and binary artifacts,
+build scripts and dependencies, Cargo native links, foreign ABIs, and included
+native binaries.
+
+Future `brynja-rustls` and `brynja-tokio` packages are planned as separately
+locked downstream companion adapters. Applications will select them directly;
+they can never enter the main facade, engine, crypto, default, legacy,
+bare-metal, or FIPS-module graph. The rustls adapter will disable every built-in
+provider and use Brynja cryptography throughout. The Tokio adapter will wrap
+Brynja's TLS engine rather than rustls or a raw AEAD stream.
+
 ## Adapter Boundary
 
 The new separately publishable `brynja-sanitization 0.1.0` package exact-pins

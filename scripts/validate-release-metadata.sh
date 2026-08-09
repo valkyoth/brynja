@@ -74,6 +74,10 @@ test -x scripts/test-release-readiness.sh
 test -x scripts/check-unsafe-policy.py
 test -x scripts/test-unsafe-policy.py
 test -f scripts/unsafe_policy.py
+test -x scripts/check-first-party-rust-crypto.py
+test -x scripts/test-first-party-rust-crypto.py
+test -f scripts/first_party_rust_crypto.py
+test -s docs/first-party-rust-cryptography.md
 test -x scripts/check-zeroization-codegen.sh
 test -x scripts/check-sanitization-adapter-codegen.sh
 test -x scripts/check-zeroization-evidence.py
@@ -140,6 +144,8 @@ grep -q 'python3 scripts/test-verification-status.py' scripts/checks.sh
 grep -q 'scripts/test-shell-syntax.sh' scripts/checks.sh
 grep -q 'python3 scripts/check-unsafe-policy.py' scripts/checks.sh
 grep -q 'python3 scripts/test-unsafe-policy.py' scripts/checks.sh
+grep -q 'python3 scripts/check-first-party-rust-crypto.py' scripts/checks.sh
+grep -q 'python3 scripts/test-first-party-rust-crypto.py' scripts/checks.sh
 grep -q 'python3 scripts/check-zeroization-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/test-zeroization-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/check-sanitization-admission.py' scripts/checks.sh

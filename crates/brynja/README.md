@@ -104,6 +104,12 @@ selected set in dependency order and publishes the facade last.
 
 ## Design Boundaries
 
+- **Golden rule:** every Brynja cryptographic primitive, construction, key
+  operation, protocol cryptographic operation, CPU backend, and FIPS module
+  service is implemented from first-party Rust source. Brynja never wraps,
+  links, vendors, calls, or delegates those duties to C, C++, Objective-C,
+  OpenSSL, BoringSSL, AWS-LC, a system cryptographic library, or another
+  foreign/native cryptographic module.
 - The modern `brynja` facade can never enable SSL or other legacy
   protocols through its features.
 - Legacy implementations live in explicitly named packages and use
@@ -113,8 +119,10 @@ selected set in dependency order and publishes the facade last.
 - `brynja-tls` is an evergreen facade and one-pass router over independently
   versioned modern TLS engines; a new TLS generation does not redefine an
   existing engine package or automatically make its predecessor legacy.
-- Runtime and build dependencies are forbidden. Any future exception requires
-  a dedicated adapter crate, written admission review, tests, and release gate.
+- Runtime and build dependencies are forbidden in the core workspace. Future
+  separately selected `brynja-rustls` and `brynja-tokio` companion adapters may
+  depend only on the exact pure-Rust ecosystem API they implement, in separate
+  lockfiles and graphs that can never enter or be enabled by `brynja`.
 - Version `0.11.2` implements one separately selected
   `brynja-sanitization` adapter over admitted exact `sanitization 2.0.3`. It
   uses an exact pin with default features disabled,
@@ -236,7 +244,8 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Pinned stable toolchain | Rust `1.97.1` |
 | Kani verifier pairing | `cargo-kani 0.67.0` on Rust `1.90.0`; separate evidence only |
 | Default target | `no_std` |
-| Third-party crates | Forbidden |
+| Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
+| Third-party crates | Forbidden in the core workspace and every Brynja facade, engine, crypto, legacy, bare-metal, and FIPS graph; future rustls/Tokio companion adapters own isolated exact API dependencies |
 | First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter with no feature or transitive package |
 | Unsafe Rust | One v0.11 volatile-store block admitted in a private module; every other site is mechanically forbidden |
 | Default networking | None |
@@ -287,6 +296,8 @@ python3 scripts/test-assurance.py
 scripts/check-bare-metal.sh
 scripts/check-kani.sh
 python3 scripts/check-unsafe-policy.py
+python3 scripts/check-first-party-rust-crypto.py
+python3 scripts/test-first-party-rust-crypto.py
 python3 scripts/check-zeroization-evidence.py
 scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
@@ -335,6 +346,7 @@ candidate can be tagged and published.
 - [Release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
 - [Version plan](https://github.com/valkyoth/brynja/blob/main/docs/VERSION_PLAN.md)
 - [Threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md)
+- [First-party Rust cryptography golden rule](https://github.com/valkyoth/brynja/blob/main/docs/first-party-rust-cryptography.md)
 - [Standards source policy](https://github.com/valkyoth/brynja/blob/main/docs/rfc-source-policy.md)
 - [Machine-readable standards evidence](https://github.com/valkyoth/brynja/blob/main/standards/README.md)
 - [Normative requirement evidence](https://github.com/valkyoth/brynja/blob/main/requirements/README.md)

@@ -113,7 +113,7 @@ manifest. Fifty residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
 explicit exclusions while assigning every one of the 763 surfaces left by the
 earlier bundles. The generated closure proves that all 126 locked authorities,
-all 206 roadmap rows, all 4,445 surfaces, and all 167 requirements have
+all 223 roadmap rows, all 4,445 surfaces, and all 167 requirements have
 bidirectional ownership. Local rights, mutable NIST and IANA refresh rules,
 and unavailable hybrid, legacy, and FIPS-validation authorities remain
 machine-readable fail-closed records rather than capability claims.

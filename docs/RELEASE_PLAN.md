@@ -15,12 +15,22 @@ and ordering; this document repeats them and automated checks reject drift.
 
 Every tag requires generated normative traceability,
 explicit resource, secret, storage, effect, dependency and failure boundaries,
-adversarial tests, documented limitations, no third-party crates in repository
-Cargo manifests, `no_std` evidence, SBOM comparison, clean CI and CodeQL
-Default, and explicit user authorization. Scheduled or exceptional public
+adversarial tests, documented limitations, no third-party crate in the core
+workspace or any facade, engine, crypto, default, legacy, bare-metal or FIPS
+graph, `no_std` evidence, SBOM comparison, clean CI and CodeQL Default, and
+explicit user authorization. Scheduled or exceptional public
 checkpoints additionally require an up-to-date committed pentest report and
 crates.io release preparation. Development milestones create a signed tag but
 no scheduled report, GitHub Release, or crates.io publication.
+
+Every cryptographic and FIPS service follows the permanent first-party Rust
+golden rule. No release may substitute a C or foreign/native cryptographic
+module, wrapper, vendor library, external assembly file, prebuilt object, or
+delegated software provider. Separately reviewed first-party Rust intrinsics or
+inline assembly remain exact Brynja implementation symbols. Future rustls and
+Tokio companion adapters may own narrowly admitted pure-Rust framework API
+dependencies only in separately locked downstream graphs; they never become a
+dependency or feature of the core workspace or a FIPS-module implementation.
 
 Early negotiation policy is separate from final routing. Optional modules remain
 downstream of validated provider ports and pass a composition gate before public
@@ -6801,6 +6811,114 @@ Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.151.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.151.1 - Optional Ecosystem Adapter And Dependency Boundary
+
+Status: planned
+
+Plan scope: Freeze separately locked downstream companion workspaces for future brynja-rustls and brynja-tokio packages; keep both absent from the core workspace lockfile and every brynja facade, engine, crypto, default, all-features, legacy, bare-metal and FIPS-module edge; admit third-party Rust dependencies only inside the adapter that implements their API, with exact minimal features, freshness, advisory, license, MSRV, SBOM and native-code closure policy; and make the first-party Rust cryptography golden rule permanent and machine-enforced without implementing either adapter yet.
+
+Goal: establish ecosystem integration without weakening Brynja's dependency-free core or first-party Rust cryptographic implementation boundary.
+
+Deliverables:
+
+- freeze the permanent golden rule that every shipped Brynja cryptographic and FIPS service is implemented from first-party Rust source and never by a foreign module, native library, wrapper or delegated provider;
+- define separately locked downstream companion-workspace, publication, ownership, feature, lockfile, SBOM, advisory, freshness, native-code and no-reverse-dependency policies for brynja-rustls and brynja-tokio;
+- extend repository policy to reject C, C++, Objective-C, external assembly, native objects and libraries, package build scripts, Cargo native links, build dependencies and foreign cryptographic ABI edges in Brynja-owned package trees;
+- update requirements closure, threat model, controls, implementation architecture, limitations, release notes and permanent evidence index.
+
+Verification:
+
+- inject foreign sources, objects, archives, build scripts, build dependencies, Cargo links, foreign ABI declarations, native link attributes and included native binaries and require fail-closed policy rejection;
+- construct broken dependency graphs in which an adapter enters the main workspace lockfile, facade, engine, crypto, default, all-features, legacy, bare-metal or FIPS-module closure and require every path to fail;
+- validate exact adapter exception fields, minimal-feature and pure-Rust closure schemas, publication direction, separate-lockfile ownership and the absence of an implementation or FIPS claim at this boundary;
+- pass repository checks, promised Rust versions and targets, dependency and advisory policy, SBOM, packages, documentation and protocol isolation.
+
+Exit criteria:
+
+- the core remains dependency-free, adapters have only narrow downstream dependency authority, and no policy path can turn integration into foreign cryptographic implementation or a FIPS claim;
+- `v0.151.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.151.2 - Brynja Rustls Custom Provider Adapter
+
+Status: planned
+
+Plan scope: Implement and prepare for separate publication brynja-rustls as an explicitly selected rustls custom provider backed completely by Brynja primitives, groups, cipher suites, signature verification, signing, secure randomness and key loading; use rustls with defaults and built-in providers disabled, never enable rustls's fips feature or resolve or delegate to AWS-LC, ring or another cryptographic provider, distinguish rustls TLS evidence from Brynja TLS evidence, and report no FIPS status from ordinary Brynja.
+
+Goal: let rustls applications explicitly select Brynja cryptography without importing a foreign cryptographic backend or confusing rustls protocol behavior with Brynja TLS behavior.
+
+Deliverables:
+
+- implement the complete current rustls custom-provider surface in brynja-rustls using only admitted Brynja primitives, groups, cipher suites, verification, signing, randomness and key-loading services;
+- exact-pin the reviewed rustls line in the companion lockfile with default providers and rustls's fips feature disabled, no AWS-LC, ring, native cryptography, fallback provider or partially delegated provider in the resolved graph;
+- provide explicit provider construction and installation examples, capability and unsupported-operation reporting, version-drift policy, and documentation that all TLS state-machine evidence belongs to rustls rather than Brynja TLS;
+- keep ordinary provider and configuration FIPS status false and update package, SBOM, advisory, compatibility, release and verification inventories.
+
+Verification:
+
+- run every supported rustls cipher-suite, group, signature, certificate-verification, signing, randomness and key-loading path through direct Brynja KATs, scalar or admitted CPU differentials, provider-failure injection and independent peers;
+- break or omit each provider element, enable each forbidden built-in/default/fips feature, inject AWS-LC, ring and fallback edges, and require graph and runtime checks to fail before a connection begins;
+- test global and per-configuration selection, concurrent installation behavior, unsupported algorithms, key lifecycle, provider cancellation and exact rustls version/API drift without attributing rustls protocol coverage to Brynja TLS;
+- pass the companion and core repository gates, promised Rust versions and targets, package archives, dependency, license, advisory, SBOM, native-code, documentation and isolation checks.
+
+Exit criteria:
+
+- rustls can use a complete explicitly selected Brynja provider with no foreign cryptographic implementation, built-in fallback, main-graph edge or ordinary FIPS claim;
+- `v0.151.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.151.3 - Brynja Tokio TLS Stream Adapter
+
+Status: planned
+
+Plan scope: Implement and prepare for separate publication brynja-tokio with connector, acceptor and TlsStream types that implement Tokio AsyncRead and AsyncWrite over the stable Brynja TLS EngineV1 contract; use caller-owned bounded buffers and minimal Tokio I/O features, preserve full-duplex progress, partial-write, wakeup, cancellation, backpressure, flush, close_notify and shutdown semantics, and forbid raw AEAD-over-stream framing, tokio-rustls and every second TLS or cryptographic implementation.
+
+Goal: provide conventional Tokio client and server streams while retaining Brynja's authenticated TLS framing, bounded Sans-I/O state and dependency direction.
+
+Deliverables:
+
+- implement separately selected connector, acceptor and TlsStream adapters over EngineV1 with explicit client/server configuration, handshake completion, plaintext and ciphertext flow, errors and terminal state;
+- define caller-owned bounded buffering, exact poll progress, partial consumption, read/write independence, wake registration, cancellation, backpressure, flush, close_notify, peer EOF, truncation and shutdown contracts;
+- exact-pin a minimal reviewed Tokio I/O feature closure in the companion lockfile and prohibit tokio-rustls, rustls, raw AEAD stream framing, another TLS stack, another cryptographic provider and any reverse edge into Brynja;
+- publish examples for clients, servers, split/full-duplex operation and graceful shutdown while retaining explicit entropy, clock, trust and storage capabilities.
+
+Verification:
+
+- exhaustively vary Pending and Ready at every transport operation, every partial read/write boundary, zero-capacity buffers, wakeup order, duplex direction, cancellation point, flush and shutdown transition;
+- inject malformed records, truncation, close_notify races, peer EOF, transport errors, provider delays, buffer exhaustion, task migration and repeated polls and prove no plaintext release, busy loop, lost wakeup, duplicated consumption or secret-bearing error;
+- compare synchronous Sans-I/O traces and Tokio traces against independent TLS peers across fragmentation, coalescing, resumption, KeyUpdate, backpressure and graceful and abortive closure;
+- pass companion and core gates, promised Rust versions and targets, package archives, dependency, license, advisory, SBOM, native-code, documentation and isolation checks.
+
+Exit criteria:
+
+- Tokio applications can opt into a bounded correct Brynja TLS stream without a second TLS or cryptographic implementation and without altering the main Brynja graph;
+- `v0.151.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.151.4 - Ecosystem Adapter Isolation And Interoperability Gate
+
+Status: planned
+
+Plan scope: Qualify brynja-rustls and brynja-tokio dependency direction, exact lockfiles, feature allowlists, native-code absence, package archives, SBOMs, MSRV/latest-stable compatibility, cancellation and hostile-I/O behavior, independent-peer interoperability and framework upgrades; prove the main Brynja graph remains byte-for-byte independent of both; keep both outside brynja-fips-module; and permit any later adapter-level approved-operation claim only through an exact certificate-bound module handle, numbered review and applicable operational-environment evidence without enabling rustls's fips feature or changing the validated artifact.
+
+Goal: close the ecosystem-adapter assurance boundary before resource proofs and final systems qualification consume the public integration surface.
+
+Deliverables:
+
+- freeze exact adapter dependency, feature, lockfile, package, SBOM, native-code, advisory, MSRV, latest-stable, upgrade and publication evidence independently from the core workspace;
+- complete rustls-provider and Tokio-stream conformance, independent-peer interoperability, hostile-I/O, cancellation, concurrency, lifecycle, resource, error and documentation matrices;
+- prove clean core source, manifest, lockfile, package archive, feature graph, SBOM and reproducible-build identity with and without each separately selected companion adapter;
+- freeze FIPS claim separation: both adapters remain outside the module, ordinary paths report no validation, and a future approved-operation bridge needs an exact certificate-bound handle, numbered review and operational-environment evidence.
+
+Verification:
+
+- compare core artifacts and graphs byte for byte before and after building each companion workspace and inject reverse, optional, re-export, default, all-feature, legacy, bare-metal and FIPS-module edges;
+- scan complete resolved adapter archives and build plans for native source, objects, libraries, build scripts, AWS-LC, ring, rustls fips, tokio-rustls, duplicate TLS and duplicate cryptographic providers;
+- run supported/unsupported framework-version matrices, forced dependency and feature drift, independent client/server peers, cancellation and hostile scheduling, resource exhaustion and package-install smoke tests;
+- audit every verification and FIPS statement so adapter evidence cannot be presented as Brynja TLS review, official validation or certificate coverage.
+
+Exit criteria:
+
+- both optional adapters are independently usable and upgradable while the dependency-free core, first-party Rust cryptography rule, protocol evidence and exact FIPS artifact remain unchanged and unambiguous;
+- `v0.151.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.152.0 - Zero-Allocation And Resource Proof
 

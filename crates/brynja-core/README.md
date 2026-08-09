@@ -108,7 +108,9 @@ negative assembly fixtures. Retest then found numeric register aliases and
 omitted pseudo/compressed branches. The gate now canonicalizes RISC-V argument
 registers, covers all eighteen conditional forms, and retains ten focused
 negative fixtures. Local remediation passes all compiler and target lanes; the
-repository-owner retest remains pending.
+repository-owner retest of exact signed candidate
+`7ce43fffdf81a349c7c44aae33b229d077d4512d` passed with zero open findings.
+The v0.12.0 tag now awaits green GitHub and CodeQL.
 
 ## Cryptography Verification Status
 

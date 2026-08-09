@@ -1,12 +1,12 @@
 # Brynja v0.12.0 Development Milestone
 
-Status: remediation complete; awaiting pentest retest
+Status: pentest PASS; awaiting GitHub and CodeQL
 
 Brynja v0.12.0 implements the first reusable constant-time foundation in
 `brynja-core`, advances the `brynja` facade to 0.12.0, and selects no crate for
 crates.io publication. Because constant-time code is an explicit material
-security trigger, the candidate requires a green exceptional-assessment retest
-before its signed development tag.
+security trigger, the candidate received an exceptional assessment and a green
+retest before its signed development tag.
 
 ## Implemented
 
@@ -66,7 +66,8 @@ pseudoinstructions, compressed conditional branches, and numeric aliases in
 memory operands could evade the textual scanner. The gate now canonicalizes
 `x10` through `x17`, classifies all eighteen RISC-V conditional forms, covers
 compressed integer loads/stores, and reproduces all four variants. The
-repository-owner retest of the signed third candidate remains pending.
+repository-owner retest of exact signed third candidate
+`7ce43fffdf81a349c7c44aae33b229d077d4512d` passed with zero open findings.
 
 ## Current Limits
 
@@ -83,6 +84,7 @@ verification, and is not FIPS 140-3 validated.
 
 v0.12.0 is an internal development milestone in the cumulative range after
 v0.10.0 through v0.15.0 and selects no crates for crates.io publication. Its
-first constant-time code meets the exceptional-pentest trigger. Only after the
-remediation retest is green and committed with a PASS/PASS report, the full gate
-passes, and GitHub and CodeQL are green may the signed `v0.12.0` tag be created.
+first constant-time code meets the exceptional-pentest trigger. The green
+retest is committed in a PASS/PASS report. Only after the full gate passes,
+GitHub and CodeQL are green, and the repository owner explicitly authorizes it
+may the signed `v0.12.0` tag be created.

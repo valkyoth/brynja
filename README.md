@@ -122,8 +122,9 @@ the validator and a sixth fixture closed that assurance gap. A second retest
 found numeric register aliases plus omitted pseudo/compressed RISC-V branches;
 the gate now canonicalizes argument registers, recognizes all eighteen
 conditional forms, and retains ten focused negative fixtures. The exact signed
-third candidate still requires repository-owner retest before v0.12.0 may be
-tagged.
+third candidate, `7ce43fffdf81a349c7c44aae33b229d077d4512d`, passed the
+repository-owner retest with zero open findings. The permanent report records
+PASS/PASS; v0.12.0 now awaits green GitHub and CodeQL before tagging.
 
 ## Development Tags And Pentesting
 

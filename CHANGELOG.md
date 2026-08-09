@@ -57,8 +57,11 @@ Keep a Changelog and Semantic Versioning.
 
 - Remediate the pentest's High RV32 timing finding by passing every expanded
   word and array mask through the non-inlined optimization barrier before
-  XOR/AND selection; record zero locally open findings and keep the tag blocked
-  pending repository-owner retest.
+  XOR/AND selection, then close two Medium assurance-scanner bypasses through
+  register canonicalization and complete RISC-V conditional classification.
+- Record the repository-owner retest of exact signed candidate
+  `7ce43fffdf81a349c7c44aae33b229d077d4512d` as PASS/PASS with zero open
+  findings; keep the tag blocked until GitHub and CodeQL are green.
 - Keep decision and mask construction private, expose one explicitly named
   public declassification, forbid ordinary equality/formatting, dynamic slices,
   secret-dependent lengths, and fallible surfaces in the v0.12 boundary, and

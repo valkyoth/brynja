@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 remediation awaiting retest
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 pentest PASS, awaiting GitHub and CodeQL
 
 | Control | Foundation enforcement |
 | --- | --- |

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 remediation awaiting retest
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 pentest PASS, awaiting GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -417,14 +417,17 @@ The initial assessment demonstrated that the source mask formula became LLVM
 `select`, then secret-dependent RV32 branches, while the old assembly checker
 validated symbols but not their bodies. Remediation barriers each expanded
 mask before XOR/AND selection, always inlines word selection into the witness,
-and inspects concrete function bodies with target-specific branch rules. Five
-new assembly regressions reject RV32 secret branches and secret-indexed loads,
-fixed-array forward branches, and x86_64/AArch64 secret branches. The permanent
-report records `RETEST REQUIRED`/`PENDING` until external confirmation.
+and inspects concrete function bodies with target-specific branch rules. The
+follow-up remediation canonicalizes RISC-V register aliases, recognizes all
+eighteen conditional forms, and retains ten focused negative fixtures. The
+repository-owner retest of exact signed candidate
+`7ce43fffdf81a349c7c44aae33b229d077d4512d` passed; the permanent report records
+`PASS`/`PASS` with zero open findings.
 
 Dynamic slices, secret-dependent lengths, signed values, arbitrary downstream
 composition, and protocol-level timing remain outside v0.12.0. The milestone
-selects no crates.io publication and awaits its remediation retest.
+selects no crates.io publication and awaits green GitHub and CodeQL before its
+signed tag.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

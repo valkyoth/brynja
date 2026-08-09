@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 remediation awaiting retest
+Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 pentest PASS, awaiting GitHub and CodeQL
 
 The `brynja` facade advances to `0.12.0` for the current development line but
 is not selected for crates.io publication. The latest signed development tag
@@ -14,9 +14,9 @@ production readiness.
 The optional adapter is a material production secret-storage boundary. Its
 exceptional v0.11.2 assessment passed with zero findings. The v0.12.0 internal
 stage selects zero crates for publication. Its initial assessment found one
-High RV32 timing flaw; local remediation is complete, and its tag remains gated
-on the remediation retest, exceptional PASS/PASS report, green CI, and green
-CodeQL.
+High RV32 timing flaw and two Medium assurance-scanner bypasses; remediation
+and repository-owner retest are complete with a PASS/PASS report and zero open
+findings. Its tag remains gated on green CI and green CodeQL.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

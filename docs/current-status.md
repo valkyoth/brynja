@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting remediation retest
+Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -31,8 +31,9 @@ published no crate. The facade now advances to `0.13.0` for upstream provider
 capability and opaque-handle contracts while all crates.io publication
 selections remain empty. Its voluntary assessment found three High
 authorization/provider-binding flaws and one Medium work-accounting flaw. The
-four source remediations are complete locally; the signed remediation candidate
-must pass repository-owner retest before any tag.
+four source remediations are complete, and the repository-owner retest of exact
+signed candidate `b45185e5aefdd48b9dc1859fee7a9000be9b6168` passed with zero
+open findings. The tag remains blocked until GitHub and CodeQL are green.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

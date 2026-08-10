@@ -1,6 +1,6 @@
 # Brynja v0.13.0 Development Milestone
 
-Status: remediation implemented; awaiting repository-owner retest
+Status: pentest passed; awaiting green GitHub and CodeQL
 
 Brynja v0.13.0 freezes the first protocol-neutral provider capability and
 opaque-handle contracts in `brynja-core`, advances the `brynja` facade to
@@ -89,9 +89,10 @@ approval, platform I/O, or provider implementations. Those remain owned by
 later explicit milestones.
 
 The voluntary assessment found three High authorization/provider-binding
-findings and one Medium work-accounting finding. All four are remediated in
-source and local tests, but v0.13.0 remains blocked pending repository-owner
-retest of the signed remediation candidate.
+findings and one Medium work-accounting finding. All four were remediated in
+source and assurance policy. The repository owner retested exact signed
+remediation candidate `b45185e5aefdd48b9dc1859fee7a9000be9b6168`; the retest
+passed with zero open findings.
 
 Brynja remains incomplete, must not secure application traffic, has no
 independent cryptographic or protocol verification, and is not FIPS 140-3
@@ -102,6 +103,6 @@ validated.
 v0.13.0 is an internal development milestone in the cumulative range after
 v0.10.0 through v0.15.0 and selects zero crates for crates.io publication. It
 did not require a scheduled pentest, but the completed voluntary assessment
-and its High findings now activate an exceptional retest gate. Only a PASS
-retest, complete local gate, green GitHub and CodeQL, and explicit
-repository-owner authorization permit the signed `v0.13.0` tag.
+and its High findings activated an exceptional retest gate. The retest passed;
+the complete local gate, green GitHub and CodeQL, and explicit repository-owner
+authorization remain mandatory before the signed `v0.13.0` tag.

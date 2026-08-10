@@ -89,7 +89,10 @@ Keep a Changelog and Semantic Versioning.
   identity, and separating MAC generation from verification while forbidding
   verification byte output. Remediate its Medium finding by replacing
   caller-supplied work claims with a monotonic meter initialized from the
-  installed provider's frozen budget; repository-owner retest remains pending.
+  installed provider's frozen budget.
+- Record the repository-owner retest of exact signed v0.13.0 remediation
+  candidate `b45185e5aefdd48b9dc1859fee7a9000be9b6168` as PASS/PASS with
+  zero open findings; keep the tag blocked until GitHub and CodeQL are green.
 - Remediate the pentest's High RV32 timing finding by passing every expanded
   word and array mask through the non-inlined optimization barrier before
   XOR/AND selection, then close two Medium assurance-scanner bypasses through

@@ -1209,7 +1209,7 @@ Exit criteria:
 
 ### v0.13.0 - Provider Capabilities And Opaque Handles
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Define all protocol-facing crypto, signature, KEM, AEAD, entropy, clock, path, storage, and pending-operation contracts in upstream no_std interface modules such as brynja-core, with opaque handles, frozen capabilities, transactional installation, exact-operation token binding, and no implicit fallback; brynja-platform only implements downstream contracts.
 
@@ -1234,8 +1234,8 @@ Verification:
 Exit criteria:
 
 - the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
-- the voluntary assessment activated an exceptional trigger, so a PASS
-  repository-owner retest is mandatory before hosted checks and tagging;
+- the voluntary assessment activated an exceptional trigger; the exact signed
+  remediation candidate passed repository-owner retest with zero open findings;
 - `v0.13.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.13.1 - CPU Backend Capability And Dispatch Contract

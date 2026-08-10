@@ -60,7 +60,10 @@ the existing single-consumption destruction contract.
 - nine broken fixtures exercise operation omission, authorization bypass,
   fallback injection, mutable effects, destruction-duty removal, version
   coupling, dependency inversion, cloneable handles, and unreviewed source
-  drift; and
+  drift;
+- the Miri and AddressSanitizer evidence lanes use current
+  `nightly-2026-08-10` at the exact official Rust revision
+  `969b803cbe1d4499f841ae0a49c637d8c70a0458`; and
 - workspace tests, Clippy, rustdoc, `no_std`, supported Rust and target
   matrices, dependency policy, package policy, advisory checks, SBOM, and
   modern/legacy isolation remain mandatory.

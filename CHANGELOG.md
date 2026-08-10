@@ -49,6 +49,9 @@ Keep a Changelog and Semantic Versioning.
 - Freeze provider authority in upstream `brynja-core`; keep
   `brynja-platform` as a downstream future implementation boundary and do not
   introduce a registry, fallback provider, platform dependency, or effect.
+- Refresh the Miri and Rust sanitizer evidence toolchain to
+  `nightly-2026-08-10` at exact Rust revision
+  `969b803cbe1d4499f841ae0a49c637d8c70a0458` after the online freshness gate.
 - Complete the v0.12.0 constant-time foundation without selecting any crate for
   publication; require its exceptional assessment before the signed tag.
 - Clarify in the shared package header and main README that Brynja is a

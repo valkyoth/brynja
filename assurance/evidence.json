@@ -6,10 +6,10 @@
   ],
   "harness_protocol": "brynja-stdin-json-v1",
   "inputs": {
-    ".github/workflows/ci.yml": "238475d94a275a5d4c09fbecc11fa3a8ec5ac386787f8c091c6c49a29bc3af2c",
+    ".github/workflows/ci.yml": "e7b2ab4df11efb276d28c8e78577f90559924827bcded8d6ac4e1ff0c7fe740d",
     "Cargo.toml": "07c3d0ef0d65e4f52ae19a50524845eab93057831c779ccc676eaa860a2157f7",
-    "assurance/policy.toml": "960f19d29bda89e9281065d6b4bc04508d75e279ef8f7787f63c472d2ba45ea1",
-    "assurance/zeroization-matrix.toml": "dd97ccbf3a06c559e28685b4b636c9a798465b85685eb44b61da80b582d4e0ed",
+    "assurance/policy.toml": "720838d3c0ea4f9c343dd40eff311cdcffa39e0539d2b4b557964a2b55a540ad",
+    "assurance/zeroization-matrix.toml": "ab01168790198edd55bca79eb2bd3c8a276cbaf38dd530e60cf553756eafd44e",
     "crates/brynja-core/Cargo.toml": "42c16a2d8c432fe0ff4264bb46ab1f6b06f768cdd2b0ca978b3c8551a286e704",
     "crates/brynja-core/src/secret_memory.rs": "0b82ff4e7a535535aed48fcf25543435850a7d9239addb933cd94e951b19ac84",
     "crates/brynja-core/src/secret_memory_volatile.rs": "2746e34bfd55c80def2acf6afdfd6798d51291ea4255732e26a360d17d43dfb1",
@@ -55,16 +55,16 @@
     "scripts/check-unsafe-policy.py": "8b23579ea13ad0d55fc08fdbca2f6fe2c9aa8f7357bc36bceba30531ee414c6d",
     "scripts/check-zeroization-codegen.sh": "71c83e5a0f59fd10bb5f4667e7aaf76c28acf33bffb4aacd433adfa6fba38cc5",
     "scripts/check-zeroization-evidence.py": "8888f925271a52c7ca465931b4f7f0ff9a1e67d8f3e634d261ff1be26880687a",
-    "scripts/check-zeroization-miri.sh": "766bbb1b18c533b07e3c5e1d7c3e81c706ba389f2c8b70beea37e0dcb05cdfd2",
-    "scripts/check-zeroization-sanitizer.sh": "19d5a46a7f75f4e90c06152007d4136a8579aad49b1a44053ef7cd1aacf3ec96",
+    "scripts/check-zeroization-miri.sh": "c3dbc21ba971c582f04f25538e7064af2b205712864ca17bbd8695a0a7364577",
+    "scripts/check-zeroization-sanitizer.sh": "75525a47f4659ddd20317a929d7290de79b57bc6603395afa3ee2e8efd3232eb",
     "scripts/test-assurance.py": "dab9086f1927b7890b13e50ed513ac21c81b39e907133c89f0c9ac891b59023c",
     "scripts/test-unsafe-policy.py": "1f1ff3fc88d552c87eed3e8c3bdbff86f8df55109bd7532ab8086194fbf603af",
     "scripts/test-zeroization-evidence.py": "bbc4d9cec588b24418508c63e8f46e397d157cef54ad0a5f9a1e96b5479a2ce5",
     "scripts/unsafe_policy.py": "90c980281f9f70d0100bf530b14acf96f043de87fe258a9118c21dea56e436ba",
-    "scripts/zeroization_evidence.py": "0bad398bc55e21524454b45d5cc5c66b732becddde5393402576083370dcdfb1"
+    "scripts/zeroization_evidence.py": "019fd174e572d6260a60ac6e630c7505606d28138fc73fd0208a9104420acba6"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "960f19d29bda89e9281065d6b4bc04508d75e279ef8f7787f63c472d2ba45ea1",
+  "policy_sha256": "720838d3c0ea4f9c343dd40eff311cdcffa39e0539d2b4b557964a2b55a540ad",
   "schema": 1,
   "tools": [
     {
@@ -91,16 +91,16 @@
     {
       "id": "miri",
       "owner": "0.11.0",
-      "revision": "771916f9028e7fe56d2685f2c4f698de5d7d6a45",
+      "revision": "969b803cbe1d4499f841ae0a49c637d8c70a0458",
       "source_kind": "rustup-component",
-      "version": "nightly-2026-08-09"
+      "version": "nightly-2026-08-10"
     },
     {
       "id": "rust-sanitizers",
       "owner": "0.11.0",
-      "revision": "771916f9028e7fe56d2685f2c4f698de5d7d6a45",
+      "revision": "969b803cbe1d4499f841ae0a49c637d8c70a0458",
       "source_kind": "rust-toolchain",
-      "version": "nightly-2026-08-09"
+      "version": "nightly-2026-08-10"
     }
   ]
 }

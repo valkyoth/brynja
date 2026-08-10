@@ -41,7 +41,10 @@ fn reject_secret_and_ambiguous_errors() {
     let local = TlsFailure::local(ProtocolVersion::Tls13, LocalFailure::InvalidInput);
     let provider = TlsFailure::provider(
         ProtocolVersion::Tls13,
-        ProviderFailure::new(ProviderOperation::Aead, ProviderFailureKind::InvalidOutput),
+        ProviderFailure::new(
+            ProviderOperation::AeadOpen,
+            ProviderFailureKind::InvalidOutput,
+        ),
     );
     let exhausted = TlsFailure::exhausted(
         ProtocolVersion::Tls13,

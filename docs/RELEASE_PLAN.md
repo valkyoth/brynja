@@ -1041,7 +1041,7 @@ Exit criteria:
 
 ### v0.11.1 - Sanitization Adapter Admission Review
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Audit the latest stable first-party `sanitization` crate against Brynja's MSRV, `no_std`, license, unsafe, target, complete-owned-region destruction, feature, dependency, advisory, optimization-evidence, and FIPS-boundary policies; compare one protocol-neutral adapter with a legacy-specific split, require an activated graph with no `zeroize` or other third-party crate, and record a fail-closed admit-or-reject decision without changing any Brynja production dependency graph.
 
@@ -1095,7 +1095,7 @@ Exit criteria:
 
 ### v0.11.2 - Optional Brynja Sanitization Adapter
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Conditional on the v0.11.1 admission decision, implement and prepare for separate publication at the next scheduled or exceptional release checkpoint a `no_std` `brynja-sanitization` downstream adapter using exact-pinned `sanitization` with default features disabled, adapter-owned wrapper types, and identical modern and legacy destruction semantics; keep it out of every facade, engine, default feature, and FIPS validated-module closure, or close the milestone with documented non-admission if any invariant cannot be preserved.
 
@@ -1152,7 +1152,7 @@ Exit criteria:
 
 ### v0.12.0 - Constant-Time Foundation
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Implement constant-time equality, choice and mask types, conditional select and swap, fixed-width secret operations, compiler barriers, and rules forbidding secret-dependent control flow, indexing, loop counts, and error timing.
 
@@ -1209,7 +1209,7 @@ Exit criteria:
 
 ### v0.13.0 - Provider Capabilities And Opaque Handles
 
-Status: planned
+Status: awaiting green CI
 
 Plan scope: Define all protocol-facing crypto, signature, KEM, AEAD, entropy, clock, path, storage, and pending-operation contracts in upstream no_std interface modules such as brynja-core, with opaque handles, frozen capabilities, transactional installation, exact-operation token binding, and no implicit fallback; brynja-platform only implements downstream contracts.
 

@@ -1,10 +1,16 @@
 # Assurance Harness And Bare-Metal Matrix
 
-Status: v0.4.0 assurance foundation released; v0.12.0 constant-time emitted-code evidence added
+Status: v0.4.0 assurance foundation released; v0.12.0 emitted-code and v0.13.0 provider-source evidence added
 
 This directory freezes the first-party assurance boundary before protocol or
 cryptographic implementation begins. It is infrastructure evidence, not proof
 that TLS exists or is secure.
+
+The v0.13.0 provider contract adds a separate hash-locked source validator and
+nine broken fixtures through `scripts/check-provider-contract.py` and
+`scripts/test-provider-contract.py`. That policy enforces authority and
+dependency structure; it is not provider-effect, algorithm, interoperability,
+or formal-verification evidence.
 
 `policy.toml` defines bounded deterministic mutation, raw-stdin differential
 adapters, OS-less compilation targets, and exact external-tool source pins.

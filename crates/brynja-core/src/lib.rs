@@ -14,6 +14,9 @@ pub mod error;
 pub mod exhaustion;
 pub mod numeric;
 pub mod provider;
+pub mod provider_capability;
+pub mod provider_contract;
+pub mod provider_request;
 pub mod quantity;
 pub mod read;
 pub mod secret;
@@ -43,6 +46,17 @@ pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
 pub use provider::{ProviderFailure, ProviderFailureKind, ProviderOperation};
+pub use provider_capability::{
+    ProviderCapabilities, ProviderCapabilitiesBuilder, ProviderCapabilityError,
+};
+pub use provider_contract::{
+    InstalledProvider, ProviderAuthorization, ProviderAuthorizationError, ProviderHandle,
+    ProviderInstallation, ProviderInstallationError, ProviderInstallationField,
+};
+pub use provider_request::{
+    ProviderFrame, ProviderRequest, ProviderRequestComplete, ProviderRequestError,
+    ProviderRequestFailure, ProviderRequestOutcome,
+};
 pub use quantity::{Count, Length};
 pub use read::{ReadCursor, ReadError};
 pub use secret::{
@@ -96,6 +110,9 @@ pub const OWNED_MEMORY_ZEROIZATION_IMPLEMENTED: bool = true;
 /// Whether the v0.12 constant-time foundation is implemented.
 pub const CONSTANT_TIME_FOUNDATION_IMPLEMENTED: bool = true;
 
+/// Whether the v0.13 provider capability and opaque-handle contracts are implemented.
+pub const PROVIDER_CONTRACTS_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -114,6 +131,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::CONSTANT_TIME_FOUNDATION_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::PROVIDER_CONTRACTS_IMPLEMENTED
         ));
     }
 }

@@ -1,14 +1,15 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.11.2 tagged; v0.12.0 pentest PASS, awaiting GitHub and CodeQL
+Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
 caller-buffer write cursors, an exact caller-owned workspace partition, an
 abstract secret-lifetime contract, and a byte-backed exclusive borrowed secret
 region with complete-region volatile clearing, plus fixed-width constant-time
-choice, mask, equality, selection, swap, and compiler-barrier operations. It
-still has no integer
+choice, mask, equality, selection, swap, and compiler-barrier operations, and
+provider capability, installation, opaque-handle, authorization, and bounded
+request-metadata contracts. It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
@@ -24,12 +25,11 @@ Signed v0.11.0 introduced the first isolated unsafe secret-destruction
 boundary and completed its exceptional pentest with zero open findings.
 v0.11.1 admitted the optional sanitization adapter and v0.11.2 implemented it;
 both exceptional assessments are permanently recorded with zero open findings.
-The facade now advances to `0.12.0` for the completed constant-time foundation
-while all crates.io publication selections remain empty. Because this is the
-first reusable timing-sensitive primitive boundary, its initial exceptional
-pentest found one High RV32 branch-timing flaw. Local remediation passes; the
-development tag awaits repository-owner retest and a committed PASS/PASS
-report.
+The v0.12.0 exceptional assessment and retest passed after closing one High
+RV32 branch-timing flaw and two Medium assurance-scanner gaps; signed v0.12.0
+published no crate. The facade now advances to `0.13.0` for upstream provider
+capability and opaque-handle contracts while all crates.io publication
+selections remain empty.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -425,9 +425,29 @@ repository-owner retest of exact signed candidate
 `PASS`/`PASS` with zero open findings.
 
 Dynamic slices, secret-dependent lengths, signed values, arbitrary downstream
-composition, and protocol-level timing remain outside v0.12.0. The milestone
-selects no crates.io publication and awaits green GitHub and CodeQL before its
-signed tag.
+composition, and protocol-level timing remain outside v0.12.0. Signed tag
+v0.12.0 selects no crates.io publication.
+
+Version 0.13.0 implements provider capability and opaque-handle contracts:
+
+- eighteen independent operations cover hash, MAC, KDF, key agreement,
+  signature, KEM, AEAD, entropy, wall/monotonic clocks, certificate paths,
+  storage, and pending boundaries without implementing those effects;
+- named transactional installation freezes a nonempty exact capability set,
+  caller resource/work limits, and mandatory nonempty destruction duties;
+- one non-cloneable and non-formattable opaque borrowed handle authorizes one
+  exact operation on one explicitly chosen provider, without registry search,
+  direction broadening, or fallback;
+- immutable version-neutral request metadata checks aggregate input, output
+  capacity, provider-operation count, and public work before any effect; and
+- nine behavioral test groups, four compile-fail examples, a reviewed
+  SHA-256-locked four-file policy, and nine broken fixtures enforce the claim.
+
+The boundary has no algorithm or key identifiers, mutable output, provider
+completion, entropy health, clock units, certificate-path semantics, storage
+backend, pending lifecycle, platform effect, CPU dispatch, or FIPS approval.
+v0.13.0 selects no crates.io publication and awaits the complete local gate,
+green GitHub and CodeQL, and explicit signed-tag authorization.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

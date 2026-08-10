@@ -72,8 +72,18 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.12.0` development line implements Brynja's first constant-time
-foundation in `brynja-core`: normalized one-byte `Choice` and `CtMask` values,
+The current `0.13.0` development line adds provider capability and opaque-handle
+contracts to `brynja-core`. Eighteen exact operations remain direction-specific;
+capabilities, caller resource/work limits, and mandatory secret-destruction
+duties freeze through transactional installation. Protocol code explicitly
+chooses one opaque borrowed provider handle, receives authorization for one
+declared operation, and prepares immutable version-neutral request metadata.
+Unsupported operations fail on that provider without registry search or
+fallback. No provider effect, algorithm, entropy source, clock, path engine,
+storage backend, or pending-operation lifecycle is implemented.
+
+Version `0.12.0` implemented Brynja's first constant-time foundation in
+`brynja-core`: normalized one-byte `Choice` and `CtMask` values,
 constant-time equality, conditional selection and swap for unsigned words and
 compile-time-sized byte arrays, and an explicit compiler barrier. The source
 policy, exhaustive byte tests, compile-fail API tests, and optimized LLVM and
@@ -124,7 +134,8 @@ the gate now canonicalizes argument registers, recognizes all eighteen
 conditional forms, and retains ten focused negative fixtures. The exact signed
 third candidate, `7ce43fffdf81a349c7c44aae33b229d077d4512d`, passed the
 repository-owner retest with zero open findings. The permanent report records
-PASS/PASS; v0.12.0 now awaits green GitHub and CodeQL before tagging.
+PASS/PASS; signed tag v0.12.0 contains the remediated implementation and no
+crates.io publication.
 
 ## Development Tags And Pentesting
 
@@ -155,8 +166,8 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
-v0.11.2, which was intentionally not published to crates.io. The repository is
-now developing v0.12.0. The published dependency is:
+v0.12.0, which was intentionally not published to crates.io. The repository is
+now developing v0.13.0. The published dependency is:
 
 ```toml
 [dependencies]
@@ -231,6 +242,10 @@ selected set in dependency order and publishes the facade last.
   declassification operation; dynamic slices, secret-dependent lengths,
   protocol-level timing claims, and platform microarchitectural guarantees are
   outside this foundation.
+- The v0.13 provider boundary freezes capabilities, limits, destruction duties,
+  opaque handles, and request metadata only. It has no provider registry or
+  fallback, mutable effect buffer, algorithm/key identifier, platform effect,
+  provider completion, pending lifecycle, or FIPS approval claim.
 - The locked RFC closure and its roadmap mapping are recorded in the
   [RFC coverage audit](https://github.com/valkyoth/brynja/blob/main/docs/RFC_COVERAGE_AUDIT.md);
   the generated
@@ -257,7 +272,7 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
-| `brynja-core` | Constant-time choice, masks, equality, selection, swap, and compiler barrier | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider capability, authorization, and request contracts | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
@@ -273,9 +288,9 @@ certificate-bound operational-environment claim.
 
 Only the shared alert/failure, bounded numeric/resource, borrowed read,
 transactional caller-buffer write, exact workspace/arena, abstract secret
-lifetime, owned-region zeroization, and fixed-width constant-time foundations
-described for `brynja-core` plus the separately selected sanitization adapter
-are implemented. No
+lifetime, owned-region zeroization, fixed-width constant-time, and provider
+capability/authorization foundations described for `brynja-core` plus the
+separately selected sanitization adapter are implemented. No
 cryptographic primitive, PKI processor, protocol parser, or protocol engine in
 this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
@@ -285,8 +300,8 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative v0.12 foundation domains; no TLS engine |
-| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus affine owned-region zeroization and fixed-width constant-time operations implemented |
+| `brynja` | Modern production facade | Exposes cumulative v0.13 foundation domains; no TLS engine or provider implementation |
+| `brynja-core` | Bounded wire, buffer, error, state, and provider domains | Prior domains plus affine zeroization, fixed-width constant-time operations, and provider capability/opaque-handle contracts implemented |
 | Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
 | Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
@@ -393,6 +408,8 @@ scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 python3 scripts/test-constant-time-codegen.py
 python3 scripts/check-constant-time-evidence.py
 python3 scripts/test-constant-time-evidence.py
+python3 scripts/check-provider-contract.py
+python3 scripts/test-provider-contract.py
 python3 scripts/check-zeroization-evidence.py
 scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
@@ -404,7 +421,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.12.0
+scripts/tag_gate.sh v0.13.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

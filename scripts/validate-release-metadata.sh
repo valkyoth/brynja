@@ -86,6 +86,9 @@ test -x scripts/test-constant-time-codegen.py
 test -x scripts/check-constant-time-evidence.py
 test -x scripts/test-constant-time-evidence.py
 test -f scripts/constant_time_evidence.py
+test -x scripts/check-provider-contract.py
+test -x scripts/test-provider-contract.py
+test -f scripts/provider_contract_policy.py
 test -s assurance/constant-time-matrix.toml
 test -s assurance/constant-time-codegen/Cargo.toml
 test -s assurance/constant-time-codegen/Cargo.lock
@@ -96,6 +99,8 @@ grep -q 'scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu'
 grep -q 'python3 scripts/test-constant-time-codegen.py' scripts/checks.sh
 grep -q 'python3 scripts/check-constant-time-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/test-constant-time-evidence.py' scripts/checks.sh
+grep -q 'python3 scripts/check-provider-contract.py' scripts/checks.sh
+grep -q 'python3 scripts/test-provider-contract.py' scripts/checks.sh
 test -s docs/first-party-rust-cryptography.md
 test -x scripts/check-zeroization-codegen.sh
 test -x scripts/check-sanitization-adapter-codegen.sh

@@ -29,6 +29,12 @@
 remains a compile-time boundary only and does not provide a working TLS,
 cryptographic, PKI, platform, or legacy-protocol implementation.
 
+Brynja v0.13.0 freezes provider capabilities, opaque handles, caller limits,
+destruction duties, and version-neutral request metadata upstream in
+`brynja-core`. Future platform effects implement those upstream contracts
+downstream; this crate does not redefine them, register a fallback provider, or
+claim entropy, time, storage, path, pending-operation, or FIPS functionality.
+
 Most application users will eventually depend on the modern facade:
 
 ```toml
@@ -38,7 +44,7 @@ brynja = "0.10"
 
 This dependency-only patch was published with v0.10.0 after its pentest,
 remediation retest, and hosted checks passed. It remains at `0.1.6` during the
-v0.11.0 development milestone under the
+v0.13.0 development milestone under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

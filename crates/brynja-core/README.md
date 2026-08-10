@@ -25,11 +25,11 @@
 
 # brynja-core
 
-`brynja-core 0.7.0` now carries the cumulative v0.12 constant-time foundation
-alongside the v0.11 owned-memory zeroization implementation, the v0.10 abstract
-secret-lifetime contract, and the transactional foundations from earlier
-milestones. The package version remains `0.7.0` until the v0.15.0 public
-checkpoint.
+`brynja-core 0.7.0` now carries the cumulative v0.13 provider capability and
+opaque-handle contracts alongside the v0.12 constant-time foundation, v0.11
+owned-memory zeroization implementation, v0.10 abstract secret-lifetime
+contract, and transactional foundations from earlier milestones. The package
+version remains `0.7.0` until the v0.15.0 public checkpoint.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
@@ -110,19 +110,37 @@ registers, covers all eighteen conditional forms, and retains ten focused
 negative fixtures. Local remediation passes all compiler and target lanes; the
 repository-owner retest of exact signed candidate
 `7ce43fffdf81a349c7c44aae33b229d077d4512d` passed with zero open findings.
-The v0.12.0 tag now awaits green GitHub and CodeQL.
+Signed tag v0.12.0 contains the remediated implementation and no crates.io
+publication.
+
+v0.13 adds eighteen exact provider operations covering cryptographic,
+signature, KEM, AEAD, entropy, clock, certificate-path, storage, and pending
+boundaries. Named single-assignment installation freezes the capability set,
+caller resource/work limits, and nonempty secret-destruction duties. An opaque
+borrowed handle authorizes exactly one declared operation on one explicitly
+chosen provider; unsupported work fails without a registry search or fallback.
+Version-neutral request metadata accepts immutable inputs only and checks
+aggregate input, output capacity, provider-operation count, and public work
+before any effect. Nine behavioral test groups, four compile-fail examples, a
+hash-locked four-file source policy, and nine broken fixtures enforce the
+boundary.
+
+This is an authority and request-metadata contract only. It implements no
+algorithm, provider effect, output commit, entropy health, clock semantics,
+certificate path, storage backend, pending-operation lifecycle, CPU dispatch,
+or FIPS approval.
 
 ## Cryptography Verification Status
 
-The constant-time foundation and the earlier core domains have not been
-independently reviewed. A component only moves from ❌ to ✅ when a named
+The provider and constant-time foundations and the earlier core domains have
+not been independently reviewed. A component only moves from ❌ to ✅ when a named
 independent reviewer signs off and linked review evidence is recorded. Project
 tests, CI, Kani, Miri, fuzzing, and pentesting do not by themselves constitute
 independent cryptographic or protocol verification.
 
 | Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time choice, masks, equality, selection, swap, and compiler barrier | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider capability, authorization, and request contracts | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -133,7 +151,7 @@ brynja = "0.10"
 
 The `0.7.0` package was published with Brynja v0.10.0 after its pentest,
 remediation retest, and hosted checks passed. It remains at `0.7.0` during the
-v0.12.0 exceptional development milestone and is not selected for publication
+v0.13.0 development milestone and is not selected for publication
 under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

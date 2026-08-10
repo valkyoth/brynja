@@ -67,6 +67,12 @@ Constant-time attackers additionally attempt to forge noncanonical decisions
 or masks, trigger secret-dependent branches or early exits, exploit dynamic
 lengths, observe accidental declassification, or rely on compiler lowering that
 reintroduces variable work on a supported toolchain or target.
+Provider-boundary attackers additionally attempt to broaden one direction into
+its opposite, forge or duplicate provider authority, swap providers after
+policy selection, trigger an implicit fallback, exceed caller limits before an
+effect, smuggle protocol-version or platform policy into a generic request,
+obtain mutable output before commitment, omit a secret-copy destruction duty,
+or treat request preparation as provider completion.
 Supply-chain attackers additionally try to replace a planned first-party Rust
 primitive or FIPS service with a C/native wrapper, vendor object, build-script
 download, system cryptographic provider, rustls built-in provider, misleading
@@ -93,6 +99,14 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
   bounded implementation controls, not
   formal proof, statistical timing evidence, arbitrary-composition coverage, or
   a microarchitectural guarantee;
+- immutable single-assignment provider capability snapshots with eighteen
+  direction-specific operations, transactional named installation, frozen
+  caller resource/work limits, mandatory nonempty destruction duties, opaque
+  nonduplicable handles, exact-operation authorization, immutable
+  version-neutral request metadata, and pre-effect length/work checks; the
+  chosen provider never changes or falls back, and this authority layer makes
+  no provider-effect, algorithm, completion, platform, pending-lifecycle, or
+  FIPS claim;
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;
 - private-field bounded numeric values, checked arithmetic in every profile,
   semantically separate quantities, non-wrapping monotonic values, explicit
@@ -170,7 +184,7 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.11.0
+## Non-Goals At 0.13.0
 
 No transport security or interoperability guarantee exists. The only protocol
 code consists of allocation-free shared alert/failure, bounded
@@ -181,8 +195,10 @@ contract, and exclusive caller-owned secret-region clearing. There is no cache,
 DMA, register, copy, dump, suspend-image, physical-memory, forgotten-owner, or
 termination erasure guarantee, integer encoder or decoder, framing layer,
 protocol parser, record layer, arena release or reuse, handshake, provider
-implementation, PKI, or
-cryptography.
+implementation or effect, algorithm/key identifier, entropy source, clock
+semantics, path engine, storage backend, pending-operation lifecycle, PKI, or
+cryptography. v0.13 provider types authorize only bounded metadata for one
+explicitly chosen provider; they do not perform or complete the operation.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
@@ -212,7 +228,9 @@ complete-initialization and destruction-duty states plus repository-only RFC
 9850 test support. v0.11.0 adds only the complete exclusively borrowed Rust
 allocation clearing primitive and affine byte-backed region states; it makes no
 platform-wide erasure, protocol, interoperability, independent-review, FIPS, or
-production claim. Planned,
+production claim. v0.12.0 adds only fixed-width constant-time operations and
+bounded compiler evidence. v0.13.0 adds only provider capabilities, opaque
+authority tokens, and bounded immutable request metadata. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

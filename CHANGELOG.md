@@ -7,6 +7,14 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement eighteen independent provider operations spanning cryptographic,
+  signature, KEM, AEAD, entropy, clock, certificate-path, storage, and pending
+  boundaries without implementing any provider effect or algorithm.
+- Add immutable capability snapshots, transactional named installation, frozen
+  resource/work limits and destruction duties, opaque borrowed handles,
+  exact-operation authorization, and bounded version-neutral request metadata.
+- Add nine provider-contract test groups, four compile-fail token examples,
+  a SHA-256-locked four-file provider source policy, and nine broken fixtures.
 - Implement private normalized `Choice` and `CtMask` values plus constant-time
   equality, conditional selection, conditional swap, and a compiler barrier for
   every unsigned word width and compile-time-sized byte arrays.
@@ -35,6 +43,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the `brynja` facade to `0.13.0` while retaining `brynja-core 0.7.0`
+  and every other supporting-crate version; select zero crates for crates.io
+  publication at this internal development milestone.
+- Freeze provider authority in upstream `brynja-core`; keep
+  `brynja-platform` as a downstream future implementation boundary and do not
+  introduce a registry, fallback provider, platform dependency, or effect.
 - Complete the v0.12.0 constant-time foundation without selecting any crate for
   publication; require its exceptional assessment before the signed tag.
 - Clarify in the shared package header and main README that Brynja is a
@@ -55,6 +69,16 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Require one explicitly chosen provider and one exact declared operation;
+  reject unsupported direction without registry search, implicit fallback, or
+  authorization reuse.
+- Check aggregate immutable input, output capacity, provider-operation count,
+  and work limits before effects, and reject installation without an explicit
+  nonempty local/external/accelerator/cache/DMA destruction-duty set.
+- Keep handles, authorization, and request tokens non-cloneable and
+  non-formattable; forbid provider-native IDs, mutable request output, protocol
+  versions, allocation, platform coupling, unsafe code, and completion claims
+  from the v0.13 boundary.
 - Remediate the pentest's High RV32 timing finding by passing every expanded
   word and array mask through the non-inlined optimization barrier before
   XOR/AND selection, then close two Medium assurance-scanner bypasses through

@@ -88,13 +88,13 @@ def test() -> None:
         copy_fixture(root)
 
         release = root / "release-crates.toml"
-        replace(release, 'cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0"]',
+        replace(release, 'cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0"]',
                 'cumulative_milestones = ["0.11.1"]')
         require_rejection(root, "cumulative milestone")
         copy_fixture(root)
 
         release = root / "release-crates.toml"
-        replace(release, 'milestone = "0.12.0"', 'milestone = "0.11.2"')
+        replace(release, 'milestone = "0.13.0"', 'milestone = "0.11.2"')
         require_rejection(root, "version and milestone")
         copy_fixture(root)
 

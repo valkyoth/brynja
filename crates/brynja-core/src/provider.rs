@@ -11,8 +11,10 @@
 pub enum ProviderOperation {
     /// Compute a cryptographic hash.
     Hash,
-    /// Compute or verify a message authentication code.
-    Mac,
+    /// Generate a message authentication code.
+    MacGenerate,
+    /// Verify a message authentication code without returning a computed tag.
+    MacVerify,
     /// Derive key material.
     KeyDerivation,
     /// Perform a key agreement.
@@ -49,9 +51,10 @@ pub enum ProviderOperation {
 
 impl ProviderOperation {
     /// Every operation in stable declaration order.
-    pub const ALL: [Self; 18] = [
+    pub const ALL: [Self; 19] = [
         Self::Hash,
-        Self::Mac,
+        Self::MacGenerate,
+        Self::MacVerify,
         Self::KeyDerivation,
         Self::KeyAgreement,
         Self::Sign,
@@ -73,24 +76,29 @@ impl ProviderOperation {
     pub(crate) const fn mask(self) -> u32 {
         match self {
             Self::Hash => 1,
-            Self::Mac => 2,
-            Self::KeyDerivation => 4,
-            Self::KeyAgreement => 8,
-            Self::Sign => 16,
-            Self::Verify => 32,
-            Self::KemEncapsulate => 64,
-            Self::KemDecapsulate => 128,
-            Self::AeadSeal => 256,
-            Self::AeadOpen => 512,
-            Self::Entropy => 1_024,
-            Self::WallClock => 2_048,
-            Self::MonotonicClock => 4_096,
-            Self::CertificatePath => 8_192,
-            Self::StorageRead => 16_384,
-            Self::StorageWrite => 32_768,
-            Self::PendingPoll => 65_536,
-            Self::PendingCancel => 131_072,
+            Self::MacGenerate => 2,
+            Self::MacVerify => 4,
+            Self::KeyDerivation => 8,
+            Self::KeyAgreement => 16,
+            Self::Sign => 32,
+            Self::Verify => 64,
+            Self::KemEncapsulate => 128,
+            Self::KemDecapsulate => 256,
+            Self::AeadSeal => 512,
+            Self::AeadOpen => 1_024,
+            Self::Entropy => 2_048,
+            Self::WallClock => 4_096,
+            Self::MonotonicClock => 8_192,
+            Self::CertificatePath => 16_384,
+            Self::StorageRead => 32_768,
+            Self::StorageWrite => 65_536,
+            Self::PendingPoll => 131_072,
+            Self::PendingCancel => 262_144,
         }
+    }
+
+    pub(crate) const fn forbids_byte_output(self) -> bool {
+        matches!(self, Self::MacVerify | Self::Verify)
     }
 }
 

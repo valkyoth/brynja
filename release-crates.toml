@@ -5,8 +5,8 @@ baseline = "0.10.0"
 cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "The voluntary v0.13.0 provider-authority assessment found three High authorization or provider-binding flaws and one Medium work-accounting flaw; the exact signed remediation candidate requires repository-owner retest before tagging."
 
 [crates."brynja"]
 previous_version = "0.12.0"

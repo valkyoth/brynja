@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting remediation retest
 
 The `brynja` facade advances to `0.13.0` for the current development line but
 is not selected for crates.io publication. The latest signed development tag
@@ -16,7 +16,9 @@ exceptional v0.11.2 assessment passed with zero findings. The v0.12.0
 exceptional assessment and retest passed after one High RV32 timing flaw and
 two Medium assurance-scanner bypasses were closed. Signed v0.12.0 selected no
 publication. The v0.13.0 internal stage also selects zero crates and adds only
-upstream provider capability and opaque-handle contracts.
+upstream provider capability and opaque-handle contracts. Its three High and
+one Medium voluntary-assessment findings have local remediations and await
+repository-owner retest before the signed tag.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

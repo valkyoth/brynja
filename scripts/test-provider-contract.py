@@ -108,6 +108,40 @@ def test() -> None:
         shutil.rmtree(root / provider_contract_policy.SOURCE_ROOT)
         copy_fixture(root)
 
+        request = root / provider_contract_policy.SOURCE_ROOT / "provider_request.rs"
+        request.write_text(
+            request.read_text(encoding="utf-8") + "\npub fn complete() {}\n",
+            encoding="utf-8",
+        )
+        require_rejection(root, "manufacture a provider result")
+        shutil.rmtree(root / provider_contract_policy.SOURCE_ROOT)
+        copy_fixture(root)
+
+        request = root / provider_contract_policy.SOURCE_ROOT / "provider_request.rs"
+        replace(
+            request,
+            "provider: &'provider InstalledProvider,",
+            "resources: &'provider ResourceBudget,",
+        )
+        require_rejection(root, "detachable resource budget")
+        shutil.rmtree(root / provider_contract_policy.SOURCE_ROOT)
+        copy_fixture(root)
+
+        request = root / provider_contract_policy.SOURCE_ROOT / "provider_request.rs"
+        request.write_text(
+            request.read_text(encoding="utf-8") + "\n// work_units\n",
+            encoding="utf-8",
+        )
+        require_rejection(root, "caller-supplied work claim")
+        shutil.rmtree(root / provider_contract_policy.SOURCE_ROOT)
+        copy_fixture(root)
+
+        request = root / provider_contract_policy.SOURCE_ROOT / "provider_request.rs"
+        replace(request, "operation.forbids_byte_output()", "false")
+        require_rejection(root, "verification output prohibition")
+        shutil.rmtree(root / provider_contract_policy.SOURCE_ROOT)
+        copy_fixture(root)
+
         capability = root / provider_contract_policy.SOURCE_ROOT / "provider_capability.rs"
         capability.write_text(
             capability.read_text(encoding="utf-8") + "\n// unreviewed drift\n",
@@ -118,4 +152,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("provider policy rejects nine capability, fallback, mutability, duty, dependency-inversion, token, and hash regressions")
+    print("provider policy rejects thirteen capability, fallback, mutability, duty, identity, result-forgery, work, dependency-inversion, token, and hash regressions")

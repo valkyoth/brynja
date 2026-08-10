@@ -187,6 +187,14 @@ impl InstalledProvider {
     pub const fn destruction_targets(&self) -> DestructionTargets {
         self.destruction_targets
     }
+
+    pub(crate) const fn resources(&self) -> ResourceBudget {
+        self.resources
+    }
+
+    pub(crate) const fn work(&self) -> WorkBudget {
+        self.work
+    }
 }
 
 /// A capability-authorization failure on one explicitly chosen provider.
@@ -238,6 +246,10 @@ impl<'provider> ProviderHandle<'provider> {
             Err(ProviderAuthorizationError::Unsupported(operation))
         }
     }
+
+    pub(crate) fn references(&self, provider: &InstalledProvider) -> bool {
+        core::ptr::eq(self.provider, provider)
+    }
 }
 
 /// A non-forgeable token bound to one provider and one exact operation.
@@ -266,14 +278,7 @@ impl<'provider> ProviderAuthorization<'provider> {
     pub const fn prepare<'data>(
         self,
         frame: ProviderFrame<'data>,
-        work_units: u64,
     ) -> Result<ProviderRequest<'provider, 'data>, ProviderRequestError> {
-        ProviderRequest::prepare(
-            self.operation,
-            frame,
-            work_units,
-            &self.provider.resources,
-            &self.provider.work,
-        )
+        ProviderRequest::prepare(self.operation, frame, self.provider)
     }
 }

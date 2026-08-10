@@ -113,17 +113,20 @@ repository-owner retest of exact signed candidate
 Signed tag v0.12.0 contains the remediated implementation and no crates.io
 publication.
 
-v0.13 adds eighteen exact provider operations covering cryptographic,
-signature, KEM, AEAD, entropy, clock, certificate-path, storage, and pending
-boundaries. Named single-assignment installation freezes the capability set,
-caller resource/work limits, and nonempty secret-destruction duties. An opaque
-borrowed handle authorizes exactly one declared operation on one explicitly
-chosen provider; unsupported work fails without a registry search or fallback.
-Version-neutral request metadata accepts immutable inputs only and checks
-aggregate input, output capacity, provider-operation count, and public work
-before any effect. Nine behavioral test groups, four compile-fail examples, a
-hash-locked four-file source policy, and nine broken fixtures enforce the
-boundary.
+v0.13 adds nineteen exact provider operations covering cryptographic,
+signature, KEM, AEAD, entropy, clock, certificate-chain, storage, and pending
+boundaries. MAC generation and verification are separate authorities, and
+verification cannot request computed-tag byte output. Named single-assignment
+installation freezes the capability set, caller resource/work limits, and
+nonempty secret-destruction duties. An opaque borrowed handle authorizes one
+declared operation on one explicitly chosen provider; the prepared request
+retains that exact identity and unsupported work fails without registry search
+or fallback. Version-neutral request metadata accepts immutable inputs only,
+checks aggregate input, output capacity, and provider-operation count before
+any effect, and initializes a monotonic provider-owned work meter. Request
+holders cannot manufacture success or failure receipts. Nine behavioral test
+groups, six compile-fail examples, a hash-locked four-file source policy, and
+thirteen broken fixtures enforce the boundary.
 
 This is an authority and request-metadata contract only. It implements no
 algorithm, provider effect, output commit, entropy health, clock semantics,

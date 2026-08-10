@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting remediation retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -29,7 +29,10 @@ The v0.12.0 exceptional assessment and retest passed after closing one High
 RV32 branch-timing flaw and two Medium assurance-scanner gaps; signed v0.12.0
 published no crate. The facade now advances to `0.13.0` for upstream provider
 capability and opaque-handle contracts while all crates.io publication
-selections remain empty.
+selections remain empty. Its voluntary assessment found three High
+authorization/provider-binding flaws and one Medium work-accounting flaw. The
+four source remediations are complete locally; the signed remediation candidate
+must pass repository-owner retest before any tag.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -430,24 +433,30 @@ v0.12.0 selects no crates.io publication.
 
 Version 0.13.0 implements provider capability and opaque-handle contracts:
 
-- eighteen independent operations cover hash, MAC, KDF, key agreement,
-  signature, KEM, AEAD, entropy, wall/monotonic clocks, certificate paths,
-  storage, and pending boundaries without implementing those effects;
+- nineteen independent operations cover hash, separate MAC
+  generation/verification, KDF, key agreement, signature, KEM, AEAD, entropy,
+  wall/monotonic clocks, certificate chains, storage, and pending boundaries
+  without implementing those effects;
 - named transactional installation freezes a nonempty exact capability set,
   caller resource/work limits, and mandatory nonempty destruction duties;
 - one non-cloneable and non-formattable opaque borrowed handle authorizes one
   exact operation on one explicitly chosen provider, without registry search,
-  direction broadening, or fallback;
+  direction broadening, or fallback, and each prepared request retains that
+  exact provider identity;
 - immutable version-neutral request metadata checks aggregate input, output
-  capacity, provider-operation count, and public work before any effect; and
-- nine behavioral test groups, four compile-fail examples, a reviewed
-  SHA-256-locked four-file policy, and nine broken fixtures enforce the claim.
+  capacity, and provider-operation count before any effect; verification cannot
+  request byte output, request holders cannot construct provider results, and a
+  monotonic provider-owned meter replaces caller-declared work; and
+- nine behavioral test groups, six compile-fail examples, a reviewed
+  SHA-256-locked four-file policy, and thirteen broken fixtures enforce the
+  claim.
 
 The boundary has no algorithm or key identifiers, mutable output, provider
 completion, entropy health, clock units, certificate-path semantics, storage
 backend, pending lifecycle, platform effect, CPU dispatch, or FIPS approval.
-v0.13.0 selects no crates.io publication and awaits the complete local gate,
-green GitHub and CodeQL, and explicit signed-tag authorization.
+v0.13.0 selects no crates.io publication and awaits repository-owner remediation
+retest before the complete local gate, green GitHub and CodeQL, and explicit
+signed-tag authorization.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

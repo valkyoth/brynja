@@ -53,10 +53,7 @@ pub use provider_contract::{
     InstalledProvider, ProviderAuthorization, ProviderAuthorizationError, ProviderHandle,
     ProviderInstallation, ProviderInstallationError, ProviderInstallationField,
 };
-pub use provider_request::{
-    ProviderFrame, ProviderRequest, ProviderRequestComplete, ProviderRequestError,
-    ProviderRequestFailure, ProviderRequestOutcome,
-};
+pub use provider_request::{ProviderFrame, ProviderRequest, ProviderRequestError};
 pub use quantity::{Count, Length};
 pub use read::{ReadCursor, ReadError};
 pub use secret::{

@@ -73,13 +73,16 @@ algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
 The current `0.13.0` development line adds provider capability and opaque-handle
-contracts to `brynja-core`. Eighteen exact operations remain direction-specific;
-capabilities, caller resource/work limits, and mandatory secret-destruction
-duties freeze through transactional installation. Protocol code explicitly
-chooses one opaque borrowed provider handle, receives authorization for one
-declared operation, and prepares immutable version-neutral request metadata.
-Unsupported operations fail on that provider without registry search or
-fallback. No provider effect, algorithm, entropy source, clock, path engine,
+contracts to `brynja-core`. Nineteen exact operations remain direction-specific,
+including separate MAC generation and verification. Capabilities, caller
+resource/work limits, and mandatory secret-destruction duties freeze through
+transactional installation. Protocol code explicitly chooses one opaque
+borrowed provider handle, receives authorization for one declared operation,
+and prepares immutable version-neutral request metadata that retains that exact
+provider identity. Unsupported operations fail without registry search or
+fallback. Request holders cannot manufacture success or failure receipts, and
+work can only be charged against the installed provider's monotonic meter. No
+provider effect, algorithm, entropy source, clock, certificate-chain engine,
 storage backend, or pending-operation lifecycle is implemented.
 
 Version `0.12.0` implemented Brynja's first constant-time foundation in
@@ -167,7 +170,8 @@ an independent pentest.
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
 v0.12.0, which was intentionally not published to crates.io. The repository is
-now developing v0.13.0. The published dependency is:
+now remediating v0.13.0 and awaits repository-owner pentest retest. The
+published dependency is:
 
 ```toml
 [dependencies]
@@ -245,7 +249,10 @@ selected set in dependency order and publishes the facade last.
 - The v0.13 provider boundary freezes capabilities, limits, destruction duties,
   opaque handles, and request metadata only. It has no provider registry or
   fallback, mutable effect buffer, algorithm/key identifier, platform effect,
-  provider completion, pending lifecycle, or FIPS approval claim.
+  request-side completion, pending lifecycle, or FIPS approval claim. MAC
+  generation and verification are distinct, verification cannot request byte
+  output, requests retain exact provider identity, and actual work must be
+  charged by a later trusted effect boundary.
 - The locked RFC closure and its roadmap mapping are recorded in the
   [RFC coverage audit](https://github.com/valkyoth/brynja/blob/main/docs/RFC_COVERAGE_AUDIT.md);
   the generated

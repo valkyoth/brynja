@@ -4,8 +4,7 @@ use brynja_core::{
     DestructionTargets, ExhaustionPhase, ProviderAuthorizationError, ProviderCapabilities,
     ProviderCapabilityError, ProviderFrame, ProviderInstallation, ProviderInstallationError,
     ProviderInstallationField, ProviderOperation, ProviderRequest, ProviderRequestError,
-    ProviderRequestOutcome, ResourceBudget, ResourceBudgetBuilder, ResourceDomain, ResourceKind,
-    WorkBudget,
+    ResourceBudget, ResourceBudgetBuilder, ResourceDomain, ResourceKind, WorkBudget,
 };
 
 fn capabilities(operations: &[ProviderOperation]) -> ProviderCapabilities {
@@ -75,23 +74,19 @@ fn prepare<'provider, 'data>(
     primary: &'data [u8],
     context: &'data [u8],
     output_capacity: usize,
-    work_units: u64,
 ) -> Result<ProviderRequest<'provider, 'data>, ProviderRequestError> {
     let authorization = provider.handle().authorize(operation);
     assert!(authorization.is_ok());
     let Ok(authorization) = authorization else {
         return Err(ProviderRequestError::InputLengthOverflow);
     };
-    authorization.prepare(
-        ProviderFrame::new(primary, context, output_capacity),
-        work_units,
-    )
+    authorization.prepare(ProviderFrame::new(primary, context, output_capacity))
 }
 
 #[test]
 fn every_capability_is_independent_and_single_assignment() {
     let all = capabilities(&ProviderOperation::ALL);
-    assert_eq!(all.count(), 18);
+    assert_eq!(all.count(), 19);
     for operation in ProviderOperation::ALL {
         assert!(all.contains(operation));
         let duplicate = ProviderCapabilities::builder()
@@ -165,6 +160,33 @@ fn exact_direction_is_required_and_no_provider_fallback_occurs() {
     ));
     assert!(open.handle().authorize(ProviderOperation::AeadOpen).is_ok());
     assert!(seal.handle().authorize(ProviderOperation::AeadSeal).is_ok());
+
+    let mac_verify = installation(&[ProviderOperation::MacVerify]);
+    assert!(mac_verify.is_ok());
+    let Ok(mac_verify) = mac_verify else {
+        return;
+    };
+    assert!(matches!(
+        mac_verify
+            .handle()
+            .authorize(ProviderOperation::MacGenerate),
+        Err(ProviderAuthorizationError::Unsupported(
+            ProviderOperation::MacGenerate
+        ))
+    ));
+    assert!(
+        mac_verify
+            .handle()
+            .authorize(ProviderOperation::MacVerify)
+            .is_ok()
+    );
+    assert!(matches!(
+        prepare(&mac_verify, ProviderOperation::MacVerify, b"m", b"tag", 1,),
+        Err(ProviderRequestError::OutputNotPermitted(
+            ProviderOperation::MacVerify
+        ))
+    ));
+    assert!(prepare(&mac_verify, ProviderOperation::MacVerify, b"m", b"tag", 0,).is_ok());
 }
 
 #[test]
@@ -179,7 +201,7 @@ fn every_operation_round_trips_through_an_exact_token() {
         assert!(authorization.is_ok());
         if let Ok(authorization) = authorization {
             assert_eq!(authorization.operation(), operation);
-            let request = authorization.prepare(ProviderFrame::new(&[], &[], 0), 0);
+            let request = authorization.prepare(ProviderFrame::new(&[], &[], 0));
             assert!(request.is_ok());
             if let Ok(request) = request {
                 assert_eq!(request.operation(), operation);
@@ -197,26 +219,32 @@ fn request_limits_are_exact_and_fail_before_any_effect() {
     };
     let primary = [0x5a; 12];
     let context = [0xa5; 4];
-    let exact = prepare(
-        &provider,
-        ProviderOperation::Hash,
-        &primary,
-        &context,
-        8,
-        12,
-    );
+    let exact = prepare(&provider, ProviderOperation::Hash, &primary, &context, 8);
     assert!(exact.is_ok());
-    if let Ok(request) = exact {
+    if let Ok(mut request) = exact {
         assert_eq!(request.frame().primary(), primary);
         assert_eq!(request.frame().context(), context);
         assert_eq!(request.frame().output_capacity(), 8);
-        assert_eq!(request.work_units(), 12);
+        assert_eq!(request.remaining_work(), 12);
         assert_eq!(request.resources().limit(ResourceDomain::InputBytes), 16);
+        assert!(request.charge_work(5).is_ok());
+        assert_eq!(request.remaining_work(), 7);
+        let overcharge = request.charge_work(8);
+        match overcharge {
+            Err(ProviderRequestError::WorkExhausted(error)) => {
+                assert_eq!(error.resource(), ResourceKind::Work);
+                assert_eq!(error.phase(), ExhaustionPhase::Provider);
+            }
+            Ok(()) | Err(_) => assert!(core::hint::black_box(false)),
+        }
+        assert_eq!(request.remaining_work(), 7);
+        assert!(request.charge_work(7).is_ok());
+        assert_eq!(request.remaining_work(), 0);
     }
     assert_eq!(primary, [0x5a; 12]);
     assert_eq!(context, [0xa5; 4]);
 
-    let input = prepare(&provider, ProviderOperation::Hash, &[0; 13], &[0; 4], 0, 0);
+    let input = prepare(&provider, ProviderOperation::Hash, &[0; 13], &[0; 4], 0);
     match input {
         Err(ProviderRequestError::ResourceExhausted(error)) => {
             assert_eq!(error.resource(), ResourceKind::Input);
@@ -225,18 +253,10 @@ fn request_limits_are_exact_and_fail_before_any_effect() {
         Ok(_) | Err(_) => assert!(core::hint::black_box(false)),
     }
 
-    let output = prepare(&provider, ProviderOperation::Hash, &[], &[], 9, 0);
+    let output = prepare(&provider, ProviderOperation::Hash, &[], &[], 9);
     match output {
         Err(ProviderRequestError::ResourceExhausted(error)) => {
             assert_eq!(error.resource(), ResourceKind::Output);
-        }
-        Ok(_) | Err(_) => assert!(core::hint::black_box(false)),
-    }
-
-    let work = prepare(&provider, ProviderOperation::Hash, &[], &[], 0, 13);
-    match work {
-        Err(ProviderRequestError::WorkExhausted(error)) => {
-            assert_eq!(error.resource(), ResourceKind::Work);
         }
         Ok(_) | Err(_) => assert!(core::hint::black_box(false)),
     }
@@ -262,7 +282,7 @@ fn secret_destruction_duties_are_frozen_and_complete() {
 }
 
 #[test]
-fn deterministic_request_metadata_has_no_hidden_provider_choice() {
+fn deterministic_metadata_retains_exact_provider_identity() {
     let first = installation(&[ProviderOperation::StorageRead]);
     let second = installation(&[ProviderOperation::StorageRead]);
     assert!(first.is_ok());
@@ -276,7 +296,6 @@ fn deterministic_request_metadata_has_no_hidden_provider_choice() {
         b"object",
         b"namespace",
         8,
-        2,
     );
     let right = prepare(
         &second,
@@ -284,7 +303,6 @@ fn deterministic_request_metadata_has_no_hidden_provider_choice() {
         b"object",
         b"namespace",
         8,
-        2,
     );
     assert!(left.is_ok());
     assert!(right.is_ok());
@@ -298,11 +316,15 @@ fn deterministic_request_metadata_has_no_hidden_provider_choice() {
         left.frame().output_capacity(),
         right.frame().output_capacity()
     );
-    assert_eq!(left.work_units(), right.work_units());
+    assert_eq!(left.remaining_work(), right.remaining_work());
+    assert!(left.is_bound_to(&first.handle()));
+    assert!(!left.is_bound_to(&second.handle()));
+    assert!(right.is_bound_to(&second.handle()));
+    assert!(!right.is_bound_to(&first.handle()));
 }
 
 #[test]
-fn cancellation_direction_and_terminal_results_remain_exact() {
+fn cancellation_direction_cannot_create_terminal_results() {
     let provider = installation(&[
         ProviderOperation::PendingPoll,
         ProviderOperation::PendingCancel,
@@ -317,19 +339,13 @@ fn cancellation_direction_and_terminal_results_remain_exact() {
         b"pending-token",
         &[],
         0,
-        1,
     );
     assert!(canceled.is_ok());
     let Ok(canceled) = canceled else {
         return;
     };
-    match canceled.fail(brynja_core::ProviderFailureKind::Canceled) {
-        ProviderRequestOutcome::Failed(failure) => {
-            assert_eq!(failure.operation(), ProviderOperation::PendingCancel);
-            assert_eq!(failure.kind(), brynja_core::ProviderFailureKind::Canceled);
-        }
-        ProviderRequestOutcome::Complete(_) => assert!(core::hint::black_box(false)),
-    }
+    assert_eq!(canceled.operation(), ProviderOperation::PendingCancel);
+    assert!(canceled.is_bound_to(&provider.handle()));
 
     let polled = prepare(
         &provider,
@@ -337,29 +353,24 @@ fn cancellation_direction_and_terminal_results_remain_exact() {
         b"pending-token",
         &[],
         0,
-        1,
     );
     assert!(polled.is_ok());
     let Ok(polled) = polled else {
         return;
     };
-    match polled.complete() {
-        ProviderRequestOutcome::Complete(completion) => {
-            assert_eq!(completion.operation(), ProviderOperation::PendingPoll);
-        }
-        ProviderRequestOutcome::Failed(_) => assert!(core::hint::black_box(false)),
-    }
+    assert_eq!(polled.operation(), ProviderOperation::PendingPoll);
+    assert!(polled.is_bound_to(&provider.handle()));
 }
 
 #[test]
 fn immutable_frame_overlap_cannot_create_partial_mutation() {
-    let provider = installation(&[ProviderOperation::Mac]);
+    let provider = installation(&[ProviderOperation::MacGenerate]);
     assert!(provider.is_ok());
     let Ok(provider) = provider else {
         return;
     };
     let bytes = [0x3c; 8];
-    let request = prepare(&provider, ProviderOperation::Mac, &bytes, &bytes, 8, 1);
+    let request = prepare(&provider, ProviderOperation::MacGenerate, &bytes, &bytes, 8);
     assert!(request.is_ok());
     if let Ok(request) = request {
         assert_eq!(request.frame().primary().as_ptr(), bytes.as_ptr());

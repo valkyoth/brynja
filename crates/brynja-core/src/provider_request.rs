@@ -1,8 +1,8 @@
 //! Version-neutral bounded provider-request metadata.
 
 use crate::{
-    ExhaustionPhase, ProviderFailureKind, ProviderOperation, ResourceBudget, ResourceDomain,
-    ResourceExhaustion, WorkBudget,
+    ExhaustionPhase, InstalledProvider, ProviderHandle, ProviderOperation, ResourceBudget,
+    ResourceDomain, ResourceExhaustion, ResourceKind,
 };
 
 /// A borrowed version-neutral provider frame.
@@ -56,6 +56,8 @@ impl<'data> ProviderFrame<'data> {
 pub enum ProviderRequestError {
     /// Aggregate input length overflowed `usize`.
     InputLengthOverflow,
+    /// A typed verification operation requested an output byte buffer.
+    OutputNotPermitted(ProviderOperation),
     /// A caller-selected resource limit rejected the request.
     ResourceExhausted(ResourceExhaustion),
     /// The caller-selected work limit rejected the request.
@@ -65,8 +67,10 @@ pub enum ProviderRequestError {
 /// A bounded request token tied to one installed provider and exact operation.
 ///
 /// This non-cloneable, non-formattable value is metadata only. It authorizes no
-/// other operation and contains no output-completion or secret-destruction
-/// claim.
+/// other operation and cannot create an output-completion, failure, or
+/// secret-destruction claim. It retains the exact installed provider that
+/// authorized it and a monotonic meter initialized from that provider's frozen
+/// work budget.
 ///
 /// ```compile_fail
 /// use brynja_core::ProviderRequest;
@@ -75,22 +79,44 @@ pub enum ProviderRequestError {
 ///     let _first = request.clone();
 /// }
 /// ```
+///
+/// Request holders cannot assert success:
+///
+/// ```compile_fail
+/// use brynja_core::ProviderRequest;
+///
+/// fn forge_success(request: ProviderRequest<'_, '_>) {
+///     let _ = request.complete();
+/// }
+/// ```
+///
+/// Request holders cannot manufacture provider failure receipts either:
+///
+/// ```compile_fail
+/// use brynja_core::{ProviderFailureKind, ProviderRequest};
+///
+/// fn forge_failure(request: ProviderRequest<'_, '_>) {
+///     let _ = request.fail(ProviderFailureKind::Unavailable);
+/// }
+/// ```
 #[must_use = "a prepared provider request must be consumed by its exact provider boundary"]
 pub struct ProviderRequest<'provider, 'data> {
     operation: ProviderOperation,
     frame: ProviderFrame<'data>,
-    work_units: u64,
-    resources: &'provider ResourceBudget,
+    provider: &'provider InstalledProvider,
+    remaining_work: u64,
 }
 
 impl<'provider, 'data> ProviderRequest<'provider, 'data> {
     pub(crate) const fn prepare(
         operation: ProviderOperation,
         frame: ProviderFrame<'data>,
-        work_units: u64,
-        resources: &'provider ResourceBudget,
-        work: &WorkBudget,
+        provider: &'provider InstalledProvider,
     ) -> Result<Self, ProviderRequestError> {
+        let resources = provider.resources();
+        if operation.forbids_byte_output() && frame.output_capacity() != 0 {
+            return Err(ProviderRequestError::OutputNotPermitted(operation));
+        }
         let input_bytes = match frame.input_bytes() {
             Some(value) => value,
             None => return Err(ProviderRequestError::InputLengthOverflow),
@@ -116,14 +142,11 @@ impl<'provider, 'data> ProviderRequest<'provider, 'data> {
         ) {
             return Err(ProviderRequestError::ResourceExhausted(error));
         }
-        if let Err(error) = work.check(work_units, ExhaustionPhase::Provider) {
-            return Err(ProviderRequestError::WorkExhausted(error));
-        }
         Ok(Self {
             operation,
             frame,
-            work_units,
-            resources,
+            provider,
+            remaining_work: provider.work().limit(),
         })
     }
 
@@ -139,78 +162,42 @@ impl<'provider, 'data> ProviderRequest<'provider, 'data> {
         &self.frame
     }
 
-    /// Returns the admitted public work-unit claim.
+    /// Returns whether this request belongs to the exact opaque provider handle.
+    ///
+    /// No native identifier or address is exposed.
     #[must_use]
-    pub const fn work_units(&self) -> u64 {
-        self.work_units
+    pub fn is_bound_to(&self, handle: &ProviderHandle<'_>) -> bool {
+        handle.references(self.provider)
     }
 
     /// Returns the frozen caller-selected resource limits.
     #[must_use]
-    pub const fn resources(&self) -> &ResourceBudget {
-        self.resources
+    pub const fn resources(&self) -> ResourceBudget {
+        self.provider.resources()
     }
 
-    /// Consumes the exact request into a synchronous completion token.
+    /// Returns the remaining provider-owned work allowance.
     ///
-    /// Calling this is a provider security assertion that the complete
-    /// operation-specific effect and output commit succeeded.
-    pub const fn complete(self) -> ProviderRequestOutcome {
-        ProviderRequestOutcome::Complete(ProviderRequestComplete {
-            operation: self.operation,
-        })
-    }
-
-    /// Consumes the exact request into a closed failure bound to its operation.
-    pub const fn fail(self, kind: ProviderFailureKind) -> ProviderRequestOutcome {
-        ProviderRequestOutcome::Failed(ProviderRequestFailure {
-            operation: self.operation,
-            kind,
-        })
-    }
-}
-
-/// A non-forgeable synchronous completion bound to one exact operation.
-pub struct ProviderRequestComplete {
-    operation: ProviderOperation,
-}
-
-impl ProviderRequestComplete {
-    /// Returns the exact operation that completed.
+    /// This is accounting state, never proof that work occurred or completed.
     #[must_use]
-    pub const fn operation(&self) -> ProviderOperation {
-        self.operation
-    }
-}
-
-/// A non-forgeable synchronous failure bound to one exact operation.
-pub struct ProviderRequestFailure {
-    operation: ProviderOperation,
-    kind: ProviderFailureKind,
-}
-
-impl ProviderRequestFailure {
-    /// Returns the exact operation that failed.
-    #[must_use]
-    pub const fn operation(&self) -> ProviderOperation {
-        self.operation
+    pub const fn remaining_work(&self) -> u64 {
+        self.remaining_work
     }
 
-    /// Returns the closed, secret-free failure category.
-    #[must_use]
-    pub const fn kind(&self) -> ProviderFailureKind {
-        self.kind
+    /// Charges provider-derived work before the corresponding expensive step.
+    ///
+    /// The meter can only decrease. An overcharge fails without changing its
+    /// remaining value. A later trusted effect boundary must derive and charge
+    /// actual work; application-supplied estimates are never accepted.
+    pub const fn charge_work(&mut self, units: u64) -> Result<(), ProviderRequestError> {
+        match self.remaining_work.checked_sub(units) {
+            Some(remaining) => {
+                self.remaining_work = remaining;
+                Ok(())
+            }
+            None => Err(ProviderRequestError::WorkExhausted(
+                ResourceExhaustion::new(ResourceKind::Work, ExhaustionPhase::Provider),
+            )),
+        }
     }
-}
-
-/// Mandatory terminal result of an exact synchronous provider request.
-///
-/// Pending-operation lifecycle is intentionally not represented as success;
-/// it is owned by a later milestone.
-#[must_use = "provider completion or failure must govern the engine transition"]
-pub enum ProviderRequestOutcome {
-    /// The exact request completed synchronously and committed its output.
-    Complete(ProviderRequestComplete),
-    /// The exact request failed with a closed, secret-free category.
-    Failed(ProviderRequestFailure),
 }

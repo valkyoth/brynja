@@ -7,8 +7,10 @@ cryptographic implementation begins. It is infrastructure evidence, not proof
 that TLS exists or is secure.
 
 The v0.13.0 provider contract adds a separate hash-locked source validator and
-nine broken fixtures through `scripts/check-provider-contract.py` and
-`scripts/test-provider-contract.py`. That policy enforces authority and
+thirteen broken fixtures through `scripts/check-provider-contract.py` and
+`scripts/test-provider-contract.py`. The additional remediation fixtures reject
+request-side result construction, exact-provider detachment, caller-supplied
+work claims, and verification byte output. That policy enforces authority and
 dependency structure; it is not provider-effect, algorithm, interoperability,
 or formal-verification evidence.
 

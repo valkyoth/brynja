@@ -16,14 +16,15 @@ SOURCES = (
     Path("provider_request.rs"),
 )
 EXPECTED_SHA256 = {
-    Path("provider.rs"): "22ed09e373bafe0efcb55f749d77d808acb3b35aca40d6afc890acbd5788566b",
+    Path("provider.rs"): "0e8baa783a41ada4ae4d79c439f0a361d12e2775f74cffc78ec80389be9b104f",
     Path("provider_capability.rs"): "588ebe84cafe0e7928c8784ca938f2475eebede80a62a28cf1a37f2e02afef0a",
-    Path("provider_contract.rs"): "2c451df74da52aee32957fb91fa6127493732c593622721b51476cf96e7c3f3e",
-    Path("provider_request.rs"): "36f1a9a4f59e7e566d20bd6d810c4fb8455e3bc5753a1b593575b2f3648f9484",
+    Path("provider_contract.rs"): "59ea3fada9c7f8bd5a3ee25842b36bb235a37ddad241b60fdf44bf2298f4bb43",
+    Path("provider_request.rs"): "51aaaaefaef164f34d392412866a327afb6d9acce555fef50a57107ce21bb295",
 }
 OPERATIONS = (
     "Hash",
-    "Mac",
+    "MacGenerate",
+    "MacVerify",
     "KeyDerivation",
     "KeyAgreement",
     "Sign",
@@ -74,7 +75,7 @@ def validate_operations(provider: str) -> None:
     variants = tuple(re.findall(r"^    ([A-Z][A-Za-z0-9]+),$", match["body"], re.MULTILINE))
     if variants != OPERATIONS:
         fail("provider exact-operation inventory drift")
-    if "pub const ALL: [Self; 18]" not in provider:
+    if "pub const ALL: [Self; 19]" not in provider:
         fail("provider operation enumeration length drift")
     if len(re.findall(r"Self::[A-Z][A-Za-z0-9]+ =>", provider)) != len(OPERATIONS):
         fail("provider operation mask coverage drift")
@@ -120,6 +121,8 @@ def validate_structure(sources: dict[Path, str]) -> None:
             fail(f"opaque provider token gained duplication or formatting: {type_name}")
     if contract.count("if self.provider.capabilities.contains(operation)") != 1:
         fail("exact-operation authorization check drift")
+    if contract.count("core::ptr::eq(self.provider, provider)") != 1:
+        fail("exact installed-provider identity check drift")
     if any(token in contract for token in (".or_else(", "fallback_provider", "ProviderRegistry")):
         fail("provider boundary introduced implicit fallback")
     if contract.count("if destruction_targets.is_empty()") != 1:
@@ -143,18 +146,21 @@ def validate_structure(sources: dict[Path, str]) -> None:
         fail("provider request gained a mutable effect buffer")
     if request.count("checked_add(self.context.len())") != 1:
         fail("provider frame aggregate-length check drift")
+    if "provider: &'provider InstalledProvider" not in request:
+        fail("prepared request lost its exact installed-provider binding")
+    if "resources: &'provider ResourceBudget" in request:
+        fail("prepared request retained only a detachable resource budget")
+    if "work_units" in request:
+        fail("provider request accepts a caller-supplied work claim")
+    if request.count("self.remaining_work.checked_sub(units)") != 1:
+        fail("provider-owned monotonic work meter drift")
+    if request.count("operation.forbids_byte_output()") != 1:
+        fail("typed verification output prohibition drift")
     for domain in ("InputBytes", "OutputBytes", "ProviderOperations"):
         if request.count(f"ResourceDomain::{domain}") != 1:
             fail(f"provider request resource check drift: {domain}")
-    if request.count("work.check(work_units, ExhaustionPhase::Provider)") != 1:
-        fail("provider request work check drift")
-    for required in (
-        "operation: self.operation",
-        "ProviderRequestOutcome::Complete(ProviderRequestComplete",
-        "ProviderRequestOutcome::Failed(ProviderRequestFailure",
-    ):
-        if required not in request:
-            fail("provider terminal result binding drift")
+    if re.search(r"pub(?:\s+const)?\s+fn\s+(?:complete|fail)\s*\(", request):
+        fail("request holder can manufacture a provider result")
     if re.search(
         r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct ProviderRequest",
         request,

@@ -7,14 +7,16 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
-- Implement eighteen independent provider operations spanning cryptographic,
-  signature, KEM, AEAD, entropy, clock, certificate-path, storage, and pending
-  boundaries without implementing any provider effect or algorithm.
+- Implement nineteen independent provider operations spanning cryptographic,
+  signature, KEM, AEAD, entropy, clock, certificate-chain, storage, and pending
+  boundaries without implementing any provider effect or algorithm; MAC
+  generation and verification are separate capabilities.
 - Add immutable capability snapshots, transactional named installation, frozen
   resource/work limits and destruction duties, opaque borrowed handles,
   exact-operation authorization, and bounded version-neutral request metadata.
-- Add nine provider-contract test groups, four compile-fail token examples,
-  a SHA-256-locked four-file provider source policy, and nine broken fixtures.
+- Add nine provider-contract test groups, six compile-fail token/result-forgery
+  examples, a SHA-256-locked four-file provider source policy, and thirteen
+  broken fixtures.
 - Implement private normalized `Choice` and `CtMask` values plus constant-time
   equality, conditional selection, conditional swap, and a compiler barrier for
   every unsigned word width and compile-time-sized byte arrays.
@@ -80,8 +82,14 @@ Keep a Changelog and Semantic Versioning.
   nonempty local/external/accelerator/cache/DMA destruction-duty set.
 - Keep handles, authorization, and request tokens non-cloneable and
   non-formattable; forbid provider-native IDs, mutable request output, protocol
-  versions, allocation, platform coupling, unsafe code, and completion claims
-  from the v0.13 boundary.
+  versions, allocation, platform coupling, unsafe code, and request-side result
+  claims from the v0.13 boundary.
+- Remediate the voluntary v0.13 assessment's three High findings by removing
+  request-side result constructors, retaining exact installed-provider
+  identity, and separating MAC generation from verification while forbidding
+  verification byte output. Remediate its Medium finding by replacing
+  caller-supplied work claims with a monotonic meter initialized from the
+  installed provider's frozen budget; repository-owner retest remains pending.
 - Remediate the pentest's High RV32 timing finding by passing every expanded
   word and array mask through the non-inlined optimization barrier before
   XOR/AND selection, then close two Medium assurance-scanner bypasses through

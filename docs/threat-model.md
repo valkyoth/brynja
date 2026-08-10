@@ -99,14 +99,17 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
   bounded implementation controls, not
   formal proof, statistical timing evidence, arbitrary-composition coverage, or
   a microarchitectural guarantee;
-- immutable single-assignment provider capability snapshots with eighteen
-  direction-specific operations, transactional named installation, frozen
+- immutable single-assignment provider capability snapshots with nineteen
+  direction-specific operations, including separate MAC generation and
+  verification, transactional named installation, frozen
   caller resource/work limits, mandatory nonempty destruction duties, opaque
   nonduplicable handles, exact-operation authorization, immutable
-  version-neutral request metadata, and pre-effect length/work checks; the
-  chosen provider never changes or falls back, and this authority layer makes
-  no provider-effect, algorithm, completion, platform, pending-lifecycle, or
-  FIPS claim;
+  version-neutral request metadata, exact installed-provider retention,
+  pre-effect length checks, verification-output prohibition, and monotonic
+  provider-owned work charging; request holders cannot manufacture results,
+  the chosen provider never changes or falls back, and this authority layer
+  makes no provider-effect, algorithm, completion, platform, pending-lifecycle,
+  or FIPS claim;
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;
 - private-field bounded numeric values, checked arithmetic in every profile,
   semantically separate quantities, non-wrapping monotonic values, explicit
@@ -198,7 +201,11 @@ protocol parser, record layer, arena release or reuse, handshake, provider
 implementation or effect, algorithm/key identifier, entropy source, clock
 semantics, path engine, storage backend, pending-operation lifecycle, PKI, or
 cryptography. v0.13 provider types authorize only bounded metadata for one
-explicitly chosen provider; they do not perform or complete the operation.
+explicitly chosen provider; they retain that exact provider but do not perform
+or complete the operation. A later trusted provider effect must derive and
+charge actual work before each expensive step and return its authoritative
+result directly; application code cannot supply a work estimate or construct a
+result receipt.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2

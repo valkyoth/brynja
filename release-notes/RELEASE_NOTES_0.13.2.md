@@ -1,6 +1,6 @@
 # Brynja v0.13.2 Development Milestone
 
-Status: implementation and remediation complete; awaiting retest
+Status: implementation and retest complete; awaiting green GitHub and CodeQL
 
 Brynja v0.13.2 reserves the package, dependency, source, and future low-level
 boundaries for CPU acceleration. It advances the `brynja` facade to 0.13.2 but
@@ -69,7 +69,9 @@ retains semantic checks before its final policy-byte check. New fixtures cover
 source-plus-policy checksum replacement, a commented `no_std` marker, added
 executable operations, same-cardinality security substitutions, weakened ABI
 preconditions, FIPS drift, and otherwise semantically invisible policy-byte
-changes. Zero findings remain open; repository-owner retest is pending.
+changes. Repository-owner retest of exact signed remediation candidate
+`2fa60d05d8c4472426cdb979243f53e2e959c231` passed with zero open findings;
+the permanent report records `PASS`/`PASS`.
 
 ## Security And Verification Status
 

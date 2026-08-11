@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.10.0 published; v0.11.0-v0.13.1 tagged; v0.13.2 awaiting pentest
+Status: v0.10.0 published; v0.11.0-v0.13.1 tagged; v0.13.2 awaiting green CI
 
 | Control | Foundation enforcement |
 | --- | --- |

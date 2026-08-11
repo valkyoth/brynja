@@ -6,7 +6,7 @@ cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0", "0.13
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "CPU-boundary source-admission and policy-integrity findings require repository-owner retest of the exact remediation candidate."
+exception_reason = "CPU-boundary source-admission and policy-integrity findings triggered an exceptional assessment; exact signed remediation candidate 2fa60d05d8c4472426cdb979243f53e2e959c231 passed repository-owner retest."
 
 [crates."brynja"]
 previous_version = "0.13.1"

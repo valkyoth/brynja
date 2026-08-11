@@ -1266,7 +1266,7 @@ Exit criteria:
 
 ### v0.13.2 - CPU Acceleration Package And Unsafe Boundary
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Freeze future `brynja-crypto-cpu` as an optional zero-dependency `no_std` package for isolated ISA kernels and static selection, and future `brynja-crypto-cpu-std` as a separate opt-in `std` runtime-detection adapter; keep scalar `brynja-crypto`, every protocol engine, default feature, bare-metal graph, and ordinary facade independent of both, keep the std adapter outside `brynja-fips-module`, and require a separately hashed, versioned, under-500-line unsafe-intrinsic or assembly boundary for every admitted backend without authorizing any implementation yet.
 

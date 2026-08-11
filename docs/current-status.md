@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.1 tagged; v0.13.2 awaiting pentest
+Status: v0.10.0 published; v0.11.0-v0.13.1 tagged; v0.13.2 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -526,7 +526,9 @@ remediated: source hashes and the complete reviewed policy now have independent
 validator anchors, actual declarations are line-anchored, and exact semantic
 comparisons cover every backend ABI, amendment duty, forbidden mechanism,
 safe-wrapper invariant, and FIPS field. The permanent report records zero open
-findings and awaits repository-owner retest of the signed remediation commit.
+findings. Repository-owner retest of exact signed remediation candidate
+`2fa60d05d8c4472426cdb979243f53e2e959c231` passed with zero open findings;
+the permanent report now records `PASS`/`PASS`.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

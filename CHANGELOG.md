@@ -118,6 +118,8 @@ Keep a Changelog and Semantic Versioning.
 - Remediate one Medium policy-integrity flaw by independently pinning the
   complete reviewed policy and comparing every amendment, forbidden mechanism,
   safe-wrapper invariant, FIPS field, and backend ABI precondition exactly.
+- Record repository-owner PASS retest of exact signed v0.13.2 remediation
+  candidate `2fa60d05d8c4472426cdb979243f53e2e959c231` with zero open findings.
 - Keep scalar, protocol-engine, default, bare-metal and FIPS graphs isolated
   from host CPU detection; require a later primitive-specific policy amendment,
   source hash, native evidence, exceptional review and explicit allowance

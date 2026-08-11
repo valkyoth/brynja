@@ -203,7 +203,11 @@ v0.13.1. Its exceptional assessment and first retest found three High
 backend-authority flaws; all were remediated, and repository-owner retest of
 exact signed final candidate `738d21227d9681299d7464d9df360cf49cac8cca`
 passed with zero open findings before the signed tag. The current v0.13.2
-package-boundary candidate awaits review and selects no crates.io publication.
+package-boundary candidate's one High and one Medium findings are remediated;
+repository-owner retest of exact signed candidate
+`2fa60d05d8c4472426cdb979243f53e2e959c231` passed with zero open findings.
+The candidate awaits green GitHub and CodeQL and selects no crates.io
+publication.
 The published dependency is:
 
 ```toml
@@ -467,7 +471,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.13.1
+scripts/tag_gate.sh v0.13.2
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

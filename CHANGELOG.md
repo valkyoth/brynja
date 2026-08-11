@@ -121,6 +121,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Install all three OS-less Rust targets before GitHub's ordinary repository
+  gate and enforce the setup with a broken-workflow fixture, preventing the CPU
+  admission fixture from failing because `core` is unavailable.
 - Refresh the locked IANA DNS Parameters snapshot after the release gate
   detected the 2026-08-11 `_x402` TXT underscored service-name addition;
   classify it as caller-owned at v0.140.0, retain its provisional draft as

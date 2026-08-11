@@ -157,6 +157,14 @@ def test_missing_ci_target_fails() -> None:
         assurance.validate_workflow(broken)
 
 
+def test_missing_repository_gate_target_install_fails() -> None:
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    install = "        run: rustup target add " + " ".join(assurance.TARGETS) + "\n"
+    broken = workflow.replace(install, "")
+    with fails_with("CI bare-metal target installation drifted"):
+        assurance.validate_workflow(broken)
+
+
 def test_tool_in_cargo_manifest_fails() -> None:
     tools = assurance.read_policy()["tools"]
     with fails_with("assurance tool entered Cargo manifest: kani"):

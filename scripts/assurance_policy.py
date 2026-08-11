@@ -260,6 +260,9 @@ def validate_workflow(workflow: str) -> None:
     for target in TARGETS:
         if workflow.count(f"          - {target}\n") != 1:
             fail(f"CI must contain bare-metal target exactly once: {target}")
+    install = "run: rustup target add " + " ".join(TARGETS)
+    if workflow.count(install) != 1:
+        fail("CI bare-metal target installation drifted")
     command = "run: cargo check --workspace --all-features --target ${{ matrix.target }}"
     if workflow.count(command) != 1:
         fail("CI bare-metal target command drifted")

@@ -65,7 +65,7 @@ consistent in the same commit.
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |
 | `security/pentest/vX.Y.Z.md` | Permanent scheduled or exceptional checkpoint outcome with previous-public-tag baseline and cumulative change scope | Stage-aware release-readiness, range, and report-history validators |
 | `assurance/policy.toml` | Bounded first-party mutation and differential contracts, three OS-less targets, separate stable/Kani toolchains, and five exact external assurance-tool pins | Schema, bounds, target, workflow, manifest-isolation, pin, source-kind, owner, and broken-fixture validation |
-| `assurance/evidence.json` | Deterministic binding of assurance policy, runners, process-containment preconditions, bounded-input controls, native-host CI, stable/Kani toolchain documentation, and every Cargo manifest | Byte-for-byte regeneration and 44 positive/broken assurance fixtures |
+| `assurance/evidence.json` | Deterministic binding of assurance policy, runners, process-containment preconditions, bounded-input controls, native-host CI, stable/Kani toolchain documentation, and every Cargo manifest | Byte-for-byte regeneration and 45 positive/broken assurance fixtures |
 | `security/pentest/v0.11.0.md` | Exceptional review of the first unsafe owned-memory destruction boundary | Required PASS/PASS committed-report gate before the v0.11.0 development tag; no crates.io publication; scope remains included in v0.15.0 cumulative review |
 
 The v0.3.0 ledger, v0.3.1 decisions, v0.3.2 matrix foundation, v0.3.3

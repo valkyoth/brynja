@@ -132,8 +132,10 @@ Keep a Changelog and Semantic Versioning.
   context. Close the first retest's third High TOCTOU finding by sealing the
   context, migration guard, and kernel; holding migration exclusion across the
   direct call; validating logical authority after every platform callback; and
-  removing arbitrary application closures from guarded entry. The signed
-  remediation candidate remains blocked pending repository-owner retest.
+  removing arbitrary application closures from guarded entry. Record the
+  repository-owner retest of exact signed final remediation candidate
+  `738d21227d9681299d7464d9df360cf49cac8cca` as PASS/PASS with zero open
+  findings; keep the tag blocked until GitHub and CodeQL are green.
 - Remediate the pentest's High RV32 timing finding by passing every expanded
   word and array mask through the non-inlined optimization barrier before
   XOR/AND selection, then close two Medium assurance-scanner bypasses through

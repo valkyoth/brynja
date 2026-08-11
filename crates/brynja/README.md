@@ -192,8 +192,10 @@ crates.io checkpoint is `0.10.0`; the latest signed development milestone is
 v0.13.0, whose exceptional pentest and remediation retest passed with zero open
 findings and which was intentionally not published to crates.io. The current
 v0.13.1 exceptional assessment and first retest found three High
-backend-authority flaws. All are locally remediated, and the exact signed
-candidate awaits repository-owner retest before green GitHub and CodeQL. The
+backend-authority flaws. All were remediated, and the repository-owner retest
+of exact signed final candidate `738d21227d9681299d7464d9df360cf49cac8cca`
+passed with zero open findings. The release-preparation commit now awaits green
+GitHub and CodeQL before tag authorization. The
 published dependency is:
 
 ```toml

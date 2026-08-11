@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.0 tagged; v0.13.1 remediation awaiting retest
+Status: v0.10.0 published; v0.11.0-v0.13.0 tagged; v0.13.1 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -489,10 +489,11 @@ boundary. It contains no CPU probe, public instance, lease, context, guard, or
 kernel constructor, intrinsic, assembly, executable accelerated kernel
 implementation, unsafe backend boundary, global cache, provider effect,
 performance claim, or FIPS validation. Its exceptional assessment and first
-retest found three High backend-authority flaws; all are locally remediated, but
-v0.13.1 remains blocked pending repository-owner retest, the complete gate,
-green GitHub and CodeQL, and explicit signed-tag authorization. It selects no
-crates.io publication.
+retest found three High backend-authority flaws; all were remediated, and the
+repository-owner retest of exact signed final candidate
+`738d21227d9681299d7464d9df360cf49cac8cca` passed with zero open findings.
+v0.13.1 remains blocked pending the complete gate, green GitHub and CodeQL, and
+explicit signed-tag authorization. It selects no crates.io publication.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

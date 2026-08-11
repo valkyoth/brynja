@@ -1,6 +1,6 @@
 # Brynja v0.13.1 Development Milestone
 
-Status: remediation complete; awaiting repository-owner retest
+Status: implementation and retest complete; awaiting green GitHub and CodeQL
 
 Brynja v0.13.1 freezes the protocol-neutral CPU-backend capability, health,
 and dispatch contract in `brynja-core`, advances the `brynja` facade to
@@ -85,8 +85,9 @@ platform-issued lease, sealed context/guard/kernel traits, guard acquisition
 that excludes migration for the complete direct call, logical revalidation
 after every platform callback, and removal of arbitrary application closures
 from the entry boundary. All three findings have negative tests and policy
-fixtures. The permanent report remains `RETEST REQUIRED` until the repository
-owner retests the exact signed remediation candidate.
+fixtures. The repository owner retested exact signed final remediation
+candidate `738d21227d9681299d7464d9df360cf49cac8cca` and reported a green result;
+the permanent report records `PASS`/`PASS` with zero open findings.
 
 ## Verification Evidence
 
@@ -163,6 +164,7 @@ validated.
 v0.13.1 is an internal development milestone in the cumulative range after
 v0.10.0 through v0.15.0 and selects zero crates for crates.io publication. No
 scheduled pentest applied, but the three High findings triggered an exceptional
-assessment. Repository-owner retest of the exact signed remediation candidate,
-the complete local gate, green GitHub and CodeQL, and explicit repository-owner
+assessment. Repository-owner retest of exact signed final remediation candidate
+`738d21227d9681299d7464d9df360cf49cac8cca` passed with zero open findings. The
+complete local gate, green GitHub and CodeQL, and explicit repository-owner
 authorization remain mandatory before the signed `v0.13.1` tag.

@@ -1240,7 +1240,7 @@ Exit criteria:
 
 ### v0.13.1 - CPU Backend Capability And Dispatch Contract
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Before any cryptographic primitive exists, freeze first-party scalar, opportunistic-accelerated, required-accelerated, and validated-module backend policies; separate candidate detection from admitted activation; define exact feature-bundle evidence, non-forgeable thread-bound capability tokens, backend identity, per-operation dispatch, startup known-answer tests, health generations, quarantine, fail-closed required mode, and secret-free reporting so safe code cannot execute an unsupported instruction or silently change service approval.
 
@@ -1261,7 +1261,7 @@ Verification:
 Exit criteria:
 
 - safe callers cannot reach an unsupported instruction and every fallback or required-mode refusal is explicit in authoritative state;
-- close the exceptional assessment's cross-instance KAT replay, CPU-migration, and guarded-entry callback/closure TOCTOU findings, commit the permanent pending report with the exact remediation candidate, and obtain repository-owner retest before release readiness;
+- record PASS/PASS with zero open findings after the repository-owner retest closed the exceptional assessment's cross-instance KAT replay, CPU-migration, and guarded-entry callback/closure TOCTOU findings on exact signed remediation candidate `738d21227d9681299d7464d9df360cf49cac8cca`;
 - `v0.13.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.13.2 - CPU Acceleration Package And Unsafe Boundary

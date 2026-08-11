@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 awaiting pentest
+Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 remediation awaiting retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -536,7 +536,7 @@ the permanent report now records `PASS`/`PASS`.
 Version 0.13.3 implements the native CPU evidence and performance-admission
 harness:
 
-- a hash-bound machine schema records source, runner, CPU, microcode or
+- a hash-bound machine schema records source, runner, measured binary, CPU, microcode or
   firmware, exact observed features and operating state, OS, compiler, flags,
   target, clock, frequency policy, workload, schedule, and raw artifact hashes;
 - five native AMD, AWS Intel, Apple M2, AWS AArch64, and RISC-V lanes plus
@@ -553,9 +553,17 @@ harness:
   session behavior on host and OS-less targets.
 
 The deterministic ledger records zero admitted backends and zero native
-results. Thirty-eight adversarial evidence fixtures reject stale provenance,
-fabricated native labels, missing features, mixed CPUs, non-finite/noisy/
-biased measurements, QEMU promotion, raw-file drift, and false eligibility.
+results. The assessment of implementation candidate
+`9d2f6f48770bb832b1b36e2ec3e647a8a362159c` found two High flaws: self-asserted
+and submitter-hashed results could authorize a candidate, and arbitrary
+operating-state strings were not checked against the reviewed backend ABI.
+Both are locally remediated pending repository-owner retest. Fifty-two adversarial
+evidence fixtures now reject unauthenticated candidate/native claims,
+machine-readable artifact semantic drift, disabled or meaningless ABI/vector
+state, stale provenance, missing features, mixed CPUs, non-finite/noisy/biased
+measurements, QEMU promotion, raw-file drift, and false eligibility. No trust
+root or signature verifier is admitted, so recorded runner metadata and hashes
+cannot authenticate evidence or authorize a backend.
 No primitive, ISA kernel, detector, benchmark result, side-channel result,
 unsafe allowance, performance claim, independent verification, or FIPS
 approval is added. v0.13.3 selects no crate for crates.io publication.

@@ -38,7 +38,9 @@ prove that detection evidence cannot activate a backend without its direct KAT
 and migration-safe execution authority.
 Version 0.13.3 registers native host lanes and a strict evidence-admission
 schema without implementing detection here. An unavailable host stays
-unadmitted, and QEMU evidence cannot be promoted to a native claim.
+unadmitted, QEMU evidence cannot be promoted to a native claim, and recorded
+runner metadata cannot authenticate evidence. Candidate/native claims remain
+forbidden until a reviewed trusted-runner verifier is separately admitted.
 
 ## Cryptography Verification Status
 

@@ -1,6 +1,6 @@
 # Brynja v0.13.3 Development Milestone
 
-Status: implementation complete; awaiting pentest
+Status: pentest remediation implemented; repository-owner retest pending
 
 Brynja v0.13.3 implements the repository assurance boundary that every future
 CPU-accelerated cryptographic backend must satisfy. It advances only the
@@ -11,7 +11,7 @@ crates.io publication.
 
 - `assurance/cpu-evidence-policy.toml` defines exact bounded fields for source,
   runner, CPU, microcode or firmware, observed features and operating state,
-  OS, compiler and flags, clock and frequency policy, workload distribution,
+  OS, compiler, flags and measured binary, clock and frequency policy, workload distribution,
   measurements, claims, and raw result artifacts.
 - `security/cpu-backend-admissions.toml` retains all eight reserved x86_64,
   AArch64, and RISC-V backends as explicitly `unadmitted`.
@@ -32,17 +32,22 @@ throughput, and statistical side channels.
 Admission requires fresh single-logical-CPU evidence, 31 or more samples,
 deterministic balanced interleaving, no more than ten-percent coefficient of
 variation, at least a five-percent speedup, no more than 64 KiB code growth,
-and at most 5 ms cold-start overhead. Every raw artifact is a bounded regular
-file with an exact SHA-256. Statistical side-channel testing retains an
-explicit not-proof residual gap.
+and at most 5 ms cold-start overhead. Every artifact is bounded exact JSON,
+hash-bound and semantically tied to the complete run context and declared
+results. Statistical side-channel testing retains an explicit not-proof
+residual gap. Hashes and recorded runner ownership are not authentication, so
+all candidate/native claims remain forbidden until a reviewed trusted-runner
+verifier exists.
 
 ## Verification
 
-- 39 adversarial evidence fixtures reject stale or future timestamps,
-  incomplete feature bundles, fabricated native labels, wrong runner owners,
+- 52 adversarial evidence fixtures reject stale or future timestamps,
+  incomplete feature or exact operating-state bundles, fabricated native labels, wrong runner owners,
   vendor/model substitution, mixed CPUs, non-finite/noisy/biased measurements, insufficient samples or
   speedup, exceeded size/start budgets, failed correctness and security gates,
-  raw-file drift or path escape, false eligibility, and QEMU promotion.
+  raw-file drift or path escape, forged or semantically inconsistent
+  machine-readable results, unauthenticated candidate/native claims, false
+  eligibility, and QEMU promotion.
 - A dependency-free non-cryptographic `no_std` fixture exercises scalar,
   positive forced mock, unsupported, opportunistic fallback, required-no-
   fallback, KAT mismatch, permanent quarantine, scalar differential mismatch,
@@ -54,6 +59,14 @@ explicit not-proof residual gap.
   visibly unadmitted without changing or blocking portable scalar builds.
 
 ## Security And Verification Status
+
+The voluntary assessment of implementation candidate
+`9d2f6f48770bb832b1b36e2ec3e647a8a362159c` found two High issues: self-
+asserted evidence could authorize a candidate, and arbitrary operating-state
+strings could bypass reviewed ISA prerequisites. Both are locally remediated
+through the authentication hard gate, exact artifact semantics, and exact
+backend operating-state equality. Repository-owner retest is pending; see
+`security/pentest/v0.13.3.md`.
 
 This milestone contains no cryptographic primitive, ISA kernel, CPU detector,
 native benchmark result, native side-channel result, executable backend, new

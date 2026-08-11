@@ -244,9 +244,14 @@ v0.13.3 adds only the machine-readable native-evidence and performance-
 admission route. It rejects stale, fabricated-native, mixed-CPU, non-finite,
 noisy, order-biased, incomplete, unhashed, or emulation-promoted evidence and
 keeps every unavailable or unmeasured backend unadmitted without blocking
-portable scalar builds. Its mock state fixture and registered hardware lanes
-are not cryptographic implementations, benchmarks, side-channel results,
-support claims, or FIPS approval.
+portable scalar builds. Machine-readable artifacts must match the source,
+measured binary, complete run context, and declared results, and observed
+operating state must exactly match the reviewed backend ABI prerequisites.
+Because runner metadata and hashes do not authenticate execution, every
+candidate/native claim is forbidden until a reviewed trusted-runner trust root
+and signature verifier are separately admitted. Its mock state fixture and
+registered hardware lanes are not cryptographic implementations, benchmarks,
+side-channel results, support claims, or FIPS approval.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
 authority, dispatch authority, instance identity, CPU lease, trusted CPU

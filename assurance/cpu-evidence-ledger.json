@@ -1,7 +1,7 @@
 {
   "admissions": {
     "path": "security/cpu-backend-admissions.toml",
-    "sha256": "ce62214892a28107201ce939ba5288627117b3589e9bf7c63350953570c9e1b9"
+    "sha256": "be2b120d289cb7b2b0dee7a51eb8a819268488e221fef7d2fc3d283f6573133b"
   },
   "backends": [
     {
@@ -12,6 +12,13 @@
         "aws-intel-x86_64"
       ],
       "reason": "no-primitive-implementation-or-native-evidence",
+      "required_features": [
+        "sha"
+      ],
+      "required_operating_state": [
+        "x86_64",
+        "sha-usable-on-current-logical-cpu"
+      ],
       "status": "unadmitted"
     },
     {
@@ -22,6 +29,14 @@
         "aws-intel-x86_64"
       ],
       "reason": "no-primitive-implementation-or-native-evidence",
+      "required_features": [
+        "aes",
+        "pclmulqdq"
+      ],
+      "required_operating_state": [
+        "x86_64",
+        "aes-and-pclmulqdq-usable-on-current-logical-cpu"
+      ],
       "status": "unadmitted"
     },
     {
@@ -32,6 +47,14 @@
         "aws-intel-x86_64"
       ],
       "reason": "no-primitive-implementation-or-native-evidence",
+      "required_features": [
+        "avx2"
+      ],
+      "required_operating_state": [
+        "x86_64",
+        "osxsave-and-xcr0-ymm-state",
+        "avx2-usable-on-current-logical-cpu"
+      ],
       "status": "unadmitted"
     },
     {
@@ -42,6 +65,14 @@
         "aws-intel-x86_64"
       ],
       "reason": "no-primitive-implementation-or-native-evidence",
+      "required_features": [
+        "avx512f"
+      ],
+      "required_operating_state": [
+        "x86_64",
+        "osxsave-and-xcr0-zmm-state",
+        "avx512f-usable-on-current-logical-cpu"
+      ],
       "status": "unadmitted"
     },
     {
@@ -52,6 +83,14 @@
         "aws-aarch64"
       ],
       "reason": "no-primitive-implementation-or-native-evidence",
+      "required_features": [
+        "neon",
+        "sha2"
+      ],
+      "required_operating_state": [
+        "aarch64",
+        "neon-and-sha2-usable-on-current-logical-cpu"
+      ],
       "status": "unadmitted"
     },
     {
@@ -62,6 +101,15 @@
         "aws-aarch64"
       ],
       "reason": "no-primitive-implementation-or-native-evidence",
+      "required_features": [
+        "neon",
+        "aes",
+        "pmull"
+      ],
+      "required_operating_state": [
+        "aarch64",
+        "neon-aes-and-pmull-usable-on-current-logical-cpu"
+      ],
       "status": "unadmitted"
     },
     {
@@ -71,6 +119,14 @@
         "riscv64-cloud"
       ],
       "reason": "no-primitive-implementation-or-qualifying-native-isa-evidence",
+      "required_features": [
+        "v"
+      ],
+      "required_operating_state": [
+        "ratified-vector-isa",
+        "vector-state-enabled",
+        "v-usable-on-current-hart"
+      ],
       "status": "unadmitted"
     },
     {
@@ -80,6 +136,13 @@
         "riscv64-cloud"
       ],
       "reason": "no-primitive-implementation-or-qualifying-native-isa-evidence",
+      "required_features": [
+        "ratified-scalar-crypto-subset"
+      ],
+      "required_operating_state": [
+        "matching-riscv-width",
+        "exact-scalar-crypto-subset-usable-on-current-hart"
+      ],
       "status": "unadmitted"
     }
   ],
@@ -157,7 +220,7 @@
   ],
   "policy": {
     "path": "assurance/cpu-evidence-policy.toml",
-    "sha256": "17798d8ad8ff9f6a9aa1a755a359de7d1869923357c60fa44f7e0bec11866182"
+    "sha256": "4a38b70d658cde7508c0b566dcc01b5f6c5ff8ad1c2867d67af1352cbec1b690"
   },
   "schema": {
     "milestone": "0.13.3",

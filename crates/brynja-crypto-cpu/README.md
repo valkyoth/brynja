@@ -38,6 +38,9 @@ KAT and quarantine path, native evidence, and primitive-specific review.
 Version 0.13.3 provides the repository-level evidence schema, native/QEMU lane
 registry, fault and differential fixtures, and performance admission budgets;
 it records no backend result and admits no implementation in this package.
+Candidate/native claims are forbidden until an independently reviewed
+trusted-runner verifier exists, and observed operating state must exactly match
+the reviewed ABI prerequisites.
 
 ## Cryptography Verification Status
 

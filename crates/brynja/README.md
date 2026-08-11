@@ -76,10 +76,15 @@ The current `0.13.3` development line adds the fail-closed native CPU evidence
 and performance-admission route. A machine-readable schema registers five
 native hardware lanes and three supplemental QEMU lanes, thirteen correctness,
 fault, code-generation, performance, and side-channel harnesses, exact raw-
-artifact hashes, freshness and single-CPU provenance, balanced benchmark
-ordering, and explicit noise, speedup, code-size, and cold-start bounds. Every
-backend remains unimplemented, unmeasured, and unadmitted; emulation cannot
-satisfy native evidence and an unavailable runner never blocks scalar builds.
+artifact JSON semantics and hashes, exact backend ABI/operating-state
+requirements, freshness and single-CPU metadata, balanced benchmark ordering,
+and explicit noise, speedup, code-size, and cold-start bounds. Recorded runner
+metadata and hashes are not authentication: because no trusted-runner trust
+root or reviewed signature verifier exists yet, the validator rejects every
+candidate status and every native performance, side-channel, or admission
+claim. Every backend remains unimplemented, unmeasured, and unadmitted;
+emulation cannot satisfy native evidence and an unavailable runner never
+blocks scalar builds.
 The exact fields, budgets, lane states, and residual limits are documented in
 the [CPU backend admission contract](https://github.com/valkyoth/brynja/blob/main/docs/cpu-backend-admission.md).
 

@@ -13,7 +13,7 @@ previous_version = "0.13.2"
 version = "0.13.3"
 change = "metadata"
 publish = false
-reason = "Advance to the v0.13.3 CPU evidence-admission milestone, retain zero admitted backends, and select no crate for crates.io publication."
+reason = "Advance to the remediated v0.13.3 CPU evidence-admission milestone, forbid candidate/native claims without trusted-runner authentication, bind exact artifact semantics and operating state, retain zero admitted backends, and select no crate for crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.7.0"

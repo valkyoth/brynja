@@ -11,7 +11,7 @@ Keep a Changelog and Semantic Versioning.
   supplemental lanes, thirteen admission harnesses, exact raw-artifact
   provenance, bounded freshness/noise/order/performance rules, and a
   deterministic register retaining zero admitted backends.
-- Add 39 adversarial evidence fixtures and a dependency-free non-cryptographic
+- Add 52 adversarial evidence fixtures and a dependency-free non-cryptographic
   `no_std`/no-atomics scalar/mock fixture covering forced, required,
   unsupported, KAT, quarantine, differential, fallback, and independent-
   session behavior across host and OS-less target checks.
@@ -121,6 +121,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Remediate two High v0.13.3 evidence-admission findings by rejecting all
+  candidate and native claims until a reviewed trusted-runner verifier exists,
+  requiring exact machine-readable artifact semantics bound to the source,
+  binary, run context, and declared measurements, and matching every observed
+  operating-state value to the backend's exact reviewed ABI prerequisites.
 - Reject stale, future, mixed-CPU, incomplete-feature, fabricated-native,
   unowned-runner, non-finite, noisy, order-biased, under-sampled, slow,
   oversized, unhashed, path-escaping, QEMU-promoted, or false-eligibility CPU

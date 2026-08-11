@@ -64,6 +64,16 @@ def main() -> int:
         lambda: evidence.validate_admissions(policy, emulated_lane, boundary),
     )
 
+    weakened_state = copy.deepcopy(admissions)
+    weakened_state["backends"][2]["required_operating_state"] = [
+        "x86_64",
+        "avx2-usable-on-current-logical-cpu",
+    ]
+    expect_failure(
+        "operating-state requirements drifted",
+        lambda: evidence.validate_admissions(policy, weakened_state, boundary),
+    )
+
     with tempfile.TemporaryDirectory(prefix="brynja-cpu-evidence-") as temporary:
         fixtures.test(policy, admissions, Path(temporary))
 
@@ -84,7 +94,7 @@ def main() -> int:
         finally:
             evidence.EVIDENCE_ROOT = original_root
 
-    print("CPU evidence rejects 39 provenance, native-claim, correctness, noise, bias, resource, and admission regressions")
+    print("CPU evidence rejects 52 authentication, semantics, operating-state, correctness, resource, and admission regressions")
     return 0
 
 

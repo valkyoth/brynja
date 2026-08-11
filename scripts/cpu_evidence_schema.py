@@ -31,7 +31,7 @@ CPU_FIELDS = {
 }
 ENVIRONMENT_FIELDS = {
     "os", "kernel", "virtualization", "compiler", "compiler_commit", "target",
-    "rustflags", "frequency_policy", "clock_source", "isolation",
+    "rustflags", "frequency_policy", "clock_source", "isolation", "binary_sha256",
 }
 WORKLOAD_FIELDS = {
     "distribution", "sizes", "corpus_sha256", "schedule", "schedule_sha256",
@@ -49,6 +49,28 @@ ARTIFACT_FIELDS = {"harness", "path", "sha256", "bytes"}
 CLAIM_FIELDS = {
     "native_performance", "native_side_channel", "admission_eligible",
     "residual_gaps",
+}
+HARNESS_RESULT_FIELDS = {
+    "forced-backend": ("forced_backend",),
+    "required-mode": ("required_mode",),
+    "unsupported-feature": ("unsupported_feature",),
+    "known-answer": ("known_answer",),
+    "quarantine": ("quarantine",),
+    "scalar-differential": ("scalar_differential",),
+    "concurrency-isolation": ("concurrency_isolation",),
+    "emitted-code": ("emitted_code",),
+    "code-size": ("code_size_increase_bytes",),
+    "cold-start": ("cold_start_nanoseconds",),
+    "latency": (
+        "latency_median_nanoseconds", "latency_p95_nanoseconds",
+        "coefficient_of_variation_ppm", "order_imbalance", "cpu_identity_count",
+    ),
+    "throughput": ("throughput_bytes_per_second", "speedup_ppm"),
+    "side-channel": ("side_channel",),
+}
+HARNESS_ARTIFACT_FIELDS = {
+    "schema", "harness", "status", "run", "source_commit", "binary_sha256",
+    "backend", "lane", "primitive", "operation", "context_sha256", "measurements",
 }
 
 
@@ -138,7 +160,10 @@ def validate_policy(policy: dict) -> None:
         "emulation_role": "supplemental-instruction-coverage-only",
         "unavailable_lane_result": "unadmitted", "unmeasured_backend_result": "unadmitted",
         "mixed_cpu_runs": "forbidden", "non_finite_measurements": "forbidden",
-        "raw_results": "hash-bound-regular-files",
+        "raw_results": "machine-readable-schema-and-hash-bound-regular-files",
+        "provenance_role": "recorded-not-authenticated",
+        "trusted_runner_attestation": "required-no-verifier-admitted",
+        "candidate_admission": "forbidden-until-authenticated-semantic-verifier",
         "benchmark_schedule": "deterministic-balanced-interleaved",
         "frequency_policy": "recorded-and-stable",
     }
@@ -169,6 +194,13 @@ def validate_policy(policy: dict) -> None:
     }
     if set(ids) != required or len(ids) != len(set(ids)):
         fail("CPU harness inventory is incomplete or duplicated")
+    mapped_fields = [
+        field
+        for identifier in required
+        for field in HARNESS_RESULT_FIELDS.get(identifier, ())
+    ]
+    if set(HARNESS_RESULT_FIELDS) != required or set(mapped_fields) != RESULT_FIELDS or len(mapped_fields) != len(set(mapped_fields)):
+        fail("machine-readable harness result coverage drifted")
     validate_lanes(policy["lanes"])
 
 
@@ -223,7 +255,62 @@ def cpu_identity_digest(cpu: dict) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def validate_artifacts(artifacts: object, policy: dict, artifact_root: Path) -> None:
+def canonical_json(value: object) -> bytes:
+    return json.dumps(value, separators=(",", ":"), sort_keys=True).encode("utf-8")
+
+
+def canonical_digest(value: object) -> str:
+    return hashlib.sha256(canonical_json(value)).hexdigest()
+
+
+def harness_context(record: dict) -> str:
+    return canonical_digest({
+        key: record[key]
+        for key in ("run", "cpu", "environment", "workload", "results")
+    })
+
+
+def parse_harness_artifact(data: bytes, harness: str, record: dict) -> None:
+    def unique_object(pairs: list[tuple[str, object]]) -> dict:
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                fail("machine-readable harness artifact has duplicate fields")
+            value[key] = item
+        return value
+
+    try:
+        payload = json.loads(data.decode("utf-8"), object_pairs_hook=unique_object)
+    except (UnicodeError, json.JSONDecodeError, RecursionError) as error:
+        fail(f"machine-readable harness artifact is invalid: {harness}: {error}")
+    exact_keys(payload, HARNESS_ARTIFACT_FIELDS, "machine-readable harness artifact")
+    fields = HARNESS_RESULT_FIELDS[harness]
+    status_fields = [field for field in fields if isinstance(record["results"][field], str)]
+    expected_status = record["results"][status_fields[0]] if status_fields else "pass"
+    expected_measurements = {
+        field: record["results"][field]
+        for field in fields
+        if field not in status_fields
+    }
+    expected_identity = {
+        "schema": 1,
+        "harness": harness,
+        "status": expected_status,
+        "run": record["run"]["id"],
+        "source_commit": record["run"]["source_commit"],
+        "binary_sha256": record["environment"]["binary_sha256"],
+        "backend": record["run"]["backend"],
+        "lane": record["run"]["lane"],
+        "primitive": record["run"]["primitive"],
+        "operation": record["run"]["operation"],
+        "context_sha256": harness_context(record),
+        "measurements": expected_measurements,
+    }
+    if canonical_json(payload) != canonical_json(expected_identity):
+        fail(f"harness artifact semantics differ from the manifest: {harness}")
+
+
+def validate_artifacts(artifacts: object, policy: dict, artifact_root: Path, record: dict) -> None:
     if not isinstance(artifacts, list):
         fail("raw artifact inventory must be an array")
     required = {item["id"] for item in policy["harnesses"]}
@@ -257,6 +344,7 @@ def validate_artifacts(artifacts: object, policy: dict, artifact_root: Path) -> 
         digest = hashlib.sha256(data).hexdigest()
         if not isinstance(artifact["sha256"], str) or HEX_64.fullmatch(artifact["sha256"]) is None or digest != artifact["sha256"]:
             fail(f"raw artifact checksum mismatch: {relative}")
+        parse_harness_artifact(data, harness, record)
     if seen != required:
         fail("raw artifact inventory is incomplete")
 
@@ -294,6 +382,8 @@ def validate_record(record: dict, policy: dict, admissions: dict, artifact_root:
     operating_state = string_list(cpu["operating_state"], "operating state", 64)
     if sorted(observed_features) != sorted(backend["required_features"]):
         fail("observed feature evidence is incomplete or overbroad")
+    if sorted(operating_state) != sorted(backend["required_operating_state"]):
+        fail("required ABI or vector operating state is unavailable")
     for field in ("vendor", "model", "family", "stepping", "microcode_or_firmware"):
         nonempty(cpu[field], f"CPU {field}")
     bounded_integer(cpu["logical_cpu"], "logical CPU number", 0, 2**32 - 1)
@@ -307,6 +397,8 @@ def validate_record(record: dict, policy: dict, admissions: dict, artifact_root:
     environment = record["environment"]
     if environment["os"] != lane["os"] or not isinstance(environment["compiler_commit"], str) or HEX_40.fullmatch(environment["compiler_commit"]) is None:
         fail("OS or compiler provenance differs from the registered lane")
+    if not isinstance(environment["binary_sha256"], str) or HEX_64.fullmatch(environment["binary_sha256"]) is None:
+        fail("measured binary hash is invalid")
     for field in ("kernel", "virtualization", "compiler", "target", "frequency_policy", "clock_source", "isolation"):
         nonempty(environment[field], f"environment {field}")
     if not isinstance(environment["rustflags"], list) or len(environment["rustflags"]) > 64 or not all(isinstance(item, str) and len(item) <= 256 for item in environment["rustflags"]):
@@ -347,15 +439,14 @@ def validate_record(record: dict, policy: dict, admissions: dict, artifact_root:
         fail("latency percentile ordering is invalid")
     if environment["frequency_policy"] != "fixed-and-recorded":
         fail("frequency policy is not stable and recorded")
-    validate_artifacts(record["artifacts"], policy, artifact_root)
+    validate_artifacts(record["artifacts"], policy, artifact_root, record)
     claims = record["claims"]
     if claims["residual_gaps"] != [expected_workload["required_residual_gap"]]:
         fail("statistical residual gap is missing or changed")
-    native = lane["execution_kind"] == "native"
-    candidate = backend["status"] == "candidate"
-    eligible = native and candidate
-    if claims["native_performance"] is not native or claims["native_side_channel"] is not native:
-        fail("native performance or side-channel claim does not match the lane")
-    if claims["admission_eligible"] is not eligible:
-        fail("admission claim differs from fail-closed evaluation")
-    return {"run": run["id"], "backend": run["backend"], "lane": run["lane"], "admission_eligible": eligible}
+    if backend["status"] != "unadmitted":
+        fail("trusted-runner attestation verifier is unavailable; candidate admission is forbidden")
+    if claims["native_performance"] is not False or claims["native_side_channel"] is not False:
+        fail("unauthenticated evidence cannot make native performance or side-channel claims")
+    if claims["admission_eligible"] is not False:
+        fail("unauthenticated evidence cannot make an admission claim")
+    return {"run": run["id"], "backend": run["backend"], "lane": run["lane"], "admission_eligible": False}

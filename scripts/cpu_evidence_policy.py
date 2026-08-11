@@ -18,9 +18,12 @@ ADMISSIONS = ROOT / "security/cpu-backend-admissions.toml"
 BOUNDARY = ROOT / "security/cpu-acceleration-boundary.toml"
 LEDGER = ROOT / "assurance/cpu-evidence-ledger.json"
 EVIDENCE_ROOT = ROOT / "assurance/cpu-evidence"
-EXPECTED_POLICY_SHA256 = "17798d8ad8ff9f6a9aa1a755a359de7d1869923357c60fa44f7e0bec11866182"
-EXPECTED_ADMISSIONS_SHA256 = "ce62214892a28107201ce939ba5288627117b3589e9bf7c63350953570c9e1b9"
-BACKEND_FIELDS = {"id", "architecture", "required_features", "native_lanes", "status", "reason"}
+EXPECTED_POLICY_SHA256 = "4a38b70d658cde7508c0b566dcc01b5f6c5ff8ad1c2867d67af1352cbec1b690"
+EXPECTED_ADMISSIONS_SHA256 = "be2b120d289cb7b2b0dee7a51eb8a819268488e221fef7d2fc3d283f6573133b"
+BACKEND_FIELDS = {
+    "id", "architecture", "required_features", "required_operating_state",
+    "native_lanes", "status", "reason",
+}
 EXPECTED_REASONS = {
     "x86-sha": "no-primitive-implementation-or-native-evidence",
     "x86-aes-gcm": "no-primitive-implementation-or-native-evidence",
@@ -66,8 +69,14 @@ def validate_admissions(policy: dict, admissions: dict, boundary: dict) -> None:
         expected_architecture = ARCHITECTURE_MAP[reserved["architecture"]]
         if backend["architecture"] != expected_architecture:
             fail(f"CPU admission architecture drifted: {identifier}")
-        if sorted(backend["required_features"]) != sorted(reserved["instructions"]):
+        features = schema.string_list(backend["required_features"], "CPU backend feature bundle", 64)
+        operating_state = schema.string_list(
+            backend["required_operating_state"], "CPU backend operating state", 64
+        )
+        if len(features) != len(set(features)) or sorted(features) != sorted(reserved["instructions"]):
             fail(f"CPU admission feature bundle drifted: {identifier}")
+        if len(operating_state) != len(set(operating_state)) or sorted(operating_state) != sorted(reserved["abi_preconditions"]):
+            fail(f"CPU operating-state requirements drifted: {identifier}")
         if backend["status"] != "unadmitted" or backend["reason"] != EXPECTED_REASONS[identifier]:
             fail(f"CPU backend gained an unsupported admission claim: {identifier}")
         if not backend["native_lanes"] or len(backend["native_lanes"]) != len(set(backend["native_lanes"])):
@@ -170,6 +179,8 @@ def build_ledger(policy: dict, admissions: dict) -> dict:
             "architecture": backend["architecture"],
             "id": backend["id"],
             "native_lanes": backend["native_lanes"],
+            "required_features": backend["required_features"],
+            "required_operating_state": backend["required_operating_state"],
             "reason": backend["reason"],
             "status": backend["status"],
         }

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -26,27 +27,22 @@ def expect_failure(message: str, callback) -> None:
         raise AssertionError(f"expected CPU evidence rejection: {message}")
 
 
-def make_record(policy: dict, admissions: dict, root: Path, lane_id: str = "local-amd-x86_64") -> dict:
+def make_record(
+    policy: dict,
+    admissions: dict,
+    root: Path,
+    lane_id: str = "local-amd-x86_64",
+    backend_id: str | None = None,
+) -> dict:
     lanes = schema.lane_map(policy)
     lane = lanes[lane_id]
     backend = next(
         item for item in admissions["backends"]
         if item["architecture"] == lane["architecture"]
+        and (backend_id is None or item["id"] == backend_id)
     )
-    artifacts = []
     raw = root / "raw"
-    raw.mkdir(parents=True)
-    for harness in policy["harnesses"]:
-        name = f"{harness['id']}.txt"
-        data = f"{harness['id']}: fixture pass\n".encode()
-        (raw / name).write_bytes(data)
-        artifacts.append({
-            "harness": harness["id"],
-            "path": f"raw/{name}",
-            "sha256": hashlib.sha256(data).hexdigest(),
-            "bytes": len(data),
-        })
-    native = lane["execution_kind"] == "native"
+    raw.mkdir(parents=True, exist_ok=True)
     vendor_rule = lane["vendor_rule"]
     vendor = vendor_rule.removeprefix("exact:") if vendor_rule.startswith("exact:") else "fixture-vendor"
     record = {
@@ -64,14 +60,14 @@ def make_record(policy: dict, admissions: dict, root: Path, lane_id: str = "loca
             "microcode_or_firmware": "fixture-firmware",
             "logical_cpu": 0, "logical_cpu_identity_sha256": HASH,
             "observed_features": list(backend["required_features"]),
-            "operating_state": ["fixture-state-observed"],
+            "operating_state": list(backend["required_operating_state"]),
         },
         "environment": {
             "os": lane["os"], "kernel": "fixture-kernel", "virtualization": "none",
             "compiler": "rustc 1.97.1", "compiler_commit": COMMIT,
             "target": f"{lane['architecture']}-fixture", "rustflags": ["-Copt-level=3"],
             "frequency_policy": "fixed-and-recorded", "clock_source": "monotonic-fixture",
-            "isolation": "dedicated-fixture",
+            "isolation": "dedicated-fixture", "binary_sha256": HASH,
         },
         "workload": {
             "distribution": policy["workload"]["distribution"],
@@ -91,15 +87,58 @@ def make_record(policy: dict, admissions: dict, root: Path, lane_id: str = "loca
             "coefficient_of_variation_ppm": 10_000, "speedup_ppm": 1_100_000,
             "order_imbalance": 1, "cpu_identity_count": 1,
         },
-        "artifacts": artifacts,
+        "artifacts": [],
         "claims": {
-            "native_performance": native, "native_side_channel": native,
+            "native_performance": False, "native_side_channel": False,
             "admission_eligible": False,
             "residual_gaps": ["statistical-testing-is-not-proof"],
         },
     }
     record["cpu"]["logical_cpu_identity_sha256"] = schema.cpu_identity_digest(record["cpu"])
+    context = schema.harness_context(record)
+    for harness in policy["harnesses"]:
+        identifier = harness["id"]
+        fields = schema.HARNESS_RESULT_FIELDS[identifier]
+        status_fields = [field for field in fields if isinstance(record["results"][field], str)]
+        payload = {
+            "schema": 1,
+            "harness": identifier,
+            "status": record["results"][status_fields[0]] if status_fields else "pass",
+            "run": record["run"]["id"],
+            "source_commit": record["run"]["source_commit"],
+            "binary_sha256": record["environment"]["binary_sha256"],
+            "backend": record["run"]["backend"],
+            "lane": record["run"]["lane"],
+            "primitive": record["run"]["primitive"],
+            "operation": record["run"]["operation"],
+            "context_sha256": context,
+            "measurements": {
+                field: record["results"][field]
+                for field in fields
+                if field not in status_fields
+            },
+        }
+        name = f"{identifier}.json"
+        data = (json.dumps(payload, sort_keys=True) + "\n").encode()
+        (raw / name).write_bytes(data)
+        record["artifacts"].append({
+            "harness": identifier,
+            "path": f"raw/{name}",
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "bytes": len(data),
+        })
     return record
+
+
+def rewrite_artifact(root: Path, record: dict, index: int, mutate) -> None:
+    artifact = record["artifacts"][index]
+    path = root / artifact["path"]
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    mutate(payload)
+    data = (json.dumps(payload, sort_keys=True) + "\n").encode()
+    path.write_bytes(data)
+    artifact["sha256"] = hashlib.sha256(data).hexdigest()
+    artifact["bytes"] = len(data)
 
 
 def run(policy: dict, admissions: dict, root: Path, record: dict) -> dict:
@@ -113,9 +152,10 @@ def test(policy: dict, admissions: dict, root: Path) -> None:
     candidate = copy.deepcopy(admissions)
     target = next(item for item in candidate["backends"] if item["id"] == record["run"]["backend"])
     target["status"] = "candidate"
-    eligible = copy.deepcopy(record)
-    eligible["claims"]["admission_eligible"] = True
-    assert run(policy, candidate, root, eligible)["admission_eligible"] is True
+    expect_failure(
+        "attestation verifier is unavailable",
+        lambda: run(policy, candidate, root, copy.deepcopy(record)),
+    )
 
     cases = (
         ("stale", lambda value: value["run"].update(created_utc="2026-01-01T00:00:00Z"), "evidence is stale"),
@@ -162,6 +202,52 @@ def test(policy: dict, admissions: dict, root: Path) -> None:
     bad_hash["artifacts"][0]["sha256"] = "00" * 32
     expect_failure("checksum mismatch", lambda: run(policy, admissions, root, bad_hash))
 
+    forged = copy.deepcopy(record)
+    forged_path = root / forged["artifacts"][0]["path"]
+    forged_data = b"FAIL: harness was never executed\n"
+    forged_path.write_bytes(forged_data)
+    forged["artifacts"][0]["sha256"] = hashlib.sha256(forged_data).hexdigest()
+    forged["artifacts"][0]["bytes"] = len(forged_data)
+    expect_failure("machine-readable harness artifact is invalid", lambda: run(policy, admissions, root, forged))
+
+    # Restore the shared fixture artifact after the deliberate on-disk forgery.
+    record = make_record(policy, admissions, root)
+
+    failed_artifact = copy.deepcopy(record)
+    rewrite_artifact(root, failed_artifact, 0, lambda payload: payload.update(status="fail"))
+    expect_failure("semantics differ", lambda: run(policy, admissions, root, failed_artifact))
+
+    record = make_record(policy, admissions, root)
+    duplicate_json = copy.deepcopy(record)
+    duplicate_path = root / duplicate_json["artifacts"][0]["path"]
+    duplicate_data = b'{"schema":1,"schema":1}\n'
+    duplicate_path.write_bytes(duplicate_data)
+    duplicate_json["artifacts"][0]["sha256"] = hashlib.sha256(duplicate_data).hexdigest()
+    duplicate_json["artifacts"][0]["bytes"] = len(duplicate_data)
+    expect_failure("duplicate fields", lambda: run(policy, admissions, root, duplicate_json))
+
+    record = make_record(policy, admissions, root)
+    wrong_source = copy.deepcopy(record)
+    rewrite_artifact(root, wrong_source, 0, lambda payload: payload.update(source_commit="00" * 20))
+    expect_failure("semantics differ", lambda: run(policy, admissions, root, wrong_source))
+
+    record = make_record(policy, admissions, root)
+    wrong_measurement = copy.deepcopy(record)
+    latency = next(index for index, item in enumerate(wrong_measurement["artifacts"]) if item["harness"] == "latency")
+    rewrite_artifact(root, wrong_measurement, latency, lambda payload: payload["measurements"].update(latency_p95_nanoseconds=1))
+    expect_failure("semantics differ", lambda: run(policy, admissions, root, wrong_measurement))
+
+    record = make_record(policy, admissions, root)
+    boolean_measurement = copy.deepcopy(record)
+    latency = next(index for index, item in enumerate(boolean_measurement["artifacts"]) if item["harness"] == "latency")
+    rewrite_artifact(root, boolean_measurement, latency, lambda payload: payload["measurements"].update(order_imbalance=True))
+    expect_failure("semantics differ", lambda: run(policy, admissions, root, boolean_measurement))
+
+    record = make_record(policy, admissions, root)
+    wrong_binary = copy.deepcopy(record)
+    wrong_binary["environment"]["binary_sha256"] = "33" * 32
+    expect_failure("semantics differ", lambda: run(policy, admissions, root, wrong_binary))
+
     missing = copy.deepcopy(record)
     missing["artifacts"].pop()
     expect_failure("inventory is incomplete", lambda: run(policy, admissions, root, missing))
@@ -183,11 +269,24 @@ def test(policy: dict, admissions: dict, root: Path) -> None:
     assert run(policy, admissions, qemu_root, qemu)["admission_eligible"] is False
     false_native = copy.deepcopy(qemu)
     false_native["claims"]["native_performance"] = True
-    expect_failure("native performance", lambda: run(policy, admissions, qemu_root, false_native))
+    expect_failure("unauthenticated evidence", lambda: run(policy, admissions, qemu_root, false_native))
 
     qemu_candidate = copy.deepcopy(admissions)
     qemu_backend = next(item for item in qemu_candidate["backends"] if item["id"] == qemu["run"]["backend"])
     qemu_backend["status"] = "candidate"
     false_eligible = copy.deepcopy(qemu)
     false_eligible["claims"]["admission_eligible"] = True
-    expect_failure("admission claim differs", lambda: run(policy, qemu_candidate, qemu_root, false_eligible))
+    expect_failure("attestation verifier is unavailable", lambda: run(policy, qemu_candidate, qemu_root, false_eligible))
+
+    operating_cases = (
+        ("local-amd-x86_64", "x86-sha", ["meaningless-state"]),
+        ("local-amd-x86_64", "x86-avx2", ["x86_64", "avx2-usable-on-current-logical-cpu"]),
+        ("local-amd-x86_64", "x86-avx512", ["osxsave-disabled", "xcr0-zmm-disabled"]),
+        ("riscv64-cloud", "riscv-vector", ["ratified-vector-isa", "vector-state-disabled"]),
+    )
+    for lane_id, backend_id, operating_state in operating_cases:
+        state_root = root / f"state-{backend_id}"
+        state_record = make_record(policy, admissions, state_root, lane_id, backend_id)
+        state_record["cpu"]["operating_state"] = operating_state
+        state_record["cpu"]["logical_cpu_identity_sha256"] = schema.cpu_identity_digest(state_record["cpu"])
+        expect_failure("required ABI or vector operating state", lambda value=state_record, path=state_root: run(policy, admissions, path, value))

@@ -29,8 +29,11 @@ kernel locations while granting zero executable or low-level authority. The
 v0.13.3 evidence layer adds a separately hash-bound schema, five native and
 three QEMU supplemental lanes, thirteen correctness, negative, fault,
 code-generation, performance, and side-channel harness contracts, an explicit
-zero-admission register, a deterministic ledger, and 39 broken evidence
-fixtures. Its dependency-free `no_std` state fixture exercises scalar,
+zero-admission register, a deterministic ledger, and 52 broken evidence
+fixtures. Exact machine-readable artifact semantics and backend-specific
+operating state are enforced, while candidate and native claims remain
+forbidden until a separately reviewed trusted-runner verifier exists. Its
+dependency-free `no_std` state fixture exercises scalar,
 positive mock, unsupported, required-mode, KAT, quarantine, differential, and
 independent-session behavior on host and OS-less targets. These are admission
 contracts only: no native result, benchmark, side-channel result, CPU detector,

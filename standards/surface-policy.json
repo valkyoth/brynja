@@ -1064,9 +1064,9 @@
         "disposition": "future-work",
         "domain": "hybrid",
         "owner": "0.120.0",
-        "rationale": "Concrete ECDHE-ML-KEM groups remain blocked pending both final Standards Track text and final IANA values.",
-        "sources": ["rfc:9954", "iana:tls-parameters"],
-        "test_target": "tests/surface/hybrid.rs#admission_blocker"
+        "rationale": "Final RFC 10024 and final IANA assignments define exactly three ECDHE-ML-KEM groups for planned v0.120.0 implementation; provisional drafts and private values remain forbidden.",
+        "sources": ["rfc:9954", "rfc:10024", "iana:tls-parameters"],
+        "test_target": "tests/surface/hybrid.rs#standard_groups"
       },
       "id": "algorithm.ecdhe-ml-kem"
     },
@@ -1549,5 +1549,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "a90755dc170ee9bbce71daa7a4182b54be143c66bfb8d3ca7f680d3f4a19ad88"
+  "source_ledger_sha256": "3ebe4093a5e21a1af40a0bdc3f031959ffc5a4d8a6721de5ab7db3f2192a9c0c"
 }

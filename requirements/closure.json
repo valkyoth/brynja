@@ -3,8 +3,8 @@
     {
       "id": "ecdhe-ml-kem-groups",
       "owner": "0.120.0",
-      "rationale": "No concrete hybrid group is admitted until a final Standards Track RFC and final non-provisional IANA assignments both exist; drafts and private values are forbidden.",
-      "status": "blocked",
+      "rationale": "Final RFC 10024 and final non-provisional IANA assignments satisfy the source gate for exactly three planned v0.120.0 groups; drafts and private values remain forbidden.",
+      "status": "resolved",
       "surface": "algorithm.ecdhe-ml-kem"
     },
     {
@@ -158,7 +158,7 @@
     {
       "authority": "iana:tls-parameters",
       "owner": "0.120.0",
-      "rationale": "The mutable registry must be refreshed without admitting provisional hybrid identifiers before a final Standards Track RFC and final assignments exist.",
+      "rationale": "The mutable registry must be refreshed at the v0.120.0 implementation freeze so the final RFC 10024 assignments cannot drift or admit provisional hybrid identifiers.",
       "status": "refresh-required",
       "url": "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
     },
@@ -3146,6 +3146,7 @@
       "source_ids": [
         "nist:NIST.FIPS.203.pdf",
         "nist:NIST.SP.800-227.pdf",
+        "rfc:10024",
         "rfc:9935",
         "rfc:9954"
       ],
@@ -3159,6 +3160,7 @@
       "source_ids": [
         "nist:NIST.FIPS.203.pdf",
         "nist:NIST.SP.800-227.pdf",
+        "rfc:10024",
         "rfc:9935",
         "rfc:9954"
       ],
@@ -3172,6 +3174,7 @@
       "source_ids": [
         "nist:NIST.FIPS.203.pdf",
         "nist:NIST.SP.800-227.pdf",
+        "rfc:10024",
         "rfc:9935",
         "rfc:9954"
       ],
@@ -3205,11 +3208,12 @@
       "requirement_ids": [
         "BRY-REQ-HYB-0001"
       ],
-      "scope": "Implement only final standardized X25519MLKEM768, SecP256r1MLKEM768, and SecP384r1MLKEM1024 encodings, component order, lengths, identifiers, and concatenated shared-secret construction under RFC 9954 plus the final Standards Track ECDHE-ML-KEM group RFC; provisional drafts and private code points never enter release artifacts.",
+      "scope": "Implement only final standardized X25519MLKEM768, SecP256r1MLKEM768, and SecP384r1MLKEM1024 encodings, component order, lengths, identifiers, and concatenated shared-secret construction under RFC 9954 and final Standards Track RFC 10024; provisional drafts and private code points never enter release artifacts.",
       "source_ids": [
         "iana:tls-parameters",
         "nist:NIST.FIPS.203.pdf",
         "nist:NIST.SP.800-227.pdf",
+        "rfc:10024",
         "rfc:9935",
         "rfc:9954"
       ],
@@ -3223,6 +3227,7 @@
       "source_ids": [
         "nist:NIST.FIPS.203.pdf",
         "nist:NIST.SP.800-227.pdf",
+        "rfc:10024",
         "rfc:9935",
         "rfc:9954"
       ],
@@ -3236,6 +3241,7 @@
       "source_ids": [
         "nist:NIST.FIPS.203.pdf",
         "nist:NIST.SP.800-227.pdf",
+        "rfc:10024",
         "rfc:9935",
         "rfc:9954"
       ],
@@ -4142,8 +4148,9 @@
       "version": "H0.8.0"
     }
   ],
-  "provisional_surface_count": 101,
+  "provisional_surface_count": 99,
   "provisional_surfaces": [
+    "algorithm.ecdhe-ml-kem",
     "iana.hpke.hpke-kdf-ids.0x0010.1",
     "iana.hpke.hpke-kdf-ids.0x0011.1",
     "iana.hpke.hpke-kdf-ids.0x0012.1",
@@ -4222,10 +4229,7 @@
     "iana.tls-parameters.tls-parameters-8.mlkem768.1",
     "iana.tls-parameters.tls-parameters-8.secp256r1kyber768draft00-obsolete.1",
     "iana.tls-parameters.tls-parameters-8.secp256r1mlkem512.1",
-    "iana.tls-parameters.tls-parameters-8.secp256r1mlkem768.1",
-    "iana.tls-parameters.tls-parameters-8.secp384r1mlkem1024.1",
     "iana.tls-parameters.tls-parameters-8.x25519kyber768draft00-obsolete.1",
-    "iana.tls-parameters.tls-parameters-8.x25519mlkem768.1",
     "iana.tls-parameters.tls-signaturescheme.eccsi-sha256.1",
     "iana.tls-parameters.tls-signaturescheme.iso-chinese-ibs.1",
     "iana.tls-parameters.tls-signaturescheme.iso-ibs1.1",
@@ -5584,10 +5588,10 @@
         "algorithm.ecdhe-ml-kem"
       ],
       "id": "BRY-REQ-HYB-0001",
-      "lifecycle": "blocked",
+      "lifecycle": "planned",
       "owner": "0.120.0",
       "source_ids": [
-        "rfc:9954"
+        "rfc:10024"
       ]
     },
     {
@@ -7047,7 +7051,7 @@
         "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0001"
       ],
-      "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+      "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
     },
     {
       "id": "iana:trans",
@@ -7392,6 +7396,21 @@
         "BRY-REQ-TLS12-0831"
       ],
       "sha256": "1cc53f068b7c02e7c49c77816d16d6453b6f094762fb16e361d358da96ac1086"
+    },
+    {
+      "id": "rfc:10024",
+      "milestones": [
+        "0.117.0",
+        "0.118.0",
+        "0.119.0",
+        "0.120.0",
+        "0.121.0",
+        "0.122.0"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-HYB-0001"
+      ],
+      "sha256": "5efcfacef53549ec4ff57450dfec28085b34cf3f34d829c541c0ddbe19230dfe"
     },
     {
       "id": "rfc:2104",
@@ -9589,7 +9608,6 @@
         "0.122.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-HYB-0001",
         "BRY-REQ-PQ-0117"
       ],
       "sha256": "db5b9f76fa7182dd02e05e1e0640f095cb51ccc8dd035fca38d66f9189d55ad0"

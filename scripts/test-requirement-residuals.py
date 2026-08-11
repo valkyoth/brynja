@@ -127,7 +127,7 @@ def test_current_residual_repository() -> None:
 
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
-    assert len(artifact["sources"]) == 126
+    assert len(artifact["sources"]) == 127
     assert len(artifact["plans"]) == 231
     assert len(artifact["surfaces"]) == 4445
     assert len(artifact["requirements"]) == 167
@@ -289,7 +289,7 @@ def test_stale_mutable_guidance_fails() -> None:
     assert_fails("invalid mutable authority record", closure_build, broken)
 
 
-def test_missing_hybrid_blocker_fails() -> None:
+def test_missing_hybrid_resolution_record_fails() -> None:
     broken = copy.deepcopy(closure.read_claims())
     broken["blocker"] = [
         item

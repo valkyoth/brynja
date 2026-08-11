@@ -45,9 +45,16 @@ def load_inputs() -> tuple[dict, dict, dict, dict, dict]:
 
 def test_current_repository() -> None:
     ledger = checker.build_ledger()
-    assert len(ledger["rfcs"]) == 103
+    assert len(ledger["rfcs"]) == 104
     assert len(ledger["local_authorities"]) == 15
     assert len(ledger["registries"]) == 8
+    assert any(item["number"] == 10024 for item in ledger["rfcs"])
+    hybrid = next(
+        item
+        for item in ledger["blockers"]
+        if item["id"] == "ecdhe-ml-kem-groups"
+    )
+    assert hybrid["status"] == "resolved"
     assert ledger["integrity"]["pin_provenance"]
 
 
@@ -165,7 +172,7 @@ def test_unknown_milestone_fails() -> None:
     )
 
 
-def test_hybrid_blocker_cannot_be_relaxed() -> None:
+def test_hybrid_resolution_cannot_admit_drafts() -> None:
     policy, rfcs, local, _, _ = load_inputs()
     broken = copy.deepcopy(policy)
     broken["blocker"][0]["drafts_forbidden"] = False

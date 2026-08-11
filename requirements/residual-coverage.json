@@ -159,7 +159,7 @@
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111"
       ],
-      "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+      "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
     },
     {
       "authority_role": "current",
@@ -2536,7 +2536,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "2e27dae1334eb0c92bcb5f6cafd94beee161b52f53e6ffea98b20eb60f28343f",
+  "policy_sha256": "07e5c839fc676dc5535601b74fb132e1fc830bc5dfd9b00a8e18b77aba04a95d",
   "requirement_count": 50,
   "schema": 1,
   "surface_count": 764,

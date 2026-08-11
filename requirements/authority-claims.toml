@@ -192,7 +192,7 @@ authority = "iana:tls-parameters"
 owner = "0.120.0"
 status = "refresh-required"
 url = "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
-rationale = "The mutable registry must be refreshed without admitting provisional hybrid identifiers before a final Standards Track RFC and final assignments exist."
+rationale = "The mutable registry must be refreshed at the v0.120.0 implementation freeze so the final RFC 10024 assignments cannot drift or admit provisional hybrid identifiers."
 
 [[mutable_authority]]
 authority = "iana:trans"
@@ -204,9 +204,9 @@ rationale = "The mutable registry is checksum snapshotted and must be refreshed 
 [[blocker]]
 id = "ecdhe-ml-kem-groups"
 owner = "0.120.0"
-status = "blocked"
+status = "resolved"
 surface = "algorithm.ecdhe-ml-kem"
-rationale = "No concrete hybrid group is admitted until a final Standards Track RFC and final non-provisional IANA assignments both exist; drafts and private values are forbidden."
+rationale = "Final RFC 10024 and final non-provisional IANA assignments satisfy the source gate for exactly three planned v0.120.0 groups; drafts and private values remain forbidden."
 
 [[blocker]]
 id = "legacy-non-rfc-sources"

@@ -162,9 +162,12 @@ def validate_claims(
     }:
         lib.fail("authority blocker set is incomplete")
     for item in blockers.values():
+        expected_status = (
+            "resolved" if item["id"] == "ecdhe-ml-kem-groups" else "blocked"
+        )
         if (
             item["owner"] not in versions
-            or item["status"] != "blocked"
+            or item["status"] != expected_status
             or len(item["rationale"].strip()) < 80
         ):
             lib.fail(f"invalid authority blocker: {item['id']}")
@@ -174,10 +177,10 @@ def validate_claims(
     hybrid = blockers["ecdhe-ml-kem-groups"]
     if (
         ledger_blocker is None
-        or ledger_blocker["status"] != "blocked"
+        or ledger_blocker["status"] != "resolved"
         or hybrid.get("surface") != "algorithm.ecdhe-ml-kem"
     ):
-        lib.fail("hybrid blocker is not bound to the source ledger and surface")
+        lib.fail("hybrid resolution is not bound to the source ledger and surface")
     surface_ids = {item["id"] for item in register["surfaces"]}
     legacy = blockers["legacy-non-rfc-sources"].get("surfaces", [])
     expected_legacy = {

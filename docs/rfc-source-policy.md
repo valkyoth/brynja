@@ -112,11 +112,11 @@ FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C join the local-only checksum
 manifest. Fifty residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
 explicit exclusions while assigning every one of the 763 surfaces left by the
-earlier bundles. The generated closure proves that all 126 locked authorities,
-all 223 roadmap rows, all 4,445 surfaces, and all 167 requirements have
+earlier bundles. The generated closure proves that all 127 locked authorities,
+all 231 roadmap rows, all 4,445 surfaces, and all 167 requirements have
 bidirectional ownership. Local rights, mutable NIST and IANA refresh rules,
-and unavailable hybrid, legacy, and FIPS-validation authorities remain
-machine-readable fail-closed records rather than capability claims.
+the resolved hybrid-source gate plus unavailable legacy and FIPS-validation
+authorities remain machine-readable records rather than capability claims.
 
 Section decisions are reconciled across the domain, transport, and residual
 policies before matrix generation. A normative section cannot be mapped in one

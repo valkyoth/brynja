@@ -49,7 +49,7 @@ tags remain inside that cumulative change range.
 
 Version 0.3.0 provides the exact source foundation:
 
-- 103 locked RFCs and fifteen local NIST/ITU authorities map to lifecycle, domain,
+- 104 locked RFCs and fifteen local NIST/ITU authorities map to lifecycle, domain,
   and roadmap ownership;
 - RFC status and update/obsolescence relationships are closed or explicitly
   excluded;
@@ -150,7 +150,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   165 exact mappings and 17 explicit dispositions;
 - all 743 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,424 surfaces;
-- the generated closure maps all 126 locked sources, all 223 roadmap rows, all
+- the generated closure maps all 127 locked sources, all 231 roadmap rows, all
   4,445 surfaces, and all 167 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
@@ -160,7 +160,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   target, owner or disposition drift, blanket section coverage, orphaned
   sources or plans, stale mutable guidance, source-rights gaps, missing
   exclusions, actionable source-blocked legacy requirements, and weakened
-  hybrid, legacy, or FIPS blockers;
+  hybrid-resolution, legacy-blocker, or FIPS-blocker records;
 - domain, transport, and residual section decisions are globally reconciled,
   with delegated sections accepted only when another bundle records an exact
   owner;
@@ -516,10 +516,11 @@ tests for every future consumer. Both findings are closed for this source-free
 release with no code claiming erasure; the repository-owner retest passed.
 
 Everything beyond those foundation domains remains governance and planning
-evidence, not protocol implementation.
-Concrete ECDHE-ML-KEM groups remain blocked until both a final Standards Track
-RFC and final IANA values exist. Non-RFC legacy requirements carry
-machine-checked blocked lifecycles and exact blocker targets until source
+evidence, not protocol implementation. Final Standards Track RFC 10024 and
+the matching IANA assignments now resolve the source gate for exactly three
+planned ECDHE-ML-KEM groups. Their implementation remains owned by v0.120.0,
+and draft or private identifiers remain forbidden. Non-RFC legacy requirements
+carry machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 

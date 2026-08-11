@@ -143,7 +143,7 @@ def validate_policy(policy: dict, rfcs: dict, local: dict) -> None:
         fail("the final ECDHE-ML-KEM admission blocker is required")
     blocker = policy["blocker"][0]
     required = {
-        "status": "blocked",
+        "status": "resolved",
         "required_registry": "tls-parameters",
         "required_final_rfc": True,
         "required_final_iana_codepoints": True,
@@ -151,7 +151,9 @@ def validate_policy(policy: dict, rfcs: dict, local: dict) -> None:
     }
     for key, value in required.items():
         if blocker.get(key) != value:
-            fail(f"ECDHE-ML-KEM blocker requires {key}={value!r}")
+            fail(f"ECDHE-ML-KEM resolution record requires {key}={value!r}")
+    if 10024 not in rfcs:
+        fail("ECDHE-ML-KEM resolution requires locked RFC 10024")
 
 
 def validate_closure(policy: dict, index: dict, locked: set[int]) -> None:

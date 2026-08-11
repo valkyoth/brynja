@@ -2527,13 +2527,13 @@
         "0.120.0"
       ],
       "sources": [
-        "rfc:9954#5"
+        "rfc:10024#4.2"
       ],
       "targets": [
-        "blocker:standards/source-policy.toml#ecdhe-ml-kem-groups"
+        "planned-symbol:crates/brynja-tls13/src/hybrid.rs#STANDARD_GROUPS"
       ],
       "tests": [
-        "planned:tests/requirements/hybrid.rs#final_rfc_and_iana_required"
+        "planned:tests/requirements/hybrid.rs#standard_groups"
       ]
     },
     "BRY-REQ-IANA-0001": {
@@ -10172,6 +10172,9 @@
         "BRY-REQ-DTLS-0114",
         "BRY-REQ-TLS12-0831"
       ],
+      "rfc:10024#4.2": [
+        "BRY-REQ-HYB-0001"
+      ],
       "rfc:2104": [
         "BRY-REQ-CRYPTO-0003"
       ],
@@ -10613,9 +10616,6 @@
       "rfc:9954": [
         "BRY-REQ-PQ-0117"
       ],
-      "rfc:9954#5": [
-        "BRY-REQ-HYB-0001"
-      ],
       "rfc:9963": [
         "BRY-REQ-TLS13-0046"
       ],
@@ -10651,9 +10651,6 @@
         "BRY-REQ-LEGACY-0600",
         "BRY-REQ-LEGACY-0700",
         "BRY-REQ-LEGACYSSL1-0800"
-      ],
-      "blocker:standards/source-policy.toml#ecdhe-ml-kem-groups": [
-        "BRY-REQ-HYB-0001"
       ],
       "boundary:boundary:application-alpn-semantics": [
         "BRY-REQ-APP-0001"
@@ -11054,6 +11051,9 @@
         "BRY-REQ-ECH-1401",
         "BRY-REQ-ECHEXT-0140",
         "BRY-REQ-ECHREG-0140"
+      ],
+      "planned-symbol:crates/brynja-tls13/src/hybrid.rs#STANDARD_GROUPS": [
+        "BRY-REQ-HYB-0001"
       ],
       "planned-symbol:crates/brynja-tls13/src/key_update.rs#KeyUpdate": [
         "BRY-REQ-TLS13-0078"
@@ -11983,7 +11983,7 @@
       "planned:tests/requirements/heartbeat.rs#negotiation_and_content_rejected": [
         "BRY-REQ-TLS-0002"
       ],
-      "planned:tests/requirements/hybrid.rs#final_rfc_and_iana_required": [
+      "planned:tests/requirements/hybrid.rs#standard_groups": [
         "BRY-REQ-HYB-0001"
       ],
       "planned:tests/requirements/legacy_tls10.rs#modern_isolation": [

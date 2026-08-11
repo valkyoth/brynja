@@ -75,7 +75,7 @@ RFC, NIST, FIPS, or independent-verification evidence.
   no section can be both mapped and excluded or carry conflicting exclusions.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
-  requirement-to-owner reports across 126 authorities, 223 roadmap rows,
+  requirement-to-owner reports across 127 authorities, 231 roadmap rows,
   4,445 surfaces, and 167 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
@@ -130,9 +130,11 @@ adds one caller-owned provisional `snifq/1` ALPN surface and updates three DNS
 references without admitting any draft or newly referenced RFC into Brynja's
 protocol scope. FIPS 203,
 SP 800-227, SP 800-90B, and SP 800-90C are local-only checksum-pinned
-authorities. Concrete ECDHE-ML-KEM groups, unauthenticated legacy
-specifications, and the mutable FIPS validation baseline remain explicit
-dependent-milestone blockers.
+authorities. The 2026-08-11 refresh admits RFC 10024 and final IANA assignments
+as planning authority for exactly three ECDHE-ML-KEM groups and records the
+former blocker as resolved without admitting implementation. Unauthenticated
+legacy specifications and the mutable FIPS validation baseline remain
+explicit dependent-milestone blockers.
 
 ## Verification
 

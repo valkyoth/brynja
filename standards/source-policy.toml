@@ -2,13 +2,13 @@
 version = 1
 
 [review]
-checked_at = "2026-08-09"
+checked_at = "2026-08-11"
 owner = "Brynja standards review"
-pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.140.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh. On 2026-08-09 the official IANA XML and its SHA-256 were independently retrieved and reviewed: the TLS ExtensionType registry update dated 2026-08-07 adds only the `snifq/1` SNIF over QUIC ALPN entry referencing provisional draft-zubov-snif-05; it remains caller-owned at v0.130.0 and does not admit draft authority or runtime code. The DNS Parameters update dated 2026-08-04 changes only three existing references from drafts to RFC 10029 and RFC 10023, adds no allocation, remains caller-owned at v0.140.0, and does not admit either RFC into Brynja protocol scope."
+pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.140.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh. On 2026-08-09 the official IANA XML and its SHA-256 were independently retrieved and reviewed: the TLS ExtensionType registry update dated 2026-08-07 adds only the `snifq/1` SNIF over QUIC ALPN entry referencing provisional draft-zubov-snif-05; it remains caller-owned at v0.130.0 and does not admit draft authority or runtime code. The DNS Parameters update dated 2026-08-04 changes only three existing references from drafts to RFC 10029 and RFC 10023, adds no allocation, remains caller-owned at v0.140.0, and does not admit either RFC into Brynja protocol scope. On 2026-08-11 final Standards Track RFC 10024 and the official TLS Parameters XML were independently retrieved and reviewed: the registry changes only the three final ECDHE-ML-KEM group and two obsoleted Kyber draft references from draft metadata to RFC 10024. RFC 10024 has no reported errata and adding it changes no existing errata record. The former admission blocker is resolved for planned v0.120.0 implementation; no protocol code is admitted at this refresh."
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
-rfc_index_sha256 = "404cdd9e59609437b2fad3a87f7c76df7781cdd0182d258867f925bd7f20b674"
+rfc_index_sha256 = "de78e7827eb0e96f9a0c0437ab0194d5b524fc93d5bede66d16c778e98c02a13"
 errata = "https://errata.rfc-editor.org/search/"
-errata_sha256 = "7c62be3e760edbc05b844a000f29df5c5a8bff42f9a43d59bf78c53290f3090e"
+errata_sha256 = "ac71f12e680d90827dd38d00b7d3abef03b7ac5caa93e4dc17832c8bd33992a7"
 
 [lifecycle]
 compatibility = [5077, 5246, 6347, 6962, 7507, 7627, 8422]
@@ -20,7 +20,7 @@ evidence = [4231, 8448]
 [[registry]]
 id = "tls-parameters"
 url = "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
-expected_sha256 = "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+expected_sha256 = "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
 domains = ["standards", "tls12", "tls13", "dtls", "hybrid"]
 milestones = ["0.3.0", "0.3.1", "0.3.4", "0.120.0"]
 
@@ -154,7 +154,7 @@ local = []
 [[domain]]
 id = "hybrid"
 milestones = ["0.117.0", "0.118.0", "0.119.0", "0.120.0", "0.121.0", "0.122.0"]
-rfcs = [9935, 9954]
+rfcs = [9935, 9954, 10024]
 local = ["NIST.FIPS.203.pdf", "NIST.SP.800-227.pdf"]
 
 [[domain]]
@@ -309,10 +309,10 @@ reason = "YANG document guidance is outside Brynja registry policy."
 
 [[blocker]]
 id = "ecdhe-ml-kem-groups"
-status = "blocked"
+status = "resolved"
 owner = "0.120.0"
 required_registry = "tls-parameters"
 required_final_rfc = true
 required_final_iana_codepoints = true
 drafts_forbidden = true
-reason = "Concrete hybrid groups require a final Standards Track RFC and final IANA values; RFC 9954 alone is only the generic construction."
+reason = "Final Standards Track RFC 10024 and final IANA values now define the three admitted hybrid groups; implementation remains planned only for v0.120.0 and drafts and private values remain forbidden."

@@ -102,3 +102,4 @@
 9973 https://www.rfc-editor.org/rfc/rfc9973.txt tls-cert-external-psk-explicit-exclusion
 10007 https://www.rfc-editor.org/rfc/rfc10007.txt crl-key-usage-clarification
 10015 https://www.rfc-editor.org/rfc/rfc10015.txt tls-dtls-12-obsolete-kex-deprecation
+10024 https://www.rfc-editor.org/rfc/rfc10024.txt tls13-ecdhe-ml-kem-groups

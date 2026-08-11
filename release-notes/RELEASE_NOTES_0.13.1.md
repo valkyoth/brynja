@@ -69,6 +69,24 @@ scalar backend.
   `nightly-2026-08-11` at exact official Rust revision
   `12c36e2539c54397c51d6ea4401defd8768a4f5b`.
 
+## Standards Authority Refresh
+
+The clean candidate gate detected an official TLS Parameters registry update.
+The reviewed delta replaces provisional draft references for three final
+ECDHE-ML-KEM groups with Standards Track RFC 10024 and updates the references
+on two obsoleted Kyber draft entries; it adds no new registry value. RFC 10024
+is now checksum-locked as the exact authority for X25519MLKEM768,
+SecP256r1MLKEM768, and SecP384r1MLKEM1024, has no reported errata, and changes
+no existing errata record.
+
+The former hybrid-source blocker is retained as a machine-readable resolved
+record, and `BRY-REQ-HYB-0001` moves from blocked to planned. Protocol code,
+group negotiation, ML-KEM, and hybrid key agreement remain absent and owned
+only by v0.117.0 through v0.122.0. Draft and private group identifiers remain
+forbidden. Requirements whose evidence embeds the refreshed IANA snapshot
+receive explicit immutable revision increments even where their registry
+records and dispositions did not change.
+
 ## Current Limits
 
 No accelerated backend can be constructed through the public safe API in this

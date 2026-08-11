@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: reviewed source closure carried through v0.6.0
+Status: reviewed source closure carried through v0.13.1
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -20,7 +20,7 @@ primitive is implemented.
   errata are implementation inputs, reported and held errata remain tracked
   without altering requirements, and rejected errata are non-applicable.
 - `snapshots/rfc-index.json` is the minimal RFC Editor index projection for the
-  103 locked RFCs. It preserves status and update/obsolescence relationships.
+  104 locked RFCs. It preserves status and update/obsolescence relationships.
 - `snapshots/iana/*.xml` are exact official IANA registry snapshots.
 - `SHA256SUMS` locks every generated upstream evidence artifact. The ledger is
   excluded because it is reproduced and compared directly.
@@ -115,7 +115,7 @@ implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty
 residual requirements cover 33 authorities, 182 reviewed normative sections,
 and all 764 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 126 sources and 4,445 surfaces.
+closure across all 127 sources and 4,445 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -151,10 +151,12 @@ updates from drafts to RFC 10029 and RFC 10023. It adds no executable behavior,
 does not admit the referenced drafts or RFCs into Brynja protocol scope, and
 advances affected immutable requirement revisions.
 
-Concrete ECDHE-ML-KEM groups remain fail-closed at milestone `0.120.0`.
-RFC 9954 supplies only the generic construction; a final Standards Track RFC
-and final IANA code points are both required. Drafts and private code points
-cannot satisfy the blocker.
+The 2026-08-11 reviewed refresh locks final Standards Track RFC 10024 and the
+matching final IANA assignments for X25519MLKEM768, SecP256r1MLKEM768, and
+SecP384r1MLKEM1024. RFC 10024 has no reported errata, and the IANA delta adds
+no new value. The former admission blocker remains recorded as `resolved`;
+implementation stays planned only for milestone `0.120.0`, and drafts and
+private code points remain forbidden.
 
 Final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are checksum-pinned
 local-only authorities. Their publication pages, planning notes, errata, and

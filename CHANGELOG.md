@@ -58,6 +58,14 @@ Keep a Changelog and Semantic Versioning.
 - Advance the `brynja` facade to `0.13.1` while retaining `brynja-core 0.7.0`
   and every other supporting-crate version; select zero crates for crates.io
   publication at this internal development milestone.
+- Admit final Standards Track RFC 10024 as the authority for
+  X25519MLKEM768, SecP256r1MLKEM768, and SecP384r1MLKEM1024 planning; refresh
+  the exact IANA TLS Parameters snapshot, resolve the former hybrid-source
+  blocker, and retain implementation exclusively at v0.120.0.
+- Advance every requirement whose immutable evidence includes the refreshed
+  TLS Parameters snapshot, while preserving all registry classifications and
+  recording that RFC 10024 adds no errata and changes no existing errata
+  decision.
 - Freeze the CPU backend contract before any ISA implementation exists; defer
   isolated kernels, std detection, unsafe admission, and native performance
   evidence to v0.13.2 and v0.13.3.

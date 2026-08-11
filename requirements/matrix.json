@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "5946bccfd3e4ddc50d9627f2e1c3b9079f4d082cd65348189ef7f07010a8edba",
-  "domain_policy_sha256": "b5ecee95f863bde2701c39fe6a7c4617d24c3ee1f262666de562974f1cfecc1a",
-  "policy_sha256": "fd43b15729740fd43ad8ef56bea7f2628827e4a34abad9cd2eb865675c9d9c82",
+  "closure_policy_sha256": "c4a00af746269495e1df0908bb204f783a970c1d33ea18ffd4d72762685330a7",
+  "domain_policy_sha256": "80e90a431c9a22c2fe8217b5413c433e9e33032759ae463cc3cf117a21bd64bc",
+  "policy_sha256": "44840f1b9046fe78abeb4100ac0282aad55bf4eceb981812c1d8b79791b4b933",
   "requirements": [
     {
       "applicability": "delegate",
@@ -10396,44 +10396,44 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "blocked",
-      "decision": "defer",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "algorithm.ecdhe-ml-kem"
       ],
       "deviation_rationale": null,
       "evidence": [],
       "id": "BRY-REQ-HYB-0001",
-      "lifecycle": "blocked",
+      "lifecycle": "planned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
       "owner": "0.120.0",
-      "residual": "RFC 9954 gives a generic construction but cannot supply the missing final concrete group specification and code points.",
-      "revision": 2,
+      "residual": "Implementation, complete normative extraction, negative vectors, interoperability, and independent review remain owned by v0.120.0.",
+      "revision": 3,
       "scope": "protocol",
       "source": {
-        "anchor": "the \"Recommended\" column SHOULD be \"N\"",
+        "anchor": "the server MUST perform the encapsulation key check",
         "errata": [],
-        "id": "rfc:9954",
+        "id": "rfc:10024",
         "kind": "rfc",
         "lifecycle": "current",
-        "section": "5",
-        "section_sha256": "0a0cee8ce047ba29455e6f844e2a0301f39f2a51db5f7a3bca3f396c1fd5c889",
-        "sha256": "db5b9f76fa7182dd02e05e1e0640f095cb51ccc8dd035fca38d66f9189d55ad0",
-        "status": "INFORMATIONAL"
+        "section": "4.2",
+        "section_sha256": "8533003c4ec166338bdd3b43f09da7846cdb4356f83c0985d4ac3c89169dd67e",
+        "sha256": "5efcfacef53549ec4ff57450dfec28085b34cf3f34d829c541c0ddbe19230dfe",
+        "status": "PROPOSED STANDARD"
       },
-      "statement": "Concrete ECDHE-ML-KEM groups remain blocked until final Standards Track definitions and final IANA assignments both exist.",
-      "strength": "SHOULD",
+      "statement": "Only the three final RFC 10024 ECDHE-ML-KEM groups are planned, with exact shares, validation, failure alerts, shared-secret order, and registry identities.",
+      "strength": "MUST",
       "targets": [
         {
-          "kind": "blocker",
-          "target": "standards/source-policy.toml#ecdhe-ml-kem-groups"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls13/src/hybrid.rs#STANDARD_GROUPS"
         }
       ],
       "tests": [
         {
           "status": "planned",
-          "target": "tests/requirements/hybrid.rs#final_rfc_and_iana_required"
+          "target": "tests/requirements/hybrid.rs#standard_groups"
         }
       ]
     },
@@ -10604,7 +10604,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -10625,7 +10625,7 @@
             "0.3.4",
             "0.120.0"
           ],
-          "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
         },
         {
           "authority_role": "exclusion",
@@ -11400,7 +11400,7 @@
       "owner": "H0.8.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -11421,7 +11421,7 @@
             "0.3.4",
             "0.120.0"
           ],
-          "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
         },
         {
           "authority_role": "legacy",
@@ -19542,7 +19542,7 @@
       "owner": "0.111.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -19582,7 +19582,7 @@
             "0.3.4",
             "0.120.0"
           ],
-          "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
         }
       ],
       "statement": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
@@ -19630,7 +19630,7 @@
       "owner": "0.111.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -19651,7 +19651,7 @@
             "0.3.4",
             "0.120.0"
           ],
-          "sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc"
+          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
         }
       ],
       "statement": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
@@ -20137,7 +20137,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.67.0",
       "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
         "collection": "tls-parameters",
@@ -20145,7 +20145,7 @@
         "kind": "iana",
         "record_sha256": "02ae68b04d095bc13817c02fc9f27d4d3e3f90b6dff7bd86b8544060b0e031b0",
         "registry": "tls-parameters-4",
-        "snapshot_sha256": "cd7ecaf748a08430cd1dbc76ec292c88fa44ac713c80a657298ed85cb11a3ffc",
+        "snapshot_sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
         "surface_id": "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
       },
       "statement": "TLS_AES_128_GCM_SHA256 remains an explicitly planned TLS 1.3 cipher suite with exact registry identity.",
@@ -29547,9 +29547,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "2e27dae1334eb0c92bcb5f6cafd94beee161b52f53e6ffea98b20eb60f28343f",
+  "residual_policy_sha256": "07e5c839fc676dc5535601b74fb132e1fc830bc5dfd9b00a8e18b77aba04a95d",
   "schema": 5,
-  "source_ledger_sha256": "a90755dc170ee9bbce71daa7a4182b54be143c66bfb8d3ca7f680d3f4a19ad88",
-  "surface_register_sha256": "dd30d84cbb452f5a0ae2a49c969f5d8da665f6594d0a230d352f337d2a28f48c",
-  "transport_policy_sha256": "f99653894e2e9f7e8da88d913e0dcc65fc32eec17d60f24afb9873464760fe2b"
+  "source_ledger_sha256": "3ebe4093a5e21a1af40a0bdc3f031959ffc5a4d8a6721de5ab7db3f2192a9c0c",
+  "surface_register_sha256": "d25faa75d2a53ca7804fb8dff110dc9e0ecafd0abd9e360b400b55833bc55f3b",
+  "transport_policy_sha256": "f91544c855e8f10647a1ea5e1f708cc9af2c94e74176b442a30cb89cea81e435"
 }

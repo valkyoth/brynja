@@ -5311,7 +5311,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement only final standardized X25519MLKEM768, SecP256r1MLKEM768, and SecP384r1MLKEM1024 encodings, component order, lengths, identifiers, and concatenated shared-secret construction under RFC 9954 plus the final Standards Track ECDHE-ML-KEM group RFC; provisional drafts and private code points never enter release artifacts.
+Plan scope: Implement only final standardized X25519MLKEM768, SecP256r1MLKEM768, and SecP384r1MLKEM1024 encodings, component order, lengths, identifiers, and concatenated shared-secret construction under RFC 9954 and final Standards Track RFC 10024; provisional drafts and private code points never enter release artifacts.
 
 Goal: complete the **Standard Hybrid Groups** implementation stop without admitting or
 claiming adjacent capability.

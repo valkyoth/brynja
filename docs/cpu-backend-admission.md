@@ -89,8 +89,10 @@ Each manifest is limited to 1 MiB, a repository snapshot is limited to 256
 manifests, and each raw artifact is limited to 16 MiB with the complete set
 limited to 64 MiB. These bounds are enforced with
 descriptor-bound limit-plus-one reads. Every metric is a bounded integer in a
-named unit. NaN, infinity, implicit
-units, unbounded files, symlinks, duplicate harnesses, missing raw files,
+named unit. Artifact JSON accepts only signed 64-bit integers and rejects
+floating-point values, non-finite constants, duplicate keys, and oversized
+integers through controlled evidence errors. NaN, infinity, implicit units,
+unbounded files, symlinks, duplicate harnesses, missing raw files,
 checksum differences, mixed logical CPUs, future or stale timestamps,
 incomplete or overbroad feature sets, any operating-state value that differs
 from the exact reviewed backend ABI prerequisites, architecture disagreement,

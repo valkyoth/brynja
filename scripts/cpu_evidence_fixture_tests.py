@@ -227,6 +227,24 @@ def test(policy: dict, admissions: dict, root: Path) -> None:
     expect_failure("duplicate fields", lambda: run(policy, admissions, root, duplicate_json))
 
     record = make_record(policy, admissions, root)
+    huge_integer = copy.deepcopy(record)
+    huge_path = root / huge_integer["artifacts"][0]["path"]
+    huge_data = b'{"value":' + (b"9" * 5_000) + b"}\n"
+    huge_path.write_bytes(huge_data)
+    huge_integer["artifacts"][0]["sha256"] = hashlib.sha256(huge_data).hexdigest()
+    huge_integer["artifacts"][0]["bytes"] = len(huge_data)
+    expect_failure("integer exceeds its bound", lambda: run(policy, admissions, root, huge_integer))
+
+    record = make_record(policy, admissions, root)
+    non_finite_json = copy.deepcopy(record)
+    non_finite_path = root / non_finite_json["artifacts"][0]["path"]
+    non_finite_data = b'{"value":NaN}\n'
+    non_finite_path.write_bytes(non_finite_data)
+    non_finite_json["artifacts"][0]["sha256"] = hashlib.sha256(non_finite_data).hexdigest()
+    non_finite_json["artifacts"][0]["bytes"] = len(non_finite_data)
+    expect_failure("non-finite JSON value", lambda: run(policy, admissions, root, non_finite_json))
+
+    record = make_record(policy, admissions, root)
     wrong_source = copy.deepcopy(record)
     rewrite_artifact(root, wrong_source, 0, lambda payload: payload.update(source_commit="00" * 20))
     expect_failure("semantics differ", lambda: run(policy, admissions, root, wrong_source))

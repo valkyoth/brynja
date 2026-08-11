@@ -16,6 +16,8 @@ maximum_order_imbalance = 1
 minimum_speedup_ppm = 1050000
 maximum_code_size_increase_bytes = 65536
 maximum_cold_start_nanoseconds = 5000000
+minimum_machine_integer = -9223372036854775808
+maximum_machine_integer = 9223372036854775807
 
 [admission]
 default = "unadmitted"

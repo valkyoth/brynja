@@ -41,7 +41,7 @@ verifier exists.
 
 ## Verification
 
-- 52 adversarial evidence fixtures reject stale or future timestamps,
+- 54 adversarial evidence fixtures reject stale or future timestamps,
   incomplete feature or exact operating-state bundles, fabricated native labels, wrong runner owners,
   vendor/model substitution, mixed CPUs, non-finite/noisy/biased measurements, insufficient samples or
   speedup, exceeded size/start budgets, failed correctness and security gates,
@@ -65,7 +65,10 @@ The voluntary assessment of implementation candidate
 asserted evidence could authorize a candidate, and arbitrary operating-state
 strings could bypass reviewed ISA prerequisites. Both are locally remediated
 through the authentication hard gate, exact artifact semantics, and exact
-backend operating-state equality. Repository-owner retest is pending; see
+backend operating-state equality. First remediation retest confirmed both High
+findings resolved and found one Low oversized-JSON-integer traceback. Signed
+64-bit-only artifact parsing and controlled float/non-finite rejection now
+remediate that issue; follow-up repository-owner retest is pending. See
 `security/pentest/v0.13.3.md`.
 
 This milestone contains no cryptographic primitive, ISA kernel, CPU detector,

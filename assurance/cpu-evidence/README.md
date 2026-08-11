@@ -37,6 +37,11 @@ paths outside the run, stale results, mixed logical CPUs, missing feature or
 exact operating-state evidence, non-finite values, noisy measurements, and
 false native claims fail closed.
 
+Artifact JSON accepts only signed 64-bit integers. Floating-point values,
+non-finite constants, oversized integers, and duplicate object keys produce a
+controlled evidence error; they cannot escape the validator as a parser
+traceback.
+
 These files prove only repository integrity and internal schema consistency.
 They do not authenticate who ran a harness or prove that it executed. No
 trusted-runner trust root or reviewed signature verifier is admitted in

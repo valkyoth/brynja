@@ -18,6 +18,8 @@ HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 IDENTIFIER = re.compile(r"^[a-z0-9][a-z0-9._-]{0,127}$")
 UTC = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$")
+JSON_INTEGER_MIN = -(2**63)
+JSON_INTEGER_MAX = 2**63 - 1
 TOP_LEVEL = {"schema", "run", "cpu", "environment", "workload", "results", "artifacts", "claims"}
 SCHEMA_FIELDS = {"version", "kind"}
 RUN_FIELDS = {
@@ -151,6 +153,8 @@ def validate_policy(policy: dict) -> None:
         "minimum_speedup_ppm": 1_050_000,
         "maximum_code_size_increase_bytes": 65_536,
         "maximum_cold_start_nanoseconds": 5_000_000,
+        "minimum_machine_integer": JSON_INTEGER_MIN,
+        "maximum_machine_integer": JSON_INTEGER_MAX,
     }
     if policy["limits"] != expected_limits:
         fail("CPU evidence limits drifted")
@@ -279,9 +283,30 @@ def parse_harness_artifact(data: bytes, harness: str, record: dict) -> None:
             value[key] = item
         return value
 
+    def parse_bounded_integer(text: str) -> int:
+        digits = text.removeprefix("-")
+        if len(digits) > 19:
+            fail("machine-readable harness integer exceeds its bound")
+        value = int(text)
+        if not JSON_INTEGER_MIN <= value <= JSON_INTEGER_MAX:
+            fail("machine-readable harness integer exceeds its bound")
+        return value
+
+    def reject_float(_text: str) -> float:
+        fail("floating-point JSON values are forbidden")
+
+    def reject_constant(value: str) -> float:
+        fail(f"non-finite JSON value is forbidden: {value}")
+
     try:
-        payload = json.loads(data.decode("utf-8"), object_pairs_hook=unique_object)
-    except (UnicodeError, json.JSONDecodeError, RecursionError) as error:
+        payload = json.loads(
+            data.decode("utf-8"),
+            object_pairs_hook=unique_object,
+            parse_int=parse_bounded_integer,
+            parse_float=reject_float,
+            parse_constant=reject_constant,
+        )
+    except (UnicodeError, json.JSONDecodeError, RecursionError, ValueError) as error:
         fail(f"machine-readable harness artifact is invalid: {harness}: {error}")
     exact_keys(payload, HARNESS_ARTIFACT_FIELDS, "machine-readable harness artifact")
     fields = HARNESS_RESULT_FIELDS[harness]

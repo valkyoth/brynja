@@ -557,10 +557,14 @@ results. The assessment of implementation candidate
 `9d2f6f48770bb832b1b36e2ec3e647a8a362159c` found two High flaws: self-asserted
 and submitter-hashed results could authorize a candidate, and arbitrary
 operating-state strings were not checked against the reviewed backend ABI.
-Both are locally remediated pending repository-owner retest. Fifty-two adversarial
-evidence fixtures now reject unauthenticated candidate/native claims,
-machine-readable artifact semantic drift, disabled or meaningless ABI/vector
-state, stale provenance, missing features, mixed CPUs, non-finite/noisy/biased
+Repository-owner retest of exact signed first remediation candidate
+`7de753a57e942c28dac8406d8f93d62c4767de3a` confirmed both High findings
+resolved and found one new Low uncontrolled oversized-JSON-integer exception.
+That parser issue is locally remediated pending another retest. Fifty-four
+adversarial evidence fixtures now reject unauthenticated candidate/native
+claims, machine-readable artifact semantic drift, disabled or meaningless
+ABI/vector state, oversized/non-finite/float JSON, stale provenance, missing
+features, mixed CPUs, non-finite/noisy/biased
 measurements, QEMU promotion, raw-file drift, and false eligibility. No trust
 root or signature verifier is admitted, so recorded runner metadata and hashes
 cannot authenticate evidence or authorize a backend.

@@ -220,7 +220,7 @@
   ],
   "policy": {
     "path": "assurance/cpu-evidence-policy.toml",
-    "sha256": "4a38b70d658cde7508c0b566dcc01b5f6c5ff8ad1c2867d67af1352cbec1b690"
+    "sha256": "609548b1a4d72908dd0ec57f5d15456aeb517223579410f60fa1fae07ccb5bf3"
   },
   "schema": {
     "milestone": "0.13.3",

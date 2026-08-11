@@ -94,7 +94,7 @@ def main() -> int:
         finally:
             evidence.EVIDENCE_ROOT = original_root
 
-    print("CPU evidence rejects 52 authentication, semantics, operating-state, correctness, resource, and admission regressions")
+    print("CPU evidence rejects 54 authentication, parser, semantics, operating-state, correctness, resource, and admission regressions")
     return 0
 
 

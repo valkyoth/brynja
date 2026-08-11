@@ -57,6 +57,9 @@ verifier exists.
   standard-library, or low-level code.
 - Unavailable Intel, unmeasured hardware, and non-qualifying RISC-V state stay
   visibly unadmitted without changing or blocking portable scalar builds.
+- The release-time live standards gate reviewed and pinned IANA's 2026-08-11
+  `_x402` TXT underscored service-name addition as caller-owned v0.140.0
+  planning data; its provisional draft reference admits no authority or code.
 
 ## Security And Verification Status
 

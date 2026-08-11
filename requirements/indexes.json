@@ -1243,6 +1243,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.vouch.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.vpim.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.web.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.x402.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.xmpp.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.xmpp.2",
         "iana.dns-parameters.zonemd-hash-algorithms",
@@ -7495,6 +7496,9 @@
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.web.1": [
+        "BRY-REQ-DNS-0140"
+      ],
+      "iana.dns-parameters.underscored-globally-scoped-dns-node-names.x402.1": [
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.xmpp.1": [

@@ -157,7 +157,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 - all 743 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,424 surfaces;
 - the generated closure maps all 127 locked sources, all 231 roadmap rows, all
-  4,445 surfaces, and all 167 requirements in both directions;
+  4,446 surfaces, and all 167 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
@@ -243,7 +243,11 @@ Version 0.6.0 adds bounded numeric and resource foundations:
 - the reviewed 2026-08-09 refresh adds only one caller-owned provisional
   `snifq/1` ALPN record and three DNS reference updates, bringing the current
   register to 4,445 surfaces without admitting draft or RFC implementation
-  authority; and
+  authority;
+- the reviewed 2026-08-11 DNS refresh adds only the caller-owned `_x402` TXT
+  underscored service name referencing provisional
+  `draft-hawkins-x402-dns-discovery-01`, bringing the current register to 4,446
+  surfaces without admitting draft authority or runtime code; and
 - no protocol surface or normative protocol requirement advances because
   these types are source-free shared foundations; later wire widths,
   direction-specific state, parsers, and engines remain future work.

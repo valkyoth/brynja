@@ -121,6 +121,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Refresh the locked IANA DNS Parameters snapshot after the release gate
+  detected the 2026-08-11 `_x402` TXT underscored service-name addition;
+  classify it as caller-owned at v0.140.0, retain its provisional draft as
+  non-authoritative, and regenerate complete 4,446-surface requirement closure.
 - Remediate two High v0.13.3 evidence-admission findings by rejecting all
   candidate and native claims until a reviewed trusted-runner verifier exists,
   requiring exact machine-readable artifact semantics bound to the source,

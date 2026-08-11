@@ -5070,6 +5070,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.vouch.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.vpim.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.web.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.x402.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.xmpp.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.xmpp.2",
         "iana.dns-parameters.zonemd-hash-algorithms",
@@ -6949,7 +6950,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "1785efcd8c9207b3d47f92e1f568fec4772f8f4a12aae771ff785aaca1b15e29"
+      "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192"
     },
     {
       "id": "iana:hpke",
@@ -12350,6 +12351,12 @@
     },
     {
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.web.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.x402.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]

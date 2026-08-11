@@ -69,14 +69,14 @@ RFC, NIST, FIPS, or independent-verification evidence.
   normative RFC sections, 64 owner milestones, and 485 transport surfaces,
   including requirement IDs or reviewed dispositions for every section.
 - `residual-coverage.json` proves exact coverage of 33 residual authorities,
-  182 normative RFC sections, and 763 previously uncovered surfaces, including
+  182 normative RFC sections, and 765 previously uncovered surfaces, including
   165 mapped sections, 17 explicit exclusions, and 266 exact section links.
 - Domain, transport, and residual section policies are reconciled globally so
   no section can be both mapped and excluded or carry conflicting exclusions.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
   requirement-to-owner reports across 127 authorities, 231 roadmap rows,
-  4,445 surfaces, and 167 requirements.
+  4,446 surfaces, and 167 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim

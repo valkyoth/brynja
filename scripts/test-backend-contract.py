@@ -69,8 +69,8 @@ def test() -> None:
         require_rejection(root, "thread-bound")
         reset(root)
 
-        backend = source / "backend.rs"
-        replace(backend, "pub(crate) const fn for_test", "pub const fn for_test")
+        instance = source / "backend_instance.rs"
+        replace(instance, "pub(crate) const fn for_test", "pub const fn for_test")
         require_rejection(root, "public constructor")
         reset(root)
 
@@ -99,6 +99,60 @@ def test() -> None:
             "false",
         )
         require_rejection(root, "KAT failure")
+        reset(root)
+
+        session = source / "backend_session.rs"
+        replace(
+            session,
+            "!core::ptr::eq(pass.session, self.session)\n            || ",
+            "",
+        )
+        require_rejection(root, "exact session or instance")
+        reset(root)
+
+        session = source / "backend_session.rs"
+        replace(
+            session,
+            "!core::ptr::eq(pass.instance, self.session.instance())\n            || ",
+            "",
+        )
+        require_rejection(root, "exact session or instance")
+        reset(root)
+
+        session = source / "backend_session.rs"
+        replace(
+            session,
+            "!failure.instance.binding_matches(self.session.instance())\n            || ",
+            "",
+        )
+        require_rejection(root, "exact session or instance")
+        reset(root)
+
+        execution = source / "backend_execution.rs"
+        replace(
+            execution,
+            "!core::ptr::eq(self.session, session)",
+            "false",
+        )
+        require_rejection(root, "CPU execution-lease invariant")
+        reset(root)
+
+        execution = source / "backend_execution.rs"
+        replace(
+            execution,
+            "lease.revalidate(self.session, runtime)?",
+            "self.validate(runtime)?",
+        )
+        require_rejection(root, "CPU execution-lease invariant")
+        reset(root)
+
+        execution = source / "backend_execution.rs"
+        replace(
+            execution,
+            "for<'entry> FnOnce(BackendKernelPermit<'entry>) -> R",
+            "FnOnce(BackendKernelPermit<'_>) -> R",
+        )
+        require_rejection(root, "CPU execution-lease invariant")
         reset(root)
 
         session = source / "backend_session.rs"
@@ -156,6 +210,6 @@ def test() -> None:
 if __name__ == "__main__":
     test()
     print(
-        "backend policy rejects thirteen execution, evidence, thread, generation, "
-        "quarantine, operation, approval, registry, and hash regressions"
+        "backend policy rejects nineteen execution, evidence, instance, CPU-context, "
+        "thread, generation, quarantine, operation, approval, registry, and hash regressions"
     )

@@ -2,7 +2,7 @@
 
 use core::marker::PhantomData;
 
-use crate::ProviderCapabilities;
+use crate::{BackendFeatureEvidence, BackendInstanceIdentity, ProviderCapabilities};
 
 /// One CPU-backend execution class.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -301,6 +301,7 @@ pub enum BackendEvidenceOrigin {
 pub struct BackendCandidate {
     profile: BackendProfile,
     origin: BackendEvidenceOrigin,
+    instance: BackendInstanceIdentity,
     thread_bound: PhantomData<*mut ()>,
 }
 
@@ -315,6 +316,7 @@ impl BackendCandidate {
             Ok(profile) => Ok(Self {
                 profile,
                 origin: BackendEvidenceOrigin::CompilerProven,
+                instance: BackendInstanceIdentity::scalar(),
                 thread_bound: PhantomData,
             }),
             Err(error) => Err(error),
@@ -330,6 +332,7 @@ impl BackendCandidate {
         Self {
             profile: evidence.profile,
             origin: evidence.origin,
+            instance: evidence.instance,
             thread_bound: PhantomData,
         }
     }
@@ -345,36 +348,9 @@ impl BackendCandidate {
     pub const fn evidence_origin(&self) -> BackendEvidenceOrigin {
         self.origin
     }
-}
 
-/// Opaque proof that the exact profile's complete feature bundle was observed.
-///
-/// This type has no public constructor. A later reviewed compiler or platform
-/// boundary must bind the complete profile and origin in one value.
-///
-/// Its private fields prevent safe downstream forgery:
-///
-/// ```compile_fail
-/// use brynja_core::BackendFeatureEvidence;
-///
-/// fn forge() -> BackendFeatureEvidence {
-///     BackendFeatureEvidence {}
-/// }
-/// ```
-pub struct BackendFeatureEvidence {
-    profile: BackendProfile,
-    origin: BackendEvidenceOrigin,
-    thread_bound: PhantomData<*mut ()>,
-}
-
-impl BackendFeatureEvidence {
-    #[cfg(test)]
-    pub(crate) const fn for_test(profile: BackendProfile, origin: BackendEvidenceOrigin) -> Self {
-        Self {
-            profile,
-            origin,
-            thread_bound: PhantomData,
-        }
+    pub(crate) const fn instance(&self) -> &BackendInstanceIdentity {
+        &self.instance
     }
 }
 

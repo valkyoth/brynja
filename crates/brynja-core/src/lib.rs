@@ -9,6 +9,9 @@ pub mod alert;
 pub mod arena_domain;
 pub mod backend;
 pub mod backend_dispatch;
+mod backend_execution;
+mod backend_instance;
+mod backend_kat;
 pub mod backend_session;
 pub mod budget;
 pub mod close;
@@ -32,6 +35,8 @@ pub mod workspace;
 pub mod write;
 
 #[cfg(test)]
+mod backend_security_tests;
+#[cfg(test)]
 mod backend_session_tests;
 
 pub use alert::{
@@ -43,17 +48,22 @@ pub use arena_domain::{
 };
 pub use backend::{
     BackendCandidate, BackendClass, BackendEvidenceOrigin, BackendFeature, BackendFeatureError,
-    BackendFeatureEvidence, BackendFeatures, BackendFeaturesBuilder, BackendGenerationError,
-    BackendIdentity, BackendPolicy, BackendProfile, BackendProfileError, BackendRuntimeGeneration,
+    BackendFeatures, BackendFeaturesBuilder, BackendGenerationError, BackendIdentity,
+    BackendPolicy, BackendProfile, BackendProfileError, BackendRuntimeGeneration,
 };
 pub use backend_dispatch::{
     ActiveBackend, BackendDispatch, BackendDispatchError, BackendFallbackReason,
     BackendSelectionReason, BackendSelectionReport, select_backend,
 };
+pub use backend_execution::{
+    BackendCpuContext, BackendCpuIdentity, BackendCpuLease, BackendCpuRevalidationError,
+    BackendKernelPermit,
+};
+pub use backend_instance::{BackendFeatureEvidence, BackendInstanceIdentity};
+pub use backend_kat::{BackendKatFailure, BackendKatPass};
 pub use backend_session::{
     BackendFault, BackendHealthSnapshot, BackendHealthState, BackendInitialization,
-    BackendInitializationError, BackendKatFailure, BackendKatPass, BackendServiceApproval,
-    BackendSession, BackendSessionError,
+    BackendInitializationError, BackendServiceApproval, BackendSession, BackendSessionError,
 };
 pub use budget::{
     BudgetBuildError, ResourceBudget, ResourceBudgetBuilder, ResourceDomain, WorkBudget,

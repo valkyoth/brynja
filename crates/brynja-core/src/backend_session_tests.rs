@@ -1,9 +1,10 @@
 use crate::{
     ActiveBackend, BackendCandidate, BackendDispatchError, BackendEvidenceOrigin,
     BackendFallbackReason, BackendFault, BackendFeature, BackendFeatures, BackendHealthState,
-    BackendIdentity, BackendInitializationError, BackendKatFailure, BackendKatPass, BackendPolicy,
-    BackendProfile, BackendRuntimeGeneration, BackendServiceApproval, BackendSession,
-    ProviderCapabilities, ProviderCapabilitiesBuilder, ProviderOperation, select_backend,
+    BackendIdentity, BackendInitializationError, BackendInstanceIdentity, BackendKatFailure,
+    BackendKatPass, BackendPolicy, BackendProfile, BackendRuntimeGeneration,
+    BackendServiceApproval, BackendSession, ProviderCapabilities, ProviderCapabilitiesBuilder,
+    ProviderOperation, select_backend,
 };
 
 fn capabilities(operations: &[ProviderOperation]) -> ProviderCapabilities {
@@ -53,7 +54,10 @@ fn unreachable_capabilities() -> ProviderCapabilities {
     value
 }
 
-fn profile(identity: BackendIdentity, operations: &[ProviderOperation]) -> BackendProfile {
+pub(crate) fn profile(
+    identity: BackendIdentity,
+    operations: &[ProviderOperation],
+) -> BackendProfile {
     let result = BackendProfile::new(
         identity,
         identity.required_features(),
@@ -77,21 +81,32 @@ fn profile(identity: BackendIdentity, operations: &[ProviderOperation]) -> Backe
 }
 
 fn session(identity: BackendIdentity, operations: &[ProviderOperation]) -> BackendSession {
+    session_with_instance(identity, operations, 1, 1)
+}
+
+pub(crate) fn session_with_instance(
+    identity: BackendIdentity,
+    operations: &[ProviderOperation],
+    artifact: u8,
+    environment: u8,
+) -> BackendSession {
     let evidence = crate::BackendFeatureEvidence::for_test(
         profile(identity, operations),
         BackendEvidenceOrigin::PlatformObserved,
+        BackendInstanceIdentity::for_test([artifact; 32], [environment; 32]),
     );
     let candidate = BackendCandidate::from_evidence(evidence);
     BackendSession::from_candidate(candidate, BackendRuntimeGeneration::initial())
 }
 
-fn initialize(
+pub(crate) fn initialize(
     session: &BackendSession,
     approval: BackendServiceApproval,
 ) -> Result<ActiveBackend<'_>, BackendInitializationError> {
     let initialization = session.begin_initialization()?;
     let snapshot = session.snapshot();
     let pass = BackendKatPass::for_test(
+        session,
         session.profile(),
         snapshot.runtime_generation(),
         snapshot.generation(),
@@ -200,6 +215,7 @@ fn interruption_and_explicit_failure_quarantine_permanently() {
     if let Ok(guard) = guard {
         let snapshot = failed.snapshot();
         let evidence = BackendKatFailure::for_test(
+            &failed,
             failed.profile(),
             snapshot.runtime_generation(),
             snapshot.generation(),
@@ -227,6 +243,7 @@ fn recursion_quarantines_and_cannot_be_completed_by_outer_guard() {
     if let Ok(outer) = outer {
         let snapshot = backend.snapshot();
         let pass = BackendKatPass::for_test(
+            &backend,
             backend.profile(),
             snapshot.runtime_generation(),
             snapshot.generation(),
@@ -245,6 +262,7 @@ fn mismatched_evidence_and_approval_fail_closed() {
     if let Ok(guard) = guard {
         let snapshot = mismatch.snapshot();
         let wrong = BackendKatPass::for_test(
+            &mismatch,
             profile(BackendIdentity::X86Avx2, &[ProviderOperation::Hash]),
             snapshot.runtime_generation(),
             snapshot.generation(),

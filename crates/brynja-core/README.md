@@ -138,19 +138,26 @@ v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
 opportunistic, required-accelerated, and validated-module policies; and
 caller-owned no-atomics health state. Opaque feature and KAT evidence separate
-candidate observation from activation. Direct-KAT guards quarantine on
+candidate observation from activation. Each non-scalar candidate owns an
+opaque measured-artifact and operational-environment identity. KAT pass and
+failure evidence borrow the exact session and instance, preventing replay
+between equal profiles or generations. Direct-KAT guards quarantine on
 recursion, failure, panic, cancellation, or early return. Healthy authority is
 thread-bound and revalidates runtime generation, health generation, backend
-identity, and exact operation before future direct kernel entry. Only
+identity, and exact operation. Accelerated entry additionally consumes an
+opaque platform-issued CPU lease, revalidates CPU or hart identity, migration
+generation, complete usable features, and required OS or architectural state,
+and lends a non-escapable permit only to the immediate kernel closure. Only
 opportunistic policy can return an explicit scalar-fallback reason; required
 and validated policies fail closed.
 
-Nine behavioral test groups, seven compile-fail examples, a hash-locked
-four-file source policy, and thirteen broken fixtures enforce this boundary.
-There is still no CPU detection, intrinsic, assembly, accelerated kernel,
-global cache, unsafe backend boundary, performance claim, provider effect, or
-FIPS validation. Public profiles, features, snapshots, approval values, and
-reports are observational and cannot construct backend authority.
+Thirteen behavioral test groups, ten compile-fail examples, a hash-locked
+eight-file source policy, and nineteen broken fixtures enforce this boundary.
+There is still no CPU detection, public instance or lease constructor,
+intrinsic, assembly, executable accelerated kernel, global cache, unsafe
+backend boundary, performance claim, provider effect, or FIPS validation.
+Public profiles, features, snapshots, approval values, and reports are
+observational and cannot construct backend authority.
 
 ## Cryptography Verification Status
 

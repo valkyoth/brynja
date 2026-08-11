@@ -3,8 +3,8 @@
 use core::{cell::Cell, marker::PhantomData};
 
 use crate::{
-    ActiveBackend, BackendCandidate, BackendClass, BackendIdentity, BackendProfile,
-    BackendRuntimeGeneration,
+    ActiveBackend, BackendCandidate, BackendClass, BackendIdentity, BackendInstanceIdentity,
+    BackendKatFailure, BackendKatPass, BackendProfile, BackendRuntimeGeneration,
 };
 /// Process-local health of one exact backend profile.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -277,6 +277,10 @@ impl BackendSession {
     pub(crate) const fn profile(&self) -> BackendProfile {
         self.candidate.profile()
     }
+
+    pub(crate) const fn instance(&self) -> &BackendInstanceIdentity {
+        self.candidate.instance()
+    }
 }
 
 /// A closed startup-initialization failure.
@@ -299,76 +303,6 @@ pub enum BackendInitializationError {
     StateChanged,
 }
 
-/// Opaque trusted-provider proof that one direct startup KAT passed.
-///
-/// It has no public constructor. Project tests and later reviewed backend
-/// packages construct it only inside the trusted provider-effect boundary.
-///
-/// Safe downstream code cannot claim that a KAT passed:
-///
-/// ```compile_fail
-/// use brynja_core::BackendKatPass;
-///
-/// fn forge() -> BackendKatPass {
-///     BackendKatPass {}
-/// }
-/// ```
-pub struct BackendKatPass {
-    profile: BackendProfile,
-    runtime: BackendRuntimeGeneration,
-    testing_generation: u64,
-    approval: BackendServiceApproval,
-    thread_bound: PhantomData<*mut ()>,
-}
-
-impl BackendKatPass {
-    #[cfg(test)]
-    pub(crate) const fn for_test(
-        profile: BackendProfile,
-        runtime: BackendRuntimeGeneration,
-        testing_generation: u64,
-        approval: BackendServiceApproval,
-    ) -> Self {
-        Self {
-            profile,
-            runtime,
-            testing_generation,
-            approval,
-            thread_bound: PhantomData,
-        }
-    }
-}
-
-/// Opaque trusted-provider proof that one direct startup KAT failed.
-///
-/// It has no public constructor and therefore cannot be forged from a public
-/// fault category alone.
-pub struct BackendKatFailure {
-    profile: BackendProfile,
-    runtime: BackendRuntimeGeneration,
-    testing_generation: u64,
-    fault: BackendFault,
-    thread_bound: PhantomData<*mut ()>,
-}
-
-impl BackendKatFailure {
-    #[cfg(test)]
-    pub(crate) const fn for_test(
-        profile: BackendProfile,
-        runtime: BackendRuntimeGeneration,
-        testing_generation: u64,
-        fault: BackendFault,
-    ) -> Self {
-        Self {
-            profile,
-            runtime,
-            testing_generation,
-            fault,
-            thread_bound: PhantomData,
-        }
-    }
-}
-
 /// In-progress direct KAT guard.
 ///
 /// Dropping this guard after panic, cancellation, or early return permanently
@@ -383,7 +317,7 @@ impl<'session> BackendInitialization<'session> {
     /// Completes initialization only with exact opaque KAT-pass evidence.
     pub fn complete(
         mut self,
-        pass: BackendKatPass,
+        pass: BackendKatPass<'session>,
     ) -> Result<ActiveBackend<'session>, BackendInitializationError> {
         let record = self.session.health.get();
         if !matches!(record.state, BackendHealthState::Testing)
@@ -393,7 +327,10 @@ impl<'session> BackendInitialization<'session> {
             self.armed = false;
             return Err(BackendInitializationError::StateChanged);
         }
-        if pass.profile != self.session.profile()
+        if !core::ptr::eq(pass.session, self.session)
+            || !core::ptr::eq(pass.instance, self.session.instance())
+            || !pass.instance.binding_matches(self.session.instance())
+            || pass.profile != self.session.profile()
             || pass.runtime != record.runtime
             || pass.testing_generation != record.generation
         {
@@ -436,7 +373,10 @@ impl<'session> BackendInitialization<'session> {
     }
 
     /// Permanently quarantines only with exact opaque KAT-failure evidence.
-    pub fn fail(mut self, failure: BackendKatFailure) -> Result<(), BackendInitializationError> {
+    pub fn fail(
+        mut self,
+        failure: BackendKatFailure<'session>,
+    ) -> Result<(), BackendInitializationError> {
         let record = self.session.health.get();
         if !matches!(record.state, BackendHealthState::Testing)
             || record.generation != self.testing_generation
@@ -445,7 +385,10 @@ impl<'session> BackendInitialization<'session> {
             self.armed = false;
             return Err(BackendInitializationError::StateChanged);
         }
-        if failure.profile != self.session.profile()
+        if !core::ptr::eq(failure.session, self.session)
+            || !core::ptr::eq(failure.instance, self.session.instance())
+            || !failure.instance.binding_matches(self.session.instance())
+            || failure.profile != self.session.profile()
             || failure.runtime != record.runtime
             || failure.testing_generation != record.generation
         {

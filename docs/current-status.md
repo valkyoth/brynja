@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.0 tagged; v0.13.1 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.13.0 tagged; v0.13.1 remediation awaiting retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -467,20 +467,29 @@ Version 0.13.1 implements the CPU-backend capability and dispatch contract:
 
 - sealed scalar, x86, AArch64, RISC-V, and validated-module identities bind
   exact feature and provider-operation profiles without authorizing execution;
-- opaque feature and KAT evidence, caller-owned no-atomics health state,
-  monotonic health/runtime generations, direct initialization, permanent
-  quarantine, and thread-bound active authority separate observation from use;
+- opaque backend-instance identity binds the measured artifact and operational
+  environment, while KAT pass/failure evidence borrows the exact session and
+  instance so equal profiles and generations cannot redirect it;
+- caller-owned no-atomics health state, monotonic health/runtime generations,
+  direct initialization, permanent quarantine, and thread-bound active
+  authority separate observation from use;
 - exact-operation dispatch revalidates identity, health, runtime, operation,
-  and observational service approval before any later kernel entry; and
+  and observational service approval, while accelerated entry also requires
+  an opaque platform-issued CPU lease and immediate revalidation of CPU or hart
+  identity, migration generation, complete usable features, and required OS or
+  architectural state before issuing a non-escapable closure permit; and
 - scalar-only, opportunistic, required-accelerated, and validated-module
   policies make fallback explicit and make required modes fail closed.
 
-Nine behavior groups, seven compile-fail examples, a SHA-256-locked four-file
-source policy, and thirteen broken fixtures enforce the boundary. It contains
-no CPU probe, intrinsic, assembly, accelerated kernel, unsafe backend boundary,
-global cache, provider effect, performance claim, or FIPS validation. v0.13.1
-selects no crates.io publication and awaits green GitHub and CodeQL before
-explicit signed-tag authorization.
+Thirteen behavior groups, ten compile-fail examples, a SHA-256-locked
+eight-file source policy, and nineteen broken fixtures enforce the boundary.
+It contains no CPU probe, public instance or lease constructor, intrinsic,
+assembly, executable accelerated kernel, unsafe backend boundary, global cache,
+provider effect, performance claim, or FIPS validation. Its exceptional
+assessment found two High backend-authority flaws; both are locally remediated,
+but v0.13.1 remains blocked pending repository-owner retest, the complete gate,
+green GitHub and CodeQL, and explicit signed-tag authorization. It selects no
+crates.io publication.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

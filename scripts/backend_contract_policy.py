@@ -11,15 +11,23 @@ from pathlib import Path
 SOURCE_ROOT = Path("crates/brynja-core/src")
 SOURCES = (
     Path("backend.rs"),
+    Path("backend_instance.rs"),
     Path("backend_session.rs"),
+    Path("backend_kat.rs"),
     Path("backend_dispatch.rs"),
+    Path("backend_execution.rs"),
     Path("backend_session_tests.rs"),
+    Path("backend_security_tests.rs"),
 )
 EXPECTED_SHA256 = {
-    Path("backend.rs"): "9386988bfd5b32ec39f72dc343e8631dddc582f0417ef66689e84ffdf87f0766",
-    Path("backend_session.rs"): "d4c774ae8aaa7b0ec8581687f62c2b7d7aa5e5650ff430c28a10560c1c4f47ce",
-    Path("backend_dispatch.rs"): "e1db25d28aefc43792d4757f0bbb97bf52adbd26057982b55e21f6728cde86cb",
-    Path("backend_session_tests.rs"): "a4355bb8e02d4d867b5c1b96fd22b18783627b7285fba249baccae13ad1f0eec",
+    Path("backend.rs"): "ca5acc500c67d3672545f2ce52802875c9b7c3cdb644a65b3f84d30cba3dc288",
+    Path("backend_instance.rs"): "039223f1a7057239ff015368d56a99062219e3d0c0878a2afffe13af6aca7a1f",
+    Path("backend_session.rs"): "57420305528749a69efcdceac801a5b2c941874046305e7b6fe57cd737551ac6",
+    Path("backend_kat.rs"): "50497f9d593bb3bdc9c5c56db3e752800c8c288a822cc0f8ad986a9f8917bd71",
+    Path("backend_dispatch.rs"): "d5ad1612dacea4f5212a401a4b5bf0f6369e0dea45cec5d00aa2cda53517d47b",
+    Path("backend_execution.rs"): "d9ee4c6579fc1e08e48bb020cf70426cc151687744efbf44b3d971ac89d4578b",
+    Path("backend_session_tests.rs"): "74c58d8410a8ea717a5d90cf4b1267fb1fa74817448ecbd20bd590a9e4ea6500",
+    Path("backend_security_tests.rs"): "235f395f3b49d7107d90335adf0cfc342db5c0abff3b47fb12f5226965b5b1e2",
 }
 IDENTITIES = (
     "Scalar",
@@ -105,10 +113,18 @@ def validate_inventory(backend: str) -> None:
 
 def validate_structure(sources: dict[Path, str]) -> None:
     backend = sources[Path("backend.rs")]
+    instance = sources[Path("backend_instance.rs")]
     session = sources[Path("backend_session.rs")]
+    kat = sources[Path("backend_kat.rs")]
     dispatch = sources[Path("backend_dispatch.rs")]
-    tests = sources[Path("backend_session_tests.rs")]
-    combined = "\n".join((backend, session, dispatch))
+    execution = sources[Path("backend_execution.rs")]
+    tests = "\n".join(
+        (
+            sources[Path("backend_session_tests.rs")],
+            sources[Path("backend_security_tests.rs")],
+        )
+    )
+    combined = "\n".join((backend, instance, session, kat, dispatch, execution))
     combined = combined.replace("std::thread::spawn", "compile_fail_thread_spawn")
     for forbidden in (
         "std::",
@@ -127,16 +143,19 @@ def validate_structure(sources: dict[Path, str]) -> None:
             fail(f"backend contract contains forbidden execution dependency: {forbidden}")
 
     validate_inventory(backend)
-    if combined.count("PhantomData<*mut ()>") != 6:
+    if combined.count("PhantomData<*mut ()>") != 8:
         fail("thread-bound backend token marker drift")
     for token in (
         "BackendCandidate",
+        "BackendInstanceIdentity",
         "BackendFeatureEvidence",
         "BackendKatPass",
         "BackendKatFailure",
         "BackendInitialization",
         "ActiveBackend",
         "BackendDispatch",
+        "BackendCpuLease",
+        "BackendKernelPermit",
     ):
         if re.search(
             rf"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct {token}",
@@ -146,8 +165,18 @@ def validate_structure(sources: dict[Path, str]) -> None:
 
     if "pub const fn from_evidence(evidence: BackendFeatureEvidence)" not in backend:
         fail("candidate activation no longer requires opaque feature evidence")
-    for evidence in ("BackendFeatureEvidence", "BackendKatPass", "BackendKatFailure"):
-        block = re.search(rf"impl {evidence} \{{(?P<body>.*?)\n\}}", combined, re.DOTALL)
+    for evidence in (
+        "BackendInstanceIdentity",
+        "BackendFeatureEvidence",
+        "BackendKatPass",
+        "BackendKatFailure",
+        "BackendCpuLease",
+    ):
+        block = re.search(
+            rf"impl(?:<[^>]+>)? {evidence}(?:<[^>]+>)? \{{(?P<body>.*?)\n\}}",
+            combined,
+            re.DOTALL,
+        )
         if block is None:
             fail(f"opaque evidence implementation missing: {evidence}")
         if re.search(r"pub\s+(?:const\s+)?fn\s+(?:new|for_test|from_)", block["body"]):
@@ -167,6 +196,30 @@ def validate_structure(sources: dict[Path, str]) -> None:
         fail("opaque KAT failure lost exact generation binding")
     if "pass.testing_generation != record.generation" not in session:
         fail("opaque KAT pass lost exact generation binding")
+    for binding in (
+        "core::ptr::eq(pass.session, self.session)",
+        "core::ptr::eq(pass.instance, self.session.instance())",
+        "pass.instance.binding_matches(self.session.instance())",
+        "core::ptr::eq(failure.session, self.session)",
+        "core::ptr::eq(failure.instance, self.session.instance())",
+        "failure.instance.binding_matches(self.session.instance())",
+    ):
+        if binding not in session:
+            fail(f"KAT evidence lost exact session or instance binding: {binding}")
+
+    for required in (
+        "core::ptr::eq(self.session, session)",
+        "self.context\n            .revalidate(",
+        "self.validate(runtime)?",
+        "lease.revalidate(self.session, runtime)?",
+        "for<'entry> FnOnce(BackendKernelPermit<'entry>) -> R",
+        "BackendCpuRevalidationError::CpuChanged",
+        "BackendCpuRevalidationError::FeaturesUnavailable",
+        "BackendCpuRevalidationError::OperatingStateUnavailable",
+        "BackendCpuRevalidationError::MigrationGenerationChanged",
+    ):
+        if required not in execution:
+            fail(f"CPU execution-lease invariant drift: {required}")
 
     for required in (
         "BackendPolicy::ScalarOnly =>",
@@ -188,13 +241,17 @@ def validate_structure(sources: dict[Path, str]) -> None:
     test_names = tuple(
         re.findall(r"^#\[test\]\nfn ([a-z0-9_]+)\(\)", tests, re.MULTILINE)
     )
-    if len(test_names) != 9:
+    if len(test_names) != 13:
         fail("backend behavior test inventory drift")
     for required_test in (
         "recursion_quarantines_and_cannot_be_completed_by_outer_guard",
         "mismatched_evidence_and_approval_fail_closed",
         "quarantine_and_runtime_changes_invalidate_existing_authority",
         "policies_are_exact_and_only_opportunistic_mode_falls_back",
+        "kat_pass_and_failure_cannot_cross_equal_sessions",
+        "validated_artifact_and_environment_substitution_fail_closed",
+        "accelerated_entry_revalidates_cpu_migration_features_and_os_state",
+        "cpu_lease_cannot_cross_equal_backend_sessions",
     ):
         if required_test not in test_names:
             fail(f"backend behavior coverage missing: {required_test}")

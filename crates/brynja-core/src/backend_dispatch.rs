@@ -70,6 +70,16 @@ pub enum BackendDispatchError {
     ApprovalUnavailable,
     /// The mandatory scalar backend was unavailable or invalid.
     ScalarUnavailable,
+    /// The CPU execution lease belongs to another session or runtime.
+    CpuLeaseMismatch,
+    /// The current CPU or hart differs from the leased observation.
+    CpuChanged,
+    /// The complete usable feature predicate no longer holds.
+    CpuFeaturesUnavailable,
+    /// Required operating-system or architectural state is unavailable.
+    CpuOperatingStateUnavailable,
+    /// The platform migration or hot-plug generation changed.
+    CpuMigrationGenerationChanged,
 }
 
 /// Explicit reason for one backend selection.
@@ -162,7 +172,7 @@ impl BackendSelectionReport {
 /// ```
 #[must_use = "dispatch authority must govern one exact direct backend entry"]
 pub struct BackendDispatch<'session> {
-    session: &'session BackendSession,
+    pub(crate) session: &'session BackendSession,
     identity: BackendIdentity,
     operation: ProviderOperation,
     policy: BackendPolicy,
@@ -173,7 +183,11 @@ pub struct BackendDispatch<'session> {
 }
 
 impl BackendDispatch<'_> {
-    /// Revalidates health and runtime generations before direct kernel entry.
+    /// Revalidates logical health and runtime authority.
+    ///
+    /// For accelerated backends this is deliberately insufficient to enter a
+    /// kernel. The separate direct entry boundary additionally requires and
+    /// immediately revalidates an opaque CPU execution lease.
     pub fn validate(&self, runtime: BackendRuntimeGeneration) -> Result<(), BackendDispatchError> {
         validate_authority(
             self.session,
@@ -411,6 +425,11 @@ fn fallback_reason(
         }
         BackendDispatchError::BackendClassMismatch
         | BackendDispatchError::ApprovalUnavailable
-        | BackendDispatchError::ScalarUnavailable => Err(error),
+        | BackendDispatchError::ScalarUnavailable
+        | BackendDispatchError::CpuLeaseMismatch
+        | BackendDispatchError::CpuChanged
+        | BackendDispatchError::CpuFeaturesUnavailable
+        | BackendDispatchError::CpuOperatingStateUnavailable
+        | BackendDispatchError::CpuMigrationGenerationChanged => Err(error),
     }
 }

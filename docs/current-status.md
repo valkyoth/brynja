@@ -510,7 +510,7 @@ Version 0.13.2 reserves the CPU-acceleration package and low-level boundary:
   modules, instruction bundles, architectures, ABI preconditions, and future
   admission duties while admitting zero active kernels and zero new low-level
   allowances; and
-- positive validation plus eighteen broken fixtures reject graph smuggling,
+- positive validation plus twenty-six broken fixtures reject graph smuggling,
   dependency or feature drift, premature backend activation, unregistered
   source, low-level tokens, build scripts, false claims, and files above the
   500-line review limit.
@@ -519,6 +519,14 @@ This milestone implements no primitive, intrinsic, assembly, runtime feature
 detection, executable dispatch, performance claim, independent verification,
 FIPS approval, or new unsafe site. Both new packages remain unpublished and the
 development release selects zero crates.io publication.
+
+The repository-owner assessment found one High fail-open inert-source
+admission flaw and one Medium policy-integrity flaw. Both are locally
+remediated: source hashes and the complete reviewed policy now have independent
+validator anchors, actual declarations are line-anchored, and exact semantic
+comparisons cover every backend ABI, amendment duty, forbidden mechanism,
+safe-wrapper invariant, and FIPS field. The permanent report records zero open
+findings and awaits repository-owner retest of the signed remediation commit.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

@@ -90,7 +90,7 @@ def test() -> None:
         policy = root / cpu_boundary_policy.POLICY
 
         replace(policy, 'current_cpu_allowances = []', 'current_cpu_allowances = ["x86-sha"]')
-        require_rejection(root, "low-level-code allowance")
+        require_rejection(root, "amendment contract")
         reset(root)
         policy = root / cpu_boundary_policy.POLICY
 
@@ -120,13 +120,13 @@ def test() -> None:
 
         cpu_source = source(root, cpu_boundary_policy.CPU)
         cpu_source.write_text(cpu_source.read_text(encoding="utf-8") + "\n// drift\n", encoding="utf-8")
-        require_rejection(root, "checksum mismatch")
+        require_rejection(root, "reopen security review")
         reset(root)
 
         cpu_source = source(root, cpu_boundary_policy.CPU)
         cpu_source.write_text(cpu_source.read_text(encoding="utf-8") + "\n// unsafe\n", encoding="utf-8")
         refresh_source_hash(root, cpu_boundary_policy.CPU)
-        require_rejection(root, "low-level or no_std")
+        require_rejection(root, "reopen security review")
         reset(root)
 
         cpu_source = source(root, cpu_boundary_policy.CPU)
@@ -142,7 +142,62 @@ def test() -> None:
         cpu_source = source(root, cpu_boundary_policy.CPU)
         replace(cpu_source, "IMPLEMENTED: bool = false", "IMPLEMENTED: bool = true")
         refresh_source_hash(root, cpu_boundary_policy.CPU)
-        require_rejection(root, "implementation claim")
+        require_rejection(root, "reopen security review")
+        reset(root)
+
+        cpu_source = source(root, cpu_boundary_policy.CPU)
+        replace(cpu_source, "#![no_std]", "// #![no_std]")
+        cpu_source.write_text(
+            cpu_source.read_text(encoding="utf-8")
+            + "\npub fn host_probe() { let _ = std::thread::available_parallelism(); }\n",
+            encoding="utf-8",
+        )
+        refresh_source_hash(root, cpu_boundary_policy.CPU)
+        require_rejection(root, "reopen security review")
+        reset(root)
+
+        cpu_source = source(root, cpu_boundary_policy.CPU)
+        cpu_source.write_text(
+            cpu_source.read_text(encoding="utf-8")
+            + "\npub fn executable_operation(value: u8) -> u8 { value.wrapping_add(1) }\n",
+            encoding="utf-8",
+        )
+        refresh_source_hash(root, cpu_boundary_policy.CPU)
+        require_rejection(root, "reopen security review")
+        reset(root)
+
+        policy = root / cpu_boundary_policy.POLICY
+        replace(policy, '  "side-channel-evidence",', '  "side-channel-review-waived",')
+        require_rejection(root, "amendment contract")
+        reset(root)
+
+        policy = root / cpu_boundary_policy.POLICY
+        replace(policy, '  "secret-free-failure",', '  "secret-bearing-failure",')
+        require_rejection(root, "safe wrapper invariant")
+        reset(root)
+
+        policy = root / cpu_boundary_policy.POLICY
+        replace(
+            policy,
+            'abi_preconditions = ["x86_64", "sha-usable-on-current-logical-cpu"]',
+            'abi_preconditions = ["none"]',
+        )
+        require_rejection(root, "backend contract")
+        reset(root)
+
+        policy = root / cpu_boundary_policy.POLICY
+        replace(policy, '  "foreign-abi",', '  "foreign-abi-allowed",')
+        require_rejection(root, "amendment contract")
+        reset(root)
+
+        policy = root / cpu_boundary_policy.POLICY
+        replace(policy, 'future_module = "brynja-fips-module"', 'future_module = "unbound"')
+        require_rejection(root, "FIPS")
+        reset(root)
+
+        policy = root / cpu_boundary_policy.POLICY
+        policy.write_text(policy.read_text(encoding="utf-8") + "\n# unreviewed drift\n", encoding="utf-8")
+        require_rejection(root, "CPU security policy changed")
         reset(root)
 
         cpu_manifest = root / "crates" / cpu_boundary_policy.CPU / "Cargo.toml"
@@ -197,4 +252,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects eighteen package, graph, source, FIPS, and admission regressions")
+    print("CPU boundary rejects twenty-six package, graph, source, FIPS, and admission regressions")

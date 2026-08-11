@@ -1274,7 +1274,7 @@ Goal: make ISA code and host runtime detection independently selectable and audi
 
 Deliverables:
 
-- reserve and classify the two packages, dependency directions, empty default features, publication roles, facade opt-in edge, scalar ownership and exact FIPS inclusion and exclusion rules;
+- reserve and classify the two packages, dependency directions, empty default features, publication roles, ordinary-facade exclusion, scalar ownership and exact FIPS inclusion and exclusion rules;
 - specify per-backend source modules, exact hash inventory, local unsafe allowances, instruction and ABI preconditions, safe wrapper invariants, maximum file size and amendment process;
 - prohibit third-party detection crates, build-time source inclusion, implicit std, OS entropy or other platform services, and feature unification that changes a validated artifact.
 
@@ -1287,6 +1287,7 @@ Verification:
 Exit criteria:
 
 - package and unsafe-policy enforcement can admit one exact future backend without granting authority to any sibling backend or std adapter;
+- record the exceptional assessment's High source-admission and Medium policy-integrity findings, their exact remediation, and repository-owner PASS/PASS retest before the signed tag; and
 - `v0.13.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.13.3 - Native CPU Evidence And Performance Admission Harness

@@ -1,6 +1,6 @@
 # Brynja v0.13.2 Development Milestone
 
-Status: implementation complete; awaiting pentest
+Status: implementation and remediation complete; awaiting retest
 
 Brynja v0.13.2 reserves the package, dependency, source, and future low-level
 boundaries for CPU acceleration. It advances the `brynja` facade to 0.13.2 but
@@ -45,13 +45,31 @@ enter a validated artifact.
 - the CPU-boundary validator checks package manifests, direct-dependency
   direction, source inventories, source hashes, reserved modules, claims,
   review size, FIPS separation, and the complete future admission checklist;
-- eighteen broken fixtures reject premature activation, nonzero allowances,
+- twenty-six broken fixtures reject premature activation, nonzero allowances,
   policy weakening, source drift, low-level tokens, oversized or unregistered
   files, false implementation claims, third-party detection, facade or engine
   smuggling, and build scripts; and
 - 33 workspace-policy fixtures include independent rejection of either CPU
   package entering the ordinary facade and of the kernel package entering a
   protocol engine.
+
+## Assessment And Remediation
+
+The repository-owner assessment found one High fail-open source-admission flaw:
+the source checksum could be changed together with the policy, and substring
+checks did not prove a real `no_std` attribute, an exact false implementation
+declaration, or continued absence of executable operations. It also found one
+Medium policy-integrity flaw: several ABI, amendment, safe-wrapper, forbidden-
+mechanism, and FIPS values were checked only partially or by cardinality.
+
+Both findings are locally remediated. The validator independently anchors both
+inert sources and the complete reviewed policy, requires line-anchored
+declarations, compares every security-critical tuple and field exactly, and
+retains semantic checks before its final policy-byte check. New fixtures cover
+source-plus-policy checksum replacement, a commented `no_std` marker, added
+executable operations, same-cardinality security substitutions, weakened ABI
+preconditions, FIPS drift, and otherwise semantically invisible policy-byte
+changes. Zero findings remain open; repository-owner retest is pending.
 
 ## Security And Verification Status
 

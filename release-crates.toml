@@ -5,8 +5,8 @@ baseline = "0.10.0"
 cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0", "0.13.1", "0.13.2"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "CPU-boundary source-admission and policy-integrity findings require repository-owner retest of the exact remediation candidate."
 
 [crates."brynja"]
 previous_version = "0.13.1"

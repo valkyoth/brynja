@@ -13,7 +13,7 @@ Keep a Changelog and Semantic Versioning.
 - Add a SHA-256-bound CPU-acceleration policy covering eight reserved backend
   identities, exact future modules, instruction bundles, ABI preconditions,
   graph and FIPS exclusions, zero active kernels, zero new low-level
-  allowances, and eighteen broken fixtures.
+  allowances, and twenty-six broken fixtures.
 - Add sealed CPU-backend identities, exact feature bundles, scalar,
   opportunistic, required-accelerated, and validated-module policies, and inert
   candidate profiles that cannot authorize an instruction.
@@ -111,6 +111,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Remediate one High fail-open inert-source admission flaw by anchoring both
+  source hashes independently in the validator, requiring real line-anchored
+  `no_std` and false-status declarations, and rejecting source-plus-policy
+  hash replacement, commented attributes, and executable placeholder drift.
+- Remediate one Medium policy-integrity flaw by independently pinning the
+  complete reviewed policy and comparing every amendment, forbidden mechanism,
+  safe-wrapper invariant, FIPS field, and backend ABI precondition exactly.
 - Keep scalar, protocol-engine, default, bare-metal and FIPS graphs isolated
   from host CPU detection; require a later primitive-specific policy amendment,
   source hash, native evidence, exceptional review and explicit allowance

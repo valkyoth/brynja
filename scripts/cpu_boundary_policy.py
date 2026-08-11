@@ -12,6 +12,18 @@ from pathlib import Path
 POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
+EXPECTED_POLICY_SHA256 = "dfebd0f108f7fe5f543969022f15c0ae1c4bedf7767d30008213ada64694811e"
+EXPECTED_SOURCE_SHA256 = {
+    (CPU, "src/lib.rs"): "614731a47da9364a16d62b71335b5cbeffb7554b117d4c2c8661fd5b2b2ec438",
+    (DETECTOR, "src/lib.rs"): "db734d07aca12e88b560d732d977d97f9e86e438ef913f6b3d5d19c733a9d7a2",
+}
+NO_STD_ATTRIBUTE = re.compile(r"(?m)^#!\[no_std\]$")
+FALSE_STATUS = {
+    (CPU, "src/lib.rs"): re.compile(r"(?m)^pub const IMPLEMENTED: bool = false;$"),
+    (DETECTOR, "src/lib.rs"): re.compile(
+        r"(?m)^pub const RUNTIME_DETECTION_IMPLEMENTED: bool = false;$"
+    ),
+}
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -26,45 +38,103 @@ LOW_LEVEL = re.compile(
     r"\b(?:unsafe|unsafe_code|extern|asm|global_asm|llvm_asm|naked_asm|include|path)\b"
 )
 BACKENDS = {
-    "x86-sha": ("X86Sha", "x86_64", "src/x86_sha.rs", ("sha",)),
+    "x86-sha": (
+        "X86Sha",
+        "x86_64",
+        "src/x86_sha.rs",
+        ("sha",),
+        ("x86_64", "sha-usable-on-current-logical-cpu"),
+    ),
     "x86-aes-gcm": (
         "X86AesGcm",
         "x86_64",
         "src/x86_aes_gcm.rs",
         ("aes", "pclmulqdq"),
+        ("x86_64", "aes-and-pclmulqdq-usable-on-current-logical-cpu"),
     ),
-    "x86-avx2": ("X86Avx2", "x86_64", "src/x86_avx2.rs", ("avx2",)),
+    "x86-avx2": (
+        "X86Avx2",
+        "x86_64",
+        "src/x86_avx2.rs",
+        ("avx2",),
+        ("x86_64", "osxsave-and-xcr0-ymm-state", "avx2-usable-on-current-logical-cpu"),
+    ),
     "x86-avx512": (
         "X86Avx512",
         "x86_64",
         "src/x86_avx512.rs",
         ("avx512f",),
+        ("x86_64", "osxsave-and-xcr0-zmm-state", "avx512f-usable-on-current-logical-cpu"),
     ),
     "aarch64-sha2": (
         "Aarch64Sha2",
         "aarch64",
         "src/aarch64_sha2.rs",
         ("neon", "sha2"),
+        ("aarch64", "neon-and-sha2-usable-on-current-logical-cpu"),
     ),
     "aarch64-aes-gcm": (
         "Aarch64AesGcm",
         "aarch64",
         "src/aarch64_aes_gcm.rs",
         ("neon", "aes", "pmull"),
+        ("aarch64", "neon-aes-and-pmull-usable-on-current-logical-cpu"),
     ),
     "riscv-vector": (
         "RiscVVector",
         "riscv",
         "src/riscv_vector.rs",
         ("v",),
+        ("ratified-vector-isa", "vector-state-enabled", "v-usable-on-current-hart"),
     ),
     "riscv-scalar-crypto": (
         "RiscVScalarCrypto",
         "riscv",
         "src/riscv_scalar_crypto.rs",
         ("ratified-scalar-crypto-subset",),
+        ("matching-riscv-width", "exact-scalar-crypto-subset-usable-on-current-hart"),
     ),
 }
+AMENDMENT_REQUIREMENTS = (
+    "primitive-and-operation",
+    "source-symbol-and-sha256",
+    "compiler-and-feature-bundle",
+    "instruction-preconditions",
+    "abi-and-vector-state-preconditions",
+    "safe-wrapper-invariants",
+    "register-and-spill-residuals",
+    "scalar-reference",
+    "known-answer-test",
+    "quarantine-path",
+    "native-hardware-evidence",
+    "side-channel-evidence",
+    "performance-evidence",
+    "fips-disposition",
+    "independent-review",
+)
+FORBIDDEN_MECHANISMS = (
+    "foreign-abi",
+    "external-assembly",
+    "native-object",
+    "build-script",
+    "generated-source-inclusion",
+    "global-registry",
+)
+SAFE_WRAPPER_INVARIANTS = (
+    "exact-backend-identity",
+    "complete-feature-bundle",
+    "operating-state-preconditions",
+    "exact-session-and-instance",
+    "successful-direct-kat",
+    "healthy-current-generation",
+    "exact-operation-authority",
+    "migration-exclusion-through-call",
+    "post-callback-logical-revalidation",
+    "guarded-direct-kernel-call",
+    "bounded-caller-owned-buffers",
+    "scalar-differential-equivalence",
+    "secret-free-failure",
+)
 SOURCE_KEYS = {"package", "path", "status", "sha256"}
 BACKEND_KEYS = {
     "id",
@@ -194,12 +264,15 @@ def validate_sources(root: Path, policy: dict) -> None:
         if len(text.splitlines()) > maximum:
             fail(f"boundary source exceeds {maximum} lines")
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if digest != record["sha256"]:
-            fail(f"boundary source checksum mismatch: {key}")
-        if text.count("#![no_std]") != 1 or LOW_LEVEL.search(text):
-            fail(f"boundary source low-level or no_std posture drifted: {key}")
-        if "IMPLEMENTED: bool = false" not in text:
-            fail(f"boundary source implementation claim drifted: {key}")
+        expected = EXPECTED_SOURCE_SHA256[key]
+        if record["sha256"] != expected or digest != expected:
+            fail(f"inert boundary source changed; reopen security review: {key}")
+        if len(NO_STD_ATTRIBUTE.findall(text)) != 1:
+            fail(f"real no_std attribute missing: {key}")
+        if FALSE_STATUS[key].search(text) is None:
+            fail(f"exact false implementation declaration missing: {key}")
+        if LOW_LEVEL.search(text):
+            fail(f"boundary source gained a low-level token: {key}")
         rust_sources = sorted(path.parent.rglob("*.rs"))
         if rust_sources != [path]:
             fail(f"unadmitted source entered reserved package: {record['package']}")
@@ -218,19 +291,19 @@ def validate_backends(root: Path, policy: dict) -> None:
         if identifier in seen or identifier not in BACKENDS:
             fail("reserved backend identity drifted")
         seen.add(identifier)
-        identity, architecture, module, instructions = BACKENDS[identifier]
+        identity, architecture, module, instructions, abi_preconditions = BACKENDS[identifier]
         if (
             record["identity"] != identity
             or record["architecture"] != architecture
             or record["module"] != module
             or tuple(record["instructions"]) != instructions
+            or tuple(record["abi_preconditions"]) != abi_preconditions
         ):
             fail(f"reserved backend contract drifted: {identifier}")
         if (
             record["status"] != "reserved"
             or record["sha256"] != "absent"
             or record["low_level_allowed"] is not False
-            or not record["abi_preconditions"]
         ):
             fail(f"reserved backend gained implementation authority: {identifier}")
         if (root / "crates" / CPU / record["module"]).exists():
@@ -297,26 +370,34 @@ def validate_policy_shape(policy: dict) -> None:
         or graph.get("os_entropy_and_platform_services") != "forbidden"
     ):
         fail("CPU boundary graph contract drifted")
-    if policy["low_level_boundary"].get("current_cpu_allowances") != []:
-        fail("CPU boundary gained a low-level-code allowance")
-    if len(policy["low_level_boundary"].get("amendment_requires", [])) != 15:
-        fail("future backend amendment evidence is incomplete")
-    if len(policy["safe_wrapper"].get("invariants", [])) != 13:
-        fail("safe wrapper invariant inventory is incomplete")
-    fips = policy["fips"]
-    if (
-        fips.get("detector_adapter") != "excluded"
-        or fips.get("kernel_inclusion") != "exact-reviewed-symbols-only"
-        or fips.get("ordinary_facade_claim") != "forbidden"
-        or fips.get("feature_unification_changes_artifact") != "forbidden"
-    ):
+    if policy["low_level_boundary"] != {
+        "current_cpu_allowances": [],
+        "approval_scope": "one-exact-symbol",
+        "amendment_requires": list(AMENDMENT_REQUIREMENTS),
+        "forbidden_mechanisms": list(FORBIDDEN_MECHANISMS),
+    }:
+        fail("future backend amendment contract drifted")
+    if policy["safe_wrapper"] != {"invariants": list(SAFE_WRAPPER_INVARIANTS)}:
+        fail("safe wrapper invariant inventory drifted")
+    if policy["fips"] != {
+        "future_module": "brynja-fips-module",
+        "ordinary_facade_claim": "forbidden",
+        "detector_adapter": "excluded",
+        "feature_unification_changes_artifact": "forbidden",
+        "kernel_inclusion": "exact-reviewed-symbols-only",
+        "dispatch_table": "artifact-owned",
+        "operational_environment": "artifact-owned",
+    }:
         fail("FIPS CPU-package boundary drifted")
 
 
 def validate(root: Path) -> None:
-    policy = read_toml(root / POLICY)
+    policy_path = root / POLICY
+    policy = read_toml(policy_path)
     validate_policy_shape(policy)
     validate_package_policy(root)
     validate_manifests(root)
     validate_sources(root, policy)
     validate_backends(root, policy)
+    if hashlib.sha256(policy_path.read_bytes()).hexdigest() != EXPECTED_POLICY_SHA256:
+        fail("CPU security policy changed; reopen boundary review")

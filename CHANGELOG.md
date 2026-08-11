@@ -7,6 +7,16 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add sealed CPU-backend identities, exact feature bundles, scalar,
+  opportunistic, required-accelerated, and validated-module policies, and inert
+  candidate profiles that cannot authorize an instruction.
+- Add caller-owned no-atomics health sessions, direct-KAT guards, opaque
+  feature and KAT evidence, monotonic health/runtime generations, permanent
+  quarantine, thread-bound active/dispatch tokens, exact-operation selection,
+  and explicit opportunistic scalar-fallback reports.
+- Add nine CPU-backend behavior test groups, seven compile-fail authority and
+  token examples, a SHA-256-locked four-file source policy, and thirteen broken
+  fixtures.
 - Implement nineteen independent provider operations spanning cryptographic,
   signature, KEM, AEAD, entropy, clock, certificate-chain, storage, and pending
   boundaries without implementing any provider effect or algorithm; MAC
@@ -45,15 +55,18 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
-- Advance the `brynja` facade to `0.13.0` while retaining `brynja-core 0.7.0`
+- Advance the `brynja` facade to `0.13.1` while retaining `brynja-core 0.7.0`
   and every other supporting-crate version; select zero crates for crates.io
   publication at this internal development milestone.
+- Freeze the CPU backend contract before any ISA implementation exists; defer
+  isolated kernels, std detection, unsafe admission, and native performance
+  evidence to v0.13.2 and v0.13.3.
 - Freeze provider authority in upstream `brynja-core`; keep
   `brynja-platform` as a downstream future implementation boundary and do not
   introduce a registry, fallback provider, platform dependency, or effect.
 - Refresh the Miri and Rust sanitizer evidence toolchain to
-  `nightly-2026-08-10` at exact Rust revision
-  `969b803cbe1d4499f841ae0a49c637d8c70a0458` after the online freshness gate.
+  `nightly-2026-08-11` at exact Rust revision
+  `12c36e2539c54397c51d6ea4401defd8768a4f5b` after the online freshness gate.
 - Complete the v0.12.0 constant-time foundation without selecting any crate for
   publication; require its exceptional assessment before the signed tag.
 - Clarify in the shared package header and main README that Brynja is a
@@ -92,7 +105,13 @@ Keep a Changelog and Semantic Versioning.
   installed provider's frozen budget.
 - Record the repository-owner retest of exact signed v0.13.0 remediation
   candidate `b45185e5aefdd48b9dc1859fee7a9000be9b6168` as PASS/PASS with
-  zero open findings; keep the tag blocked until GitHub and CodeQL are green.
+  zero open findings; signed tag v0.13.0 contains the remediated contract.
+- Prevent safe candidate observations, profiles, reports, or public approval
+  values from becoming backend authority; require opaque exact evidence and a
+  direct KAT result before activation.
+- Quarantine recursive, interrupted, failed, mismatched, or approval-invalid
+  initialization permanently; reject stale health/runtime generations and
+  unsupported operations immediately before future direct kernel entry.
 - Remediate the pentest's High RV32 timing finding by passing every expanded
   word and array mask through the non-inlined optimization barrier before
   XOR/AND selection, then close two Medium assurance-scanner bypasses through

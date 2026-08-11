@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.12.0 tagged; v0.13.0 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.13.0 tagged; v0.13.1 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -9,7 +9,9 @@ abstract secret-lifetime contract, and a byte-backed exclusive borrowed secret
 region with complete-region volatile clearing, plus fixed-width constant-time
 choice, mask, equality, selection, swap, and compiler-barrier operations, and
 provider capability, installation, opaque-handle, authorization, and bounded
-request-metadata contracts. It still has no integer
+request-metadata contracts, plus inert CPU-backend profiles, exact feature and
+operation bundles, explicit selection policy, caller-owned KAT/health state,
+permanent quarantine, and thread-bound dispatch authority. It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
@@ -27,13 +29,16 @@ v0.11.1 admitted the optional sanitization adapter and v0.11.2 implemented it;
 both exceptional assessments are permanently recorded with zero open findings.
 The v0.12.0 exceptional assessment and retest passed after closing one High
 RV32 branch-timing flaw and two Medium assurance-scanner gaps; signed v0.12.0
-published no crate. The facade now advances to `0.13.0` for upstream provider
+published no crate. The facade then advanced to `0.13.0` for upstream provider
 capability and opaque-handle contracts while all crates.io publication
-selections remain empty. Its voluntary assessment found three High
+selections remained empty. Its voluntary assessment found three High
 authorization/provider-binding flaws and one Medium work-accounting flaw. The
 four source remediations are complete, and the repository-owner retest of exact
 signed candidate `b45185e5aefdd48b9dc1859fee7a9000be9b6168` passed with zero
-open findings. The tag remains blocked until GitHub and CodeQL are green.
+open findings. Signed tag v0.13.0 contains the remediated contract and selected
+no crates.io publication. The facade now advances to `0.13.1` for the
+CPU-backend capability and dispatch contract while every support-crate version
+and crates.io publication selection remains unchanged.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -455,9 +460,27 @@ Version 0.13.0 implements provider capability and opaque-handle contracts:
 The boundary has no algorithm or key identifiers, mutable output, provider
 completion, entropy health, clock units, certificate-path semantics, storage
 backend, pending lifecycle, platform effect, CPU dispatch, or FIPS approval.
-v0.13.0 selects no crates.io publication and awaits repository-owner remediation
-retest before the complete local gate, green GitHub and CodeQL, and explicit
-signed-tag authorization.
+The repository-owner remediation retest passed with zero open findings. Signed
+v0.13.0 selects no crates.io publication.
+
+Version 0.13.1 implements the CPU-backend capability and dispatch contract:
+
+- sealed scalar, x86, AArch64, RISC-V, and validated-module identities bind
+  exact feature and provider-operation profiles without authorizing execution;
+- opaque feature and KAT evidence, caller-owned no-atomics health state,
+  monotonic health/runtime generations, direct initialization, permanent
+  quarantine, and thread-bound active authority separate observation from use;
+- exact-operation dispatch revalidates identity, health, runtime, operation,
+  and observational service approval before any later kernel entry; and
+- scalar-only, opportunistic, required-accelerated, and validated-module
+  policies make fallback explicit and make required modes fail closed.
+
+Nine behavior groups, seven compile-fail examples, a SHA-256-locked four-file
+source policy, and thirteen broken fixtures enforce the boundary. It contains
+no CPU probe, intrinsic, assembly, accelerated kernel, unsafe backend boundary,
+global cache, provider effect, performance claim, or FIPS validation. v0.13.1
+selects no crates.io publication and awaits green GitHub and CodeQL before
+explicit signed-tag authorization.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

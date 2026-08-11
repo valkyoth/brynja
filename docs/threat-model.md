@@ -187,7 +187,7 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
   validated artifacts, and fail-closed claim withdrawal or revalidation after
   guidance, algorithm, vulnerability, patch, certificate, or environment drift.
 
-## Non-Goals At 0.13.0
+## Non-Goals At 0.13.1
 
 No transport security or interoperability guarantee exists. The only protocol
 code consists of allocation-free shared alert/failure, bounded
@@ -206,6 +206,14 @@ or complete the operation. A later trusted provider effect must derive and
 charge actual work before each expensive step and return its authoritative
 result directly; application code cannot supply a work estimate or construct a
 result receipt.
+v0.13.1 backend types add only inert identities, exact feature/operation
+profiles, policy selection, caller-owned KAT health state, generation
+invalidation, permanent quarantine, and opaque thread-bound authority. They do
+not detect a CPU, call an intrinsic, execute assembly or a kernel, initialize a
+global cache, measure performance or timing, approve a module, complete a
+provider effect, or establish FIPS validation. Public profiles, features,
+approval values, snapshots, and reports are observational and cannot construct
+feature evidence, KAT evidence, active authority, or dispatch authority.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
@@ -237,7 +245,9 @@ allocation clearing primitive and affine byte-backed region states; it makes no
 platform-wide erasure, protocol, interoperability, independent-review, FIPS, or
 production claim. v0.12.0 adds only fixed-width constant-time operations and
 bounded compiler evidence. v0.13.0 adds only provider capabilities, opaque
-authority tokens, and bounded immutable request metadata. Planned,
+authority tokens, and bounded immutable request metadata. v0.13.1 adds only
+CPU-backend capability, health, policy, and dispatch contracts without any
+backend implementation or detection. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

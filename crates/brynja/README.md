@@ -72,8 +72,19 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.13.0` development line adds provider capability and opaque-handle
-contracts to `brynja-core`. Nineteen exact operations remain direction-specific,
+The current `0.13.1` development line adds a version-neutral CPU-backend
+contract to `brynja-core`. Sealed scalar, x86, AArch64, RISC-V, and
+validated-module identities bind exact feature and provider-operation profiles.
+Caller-owned health state separates detection evidence, direct startup KATs,
+per-operation dispatch authority, permanent quarantine, runtime generations,
+and secret-free reporting. Opportunistic policy reports scalar fallback;
+required-accelerated and validated-module policies fail closed. Authority and
+KAT evidence are opaque and thread-bound. This milestone adds no CPU detection,
+intrinsic, assembly, accelerated kernel, unsafe backend boundary, provider
+effect, performance claim, or FIPS validation.
+
+Version `0.13.0` added provider capability and opaque-handle contracts to
+`brynja-core`. Nineteen exact operations remain direction-specific,
 including separate MAC generation and verification. Capabilities, caller
 resource/work limits, and mandatory secret-destruction duties freeze through
 transactional installation. Protocol code explicitly chooses one opaque
@@ -169,9 +180,9 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
-v0.12.0, which was intentionally not published to crates.io. The v0.13.0
-exceptional pentest and remediation retest passed with zero open findings; its
-signed tag still awaits green GitHub and CodeQL. The published dependency is:
+v0.13.0, whose exceptional pentest and remediation retest passed with zero open
+findings and which was intentionally not published to crates.io. The current
+v0.13.1 candidate awaits green GitHub and CodeQL. The published dependency is:
 
 ```toml
 [dependencies]
@@ -279,7 +290,7 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider capability, authorization, and request contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider and CPU-backend capability, authorization, health, and dispatch contracts | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
@@ -362,7 +373,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.97.1`, the current stable patch release checked on 2026-08-09.
+to Rust `1.97.1`, the current stable patch release checked on 2026-08-11.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 
@@ -417,6 +428,8 @@ python3 scripts/check-constant-time-evidence.py
 python3 scripts/test-constant-time-evidence.py
 python3 scripts/check-provider-contract.py
 python3 scripts/test-provider-contract.py
+python3 scripts/check-backend-contract.py
+python3 scripts/test-backend-contract.py
 python3 scripts/check-zeroization-evidence.py
 scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
@@ -428,7 +441,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.13.0
+scripts/tag_gate.sh v0.13.1
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

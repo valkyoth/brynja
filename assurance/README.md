@@ -1,6 +1,6 @@
 # Assurance Harness And Bare-Metal Matrix
 
-Status: v0.4.0 assurance foundation released; v0.12.0 emitted-code and v0.13.0 provider-source evidence added
+Status: v0.4.0 assurance foundation released; v0.12.0 emitted-code, v0.13.0 provider-source, and v0.13.1 backend-contract evidence added
 
 This directory freezes the first-party assurance boundary before protocol or
 cryptographic implementation begins. It is infrastructure evidence, not proof
@@ -13,6 +13,16 @@ request-side result construction, exact-provider detachment, caller-supplied
 work claims, and verification byte output. That policy enforces authority and
 dependency structure; it is not provider-effect, algorithm, interoperability,
 or formal-verification evidence.
+
+The v0.13.1 CPU-backend contract adds a separate four-file hash-locked source
+validator and thirteen broken fixtures through
+`scripts/check-backend-contract.py` and
+`scripts/test-backend-contract.py`. It rejects ISA execution, public evidence
+forgery, thread-token drift, atomics/global state, stale generations,
+resettable quarantine, unsupported-operation dispatch, recursive fallback,
+validated-policy substitution, registries, and unreviewed source changes. It
+does not provide a CPU probe, backend implementation, KAT corpus, concurrency
+model checker, native-host result, performance evidence, or FIPS validation.
 
 `policy.toml` defines bounded deterministic mutation, raw-stdin differential
 adapters, OS-less compilation targets, and exact external-tool source pins.
@@ -115,4 +125,8 @@ scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 python3 scripts/test-constant-time-codegen.py
 python3 scripts/check-constant-time-evidence.py
 python3 scripts/test-constant-time-evidence.py
+python3 scripts/check-provider-contract.py
+python3 scripts/test-provider-contract.py
+python3 scripts/check-backend-contract.py
+python3 scripts/test-backend-contract.py
 ```

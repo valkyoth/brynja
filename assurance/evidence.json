@@ -6,10 +6,10 @@
   ],
   "harness_protocol": "brynja-stdin-json-v1",
   "inputs": {
-    ".github/workflows/ci.yml": "e7b2ab4df11efb276d28c8e78577f90559924827bcded8d6ac4e1ff0c7fe740d",
+    ".github/workflows/ci.yml": "9e63d6c7b8b3d1794171521fdec6a03d52a166a1e8e3ee375bd42fdbc5ada167",
     "Cargo.toml": "07c3d0ef0d65e4f52ae19a50524845eab93057831c779ccc676eaa860a2157f7",
-    "assurance/policy.toml": "720838d3c0ea4f9c343dd40eff311cdcffa39e0539d2b4b557964a2b55a540ad",
-    "assurance/zeroization-matrix.toml": "ab01168790198edd55bca79eb2bd3c8a276cbaf38dd530e60cf553756eafd44e",
+    "assurance/policy.toml": "24f1993ad35446eac832012520bb1de4dbf2b541c16bc33757623c8e53f25385",
+    "assurance/zeroization-matrix.toml": "acd45a893179a3d4c42fe44df98e0fec19722825a6f46d36c7ea32178d74bbd1",
     "crates/brynja-core/Cargo.toml": "42c16a2d8c432fe0ff4264bb46ab1f6b06f768cdd2b0ca978b3c8551a286e704",
     "crates/brynja-core/src/secret_memory.rs": "0b82ff4e7a535535aed48fcf25543435850a7d9239addb933cd94e951b19ac84",
     "crates/brynja-core/src/secret_memory_volatile.rs": "2746e34bfd55c80def2acf6afdfd6798d51291ea4255732e26a360d17d43dfb1",
@@ -37,7 +37,7 @@
     "crates/brynja-tls13-handshake/Cargo.toml": "df9df9687b00ba5b200caa931a4e277e23fc95d273870969e578f5a2b25070e6",
     "crates/brynja-tls13/Cargo.toml": "f6f38215ef2415bb89a6d611bed819a83de7af9a1b145dae80e1fadffe5d58fb",
     "crates/brynja-xtask/Cargo.toml": "e178b328289b523b7dc0a9d994cf5409ae54a44ba4198092c520ee45f1247d50",
-    "crates/brynja/Cargo.toml": "dc2a283c2f3ea41b88abb38b08271a034871213d170fc258db515d7aebc31ac9",
+    "crates/brynja/Cargo.toml": "48398d74f20bdeb6ae2f8b272cf9f8fa75c44fc86b976a26f9fc68330a6ca60c",
     "docs/KANI.md": "faf8ff6bb60ba18512acb30eb8ba428826e9a18d0076173fb19d1630f1722794",
     "docs/unsafe-policy.md": "18b834f74f27ccbe448f900dce93db259e4c5831dff04f0238008491e2d4fc72",
     "rust-toolchain.toml": "7c2f0a64d6cb4c7b9fb3dc70adbcdb8727a1396367605a09e29bee276044dc23",
@@ -55,16 +55,16 @@
     "scripts/check-unsafe-policy.py": "8b23579ea13ad0d55fc08fdbca2f6fe2c9aa8f7357bc36bceba30531ee414c6d",
     "scripts/check-zeroization-codegen.sh": "71c83e5a0f59fd10bb5f4667e7aaf76c28acf33bffb4aacd433adfa6fba38cc5",
     "scripts/check-zeroization-evidence.py": "8888f925271a52c7ca465931b4f7f0ff9a1e67d8f3e634d261ff1be26880687a",
-    "scripts/check-zeroization-miri.sh": "c3dbc21ba971c582f04f25538e7064af2b205712864ca17bbd8695a0a7364577",
-    "scripts/check-zeroization-sanitizer.sh": "75525a47f4659ddd20317a929d7290de79b57bc6603395afa3ee2e8efd3232eb",
+    "scripts/check-zeroization-miri.sh": "e2abe338493188150e2a125d4249507c351a5dd97421fa08c29968715b34f2df",
+    "scripts/check-zeroization-sanitizer.sh": "59023529710f15653aa2333c9203ed5e3d66112bf5b8d471d8190e4f04cd7ab0",
     "scripts/test-assurance.py": "dab9086f1927b7890b13e50ed513ac21c81b39e907133c89f0c9ac891b59023c",
     "scripts/test-unsafe-policy.py": "1f1ff3fc88d552c87eed3e8c3bdbff86f8df55109bd7532ab8086194fbf603af",
     "scripts/test-zeroization-evidence.py": "bbc4d9cec588b24418508c63e8f46e397d157cef54ad0a5f9a1e96b5479a2ce5",
     "scripts/unsafe_policy.py": "90c980281f9f70d0100bf530b14acf96f043de87fe258a9118c21dea56e436ba",
-    "scripts/zeroization_evidence.py": "019fd174e572d6260a60ac6e630c7505606d28138fc73fd0208a9104420acba6"
+    "scripts/zeroization_evidence.py": "2e29dae0552e491f639f53e65621187d5b1f8020f99410ba60a257834d66b6d2"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "720838d3c0ea4f9c343dd40eff311cdcffa39e0539d2b4b557964a2b55a540ad",
+  "policy_sha256": "24f1993ad35446eac832012520bb1de4dbf2b541c16bc33757623c8e53f25385",
   "schema": 1,
   "tools": [
     {
@@ -91,16 +91,16 @@
     {
       "id": "miri",
       "owner": "0.11.0",
-      "revision": "969b803cbe1d4499f841ae0a49c637d8c70a0458",
+      "revision": "12c36e2539c54397c51d6ea4401defd8768a4f5b",
       "source_kind": "rustup-component",
-      "version": "nightly-2026-08-10"
+      "version": "nightly-2026-08-11"
     },
     {
       "id": "rust-sanitizers",
       "owner": "0.11.0",
-      "revision": "969b803cbe1d4499f841ae0a49c637d8c70a0458",
+      "revision": "12c36e2539c54397c51d6ea4401defd8768a4f5b",
       "source_kind": "rust-toolchain",
-      "version": "nightly-2026-08-10"
+      "version": "nightly-2026-08-11"
     }
   ]
 }

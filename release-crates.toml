@@ -1,26 +1,26 @@
 [release]
-version = "0.13.0"
-milestone = "0.13.0"
+version = "0.13.1"
+milestone = "0.13.1"
 baseline = "0.10.0"
-cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0"]
+cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0", "0.13.1"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "The voluntary v0.13.0 provider-authority assessment found three High authorization or provider-binding flaws and one Medium work-accounting flaw; the repository owner retested the exact signed remediation candidate and confirmed all four closed with zero open findings."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.12.0"
-version = "0.13.0"
+previous_version = "0.13.0"
+version = "0.13.1"
 change = "code"
 publish = false
-reason = "Expose the completed v0.13.0 provider capability and opaque-handle contracts through the existing core re-export while selecting no crate for crates.io publication."
+reason = "Expose the completed v0.13.1 CPU-backend capability and dispatch contracts through the existing core re-export while selecting no crate for crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.7.0"
 version = "0.7.0"
 change = "code"
 publish = false
-reason = "Retain published 0.7.0 while carrying the cumulative owned-memory, constant-time, and provider-contract implementations to the v0.15.0 checkpoint."
+reason = "Retain published 0.7.0 while carrying the cumulative owned-memory, constant-time, provider, and CPU-backend contract implementations to the v0.15.0 checkpoint."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.0"

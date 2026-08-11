@@ -1209,7 +1209,7 @@ Exit criteria:
 
 ### v0.13.0 - Provider Capabilities And Opaque Handles
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Define all protocol-facing crypto, signature, KEM, AEAD, entropy, clock, path, storage, and pending-operation contracts in upstream no_std interface modules such as brynja-core, with opaque handles, frozen capabilities, transactional installation, exact-operation token binding, and no implicit fallback; brynja-platform only implements downstream contracts.
 
@@ -1240,7 +1240,7 @@ Exit criteria:
 
 ### v0.13.1 - CPU Backend Capability And Dispatch Contract
 
-Status: planned
+Status: awaiting green CI
 
 Plan scope: Before any cryptographic primitive exists, freeze first-party scalar, opportunistic-accelerated, required-accelerated, and validated-module backend policies; separate candidate detection from admitted activation; define exact feature-bundle evidence, non-forgeable thread-bound capability tokens, backend identity, per-operation dispatch, startup known-answer tests, health generations, quarantine, fail-closed required mode, and secret-free reporting so safe code cannot execute an unsupported instruction or silently change service approval.
 

@@ -7,6 +7,9 @@
 
 pub mod alert;
 pub mod arena_domain;
+pub mod backend;
+pub mod backend_dispatch;
+pub mod backend_session;
 pub mod budget;
 pub mod close;
 pub mod constant_time;
@@ -28,12 +31,29 @@ pub mod version;
 pub mod workspace;
 pub mod write;
 
+#[cfg(test)]
+mod backend_session_tests;
+
 pub use alert::{
     Alert, AlertClass, AlertCode, AlertCodeClass, AlertDescription, AlertOrigin, AlertSeverity,
 };
 pub use arena_domain::{
     ArenaDomain, ArenaKind, CertificateDomain, OutputDomain, PlaintextDomain, SecretDomain,
     TranscriptDomain,
+};
+pub use backend::{
+    BackendCandidate, BackendClass, BackendEvidenceOrigin, BackendFeature, BackendFeatureError,
+    BackendFeatureEvidence, BackendFeatures, BackendFeaturesBuilder, BackendGenerationError,
+    BackendIdentity, BackendPolicy, BackendProfile, BackendProfileError, BackendRuntimeGeneration,
+};
+pub use backend_dispatch::{
+    ActiveBackend, BackendDispatch, BackendDispatchError, BackendFallbackReason,
+    BackendSelectionReason, BackendSelectionReport, select_backend,
+};
+pub use backend_session::{
+    BackendFault, BackendHealthSnapshot, BackendHealthState, BackendInitialization,
+    BackendInitializationError, BackendKatFailure, BackendKatPass, BackendServiceApproval,
+    BackendSession, BackendSessionError,
 };
 pub use budget::{
     BudgetBuildError, ResourceBudget, ResourceBudgetBuilder, ResourceDomain, WorkBudget,
@@ -110,6 +130,9 @@ pub const CONSTANT_TIME_FOUNDATION_IMPLEMENTED: bool = true;
 /// Whether the v0.13 provider capability and opaque-handle contracts are implemented.
 pub const PROVIDER_CONTRACTS_IMPLEMENTED: bool = true;
 
+/// Whether the v0.13.1 CPU backend capability and dispatch contract is implemented.
+pub const CPU_BACKEND_CONTRACT_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -131,6 +154,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::PROVIDER_CONTRACTS_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::CPU_BACKEND_CONTRACT_IMPLEMENTED
         ));
     }
 }

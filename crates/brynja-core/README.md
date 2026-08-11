@@ -25,8 +25,9 @@
 
 # brynja-core
 
-`brynja-core 0.7.0` now carries the cumulative v0.13 provider capability and
-opaque-handle contracts alongside the v0.12 constant-time foundation, v0.11
+`brynja-core 0.7.0` now carries the cumulative v0.13.1 CPU-backend capability
+and dispatch contract plus the v0.13 provider capability and opaque-handle
+contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. The package
 version remains `0.7.0` until the v0.15.0 public checkpoint.
@@ -133,6 +134,24 @@ algorithm, provider effect, output commit, entropy health, clock semantics,
 certificate path, storage backend, pending-operation lifecycle, CPU dispatch,
 or FIPS approval.
 
+v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
+identities; exact feature and provider-operation profiles; scalar-only,
+opportunistic, required-accelerated, and validated-module policies; and
+caller-owned no-atomics health state. Opaque feature and KAT evidence separate
+candidate observation from activation. Direct-KAT guards quarantine on
+recursion, failure, panic, cancellation, or early return. Healthy authority is
+thread-bound and revalidates runtime generation, health generation, backend
+identity, and exact operation before future direct kernel entry. Only
+opportunistic policy can return an explicit scalar-fallback reason; required
+and validated policies fail closed.
+
+Nine behavioral test groups, seven compile-fail examples, a hash-locked
+four-file source policy, and thirteen broken fixtures enforce this boundary.
+There is still no CPU detection, intrinsic, assembly, accelerated kernel,
+global cache, unsafe backend boundary, performance claim, provider effect, or
+FIPS validation. Public profiles, features, snapshots, approval values, and
+reports are observational and cannot construct backend authority.
+
 ## Cryptography Verification Status
 
 The provider and constant-time foundations and the earlier core domains have
@@ -143,7 +162,7 @@ independent cryptographic or protocol verification.
 
 | Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider capability, authorization, and request contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider and CPU-backend capability, authorization, health, and dispatch contracts | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -154,7 +173,7 @@ brynja = "0.10"
 
 The `0.7.0` package was published with Brynja v0.10.0 after its pentest,
 remediation retest, and hosted checks passed. It remains at `0.7.0` during the
-v0.13.0 development milestone and is not selected for publication
+v0.13.1 development milestone and is not selected for publication
 under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

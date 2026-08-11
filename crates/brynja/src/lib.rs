@@ -52,6 +52,9 @@ mod tests {
         assert!(::core::hint::black_box(
             super::core::PROVIDER_CONTRACTS_IMPLEMENTED
         ));
+        assert!(::core::hint::black_box(
+            super::core::CPU_BACKEND_CONTRACT_IMPLEMENTED
+        ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);
         assert_eq!(cursor.finish().map(|finished| finished.len()), Ok(0));

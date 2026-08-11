@@ -1,0 +1,216 @@
+[schema]
+version = 1
+milestone = "0.13.3"
+status = "admission-contracts-only"
+
+[limits]
+maximum_manifest_bytes = 1048576
+maximum_evidence_manifests = 256
+maximum_raw_artifact_bytes = 16777216
+maximum_total_raw_artifact_bytes = 67108864
+maximum_evidence_age_days = 90
+minimum_benchmark_samples = 31
+maximum_benchmark_samples = 100000
+maximum_coefficient_of_variation_ppm = 100000
+maximum_order_imbalance = 1
+minimum_speedup_ppm = 1050000
+maximum_code_size_increase_bytes = 65536
+maximum_cold_start_nanoseconds = 5000000
+
+[admission]
+default = "unadmitted"
+scalar_build_independent = true
+native_performance_required = true
+native_side_channel_required = true
+emulation_role = "supplemental-instruction-coverage-only"
+unavailable_lane_result = "unadmitted"
+unmeasured_backend_result = "unadmitted"
+mixed_cpu_runs = "forbidden"
+non_finite_measurements = "forbidden"
+raw_results = "hash-bound-regular-files"
+benchmark_schedule = "deterministic-balanced-interleaved"
+frequency_policy = "recorded-and-stable"
+
+[record_schema]
+top_level = ["schema", "run", "cpu", "environment", "workload", "results", "artifacts", "claims"]
+schema = ["version", "kind"]
+run = ["id", "created_utc", "source_commit", "lane", "backend", "primitive", "operation", "runner_owner", "execution_kind", "status"]
+cpu = ["architecture", "vendor", "model", "family", "stepping", "microcode_or_firmware", "logical_cpu", "logical_cpu_identity_sha256", "observed_features", "operating_state"]
+environment = ["os", "kernel", "virtualization", "compiler", "compiler_commit", "target", "rustflags", "frequency_policy", "clock_source", "isolation"]
+workload = ["distribution", "sizes", "corpus_sha256", "schedule", "schedule_sha256", "sample_count"]
+results = ["forced_backend", "required_mode", "unsupported_feature", "known_answer", "quarantine", "scalar_differential", "concurrency_isolation", "emitted_code", "side_channel", "code_size_increase_bytes", "cold_start_nanoseconds", "latency_median_nanoseconds", "latency_p95_nanoseconds", "throughput_bytes_per_second", "coefficient_of_variation_ppm", "speedup_ppm", "order_imbalance", "cpu_identity_count"]
+artifact = ["harness", "path", "sha256", "bytes"]
+claims = ["native_performance", "native_side_channel", "admission_eligible", "residual_gaps"]
+
+[workload]
+distribution = "boundary-and-streaming-v1"
+sizes = [0, 1, 15, 16, 31, 32, 63, 64, 65, 255, 256, 1024, 16384, 1048576]
+required_result = "pass"
+required_side_channel_result = "pass-no-detectable-leakage"
+required_residual_gap = "statistical-testing-is-not-proof"
+
+[[harnesses]]
+id = "forced-backend"
+class = "correctness"
+native_required = false
+failure = "requested-and-observed-backend-differ"
+
+[[harnesses]]
+id = "required-mode"
+class = "negative"
+native_required = false
+failure = "required-acceleration-fell-back-to-scalar"
+
+[[harnesses]]
+id = "unsupported-feature"
+class = "negative"
+native_required = false
+failure = "kernel-entered-without-complete-feature-bundle"
+
+[[harnesses]]
+id = "known-answer"
+class = "fault-injection"
+native_required = false
+failure = "bad-known-answer-did-not-fail-closed"
+
+[[harnesses]]
+id = "quarantine"
+class = "fault-injection"
+native_required = false
+failure = "failed-backend-remained-selectable"
+
+[[harnesses]]
+id = "scalar-differential"
+class = "correctness"
+native_required = false
+failure = "accelerated-output-differs-from-scalar"
+
+[[harnesses]]
+id = "concurrency-isolation"
+class = "correctness"
+native_required = false
+failure = "session-or-cpu-authority-crossed-worker"
+
+[[harnesses]]
+id = "emitted-code"
+class = "codegen"
+native_required = false
+failure = "required-instruction-or-wrapper-invariant-absent"
+
+[[harnesses]]
+id = "code-size"
+class = "performance"
+native_required = true
+failure = "code-size-budget-exceeded"
+
+[[harnesses]]
+id = "cold-start"
+class = "performance"
+native_required = true
+failure = "initialization-budget-exceeded"
+
+[[harnesses]]
+id = "latency"
+class = "performance"
+native_required = true
+failure = "latency-or-noise-budget-failed"
+
+[[harnesses]]
+id = "throughput"
+class = "performance"
+native_required = true
+failure = "useful-speedup-threshold-failed"
+
+[[harnesses]]
+id = "side-channel"
+class = "security"
+native_required = true
+failure = "statistical-side-channel-gate-failed"
+
+[[lanes]]
+id = "local-amd-x86_64"
+execution_kind = "native"
+architecture = "x86_64"
+os = "linux"
+runner_owner = "repository-owner-local"
+provider = "self-hosted"
+selection = "observed-features-not-product-name"
+vendor_rule = "exact:AuthenticAMD"
+status = "registered-unmeasured"
+
+[[lanes]]
+id = "aws-intel-x86_64"
+execution_kind = "native"
+architecture = "x86_64"
+os = "linux"
+runner_owner = "repository-owner-aws"
+provider = "aws"
+selection = "observed-features-not-product-name"
+vendor_rule = "exact:GenuineIntel"
+status = "registered-unavailable"
+
+[[lanes]]
+id = "apple-m2-aarch64"
+execution_kind = "native"
+architecture = "aarch64"
+os = "macos"
+runner_owner = "repository-owner-local"
+provider = "self-hosted"
+selection = "observed-features-not-product-name"
+vendor_rule = "exact:Apple"
+status = "registered-unmeasured"
+
+[[lanes]]
+id = "aws-aarch64"
+execution_kind = "native"
+architecture = "aarch64"
+os = "linux"
+runner_owner = "repository-owner-aws"
+provider = "aws"
+selection = "observed-features-not-product-name"
+vendor_rule = "recorded-nonempty"
+status = "registered-unmeasured"
+
+[[lanes]]
+id = "riscv64-cloud"
+execution_kind = "native"
+architecture = "riscv64"
+os = "linux"
+runner_owner = "repository-owner-remote"
+provider = "riscv-cloud"
+selection = "observed-isa-and-state-not-product-name"
+vendor_rule = "recorded-nonempty"
+status = "registered-unmeasured"
+
+[[lanes]]
+id = "qemu-x86_64"
+execution_kind = "emulated"
+architecture = "x86_64"
+os = "linux"
+runner_owner = "repository-ci"
+provider = "qemu"
+selection = "explicit-emulated-cpu-model"
+vendor_rule = "exact:QEMU"
+status = "supplemental-only"
+
+[[lanes]]
+id = "qemu-aarch64"
+execution_kind = "emulated"
+architecture = "aarch64"
+os = "linux"
+runner_owner = "repository-ci"
+provider = "qemu"
+selection = "explicit-emulated-cpu-model"
+vendor_rule = "exact:QEMU"
+status = "supplemental-only"
+
+[[lanes]]
+id = "qemu-riscv64"
+execution_kind = "emulated"
+architecture = "riscv64"
+os = "linux"
+runner_owner = "repository-ci"
+provider = "qemu"
+selection = "explicit-emulated-cpu-model"
+vendor_rule = "exact:QEMU"
+status = "supplemental-only"

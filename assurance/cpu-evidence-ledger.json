@@ -1,0 +1,166 @@
+{
+  "admissions": {
+    "path": "security/cpu-backend-admissions.toml",
+    "sha256": "ce62214892a28107201ce939ba5288627117b3589e9bf7c63350953570c9e1b9"
+  },
+  "backends": [
+    {
+      "architecture": "x86_64",
+      "id": "x86-sha",
+      "native_lanes": [
+        "local-amd-x86_64",
+        "aws-intel-x86_64"
+      ],
+      "reason": "no-primitive-implementation-or-native-evidence",
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "x86_64",
+      "id": "x86-aes-gcm",
+      "native_lanes": [
+        "local-amd-x86_64",
+        "aws-intel-x86_64"
+      ],
+      "reason": "no-primitive-implementation-or-native-evidence",
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "x86_64",
+      "id": "x86-avx2",
+      "native_lanes": [
+        "local-amd-x86_64",
+        "aws-intel-x86_64"
+      ],
+      "reason": "no-primitive-implementation-or-native-evidence",
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "x86_64",
+      "id": "x86-avx512",
+      "native_lanes": [
+        "local-amd-x86_64",
+        "aws-intel-x86_64"
+      ],
+      "reason": "no-primitive-implementation-or-native-evidence",
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "aarch64",
+      "id": "aarch64-sha2",
+      "native_lanes": [
+        "apple-m2-aarch64",
+        "aws-aarch64"
+      ],
+      "reason": "no-primitive-implementation-or-native-evidence",
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "aarch64",
+      "id": "aarch64-aes-gcm",
+      "native_lanes": [
+        "apple-m2-aarch64",
+        "aws-aarch64"
+      ],
+      "reason": "no-primitive-implementation-or-native-evidence",
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "riscv64",
+      "id": "riscv-vector",
+      "native_lanes": [
+        "riscv64-cloud"
+      ],
+      "reason": "no-primitive-implementation-or-qualifying-native-isa-evidence",
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "riscv64",
+      "id": "riscv-scalar-crypto",
+      "native_lanes": [
+        "riscv64-cloud"
+      ],
+      "reason": "no-primitive-implementation-or-qualifying-native-isa-evidence",
+      "status": "unadmitted"
+    }
+  ],
+  "claims": {
+    "admitted_backend_count": 0,
+    "native_result_count": 0,
+    "portable_scalar_blocked_by_unavailable_lane": false,
+    "qemu_can_satisfy_native_evidence": false
+  },
+  "evidence_manifests": [],
+  "harnesses": [
+    "forced-backend",
+    "required-mode",
+    "unsupported-feature",
+    "known-answer",
+    "quarantine",
+    "scalar-differential",
+    "concurrency-isolation",
+    "emitted-code",
+    "code-size",
+    "cold-start",
+    "latency",
+    "throughput",
+    "side-channel"
+  ],
+  "lanes": [
+    {
+      "architecture": "x86_64",
+      "execution_kind": "native",
+      "id": "local-amd-x86_64",
+      "status": "registered-unmeasured"
+    },
+    {
+      "architecture": "x86_64",
+      "execution_kind": "native",
+      "id": "aws-intel-x86_64",
+      "status": "registered-unavailable"
+    },
+    {
+      "architecture": "aarch64",
+      "execution_kind": "native",
+      "id": "apple-m2-aarch64",
+      "status": "registered-unmeasured"
+    },
+    {
+      "architecture": "aarch64",
+      "execution_kind": "native",
+      "id": "aws-aarch64",
+      "status": "registered-unmeasured"
+    },
+    {
+      "architecture": "riscv64",
+      "execution_kind": "native",
+      "id": "riscv64-cloud",
+      "status": "registered-unmeasured"
+    },
+    {
+      "architecture": "x86_64",
+      "execution_kind": "emulated",
+      "id": "qemu-x86_64",
+      "status": "supplemental-only"
+    },
+    {
+      "architecture": "aarch64",
+      "execution_kind": "emulated",
+      "id": "qemu-aarch64",
+      "status": "supplemental-only"
+    },
+    {
+      "architecture": "riscv64",
+      "execution_kind": "emulated",
+      "id": "qemu-riscv64",
+      "status": "supplemental-only"
+    }
+  ],
+  "policy": {
+    "path": "assurance/cpu-evidence-policy.toml",
+    "sha256": "17798d8ad8ff9f6a9aa1a755a359de7d1869923357c60fa44f7e0bec11866182"
+  },
+  "schema": {
+    "milestone": "0.13.3",
+    "version": 1
+  }
+}

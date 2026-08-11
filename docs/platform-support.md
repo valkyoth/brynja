@@ -11,7 +11,7 @@ Status: policy
 | Compile | Bare metal | `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and `x86_64-unknown-none` all-feature workspace checks |
 | Contract | Aesynx | Stable adapter contract plus executable target-ABI or emulator harness required for v1 |
 
-## Planned Native CPU-Acceleration Evidence
+## Registered Native CPU-Acceleration Evidence
 
 | Architecture lane | Available native evidence | Admission rule |
 | --- | --- | --- |
@@ -30,6 +30,11 @@ Cross-compilation and QEMU prove build and supplemental instruction behavior,
 not native performance, microarchitecture-specific side channels, CPU feature
 detection, or production support. An unavailable or non-qualifying machine
 produces a visible candidate or scalar-only result rather than a support claim.
+Version 0.13.3 binds these lanes, three supplemental QEMU routes, exact
+provenance fields, raw-artifact hashes, 90-day freshness, noise and
+benchmark-order limits, and code-size, cold-start, latency, throughput, and
+side-channel gates in `assurance/cpu-evidence-policy.toml`. All lanes remain
+unmeasured or unavailable and all eight backends remain unadmitted.
 
 Compilation is not a complete support claim. Production support later requires
 native interoperability, entropy/time integration, lifecycle tests, packaging,

@@ -72,7 +72,18 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.13.2` development line reserves `brynja-crypto-cpu` as a
+The current `0.13.3` development line adds the fail-closed native CPU evidence
+and performance-admission route. A machine-readable schema registers five
+native hardware lanes and three supplemental QEMU lanes, thirteen correctness,
+fault, code-generation, performance, and side-channel harnesses, exact raw-
+artifact hashes, freshness and single-CPU provenance, balanced benchmark
+ordering, and explicit noise, speedup, code-size, and cold-start bounds. Every
+backend remains unimplemented, unmeasured, and unadmitted; emulation cannot
+satisfy native evidence and an unavailable runner never blocks scalar builds.
+The exact fields, budgets, lane states, and residual limits are documented in
+the [CPU backend admission contract](https://github.com/valkyoth/brynja/blob/main/docs/cpu-backend-admission.md).
+
+Version `0.13.2` reserved `brynja-crypto-cpu` as a
 zero-dependency `no_std` package and `brynja-crypto-cpu-std` as its separately
 selected future host detector. Both remain independent of the main facade,
 defaults, and protocol engines. Eight x86_64, AArch64, and RISC-V backend
@@ -199,15 +210,11 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
-v0.13.1. Its exceptional assessment and first retest found three High
-backend-authority flaws; all were remediated, and repository-owner retest of
-exact signed final candidate `738d21227d9681299d7464d9df360cf49cac8cca`
-passed with zero open findings before the signed tag. The current v0.13.2
-package-boundary candidate's one High and one Medium findings are remediated;
+v0.13.2. Its package-boundary candidate's one High and one Medium findings were remediated;
 repository-owner retest of exact signed candidate
 `2fa60d05d8c4472426cdb979243f53e2e959c231` passed with zero open findings.
-The candidate awaits green GitHub and CodeQL and selects no crates.io
-publication.
+The current v0.13.3 CPU-evidence candidate awaits pentest and selects no
+crates.io publication.
 The published dependency is:
 
 ```toml
@@ -460,6 +467,9 @@ python3 scripts/check-provider-contract.py
 python3 scripts/test-provider-contract.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
+python3 scripts/check-cpu-evidence.py
+python3 scripts/test-cpu-evidence.py
+scripts/check-cpu-admission-fixture.sh
 python3 scripts/check-zeroization-evidence.py
 scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
 scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
@@ -471,7 +481,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.13.2
+scripts/tag_gate.sh v0.13.3
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

@@ -240,6 +240,13 @@ admission register. Both packages remain outside the ordinary facade and
 protocol engines. The register admits zero kernels and zero new low-level-code
 allowances; a reserved path, identity, feature bundle, or ABI precondition is
 not execution authority or implementation evidence.
+v0.13.3 adds only the machine-readable native-evidence and performance-
+admission route. It rejects stale, fabricated-native, mixed-CPU, non-finite,
+noisy, order-biased, incomplete, unhashed, or emulation-promoted evidence and
+keeps every unavailable or unmeasured backend unadmitted without blocking
+portable scalar builds. Its mock state fixture and registered hardware lanes
+are not cryptographic implementations, benchmarks, side-channel results,
+support claims, or FIPS approval.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
 authority, dispatch authority, instance identity, CPU lease, trusted CPU
@@ -279,7 +286,9 @@ authority tokens, and bounded immutable request metadata. v0.13.1 adds only
 CPU-backend capability, health, policy, and dispatch contracts without any
 backend implementation or detection. v0.13.2 adds only inert CPU package and
 future-admission boundaries without a primitive, detector, kernel, performance
-claim, independent verification, or FIPS approval. Planned,
+claim, independent verification, or FIPS approval. v0.13.3 adds only evidence
+schema, harness, lane, and zero-admission contracts; it records no native
+result and admits no backend. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

@@ -7,5 +7,5 @@ for toolchain in "${toolchains[@]}"; do
         rustup toolchain install "$toolchain" --profile minimal
     fi
     cargo "+$toolchain" check --workspace --all-features
+    cargo "+$toolchain" check --manifest-path assurance/cpu-admission-fixture/Cargo.toml
 done
-

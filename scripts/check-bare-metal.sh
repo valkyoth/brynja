@@ -9,4 +9,5 @@ while IFS= read -r target; do
         exit 1
     }
     cargo check --workspace --all-features --target "$target"
+    cargo check --manifest-path assurance/cpu-admission-fixture/Cargo.toml --target "$target"
 done

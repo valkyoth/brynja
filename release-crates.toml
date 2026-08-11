@@ -1,19 +1,19 @@
 [release]
-version = "0.13.2"
-milestone = "0.13.2"
+version = "0.13.3"
+milestone = "0.13.3"
 baseline = "0.10.0"
-cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0", "0.13.1", "0.13.2"]
+cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0", "0.13.1", "0.13.2", "0.13.3"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "CPU-boundary source-admission and policy-integrity findings triggered an exceptional assessment; exact signed remediation candidate 2fa60d05d8c4472426cdb979243f53e2e959c231 passed repository-owner retest."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.13.1"
-version = "0.13.2"
-change = "code"
+previous_version = "0.13.2"
+version = "0.13.3"
+change = "metadata"
 publish = false
-reason = "Advance to the v0.13.2 CPU package-boundary milestone while keeping both reserved packages outside the facade and selecting no crate for crates.io publication."
+reason = "Advance to the v0.13.3 CPU evidence-admission milestone, retain zero admitted backends, and select no crate for crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.7.0"
@@ -34,14 +34,14 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Reserve the zero-dependency no_std ISA-kernel package and eight exact backend module contracts without admitting an implementation."
+reason = "Retain the zero-dependency no_std ISA-kernel package and eight exact backend module contracts while the v0.13.3 repository harness admits no implementation."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Reserve the directly selected future host detector adapter as an inert no_std placeholder depending only on brynja-crypto-cpu."
+reason = "Retain the directly selected future host detector adapter as an inert no_std placeholder; registered v0.13.3 lanes implement no detection."
 
 [crates."brynja-pki"]
 previous_version = "0.1.6"

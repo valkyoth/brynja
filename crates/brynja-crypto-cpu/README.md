@@ -35,6 +35,9 @@ cryptographic algorithm, dispatch implementation, low-level-code allowance,
 performance claim, or FIPS validation. Every future backend symbol requires
 its own source hash, feature and ABI preconditions, safe-wrapper invariants,
 KAT and quarantine path, native evidence, and primitive-specific review.
+Version 0.13.3 provides the repository-level evidence schema, native/QEMU lane
+registry, fault and differential fixtures, and performance admission budgets;
+it records no backend result and admits no implementation in this package.
 
 ## Cryptography Verification Status
 
@@ -47,6 +50,6 @@ pentesting do not by themselves constitute independent verification.
 | --- | --- | --- |
 | `brynja-crypto-cpu` | Future first-party CPU cryptographic kernels and static selection | ❌ Not implemented or verified |
 
-The package is not selected for crates.io publication at v0.13.2. The project-
+The package is not selected for crates.io publication at v0.13.3. The project-
 wide first-party Rust, `no_std`, source-size, platform, FIPS, and unsafe-code
 policies apply here.

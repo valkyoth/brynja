@@ -1,6 +1,6 @@
 # Assurance Harness And Bare-Metal Matrix
 
-Status: v0.4.0 assurance foundation released; v0.12.0 emitted-code, v0.13.0 provider-source, and v0.13.1 backend-contract evidence added
+Status: v0.4.0 assurance foundation released; v0.12.0 emitted-code and v0.13.0-v0.13.3 provider/CPU evidence added
 
 This directory freezes the first-party assurance boundary before protocol or
 cryptographic implementation begins. It is infrastructure evidence, not proof
@@ -23,6 +23,19 @@ resettable quarantine, unsupported-operation dispatch, recursive fallback,
 validated-policy substitution, registries, and unreviewed source changes. It
 does not provide a CPU probe, backend implementation, KAT corpus, concurrency
 model checker, native-host result, performance evidence, or FIPS validation.
+
+The v0.13.2 boundary reserves two inert CPU packages and eight exact future
+kernel locations while granting zero executable or low-level authority. The
+v0.13.3 evidence layer adds a separately hash-bound schema, five native and
+three QEMU supplemental lanes, thirteen correctness, negative, fault,
+code-generation, performance, and side-channel harness contracts, an explicit
+zero-admission register, a deterministic ledger, and 39 broken evidence
+fixtures. Its dependency-free `no_std` state fixture exercises scalar,
+positive mock, unsupported, required-mode, KAT, quarantine, differential, and
+independent-session behavior on host and OS-less targets. These are admission
+contracts only: no native result, benchmark, side-channel result, CPU detector,
+ISA kernel, cryptographic primitive, unsafe allowance, performance claim, or
+FIPS approval exists.
 
 `policy.toml` defines bounded deterministic mutation, raw-stdin differential
 adapters, OS-less compilation targets, and exact external-tool source pins.
@@ -129,4 +142,7 @@ python3 scripts/check-provider-contract.py
 python3 scripts/test-provider-contract.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
+python3 scripts/check-cpu-evidence.py
+python3 scripts/test-cpu-evidence.py
+scripts/check-cpu-admission-fixture.sh
 ```

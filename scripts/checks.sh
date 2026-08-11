@@ -20,6 +20,9 @@ python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-boundary.py
 python3 scripts/test-cpu-boundary.py
+python3 scripts/check-cpu-evidence.py
+python3 scripts/test-cpu-evidence.py
+scripts/check-cpu-admission-fixture.sh
 python3 scripts/check-zeroization-evidence.py
 python3 scripts/test-zeroization-evidence.py
 python3 scripts/check-sanitization-admission.py

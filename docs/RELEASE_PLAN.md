@@ -1266,7 +1266,7 @@ Exit criteria:
 
 ### v0.13.2 - CPU Acceleration Package And Unsafe Boundary
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Freeze future `brynja-crypto-cpu` as an optional zero-dependency `no_std` package for isolated ISA kernels and static selection, and future `brynja-crypto-cpu-std` as a separate opt-in `std` runtime-detection adapter; keep scalar `brynja-crypto`, every protocol engine, default feature, bare-metal graph, and ordinary facade independent of both, keep the std adapter outside `brynja-fips-module`, and require a separately hashed, versioned, under-500-line unsafe-intrinsic or assembly boundary for every admitted backend without authorizing any implementation yet.
 
@@ -1292,7 +1292,7 @@ Exit criteria:
 
 ### v0.13.3 - Native CPU Evidence And Performance Admission Harness
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Establish reproducible backend evidence manifests, forced-backend and unsupported-feature processes, KAT and quarantine fault injection, scalar differential corpora, emitted-code and side-channel capture, code-size and latency budgets, and benchmark admission thresholds across local AMD x86_64, an observed-feature AWS Intel x86_64 instance, Apple M2, AWS AArch64, and the available RISC-V cloud host; record CPU, microcode, OS, compiler, flags, frequency policy, and feature evidence, treat emulation as supplemental only, and leave an unavailable or unmeasured backend unadmitted rather than blocking portable scalar support.
 
@@ -1301,13 +1301,13 @@ Goal: make correctness, security and useful performance—not architecture label
 Deliverables:
 
 - define a machine-readable evidence schema for CPU identity, observed features, microcode or firmware, OS, compiler, flags, runner ownership, clock and frequency policy, operation, size distribution and raw result hashes;
-- implement first-party forced-backend, negative unsupported-instruction, KAT fault, quarantine, scalar differential, emitted-code, code-size, cold-start, latency, throughput and side-channel harness contracts;
+- implement first-party forced-backend, required-no-fallback, negative unsupported-instruction, KAT fault, quarantine, scalar differential, concurrency-isolation, emitted-code, code-size, cold-start, latency, throughput and side-channel harness contracts;
 - register the local AMD and M2 lanes, AWS Intel and Arm lanes selected by observed features rather than product name, the slow RISC-V lane, and QEMU only as supplemental instruction coverage.
 
 Verification:
 
 - validate schema regeneration, provenance, stale-run rejection, missing feature evidence, fabricated native labels, mixed CPUs, noisy or non-finite measurements and benchmark-order bias;
-- run scalar and mock-backend positive, mismatch, unsupported, quarantine, concurrency and required-mode fixtures on std, no_std, no-atomics and emulated targets;
+- run scalar and mock-backend positive, mismatch, unsupported, quarantine, concurrency and required-mode fixtures under host tests and a dependency-free no_std/no-atomics model across OS-less targets; exercise emulated-label and QEMU-promotion refusal as supplemental fixtures because no ISA kernel yet exists to execute;
 - prove an unavailable Intel instance, non-qualifying RISC-V ISA or unreachable runner produces an explicit unadmitted result without creating a false support claim or blocking scalar builds.
 
 Exit criteria:

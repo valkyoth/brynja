@@ -7,6 +7,14 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add a hash-bound v0.13.3 CPU evidence schema, five native and three QEMU
+  supplemental lanes, thirteen admission harnesses, exact raw-artifact
+  provenance, bounded freshness/noise/order/performance rules, and a
+  deterministic register retaining zero admitted backends.
+- Add 39 adversarial evidence fixtures and a dependency-free non-cryptographic
+  `no_std`/no-atomics scalar/mock fixture covering forced, required,
+  unsupported, KAT, quarantine, differential, fallback, and independent-
+  session behavior across host and OS-less target checks.
 - Reserve unpublished `brynja-crypto-cpu 0.1.0` and
   `brynja-crypto-cpu-std 0.1.0` package boundaries without implementing a
   primitive, ISA kernel, runtime detector, or executable dispatch path.
@@ -68,6 +76,8 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the `brynja` facade to `0.13.3` while retaining every supporting-
+  crate version and selecting zero crates for crates.io publication.
 - Advance the `brynja` facade to `0.13.2`, keep both CPU boundaries outside
   every facade and protocol engine, and select zero crates for crates.io
   publication.
@@ -111,6 +121,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Reject stale, future, mixed-CPU, incomplete-feature, fabricated-native,
+  unowned-runner, non-finite, noisy, order-biased, under-sampled, slow,
+  oversized, unhashed, path-escaping, QEMU-promoted, or false-eligibility CPU
+  evidence while leaving unavailable hosts explicitly unadmitted and scalar
+  builds independent.
 - Remediate one High fail-open inert-source admission flaw by anchoring both
   source hashes independently in the validator, requiring real line-anchored
   `no_std` and false-status declarations, and rejecting source-plus-policy

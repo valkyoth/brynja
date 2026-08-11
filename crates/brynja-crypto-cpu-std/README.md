@@ -36,6 +36,9 @@ executable backend, cryptographic code, or low-level-code allowance. A later
 implementation milestone must explicitly authorize standard-library use and
 prove that detection evidence cannot activate a backend without its direct KAT
 and migration-safe execution authority.
+Version 0.13.3 registers native host lanes and a strict evidence-admission
+schema without implementing detection here. An unavailable host stays
+unadmitted, and QEMU evidence cannot be promoted to a native claim.
 
 ## Cryptography Verification Status
 
@@ -48,6 +51,6 @@ and pentesting do not by themselves constitute independent verification.
 | --- | --- | --- |
 | `brynja-crypto-cpu-std` | Future host feature detection and dispatch initialization | ❌ Not implemented or verified |
 
-The package is not selected for crates.io publication at v0.13.2. The project-
+The package is not selected for crates.io publication at v0.13.3. The project-
 wide first-party Rust, dependency, source-size, platform, FIPS, and low-level-
 code policies apply here.

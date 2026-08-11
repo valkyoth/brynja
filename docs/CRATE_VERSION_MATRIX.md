@@ -1,10 +1,10 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.13.1 tagged; v0.13.2 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 awaiting pentest
 
-The `brynja` facade advances to `0.13.2` for the current development line but
+The `brynja` facade advances to `0.13.3` for the current development line but
 is not selected for crates.io publication. The latest signed development tag
-is v0.13.1 and the latest public
+is v0.13.2 and the latest public
 checkpoint remains `brynja 0.10.0`, `brynja-core 0.7.0`, eight modern support
 packages at `0.1.6`, and `brynja-crypto 0.1.0`. Supporting, legacy, and
 repository-only package versions remain unchanged during this development
@@ -24,14 +24,15 @@ health, and dispatch contracts. The v0.13.2 stage reserves two inert CPU
 package boundaries and likewise selects no crate. Its one High and one Medium
 assessment findings are remediated, and repository-owner retest of exact signed
 candidate `2fa60d05d8c4472426cdb979243f53e2e959c231` passed with zero open
-findings.
+findings. The v0.13.3 stage adds repository-only CPU evidence and performance-
+admission contracts while all eight reserved backends remain unadmitted.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.13.2` | no | Current development version; latest signed tag is `v0.13.1` and latest crates.io checkpoint is `0.10.0` |
+| `brynja` | `0.13.3` | no | Current development version; latest signed tag is `v0.13.2` and latest crates.io checkpoint is `0.10.0` |
 | `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while cumulative v0.11 zeroization, v0.12 constant-time, v0.13 provider-contract, and v0.13.1 backend-contract code remain unreleased on crates.io |
 | `brynja-crypto` | `0.1.0` | no | Published code boundary retained; shared documentation clarifies its provider/composition role above future leaf-family crates |
-| `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Unpublished inert v0.13.2 boundaries; no kernel, runtime detector, low-level allowance, performance admission, or FIPS claim |
+| `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Unpublished inert boundaries; v0.13.3 registers evidence lanes and admission gates but no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
 | `brynja-pki`, `brynja-platform` | `0.1.6` | no | Published boundaries retained; platform effects remain unimplemented downstream from the new core contracts |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.6` | no | Published boundaries retained; engines remain unimplemented |
 | `brynja-dtls`, `brynja-quic-tls` | `0.1.6` | no | Published boundaries retained; engines/adapters remain unimplemented |
@@ -89,7 +90,7 @@ and cannot reuse the validation claim.
 The `brynja-sanitization` package uses an independent SemVer
 line and publishes only when its adapter code or exact `sanitization` pin
 changes. Its v0.1.0 implementation is present but held from crates.io during
-the current v0.13.2 internal development line.
+the current v0.13.3 internal development line.
 
 Every tag requires a clean worktree, signed commit, complete automated tag
 gate, user-confirmed green GitHub and CodeQL, and explicit authorization.

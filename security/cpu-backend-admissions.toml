@@ -1,0 +1,68 @@
+[schema]
+version = 1
+milestone = "0.13.3"
+status = "zero-backends-admitted"
+
+[[backends]]
+id = "x86-sha"
+architecture = "x86_64"
+required_features = ["sha"]
+native_lanes = ["local-amd-x86_64", "aws-intel-x86_64"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-native-evidence"
+
+[[backends]]
+id = "x86-aes-gcm"
+architecture = "x86_64"
+required_features = ["aes", "pclmulqdq"]
+native_lanes = ["local-amd-x86_64", "aws-intel-x86_64"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-native-evidence"
+
+[[backends]]
+id = "x86-avx2"
+architecture = "x86_64"
+required_features = ["avx2"]
+native_lanes = ["local-amd-x86_64", "aws-intel-x86_64"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-native-evidence"
+
+[[backends]]
+id = "x86-avx512"
+architecture = "x86_64"
+required_features = ["avx512f"]
+native_lanes = ["local-amd-x86_64", "aws-intel-x86_64"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-native-evidence"
+
+[[backends]]
+id = "aarch64-sha2"
+architecture = "aarch64"
+required_features = ["neon", "sha2"]
+native_lanes = ["apple-m2-aarch64", "aws-aarch64"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-native-evidence"
+
+[[backends]]
+id = "aarch64-aes-gcm"
+architecture = "aarch64"
+required_features = ["neon", "aes", "pmull"]
+native_lanes = ["apple-m2-aarch64", "aws-aarch64"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-native-evidence"
+
+[[backends]]
+id = "riscv-vector"
+architecture = "riscv64"
+required_features = ["v"]
+native_lanes = ["riscv64-cloud"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-qualifying-native-isa-evidence"
+
+[[backends]]
+id = "riscv-scalar-crypto"
+architecture = "riscv64"
+required_features = ["ratified-scalar-crypto-subset"]
+native_lanes = ["riscv64-cloud"]
+status = "unadmitted"
+reason = "no-primitive-implementation-or-qualifying-native-isa-evidence"

@@ -1,6 +1,7 @@
 # Rust build output
 /target/
 /assurance/sanitization-admission/target/
+/assurance/cpu-admission-fixture/target/
 /fuzz/target/
 /fuzz/artifacts/
 /fuzz/corpus/

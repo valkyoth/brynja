@@ -1261,7 +1261,7 @@ Verification:
 Exit criteria:
 
 - safe callers cannot reach an unsupported instruction and every fallback or required-mode refusal is explicit in authoritative state;
-- close the exceptional assessment's cross-instance KAT replay and CPU-migration findings, commit the permanent pending report with the exact remediation candidate, and obtain repository-owner retest before release readiness;
+- close the exceptional assessment's cross-instance KAT replay, CPU-migration, and guarded-entry callback/closure TOCTOU findings, commit the permanent pending report with the exact remediation candidate, and obtain repository-owner retest before release readiness;
 - `v0.13.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.13.2 - CPU Acceleration Package And Unsafe Boundary

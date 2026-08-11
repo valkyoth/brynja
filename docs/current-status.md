@@ -475,19 +475,22 @@ Version 0.13.1 implements the CPU-backend capability and dispatch contract:
   authority separate observation from use;
 - exact-operation dispatch revalidates identity, health, runtime, operation,
   and observational service approval, while accelerated entry also requires
-  an opaque platform-issued CPU lease and immediate revalidation of CPU or hart
-  identity, migration generation, complete usable features, and required OS or
-  architectural state before issuing a non-escapable closure permit; and
+  an opaque platform-issued CPU lease and a sealed context that acquires a
+  migration-excluding guard while revalidating CPU or hart identity, migration
+  generation, complete usable features, and required OS or architectural state;
+  logical authority is checked again after every platform callback, then one
+  sealed kernel executes directly while the guard remains live; and
 - scalar-only, opportunistic, required-accelerated, and validated-module
   policies make fallback explicit and make required modes fail closed.
 
-Thirteen behavior groups, ten compile-fail examples, a SHA-256-locked
-eight-file source policy, and nineteen broken fixtures enforce the boundary.
-It contains no CPU probe, public instance or lease constructor, intrinsic,
-assembly, executable accelerated kernel, unsafe backend boundary, global cache,
-provider effect, performance claim, or FIPS validation. Its exceptional
-assessment found two High backend-authority flaws; both are locally remediated,
-but v0.13.1 remains blocked pending repository-owner retest, the complete gate,
+Thirteen behavior groups, eleven compile-fail examples, a SHA-256-locked
+eight-file source policy, and twenty-three broken fixtures enforce the
+boundary. It contains no CPU probe, public instance, lease, context, guard, or
+kernel constructor, intrinsic, assembly, executable accelerated kernel
+implementation, unsafe backend boundary, global cache, provider effect,
+performance claim, or FIPS validation. Its exceptional assessment and first
+retest found three High backend-authority flaws; all are locally remediated, but
+v0.13.1 remains blocked pending repository-owner retest, the complete gate,
 green GitHub and CodeQL, and explicit signed-tag authorization. It selects no
 crates.io publication.
 

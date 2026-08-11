@@ -23,10 +23,10 @@ effect, global registry, or FIPS-validated module.
 - caller-owned `Cell` health state with `NeverTested`, `Testing`, `Healthy`,
   and permanent `Quarantined` states, monotonic health generations, explicit
   runtime generations, and no atomics or global first-use state;
-- an opaque exact-session CPU lease, immediate logical CPU or hart,
-  migration-generation, complete-feature and OS/architecture-state
-  revalidation, and a non-escapable permit for one immediate accelerated entry;
-  and
+- an opaque exact-session CPU lease plus sealed CPU-context,
+  migration-excluding guard, and kernel traits; the guard covers logical CPU or
+  hart, migration-generation, complete-feature and OS/architecture-state
+  revalidation and remains live across one direct kernel execution; and
 - explicit scalar-fallback reasons only in opportunistic mode, with required
   acceleration and validated-module policy failing closed.
 
@@ -51,11 +51,14 @@ revalidates backend identity, health, runtime generation, health generation,
 and exact operation. Runtime replacement invalidates healthy authority and
 requires a new KAT; permanent quarantine cannot be reset by that transition.
 Thread affinity alone is not accepted as CPU execution evidence. Accelerated
-entry requires a platform-issued lease bound to the exact session and runtime,
-then immediately revalidates logical CPU or hart identity, migration
-generation, complete usable feature predicate, and required operating or
-architectural state. The higher-ranked closure can use the resulting permit
-only during that entry and cannot return or retain it.
+entry requires a platform-issued lease bound to the exact session, runtime, and
+sealed CPU context. That context acquires a migration-excluding guard while it
+revalidates logical CPU or hart identity, migration generation, the complete
+usable feature predicate, and required operating or architectural state.
+Logical authority is checked again after every platform callback, then one
+sealed kernel executes directly while the guard remains live. Applications
+cannot implement the sealed context, guard, or kernel and cannot insert an
+arbitrary closure between validation and instruction use.
 
 Validated-module identity and `Approved` observation are contract values only.
 They do not claim FIPS 140-3 validation. Validated-module policy requires exact
@@ -64,21 +67,26 @@ scalar backend.
 
 ## Exceptional Assessment And Remediation
 
-The repository-owner assessment found two High authorization flaws. First,
+The repository-owner assessment and its first retest found three High
+authorization flaws. First,
 KAT pass/failure evidence was bound only to value-equal profiles and generation
 counters, permitting redirection between equal sessions or validated modules.
 Second, thread-bound tokens did not account for operating-system or hypervisor
 migration of the same Rust thread to a CPU or hart lacking the admitted usable
-instruction predicate.
+instruction predicate. Third, the first remediation exposed a public CPU
+callback followed by an arbitrary application closure: the callback could
+invalidate logical authority, and migration could occur after it returned but
+before the closure used the permit.
 
 The first finding is locally remediated by opaque measured-artifact and
 operational-environment identity plus exact session and instance references in
-KAT evidence. The second is locally remediated by an opaque platform-issued CPU
-lease and immediate live context revalidation inside the accelerated-entry
-function, before a non-escapable permit reaches the closure. Both findings have
-negative tests and policy fixtures. The permanent report remains `RETEST
-REQUIRED` until the repository owner retests the exact signed remediation
-candidate.
+KAT evidence. The CPU findings are locally remediated by an opaque
+platform-issued lease, sealed context/guard/kernel traits, guard acquisition
+that excludes migration for the complete direct call, logical revalidation
+after every platform callback, and removal of arbitrary application closures
+from the entry boundary. All three findings have negative tests and policy
+fixtures. The permanent report remains `RETEST REQUIRED` until the repository
+owner retests the exact signed remediation candidate.
 
 ## Verification Evidence
 
@@ -87,19 +95,24 @@ candidate.
   substitution, approval substitution, all four policies, explicit fallback,
   quarantine, runtime replacement, exact operations, non-authorizing reports,
   CPU migration, feature loss, operating-state loss, migration-generation
-  drift, and CPU-lease session substitution;
-- ten compile-fail examples reject observational-profile injection, instance,
+  drift, CPU-lease session/context substitution, reentrant runtime invalidation
+  during guard acquisition, guard lifetime, and attempted migration inside the
+  sealed kernel;
+- eleven compile-fail examples reject observational-profile injection, instance,
   feature, KAT, and CPU-lease forgery; active-token cloning, formatting, and
-  cross-thread movement; dispatch-token cloning; and kernel-permit escape;
+  cross-thread movement; dispatch-token cloning; and untrusted CPU-context and
+  kernel implementations;
 - a SHA-256-locked eight-file source policy confines each backend file below
   500 lines and rejects `std`, allocation, unsafe code, atomics, target/ISA
   coupling, intrinsics, assembly, FFI, registries, recursive fallback, token
-  trait drift, public evidence/instance/lease constructors, and missing exact
-  session, instance, generation, operation, approval, quarantine, CPU-context,
-  or non-escapable-permit checks; and
-- nineteen broken fixtures exercise execution, evidence, session, instance,
-  thread, CPU context, generation, quarantine, operation, approval, registry,
-  permit-lifetime, and source-hash regressions; and
+  trait drift, public evidence/instance/lease constructors, unsealed
+  context/guard/kernel traits, arbitrary callbacks, and missing exact session,
+  instance, generation, operation, approval, quarantine, guard, post-callback
+  validation, or direct sealed-kernel checks; and
+- twenty-three broken fixtures exercise execution, evidence, session,
+  instance, thread, CPU context, sealing, guard lifetime, callback exclusion,
+  generation, quarantine, operation, approval, registry, and source-hash
+  regressions; and
 - the network freshness gate updates Miri and Rust sanitizer execution to
   `nightly-2026-08-11` at exact official Rust revision
   `12c36e2539c54397c51d6ea4401defd8768a4f5b`.
@@ -124,11 +137,13 @@ records and dispositions did not change.
 
 ## Current Limits
 
-No accelerated backend, instance identity, or CPU lease can be constructed
-through the public safe API in this milestone. The safe scalar candidate is
-inert until a trusted provider returns an exact KAT result. v0.13.2 owns the
-optional no_std ISA-kernel package, std runtime-detection adapter, reviewed
-instance/lease construction, and separately reviewed unsafe boundary. v0.13.3
+No accelerated backend, instance identity, CPU lease, trusted CPU context,
+migration guard, or sealed kernel can be constructed through the public safe
+API in this milestone. The safe scalar candidate is inert until a trusted
+provider returns an exact KAT result. v0.13.2 owns the optional no_std
+ISA-kernel package, std runtime-detection adapter, reviewed
+instance/lease/context/guard/kernel construction, and separately reviewed
+unsafe boundary. v0.13.3
 owns native-host, differential, emitted-code, side-channel, and performance
 admission evidence. Later per-primitive milestones decide whether any backend
 is useful and safe enough to activate.
@@ -147,7 +162,7 @@ validated.
 
 v0.13.1 is an internal development milestone in the cumulative range after
 v0.10.0 through v0.15.0 and selects zero crates for crates.io publication. No
-scheduled pentest applied, but the two High findings triggered an exceptional
+scheduled pentest applied, but the three High findings triggered an exceptional
 assessment. Repository-owner retest of the exact signed remediation candidate,
 the complete local gate, green GitHub and CodeQL, and explicit repository-owner
 authorization remain mandatory before the signed `v0.13.1` tag.

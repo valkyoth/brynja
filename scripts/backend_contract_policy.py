@@ -24,10 +24,10 @@ EXPECTED_SHA256 = {
     Path("backend_instance.rs"): "039223f1a7057239ff015368d56a99062219e3d0c0878a2afffe13af6aca7a1f",
     Path("backend_session.rs"): "57420305528749a69efcdceac801a5b2c941874046305e7b6fe57cd737551ac6",
     Path("backend_kat.rs"): "50497f9d593bb3bdc9c5c56db3e752800c8c288a822cc0f8ad986a9f8917bd71",
-    Path("backend_dispatch.rs"): "d5ad1612dacea4f5212a401a4b5bf0f6369e0dea45cec5d00aa2cda53517d47b",
-    Path("backend_execution.rs"): "d9ee4c6579fc1e08e48bb020cf70426cc151687744efbf44b3d971ac89d4578b",
+    Path("backend_dispatch.rs"): "8ba2f43f09f287a11c499dd25b7b9578fc9a1d04d8367735f4bd798b6c1108bf",
+    Path("backend_execution.rs"): "777b953a5ca41c111a254d5dac15243008deaccc2a15e03587c6db6f93deedb3",
     Path("backend_session_tests.rs"): "74c58d8410a8ea717a5d90cf4b1267fb1fa74817448ecbd20bd590a9e4ea6500",
-    Path("backend_security_tests.rs"): "235f395f3b49d7107d90335adf0cfc342db5c0abff3b47fb12f5226965b5b1e2",
+    Path("backend_security_tests.rs"): "56043fbc7327504485e75ecba72904235e53c9831546334b8b216ca3701cca2a",
 }
 IDENTITIES = (
     "Scalar",
@@ -170,6 +170,7 @@ def validate_structure(sources: dict[Path, str]) -> None:
         "BackendFeatureEvidence",
         "BackendKatPass",
         "BackendKatFailure",
+        "BackendCpuContextIdentity",
         "BackendCpuLease",
     ):
         block = re.search(
@@ -209,10 +210,14 @@ def validate_structure(sources: dict[Path, str]) -> None:
 
     for required in (
         "core::ptr::eq(self.session, session)",
-        "self.context\n            .revalidate(",
+        "pub trait BackendCpuContext: sealed::CpuContext",
+        "pub trait BackendCpuGuard: sealed::CpuGuard",
+        "pub trait BackendKernel: sealed::Kernel",
+        "lease.validate_binding(self.session, runtime)?",
+        ".acquire_guard(",
+        "_execution_guard: &guard",
         "self.validate(runtime)?",
-        "lease.revalidate(self.session, runtime)?",
-        "for<'entry> FnOnce(BackendKernelPermit<'entry>) -> R",
+        "kernel.execute(&permit)",
         "BackendCpuRevalidationError::CpuChanged",
         "BackendCpuRevalidationError::FeaturesUnavailable",
         "BackendCpuRevalidationError::OperatingStateUnavailable",
@@ -220,6 +225,15 @@ def validate_structure(sources: dict[Path, str]) -> None:
     ):
         if required not in execution:
             fail(f"CPU execution-lease invariant drift: {required}")
+    if "FnOnce" in execution or "enter_kernel" in execution:
+        fail("CPU execution boundary admits an arbitrary callback")
+    acquire = execution.index(".acquire_guard(")
+    validate = execution.index("self.validate(runtime)?", acquire)
+    execute = execution.index("kernel.execute(&permit)", validate)
+    if not acquire < validate < execute:
+        fail("CPU guard, logical validation, and sealed kernel order drift")
+    if execution.count("context.identity() != lease.context") != 2:
+        fail("CPU context identity is not bound before and after guard acquisition")
 
     for required in (
         "BackendPolicy::ScalarOnly =>",
@@ -255,6 +269,14 @@ def validate_structure(sources: dict[Path, str]) -> None:
     ):
         if required_test not in test_names:
             fail(f"backend behavior coverage missing: {required_test}")
+    for behavior in (
+        "invalidate_session: Some(&reentrant)",
+        "Some(BackendDispatchError::RuntimeChanged)",
+        "attempt_migration(self.migration_target)",
+        "assert!(!context.guard_held.get())",
+    ):
+        if behavior not in tests:
+            fail(f"guarded kernel behavior coverage missing: {behavior}")
 
 
 def validate_hashes(sources: dict[Path, str]) -> None:

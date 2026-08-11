@@ -56,8 +56,8 @@ pub use backend_dispatch::{
     BackendSelectionReason, BackendSelectionReport, select_backend,
 };
 pub use backend_execution::{
-    BackendCpuContext, BackendCpuIdentity, BackendCpuLease, BackendCpuRevalidationError,
-    BackendKernelPermit,
+    BackendCpuContext, BackendCpuContextIdentity, BackendCpuGuard, BackendCpuIdentity,
+    BackendCpuLease, BackendCpuRevalidationError, BackendKernel, BackendKernelPermit,
 };
 pub use backend_instance::{BackendFeatureEvidence, BackendInstanceIdentity};
 pub use backend_kat::{BackendKatFailure, BackendKatPass};

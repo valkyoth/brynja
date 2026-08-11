@@ -145,19 +145,23 @@ between equal profiles or generations. Direct-KAT guards quarantine on
 recursion, failure, panic, cancellation, or early return. Healthy authority is
 thread-bound and revalidates runtime generation, health generation, backend
 identity, and exact operation. Accelerated entry additionally consumes an
-opaque platform-issued CPU lease, revalidates CPU or hart identity, migration
-generation, complete usable features, and required OS or architectural state,
-and lends a non-escapable permit only to the immediate kernel closure. Only
-opportunistic policy can return an explicit scalar-fallback reason; required
-and validated policies fail closed.
+opaque platform-issued CPU lease and a sealed context that acquires a
+migration-excluding guard while revalidating CPU or hart identity, migration
+generation, complete usable features, and required OS or architectural state.
+Logical authority is checked again after every platform callback, then one
+sealed kernel executes directly while the guard remains live. No application
+closure can enter between validation and instruction use. Only opportunistic
+policy can return an explicit scalar-fallback reason; required and validated
+policies fail closed.
 
-Thirteen behavioral test groups, ten compile-fail examples, a hash-locked
-eight-file source policy, and nineteen broken fixtures enforce this boundary.
-There is still no CPU detection, public instance or lease constructor,
-intrinsic, assembly, executable accelerated kernel, global cache, unsafe
-backend boundary, performance claim, provider effect, or FIPS validation.
-Public profiles, features, snapshots, approval values, and reports are
-observational and cannot construct backend authority.
+Thirteen behavioral test groups, eleven compile-fail examples, a hash-locked
+eight-file source policy, and twenty-three broken fixtures enforce this
+boundary. There is still no CPU detection, public instance, lease, context,
+guard, or kernel constructor, intrinsic, assembly, executable accelerated
+kernel implementation, global cache, unsafe backend boundary, performance
+claim, provider effect, or FIPS validation. Public profiles, features,
+snapshots, approval values, and reports are observational and cannot construct
+backend authority.
 
 ## Cryptography Verification Status
 

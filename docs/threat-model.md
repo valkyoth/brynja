@@ -77,8 +77,10 @@ CPU-backend attackers additionally attempt to replay KAT or approval evidence
 between equal profiles backed by different measured artifacts or operational
 environments, substitute an equal-generation session, migrate one Rust thread
 to a logical CPU or hart lacking the admitted instructions, exploit stale
-hot-plug or migration state, or omit x86 OSXSAVE/XCR0 and RISC-V extension
-dependencies from the usable-feature predicate.
+hot-plug or migration state, invalidate logical authority reentrantly during a
+platform callback, delay or yield between feature validation and instruction
+use, inject an application closure into direct entry, or omit x86 OSXSAVE/XCR0
+and RISC-V extension dependencies from the usable-feature predicate.
 Supply-chain attackers additionally try to replace a planned first-party Rust
 primitive or FIPS service with a C/native wrapper, vendor object, build-script
 download, system cryptographic provider, rustls built-in provider, misleading
@@ -118,12 +120,14 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
   or FIPS claim;
 - opaque measured backend-instance identity and exact-session-borrowing KAT
   pass/failure evidence; accelerated entry additionally requires an opaque
-  platform-issued lease bound to the exact session/runtime and immediate live
-  revalidation of CPU or hart identity, migration generation, the complete
-  usable feature predicate, and required OS or architectural state before a
-  higher-ranked closure receives its non-escapable kernel permit; no public
-  identity, evidence, or lease constructor and no executable backend exists at
-  v0.13.1;
+  platform-issued lease bound to the exact session/runtime, a sealed context
+  that acquires a migration-excluding guard while checking CPU or hart identity,
+  migration generation, the complete usable feature predicate, and required OS
+  or architectural state, a second logical-authority validation after every
+  platform callback, and direct sealed-kernel execution while the guard remains
+  live; no application closure or public identity, evidence, lease, context,
+  guard, or kernel constructor and no executable backend implementation exists
+  at v0.13.1;
 - nonce uniqueness, sequence exhaustion, replay, key-update, and ticket limits;
 - private-field bounded numeric values, checked arithmetic in every profile,
   semantically separate quantities, non-wrapping monotonic values, explicit
@@ -224,13 +228,17 @@ v0.13.1 backend types add only inert identities, exact feature/operation
 profiles, policy selection, caller-owned KAT health state, generation
 invalidation, permanent quarantine, opaque measured-instance binding,
 exact-session KAT evidence, opaque CPU leases, immediate CPU-context
-revalidation, and thread-bound authority. They do not provide an instance or
-lease constructor, detect a CPU, call an intrinsic, execute assembly or an
-accelerated kernel, initialize a global cache, measure performance or timing,
-approve a module, complete a provider effect, or establish FIPS validation.
+guard acquisition, migration exclusion held across a direct sealed-kernel call,
+post-callback logical revalidation, and thread-bound authority. They do not
+provide an instance, lease, context, guard, or kernel constructor, accept an
+application callback, detect a CPU, call an intrinsic, execute assembly or an
+accelerated kernel implementation, initialize a global cache, measure
+performance or timing, approve a module, complete a provider effect, or
+establish FIPS validation.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
-authority, dispatch authority, instance identity, or a CPU lease.
+authority, dispatch authority, instance identity, CPU lease, trusted CPU
+context, migration-excluding guard, or sealed kernel.
 v0.3.0 inventories and locks source
 authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2

@@ -140,7 +140,7 @@ def test() -> None:
         execution = source / "backend_execution.rs"
         replace(
             execution,
-            "lease.revalidate(self.session, runtime)?",
+            "lease.validate_binding(self.session, runtime)?",
             "self.validate(runtime)?",
         )
         require_rejection(root, "CPU execution-lease invariant")
@@ -149,10 +149,46 @@ def test() -> None:
         execution = source / "backend_execution.rs"
         replace(
             execution,
-            "for<'entry> FnOnce(BackendKernelPermit<'entry>) -> R",
-            "FnOnce(BackendKernelPermit<'_>) -> R",
+            "_execution_guard: &guard",
+            "_execution_guard: &permit",
         )
         require_rejection(root, "CPU execution-lease invariant")
+        reset(root)
+
+        execution = source / "backend_execution.rs"
+        replace(
+            execution,
+            "pub trait BackendCpuContext: sealed::CpuContext",
+            "pub trait BackendCpuContext",
+        )
+        require_rejection(root, "CPU execution-lease invariant")
+        reset(root)
+
+        execution = source / "backend_execution.rs"
+        replace(
+            execution,
+            "pub trait BackendCpuGuard: sealed::CpuGuard",
+            "pub trait BackendCpuGuard",
+        )
+        require_rejection(root, "CPU execution-lease invariant")
+        reset(root)
+
+        execution = source / "backend_execution.rs"
+        replace(
+            execution,
+            "pub trait BackendKernel: sealed::Kernel",
+            "pub trait BackendKernel",
+        )
+        require_rejection(root, "CPU execution-lease invariant")
+        reset(root)
+
+        execution = source / "backend_execution.rs"
+        execution.write_text(
+            execution.read_text(encoding="utf-8")
+            + "\nfn arbitrary_callback<F: FnOnce()>(callback: F) { callback(); }\n",
+            encoding="utf-8",
+        )
+        require_rejection(root, "arbitrary callback")
         reset(root)
 
         session = source / "backend_session.rs"
@@ -210,6 +246,6 @@ def test() -> None:
 if __name__ == "__main__":
     test()
     print(
-        "backend policy rejects nineteen execution, evidence, instance, CPU-context, "
+        "backend policy rejects twenty-three execution, evidence, instance, CPU-context, "
         "thread, generation, quarantine, operation, approval, registry, and hash regressions"
     )

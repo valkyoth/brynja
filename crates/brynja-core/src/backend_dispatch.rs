@@ -186,8 +186,9 @@ impl BackendDispatch<'_> {
     /// Revalidates logical health and runtime authority.
     ///
     /// For accelerated backends this is deliberately insufficient to enter a
-    /// kernel. The separate direct entry boundary additionally requires and
-    /// immediately revalidates an opaque CPU execution lease.
+    /// kernel. The separate direct entry boundary additionally acquires a
+    /// sealed migration-excluding guard and revalidates logical authority after
+    /// every platform callback.
     pub fn validate(&self, runtime: BackendRuntimeGeneration) -> Result<(), BackendDispatchError> {
         validate_authority(
             self.session,

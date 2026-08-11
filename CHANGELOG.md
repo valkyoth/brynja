@@ -16,12 +16,13 @@ Keep a Changelog and Semantic Versioning.
   and explicit opportunistic scalar-fallback reports.
 - Bind backend evidence to one opaque measured artifact and operational
   environment and bind KAT pass/failure evidence to the exact session and
-  instance. Add opaque exact-session CPU leases, immediate live CPU/hart,
-  migration-generation, complete-feature and OS/architecture-state
-  revalidation, and a non-escapable immediate kernel permit.
-- Add thirteen CPU-backend behavior test groups, ten compile-fail authority and
-  token examples, a SHA-256-locked eight-file source policy, and nineteen
-  broken fixtures.
+  instance. Add opaque exact-session CPU leases plus sealed CPU-context,
+  migration-excluding guard, and kernel traits; acquire and retain the guard
+  across direct execution and revalidate logical authority after every
+  platform callback.
+- Add thirteen CPU-backend behavior test groups, eleven compile-fail authority
+  and token examples, a SHA-256-locked eight-file source policy, and
+  twenty-three broken fixtures.
 - Implement nineteen independent provider operations spanning cryptographic,
   signature, KEM, AEAD, entropy, clock, certificate-chain, storage, and pending
   boundaries without implementing any provider effect or algorithm; MAC
@@ -125,12 +126,14 @@ Keep a Changelog and Semantic Versioning.
 - Quarantine recursive, interrupted, failed, mismatched, or approval-invalid
   initialization permanently; reject stale health/runtime generations and
   unsupported operations immediately before future direct kernel entry.
-- Remediate the exceptional v0.13.1 assessment's two High findings: exact
+- Remediate the exceptional v0.13.1 assessment's first two High findings: exact
   session and measured-instance references prevent KAT/approval replay between
-  equal profiles, while an opaque platform CPU lease and immediate complete
-  context revalidation prevent stale feature authority after same-thread CPU
-  migration. The signed remediation candidate remains blocked pending
-  repository-owner retest.
+  equal profiles, while an opaque platform CPU lease binds the admitted CPU
+  context. Close the first retest's third High TOCTOU finding by sealing the
+  context, migration guard, and kernel; holding migration exclusion across the
+  direct call; validating logical authority after every platform callback; and
+  removing arbitrary application closures from guarded entry. The signed
+  remediation candidate remains blocked pending repository-owner retest.
 - Remediate the pentest's High RV32 timing finding by passing every expanded
   word and array mask through the non-inlined optimization barrier before
   XOR/AND selection, then close two Medium assurance-scanner bypasses through

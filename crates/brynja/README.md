@@ -81,14 +81,16 @@ than matching reusable profile values. Caller-owned health state separates
 detection evidence, direct startup KATs, per-operation dispatch authority,
 permanent quarantine, runtime generations, and secret-free reporting.
 Accelerated entry additionally requires an opaque platform-issued CPU lease and
-immediate revalidation of logical CPU or hart identity, migration generation,
-the complete usable feature predicate, and required OS or architectural state.
-The resulting kernel permit cannot escape the entry closure. Opportunistic
-policy reports scalar fallback; required-accelerated and validated-module
-policies fail closed. This milestone adds no CPU detection, public lease or
-instance constructor, intrinsic, assembly, executable accelerated kernel,
-unsafe backend boundary, provider effect, performance claim, or FIPS
-validation.
+a sealed context that acquires a migration-excluding guard while revalidating
+logical CPU or hart identity, migration generation, the complete usable feature
+predicate, and required OS or architectural state. Logical authority is checked
+again after every platform callback, then a sealed kernel executes directly
+while the guard remains live; application closures cannot enter this boundary.
+Opportunistic policy reports scalar fallback; required-accelerated and
+validated-module policies fail closed. This milestone adds no CPU detection,
+public lease, context, guard, kernel, or instance constructor, intrinsic,
+assembly, executable accelerated kernel implementation, unsafe backend
+boundary, provider effect, performance claim, or FIPS validation.
 
 Version `0.13.0` added provider capability and opaque-handle contracts to
 `brynja-core`. Nineteen exact operations remain direction-specific,
@@ -189,9 +191,10 @@ Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
 v0.13.0, whose exceptional pentest and remediation retest passed with zero open
 findings and which was intentionally not published to crates.io. The current
-v0.13.1 exceptional assessment found two High backend-authority flaws. Both are
-locally remediated, and the exact signed candidate awaits repository-owner
-retest before green GitHub and CodeQL. The published dependency is:
+v0.13.1 exceptional assessment and first retest found three High
+backend-authority flaws. All are locally remediated, and the exact signed
+candidate awaits repository-owner retest before green GitHub and CodeQL. The
+published dependency is:
 
 ```toml
 [dependencies]

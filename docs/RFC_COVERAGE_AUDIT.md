@@ -26,14 +26,14 @@ This document records planning coverage, not protocol conformance. v0.3.2
 establishes stable machine-readable identifiers, lifecycle states, exact
 authority binding, bidirectional mappings, and fail-closed pilot verification.
 v0.3.3 populates every currently scoped cryptography, encoding, PKIX, OCSP,
-and CT rule across 53 authorities and 3,322 surfaces. v0.3.4 populates 70 TLS,
+and CT rule across 53 authorities and 3,323 current surfaces. v0.3.4 populates 70 TLS,
 DTLS, and QUIC-TLS rules across 40 authorities, 550 normative sections, 63
 owner milestones, and 483 surfaces. v0.3.5 adds 49 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
 authorities, 182 reviewed normative sections, and 765 formerly uncovered
 surfaces.
 The complete closure covers 127 locked authorities, 231 roadmap rows, and
-4,446 surfaces. Planned targets become actual code, tests, and evidence only
+4,447 surfaces. Planned targets become actual code, tests, and evidence only
 in their owning milestone.
 
 ## Coverage By Implementation Domain

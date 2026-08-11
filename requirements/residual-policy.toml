@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "39d6cae635007a8b5b96be41fac5b970c68672a56af661751909f467b32fe764"
-surface_register_sha256 = "0f3dd91389cf171cc70b81d19ebf70609282aa8306a33a512bb9cd94a0a21a9c"
+source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a"
+surface_register_sha256 = "a4cbb2abce443ea2ec35baf9e6e2b957680d3c68640cada0a73f7b73458c7805"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -203,7 +203,7 @@ id = "BRY-REQ-RFC6066X-0148"
 domain = "tls"
 owner = "0.64.0"
 disposition = "safely-ignored"
-revision = 3
+revision = 4
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
@@ -217,7 +217,7 @@ id = "BRY-REQ-RFC6066CFG-0148"
 domain = "tls"
 owner = "0.148.0"
 disposition = "intentionally-rejected"
-revision = 2
+revision = 3
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "facility.rfc6066-unsupported-configuration",
@@ -228,7 +228,7 @@ id = "BRY-REQ-COMPOSEX-0148"
 domain = "tls"
 owner = "0.148.0"
 disposition = "intentionally-rejected"
-revision = 3
+revision = 4
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.cachedinformationtype",
@@ -1165,7 +1165,7 @@ domain = "dtls"
 owner = "0.111.1"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "iana:tls-parameters"]
-revision = 4
+revision = 5
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
   "iana.tls-parameters.tls-rrc-message-types",

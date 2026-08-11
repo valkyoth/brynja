@@ -76,7 +76,7 @@ RFC, NIST, FIPS, or independent-verification evidence.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
   requirement-to-owner reports across 127 authorities, 231 roadmap rows,
-  4,446 surfaces, and 167 requirements.
+  4,447 surfaces, and 167 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim
@@ -105,7 +105,7 @@ governance requirements and requires a substantive human-reviewed rationale.
 A `reviewed-domain` mapping is restricted to the five v0.3.3 policy domains
 and their allowlisted surface domains. All 53 in-scope authorities must be
 cited with their exact current, compatibility, evidence, or exclusion role.
-Every one of the 3,322 selected surfaces must map to an owning requirement or
+Every one of the 3,323 current selected surfaces must map to an owning requirement or
 an explicit later milestone. The only deferrals are the two ML-KEM surfaces
 owned by v0.3.5.
 Every linked surface must independently share both an admitted authority and

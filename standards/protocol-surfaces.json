@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "4c99e1962ff2801cd1e475d465a09046f512f1a4ee86985854d3c8a46fd95962",
+  "policy_sha256": "17f7b48b0938e3afc791a9f98f1e4a826d0abb76e5d58a8bc311def389addbd7",
   "schema": 2,
-  "source_ledger_sha256": "39d6cae635007a8b5b96be41fac5b970c68672a56af661751909f467b32fe764",
+  "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -87727,7 +87727,7 @@
       "registry": {
         "collection": "tls-extensiontype-values",
         "id": "alpn-protocol-ids",
-        "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
+        "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
         "title": "TLS Application-Layer Protocol Negotiation (ALPN) Protocol IDs"
       },
       "test_target": "tests/surface/alpn.rs#opaque_round_trip"
@@ -89685,7 +89685,7 @@
       "registry": {
         "collection": "tls-extensiontype-values",
         "id": "cachedinformationtype",
-        "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
+        "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
         "title": "TLS CachedInformationType Values"
       },
       "test_target": "tests/surface/cached_info.rs#rejected"
@@ -89854,7 +89854,7 @@
       "registry": {
         "collection": "tls-extensiontype-values",
         "id": "certificate-status",
-        "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
+        "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
         "title": "TLS Certificate Status Types"
       },
       "test_target": "tests/surface/certificate_types.rs#registry"
@@ -90008,7 +90008,7 @@
       "registry": {
         "collection": "tls-extensiontype-values",
         "id": "tls-certificate-compression-algorithm-ids",
-        "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
+        "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
         "title": "TLS Certificate Compression Algorithm IDs"
       },
       "test_target": "tests/surface/certificate_compression.rs#registry"
@@ -90219,7 +90219,7 @@
       "registry": {
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1",
-        "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
+        "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
         "title": "TLS ExtensionType Values"
       },
       "test_target": "tests/surface/extensions.rs#registry"
@@ -93900,7 +93900,7 @@
       "registry": {
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-3",
-        "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea",
+        "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
         "title": "TLS Certificate Types"
       },
       "test_target": "tests/surface/certificate_types.rs#registry"
@@ -93931,6 +93931,40 @@
           {
             "data": "rfc8902",
             "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "tls-extensiontype-values",
+        "id": "tls-extensiontype-values-3"
+      },
+      "test_target": "tests/surface/certificate_types.rs#registry"
+    },
+    {
+      "code_target": "crates/brynja-tls/src/certificate_type.rs",
+      "disposition": "future-work",
+      "domain": "pki",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-3.c509-certificate.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:tls-extensiontype-values",
+        "rfc:6066"
+      ],
+      "owner": "0.136.0",
+      "rationale": "Certificate type and status registries are deferred to X.509, raw-public-key, and status-feature milestones.",
+      "record": {
+        "attributes": {
+          "date": "2026-08-11"
+        },
+        "fields": {
+          "description": "C509 Certificate",
+          "rec": "N",
+          "value": "4"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-cose-cbor-encoded-cert-20",
+            "type": "draft"
           }
         ]
       },
@@ -94062,7 +94096,7 @@
         "attributes": {},
         "fields": {
           "description": "Unassigned",
-          "value": "4-223"
+          "value": "5-223"
         },
         "references": []
       },

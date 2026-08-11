@@ -5527,10 +5527,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "31677c30e4ba2b1cc704c81e3221205ffbc41348f59ede80154a5421d8467227",
+  "policy_sha256": "71cd0056bb32f64d356c716ebefed4bbcfcd21b6efe0aa9c663f18c353bf1c8e",
   "requirement_count": 34,
   "schema": 1,
-  "surface_count": 3322,
+  "surface_count": 3323,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -22795,6 +22795,14 @@
       "disposition": "future-work",
       "domain": "pki",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-3.1609dot2.1",
+      "owner": "0.136.0",
+      "requirement_id": "BRY-REQ-OCSP-0006"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "pki",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-3.c509-certificate.1",
       "owner": "0.136.0",
       "requirement_id": "BRY-REQ-OCSP-0006"
     },

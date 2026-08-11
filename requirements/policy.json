@@ -203,7 +203,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.130.0",
       "residual": "Brynja still validates ALPN wire bounds and negotiation context while application protocol semantics stay external.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -238,7 +238,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.148.0",
       "residual": "Private-use values never become interoperable defaults and must remain explicitly configured and collision-scoped.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -309,7 +309,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.19.0",
       "residual": "Every modern stream and datagram parser must retain an explicit negative test for negotiation and content.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -344,7 +344,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.130.0",
       "residual": "Brynja owns bounded opaque transport and exact transcript binding but not the selected application's semantics.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -441,6 +441,6 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "39d6cae635007a8b5b96be41fac5b970c68672a56af661751909f467b32fe764",
-  "surface_register_sha256": "0f3dd91389cf171cc70b81d19ebf70609282aa8306a33a512bb9cd94a0a21a9c"
+  "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
+  "surface_register_sha256": "a4cbb2abce443ea2ec35baf9e6e2b957680d3c68640cada0a73f7b73458c7805"
 }

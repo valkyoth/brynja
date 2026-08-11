@@ -111,7 +111,7 @@ Version 0.3.3 completes the cryptography, encoding, and PKIX population pass:
 - all 53 exact authorities in the symmetric, public-key, key-container, PKIX,
   OCSP, and CT domains are cited with current, compatibility, evidence, or
   exclusion roles;
-- all 3,322 cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
+- all 3,323 current cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
   or one of two explicit v0.3.5 ML-KEM deferrals;
 - every uppercase normative RFC section is hash-bound with occurrence counts,
   and every domain rule records assurance invariants, a work bound, positive
@@ -157,7 +157,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 - all 743 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,424 surfaces;
 - the generated closure maps all 127 locked sources, all 231 roadmap rows, all
-  4,446 surfaces, and all 167 requirements in both directions;
+  4,447 surfaces, and all 167 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
@@ -247,7 +247,11 @@ Version 0.6.0 adds bounded numeric and resource foundations:
 - the reviewed 2026-08-11 DNS refresh adds only the caller-owned `_x402` TXT
   underscored service name referencing provisional
   `draft-hawkins-x402-dns-discovery-01`, bringing the current register to 4,446
-  surfaces without admitting draft authority or runtime code; and
+  surfaces without admitting draft authority or runtime code;
+- the later reviewed 2026-08-11 TLS ExtensionType refresh adds C509 Certificate
+  type value 4 and moves the unassigned range start to 5, bringing the current
+  register to 4,447 surfaces while retaining the provisional C509 draft as
+  non-authoritative future work and admitting no runtime code; and
 - no protocol surface or normative protocol requirement advances because
   these types are source-free shared foundations; later wire widths,
   direction-specific state, parsers, and engines remain future work.

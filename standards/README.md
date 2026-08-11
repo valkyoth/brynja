@@ -95,7 +95,7 @@ The surface checker additionally fails on a changed source-ledger hash,
 missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
-or stale generated JSON or Markdown. All 4,125 individual IANA records, 195
+or stale generated JSON or Markdown. All 4,126 individual IANA records, 195
 nested registries, and 126 semantic decisions are represented; `future-work`
 does not claim implementation. An `implemented` disposition is admitted only
 when current code, tests, and requirement evidence support that exact surface.
@@ -109,13 +109,13 @@ incorrect revisions, unrelated decision links, lifecycle/disposition or owner
 conflicts, protocol use of global mappings, released-scope changes, or stale
 generated artifacts. Its 12 foundation requirements exercise all eight
 lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
-encoding, PKIX, OCSP, and CT authorities plus 3,322 selected surfaces; 70
+encoding, PKIX, OCSP, and CT authorities plus 3,323 current selected surfaces; 70
 transport requirements cover 40 authorities, 550 normative sections, 63
 implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty
 residual requirements cover 33 authorities, 182 reviewed normative sections,
 and all 765 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 127 sources and 4,446 surfaces.
+closure across all 127 sources and 4,447 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -157,6 +157,12 @@ SecP384r1MLKEM1024. RFC 10024 has no reported errata, and the IANA delta adds
 no new value. The former admission blocker remains recorded as `resolved`;
 implementation stays planned only for milestone `0.120.0`, and drafts and
 private code points remain forbidden.
+
+The later 2026-08-11 reviewed TLS ExtensionType refresh records certificate
+type value 4 as C509 Certificate and moves the unassigned range start to 5.
+The registry's provisional `draft-ietf-cose-cbor-encoded-cert-20` reference is
+not admitted as normative authority; the surface remains future work behind
+the existing certificate-type decision boundary and admits no runtime code.
 
 Final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are checksum-pinned
 local-only authorities. Their publication pages, planning notes, errata, and

@@ -60,6 +60,10 @@ verifier exists.
 - The release-time live standards gate reviewed and pinned IANA's 2026-08-11
   `_x402` TXT underscored service-name addition as caller-owned v0.140.0
   planning data; its provisional draft reference admits no authority or code.
+- A subsequent live-gate run reviewed and pinned IANA's 2026-08-11 C509
+  Certificate type allocation as non-authoritative future work; the
+  provisional draft reference admits no authority, implementation, or runtime
+  behavior.
 - GitHub's ordinary repository-gate job installs all three OS-less Rust targets
   before the CPU-admission fixture runs; assurance validation rejects removal
   of that setup.

@@ -121,6 +121,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Refresh the locked IANA TLS ExtensionType snapshot after the release gate
+  detected the 2026-08-11 C509 Certificate type allocation; retain its
+  provisional draft as non-authoritative future work and regenerate complete
+  4,447-surface requirement closure without admitting code.
 - Force LF checkout for repository text and reject removal of that rule from
   the CPU-evidence policy, keeping reviewed byte hashes identical on Windows,
   Linux, and macOS.

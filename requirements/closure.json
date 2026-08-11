@@ -4148,7 +4148,7 @@
       "version": "H0.8.0"
     }
   ],
-  "provisional_surface_count": 99,
+  "provisional_surface_count": 100,
   "provisional_surfaces": [
     "algorithm.ecdhe-ml-kem",
     "iana.hpke.hpke-kdf-ids.0x0010.1",
@@ -4215,6 +4215,7 @@
     "iana.tls-extensiontype-values.tls-extensiontype-values-1.tlmsp.1",
     "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-flags.1",
     "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
+    "iana.tls-extensiontype-values.tls-extensiontype-values-3.c509-certificate.1",
     "iana.tls-parameters.exporter-labels.exporter-ace-pop-input-coap-group-oscore-app.1",
     "iana.tls-parameters.exporter-labels.exporter-onem2m-connection.1",
     "iana.tls-parameters.exporter-labels.exporter-onem2m-escertke.1",
@@ -7035,7 +7036,7 @@
         "BRY-REQ-TLS-0002",
         "BRY-REQ-TLS12EXT-0058"
       ],
-      "sha256": "e12d35d69c08955f92039ebd08849a9f14d12532a0a8bef57899c50d875a8fea"
+      "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d"
     },
     {
       "id": "iana:tls-parameters",
@@ -27347,6 +27348,12 @@
     },
     {
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-3.1609dot2.1",
+      "requirement_ids": [
+        "BRY-REQ-OCSP-0006"
+      ]
+    },
+    {
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-3.c509-certificate.1",
       "requirement_ids": [
         "BRY-REQ-OCSP-0006"
       ]

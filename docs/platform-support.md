@@ -21,9 +21,10 @@ Status: policy
 | Server AArch64 | AWS Arm system | Record exact Graviton or successor CPU and observed features independently from Apple evidence |
 | RISC-V | Available slow cloud host | Generic RISC-V and base RVV do not imply crypto extensions; admit only an exact ratified scalar-crypto or vector-crypto bundle seen on matching native hardware |
 
-Every lane runs scalar as the portable baseline. `brynja-crypto-cpu` remains an
-optional `no_std` backend package; a separate `brynja-crypto-cpu-std` adapter
-may provide opt-in runtime detection on supported host systems. OS-less targets
+Every lane runs scalar as the portable baseline. `brynja-crypto-cpu` is a
+reserved `no_std` backend package; the separate, currently inert
+`brynja-crypto-cpu-std` boundary may provide opt-in runtime detection on
+supported host systems after a later explicit admission. OS-less targets
 use compiler-proven target features or an explicitly reviewed capability token.
 Cross-compilation and QEMU prove build and supplemental instruction behavior,
 not native performance, microarchitecture-specific side channels, CPU feature
@@ -35,8 +36,8 @@ native interoperability, entropy/time integration, lifecycle tests, packaging,
 and platform-specific security review. Protocol-facing traits live in upstream
 `no_std` interface crates; `brynja-platform` is a downstream implementer and is
 never required by a protocol engine. Core packages may not inspect the OS or
-assume `std`. The planned std CPU-detection adapter is a separate downstream
-package, not a core or protocol dependency, and provides no entropy, clock,
+assume `std`. The reserved CPU-detection boundary is a separate downstream
+package, not a facade, core, or protocol dependency, and provides no entropy, clock,
 transport, storage or generic OS integration.
 
 The v0.4.0 bare-metal matrix proves only that the complete crate graph remains

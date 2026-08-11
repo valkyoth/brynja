@@ -235,6 +235,11 @@ application callback, detect a CPU, call an intrinsic, execute assembly or an
 accelerated kernel implementation, initialize a global cache, measure
 performance or timing, approve a module, complete a provider effect, or
 establish FIPS validation.
+v0.13.2 adds two inert, unpublished package boundaries and a hash-bound future
+admission register. Both packages remain outside the ordinary facade and
+protocol engines. The register admits zero kernels and zero new low-level-code
+allowances; a reserved path, identity, feature bundle, or ABI precondition is
+not execution authority or implementation evidence.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
 authority, dispatch authority, instance identity, CPU lease, trusted CPU
@@ -272,7 +277,9 @@ production claim. v0.12.0 adds only fixed-width constant-time operations and
 bounded compiler evidence. v0.13.0 adds only provider capabilities, opaque
 authority tokens, and bounded immutable request metadata. v0.13.1 adds only
 CPU-backend capability, health, policy, and dispatch contracts without any
-backend implementation or detection. Planned,
+backend implementation or detection. v0.13.2 adds only inert CPU package and
+future-admission boundaries without a primitive, detector, kernel, performance
+claim, independent verification, or FIPS approval. Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

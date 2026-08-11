@@ -30,9 +30,10 @@ test count, or interoperability alone never establishes that claim.
   can never enter the main workspace lockfile, a Brynja facade, engine, crypto,
   default, bare-metal, legacy, or validated-module graph.
 - Portable production cores remain `no_std` with no assumed allocator, OS,
-  socket, clock, filesystem, entropy source, or runtime CPU detector. A future
-  separately selected `brynja-crypto-cpu-std` adapter may use `std` only for
-  CPU feature detection and dispatch initialization; it cannot enter default,
+  socket, clock, filesystem, entropy source, or runtime CPU detector. The inert,
+  separately selected `brynja-crypto-cpu-std` boundary may use `std` only after
+  a later explicit admission, and then solely for CPU feature detection and
+  dispatch initialization; it cannot enter default,
   bare-metal, protocol-engine, entropy, or validated-module graphs.
 - No Rust source file over 500 lines. Split modules before 450 lines so tests
   and review changes have room.
@@ -69,8 +70,8 @@ brynja
 ├── brynja-hash-sha3 (future SHA-3/SHAKE scalar ownership shared with ML-KEM)
 ├── brynja-mac-hmac (future reusable HMAC ownership)
 ├── brynja-crypto (provider contracts, compositions, and non-hash primitives)
-├── future optional brynja-crypto-cpu (zero-dependency no_std ISA kernels)
-├── future optional brynja-crypto-cpu-std (std detection adapter only)
+├── optional brynja-crypto-cpu (reserved zero-dependency no_std ISA boundary)
+├── optional brynja-crypto-cpu-std (reserved host-detection boundary)
 ├── future brynja-fips-module (exact validated artifact; never a feature)
 ├── future brynja-fips (downstream approved-only selection facade)
 ├── brynja-pki

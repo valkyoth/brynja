@@ -38,6 +38,8 @@ small, hashed, first-party `brynja-crypto-cpu` implementation symbols after the
 primitive- and architecture-specific unsafe, emitted-code, native-hardware,
 side-channel, differential, KAT, and audit gates in the release plan. External
 assembly files, prebuilt objects, and vendor libraries remain prohibited.
+Version 0.13.2 reserves that package and eight future symbol locations but
+admits no implementation symbol or additional low-level-code exception.
 
 Caller-provided entropy, external keys, accelerators, or HSMs are outside the
 Brynja implementation and claim boundary. They can satisfy an explicit

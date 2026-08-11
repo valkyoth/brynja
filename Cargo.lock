@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -22,6 +22,17 @@ version = "0.7.0"
 [[package]]
 name = "brynja-crypto"
 version = "0.1.0"
+
+[[package]]
+name = "brynja-crypto-cpu"
+version = "0.1.0"
+
+[[package]]
+name = "brynja-crypto-cpu-std"
+version = "0.1.0"
+dependencies = [
+ "brynja-crypto-cpu",
+]
 
 [[package]]
 name = "brynja-dtls"

@@ -37,6 +37,8 @@ lto = "fat"
 [workspace.dependencies]
 brynja-core = { path = "crates/brynja-core", version = "=0.7.0" }
 brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.0" }
+brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.0" }
+brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.0" }
 brynja-pki = { path = "crates/brynja-pki", version = "=0.1.6" }
 brynja-tls = { path = "crates/brynja-tls", version = "=0.1.6" }
 brynja-tls12 = { path = "crates/brynja-tls12", version = "=0.1.6" }

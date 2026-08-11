@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.0 tagged; v0.13.1 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.13.1 tagged; v0.13.2 awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -36,9 +36,12 @@ authorization/provider-binding flaws and one Medium work-accounting flaw. The
 four source remediations are complete, and the repository-owner retest of exact
 signed candidate `b45185e5aefdd48b9dc1859fee7a9000be9b6168` passed with zero
 open findings. Signed tag v0.13.0 contains the remediated contract and selected
-no crates.io publication. The facade now advances to `0.13.1` for the
-CPU-backend capability and dispatch contract while every support-crate version
-and crates.io publication selection remains unchanged.
+no crates.io publication. Signed v0.13.1 contains the remediated CPU-backend
+capability and dispatch contract and also selected no crates.io publication.
+The facade now advances to `0.13.2`; two inert packages reserve the future
+CPU-kernel and host-detection boundaries while every previously existing
+support-crate version and every crates.io publication selection remains
+unchanged.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -492,8 +495,30 @@ performance claim, or FIPS validation. Its exceptional assessment and first
 retest found three High backend-authority flaws; all were remediated, and the
 repository-owner retest of exact signed final candidate
 `738d21227d9681299d7464d9df360cf49cac8cca` passed with zero open findings.
-v0.13.1 remains blocked pending the complete gate, green GitHub and CodeQL, and
-explicit signed-tag authorization. It selects no crates.io publication.
+Signed v0.13.1 contains the exact remediated candidate and selects no crates.io
+publication.
+
+Version 0.13.2 reserves the CPU-acceleration package and low-level boundary:
+
+- `brynja-crypto-cpu 0.1.0` is an optional, zero-dependency `no_std` package
+  reserved for separately admitted first-party Rust ISA kernels;
+- `brynja-crypto-cpu-std 0.1.0` is a separately selected inert host-adapter
+  boundary that currently remains `no_std` and performs no CPU detection;
+- the ordinary facade, protocol engines, defaults, bare-metal graphs, and
+  validated-module/FIPS boundaries remain independent of both packages;
+- a SHA-256-bound machine register reserves eight exact backend identities,
+  modules, instruction bundles, architectures, ABI preconditions, and future
+  admission duties while admitting zero active kernels and zero new low-level
+  allowances; and
+- positive validation plus eighteen broken fixtures reject graph smuggling,
+  dependency or feature drift, premature backend activation, unregistered
+  source, low-level tokens, build scripts, false claims, and files above the
+  500-line review limit.
+
+This milestone implements no primitive, intrinsic, assembly, runtime feature
+detection, executable dispatch, performance claim, independent verification,
+FIPS approval, or new unsafe site. Both new packages remain unpublished and the
+development release selects zero crates.io publication.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

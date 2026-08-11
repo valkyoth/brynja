@@ -19,11 +19,12 @@ MODERN_CLASSES = frozenset(
         "modern-shared",
         "platform-adapter",
         "protocol-adapter",
+        "cpu-backend",
     }
 )
 LEGACY_CLASSES = frozenset({"legacy-facade", "legacy-engine"})
 PRIVATE_CLASSES = frozenset({"repository-only", "research-only"})
-ADAPTER_CLASSES = frozenset({"security-adapter"})
+ADAPTER_CLASSES = frozenset({"security-adapter", "host-adapter"})
 ALL_CLASSES = MODERN_CLASSES | LEGACY_CLASSES | PRIVATE_CLASSES | ADAPTER_CLASSES
 EXTERNAL = {
     "sanitization": {
@@ -328,6 +329,25 @@ def validate_resolved_mode(
         raise ValueError("sanitization activated an unadmitted feature")
     if edges.get(sanitization_id, set()):
         raise ValueError("sanitization activated a transitive package")
+    cpu = reachable_names("brynja-crypto-cpu", names, packages_by_id, edges)
+    if cpu != {"brynja-crypto-cpu"}:
+        raise ValueError("no_std CPU backend package gained a dependency")
+    detector = reachable_names("brynja-crypto-cpu-std", names, packages_by_id, edges)
+    if detector != {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}:
+        raise ValueError("host CPU detector package graph drifted")
+    if {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}.intersection(modern):
+        raise ValueError("modern facade must remain independent of CPU packages")
+    for engine in (
+        "brynja-tls",
+        "brynja-tls12",
+        "brynja-tls13",
+        "brynja-tls13-handshake",
+        "brynja-dtls",
+        "brynja-quic-tls",
+    ):
+        reached = reachable_names(engine, names, packages_by_id, edges)
+        if {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}.intersection(reached):
+            raise ValueError(f"protocol engine reaches a CPU adapter: {engine}")
 
 
 def parse_args() -> argparse.Namespace:

@@ -19,6 +19,18 @@ publish = "crates-io"
 required = []
 optional = {}
 
+[packages.brynja-crypto-cpu]
+class = "cpu-backend"
+publish = "crates-io"
+required = []
+optional = {}
+
+[packages.brynja-crypto-cpu-std]
+class = "host-adapter"
+publish = "crates-io"
+required = ["brynja-crypto-cpu"]
+optional = {}
+
 [packages.brynja-pki]
 class = "modern-shared"
 publish = "crates-io"

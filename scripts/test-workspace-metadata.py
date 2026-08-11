@@ -383,6 +383,39 @@ def test_resolved_isolation(all_features: dict, no_default: dict) -> None:
         "facade activation of the sanitization adapter",
     )
 
+    facade_detector = copy.deepcopy(all_features)
+    node(facade_detector, "brynja")["deps"].append(
+        graph_dependency(facade_detector, "brynja", "brynja-crypto-cpu-std")
+    )
+    require_rejection(
+        facade_detector,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "host CPU detector smuggling through the facade",
+    )
+
+    facade_cpu = copy.deepcopy(all_features)
+    node(facade_cpu, "brynja")["deps"].append(
+        graph_dependency(facade_cpu, "brynja", "brynja-crypto-cpu")
+    )
+    require_rejection(
+        facade_cpu,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "CPU package smuggling through the facade",
+    )
+
+    engine_cpu = copy.deepcopy(all_features)
+    node(engine_cpu, "brynja-tls13")["deps"].append(
+        graph_dependency(engine_cpu, "brynja-tls13", "brynja-crypto-cpu")
+    )
+    require_rejection(
+        engine_cpu,
+        "all-features",
+        "resolved all-features dependency graph drifted",
+        "CPU package smuggling through a protocol engine",
+    )
+
     upstream_feature = copy.deepcopy(all_features)
     node(upstream_feature, "sanitization")["features"] = ["zeroize-interop"]
     require_rejection(
@@ -448,7 +481,7 @@ def main() -> int:
     test_resolved_isolation(all_features, no_default)
     test_keylog_isolation(all_features)
     reject_invalid_and_exhausted(all_features)
-    print("workspace policy rejects 30 package-class, external-admission, and feature-graph regressions")
+    print("workspace policy rejects 33 package-class, external-admission, and feature-graph regressions")
     return 0
 
 

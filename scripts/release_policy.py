@@ -33,6 +33,8 @@ CHANGE_KINDS = (
 PUBLISH_ORDER = (
     "brynja-core",
     "brynja-crypto",
+    "brynja-crypto-cpu",
+    "brynja-crypto-cpu-std",
     "brynja-pki",
     "brynja-platform",
     "brynja-tls13-handshake",

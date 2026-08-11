@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Reserve unpublished `brynja-crypto-cpu 0.1.0` and
+  `brynja-crypto-cpu-std 0.1.0` package boundaries without implementing a
+  primitive, ISA kernel, runtime detector, or executable dispatch path.
+- Add a SHA-256-bound CPU-acceleration policy covering eight reserved backend
+  identities, exact future modules, instruction bundles, ABI preconditions,
+  graph and FIPS exclusions, zero active kernels, zero new low-level
+  allowances, and eighteen broken fixtures.
 - Add sealed CPU-backend identities, exact feature bundles, scalar,
   opportunistic, required-accelerated, and validated-module policies, and inert
   candidate profiles that cannot authorize an instruction.
@@ -61,6 +68,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the `brynja` facade to `0.13.2`, keep both CPU boundaries outside
+  every facade and protocol engine, and select zero crates for crates.io
+  publication.
 - Advance the `brynja` facade to `0.13.1` while retaining `brynja-core 0.7.0`
   and every other supporting-crate version; select zero crates for crates.io
   publication at this internal development milestone.
@@ -101,6 +111,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Keep scalar, protocol-engine, default, bare-metal and FIPS graphs isolated
+  from host CPU detection; require a later primitive-specific policy amendment,
+  source hash, native evidence, exceptional review and explicit allowance
+  before any low-level CPU implementation can be admitted.
 - Require one explicitly chosen provider and one exact declared operation;
   reject unsupported direction without registry search, implicit fallback, or
   authorization reuse.

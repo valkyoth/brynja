@@ -72,7 +72,17 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.13.1` development line adds a version-neutral CPU-backend
+The current `0.13.2` development line reserves `brynja-crypto-cpu` as a
+zero-dependency `no_std` package and `brynja-crypto-cpu-std` as its separately
+selected future host detector. Both remain independent of the main facade,
+defaults, and protocol engines. Eight x86_64, AArch64, and RISC-V backend
+module identities now carry
+exact reserved paths, instruction and ABI preconditions, safe-wrapper
+invariants, and a fail-closed amendment checklist. Both packages are inert:
+there is no detector, intrinsic, assembly, executable backend, new low-level-
+code allowance, performance claim, or FIPS validation.
+
+Version `0.13.1` added a version-neutral CPU-backend
 contract to `brynja-core`. Sealed scalar, x86, AArch64, RISC-V, and
 validated-module identities bind exact feature and provider-operation profiles.
 Opaque backend-instance identity binds a measured artifact and operational
@@ -189,14 +199,12 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
-v0.13.0, whose exceptional pentest and remediation retest passed with zero open
-findings and which was intentionally not published to crates.io. The current
-v0.13.1 exceptional assessment and first retest found three High
-backend-authority flaws. All were remediated, and the repository-owner retest
-of exact signed final candidate `738d21227d9681299d7464d9df360cf49cac8cca`
-passed with zero open findings. The release-preparation commit now awaits green
-GitHub and CodeQL before tag authorization. The
-published dependency is:
+v0.13.1. Its exceptional assessment and first retest found three High
+backend-authority flaws; all were remediated, and repository-owner retest of
+exact signed final candidate `738d21227d9681299d7464d9df360cf49cac8cca`
+passed with zero open findings before the signed tag. The current v0.13.2
+package-boundary candidate awaits review and selects no crates.io publication.
+The published dependency is:
 
 ```toml
 [dependencies]
@@ -307,6 +315,8 @@ certificate-bound operational-environment claim.
 | `brynja-core` | Constant-time operations plus provider and CPU-backend capability, authorization, health, and dispatch contracts | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
+| `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
+| `brynja-crypto-cpu-std` | Future host CPU detection and dispatch initialization | ❌ Not implemented or verified |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
 | `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |
 | `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |
@@ -338,6 +348,8 @@ formal proof, pentest, or release status.
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
 | Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Foundation only |
+| `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
+| `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
 | `brynja-tls13` | Version-specific TLS 1.3 stream engine | Foundation only |

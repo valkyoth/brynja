@@ -21,10 +21,14 @@ Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
 
-## Planned CPU-Acceleration Boundary Is Not Yet Approved
+## Reserved CPU-Acceleration Boundary; No Low-Level Site Approved
 
-Versions 0.13.1 through 0.13.3 plan capability, package, evidence and test
-contracts only. They do not permit another unsafe site. Later
+Versions 0.13.1 and 0.13.2 establish capability and package policy contracts
+only. The latter reserves `brynja-crypto-cpu` and
+`brynja-crypto-cpu-std`, eight machine-readable backend identities, and exact
+future amendment duties while admitting zero active kernels and zero new
+low-level allowances. Version 0.13.3 plans evidence and test contracts. None
+of these milestones permits another unsafe site. Later
 primitive-specific acceleration milestones may request exact intrinsics or
 assembly inside the separately classified `brynja-crypto-cpu` package. Each
 request must identify the primitive and operation, exact source symbol and

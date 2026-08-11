@@ -1,0 +1,200 @@
+[schema]
+version = 1
+milestone = "0.13.2"
+status = "reserved-no-implementation"
+
+[limits]
+maximum_source_lines = 500
+active_backend_count = 0
+approved_cpu_low_level_allowances = 0
+
+[packages.kernel]
+name = "brynja-crypto-cpu"
+version = "0.1.0"
+runtime = "no_std"
+dependencies = []
+default_features = []
+publication = "deferred-crates-io"
+facade_feature = "none"
+
+[packages.detector]
+name = "brynja-crypto-cpu-std"
+version = "0.1.0"
+runtime = "reserved-std-currently-no_std"
+dependencies = ["brynja-crypto-cpu"]
+default_features = []
+publication = "deferred-crates-io"
+facade_feature = "none"
+
+[graph]
+scalar_owner = "brynja-crypto"
+facade = "brynja"
+forbidden_consumers = [
+  "brynja-crypto",
+  "brynja-tls",
+  "brynja-tls12",
+  "brynja-tls13",
+  "brynja-tls13-handshake",
+  "brynja-dtls",
+  "brynja-quic-tls",
+  "brynja-legacy",
+]
+third_party_detection_crates = "forbidden"
+build_time_source_inclusion = "forbidden"
+implicit_std = "forbidden"
+os_entropy_and_platform_services = "forbidden"
+
+[fips]
+future_module = "brynja-fips-module"
+ordinary_facade_claim = "forbidden"
+detector_adapter = "excluded"
+feature_unification_changes_artifact = "forbidden"
+kernel_inclusion = "exact-reviewed-symbols-only"
+dispatch_table = "artifact-owned"
+operational_environment = "artifact-owned"
+
+[low_level_boundary]
+current_cpu_allowances = []
+approval_scope = "one-exact-symbol"
+amendment_requires = [
+  "primitive-and-operation",
+  "source-symbol-and-sha256",
+  "compiler-and-feature-bundle",
+  "instruction-preconditions",
+  "abi-and-vector-state-preconditions",
+  "safe-wrapper-invariants",
+  "register-and-spill-residuals",
+  "scalar-reference",
+  "known-answer-test",
+  "quarantine-path",
+  "native-hardware-evidence",
+  "side-channel-evidence",
+  "performance-evidence",
+  "fips-disposition",
+  "independent-review",
+]
+forbidden_mechanisms = [
+  "foreign-abi",
+  "external-assembly",
+  "native-object",
+  "build-script",
+  "generated-source-inclusion",
+  "global-registry",
+]
+
+[safe_wrapper]
+invariants = [
+  "exact-backend-identity",
+  "complete-feature-bundle",
+  "operating-state-preconditions",
+  "exact-session-and-instance",
+  "successful-direct-kat",
+  "healthy-current-generation",
+  "exact-operation-authority",
+  "migration-exclusion-through-call",
+  "post-callback-logical-revalidation",
+  "guarded-direct-kernel-call",
+  "bounded-caller-owned-buffers",
+  "scalar-differential-equivalence",
+  "secret-free-failure",
+]
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/lib.rs"
+status = "boundary-only"
+sha256 = "614731a47da9364a16d62b71335b5cbeffb7554b117d4c2c8661fd5b2b2ec438"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/lib.rs"
+status = "boundary-only"
+sha256 = "db734d07aca12e88b560d732d977d97f9e86e438ef913f6b3d5d19c733a9d7a2"
+
+[[backends]]
+id = "x86-sha"
+identity = "X86Sha"
+architecture = "x86_64"
+module = "src/x86_sha.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["sha"]
+abi_preconditions = ["x86_64", "sha-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "x86-aes-gcm"
+identity = "X86AesGcm"
+architecture = "x86_64"
+module = "src/x86_aes_gcm.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["aes", "pclmulqdq"]
+abi_preconditions = ["x86_64", "aes-and-pclmulqdq-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "x86-avx2"
+identity = "X86Avx2"
+architecture = "x86_64"
+module = "src/x86_avx2.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["avx2"]
+abi_preconditions = ["x86_64", "osxsave-and-xcr0-ymm-state", "avx2-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "x86-avx512"
+identity = "X86Avx512"
+architecture = "x86_64"
+module = "src/x86_avx512.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["avx512f"]
+abi_preconditions = ["x86_64", "osxsave-and-xcr0-zmm-state", "avx512f-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "aarch64-sha2"
+identity = "Aarch64Sha2"
+architecture = "aarch64"
+module = "src/aarch64_sha2.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["neon", "sha2"]
+abi_preconditions = ["aarch64", "neon-and-sha2-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "aarch64-aes-gcm"
+identity = "Aarch64AesGcm"
+architecture = "aarch64"
+module = "src/aarch64_aes_gcm.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["neon", "aes", "pmull"]
+abi_preconditions = ["aarch64", "neon-aes-and-pmull-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "riscv-vector"
+identity = "RiscVVector"
+architecture = "riscv"
+module = "src/riscv_vector.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["v"]
+abi_preconditions = ["ratified-vector-isa", "vector-state-enabled", "v-usable-on-current-hart"]
+
+[[backends]]
+id = "riscv-scalar-crypto"
+identity = "RiscVScalarCrypto"
+architecture = "riscv"
+module = "src/riscv_scalar_crypto.rs"
+status = "reserved"
+sha256 = "absent"
+low_level_allowed = false
+instructions = ["ratified-scalar-crypto-subset"]
+abi_preconditions = ["matching-riscv-width", "exact-scalar-crypto-subset-usable-on-current-hart"]

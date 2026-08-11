@@ -1,0 +1,20 @@
+[package]
+name = "brynja-crypto-cpu-std"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Opt-in host CPU-detection boundary for Brynja cryptography"
+publish = ["crates-io"]
+
+[features]
+default = []
+
+[dependencies]
+brynja-crypto-cpu = { workspace = true }
+
+[lints]
+workspace = true

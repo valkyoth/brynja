@@ -1240,7 +1240,7 @@ Exit criteria:
 
 ### v0.13.1 - CPU Backend Capability And Dispatch Contract
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Before any cryptographic primitive exists, freeze first-party scalar, opportunistic-accelerated, required-accelerated, and validated-module backend policies; separate candidate detection from admitted activation; define exact feature-bundle evidence, non-forgeable thread-bound capability tokens, backend identity, per-operation dispatch, startup known-answer tests, health generations, quarantine, fail-closed required mode, and secret-free reporting so safe code cannot execute an unsupported instruction or silently change service approval.
 
@@ -1266,7 +1266,7 @@ Exit criteria:
 
 ### v0.13.2 - CPU Acceleration Package And Unsafe Boundary
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Freeze future `brynja-crypto-cpu` as an optional zero-dependency `no_std` package for isolated ISA kernels and static selection, and future `brynja-crypto-cpu-std` as a separate opt-in `std` runtime-detection adapter; keep scalar `brynja-crypto`, every protocol engine, default feature, bare-metal graph, and ordinary facade independent of both, keep the std adapter outside `brynja-fips-module`, and require a separately hashed, versioned, under-500-line unsafe-intrinsic or assembly boundary for every admitted backend without authorizing any implementation yet.
 

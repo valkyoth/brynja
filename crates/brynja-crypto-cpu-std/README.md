@@ -1,0 +1,53 @@
+<p align="center">
+  <b>Security-first, first-party Rust, no_std cryptography and secure protocols.</b><br>
+  Built in small reviewable releases with strict modern, legacy, and research isolation.
+</p>
+
+<div align="center">
+  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  |
+  <a href="https://docs.rs/brynja">Docs.rs</a>
+  |
+  <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
+  |
+  <a href="https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md">Threat Model</a>
+  |
+  <a href="https://github.com/valkyoth/brynja/blob/main/SECURITY.md">Security</a>
+</div>
+
+<br>
+
+<p align="center">
+  <a href="https://github.com/valkyoth/brynja">
+    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+  </a>
+</p>
+
+# brynja-crypto-cpu-std
+
+`brynja-crypto-cpu-std` reserves the separate opt-in host CPU-detection and
+dispatch-initialization boundary. It depends only on `brynja-crypto-cpu`, is
+selected directly by host applications, and can never enter Brynja defaults,
+protocol engines, bare-metal graphs, or a FIPS validated-module artifact.
+
+The v0.1.0 placeholder deliberately remains `no_std`. It contains no runtime
+detection, global initializer, detector dependency, platform service,
+executable backend, cryptographic code, or low-level-code allowance. A later
+implementation milestone must explicitly authorize standard-library use and
+prove that detection evidence cannot activate a backend without its direct KAT
+and migration-safe execution authority.
+
+## Cryptography Verification Status
+
+No cryptographic or dispatch code in this crate has been independently
+reviewed. A component only moves from ❌ to ✅ when a named independent reviewer
+signs off and the evidence is linked. Project tests, CI, Kani, Miri, fuzzing,
+and pentesting do not by themselves constitute independent verification.
+
+| Component | Cryptographic scope | Independently verified |
+| --- | --- | --- |
+| `brynja-crypto-cpu-std` | Future host feature detection and dispatch initialization | ❌ Not implemented or verified |
+
+The package is not selected for crates.io publication at v0.13.2. The project-
+wide first-party Rust, dependency, source-size, platform, FIPS, and low-level-
+code policies apply here.

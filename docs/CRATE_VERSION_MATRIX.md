@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 remediation awaiting retest
+Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 awaiting green CI
 
 The `brynja` facade advances to `0.13.3` for the current development line but
 is not selected for crates.io publication. The latest signed development tag
@@ -25,7 +25,10 @@ package boundaries and likewise selects no crate. Its one High and one Medium
 assessment findings are remediated, and repository-owner retest of exact signed
 candidate `2fa60d05d8c4472426cdb979243f53e2e959c231` passed with zero open
 findings. The v0.13.3 stage adds repository-only CPU evidence and performance-
-admission contracts while all eight reserved backends remain unadmitted.
+admission contracts while all eight reserved backends remain unadmitted. Its
+two High findings passed first remediation retest; the resulting Low parser
+finding passed repository-owner retest on exact signed second remediation
+candidate `1f08ca0fd9be6bf1995a22a9ca806addc17641e0`, with zero open findings.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

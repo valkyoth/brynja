@@ -218,8 +218,11 @@ crates.io checkpoint is `0.10.0`; the latest signed development milestone is
 v0.13.2. Its package-boundary candidate's one High and one Medium findings were remediated;
 repository-owner retest of exact signed candidate
 `2fa60d05d8c4472426cdb979243f53e2e959c231` passed with zero open findings.
-The current v0.13.3 CPU-evidence candidate awaits pentest and selects no
-crates.io publication.
+The current v0.13.3 CPU-evidence candidate's two High findings passed first
+remediation retest, and the resulting Low parser finding passed repository-
+owner retest of exact signed second remediation candidate
+`1f08ca0fd9be6bf1995a22a9ca806addc17641e0` with zero open findings. It awaits
+green GitHub and CodeQL and selects no crates.io publication.
 The published dependency is:
 
 ```toml

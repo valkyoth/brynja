@@ -1,6 +1,6 @@
 # Brynja v0.13.3 Development Milestone
 
-Status: pentest remediation implemented; repository-owner retest pending
+Status: implementation and retest complete; awaiting green GitHub and CodeQL
 
 Brynja v0.13.3 implements the repository assurance boundary that every future
 CPU-accelerated cryptographic backend must satisfy. It advances only the
@@ -67,8 +67,10 @@ strings could bypass reviewed ISA prerequisites. Both are locally remediated
 through the authentication hard gate, exact artifact semantics, and exact
 backend operating-state equality. First remediation retest confirmed both High
 findings resolved and found one Low oversized-JSON-integer traceback. Signed
-64-bit-only artifact parsing and controlled float/non-finite rejection now
-remediate that issue; follow-up repository-owner retest is pending. See
+64-bit-only artifact parsing and controlled float/non-finite rejection remediate
+that issue. Repository-owner retest of exact signed second remediation
+candidate `1f08ca0fd9be6bf1995a22a9ca806addc17641e0` passed with zero open
+findings; the permanent report records `PASS`/`PASS`. See
 `security/pentest/v0.13.3.md`.
 
 This milestone contains no cryptographic primitive, ISA kernel, CPU detector,

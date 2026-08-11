@@ -130,6 +130,9 @@ Keep a Changelog and Semantic Versioning.
   bounding artifact integers to signed 64-bit values, rejecting floats and
   non-finite constants, and normalizing oversized inputs into controlled
   evidence errors without a traceback.
+- Record repository-owner PASS retest of exact signed second v0.13.3
+  remediation candidate `1f08ca0fd9be6bf1995a22a9ca806addc17641e0`
+  with zero open findings.
 - Reject stale, future, mixed-CPU, incomplete-feature, fabricated-native,
   unowned-runner, non-finite, noisy, order-biased, under-sampled, slow,
   oversized, unhashed, path-escaping, QEMU-promoted, or false-eligibility CPU

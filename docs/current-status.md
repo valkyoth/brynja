@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 remediation awaiting retest
+Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -560,8 +560,10 @@ operating-state strings were not checked against the reviewed backend ABI.
 Repository-owner retest of exact signed first remediation candidate
 `7de753a57e942c28dac8406d8f93d62c4767de3a` confirmed both High findings
 resolved and found one new Low uncontrolled oversized-JSON-integer exception.
-That parser issue is locally remediated pending another retest. Fifty-four
-adversarial evidence fixtures now reject unauthenticated candidate/native
+Repository-owner retest of exact signed second remediation candidate
+`1f08ca0fd9be6bf1995a22a9ca806addc17641e0` confirmed that parser issue
+resolved with zero open findings; the permanent report records `PASS`/`PASS`.
+Fifty-four adversarial evidence fixtures now reject unauthenticated candidate/native
 claims, machine-readable artifact semantic drift, disabled or meaningless
 ABI/vector state, oversized/non-finite/float JSON, stale provenance, missing
 features, mixed CPUs, non-finite/noisy/biased

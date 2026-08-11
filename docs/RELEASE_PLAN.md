@@ -1292,7 +1292,7 @@ Exit criteria:
 
 ### v0.13.3 - Native CPU Evidence And Performance Admission Harness
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Establish reproducible backend evidence manifests, forced-backend and unsupported-feature processes, KAT and quarantine fault injection, scalar differential corpora, emitted-code and side-channel capture, code-size and latency budgets, and benchmark admission thresholds across local AMD x86_64, an observed-feature AWS Intel x86_64 instance, Apple M2, AWS AArch64, and the available RISC-V cloud host; record CPU, microcode, OS, compiler, flags, frequency policy, and feature evidence, treat emulation as supplemental only, and leave an unavailable or unmeasured backend unadmitted rather than blocking portable scalar support.
 
@@ -1313,6 +1313,7 @@ Verification:
 Exit criteria:
 
 - every future backend has a reproducible route to native admission and emulation cannot satisfy native performance or side-channel evidence;
+- record PASS/PASS with zero open findings after repository-owner retest confirmed both High findings resolved on exact signed first remediation candidate `7de753a57e942c28dac8406d8f93d62c4767de3a` and the follow-up Low parser finding resolved on exact signed second remediation candidate `1f08ca0fd9be6bf1995a22a9ca806addc17641e0`; and
 - `v0.13.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.14.0 - Entropy And Secure-Random Contracts

@@ -74,6 +74,21 @@ def main() -> int:
         lambda: evidence.validate_admissions(policy, weakened_state, boundary),
     )
 
+    attributes = evidence.ATTRIBUTES.read_text(encoding="utf-8")
+    broken_attributes = attributes.replace("* text=auto eol=lf\n", "")
+    original_attributes = evidence.ATTRIBUTES
+    with tempfile.TemporaryDirectory(prefix="brynja-cpu-attributes-") as temporary:
+        fixture = Path(temporary) / ".gitattributes"
+        fixture.write_text(broken_attributes, encoding="utf-8")
+        evidence.ATTRIBUTES = fixture
+        try:
+            expect_failure(
+                "LF checkout policy drifted",
+                evidence.validate_repository_binding,
+            )
+        finally:
+            evidence.ATTRIBUTES = original_attributes
+
     with tempfile.TemporaryDirectory(prefix="brynja-cpu-evidence-") as temporary:
         fixtures.test(policy, admissions, Path(temporary))
 
@@ -94,7 +109,7 @@ def main() -> int:
         finally:
             evidence.EVIDENCE_ROOT = original_root
 
-    print("CPU evidence rejects 54 authentication, parser, semantics, operating-state, correctness, resource, and admission regressions")
+    print("CPU evidence rejects 55 authentication, checkout, parser, semantics, operating-state, correctness, resource, and admission regressions")
     return 0
 
 

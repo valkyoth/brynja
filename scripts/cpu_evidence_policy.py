@@ -18,6 +18,7 @@ ADMISSIONS = ROOT / "security/cpu-backend-admissions.toml"
 BOUNDARY = ROOT / "security/cpu-acceleration-boundary.toml"
 LEDGER = ROOT / "assurance/cpu-evidence-ledger.json"
 EVIDENCE_ROOT = ROOT / "assurance/cpu-evidence"
+ATTRIBUTES = ROOT / ".gitattributes"
 EXPECTED_POLICY_SHA256 = "609548b1a4d72908dd0ec57f5d15456aeb517223579410f60fa1fae07ccb5bf3"
 EXPECTED_ADMISSIONS_SHA256 = "be2b120d289cb7b2b0dee7a51eb8a819268488e221fef7d2fc3d283f6573133b"
 BACKEND_FIELDS = {
@@ -92,6 +93,9 @@ def validate_admissions(policy: dict, admissions: dict, boundary: dict) -> None:
 
 
 def validate_repository_binding() -> None:
+    attributes = ATTRIBUTES.read_text(encoding="utf-8")
+    if attributes.splitlines().count("* text=auto eol=lf") != 1:
+        fail("CPU evidence LF checkout policy drifted")
     checks = (ROOT / "scripts/checks.sh").read_text(encoding="utf-8")
     for command in (
         "python3 scripts/check-cpu-evidence.py",

@@ -11,7 +11,7 @@ Keep a Changelog and Semantic Versioning.
   supplemental lanes, thirteen admission harnesses, exact raw-artifact
   provenance, bounded freshness/noise/order/performance rules, and a
   deterministic register retaining zero admitted backends.
-- Add 54 adversarial evidence fixtures and a dependency-free non-cryptographic
+- Add 55 adversarial evidence fixtures and a dependency-free non-cryptographic
   `no_std`/no-atomics scalar/mock fixture covering forced, required,
   unsupported, KAT, quarantine, differential, fallback, and independent-
   session behavior across host and OS-less target checks.
@@ -121,6 +121,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Force LF checkout for repository text and reject removal of that rule from
+  the CPU-evidence policy, keeping reviewed byte hashes identical on Windows,
+  Linux, and macOS.
 - Install all three OS-less Rust targets before GitHub's ordinary repository
   gate and enforce the setup with a broken-workflow fixture, preventing the CPU
   admission fixture from failing because `core` is unavailable.

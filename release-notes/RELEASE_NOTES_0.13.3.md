@@ -41,7 +41,7 @@ verifier exists.
 
 ## Verification
 
-- 54 adversarial evidence fixtures reject stale or future timestamps,
+- 55 adversarial evidence fixtures reject checkout-byte drift, stale or future timestamps,
   incomplete feature or exact operating-state bundles, fabricated native labels, wrong runner owners,
   vendor/model substitution, mixed CPUs, non-finite/noisy/biased measurements, insufficient samples or
   speedup, exceeded size/start budgets, failed correctness and security gates,
@@ -63,6 +63,9 @@ verifier exists.
 - GitHub's ordinary repository-gate job installs all three OS-less Rust targets
   before the CPU-admission fixture runs; assurance validation rejects removal
   of that setup.
+- Repository text is checked out with LF on every host, and CPU-evidence tests
+  reject removal of that rule so reviewed policy hashes remain portable to
+  Windows runners.
 
 ## Security And Verification Status
 

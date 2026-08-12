@@ -1,10 +1,10 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting green CI
 
-The `brynja` facade advances to `0.13.3` for the current development line but
+The `brynja` facade advances to `0.14.0` for the current development line but
 is not selected for crates.io publication. The latest signed development tag
-is v0.13.2 and the latest public
+is v0.13.3 and the latest public
 checkpoint remains `brynja 0.10.0`, `brynja-core 0.7.0`, eight modern support
 packages at `0.1.6`, and `brynja-crypto 0.1.0`. Supporting, legacy, and
 repository-only package versions remain unchanged during this development
@@ -29,11 +29,14 @@ admission contracts while all eight reserved backends remain unadmitted. Its
 two High findings passed first remediation retest; the resulting Low parser
 finding passed repository-owner retest on exact signed second remediation
 candidate `1f08ca0fd9be6bf1995a22a9ca806addc17641e0`, with zero open findings.
+The v0.14.0 stage adds affine raw-entropy and initialized secure-random
+contracts plus a production-unreachable deterministic fault provider. It
+implements no algorithm, entropy source, OS integration, or FIPS service.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.13.3` | no | Current development version; latest signed tag is `v0.13.2` and latest crates.io checkpoint is `0.10.0` |
-| `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while cumulative v0.11 zeroization, v0.12 constant-time, v0.13 provider-contract, and v0.13.1 backend-contract code remain unreleased on crates.io |
+| `brynja` | `0.14.0` | no | Current development version; latest signed tag is `v0.13.3` and latest crates.io checkpoint is `0.10.0` |
+| `brynja-core` | `0.7.0` | no | Published v0.10 boundary retained while cumulative v0.11 zeroization, v0.12 constant-time, v0.13 provider/backend, and v0.14 entropy-contract code remain unreleased on crates.io |
 | `brynja-crypto` | `0.1.0` | no | Published code boundary retained; shared documentation clarifies its provider/composition role above future leaf-family crates |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Unpublished inert boundaries; v0.13.3 registers evidence lanes and admission gates but no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
 | `brynja-pki`, `brynja-platform` | `0.1.6` | no | Published boundaries retained; platform effects remain unimplemented downstream from the new core contracts |
@@ -41,7 +44,7 @@ candidate `1f08ca0fd9be6bf1995a22a9ca806addc17641e0`, with zero open findings.
 | `brynja-dtls`, `brynja-quic-tls` | `0.1.6` | no | Published boundaries retained; engines/adapters remain unimplemented |
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
-| Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling |
+| Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling; test support now includes a deterministic/fault engine that production cannot reach |
 | `brynja-sanitization` | `0.1.0` | no | Implemented separately over exact `sanitization 2.0.3`; first publication deferred to a cumulative public checkpoint |
 
 ## Enforced crates.io Release Policy
@@ -93,7 +96,7 @@ and cannot reuse the validation claim.
 The `brynja-sanitization` package uses an independent SemVer
 line and publishes only when its adapter code or exact `sanitization` pin
 changes. Its v0.1.0 implementation is present but held from crates.io during
-the current v0.13.3 internal development line.
+the current v0.14.0 internal development line.
 
 Every tag requires a clean worktree, signed commit, complete automated tag
 gate, user-confirmed green GitHub and CodeQL, and explicit authorization.

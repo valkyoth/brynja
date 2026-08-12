@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.2 tagged; v0.13.3 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -11,9 +11,10 @@ choice, mask, equality, selection, swap, and compiler-barrier operations, and
 provider capability, installation, opaque-handle, authorization, and bounded
 request-metadata contracts, plus inert CPU-backend profiles, exact feature and
 operation bundles, explicit selection policy, caller-owned KAT/health state,
-permanent quarantine, thread-bound dispatch authority, and a fail-closed
-native CPU evidence and performance-admission harness that currently admits
-zero backends. It still has no integer
+permanent quarantine, thread-bound dispatch authority, a fail-closed
+native CPU evidence and performance-admission harness, and affine raw-entropy
+plus initialized secure-random contracts. It currently admits zero backends.
+It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
@@ -41,10 +42,12 @@ open findings. Signed tag v0.13.0 contains the remediated contract and selected
 no crates.io publication. Signed v0.13.1 contains the remediated CPU-backend
 capability and dispatch contract and also selected no crates.io publication.
 Signed v0.13.2 reserves two inert future CPU-kernel and host-detection package
-boundaries. The facade now advances to `0.13.3`; machine-readable evidence,
-lane, raw-artifact, benchmark, and admission contracts provide every future
-backend a fail-closed route to native review while admitting none. Every
-support-crate version and crates.io publication selection remains unchanged.
+boundaries. Signed v0.13.3 provides machine-readable evidence, lane,
+raw-artifact, benchmark, and admission contracts while admitting no backend.
+The facade now advances to `0.14.0`; `brynja-core` adds exact-purpose raw
+entropy and initialized secure-random state, while an isolated deterministic
+fault provider lives only in unpublished test support. Every support-crate
+version and crates.io publication selection remains unchanged.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -581,6 +584,19 @@ cannot authenticate evidence or authorize a backend.
 No primitive, ISA kernel, detector, benchmark result, side-channel result,
 unsafe allowance, performance claim, independent verification, or FIPS
 approval is added. v0.13.3 selects no crate for crates.io publication.
+
+Version 0.14.0 implements the entropy and initialized secure-random contract.
+Raw caller bytes are affine secret input bound to exact instantiation or
+reseed purpose, declared strength capacity, and byte count; the contract does
+not estimate source entropy. Initialized state is non-cloneable, binds an
+exact runtime generation, forces reseed after fork and a bounded number of
+successful requests, initializes exact caller output transactionally, and
+destroys/quarantines state after terminal failure. Partial writes, mismatch,
+underfill, rollback, and all errors clear the complete output. A deterministic
+fault engine exists only in permanently unpublished `brynja-test-support` and
+is mechanically production-unreachable. This milestone adds no DRBG,
+algorithm, OS entropy source, FFI, source-health result, FIPS status, or
+independent verification and selects no crate for crates.io publication.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

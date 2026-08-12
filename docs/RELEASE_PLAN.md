@@ -1318,31 +1318,49 @@ Exit criteria:
 
 ### v0.14.0 - Entropy And Secure-Random Contracts
 
-Status: planned
+Status: awaiting green CI
 
-Plan scope: Separate caller-provided raw entropy from initialized secure randomness; type security strength, purpose, retryable and permanent failure, fork and reseed rules, clone prohibition, and test-only providers that production configuration cannot construct.
+Plan scope: Separate affine caller-provided raw entropy from non-cloneable initialized secure randomness; bind exact purpose, strength capacity, bytes, runtime generation, fork and bounded reseed rules, transactional caller-owned output, retryable versus permanently quarantined failure, synchronous destruction, and a deterministic/fault provider confined to unpublished test support; add no algorithm, OS RNG, FFI, source-quality, independent-verification, or FIPS claim.
 
 Goal: complete the **Entropy And Secure-Random Contracts** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- implement affine raw-entropy requests with exact instantiation/reseed purpose,
+  declared 128/192/256-bit strength capacity, exact byte length, bounded input,
+  and complete-region clearing without claiming source quality;
+- implement a non-cloneable initialized secure-random wrapper with exact engine
+  strength, successful-request reseed accounting, runtime-generation and fork
+  invalidation, retryable/permanent failure separation, terminal quarantine,
+  and synchronous explicit/Drop destruction duties;
+- expose output only after exact complete transactional initialization; clear
+  pre-existing bytes and every partial, mismatched, retryable, permanent,
+  underfilled, exhausted, forked, or rollback result;
+- add deterministic and fault-injecting test support only to permanently
+  unpublished `brynja-test-support`, with no production dependency path;
+- freeze upstream capability types, caller limits, transactional effects,
+  mandatory zeroization, version-neutral framing, provider failure, and
+  secret-free errors;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- run exact bound, strength, purpose, interval, output-size, compile-fail,
+  no-mutation, no_std, zeroization, runtime-generation, fork, reseed,
+  retry/permanent-fault, underfill, teardown, and deterministic-provider tests;
+- enforce reviewed hashes, the 500-line ceiling, no std/alloc/unsafe/FFI/OS
+  randomness, secret-state trait exclusions, and repository-only provider
+  isolation with positive and eight broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- the upstream foundation is deterministic, hostile-input safe,
+  platform-independent, reviewably destroys owned secrets, and makes no
+  entropy-quality, DRBG, OS-source, FIPS, or independent-verification claim;
 - `v0.14.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.15.0 - Wall And Monotonic Clock Contracts

@@ -154,7 +154,7 @@ optional = {}
 [packages.brynja-test-support]
 class = "repository-only"
 publish = "never"
-required = []
+required = ["brynja-core"]
 optional = {}
 
 [packages.brynja-xtask]

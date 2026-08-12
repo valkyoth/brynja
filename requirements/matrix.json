@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "c4a00af746269495e1df0908bb204f783a970c1d33ea18ffd4d72762685330a7",
-  "domain_policy_sha256": "71cd0056bb32f64d356c716ebefed4bbcfcd21b6efe0aa9c663f18c353bf1c8e",
-  "policy_sha256": "244abb1eaea1dece20844496a0180cfd7dfba5ae8d5ea6a2b3aa0edce33e3209",
+  "domain_policy_sha256": "4cfc6a2839682d1fe6dbe469341ecb30e27ab25d1e229fc6cfaa92b228d5ce5a",
+  "policy_sha256": "af78edc413f9798d71511ddf99661a90f18f3724fc1c094e8344892c7f684091",
   "requirements": [
     {
       "applicability": "delegate",
@@ -9194,13 +9194,13 @@
         "key-lifecycle",
         "side-channel"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.14.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -9258,11 +9258,11 @@
           "sha256": "22dc2de903b2fe602fa0729c38b9512927ad96ef5669a3da8a0ffb4d22c8e6d8"
         }
       ],
-      "statement": "Secure-random contracts require explicit caller and provider duties without implying that an arbitrary random source is validated entropy.",
+      "statement": "Affine raw-entropy inputs and non-cloneable initialized secure-random state now enforce exact purpose, strength, output, reseed, fork, failure, and destruction duties without treating arbitrary caller bytes as validated entropy.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-core/src/entropy.rs"
         }
       ],
@@ -9270,12 +9270,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/surface/entropy.rs#contract"
+          "target": "crates/brynja-core/tests/entropy.rs#contract"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/surface/entropy.rs#reject_invalid_and_exhausted"
+          "target": "crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -29548,9 +29548,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "d2efda3f63104c9c5707cec7647d8b5659d05b59b8fe09416f466f9ced97c5b5",
+  "residual_policy_sha256": "c874385fbb82d9eaa997287b179dfdc7375e84c2f751bc103e00cb478673a02f",
   "schema": 5,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "a4cbb2abce443ea2ec35baf9e6e2b957680d3c68640cada0a73f7b73458c7805",
-  "transport_policy_sha256": "4f59c61c0a6e2cca77b2c554138d6c58da276172ab31befe7bc870c179642ed9"
+  "surface_register_sha256": "d4ef3cd564ef77138e9f7e7779302b654e633b15405357c9d5ab19e7e6c51bc2",
+  "transport_policy_sha256": "9b66827d4eb2f9d86c95c2c49cdf2186ab9363038ee9d7a8254f1e7ba6e908da"
 }

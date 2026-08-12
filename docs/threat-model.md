@@ -252,6 +252,15 @@ candidate/native claim is forbidden until a reviewed trusted-runner trust root
 and signature verifier are separately admitted. Its mock state fixture and
 registered hardware lanes are not cryptographic implementations, benchmarks,
 side-channel results, support claims, or FIPS approval.
+
+v0.14.0 adds affine raw-entropy input and initialized secure-random state
+contracts. They defend against purpose/strength/length confusion, output
+underfill, partial-output exposure, stale or inherited post-fork state,
+unbounded use between reseeds, rollback, retry/permanent fault confusion, and
+silent continued use after terminal failure. They do not estimate entropy,
+implement a DRBG or source, access an OS RNG, provide FFI, or grant FIPS or
+independent-verification status. The deterministic engine is a predictable
+repository-only test fixture and machine policy forbids production reachability.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
 authority, dispatch authority, instance identity, CPU lease, trusted CPU
@@ -293,7 +302,11 @@ backend implementation or detection. v0.13.2 adds only inert CPU package and
 future-admission boundaries without a primitive, detector, kernel, performance
 claim, independent verification, or FIPS approval. v0.13.3 adds only evidence
 schema, harness, lane, and zero-admission contracts; it records no native
-result and admits no backend. Planned,
+result and admits no backend.
+v0.14.0 adds only entropy and initialized secure-random state contracts plus
+production-unreachable deterministic test support; it adds no randomness
+algorithm, source, platform effect, source-health evidence, or validation.
+Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol
 implementation, formal verification, bare-metal runtime support, or FIPS

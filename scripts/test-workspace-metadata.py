@@ -428,8 +428,9 @@ def test_resolved_isolation(all_features: dict, no_default: dict) -> None:
 
 def test_keylog_isolation(baseline: dict) -> None:
     support = package(baseline, "brynja-test-support")
-    if support["publish"] != [] or support["dependencies"]:
-        raise AssertionError("test-support key logging is not repository-isolated")
+    dependency_names = [item["name"] for item in support["dependencies"]]
+    if support["publish"] != [] or dependency_names != ["brynja-core"]:
+        raise AssertionError("test support is not repository-isolated")
     support_id = package_id(baseline, "brynja-test-support")
     for owner in (
         "brynja",

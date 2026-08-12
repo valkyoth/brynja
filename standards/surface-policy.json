@@ -1013,12 +1013,12 @@
     {
       "decision": {
         "code_target": "crates/brynja-core/src/entropy.rs",
-        "disposition": "future-work",
+        "disposition": "implemented",
         "domain": "entropy",
         "owner": "0.14.0",
-        "rationale": "Secure-random contracts require explicit caller and provider duties without implying that an arbitrary random source is validated entropy.",
+        "rationale": "Affine raw-entropy inputs and non-cloneable initialized secure-random state now enforce exact purpose, strength, output, reseed, fork, failure, and destruction duties without treating arbitrary caller bytes as validated entropy.",
         "sources": ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"],
-        "test_target": "tests/surface/entropy.rs#contract"
+        "test_target": "crates/brynja-core/tests/entropy.rs#contract"
       },
       "id": "facility.entropy.secure-random-contract"
     },

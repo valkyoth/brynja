@@ -2536,7 +2536,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "d2efda3f63104c9c5707cec7647d8b5659d05b59b8fe09416f466f9ced97c5b5",
+  "policy_sha256": "c874385fbb82d9eaa997287b179dfdc7375e84c2f751bc103e00cb478673a02f",
   "requirement_count": 50,
   "schema": 1,
   "surface_count": 765,
@@ -2591,7 +2591,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "entropy",
       "id": "facility.entropy.secure-random-contract",
       "owner": "0.14.0",

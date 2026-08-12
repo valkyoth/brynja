@@ -89,6 +89,9 @@ test -f scripts/constant_time_evidence.py
 test -x scripts/check-provider-contract.py
 test -x scripts/test-provider-contract.py
 test -f scripts/provider_contract_policy.py
+test -x scripts/check-entropy-contract.py
+test -x scripts/test-entropy-contract.py
+test -f scripts/entropy_contract_policy.py
 test -x scripts/check-cpu-boundary.py
 test -x scripts/test-cpu-boundary.py
 test -f scripts/cpu_boundary_policy.py
@@ -105,6 +108,8 @@ grep -q 'python3 scripts/check-constant-time-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/test-constant-time-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/check-provider-contract.py' scripts/checks.sh
 grep -q 'python3 scripts/test-provider-contract.py' scripts/checks.sh
+grep -q 'python3 scripts/check-entropy-contract.py' scripts/checks.sh
+grep -q 'python3 scripts/test-entropy-contract.py' scripts/checks.sh
 grep -q 'python3 scripts/check-cpu-boundary.py' scripts/checks.sh
 grep -q 'python3 scripts/test-cpu-boundary.py' scripts/checks.sh
 test -s docs/first-party-rust-cryptography.md

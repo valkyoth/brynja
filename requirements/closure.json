@@ -513,7 +513,7 @@
       "requirement_ids": [
         "BRY-REQ-ENTROPY-0014"
       ],
-      "scope": "Separate caller-provided raw entropy from initialized secure randomness; type security strength, purpose, retryable and permanent failure, fork and reseed rules, clone prohibition, and test-only providers that production configuration cannot construct.",
+      "scope": "Separate affine caller-provided raw entropy from non-cloneable initialized secure randomness; bind exact purpose, strength capacity, bytes, runtime generation, fork and bounded reseed rules, transactional caller-owned output, retryable versus permanently quarantined failure, synchronous destruction, and a deterministic/fault provider confined to unpublished test support; add no algorithm, OS RNG, FFI, source-quality, independent-verification, or FIPS claim.",
       "source_ids": [
         "nist:NIST.SP.800-90Ar1.pdf",
         "nist:NIST.SP.800-90B.pdf",
@@ -5440,7 +5440,7 @@
         "facility.entropy.secure-random-contract"
       ],
       "id": "BRY-REQ-ENTROPY-0014",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.14.0",
       "source_ids": [
         "nist:NIST.SP.800-90Ar1.pdf",

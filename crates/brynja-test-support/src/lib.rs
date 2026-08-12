@@ -5,8 +5,10 @@
 
 #![no_std]
 
+pub mod deterministic_random;
 pub mod keylog;
 
+pub use deterministic_random::{DeterministicFault, DeterministicRandom};
 pub use keylog::{KeyLogError, KeyLogLabel, LineEnding, write_line};
 
 /// Whether this package provides its planned implementation.
@@ -17,6 +19,9 @@ pub const IMPLEMENTED: bool = false;
 /// Whether isolated RFC 9850 test-support encoding is implemented.
 pub const KEYLOG_TEST_SUPPORT_IMPLEMENTED: bool = true;
 
+/// Whether isolated deterministic secure-random test support is implemented.
+pub const DETERMINISTIC_RANDOM_TEST_SUPPORT_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -24,6 +29,9 @@ mod tests {
         assert!(!::core::hint::black_box(super::IMPLEMENTED));
         assert!(::core::hint::black_box(
             super::KEYLOG_TEST_SUPPORT_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::DETERMINISTIC_RANDOM_TEST_SUPPORT_IMPLEMENTED
         ));
     }
 }

@@ -2199,11 +2199,11 @@
         "nist:NIST.SP.800-90C.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-core/src/entropy.rs"
+        "actual-symbol:crates/brynja-core/src/entropy.rs"
       ],
       "tests": [
-        "planned:positive:tests/surface/entropy.rs#contract",
-        "planned:negative:tests/surface/entropy.rs#reject_invalid_and_exhausted"
+        "planned:positive:crates/brynja-core/tests/entropy.rs#contract",
+        "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-ENTROPY-0124": {
@@ -10628,6 +10628,9 @@
       ]
     },
     "targets": {
+      "actual-symbol:crates/brynja-core/src/entropy.rs": [
+        "BRY-REQ-ENTROPY-0014"
+      ],
       "actual-symbol:crates/brynja-core/src/error.rs#TlsFailure": [
         "BRY-REQ-TLS-0005"
       ],
@@ -10730,9 +10733,6 @@
       ],
       "legacy-boundary:crates/brynja-legacy/src/lib.rs": [
         "BRY-REQ-LEGACY-0800"
-      ],
-      "planned-symbol:crates/brynja-core/src/entropy.rs": [
-        "BRY-REQ-ENTROPY-0014"
       ],
       "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes": [
         "BRY-REQ-CRYPTO-0005"
@@ -11128,6 +11128,9 @@
       "actual:scripts/test-requirements.py#test_missing_residual_fails": [
         "BRY-REQ-STD-0002"
       ],
+      "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-ENTROPY-0014"
+      ],
       "planned:negative:tests/conformance/dtls.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0116"
       ],
@@ -11477,7 +11480,6 @@
         "BRY-REQ-ECHREG-0140"
       ],
       "planned:negative:tests/surface/entropy.rs#reject_invalid_and_exhausted": [
-        "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
         "BRY-REQ-ENTROPY-1241",
         "BRY-REQ-ENTROPY-1242"
@@ -11527,6 +11529,9 @@
       "planned:negative:tests/surface/status_request_v2.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
+      ],
+      "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
+        "BRY-REQ-ENTROPY-0014"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"
@@ -11899,9 +11904,6 @@
       ],
       "planned:positive:tests/surface/ech_config.rs#registry": [
         "BRY-REQ-ECHREG-0140"
-      ],
-      "planned:positive:tests/surface/entropy.rs#contract": [
-        "BRY-REQ-ENTROPY-0014"
       ],
       "planned:positive:tests/surface/entropy.rs#drbg": [
         "BRY-REQ-ENTROPY-1241"

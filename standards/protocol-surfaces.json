@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "17f7b48b0938e3afc791a9f98f1e4a826d0abb76e5d58a8bc311def389addbd7",
+  "policy_sha256": "2710586beb986fe96d1feb640a1a21ccdfd2ea5788fb8972440dc88b679abee7",
   "schema": 2,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
   "surfaces": [
@@ -353,7 +353,7 @@
     },
     {
       "code_target": "crates/brynja-core/src/entropy.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "entropy",
       "id": "facility.entropy.secure-random-contract",
       "kind": "semantic",
@@ -363,8 +363,8 @@
         "nist:NIST.SP.800-90C.pdf"
       ],
       "owner": "0.14.0",
-      "rationale": "Secure-random contracts require explicit caller and provider duties without implying that an arbitrary random source is validated entropy.",
-      "test_target": "tests/surface/entropy.rs#contract"
+      "rationale": "Affine raw-entropy inputs and non-cloneable initialized secure-random state now enforce exact purpose, strength, output, reseed, fork, failure, and destruction duties without treating arbitrary caller bytes as validated entropy.",
+      "test_target": "crates/brynja-core/tests/entropy.rs#contract"
     },
     {
       "code_target": "crates/brynja-fips-module/src/entropy.rs",

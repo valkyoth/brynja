@@ -27,15 +27,23 @@
 
 `brynja-test-support` is a narrowly scoped, permanently unpublished Brynja
 workspace package. In `0.1.0` it provides the RFC 9850 key-log line encoder
-used by repository tests. All ten pinned IANA labels and LF, CRLF, and CR line
-endings are explicit. Writes preflight the complete line and preserve the
-complete output buffer on every capacity or input rejection.
+and a deterministic, fault-injecting implementation of the v0.14 secure-random
+engine contract. The latter can exercise retryable, permanent, partial-write,
+underfill, reseed, and destruction paths. It is intentionally predictable,
+not cryptographically secure, and must never be used as a randomness source.
 
-No production package depends on this crate, and workspace policy rejects any
+All ten pinned IANA labels and LF, CRLF, and CR line endings are explicit.
+Writes preflight the complete line and preserve the complete output buffer on
+every capacity or input rejection. Deterministic engine state is cleared on
+uninstantiation and drop.
+
+Only `brynja-core` is a dependency of this crate. No production package depends
+on this crate, and workspace policy rejects any
 normal, optional, feature, target, or resolved production-graph edge to it. It
 does not provide TLS, cryptography, PKI, a platform provider, or a legacy
-protocol implementation. Key-log output reveals traffic secrets by design and
-is therefore prohibited from every production package and feature.
+protocol implementation or production entropy source. Key-log output reveals
+traffic secrets by design and is therefore prohibited from every production
+package and feature.
 
 ## Cryptography Verification Status
 

@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add affine exact-purpose raw-entropy requests and non-cloneable initialized
+  secure-random state with bounded requests, runtime-generation binding,
+  mandatory fork/reseed transitions, transactional output, terminal
+  quarantine, and synchronous destruction duties.
+- Add a permanently unpublished deterministic/fault secure-random provider,
+  thirteen behavioral tests, affine compile-fail examples, a hash-bound source
+  policy, and eight isolation, trait, low-level, and drift fixtures.
 - Add a hash-bound v0.13.3 CPU evidence schema, five native and three QEMU
   supplemental lanes, thirteen admission harnesses, exact raw-artifact
   provenance, bounded freshness/noise/order/performance rules, and a
@@ -76,6 +83,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the `brynja` facade to `0.14.0`, retain supporting-crate versions,
+  implement requirement `BRY-REQ-ENTROPY-0014`, and select zero crates for
+  crates.io publication.
 - Advance the `brynja` facade to `0.13.3` while retaining every supporting-
   crate version and selecting zero crates for crates.io publication.
 - Advance the `brynja` facade to `0.13.2`, keep both CPU boundaries outside

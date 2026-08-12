@@ -16,6 +16,7 @@ pub mod backend_session;
 pub mod budget;
 pub mod close;
 pub mod constant_time;
+pub mod entropy;
 pub mod error;
 pub mod exhaustion;
 pub mod numeric;
@@ -29,6 +30,7 @@ pub mod secret;
 pub mod secret_destruction;
 pub mod secret_memory;
 mod secret_memory_volatile;
+pub mod secure_random;
 pub mod sequence;
 pub mod version;
 pub mod workspace;
@@ -72,6 +74,10 @@ pub use close::{Cancellation, CloseOutcome};
 pub use constant_time::{
     Choice, ConditionalSelect, ConditionalSwap, ConstantTimeEq, CtMask, compiler_barrier,
 };
+pub use entropy::{
+    EntropyContractError, EntropyFailure, EntropyFailureKind, EntropyFailureStage, EntropyPurpose,
+    MAX_RANDOM_REQUEST_BYTES, RawEntropy, RawEntropyRequest, SecurityStrength,
+};
 pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
@@ -98,6 +104,10 @@ pub use secret_destruction::{
 pub use secret_memory::{
     OwnedRegionClearComplete, OwnedSecretRegion, SecretMemoryError, SecretRegionInitialization,
     clear_owned_region,
+};
+pub use secure_random::{
+    MAX_RESEED_INTERVAL, RandomPurpose, RandomRuntimeGeneration, RandomStateDestruction,
+    SecureRandom, SecureRandomConfig, SecureRandomEngine, SecureRandomError, SecureRandomRequest,
 };
 pub use sequence::{Epoch, SequenceNumber};
 pub use version::{ProtocolFamily, ProtocolVersion};
@@ -143,6 +153,9 @@ pub const PROVIDER_CONTRACTS_IMPLEMENTED: bool = true;
 /// Whether the v0.13.1 CPU backend capability and dispatch contract is implemented.
 pub const CPU_BACKEND_CONTRACT_IMPLEMENTED: bool = true;
 
+/// Whether the v0.14 entropy and secure-random contracts are implemented.
+pub const ENTROPY_CONTRACT_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -168,5 +181,6 @@ mod tests {
         assert!(::core::hint::black_box(
             super::CPU_BACKEND_CONTRACT_IMPLEMENTED
         ));
+        assert!(::core::hint::black_box(super::ENTROPY_CONTRACT_IMPLEMENTED));
     }
 }

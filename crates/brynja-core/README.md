@@ -25,8 +25,9 @@
 
 # brynja-core
 
-`brynja-core 0.7.0` now carries the cumulative v0.13.1 CPU-backend capability
-and dispatch contract plus the v0.13 provider capability and opaque-handle
+`brynja-core 0.7.0` now carries the cumulative v0.14 entropy and initialized
+secure-random contract, v0.13.1 CPU-backend capability and dispatch contract,
+and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. The package
@@ -134,6 +135,24 @@ algorithm, provider effect, output commit, entropy health, clock semantics,
 certificate path, storage backend, pending-operation lifecycle, CPU dispatch,
 or FIPS approval.
 
+v0.14 separates affine caller-provided `RawEntropy` from initialized
+`SecureRandom` state. Requests bind exact purpose, security-strength capacity,
+and byte length. The non-cloneable state wrapper requires an exact runtime
+generation, mandates reseed after fork or a bounded successful-request
+interval, and exposes output only after an engine completely initializes the
+exact caller-owned region. Pre-existing bytes, partial writes, retryable
+failures, length mismatches, underfill, rollback, and permanent failures all
+clear the complete output. Terminal failures synchronously destroy and
+quarantine the engine; explicit and `Drop` teardown preserve a mandatory
+destruction-failure hook.
+
+This contract does not estimate entropy, implement a DRBG or algorithm, access
+an operating-system RNG, use FFI, choose a provider, or grant FIPS status.
+Callers remain responsible for honest source-strength assertions. The only
+deterministic implementation is a deliberately non-cryptographic fixture in
+permanently unpublished `brynja-test-support`; production graphs cannot reach
+it.
+
 v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
 opportunistic, required-accelerated, and validated-module policies; and
@@ -173,7 +192,7 @@ independent cryptographic or protocol verification.
 
 | Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider and CPU-backend capability, authorization, health, and dispatch contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, and secure-random state contracts | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -184,7 +203,7 @@ brynja = "0.10"
 
 The `0.7.0` package was published with Brynja v0.10.0 after its pentest,
 remediation retest, and hosted checks passed. It remains at `0.7.0` during the
-v0.13.1 development milestone and is not selected for publication
+v0.14.0 development milestone and is not selected for publication
 under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

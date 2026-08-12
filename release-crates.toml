@@ -1,26 +1,26 @@
 [release]
-version = "0.13.3"
-milestone = "0.13.3"
+version = "0.14.0"
+milestone = "0.14.0"
 baseline = "0.10.0"
-cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0", "0.13.1", "0.13.2", "0.13.3"]
+cumulative_milestones = ["0.11.0", "0.11.1", "0.11.2", "0.12.0", "0.13.0", "0.13.1", "0.13.2", "0.13.3", "0.14.0"]
 policy = "independent"
 stage = "internal"
 exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.13.2"
-version = "0.13.3"
+previous_version = "0.13.3"
+version = "0.14.0"
 change = "metadata"
 publish = false
-reason = "Advance to the remediated and retested v0.13.3 CPU evidence-admission milestone, forbid candidate/native claims without trusted-runner authentication, bind exact artifact semantics and operating state, bound machine JSON parsing, retain zero admitted backends, and select no crate for crates.io publication."
+reason = "Advance to the v0.14.0 entropy-contract milestone with affine caller-provided raw entropy, non-cloneable initialized secure-random state, exact fork and reseed rules, transactional output, closed failures, and no crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.7.0"
 version = "0.7.0"
 change = "code"
 publish = false
-reason = "Retain published 0.7.0 while carrying the cumulative owned-memory, constant-time, provider, and CPU-backend contract implementations to the v0.15.0 checkpoint."
+reason = "Retain published 0.7.0 while adding the cumulative affine entropy and initialized secure-random contracts for the v0.15.0 checkpoint."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.0"
@@ -174,7 +174,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "repository"
 publish = false
-reason = "Repository-only test support; it is never a crates.io product."
+reason = "Add a deterministic and fault-injecting secure-random engine beside RFC 9850 support; the package remains unpublished and production-unreachable."
 
 [crates."brynja-interop"]
 previous_version = "unpublished"

@@ -178,11 +178,11 @@ pub trait SecureRandomEngine {
     /// Destroys all engine-owned secret state synchronously.
     fn uninstantiate(&mut self) -> RandomStateDestruction;
 
-    /// Handles a destruction failure reached through [`Drop`].
+    /// Handles a destruction failure reached through any teardown route.
     ///
     /// Returning asserts the failure was made durable or a fail-stop response
     /// was initiated, so silent continued use is impossible.
-    fn handle_drop_failure(&mut self);
+    fn handle_destruction_failure(&mut self);
 }
 
 /// A closed secure-random state-machine failure.
@@ -390,13 +390,15 @@ impl<E: SecureRandomEngine> SecureRandom<E> {
                 EntropyFailureStage::Uninstantiate,
             ));
         };
-        if matches!(engine.uninstantiate(), RandomStateDestruction::Complete) {
-            Ok(())
-        } else {
-            Err(EntropyFailure::new(
-                EntropyFailureKind::Permanent,
-                EntropyFailureStage::Uninstantiate,
-            ))
+        match engine.uninstantiate() {
+            RandomStateDestruction::Complete => Ok(()),
+            RandomStateDestruction::Failed => {
+                engine.handle_destruction_failure();
+                Err(EntropyFailure::new(
+                    EntropyFailureKind::Permanent,
+                    EntropyFailureStage::Uninstantiate,
+                ))
+            }
         }
     }
 
@@ -438,7 +440,7 @@ impl<E: SecureRandomEngine> SecureRandom<E> {
         if let Some(mut engine) = self.engine.take()
             && matches!(engine.uninstantiate(), RandomStateDestruction::Failed)
         {
-            engine.handle_drop_failure();
+            engine.handle_destruction_failure();
         }
     }
 }
@@ -448,7 +450,7 @@ impl<E: SecureRandomEngine> Drop for SecureRandom<E> {
         if let Some(engine) = self.engine.as_mut()
             && matches!(engine.uninstantiate(), RandomStateDestruction::Failed)
         {
-            engine.handle_drop_failure();
+            engine.handle_destruction_failure();
         }
     }
 }
@@ -480,6 +482,6 @@ const fn classify(kind: EntropyFailureKind, stage: EntropyFailureStage) -> Secur
 
 fn destroy_failed_engine<E: SecureRandomEngine>(engine: &mut E) {
     if matches!(engine.uninstantiate(), RandomStateDestruction::Failed) {
-        engine.handle_drop_failure();
+        engine.handle_destruction_failure();
     }
 }

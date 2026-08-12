@@ -64,6 +64,11 @@ def test() -> None:
         reject(root, "state-machine drift")
         copy_fixture(root)
 
+        secure = root / entropy_contract_policy.SOURCES[1]
+        replace(secure, "engine.handle_destruction_failure();", "return;")
+        reject(root, "destruction failure handling drift")
+        copy_fixture(root)
+
         fixture = root / entropy_contract_policy.SOURCES[2]
         replace(fixture, "clear_owned_region(&mut self.state)", "Ok(())")
         reject(root, "test-provider boundary drift")
@@ -95,4 +100,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("entropy policy rejects eight trait, state, isolation, low-level, and hash regressions")
+    print("entropy policy rejects nine trait, state, teardown, isolation, low-level, and hash regressions")

@@ -1292,7 +1292,7 @@ Exit criteria:
 
 ### v0.13.3 - Native CPU Evidence And Performance Admission Harness
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Establish reproducible backend evidence manifests, forced-backend and unsupported-feature processes, KAT and quarantine fault injection, scalar differential corpora, emitted-code and side-channel capture, code-size and latency budgets, and benchmark admission thresholds across local AMD x86_64, an observed-feature AWS Intel x86_64 instance, Apple M2, AWS AArch64, and the available RISC-V cloud host; record CPU, microcode, OS, compiler, flags, frequency policy, and feature evidence, treat emulation as supplemental only, and leave an unavailable or unmeasured backend unadmitted rather than blocking portable scalar support.
 
@@ -1318,7 +1318,7 @@ Exit criteria:
 
 ### v0.14.0 - Entropy And Secure-Random Contracts
 
-Status: awaiting green CI
+Status: awaiting pentest
 
 Plan scope: Separate affine caller-provided raw entropy from non-cloneable initialized secure randomness; bind exact purpose, strength capacity, bytes, runtime generation, fork and bounded reseed rules, transactional caller-owned output, retryable versus permanently quarantined failure, synchronous destruction, and a deterministic/fault provider confined to unpublished test support; add no algorithm, OS RNG, FFI, source-quality, independent-verification, or FIPS claim.
 
@@ -1352,7 +1352,7 @@ Verification:
   retry/permanent-fault, underfill, teardown, and deterministic-provider tests;
 - enforce reviewed hashes, the 500-line ceiling, no std/alloc/unsafe/FFI/OS
   randomness, secret-state trait exclusions, and repository-only provider
-  isolation with positive and eight broken policy fixtures;
+  isolation with positive and nine broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 

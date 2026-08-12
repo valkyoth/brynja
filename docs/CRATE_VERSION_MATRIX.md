@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting remediation retest
 
 The `brynja` facade advances to `0.14.0` for the current development line but
 is not selected for crates.io publication. The latest signed development tag
@@ -31,7 +31,9 @@ finding passed repository-owner retest on exact signed second remediation
 candidate `1f08ca0fd9be6bf1995a22a9ca806addc17641e0`, with zero open findings.
 The v0.14.0 stage adds affine raw-entropy and initialized secure-random
 contracts plus a production-unreachable deterministic fault provider. It
-implements no algorithm, entropy source, OS integration, or FIPS service.
+implements no algorithm, entropy source, OS integration, or FIPS service. Its
+one Medium explicit-teardown handler omission is locally remediated and awaits
+repository-owner retest.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

@@ -41,7 +41,7 @@ pub struct DeterministicRandom {
     cursor: usize,
     fault: DeterministicFault,
     initialized: bool,
-    drop_failure_observed: bool,
+    destruction_failure_observed: bool,
 }
 
 impl DeterministicRandom {
@@ -54,7 +54,7 @@ impl DeterministicRandom {
             cursor: 0,
             fault: DeterministicFault::None,
             initialized: false,
-            drop_failure_observed: false,
+            destruction_failure_observed: false,
         }
     }
 
@@ -63,10 +63,10 @@ impl DeterministicRandom {
         self.fault = fault;
     }
 
-    /// Reports whether the mandatory drop-failure hook ran.
+    /// Reports whether the mandatory destruction-failure hook ran.
     #[must_use]
-    pub const fn drop_failure_observed(&self) -> bool {
-        self.drop_failure_observed
+    pub const fn destruction_failure_observed(&self) -> bool {
+        self.destruction_failure_observed
     }
 
     fn absorb(&mut self, entropy: &RawEntropy<'_>) {
@@ -184,8 +184,8 @@ impl SecureRandomEngine for DeterministicRandom {
         self.clear_state()
     }
 
-    fn handle_drop_failure(&mut self) {
-        self.drop_failure_observed = true;
+    fn handle_destruction_failure(&mut self) {
+        self.destruction_failure_observed = true;
     }
 }
 

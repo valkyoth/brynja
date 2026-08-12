@@ -27,7 +27,7 @@ struct Metrics {
     generate: Cell<u32>,
     reseed: Cell<u32>,
     destroy: Cell<u32>,
-    drop_failure: Cell<u32>,
+    destruction_failure: Cell<u32>,
 }
 
 impl Metrics {
@@ -37,7 +37,7 @@ impl Metrics {
             generate: Cell::new(0),
             reseed: Cell::new(0),
             destroy: Cell::new(0),
-            drop_failure: Cell::new(0),
+            destruction_failure: Cell::new(0),
         }
     }
 }
@@ -110,8 +110,8 @@ impl SecureRandomEngine for Engine<'_> {
         self.destruction
     }
 
-    fn handle_drop_failure(&mut self) {
-        Self::increment(&self.metrics.drop_failure);
+    fn handle_destruction_failure(&mut self) {
+        Self::increment(&self.metrics.destruction_failure);
     }
 }
 
@@ -453,30 +453,36 @@ fn explicit_and_drop_destruction_are_observable() {
     assert_eq!(random.uninstantiate(), Ok(()));
     assert_eq!(metrics.destroy.get(), 1);
 
-    let failed_metrics = Metrics::new();
-    let mut failed_seed = [9; 32];
-    let failed_engine = Engine {
-        metrics: &failed_metrics,
-        behavior: Behavior::Success,
-        destruction: RandomStateDestruction::Failed,
-    };
-    let entropy = raw_entropy(
-        &mut failed_seed,
-        EntropyPurpose::Instantiation,
-        SecurityStrength::Bits256,
-    );
-    let random = match SecureRandom::instantiate(
-        failed_engine,
-        config(3),
-        RandomRuntimeGeneration::initial(),
-        entropy,
-    ) {
-        Ok(value) => value,
-        Err(_) => return assert!(core::hint::black_box(false)),
-    };
-    drop(random);
-    assert_eq!(failed_metrics.destroy.get(), 1);
-    assert_eq!(failed_metrics.drop_failure.get(), 1);
+    for explicit in [true, false] {
+        let failed_metrics = Metrics::new();
+        let mut failed_seed = [9; 32];
+        let failed_engine = Engine {
+            metrics: &failed_metrics,
+            behavior: Behavior::Success,
+            destruction: RandomStateDestruction::Failed,
+        };
+        let entropy = raw_entropy(
+            &mut failed_seed,
+            EntropyPurpose::Instantiation,
+            SecurityStrength::Bits256,
+        );
+        let random = match SecureRandom::instantiate(
+            failed_engine,
+            config(3),
+            RandomRuntimeGeneration::initial(),
+            entropy,
+        ) {
+            Ok(value) => value,
+            Err(_) => return assert!(core::hint::black_box(false)),
+        };
+        if explicit {
+            assert!(random.uninstantiate().is_err());
+        } else {
+            drop(random);
+        }
+        assert_eq!(failed_metrics.destroy.get(), 1);
+        assert_eq!(failed_metrics.destruction_failure.get(), 1);
+    }
 }
 
 #[test]

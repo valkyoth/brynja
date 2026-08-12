@@ -16,8 +16,8 @@ SOURCES = (
 )
 EXPECTED_SHA256 = {
     Path("crates/brynja-core/src/entropy.rs"): "b1a0b0793da8517c34f0d0aed8694c4ca0d5e848672699fbcfcf33cd99d960f3",
-    Path("crates/brynja-core/src/secure_random.rs"): "c0d88cba70edf683a033d83a9f4645d3903846f617b9bf72dd40d0168c812f07",
-    Path("crates/brynja-test-support/src/deterministic_random.rs"): "8c1e1d947611ff2f46c7554811c9855fe5652e8e635bbfbf02a07eeb19b06232",
+    Path("crates/brynja-core/src/secure_random.rs"): "54a950a18b6bccad3a0c78a21667ab39ed00fb4fd1972d9b3ea79a47cbb7366a",
+    Path("crates/brynja-test-support/src/deterministic_random.rs"): "9a8568e92ac3c008b2572c763528d913f8a9146848724a87b6e34e8126c9c58f",
 }
 
 
@@ -86,6 +86,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     ):
         if secure.count(required) < 1:
             fail(f"secure-random state-machine drift: {required}")
+    if secure.count("engine.handle_destruction_failure()") != 4:
+        fail("secure-random destruction failure handling drift")
     if re.search(r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct RawEntropy<'", entropy):
         fail("raw entropy gained duplication or formatting traits")
     if re.search(r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct SecureRandom<", secure):
@@ -94,6 +96,7 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "pub struct DeterministicRandom",
         "pub enum DeterministicFault",
         "impl SecureRandomEngine for DeterministicRandom",
+        "fn handle_destruction_failure(&mut self)",
     ):
         if fixture.count(required) < 1:
             fail(f"deterministic test-provider boundary drift: {required}")

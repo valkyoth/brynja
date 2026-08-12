@@ -1,6 +1,6 @@
 # Brynja v0.14.0 Development Milestone
 
-Status: implementation complete; awaiting green GitHub and CodeQL
+Status: remediation complete; awaiting repository-owner retest
 
 Brynja v0.14.0 implements the entropy and initialized secure-random contract
 needed by future first-party cryptographic mechanisms. It advances only the
@@ -45,7 +45,7 @@ and remains inside the cumulative v0.10.0-to-v0.15.0 pentest range.
 - A SHA-256-bound source policy rejects cloning or formatting secret state,
   OS randomness, allocation, standard-library use, unsafe or foreign code,
   missing state transitions, test-provider publication, dependency-boundary
-  drift, files over 500 lines, and unreviewed source changes. Eight broken
+  drift, files over 500 lines, and unreviewed source changes. Nine broken
   fixtures exercise the policy.
 - The normative surface and requirement registers now bind
   `BRY-REQ-ENTROPY-0014` to the implementation and its exact tests.
@@ -58,6 +58,14 @@ performance claim, independent cryptographic verification, or FIPS validation.
 Caller-provided bytes do not inherit a FIPS or entropy-quality claim merely by
 passing through these types. Later roadmap milestones retain ownership of
 source health, DRBGs, platform providers, and validated-module boundaries.
+
+The voluntary assessment of exact signed implementation candidate
+`c7d34806a6170857d2152dc6a9a359b37cd9aaa3` found one Medium destruction-
+failure handling gap: failed explicit teardown returned an error without
+invoking the mandatory terminal handler. All four failed-destruction paths now
+invoke the renamed `handle_destruction_failure` hook, and regression tests
+cover explicit and `Drop` failure exactly once. Local remediation passes; the
+repository-owner retest remains pending.
 
 ## Release Process
 

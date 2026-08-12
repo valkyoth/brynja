@@ -13,7 +13,7 @@ Keep a Changelog and Semantic Versioning.
   quarantine, and synchronous destruction duties.
 - Add a permanently unpublished deterministic/fault secure-random provider,
   thirteen behavioral tests, affine compile-fail examples, a hash-bound source
-  policy, and eight isolation, trait, low-level, and drift fixtures.
+  policy, and nine isolation, trait, teardown, low-level, and drift fixtures.
 - Add a hash-bound v0.13.3 CPU evidence schema, five native and three QEMU
   supplemental lanes, thirteen admission harnesses, exact raw-artifact
   provenance, bounded freshness/noise/order/performance rules, and a
@@ -83,6 +83,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Require the secure-random destruction-failure handler after failed explicit
+  teardown as well as `Drop`, quarantine, and rejected initialization; rename
+  the engine hook to reflect its complete scope and cover explicit and `Drop`
+  failure exactly once in regression tests.
 - Advance the `brynja` facade to `0.14.0`, retain supporting-crate versions,
   implement requirement `BRY-REQ-ENTROPY-0014`, and select zero crates for
   crates.io publication.

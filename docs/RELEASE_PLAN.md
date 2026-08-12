@@ -1318,7 +1318,7 @@ Exit criteria:
 
 ### v0.14.0 - Entropy And Secure-Random Contracts
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Separate affine caller-provided raw entropy from non-cloneable initialized secure randomness; bind exact purpose, strength capacity, bytes, runtime generation, fork and bounded reseed rules, transactional caller-owned output, retryable versus permanently quarantined failure, synchronous destruction, and a deterministic/fault provider confined to unpublished test support; add no algorithm, OS RNG, FFI, source-quality, independent-verification, or FIPS claim.
 
@@ -1361,6 +1361,10 @@ Exit criteria:
 - the upstream foundation is deterministic, hostile-input safe,
   platform-independent, reviewably destroys owned secrets, and makes no
   entropy-quality, DRBG, OS-source, FIPS, or independent-verification claim;
+- record PASS/PASS with zero open findings after repository-owner retest
+  confirmed the Medium explicit-teardown terminal-handler omission resolved on
+  exact signed remediation candidate
+  `854c301de56ba432bd0544e2acc525b34a7b28c8`; and
 - `v0.14.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.15.0 - Wall And Monotonic Clock Contracts

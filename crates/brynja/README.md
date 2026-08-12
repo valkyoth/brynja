@@ -217,9 +217,9 @@ an independent pentest.
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
 v0.13.3. The current v0.14.0 entropy-contract candidate's one Medium explicit-
-teardown finding is locally remediated and awaits repository-owner retest. It
-selects no crates.io publication, and its changes remain in the cumulative
-v0.10.0-to-v0.15.0 pentest scope.
+teardown finding is remediated and its repository-owner retest passed with zero
+open findings. It awaits green GitHub and CodeQL, selects no crates.io
+publication, and remains in the cumulative v0.10.0-to-v0.15.0 pentest scope.
 The published dependency is:
 
 ```toml

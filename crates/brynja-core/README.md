@@ -147,7 +147,7 @@ quarantine the engine; explicit and `Drop` teardown preserve a mandatory
 destruction-failure hook. Failed explicit teardown, failed `Drop`, rejected
 initialization, and permanent quarantine all invoke that terminal hook; the
 v0.14 assessment found and remediation closed the original explicit-path
-omission, with repository-owner retest pending.
+omission; repository-owner retest passed with zero open findings.
 
 This contract does not estimate entropy, implement a DRBG or algorithm, access
 an operating-system RNG, use FFI, choose a provider, or grant FIPS status.

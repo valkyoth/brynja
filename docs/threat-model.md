@@ -263,8 +263,8 @@ independent-verification status. The deterministic engine is a predictable
 repository-only test fixture and machine policy forbids production reachability.
 Failed explicit teardown, `Drop`, rejected initialization, and terminal
 quarantine now share one mandatory destruction-failure handler after the v0.14
-assessment identified the explicit-path omission; repository-owner retest is
-pending.
+assessment identified the explicit-path omission; repository-owner retest
+passed with zero open findings.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
 authority, dispatch authority, instance identity, CPU lease, trusted CPU

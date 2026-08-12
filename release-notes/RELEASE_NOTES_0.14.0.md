@@ -1,6 +1,6 @@
 # Brynja v0.14.0 Development Milestone
 
-Status: remediation complete; awaiting repository-owner retest
+Status: implementation and retest complete; awaiting green GitHub and CodeQL
 
 Brynja v0.14.0 implements the entropy and initialized secure-random contract
 needed by future first-party cryptographic mechanisms. It advances only the
@@ -64,8 +64,10 @@ The voluntary assessment of exact signed implementation candidate
 failure handling gap: failed explicit teardown returned an error without
 invoking the mandatory terminal handler. All four failed-destruction paths now
 invoke the renamed `handle_destruction_failure` hook, and regression tests
-cover explicit and `Drop` failure exactly once. Local remediation passes; the
-repository-owner retest remains pending.
+cover explicit and `Drop` failure exactly once. The repository owner retested
+exact signed remediation candidate
+`854c301de56ba432bd0544e2acc525b34a7b28c8` green. The permanent report records
+`PASS`/`PASS` with zero open findings.
 
 ## Release Process
 

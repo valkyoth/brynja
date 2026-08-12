@@ -115,8 +115,8 @@ the permanent report records `PASS`/`PASS` with zero open findings.
   generation, quarantine, operation, approval, registry, and source-hash
   regressions; and
 - the network freshness gate updates Miri and Rust sanitizer execution to
-  `nightly-2026-08-11` at exact official Rust revision
-  `12c36e2539c54397c51d6ea4401defd8768a4f5b`.
+  `nightly-2026-08-12` at exact official Rust revision
+  `3d6c19bb9ab4798ecfb2ee943df01a811720fc27`.
 
 ## Standards Authority Refresh
 

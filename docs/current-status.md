@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting remediation retest
+Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -601,7 +601,8 @@ The voluntary assessment found one Medium omission where failed explicit
 teardown did not invoke the terminal destruction-failure handler. The handler
 now covers explicit teardown, `Drop`, rejected initialization, and permanent
 quarantine; failed explicit and `Drop` teardown must each invoke it exactly
-once. Local remediation passes and repository-owner retest is pending.
+once. Repository-owner retest of exact signed remediation candidate
+`854c301de56ba432bd0544e2acc525b34a7b28c8` passed with zero open findings.
 
 The package is held from crates.io until a public checkpoint. Because this is
 the first production adapter around external unsafe secret-storage code,

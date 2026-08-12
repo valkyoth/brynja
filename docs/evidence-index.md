@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting remediation retest
+Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting green CI
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -45,7 +45,7 @@ consistent in the same commit.
 | `security/pentest/v0.11.2.md` | v0.11.2 exceptional repository-owner assessment | PASS/PASS, zero open findings, assessed implementation commit, scope, verification, publication state, and residual-risk record |
 | `crates/brynja-test-support/src/keylog.rs`, `crates/brynja-test-support/tests/keylog.rs`, `scripts/test-workspace-metadata.py` | v0.10.0 RFC 9850 repository-only key-log support | Exact ten-label and three-ending encoding, whole-line transactional preflight, every short output, closed diagnostics, permanent non-publication, and production dependency/feature/resolved-graph rejection fixtures |
 | `crates/brynja-core/src/{entropy,secure_random}.rs`, `crates/brynja-core/tests/entropy.rs`, `crates/brynja-test-support/src/deterministic_random.rs`, `crates/brynja-test-support/tests/deterministic_random.rs`, `scripts/{entropy_contract_policy,check-entropy-contract,test-entropy-contract}.py` | v0.14.0 entropy and initialized secure-random contract | Exact purpose/strength/length inputs, non-cloneable state, bounded fork/reseed generation, transactional complete output, retry/permanent fault separation, terminal destruction/quarantine including explicit and Drop failures, deterministic repository-only fault injection, reviewed hashes, 500-line/no-std/no-alloc/no-unsafe/no-FFI/no-OS-source enforcement, and nine broken fixtures; no algorithm, source-quality, FIPS, or independent-verification claim |
-| `security/pentest/v0.14.0.md` | Voluntary v0.14.0 entropy-contract assessment | One Medium explicit-teardown terminal-handler omission remediated locally through a common destruction-failure hook, exact-once regression coverage, and a ninth source-policy fixture; repository-owner retest pending |
+| `security/pentest/v0.14.0.md` | Voluntary v0.14.0 entropy-contract assessment | PASS/PASS with zero open findings after one Medium explicit-teardown terminal-handler omission was remediated through a common destruction-failure hook, exact-once regression coverage, and a ninth source-policy fixture |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/domain-scope.toml`, `requirements/domains/*.toml` | Reviewed v0.3.3 authority, invariant, work-bound, test-polarity, surface-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, and completeness validation |
 | `requirements/domain-sections.toml` | Reviewed per-requirement bindings for all 364 domain normative RFC sections | Exact source/requirement pairs, semantic revisions, extraction anchors, section hashes, and explicit disposition validation |

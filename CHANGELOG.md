@@ -113,8 +113,8 @@ Keep a Changelog and Semantic Versioning.
   `brynja-platform` as a downstream future implementation boundary and do not
   introduce a registry, fallback provider, platform dependency, or effect.
 - Refresh the Miri and Rust sanitizer evidence toolchain to
-  `nightly-2026-08-11` at exact Rust revision
-  `12c36e2539c54397c51d6ea4401defd8768a4f5b` after the online freshness gate.
+  `nightly-2026-08-12` at exact Rust revision
+  `3d6c19bb9ab4798ecfb2ee943df01a811720fc27` after the online freshness gate.
 - Complete the v0.12.0 constant-time foundation without selecting any crate for
   publication; require its exceptional assessment before the signed tag.
 - Clarify in the shared package header and main README that Brynja is a
@@ -135,6 +135,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Record repository-owner PASS retest of exact signed v0.14.0 remediation
+  candidate `854c301de56ba432bd0544e2acc525b34a7b28c8`, closing the Medium
+  explicit-teardown terminal-handler omission with zero open findings.
 - Refresh the locked IANA TLS ExtensionType snapshot after the release gate
   detected the 2026-08-11 C509 Certificate type allocation; retain its
   provisional draft as non-authoritative future work and regenerate complete

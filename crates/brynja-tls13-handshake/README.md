@@ -26,7 +26,7 @@
 # brynja-tls13-handshake
 
 `brynja-tls13-handshake` is the record-independent TLS 1.3 handshake boundary
-shared by stream TLS and QUIC. Version `0.1.6` only repins its exact v0.10
+shared by stream TLS and QUIC. Version `0.1.7` only repins its exact v0.15
 dependency graph; it does not provide a working protocol implementation.
 
 ## Cryptography Verification Status
@@ -50,9 +50,9 @@ Most application users will eventually depend on the evergreen facade:
 brynja = "0.10"
 ```
 
-This dependency-only patch was published with v0.10.0 after its pentest,
-remediation retest, and hosted checks passed. It remains at `0.1.6` during the
-v0.11.0 development milestone under the
+This dependency-only patch is selected for v0.15.0 but remains unpublished
+until its cumulative pentest and hosted checks pass. It is versioned `0.1.7`
+under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

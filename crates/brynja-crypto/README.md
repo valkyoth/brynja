@@ -33,7 +33,7 @@ for protocol callers. The
 dependency direction is always from `brynja-crypto` to the leaf families, never
 back toward TLS or the full cryptographic graph.
 
-In `0.1.0` this package establishes a compile-time boundary only; it does not
+In `0.1.1` this package establishes a compile-time boundary only; it does not
 provide a working TLS, cryptographic, PKI, platform, or legacy-protocol
 implementation.
 
@@ -58,8 +58,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.1"
 ```
 
-This published package is not selected again during the current internal
-development milestone. A future publication requires the version-specific
+This dependency-only patch is selected for the v0.15.0 cumulative checkpoint
+because it exact-pins `brynja-core 0.8.0`. Publication requires the scheduled
+pentest, green hosted checks, signed checkpoint tag, and version-specific
 deliverables, verification, documentation, a current committed cumulative
 PASS pentest report, and green GitHub checks in the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).

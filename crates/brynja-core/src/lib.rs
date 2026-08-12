@@ -14,6 +14,7 @@ mod backend_instance;
 mod backend_kat;
 pub mod backend_session;
 pub mod budget;
+pub mod clock;
 pub mod close;
 pub mod constant_time;
 pub mod entropy;
@@ -69,6 +70,12 @@ pub use backend_session::{
 };
 pub use budget::{
     BudgetBuildError, ResourceBudget, ResourceBudgetBuilder, ResourceDomain, WorkBudget,
+};
+pub use clock::{
+    ClockDuration, ClockGeneration, ClockUnavailable, DeadlineStatus, MonotonicClock,
+    MonotonicClockError, MonotonicClockSource, MonotonicDeadline, MonotonicInstant,
+    MonotonicPurpose, NANOS_PER_SECOND, TimeError, WallClockSource, WallTime, WallTimeRange,
+    WallTimeStatus,
 };
 pub use close::{Cancellation, CloseOutcome};
 pub use constant_time::{
@@ -156,6 +163,9 @@ pub const CPU_BACKEND_CONTRACT_IMPLEMENTED: bool = true;
 /// Whether the v0.14 entropy and secure-random contracts are implemented.
 pub const ENTROPY_CONTRACT_IMPLEMENTED: bool = true;
 
+/// Whether the v0.15 wall and monotonic clock contracts are implemented.
+pub const CLOCK_CONTRACT_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -182,5 +192,6 @@ mod tests {
             super::CPU_BACKEND_CONTRACT_IMPLEMENTED
         ));
         assert!(::core::hint::black_box(super::ENTROPY_CONTRACT_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::CLOCK_CONTRACT_IMPLEMENTED));
     }
 }

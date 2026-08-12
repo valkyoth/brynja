@@ -265,6 +265,14 @@ Failed explicit teardown, `Drop`, rejected initialization, and terminal
 quarantine now share one mandatory destruction-failure handler after the v0.14
 assessment identified the explicit-path omission; repository-owner retest
 passed with zero open findings.
+v0.15.0 separates externally adjustable signed Unix wall time from opaque
+generation-bound monotonic time. Canonical checked arithmetic rejects malformed
+subseconds, overflow, underflow, reversed ranges, wrong direction, generation
+reuse, purpose confusion, deadline overflow, and raw-source rollback. Temporary
+unavailability returns no substitute value and preserves prior monotonic state;
+rollback permanently fails the wrapper. This does not authenticate the
+downstream source, prevent wall-clock adjustment, read an OS clock, validate a
+certificate, run a protocol timer, store replay state, or create FIPS evidence.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
 authority, dispatch authority, instance identity, CPU lease, trusted CPU
@@ -310,6 +318,9 @@ result and admits no backend.
 v0.14.0 adds only entropy and initialized secure-random state contracts plus
 production-unreachable deterministic test support; it adds no randomness
 algorithm, source, platform effect, source-health evidence, or validation.
+v0.15.0 adds only typed time values, source interfaces, monotonic rollback
+detection, and deterministic test support; it adds no OS clock or protocol,
+PKI, ticket, replay, cryptographic, independent-review, or FIPS result.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

@@ -25,7 +25,7 @@
 
 # brynja-pki
 
-`brynja-pki 0.1.6` repins its exact `brynja-core 0.7.0` dependency. It remains
+`brynja-pki 0.1.7` repins its exact `brynja-core 0.8.0` dependency. It remains
 a compile-time boundary only and does not provide a working TLS,
 cryptographic, PKI, platform, or legacy-protocol implementation.
 
@@ -50,9 +50,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.10"
 ```
 
-This dependency-only patch was published with v0.10.0 after its pentest,
-remediation retest, and hosted checks passed. It remains at `0.1.6` during the
-v0.11.0 development milestone under the
+This dependency-only patch is selected for v0.15.0 but remains unpublished
+until its cumulative pentest and hosted checks pass. It is versioned `0.1.7`
+under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

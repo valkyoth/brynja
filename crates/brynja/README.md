@@ -72,8 +72,18 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.14.0` development line implements the upstream entropy and
-initialized secure-random contract in `brynja-core`. Caller-provided raw
+The current `0.15.0` public-checkpoint candidate adds non-interchangeable typed
+wall and monotonic clocks to `brynja-core`. Signed Unix wall values support
+checked arithmetic and inclusive validity ranges for later PKI policy. Opaque
+monotonic instants are bound to an explicit nonzero runtime/boot generation,
+redact raw ticks, admit equal observations, reject cross-generation arithmetic,
+and permanently fail their source wrapper after rollback. Deadlines bind exact
+timer, freshness, ticket, or replay purpose; temporary unavailability returns
+no substitute time. No OS clock, PKI validator, protocol timer, ticket service,
+replay store, cryptographic result, or FIPS evidence is implemented.
+
+Version `0.14.0` implemented the upstream entropy and initialized secure-random
+contract in `brynja-core`. Caller-provided raw
 entropy is affine, exact-purpose, exact-strength, exact-length secret input;
 it is not an OS entropy source, a DRBG, or a validation claim. Initialized
 secure-random state is non-cloneable, requires an exact runtime generation,
@@ -82,12 +92,14 @@ transactional caller-owned secret memory, and permanently quarantines engine
 underfill, rollback, or terminal failure. The wrapper supplies no algorithm,
 platform RNG, FFI, FIPS status, or automatic fallback.
 
-An intentionally non-cryptographic deterministic and fault-injecting engine
+Intentionally non-production deterministic clock sources and a
+non-cryptographic deterministic and fault-injecting random engine
 lives only in permanently unpublished `brynja-test-support`. Machine policy
-rejects making that fixture publishable, moving it into a production graph,
-adding OS randomness or foreign code to the reviewed boundary, granting the
-secret states cloning or formatting, or changing the three reviewed source
-files without reopening review.
+rejects making those fixtures publishable, moving them into a production graph,
+adding OS randomness, OS clocks, or foreign code to the reviewed boundaries,
+exposing monotonic ticks, weakening rollback latching, granting secret states
+cloning or formatting, or changing reviewed source files without reopening
+review.
 
 Version `0.13.2` reserved `brynja-crypto-cpu` as a
 zero-dependency `no_std` package and `brynja-crypto-cpu-std` as its separately
@@ -216,10 +228,10 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.10.0`; the latest signed development milestone is
-v0.13.3. The current v0.14.0 entropy-contract candidate's one Medium explicit-
-teardown finding is remediated and its repository-owner retest passed with zero
-open findings. It awaits green GitHub and CodeQL, selects no crates.io
-publication, and remains in the cumulative v0.10.0-to-v0.15.0 pentest scope.
+v0.14.0. The current v0.15.0 typed-clock checkpoint candidate awaits its
+scheduled cumulative pentest of all changes after v0.10.0 through v0.15.0.
+Fourteen packages are selected, but no upload or tag is allowed before the
+committed PASS report, green GitHub and CodeQL, and explicit authorization.
 The published dependency is:
 
 ```toml
@@ -328,7 +340,7 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, and secure-random state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, and typed-clock state contracts | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
@@ -347,7 +359,8 @@ certificate-bound operational-environment claim.
 Only the shared alert/failure, bounded numeric/resource, borrowed read,
 transactional caller-buffer write, exact workspace/arena, abstract secret
 lifetime, owned-region zeroization, fixed-width constant-time, and provider
-capability/authorization foundations described for `brynja-core` plus the
+capability/authorization, entropy/secure-random, and typed-clock foundations
+described for `brynja-core` plus the
 separately selected sanitization adapter are implemented. No
 cryptographic primitive, PKI processor, protocol parser, or protocol engine in
 this table is implemented.
@@ -358,8 +371,8 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative v0.13 foundation domains; no TLS engine or provider implementation |
-| `brynja-core` | Bounded wire, buffer, error, state, provider, and entropy domains | Prior domains plus affine zeroization, fixed-width constant-time operations, provider capabilities, and entropy/secure-random state contracts implemented |
+| `brynja` | Modern production facade | Exposes cumulative v0.15 foundation domains; no TLS engine or provider implementation |
+| `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, and time domains | Prior domains plus affine zeroization, fixed-width constant-time operations, provider capabilities, entropy/secure-random state, and typed wall/monotonic clock contracts implemented |
 | Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
 | Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
@@ -374,10 +387,10 @@ formal proof, pentest, or release status.
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 implemented over exact `sanitization 2.0.3`; separately selected and not yet published |
+| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 implemented over exact `sanitization 2.0.3`; selected for v0.15.0 and not yet published |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
-| `brynja-test-support` | RFC 9850 key-log encoder plus deterministic/fault secure-random fixtures | Implemented, unpublished, production-unreachable; never a randomness source |
+| `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
 | Other repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
 
 See the [legacy protocol plan](https://github.com/valkyoth/brynja/blob/main/docs/LEGACY_PROTOCOL_PLAN.md)
@@ -488,7 +501,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.14.0
+scripts/tag_gate.sh v0.15.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

@@ -1318,7 +1318,7 @@ Exit criteria:
 
 ### v0.14.0 - Entropy And Secure-Random Contracts
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Separate affine caller-provided raw entropy from non-cloneable initialized secure randomness; bind exact purpose, strength capacity, bytes, runtime generation, fork and bounded reseed rules, transactional caller-owned output, retryable versus permanently quarantined failure, synchronous destruction, and a deterministic/fault provider confined to unpublished test support; add no algorithm, OS RNG, FFI, source-quality, independent-verification, or FIPS claim.
 
@@ -1369,7 +1369,7 @@ Exit criteria:
 
 ### v0.15.0 - Wall And Monotonic Clock Contracts
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Define non-interchangeable typed wall time for PKI and typed monotonic time for timers, freshness, tickets, and replay policy with checked arithmetic and explicit unavailable-time behavior.
 
@@ -1378,22 +1378,46 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- implement canonical nonnegative durations and signed Unix wall time with
+  checked carry, borrow, range, direction, and representability behavior;
+- define inclusive PKI-oriented wall-time ranges and a value-free unavailable
+  result, while leaving every OS clock read to a downstream capability;
+- define opaque monotonic instants bound to one explicit nonzero runtime/boot
+  generation, with no raw-tick accessor, redacted formatting, checked elapsed
+  time, and permanent rollback failure;
+- bind monotonic deadlines to exact timer, freshness, ticket, or replay purpose
+  and their originating generation, rejecting cross-purpose and cross-generation
+  use without substitution;
+- add deterministic scripted wall and monotonic sources only to permanently
+  unpublished test support, with no production dependency path;
+- prepare the cumulative public package set after v0.10.0 in dependency order,
+  but keep publication blocked until the scheduled cumulative pentest report,
+  hosted checks, explicit tag authorization, and exact tag are complete;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- run canonical subsecond, signed epoch, carry, borrow, overflow, underflow,
+  reversed-range, inclusive-boundary, generation-exhaustion, equal-tick,
+  rollback, unavailable, purpose, deadline, and deterministic-source tests;
+- compile-fail wall/monotonic interchange and raw-instant construction; enforce
+  reviewed hashes, private raw state, redacted monotonic formatting, the
+  500-line ceiling, no std/alloc/unsafe/FFI/OS-clock access, and repository-only
+  fixture isolation with nine broken policy fixtures;
+- verify every selected package, exact internal pin, publication order, package
+  archive, SBOM, cumulative delta after v0.10.0, and pending-pentest fail-closed
+  behavior without uploading or creating the tag;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- wall and monotonic values cannot be interchanged, all time arithmetic is
+  checked, unavailable time is explicit, clock rollback fails permanently, and
+  no OS clock, protocol timer engine, PKI validation, ticket service, replay
+  store, cryptographic algorithm, independent verification, or FIPS claim is
+  implied;
 - `v0.15.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.16.0 - Pending Operations And Accelerator Lifecycle

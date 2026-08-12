@@ -2,9 +2,10 @@
 //!
 //! This release exposes checked numeric/resource domains, transactional
 //! borrowed cursors, caller-owned workspaces, secret-lifetime and owned-memory
-//! foundations, fixed-width constant-time operations, and provider capability
-//! contracts with opaque exact-operation handles. It does not provide a TLS
-//! connection API, provider implementation, or cryptographic algorithm.
+//! foundations, fixed-width constant-time operations, provider capability
+//! contracts with opaque exact-operation handles, and typed wall and monotonic
+//! clocks. It does not provide a TLS connection API, provider implementation,
+//! or cryptographic algorithm.
 
 #![no_std]
 
@@ -54,6 +55,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::core::CPU_BACKEND_CONTRACT_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::core::CLOCK_CONTRACT_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

@@ -37,17 +37,18 @@ clear, and named copies to and from `brynja-core` owned regions. Rich source
 errors cannot cross its boundary. Modern and legacy callers use the same
 protocol-neutral type; there is no legacy-specific adapter.
 
-The package is implemented at Brynja v0.11.2 but is not published during that
-development milestone. Publication is deferred to the next scheduled or
-exceptional public checkpoint after its cumulative review passes.
+The package is implemented at Brynja v0.11.2 and selected for initial
+publication at the v0.15.0 scheduled public checkpoint. It remains unpublished
+until the cumulative pentest and every hosted release gate pass.
 
 ```toml
 [dependencies]
 brynja-sanitization = { version = "0.1", default-features = false }
 ```
 
-Until its first checkpoint publication, downstream repository users must use
-an exact reviewed Git revision or local path and accept the development risk.
+Until that checkpoint publication completes, downstream repository users must
+use an exact reviewed Git revision or local path and accept the development
+risk.
 
 ## Cryptography Verification Status
 

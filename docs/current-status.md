@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.13.3 tagged; v0.14.0 awaiting green CI
+Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting scheduled pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -13,7 +13,10 @@ request-metadata contracts, plus inert CPU-backend profiles, exact feature and
 operation bundles, explicit selection policy, caller-owned KAT/health state,
 permanent quarantine, thread-bound dispatch authority, a fail-closed
 native CPU evidence and performance-admission harness, and affine raw-entropy
-plus initialized secure-random contracts. It currently admits zero backends.
+plus initialized secure-random contracts, canonical checked durations, signed
+Unix wall time, inclusive validity ranges, opaque generation-bound monotonic
+instants, purpose-bound deadlines, explicit unavailability, and permanent
+rollback failure. It currently admits zero backends.
 It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
@@ -44,10 +47,14 @@ capability and dispatch contract and also selected no crates.io publication.
 Signed v0.13.2 reserves two inert future CPU-kernel and host-detection package
 boundaries. Signed v0.13.3 provides machine-readable evidence, lane,
 raw-artifact, benchmark, and admission contracts while admitting no backend.
-The facade now advances to `0.14.0`; `brynja-core` adds exact-purpose raw
-entropy and initialized secure-random state, while an isolated deterministic
-fault provider lives only in unpublished test support. Every support-crate
-version and crates.io publication selection remains unchanged.
+Signed v0.14.0 contains exact-purpose raw entropy and initialized secure-random
+state, while its deterministic fault provider remains unpublished test support.
+The facade now advances to the scheduled `0.15.0` checkpoint;
+`brynja-core 0.8.0` adds typed wall and monotonic clock contracts and test
+support adds deterministic scripted sources. Fourteen crates are selected for
+the cumulative publication, but the scheduled v0.10.0-through-v0.15.0 pentest,
+green hosted checks, signed tag, and explicit authorization still block every
+upload.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

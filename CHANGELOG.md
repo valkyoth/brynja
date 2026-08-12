@@ -7,6 +7,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add canonical checked durations, signed Unix wall time, inclusive validity
+  ranges, opaque generation-bound monotonic instants, purpose-bound deadlines,
+  explicit unavailable-time behavior, and permanent rollback failure.
+- Add permanently unpublished deterministic wall and monotonic sources, ten
+  behavioral tests, two compile-fail type/forgery examples, a SHA-256-bound
+  five-file clock policy, and nine broken assurance fixtures.
 - Add affine exact-purpose raw-entropy requests and non-cloneable initialized
   secure-random state with bounded requests, runtime-generation binding,
   mandatory fork/reseed transitions, transactional output, terminal
@@ -83,6 +89,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the cumulative public checkpoint to `brynja 0.15.0`,
+  `brynja-core 0.8.0`, dependency-only modern support releases, and the initial
+  `brynja-crypto-cpu`, `brynja-crypto-cpu-std`, and
+  `brynja-sanitization` packages; publication remains blocked pending the
+  scheduled v0.10.0-through-v0.15.0 pentest and release gates.
 - Require the secure-random destruction-failure handler after failed explicit
   teardown as well as `Drop`, quarantine, and rejected initialization; rename
   the engine hook to reflect its complete scope and cover explicit and `Drop`

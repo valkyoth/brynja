@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -17,11 +17,11 @@ dependencies = [
 
 [[package]]
 name = "brynja-core"
-version = "0.7.0"
+version = "0.8.0"
 
 [[package]]
 name = "brynja-crypto"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "brynja-crypto-cpu"
@@ -36,7 +36,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-dtls"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -90,14 +90,14 @@ version = "0.1.0"
 
 [[package]]
 name = "brynja-pki"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
 ]
 
 [[package]]
 name = "brynja-platform"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
 ]
@@ -108,7 +108,7 @@ version = "0.1.0"
 
 [[package]]
 name = "brynja-quic-tls"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
  "brynja-tls13-handshake",
@@ -135,7 +135,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-tls"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
  "brynja-tls12",
@@ -144,7 +144,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-tls12"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -153,7 +153,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-tls13"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -162,7 +162,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-tls13-handshake"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "brynja-core",
  "brynja-crypto",

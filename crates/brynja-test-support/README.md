@@ -26,11 +26,14 @@
 # brynja-test-support
 
 `brynja-test-support` is a narrowly scoped, permanently unpublished Brynja
-workspace package. In `0.1.0` it provides the RFC 9850 key-log line encoder
-and a deterministic, fault-injecting implementation of the v0.14 secure-random
-engine contract. The latter can exercise retryable, permanent, partial-write,
-underfill, reseed, and destruction paths. It is intentionally predictable,
-not cryptographically secure, and must never be used as a randomness source.
+workspace package. In `0.1.0` it provides the RFC 9850 key-log line encoder,
+a deterministic fault-injecting implementation of the v0.14 secure-random
+engine contract, and scripted wall and monotonic sources for the v0.15 typed
+clock contract. The random fixture exercises retryable, permanent,
+partial-write, underfill, reseed, and destruction paths. The clock fixtures
+exercise exact observations, explicit unavailability, exhaustion, equal ticks,
+and rollback. They are intentionally predictable and must never be used as
+production randomness or time sources.
 
 All ten pinned IANA labels and LF, CRLF, and CR line endings are explicit.
 Writes preflight the complete line and preserve the complete output buffer on
@@ -41,7 +44,8 @@ Only `brynja-core` is a dependency of this crate. No production package depends
 on this crate, and workspace policy rejects any
 normal, optional, feature, target, or resolved production-graph edge to it. It
 does not provide TLS, cryptography, PKI, a platform provider, or a legacy
-protocol implementation or production entropy source. Key-log output reveals
+protocol implementation, production entropy source, or production clock.
+Key-log output reveals
 traffic secrets by design and is therefore prohibited from every production
 package and feature.
 

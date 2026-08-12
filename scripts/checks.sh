@@ -18,6 +18,8 @@ python3 scripts/check-provider-contract.py
 python3 scripts/test-provider-contract.py
 python3 scripts/check-entropy-contract.py
 python3 scripts/test-entropy-contract.py
+python3 scripts/check-clock-contract.py
+python3 scripts/test-clock-contract.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-boundary.py

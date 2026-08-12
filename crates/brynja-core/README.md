@@ -25,7 +25,8 @@
 
 # brynja-core
 
-`brynja-core 0.7.0` now carries the cumulative v0.14 entropy and initialized
+`brynja-core 0.8.0` now carries the cumulative v0.15 typed wall and monotonic
+clock contract, v0.14 entropy and initialized
 secure-random contract, v0.13.1 CPU-backend capability and dispatch contract,
 and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
@@ -156,6 +157,19 @@ deterministic implementation is a deliberately non-cryptographic fixture in
 permanently unpublished `brynja-test-support`; production graphs cannot reach
 it.
 
+v0.15 adds canonical checked nonnegative durations, signed Unix wall time,
+inclusive wall-time validity ranges, opaque nonzero-generation monotonic
+instants, and purpose-bound timer, freshness, ticket, and replay deadlines.
+Wall and monotonic domains cannot be interchanged. Monotonic ticks are private
+and redacted, elapsed and deadline arithmetic rejects generation or direction
+confusion, temporary unavailability preserves state, and a source rollback
+permanently fails its wrapper. Downstream capabilities provide raw time;
+`brynja-core` reads no OS clock and performs no PKI, protocol timer, ticket,
+replay, cryptographic, independent-verification, or FIPS operation. Scripted
+sources exist only in permanently unpublished test support. Eight core tests,
+two fixture tests, two compile-fail examples, reviewed hashes, and nine broken
+policy fixtures enforce this boundary.
+
 v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
 opportunistic, required-accelerated, and validated-module policies; and
@@ -195,7 +209,7 @@ independent cryptographic or protocol verification.
 
 | Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, and secure-random state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, and typed-clock state contracts | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -204,10 +218,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.10"
 ```
 
-The `0.7.0` package was published with Brynja v0.10.0 after its pentest,
-remediation retest, and hosted checks passed. It remains at `0.7.0` during the
-v0.14.0 development milestone and is not selected for publication
-under the
+Version `0.8.0` is selected for the Brynja v0.15.0 cumulative public checkpoint.
+It is not published until the scheduled v0.10.0-through-v0.15.0 pentest report,
+green hosted checks, signed tag, and explicit authorization satisfy the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line

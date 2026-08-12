@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting scheduled pentest
+Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting green CI
 
 The `brynja` facade advances to `0.15.0` for the scheduled cumulative public
 checkpoint. The latest signed development tag is v0.14.0 and the latest
@@ -34,8 +34,10 @@ one Medium explicit-teardown handler omission is remediated, and repository-
 owner retest passed with zero open findings.
 The v0.15.0 candidate adds typed wall and monotonic clock contracts, checked
 time arithmetic, explicit source unavailability, and terminal rollback
-detection. Its scheduled pentest covers all changes after v0.10.0 through the
-exact candidate and remains mandatory before tagging or publication.
+detection. Its scheduled pentest covered all changes after v0.10.0 through
+exact signed candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` and
+passed with zero findings. Green hosted checks remain mandatory before tagging
+or publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

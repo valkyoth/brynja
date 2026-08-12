@@ -1369,7 +1369,7 @@ Exit criteria:
 
 ### v0.15.0 - Wall And Monotonic Clock Contracts
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Define non-interchangeable typed wall time for PKI and typed monotonic time for timers, freshness, tickets, and replay policy with checked arithmetic and explicit unavailable-time behavior.
 
@@ -1406,8 +1406,8 @@ Verification:
   500-line ceiling, no std/alloc/unsafe/FFI/OS-clock access, and repository-only
   fixture isolation with nine broken policy fixtures;
 - verify every selected package, exact internal pin, publication order, package
-  archive, SBOM, cumulative delta after v0.10.0, and pending-pentest fail-closed
-  behavior without uploading or creating the tag;
+  archive, SBOM, cumulative delta after v0.10.0, and committed-report
+  fail-closed behavior without uploading or creating the tag;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 

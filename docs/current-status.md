@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting scheduled pentest
+Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -52,9 +52,10 @@ state, while its deterministic fault provider remains unpublished test support.
 The facade now advances to the scheduled `0.15.0` checkpoint;
 `brynja-core 0.8.0` adds typed wall and monotonic clock contracts and test
 support adds deterministic scripted sources. Fourteen crates are selected for
-the cumulative publication, but the scheduled v0.10.0-through-v0.15.0 pentest,
-green hosted checks, signed tag, and explicit authorization still block every
-upload.
+the cumulative publication. The scheduled v0.10.0-through-v0.15.0 pentest of
+exact signed candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` passed
+with zero findings; green hosted checks, the signed tag, and explicit
+authorization still block every upload.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

@@ -1,11 +1,13 @@
 # Brynja v0.15.0 Public Checkpoint
 
-Status: awaiting pentest
+Status: implementation and scheduled pentest complete; awaiting green GitHub and CodeQL
 
 Brynja v0.15.0 adds typed wall and monotonic clock contracts and prepares the
 cumulative public checkpoint covering every change after v0.10.0 through this
-candidate. Nothing may be tagged or published until the repository owner
-records the cumulative PASS pentest report and GitHub and CodeQL are green.
+candidate. The repository owner assessed exact signed implementation candidate
+`1aa4ad938438f0f2dc996b74b6364f1026c05e0f` and reported PASS/PASS with zero
+open findings. Nothing may be tagged or published until the report-bearing
+release commit passes GitHub and CodeQL.
 
 ## Typed Clock Boundary
 
@@ -54,4 +56,4 @@ TLS implementation, independent cryptographic verification, or FIPS
 validation. Wall time can be adjusted externally; monotonic time is only as
 trustworthy as the downstream source and explicit generation supplied by its
 integrator. The cumulative pentest covers changes after signed public tag
-v0.10.0 through the exact v0.15.0 candidate.
+v0.10.0 through the exact v0.15.0 candidate and passed with no findings.

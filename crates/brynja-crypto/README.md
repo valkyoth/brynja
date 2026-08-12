@@ -59,10 +59,9 @@ brynja = "0.1"
 ```
 
 This dependency-only patch is selected for the v0.15.0 cumulative checkpoint
-because it exact-pins `brynja-core 0.8.0`. Publication requires the scheduled
-pentest, green hosted checks, signed checkpoint tag, and version-specific
-deliverables, verification, documentation, a current committed cumulative
-PASS pentest report, and green GitHub checks in the
+because it exact-pins `brynja-core 0.8.0`. The scheduled pentest passed with
+zero findings. Publication still requires green hosted checks, the signed
+checkpoint tag, and every version-specific gate in the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party-cryptography, `no_std`, 500-line source-file,

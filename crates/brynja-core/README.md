@@ -219,8 +219,9 @@ brynja = "0.10"
 ```
 
 Version `0.8.0` is selected for the Brynja v0.15.0 cumulative public checkpoint.
-It is not published until the scheduled v0.10.0-through-v0.15.0 pentest report,
-green hosted checks, signed tag, and explicit authorization satisfy the
+Its scheduled v0.10.0-through-v0.15.0 pentest passed with zero findings. It is
+not published until green hosted checks, the signed tag, and explicit
+authorization satisfy the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line

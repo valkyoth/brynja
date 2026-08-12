@@ -92,8 +92,8 @@ Keep a Changelog and Semantic Versioning.
 - Advance the cumulative public checkpoint to `brynja 0.15.0`,
   `brynja-core 0.8.0`, dependency-only modern support releases, and the initial
   `brynja-crypto-cpu`, `brynja-crypto-cpu-std`, and
-  `brynja-sanitization` packages; publication remains blocked pending the
-  scheduled v0.10.0-through-v0.15.0 pentest and release gates.
+  `brynja-sanitization` packages; the scheduled cumulative pentest passed and
+  publication remains blocked pending the hosted release gates.
 - Require the secure-random destruction-failure handler after failed explicit
   teardown as well as `Drop`, quarantine, and rejected initialization; rename
   the engine hook to reflect its complete scope and cover explicit and `Drop`
@@ -146,6 +146,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Record the scheduled cumulative v0.15.0 assessment of all changes after
+  signed public tag v0.10.0 through exact signed implementation candidate
+  `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` as PASS/PASS with zero open
+  findings.
 - Record repository-owner PASS retest of exact signed v0.14.0 remediation
   candidate `854c301de56ba432bd0544e2acc525b34a7b28c8`, closing the Medium
   explicit-teardown terminal-handler omission with zero open findings.

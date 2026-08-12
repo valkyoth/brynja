@@ -53,7 +53,8 @@ pentesting do not by themselves constitute independent verification.
 | --- | --- | --- |
 | `brynja-crypto-cpu` | Future first-party CPU cryptographic kernels and static selection | ❌ Not implemented or verified |
 
-The initial package is selected for the v0.15.0 cumulative checkpoint but
-remains unpublished until its pentest and hosted gates pass. The project-wide
+The initial package is selected for the v0.15.0 cumulative checkpoint. Its
+pentest passed with zero findings, but it remains unpublished until the hosted
+gates pass. The project-wide
 first-party Rust, `no_std`, source-size, platform, FIPS, and unsafe-code
 policies apply here.

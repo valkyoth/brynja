@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.15.0 published; v0.16.0 remediation awaiting retest
+Status: v0.15.0 published; v0.16.0 pentest passed and awaiting green CI
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

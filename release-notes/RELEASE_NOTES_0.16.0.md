@@ -1,6 +1,6 @@
 # Brynja v0.16.0 Development Milestone
 
-Status: remediation complete; awaiting repository-owner retest
+Status: pentest PASS; awaiting green GitHub and CodeQL
 
 Brynja v0.16.0 implements an upstream `no_std` lifecycle for pending
 certificate, external-signature, and accelerator operations. It advances only
@@ -26,7 +26,8 @@ cumulative change range that the scheduled v0.20.0 checkpoint will assess.
 - Every effect exposes the exact opaque installed-provider handle it
   implements. A request authorized by another provider fails before effectful
   work. Identity is rechecked after cost derivation and again after guarded
-  preparation immediately before activation, as well as before later transitions.
+  preparation immediately before activation, as well as before later
+  transitions.
 - Activation, resume, cancellation, and destruction borrow state owned by the
   lifecycle. Recoverable provider unwinding therefore leaves even partially
   initialized state available to mandatory `Drop` cleanup.
@@ -85,8 +86,9 @@ owner confirmed that fix on `fc27b6602d1d5e28a090c20e91f024e91173f574`, then
 found a Medium identity TOCTOU if a contract-violating provider changed its
 reported handle during preparation. A guarded post-preparation identity check
 now destroys prepared state and fails before activation, with exact behavior
-and policy regressions. This third remediation is locally green and awaits
-repository-owner retest; the permanent report is
+and policy regressions. The repository owner retested exact signed third
+remediation candidate `f0557b8419b77129d1763e9469ae4e7deeffc2e7` and reported
+a green result. The permanent PASS/PASS report is
 [`security/pentest/v0.16.0.md`](../security/pentest/v0.16.0.md).
 
 This milestone implements no downstream provider, certificate validator,

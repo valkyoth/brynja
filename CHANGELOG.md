@@ -144,8 +144,8 @@ Keep a Changelog and Semantic Versioning.
   `brynja-platform` as a downstream future implementation boundary and do not
   introduce a registry, fallback provider, platform dependency, or effect.
 - Refresh the Miri and Rust sanitizer evidence toolchain to
-  `nightly-2026-08-12` at exact Rust revision
-  `3d6c19bb9ab4798ecfb2ee943df01a811720fc27` after the online freshness gate.
+  `nightly-2026-08-13` at exact Rust revision
+  `c98d0cb27cc63afdd62602a52eb4feb8a1c682dd` after the online freshness gate.
 - Complete the v0.12.0 constant-time foundation without selecting any crate for
   publication; require its exceptional assessment before the signed tag.
 - Clarify in the shared package header and main README that Brynja is a
@@ -166,6 +166,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Record the exceptional v0.16.0 pending-lifecycle assessment and final
+  repository-owner PASS retest of exact signed third remediation candidate
+  `f0557b8419b77129d1763e9469ae4e7deeffc2e7`, closing three High and two
+  Medium findings with zero open findings.
 - Record the scheduled cumulative v0.15.0 assessment of all changes after
   signed public tag v0.10.0 through exact signed implementation candidate
   `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` as PASS/PASS with zero open

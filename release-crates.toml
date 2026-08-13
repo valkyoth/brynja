@@ -6,7 +6,7 @@ cumulative_milestones = ["0.16.0"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "The v0.16.0 pending-operation boundary received an exceptional repository-owner assessment; two retests confirmed four earlier findings fixed, then found one Medium preparation-time identity TOCTOU that is remediated and awaiting a third retest before tagging."
+exception_reason = "The v0.16.0 pending-operation boundary received an exceptional repository-owner assessment; repository-owner retests confirmed all three High and two Medium findings fixed, with PASS/PASS and zero open findings before tagging."
 
 [crates."brynja"]
 previous_version = "0.15.0"

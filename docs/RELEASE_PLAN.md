@@ -1422,7 +1422,7 @@ Exit criteria:
 
 ### v0.16.0 - Pending Operations And Accelerator Lifecycle
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Define resumable provider tokens, certificate, signature and accelerator requests, cancellation, retry semantics, backpressure, and failure-atomic state transitions; external-key and accelerator-handle destruction completes only through a mandatory single-consumption token transition, never through an informational event.
 
@@ -1494,10 +1494,11 @@ Exit criteria:
   and no provider implementation, certificate validation,
   signature, accelerator, platform effect, protocol engine, independent
   verification, or FIPS claim is implied;
-- the exceptional repository-owner retest reports all three findings closed
-  with zero open findings before the final report-bearing candidate may proceed
-  through green GitHub and CodeQL to explicit signed-tag authorization; no
-  crates.io publication is selected.
+- the exceptional repository-owner retests report all five findings (three
+  High and two Medium) closed with zero open findings on exact signed final
+  remediation candidate `f0557b8419b77129d1763e9469ae4e7deeffc2e7` before the
+  report-bearing candidate may proceed through green GitHub and CodeQL to
+  explicit signed-tag authorization; no crates.io publication is selected.
 - `v0.16.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.17.0 - FIPS-Aware Provider Architecture

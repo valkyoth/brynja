@@ -248,7 +248,7 @@ brynja = "0.15"
 
 Version `0.8.0` was published at the Brynja v0.15.0 cumulative checkpoint after
 its scheduled assessment passed with zero findings. The v0.16.0 pending-
-operation delta is tagged development work and remains unpublished until a
+operation delta is assessed development work and remains unpublished until a
 later checkpoint under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

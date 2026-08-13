@@ -91,6 +91,12 @@ accelerator, cache, DMA, and other declared cleanup. Provider failure,
 exhaustion, and `Drop` use the same cleanup path. No provider effect,
 certificate validation, signature, accelerator implementation, protocol
 engine, cryptographic result, or FIPS evidence is implemented.
+The exceptional v0.16.0 assessment found three High and two Medium issues
+across the initial candidate and follow-up reviews. All are remediated; the
+repository-owner retest of exact signed candidate
+`f0557b8419b77129d1763e9469ae4e7deeffc2e7` passed with zero open findings.
+The permanent report is PASS/PASS, and the tag candidate now awaits green
+GitHub and CodeQL.
 
 Version `0.15.0` added non-interchangeable typed wall and monotonic clocks
 to `brynja-core`. Signed Unix wall values support checked arithmetic and

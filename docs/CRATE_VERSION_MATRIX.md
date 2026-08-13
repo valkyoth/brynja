@@ -41,6 +41,10 @@ and all fourteen selected packages were published. The v0.16.0 stage adds
 bounded affine pending certificate, external-signature, and accelerator
 lifecycles with authoritative provider-state destruction. It implements no
 provider effect or algorithm and selects no package publication.
+Its exceptional assessment found three High and two Medium issues across the
+initial candidate and follow-up reviews. All are remediated, and the final
+repository-owner retest of exact signed candidate
+`f0557b8419b77129d1763e9469ae4e7deeffc2e7` passed with zero open findings.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

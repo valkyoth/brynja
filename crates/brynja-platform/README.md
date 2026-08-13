@@ -41,6 +41,11 @@ authority.
 Brynja v0.16.0 freezes the upstream pending-operation effect and authoritative
 destruction lifecycle. This package supplies no pending provider, external-key
 store, accelerator driver, completion assertion, or cleanup implementation.
+Brynja v0.17.0 freezes the upstream FIPS-aware provider architecture. This
+package cannot classify module services, complete module self-tests, provide
+an operational-environment identity, or turn platform evidence into a FIPS
+claim; any later implementation must enter through separately reviewed exact
+module contracts.
 
 Most application users will eventually depend on the modern facade:
 

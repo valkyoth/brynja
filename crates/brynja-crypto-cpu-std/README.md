@@ -41,6 +41,9 @@ schema without implementing detection here. An unavailable host stays
 unadmitted, QEMU evidence cannot be promoted to a native claim, and recorded
 runner metadata cannot authenticate evidence. Candidate/native claims remain
 forbidden until a reviewed trusted-runner verifier is separately admitted.
+Brynja v0.17.0 makes this exclusion structural: no std detector, ordinary
+backend policy, opportunistic result, or adapter-owned global can enter or
+alter its FIPS-aware module configuration or session.
 
 ## Cryptography Verification Status
 

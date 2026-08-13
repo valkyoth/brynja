@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.15.0 published; v0.16.0 pentest passed and awaiting green CI
+Status: v0.16.0 signed; v0.17.0 implementation complete and awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -18,8 +18,10 @@ Unix wall time, inclusive validity ranges, opaque generation-bound monotonic
 instants, purpose-bound deadlines, explicit unavailability, and permanent
 rollback failure, plus affine bounded pending certificate, external-signature,
 and accelerator request state whose completion and cancellation require an
-authoritative single-consumption destruction transition. It currently admits
-zero backends.
+authoritative single-consumption destruction transition, plus exact FIPS-aware
+service classification, module-owned environment/build/SSP assumptions,
+trusted self-test entry, permanent-failure state, and generation-bound service
+indicators. It currently admits zero backends and implements no FIPS module.
 It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
@@ -56,9 +58,10 @@ The `0.15.0` checkpoint published `brynja-core 0.8.0`, the modern dependency
 patches, the initial CPU-boundary and sanitization packages, and the facade
 after the scheduled v0.10.0-through-v0.15.0 pentest of
 exact signed candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` passed
-with zero findings and hosted checks became green. The facade now advances to
-`0.16.0`; supporting versions remain unchanged and no crate is selected for
-publication.
+with zero findings and hosted checks became green. Signed v0.16.0 contains the
+remediated pending-operation lifecycle and selects no crates.io publication.
+The facade now advances to `0.17.0`; supporting versions remain unchanged and
+no crate is selected for publication.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -643,6 +646,27 @@ durable/fail-stop handler. This is an upstream contract only and implements no
 provider, key store, accelerator, certificate validator, signature,
 cryptographic algorithm, protocol engine, independent verification, or FIPS
 validation. v0.16.0 selects no crates.io publication.
+
+Version 0.17.0 implements an inert FIPS-aware provider architecture. Exact,
+possibly empty service sets classify every capability of one installed
+provider exactly once. Transactional configuration rejects overlap, omission,
+unsupported services, duplicate fields, empty build digests, empty SSP
+destruction duties, the ordinary validated-module placeholder, and scalar or
+accelerated backend/feature mismatch. Deterministic source, toolchain, flags,
+and dependency digests remain expectations rather than a validated binary
+identity.
+
+An explicitly trusted runner receives the mandatory integrity and algorithm
+known-answer plan. Services remain unavailable before success; failure,
+reentry, interruption, unwind, generation exhaustion, or a later catastrophic
+event permanently fails the caller-owned session. Non-cloneable thread-bound
+service indicators bind one operation, disposition, provider, and generation
+and become stale after failure. Ordinary `BackendPolicy`, opportunistic
+dispatch, std runtime detection, and the std CPU adapter cannot enter this
+boundary. The milestone adds no module, algorithm, provider effect, self-test
+algorithm, CPU kernel, environment measurement, deterministic binary
+reproduction, SSP effect, independent verification, CMVP submission,
+certificate, or FIPS validation. v0.17.0 selects no crates.io publication.
 
 The package was held from crates.io until the v0.15.0 public checkpoint.
 Because this is the first production adapter around external unsafe

@@ -7,6 +7,17 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add exact, possibly empty FIPS-aware approved and non-approved service sets,
+  transactional complete provider classification, module-owned scalar or
+  accelerated environment assumptions, deterministic-build digest
+  expectations, and explicit SSP-flow/destruction policy.
+- Add an explicit trusted self-test runner boundary, private interruption-safe
+  guard, permanent failure latch, and generation-bound non-cloneable service
+  indicators that become stale after catastrophic failure.
+- Add six FIPS architecture behavior groups, four compile-fail boundary
+  examples, a SHA-256-bound four-file source policy, and twenty-three isolation,
+  classification, lifecycle, authorization, source-size, unsafe, and drift
+  fixtures, including broad provider-handle escape.
 - Add exact affine pending certificate, external-signature, and accelerator
   requests with mandatory poll/cancel capability admission, applicable
   destruction duties, checked effect-attempt and backpressure limits, and no
@@ -106,6 +117,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the development facade to `brynja 0.17.0`, retain every supporting-
+  crate publication version, include v0.16.0 and v0.17.0 in the next cumulative
+  checkpoint range, and select zero crates for crates.io publication.
 - Advance the development facade to `brynja 0.16.0`, retain every supporting-
   crate publication version from v0.15.0, and select zero crates for crates.io
   publication.

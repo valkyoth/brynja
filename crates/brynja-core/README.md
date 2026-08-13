@@ -25,15 +25,16 @@
 
 # brynja-core
 
-`brynja-core 0.8.0` now carries the cumulative v0.16 pending-operation
-lifecycle, v0.15 typed wall and monotonic clock contract, v0.14 entropy and initialized
+`brynja-core 0.8.0` now carries the cumulative v0.17 FIPS-aware provider
+architecture, v0.16 pending-operation lifecycle, v0.15 typed wall and monotonic
+clock contract, v0.14 entropy and initialized
 secure-random contract, v0.13.1 CPU-backend capability and dispatch contract,
 and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. Version
-`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 code remains
-unpublished until a later public checkpoint.
+`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 and v0.17 code
+remain unpublished until a later public checkpoint.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
@@ -198,6 +199,29 @@ destruction, and drop handling. This upstream contract implements no provider, p
 signature, external key store, accelerator, platform effect, cryptographic
 algorithm, protocol engine, independent verification, or FIPS validation.
 
+v0.17 adds an inert FIPS-aware provider architecture. Exact, possibly empty
+service sets classify every capability of one installed provider exactly once
+as intended approved or explicitly non-approved. Transactional configuration
+rejects overlap, omission, unsupported services, duplicate fields, empty build
+digests, empty SSP destruction duties, mismatched backend ownership, and
+incomplete feature assumptions. One nonzero operational-environment identity
+binds one module-owned scalar or accelerated symbol class and its exact feature
+bundle. The ordinary validated-module placeholder, opportunistic
+`BackendPolicy`, runtime std detector, and std CPU adapter are excluded.
+
+An explicitly trusted runner receives the exact mandatory integrity and
+algorithm-known-answer plan. Before it passes, no service can be authorized.
+Failure, reentry, interruption, unwind, impossible state, generation
+exhaustion, or a later catastrophic event permanently fails the caller-owned
+session. A non-cloneable, non-formattable, thread-bound service indicator binds
+one operation, disposition, provider, and health generation and becomes stale
+after failure. Six behavior groups, four compile-fail examples, exact source
+hashes, and twenty-three broken policy fixtures enforce this architecture. It
+implements no module, algorithm, provider effect, self-test algorithm, CPU
+kernel, runtime detector, environment measurement, deterministic binary
+reproduction, SSP movement or erasure, CMVP submission, certificate,
+independent verification, or FIPS validation.
+
 v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
 opportunistic, required-accelerated, and validated-module policies; and
@@ -237,7 +261,7 @@ independent cryptographic or protocol verification.
 
 | Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, and pending-operation state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, and FIPS-aware state contracts | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -247,9 +271,8 @@ brynja = "0.15"
 ```
 
 Version `0.8.0` was published at the Brynja v0.15.0 cumulative checkpoint after
-its scheduled assessment passed with zero findings. The v0.16.0 pending-
-operation delta is assessed development work and remains unpublished until a
-later checkpoint under the
+its scheduled assessment passed with zero findings. The v0.16.0 and v0.17.0
+development deltas remain unpublished until a later checkpoint under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line

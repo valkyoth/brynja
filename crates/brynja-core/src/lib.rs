@@ -20,6 +20,10 @@ pub mod constant_time;
 pub mod entropy;
 pub mod error;
 pub mod exhaustion;
+pub mod fips;
+pub mod fips_build;
+pub mod fips_service;
+pub mod fips_session;
 pub mod numeric;
 pub mod pending;
 pub mod provider;
@@ -88,6 +92,17 @@ pub use entropy::{
 };
 pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
+pub use fips::{
+    FipsBackendOwner, FipsConfigurationError, FipsConfigurationField, FipsEnvironmentError,
+    FipsModuleBuilder, FipsModuleConfig, FipsOperationalEnvironment, FipsSelfTest,
+    FipsSelfTestPlan, FipsServiceDisposition, FipsSspError, FipsSspFlow, FipsSspPolicy,
+};
+pub use fips_build::{FipsBuildError, FipsBuildExpectations};
+pub use fips_service::{FipsServiceSet, FipsServiceSetBuilder, FipsServiceSetError};
+pub use fips_session::{
+    FipsModuleError, FipsModuleFault, FipsModuleSession, FipsModuleSnapshot, FipsModuleState,
+    FipsSelfTestResult, FipsSelfTestRunner, FipsServiceAuthorization, FipsServiceError,
+};
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
 pub use pending::{
     PendingBackpressure, PendingBeginStep, PendingCancelStep, PendingCancellation,
@@ -179,6 +194,9 @@ pub const CLOCK_CONTRACT_IMPLEMENTED: bool = true;
 /// Whether the v0.16 pending-operation lifecycle is implemented.
 pub const PENDING_OPERATION_LIFECYCLE_IMPLEMENTED: bool = true;
 
+/// Whether the v0.17 FIPS-aware provider architecture is implemented.
+pub const FIPS_AWARE_PROVIDER_ARCHITECTURE_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -208,6 +226,9 @@ mod tests {
         assert!(::core::hint::black_box(super::CLOCK_CONTRACT_IMPLEMENTED));
         assert!(::core::hint::black_box(
             super::PENDING_OPERATION_LIFECYCLE_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::FIPS_AWARE_PROVIDER_ARCHITECTURE_IMPLEMENTED
         ));
     }
 }

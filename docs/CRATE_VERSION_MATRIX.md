@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Status: v0.15.0 published; v0.16.0 awaiting green CI
+Status: v0.16.0 signed; v0.17.0 implementation complete and awaiting green CI
 
-The `brynja` facade advances to `0.16.0` for the current development milestone
+The `brynja` facade advances to `0.17.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published
 checkpoint is v0.15.0: `brynja 0.15.0`, `brynja-core 0.8.0`,
 `brynja-crypto 0.1.1`, the eight modern support packages at `0.1.7`, and the
@@ -45,11 +45,15 @@ Its exceptional assessment found three High and two Medium issues across the
 initial candidate and follow-up reviews. All are remediated, and the final
 repository-owner retest of exact signed candidate
 `f0557b8419b77129d1763e9469ae4e7deeffc2e7` passed with zero open findings.
+Signed tag v0.16.0 contains that remediation and selected no publication. The
+v0.17.0 stage adds only inert FIPS-aware service, build, environment, SSP,
+self-test, permanent-failure and service-indicator contracts. It implements no
+module, service, algorithm or validation and selects no package publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.16.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
-| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16 pending-lifecycle code remains unreleased on crates.io |
+| `brynja` | `0.17.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
+| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16 pending and v0.17 FIPS-aware architecture code remains unreleased on crates.io |
 | `brynja-crypto` | `0.1.1` | no | Published provider/composition boundary retained; cryptographic effects remain unimplemented |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Published inert boundaries; no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
 | `brynja-pki`, `brynja-platform` | `0.1.7` | no | Published boundaries retained; PKI and platform effects remain unimplemented |

@@ -5,8 +5,11 @@
 //! foundations, fixed-width constant-time operations, provider capability
 //! contracts with opaque exact-operation handles, and typed wall and monotonic
 //! clocks. Pending certificate, external-signature, and accelerator operations
-//! now have an affine bounded lifecycle. This crate does not provide a TLS
-//! connection API, provider implementation, or cryptographic algorithm.
+//! have an affine bounded lifecycle. An inert FIPS-aware architecture freezes
+//! service, environment, SSP, self-test, and permanent-failure contracts
+//! without implementing or claiming a validated module. This crate does not
+//! provide a TLS connection API, provider implementation, or cryptographic
+//! algorithm.
 
 #![no_std]
 
@@ -62,6 +65,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::core::PENDING_OPERATION_LIFECYCLE_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::core::FIPS_AWARE_PROVIDER_ARCHITECTURE_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

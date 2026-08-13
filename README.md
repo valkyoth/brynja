@@ -72,31 +72,25 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.16.0` development milestone adds an affine pending-operation
-lifecycle to `brynja-core`. Exact certificate-path, external-signature, and
-accelerator-eligible requests require the same provider's poll, cancellation,
-and applicable destruction duties. Checked caller limits bound every effect
-attempt and backpressure response. The effect must prove its exact opaque
-provider identity before begin and every later transition. Provider-derived,
-effect-free nonzero costs are charged before the lifecycle issues a
-non-forgeable work permit. Inert local state is prepared first and placed under
-lifecycle ownership; provider identity is checked again after preparation and
-immediately before activation may create any external resource.
-Activation, resume, and cancellation only borrow lifecycle-owned state, so an
-unwind leaves even partially initialized state available for mandatory `Drop`
-cleanup.
-Completion or cancellation becomes authoritative only after a non-cloneable
-token is consumed to assert external-key,
-accelerator, cache, DMA, and other declared cleanup. Provider failure,
-exhaustion, and `Drop` use the same cleanup path. No provider effect,
-certificate validation, signature, accelerator implementation, protocol
-engine, cryptographic result, or FIPS evidence is implemented.
-The exceptional v0.16.0 assessment found three High and two Medium issues
-across the initial candidate and follow-up reviews. All are remediated; the
-repository-owner retest of exact signed candidate
-`f0557b8419b77129d1763e9469ae4e7deeffc2e7` passed with zero open findings.
-The permanent report is PASS/PASS, and the tag candidate now awaits green
-GitHub and CodeQL.
+The current `0.17.0` development milestone freezes an inert FIPS-aware provider
+architecture in `brynja-core`. Exact, possibly empty service sets classify
+every installed-provider operation once as intended approved or explicitly
+non-approved. A module configuration binds nonzero deterministic-build digests,
+one exact operational-environment identity, a module-owned scalar or
+accelerated backend with its complete feature bundle, and explicit SSP flow
+plus complete-copy destruction duties. The ordinary validated-module
+placeholder, opportunistic `BackendPolicy`, runtime std detection, and the std
+CPU adapter cannot enter this boundary.
+
+An explicitly trusted self-test runner receives the exact integrity and
+algorithm-known-answer plan. Services remain unavailable until it succeeds;
+failure, reentry, interruption, unwind, or a later catastrophic event latches
+the caller-owned module session failed. Non-cloneable thread-bound service
+indicators bind one operation, disposition, provider, and health generation,
+and become stale after terminal failure. This implements no cryptographic
+module, algorithm, provider effect, self-test algorithm, CPU kernel, SSP
+transport or erasure, deterministic binary reproduction, CMVP submission,
+certificate, independent verification, or FIPS validation.
 
 Version `0.15.0` added non-interchangeable typed wall and monotonic clocks
 to `brynja-core`. Signed Unix wall values support checked arithmetic and
@@ -234,7 +228,7 @@ published only when their cumulative changes require it at a checkpoint.
 Pentests look backwards over the complete change range between public
 checkpoints. The v0.15.0 assessment covered all changes after signed public tag
 v0.10.0 through v0.15.0. The v0.20.0 assessment covers all changes after
-v0.15.0 through v0.20.0, including the current v0.16.0 milestone, and the same
+v0.15.0 through v0.20.0, including the current v0.17.0 milestone, and the same
 pattern continues every fifth minor version. Each checkpoint report records
 its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
@@ -250,9 +244,9 @@ an independent pentest.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-crates.io checkpoint and signed tag are `0.15.0`. The current `0.16.0`
-pending-operation milestone selects no crates.io publication and awaits its
-repository-owner security retest, complete local and hosted gates, and explicit
+crates.io checkpoint is `0.15.0`; the latest signed development tag is
+`0.16.0`. The current `0.17.0` FIPS-aware architecture milestone selects no
+crates.io publication and awaits complete local and hosted gates plus explicit
 signed-tag authorization.
 The published dependency is:
 
@@ -363,7 +357,7 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, and pending-operation state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, and FIPS-aware state contracts | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
@@ -513,6 +507,8 @@ python3 scripts/check-clock-contract.py
 python3 scripts/test-clock-contract.py
 python3 scripts/check-pending-contract.py
 python3 scripts/test-pending-contract.py
+python3 scripts/check-fips-architecture.py
+python3 scripts/test-fips-architecture.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-evidence.py
@@ -529,7 +525,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.16.0
+scripts/tag_gate.sh v0.17.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

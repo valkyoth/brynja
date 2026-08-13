@@ -1,26 +1,26 @@
 [release]
-version = "0.16.0"
-milestone = "0.16.0"
+version = "0.17.0"
+milestone = "0.17.0"
 baseline = "0.15.0"
-cumulative_milestones = ["0.16.0"]
+cumulative_milestones = ["0.16.0", "0.17.0"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "The v0.16.0 pending-operation boundary received an exceptional repository-owner assessment; repository-owner retests confirmed all three High and two Medium findings fixed, with PASS/PASS and zero open findings before tagging."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.15.0"
-version = "0.16.0"
+previous_version = "0.16.0"
+version = "0.17.0"
 change = "metadata"
 publish = false
-reason = "Advance to the v0.16.0 pending-operation milestone with bounded affine certificate, external-signature, and accelerator lifecycles and no crates.io publication."
+reason = "Advance to the v0.17.0 FIPS-aware architecture milestone with inert service, environment, self-test, permanent-failure, and SSP contracts and no crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.8.0"
 version = "0.8.0"
 change = "code"
 publish = false
-reason = "Retain published 0.8.0 while adding the pending-operation and authoritative provider-state destruction lifecycle for the future v0.20.0 checkpoint."
+reason = "Retain published 0.8.0 while adding the inert FIPS-aware provider architecture for the future v0.20.0 checkpoint."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.1"
@@ -174,7 +174,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "repository"
 publish = false
-reason = "Retain deterministic clock, random, and RFC 9850 support; v0.16 deterministic pending tests remain internal to brynja-core and production-unreachable."
+reason = "Retain deterministic clock, random, and RFC 9850 support; v0.17 FIPS-aware tests remain internal to brynja-core and production-unreachable."
 
 [crates."brynja-interop"]
 previous_version = "unpublished"

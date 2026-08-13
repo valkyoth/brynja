@@ -1422,7 +1422,7 @@ Exit criteria:
 
 ### v0.16.0 - Pending Operations And Accelerator Lifecycle
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Define resumable provider tokens, certificate, signature and accelerator requests, cancellation, retry semantics, backpressure, and failure-atomic state transitions; external-key and accelerator-handle destruction completes only through a mandatory single-consumption token transition, never through an informational event.
 
@@ -1503,7 +1503,7 @@ Exit criteria:
 
 ### v0.17.0 - FIPS-Aware Provider Architecture
 
-Status: planned
+Status: awaiting green CI
 
 Plan scope: Freeze approved and non-approved service separation, self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, service indicators, SSP boundaries, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.
 
@@ -1512,25 +1512,51 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
-- bind every future approved CPU implementation and dispatch path to an exact
-  module-owned symbol, KAT, catastrophic-failure behavior and operational
-  environment, excluding ordinary std-adapter and opportunistic selection;
+- add exact, possibly empty approved and non-approved service sets and require
+  a transactional configuration to classify every installed-provider
+  capability exactly once, rejecting overlap, omission, and unsupported work;
+- bind one nonzero operational-environment identity to an exact module-owned
+  scalar or accelerated backend and its complete required feature bundle;
+  explicitly reject the ordinary validated-module placeholder and expose no
+  `BackendPolicy`, opportunistic dispatch, std detection, or std adapter;
+- freeze nonzero deterministic source, toolchain, flags, and dependency digest
+  expectations without claiming the final validated binary identity;
+- freeze internal/import/export SSP-flow intent and mandatory nonempty
+  complete-copy destruction targets without implementing a port or erasure;
+- require exact integrity and algorithm-known-answer self-tests through an
+  explicitly trusted runner; keep the completion guard private and permanently
+  latch failure on rejection, reentry, interruption, unwind, impossible state,
+  generation exhaustion, or a later catastrophic event;
+- issue only non-cloneable, non-formattable, thread-bound service indicators
+  tied to one exact operation, disposition, provider and health generation;
+  invalidate all outstanding indicators after terminal failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- run exact service-set, duplicate, empty-side, overlap, omission, unsupported,
+  environment identity, backend owner, feature bundle, build digest, SSP duty,
+  pre-test authorization, successful test, failed test, interrupted test,
+  reentry, catastrophic failure, generation invalidation and unsupported-service
+  tests;
+- compile-fail raw service-set construction, ordinary backend-policy injection,
+  and service-indicator cloning; enforce reviewed hashes, private state,
+  permanent-failure transitions, exact provider classification, the 500-line
+  ceiling, and no std/alloc/unsafe/FFI/runtime-detection/ordinary-dispatch/global
+  state with twenty-three broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- every provider capability has one declared disposition; service use is
+  impossible before the exact self-test plan passes; failure is permanent and
+  invalidates earlier indicators; module backend identity and feature
+  assumptions are exact; ordinary dispatch cannot alter the boundary; and no
+  module, algorithm, self-test implementation, service execution, build
+  reproduction, SSP effect, provider effect, independent verification,
+  certificate, CMVP submission, or FIPS validation is implied;
 - `v0.17.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.18.0 - Mandatory Security Outcome Authority Contract

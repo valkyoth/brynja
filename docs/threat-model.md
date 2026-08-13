@@ -230,6 +230,13 @@ continuation state across recoverable activation, resume, cancellation, and
 terminal-cleanup unwinding
 without implementing a provider effect; application code cannot forge a work
 permit or authoritative completion from an informational event.
+v0.17 FIPS-aware types classify one installed provider's complete operation
+surface and bind exact build, operational-environment, backend-feature, SSP,
+self-test and permanent-failure assumptions without implementing a service.
+Ordinary backend policy, opportunistic/std dispatch, and the sealed-provider
+placeholder cannot cross that boundary. The self-test runner is explicitly
+trusted; dishonest runner success remains an operating-boundary violation, not
+evidence created or detected by these policy types.
 v0.13.1 backend types add only inert identities, exact feature/operation
 profiles, policy selection, caller-owned KAT health state, generation
 invalidation, permanent quarantine, opaque measured-instance binding,
@@ -348,6 +355,12 @@ v0.16.0 adds only bounded affine pending request, effect-state, cancellation,
 backpressure, and authoritative destruction transitions; it adds no provider,
 certificate validation, signature, external key store, accelerator driver,
 algorithm, protocol, platform, independent-review, or FIPS result.
+v0.17.0 adds only inert FIPS-aware classification, deterministic-build and
+operational-environment expectations, SSP policy, self-test state, permanent
+failure and generation-bound service indicators; it adds no cryptographic
+module, algorithm, provider effect, self-test implementation, CPU kernel,
+measured environment, reproduced binary, SSP effect, CMVP submission,
+certificate, independent review, or FIPS validation result.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

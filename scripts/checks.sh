@@ -22,6 +22,8 @@ python3 scripts/check-clock-contract.py
 python3 scripts/test-clock-contract.py
 python3 scripts/check-pending-contract.py
 python3 scripts/test-pending-contract.py
+python3 scripts/check-fips-architecture.py
+python3 scripts/test-fips-architecture.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-boundary.py

@@ -41,6 +41,9 @@ it records no backend result and admits no implementation in this package.
 Candidate/native claims are forbidden until an independently reviewed
 trusted-runner verifier exists, and observed operating state must exactly match
 the reviewed ABI prerequisites.
+Brynja v0.17.0 additionally requires every future FIPS-selected backend to be
+owned by one exact module environment and complete feature bundle; ordinary
+dispatch identity and this package alone cannot authorize or validate it.
 
 ## Cryptography Verification Status
 

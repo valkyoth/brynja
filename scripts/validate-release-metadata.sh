@@ -98,6 +98,9 @@ test -f scripts/clock_contract_policy.py
 test -x scripts/check-pending-contract.py
 test -x scripts/test-pending-contract.py
 test -f scripts/pending_contract_policy.py
+test -x scripts/check-fips-architecture.py
+test -x scripts/test-fips-architecture.py
+test -f scripts/fips_architecture_policy.py
 test -x scripts/check-cpu-boundary.py
 test -x scripts/test-cpu-boundary.py
 test -f scripts/cpu_boundary_policy.py
@@ -120,6 +123,8 @@ grep -q 'python3 scripts/check-clock-contract.py' scripts/checks.sh
 grep -q 'python3 scripts/test-clock-contract.py' scripts/checks.sh
 grep -q 'python3 scripts/check-pending-contract.py' scripts/checks.sh
 grep -q 'python3 scripts/test-pending-contract.py' scripts/checks.sh
+grep -q 'python3 scripts/check-fips-architecture.py' scripts/checks.sh
+grep -q 'python3 scripts/test-fips-architecture.py' scripts/checks.sh
 grep -q 'python3 scripts/check-cpu-boundary.py' scripts/checks.sh
 grep -q 'python3 scripts/test-cpu-boundary.py' scripts/checks.sh
 test -s docs/first-party-rust-cryptography.md

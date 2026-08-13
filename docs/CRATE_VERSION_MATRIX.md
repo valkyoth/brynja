@@ -51,8 +51,12 @@ environment, provider-derived SSP-destruction, self-test, permanent-failure and
 non-authorizing service-indicator contracts. Its exceptional assessment found
 two High design issues; both are remediated, and repository-owner retest of
 exact signed candidate `bc83f44a9c8fdb710d03429b1669ee6c4449b054` passed
-with zero open findings. The report retains caller-session-scoped failure as a
-non-exploitable future constraint gated at v0.127.1. It implements no module,
+with zero open findings. A final full-delta review through exact signed
+candidate `3f889a2c07ae513235fd8cb9056faa983f2135e9` substantiated no open
+Critical, High, or Medium vulnerability. The report retains caller-session-
+scoped failure and application-implementable self-test success as
+non-exploitable future constraints gated by module-wide failure at v0.127.1
+and opaque module-owned attestation at v0.125.0/v0.127.0. It implements no module,
 service, algorithm or validation and selects no package publication.
 
 | Package group | Version | Publish | Meaning |

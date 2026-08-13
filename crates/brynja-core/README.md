@@ -224,6 +224,12 @@ kernel, runtime detector, environment measurement, deterministic binary
 reproduction, SSP movement or erasure, CMVP submission, certificate,
 independent verification, or FIPS validation.
 
+`FipsSelfTestRunner` is intentionally public only as a trusted architecture
+seam. Application code can implement it, so its return value is not self-test
+evidence and grants no execution or approved status. Before those capabilities
+exist, v0.125.0 and v0.127.0 require an opaque module-owned attestation issued
+only by the complete final-image integrity and pre-operational self-tests.
+
 Permanent failure is currently scoped to one caller-owned
 `FipsModuleSession`; sibling sessions over the same configuration are
 independent. This is not currently exploitable because every service is

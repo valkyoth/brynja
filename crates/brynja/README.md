@@ -96,6 +96,12 @@ module, algorithm, provider effect, self-test algorithm, CPU kernel, SSP
 transport or erasure, deterministic binary reproduction, CMVP submission,
 certificate, independent verification, or FIPS validation.
 
+The public `FipsSelfTestRunner` trait is a trusted architecture seam, not
+self-test evidence: application code can implement it, and its success grants
+no provider execution or approved status. Before either becomes possible,
+v0.125.0 and v0.127.0 require an opaque module-owned attestation that only the
+complete final-image integrity and pre-operational self-tests can issue.
+
 Permanent failure is currently caller-session-scoped. That has no executable
 bypass today because every service is non-approved and no provider effect
 exists. Before executable or approved FIPS services exist, v0.127.1 must make

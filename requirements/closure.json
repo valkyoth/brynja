@@ -3317,7 +3317,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement the sealed approved-only provider and return an unambiguous per-service approval indicator through each mandatory typed service result or ActionV1, with SecurityEvent only duplicating that status for audit; permit no additive fips feature or construction before self-test success.",
+      "scope": "Implement the sealed approved-only provider and return an unambiguous per-service approval indicator through each mandatory typed service result or ActionV1, with SecurityEvent only duplicating that status for audit; make execution and approved status require an opaque unforgeable module-owned self-test attestation that no public or application-implementable trait can create, keep that attestation unobtainable until v0.127.0, and permit no additive fips feature or construction before attested self-test success.",
       "source_ids": [
         "nist:NIST.SP.800-90Ar1.pdf",
         "nist:NIST.SP.800-90B.pdf",
@@ -3344,7 +3344,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "After the final DRBG, provider, SSP, and algorithm implementations are linked, implement module-integrity verification and every required algorithm, DRBG, and component pre-operational self-test over the complete final image; no cryptographic service or output is available before success, and deterministic fault injection covers every test and integrity path.",
+      "scope": "After the final DRBG, provider, SSP, and algorithm implementations are linked, implement module-owned module-integrity verification and every required algorithm, DRBG, and component pre-operational self-test over the complete final image; only that internal path may issue the opaque artifact-, environment-, generation-, and test-plan-bound attestation required by provider execution and approved status, no public or application-implementable runner can issue or substitute it, no cryptographic service or output is available before success, and deterministic fault injection covers every test and integrity path.",
       "source_ids": [],
       "title": "Module Integrity And Pre-Operational Self-Tests",
       "version": "0.127.0"

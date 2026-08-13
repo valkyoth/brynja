@@ -1566,6 +1566,9 @@ Exit criteria:
   certificate, CMVP submission, or FIPS validation is implied; current
   permanent failure remains caller-session-scoped, and v0.127.1 must make it
   module-wide and sibling-proof before any executable or approved FIPS service;
+  the application-implementable self-test runner is trusted but non-authorizing,
+  and v0.125.0/v0.127.0 must require and internally issue an opaque module-owned
+  attestation before execution or approved status can become reachable;
 - the exceptional assessment's two High findings are remediated, the exact
   signed remediation candidate receives a green repository-owner retest, and
   the permanent report records `PASS`/`PASS` with zero open findings;
@@ -5707,7 +5710,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement the sealed approved-only provider and return an unambiguous per-service approval indicator through each mandatory typed service result or ActionV1, with SecurityEvent only duplicating that status for audit; permit no additive fips feature or construction before self-test success.
+Plan scope: Implement the sealed approved-only provider and return an unambiguous per-service approval indicator through each mandatory typed service result or ActionV1, with SecurityEvent only duplicating that status for audit; make execution and approved status require an opaque unforgeable module-owned self-test attestation that no public or application-implementable trait can create, keep that attestation unobtainable until v0.127.0, and permit no additive fips feature or construction before attested self-test success.
 
 Goal: complete the **Approved Provider And Mandatory Service Indicator** implementation stop without admitting or
 claiming adjacent capability.
@@ -5718,6 +5721,9 @@ Deliverables:
   secret, effect, storage, failure, dependency, and package boundaries;
 - generate an approved-only policy from the exact validated service and
   parameter manifest while keeping connection failure distinct from module error;
+- define an opaque, unforgeable module-owned self-test attestation as a mandatory
+  execution-authority input, expose no public constructor or trait-based
+  substitute, and keep it unobtainable until the v0.127.0 internal tests exist;
 - return the approval or non-approval status from every service invocation in a
   mandatory typed result or ActionV1 and emit only a redundant, non-authoritative
   SecurityEvent audit copy;
@@ -5732,13 +5738,17 @@ Verification:
   mandatory non-approval results, no application data, and no module latch;
 - drop every audit event and prove callers must still consume an unambiguous
   mandatory approval indicator before treating service output as approved;
+- compile-fail application construction, implementation, substitution, cloning,
+  formatting, serialization, and cross-module reuse of self-test attestation;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - every service result carries mandatory approval status independently of audit
-  delivery, while architectural boundaries and catastrophic-latch semantics are preserved;
+  delivery, while no service can execute or become approved without the
+  still-unobtainable module-owned self-test attestation and architectural
+  boundaries and catastrophic-latch semantics are preserved;
 - `v0.125.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.126.0 - SSP Lifecycle And Zeroization Services
@@ -5782,7 +5792,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: After the final DRBG, provider, SSP, and algorithm implementations are linked, implement module-integrity verification and every required algorithm, DRBG, and component pre-operational self-test over the complete final image; no cryptographic service or output is available before success, and deterministic fault injection covers every test and integrity path.
+Plan scope: After the final DRBG, provider, SSP, and algorithm implementations are linked, implement module-owned module-integrity verification and every required algorithm, DRBG, and component pre-operational self-test over the complete final image; only that internal path may issue the opaque artifact-, environment-, generation-, and test-plan-bound attestation required by provider execution and approved status, no public or application-implementable runner can issue or substitute it, no cryptographic service or output is available before success, and deterministic fault injection covers every test and integrity path.
 
 Goal: complete the **Module Integrity And Pre-Operational Self-Tests** implementation stop without admitting or
 claiming adjacent capability.
@@ -5793,6 +5803,9 @@ Deliverables:
   secret, effect, storage, failure, dependency, and package boundaries;
 - implement final-image integrity and required algorithm, DRBG, component, and
   dependency pre-operational tests with deterministic fault hooks;
+- replace the trusted public-runner seam as an authority source with a
+  module-owned internal test path that alone issues an opaque attestation bound
+  to the exact artifact, operational environment, module generation, and test plan;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -5802,13 +5815,17 @@ Verification:
   require failure before any cryptographic service or output;
 - test concurrent first use, repeated status queries, interrupted startup,
   unavailable dependencies, exact test coverage, and secret-free errors;
+- compile-fail application runner, token construction, substitution, replay,
+  cloning, formatting and serialization, and reject stale, wrong-artifact,
+  wrong-environment, wrong-generation and wrong-plan attestations;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - complete-image integrity and pre-operational tests block every service until
-  success and fail deterministically under every injected fault;
+  success, alone issue the exact module-owned attestation required by execution
+  and approved status, and fail deterministically under every injected fault;
 - `v0.127.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.127.1 - Conditional Self-Tests And Permanent Failure State

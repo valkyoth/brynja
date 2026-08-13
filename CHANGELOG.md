@@ -189,6 +189,11 @@ Keep a Changelog and Semantic Versioning.
   caller-session-scoped failure as a non-exploitable future constraint and
   require a module-wide sibling-proof irreversible latch at v0.127.1 before
   any executable or approved FIPS service exists.
+- Record the final full-delta review through exact signed candidate
+  `3f889a2c07ae513235fd8cb9056faa983f2135e9` with no open Critical, High, or
+  Medium vulnerability; require an opaque unforgeable module-owned self-test
+  attestation at v0.125.0/v0.127.0 before provider execution or approved status
+  can become reachable.
 - Record the exceptional v0.16.0 pending-lifecycle assessment and final
   repository-owner PASS retest of exact signed third remediation candidate
   `f0557b8419b77129d1763e9469ae4e7deeffc2e7`, closing three High and two

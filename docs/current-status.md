@@ -672,10 +672,17 @@ reproduction, SSP effect, independent verification, CMVP submission,
 certificate, or FIPS validation. An exceptional assessment found and locally
 remediated two High design issues. Repository-owner retest of exact signed
 candidate `bc83f44a9c8fdb710d03429b1669ee6c4449b054` passed with zero open
-findings. Permanent failure remains caller-session-scoped and is currently
+findings. A final full-delta review through exact signed candidate
+`3f889a2c07ae513235fd8cb9056faa983f2135e9` substantiated no open Critical,
+High, or Medium vulnerability and confirmed both remediations. Permanent
+failure remains caller-session-scoped and is currently
 non-exploitable because no service is approved or executable; v0.127.1 now
 explicitly requires a module-wide irreversible latch that sibling sessions
-cannot bypass before that changes. v0.17.0 selects no crates.io publication.
+cannot bypass before that changes. The application-implementable self-test
+runner likewise grants no execution or approved status; v0.125.0/v0.127.0
+require an opaque module-owned attestation issued only by complete final-image
+tests before either can become reachable. v0.17.0 selects no crates.io
+publication.
 
 The package was held from crates.io until the v0.15.0 public checkpoint.
 Because this is the first production adapter around external unsafe

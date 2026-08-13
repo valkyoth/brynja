@@ -245,6 +245,11 @@ Ordinary backend policy, opportunistic/std dispatch, and the sealed-provider
 placeholder cannot cross that boundary. The self-test runner is explicitly
 trusted; dishonest runner success remains an operating-boundary violation, not
 evidence created or detected by these policy types.
+Its application-implementable return value grants no execution or approved
+status. v0.125.0 must make both require an opaque unforgeable module-owned
+attestation, and v0.127.0 must ensure only complete final-image integrity and
+pre-operational tests can issue an artifact-, environment-, generation-, and
+test-plan-bound instance.
 v0.13.1 backend types add only inert identities, exact feature/operation
 profiles, policy selection, caller-owned KAT health state, generation
 invalidation, permanent quarantine, opaque measured-instance binding,

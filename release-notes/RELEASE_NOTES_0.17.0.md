@@ -36,6 +36,10 @@ scheduled v0.20.0 checkpoint will assess.
 - An explicitly trusted `FipsSelfTestRunner` receives the exact mandatory
   integrity and algorithm-known-answer plan. Application code cannot directly
   obtain or complete the internal self-test guard.
+- The runner is an application-implementable trusted seam, not self-test
+  evidence, and grants no execution or approved status. v0.125.0/v0.127.0 must
+  replace it as an authority source with an opaque module-owned attestation
+  issued only by complete final-image tests.
 - Service indication remains unavailable before successful self-tests.
   Failure, reentry, interruption, panic, cancellation, impossible transition,
 generation exhaustion, or a later catastrophic event permanently latches
@@ -85,11 +89,20 @@ The repository owner retested exact signed remediation candidate
 zero open findings. The permanent `PASS`/`PASS` report is
 [`security/pentest/v0.17.0.md`](../security/pentest/v0.17.0.md).
 
+A final review of all seven signed commits from `v0.16.0` through exact signed
+candidate `3f889a2c07ae513235fd8cb9056faa983f2135e9` substantiated no open
+Critical, High, or Medium vulnerability and confirmed both remediations.
+
 The assessment also records a non-exploitable future constraint: permanent
 failure is currently scoped to one caller-owned session. Before executable or
 approved FIPS services exist, v0.127.1 must introduce one irreversible
 module-wide latch shared by every current and future session, so a newly
 constructed sibling session cannot bypass failure.
+
+The same review retains one additional non-exploitable future constraint: the
+public self-test runner is trusted caller input. Before execution or approved
+status exists, an opaque module-owned attestation must be required and only the
+complete internal integrity and pre-operational test path may issue it.
 
 This milestone does not implement a FIPS cryptographic module, cryptographic
 algorithm, provider effect, self-test algorithm, service execution, CPU kernel,

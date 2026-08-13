@@ -16,14 +16,17 @@ Keep a Changelog and Semantic Versioning.
   source hashes, and thirty-three broken policy fixtures.
 - Remediate the v0.20.0 Low DER semantic-boundary finding by preventing nested
   identifier and length parsing from reading an adjacent byte beyond its
-  parent, with focused tag/length regression coverage and policy enforcement;
-  repository-owner retest remains pending.
+  parent, with focused tag/length regression coverage and policy enforcement.
+- Record the repository-owner retest of exact signed v0.20.0 remediation
+  candidate `7fd31b4cc536cb2dce1a565fa3551365b086000f` as `PASS`/`PASS`
+  with zero open findings.
 - Promote `BRY-REQ-ENC-0001` to implemented revision 2 and add the dedicated
   X.690-bound `format.der.framing` surface without claiming ASN.1 semantics,
   X.509, cryptography, independent verification, or FIPS validation.
 - Prepare the scheduled v0.20.0 cumulative checkpoint with 15 selected
-  packages; publication remains blocked pending the v0.15.0-to-v0.20.0
-  pentest report and green GitHub and CodeQL.
+  packages after the v0.15.0-to-v0.20.0 pentest and remediation retest passed;
+  publication remains blocked pending green GitHub and CodeQL and explicit
+  authorization.
 - Add unpublished `brynja-protocol 0.1.0` with typed external wire policies,
   borrowed TLS 1.2/TLS 1.3 and DTLS 1.2/DTLS 1.3 record-envelope parsing, and
   transactional caller-buffer encoding.

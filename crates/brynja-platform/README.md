@@ -55,8 +55,9 @@ brynja = "0.15"
 ```
 
 Version `0.1.7` was published at v0.15.0. Candidate `0.1.8` is selected for
-v0.20.0 and remains unpublished pending its cumulative pentest and hosted
-checks. It is governed by the
+v0.20.0 and remains unpublished until the committed release-check candidate and
+hosted checks pass. The cumulative pentest and remediation retest record
+`PASS`/`PASS` with zero open findings. It is governed by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

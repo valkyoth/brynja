@@ -1768,7 +1768,7 @@ Exit criteria:
 
 ### v0.20.0 - Bounded DER Reader
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement a non-recursive DER tag, length and value reader with definite, minimal, overflow-safe, depth-, node-, size-, and work-bounded parsing.
 
@@ -1822,8 +1822,9 @@ Exit criteria:
   any type-specific ASN.1 or PKIX interpretation;
 - the scheduled repository-owner pentest covers every change after signed
   v0.15.0 through the exact v0.20.0 candidate; its one Low semantic-boundary
-  finding is locally remediated and repository-owner retest reports zero open
-  findings;
+  finding is remediated, and repository-owner retest of exact signed
+  remediation candidate `7fd31b4cc536cb2dce1a565fa3551365b086000f`
+  reports zero open findings in the committed `PASS`/`PASS` report;
 - `v0.20.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.21.0 - Canonical ASN.1 Primitives

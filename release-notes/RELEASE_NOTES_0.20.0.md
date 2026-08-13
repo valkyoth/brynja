@@ -1,12 +1,12 @@
 # Brynja v0.20.0 Scheduled Public Checkpoint
 
-Status: cumulative pentest complete; one Low remediated; awaiting retest
+Status: cumulative pentest and remediation retest passed; awaiting green hosted checks
 
 Brynja v0.20.0 adds bounded DER framing in `brynja-pki 0.2.0`. The
-checkpoint selects 15 packages for eventual crates.io publication, but none
-may publish until the cumulative assessment of every change after signed
-v0.15.0 through this exact candidate passes, its permanent report is committed,
-and GitHub and CodeQL are green.
+checkpoint selects 15 packages for eventual crates.io publication. Its
+cumulative assessment, remediation, and retest passed with zero open findings,
+but none may publish until the permanent report and release-check candidate are
+committed and GitHub and CodeQL are green.
 
 ## Bounded DER Reader
 
@@ -46,8 +46,9 @@ The scheduled cumulative assessment found no Critical, High, or Medium issue
 and one Low semantic-boundary oracle. An incomplete nested identifier or length
 could inspect one adjacent byte beyond its parent before rejection. Every
 header byte access is now parent-boundary-aware, and regressions prove adjacent
-bytes cannot influence the nested error. Local remediation passes;
-repository-owner retest is pending.
+bytes cannot influence the nested error. Repository-owner retest of exact
+signed remediation candidate
+`7fd31b4cc536cb2dce1a565fa3551365b086000f` passed with zero open findings.
 
 ## Candidate Publication Set
 

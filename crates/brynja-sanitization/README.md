@@ -39,7 +39,9 @@ protocol-neutral type; there is no legacy-specific adapter.
 
 The package was implemented at Brynja v0.11.2 and published as version `0.1.0`
 at v0.15.0. Dependency-pin candidate `0.1.1` is selected for v0.20.0 and remains
-unpublished pending its cumulative pentest and hosted release gates.
+unpublished until the committed release-check candidate and hosted release
+gates pass. The cumulative pentest and remediation retest record `PASS`/`PASS`
+with zero open findings.
 
 ```toml
 [dependencies]

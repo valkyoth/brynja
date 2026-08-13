@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.19.0 signed; v0.20.0 Low finding remediated and awaiting pentest retest
+Status: v0.19.0 signed; v0.20.0 pentest and remediation retest PASS; awaiting green hosted checks
 
 The `brynja` facade advances to `0.20.0` for the scheduled public checkpoint
 and selects 15 crates.io packages, which remain unpublished pending the
@@ -96,7 +96,8 @@ scheduled cumulative assessment passes.
 That assessment found no Critical, High, or Medium issue and one Low nested
 DER header semantic-boundary oracle. The reader now enforces the parent before
 every identifier/length byte read; local regression and policy checks pass,
-and repository-owner retest remains pending.
+and repository-owner retest of the exact signed remediation candidate passed
+with zero open findings.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

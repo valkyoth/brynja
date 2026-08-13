@@ -36,7 +36,9 @@ contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. Version
 `0.8.0` was published at v0.15.0; `0.9.0` is selected for v0.20.0 and remains
-unpublished pending the cumulative pentest and hosted release gates.
+unpublished until the committed release-check candidate and hosted release
+gates pass. The cumulative pentest and remediation retest record `PASS`/`PASS`
+with zero open findings.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return

@@ -57,7 +57,8 @@ pentesting do not by themselves constitute independent verification.
 | `brynja-crypto-cpu` | Future first-party CPU cryptographic kernels and static selection | ❌ Not implemented or verified |
 
 Version `0.1.0` was published at v0.15.0. Metadata candidate `0.1.1` is selected
-for v0.20.0 and remains unpublished pending its cumulative pentest and hosted
-gates. The project-wide
+for v0.20.0 and remains unpublished until the committed release-check candidate
+and hosted gates pass. The cumulative pentest and remediation retest record
+`PASS`/`PASS` with zero open findings. The project-wide
 first-party Rust, `no_std`, source-size, platform, FIPS, and unsafe-code
 policies apply here.

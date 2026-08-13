@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.19.0 signed; v0.20.0 Low finding remediated and awaiting pentest retest
+Status: v0.19.0 signed; v0.20.0 pentest and remediation retest PASS; awaiting green hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -111,18 +111,21 @@ and one Low DER semantic-boundary oracle: an incomplete nested identifier or
 length could inspect one adjacent byte beyond its parent before later
 rejection. Every header-byte access is now parent-boundary-aware, declared
 content uses the same boundary decision, and focused tag/length regressions and
-source policy pass. Repository-owner retest remains pending.
+source policy pass. Repository-owner retest of exact signed remediation
+candidate `7fd31b4cc536cb2dce1a565fa3551365b086000f` passed with zero
+open findings, and the permanent report records `PASS`/`PASS`.
 
 This scheduled public checkpoint selects 15 packages, including the initial
 `brynja-protocol 0.1.0` publication and the changed `brynja-pki 0.2.0`, but
-publishes nothing until the remediation retest passes, the permanent report is
-committed as PASS/PASS, and GitHub and CodeQL are green.
+publishes nothing until this permanent PASS/PASS report and the complete
+release-check candidate are committed, GitHub and CodeQL are green, and the
+repository owner explicitly authorizes tagging.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
 publication occur at each fifth-minor public checkpoint. The v0.15.0 pentest
-reviewed all changes after v0.10.0 through v0.15.0; the v0.20.0 pentest will
-review all changes after v0.15.0 through v0.20.0. Intermediate patch and minor
+reviewed all changes after v0.10.0 through v0.15.0; the v0.20.0 pentest
+reviewed all changes after v0.15.0 through v0.20.0. Intermediate patch and minor
 tags remain inside that cumulative change range.
 
 Version 0.3.0 provides the exact source foundation:

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.19.0 signed; v0.20.0 implementation complete and awaiting scheduled cumulative pentest
+Status: v0.19.0 signed; v0.20.0 Low finding remediated and awaiting pentest retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -106,11 +106,17 @@ parent-boundary enforcement, failure-atomic reader position, and exact borrowed
 slices are implemented. ASN.1 primitive semantics, SET ordering, X.509,
 cryptography, signature verification, and FIPS validation remain absent.
 
+The scheduled cumulative assessment found no Critical, High, or Medium issue
+and one Low DER semantic-boundary oracle: an incomplete nested identifier or
+length could inspect one adjacent byte beyond its parent before later
+rejection. Every header-byte access is now parent-boundary-aware, declared
+content uses the same boundary decision, and focused tag/length regressions and
+source policy pass. Repository-owner retest remains pending.
+
 This scheduled public checkpoint selects 15 packages, including the initial
 `brynja-protocol 0.1.0` publication and the changed `brynja-pki 0.2.0`, but
-publishes nothing until the cumulative pentest reviews every change after
-signed v0.15.0 through the exact v0.20.0 candidate, its PASS report is
-committed, and GitHub and CodeQL are green.
+publishes nothing until the remediation retest passes, the permanent report is
+committed as PASS/PASS, and GitHub and CodeQL are green.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

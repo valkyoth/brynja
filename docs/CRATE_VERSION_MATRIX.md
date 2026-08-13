@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.19.0 signed; v0.20.0 implementation complete and awaiting scheduled cumulative pentest
+Status: v0.19.0 signed; v0.20.0 Low finding remediated and awaiting pentest retest
 
 The `brynja` facade advances to `0.20.0` for the scheduled public checkpoint
 and selects 15 crates.io packages, which remain unpublished pending the
@@ -93,6 +93,10 @@ remediation. The v0.20.0 stage adds bounded DER framing in `brynja-pki`,
 promotes the unpublished shared protocol crate, and selects every package
 changed since v0.15.0 plus exact-pin dependents for publication only after the
 scheduled cumulative assessment passes.
+That assessment found no Critical, High, or Medium issue and one Low nested
+DER header semantic-boundary oracle. The reader now enforces the parent before
+every identifier/length byte read; local regression and policy checks pass,
+and repository-owner retest remains pending.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

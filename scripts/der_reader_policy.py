@@ -23,7 +23,7 @@ EXPECTED_SHA256 = {
     DER: "9cdbade4dc46c56a0cb82e185b74f3991a53a8a817ef242e7ddbcbb2f0399c5a",
     ERROR: "e5a46237a5c3ad984ed9295b0f26da3bd8bee13d3488cf3b57f59413bfc566b9",
     LIMITS: "3f096993234a72694cddea3fce988bd68029a8fd1d4fd34e20e56c7dc3215827",
-    READER: "b5e06c2e09816ba61a553b42d2fd4208c505f9a041160fec3e425960ba1a4aff",
+    READER: "4ba09fd1290d82e477233660c60c7c82dd0a3cec5d4585128a7d73d4145a94fc",
     TAG: "44639647920a1a75bd5150a9d322b163828999d26024551fd4319b5f4fdfa0e4",
 }
 
@@ -115,6 +115,9 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "frames: [Frame; STACK]",
         "pub fn new(input: &'input [u8], limits: DerLimits)",
         "pub fn next_event(&mut self)",
+        "fn bounded_byte(",
+        "if position >= boundary",
+        "boundary_error: DerError",
         "checked_add(length)",
         "DerError::IndefiniteLength",
         "DerError::NonMinimalLength",

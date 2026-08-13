@@ -97,10 +97,11 @@ reader position.
 
 This checkpoint implements framing only. It does not interpret ASN.1 primitive
 types, validate X.509, perform cryptography, authenticate input, or make a FIPS
-claim. The selected 15-package publication set remains unpublished until the
-scheduled cumulative pentest covers every change after signed v0.15.0 through
-the exact v0.20.0 candidate, the permanent PASS report is committed, and
-GitHub and CodeQL are green.
+claim. The scheduled cumulative pentest found one Low nested-header semantic-
+boundary oracle and no Critical, High, or Medium issue. Header byte access is
+now parent-boundary-aware with focused regressions; repository-owner retest is
+pending. The selected 15-package set remains unpublished until the permanent
+report records PASS and GitHub and CodeQL are green.
 
 The signed `0.19.0` development milestone adds `brynja-protocol`, a shared
 allocation-free TLS and DTLS record-envelope boundary. An already selected
@@ -354,13 +355,20 @@ exposure flaw. The repository-owner retest of exact signed remediation commit
 The permanent `PASS`/`PASS` report does not remove v0.19.0 from the cumulative
 v0.15.0-to-v0.20.0 checkpoint assessment.
 
+The scheduled v0.20.0 assessment found one Low semantic-boundary oracle in the
+DER reader and no Critical, High, or Medium issue. An incomplete nested tag or
+length could inspect an adjacent byte beyond its parent before rejection. The
+reader now rejects the exact parent boundary before every header-byte access;
+focused regressions and source policy pass, and repository-owner retest is
+pending.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.19.0`. The current `0.20.0` DER-framing checkpoint selects 15 packages but
-publishes none until its scheduled cumulative pentest report and green hosted
-checks are complete.
+publishes none while its locally remediated Low finding awaits retest, or until
+the final PASS report and green hosted checks are complete.
 The published dependency is:
 
 ```toml

@@ -1805,10 +1805,13 @@ Verification:
 - exhaustively parse all 65,536 two-octet byte strings and require deterministic
   bounded completion; compile-fail positional/default limit construction and
   formatting of reader state and elements;
-- lock all six implementation source hashes and reject thirty-two fixtures for
+- lock all six implementation source hashes and reject thirty-three fixtures for
   allocation, recursion, unsafe/FFI, I/O, OS/provider/crypto coupling, public
   mutable state, missing canonical checks, weakened limits, graph drift, source
   drift, or files above 500 lines;
+- require identifier and length byte access to reject the exact enclosing
+  constructed boundary before inspecting adjacent input, closing the Low
+  semantic-boundary oracle found by the scheduled assessment;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -1818,7 +1821,9 @@ Exit criteria:
   allocation-free, failure-atomic, platform-independent, and bounded before
   any type-specific ASN.1 or PKIX interpretation;
 - the scheduled repository-owner pentest covers every change after signed
-  v0.15.0 through the exact v0.20.0 candidate and reports zero open findings;
+  v0.15.0 through the exact v0.20.0 candidate; its one Low semantic-boundary
+  finding is locally remediated and repository-owner retest reports zero open
+  findings;
 - `v0.20.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.21.0 - Canonical ASN.1 Primitives

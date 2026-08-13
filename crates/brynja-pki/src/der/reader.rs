@@ -143,20 +143,36 @@ impl<'input, const STACK: usize> Reader<'input, STACK> {
         } else {
             self.frame(self.parent_index()?)?.end
         };
-        let (tag, after_tag) = parse_tag(self.input, start, self.limits.identifier_octets())?;
-        let (length, content_start) =
-            parse_length(self.input, after_tag, self.limits.length_octets())?;
+        let boundary_error = if self.depth == 0 {
+            DerError::Truncated
+        } else {
+            DerError::BoundaryViolation
+        };
+        let (tag, after_tag) = parse_tag(
+            self.input,
+            start,
+            boundary,
+            boundary_error,
+            self.limits.identifier_octets(),
+        )?;
+        let (length, content_start) = parse_length(
+            self.input,
+            after_tag,
+            boundary,
+            boundary_error,
+            self.limits.length_octets(),
+        )?;
         if length > self.limits.value_bytes() {
             return Err(DerError::ValueLimit);
         }
         let end = content_start
             .checked_add(length)
             .ok_or(DerError::LengthOverflow)?;
+        if end > boundary {
+            return Err(boundary_error);
+        }
         if end > self.input.len() {
             return Err(DerError::Truncated);
-        }
-        if end > boundary {
-            return Err(DerError::BoundaryViolation);
         }
 
         let next_nodes = self.nodes.checked_add(1).ok_or(DerError::NodeLimit)?;
@@ -260,12 +276,26 @@ impl<'input, const STACK: usize> Reader<'input, STACK> {
     }
 }
 
-fn byte(input: &[u8], position: usize) -> Result<u8, DerError> {
+fn bounded_byte(
+    input: &[u8],
+    position: usize,
+    boundary: usize,
+    boundary_error: DerError,
+) -> Result<u8, DerError> {
+    if position >= boundary {
+        return Err(boundary_error);
+    }
     input.get(position).copied().ok_or(DerError::Truncated)
 }
 
-fn parse_tag(input: &[u8], start: usize, limit: usize) -> Result<(Tag, usize), DerError> {
-    let first = byte(input, start)?;
+fn parse_tag(
+    input: &[u8],
+    start: usize,
+    boundary: usize,
+    boundary_error: DerError,
+    limit: usize,
+) -> Result<(Tag, usize), DerError> {
+    let first = bounded_byte(input, start, boundary, boundary_error)?;
     let class = match first >> 6 {
         0 => TagClass::Universal,
         1 => TagClass::Application,
@@ -290,7 +320,7 @@ fn parse_tag(input: &[u8], start: usize, limit: usize) -> Result<(Tag, usize), D
         if count > limit {
             return Err(DerError::IdentifierOctetsLimit);
         }
-        let octet = byte(input, position)?;
+        let octet = bounded_byte(input, position, boundary, boundary_error)?;
         position = position.checked_add(1).ok_or(DerError::TagOverflow)?;
         let group = octet & 0x7f;
         if count == 2 && group == 0 {
@@ -310,8 +340,14 @@ fn parse_tag(input: &[u8], start: usize, limit: usize) -> Result<(Tag, usize), D
     Ok((Tag::new(class, constructed, number), position))
 }
 
-fn parse_length(input: &[u8], start: usize, limit: usize) -> Result<(usize, usize), DerError> {
-    let first = byte(input, start)?;
+fn parse_length(
+    input: &[u8],
+    start: usize,
+    boundary: usize,
+    boundary_error: DerError,
+    limit: usize,
+) -> Result<(usize, usize), DerError> {
+    let first = bounded_byte(input, start, boundary, boundary_error)?;
     let mut position = start.checked_add(1).ok_or(DerError::LengthOverflow)?;
     if first & 0x80 == 0 {
         return Ok((usize::from(first), position));
@@ -324,13 +360,13 @@ fn parse_length(input: &[u8], start: usize, limit: usize) -> Result<(usize, usiz
     if total > limit || count > core::mem::size_of::<usize>() {
         return Err(DerError::LengthOctetsLimit);
     }
-    if byte(input, position)? == 0 {
+    if bounded_byte(input, position, boundary, boundary_error)? == 0 {
         return Err(DerError::NonMinimalLength);
     }
     let mut length = 0_usize;
     let mut remaining = count;
     while remaining > 0 {
-        let octet = byte(input, position)?;
+        let octet = bounded_byte(input, position, boundary, boundary_error)?;
         length = length
             .checked_mul(256)
             .and_then(|value| value.checked_add(usize::from(octet)))

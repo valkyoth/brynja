@@ -65,7 +65,10 @@ brynja = "0.15"
 
 The last published package is `0.1.7`. This `0.2.0` candidate is selected for
 the v0.20.0 checkpoint and remains unpublished until the cumulative v0.15.0 to
-v0.20.0 pentest, committed PASS report, and hosted checks pass. It is governed by the
+v0.20.0 remediation retest, committed PASS report, and hosted checks pass. The
+initial assessment found one Low semantic-boundary oracle and no Critical,
+High, or Medium issue; parent-aware header access and focused regressions now
+remediate it locally. This crate is governed by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

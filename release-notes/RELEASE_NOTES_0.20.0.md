@@ -1,6 +1,6 @@
 # Brynja v0.20.0 Scheduled Public Checkpoint
 
-Status: implementation complete; awaiting scheduled cumulative pentest
+Status: cumulative pentest complete; one Low remediated; awaiting retest
 
 Brynja v0.20.0 adds bounded DER framing in `brynja-pki 0.2.0`. The
 checkpoint selects 15 packages for eventual crates.io publication, but none
@@ -28,19 +28,26 @@ independent cryptographic verification, or FIPS validation.
 
 ## Verification
 
-- Thirteen integration tests cover canonical forms, nesting, multiple roots,
+- Fourteen integration tests cover canonical forms, nesting, multiple roots,
   every truncation point, malformed tags and lengths, parent escape, every
   resource ceiling, stack mismatch, and failure atomicity.
 - One exhaustive corpus parses all 65,536 two-octet inputs deterministically.
 - Three compile-fail examples reject positional/default limits and formatting
   of reader state or borrowed elements.
 - Six implementation files are SHA-256 locked and remain below 500 lines.
-- Thirty-two broken policy fixtures reject allocation, recursion, unsafe/FFI,
+- Thirty-three broken policy fixtures reject allocation, recursion, unsafe/FFI,
   I/O, provider or cryptographic coupling, mutable/public internals, missing
   canonical checks, limit weakening, graph drift, and source drift.
 - The exact X.690 edition and mandatory erratum are linked to implemented
   requirement `BRY-REQ-ENC-0001` revision 2 and the dedicated
   `format.der.framing` surface.
+
+The scheduled cumulative assessment found no Critical, High, or Medium issue
+and one Low semantic-boundary oracle. An incomplete nested identifier or length
+could inspect one adjacent byte beyond its parent before rejection. Every
+header byte access is now parent-boundary-aware, and regressions prove adjacent
+bytes cannot influence the nested error. Local remediation passes;
+repository-owner retest is pending.
 
 ## Candidate Publication Set
 

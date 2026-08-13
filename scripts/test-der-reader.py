@@ -61,6 +61,7 @@ def main() -> int:
     reject("nonminimal length", lambda root: replace(root, policy.READER, "DerError::NonMinimalLength", "DerError::Truncated"))
     reject("nonminimal tag", lambda root: replace(root, policy.READER, "DerError::NonMinimalTag", "DerError::Truncated"))
     reject("boundary", lambda root: replace(root, policy.READER, "DerError::BoundaryViolation", "DerError::Truncated"))
+    reject("header boundary", lambda root: replace(root, policy.READER, "if position >= boundary", "if position > boundary"))
     reject("platform length", lambda root: replace(root, policy.READER, "count > core::mem::size_of::<usize>()", "count == usize::MAX"))
     reject("short long-form", lambda root: replace(root, policy.READER, "length < 128", "length < 1"))
     reject("payload error", lambda root: replace(root, policy.ERROR, "Truncated,", "Truncated { offset: usize },"))
@@ -69,7 +70,7 @@ def main() -> int:
     reject("oversized source", lambda root: (root / policy.READER).write_text((root / policy.READER).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.TAG, "Canonical DER tag identity", "DER tag identity"))
     reject("implementation claim", lambda root: replace(root, policy.LIB, "BOUNDED_DER_READER_IMPLEMENTED: bool = true", "BOUNDED_DER_READER_IMPLEMENTED: bool = false"))
-    print("DER-reader policy rejects thirty-two allocation, recursion, canonicality, bound, package, size, and hash regressions")
+    print("DER-reader policy rejects thirty-three allocation, recursion, canonicality, bound, package, size, and hash regressions")
     return 0
 
 

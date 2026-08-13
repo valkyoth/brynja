@@ -221,6 +221,29 @@ fn child_cannot_cross_constructed_boundary() -> Result<(), TestError> {
 }
 
 #[test]
+fn child_header_cannot_inspect_adjacent_bytes() -> Result<(), TestError> {
+    for input in [
+        &[0x30, 0x01, 0x04, 0x00][..],
+        &[0x30, 0x01, 0x04, 0x80][..],
+        &[0x30, 0x01, 0x1f, 0x20, 0x00][..],
+        &[0x30, 0x02, 0x04, 0x81, 0x80][..],
+    ] {
+        let mut reader = Reader::<8>::new(input, ordinary()?)?;
+        assert!(matches!(
+            reader.next_event()?,
+            Some(DerEvent::ConstructedStart(_))
+        ));
+        assert!(matches!(
+            reader.next_event(),
+            Err(DerError::BoundaryViolation)
+        ));
+        assert_eq!(reader.position(), 2);
+        assert_eq!(reader.nodes(), 1);
+    }
+    Ok(())
+}
+
+#[test]
 fn every_runtime_resource_ceiling_fails_closed() -> Result<(), TestError> {
     let primitive = [0x04, 0x01, 0xaa];
     let cases = [

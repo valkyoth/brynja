@@ -11,9 +11,13 @@ Keep a Changelog and Semantic Versioning.
   non-recursive event traversal, canonical identifier and definite minimal
   length checks, checked parent containment, and failure-atomic reader state.
 - Add immutable input, depth, node, child, identifier-octet, length-octet,
-  value-size, work, and fixed-stack ceilings, thirteen integration tests,
+  value-size, work, and fixed-stack ceilings, fourteen integration tests,
   three compile-fail examples, an exhaustive 65,536-input corpus, six locked
-  source hashes, and thirty-two broken policy fixtures.
+  source hashes, and thirty-three broken policy fixtures.
+- Remediate the v0.20.0 Low DER semantic-boundary finding by preventing nested
+  identifier and length parsing from reading an adjacent byte beyond its
+  parent, with focused tag/length regression coverage and policy enforcement;
+  repository-owner retest remains pending.
 - Promote `BRY-REQ-ENC-0001` to implemented revision 2 and add the dedicated
   X.690-bound `format.der.framing` surface without claiming ASN.1 semantics,
   X.509, cryptography, independent verification, or FIPS validation.

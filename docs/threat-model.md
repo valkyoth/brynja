@@ -423,7 +423,10 @@ v0.20.0 treats every DER identifier, length, nesting transition, declared
 content extent, sibling count, and trailing root as hostile. The reader accepts
 only definite minimal framing, uses checked offsets, rejects non-canonical
 high tags and universal end-of-contents, prevents a child from escaping its
-parent, and exposes only borrowed slices after all framing checks pass. Input,
+parent, rejects the semantic parent boundary before every identifier or length
+byte access, and exposes only borrowed slices after all framing checks pass.
+This pre-access rule closes the Low adjacent-byte error oracle found by the
+scheduled v0.20.0 assessment; repository-owner retest remains pending. Input,
 depth, node, child, identifier-octet, length-octet, value-size, total-work, and
 fixed-stack ceilings are immutable. Parsing is non-recursive and a failed call
 does not advance observable reader state. A successfully framed element is not

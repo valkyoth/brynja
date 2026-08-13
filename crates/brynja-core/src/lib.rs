@@ -37,6 +37,7 @@ pub mod secret_destruction;
 pub mod secret_memory;
 mod secret_memory_volatile;
 pub mod secure_random;
+pub mod security_outcome;
 pub mod sequence;
 pub mod version;
 pub mod workspace;
@@ -141,6 +142,18 @@ pub use secure_random::{
     MAX_RESEED_INTERVAL, RandomPurpose, RandomRuntimeGeneration, RandomStateDestruction,
     SecureRandom, SecureRandomConfig, SecureRandomEngine, SecureRandomError, SecureRandomRequest,
 };
+pub use security_outcome::{
+    AmplificationDecision, AntiReplayDecision, AuthenticationDecision, EarlyDataDecision,
+    EchDecision, ExhaustionDecision, ExternalKeyDestroyed, ExternalKeyDestruction,
+    ExternalKeyDestructionError, ExternalKeyDestructionFailure, ExternalKeyDestructionOutcome,
+    ExternalKeyDestructionToken, KeyLifecycleDecision, PolicyDecision, ProfileSelectionDecision,
+    ProtocolSelectionDecision, ProviderDecision, PskDecision, ResumptionDecision,
+    SecurityAuthority, SecurityAuthorityError, SecurityAuthoritySnapshot, SecurityAuthorityState,
+    SecurityCanceled, SecurityDecision, SecurityDecisionKind, SecurityFailure, SecurityFailureKind,
+    SecurityOutcome, SecurityPending, SecurityReceipt, SecurityRejection, SecurityResolution,
+    SecurityTerminal, SelfTestDecision, ServiceApprovalDecision, TerminalTransitionDecision,
+    TicketDecision,
+};
 pub use sequence::{Epoch, SequenceNumber};
 pub use version::{ProtocolFamily, ProtocolVersion};
 pub use workspace::{
@@ -197,6 +210,9 @@ pub const PENDING_OPERATION_LIFECYCLE_IMPLEMENTED: bool = true;
 /// Whether the v0.17 FIPS-aware provider architecture is implemented.
 pub const FIPS_AWARE_PROVIDER_ARCHITECTURE_IMPLEMENTED: bool = true;
 
+/// Whether the v0.18 mandatory security-outcome authority contract is implemented.
+pub const SECURITY_OUTCOME_AUTHORITY_CONTRACT_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -229,6 +245,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::FIPS_AWARE_PROVIDER_ARCHITECTURE_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::SECURITY_OUTCOME_AUTHORITY_CONTRACT_IMPLEMENTED
         ));
     }
 }

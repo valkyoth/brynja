@@ -72,7 +72,27 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.17.0` development milestone freezes an inert FIPS-aware provider
+The current `0.18.0` development milestone adds a protocol-neutral mandatory
+security-outcome authority contract in `brynja-core`. Sealed type-level domains
+cover self-tests, service approval, protocol and profile selection,
+authentication, tickets, resumption, PSKs, early data, anti-replay,
+amplification, exhaustion, providers, key lifecycle, ECH, policy, and terminal
+transitions. One caller-owned allocation-free authority admits one incomplete
+decision at a time and returns exhaustive accepted, approved, non-approved,
+rejected, pending, canceled, failed, or terminal results. Approval is confined
+to the service-approval domain, rejection and failure reasons remain confined
+to their exact typed domains, and terminal transitions cannot report ordinary
+success.
+
+External-key destruction can report success only after consuming one
+non-cloneable, thread-bound token for the exact external-store target. Duplicate,
+cross-authority, cross-generation, failed, and abandoned completion fail closed.
+Snapshots are informational and cannot authorize, complete, or alter work. The
+contract implements no decision policy, authentication, protocol selection,
+ticket, replay store, ECH, provider effect, external key store, cryptography,
+protocol engine, event schema, independent verification, or FIPS validation.
+
+The signed `0.17.0` development milestone freezes an inert FIPS-aware provider
 architecture in `brynja-core`. Broad operation-category sets classify every
 installed-provider capability explicitly non-approved. Any nonempty approved
 set fails closed until exact algorithm, parameter, backend, and usage identities
@@ -244,7 +264,7 @@ published only when their cumulative changes require it at a checkpoint.
 Pentests look backwards over the complete change range between public
 checkpoints. The v0.15.0 assessment covered all changes after signed public tag
 v0.10.0 through v0.15.0. The v0.20.0 assessment covers all changes after
-v0.15.0 through v0.20.0, including the current v0.17.0 milestone, and the same
+v0.15.0 through v0.20.0, including the current v0.18.0 milestone, and the same
 pattern continues every fifth minor version. Each checkpoint report records
 its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
@@ -261,11 +281,8 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
-`0.16.0`. The current `0.17.0` FIPS-aware architecture milestone selects no
-crates.io publication. Its exceptional assessment found two High design
-issues; remediation and repository-owner retest are green. Local release gates
-must pass with the committed report before hosted gates and signed-tag
-authorization.
+`0.17.0`. The current `0.18.0` mandatory security-outcome authority milestone
+selects no crates.io publication and awaits its development-milestone pentest.
 The published dependency is:
 
 ```toml
@@ -375,7 +392,7 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, and FIPS-aware state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
@@ -407,8 +424,8 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative v0.15 foundation domains; no TLS engine or provider implementation |
-| `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, and time domains | Prior domains plus affine zeroization, fixed-width constant-time operations, provider capabilities, entropy/secure-random state, and typed wall/monotonic clock contracts implemented |
+| `brynja` | Modern production facade | Exposes cumulative foundations through v0.18; no TLS engine or provider implementation |
+| `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
 | Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
@@ -527,6 +544,8 @@ python3 scripts/check-pending-contract.py
 python3 scripts/test-pending-contract.py
 python3 scripts/check-fips-architecture.py
 python3 scripts/test-fips-architecture.py
+python3 scripts/check-security-outcome.py
+python3 scripts/test-security-outcome.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-evidence.py
@@ -543,7 +562,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.17.0
+scripts/tag_gate.sh v0.18.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

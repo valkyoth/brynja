@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Status: v0.16.0 signed; v0.17.0 pentest PASS and awaiting green CI
+Status: v0.17.0 signed; v0.18.0 implementation complete and awaiting pentest
 
-The `brynja` facade advances to `0.17.0` for the current development milestone
+The `brynja` facade advances to `0.18.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published
 checkpoint is v0.15.0: `brynja 0.15.0`, `brynja-core 0.8.0`,
 `brynja-crypto 0.1.1`, the eight modern support packages at `0.1.7`, and the
@@ -58,11 +58,17 @@ scoped failure and application-implementable self-test success as
 non-exploitable future constraints gated by module-wide failure at v0.127.1
 and opaque module-owned attestation at v0.125.0/v0.127.0. It implements no module,
 service, algorithm or validation and selects no package publication.
+Signed tag v0.17.0 contains the final reviewed remediation. The v0.18.0 stage
+adds only sealed mandatory decision domains, one caller-owned authoritative
+state machine, exhaustive typed outcomes, and token-gated external-key
+destruction. It implements no policy, authentication, protocol engine,
+provider effect, external key store, event schema, algorithm, independent
+verification, or validation and selects no package publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.17.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
-| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16 pending and v0.17 FIPS-aware architecture code remains unreleased on crates.io |
+| `brynja` | `0.18.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
+| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16-v0.18 authority and architecture code remains unreleased on crates.io |
 | `brynja-crypto` | `0.1.1` | no | Published provider/composition boundary retained; cryptographic effects remain unimplemented |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Published inert boundaries; no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
 | `brynja-pki`, `brynja-platform` | `0.1.7` | no | Published boundaries retained; PKI and platform effects remain unimplemented |

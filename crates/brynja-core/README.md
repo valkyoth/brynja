@@ -25,15 +25,16 @@
 
 # brynja-core
 
-`brynja-core 0.8.0` now carries the cumulative v0.17 FIPS-aware provider
-architecture, v0.16 pending-operation lifecycle, v0.15 typed wall and monotonic
+`brynja-core 0.8.0` now carries the cumulative v0.18 mandatory security-outcome
+authority contract, v0.17 FIPS-aware provider architecture, v0.16
+pending-operation lifecycle, v0.15 typed wall and monotonic
 clock contract, v0.14 entropy and initialized
 secure-random contract, v0.13.1 CPU-backend capability and dispatch contract,
 and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. Version
-`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 and v0.17 code
+`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 through v0.18 code
 remain unpublished until a later public checkpoint.
 
 Every arithmetic operation is checked independently of build profile.
@@ -237,6 +238,27 @@ non-approved and no provider effect exists. Before executable or approved FIPS
 services exist, v0.127.1 must replace this with one module-wide irreversible
 failure latch that fresh sibling sessions cannot reset or bypass.
 
+v0.18 adds sealed type-level domains and one caller-owned authoritative state
+machine for every planned security decision class. Only one exact decision may
+remain incomplete. Checked generations bind non-cloneable, thread-bound pending
+values and receipts to their authority; exhaustive results distinguish accepted,
+approved, non-approved, rejected, pending, canceled, failed, and terminal work.
+Approval results are valid only for service approval, ordinary acceptance is
+invalid for that domain, and explicit terminal transitions cannot report
+non-terminal success. Terminal reasons latch permanently.
+
+External-key destruction begins only as a typed key-lifecycle decision and
+issues one non-cloneable token for the external-store target. Only consuming a
+correct authority- and generation-bound token can produce a successful result;
+duplicate, cross-boundary, failed, or abandoned completion is terminal. Ten
+behavior groups, three compile-fail examples, four reviewed source hashes, the
+500-line ceiling, and eighteen broken fixtures enforce the contract. Rejection
+and failure reasons must match their exact decision domain. It
+implements no policy, authentication, protocol/profile selection, ticket,
+resumption, PSK, early-data, replay, amplification, ECH, provider effect,
+external key store, cryptography, protocol engine, event schema, independent
+verification, or FIPS validation.
+
 v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
 opportunistic, required-accelerated, and validated-module policies; and
@@ -276,7 +298,7 @@ independent cryptographic or protocol verification.
 
 | Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, and FIPS-aware state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
@@ -286,8 +308,8 @@ brynja = "0.15"
 ```
 
 Version `0.8.0` was published at the Brynja v0.15.0 cumulative checkpoint after
-its scheduled assessment passed with zero findings. The v0.16.0 and v0.17.0
-development deltas remain unpublished until a later checkpoint under the
+its scheduled assessment passed with zero findings. The v0.16.0, v0.17.0, and
+v0.18.0 development deltas remain unpublished until a later checkpoint under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line

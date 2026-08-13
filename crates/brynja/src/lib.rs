@@ -7,7 +7,9 @@
 //! clocks. Pending certificate, external-signature, and accelerator operations
 //! have an affine bounded lifecycle. An inert FIPS-aware architecture freezes
 //! service, environment, SSP, self-test, and permanent-failure contracts
-//! without implementing or claiming a validated module. This crate does not
+//! without implementing or claiming a validated module. Mandatory typed
+//! security outcomes now bind exact decision domains to authoritative state,
+//! including token-gated external-key destruction. This crate does not
 //! provide a TLS connection API, provider implementation, or cryptographic
 //! algorithm.
 
@@ -68,6 +70,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::core::FIPS_AWARE_PROVIDER_ARCHITECTURE_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::core::SECURITY_OUTCOME_AUTHORITY_CONTRACT_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

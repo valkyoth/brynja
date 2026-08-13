@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.16.0 signed; v0.17.0 pentest PASS and awaiting green CI
+Status: v0.17.0 signed; v0.18.0 implementation complete and awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -22,7 +22,9 @@ authoritative single-consumption destruction transition, plus fail-closed
 FIPS-aware non-approved operation classification, module-owned
 environment/build assumptions, provider-derived SSP destruction duties,
 trusted self-test entry, permanent-failure state, and generation-bound service
-indicators. It currently admits zero backends and implements no FIPS module.
+indicators, plus sealed mandatory security-decision domains, exhaustive typed
+outcomes, one caller-owned authority state machine, and token-gated external-key
+destruction completion. It currently admits zero backends and implements no FIPS module.
 It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
@@ -61,7 +63,8 @@ after the scheduled v0.10.0-through-v0.15.0 pentest of
 exact signed candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` passed
 with zero findings and hosted checks became green. Signed v0.16.0 contains the
 remediated pending-operation lifecycle and selects no crates.io publication.
-The facade now advances to `0.17.0`; supporting versions remain unchanged and
+Signed v0.17.0 contains the remediated FIPS-aware architecture and selects no
+publication. The facade now advances to `0.18.0`; supporting versions remain unchanged and
 no crate is selected for publication.
 
 Every roadmap version now completes the full automated tag gate and waits for
@@ -647,6 +650,30 @@ durable/fail-stop handler. This is an upstream contract only and implements no
 provider, key store, accelerator, certificate validator, signature,
 cryptographic algorithm, protocol engine, independent verification, or FIPS
 validation. v0.16.0 selects no crates.io publication.
+
+Version 0.18.0 implements a protocol-neutral mandatory security-outcome
+authority contract. Sealed type-level domains cover self-tests, service
+approval, protocol/profile selection, authentication, tickets, resumption,
+PSKs, early data, anti-replay, amplification, exhaustion, provider results,
+key lifecycle, ECH, policy, and terminal transitions. One allocation-free
+caller-owned authority permits one incomplete typed decision and returns only
+exhaustive accepted, approved, non-approved, rejected, pending, canceled,
+failed, or terminal outcomes. Checked generations bind affine pending values
+and receipts; terminal reasons latch permanently. Service approval cannot use
+ordinary acceptance, other domains cannot claim approval, rejection and
+failure reasons cannot cross their typed domains, and terminal
+transitions cannot claim ordinary success.
+
+External-key destruction succeeds only through one consumed non-cloneable,
+thread-bound token bound to the exact authority, generation, and external-store
+target. Duplicate token requests, cross-authority substitution, provider
+failure, and explicit abandonment fail closed. Informational snapshots cannot
+authorize or complete work. Ten behavior groups, three compile-fail examples,
+four reviewed-source hashes, and eighteen broken fixtures enforce the boundary.
+No decision logic, policy implementation, authentication, protocol engine,
+provider effect, external key store, audit event, cryptography, independent
+verification, or FIPS validation is implemented. v0.18.0 selects no crates.io
+publication.
 
 Version 0.17.0 implements an inert FIPS-aware provider architecture. Broad
 operation-category sets classify every capability of one installed provider

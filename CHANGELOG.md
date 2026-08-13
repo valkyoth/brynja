@@ -7,6 +7,16 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add seventeen sealed mandatory security-decision domains, a caller-owned
+  one-pending authoritative state machine, checked generations, permanent
+  terminal latching, and exhaustive accepted, approved, non-approved,
+  rejected, pending, canceled, failed, and terminal typed outcomes.
+- Add affine token-gated external-key destruction whose success requires the
+  exact consumed external-store token and whose duplicate, substituted,
+  provider-failed, abandoned, or dropped transitions fail closed.
+- Add ten authority behavior groups, three compile-fail boundary examples, a
+  SHA-256-bound four-file source policy, and eighteen decision, reason-binding,
+  approval, terminal, token, low-level, size, and drift fixtures.
 - Add broad FIPS-aware service-category sets with approved classification
   fail-closed until exact algorithm identities exist, transactional complete
   non-approved provider classification, module-owned scalar or
@@ -119,6 +129,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the development facade to `brynja 0.18.0`, retain every supporting-
+  crate publication version, include v0.18.0 in the cumulative v0.20.0 range,
+  and select zero crates for crates.io publication.
 - Advance the development facade to `brynja 0.17.0`, retain every supporting-
   crate publication version, include v0.16.0 and v0.17.0 in the next cumulative
   checkpoint range, and select zero crates for crates.io publication.

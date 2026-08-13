@@ -1503,7 +1503,7 @@ Exit criteria:
 
 ### v0.17.0 - FIPS-Aware Provider Architecture
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Freeze broad operation classification with every current capability explicitly non-approved and every nonempty approved set rejected until exact service identities span execution; add self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, non-authorizing service indicators, provider-derived SSP destruction duties, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.
 
@@ -1576,7 +1576,7 @@ Exit criteria:
 
 ### v0.18.0 - Mandatory Security Outcome Authority Contract
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Define authoritative engine state and exhaustive mandatory typed results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, anti-replay, amplification, exhaustion, provider failure, key lifecycle, ECH, policy, and terminal transitions; external-key destruction completes only through a mandatory token transition, and ignoring every informational output cannot make rejected, non-approved, incomplete, or failed work appear accepted, approved, complete, or successful.
 
@@ -1585,12 +1585,16 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
+- add sealed type-level domains for every named decision and an allocation-free
+  caller-owned authority whose checked generation permits only one incomplete
+  decision and permanently latches exact terminal reasons;
 - define authoritative mandatory results and state transitions for service
   approval, external-key destruction, authentication, ECH, early data,
   anti-replay, and policy decisions, with exact success, rejection, pending,
   cancellation, failure, and terminal semantics;
+- require external-key success to consume a non-cloneable, thread-bound token
+  for the exact external-store target and reject duplicate, cross-authority,
+  cross-generation, failed, or abandoned completion;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -1601,13 +1605,21 @@ Verification:
   and prove mandatory results and engine state are complete and unambiguous;
 - discard every informational output, inject cancellation and provider failure,
   and prove no incomplete or failed operation can be observed as successful;
+- compile-fail pending-decision and external-key token cloning and cross-thread
+  movement; enforce reviewed hashes, private state, the 500-line ceiling, and
+  no std/alloc/unsafe/FFI/provider-effect/audit-event boundary with eighteen
+  broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - every security decision and completion is authoritative, mandatory, and
-  unambiguous without relying on an audit or informational path;
+  unambiguous without relying on an audit or informational path; service
+  approval cannot use ordinary acceptance, other domains cannot claim approval,
+  rejection and failure reasons cannot cross their typed domains, terminal
+  transitions cannot claim non-terminal success, and external-key
+  destruction cannot complete without its exact consumed token;
 - `v0.18.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.18.1 - Bounded Observational Security Event Schema

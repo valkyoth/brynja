@@ -374,6 +374,17 @@ failure and generation-bound service indicators; it adds no cryptographic
 module, algorithm, provider effect, self-test implementation, CPU kernel,
 measured environment, reproduced binary, SSP effect, CMVP submission,
 certificate, independent review, or FIPS validation result.
+v0.18.0 adds only sealed security-decision domains, caller-owned authoritative
+state, exhaustive typed results, exact rejection/failure reason binding, and token-gated external-key destruction
+completion. Informational snapshots cannot change state; ordinary domains
+cannot claim approved status; service approval cannot collapse into ordinary
+acceptance; terminal transitions cannot report ordinary success; and external-
+key completion cannot exist without consuming its exact authority- and
+generation-bound token. The contract implements no decision policy,
+authentication, protocol/profile selection, ticket, resumption, PSK,
+early-data, replay, amplification, ECH, provider effect, external key store,
+event schema, cryptography, protocol engine, independent review, or FIPS
+validation result.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

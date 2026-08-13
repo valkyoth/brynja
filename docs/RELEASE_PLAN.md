@@ -1444,9 +1444,11 @@ Deliverables:
 - require bounded, effect-free provider cost derivation before begin, resume,
   or cancellation; debit the authoritative monotonic meter and issue one
   non-forgeable, nonzero work permit before the corresponding effect;
-- keep opaque continuation state owned by `PendingOperation` while resume,
-  cancellation, and destruction callbacks borrow it, ensuring recoverable
-  unwinding leaves state available to mandatory `Drop` cleanup;
+- split bounded effect-free inert state preparation from effectful activation;
+  construct `PendingOperation` with prepared state before activation can create
+  an external resource, and make activation, resume, cancellation, and
+  destruction borrow that state so recoverable unwinding leaves partial state
+  available to mandatory `Drop` cleanup;
 - make completion, cancellation, provider failure, exhaustion, and `Drop`
   synchronously consume provider state through one non-cloneable destruction
   token covering frozen local, external-store, accelerator, cache, and DMA
@@ -1465,7 +1467,9 @@ Verification:
 
 - run exact-kind, wrong-direction, missing-capability, missing-duty, zero-limit,
   provider-substitution, provider-derived charge, zero-charge, work-exhaustion,
-  resume/cancel unwind, no-state begin, retry, backpressure, active, complete, cancel, provider-fail,
+  pre-resource, post-resource, and partial-mutation begin unwind, begin-unwind
+  destruction failure, resume/cancel unwind, no-state begin, retry,
+  backpressure, active, complete, cancel, provider-fail,
   attempt-exhaustion, backpressure-exhaustion, destruction-fail, `Drop`, and
   input-preservation tests with a deterministic provider;
 - compile-fail affine request, operation, destruction-token duplication, and
@@ -1473,7 +1477,7 @@ Verification:
   borrowed callback state, lifecycle-only work charging, exact single-
   consumption methods, terminal `Drop` handling, reviewed hashes, private
   state, the 500-line ceiling, and no std/alloc/unsafe/FFI/platform access with
-  sixteen broken policy fixtures;
+  twenty broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -1482,8 +1486,9 @@ Exit criteria:
 - certificate, signature, and accelerator requests cannot cross kinds; retry
   and backpressure cannot duplicate state or bypass caller bounds; an
   authorizing provider cannot be substituted; effect work cannot run without a
-  provider-derived accepted charge; recoverable callback panic cannot evade
-  cleanup; every state-owning terminal path attempts authoritative destruction;
+  provider-derived accepted charge; no effectful activation runs before state
+  is lifecycle-owned; recoverable callback panic cannot evade cleanup; every
+  state-owning terminal path attempts authoritative destruction;
   and no provider implementation, certificate validation,
   signature, accelerator, platform effect, protocol engine, independent
   verification, or FIPS claim is implied;

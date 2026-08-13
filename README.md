@@ -79,8 +79,11 @@ and applicable destruction duties. Checked caller limits bound every effect
 attempt and backpressure response. The effect must prove its exact opaque
 provider identity before begin and every later transition. Provider-derived,
 effect-free nonzero costs are charged before the lifecycle issues a
-non-forgeable work permit. Resume and cancellation only borrow lifecycle-owned
-state, so an unwind leaves it available for mandatory `Drop` cleanup.
+non-forgeable work permit. Inert local state is prepared first and placed under
+lifecycle ownership before activation may create any external resource.
+Activation, resume, and cancellation only borrow lifecycle-owned state, so an
+unwind leaves even partially initialized state available for mandatory `Drop`
+cleanup.
 Completion or cancellation becomes authoritative only after a non-cloneable
 token is consumed to assert external-key,
 accelerator, cache, DMA, and other declared cleanup. Provider failure,

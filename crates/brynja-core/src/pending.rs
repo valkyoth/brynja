@@ -10,7 +10,7 @@ mod outcome;
 mod request;
 
 pub use effect::{
-    PendingBackpressure, PendingBegin, PendingCancelStep, PendingDestructionCause,
+    PendingBackpressure, PendingBeginStep, PendingCancelStep, PendingDestructionCause,
     PendingDestructionComplete, PendingDestructionFailure, PendingDestructionFailureKind,
     PendingDestructionOutcome, PendingDestructionToken, PendingEffectRequest, PendingProvider,
     PendingRetryReason, PendingStep, PendingWorkPermit,

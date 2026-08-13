@@ -5,8 +5,8 @@ mod support;
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
 use brynja_core::{
-    DestructionTargets, PendingDestructionCause, PendingFailureKind, PendingOperation,
-    PendingRequest, PendingStart, PendingTransition, ProviderOperation,
+    DestructionTargets, PendingDestructionCause, PendingDestructionFailureKind, PendingFailureKind,
+    PendingOperation, PendingRequest, PendingStart, PendingTransition, ProviderOperation,
 };
 use support::{DeterministicProvider, Step, installed, limits, prepared};
 
@@ -76,6 +76,59 @@ fn unwind_during_resume_or_cancel_retains_state_for_drop_cleanup() {
     assert_eq!(cancel.last_cause, Some(PendingDestructionCause::Drop));
 }
 
+#[test]
+fn unwind_before_begin_resource_creation_cleans_inert_state() {
+    let provider = provider();
+    let mut effect = DeterministicProvider::active(&provider, &[], &[]);
+    effect.panic_begin_before_external = true;
+
+    assert!(begin_panics(&provider, &mut effect));
+    assert_eq!(effect.external_resources, 0);
+    assert_eq!(effect.destroyed, 1);
+    assert_eq!(effect.last_destroyed_cursor, Some(0));
+    assert_eq!(effect.last_cause, Some(PendingDestructionCause::Drop));
+}
+
+#[test]
+fn unwind_after_begin_resource_creation_runs_authoritative_cleanup() {
+    let provider = provider();
+    let mut effect = DeterministicProvider::active(&provider, &[], &[]);
+    effect.panic_begin_after_external = true;
+
+    assert!(begin_panics(&provider, &mut effect));
+    assert_eq!(effect.external_resources, 0);
+    assert_eq!(effect.destroyed, 1);
+    assert_eq!(effect.last_destroyed_cursor, Some(0));
+    assert_eq!(effect.last_cause, Some(PendingDestructionCause::Drop));
+}
+
+#[test]
+fn unwind_after_partial_begin_mutation_destroys_mutated_state() {
+    let provider = provider();
+    let mut effect = DeterministicProvider::active(&provider, &[], &[]);
+    effect.panic_begin_after_mutation = true;
+
+    assert!(begin_panics(&provider, &mut effect));
+    assert_eq!(effect.external_resources, 0);
+    assert_eq!(effect.destroyed, 1);
+    assert_eq!(effect.last_destroyed_cursor, Some(1));
+    assert_eq!(effect.last_cause, Some(PendingDestructionCause::Drop));
+}
+
+#[test]
+fn begin_unwind_cleanup_failure_notifies_exactly_once() {
+    let provider = provider();
+    let mut effect = DeterministicProvider::active(&provider, &[], &[]);
+    effect.panic_begin_after_external = true;
+    effect.destroy_failure = Some(PendingDestructionFailureKind::AcceleratorHandle);
+
+    assert!(begin_panics(&provider, &mut effect));
+    assert_eq!(effect.external_resources, 1);
+    assert_eq!(effect.destroyed, 1);
+    assert_eq!(effect.drop_failures, 1);
+    assert_eq!(effect.last_cause, Some(PendingDestructionCause::Drop));
+}
+
 fn provider() -> brynja_core::InstalledProvider {
     installed(
         ProviderOperation::Hash,
@@ -103,4 +156,14 @@ fn active<'provider, 'effect>(
         PendingStart::Active(operation) => operation,
         _ => unreachable!(),
     }
+}
+
+fn begin_panics(
+    provider: &brynja_core::InstalledProvider,
+    effect: &mut DeterministicProvider<'_>,
+) -> bool {
+    catch_unwind(AssertUnwindSafe(|| {
+        let _start = PendingOperation::begin(request(provider), effect);
+    }))
+    .is_err()
 }

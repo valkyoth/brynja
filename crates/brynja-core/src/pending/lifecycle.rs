@@ -3,11 +3,11 @@
 use crate::ProviderOperation;
 
 use super::{
-    PendingBackpressure, PendingBegin, PendingCancelStep, PendingCancellation, PendingCompletion,
-    PendingDestructionCause, PendingDestructionFailure, PendingDestructionFailureKind,
-    PendingDestructionOutcome, PendingDestructionToken, PendingEffectRequest, PendingFailure,
-    PendingFailureKind, PendingProvider, PendingRequest, PendingRequestKind, PendingStart,
-    PendingStep, PendingTransition, PendingWorkPermit,
+    PendingBackpressure, PendingBeginStep, PendingCancelStep, PendingCancellation,
+    PendingCompletion, PendingDestructionCause, PendingDestructionFailure,
+    PendingDestructionFailureKind, PendingDestructionOutcome, PendingDestructionToken,
+    PendingEffectRequest, PendingFailure, PendingFailureKind, PendingProvider, PendingRequest,
+    PendingRequestKind, PendingStart, PendingStep, PendingTransition, PendingWorkPermit,
 };
 
 /// Affine ownership of one exact pending provider operation.
@@ -26,7 +26,7 @@ use super::{
 /// ```
 #[must_use = "pending provider state must be resumed, canceled, or dropped"]
 pub struct PendingOperation<'provider, 'data, 'effect, Effect: PendingProvider> {
-    request: PendingRequest<'provider, 'data>,
+    request: Option<PendingRequest<'provider, 'data>>,
     state: Option<Effect::State>,
     effect: &'effect mut Effect,
     attempts: u64,
@@ -87,53 +87,85 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
                 PendingFailureKind::WorkExhausted,
             ));
         }
-        let effect_request = PendingEffectRequest::new(
+        let prepare_request = PendingEffectRequest::new(
             request.kind(),
             request.operation(),
             request.frame(),
             request.attempts(),
             request.remaining_work(),
         );
-        match effect.begin(effect_request, PendingWorkPermit::new(units)) {
-            PendingBegin::Active(state) => {
-                let attempts = request.attempts();
-                let backpressure = request.backpressure();
-                PendingStart::Active(Self {
-                    request,
-                    state: Some(state),
-                    effect,
-                    attempts,
-                    backpressure,
-                })
+        let state = match effect.prepare_state(&prepare_request) {
+            Ok(state) => state,
+            Err(kind) => {
+                return PendingStart::Failed(failure_from_request(
+                    &request,
+                    PendingFailureKind::Provider(kind),
+                ));
             }
-            PendingBegin::Retry(reason) => PendingStart::Retry(request, reason),
-            PendingBegin::Backpressure(reason) => {
-                if request.record_backpressure() {
-                    PendingStart::Backpressure(request, reason)
-                } else {
-                    PendingStart::Failed(failure_from_request(
-                        &request,
-                        PendingFailureKind::BackpressureExhausted,
-                    ))
+        };
+        let attempts = request.attempts();
+        let backpressure = request.backpressure();
+        let mut operation = Self {
+            request: Some(request),
+            state: Some(state),
+            effect,
+            attempts,
+            backpressure,
+        };
+        let guarded_request = operation
+            .request
+            .as_ref()
+            .unwrap_or_else(|| unreachable!("pending request ownership invariant"));
+        let effect_request = PendingEffectRequest::new(
+            guarded_request.kind(),
+            guarded_request.operation(),
+            guarded_request.frame(),
+            operation.attempts,
+            guarded_request.remaining_work(),
+        );
+        let step = match operation.state.as_mut() {
+            Some(state) => {
+                operation
+                    .effect
+                    .begin(state, effect_request, PendingWorkPermit::new(units))
+            }
+            None => return PendingStart::Failed(operation.invariant_failure_value()),
+        };
+        match step {
+            PendingBeginStep::Active => PendingStart::Active(operation),
+            PendingBeginStep::Retry(reason) => match operation.recover_request() {
+                Ok(request) => PendingStart::Retry(request, reason),
+                Err(failure) => PendingStart::Failed(failure),
+            },
+            PendingBeginStep::Backpressure(reason) => match operation.recover_request() {
+                Ok(mut request) => {
+                    if request.record_backpressure() {
+                        PendingStart::Backpressure(request, reason)
+                    } else {
+                        PendingStart::Failed(failure_from_request(
+                            &request,
+                            PendingFailureKind::BackpressureExhausted,
+                        ))
+                    }
                 }
-            }
-            PendingBegin::Failed(kind) => PendingStart::Failed(failure_from_request(
-                &request,
-                PendingFailureKind::Provider(kind),
-            )),
+                Err(failure) => PendingStart::Failed(failure),
+            },
+            PendingBeginStep::Failed(kind) => PendingStart::Failed(
+                operation.finish_begin_failure(PendingFailureKind::Provider(kind)),
+            ),
         }
     }
 
     /// Returns the exact pending boundary.
     #[must_use]
-    pub const fn request_kind(&self) -> PendingRequestKind {
-        self.request.kind()
+    pub fn request_kind(&self) -> PendingRequestKind {
+        self.request_ref().kind()
     }
 
     /// Returns the exact original provider operation.
     #[must_use]
-    pub const fn operation(&self) -> ProviderOperation {
-        self.request.operation()
+    pub fn operation(&self) -> ProviderOperation {
+        self.request_ref().operation()
     }
 
     /// Returns the number of effect transitions already attempted.
@@ -146,6 +178,41 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
     #[must_use]
     pub const fn backpressure_responses(&self) -> u64 {
         self.backpressure
+    }
+
+    fn request_ref(&self) -> &PendingRequest<'provider, 'data> {
+        self.request
+            .as_ref()
+            .unwrap_or_else(|| unreachable!("pending request ownership invariant"))
+    }
+
+    fn request_mut(&mut self) -> &mut PendingRequest<'provider, 'data> {
+        self.request
+            .as_mut()
+            .unwrap_or_else(|| unreachable!("pending request ownership invariant"))
+    }
+
+    fn recover_request(mut self) -> Result<PendingRequest<'provider, 'data>, PendingFailure> {
+        if let Err(failure) = self.destroy(PendingDestructionCause::Activation) {
+            return Err(self.destruction_failure(failure));
+        }
+        self.request
+            .take()
+            .ok_or_else(|| self.invariant_failure_value())
+    }
+
+    fn finish_begin_failure(mut self, kind: PendingFailureKind) -> PendingFailure {
+        match self.destroy(PendingDestructionCause::ProviderFailure) {
+            Ok(()) => failure_from_request(self.request_ref(), kind),
+            Err(failure) => self.destruction_failure(failure),
+        }
+    }
+
+    fn invariant_failure_value(&self) -> PendingFailure {
+        failure_from_request(
+            self.request_ref(),
+            PendingFailureKind::Destruction(PendingDestructionFailureKind::ProviderState),
+        )
     }
 
     /// Performs one bounded resume transition.
@@ -163,11 +230,11 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
             );
         }
         let cost_request = PendingEffectRequest::new(
-            self.request.kind(),
-            self.request.operation(),
-            self.request.frame(),
+            self.request_ref().kind(),
+            self.request_ref().operation(),
+            self.request_ref().frame(),
             self.attempts,
-            self.request.remaining_work(),
+            self.request_ref().remaining_work(),
         );
         let units = match self.state.as_ref() {
             Some(state) => match self.effect.resume_cost(state, &cost_request) {
@@ -193,18 +260,22 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
                 PendingDestructionCause::ProviderFailure,
             );
         }
-        if self.request.charge_work(units).is_err() {
+        if self.request_mut().charge_work(units).is_err() {
             return self.finish_failure(
                 PendingFailureKind::WorkExhausted,
                 PendingDestructionCause::Exhaustion,
             );
         }
+        let guarded_request = self
+            .request
+            .as_ref()
+            .unwrap_or_else(|| unreachable!("pending request ownership invariant"));
         let request = PendingEffectRequest::new(
-            self.request.kind(),
-            self.request.operation(),
-            self.request.frame(),
+            guarded_request.kind(),
+            guarded_request.operation(),
+            guarded_request.frame(),
             self.attempts,
-            self.request.remaining_work(),
+            guarded_request.remaining_work(),
         );
         let Some(state) = self.state.as_mut() else {
             return self.invariant_failure();
@@ -239,11 +310,11 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
             );
         }
         let cost_request = PendingEffectRequest::new(
-            self.request.kind(),
-            self.request.operation(),
-            self.request.frame(),
+            self.request_ref().kind(),
+            self.request_ref().operation(),
+            self.request_ref().frame(),
             self.attempts,
-            self.request.remaining_work(),
+            self.request_ref().remaining_work(),
         );
         let units = match self.state.as_ref() {
             Some(state) => match self.effect.cancel_cost(state, &cost_request) {
@@ -269,18 +340,22 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
                 PendingDestructionCause::ProviderFailure,
             );
         }
-        if self.request.charge_work(units).is_err() {
+        if self.request_mut().charge_work(units).is_err() {
             return self.finish_failure(
                 PendingFailureKind::WorkExhausted,
                 PendingDestructionCause::Exhaustion,
             );
         }
+        let guarded_request = self
+            .request
+            .as_ref()
+            .unwrap_or_else(|| unreachable!("pending request ownership invariant"));
         let request = PendingEffectRequest::new(
-            self.request.kind(),
-            self.request.operation(),
-            self.request.frame(),
+            guarded_request.kind(),
+            guarded_request.operation(),
+            guarded_request.frame(),
             self.attempts,
-            self.request.remaining_work(),
+            guarded_request.remaining_work(),
         );
         let Some(state) = self.state.as_mut() else {
             return self.invariant_failure();
@@ -300,14 +375,15 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
     }
 
     fn identity_matches(&self) -> bool {
-        self.request.is_bound_to(&self.effect.provider_handle())
+        self.request_ref()
+            .is_bound_to(&self.effect.provider_handle())
     }
 
     fn begin_attempt(&mut self) -> bool {
         let Some(next) = self.attempts.checked_add(1) else {
             return false;
         };
-        if next > self.request.limits().effect_attempts() {
+        if next > self.request_ref().limits().effect_attempts() {
             false
         } else {
             self.attempts = next;
@@ -321,7 +397,7 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
     ) -> PendingTransition<'provider, 'data, 'effect, Effect> {
         let next = self.backpressure.checked_add(1);
         match next {
-            Some(value) if value <= self.request.limits().backpressure_responses() => {
+            Some(value) if value <= self.request_ref().limits().backpressure_responses() => {
                 self.backpressure = value;
                 PendingTransition::Backpressure(self, reason)
             }
@@ -335,9 +411,9 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
     fn finish_complete(mut self) -> PendingTransition<'provider, 'data, 'effect, Effect> {
         match self.destroy(PendingDestructionCause::Completion) {
             Ok(()) => PendingTransition::Complete(PendingCompletion {
-                request_kind: self.request.kind(),
-                operation: self.request.operation(),
-                resource: self.request.resource(),
+                request_kind: self.request_ref().kind(),
+                operation: self.request_ref().operation(),
+                resource: self.request_ref().resource(),
             }),
             Err(failure) => PendingTransition::Failed(self.destruction_failure(failure)),
         }
@@ -346,9 +422,9 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
     fn finish_canceled(mut self) -> PendingTransition<'provider, 'data, 'effect, Effect> {
         match self.destroy(PendingDestructionCause::Cancellation) {
             Ok(()) => PendingTransition::Canceled(PendingCancellation {
-                request_kind: self.request.kind(),
-                operation: self.request.operation(),
-                resource: self.request.resource(),
+                request_kind: self.request_ref().kind(),
+                operation: self.request_ref().operation(),
+                resource: self.request_ref().resource(),
             }),
             Err(failure) => PendingTransition::Failed(self.destruction_failure(failure)),
         }
@@ -360,27 +436,28 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
         cause: PendingDestructionCause,
     ) -> PendingTransition<'provider, 'data, 'effect, Effect> {
         match self.destroy(cause) {
-            Ok(()) => PendingTransition::Failed(failure_from_request(&self.request, kind)),
+            Ok(()) => PendingTransition::Failed(failure_from_request(self.request_ref(), kind)),
             Err(failure) => PendingTransition::Failed(self.destruction_failure(failure)),
         }
     }
 
     fn invariant_failure(self) -> PendingTransition<'provider, 'data, 'effect, Effect> {
         PendingTransition::Failed(failure_from_request(
-            &self.request,
+            self.request_ref(),
             PendingFailureKind::Destruction(PendingDestructionFailureKind::ProviderState),
         ))
     }
 
     fn destroy(&mut self, cause: PendingDestructionCause) -> Result<(), PendingDestructionFailure> {
+        if self.state.is_none() {
+            return Ok(());
+        }
+        let resource = self.request_ref().resource();
+        let targets = self.request_ref().destruction_targets();
         let Some(state) = self.state.as_mut() else {
             return Ok(());
         };
-        let token = PendingDestructionToken::new(
-            self.request.resource(),
-            self.request.destruction_targets(),
-            cause,
-        );
+        let token = PendingDestructionToken::new(resource, targets, cause);
         match self.effect.destroy(state, token) {
             PendingDestructionOutcome::Complete(_) => {
                 let _destroyed = self.state.take();
@@ -392,7 +469,7 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
 
     fn destruction_failure(&self, failure: PendingDestructionFailure) -> PendingFailure {
         failure_from_request(
-            &self.request,
+            self.request_ref(),
             PendingFailureKind::Destruction(failure.kind()),
         )
     }

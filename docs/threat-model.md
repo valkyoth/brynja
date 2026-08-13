@@ -226,7 +226,8 @@ result directly; application code cannot supply a work estimate or construct a
 result receipt. v0.15 clock contracts classify time without reading a platform clock.
 v0.16 pending types bind the exact authorizing provider, charge its derived
 nonzero cost before issuing a non-forgeable work permit, and retain borrowed
-continuation state across recoverable provider unwinding and terminal cleanup
+continuation state across recoverable activation, resume, cancellation, and
+terminal-cleanup unwinding
 without implementing a provider effect; application code cannot forge a work
 permit or authoritative completion from an informational event.
 v0.13.1 backend types add only inert identities, exact feature/operation
@@ -284,9 +285,11 @@ identity admission prevents certificate, signature, accelerator, and provider
 confusion; missing poll, cancel, external-store, or accelerator duties fail
 before state exists. Checked effect and backpressure limits bound retry.
 Bounded effect-free cost derivation precedes authoritative charging and a
-single-use work permit. Resume, cancellation, and destruction borrow state
+single-use work permit. Effect-free preparation creates inert local state;
+only after the lifecycle owns it may borrowed activation create external
+resources. Activation, resume, cancellation, and destruction borrow state
 owned by the lifecycle, so recoverable callback unwinding reaches `Drop` with
-state intact. Completion, cancellation, provider failure, exhaustion, and
+partial state intact. Completion, cancellation, provider failure, exhaustion, and
 `Drop` require non-cloneable destruction authority. An informational event
 cannot complete cleanup or make work authoritative. The downstream
 provider remains trusted to destroy its opaque state and every declared

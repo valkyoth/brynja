@@ -17,11 +17,11 @@ SOURCES = (
     Path("crates/brynja-core/src/provider_request.rs"),
 )
 EXPECTED_SHA256 = {
-    SOURCES[0]: "8dda7cb837a50de38de081892e6aa1391c643ae4cad8c6c40e9eb585b0bd41dc",
+    SOURCES[0]: "46657f8dce1da5563d80510ad3d0dc9f0fa3f9205bb86c8f251ae365c6619223",
     SOURCES[1]: "cd770f4d2af3bd02b321f7ad8bde2976804b81c56df1909ac546222b18669836",
-    SOURCES[2]: "e13779384b51b121c875d9295420a8f17c8c1fee750ab0ef9bdb9b84311eaaac",
+    SOURCES[2]: "2b98ab88bde482ca6b82db1eee7d6ecb825c13750af4244ad6fcf0693b7f13be",
     SOURCES[3]: "0aef23d94769122abff337e7da7ac2c73a3706cc2a4d7bcf02b031b7453bc0ce",
-    SOURCES[4]: "a8ce1c54cd87b4722c91b4d25e83c7fce19d055e72f3a20081245736e9be71ab",
+    SOURCES[4]: "0c316190aada645c92c4d01835402fb864055dc51145a9470a02bd96af6291df",
     SOURCES[5]: "28ec8d61126287aa8e7e7d65c014f1f3a942070f0736812928494f69e3278381",
 }
 
@@ -96,12 +96,13 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     for required in (
         "pub struct PendingEffectRequest",
         "pub struct PendingWorkPermit",
-        "pub enum PendingBegin<State>",
+        "pub enum PendingBeginStep",
         "pub enum PendingStep",
         "pub enum PendingCancelStep",
         "pub struct PendingDestructionToken",
         "pub trait PendingProvider",
         "fn provider_handle(&self) -> ProviderHandle<'_>;",
+        "fn prepare_state(",
         "fn begin_cost(",
         "fn resume_cost(",
         "fn cancel_cost(",
@@ -110,10 +111,12 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "fn handle_drop_failure(&mut self, failure: PendingDestructionFailure);",
     ):
         require_once(effect, required, "pending provider effect")
-    if effect.count("state: &mut Self::State") != 3:
-        fail("pending provider state must remain borrowed across three effects")
+    if effect.count("state: &mut Self::State") != 4:
+        fail("pending provider state must remain borrowed across four effects")
     if effect.count("permit: PendingWorkPermit") != 3:
         fail("pending effect methods must consume three lifecycle work permits")
+    if "pub enum PendingBegin<State>" in effect:
+        fail("pending begin may not return unguarded provider state")
     transition_code = effect.split("pub enum PendingStep", 1)[1].split(
         "/// Why pending", 1
     )[0]
@@ -143,13 +146,17 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     lifecycle = sources[SOURCES[4]][1]
     for required in (
         "pub struct PendingOperation",
+        "request: Option<PendingRequest<'provider, 'data>>",
         "request.is_bound_to(&effect.provider_handle())",
-        "self.request.is_bound_to(&self.effect.provider_handle())",
         "effect.begin_cost(&cost_request)",
+        "effect.prepare_state(&prepare_request)",
+        "let mut operation = Self",
+        "request: Some(request)",
+        "state: Some(state)",
         "self.effect.resume_cost(state, &cost_request)",
         "self.effect.cancel_cost(state, &cost_request)",
         "PendingWorkPermit::new(units)",
-        "self.request.charge_work(units)",
+        "self.request_mut().charge_work(units)",
         "if !request.begin_attempt()",
         "if !self.begin_attempt()",
         "self.record_backpressure(reason)",
@@ -164,8 +171,13 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
             fail(f"pending lifecycle transition drift: {required}")
     if lifecycle.count("request.is_bound_to(&effect.provider_handle())") != 2:
         fail("pending provider identity binding drift")
-    if lifecycle.count("self.request.charge_work(units)") != 2:
+    if lifecycle.count("self.request_mut().charge_work(units)") != 2:
         fail("pending authoritative work charging drift")
+    prepare = lifecycle.index("effect.prepare_state(&prepare_request)")
+    guarded = lifecycle.index("let mut operation = Self")
+    activation = lifecycle.index(".begin(state, effect_request")
+    if not prepare < guarded < activation:
+        fail("pending activation must follow lifecycle state ownership")
     if re.search(
         r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct PendingOperation",
         lifecycle,

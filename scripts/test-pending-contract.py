@@ -135,7 +135,7 @@ def test() -> None:
         lifecycle = root / pending_contract_policy.SOURCES[4]
         replace(
             lifecycle,
-            "self.request.charge_work(units)",
+            "self.request_mut().charge_work(units)",
             "Ok::<(), ()>(())",
         )
         reject(root, "authoritative work charging drift")
@@ -150,6 +150,26 @@ def test() -> None:
         reject(root, "authoritative work meter drift")
         copy_fixture(root)
 
+        effect = root / pending_contract_policy.SOURCES[2]
+        replace(effect, "fn prepare_state(", "fn omitted_prepare_state(")
+        reject(root, "pending provider effect drift")
+        copy_fixture(root)
+
+        effect = root / pending_contract_policy.SOURCES[2]
+        replace(effect, "pub enum PendingBeginStep", "pub enum PendingBegin<State>")
+        reject(root, "pending provider effect drift")
+        copy_fixture(root)
+
+        lifecycle = root / pending_contract_policy.SOURCES[4]
+        replace(lifecycle, "state: Some(state)", "state: None")
+        reject(root, "pending lifecycle transition drift")
+        copy_fixture(root)
+
+        lifecycle = root / pending_contract_policy.SOURCES[4]
+        replace(lifecycle, "let mut operation = Self", "let mut operation = fake")
+        reject(root, "pending lifecycle transition drift")
+        copy_fixture(root)
+
         module = root / pending_contract_policy.SOURCES[0]
         module.write_text(module.read_text(encoding="utf-8") + "\n// review drift\n", encoding="utf-8")
         reject(root, "reviewed source hash drift")
@@ -157,4 +177,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("pending policy rejects sixteen admission, identity, work, unwind, cleanup, low-level, size, and hash regressions")
+    print("pending policy rejects twenty admission, identity, work, begin/unwind, cleanup, low-level, size, and hash regressions")

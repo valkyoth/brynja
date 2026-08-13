@@ -3,7 +3,7 @@
 #![allow(dead_code)]
 
 use brynja_core::{
-    DestructionTargets, PendingBackpressure, PendingBegin, PendingCancelStep,
+    DestructionTargets, PendingBackpressure, PendingBeginStep, PendingCancelStep,
     PendingDestructionCause, PendingDestructionFailure, PendingDestructionFailureKind,
     PendingDestructionOutcome, PendingDestructionToken, PendingEffectRequest, PendingLimits,
     PendingProvider, PendingRetryReason, PendingStep, PendingWorkPermit, ProviderCapabilities,
@@ -26,7 +26,7 @@ pub(crate) struct State {
 
 pub(crate) struct DeterministicProvider<'provider> {
     provider: &'provider brynja_core::InstalledProvider,
-    begin: Option<PendingBegin<State>>,
+    begin: Option<PendingBeginStep>,
     resume: &'static [Step],
     cancel: &'static [Step],
     pub(crate) destroy_failure: Option<PendingDestructionFailureKind>,
@@ -37,6 +37,11 @@ pub(crate) struct DeterministicProvider<'provider> {
     pub(crate) charged_units: u64,
     pub(crate) panic_resume: bool,
     pub(crate) panic_cancel: bool,
+    pub(crate) panic_begin_before_external: bool,
+    pub(crate) panic_begin_after_mutation: bool,
+    pub(crate) panic_begin_after_external: bool,
+    pub(crate) external_resources: usize,
+    pub(crate) last_destroyed_cursor: Option<usize>,
 }
 
 impl<'provider> DeterministicProvider<'provider> {
@@ -47,7 +52,7 @@ impl<'provider> DeterministicProvider<'provider> {
     ) -> Self {
         Self {
             provider,
-            begin: Some(PendingBegin::Active(State { cursor: 0 })),
+            begin: Some(PendingBeginStep::Active),
             resume,
             cancel,
             destroy_failure: None,
@@ -58,12 +63,17 @@ impl<'provider> DeterministicProvider<'provider> {
             charged_units: 0,
             panic_resume: false,
             panic_cancel: false,
+            panic_begin_before_external: false,
+            panic_begin_after_mutation: false,
+            panic_begin_after_external: false,
+            external_resources: 0,
+            last_destroyed_cursor: None,
         }
     }
 
     pub(crate) fn begin_once(
         provider: &'provider brynja_core::InstalledProvider,
-        begin: PendingBegin<State>,
+        begin: PendingBeginStep,
     ) -> Self {
         Self {
             provider,
@@ -78,6 +88,11 @@ impl<'provider> DeterministicProvider<'provider> {
             charged_units: 0,
             panic_resume: false,
             panic_cancel: false,
+            panic_begin_before_external: false,
+            panic_begin_after_mutation: false,
+            panic_begin_after_external: false,
+            external_resources: 0,
+            last_destroyed_cursor: None,
         }
     }
 
@@ -102,17 +117,46 @@ impl PendingProvider for DeterministicProvider<'_> {
         Ok(self.step_cost)
     }
 
+    fn prepare_state(
+        &self,
+        _request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<Self::State, ProviderFailureKind> {
+        Ok(State { cursor: 0 })
+    }
+
     fn begin(
         &mut self,
+        state: &mut Self::State,
         request: PendingEffectRequest<'_, '_>,
         permit: PendingWorkPermit,
-    ) -> PendingBegin<Self::State> {
+    ) -> PendingBeginStep {
         assert!(request.attempt() >= 1);
         assert_eq!(permit.units(), self.step_cost);
         self.charged_units = self.charged_units.saturating_add(permit.units());
-        self.begin
+        assert!(
+            !self.panic_begin_before_external,
+            "injected pre-resource begin panic"
+        );
+        if self.panic_begin_after_mutation {
+            state.cursor = state.cursor.saturating_add(1);
+        }
+        assert!(
+            !self.panic_begin_after_mutation,
+            "injected partial-state begin panic"
+        );
+        self.external_resources = self.external_resources.saturating_add(1);
+        assert!(
+            !self.panic_begin_after_external,
+            "injected post-resource begin panic"
+        );
+        let step = self
+            .begin
             .take()
-            .unwrap_or(PendingBegin::Failed(ProviderFailureKind::Failed))
+            .unwrap_or(PendingBeginStep::Failed(ProviderFailureKind::Failed));
+        if !matches!(&step, PendingBeginStep::Active) {
+            self.external_resources = self.external_resources.saturating_sub(1);
+        }
+        step
     }
 
     fn resume_cost(
@@ -174,14 +218,16 @@ impl PendingProvider for DeterministicProvider<'_> {
 
     fn destroy(
         &mut self,
-        _state: &mut Self::State,
+        state: &mut Self::State,
         token: PendingDestructionToken,
     ) -> PendingDestructionOutcome {
         self.destroyed = self.destroyed.checked_add(1).unwrap_or(self.destroyed);
         self.last_cause = Some(token.cause());
+        self.last_destroyed_cursor = Some(state.cursor);
         if let Some(kind) = self.destroy_failure {
             token.fail(kind)
         } else {
+            self.external_resources = self.external_resources.saturating_sub(1);
             token.complete()
         }
     }

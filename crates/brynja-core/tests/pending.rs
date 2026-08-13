@@ -3,7 +3,7 @@
 mod support;
 
 use brynja_core::{
-    DestructionTarget, DestructionTargets, PendingBackpressure, PendingBegin,
+    DestructionTarget, DestructionTargets, PendingBackpressure, PendingBeginStep,
     PendingDestructionCause, PendingDestructionFailureKind, PendingFailureKind, PendingLimitError,
     PendingLimits, PendingOperation, PendingRequest, PendingRequestError, PendingRequestKind,
     PendingResource, PendingRetryReason, PendingStart, PendingTransition, ProviderFailureKind,
@@ -101,7 +101,7 @@ fn begin_retry_and_backpressure_return_the_same_affine_request() {
     .unwrap_or_else(|_| unreachable!());
     let mut retry = DeterministicProvider::begin_once(
         &provider,
-        PendingBegin::Retry(PendingRetryReason::TransientFailure),
+        PendingBeginStep::Retry(PendingRetryReason::TransientFailure),
     );
     let request = match PendingOperation::begin(request, &mut retry) {
         PendingStart::Retry(request, PendingRetryReason::TransientFailure) => request,
@@ -109,7 +109,7 @@ fn begin_retry_and_backpressure_return_the_same_affine_request() {
     };
     let mut blocked = DeterministicProvider::begin_once(
         &provider,
-        PendingBegin::Backpressure(PendingBackpressure::DeviceBusy),
+        PendingBeginStep::Backpressure(PendingBackpressure::DeviceBusy),
     );
     let request = match PendingOperation::begin(request, &mut blocked) {
         PendingStart::Backpressure(request, PendingBackpressure::DeviceBusy) => request,
@@ -117,7 +117,7 @@ fn begin_retry_and_backpressure_return_the_same_affine_request() {
     };
     let mut blocked_again = DeterministicProvider::begin_once(
         &provider,
-        PendingBegin::Backpressure(PendingBackpressure::DeviceBusy),
+        PendingBeginStep::Backpressure(PendingBackpressure::DeviceBusy),
     );
     assert!(matches!(
         PendingOperation::begin(request, &mut blocked_again),
@@ -343,7 +343,7 @@ fn destruction_failure_overrides_success_and_drop_is_reported() {
 }
 
 #[test]
-fn begin_failure_creates_no_cleanup_claim() {
+fn begin_failure_cleans_prepared_state() {
     let provider = installed(
         ProviderOperation::CertificatePath,
         DestructionTargets::local_memory(),
@@ -361,7 +361,7 @@ fn begin_failure_creates_no_cleanup_claim() {
     .unwrap_or_else(|_| unreachable!());
     let mut effect = DeterministicProvider::begin_once(
         &provider,
-        PendingBegin::Failed(ProviderFailureKind::Unavailable),
+        PendingBeginStep::Failed(ProviderFailureKind::Unavailable),
     );
     assert!(matches!(
         PendingOperation::begin(request, &mut effect),
@@ -369,5 +369,9 @@ fn begin_failure_creates_no_cleanup_claim() {
             if failure.kind()
                 == PendingFailureKind::Provider(ProviderFailureKind::Unavailable)
     ));
-    assert_eq!(effect.destroyed, 0);
+    assert_eq!(effect.destroyed, 1);
+    assert_eq!(
+        effect.last_cause,
+        Some(PendingDestructionCause::ProviderFailure)
+    );
 }

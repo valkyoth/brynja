@@ -18,16 +18,17 @@ cumulative change range that the scheduled v0.20.0 checkpoint will assess.
 - Immutable nonzero effect-attempt and backpressure-response limits follow the
   affine request through every no-state retry and active transition.
 
-## Resumption And Cancellation
+## Guarded Activation And Resumption
 
 - `PendingProvider` separates downstream effects from the upstream lifecycle.
-  Begin either creates no provider state or exactly one opaque state.
+  Effect-free preparation creates inert local state; the lifecycle owns that
+  state before borrowed activation may create an external resource.
 - Every effect exposes the exact opaque installed-provider handle it
   implements. A request authorized by another provider fails before effectful
   work, and identity is rechecked before later transitions.
-- Resume, cancellation, and destruction borrow state owned by the lifecycle.
-  Recoverable provider unwinding therefore leaves state available to the
-  mandatory `Drop` cleanup path.
+- Activation, resume, cancellation, and destruction borrow state owned by the
+  lifecycle. Recoverable provider unwinding therefore leaves even partially
+  initialized state available to mandatory `Drop` cleanup.
 - Effect calls and cumulative backpressure responses use checked counters.
   Exhaustion is terminal and triggers mandatory cleanup.
 
@@ -53,15 +54,16 @@ cumulative change range that the scheduled v0.20.0 checkpoint will assess.
 
 ## Verification And Limits
 
-Eleven deterministic and adversarial state-machine tests cover exact admission,
-provider substitution, provider-derived and zero work charges, resume/cancel
-unwinding, no-state begin, retry, backpressure, completion, cancellation,
+Fifteen deterministic and adversarial state-machine tests cover exact admission,
+provider substitution, provider-derived and zero work charges, begin before and
+after resource creation, partial begin mutation, failed begin-unwind cleanup,
+resume/cancel unwinding, no-state begin, retry, backpressure, completion, cancellation,
 provider failure, exhaustion, destruction failure, `Drop`, and unchanged input.
 Compile-fail tests reject request, operation, and destruction-token duplication
 plus work-permit forgery. A SHA-256-bound policy
 keeps each source below 500 lines, requires the security transitions, forbids
 standard-library, allocation, unsafe, FFI, platform, and architecture access,
-and rejects sixteen broken fixtures.
+and rejects twenty broken fixtures.
 
 ## Security Assessment And Remediation
 
@@ -72,7 +74,12 @@ executed by a substituted provider effect; resume or cancellation unwinding
 could move state beyond `Drop`; and pending effects could not debit the
 authoritative work meter. Exact identity binding, borrowed callback state, and
 provider-derived precharged work permits close those paths. The remediation is
-locally green and awaits repository-owner retest; the permanent report is
+locally green, and the repository owner confirmed all three fixes on
+`b5d0049c4943111926e568ba5dd7504075c7beac`. That retest found an adjacent High
+begin-unwind gap: activation could create state before lifecycle ownership.
+Effect-free inert preparation and lifecycle-owned borrowed activation close the
+remaining gap, with four dedicated unwind/destruction regressions. This second
+remediation is locally green and awaits repository-owner retest; the permanent report is
 [`security/pentest/v0.16.0.md`](../security/pentest/v0.16.0.md).
 
 This milestone implements no downstream provider, certificate validator,

@@ -116,16 +116,16 @@ impl PendingWorkPermit {
     }
 }
 
-/// Provider result when first creating continuation state.
-#[must_use = "begin results preserve ownership or terminate explicitly"]
-pub enum PendingBegin<State> {
-    /// Provider continuation state was created.
-    Active(State),
-    /// No state or handle was created; retry the original request.
+/// One activation transition over lifecycle-owned prepared state.
+#[must_use = "begin steps must be consumed by the lifecycle"]
+pub enum PendingBeginStep {
+    /// Provider continuation state became active.
+    Active,
+    /// No external resource remains active; retry the original request.
     Retry(PendingRetryReason),
-    /// No state or handle was created; bounded backpressure was reported.
+    /// No external resource remains active; bounded backpressure was reported.
     Backpressure(PendingBackpressure),
-    /// No state or handle was created; the request failed.
+    /// Activation failed and prepared state must be destroyed.
     Failed(ProviderFailureKind),
 }
 
@@ -161,6 +161,8 @@ pub enum PendingCancelStep {
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[non_exhaustive]
 pub enum PendingDestructionCause {
+    /// Prepared state is being closed after activation did not remain active.
+    Activation,
     /// Provider work completed.
     Completion,
     /// Cancellation became durable.
@@ -317,12 +319,13 @@ pub enum PendingDestructionOutcome {
 /// Downstream effect boundary for one provider's pending continuation state.
 ///
 /// `provider_handle` is an immutable identity assertion for this effect and
-/// must never change during its borrow. Cost methods must be bounded and
-/// effect-free. Resume, cancellation, and destruction mutate state borrowed
-/// from the lifecycle, so unwinding cannot move state beyond [`Drop`].
-/// Returning `PendingBegin::Retry`, `Backpressure`, or `Failed` asserts that
-/// no provider state, external key operation, or accelerator handle was
-/// created.
+/// must never change during its borrow. State preparation and cost methods must
+/// be bounded and effect-free: prepared state is inert local cleanup metadata.
+/// Activation, resume, cancellation, and destruction mutate state already
+/// owned by the lifecycle, so unwinding cannot move it beyond [`Drop`]. A
+/// retry or backpressure step asserts that activation left no external
+/// resource active, but the lifecycle still destroys prepared state before
+/// returning the request.
 pub trait PendingProvider {
     /// Opaque provider-owned continuation state.
     type State;
@@ -330,18 +333,28 @@ pub trait PendingProvider {
     /// Returns the exact installed provider implemented by this effect.
     fn provider_handle(&self) -> ProviderHandle<'_>;
 
+    /// Creates only inert local state without an external or platform effect.
+    ///
+    /// The returned value must describe partially initialized cleanup safely
+    /// before activation can create an external resource.
+    fn prepare_state(
+        &self,
+        request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<Self::State, ProviderFailureKind>;
+
     /// Derives the bounded, effect-free charge for creating state.
     fn begin_cost(
         &self,
         request: &PendingEffectRequest<'_, '_>,
     ) -> Result<u64, ProviderFailureKind>;
 
-    /// Creates continuation state after its exact charge was accepted.
+    /// Activates lifecycle-owned state after its exact charge was accepted.
     fn begin(
         &mut self,
+        state: &mut Self::State,
         request: PendingEffectRequest<'_, '_>,
         permit: PendingWorkPermit,
-    ) -> PendingBegin<Self::State>;
+    ) -> PendingBeginStep;
 
     /// Derives the bounded, effect-free charge for one resume transition.
     fn resume_cost(

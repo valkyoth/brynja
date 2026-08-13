@@ -6,7 +6,7 @@ cumulative_milestones = ["0.16.0"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "The v0.16.0 pending-operation boundary received an exceptional repository-owner assessment; two High provider-confusion/unwind-cleanup findings and one Medium work-accounting finding are remediated and awaiting retest before tagging."
+exception_reason = "The v0.16.0 pending-operation boundary received an exceptional repository-owner assessment; the first retest confirmed two High and one Medium original findings fixed, then found one adjacent High begin-unwind gap that is remediated and awaiting a second retest before tagging."
 
 [crates."brynja"]
 previous_version = "0.15.0"

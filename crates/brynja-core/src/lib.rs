@@ -90,13 +90,13 @@ pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
 pub use pending::{
-    PendingBackpressure, PendingBegin, PendingCancelStep, PendingCancellation, PendingCompletion,
-    PendingDestructionCause, PendingDestructionComplete, PendingDestructionFailure,
-    PendingDestructionFailureKind, PendingDestructionOutcome, PendingDestructionToken,
-    PendingEffectRequest, PendingFailure, PendingFailureKind, PendingLimitError, PendingLimits,
-    PendingOperation, PendingProvider, PendingRequest, PendingRequestError, PendingRequestKind,
-    PendingResource, PendingRetryReason, PendingStart, PendingStep, PendingTransition,
-    PendingWorkPermit,
+    PendingBackpressure, PendingBeginStep, PendingCancelStep, PendingCancellation,
+    PendingCompletion, PendingDestructionCause, PendingDestructionComplete,
+    PendingDestructionFailure, PendingDestructionFailureKind, PendingDestructionOutcome,
+    PendingDestructionToken, PendingEffectRequest, PendingFailure, PendingFailureKind,
+    PendingLimitError, PendingLimits, PendingOperation, PendingProvider, PendingRequest,
+    PendingRequestError, PendingRequestKind, PendingResource, PendingRetryReason, PendingStart,
+    PendingStep, PendingTransition, PendingWorkPermit,
 };
 pub use provider::{ProviderFailure, ProviderFailureKind, ProviderOperation};
 pub use provider_capability::{

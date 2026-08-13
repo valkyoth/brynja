@@ -267,6 +267,13 @@ resumption, PSK, early-data, replay, amplification, ECH, provider effect,
 external key store, cryptography, protocol engine, event schema, independent
 verification, or FIPS validation.
 
+The exceptional v0.18.0 assessment found four High and one Medium issue across
+the initial review and first retest. The clean second repository-owner retest
+of exact signed remediation commit
+`635b229296be45b195d37d8111fd8ad8f8b1e571` records `PASS`/`PASS` with
+zero open findings. This is pentest evidence, not independent cryptographic or
+protocol verification.
+
 v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
 opportunistic, required-accelerated, and validated-module policies; and

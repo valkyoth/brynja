@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.17.0 signed; v0.18.0 second pentest remediation complete and awaiting retest
+Status: v0.17.0 signed; v0.18.0 pentest PASS and awaiting green GitHub and CodeQL
 
 | Control | Foundation enforcement |
 | --- | --- |

@@ -5,8 +5,8 @@ baseline = "0.15.0"
 cumulative_milestones = ["0.16.0", "0.17.0", "0.18.0"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "Mandatory security-outcome authority received an exceptional repository-owner assessment and clean retest."
 
 [crates."brynja"]
 previous_version = "0.17.0"

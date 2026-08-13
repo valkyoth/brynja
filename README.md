@@ -304,8 +304,9 @@ an independent pentest.
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.17.0`. The current `0.18.0` mandatory security-outcome authority milestone
-selects no crates.io publication; its pentest findings are remediated and await
-a second repository-owner retest.
+selects no crates.io publication. Its exceptional assessment and clean second
+retest record `PASS`/`PASS` with zero open findings; the signed candidate now
+awaits green GitHub and CodeQL.
 The published dependency is:
 
 ```toml

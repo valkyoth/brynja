@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.17.0 signed; v0.18.0 second pentest remediation complete and awaiting retest
+Status: v0.17.0 signed; v0.18.0 pentest PASS and awaiting green GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -64,8 +64,12 @@ exact signed candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` passed
 with zero findings and hosted checks became green. Signed v0.16.0 contains the
 remediated pending-operation lifecycle and selects no crates.io publication.
 Signed v0.17.0 contains the remediated FIPS-aware architecture and selects no
-publication. The facade now advances to `0.18.0`; supporting versions remain unchanged and
-no crate is selected for publication.
+publication. The v0.18.0 exceptional assessment found four High and one Medium
+issue across its initial review and first retest. The clean second retest of
+exact signed remediation commit
+`635b229296be45b195d37d8111fd8ad8f8b1e571` records `PASS`/`PASS` with
+zero open findings. The facade advances to `0.18.0`; supporting versions remain
+unchanged and no crate is selected for publication.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

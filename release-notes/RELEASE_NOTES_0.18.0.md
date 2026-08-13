@@ -1,6 +1,6 @@
 # Brynja v0.18.0 Development Milestone
 
-Status: second pentest remediation complete; awaiting repository-owner retest
+Status: pentest PASS; awaiting green GitHub and CodeQL
 
 Brynja v0.18.0 adds the mandatory security-outcome authority contract to
 `brynja-core`. It advances only the `brynja` facade version, selects no
@@ -86,8 +86,10 @@ one remaining High capability-laundering bypass because all public outcome
 variants shared one completion type. The second remediation introduces opaque
 disposition-specific outcomes, private validated reasons, and exact disposition
 checking at commit. Permanent regression tests and source-policy fixtures cover
-all five findings. A clean repository-owner retest of the second remediation is
-pending; no PASS claim is made yet.
+all five findings. The clean second repository-owner retest of exact signed
+remediation commit `635b229296be45b195d37d8111fd8ad8f8b1e571` found no
+additional issue and records `PASS`/`PASS` with zero open findings in
+`security/pentest/v0.18.0.md`.
 
 ## Limits
 
@@ -127,6 +129,8 @@ the same implementation rather than building SHA-1 again.
 v0.18.0 is a tagged development milestone with no scheduled cumulative
 pentest or crates.io publication. Its implementation received an exceptional
 assessment; its original four findings and the High found by the first retest
-are remediated and now require a clean second repository-owner retest, followed by the complete local gate, green GitHub and
-CodeQL, and explicit authorization before its signed tag. Every change after
-v0.15.0 remains in the scheduled cumulative v0.20.0 assessment.
+are remediated, and the clean second repository-owner retest passed. The
+complete local gate and permanent report are committed together; green GitHub
+and CodeQL plus explicit authorization remain required before its signed tag.
+Every change after v0.15.0 remains in the scheduled cumulative v0.20.0
+assessment.

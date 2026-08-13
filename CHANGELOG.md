@@ -217,6 +217,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Record the exceptional v0.18.0 mandatory security-outcome assessment and
+  clean second repository-owner retest of exact signed remediation candidate
+  `635b229296be45b195d37d8111fd8ad8f8b1e571`, closing four High and one
+  Medium finding across the initial review and first retest with `PASS`/`PASS`
+  and zero open findings.
 - Record the exceptional v0.17.0 FIPS-aware architecture assessment and green
   repository-owner retest of exact signed remediation candidate
   `bc83f44a9c8fdb710d03429b1669ee6c4449b054`, closing two High operation-only

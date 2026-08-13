@@ -1,7 +1,6 @@
 # Brynja v0.18.1 Development Milestone
 
-Status: implementation complete; awaiting repository-owner review, the final
-committed candidate, and green GitHub and CodeQL
+Status: exceptional pentest PASS; awaiting green GitHub and CodeQL
 
 Brynja v0.18.1 adds a bounded observational security-event schema to
 `brynja-core`. It advances the `brynja` facade to `0.18.1`, retains every
@@ -71,11 +70,20 @@ serialization, retention, and response policy remain application-owned.
   targets, `no_std`, dependency/advisory policy, SBOM, package contents,
   documentation, and modern/legacy isolation.
 
+## Pentest
+
+The repository owner assessed exact signed implementation commit
+`9ff9a459d8caae7e7f5c18b6576647487ba5b251` and reported a green result with
+zero findings. No remediation was required. The permanent `PASS`/`PASS` report
+is [`security/pentest/v0.18.1.md`](../security/pentest/v0.18.1.md).
+
+This exceptional assessment does not replace or narrow the scheduled v0.20.0
+cumulative review of every change after signed v0.15.0 through v0.20.0.
+
 ## Release Process
 
-v0.18.1 is a signed development milestone after the exact candidate passes the
-complete local gate and GitHub and CodeQL are green. It has no scheduled
-pentest or crates.io publication unless an exceptional trigger is recorded.
+v0.18.1 becomes a signed development milestone after the exact candidate
+passes the complete local gate and GitHub and CodeQL are green. Its completed
+exceptional pentest does not convert it into a crates.io publication.
 All changes after v0.15.0, including v0.18.1, remain in the backwards-looking
 cumulative v0.20.0 assessment range.
-

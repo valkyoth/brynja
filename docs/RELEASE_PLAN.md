@@ -1642,7 +1642,7 @@ Exit criteria:
 
 ### v0.18.1 - Bounded Observational Security Event Schema
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Define an upstream no_std Sans-I/O SecurityEvent audit schema that only duplicates the authoritative outcomes frozen at v0.18.0; events are caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, optionally caller-timestamped or explicitly untimestamped for later enrichment, use saturating drop counters with visible saturation, contain no secret or stable correlating identifier, never reenter, and cannot block, authorize, complete, or alter cryptographic or protocol state.
 
@@ -1683,6 +1683,9 @@ Implementation evidence:
   event forging, authorization, reentrant mutable access, dynamic or secret
   payloads, identifiers, callbacks, alert/provider/authority crossings,
   wrapping counters, public state, oversized files, and reviewed-source drift.
+- the exceptional repository-owner assessment of exact signed implementation
+  candidate `9ff9a459d8caae7e7f5c18b6576647487ba5b251` passed with zero
+  findings and is permanently recorded in `security/pentest/v0.18.1.md`;
 
 Exit criteria:
 

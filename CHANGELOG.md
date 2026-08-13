@@ -149,6 +149,9 @@ Keep a Changelog and Semantic Versioning.
 - Advance the development facade to `brynja 0.18.1`, retain every supporting-
   crate publication version, include v0.18.1 in the cumulative v0.20.0 range,
   and select zero crates for crates.io publication.
+- Record the exceptional repository-owner v0.18.1 assessment as PASS/PASS with
+  zero open findings and no remediation, while retaining the complete delta in
+  the scheduled v0.20.0 cumulative assessment.
 - Make public accepted and approved resolutions permanently fail closed until
   a sealed exact-subject proof path exists; retain exact token-bound acceptance
   only inside external-key completion.

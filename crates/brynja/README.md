@@ -321,13 +321,19 @@ These reports make the assessed versions and ranges explicit; automated tests,
 CI, CodeQL, fuzzing, Miri, or Kani are valuable evidence but are not themselves
 an independent pentest.
 
+The repository owner also performed an exceptional review of exact signed
+v0.18.1 implementation commit `9ff9a459d8caae7e7f5c18b6576647487ba5b251`
+and reported zero findings. That assessment is recorded permanently without
+removing v0.18.1 from the broader v0.15.0-to-v0.20.0 cumulative review range.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.18.0`. The current `0.18.1` bounded observational security-event milestone
-selects no crates.io publication and remains inside the cumulative v0.20.0
-assessment range.
+has passed its exceptional pentest, selects no crates.io publication, awaits
+green GitHub and CodeQL before tagging, and remains inside the cumulative
+v0.20.0 assessment range.
 The published dependency is:
 
 ```toml

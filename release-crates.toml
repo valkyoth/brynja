@@ -5,8 +5,8 @@ baseline = "0.15.0"
 cumulative_milestones = ["0.16.0", "0.17.0", "0.18.0", "0.18.1"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "Record the repository-owner PASS assessment of the bounded observational security-event boundary without changing the internal no-publication milestone."
 
 [crates."brynja"]
 previous_version = "0.18.0"

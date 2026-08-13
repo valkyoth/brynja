@@ -352,6 +352,9 @@ its scheduled assessment passed with zero findings. The v0.16.0, v0.17.0,
 v0.18.0, and v0.18.1 development deltas remain unpublished until a later
 checkpoint under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
+The exceptional repository-owner assessment of the exact v0.18.1
+implementation candidate passed with zero findings; v0.18.1 remains in the
+scheduled cumulative v0.20.0 review range.
 
 The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line
 source-file, platform-portability, and modern/legacy isolation policies apply

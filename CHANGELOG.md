@@ -16,6 +16,10 @@ Keep a Changelog and Semantic Versioning.
 - Add seventeen behavior tests, three compile-fail examples, seven reviewed
   source hashes, twenty-nine negative policy fixtures, and generated protocol-
   surface and requirement evidence for the first hostile parser boundary.
+- Remediate the initial v0.19.0 High cleartext-exposure finding by separating
+  TLS 1.2 and TLS 1.3 plaintext admission, categorically rejecting TLS 1.3
+  application data during parsing and construction, and adding a dedicated
+  closed error plus regression coverage.
 - Advance the development facade to `brynja 0.19.0`, expose the shared framing
   crate, wire it into the modern TLS/DTLS engine packages, select zero crates
   for publication, and require an exceptional pentest before the signed tag.

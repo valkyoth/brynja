@@ -51,6 +51,15 @@ def main() -> int:
     reject("heartbeat content", lambda root: replace(root, policy.CONTENT, "Heartbeat,", "HeartbeatRemoved,"))
     reject("heartbeat extension", lambda root: replace(root, policy.CONTENT, "HEARTBEAT_EXTENSION_TYPE: u16 = 15", "HEARTBEAT_EXTENSION_TYPE: u16 = 16"))
     reject("heartbeat rejection", lambda root: replace(root, policy.CONTENT, "Err(RecordError::HeartbeatRejected)", "Err(RecordError::UnsupportedContentType)"))
+    reject(
+        "TLS 1.3 cleartext application data",
+        lambda root: replace(
+            root,
+            policy.CONTENT,
+            "return Err(RecordError::UnprotectedApplicationData);",
+            "return Ok(content_type);",
+        ),
+    )
     reject("unknown coercion", lambda root: replace(root, policy.CONTENT, "ContentTypeClass::Unassigned", "ContentTypeClass::Assigned(ContentType::Alert)"))
     reject("TLS plaintext bound", lambda root: replace(root, policy.RECORD, "MAX_PLAINTEXT_LENGTH", "MAX_TLS12_CIPHERTEXT_LENGTH"))
     reject("TLS 1.2 ciphertext bound", lambda root: replace(root, policy.RECORD, "MAX_TLS12_CIPHERTEXT_LENGTH", "MAX_TLS13_CIPHERTEXT_LENGTH"))
@@ -74,7 +83,7 @@ def main() -> int:
     reject("oversized source", lambda root: (root / policy.DTLS).write_text((root / policy.DTLS).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.RECORD, "TLS stream record framing", "TLS record framing"))
     reject("implementation claim", lambda root: replace(root, policy.LIB, "TLS_DTLS_RECORD_FRAMING_IMPLEMENTED: bool = true", "TLS_DTLS_RECORD_FRAMING_IMPLEMENTED: bool = false"))
-    print("record-framing policy rejects twenty-nine profile, heartbeat, bound, package, size, and hash regressions")
+    print("record-framing policy rejects thirty profile, cleartext, heartbeat, bound, package, size, and hash regressions")
     return 0
 
 

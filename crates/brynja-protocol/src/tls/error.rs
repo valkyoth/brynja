@@ -18,6 +18,8 @@ pub enum RecordError {
     UnsupportedContentType,
     /// RFC 6520 Heartbeat is deliberately excluded.
     HeartbeatRejected,
+    /// TLS 1.3 application data was presented in an unprotected wire record.
+    UnprotectedApplicationData,
     /// A protected TLS 1.3 record did not use outer type 23.
     InvalidCiphertextType,
     /// A protected TLS 1.3 record did not use legacy version 0x0303.

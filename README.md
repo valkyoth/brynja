@@ -104,6 +104,11 @@ DTLS engine packages consume the shared crate but remain unimplemented.
 Because this is Brynja's first hostile protocol parser, v0.19.0 requires an
 exceptional pentest before its signed tag even though it selects no crates.io
 publication and remains in the cumulative v0.15.0-to-v0.20.0 review range.
+The initial assessment found one High cleartext-exposure flaw: TLS 1.3
+plaintext admission inherited TLS 1.2 application-data allowance. TLS 1.3
+application data is now categorically rejected during both parsing and caller
+construction with a dedicated closed error. Focused regression and policy
+fixtures pass; the exact remediation candidate awaits exceptional retest.
 
 The signed `0.18.0` development milestone adds a protocol-neutral mandatory
 security-outcome authority contract in `brynja-core`. Sealed type-level domains
@@ -329,7 +334,7 @@ removing v0.18.1 from the broader v0.15.0-to-v0.20.0 cumulative review range.
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.18.1`. The current `0.19.0` shared record-framing milestone selects no
-crates.io publication and awaits its exceptional pentest before hosted checks
+crates.io publication and awaits its exceptional retest before hosted checks
 and tagging. It remains inside the cumulative v0.20.0 assessment range.
 The published dependency is:
 

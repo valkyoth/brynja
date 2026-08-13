@@ -68,6 +68,31 @@ fn outgoing_tls13_plaintext_allows_only_specified_compatibility_values() {
 }
 
 #[test]
+fn tls13_application_data_is_never_admitted_as_plaintext() {
+    let policy = WirePolicy::for_version(ProtocolVersion::Tls13);
+    assert!(matches!(
+        TlsPlaintext::new(
+            policy,
+            ContentTypeCode::classify(23),
+            LegacyRecordVersion::tls13_default(),
+            b"secret",
+        ),
+        Err(RecordError::UnprotectedApplicationData)
+    ));
+    assert!(matches!(
+        TlsPlaintext::parse(policy, &wire(23, [3, 3], b"secret")),
+        Err(RecordError::UnprotectedApplicationData)
+    ));
+    assert!(
+        TlsPlaintext::parse(
+            WirePolicy::for_version(ProtocolVersion::Tls12),
+            &wire(23, [3, 3], b"application"),
+        )
+        .is_ok()
+    );
+}
+
+#[test]
 fn tls13_ciphertext_requires_both_outer_constants() {
     let policy = WirePolicy::for_version(ProtocolVersion::Tls13);
     assert!(TlsCiphertext::parse(policy, &wire(23, [3, 3], &[7])).is_ok());

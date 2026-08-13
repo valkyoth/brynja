@@ -36,13 +36,16 @@ The boundary covers TLS 1.2 and TLS 1.3 plaintext/ciphertext envelopes, DTLS
 1.2 plaintext/ciphertext envelopes, and DTLS 1.3 plaintext and unified
 ciphertext headers. TLS 1.3 and DTLS 1.3 legacy-version handling follows RFC
 9846. RFC 6520 Heartbeat content and extension negotiation are rejected in
-every modern profile.
+every modern profile. TLS 1.3 application data is categorically rejected from
+unprotected wire records during both parsing and construction; it remains
+available only through the separate post-decryption inner-content classifier.
 
 This crate does not negotiate versions, decrypt or authenticate records,
 reconstruct DTLS sequence numbers, enforce replay policy, process handshakes,
 perform I/O, allocate, implement cryptography, or provide a TLS/DTLS engine.
-It is an unpublished v0.19.0 development boundary pending its exceptional
-pentest and remains inside the cumulative v0.15.0-to-v0.20.0 review range.
+It is an unpublished v0.19.0 development boundary whose initial High
+cleartext-exposure finding is remediated and awaiting exceptional retest. It
+remains inside the cumulative v0.15.0-to-v0.20.0 review range.
 
 ## Cryptography Verification Status
 

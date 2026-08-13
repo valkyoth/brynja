@@ -22,8 +22,8 @@ SOURCES = (LIB, TLS, CONTENT, ERROR, RECORD, DTLS, DTLS12)
 EXPECTED_SHA256 = {
     LIB: "80791d0e9fb05193522810c3bb7d64a1177daf2a7c1985fa20f0b6baecbeda66",
     TLS: "5f3e727c9eabac8d0d77809479c213559d2123bae402bbf1b6106df193f965ff",
-    CONTENT: "c6cd53c5058db9aa0b771061e748880fa6020d89e9d9da0667ede37bfdab9abf",
-    ERROR: "b91907ccf58bd2818b3b35675bacba87dc3bd2598bfed5f047ef2f1337c1d4ae",
+    CONTENT: "d0b78e5828c49e104a3193d0dfb1c0433d11abb4e20cc044943c26a050aa8081",
+    ERROR: "b7d0f6b85e6787db39d062c107b835d30ee42fc927b7e6a6ab7fd586a4cdda63",
     RECORD: "20c9a167380e1562916eb75c3ba9c3325641afeae75d31bc1d87b1747458a2c5",
     DTLS: "751ca4e00fd71dfdcef8495ec99bee411713d3fb1e0c4bc0c5a437a26efd2fa1",
     DTLS12: "8d0320531605e263451c0ba4e089ec80fddd42ae850f869d43dc59a903414aab",
@@ -110,6 +110,7 @@ def validate_structure(root: Path, sources: dict[Path, tuple[str, str]]) -> None
         "HEARTBEAT_EXTENSION_TYPE: u16 = 15",
         "pub const fn reject_heartbeat_negotiation",
         "Err(RecordError::HeartbeatRejected)",
+        "return Err(RecordError::UnprotectedApplicationData);",
         "RecordError::InvalidCiphertextType",
         "pub fn admit_inner_content_type",
     ):
@@ -164,6 +165,7 @@ def validate_structure(root: Path, sources: dict[Path, tuple[str, str]]) -> None
     for required in (
         "pub enum RecordError",
         "HeartbeatRejected,",
+        "UnprotectedApplicationData,",
         "RecordOverflow,",
         "InvalidUnifiedHeader,",
         "InsufficientOutput,",

@@ -179,13 +179,22 @@ impl WirePolicy {
             return Err(RecordError::HeartbeatRejected);
         }
         let admitted = match self.version {
-            ProtocolVersion::Tls12 | ProtocolVersion::Tls13 => matches!(
+            ProtocolVersion::Tls12 => matches!(
                 content_type,
                 ContentType::ChangeCipherSpec
                     | ContentType::Alert
                     | ContentType::Handshake
                     | ContentType::ApplicationData
             ),
+            ProtocolVersion::Tls13 => {
+                if matches!(content_type, ContentType::ApplicationData) {
+                    return Err(RecordError::UnprotectedApplicationData);
+                }
+                matches!(
+                    content_type,
+                    ContentType::ChangeCipherSpec | ContentType::Alert | ContentType::Handshake
+                )
+            }
             ProtocolVersion::Dtls12 => matches!(
                 content_type,
                 ContentType::ChangeCipherSpec

@@ -412,7 +412,10 @@ Parsers borrow immutable input and validate complete headers and bounded
 fragments before exposure. Encoders preflight exact caller-owned output and
 preserve it on failure. TLS 1.3 and DTLS 1.3 legacy-version exceptions are
 explicit, ciphertext constants are exact, and RFC 6520 Heartbeat content and
-negotiation are rejected across all modern profiles. The framing layer does
+negotiation are rejected across all modern profiles. TLS 1.3 application data
+is categorically rejected from unprotected wire records during both parsing
+and construction; its separate post-decryption inner-content classification
+remains available. The framing layer does
 not decrypt, authenticate, reconstruct truncated DTLS sequence numbers,
 enforce anti-replay, interpret handshake messages, perform I/O, or decide
 alerts; those later authorities must not infer trust from framing success.

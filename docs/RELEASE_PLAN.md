@@ -1718,18 +1718,20 @@ Deliverables:
   short/long sequence-number forms, and optional-length datagram semantics;
 - preserve permitted legacy-version and unknown content-type bytes, reject RFC
   6520 Heartbeat content and extension negotiation in every modern profile,
+  categorically reject TLS 1.3 application data from unprotected wire records,
   and keep all errors closed and payload-free;
 - use caller-owned output only, preflight complete writes, and leave buffers
   unchanged on failure; perform no allocation, I/O, cryptography, decryption,
   authentication, replay processing, or handshake transition;
-- bind reviewed source hashes, file-size and forbidden-boundary rules, 29
+- bind reviewed source hashes, file-size and forbidden-boundary rules, 30
   negative policy fixtures, requirements and protocol-surface evidence, threat
   model, controls, status, release notes, and crate documentation.
 
 Verification:
 
 - exhaustively classify all 256 content-type bytes; test known, unknown, and
-  forbidden Heartbeat values plus rejected Heartbeat extension admission;
+  forbidden Heartbeat values, rejected Heartbeat extension admission, and TLS
+  1.3 application-data rejection on both parse and construction paths;
 - test TLS and DTLS profile/version separation, exact maximum lengths,
   ciphertext constants, empty-record rules, all header truncations, trailing
   stream/datagram bytes, DTLS epoch/CID/sequence layouts, and transactional
@@ -1744,7 +1746,8 @@ Implementation evidence:
 
 - `crates/brynja-protocol/src/lib.rs` and
   `crates/brynja-protocol/src/tls/{content_type,error,record,dtls,dtls12_ciphertext}.rs`;
-- `crates/brynja-protocol/tests/{wire_policy,tls_records,dtls_records}.rs`;
+- `crates/brynja-protocol/tests/{wire_policy,tls_records,dtls_records}.rs`,
+  including the regression for the initial High cleartext-exposure finding;
 - `scripts/{record_framing_policy,check-record-framing,test-record-framing}.py`;
 - `standards/protocol-surfaces.json` and the generated requirement matrix,
   indexes, and coverage artifacts.

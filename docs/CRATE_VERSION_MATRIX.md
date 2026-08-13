@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.18.1 signed; v0.19.0 implementation complete and awaiting exceptional pentest
+Status: v0.18.1 signed; v0.19.0 High finding remediated and awaiting exceptional retest
 
 The `brynja` facade advances to `0.19.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published

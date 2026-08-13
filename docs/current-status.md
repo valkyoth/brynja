@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.18.1 signed; v0.19.0 implementation complete and awaiting exceptional pentest
+Status: v0.18.1 signed; v0.19.0 High finding remediated and awaiting exceptional retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -88,6 +88,12 @@ a handshake. The TLS and DTLS engine packages consume the shared boundary but
 remain unimplemented. No package is selected for publication. As the first
 hostile protocol parser, v0.19.0 requires an exceptional pentest before tag and
 also remains in the scheduled v0.15.0-to-v0.20.0 cumulative assessment.
+The initial assessment found one High TLS 1.3 cleartext-exposure flaw: the
+plaintext admission path inherited TLS 1.2 application-data allowance. TLS
+1.3 application data is now categorically rejected during both parsing and
+construction with a dedicated closed error, while TLS 1.2 retains its required
+plaintext behavior. Focused regression and policy fixtures pass; the exact
+remediation candidate awaits repository-owner retest.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

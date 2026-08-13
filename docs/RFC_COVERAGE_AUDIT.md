@@ -32,9 +32,13 @@ owner milestones, and 483 surfaces. v0.3.5 adds 49 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
 authorities, 182 reviewed normative sections, and 765 formerly uncovered
 surfaces.
-The complete closure covers 127 locked authorities, 231 roadmap rows, and
-4,447 surfaces. Planned targets become actual code, tests, and evidence only
-in their owning milestone.
+The complete closure covers 127 currently locked authorities, 272 roadmap
+rows, and 4,447 currently registered surfaces. The 35 new OpenPGP rows are
+explicitly fenced as planned-authority admission: v0.163.0 must authenticate
+RFC 9580, its obsoleted lineage, referenced algorithm and compression sources,
+errata, and the OpenPGP Parameters registry and then generate exact requirement
+and surface mappings before any OpenPGP code is admitted. Planned targets
+become actual code, tests, and evidence only in their owning milestone.
 
 ## Coverage By Implementation Domain
 
@@ -53,6 +57,7 @@ in their owning milestone.
 | QUIC TLS | RFC 9000-RFC 9002 and RFC 9369 | v0.94.0-v0.101.0 | Covered. TLS owns the recordless handshake; version-specific Initial secrets, Retry integrity, packet protection, key phase, and QUIC v2 remain caller transport responsibilities. |
 | DTLS 1.2 and 1.3 | RFC 6347, RFC 9146, RFC 9147 as updated by RFC 9853, RFC 9325, RFC 10015 | v0.102.0-v0.116.0 | Gap closed: CID path changes now receive a separate basic/enhanced return-routability milestone. Early data remains explicitly excluded for v1. |
 | ML-KEM and hybrid TLS | RFC 9935, RFC 9954, RFC 10024 plus FIPS 203 and SP 800-227 | v0.117.0-v0.122.0 | Generic construction and the three final standardized ECDHE-ML-KEM groups are covered as planning authority; ML-KEM PKIX credentials are excluded, implementation remains future work, and drafts and private identifiers remain forbidden. |
+| OpenPGP | RFC 9580 plus its exact obsoleted lineage, referenced algorithm and compression authorities, errata, and the OpenPGP Parameters registry | v0.163.0-v0.180.0 | Planned-authority boundary only. v0.163.0 must authenticate, lock, classify, and generate complete requirement/surface closure before later packet, key, message, compatibility, audit, or publication work can begin. |
 | HPKE | RFC 9180 | v0.138.0-v0.139.1 | Gap closed: Context.Export, export-only policy, ordered delivery, loss invalidation, role separation, unsupported modes, and complete context destruction are explicit. |
 | ECH and DNS bootstrap boundary | RFC 9180, RFC 9460, RFC 9848, RFC 9849 | v0.140.0-v0.143.0 | Covered. DNS resolution and caching remain caller-owned; hostile ECHConfigList parsing, provenance, retry, and downgrade policy remain protocol-owned. |
 | Raw public keys, delegated credentials, record size, and certificate compression | RFC 7250, RFC 8449, RFC 8879, RFC 9345 | v0.136.0-v0.137.0, v0.144.0-v0.146.1 | Covered with distinct trust, authorization, transcript, algorithm-provider, and resource boundaries. |

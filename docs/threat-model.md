@@ -162,9 +162,10 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
 - fail-closed entropy, time, identity, revocation, and algorithm policy;
 - no secret-bearing logs, panics, debug formatting, or error strings;
 - modern/legacy package and runtime isolation;
-- deterministic builds, pinned CI actions, zero third-party dependencies in
-  every core graph, isolated exact dependency closures for separately selected
-  ecosystem adapters, SBOMs, and a current committed pentest report that must
+- deterministic builds, pinned CI actions, no unreviewed external dependency
+  in any core graph, one exact allocation-free Base64-ng encoding boundary,
+  isolated exact dependency closures for separately selected ecosystem
+  adapters, SBOMs, and a current committed pentest report that must
   change with every later release candidate fix;
 - a permanent machine-enforced first-party Rust cryptography rule rejecting
   foreign cryptographic source, objects, libraries, build scripts, native-link

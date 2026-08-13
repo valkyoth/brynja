@@ -4,10 +4,11 @@ Status: planning document
 
 ## Objective
 
-Build a dependency-free, `no_std`, first-party TLS ecosystem in Rust through
-small, independently reviewable releases. The modern `brynja` facade reaches
-serious production readiness only at `1.0.0`; package presence, compilation,
-test count, or interoperability alone never establishes that claim.
+Build a security-first, `no_std`, first-party Rust TLS and OpenPGP ecosystem
+through small, independently reviewable releases. The modern `brynja` facade
+reaches serious production readiness only at `1.0.0`; package presence,
+compilation, test count, or interoperability alone never establishes that
+claim.
 
 ## Non-Negotiable Constraints
 
@@ -21,8 +22,12 @@ test count, or interoperability alone never establishes that claim.
   First-party Rust intrinsics or inline assembly remain separately gated unsafe
   implementations; external assembly, objects, archives, and shared libraries
   are forbidden.
-- The core workspace admits no third-party runtime, build, development, fuzz,
-  test, or tooling crates in Cargo manifests. Brynja does not use `cargo-fuzz`
+- The core workspace admits no unreviewed external runtime, build, development,
+  fuzz, test, or tooling crates in Cargo manifests. v0.47.1 may admit an exact
+  first-party `base64-ng` package with default features disabled solely behind
+  bounded Base64, PEM, and OpenPGP armor boundaries, provided the reachable
+  path is allocation-free, `no_std`, native-code-free, non-cryptographic and
+  excluded from `brynja-fips-module`. Brynja does not use `cargo-fuzz`
   or `libfuzzer-sys`; pinned external process tools drive first-party harness
   binaries. Future downstream `brynja-rustls` and `brynja-tokio` companion
   packages may admit only the exact pure-Rust ecosystem interfaces they
@@ -83,6 +88,11 @@ brynja
 ├── optional brynja-quic-tls (TLS 1.3 handshake plus QUIC profile)
 ├── optional brynja-dtls (independent datagram state machine)
 ├── optional brynja-platform (downstream implementations only)
+├── future brynja-openpgp-core (packet, registry, resource, certificate and key models)
+├── future brynja-openpgp-armor (admitted Base64 boundary only)
+├── future brynja-openpgp (modern RFC 9580 Sans-I/O facade and engines)
+├── optional brynja-openpgp-legacy (deprecated read/decrypt/verify compatibility)
+│   └── future brynja-legacy-sha1 (v4 fingerprint-only; sole consumer)
 └── future brynja-sanitization (explicit downstream adapter only)
 
 future downstream companion integration workspaces (never brynja dependencies)

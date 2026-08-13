@@ -60,6 +60,7 @@ def expected_versions() -> list[str]:
         44: (1,),
         45: (1,),
         46: (1,),
+        47: (1,),
         57: (1,),
         58: (1, 2, 3),
         76: (1, 2),
@@ -80,9 +81,23 @@ def expected_versions() -> list[str]:
         140: (1,),
         146: (1,),
         151: (1, 2, 3, 4),
+        163: (1,),
+        164: (1,),
+        166: (1,),
+        167: (1,),
+        168: (1,),
+        169: (1, 2),
+        171: (1,),
+        172: (1,),
+        173: (1,),
+        174: (1,),
+        176: (1,),
+        177: (1,),
+        178: (1,),
+        179: (1, 2, 3),
     }
     versions = []
-    for number in range(1, 163):
+    for number in range(1, 186):
         versions.append(f"v0.{number}.0")
         versions.extend(
             f"v0.{number}.{patch}" for patch in patch_releases.get(number, ())

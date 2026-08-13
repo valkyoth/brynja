@@ -2,10 +2,11 @@
 
 Status: non-normative post-1.0 design plan; no versions assigned
 
-This document records a potential expansion of Brynja from a TLS-focused
-project into a broader first-party Rust hashing ecosystem after the serious
-production-ready TLS `1.0.0` release. It does not add an implementation claim,
-reserve crates.io names, authorize an algorithm, or change the v1 TLS scope.
+This document records a potential expansion of Brynja from its TLS and RFC
+9580 OpenPGP production scope into a broader first-party Rust hashing ecosystem
+after the serious production-ready `1.0.0` release. It does not add an
+implementation claim, reserve crates.io names, authorize an algorithm, or
+change the v1 secure-protocol scope.
 Actual versions, ordering, release trains, and publication selections will be
 assigned only after `v1.0.0`.
 
@@ -227,7 +228,7 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | MD6 | Research/legacy family; tree and keyed modes separated |
 | RadioGatún | Research family with word width and output profile explicit |
 | RIPEMD, RIPEMD-128/160/256/320 | `brynja-legacy-hash-ripemd`; variants never aliased |
-| SHA-1 | `brynja-legacy-hash-sha1`; compatibility only |
+| SHA-1 | Existing pre-1.0 `brynja-legacy-sha1` remains OpenPGP-v4-fingerprint-only; any post-1.0 generic compatibility API or new consumer requires a numbered expansion and fresh audit |
 | SHA-224/256/384/512 | `brynja-hash-sha2`; pre-1.0 SHA-256/384/512 cores are reused and SHA-224 is a post-1.0 extension |
 | SHA-3 | `brynja-hash-sha3`; pre-1.0 SHA3-256/512 core is reused and other named FIPS 202 instances follow post-1.0 |
 | Skein | Standalone family with state/output/tree parameters explicit |

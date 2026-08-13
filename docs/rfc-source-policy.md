@@ -113,8 +113,11 @@ manifest. Fifty residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
 explicit exclusions while assigning every one of the 763 surfaces left by the
 earlier bundles. The generated closure proves that all 127 locked authorities,
-all 231 roadmap rows, all 4,447 surfaces, and all 167 requirements have
-bidirectional ownership. Local rights, mutable NIST and IANA refresh rules,
+all 272 roadmap rows, all 4,447 current surfaces, and all 167 requirements have
+bidirectional ownership. The new OpenPGP rows are fenced from implementation
+until v0.163.0 authenticates their RFC, errata, registry, algorithm, and
+compression authority closure and generates the corresponding requirements
+and surfaces. Local rights, mutable NIST and IANA refresh rules,
 the resolved hybrid-source gate plus unavailable legacy and FIPS-validation
 authorities remain machine-readable records rather than capability claims.
 

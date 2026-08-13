@@ -26,12 +26,12 @@
 # brynja
 
 Brynja is a security-first, first-party Rust, `no_std` cryptography and
-secure-protocol ecosystem. Its first production goal remains a serious
-production-ready TLS implementation at `1.0.0`; its primitive boundaries are
-being designed so later standalone cryptographic families can reuse the exact
-same reviewed implementations. The core cryptographic and protocol graph uses
-only Brynja-owned Rust code; explicitly isolated companion adapters follow
-their separately documented dependency policy.
+secure-protocol ecosystem. Its first production goal is a serious
+production-ready TLS and RFC 9580 OpenPGP implementation at `1.0.0`; its
+primitive boundaries are designed so both protocol families and later
+standalone cryptographic families reuse the exact same reviewed
+implementations. Cryptography remains Brynja-owned Rust. Narrow encoding and
+companion-adapter exceptions follow explicit admission and isolation policy.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and not ready to
 > secure application traffic. Every version receives an immutable signed tag
@@ -42,11 +42,12 @@ their separately documented dependency policy.
 
 ## Project Direction
 
-The roadmap through `1.0.0` remains TLS-first. Standalone hashing does not
-expand or delay the v1 TLS claim. SHA-2, SHA-3, SHAKE, and HMAC are already
-required by TLS, PKI, and ML-KEM, so their planned implementation ownership now
-lives in small reusable family crates instead of private copies inside a
-protocol crate.
+The roadmap through `1.0.0` implements TLS first and then a separately bounded
+RFC 9580 OpenPGP family before the final candidate. Standalone hashing does not
+expand or delay that v1 protocol claim. SHA-2, SHA-3, SHAKE, and HMAC are
+already required by TLS, PKI, ML-KEM, and OpenPGP, so their planned
+implementation ownership lives in small reusable family crates instead of
+private copies inside a protocol crate.
 
 | Boundary | Responsibility |
 | --- | --- |
@@ -54,13 +55,22 @@ protocol crate.
 | `brynja-hash-sha2` / `brynja-hash-sha3` | Portable family implementations reused by standalone callers and Brynja protocols |
 | `brynja-mac-hmac` | Keyed HMAC construction with MAC-specific types and verification |
 | `brynja-crypto` | Provider contracts, algorithm policy and composition, AEADs, KDFs, RSA, ECC, and integration of exact primitive-family implementations |
-| `brynja` | TLS-first facade; a future hash convenience surface remains default-off and curated |
+| `brynja` | Modern secure-protocol facade; TLS and OpenPGP stay separately selectable and a future hash convenience surface remains default-off and curated |
 
 `brynja-crypto` therefore remains essential. It is the protocol-facing
 cryptographic substrate above the small leaf-family crates; those crates never
 depend on TLS or pull the complete crypto graph. This direction prevents both
 duplicate SHA implementations and a standalone hash user acquiring every
 Brynja algorithm.
+
+The final pre-1.0 phase adds `brynja-openpgp-core`,
+`brynja-openpgp-armor`, and `brynja-openpgp`. Packet framing, certificates,
+keys, signatures, encryption, compression, trust policy, and deprecated
+compatibility remain separate review boundaries. OpenPGP is outside the FIPS
+validated-module plan. Base64 is the one encoding algorithm Brynja does not
+plan to duplicate: v0.47.1 will audit the latest stable first-party
+`base64-ng` family and admit only an exact-pinned, allocation-free `no_std`
+edge suitable for PEM and OpenPGP armor.
 
 After `1.0.0`, Brynja may expand into separately selectable modern, legacy,
 utility, and research hashing families. Checksums and MACs remain distinct from
@@ -319,7 +329,11 @@ selected set in dependency order and publishes the facade last.
 - `brynja-tls` is an evergreen facade and one-pass router over independently
   versioned modern TLS engines; a new TLS generation does not redefine an
   existing engine package or automatically make its predecessor legacy.
-- Runtime and build dependencies are forbidden in the core workspace. Future
+- Unreviewed runtime and build dependencies are forbidden in the core
+  workspace. The only planned core encoding exception is an exact-pinned,
+  default-feature-disabled `base64-ng` edge confined to bounded Base64, PEM,
+  and OpenPGP armor after its v0.47.1 admission review; it never implements
+  cryptography or enters `brynja-fips-module`. Future
   separately selected `brynja-rustls` and `brynja-tokio` companion adapters may
   depend only on the exact pure-Rust ecosystem API they implement, in separate
   lockfiles and graphs that can never enter or be enabled by `brynja`.
@@ -403,6 +417,9 @@ certificate-bound operational-environment claim.
 | `brynja-tls13` / `brynja-tls13-handshake` | TLS 1.3 record and handshake engine | ❌ Not verified |
 | `brynja-quic-tls` | QUIC/TLS handshake integration | ❌ Not verified |
 | `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |
+| Future `brynja-openpgp-core` / `brynja-openpgp-armor` / `brynja-openpgp` | RFC 9580 packet, armor, certificate, key, signature, encryption, compression, and message processing | ❌ Not implemented or verified |
+| Future `brynja-openpgp-legacy` | Explicitly isolated deprecated OpenPGP read, decrypt, or verify compatibility | ❌ Not implemented or verified |
+| Future `brynja-legacy-sha1` | OpenPGP v4 fingerprint-only SHA-1 boundary | ❌ Not implemented or verified |
 | `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |
 | `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
@@ -439,6 +456,11 @@ formal proof, pentest, or release status.
 | `brynja-tls12` | Version-specific explicitly hardened TLS 1.2 engine | Foundation only |
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
+| Future `brynja-openpgp-core` | RFC 9580 packet, registry, resource, certificate, and key models | Planned from v0.163.0 |
+| Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.165.0 |
+| Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.180.0 |
+| Future `brynja-openpgp-legacy` | Optional deprecated-algorithm compatibility with no modern facade edge | Conditional and separately isolated |
+| Future `brynja-legacy-sha1` | RFC 9580 v4 fingerprint and key-ID derivation only | Planned at v0.169.2; only `brynja-openpgp-legacy` may depend on it |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
@@ -470,13 +492,13 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Kani verifier pairing | `cargo-kani 0.67.0` on Rust `1.90.0`; separate evidence only |
 | Default target | `no_std` |
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
-| Third-party crates | Forbidden in the core workspace and every Brynja facade, engine, crypto, legacy, bare-metal, and FIPS graph; future rustls/Tokio companion adapters own isolated exact API dependencies |
-| First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter with no feature or transitive package |
+| External crates | Rejected unless a numbered admission freezes an exact minimal graph; planned `base64-ng` use is encoding-only and future rustls/Tokio API dependencies remain isolated |
+| First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
 | Unsafe Rust | One v0.11 volatile-store block admitted in a private module; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
 | FIPS 140-3 status | Planned Level 1 software-module path; not validated |
-| Production readiness | Not before an exact reviewed `1.0.0-rc.N` candidate |
+| Production readiness | Not before an exact independently reviewed TLS and OpenPGP `1.0.0-rc.N` candidate |
 
 ## Rust Version Support
 

@@ -68,6 +68,28 @@ destruction effect, event schema, cryptographic algorithm, protocol engine,
 independent verification, or FIPS validation. A token completion is a trusted
 provider assertion, not proof that an external key was erased.
 
+## Planning Update
+
+The roadmap now adds RFC 9580 OpenPGP as a separately bounded final pre-1.0
+protocol phase. Thirty-five OpenPGP implementation and assurance stops run from
+v0.163.0 through v0.180.0, followed by integrated TLS/OpenPGP rehearsal, final
+audit, remediation, cumulative pentest, and production-candidate gates through
+v0.185.0. OpenPGP shares reviewed primitive crates but never TLS state, PKIX
+trust, deprecated algorithm fallback, implicit platform effects, or a FIPS
+approved-service claim.
+
+Version v0.47.1 now owns a future admission review for exact-pinned first-party
+`base64-ng` reuse. Brynja will not duplicate Base64, but the reachable PEM and
+OpenPGP armor path must remain allocation-free, `no_std`, feature-minimal,
+native-code-free, non-cryptographic, and outside `brynja-fips-module`.
+`base64-ng-openpgp` is not pre-admitted; it must first expose the required
+caller-buffer profile or Brynja will reuse only the core Base64 transforms.
+This planning change adds no v0.18.0 production dependency or runtime code.
+RFC 9580 v4 fingerprint SHA-1 is separately planned in
+`brynja-legacy-sha1`; only `brynja-openpgp-legacy` may depend on its
+fingerprint-specific API. It is not a general SHA-1 crate, and any future
+legacy-protocol consumer requires a new numbered expansion and audit.
+
 ## Release Process
 
 v0.18.0 is a tagged development milestone with no scheduled cumulative

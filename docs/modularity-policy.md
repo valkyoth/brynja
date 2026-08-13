@@ -41,6 +41,15 @@ callers with identical destruction guarantees; legacy code does not receive a
 separate weaker sanitizer. Any future need for `brynja-legacy-sanitization`
 requires its own numbered admission review.
 
+Base64 is an encoding boundary, not cryptography. v0.47.1 reviews the latest
+stable first-party `base64-ng` family and may admit only an exact-pinned,
+default-feature-disabled, allocation-free `no_std` edge with no unsafe, native
+code, build script, or transitive package. `base64-ng-openpgp` is admitted only
+if it offers that same caller-buffer profile; otherwise Brynja uses
+`base64-ng` transforms behind its own bounded PEM and OpenPGP armor framing.
+No admitted Base64 edge may enter primitive implementations,
+`brynja-fips-module`, or an unrelated protocol package.
+
 RFC 9850 key logging belongs only to a separately compiled, unpublished
 test-support artifact. No production crate, facade feature, default build,
 release archive, FIPS module, or downstream dependency path may contain its
@@ -57,6 +66,26 @@ by QUIC TLS. A future TLS generation receives its own version-named package and
 cannot alter an older engine in place. DTLS may reuse reviewed codecs,
 transcript, certificate, and key-schedule components but retains a distinct
 state machine, path identity, epochs, fragmentation, and retransmission.
+
+OpenPGP is a separate modern protocol family. `brynja-openpgp-core` owns RFC
+9580 packet, registry, resource, certificate and key models without platform
+effects. `brynja-openpgp-armor` owns only armor framing over the admitted
+Base64 boundary. `brynja-openpgp` owns modern Sans-I/O message and key-lifecycle
+engines and depends on exact reusable primitive packages; it never depends on
+TLS, PKI path validation, platform implementations, or a global trust store.
+Deprecated algorithms, when independently justified for read, decrypt, or
+verify interoperability, live in optional `brynja-openpgp-legacy`; it cannot
+enter the modern facade, defaults, FIPS artifacts, or generate weak material.
+The v4 fingerprint requirement is implemented in `brynja-legacy-sha1`, whose
+only admitted dependent and operation are `brynja-openpgp-legacy` and exact v4
+fingerprint/key-ID derivation. It exposes no generic digest or arbitrary-input
+API. TLS, PKIX, general hashing, `brynja`, and every FIPS graph are forbidden
+consumers; any later legacy-protocol use requires a numbered expansion, new
+API, graph review, cryptographic audit, and pentest rather than silently
+reusing the OpenPGP-only authority.
+OpenPGP structural and cryptographic validity never implies Web-of-Trust or
+application identity trust, and no package performs an implicit keyserver,
+WKD, DNS, filesystem, TOFU, or network operation.
 
 CPU acceleration follows an equally strict downstream boundary.
 Portable scalar references belong to the smallest semantic family. Before the

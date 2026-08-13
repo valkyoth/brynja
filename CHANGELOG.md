@@ -182,6 +182,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Security
 
+- Record the exceptional v0.17.0 FIPS-aware architecture assessment and green
+  repository-owner retest of exact signed remediation candidate
+  `bc83f44a9c8fdb710d03429b1669ee6c4449b054`, closing two High operation-only
+  approval and SSP-destruction-source findings with zero open findings. Retain
+  caller-session-scoped failure as a non-exploitable future constraint and
+  require a module-wide sibling-proof irreversible latch at v0.127.1 before
+  any executable or approved FIPS service exists.
 - Record the exceptional v0.16.0 pending-lifecycle assessment and final
   repository-owner PASS retest of exact signed third remediation candidate
   `f0557b8419b77129d1763e9469ae4e7deeffc2e7`, closing three High and two

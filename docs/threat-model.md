@@ -236,6 +236,11 @@ operational-environment, backend-feature, provider-derived SSP destruction,
 self-test and permanent-failure assumptions without implementing a service.
 Nonempty approved sets fail until exact service identities exist, and an
 operation-only indicator cannot authorize execution.
+Permanent failure is currently scoped to a caller-owned session. Because no
+service is approved or executable, constructing a sibling session is not a
+present bypass. v0.127.1 must introduce one module-wide irreversible latch
+shared by current and future sessions before any executable or approved FIPS
+service exists.
 Ordinary backend policy, opportunistic/std dispatch, and the sealed-provider
 placeholder cannot cross that boundary. The self-test runner is explicitly
 trusted; dishonest runner success remains an operating-boundary violation, not

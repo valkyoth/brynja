@@ -224,6 +224,13 @@ kernel, runtime detector, environment measurement, deterministic binary
 reproduction, SSP movement or erasure, CMVP submission, certificate,
 independent verification, or FIPS validation.
 
+Permanent failure is currently scoped to one caller-owned
+`FipsModuleSession`; sibling sessions over the same configuration are
+independent. This is not currently exploitable because every service is
+non-approved and no provider effect exists. Before executable or approved FIPS
+services exist, v0.127.1 must replace this with one module-wide irreversible
+failure latch that fresh sibling sessions cannot reset or bypass.
+
 v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
 opportunistic, required-accelerated, and validated-module policies; and

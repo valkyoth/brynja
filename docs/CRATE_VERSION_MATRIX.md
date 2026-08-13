@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.16.0 signed; v0.17.0 remediation complete and awaiting owner retest
+Status: v0.16.0 signed; v0.17.0 pentest PASS and awaiting green CI
 
 The `brynja` facade advances to `0.17.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published
@@ -49,9 +49,11 @@ Signed tag v0.16.0 contains that remediation and selected no publication. The
 v0.17.0 stage adds only inert FIPS-aware non-approved operation, build,
 environment, provider-derived SSP-destruction, self-test, permanent-failure and
 non-authorizing service-indicator contracts. Its exceptional assessment found
-two High design issues; both are locally remediated and await owner retest. It
-implements no module, service, algorithm or validation and selects no package
-publication.
+two High design issues; both are remediated, and repository-owner retest of
+exact signed candidate `bc83f44a9c8fdb710d03429b1669ee6c4449b054` passed
+with zero open findings. The report retains caller-session-scoped failure as a
+non-exploitable future constraint gated at v0.127.1. It implements no module,
+service, algorithm or validation and selects no package publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

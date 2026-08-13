@@ -1,6 +1,6 @@
 # Brynja v0.17.0 Development Milestone
 
-Status: remediation complete; awaiting repository-owner retest
+Status: pentest PASS; awaiting green GitHub and CodeQL
 
 Brynja v0.17.0 freezes an inert `no_std` FIPS-aware provider architecture in
 `brynja-core`. It advances only the `brynja` facade version, selects no
@@ -80,9 +80,16 @@ Configuration now rejects every nonempty approved set, and the operation-only
 output has been renamed and constrained to an informational service indicator
 that cannot authorize or execute provider work. SSP destruction duties now
 come directly from the provider contract, removing the second source of truth.
-The local remediation is green and awaits repository-owner retest. The
-permanent report is
+The repository owner retested exact signed remediation candidate
+`bc83f44a9c8fdb710d03429b1669ee6c4449b054` and reported a green result with
+zero open findings. The permanent `PASS`/`PASS` report is
 [`security/pentest/v0.17.0.md`](../security/pentest/v0.17.0.md).
+
+The assessment also records a non-exploitable future constraint: permanent
+failure is currently scoped to one caller-owned session. Before executable or
+approved FIPS services exist, v0.127.1 must introduce one irreversible
+module-wide latch shared by every current and future session, so a newly
+constructed sibling session cannot bypass failure.
 
 This milestone does not implement a FIPS cryptographic module, cryptographic
 algorithm, provider effect, self-test algorithm, service execution, CPU kernel,
@@ -93,8 +100,8 @@ self-test runner remain security-critical trusted code.
 
 ## Release Process
 
-v0.17.0 is now an exceptionally assessed development milestone. A green owner
-retest, a committed `PASS`/`PASS` report, the complete local gate, green GitHub
-and CodeQL, and explicit authorization are mandatory before its signed tag. It
-selects no crates.io publication. Every change after v0.15.0 remains in the
-scheduled cumulative v0.20.0 assessment.
+v0.17.0 is an exceptionally assessed development milestone. Its green owner
+retest and committed `PASS`/`PASS` report are complete. The complete local
+gate, green GitHub and CodeQL, and explicit authorization remain mandatory
+before its signed tag. It selects no crates.io publication. Every change after
+v0.15.0 remains in the scheduled cumulative v0.20.0 assessment.

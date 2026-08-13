@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.16.0 signed; v0.17.0 remediation complete and awaiting owner retest
+Status: v0.16.0 signed; v0.17.0 pentest PASS and awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -670,8 +670,12 @@ boundary. The milestone adds no module, algorithm, provider effect, self-test
 algorithm, CPU kernel, environment measurement, deterministic binary
 reproduction, SSP effect, independent verification, CMVP submission,
 certificate, or FIPS validation. An exceptional assessment found and locally
-remediated two High design issues; repository-owner retest is pending. v0.17.0
-selects no crates.io publication.
+remediated two High design issues. Repository-owner retest of exact signed
+candidate `bc83f44a9c8fdb710d03429b1669ee6c4449b054` passed with zero open
+findings. Permanent failure remains caller-session-scoped and is currently
+non-exploitable because no service is approved or executable; v0.127.1 now
+explicitly requires a module-wide irreversible latch that sibling sessions
+cannot bypass before that changes. v0.17.0 selects no crates.io publication.
 
 The package was held from crates.io until the v0.15.0 public checkpoint.
 Because this is the first production adapter around external unsafe

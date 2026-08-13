@@ -3355,7 +3355,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Implement required pairwise-consistency, conditional, on-demand, firmware or software load, and continuous health-test coordination; serialize concurrent test requests, destroy affected SSPs, block prohibited services, and enter an irreversible module error state exactly for FIPS-defined integrity, self-test, and catastrophic failures.",
+      "scope": "Implement required pairwise-consistency, conditional, on-demand, firmware or software load, and continuous health-test coordination; serialize concurrent test requests, destroy affected SSPs, block prohibited services, and enter one module-wide irreversible error state shared by every current or future session exactly for FIPS-defined integrity, self-test, and catastrophic failures, so constructing a sibling session can never clear or bypass failure.",
       "source_ids": [],
       "title": "Conditional Self-Tests And Permanent Failure State",
       "version": "0.127.1"

@@ -76,8 +76,8 @@ The current `0.17.0` development milestone freezes an inert FIPS-aware provider
 architecture in `brynja-core`. Broad operation-category sets classify every
 installed-provider capability explicitly non-approved. Any nonempty approved
 set fails closed until exact algorithm, parameter, backend, and usage identities
-span the provider request and result path. A module configuration binds nonzero deterministic-build digests,
-one exact operational-environment identity, a module-owned scalar or
+span the provider request and result path. A module configuration binds nonzero
+deterministic-build digests, one exact operational-environment identity, a module-owned scalar or
 accelerated backend with its complete feature bundle, and explicit SSP flow;
 complete-copy destruction duties come directly from the installed provider.
 The ordinary validated-module
@@ -85,7 +85,8 @@ placeholder, opportunistic `BackendPolicy`, runtime std detection, and the std
 CPU adapter cannot enter this boundary.
 
 An explicitly trusted self-test runner receives the exact integrity and
-algorithm-known-answer plan. Service indicators remain unavailable until it succeeds;
+algorithm-known-answer plan. Service indicators remain unavailable until it
+succeeds;
 failure, reentry, interruption, unwind, or a later catastrophic event latches
 the caller-owned module session failed. Non-cloneable thread-bound service
 indicators report one operation category, disposition, provider, and health
@@ -94,6 +95,12 @@ execute provider work. This implements no cryptographic
 module, algorithm, provider effect, self-test algorithm, CPU kernel, SSP
 transport or erasure, deterministic binary reproduction, CMVP submission,
 certificate, independent verification, or FIPS validation.
+
+Permanent failure is currently caller-session-scoped. That has no executable
+bypass today because every service is non-approved and no provider effect
+exists. Before executable or approved FIPS services exist, v0.127.1 must make
+the irreversible failure latch module-wide so a fresh sibling session cannot
+reset or bypass it.
 
 Version `0.15.0` added non-interchangeable typed wall and monotonic clocks
 to `brynja-core`. Signed Unix wall values support checked arithmetic and
@@ -250,8 +257,9 @@ Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.16.0`. The current `0.17.0` FIPS-aware architecture milestone selects no
 crates.io publication. Its exceptional assessment found two High design
-issues; remediation is locally green and awaits the repository-owner retest
-before hosted gates and signed-tag authorization.
+issues; remediation and repository-owner retest are green. Local release gates
+must pass with the committed report before hosted gates and signed-tag
+authorization.
 The published dependency is:
 
 ```toml

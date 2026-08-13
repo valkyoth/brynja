@@ -1503,7 +1503,7 @@ Exit criteria:
 
 ### v0.17.0 - FIPS-Aware Provider Architecture
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Freeze broad operation classification with every current capability explicitly non-approved and every nonempty approved set rejected until exact service identities span execution; add self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, non-authorizing service indicators, provider-derived SSP destruction duties, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.
 
@@ -1563,7 +1563,9 @@ Exit criteria:
   assumptions are exact; ordinary dispatch cannot alter the boundary; and no
   module, algorithm, self-test implementation, service execution, build
   reproduction, SSP effect, provider effect, independent verification,
-  certificate, CMVP submission, or FIPS validation is implied;
+  certificate, CMVP submission, or FIPS validation is implied; current
+  permanent failure remains caller-session-scoped, and v0.127.1 must make it
+  module-wide and sibling-proof before any executable or approved FIPS service;
 - the exceptional assessment's two High findings are remediated, the exact
   signed remediation candidate receives a green repository-owner retest, and
   the permanent report records `PASS`/`PASS` with zero open findings;
@@ -5813,7 +5815,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement required pairwise-consistency, conditional, on-demand, firmware or software load, and continuous health-test coordination; serialize concurrent test requests, destroy affected SSPs, block prohibited services, and enter an irreversible module error state exactly for FIPS-defined integrity, self-test, and catastrophic failures.
+Plan scope: Implement required pairwise-consistency, conditional, on-demand, firmware or software load, and continuous health-test coordination; serialize concurrent test requests, destroy affected SSPs, block prohibited services, and enter one module-wide irreversible error state shared by every current or future session exactly for FIPS-defined integrity, self-test, and catastrophic failures, so constructing a sibling session can never clear or bypass failure.
 
 Goal: complete the **Conditional Self-Tests And Permanent Failure State** implementation stop without admitting or
 claiming adjacent capability.
@@ -5824,6 +5826,10 @@ Deliverables:
   load, and health-test transition with explicit concurrency semantics;
 - freeze irreversible error-state entry, SSP destruction, allowed status and
   zeroization services, recovery requirements, and connection/module separation;
+- replace caller-session-only failure with one module-owned latch shared by
+  every current and future session before any executable or approved FIPS
+  service exists; prevent construction of a sibling session from resetting,
+  shadowing, or bypassing the latched failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -5833,13 +5839,17 @@ Verification:
   affected outputs and SSPs never escape and prohibited services stay blocked;
 - distinguish ordinary invalid inputs and approved-profile connection failures
   from integrity, self-test, entropy, and catastrophic module failures;
+- create concurrent and sequential sibling sessions before and after every
+  permanent-failure path and prove all observe the same irreversible latch,
+  including newly constructed sessions and attempted service indications;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - conditional testing and the permanent module error state are complete,
-  irreversible where required, and never misused for connection policy;
+  irreversible, shared by all sessions, impossible to bypass through fresh
+  session construction, and never misused for connection policy;
 - `v0.127.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.128.0 - FIPS Observational Security Event Integration

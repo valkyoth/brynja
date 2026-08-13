@@ -6,7 +6,7 @@ cumulative_milestones = ["0.16.0", "0.17.0"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "The v0.17.0 FIPS-aware architecture received an exceptional repository-owner assessment; two High operation-only approval and SSP-destruction-source findings are remediated and awaiting retest before tagging."
+exception_reason = "The v0.17.0 exceptional repository-owner assessment found two High operation-only approval and SSP-destruction-source issues; both are remediated, exact signed candidate bc83f44a9c8fdb710d03429b1669ee6c4449b054 passed retest with zero open findings, and the signed tag awaits green hosted checks."
 
 [crates."brynja"]
 previous_version = "0.16.0"

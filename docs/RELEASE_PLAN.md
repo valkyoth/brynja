@@ -1503,7 +1503,7 @@ Exit criteria:
 
 ### v0.17.0 - FIPS-Aware Provider Architecture
 
-Status: remediation complete; awaiting repository-owner retest
+Status: awaiting pentest
 
 Plan scope: Freeze broad operation classification with every current capability explicitly non-approved and every nonempty approved set rejected until exact service identities span execution; add self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, non-authorizing service indicators, provider-derived SSP destruction duties, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.
 

@@ -12,13 +12,17 @@ SOURCES = (
     Path("crates/brynja-core/src/pending.rs"),
     Path("crates/brynja-core/src/pending/request.rs"),
     Path("crates/brynja-core/src/pending/effect.rs"),
+    Path("crates/brynja-core/src/pending/outcome.rs"),
     Path("crates/brynja-core/src/pending/lifecycle.rs"),
+    Path("crates/brynja-core/src/provider_request.rs"),
 )
 EXPECTED_SHA256 = {
-    SOURCES[0]: "78d22ca8e73ab58b24c4e759c13f50265e07d785960056dc58b147a8714d8167",
-    SOURCES[1]: "70530c74014d8b434930ed55d10e65be63e73ce03fcd983165e80fe683b812dc",
-    SOURCES[2]: "fd9b6e779a183d3afa1857e391fd61c01b2606754a7bc2beec926006a33176e8",
-    SOURCES[3]: "fbdbfc7052f08f442c9f0dad4e8bafeaab89dfab4d75b1004a9a9cc2606465be",
+    SOURCES[0]: "8dda7cb837a50de38de081892e6aa1391c643ae4cad8c6c40e9eb585b0bd41dc",
+    SOURCES[1]: "cd770f4d2af3bd02b321f7ad8bde2976804b81c56df1909ac546222b18669836",
+    SOURCES[2]: "e13779384b51b121c875d9295420a8f17c8c1fee750ab0ef9bdb9b84311eaaac",
+    SOURCES[3]: "0aef23d94769122abff337e7da7ac2c73a3706cc2a4d7bcf02b031b7453bc0ce",
+    SOURCES[4]: "a8ce1c54cd87b4722c91b4d25e83c7fce19d055e72f3a20081245736e9be71ab",
+    SOURCES[5]: "28ec8d61126287aa8e7e7d65c014f1f3a942070f0736812928494f69e3278381",
 }
 
 
@@ -91,34 +95,61 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     effect = sources[SOURCES[2]][1]
     for required in (
         "pub struct PendingEffectRequest",
+        "pub struct PendingWorkPermit",
         "pub enum PendingBegin<State>",
-        "pub enum PendingStep<State>",
-        "pub enum PendingCancelStep<State>",
+        "pub enum PendingStep",
+        "pub enum PendingCancelStep",
         "pub struct PendingDestructionToken",
         "pub trait PendingProvider",
+        "fn provider_handle(&self) -> ProviderHandle<'_>;",
+        "fn begin_cost(",
+        "fn resume_cost(",
+        "fn cancel_cost(",
         "pub const fn complete(self)",
         "pub const fn fail(self, kind: PendingDestructionFailureKind)",
         "fn handle_drop_failure(&mut self, failure: PendingDestructionFailure);",
     ):
         require_once(effect, required, "pending provider effect")
-    for variant in (
+    if effect.count("state: &mut Self::State") != 3:
+        fail("pending provider state must remain borrowed across three effects")
+    if effect.count("permit: PendingWorkPermit") != 3:
+        fail("pending effect methods must consume three lifecycle work permits")
+    transition_code = effect.split("pub enum PendingStep", 1)[1].split(
+        "/// Why pending", 1
+    )[0]
+    for forbidden in (
         "Complete(State)",
         "Active(State)",
         "Retry(State, PendingRetryReason)",
         "Backpressure(State, PendingBackpressure)",
-        "Failed(State, ProviderFailureKind)",
+        "state: Self::State",
     ):
-        if effect.count(variant) < 1:
-            fail(f"pending state ownership drift: {variant}")
+        if forbidden in transition_code:
+            fail(f"pending state escaped lifecycle ownership: {forbidden}")
     if re.search(
         r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct PendingDestructionToken",
         effect,
     ):
         fail("pending destruction token gained duplication or formatting")
 
-    lifecycle = sources[SOURCES[3]][1]
+    outcome = sources[SOURCES[3]][1]
+    for required in (
+        "ProviderMismatch",
+        "WorkExhausted",
+        "InvalidWorkCharge",
+    ):
+        require_once(outcome, required, "pending failure outcome")
+
+    lifecycle = sources[SOURCES[4]][1]
     for required in (
         "pub struct PendingOperation",
+        "request.is_bound_to(&effect.provider_handle())",
+        "self.request.is_bound_to(&self.effect.provider_handle())",
+        "effect.begin_cost(&cost_request)",
+        "self.effect.resume_cost(state, &cost_request)",
+        "self.effect.cancel_cost(state, &cost_request)",
+        "PendingWorkPermit::new(units)",
+        "self.request.charge_work(units)",
         "if !request.begin_attempt()",
         "if !self.begin_attempt()",
         "self.record_backpressure(reason)",
@@ -126,11 +157,15 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "self.destroy(PendingDestructionCause::Cancellation)",
         "self.destroy(PendingDestructionCause::Drop)",
         "self.effect.handle_drop_failure(failure);",
-        "let Some(state) = self.state.take()",
+        "let Some(state) = self.state.as_mut()",
         "PendingDestructionToken::new(",
     ):
         if lifecycle.count(required) < 1:
             fail(f"pending lifecycle transition drift: {required}")
+    if lifecycle.count("request.is_bound_to(&effect.provider_handle())") != 2:
+        fail("pending provider identity binding drift")
+    if lifecycle.count("self.request.charge_work(units)") != 2:
+        fail("pending authoritative work charging drift")
     if re.search(
         r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct PendingOperation",
         lifecycle,
@@ -138,6 +173,19 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         fail("pending operation gained duplication or formatting")
     if "pub state:" in lifecycle or "pub effect:" in lifecycle:
         fail("pending operation exposed provider state")
+    if ".resume(state, request, PendingWorkPermit::new(units))" not in lifecycle:
+        fail("pending resume lost lifecycle-owned state")
+    if ".cancel(state, request, PendingWorkPermit::new(units))" not in lifecycle:
+        fail("pending cancellation lost lifecycle-owned state")
+
+    provider_request = sources[SOURCES[5]][1]
+    require_once(
+        provider_request,
+        "pub(crate) const fn charge_work(&mut self, units: u64)",
+        "authoritative work meter",
+    )
+    if "pub const fn charge_work" in provider_request:
+        fail("provider work meter became caller-controlled")
 
 
 def validate_hashes(sources: dict[Path, tuple[str, str]]) -> None:

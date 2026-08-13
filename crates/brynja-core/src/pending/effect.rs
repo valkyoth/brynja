@@ -1,6 +1,8 @@
 //! Downstream pending-provider effect and cleanup boundary.
 
-use crate::{DestructionTargets, ProviderFailureKind, ProviderFrame, ProviderOperation};
+use crate::{
+    DestructionTargets, ProviderFailureKind, ProviderFrame, ProviderHandle, ProviderOperation,
+};
 
 use super::{PendingRequestKind, PendingResource};
 
@@ -85,6 +87,35 @@ impl<'request, 'data> PendingEffectRequest<'request, 'data> {
     }
 }
 
+/// Non-forgeable authority for one provider-derived unit charge.
+///
+/// The lifecycle creates this value only after the provider has derived a
+/// bounded cost and the authoritative request meter has accepted that cost.
+///
+/// ```compile_fail
+/// use brynja_core::PendingWorkPermit;
+///
+/// fn forge() {
+///     let _ = PendingWorkPermit { units: 1 };
+/// }
+/// ```
+#[must_use = "charged work authority must be consumed by its provider step"]
+pub struct PendingWorkPermit {
+    units: u64,
+}
+
+impl PendingWorkPermit {
+    pub(crate) const fn new(units: u64) -> Self {
+        Self { units }
+    }
+
+    /// Returns the exact provider-derived units charged before this step.
+    #[must_use]
+    pub const fn units(&self) -> u64 {
+        self.units
+    }
+}
+
 /// Provider result when first creating continuation state.
 #[must_use = "begin results preserve ownership or terminate explicitly"]
 pub enum PendingBegin<State> {
@@ -98,32 +129,32 @@ pub enum PendingBegin<State> {
     Failed(ProviderFailureKind),
 }
 
-/// One resumable provider transition. Every variant returns state ownership.
+/// One resumable provider transition over lifecycle-owned state.
 #[must_use = "pending steps must be consumed by the lifecycle"]
-pub enum PendingStep<State> {
-    /// Work completed and the provider state must now be destroyed.
-    Complete(State),
+pub enum PendingStep {
+    /// Work completed; the borrowed provider state must now be destroyed.
+    Complete,
     /// Work made progress and remains pending.
-    Active(State),
+    Active,
     /// Work remains retryable.
-    Retry(State, PendingRetryReason),
+    Retry(PendingRetryReason),
     /// Work remains pending behind explicit backpressure.
-    Backpressure(State, PendingBackpressure),
-    /// Work failed and the provider state must now be destroyed.
-    Failed(State, ProviderFailureKind),
+    Backpressure(PendingBackpressure),
+    /// Work failed; the borrowed provider state must now be destroyed.
+    Failed(ProviderFailureKind),
 }
 
-/// One cancellation transition. Every variant returns state ownership.
+/// One cancellation transition over lifecycle-owned state.
 #[must_use = "cancellation steps must be consumed by the lifecycle"]
-pub enum PendingCancelStep<State> {
-    /// Cancellation is durable and provider state must now be destroyed.
-    Canceled(State),
+pub enum PendingCancelStep {
+    /// Cancellation is durable; provider state must now be destroyed.
+    Canceled,
     /// Cancellation must be retried.
-    Retry(State, PendingRetryReason),
+    Retry(PendingRetryReason),
     /// Cancellation is subject to explicit backpressure.
-    Backpressure(State, PendingBackpressure),
-    /// Cancellation failed and provider state must now be destroyed.
-    Failed(State, ProviderFailureKind),
+    Backpressure(PendingBackpressure),
+    /// Cancellation failed; provider state must now be destroyed.
+    Failed(ProviderFailureKind),
 }
 
 /// Why pending provider state must be destroyed.
@@ -285,34 +316,70 @@ pub enum PendingDestructionOutcome {
 
 /// Downstream effect boundary for one provider's pending continuation state.
 ///
-/// Every resumable or cancellation variant returns ownership of `State`.
-/// Returning `PendingBegin::Retry`, `Backpressure`, or `Failed` asserts that no
-/// provider state, external key operation, or accelerator handle was created.
+/// `provider_handle` is an immutable identity assertion for this effect and
+/// must never change during its borrow. Cost methods must be bounded and
+/// effect-free. Resume, cancellation, and destruction mutate state borrowed
+/// from the lifecycle, so unwinding cannot move state beyond [`Drop`].
+/// Returning `PendingBegin::Retry`, `Backpressure`, or `Failed` asserts that
+/// no provider state, external key operation, or accelerator handle was
+/// created.
 pub trait PendingProvider {
     /// Opaque provider-owned continuation state.
     type State;
 
-    /// Creates continuation state or reports a no-state result.
-    fn begin(&mut self, request: PendingEffectRequest<'_, '_>) -> PendingBegin<Self::State>;
+    /// Returns the exact installed provider implemented by this effect.
+    fn provider_handle(&self) -> ProviderHandle<'_>;
 
-    /// Performs one bounded resume transition.
+    /// Derives the bounded, effect-free charge for creating state.
+    fn begin_cost(
+        &self,
+        request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<u64, ProviderFailureKind>;
+
+    /// Creates continuation state after its exact charge was accepted.
+    fn begin(
+        &mut self,
+        request: PendingEffectRequest<'_, '_>,
+        permit: PendingWorkPermit,
+    ) -> PendingBegin<Self::State>;
+
+    /// Derives the bounded, effect-free charge for one resume transition.
+    fn resume_cost(
+        &self,
+        state: &Self::State,
+        request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<u64, ProviderFailureKind>;
+
+    /// Performs one bounded, precharged resume transition.
     fn resume(
         &mut self,
-        state: Self::State,
+        state: &mut Self::State,
         request: PendingEffectRequest<'_, '_>,
-    ) -> PendingStep<Self::State>;
+        permit: PendingWorkPermit,
+    ) -> PendingStep;
 
-    /// Requests durable cancellation.
+    /// Derives the bounded, effect-free charge for one cancellation attempt.
+    fn cancel_cost(
+        &self,
+        state: &Self::State,
+        request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<u64, ProviderFailureKind>;
+
+    /// Requests durable cancellation after its exact charge was accepted.
     fn cancel(
         &mut self,
-        state: Self::State,
+        state: &mut Self::State,
         request: PendingEffectRequest<'_, '_>,
-    ) -> PendingCancelStep<Self::State>;
+        permit: PendingWorkPermit,
+    ) -> PendingCancelStep;
 
-    /// Destroys continuation state and consumes exact transition authority.
+    /// Destroys borrowed continuation state and consumes exact authority.
+    ///
+    /// Borrowed ownership ensures an unwind leaves state available to the
+    /// lifecycle's `Drop` handling for another mandatory cleanup attempt.
     fn destroy(
         &mut self,
-        state: Self::State,
+        state: &mut Self::State,
         token: PendingDestructionToken,
     ) -> PendingDestructionOutcome;
 

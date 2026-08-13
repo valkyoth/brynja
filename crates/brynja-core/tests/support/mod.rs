@@ -1,11 +1,14 @@
 //! Deterministic pending-provider fixture shared by lifecycle tests.
 
+#![allow(dead_code)]
+
 use brynja_core::{
     DestructionTargets, PendingBackpressure, PendingBegin, PendingCancelStep,
     PendingDestructionCause, PendingDestructionFailure, PendingDestructionFailureKind,
     PendingDestructionOutcome, PendingDestructionToken, PendingEffectRequest, PendingLimits,
-    PendingProvider, PendingRetryReason, PendingStep, ProviderCapabilities, ProviderFailureKind,
-    ProviderFrame, ProviderInstallation, ProviderOperation, ResourceBudget, WorkBudget,
+    PendingProvider, PendingRetryReason, PendingStep, PendingWorkPermit, ProviderCapabilities,
+    ProviderFailureKind, ProviderFrame, ProviderHandle, ProviderInstallation, ProviderOperation,
+    ResourceBudget, WorkBudget,
 };
 
 #[derive(Clone, Copy)]
@@ -21,7 +24,8 @@ pub(crate) struct State {
     cursor: usize,
 }
 
-pub(crate) struct DeterministicProvider {
+pub(crate) struct DeterministicProvider<'provider> {
+    provider: &'provider brynja_core::InstalledProvider,
     begin: Option<PendingBegin<State>>,
     resume: &'static [Step],
     cancel: &'static [Step],
@@ -29,11 +33,20 @@ pub(crate) struct DeterministicProvider {
     pub(crate) destroyed: usize,
     pub(crate) drop_failures: usize,
     pub(crate) last_cause: Option<PendingDestructionCause>,
+    pub(crate) step_cost: u64,
+    pub(crate) charged_units: u64,
+    pub(crate) panic_resume: bool,
+    pub(crate) panic_cancel: bool,
 }
 
-impl DeterministicProvider {
-    pub(crate) fn active(resume: &'static [Step], cancel: &'static [Step]) -> Self {
+impl<'provider> DeterministicProvider<'provider> {
+    pub(crate) fn active(
+        provider: &'provider brynja_core::InstalledProvider,
+        resume: &'static [Step],
+        cancel: &'static [Step],
+    ) -> Self {
         Self {
+            provider,
             begin: Some(PendingBegin::Active(State { cursor: 0 })),
             resume,
             cancel,
@@ -41,11 +54,19 @@ impl DeterministicProvider {
             destroyed: 0,
             drop_failures: 0,
             last_cause: None,
+            step_cost: 1,
+            charged_units: 0,
+            panic_resume: false,
+            panic_cancel: false,
         }
     }
 
-    pub(crate) fn begin_once(begin: PendingBegin<State>) -> Self {
+    pub(crate) fn begin_once(
+        provider: &'provider brynja_core::InstalledProvider,
+        begin: PendingBegin<State>,
+    ) -> Self {
         Self {
+            provider,
             begin: Some(begin),
             resume: &[],
             cancel: &[],
@@ -53,64 +74,107 @@ impl DeterministicProvider {
             destroyed: 0,
             drop_failures: 0,
             last_cause: None,
+            step_cost: 1,
+            charged_units: 0,
+            panic_resume: false,
+            panic_cancel: false,
         }
     }
 
-    fn step(state: State, script: &[Step]) -> (State, Step) {
+    fn step(state: &mut State, script: &[Step]) -> Step {
         let step = script.get(state.cursor).copied().unwrap_or(Step::Failed);
-        let cursor = state.cursor.checked_add(1).unwrap_or(state.cursor);
-        (State { cursor }, step)
+        state.cursor = state.cursor.checked_add(1).unwrap_or(state.cursor);
+        step
     }
 }
 
-impl PendingProvider for DeterministicProvider {
+impl PendingProvider for DeterministicProvider<'_> {
     type State = State;
 
-    fn begin(&mut self, request: PendingEffectRequest<'_, '_>) -> PendingBegin<Self::State> {
+    fn provider_handle(&self) -> ProviderHandle<'_> {
+        self.provider.handle()
+    }
+
+    fn begin_cost(
+        &self,
+        _request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<u64, ProviderFailureKind> {
+        Ok(self.step_cost)
+    }
+
+    fn begin(
+        &mut self,
+        request: PendingEffectRequest<'_, '_>,
+        permit: PendingWorkPermit,
+    ) -> PendingBegin<Self::State> {
         assert!(request.attempt() >= 1);
+        assert_eq!(permit.units(), self.step_cost);
+        self.charged_units = self.charged_units.saturating_add(permit.units());
         self.begin
             .take()
             .unwrap_or(PendingBegin::Failed(ProviderFailureKind::Failed))
     }
 
+    fn resume_cost(
+        &self,
+        _state: &Self::State,
+        _request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<u64, ProviderFailureKind> {
+        Ok(self.step_cost)
+    }
+
     fn resume(
         &mut self,
-        state: Self::State,
+        state: &mut Self::State,
         request: PendingEffectRequest<'_, '_>,
-    ) -> PendingStep<Self::State> {
+        permit: PendingWorkPermit,
+    ) -> PendingStep {
         assert!(request.attempt() >= 2);
-        let (state, step) = Self::step(state, self.resume);
+        assert_eq!(permit.units(), self.step_cost);
+        self.charged_units = self.charged_units.saturating_add(permit.units());
+        assert!(!self.panic_resume, "injected resume panic");
+        let step = Self::step(state, self.resume);
         match step {
-            Step::Active => PendingStep::Active(state),
-            Step::Retry => PendingStep::Retry(state, PendingRetryReason::NotReady),
-            Step::Backpressure => PendingStep::Backpressure(state, PendingBackpressure::DeviceBusy),
-            Step::Complete => PendingStep::Complete(state),
-            Step::Failed => PendingStep::Failed(state, ProviderFailureKind::Failed),
+            Step::Active => PendingStep::Active,
+            Step::Retry => PendingStep::Retry(PendingRetryReason::NotReady),
+            Step::Backpressure => PendingStep::Backpressure(PendingBackpressure::DeviceBusy),
+            Step::Complete => PendingStep::Complete,
+            Step::Failed => PendingStep::Failed(ProviderFailureKind::Failed),
         }
+    }
+
+    fn cancel_cost(
+        &self,
+        _state: &Self::State,
+        _request: &PendingEffectRequest<'_, '_>,
+    ) -> Result<u64, ProviderFailureKind> {
+        Ok(self.step_cost)
     }
 
     fn cancel(
         &mut self,
-        state: Self::State,
+        state: &mut Self::State,
         request: PendingEffectRequest<'_, '_>,
-    ) -> PendingCancelStep<Self::State> {
+        permit: PendingWorkPermit,
+    ) -> PendingCancelStep {
         assert!(request.attempt() >= 2);
-        let (state, step) = Self::step(state, self.cancel);
+        assert_eq!(permit.units(), self.step_cost);
+        self.charged_units = self.charged_units.saturating_add(permit.units());
+        assert!(!self.panic_cancel, "injected cancel panic");
+        let step = Self::step(state, self.cancel);
         match step {
             Step::Active | Step::Retry => {
-                PendingCancelStep::Retry(state, PendingRetryReason::CancellationInProgress)
+                PendingCancelStep::Retry(PendingRetryReason::CancellationInProgress)
             }
-            Step::Backpressure => {
-                PendingCancelStep::Backpressure(state, PendingBackpressure::QueueFull)
-            }
-            Step::Complete => PendingCancelStep::Canceled(state),
-            Step::Failed => PendingCancelStep::Failed(state, ProviderFailureKind::Failed),
+            Step::Backpressure => PendingCancelStep::Backpressure(PendingBackpressure::QueueFull),
+            Step::Complete => PendingCancelStep::Canceled,
+            Step::Failed => PendingCancelStep::Failed(ProviderFailureKind::Failed),
         }
     }
 
     fn destroy(
         &mut self,
-        _state: Self::State,
+        _state: &mut Self::State,
         token: PendingDestructionToken,
     ) -> PendingDestructionOutcome {
         self.destroyed = self.destroyed.checked_add(1).unwrap_or(self.destroyed);

@@ -76,7 +76,7 @@ def test() -> None:
         reject(root, "destruction token gained duplication")
         copy_fixture(root)
 
-        lifecycle = root / pending_contract_policy.SOURCES[3]
+        lifecycle = root / pending_contract_policy.SOURCES[4]
         replace(
             lifecycle,
             "self.destroy(PendingDestructionCause::Drop)",
@@ -85,7 +85,7 @@ def test() -> None:
         reject(root, "pending lifecycle transition drift")
         copy_fixture(root)
 
-        lifecycle = root / pending_contract_policy.SOURCES[3]
+        lifecycle = root / pending_contract_policy.SOURCES[4]
         replace(
             lifecycle,
             "self.effect.handle_drop_failure(failure);",
@@ -94,7 +94,7 @@ def test() -> None:
         reject(root, "pending lifecycle transition drift")
         copy_fixture(root)
 
-        lifecycle = root / pending_contract_policy.SOURCES[3]
+        lifecycle = root / pending_contract_policy.SOURCES[4]
         replace(
             lifecycle,
             "pub struct PendingOperation",
@@ -108,9 +108,46 @@ def test() -> None:
         reject(root, "forbidden boundary")
         copy_fixture(root)
 
-        lifecycle = root / pending_contract_policy.SOURCES[3]
+        lifecycle = root / pending_contract_policy.SOURCES[4]
         lifecycle.write_text(lifecycle.read_text(encoding="utf-8") + "\n" * 100, encoding="utf-8")
         reject(root, "exceeds 500 lines")
+        copy_fixture(root)
+
+        lifecycle = root / pending_contract_policy.SOURCES[4]
+        replace(
+            lifecycle,
+            "request.is_bound_to(&effect.provider_handle())",
+            "true",
+        )
+        reject(root, "provider identity binding drift")
+        copy_fixture(root)
+
+        effect = root / pending_contract_policy.SOURCES[2]
+        replace(effect, "state: &mut Self::State", "state: Self::State")
+        reject(root, "state must remain borrowed")
+        copy_fixture(root)
+
+        effect = root / pending_contract_policy.SOURCES[2]
+        replace(effect, "fn resume_cost(", "fn omitted_resume_cost(")
+        reject(root, "pending provider effect drift")
+        copy_fixture(root)
+
+        lifecycle = root / pending_contract_policy.SOURCES[4]
+        replace(
+            lifecycle,
+            "self.request.charge_work(units)",
+            "Ok::<(), ()>(())",
+        )
+        reject(root, "authoritative work charging drift")
+        copy_fixture(root)
+
+        provider_request = root / pending_contract_policy.SOURCES[5]
+        replace(
+            provider_request,
+            "pub(crate) const fn charge_work",
+            "pub const fn charge_work",
+        )
+        reject(root, "authoritative work meter drift")
         copy_fixture(root)
 
         module = root / pending_contract_policy.SOURCES[0]
@@ -120,4 +157,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("pending policy rejects eleven admission, lifecycle, cleanup, low-level, size, and hash regressions")
+    print("pending policy rejects sixteen admission, identity, work, unwind, cleanup, low-level, size, and hash regressions")

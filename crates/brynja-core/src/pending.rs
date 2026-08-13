@@ -6,17 +6,19 @@
 
 mod effect;
 mod lifecycle;
+mod outcome;
 mod request;
 
 pub use effect::{
     PendingBackpressure, PendingBegin, PendingCancelStep, PendingDestructionCause,
     PendingDestructionComplete, PendingDestructionFailure, PendingDestructionFailureKind,
     PendingDestructionOutcome, PendingDestructionToken, PendingEffectRequest, PendingProvider,
-    PendingRetryReason, PendingStep,
+    PendingRetryReason, PendingStep, PendingWorkPermit,
 };
-pub use lifecycle::{
-    PendingCancellation, PendingCompletion, PendingFailure, PendingFailureKind, PendingOperation,
-    PendingStart, PendingTransition,
+pub use lifecycle::PendingOperation;
+pub use outcome::{
+    PendingCancellation, PendingCompletion, PendingFailure, PendingFailureKind, PendingStart,
+    PendingTransition,
 };
 pub use request::{
     PendingLimitError, PendingLimits, PendingRequest, PendingRequestError, PendingRequestKind,

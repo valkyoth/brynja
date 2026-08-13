@@ -1422,7 +1422,7 @@ Exit criteria:
 
 ### v0.16.0 - Pending Operations And Accelerator Lifecycle
 
-Status: awaiting green CI
+Status: awaiting pentest
 
 Plan scope: Define resumable provider tokens, certificate, signature and accelerator requests, cancellation, retry semantics, backpressure, and failure-atomic state transitions; external-key and accelerator-handle destruction completes only through a mandatory single-consumption token transition, never through an informational event.
 
@@ -1438,8 +1438,15 @@ Deliverables:
   backpressure-response limits, preserving the same request on no-state begin
   retry or backpressure and failing closed at every checked counter boundary;
 - define a downstream `PendingProvider` effect whose begin result creates
-  either no state or exactly one opaque state, and whose resume and cancel
-  variants always return ownership of that state until a terminal transition;
+  either no state or exactly one opaque state; bind that effect to the exact
+  installed-provider handle that authorized the request and reject substitution
+  before begin or any later provider effect;
+- require bounded, effect-free provider cost derivation before begin, resume,
+  or cancellation; debit the authoritative monotonic meter and issue one
+  non-forgeable, nonzero work permit before the corresponding effect;
+- keep opaque continuation state owned by `PendingOperation` while resume,
+  cancellation, and destruction callbacks borrow it, ensuring recoverable
+  unwinding leaves state available to mandatory `Drop` cleanup;
 - make completion, cancellation, provider failure, exhaustion, and `Drop`
   synchronously consume provider state through one non-cloneable destruction
   token covering frozen local, external-store, accelerator, cache, and DMA
@@ -1457,25 +1464,33 @@ Deliverables:
 Verification:
 
 - run exact-kind, wrong-direction, missing-capability, missing-duty, zero-limit,
-  no-state begin, retry, backpressure, active, complete, cancel, provider-fail,
+  provider-substitution, provider-derived charge, zero-charge, work-exhaustion,
+  resume/cancel unwind, no-state begin, retry, backpressure, active, complete, cancel, provider-fail,
   attempt-exhaustion, backpressure-exhaustion, destruction-fail, `Drop`, and
   input-preservation tests with a deterministic provider;
-- compile-fail affine request, operation, and destruction-token duplication;
-  enforce checked counters, state-returning effect variants, exact single-
+- compile-fail affine request, operation, destruction-token duplication, and
+  work-permit forgery; enforce checked counters, exact provider identity,
+  borrowed callback state, lifecycle-only work charging, exact single-
   consumption methods, terminal `Drop` handling, reviewed hashes, private
   state, the 500-line ceiling, and no std/alloc/unsafe/FFI/platform access with
-  eleven broken policy fixtures;
+  sixteen broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - certificate, signature, and accelerator requests cannot cross kinds; retry
-  and backpressure cannot duplicate state or bypass caller bounds; every state-
-  owning terminal path attempts exactly one authoritative destruction
-  transition; and no provider implementation, certificate validation,
+  and backpressure cannot duplicate state or bypass caller bounds; an
+  authorizing provider cannot be substituted; effect work cannot run without a
+  provider-derived accepted charge; recoverable callback panic cannot evade
+  cleanup; every state-owning terminal path attempts authoritative destruction;
+  and no provider implementation, certificate validation,
   signature, accelerator, platform effect, protocol engine, independent
   verification, or FIPS claim is implied;
+- the exceptional repository-owner retest reports all three findings closed
+  with zero open findings before the final report-bearing candidate may proceed
+  through green GitHub and CodeQL to explicit signed-tag authorization; no
+  crates.io publication is selected.
 - `v0.16.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.17.0 - FIPS-Aware Provider Architecture

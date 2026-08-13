@@ -15,9 +15,13 @@ Keep a Changelog and Semantic Versioning.
   cancellation, failure, exhaustion, and `Drop` transitions whose authoritative
   completion consumes one non-cloneable destruction token covering all frozen
   external-store, accelerator, cache, DMA, and other provider duties.
-- Add seven deterministic lifecycle tests, three compile-fail ownership tests,
-  a SHA-256-bound four-file policy, and eleven admission, bound, cleanup,
-  low-level, source-size, and drift fixtures.
+- Bind every pending effect to the exact authorizing provider; retain state
+  through unwinding callbacks; and charge provider-derived nonzero work before
+  issuing a non-forgeable permit for each effectful transition.
+- Add eleven deterministic and adversarial lifecycle tests, four compile-fail
+  ownership/forgery tests, a SHA-256-bound six-file policy, and sixteen
+  admission, identity, work, unwind, cleanup, low-level, source-size, and drift
+  fixtures.
 - Add canonical checked durations, signed Unix wall time, inclusive validity
   ranges, opaque generation-bound monotonic instants, purpose-bound deadlines,
   explicit unavailable-time behavior, and permanent rollback failure.

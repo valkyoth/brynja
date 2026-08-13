@@ -96,6 +96,7 @@ pub use pending::{
     PendingEffectRequest, PendingFailure, PendingFailureKind, PendingLimitError, PendingLimits,
     PendingOperation, PendingProvider, PendingRequest, PendingRequestError, PendingRequestKind,
     PendingResource, PendingRetryReason, PendingStart, PendingStep, PendingTransition,
+    PendingWorkPermit,
 };
 pub use provider::{ProviderFailure, ProviderFailureKind, ProviderOperation};
 pub use provider_capability::{

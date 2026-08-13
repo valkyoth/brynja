@@ -176,18 +176,22 @@ requires the same installed provider's poll and cancel capabilities plus
 applicable external-store or accelerator destruction duties. Immutable checked
 limits bound begin, resume, cancellation, retry, and backpressure. A downstream
 `PendingProvider` either creates no state or exactly one opaque state; every
-later effect variant returns that state to the lifecycle. Completion,
-cancellation, provider failure, exhaustion, and `Drop` synchronously consume
-state with one non-cloneable destruction token that carries all frozen local,
+effect is bound to the exact opaque provider that authorized the request.
+Provider-derived, effect-free nonzero costs are charged by the lifecycle before
+it issues a non-forgeable work permit. Resume, cancellation, and destruction
+borrow lifecycle-owned state so recoverable unwinding cannot move it beyond
+`Drop`. Completion, cancellation, provider failure, exhaustion, and `Drop`
+synchronously destroy state with one non-cloneable destruction token that carries all frozen local,
 external-store, accelerator, cache, and DMA duties. Completion and cancellation
 remain unavailable until that token becomes a complete result, and failed
 cleanup reached through `Drop` invokes the mandatory durable/fail-stop hook.
 
-Seven deterministic tests, three compile-fail examples, reviewed hashes, and
-eleven broken fixtures enforce exact kinds and directions, missing capability
-and duty rejection, unchanged input, bounded retries/backpressure, state
-ownership, cancellation, failure, exhaustion, authoritative destruction, and
-drop handling. This upstream contract implements no provider, path validator,
+Eleven deterministic and adversarial tests, four compile-fail examples,
+reviewed hashes, and sixteen broken fixtures enforce exact kinds and
+directions, provider identity, provider-derived work charging, unwind-safe
+state ownership, missing capability and duty rejection, unchanged input,
+bounded retries/backpressure, cancellation, failure, exhaustion, authoritative
+destruction, and drop handling. This upstream contract implements no provider, path validator,
 signature, external key store, accelerator, platform effect, cryptographic
 algorithm, protocol engine, independent verification, or FIPS validation.
 

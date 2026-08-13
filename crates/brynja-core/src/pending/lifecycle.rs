@@ -1,157 +1,14 @@
 //! Failure-atomic ownership of one pending provider operation.
 
-use crate::{ProviderFailureKind, ProviderOperation};
+use crate::ProviderOperation;
 
 use super::{
-    PendingBackpressure, PendingBegin, PendingCancelStep, PendingDestructionCause,
-    PendingDestructionFailure, PendingDestructionFailureKind, PendingDestructionOutcome,
-    PendingDestructionToken, PendingEffectRequest, PendingProvider, PendingRequest,
-    PendingRequestKind, PendingResource, PendingRetryReason, PendingStep,
+    PendingBackpressure, PendingBegin, PendingCancelStep, PendingCancellation, PendingCompletion,
+    PendingDestructionCause, PendingDestructionFailure, PendingDestructionFailureKind,
+    PendingDestructionOutcome, PendingDestructionToken, PendingEffectRequest, PendingFailure,
+    PendingFailureKind, PendingProvider, PendingRequest, PendingRequestKind, PendingStart,
+    PendingStep, PendingTransition, PendingWorkPermit,
 };
-
-/// A terminal pending-operation failure class.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[non_exhaustive]
-pub enum PendingFailureKind {
-    /// The downstream provider rejected or failed the effect.
-    Provider(ProviderFailureKind),
-    /// The caller-selected resume bound was exhausted.
-    EffectAttemptsExhausted,
-    /// The caller-selected backpressure bound was exhausted.
-    BackpressureExhausted,
-    /// Mandatory provider-state destruction failed.
-    Destruction(PendingDestructionFailureKind),
-}
-
-/// A terminal secret-free pending-operation failure.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[must_use = "pending operation failure is terminal"]
-pub struct PendingFailure {
-    kind: PendingFailureKind,
-    request_kind: PendingRequestKind,
-    operation: ProviderOperation,
-    resource: PendingResource,
-}
-
-impl PendingFailure {
-    /// Returns the terminal failure category.
-    #[must_use]
-    pub const fn kind(self) -> PendingFailureKind {
-        self.kind
-    }
-
-    /// Returns the exact pending boundary that failed.
-    #[must_use]
-    pub const fn request_kind(self) -> PendingRequestKind {
-        self.request_kind
-    }
-
-    /// Returns the original exact provider operation.
-    #[must_use]
-    pub const fn operation(self) -> ProviderOperation {
-        self.operation
-    }
-
-    /// Returns the provider resource covered by terminal cleanup.
-    #[must_use]
-    pub const fn resource(self) -> PendingResource {
-        self.resource
-    }
-}
-
-/// Authoritative completion after provider state was destroyed.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[must_use = "completion must govern the caller's next state"]
-pub struct PendingCompletion {
-    request_kind: PendingRequestKind,
-    operation: ProviderOperation,
-    resource: PendingResource,
-}
-
-impl PendingCompletion {
-    /// Returns the completed pending boundary.
-    #[must_use]
-    pub const fn request_kind(self) -> PendingRequestKind {
-        self.request_kind
-    }
-
-    /// Returns the completed provider operation.
-    #[must_use]
-    pub const fn operation(self) -> ProviderOperation {
-        self.operation
-    }
-
-    /// Returns the resource whose cleanup completed.
-    #[must_use]
-    pub const fn resource(self) -> PendingResource {
-        self.resource
-    }
-}
-
-/// Authoritative cancellation after provider state was destroyed.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[must_use = "cancellation must govern the caller's next state"]
-pub struct PendingCancellation {
-    request_kind: PendingRequestKind,
-    operation: ProviderOperation,
-    resource: PendingResource,
-}
-
-impl PendingCancellation {
-    /// Returns the canceled pending boundary.
-    #[must_use]
-    pub const fn request_kind(self) -> PendingRequestKind {
-        self.request_kind
-    }
-
-    /// Returns the canceled provider operation.
-    #[must_use]
-    pub const fn operation(self) -> ProviderOperation {
-        self.operation
-    }
-
-    /// Returns the resource whose cleanup completed.
-    #[must_use]
-    pub const fn resource(self) -> PendingResource {
-        self.resource
-    }
-}
-
-/// Result of attempting to create provider continuation state.
-#[must_use = "pending start ownership must be handled"]
-pub enum PendingStart<'provider, 'data, 'effect, Effect: PendingProvider> {
-    /// Provider continuation state is active.
-    Active(PendingOperation<'provider, 'data, 'effect, Effect>),
-    /// No state was created; the same request may be retried.
-    Retry(PendingRequest<'provider, 'data>, PendingRetryReason),
-    /// No state was created; the same request is backpressured.
-    Backpressure(PendingRequest<'provider, 'data>, PendingBackpressure),
-    /// No state was created and the request failed.
-    Failed(PendingFailure),
-}
-
-/// Result of one resume or cancellation transition.
-#[must_use = "pending transition must be handled"]
-pub enum PendingTransition<'provider, 'data, 'effect, Effect: PendingProvider> {
-    /// Work remains active after progress.
-    Active(PendingOperation<'provider, 'data, 'effect, Effect>),
-    /// Work remains active and may be retried.
-    Retry(
-        PendingOperation<'provider, 'data, 'effect, Effect>,
-        PendingRetryReason,
-    ),
-    /// Work remains active behind bounded backpressure.
-    Backpressure(
-        PendingOperation<'provider, 'data, 'effect, Effect>,
-        PendingBackpressure,
-    ),
-    /// Work and mandatory provider-state destruction completed.
-    Complete(PendingCompletion),
-    /// Cancellation and mandatory provider-state destruction completed.
-    Canceled(PendingCancellation),
-    /// The lifecycle is terminal.
-    Failed(PendingFailure),
-}
 
 /// Affine ownership of one exact pending provider operation.
 ///
@@ -184,10 +41,50 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
         mut request: PendingRequest<'provider, 'data>,
         effect: &'effect mut Effect,
     ) -> PendingStart<'provider, 'data, 'effect, Effect> {
+        if !request.is_bound_to(&effect.provider_handle()) {
+            return PendingStart::Failed(failure_from_request(
+                &request,
+                PendingFailureKind::ProviderMismatch,
+            ));
+        }
         if !request.begin_attempt() {
             return PendingStart::Failed(failure_from_request(
                 &request,
                 PendingFailureKind::EffectAttemptsExhausted,
+            ));
+        }
+        let cost_request = PendingEffectRequest::new(
+            request.kind(),
+            request.operation(),
+            request.frame(),
+            request.attempts(),
+            request.remaining_work(),
+        );
+        let units = match effect.begin_cost(&cost_request) {
+            Ok(units) => units,
+            Err(kind) => {
+                return PendingStart::Failed(failure_from_request(
+                    &request,
+                    PendingFailureKind::Provider(kind),
+                ));
+            }
+        };
+        if units == 0 {
+            return PendingStart::Failed(failure_from_request(
+                &request,
+                PendingFailureKind::InvalidWorkCharge,
+            ));
+        }
+        if !request.is_bound_to(&effect.provider_handle()) {
+            return PendingStart::Failed(failure_from_request(
+                &request,
+                PendingFailureKind::ProviderMismatch,
+            ));
+        }
+        if request.charge_work(units).is_err() {
+            return PendingStart::Failed(failure_from_request(
+                &request,
+                PendingFailureKind::WorkExhausted,
             ));
         }
         let effect_request = PendingEffectRequest::new(
@@ -197,7 +94,7 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
             request.attempts(),
             request.remaining_work(),
         );
-        match effect.begin(effect_request) {
+        match effect.begin(effect_request, PendingWorkPermit::new(units)) {
             PendingBegin::Active(state) => {
                 let attempts = request.attempts();
                 let backpressure = request.backpressure();
@@ -251,22 +148,57 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
         self.backpressure
     }
 
-    /// Charges work before the next expensive provider transition.
-    pub const fn charge_work(&mut self, units: u64) -> Result<(), crate::ProviderRequestError> {
-        self.request.charge_work(units)
-    }
-
     /// Performs one bounded resume transition.
     pub fn resume(mut self) -> PendingTransition<'provider, 'data, 'effect, Effect> {
+        if !self.identity_matches() {
+            return self.finish_failure(
+                PendingFailureKind::ProviderMismatch,
+                PendingDestructionCause::ProviderFailure,
+            );
+        }
         if !self.begin_attempt() {
             return self.finish_failure(
                 PendingFailureKind::EffectAttemptsExhausted,
                 PendingDestructionCause::Exhaustion,
             );
         }
-        let Some(state) = self.state.take() else {
-            return self.invariant_failure();
+        let cost_request = PendingEffectRequest::new(
+            self.request.kind(),
+            self.request.operation(),
+            self.request.frame(),
+            self.attempts,
+            self.request.remaining_work(),
+        );
+        let units = match self.state.as_ref() {
+            Some(state) => match self.effect.resume_cost(state, &cost_request) {
+                Ok(units) => units,
+                Err(kind) => {
+                    return self.finish_failure(
+                        PendingFailureKind::Provider(kind),
+                        PendingDestructionCause::ProviderFailure,
+                    );
+                }
+            },
+            None => return self.invariant_failure(),
         };
+        if units == 0 {
+            return self.finish_failure(
+                PendingFailureKind::InvalidWorkCharge,
+                PendingDestructionCause::ProviderFailure,
+            );
+        }
+        if !self.identity_matches() {
+            return self.finish_failure(
+                PendingFailureKind::ProviderMismatch,
+                PendingDestructionCause::ProviderFailure,
+            );
+        }
+        if self.request.charge_work(units).is_err() {
+            return self.finish_failure(
+                PendingFailureKind::WorkExhausted,
+                PendingDestructionCause::Exhaustion,
+            );
+        }
         let request = PendingEffectRequest::new(
             self.request.kind(),
             self.request.operation(),
@@ -274,44 +206,75 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
             self.attempts,
             self.request.remaining_work(),
         );
-        match self.effect.resume(state, request) {
-            PendingStep::Complete(state) => {
-                self.state = Some(state);
-                self.finish_complete()
-            }
-            PendingStep::Active(state) => {
-                self.state = Some(state);
-                PendingTransition::Active(self)
-            }
-            PendingStep::Retry(state, reason) => {
-                self.state = Some(state);
-                PendingTransition::Retry(self, reason)
-            }
-            PendingStep::Backpressure(state, reason) => {
-                self.state = Some(state);
-                self.record_backpressure(reason)
-            }
-            PendingStep::Failed(state, kind) => {
-                self.state = Some(state);
-                self.finish_failure(
-                    PendingFailureKind::Provider(kind),
-                    PendingDestructionCause::ProviderFailure,
-                )
-            }
+        let Some(state) = self.state.as_mut() else {
+            return self.invariant_failure();
+        };
+        match self
+            .effect
+            .resume(state, request, PendingWorkPermit::new(units))
+        {
+            PendingStep::Complete => self.finish_complete(),
+            PendingStep::Active => PendingTransition::Active(self),
+            PendingStep::Retry(reason) => PendingTransition::Retry(self, reason),
+            PendingStep::Backpressure(reason) => self.record_backpressure(reason),
+            PendingStep::Failed(kind) => self.finish_failure(
+                PendingFailureKind::Provider(kind),
+                PendingDestructionCause::ProviderFailure,
+            ),
         }
     }
 
     /// Requests cancellation and retains ownership until it is durable.
     pub fn cancel(mut self) -> PendingTransition<'provider, 'data, 'effect, Effect> {
+        if !self.identity_matches() {
+            return self.finish_failure(
+                PendingFailureKind::ProviderMismatch,
+                PendingDestructionCause::ProviderFailure,
+            );
+        }
         if !self.begin_attempt() {
             return self.finish_failure(
                 PendingFailureKind::EffectAttemptsExhausted,
                 PendingDestructionCause::Exhaustion,
             );
         }
-        let Some(state) = self.state.take() else {
-            return self.invariant_failure();
+        let cost_request = PendingEffectRequest::new(
+            self.request.kind(),
+            self.request.operation(),
+            self.request.frame(),
+            self.attempts,
+            self.request.remaining_work(),
+        );
+        let units = match self.state.as_ref() {
+            Some(state) => match self.effect.cancel_cost(state, &cost_request) {
+                Ok(units) => units,
+                Err(kind) => {
+                    return self.finish_failure(
+                        PendingFailureKind::Provider(kind),
+                        PendingDestructionCause::ProviderFailure,
+                    );
+                }
+            },
+            None => return self.invariant_failure(),
         };
+        if units == 0 {
+            return self.finish_failure(
+                PendingFailureKind::InvalidWorkCharge,
+                PendingDestructionCause::ProviderFailure,
+            );
+        }
+        if !self.identity_matches() {
+            return self.finish_failure(
+                PendingFailureKind::ProviderMismatch,
+                PendingDestructionCause::ProviderFailure,
+            );
+        }
+        if self.request.charge_work(units).is_err() {
+            return self.finish_failure(
+                PendingFailureKind::WorkExhausted,
+                PendingDestructionCause::Exhaustion,
+            );
+        }
         let request = PendingEffectRequest::new(
             self.request.kind(),
             self.request.operation(),
@@ -319,27 +282,25 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
             self.attempts,
             self.request.remaining_work(),
         );
-        match self.effect.cancel(state, request) {
-            PendingCancelStep::Canceled(state) => {
-                self.state = Some(state);
-                self.finish_canceled()
-            }
-            PendingCancelStep::Retry(state, reason) => {
-                self.state = Some(state);
-                PendingTransition::Retry(self, reason)
-            }
-            PendingCancelStep::Backpressure(state, reason) => {
-                self.state = Some(state);
-                self.record_backpressure(reason)
-            }
-            PendingCancelStep::Failed(state, kind) => {
-                self.state = Some(state);
-                self.finish_failure(
-                    PendingFailureKind::Provider(kind),
-                    PendingDestructionCause::ProviderFailure,
-                )
-            }
+        let Some(state) = self.state.as_mut() else {
+            return self.invariant_failure();
+        };
+        match self
+            .effect
+            .cancel(state, request, PendingWorkPermit::new(units))
+        {
+            PendingCancelStep::Canceled => self.finish_canceled(),
+            PendingCancelStep::Retry(reason) => PendingTransition::Retry(self, reason),
+            PendingCancelStep::Backpressure(reason) => self.record_backpressure(reason),
+            PendingCancelStep::Failed(kind) => self.finish_failure(
+                PendingFailureKind::Provider(kind),
+                PendingDestructionCause::ProviderFailure,
+            ),
         }
+    }
+
+    fn identity_matches(&self) -> bool {
+        self.request.is_bound_to(&self.effect.provider_handle())
     }
 
     fn begin_attempt(&mut self) -> bool {
@@ -412,7 +373,7 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
     }
 
     fn destroy(&mut self, cause: PendingDestructionCause) -> Result<(), PendingDestructionFailure> {
-        let Some(state) = self.state.take() else {
+        let Some(state) = self.state.as_mut() else {
             return Ok(());
         };
         let token = PendingDestructionToken::new(
@@ -421,7 +382,10 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
             cause,
         );
         match self.effect.destroy(state, token) {
-            PendingDestructionOutcome::Complete(_) => Ok(()),
+            PendingDestructionOutcome::Complete(_) => {
+                let _destroyed = self.state.take();
+                Ok(())
+            }
             PendingDestructionOutcome::Failed(failure) => Err(failure),
         }
     }

@@ -1,8 +1,8 @@
 //! Typed admission of provider requests into the pending lifecycle.
 
 use crate::{
-    DestructionTarget, DestructionTargets, ProviderFrame, ProviderOperation, ProviderRequest,
-    ProviderRequestError, ResourceBudget,
+    DestructionTarget, DestructionTargets, ProviderFrame, ProviderHandle, ProviderOperation,
+    ProviderRequest, ProviderRequestError, ResourceBudget,
 };
 
 /// The exact asynchronous boundary requested by protocol code.
@@ -231,9 +231,12 @@ impl<'provider, 'data> PendingRequest<'provider, 'data> {
         self.request.remaining_work()
     }
 
-    /// Charges work before an expensive provider step.
-    pub const fn charge_work(&mut self, units: u64) -> Result<(), ProviderRequestError> {
+    pub(crate) const fn charge_work(&mut self, units: u64) -> Result<(), ProviderRequestError> {
         self.request.charge_work(units)
+    }
+
+    pub(crate) fn is_bound_to(&self, handle: &ProviderHandle<'_>) -> bool {
+        self.request.is_bound_to(handle)
     }
 
     pub(crate) const fn limits(&self) -> PendingLimits {

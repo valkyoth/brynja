@@ -76,9 +76,13 @@ The current `0.16.0` development milestone adds an affine pending-operation
 lifecycle to `brynja-core`. Exact certificate-path, external-signature, and
 accelerator-eligible requests require the same provider's poll, cancellation,
 and applicable destruction duties. Checked caller limits bound every effect
-attempt and backpressure response. Every state-owning result returns opaque
-state to the lifecycle, and completion or cancellation becomes authoritative
-only after a non-cloneable token is consumed to assert external-key,
+attempt and backpressure response. The effect must prove its exact opaque
+provider identity before begin and every later transition. Provider-derived,
+effect-free nonzero costs are charged before the lifecycle issues a
+non-forgeable work permit. Resume and cancellation only borrow lifecycle-owned
+state, so an unwind leaves it available for mandatory `Drop` cleanup.
+Completion or cancellation becomes authoritative only after a non-cloneable
+token is consumed to assert external-key,
 accelerator, cache, DMA, and other declared cleanup. Provider failure,
 exhaustion, and `Drop` use the same cleanup path. No provider effect,
 certificate validation, signature, accelerator implementation, protocol
@@ -238,7 +242,8 @@ an independent pentest.
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint and signed tag are `0.15.0`. The current `0.16.0`
 pending-operation milestone selects no crates.io publication and awaits its
-complete local and hosted gates before explicit signed-tag authorization.
+repository-owner security retest, complete local and hosted gates, and explicit
+signed-tag authorization.
 The published dependency is:
 
 ```toml

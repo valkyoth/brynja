@@ -184,12 +184,7 @@ impl<'provider, 'data> ProviderRequest<'provider, 'data> {
         self.remaining_work
     }
 
-    /// Charges provider-derived work before the corresponding expensive step.
-    ///
-    /// The meter can only decrease. An overcharge fails without changing its
-    /// remaining value. A later trusted effect boundary must derive and charge
-    /// actual work; application-supplied estimates are never accepted.
-    pub const fn charge_work(&mut self, units: u64) -> Result<(), ProviderRequestError> {
+    pub(crate) const fn charge_work(&mut self, units: u64) -> Result<(), ProviderRequestError> {
         match self.remaining_work.checked_sub(units) {
             Some(remaining) => {
                 self.remaining_work = remaining;

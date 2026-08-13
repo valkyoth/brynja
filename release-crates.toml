@@ -5,8 +5,8 @@ baseline = "0.15.0"
 cumulative_milestones = ["0.16.0"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "The v0.16.0 pending-operation boundary received an exceptional repository-owner assessment; two High provider-confusion/unwind-cleanup findings and one Medium work-accounting finding are remediated and awaiting retest before tagging."
 
 [crates."brynja"]
 previous_version = "0.15.0"

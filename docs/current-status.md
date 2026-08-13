@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.15.0 published; v0.16.0 awaiting green CI
+Status: v0.15.0 published; v0.16.0 remediation awaiting retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -627,10 +627,13 @@ published.
 Version 0.16.0 implements the pending-operation lifecycle. Certificate-path,
 external-signature, and accelerator requests require exact operation, poll,
 cancel, and applicable destruction capabilities. Checked limits bound every
-effect call and backpressure response. Begin creates no state or one opaque
-state; all subsequent variants return ownership until completion,
-cancellation, provider failure, exhaustion, or `Drop` consumes it through one
-mandatory destruction token. Completion and cancellation are unavailable
+effect call and backpressure response. The effect must match the exact
+authorizing provider. Provider-derived nonzero costs are charged before a
+non-forgeable work permit is issued, and resume/cancel/destruction borrow state
+owned by the lifecycle so recoverable unwinding still reaches `Drop` cleanup.
+Begin creates no state or one opaque state; completion, cancellation, provider
+failure, exhaustion, or `Drop` destroys it through mandatory destruction
+authority. Completion and cancellation are unavailable
 until cleanup reports complete; failed `Drop` cleanup reaches the mandatory
 durable/fail-stop handler. This is an upstream contract only and implements no
 provider, key store, accelerator, certificate validator, signature,

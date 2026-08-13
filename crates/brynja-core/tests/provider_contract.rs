@@ -221,25 +221,12 @@ fn request_limits_are_exact_and_fail_before_any_effect() {
     let context = [0xa5; 4];
     let exact = prepare(&provider, ProviderOperation::Hash, &primary, &context, 8);
     assert!(exact.is_ok());
-    if let Ok(mut request) = exact {
+    if let Ok(request) = exact {
         assert_eq!(request.frame().primary(), primary);
         assert_eq!(request.frame().context(), context);
         assert_eq!(request.frame().output_capacity(), 8);
         assert_eq!(request.remaining_work(), 12);
         assert_eq!(request.resources().limit(ResourceDomain::InputBytes), 16);
-        assert!(request.charge_work(5).is_ok());
-        assert_eq!(request.remaining_work(), 7);
-        let overcharge = request.charge_work(8);
-        match overcharge {
-            Err(ProviderRequestError::WorkExhausted(error)) => {
-                assert_eq!(error.resource(), ResourceKind::Work);
-                assert_eq!(error.phase(), ExhaustionPhase::Provider);
-            }
-            Ok(()) | Err(_) => assert!(core::hint::black_box(false)),
-        }
-        assert_eq!(request.remaining_work(), 7);
-        assert!(request.charge_work(7).is_ok());
-        assert_eq!(request.remaining_work(), 0);
     }
     assert_eq!(primary, [0x5a; 12]);
     assert_eq!(context, [0xa5; 4]);

@@ -99,23 +99,26 @@ fn begin_retry_and_backpressure_return_the_same_affine_request() {
         limits(3, 1),
     )
     .unwrap_or_else(|_| unreachable!());
-    let mut retry = DeterministicProvider::begin_once(PendingBegin::Retry(
-        PendingRetryReason::TransientFailure,
-    ));
+    let mut retry = DeterministicProvider::begin_once(
+        &provider,
+        PendingBegin::Retry(PendingRetryReason::TransientFailure),
+    );
     let request = match PendingOperation::begin(request, &mut retry) {
         PendingStart::Retry(request, PendingRetryReason::TransientFailure) => request,
         _ => unreachable!(),
     };
-    let mut blocked = DeterministicProvider::begin_once(PendingBegin::Backpressure(
-        PendingBackpressure::DeviceBusy,
-    ));
+    let mut blocked = DeterministicProvider::begin_once(
+        &provider,
+        PendingBegin::Backpressure(PendingBackpressure::DeviceBusy),
+    );
     let request = match PendingOperation::begin(request, &mut blocked) {
         PendingStart::Backpressure(request, PendingBackpressure::DeviceBusy) => request,
         _ => unreachable!(),
     };
-    let mut blocked_again = DeterministicProvider::begin_once(PendingBegin::Backpressure(
-        PendingBackpressure::DeviceBusy,
-    ));
+    let mut blocked_again = DeterministicProvider::begin_once(
+        &provider,
+        PendingBegin::Backpressure(PendingBackpressure::DeviceBusy),
+    );
     assert!(matches!(
         PendingOperation::begin(request, &mut blocked_again),
         PendingStart::Failed(failure)
@@ -138,6 +141,7 @@ fn resume_is_deterministic_bounded_and_destroys_exactly_once() {
     )
     .unwrap_or_else(|_| unreachable!());
     let mut effect = DeterministicProvider::active(
+        &provider,
         &[
             Step::Active,
             Step::Retry,
@@ -186,8 +190,11 @@ fn cancellation_retries_then_completes_authoritatively() {
         limits(4, 2),
     )
     .unwrap_or_else(|_| unreachable!());
-    let mut effect =
-        DeterministicProvider::active(&[], &[Step::Retry, Step::Backpressure, Step::Complete]);
+    let mut effect = DeterministicProvider::active(
+        &provider,
+        &[],
+        &[Step::Retry, Step::Backpressure, Step::Complete],
+    );
     let operation = match PendingOperation::begin(request, &mut effect) {
         PendingStart::Active(operation) => operation,
         _ => unreachable!(),
@@ -231,7 +238,7 @@ fn exhaustion_failure_and_drop_all_run_terminal_cleanup() {
         .unwrap_or_else(|_| unreachable!())
     };
 
-    let mut exhaustion = DeterministicProvider::active(&[Step::Retry], &[]);
+    let mut exhaustion = DeterministicProvider::active(&provider, &[Step::Retry], &[]);
     let operation = match PendingOperation::begin(make(), &mut exhaustion) {
         PendingStart::Active(operation) => operation,
         _ => unreachable!(),
@@ -251,7 +258,7 @@ fn exhaustion_failure_and_drop_all_run_terminal_cleanup() {
         Some(PendingDestructionCause::Exhaustion)
     );
 
-    let mut failure = DeterministicProvider::active(&[Step::Failed], &[]);
+    let mut failure = DeterministicProvider::active(&provider, &[Step::Failed], &[]);
     let operation = match PendingOperation::begin(make(), &mut failure) {
         PendingStart::Active(operation) => operation,
         _ => unreachable!(),
@@ -267,7 +274,7 @@ fn exhaustion_failure_and_drop_all_run_terminal_cleanup() {
         Some(PendingDestructionCause::ProviderFailure)
     );
 
-    let mut dropped = DeterministicProvider::active(&[], &[]);
+    let mut dropped = DeterministicProvider::active(&provider, &[], &[]);
     {
         let operation = match PendingOperation::begin(make(), &mut dropped) {
             PendingStart::Active(operation) => operation,
@@ -294,7 +301,7 @@ fn destruction_failure_overrides_success_and_drop_is_reported() {
         )
         .unwrap_or_else(|_| unreachable!())
     };
-    let mut explicit = DeterministicProvider::active(&[Step::Complete], &[]);
+    let mut explicit = DeterministicProvider::active(&provider, &[Step::Complete], &[]);
     explicit.destroy_failure = Some(PendingDestructionFailureKind::ExternalKey);
     let operation = match PendingOperation::begin(make(), &mut explicit) {
         PendingStart::Active(operation) => operation,
@@ -308,17 +315,18 @@ fn destruction_failure_overrides_success_and_drop_is_reported() {
                     PendingDestructionFailureKind::ExternalKey
                 )
     ));
-    assert_eq!(explicit.destroyed, 1);
+    assert_eq!(explicit.destroyed, 2);
+    assert_eq!(explicit.drop_failures, 1);
 
-    let mut dropped = DeterministicProvider::active(&[], &[]);
+    let accelerator = installed(
+        ProviderOperation::Hash,
+        DestructionTargets::all(),
+        true,
+        true,
+    );
+    let mut dropped = DeterministicProvider::active(&accelerator, &[], &[]);
     dropped.destroy_failure = Some(PendingDestructionFailureKind::AcceleratorHandle);
     {
-        let accelerator = installed(
-            ProviderOperation::Hash,
-            DestructionTargets::all(),
-            true,
-            true,
-        );
         let request = PendingRequest::accelerator(
             prepared(&accelerator, ProviderOperation::Hash, b"input"),
             limits(2, 1),
@@ -351,8 +359,10 @@ fn begin_failure_creates_no_cleanup_claim() {
         limits(1, 1),
     )
     .unwrap_or_else(|_| unreachable!());
-    let mut effect =
-        DeterministicProvider::begin_once(PendingBegin::Failed(ProviderFailureKind::Unavailable));
+    let mut effect = DeterministicProvider::begin_once(
+        &provider,
+        PendingBegin::Failed(ProviderFailureKind::Unavailable),
+    );
     assert!(matches!(
         PendingOperation::begin(request, &mut effect),
         PendingStart::Failed(failure)

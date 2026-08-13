@@ -92,7 +92,7 @@ brynja
 ├── future brynja-openpgp-armor (admitted Base64 boundary only)
 ├── future brynja-openpgp (modern RFC 9580 Sans-I/O facade and engines)
 ├── optional brynja-openpgp-legacy (deprecated read/decrypt/verify compatibility)
-│   └── future brynja-legacy-sha1 (v4 fingerprint-only; sole consumer)
+│   └── future brynja-legacy-sha1 (complete legacy hash; OpenPGP is first admitted consumer)
 └── future brynja-sanitization (explicit downstream adapter only)
 
 future downstream companion integration workspaces (never brynja dependencies)

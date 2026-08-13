@@ -7840,31 +7840,57 @@ Exit criteria:
 - weak historical capability is either absent or conspicuously isolated and can never be negotiated or selected by the modern facade;
 - `v0.169.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.169.2 - Brynja Legacy SHA-1 OpenPGP Fingerprint Boundary
+### v0.169.2 - First-Party Brynja Legacy SHA-1
 
 Status: planned
 
-Plan scope: Implement `brynja-legacy-sha1` as the smallest first-party SHA-1 compression and hashing package solely for RFC 9580 v4 fingerprint and key-ID derivation, and permit only `brynja-openpgp-legacy` to depend on it; expose no generic digest, MAC, signature, certificate, password or other-protocol use, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signing and generation, and keep every symbol outside `brynja`, modern defaults, general hash, TLS, PKIX and FIPS-approved graphs and claims. Any later legacy-protocol consumer requires its own numbered capability expansion and audit.
+Plan scope: Implement complete streaming and fixed-message SHA-1 once in `brynja-legacy-sha1` with official vectors, boundary lengths, checked exhaustion, caller-owned state, constant-time applicability, zeroization policy, differential, formal, fuzz, emitted-code and independent cryptographic-risk evidence; publish conspicuous collision-resistance warnings, expose no MAC, signature, certificate or protocol policy, and keep the package outside `brynja`, every modern/default/general-hash/TLS/PKIX/FIPS graph and approved claim. Direct use is explicit and unsafe for collision-resistant purposes; each internal consumer requires its own numbered admission.
 
-Goal: support RFC 9580 v4 key identity compatibility without admitting SHA-1
-as a general cryptographic service or modern security primitive.
+Goal: implement SHA-1 exactly once as a complete but visibly legacy primitive
+whose dangerous properties and downstream authority cannot be hidden.
 
 Deliverables:
 
-- implement `brynja-legacy-sha1` with a private first-party compression function and fixed OpenPGP fingerprint path but no public generic hash trait or arbitrary-message API;
-- bind execution to exact v4 key-packet preimages and derive key IDs only after retaining and comparing the complete fingerprint;
-- permit only `brynja-openpgp-legacy` as a dependency and freeze package, feature, symbol and claim isolation from `brynja`, defaults, general hashing, signatures, MACs, passwords, all other protocols, PKIX and FIPS artifacts.
+- implement complete caller-buffer streaming, reset and fixed-message SHA-1 with checked bit-length accounting, exact digest output and no hidden allocation;
+- publish warnings and types that never claim collision resistance, MAC safety, signature suitability, password security, certificate policy or FIPS approval;
+- freeze package and feature isolation from `brynja`, modern/default/general-hash/TLS/PKIX/FIPS graphs while requiring a numbered review for every internal consumer.
 
 Verification:
 
-- run published SHA-1 and OpenPGP v4 fingerprint vectors, boundary-length differentials and malformed or substituted key-packet cases;
-- test chosen-prefix and full-fingerprint collision policy, key-ID ambiguity, prohibited generic use, sole-consumer enforcement and every graph-isolation regression fixture;
-- complete constant-time applicability, emitted-code, formal length, fuzz, independent cryptographic-risk and repository review.
+- run official and published SHA-1 vectors, million-byte, padding-boundary, chunking, reset, fixed/streaming equivalence, overflow and independent differential cases;
+- fuzz state transitions and lengths, prove checked accounting and transactional output, inspect emitted code and document constant-time and zeroization applicability;
+- complete independent cryptographic-risk, package-warning, no_std, MSRV/latest, graph-isolation and repository review.
 
 Exit criteria:
 
-- v4 fingerprints are interoperable and collision-aware while SHA-1 remains inaccessible for every other modern or general operation;
+- complete SHA-1 is reusable without reimplementation, but no Brynja internal graph may consume it until a separate numbered admission defines exact safe compatibility use;
 - `v0.169.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.3 - OpenPGP V4 Fingerprint SHA-1 Integration
+
+Status: planned
+
+Plan scope: Permit only `brynja-openpgp-legacy` to consume `brynja-legacy-sha1` before 1.0, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and prove no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.
+
+Goal: admit one exact RFC 9580 compatibility use while preserving the complete
+legacy primitive as the sole SHA-1 implementation.
+
+Deliverables:
+
+- connect exact v4 key-packet fingerprint preimages to `brynja-legacy-sha1` only inside `brynja-openpgp-legacy`;
+- derive key IDs only from retained complete fingerprints and require full-fingerprint comparison with explicit collision and ambiguity outcomes;
+- prohibit every SHA-1 signature, generation, modern OpenPGP, facade, default, TLS, PKIX, password, MAC and FIPS edge with machine graph policy.
+
+Verification:
+
+- run RFC 9580 and independent v4 fingerprint/key-ID vectors, malformed key-packet, substitution, ambiguity and chosen-prefix policy cases;
+- graph-test sole-consumer authority and reject arbitrary SHA-1 operation routing through OpenPGP provider or algorithm selection;
+- pass interoperability, fuzz, formal preimage/length, independent compatibility-risk, documentation and repository review.
+
+Exit criteria:
+
+- v4 fingerprints interoperate through one exact legacy edge while SHA-1 signing, generation and every unauthorized consumer remain impossible;
+- `v0.169.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.170.0 - OpenPGP Key And Cryptography Audit Gate
 

@@ -7,7 +7,7 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
-- Add a final pre-1.0 RFC 9580 OpenPGP phase with 35 small standards,
+- Add a final pre-1.0 RFC 9580 OpenPGP phase with 36 small standards,
   resource, packet, key, cryptography, message, lifecycle, interoperability,
   audit, remediation, and publication milestones, followed by whole-project
   integration and final-audit gates.
@@ -15,9 +15,10 @@ Keep a Changelog and Semantic Versioning.
   reuse in bounded PEM and OpenPGP armor so Brynja does not duplicate Base64;
   the planned edge must remain allocation-free, `no_std`, non-cryptographic,
   and outside the FIPS module.
-- Isolate RFC 9580 v4 fingerprint SHA-1 in future `brynja-legacy-sha1`, with
-  `brynja-openpgp-legacy` as its sole admitted consumer and no generic digest,
-  modern facade, TLS, PKIX, general-hash, signature, or FIPS edge.
+- Plan complete streaming and fixed-message SHA-1 once in future
+  `brynja-legacy-sha1`, then separately admit `brynja-openpgp-legacy` as its
+  first consumer for v4 fingerprints; later legacy protocol and hash-facade
+  consumers require their own review and may not reimplement SHA-1.
 - Add seventeen sealed mandatory security-decision domains, a caller-owned
   one-pending authoritative state machine, checked generations, permanent
   terminal latching, and exhaustive accepted, approved, non-approved,

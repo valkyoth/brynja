@@ -76,13 +76,14 @@ TLS, PKI path validation, platform implementations, or a global trust store.
 Deprecated algorithms, when independently justified for read, decrypt, or
 verify interoperability, live in optional `brynja-openpgp-legacy`; it cannot
 enter the modern facade, defaults, FIPS artifacts, or generate weak material.
-The v4 fingerprint requirement is implemented in `brynja-legacy-sha1`, whose
-only admitted dependent and operation are `brynja-openpgp-legacy` and exact v4
-fingerprint/key-ID derivation. It exposes no generic digest or arbitrary-input
-API. TLS, PKIX, general hashing, `brynja`, and every FIPS graph are forbidden
-consumers; any later legacy-protocol use requires a numbered expansion, new
-API, graph review, cryptographic audit, and pentest rather than silently
-reusing the OpenPGP-only authority.
+`brynja-legacy-sha1` owns one complete streaming and fixed-message SHA-1
+implementation with conspicuous collision-resistance warnings. It is not a
+modern hash family and never enters `brynja`, defaults, TLS, PKIX, general hash
+or FIPS graphs. Before 1.0, only `brynja-openpgp-legacy` may depend on it and
+only for exact v4 fingerprint/key-ID derivation. A later legacy protocol or
+post-1.0 legacy hash facade may reuse that exact implementation only after its
+own numbered consumer-specific admission, graph review, cryptographic audit
+and pentest; no consumer may create a second SHA-1 implementation.
 OpenPGP structural and cryptographic validity never implies Web-of-Trust or
 application identity trust, and no package performs an implicit keyserver,
 WKD, DNS, filesystem, TOFU, or network operation.

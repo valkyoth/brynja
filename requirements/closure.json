@@ -4135,10 +4135,21 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement `brynja-legacy-sha1` as the smallest first-party SHA-1 compression and hashing package solely for RFC 9580 v4 fingerprint and key-ID derivation, and permit only `brynja-openpgp-legacy` to depend on it; expose no generic digest, MAC, signature, certificate, password or other-protocol use, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signing and generation, and keep every symbol outside `brynja`, modern defaults, general hash, TLS, PKIX and FIPS-approved graphs and claims. Any later legacy-protocol consumer requires its own numbered capability expansion and audit.",
+      "scope": "Implement complete streaming and fixed-message SHA-1 once in `brynja-legacy-sha1` with official vectors, boundary lengths, checked exhaustion, caller-owned state, constant-time applicability, zeroization policy, differential, formal, fuzz, emitted-code and independent cryptographic-risk evidence; publish conspicuous collision-resistance warnings, expose no MAC, signature, certificate or protocol policy, and keep the package outside `brynja`, every modern/default/general-hash/TLS/PKIX/FIPS graph and approved claim. Direct use is explicit and unsafe for collision-resistant purposes; each internal consumer requires its own numbered admission.",
       "source_ids": [],
-      "title": "Brynja Legacy SHA-1 OpenPGP Fingerprint Boundary",
+      "title": "First-Party Brynja Legacy SHA-1",
       "version": "0.169.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Permit only `brynja-openpgp-legacy` to consume `brynja-legacy-sha1` before 1.0, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and prove no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.",
+      "source_ids": [],
+      "title": "OpenPGP V4 Fingerprint SHA-1 Integration",
+      "version": "0.169.3"
     },
     {
       "boundary": {

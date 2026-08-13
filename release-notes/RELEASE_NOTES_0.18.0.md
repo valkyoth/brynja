@@ -71,7 +71,7 @@ provider assertion, not proof that an external key was erased.
 ## Planning Update
 
 The roadmap now adds RFC 9580 OpenPGP as a separately bounded final pre-1.0
-protocol phase. Thirty-five OpenPGP implementation and assurance stops run from
+protocol phase. Thirty-six OpenPGP implementation and assurance stops run from
 v0.163.0 through v0.180.0, followed by integrated TLS/OpenPGP rehearsal, final
 audit, remediation, cumulative pentest, and production-candidate gates through
 v0.185.0. OpenPGP shares reviewed primitive crates but never TLS state, PKIX
@@ -85,10 +85,12 @@ native-code-free, non-cryptographic, and outside `brynja-fips-module`.
 `base64-ng-openpgp` is not pre-admitted; it must first expose the required
 caller-buffer profile or Brynja will reuse only the core Base64 transforms.
 This planning change adds no v0.18.0 production dependency or runtime code.
-RFC 9580 v4 fingerprint SHA-1 is separately planned in
-`brynja-legacy-sha1`; only `brynja-openpgp-legacy` may depend on its
-fingerprint-specific API. It is not a general SHA-1 crate, and any future
-legacy-protocol consumer requires a new numbered expansion and audit.
+Complete streaming and fixed-message SHA-1 is separately planned once in
+`brynja-legacy-sha1` with explicit collision-resistance warnings and no modern
+graph edge. A following milestone admits `brynja-openpgp-legacy` as its first
+consumer solely for v4 fingerprints. Future legacy protocol or post-1.0 legacy
+hash-facade consumers require their own numbered integration review and reuse
+the same implementation rather than building SHA-1 again.
 
 ## Release Process
 

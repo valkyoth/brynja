@@ -228,7 +228,7 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | MD6 | Research/legacy family; tree and keyed modes separated |
 | RadioGatún | Research family with word width and output profile explicit |
 | RIPEMD, RIPEMD-128/160/256/320 | `brynja-legacy-hash-ripemd`; variants never aliased |
-| SHA-1 | Existing pre-1.0 `brynja-legacy-sha1` remains OpenPGP-v4-fingerprint-only; any post-1.0 generic compatibility API or new consumer requires a numbered expansion and fresh audit |
+| SHA-1 | Reuse the complete pre-1.0 `brynja-legacy-sha1` implementation; a post-1.0 legacy hash facade may re-export it only after a numbered consumer-specific admission and fresh audit, never by reimplementation |
 | SHA-224/256/384/512 | `brynja-hash-sha2`; pre-1.0 SHA-256/384/512 cores are reused and SHA-224 is a post-1.0 extension |
 | SHA-3 | `brynja-hash-sha3`; pre-1.0 SHA3-256/512 core is reused and other named FIPS 202 instances follow post-1.0 |
 | Skein | Standalone family with state/output/tree parameters explicit |

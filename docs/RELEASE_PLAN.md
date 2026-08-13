@@ -1567,7 +1567,7 @@ Exit criteria:
 - the exceptional assessment's two High findings are remediated, the exact
   signed remediation candidate receives a green repository-owner retest, and
   the permanent report records `PASS`/`PASS` with zero open findings;
-- `v0.17.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without crates.io publication.`
+- `v0.17.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.18.0 - Mandatory Security Outcome Authority Contract
 

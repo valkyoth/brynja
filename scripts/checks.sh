@@ -26,6 +26,8 @@ python3 scripts/check-fips-architecture.py
 python3 scripts/test-fips-architecture.py
 python3 scripts/check-security-outcome.py
 python3 scripts/test-security-outcome.py
+python3 scripts/check-security-event.py
+python3 scripts/test-security-event.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-boundary.py

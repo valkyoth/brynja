@@ -392,6 +392,18 @@ authentication, protocol/profile selection, ticket, resumption, PSK,
 early-data, replay, amplification, ECH, provider effect, external key store,
 event schema, cryptography, protocol engine, independent review, or FIPS
 validation result.
+v0.18.1 treats audit observation as adversarially absent, delayed, duplicated,
+full, and untimestamped. Events can only duplicate exact opaque authority
+values or non-ready snapshots and carry no generation or application-supplied
+payload that could become a secret leak or stable identifier. Terminal events
+do not fabricate unavailable decision identity. Caller timestamps are explicit
+metadata and cannot be replaced by the schema. The fixed FIFO never invokes a
+consumer and cannot retry, wait, authorize, commit, complete, latch, alert,
+call a provider, or mutate protocol/cryptographic state. Full and zero-capacity
+queues drop immediately; exact-until-saturated loss remains visible, while the
+mandatory result remains independently authoritative. Caller mishandling of
+drained events, timestamp privacy, audit persistence, transport, access
+control, serialization, and log retention remain outside the trust boundary.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

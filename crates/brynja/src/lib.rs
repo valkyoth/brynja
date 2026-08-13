@@ -9,9 +9,10 @@
 //! service, environment, SSP, self-test, and permanent-failure contracts
 //! without implementing or claiming a validated module. Mandatory typed
 //! security outcomes now bind exact decision domains to authoritative state,
-//! including token-gated external-key destruction. This crate does not
-//! provide a TLS connection API, provider implementation, or cryptographic
-//! algorithm.
+//! including token-gated external-key destruction. Bounded observational
+//! events duplicate those outcomes without gaining authority. This crate does
+//! not provide a TLS connection API, provider implementation, or
+//! cryptographic algorithm.
 
 #![no_std]
 
@@ -73,6 +74,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::core::SECURITY_OUTCOME_AUTHORITY_CONTRACT_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::core::SECURITY_EVENT_SCHEMA_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

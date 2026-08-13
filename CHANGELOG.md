@@ -141,6 +141,14 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Add the v0.18.1 bounded observational security-event schema with opaque
+  authority-derived events, explicit one-way caller timestamp enrichment,
+  deterministic fixed-capacity FIFO buffering, and visible saturating loss
+  accounting; keep observation structurally unable to authorize, commit,
+  complete, latch, alert, execute effects, or alter security state.
+- Advance the development facade to `brynja 0.18.1`, retain every supporting-
+  crate publication version, include v0.18.1 in the cumulative v0.20.0 range,
+  and select zero crates for crates.io publication.
 - Make public accepted and approved resolutions permanently fail closed until
   a sealed exact-subject proof path exists; retain exact token-bound acceptance
   only inside external-key completion.

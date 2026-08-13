@@ -25,8 +25,9 @@
 
 # brynja-core
 
-`brynja-core 0.8.0` now carries the cumulative v0.18 mandatory security-outcome
-authority contract, v0.17 FIPS-aware provider architecture, v0.16
+`brynja-core 0.8.0` now carries the cumulative v0.18.1 bounded observational
+security-event schema, v0.18 mandatory security-outcome authority contract,
+v0.17 FIPS-aware provider architecture, v0.16
 pending-operation lifecycle, v0.15 typed wall and monotonic
 clock contract, v0.14 entropy and initialized
 secure-random contract, v0.13.1 CPU-backend capability and dispatch contract,
@@ -34,7 +35,7 @@ and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. Version
-`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 through v0.18 code
+`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 through v0.18.1 code
 remain unpublished until a later public checkpoint.
 
 Every arithmetic operation is checked independently of build profile.
@@ -267,6 +268,30 @@ resumption, PSK, early-data, replay, amplification, ECH, provider effect,
 external key store, cryptography, protocol engine, event schema, independent
 verification, or FIPS validation.
 
+v0.18.1 adds opaque, copyable `SecurityEvent` values that can only be derived
+from a typed pending/outcome value or a non-ready authoritative snapshot.
+They duplicate the exact decision and disposition where authority retains
+them, or the exact permanent terminal reason, without carrying authority
+generations, secrets, handles, identities, plaintext, transcripts, PSK
+identities, tickets, ECH inner names, arbitrary strings, byte payloads, or
+stable cross-connection identifiers. Ready state produces no event. Terminal
+events deliberately carry no invented decision identity because the v0.18
+terminal snapshot does not retain one.
+
+`SecurityEventRecord` begins explicitly untimestamped and permits one later
+caller-provided wall or generation-bound monotonic timestamp. It reads no
+clock and rejects timestamp replacement. `SecurityEventQueue<N>` embeds a
+fixed caller-owned FIFO array, performs no allocation, callback, I/O, retry,
+wait, provider call, alert, or protocol transition, and drops immediately when
+full. Loss uses a visible saturating `u64` counter plus a saturation flag.
+Events and queues cannot authorize, commit, complete, latch, or mutate the
+v0.18 authority. Ten integration tests, two internal boundary tests, three
+compile-fail examples, four reviewed source hashes, the 500-line ceiling, and
+twenty-two broken fixtures enforce this separation. The schema implements no
+audit sink, delivery, persistence, structured serialization, policy decision,
+provider effect, protocol engine, cryptography, independent verification, or
+FIPS validation.
+
 The exceptional v0.18.0 assessment found four High and one Medium issue across
 the initial review and first retest. The clean second repository-owner retest
 of exact signed remediation commit
@@ -323,8 +348,9 @@ brynja = "0.15"
 ```
 
 Version `0.8.0` was published at the Brynja v0.15.0 cumulative checkpoint after
-its scheduled assessment passed with zero findings. The v0.16.0, v0.17.0, and
-v0.18.0 development deltas remain unpublished until a later checkpoint under the
+its scheduled assessment passed with zero findings. The v0.16.0, v0.17.0,
+v0.18.0, and v0.18.1 development deltas remain unpublished until a later
+checkpoint under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line

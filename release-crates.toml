@@ -1,26 +1,26 @@
 [release]
-version = "0.18.0"
-milestone = "0.18.0"
+version = "0.18.1"
+milestone = "0.18.1"
 baseline = "0.15.0"
-cumulative_milestones = ["0.16.0", "0.17.0", "0.18.0"]
+cumulative_milestones = ["0.16.0", "0.17.0", "0.18.0", "0.18.1"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "Mandatory security-outcome authority received an exceptional repository-owner assessment and clean retest."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.17.0"
-version = "0.18.0"
+previous_version = "0.18.0"
+version = "0.18.1"
 change = "metadata"
 publish = false
-reason = "Advance to the v0.18.0 mandatory security-outcome authority milestone with exact typed results, authoritative state, and token-gated external-key destruction and no crates.io publication."
+reason = "Advance to the v0.18.1 bounded observational security-event milestone with no crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.8.0"
 version = "0.8.0"
 change = "code"
 publish = false
-reason = "Retain published 0.8.0 while adding the mandatory security-outcome authority contract for the future v0.20.0 checkpoint."
+reason = "Retain published 0.8.0 while adding the bounded observational security-event schema for the future v0.20.0 checkpoint."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.1"

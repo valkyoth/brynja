@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.17.0 signed; v0.18.0 pentest PASS and awaiting green GitHub and CodeQL
+Status: v0.18.0 signed; v0.18.1 implementation complete and awaiting repository-owner review
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -24,7 +24,9 @@ environment/build assumptions, provider-derived SSP destruction duties,
 trusted self-test entry, permanent-failure state, and generation-bound service
 indicators, plus sealed mandatory security-decision domains, exhaustive typed
 outcomes, one caller-owned authority state machine, and token-gated external-key
-destruction completion. It currently admits zero backends and implements no FIPS module.
+destruction completion, plus opaque bounded observational security events,
+explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
+saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
 It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
@@ -68,8 +70,9 @@ publication. The v0.18.0 exceptional assessment found four High and one Medium
 issue across its initial review and first retest. The clean second retest of
 exact signed remediation commit
 `635b229296be45b195d37d8111fd8ad8f8b1e571` records `PASS`/`PASS` with
-zero open findings. The facade advances to `0.18.0`; supporting versions remain
-unchanged and no crate is selected for publication.
+zero open findings. Signed tag v0.18.0 contains that remediation. The facade now
+advances to `0.18.1`; supporting versions remain unchanged and no crate is
+selected for publication.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -686,6 +689,23 @@ No decision logic, policy implementation, authentication, protocol engine,
 provider effect, external key store, audit event, cryptography, independent
 verification, or FIPS validation is implemented. v0.18.0 selects no crates.io
 publication.
+
+Version 0.18.1 adds only a bounded observational duplicate of that authority.
+Opaque events are derived from exact pending/outcome values or non-ready
+snapshots; they expose closed decision, disposition, and terminal categories
+but no authority generation, secret, handle, peer identity, plaintext,
+transcript, PSK identity, ticket, ECH inner name, arbitrary string, byte
+payload, or stable cross-connection identifier. Terminal events do not invent
+a decision identity that the v0.18 snapshot does not retain. Records are
+explicitly untimestamped until a caller supplies one wall or monotonic
+observation, and timestamps cannot be replaced. The fixed-capacity
+caller-owned FIFO performs no callback, I/O, retry, wait, provider call, alert,
+or state transition; full and zero-capacity queues drop immediately and expose
+exact-until-saturated loss accounting. Missing, ignored, delayed, duplicated,
+or dropped events cannot authorize, commit, complete, latch, alter, or obscure
+any mandatory outcome. The milestone adds no sink, delivery guarantee,
+persistence, serialization, protocol engine, cryptographic operation,
+independent review, or FIPS result and selects no crates.io publication.
 
 Version 0.17.0 implements an inert FIPS-aware provider architecture. Broad
 operation-category sets classify every capability of one installed provider

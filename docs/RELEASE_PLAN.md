@@ -1576,7 +1576,7 @@ Exit criteria:
 
 ### v0.18.0 - Mandatory Security Outcome Authority Contract
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Define authoritative engine state and exhaustive mandatory typed results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, anti-replay, amplification, exhaustion, provider failure, key lifecycle, ECH, policy, and terminal transitions; public inputs cannot forge accepted or approved authority without sealed exact-subject evidence, each validated disposition has an opaque non-interchangeable result with private reasons and an exact authority-retained commit match, self-test failure is permanently terminal, every resolved non-terminal result requires an affine commit whose abandonment fails closed, pending abandonment fails closed, external-key destruction completes only through an exact mandatory token transition, and ignoring every informational output cannot make rejected, non-approved, incomplete, or failed work appear accepted, approved, complete, or successful.
 
@@ -1642,7 +1642,7 @@ Exit criteria:
 
 ### v0.18.1 - Bounded Observational Security Event Schema
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Define an upstream no_std Sans-I/O SecurityEvent audit schema that only duplicates the authoritative outcomes frozen at v0.18.0; events are caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, optionally caller-timestamped or explicitly untimestamped for later enrichment, use saturating drop counters with visible saturation, contain no secret or stable correlating identifier, never reenter, and cannot block, authorize, complete, or alter cryptographic or protocol state.
 
@@ -1669,6 +1669,20 @@ Verification:
   reentrancy with identical authoritative state and peer-alert behavior;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
+
+Implementation evidence:
+
+- four hash-locked source modules keep the event, timestamp record, and queue
+  contracts independently reviewable and below 500 lines;
+- ten integration tests and two internal boundary tests cover all seventeen
+  decision domains, every closed event class, exact negative and accepted
+  outcomes, terminal snapshots, timestamp-free and later-enriched records,
+  deterministic FIFO ordering, zero/full capacity, absent drains, visible
+  saturation, and generation-free equality;
+- three compile-fail examples and twenty-two broken policy fixtures reject
+  event forging, authorization, reentrant mutable access, dynamic or secret
+  payloads, identifiers, callbacks, alert/provider/authority crossings,
+  wrapping counters, public state, oversized files, and reviewed-source drift.
 
 Exit criteria:
 

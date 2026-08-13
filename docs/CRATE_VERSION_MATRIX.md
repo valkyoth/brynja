@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Status: v0.17.0 signed; v0.18.0 pentest PASS and awaiting green GitHub and CodeQL
+Status: v0.18.0 signed; v0.18.1 implementation complete and awaiting repository-owner review
 
-The `brynja` facade advances to `0.18.0` for the current development milestone
+The `brynja` facade advances to `0.18.1` for the current development milestone
 and selects no crates.io publication. The latest signed and published
 checkpoint is v0.15.0: `brynja 0.15.0`, `brynja-core 0.8.0`,
 `brynja-crypto 0.1.1`, the eight modern support packages at `0.1.7`, and the
@@ -69,14 +69,20 @@ disposition-relabeling flaw; opaque non-interchangeable outcome types, private
 validated reasons, and exact disposition retention/checking now close that
 bypass. The clean second repository-owner retest of exact signed candidate
 `635b229296be45b195d37d8111fd8ad8f8b1e571` records `PASS`/`PASS` with
-zero open findings. It implements no policy, authentication, protocol engine,
-provider effect, external key store, event schema, algorithm, independent
-verification, or validation and selects no package publication.
+zero open findings. Signed tag v0.18.0 contains that remediation. It implements
+no policy, authentication, protocol engine, provider effect, external key
+store, event schema, algorithm, independent verification, or validation and
+selects no package publication. The v0.18.1 stage adds only opaque bounded
+observational events, one-way caller timestamp enrichment, a fixed caller-owned
+FIFO, and visible saturating loss accounting. Events duplicate mandatory v0.18
+state but cannot authorize, commit, complete, latch, alert, call a provider, or
+mutate security state. It adds no sink, delivery, persistence, protocol,
+cryptographic, independent-review, or FIPS claim and selects no publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.18.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
-| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16-v0.18 authority and architecture code remains unreleased on crates.io |
+| `brynja` | `0.18.1` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
+| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16-v0.18.1 authority, architecture, and event code remains unreleased on crates.io |
 | `brynja-crypto` | `0.1.1` | no | Published provider/composition boundary retained; cryptographic effects remain unimplemented |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Published inert boundaries; no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
 | `brynja-pki`, `brynja-platform` | `0.1.7` | no | Published boundaries retained; PKI and platform effects remain unimplemented |

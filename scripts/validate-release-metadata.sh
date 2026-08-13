@@ -104,6 +104,9 @@ test -f scripts/fips_architecture_policy.py
 test -x scripts/check-security-outcome.py
 test -x scripts/test-security-outcome.py
 test -f scripts/security_outcome_policy.py
+test -x scripts/check-security-event.py
+test -x scripts/test-security-event.py
+test -f scripts/security_event_policy.py
 test -x scripts/check-cpu-boundary.py
 test -x scripts/test-cpu-boundary.py
 test -f scripts/cpu_boundary_policy.py
@@ -130,6 +133,8 @@ grep -q 'python3 scripts/check-fips-architecture.py' scripts/checks.sh
 grep -q 'python3 scripts/test-fips-architecture.py' scripts/checks.sh
 grep -q 'python3 scripts/check-security-outcome.py' scripts/checks.sh
 grep -q 'python3 scripts/test-security-outcome.py' scripts/checks.sh
+grep -q 'python3 scripts/check-security-event.py' scripts/checks.sh
+grep -q 'python3 scripts/test-security-event.py' scripts/checks.sh
 grep -q 'python3 scripts/check-cpu-boundary.py' scripts/checks.sh
 grep -q 'python3 scripts/test-cpu-boundary.py' scripts/checks.sh
 test -s docs/first-party-rust-cryptography.md

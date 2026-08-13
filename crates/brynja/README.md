@@ -86,7 +86,28 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.18.0` development milestone adds a protocol-neutral mandatory
+The current `0.18.1` development milestone adds a protocol-neutral bounded
+observational security-event schema in `brynja-core`. Opaque events can only be
+derived from the mandatory v0.18 authority values or a non-ready authoritative
+snapshot. They duplicate pending, accepted, approved, non-approved, rejected,
+canceled, failed, and terminal state without carrying an authority generation,
+secret, handle, identity, plaintext, transcript, PSK identity, ticket, ECH
+inner name, arbitrary string, byte payload, or stable cross-connection
+identifier. Events are format-safe values and remain separate from peer-visible
+alerts.
+
+`SecurityEventQueue<N>` is a caller-owned, allocation-free FIFO. Enqueue and
+drain perform no callback, I/O, retry, wait, provider action, or protocol
+transition. A full or zero-capacity queue drops the incoming observational
+record immediately and increments a visible saturating counter; loss never
+changes or obscures the mandatory authoritative outcome. Records begin
+explicitly untimestamped and may receive one caller-provided wall or monotonic
+timestamp later, without clock access or relabeling inside Brynja. The schema
+cannot authorize, commit, complete, latch, alert, or alter cryptographic or
+protocol state and makes no audit-delivery, persistence, independent-review, or
+FIPS claim.
+
+The signed `0.18.0` development milestone adds a protocol-neutral mandatory
 security-outcome authority contract in `brynja-core`. Sealed type-level domains
 cover self-tests, service approval, protocol and profile selection,
 authentication, tickets, resumption, PSKs, early data, anti-replay,
@@ -109,8 +130,9 @@ success.
 External-key destruction can report success only after consuming one
 non-cloneable, thread-bound token for the exact external-store target. Duplicate,
 cross-authority, cross-generation, failed, and abandoned completion fail closed.
-Snapshots are informational and cannot authorize, complete, or alter work. The
-contract implements no decision policy, authentication, protocol selection,
+Snapshots are informational and cannot authorize, complete, or alter work.
+The v0.18 authority contract itself implements no decision policy,
+authentication, protocol selection,
 ticket, replay store, ECH, provider effect, external key store, cryptography,
 protocol engine, event schema, independent verification, or FIPS validation.
 
@@ -286,7 +308,7 @@ published only when their cumulative changes require it at a checkpoint.
 Pentests look backwards over the complete change range between public
 checkpoints. The v0.15.0 assessment covered all changes after signed public tag
 v0.10.0 through v0.15.0. The v0.20.0 assessment covers all changes after
-v0.15.0 through v0.20.0, including the current v0.18.0 milestone, and the same
+v0.15.0 through v0.20.0, including the current v0.18.1 milestone, and the same
 pattern continues every fifth minor version. Each checkpoint report records
 its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
@@ -303,10 +325,9 @@ an independent pentest.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
-`0.17.0`. The current `0.18.0` mandatory security-outcome authority milestone
-selects no crates.io publication. Its exceptional assessment and clean second
-retest record `PASS`/`PASS` with zero open findings; the signed candidate now
-awaits green GitHub and CodeQL.
+`0.18.0`. The current `0.18.1` bounded observational security-event milestone
+selects no crates.io publication and remains inside the cumulative v0.20.0
+assessment range.
 The published dependency is:
 
 ```toml
@@ -582,6 +603,8 @@ python3 scripts/check-fips-architecture.py
 python3 scripts/test-fips-architecture.py
 python3 scripts/check-security-outcome.py
 python3 scripts/test-security-outcome.py
+python3 scripts/check-security-event.py
+python3 scripts/test-security-event.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-evidence.py
@@ -598,7 +621,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.18.0
+scripts/tag_gate.sh v0.18.1
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

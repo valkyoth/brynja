@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.17.0 signed; v0.18.0 implementation complete and awaiting pentest
+Status: v0.17.0 signed; v0.18.0 pentest remediation complete and awaiting retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -658,18 +658,24 @@ PSKs, early data, anti-replay, amplification, exhaustion, provider results,
 key lifecycle, ECH, policy, and terminal transitions. One allocation-free
 caller-owned authority permits one incomplete typed decision and returns only
 exhaustive accepted, approved, non-approved, rejected, pending, canceled,
-failed, or terminal outcomes. Checked generations bind affine pending values
-and receipts; terminal reasons latch permanently. Service approval cannot use
-ordinary acceptance, other domains cannot claim approval, rejection and
-failure reasons cannot cross their typed domains, and terminal
-transitions cannot claim ordinary success.
+failed, or terminal outcomes. Public resolutions cannot create accepted or
+approved authority; future positive paths require sealed exact-subject
+evidence, while external-key completion alone has an internal exact-token
+acceptance path. Resolved non-terminal outcomes hold the authority in
+`AwaitingCommit` until their affine completion is explicitly committed.
+Abandoned pending decisions and uncommitted outcomes permanently fail closed,
+and mandatory self-test failure permanently latches integrity failure. Checked
+generations bind affine pending values, completions, and receipts; rejection
+and failure reasons cannot cross their typed domains, and terminal transitions
+cannot claim ordinary success.
 
 External-key destruction succeeds only through one consumed non-cloneable,
 thread-bound token bound to the exact authority, generation, and external-store
 target. Duplicate token requests, cross-authority substitution, provider
 failure, and explicit abandonment fail closed. Informational snapshots cannot
-authorize or complete work. Ten behavior groups, three compile-fail examples,
-four reviewed-source hashes, and eighteen broken fixtures enforce the boundary.
+authorize or complete work. Fourteen behavior tests, four compile-fail
+examples, five reviewed-source hashes, and twenty-three broken fixtures enforce
+the boundary.
 No decision logic, policy implementation, authentication, protocol engine,
 provider effect, external key store, audit event, cryptography, independent
 verification, or FIPS validation is implemented. v0.18.0 selects no crates.io

@@ -7,7 +7,7 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
-- Add a final pre-1.0 RFC 9580 OpenPGP phase with 36 small standards,
+- Add a final pre-1.0 RFC 9580 OpenPGP phase with 44 small standards,
   resource, packet, key, cryptography, message, lifecycle, interoperability,
   audit, remediation, and publication milestones, followed by whole-project
   integration and final-audit gates.
@@ -26,8 +26,8 @@ Keep a Changelog and Semantic Versioning.
 - Add affine token-gated external-key destruction whose success requires the
   exact consumed external-store token and whose duplicate, substituted,
   provider-failed, abandoned, or dropped transitions fail closed.
-- Add ten authority behavior groups, three compile-fail boundary examples, a
-  SHA-256-bound four-file source policy, and eighteen decision, reason-binding,
+- Add fourteen authority behavior tests, four compile-fail boundary examples, a
+  SHA-256-bound five-file source policy, and twenty-three decision, reason-binding,
   approval, terminal, token, low-level, size, and drift fixtures.
 - Add broad FIPS-aware service-category sets with approved classification
   fail-closed until exact algorithm identities exist, transactional complete
@@ -141,6 +141,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Make public accepted and approved resolutions permanently fail closed until
+  a sealed exact-subject proof path exists; retain exact token-bound acceptance
+  only inside external-key completion.
+- Hold every resolved non-terminal outcome in `AwaitingCommit` behind an affine
+  completion, terminalize dropped pending decisions and dropped completions,
+  and map mandatory self-test failure directly to permanent integrity failure.
 - Advance the development facade to `brynja 0.18.0`, retain every supporting-
   crate publication version, include v0.18.0 in the cumulative v0.20.0 range,
   and select zero crates for crates.io publication.

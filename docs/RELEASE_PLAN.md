@@ -1578,7 +1578,7 @@ Exit criteria:
 
 Status: awaiting pentest
 
-Plan scope: Define authoritative engine state and exhaustive mandatory typed results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, anti-replay, amplification, exhaustion, provider failure, key lifecycle, ECH, policy, and terminal transitions; external-key destruction completes only through a mandatory token transition, and ignoring every informational output cannot make rejected, non-approved, incomplete, or failed work appear accepted, approved, complete, or successful.
+Plan scope: Define authoritative engine state and exhaustive mandatory typed results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, anti-replay, amplification, exhaustion, provider failure, key lifecycle, ECH, policy, and terminal transitions; public inputs cannot forge accepted or approved authority without sealed exact-subject evidence, self-test failure is permanently terminal, every resolved non-terminal result requires an affine commit whose abandonment fails closed, pending abandonment fails closed, external-key destruction completes only through an exact mandatory token transition, and ignoring every informational output cannot make rejected, non-approved, incomplete, or failed work appear accepted, approved, complete, or successful.
 
 Goal: complete the **Mandatory Security Outcome Authority Contract** implementation stop without admitting or
 claiming adjacent capability.
@@ -1592,6 +1592,13 @@ Deliverables:
   approval, external-key destruction, authentication, ECH, early data,
   anti-replay, and policy decisions, with exact success, rejection, pending,
   cancellation, failure, and terminal semantics;
+- prevent public resolution values from establishing accepted or approved
+  authority; require every future positive path to consume sealed evidence
+  bound to its exact subject, operation, provider, authority, and generation;
+- hold resolved non-terminal work in an authoritative `AwaitingCommit` state
+  behind an affine completion, permanently fail on pending or completion
+  abandonment, and permanently latch mandatory self-test failure as integrity
+  failure;
 - require external-key success to consume a non-cloneable, thread-bound token
   for the exact external-store target and reject duplicate, cross-authority,
   cross-generation, failed, or abandoned completion;
@@ -1600,25 +1607,30 @@ Deliverables:
 
 Verification:
 
-- exhaustively exercise accepted, rejected, approved, non-approved, pending,
+- exhaustively exercise inaccessible caller-forged acceptance/approval plus
+  rejected, non-approved, pending,
   destruction, authentication, ECH, early-data, anti-replay, and policy paths
   and prove mandatory results and engine state are complete and unambiguous;
-- discard every informational output, inject cancellation and provider failure,
-  and prove no incomplete or failed operation can be observed as successful;
-- compile-fail pending-decision and external-key token cloning and cross-thread
-  movement; enforce reviewed hashes, private state, the 500-line ceiling, and
+- discard pending and resolved authoritative values, inject self-test,
+  cancellation and provider failure, and prove abandonment terminalizes rather
+  than unlocking or permanently busying the authority;
+- compile-fail pending-decision, completion, and external-key token cloning and
+  pending cross-thread movement; enforce reviewed hashes, private state, the
+  500-line ceiling, and
   no std/alloc/unsafe/FFI/provider-effect/audit-event boundary with eighteen
-  broken policy fixtures;
+  or more broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
 - every security decision and completion is authoritative, mandatory, and
-  unambiguous without relying on an audit or informational path; service
-  approval cannot use ordinary acceptance, other domains cannot claim approval,
-  rejection and failure reasons cannot cross their typed domains, terminal
-  transitions cannot claim non-terminal success, and external-key
+  unambiguous without relying on an audit or informational path; no public
+  resolution can forge positive authority, every future positive path requires
+  sealed exact-subject evidence, uncommitted resolution and pending abandonment
+  fail terminally, mandatory self-test failure cannot recover, rejection and
+  failure reasons cannot cross their typed domains, terminal transitions cannot
+  claim non-terminal success, and external-key
   destruction cannot complete without its exact consumed token;
 - `v0.18.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 

@@ -43,7 +43,7 @@ def test() -> None:
         copy_fixture(root)
         security_outcome_policy.validate(root)
 
-        domain = root / security_outcome_policy.SOURCES[1]
+        domain = root / security_outcome_policy.DOMAIN
         replace(
             domain,
             "AuthenticationDecision,\n    Authentication,",
@@ -52,26 +52,35 @@ def test() -> None:
         reject(root, "decision-domain drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
         replace(state, "record: Cell<AuthorityRecord>", "record: AuthorityRecord")
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
         replace(state, "record.generation.checked_add(1)", "Some(record.generation)")
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
         replace(
             state,
-            "D::KIND != ServiceApprovalDecision::KIND",
+            "matches!(resolution, SecurityResolution::Approved)",
             "false",
         )
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
+        replace(
+            state,
+            "SecurityResolution::Accepted) && !positive_authorized",
+            "SecurityResolution::Accepted) && false",
+        )
+        reject(root, "state or result drift")
+        copy_fixture(root)
+
+        state = root / security_outcome_policy.STATE
         replace(
             state,
             "D::KIND == SecurityDecisionKind::TerminalTransition",
@@ -80,22 +89,22 @@ def test() -> None:
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
         replace(state, "!rejection_matches_domain(D::KIND, reason)", "false")
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
         replace(state, "!failure_matches_domain(D::KIND, reason)", "false")
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
-        replace(state, "pub fn resolve(self", "pub fn resolve(&self")
+        state = root / security_outcome_policy.STATE
+        replace(state, "pub fn resolve(", "pub fn resolve_changed(")
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
         replace(
             state,
             "pub struct SecurityPending",
@@ -104,12 +113,48 @@ def test() -> None:
         reject(root, "gained duplication")
         copy_fixture(root)
 
-        external = root / security_outcome_policy.SOURCES[3]
+        state = root / security_outcome_policy.STATE
+        replace(
+            state,
+            "self.fail_terminal(SecurityTerminal::Integrity)",
+            "self.fail_terminal(SecurityTerminal::ContractInvariant)",
+        )
+        reject(root, "state or result drift")
+        copy_fixture(root)
+
+        state = root / security_outcome_policy.STATE
+        replace(
+            state,
+            "SecurityTerminal::DecisionAbandoned",
+            "SecurityTerminal::ContractInvariant",
+        )
+        reject(root, "state or result drift")
+        copy_fixture(root)
+
+        state = root / security_outcome_policy.STATE
+        replace(
+            state,
+            "SecurityTerminal::OutcomeAbandoned",
+            "SecurityTerminal::ContractInvariant",
+        )
+        reject(root, "state or result drift")
+        copy_fixture(root)
+
+        state = root / security_outcome_policy.STATE
+        replace(
+            state,
+            "pub struct SecurityCompletion",
+            "#[derive(Clone)]\npub struct SecurityCompletion",
+        )
+        reject(root, "gained duplication")
+        copy_fixture(root)
+
+        external = root / security_outcome_policy.EXTERNAL_KEY
         replace(external, "pub const fn complete(self)", "pub const fn complete(&self)")
         reject(root, "external-key mandatory transition drift")
         copy_fixture(root)
 
-        external = root / security_outcome_policy.SOURCES[3]
+        external = root / security_outcome_policy.EXTERNAL_KEY
         replace(
             external,
             "DestructionTarget::ExternalStore",
@@ -118,12 +163,12 @@ def test() -> None:
         reject(root, "external-key mandatory transition drift")
         copy_fixture(root)
 
-        external = root / security_outcome_policy.SOURCES[3]
+        external = root / security_outcome_policy.EXTERNAL_KEY
         replace(external, "token_issued: bool", "token_issued: ()")
         reject(root, "external-key mandatory transition drift")
         copy_fixture(root)
 
-        external = root / security_outcome_policy.SOURCES[3]
+        external = root / security_outcome_policy.EXTERNAL_KEY
         replace(
             external,
             "proof.generation == pending.generation()",
@@ -132,16 +177,16 @@ def test() -> None:
         reject(root, "external-key mandatory transition drift")
         copy_fixture(root)
 
-        external = root / security_outcome_policy.SOURCES[3]
+        external = root / security_outcome_policy.EXTERNAL_KEY
         replace(
             external,
-            "pending.resolve(SecurityResolution::Accepted)",
+            "pending.resolve_verified_accepted()",
             "pending.resolve(SecurityResolution::Pending)",
         )
         reject(root, "external-key mandatory transition drift")
         copy_fixture(root)
 
-        external = root / security_outcome_policy.SOURCES[3]
+        external = root / security_outcome_policy.EXTERNAL_KEY
         replace(
             external,
             "pub struct ExternalKeyDestructionToken",
@@ -150,21 +195,21 @@ def test() -> None:
         reject(root, "gained duplication")
         copy_fixture(root)
 
-        module = root / security_outcome_policy.SOURCES[0]
+        module = root / security_outcome_policy.MODULE
         module.write_text(module.read_text(encoding="utf-8") + "\nfn native() { unsafe {} }\n", encoding="utf-8")
         reject(root, "forbidden boundary")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.SOURCES[2]
+        state = root / security_outcome_policy.STATE
         state.write_text(state.read_text(encoding="utf-8") + "\n" * 100, encoding="utf-8")
         reject(root, "exceeds 500 lines")
         copy_fixture(root)
 
-        module = root / security_outcome_policy.SOURCES[0]
+        module = root / security_outcome_policy.MODULE
         module.write_text(module.read_text(encoding="utf-8") + "\n// review drift\n", encoding="utf-8")
         reject(root, "reviewed source hash drift")
 
 
 if __name__ == "__main__":
     test()
-    print("security-outcome policy rejects eighteen domain, authority, resolution-binding, approval, terminal, destruction, low-level, size, and hash regressions")
+    print("security-outcome policy rejects twenty-three domain, authority, evidence, commit, abandonment, self-test, destruction, low-level, size, and hash regressions")

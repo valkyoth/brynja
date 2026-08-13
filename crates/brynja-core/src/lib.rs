@@ -149,10 +149,10 @@ pub use security_outcome::{
     ExternalKeyDestructionToken, KeyLifecycleDecision, PolicyDecision, ProfileSelectionDecision,
     ProtocolSelectionDecision, ProviderDecision, PskDecision, ResumptionDecision,
     SecurityAuthority, SecurityAuthorityError, SecurityAuthoritySnapshot, SecurityAuthorityState,
-    SecurityCanceled, SecurityDecision, SecurityDecisionKind, SecurityFailure, SecurityFailureKind,
-    SecurityOutcome, SecurityPending, SecurityReceipt, SecurityRejection, SecurityResolution,
-    SecurityTerminal, SelfTestDecision, ServiceApprovalDecision, TerminalTransitionDecision,
-    TicketDecision,
+    SecurityCanceled, SecurityCompletion, SecurityDecision, SecurityDecisionKind, SecurityFailure,
+    SecurityFailureKind, SecurityOutcome, SecurityPending, SecurityReceipt, SecurityRejection,
+    SecurityResolution, SecurityTerminal, SelfTestDecision, ServiceApprovalDecision,
+    TerminalTransitionDecision, TicketDecision,
 };
 pub use sequence::{Epoch, SequenceNumber};
 pub use version::{ProtocolFamily, ProtocolVersion};

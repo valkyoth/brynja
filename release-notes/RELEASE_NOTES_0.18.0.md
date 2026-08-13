@@ -1,6 +1,6 @@
 # Brynja v0.18.0 Development Milestone
 
-Status: implementation complete; awaiting pentest
+Status: pentest remediation complete; awaiting repository-owner retest
 
 Brynja v0.18.0 adds the mandatory security-outcome authority contract to
 `brynja-core`. It advances only the `brynja` facade version, selects no
@@ -22,9 +22,17 @@ scheduled v0.20.0 checkpoint will assess.
 
 - Exhaustive typed results distinguish accepted, approved, non-approved,
   rejected, pending, canceled, failed, and terminal work.
-- Approved and non-approved results are confined to service approval; ordinary
-  domains cannot claim them, and service approval cannot collapse into an
-  ordinary accepted result.
+- Public resolution values cannot establish accepted or approved authority.
+  Positive outcomes remain unreachable until a sealed, subject-bound execution
+  path supplies exact evidence; the current external-key completion path alone
+  can establish its exact token-bound acceptance.
+- Every resolved non-terminal outcome owns an affine completion and leaves the
+  authority in `AwaitingCommit`. Only explicit commitment returns it to ready;
+  dropping the completion permanently fails closed.
+- Dropping an incomplete decision permanently fails closed, rather than
+  leaving an unrecoverable busy state.
+- A mandatory self-test failure maps directly to permanent integrity failure
+  and forbids every later decision.
 - Explicit terminal transitions can remain pending or enter terminal state but
   cannot claim non-terminal success.
 - Closed rejections and failures carry no arbitrary text, secret, provider-native
@@ -45,19 +53,31 @@ scheduled v0.20.0 checkpoint will assess.
 
 ## Verification
 
-- Ten deterministic behavior groups exercise all decision classes and every
+- Fourteen deterministic behavior tests exercise all decision classes and every
   accepted, approved, non-approved, rejected, pending, canceled, failed, and
   terminal outcome class.
 - Rejection matrices cover unsupported, policy, authentication, replay,
   amplification, ticket, PSK, early-data, and ECH decisions; failure matrices
   cover self-test, provider, exhaustion, authentication, key lifecycle, and
   policy failures. Cross-domain reasons fail terminally.
-- Three compile-fail examples reject pending-decision cloning and thread
-  movement plus external-key token cloning.
-- A SHA-256-bound four-file policy enforces private authority state,
-  single-consumption destruction, exact approval and terminal separation, the
+- Four compile-fail examples reject pending/completion cloning, pending thread
+  movement, and external-key token cloning.
+- A SHA-256-bound five-file policy enforces private authority state,
+  non-forgeable positive authority, mandatory outcome commitment, fail-closed
+  abandonment, terminal self-test failure, single-consumption destruction, the
   500-line source ceiling, and no `std`, allocation, unsafe, FFI, provider
-  effect, or audit-event coupling. Eighteen broken fixtures test the gate.
+  effect, or audit-event coupling. Twenty-three broken fixtures test the gate.
+
+## Pentest Remediation
+
+The exceptional v0.18.0 assessment found three High architectural issues and
+one Medium abandonment issue. The implementation now makes positive authority
+unreachable through caller-constructible resolutions, permanently latches a
+failed mandatory self-test, requires explicit affine commitment before any
+resolved result unlocks the authority, and terminalizes abandoned pending or
+completion values. Permanent regression tests and source-policy fixtures cover
+all four findings. Repository-owner retest of this remediation is pending; no
+PASS claim is made yet.
 
 ## Limits
 
@@ -71,7 +91,7 @@ provider assertion, not proof that an external key was erased.
 ## Planning Update
 
 The roadmap now adds RFC 9580 OpenPGP as a separately bounded final pre-1.0
-protocol phase. Thirty-six OpenPGP implementation and assurance stops run from
+protocol phase. Forty-four OpenPGP implementation and assurance stops run from
 v0.163.0 through v0.180.0, followed by integrated TLS/OpenPGP rehearsal, final
 audit, remediation, cumulative pentest, and production-candidate gates through
 v0.185.0. OpenPGP shares reviewed primitive crates but never TLS state, PKIX
@@ -95,8 +115,8 @@ the same implementation rather than building SHA-1 again.
 ## Release Process
 
 v0.18.0 is a tagged development milestone with no scheduled cumulative
-pentest or crates.io publication unless its implementation triggers an
-exceptional assessment. Its implementation candidate must receive the requested
-pentest, then the complete local gate, green GitHub and CodeQL, and explicit
-authorization before its signed tag. Every change after v0.15.0 remains in the
-scheduled cumulative v0.20.0 assessment.
+pentest or crates.io publication. Its implementation received an exceptional
+assessment; the four findings are remediated and now require a clean
+repository-owner retest, followed by the complete local gate, green GitHub and
+CodeQL, and explicit authorization before its signed tag. Every change after
+v0.15.0 remains in the scheduled cumulative v0.20.0 assessment.

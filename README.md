@@ -93,9 +93,14 @@ authentication, tickets, resumption, PSKs, early data, anti-replay,
 amplification, exhaustion, providers, key lifecycle, ECH, policy, and terminal
 transitions. One caller-owned allocation-free authority admits one incomplete
 decision at a time and returns exhaustive accepted, approved, non-approved,
-rejected, pending, canceled, failed, or terminal results. Approval is confined
-to the service-approval domain, rejection and failure reasons remain confined
-to their exact typed domains, and terminal transitions cannot report ordinary
+rejected, pending, canceled, failed, or terminal results. Public resolutions
+cannot forge accepted or approved authority: positive outcomes remain
+unreachable until a sealed, subject-bound execution path supplies exact
+evidence. Resolved non-terminal work remains `AwaitingCommit` until its affine
+completion is explicitly committed. Abandoning pending work or an uncommitted
+outcome permanently fails closed, mandatory self-test failure permanently
+latches integrity failure, rejection and failure reasons remain confined to
+their exact typed domains, and terminal transitions cannot report ordinary
 success.
 
 External-key destruction can report success only after consuming one
@@ -296,7 +301,8 @@ an independent pentest.
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.17.0`. The current `0.18.0` mandatory security-outcome authority milestone
-selects no crates.io publication and awaits its development-milestone pentest.
+selects no crates.io publication; its pentest findings are remediated and await
+repository-owner retest.
 The published dependency is:
 
 ```toml

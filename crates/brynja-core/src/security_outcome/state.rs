@@ -2,9 +2,11 @@
 
 use core::{cell::Cell, marker::PhantomData};
 
-use crate::ProviderFailureKind;
-
-use super::{SecurityDecision, SecurityDecisionKind, ServiceApprovalDecision};
+use super::resolution::{failure_matches_domain, rejection_matches_domain};
+use super::{
+    SecurityDecision, SecurityDecisionKind, SecurityFailureKind, SecurityRejection,
+    SecurityResolution, SecurityTerminal, ServiceApprovalDecision,
+};
 
 /// Authoritative engine state.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -13,148 +15,10 @@ pub enum SecurityAuthorityState {
     Ready,
     /// One exact decision is incomplete.
     Pending(SecurityDecisionKind),
+    /// One resolved outcome must still be committed by the protocol engine.
+    AwaitingCommit(SecurityDecisionKind),
     /// A terminal failure permanently forbids further decisions.
     Terminal,
-}
-
-/// Closed rejection reasons that carry no peer-controlled text or secret.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub enum SecurityRejection {
-    /// The requested capability or combination is unsupported.
-    Unsupported,
-    /// Mandatory local policy rejected the operation.
-    Policy,
-    /// Authentication did not succeed.
-    Authentication,
-    /// Replay or duplicate-use policy rejected the operation.
-    Replay,
-    /// Amplification limits rejected the operation.
-    Amplification,
-    /// A ticket was invalid or inadmissible.
-    Ticket,
-    /// A pre-shared key was invalid or inadmissible.
-    Psk,
-    /// Early data was not admitted.
-    EarlyData,
-    /// Encrypted ClientHello was not admitted.
-    Ech,
-}
-
-/// Closed non-terminal failure reasons.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub enum SecurityFailureKind {
-    /// A self-test reported failure.
-    SelfTest,
-    /// A provider returned a closed failure category.
-    Provider(ProviderFailureKind),
-    /// A bounded resource, sequence, or work domain was exhausted.
-    Exhaustion,
-    /// Authentication processing failed without producing acceptance.
-    Authentication,
-    /// Key lifecycle processing failed before authoritative completion.
-    KeyLifecycle,
-    /// Local policy evaluation failed closed.
-    Policy,
-}
-
-/// Closed permanent terminal reasons.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub enum SecurityTerminal {
-    /// Internal state or token binding was inconsistent.
-    ContractInvariant,
-    /// A catastrophic provider failure requires permanent shutdown.
-    Provider,
-    /// Mandatory external-key destruction did not complete.
-    ExternalKeyDestruction,
-    /// A security-relevant generation was exhausted.
-    GenerationExhausted,
-    /// Integrity or mandatory self-test failure requires shutdown.
-    Integrity,
-    /// Mandatory policy requires permanent shutdown.
-    Policy,
-}
-
-/// Engine-supplied resolution of one pending decision.
-///
-/// This value is input to the authority state machine, not an informational
-/// event. `Approved` and `NonApproved` are valid only for
-/// [`ServiceApprovalDecision`]; misuse fails terminally.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[must_use = "a security resolution must be committed to authoritative state"]
-pub enum SecurityResolution {
-    /// Work remains incomplete.
-    Pending,
-    /// The exact non-approval decision succeeded.
-    Accepted,
-    /// The exact service is approved.
-    Approved,
-    /// The exact service is explicitly non-approved.
-    NonApproved,
-    /// The decision rejected its subject.
-    Rejected(SecurityRejection),
-    /// Cancellation completed without acceptance.
-    Canceled,
-    /// Processing failed without acceptance.
-    Failed(SecurityFailureKind),
-    /// Processing permanently failed the authority.
-    Terminal(SecurityTerminal),
-}
-
-const fn rejection_matches_domain(
-    decision: SecurityDecisionKind,
-    reason: SecurityRejection,
-) -> bool {
-    matches!(
-        (decision, reason),
-        (
-            SecurityDecisionKind::ProtocolSelection
-                | SecurityDecisionKind::ProfileSelection
-                | SecurityDecisionKind::ServiceApproval
-                | SecurityDecisionKind::Provider,
-            SecurityRejection::Unsupported
-        ) | (SecurityDecisionKind::Policy, SecurityRejection::Policy)
-            | (
-                SecurityDecisionKind::Authentication,
-                SecurityRejection::Authentication
-            )
-            | (SecurityDecisionKind::AntiReplay, SecurityRejection::Replay)
-            | (
-                SecurityDecisionKind::Amplification,
-                SecurityRejection::Amplification
-            )
-            | (SecurityDecisionKind::Ticket, SecurityRejection::Ticket)
-            | (SecurityDecisionKind::Psk, SecurityRejection::Psk)
-            | (
-                SecurityDecisionKind::EarlyData,
-                SecurityRejection::EarlyData
-            )
-            | (SecurityDecisionKind::Ech, SecurityRejection::Ech)
-    )
-}
-
-const fn failure_matches_domain(
-    decision: SecurityDecisionKind,
-    reason: SecurityFailureKind,
-) -> bool {
-    matches!(
-        (decision, reason),
-        (
-            SecurityDecisionKind::SelfTest,
-            SecurityFailureKind::SelfTest
-        ) | (
-            SecurityDecisionKind::Provider,
-            SecurityFailureKind::Provider(_)
-        ) | (
-            SecurityDecisionKind::Exhaustion,
-            SecurityFailureKind::Exhaustion
-        ) | (
-            SecurityDecisionKind::Authentication,
-            SecurityFailureKind::Authentication
-        ) | (
-            SecurityDecisionKind::KeyLifecycle,
-            SecurityFailureKind::KeyLifecycle
-        ) | (SecurityDecisionKind::Policy, SecurityFailureKind::Policy)
-    )
 }
 
 #[derive(Clone, Copy)]
@@ -239,7 +103,8 @@ impl SecurityAuthority {
         let record = self.record.get();
         match record.state {
             SecurityAuthorityState::Ready => {}
-            SecurityAuthorityState::Pending(kind) => {
+            SecurityAuthorityState::Pending(kind)
+            | SecurityAuthorityState::AwaitingCommit(kind) => {
                 return Err(SecurityAuthorityError::Busy(kind));
             }
             SecurityAuthorityState::Terminal => {
@@ -289,6 +154,7 @@ impl SecurityAuthority {
         &self,
         generation: u64,
         resolution: SecurityResolution,
+        positive_authorized: bool,
     ) -> SecurityOutcome<'_, D> {
         let current = self.record.get();
         if current.state != SecurityAuthorityState::Pending(D::KIND)
@@ -297,10 +163,14 @@ impl SecurityAuthority {
             self.fail_terminal(SecurityTerminal::ContractInvariant);
             return SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND));
         }
-        if matches!(
-            resolution,
-            SecurityResolution::Approved | SecurityResolution::NonApproved
-        ) && D::KIND != ServiceApprovalDecision::KIND
+        if matches!(resolution, SecurityResolution::Approved)
+            || (matches!(resolution, SecurityResolution::Accepted) && !positive_authorized)
+        {
+            self.fail_terminal(SecurityTerminal::ContractInvariant);
+            return SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND));
+        }
+        if matches!(resolution, SecurityResolution::NonApproved)
+            && D::KIND != ServiceApprovalDecision::KIND
         {
             self.fail_terminal(SecurityTerminal::ContractInvariant);
             return SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND));
@@ -332,6 +202,15 @@ impl SecurityAuthority {
             self.fail_terminal(SecurityTerminal::ContractInvariant);
             return SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND));
         }
+        if D::KIND == SecurityDecisionKind::SelfTest
+            && matches!(
+                resolution,
+                SecurityResolution::Failed(SecurityFailureKind::SelfTest)
+            )
+        {
+            self.fail_terminal(SecurityTerminal::Integrity);
+            return SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND));
+        }
         match resolution {
             SecurityResolution::Pending => {
                 SecurityOutcome::Pending(SecurityPending::new(self, generation))
@@ -341,32 +220,47 @@ impl SecurityAuthority {
                 SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND))
             }
             other => {
-                let Some(next) = generation.checked_add(1) else {
-                    self.fail_terminal(SecurityTerminal::GenerationExhausted);
-                    return SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND));
-                };
                 self.record.set(AuthorityRecord {
-                    state: SecurityAuthorityState::Ready,
-                    generation: next,
+                    state: SecurityAuthorityState::AwaitingCommit(D::KIND),
+                    generation,
                     terminal: None,
                 });
-                let receipt = SecurityReceipt::new(self, D::KIND);
+                let completion = SecurityCompletion::new(self, generation);
                 match other {
-                    SecurityResolution::Accepted => SecurityOutcome::Accepted(receipt),
-                    SecurityResolution::Approved => SecurityOutcome::Approved(receipt),
-                    SecurityResolution::NonApproved => SecurityOutcome::NonApproved(receipt),
+                    SecurityResolution::Accepted => SecurityOutcome::Accepted(completion),
+                    SecurityResolution::NonApproved => SecurityOutcome::NonApproved(completion),
                     SecurityResolution::Rejected(reason) => {
-                        SecurityOutcome::Rejected(receipt, reason)
+                        SecurityOutcome::Rejected(completion, reason)
                     }
-                    SecurityResolution::Canceled => SecurityOutcome::Canceled(receipt),
-                    SecurityResolution::Failed(reason) => SecurityOutcome::Failed(receipt, reason),
-                    SecurityResolution::Pending | SecurityResolution::Terminal(_) => {
+                    SecurityResolution::Canceled => SecurityOutcome::Canceled(completion),
+                    SecurityResolution::Failed(reason) => {
+                        SecurityOutcome::Failed(completion, reason)
+                    }
+                    SecurityResolution::Approved
+                    | SecurityResolution::Pending
+                    | SecurityResolution::Terminal(_) => {
                         self.fail_terminal(SecurityTerminal::ContractInvariant);
                         SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND))
                     }
                 }
             }
         }
+    }
+
+    fn commit<D: SecurityDecision>(&self, generation: u64) -> SecurityReceipt<'_, D> {
+        let current = self.record.get();
+        if current.state != SecurityAuthorityState::AwaitingCommit(D::KIND)
+            || current.generation != generation
+        {
+            self.fail_terminal(SecurityTerminal::ContractInvariant);
+            return SecurityReceipt::new(self, D::KIND);
+        }
+        self.record.set(AuthorityRecord {
+            state: SecurityAuthorityState::Ready,
+            generation,
+            terminal: None,
+        });
+        SecurityReceipt::new(self, D::KIND)
     }
 }
 
@@ -393,6 +287,7 @@ impl Default for SecurityAuthority {
 pub struct SecurityPending<'authority, D: SecurityDecision> {
     authority: &'authority SecurityAuthority,
     generation: u64,
+    armed: bool,
     decision: PhantomData<D>,
     thread_bound: PhantomData<*mut ()>,
 }
@@ -402,6 +297,7 @@ impl<'authority, D: SecurityDecision> SecurityPending<'authority, D> {
         Self {
             authority,
             generation,
+            armed: true,
             decision: PhantomData,
             thread_bound: PhantomData,
         }
@@ -420,12 +316,85 @@ impl<'authority, D: SecurityDecision> SecurityPending<'authority, D> {
     }
 
     /// Consumes the incomplete value into one mandatory authoritative outcome.
-    pub fn resolve(self, resolution: SecurityResolution) -> SecurityOutcome<'authority, D> {
-        self.authority.resolve::<D>(self.generation, resolution)
+    pub fn resolve(mut self, resolution: SecurityResolution) -> SecurityOutcome<'authority, D> {
+        self.armed = false;
+        self.authority
+            .resolve::<D>(self.generation, resolution, false)
+    }
+
+    pub(super) fn resolve_verified_accepted(mut self) -> SecurityOutcome<'authority, D> {
+        self.armed = false;
+        self.authority
+            .resolve::<D>(self.generation, SecurityResolution::Accepted, true)
     }
 
     pub(super) const fn authority(&self) -> &'authority SecurityAuthority {
         self.authority
+    }
+}
+
+impl<D: SecurityDecision> Drop for SecurityPending<'_, D> {
+    fn drop(&mut self) {
+        if self.armed {
+            self.authority
+                .fail_terminal(SecurityTerminal::DecisionAbandoned);
+        }
+    }
+}
+
+/// Affine completion that must be committed before another decision can begin.
+///
+/// ```compile_fail
+/// use brynja_core::{AuthenticationDecision, SecurityCompletion};
+/// fn require_clone<T: Clone>() {}
+/// require_clone::<SecurityCompletion<'static, AuthenticationDecision>>();
+/// ```
+#[must_use = "a resolved security outcome must be committed to engine state"]
+pub struct SecurityCompletion<'authority, D: SecurityDecision> {
+    authority: &'authority SecurityAuthority,
+    generation: u64,
+    armed: bool,
+    marker: PhantomData<D>,
+    thread_bound: PhantomData<*mut ()>,
+}
+
+impl<'authority, D: SecurityDecision> SecurityCompletion<'authority, D> {
+    const fn new(authority: &'authority SecurityAuthority, generation: u64) -> Self {
+        Self {
+            authority,
+            generation,
+            armed: true,
+            marker: PhantomData,
+            thread_bound: PhantomData,
+        }
+    }
+
+    /// Returns the exact decision awaiting commitment.
+    #[must_use]
+    pub const fn decision(&self) -> SecurityDecisionKind {
+        D::KIND
+    }
+
+    /// Returns the generation bound to this completion.
+    #[must_use]
+    pub const fn generation(&self) -> u64 {
+        self.generation
+    }
+
+    /// Commits the already-handled outcome and unlocks the authority.
+    pub fn commit(mut self) -> SecurityReceipt<'authority, D> {
+        let receipt = self.authority.commit::<D>(self.generation);
+        self.armed = false;
+        receipt
+    }
+}
+
+impl<D: SecurityDecision> Drop for SecurityCompletion<'_, D> {
+    fn drop(&mut self) {
+        if self.armed {
+            self.authority
+                .fail_terminal(SecurityTerminal::OutcomeAbandoned);
+        }
     }
 }
 
@@ -474,26 +443,26 @@ impl<'authority, D: SecurityDecision> SecurityReceipt<'authority, D> {
 /// Exhaustive mandatory result of one exact security decision.
 #[must_use = "the authoritative security outcome must govern the next state"]
 pub enum SecurityOutcome<'authority, D: SecurityDecision> {
-    /// The exact ordinary decision succeeded.
-    Accepted(SecurityReceipt<'authority, D>),
-    /// The exact service is approved.
-    Approved(SecurityReceipt<'authority, D>),
+    /// A verified ordinary decision succeeded and awaits explicit commitment.
+    Accepted(SecurityCompletion<'authority, D>),
+    /// A verified exact service is approved and awaits explicit commitment.
+    Approved(SecurityCompletion<'authority, D>),
     /// The exact service is explicitly non-approved.
-    NonApproved(SecurityReceipt<'authority, D>),
+    NonApproved(SecurityCompletion<'authority, D>),
     /// The subject was authoritatively rejected.
-    Rejected(SecurityReceipt<'authority, D>, SecurityRejection),
+    Rejected(SecurityCompletion<'authority, D>, SecurityRejection),
     /// Work remains incomplete and retains affine authority.
     Pending(SecurityPending<'authority, D>),
     /// Cancellation completed without acceptance.
-    Canceled(SecurityReceipt<'authority, D>),
+    Canceled(SecurityCompletion<'authority, D>),
     /// Processing failed without acceptance.
-    Failed(SecurityReceipt<'authority, D>, SecurityFailureKind),
+    Failed(SecurityCompletion<'authority, D>, SecurityFailureKind),
     /// Permanent terminal state forbids further work.
     Terminal(SecurityReceipt<'authority, D>),
 }
 
 /// Type alias for the cancellation result receipt.
-pub type SecurityCanceled<'authority, D> = SecurityReceipt<'authority, D>;
+pub type SecurityCanceled<'authority, D> = SecurityCompletion<'authority, D>;
 
 /// Type alias for a non-terminal failure result receipt and reason.
-pub type SecurityFailure<'authority, D> = (SecurityReceipt<'authority, D>, SecurityFailureKind);
+pub type SecurityFailure<'authority, D> = (SecurityCompletion<'authority, D>, SecurityFailureKind);

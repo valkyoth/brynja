@@ -6,6 +6,7 @@
 
 mod domain;
 mod external_key;
+mod resolution;
 mod state;
 
 pub use domain::{
@@ -19,8 +20,11 @@ pub use external_key::{
     ExternalKeyDestroyed, ExternalKeyDestruction, ExternalKeyDestructionError,
     ExternalKeyDestructionFailure, ExternalKeyDestructionOutcome, ExternalKeyDestructionToken,
 };
+pub use resolution::{
+    SecurityFailureKind, SecurityRejection, SecurityResolution, SecurityTerminal,
+};
 pub use state::{
     SecurityAuthority, SecurityAuthorityError, SecurityAuthoritySnapshot, SecurityAuthorityState,
-    SecurityCanceled, SecurityFailure, SecurityFailureKind, SecurityOutcome, SecurityPending,
-    SecurityReceipt, SecurityRejection, SecurityResolution, SecurityTerminal,
+    SecurityCanceled, SecurityCompletion, SecurityFailure, SecurityOutcome, SecurityPending,
+    SecurityReceipt,
 };

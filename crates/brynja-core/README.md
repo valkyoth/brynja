@@ -241,19 +241,24 @@ failure latch that fresh sibling sessions cannot reset or bypass.
 v0.18 adds sealed type-level domains and one caller-owned authoritative state
 machine for every planned security decision class. Only one exact decision may
 remain incomplete. Checked generations bind non-cloneable, thread-bound pending
-values and receipts to their authority; exhaustive results distinguish accepted,
-approved, non-approved, rejected, pending, canceled, failed, and terminal work.
-Approval results are valid only for service approval, ordinary acceptance is
-invalid for that domain, and explicit terminal transitions cannot report
-non-terminal success. Terminal reasons latch permanently.
+values, completions, and receipts to their authority; exhaustive results
+distinguish accepted, approved, non-approved, rejected, pending, canceled,
+failed, and terminal work. Public resolutions cannot forge accepted or approved
+authority. A future positive path must supply sealed exact-subject evidence;
+the current external-key path alone can establish its exact token-bound
+acceptance. Resolved non-terminal work remains `AwaitingCommit` until its affine
+completion is explicitly committed. Dropping pending work or an uncommitted
+outcome permanently fails closed, mandatory self-test failure permanently
+latches integrity failure, and explicit terminal transitions cannot report
+non-terminal success.
 
 External-key destruction begins only as a typed key-lifecycle decision and
 issues one non-cloneable token for the external-store target. Only consuming a
 correct authority- and generation-bound token can produce a successful result;
-duplicate, cross-boundary, failed, or abandoned completion is terminal. Ten
-behavior groups, three compile-fail examples, four reviewed source hashes, the
-500-line ceiling, and eighteen broken fixtures enforce the contract. Rejection
-and failure reasons must match their exact decision domain. It
+duplicate, cross-boundary, failed, or abandoned completion is terminal.
+Fourteen behavior tests, four compile-fail examples, five reviewed source
+hashes, the 500-line ceiling, and twenty-three broken fixtures enforce the
+contract. Rejection and failure reasons must match their exact decision domain. It
 implements no policy, authentication, protocol/profile selection, ticket,
 resumption, PSK, early-data, replay, amplification, ECH, provider effect,
 external key store, cryptography, protocol engine, event schema, independent

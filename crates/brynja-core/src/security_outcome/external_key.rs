@@ -172,9 +172,7 @@ impl<'authority> ExternalKeyDestruction<'authority> {
             ));
         }
         match outcome {
-            ExternalKeyDestructionOutcome::Complete(_) => {
-                pending.resolve(SecurityResolution::Accepted)
-            }
+            ExternalKeyDestructionOutcome::Complete(_) => pending.resolve_verified_accepted(),
             ExternalKeyDestructionOutcome::Failed { .. } => pending.resolve(
                 SecurityResolution::Terminal(SecurityTerminal::ExternalKeyDestruction),
             ),

@@ -376,12 +376,16 @@ module, algorithm, provider effect, self-test implementation, CPU kernel,
 measured environment, reproduced binary, SSP effect, CMVP submission,
 certificate, independent review, or FIPS validation result.
 v0.18.0 adds only sealed security-decision domains, caller-owned authoritative
-state, exhaustive typed results, exact rejection/failure reason binding, and token-gated external-key destruction
-completion. Informational snapshots cannot change state; ordinary domains
-cannot claim approved status; service approval cannot collapse into ordinary
-acceptance; terminal transitions cannot report ordinary success; and external-
-key completion cannot exist without consuming its exact authority- and
-generation-bound token. The contract implements no decision policy,
+state, exhaustive typed results, exact rejection/failure reason binding, and
+token-gated external-key destruction completion. Informational snapshots
+cannot change state; public resolutions cannot forge positive authority;
+future accepted or approved paths require sealed exact-subject evidence;
+resolved non-terminal outcomes cannot unlock the authority until explicit
+affine commitment; dropping pending work or an uncommitted outcome is terminal;
+mandatory self-test failure permanently latches integrity failure; terminal
+transitions cannot report ordinary success; and external-key completion cannot
+exist without consuming its exact authority- and generation-bound token. The
+contract implements no decision policy,
 authentication, protocol/profile selection, ticket, resumption, PSK,
 early-data, replay, amplification, ECH, provider effect, external key store,
 event schema, cryptography, protocol engine, independent review, or FIPS

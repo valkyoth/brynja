@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.17.0 signed; v0.18.0 implementation complete and awaiting pentest
+Status: v0.17.0 signed; v0.18.0 pentest remediation complete and awaiting retest
 
 The `brynja` facade advances to `0.18.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published
@@ -61,7 +61,11 @@ service, algorithm or validation and selects no package publication.
 Signed tag v0.17.0 contains the final reviewed remediation. The v0.18.0 stage
 adds only sealed mandatory decision domains, one caller-owned authoritative
 state machine, exhaustive typed outcomes, and token-gated external-key
-destruction. It implements no policy, authentication, protocol engine,
+destruction. Its assessment findings are remediated by making public positive
+resolutions non-authorizing, requiring explicit affine outcome commitment,
+terminalizing abandoned pending/outcome values, and permanently latching
+mandatory self-test failure; repository-owner retest is pending. It implements
+no policy, authentication, protocol engine,
 provider effect, external key store, event schema, algorithm, independent
 verification, or validation and selects no package publication.
 

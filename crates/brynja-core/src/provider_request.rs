@@ -200,4 +200,8 @@ impl<'provider, 'data> ProviderRequest<'provider, 'data> {
             )),
         }
     }
+
+    pub(crate) const fn provider(&self) -> &'provider InstalledProvider {
+        self.provider
+    }
 }

@@ -53,8 +53,7 @@ and pentesting do not by themselves constitute independent verification.
 | --- | --- | --- |
 | `brynja-crypto-cpu-std` | Future host feature detection and dispatch initialization | ❌ Not implemented or verified |
 
-The initial package is selected for the v0.15.0 cumulative checkpoint. Its
-pentest passed with zero findings, but it remains unpublished until the hosted
-gates pass. The project-wide
+Version `0.1.0` was published at the v0.15.0 cumulative checkpoint after its
+pentest and hosted gates passed with zero findings. The project-wide
 first-party Rust, dependency, source-size, platform, FIPS, and low-level-code
 policies apply here.

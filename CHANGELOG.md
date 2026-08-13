@@ -7,6 +7,17 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add exact affine pending certificate, external-signature, and accelerator
+  requests with mandatory poll/cancel capability admission, applicable
+  destruction duties, checked effect-attempt and backpressure limits, and no
+  implicit provider fallback.
+- Add state-owning begin, resume, retry, backpressure, completion,
+  cancellation, failure, exhaustion, and `Drop` transitions whose authoritative
+  completion consumes one non-cloneable destruction token covering all frozen
+  external-store, accelerator, cache, DMA, and other provider duties.
+- Add seven deterministic lifecycle tests, three compile-fail ownership tests,
+  a SHA-256-bound four-file policy, and eleven admission, bound, cleanup,
+  low-level, source-size, and drift fixtures.
 - Add canonical checked durations, signed Unix wall time, inclusive validity
   ranges, opaque generation-bound monotonic instants, purpose-bound deadlines,
   explicit unavailable-time behavior, and permanent rollback failure.
@@ -89,11 +100,14 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Advance the development facade to `brynja 0.16.0`, retain every supporting-
+  crate publication version from v0.15.0, and select zero crates for crates.io
+  publication.
 - Advance the cumulative public checkpoint to `brynja 0.15.0`,
   `brynja-core 0.8.0`, dependency-only modern support releases, and the initial
   `brynja-crypto-cpu`, `brynja-crypto-cpu-std`, and
-  `brynja-sanitization` packages; the scheduled cumulative pentest passed and
-  publication remains blocked pending the hosted release gates.
+  `brynja-sanitization` packages; the scheduled cumulative pentest and hosted
+  release gates passed and the complete selected set was published.
 - Require the secure-random destruction-failure handler after failed explicit
   teardown as well as `Drop`, quarantine, and rejected initialization; rename
   the engine hook to reflect its complete scope and cover explicit and `Drop`

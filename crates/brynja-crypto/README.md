@@ -55,13 +55,12 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.1"
+brynja = "0.15"
 ```
 
-This dependency-only patch is selected for the v0.15.0 cumulative checkpoint
-because it exact-pins `brynja-core 0.8.0`. The scheduled pentest passed with
-zero findings. Publication still requires green hosted checks, the signed
-checkpoint tag, and every version-specific gate in the
+Version `0.1.1` was published at the v0.15.0 cumulative checkpoint after the
+scheduled pentest and hosted gates passed with zero findings. It exact-pins
+the published `brynja-core 0.8.0` boundary under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party-cryptography, `no_std`, 500-line source-file,

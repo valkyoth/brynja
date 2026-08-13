@@ -1369,7 +1369,7 @@ Exit criteria:
 
 ### v0.15.0 - Wall And Monotonic Clock Contracts
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Define non-interchangeable typed wall time for PKI and typed monotonic time for timers, freshness, tickets, and replay policy with checked arithmetic and explicit unavailable-time behavior.
 
@@ -1422,7 +1422,7 @@ Exit criteria:
 
 ### v0.16.0 - Pending Operations And Accelerator Lifecycle
 
-Status: planned
+Status: awaiting green CI
 
 Plan scope: Define resumable provider tokens, certificate, signature and accelerator requests, cancellation, retry semantics, backpressure, and failure-atomic state transitions; external-key and accelerator-handle destruction completes only through a mandatory single-consumption token transition, never through an informational event.
 
@@ -1431,22 +1431,51 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- admit only exact certificate-path, external-signature, and accelerator-
+  eligible provider requests whose chosen provider also declares poll, cancel,
+  and applicable external-store or accelerator destruction duties;
+- bind each affine request to immutable nonzero effect-attempt and
+  backpressure-response limits, preserving the same request on no-state begin
+  retry or backpressure and failing closed at every checked counter boundary;
+- define a downstream `PendingProvider` effect whose begin result creates
+  either no state or exactly one opaque state, and whose resume and cancel
+  variants always return ownership of that state until a terminal transition;
+- make completion, cancellation, provider failure, exhaustion, and `Drop`
+  synchronously consume provider state through one non-cloneable destruction
+  token covering frozen local, external-store, accelerator, cache, and DMA
+  duties; completion or cancellation is authoritative only after that token is
+  consumed into a complete result;
+- return only closed secret-free retry, backpressure, provider, exhaustion,
+  and destruction outcomes; route failed destruction reached through `Drop`
+  to the mandatory durable/fail-stop provider hook;
+- add deterministic scripted provider tests and reviewed source policy without
+  adding an implementation, registry, thread, allocator, OS, FFI, unsafe, or
+  cryptographic dependency;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, terminal states, and exact single consumption of every external-key or accelerator-handle destruction token;
+- run exact-kind, wrong-direction, missing-capability, missing-duty, zero-limit,
+  no-state begin, retry, backpressure, active, complete, cancel, provider-fail,
+  attempt-exhaustion, backpressure-exhaustion, destruction-fail, `Drop`, and
+  input-preservation tests with a deterministic provider;
+- compile-fail affine request, operation, and destruction-token duplication;
+  enforce checked counters, state-returning effect variants, exact single-
+  consumption methods, terminal `Drop` handling, reviewed hashes, private
+  state, the 500-line ceiling, and no std/alloc/unsafe/FFI/platform access with
+  eleven broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- certificate, signature, and accelerator requests cannot cross kinds; retry
+  and backpressure cannot duplicate state or bypass caller bounds; every state-
+  owning terminal path attempts exactly one authoritative destruction
+  transition; and no provider implementation, certificate validation,
+  signature, accelerator, platform effect, protocol engine, independent
+  verification, or FIPS claim is implied;
 - `v0.16.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.17.0 - FIPS-Aware Provider Architecture

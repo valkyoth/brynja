@@ -21,6 +21,7 @@ pub mod entropy;
 pub mod error;
 pub mod exhaustion;
 pub mod numeric;
+pub mod pending;
 pub mod provider;
 pub mod provider_capability;
 pub mod provider_contract;
@@ -88,6 +89,14 @@ pub use entropy::{
 pub use error::{AlertFailure, FailureKind, LocalFailure, TlsFailure};
 pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
+pub use pending::{
+    PendingBackpressure, PendingBegin, PendingCancelStep, PendingCancellation, PendingCompletion,
+    PendingDestructionCause, PendingDestructionComplete, PendingDestructionFailure,
+    PendingDestructionFailureKind, PendingDestructionOutcome, PendingDestructionToken,
+    PendingEffectRequest, PendingFailure, PendingFailureKind, PendingLimitError, PendingLimits,
+    PendingOperation, PendingProvider, PendingRequest, PendingRequestError, PendingRequestKind,
+    PendingResource, PendingRetryReason, PendingStart, PendingStep, PendingTransition,
+};
 pub use provider::{ProviderFailure, ProviderFailureKind, ProviderOperation};
 pub use provider_capability::{
     ProviderCapabilities, ProviderCapabilitiesBuilder, ProviderCapabilityError,
@@ -166,6 +175,9 @@ pub const ENTROPY_CONTRACT_IMPLEMENTED: bool = true;
 /// Whether the v0.15 wall and monotonic clock contracts are implemented.
 pub const CLOCK_CONTRACT_IMPLEMENTED: bool = true;
 
+/// Whether the v0.16 pending-operation lifecycle is implemented.
+pub const PENDING_OPERATION_LIFECYCLE_IMPLEMENTED: bool = true;
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -193,5 +205,8 @@ mod tests {
         ));
         assert!(::core::hint::black_box(super::ENTROPY_CONTRACT_IMPLEMENTED));
         assert!(::core::hint::black_box(super::CLOCK_CONTRACT_IMPLEMENTED));
+        assert!(::core::hint::black_box(
+            super::PENDING_OPERATION_LIFECYCLE_IMPLEMENTED
+        ));
     }
 }

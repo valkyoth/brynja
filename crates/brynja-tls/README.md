@@ -49,12 +49,11 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.10"
+brynja = "0.15"
 ```
 
-This dependency-only patch is selected for v0.15.0. Its cumulative pentest
-passed with zero findings, but it remains unpublished until hosted checks pass.
-It is versioned `0.1.7` under the
+This `0.1.7` package was published at the v0.15.0 cumulative checkpoint
+after its pentest and hosted checks passed. It is governed by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

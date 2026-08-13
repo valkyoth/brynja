@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting green CI
+Status: v0.15.0 published; v0.16.0 awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -16,14 +16,17 @@ native CPU evidence and performance-admission harness, and affine raw-entropy
 plus initialized secure-random contracts, canonical checked durations, signed
 Unix wall time, inclusive validity ranges, opaque generation-bound monotonic
 instants, purpose-bound deadlines, explicit unavailability, and permanent
-rollback failure. It currently admits zero backends.
+rollback failure, plus affine bounded pending certificate, external-signature,
+and accelerator request state whose completion and cancellation require an
+authoritative single-consumption destruction transition. It currently admits
+zero backends.
 It still has no integer
 encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
 
-Signed releases v0.1.0 through v0.10.0 established the workspace, hardened
+Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
 the assurance harness and first value, cursor, workspace, and abstract secret
@@ -49,18 +52,18 @@ boundaries. Signed v0.13.3 provides machine-readable evidence, lane,
 raw-artifact, benchmark, and admission contracts while admitting no backend.
 Signed v0.14.0 contains exact-purpose raw entropy and initialized secure-random
 state, while its deterministic fault provider remains unpublished test support.
-The facade now advances to the scheduled `0.15.0` checkpoint;
-`brynja-core 0.8.0` adds typed wall and monotonic clock contracts and test
-support adds deterministic scripted sources. Fourteen crates are selected for
-the cumulative publication. The scheduled v0.10.0-through-v0.15.0 pentest of
+The `0.15.0` checkpoint published `brynja-core 0.8.0`, the modern dependency
+patches, the initial CPU-boundary and sanitization packages, and the facade
+after the scheduled v0.10.0-through-v0.15.0 pentest of
 exact signed candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` passed
-with zero findings; green hosted checks, the signed tag, and explicit
-authorization still block every upload.
+with zero findings and hosted checks became green. The facade now advances to
+`0.16.0`; supporting versions remain unchanged and no crate is selected for
+publication.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
 publication occur at each fifth-minor public checkpoint. The v0.15.0 pentest
-will review all changes after v0.10.0 through v0.15.0; the v0.20.0 pentest will
+reviewed all changes after v0.10.0 through v0.15.0; the v0.20.0 pentest will
 review all changes after v0.15.0 through v0.20.0. Intermediate patch and minor
 tags remain inside that cumulative change range.
 
@@ -612,12 +615,34 @@ quarantine; failed explicit and `Drop` teardown must each invoke it exactly
 once. Repository-owner retest of exact signed remediation candidate
 `854c301de56ba432bd0544e2acc525b34a7b28c8` passed with zero open findings.
 
-The package is held from crates.io until a public checkpoint. Because this is
-the first production adapter around external unsafe secret-storage code,
-v0.11.2 received an exceptional assessment; it passed with zero findings and
-zero open findings. Its signed development tag was created after green GitHub
-and CodeQL, and it remains in the later v0.10.0-through-v0.15.0 cumulative
-scope.
+Version 0.15.0 implements typed wall and monotonic clock contracts. Signed Unix
+time is canonical and checked; monotonic instants are private, redacted, bound
+to one nonzero runtime generation, and permanently fail after rollback.
+Purpose-bound deadlines cannot cross timer, freshness, ticket, or replay
+domains. The package reads no OS clock and performs no PKI, timer, ticket,
+replay, or cryptographic effect. The cumulative assessment of every change
+after v0.10.0 passed with zero findings and the selected package set was
+published.
+
+Version 0.16.0 implements the pending-operation lifecycle. Certificate-path,
+external-signature, and accelerator requests require exact operation, poll,
+cancel, and applicable destruction capabilities. Checked limits bound every
+effect call and backpressure response. Begin creates no state or one opaque
+state; all subsequent variants return ownership until completion,
+cancellation, provider failure, exhaustion, or `Drop` consumes it through one
+mandatory destruction token. Completion and cancellation are unavailable
+until cleanup reports complete; failed `Drop` cleanup reaches the mandatory
+durable/fail-stop handler. This is an upstream contract only and implements no
+provider, key store, accelerator, certificate validator, signature,
+cryptographic algorithm, protocol engine, independent verification, or FIPS
+validation. v0.16.0 selects no crates.io publication.
+
+The package was held from crates.io until the v0.15.0 public checkpoint.
+Because this is the first production adapter around external unsafe
+secret-storage code, v0.11.2 received an exceptional assessment; it passed
+with zero findings and zero open findings. Its signed development tag was
+created after green GitHub and CodeQL, and the adapter was subsequently covered
+by the completed v0.10.0-through-v0.15.0 cumulative assessment and published.
 
 The repository-owner v0.10.0 assessment found one Medium failure-observability
 gap: target failure reached through either Drop implementation was discarded

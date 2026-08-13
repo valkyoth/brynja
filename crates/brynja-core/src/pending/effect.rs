@@ -1,0 +1,321 @@
+//! Downstream pending-provider effect and cleanup boundary.
+
+use crate::{DestructionTargets, ProviderFailureKind, ProviderFrame, ProviderOperation};
+
+use super::{PendingRequestKind, PendingResource};
+
+/// Secret-free reason that an operation may be retried.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[non_exhaustive]
+pub enum PendingRetryReason {
+    /// The provider has not yet made progress.
+    NotReady,
+    /// A transient provider condition prevented progress.
+    TransientFailure,
+    /// Cancellation was observed but is not yet durable.
+    CancellationInProgress,
+}
+
+/// Secret-free backpressure classification.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[non_exhaustive]
+pub enum PendingBackpressure {
+    /// The provider's bounded queue is full.
+    QueueFull,
+    /// The caller must drain output before retrying.
+    OutputBlocked,
+    /// The accelerator cannot currently accept work.
+    DeviceBusy,
+}
+
+/// Immutable metadata presented to a downstream provider effect.
+pub struct PendingEffectRequest<'request, 'data> {
+    kind: PendingRequestKind,
+    operation: ProviderOperation,
+    frame: &'request ProviderFrame<'data>,
+    attempt: u64,
+    remaining_work: u64,
+}
+
+impl<'request, 'data> PendingEffectRequest<'request, 'data> {
+    pub(crate) const fn new(
+        kind: PendingRequestKind,
+        operation: ProviderOperation,
+        frame: &'request ProviderFrame<'data>,
+        attempt: u64,
+        remaining_work: u64,
+    ) -> Self {
+        Self {
+            kind,
+            operation,
+            frame,
+            attempt,
+            remaining_work,
+        }
+    }
+
+    /// Returns the exact pending request kind.
+    #[must_use]
+    pub const fn kind(&self) -> PendingRequestKind {
+        self.kind
+    }
+
+    /// Returns the exact original provider operation.
+    #[must_use]
+    pub const fn operation(&self) -> ProviderOperation {
+        self.operation
+    }
+
+    /// Returns the immutable version-neutral frame.
+    #[must_use]
+    pub const fn frame(&self) -> &ProviderFrame<'data> {
+        self.frame
+    }
+
+    /// Returns the one-based effect attempt number.
+    #[must_use]
+    pub const fn attempt(&self) -> u64 {
+        self.attempt
+    }
+
+    /// Returns the remaining precharged work allowance.
+    #[must_use]
+    pub const fn remaining_work(&self) -> u64 {
+        self.remaining_work
+    }
+}
+
+/// Provider result when first creating continuation state.
+#[must_use = "begin results preserve ownership or terminate explicitly"]
+pub enum PendingBegin<State> {
+    /// Provider continuation state was created.
+    Active(State),
+    /// No state or handle was created; retry the original request.
+    Retry(PendingRetryReason),
+    /// No state or handle was created; bounded backpressure was reported.
+    Backpressure(PendingBackpressure),
+    /// No state or handle was created; the request failed.
+    Failed(ProviderFailureKind),
+}
+
+/// One resumable provider transition. Every variant returns state ownership.
+#[must_use = "pending steps must be consumed by the lifecycle"]
+pub enum PendingStep<State> {
+    /// Work completed and the provider state must now be destroyed.
+    Complete(State),
+    /// Work made progress and remains pending.
+    Active(State),
+    /// Work remains retryable.
+    Retry(State, PendingRetryReason),
+    /// Work remains pending behind explicit backpressure.
+    Backpressure(State, PendingBackpressure),
+    /// Work failed and the provider state must now be destroyed.
+    Failed(State, ProviderFailureKind),
+}
+
+/// One cancellation transition. Every variant returns state ownership.
+#[must_use = "cancellation steps must be consumed by the lifecycle"]
+pub enum PendingCancelStep<State> {
+    /// Cancellation is durable and provider state must now be destroyed.
+    Canceled(State),
+    /// Cancellation must be retried.
+    Retry(State, PendingRetryReason),
+    /// Cancellation is subject to explicit backpressure.
+    Backpressure(State, PendingBackpressure),
+    /// Cancellation failed and provider state must now be destroyed.
+    Failed(State, ProviderFailureKind),
+}
+
+/// Why pending provider state must be destroyed.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[non_exhaustive]
+pub enum PendingDestructionCause {
+    /// Provider work completed.
+    Completion,
+    /// Cancellation became durable.
+    Cancellation,
+    /// A provider transition failed.
+    ProviderFailure,
+    /// A caller-selected transition limit was exhausted.
+    Exhaustion,
+    /// The affine pending operation left scope.
+    Drop,
+}
+
+/// A single-consumption authority to finish provider-state destruction.
+///
+/// An effect can only produce a completion or failure by consuming this token.
+/// Informational events cannot authorize the lifecycle transition.
+///
+/// ```compile_fail
+/// use brynja_core::PendingDestructionToken;
+///
+/// fn claim_twice(token: PendingDestructionToken) {
+///     let _first = token.complete();
+///     let _second = token.complete();
+/// }
+/// ```
+#[must_use = "pending destruction authority must be consumed exactly once"]
+pub struct PendingDestructionToken {
+    resource: PendingResource,
+    targets: DestructionTargets,
+    cause: PendingDestructionCause,
+}
+
+impl PendingDestructionToken {
+    pub(crate) const fn new(
+        resource: PendingResource,
+        targets: DestructionTargets,
+        cause: PendingDestructionCause,
+    ) -> Self {
+        Self {
+            resource,
+            targets,
+            cause,
+        }
+    }
+
+    /// Returns the provider-owned resource covered by the transition.
+    #[must_use]
+    pub const fn resource(&self) -> PendingResource {
+        self.resource
+    }
+
+    /// Returns all frozen local, external, accelerator, cache, and DMA duties.
+    #[must_use]
+    pub const fn targets(&self) -> DestructionTargets {
+        self.targets
+    }
+
+    /// Returns why destruction is mandatory.
+    #[must_use]
+    pub const fn cause(&self) -> PendingDestructionCause {
+        self.cause
+    }
+
+    /// Asserts that every applicable duty completed synchronously.
+    pub const fn complete(self) -> PendingDestructionOutcome {
+        PendingDestructionOutcome::Complete(PendingDestructionComplete {
+            resource: self.resource,
+            cause: self.cause,
+        })
+    }
+
+    /// Consumes the authority into a terminal closed failure.
+    pub const fn fail(self, kind: PendingDestructionFailureKind) -> PendingDestructionOutcome {
+        PendingDestructionOutcome::Failed(PendingDestructionFailure {
+            resource: self.resource,
+            cause: self.cause,
+            kind,
+        })
+    }
+}
+
+/// Proof that provider-state destruction completed.
+#[must_use = "destruction completion must govern the terminal transition"]
+pub struct PendingDestructionComplete {
+    resource: PendingResource,
+    cause: PendingDestructionCause,
+}
+
+impl PendingDestructionComplete {
+    /// Returns the destroyed provider-owned resource.
+    #[must_use]
+    pub const fn resource(&self) -> PendingResource {
+        self.resource
+    }
+
+    /// Returns the terminal transition cause.
+    #[must_use]
+    pub const fn cause(&self) -> PendingDestructionCause {
+        self.cause
+    }
+}
+
+/// Closed provider-state destruction failure class.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[non_exhaustive]
+pub enum PendingDestructionFailureKind {
+    /// An external key could not be synchronously released or destroyed.
+    ExternalKey,
+    /// An accelerator handle or device state could not be destroyed.
+    AcceleratorHandle,
+    /// Cache or DMA completion could not be established.
+    CacheOrDma,
+    /// Other provider continuation state could not be destroyed.
+    ProviderState,
+}
+
+/// Terminal secret-free failure of mandatory provider-state destruction.
+#[must_use = "pending destruction failure is terminal"]
+pub struct PendingDestructionFailure {
+    resource: PendingResource,
+    cause: PendingDestructionCause,
+    kind: PendingDestructionFailureKind,
+}
+
+impl PendingDestructionFailure {
+    /// Returns the provider resource that remains unaccounted for.
+    #[must_use]
+    pub const fn resource(&self) -> PendingResource {
+        self.resource
+    }
+
+    /// Returns the terminal transition cause.
+    #[must_use]
+    pub const fn cause(&self) -> PendingDestructionCause {
+        self.cause
+    }
+
+    /// Returns the closed failure category.
+    #[must_use]
+    pub const fn kind(&self) -> PendingDestructionFailureKind {
+        self.kind
+    }
+}
+
+/// Mandatory outcome of consuming destruction authority.
+#[must_use = "pending destruction outcome must be handled"]
+pub enum PendingDestructionOutcome {
+    /// Every declared destruction duty completed.
+    Complete(PendingDestructionComplete),
+    /// Destruction failed and the lifecycle is terminal.
+    Failed(PendingDestructionFailure),
+}
+
+/// Downstream effect boundary for one provider's pending continuation state.
+///
+/// Every resumable or cancellation variant returns ownership of `State`.
+/// Returning `PendingBegin::Retry`, `Backpressure`, or `Failed` asserts that no
+/// provider state, external key operation, or accelerator handle was created.
+pub trait PendingProvider {
+    /// Opaque provider-owned continuation state.
+    type State;
+
+    /// Creates continuation state or reports a no-state result.
+    fn begin(&mut self, request: PendingEffectRequest<'_, '_>) -> PendingBegin<Self::State>;
+
+    /// Performs one bounded resume transition.
+    fn resume(
+        &mut self,
+        state: Self::State,
+        request: PendingEffectRequest<'_, '_>,
+    ) -> PendingStep<Self::State>;
+
+    /// Requests durable cancellation.
+    fn cancel(
+        &mut self,
+        state: Self::State,
+        request: PendingEffectRequest<'_, '_>,
+    ) -> PendingCancelStep<Self::State>;
+
+    /// Destroys continuation state and consumes exact transition authority.
+    fn destroy(
+        &mut self,
+        state: Self::State,
+        token: PendingDestructionToken,
+    ) -> PendingDestructionOutcome;
+
+    /// Makes a destruction failure reached through `Drop` durable or fail-stop.
+    fn handle_drop_failure(&mut self, failure: PendingDestructionFailure);
+}

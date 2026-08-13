@@ -16,10 +16,10 @@ SOURCES = (
     Path("provider_request.rs"),
 )
 EXPECTED_SHA256 = {
-    Path("provider.rs"): "0e8baa783a41ada4ae4d79c439f0a361d12e2775f74cffc78ec80389be9b104f",
+    Path("provider.rs"): "487abd5036e98c64bc67bf93e571ccded0e6b937c4a91eab77df513a4b9e2575",
     Path("provider_capability.rs"): "588ebe84cafe0e7928c8784ca938f2475eebede80a62a28cf1a37f2e02afef0a",
     Path("provider_contract.rs"): "59ea3fada9c7f8bd5a3ee25842b36bb235a37ddad241b60fdf44bf2298f4bb43",
-    Path("provider_request.rs"): "51aaaaefaef164f34d392412866a327afb6d9acce555fef50a57107ce21bb295",
+    Path("provider_request.rs"): "4453230df5c648eaf33570031621ae18c58895d7ba4f548ace63939eecea91fb",
 }
 OPERATIONS = (
     "Hash",

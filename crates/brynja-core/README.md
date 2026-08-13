@@ -25,14 +25,15 @@
 
 # brynja-core
 
-`brynja-core 0.8.0` now carries the cumulative v0.15 typed wall and monotonic
-clock contract, v0.14 entropy and initialized
+`brynja-core 0.8.0` now carries the cumulative v0.16 pending-operation
+lifecycle, v0.15 typed wall and monotonic clock contract, v0.14 entropy and initialized
 secure-random contract, v0.13.1 CPU-backend capability and dispatch contract,
 and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
-contract, and transactional foundations from earlier milestones. The package
-version remains `0.7.0` until the v0.15.0 public checkpoint.
+contract, and transactional foundations from earlier milestones. Version
+`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 code remains
+unpublished until a later public checkpoint.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return
@@ -133,8 +134,7 @@ thirteen broken fixtures enforce the boundary.
 
 This is an authority and request-metadata contract only. It implements no
 algorithm, provider effect, output commit, entropy health, clock semantics,
-certificate path, storage backend, pending-operation lifecycle, CPU dispatch,
-or FIPS approval.
+certificate path, storage backend, CPU dispatch, or FIPS approval.
 
 v0.14 separates affine caller-provided `RawEntropy` from initialized
 `SecureRandom` state. Requests bind exact purpose, security-strength capacity,
@@ -169,6 +169,27 @@ replay, cryptographic, independent-verification, or FIPS operation. Scripted
 sources exist only in permanently unpublished test support. Eight core tests,
 two fixture tests, two compile-fail examples, reviewed hashes, and nine broken
 policy fixtures enforce this boundary.
+
+v0.16 adds an affine pending lifecycle over exact certificate-path,
+external-signature, and accelerator-eligible provider requests. Admission
+requires the same installed provider's poll and cancel capabilities plus
+applicable external-store or accelerator destruction duties. Immutable checked
+limits bound begin, resume, cancellation, retry, and backpressure. A downstream
+`PendingProvider` either creates no state or exactly one opaque state; every
+later effect variant returns that state to the lifecycle. Completion,
+cancellation, provider failure, exhaustion, and `Drop` synchronously consume
+state with one non-cloneable destruction token that carries all frozen local,
+external-store, accelerator, cache, and DMA duties. Completion and cancellation
+remain unavailable until that token becomes a complete result, and failed
+cleanup reached through `Drop` invokes the mandatory durable/fail-stop hook.
+
+Seven deterministic tests, three compile-fail examples, reviewed hashes, and
+eleven broken fixtures enforce exact kinds and directions, missing capability
+and duty rejection, unchanged input, bounded retries/backpressure, state
+ownership, cancellation, failure, exhaustion, authoritative destruction, and
+drop handling. This upstream contract implements no provider, path validator,
+signature, external key store, accelerator, platform effect, cryptographic
+algorithm, protocol engine, independent verification, or FIPS validation.
 
 v0.13.1 adds sealed scalar, x86, AArch64, RISC-V, and validated-module backend
 identities; exact feature and provider-operation profiles; scalar-only,
@@ -209,19 +230,19 @@ independent cryptographic or protocol verification.
 
 | Component | Cryptographic or protocol scope | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, and typed-clock state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, and pending-operation state contracts | ❌ Not verified |
 
 Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.10"
+brynja = "0.15"
 ```
 
-Version `0.8.0` is selected for the Brynja v0.15.0 cumulative public checkpoint.
-Its scheduled v0.10.0-through-v0.15.0 pentest passed with zero findings. It is
-not published until green hosted checks, the signed tag, and explicit
-authorization satisfy the
+Version `0.8.0` was published at the Brynja v0.15.0 cumulative checkpoint after
+its scheduled assessment passed with zero findings. The v0.16.0 pending-
+operation delta is tagged development work and remains unpublished until a
+later checkpoint under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party Rust cryptography, dependency, `no_std`, 500-line

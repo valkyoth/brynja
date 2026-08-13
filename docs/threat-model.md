@@ -216,14 +216,17 @@ contract, and exclusive caller-owned secret-region clearing. There is no cache,
 DMA, register, copy, dump, suspend-image, physical-memory, forgotten-owner, or
 termination erasure guarantee, integer encoder or decoder, framing layer,
 protocol parser, record layer, arena release or reuse, handshake, provider
-implementation or effect, algorithm/key identifier, entropy source, clock
-semantics, path engine, storage backend, pending-operation lifecycle, PKI, or
+implementation or effect, algorithm/key identifier, entropy source, path
+engine, storage backend, PKI, or
 cryptography. v0.13 provider types authorize only bounded metadata for one
 explicitly chosen provider; they retain that exact provider but do not perform
 or complete the operation. A later trusted provider effect must derive and
 charge actual work before each expensive step and return its authoritative
 result directly; application code cannot supply a work estimate or construct a
-result receipt.
+result receipt. v0.15 clock contracts classify time without reading a platform clock.
+v0.16 pending types own and bound continuation state and its terminal cleanup
+without implementing a provider effect; application code cannot forge
+authoritative completion from an informational event.
 v0.13.1 backend types add only inert identities, exact feature/operation
 profiles, policy selection, caller-owned KAT health state, generation
 invalidation, permanent quarantine, opaque measured-instance binding,
@@ -273,6 +276,18 @@ unavailability returns no substitute value and preserves prior monotonic state;
 rollback permanently fails the wrapper. This does not authenticate the
 downstream source, prevent wall-clock adjustment, read an OS clock, validate a
 certificate, run a protocol timer, store replay state, or create FIPS evidence.
+v0.16.0 treats pending continuation state, external signing-key work, and
+accelerator handles as affine resources. Exact request-kind admission prevents
+certificate, signature, and accelerator confusion; missing poll, cancel,
+external-store, or accelerator duties fail before state exists. Checked effect
+and backpressure limits bound retry. Every state-owning effect variant returns
+ownership, while completion, cancellation, provider failure, exhaustion, and
+`Drop` require the same non-cloneable destruction authority. An informational
+event cannot complete cleanup or make work authoritative. The downstream
+provider remains trusted to destroy its opaque state and every declared
+external-store, accelerator, cache, and DMA copy before consuming the token;
+forgotten owners, process abort, device failure, dumps, physical remanence, and
+dishonest implementations remain outside the upstream type-level claim.
 Public profiles, features, approval values, snapshots, and reports are
 observational and cannot construct feature evidence, KAT evidence, active
 authority, dispatch authority, instance identity, CPU lease, trusted CPU
@@ -321,6 +336,10 @@ algorithm, source, platform effect, source-health evidence, or validation.
 v0.15.0 adds only typed time values, source interfaces, monotonic rollback
 detection, and deterministic test support; it adds no OS clock or protocol,
 PKI, ticket, replay, cryptographic, independent-review, or FIPS result.
+v0.16.0 adds only bounded affine pending request, effect-state, cancellation,
+backpressure, and authoritative destruction transitions; it adds no provider,
+certificate validation, signature, external key store, accelerator driver,
+algorithm, protocol, platform, independent-review, or FIPS result.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

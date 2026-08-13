@@ -1,13 +1,13 @@
 # Brynja v0.15.0 Public Checkpoint
 
-Status: implementation and scheduled pentest complete; awaiting green GitHub and CodeQL
+Status: released and published
 
 Brynja v0.15.0 adds typed wall and monotonic clock contracts and prepares the
 cumulative public checkpoint covering every change after v0.10.0 through this
 candidate. The repository owner assessed exact signed implementation candidate
 `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` and reported PASS/PASS with zero
-open findings. Nothing may be tagged or published until the report-bearing
-release commit passes GitHub and CodeQL.
+open findings. The report-bearing release commit passed GitHub and CodeQL; the
+signed tag and selected crates.io publication are complete.
 
 ## Typed Clock Boundary
 

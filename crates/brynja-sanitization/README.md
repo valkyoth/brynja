@@ -37,10 +37,9 @@ clear, and named copies to and from `brynja-core` owned regions. Rich source
 errors cannot cross its boundary. Modern and legacy callers use the same
 protocol-neutral type; there is no legacy-specific adapter.
 
-The package is implemented at Brynja v0.11.2 and selected for initial
-publication at the v0.15.0 scheduled public checkpoint. The cumulative pentest
-passed with zero findings, but it remains unpublished until every hosted
-release gate passes.
+The package was implemented at Brynja v0.11.2 and published as version `0.1.0`
+at the v0.15.0 scheduled public checkpoint after the cumulative pentest and
+hosted release gates passed with zero findings.
 
 ```toml
 [dependencies]

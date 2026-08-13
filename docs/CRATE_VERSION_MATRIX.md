@@ -1,12 +1,12 @@
 # Crate Version Matrix
 
-Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting green CI
+Status: v0.15.0 published; v0.16.0 awaiting green CI
 
-The `brynja` facade advances to `0.15.0` for the scheduled cumulative public
-checkpoint. The latest signed development tag is v0.14.0 and the latest
-published checkpoint remains `brynja 0.10.0`, `brynja-core 0.7.0`, eight
-modern support packages at `0.1.6`, and `brynja-crypto 0.1.0`. The candidate
-selects fourteen packages, but selection does not authorize publication and
+The `brynja` facade advances to `0.16.0` for the current development milestone
+and selects no crates.io publication. The latest signed and published
+checkpoint is v0.15.0: `brynja 0.15.0`, `brynja-core 0.8.0`,
+`brynja-crypto 0.1.1`, the eight modern support packages at `0.1.7`, and the
+initial CPU-boundary and sanitization packages at `0.1.0`. Package publication
 does not imply a TLS implementation or production readiness.
 
 The optional adapter is a material production secret-storage boundary. Its
@@ -32,26 +32,29 @@ contracts plus a production-unreachable deterministic fault provider. It
 implements no algorithm, entropy source, OS integration, or FIPS service. Its
 one Medium explicit-teardown handler omission is remediated, and repository-
 owner retest passed with zero open findings.
-The v0.15.0 candidate adds typed wall and monotonic clock contracts, checked
+The v0.15.0 checkpoint added typed wall and monotonic clock contracts, checked
 time arithmetic, explicit source unavailability, and terminal rollback
 detection. Its scheduled pentest covered all changes after v0.10.0 through
 exact signed candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` and
-passed with zero findings. Green hosted checks remain mandatory before tagging
-or publication.
+passed with zero findings. Hosted checks passed, the signed tag was created,
+and all fourteen selected packages were published. The v0.16.0 stage adds
+bounded affine pending certificate, external-signature, and accelerator
+lifecycles with authoritative provider-state destruction. It implements no
+provider effect or algorithm and selects no package publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.15.0` | pending | Public-checkpoint candidate; publish last only after pentest, green hosted checks, signed tag, and authorization |
-| `brynja-core` | `0.8.0` | pending | Cumulative v0.11-v0.15 foundation code, including typed clock contracts |
-| `brynja-crypto` | `0.1.1` | pending | Exact core dependency update; provider/composition boundary remains effect-free |
-| `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | pending | Initial inert package boundaries; no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
-| `brynja-pki`, `brynja-platform` | `0.1.7` | pending | Exact core dependency updates; PKI and platform effects remain unimplemented |
-| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.7` | pending | Exact internal dependency updates; engines remain unimplemented |
-| `brynja-dtls`, `brynja-quic-tls` | `0.1.7` | pending | Exact internal dependency updates; engines/adapters remain unimplemented |
+| `brynja` | `0.16.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
+| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16 pending-lifecycle code remains unreleased on crates.io |
+| `brynja-crypto` | `0.1.1` | no | Published provider/composition boundary retained; cryptographic effects remain unimplemented |
+| `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Published inert boundaries; no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
+| `brynja-pki`, `brynja-platform` | `0.1.7` | no | Published boundaries retained; PKI and platform effects remain unimplemented |
+| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.7` | no | Published boundaries retained; engines remain unimplemented |
+| `brynja-dtls`, `brynja-quic-tls` | `0.1.7` | no | Published boundaries retained; engines/adapters remain unimplemented |
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling; test support now includes a deterministic/fault engine that production cannot reach |
-| `brynja-sanitization` | `0.1.0` | pending | Initial separate adapter over exact `sanitization 2.0.3`; absent from every facade, engine, default, and FIPS boundary |
+| `brynja-sanitization` | `0.1.0` | no | Published separate adapter over exact `sanitization 2.0.3`; absent from every facade, engine, default, and FIPS boundary |
 
 ## Enforced crates.io Release Policy
 
@@ -101,8 +104,7 @@ and cannot reuse the validation claim.
 
 The `brynja-sanitization` package uses an independent SemVer
 line and publishes only when its adapter code or exact `sanitization` pin
-changes. Its v0.1.0 initial publication is selected for v0.15.0 but remains
-blocked behind the complete public-checkpoint gates.
+changes. Its v0.1.0 initial publication completed at v0.15.0.
 
 Every tag requires a clean worktree, signed commit, complete automated tag
 gate, user-confirmed green GitHub and CodeQL, and explicit authorization.
@@ -118,6 +120,11 @@ For released checkpoint `v0.10.0`, publication order was `brynja-core 0.7.0`, `b
 0.1.6`, `brynja-tls13 0.1.6`, `brynja-tls 0.1.6`, `brynja-dtls 0.1.6`,
 `brynja-quic-tls 0.1.6`, and finally `brynja 0.10.0`. The publisher waits for
 each new dependency to be indexed before continuing.
+
+For released checkpoint `v0.15.0`, the guarded publisher selected fourteen
+packages in dependency order: `brynja-core 0.8.0`, `brynja-crypto 0.1.1`, the
+two CPU boundary packages at `0.1.0`, eight modern supporting packages at
+`0.1.7`, `brynja-sanitization 0.1.0`, and finally `brynja 0.15.0`.
 
 ## Rust Compatibility
 

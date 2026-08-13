@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.10.0 published; v0.11.0-v0.14.0 tagged; v0.15.0 awaiting green CI
+Status: v0.15.0 published; v0.16.0 awaiting green CI
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -48,6 +48,7 @@ consistent in the same commit.
 | `security/pentest/v0.14.0.md` | Voluntary v0.14.0 entropy-contract assessment | PASS/PASS with zero open findings after one Medium explicit-teardown terminal-handler omission was remediated through a common destruction-failure hook, exact-once regression coverage, and a ninth source-policy fixture |
 | `crates/brynja-core/src/clock.rs`, `crates/brynja-core/src/clock/{duration,wall,monotonic}.rs`, `crates/brynja-core/tests/clock.rs`, `crates/brynja-test-support/src/deterministic_clock.rs`, `crates/brynja-test-support/tests/deterministic_clock.rs`, `scripts/{clock_contract_policy,check-clock-contract,test-clock-contract}.py` | v0.15.0 typed wall and monotonic clock contract | Canonical checked duration and signed Unix arithmetic, inclusive validity ranges, opaque generation-bound redacted monotonic instants, explicit unavailable reads, terminal rollback detection, purpose-bound deadlines, deterministic repository-only sources, reviewed hashes, 500-line/no-std/no-alloc/no-unsafe/no-FFI/no-OS-clock enforcement, and nine broken fixtures |
 | `security/pentest/v0.15.0.md` | Scheduled cumulative v0.15.0 checkpoint assessment | PASS/PASS with zero open findings for every change after signed public v0.10.0 through exact signed v0.15.0 implementation candidate `1aa4ad938438f0f2dc996b74b6364f1026c05e0f` |
+| `crates/brynja-core/src/pending.rs`, `crates/brynja-core/src/pending/{request,effect,lifecycle}.rs`, `crates/brynja-core/tests/pending.rs`, `crates/brynja-core/tests/support/mod.rs`, `scripts/{pending_contract_policy,check-pending-contract,test-pending-contract}.py` | v0.16.0 pending operation and accelerator lifecycle | Exact certificate/signature/accelerator admission, poll/cancel and destruction-duty checks, affine no-state retry and opaque-state ownership, checked effect/backpressure bounds, authoritative single-consumption external-key/accelerator/cache/DMA cleanup across completion/cancel/failure/exhaustion/Drop, closed outcomes, seven deterministic tests, three compile-fail examples, reviewed hashes, 500-line/no-std/no-alloc/no-unsafe/no-FFI enforcement, and eleven broken fixtures; no provider effect, algorithm, platform, FIPS, or independent-verification claim |
 | `requirements/policy.json` | Reviewed stable requirement identifiers, lifecycles, decisions, owners, targets, tests, evidence, and residual risk | Schema, source, lifecycle, transition, anchor, ownership, and claim validation |
 | `requirements/domain-scope.toml`, `requirements/domains/*.toml` | Reviewed v0.3.3 authority, invariant, work-bound, test-polarity, surface-group, and deferral policy | Exact field, role, owner, lifecycle, domain, mapping, and completeness validation |
 | `requirements/domain-sections.toml` | Reviewed per-requirement bindings for all 364 domain normative RFC sections | Exact source/requirement pairs, semantic revisions, extraction anchors, section hashes, and explicit disposition validation |
@@ -92,5 +93,8 @@ effect or cryptographic operation. v0.15.0 adds only typed clock values,
 source capabilities, rollback detection, and deterministic repository-only
 fixtures; it implements no OS clock, PKI validation, protocol timer, ticket
 service, replay storage, cryptography, or FIPS service.
+v0.16.0 adds only pending-operation ownership and terminal cleanup authority;
+it implements no pending effect, external-key or accelerator operation, or
+cryptographic service.
 No other ledger, surface, or planned protocol requirement entry is an implementation,
 interoperability, independent-review, security, or FIPS validation claim.

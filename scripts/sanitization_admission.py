@@ -283,11 +283,21 @@ def validate_release_state(root: Path) -> None:
     metadata = table(release, "release")
     require(metadata.get("version") == metadata.get("milestone"),
             "release version and milestone differ")
-    require(metadata.get("baseline") == "0.10.0", "cumulative baseline drift")
+    baseline = metadata.get("baseline")
     milestones = metadata.get("cumulative_milestones")
-    require(isinstance(milestones, list) and
-            milestones[:3] == ["0.11.0", "0.11.1", "0.11.2"],
-            "cumulative milestone history lost the v0.11.2 adapter boundary")
+    require(isinstance(milestones, list) and milestones,
+            "cumulative milestone history is empty")
+    if baseline == "0.10.0":
+        require(milestones[:3] == ["0.11.0", "0.11.1", "0.11.2"],
+                "cumulative milestone history lost the v0.11.2 adapter boundary")
+    else:
+        require(baseline == "0.15.0",
+                "post-publication cumulative baseline drift")
+        crates = table(release, "crates")
+        adapter = table(crates, "brynja-sanitization")
+        require(adapter.get("previous_version") == "0.1.0" and
+                adapter.get("version") == "0.1.0",
+                "published adapter release history drift")
 
 
 def archive_member(archive: tarfile.TarFile, suffix: str) -> bytes:

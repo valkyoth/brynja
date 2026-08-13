@@ -61,7 +61,7 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.10"
+brynja = "0.15"
 ```
 
 This package is marked `publish = false` permanently. It is repository-only

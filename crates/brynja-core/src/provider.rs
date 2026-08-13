@@ -100,6 +100,22 @@ impl ProviderOperation {
     pub(crate) const fn forbids_byte_output(self) -> bool {
         matches!(self, Self::MacVerify | Self::Verify)
     }
+
+    pub(crate) const fn is_acceleratable(self) -> bool {
+        matches!(
+            self,
+            Self::Hash
+                | Self::MacGenerate
+                | Self::MacVerify
+                | Self::KeyDerivation
+                | Self::KeyAgreement
+                | Self::Verify
+                | Self::KemEncapsulate
+                | Self::KemDecapsulate
+                | Self::AeadSeal
+                | Self::AeadOpen
+        )
+    }
 }
 
 /// A provider failure class that does not expose provider text or codes.

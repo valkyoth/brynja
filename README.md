@@ -72,15 +72,23 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.15.0` public-checkpoint candidate adds non-interchangeable typed
-wall and monotonic clocks to `brynja-core`. Signed Unix wall values support
-checked arithmetic and inclusive validity ranges for later PKI policy. Opaque
-monotonic instants are bound to an explicit nonzero runtime/boot generation,
-redact raw ticks, admit equal observations, reject cross-generation arithmetic,
-and permanently fail their source wrapper after rollback. Deadlines bind exact
-timer, freshness, ticket, or replay purpose; temporary unavailability returns
-no substitute time. No OS clock, PKI validator, protocol timer, ticket service,
-replay store, cryptographic result, or FIPS evidence is implemented.
+The current `0.16.0` development milestone adds an affine pending-operation
+lifecycle to `brynja-core`. Exact certificate-path, external-signature, and
+accelerator-eligible requests require the same provider's poll, cancellation,
+and applicable destruction duties. Checked caller limits bound every effect
+attempt and backpressure response. Every state-owning result returns opaque
+state to the lifecycle, and completion or cancellation becomes authoritative
+only after a non-cloneable token is consumed to assert external-key,
+accelerator, cache, DMA, and other declared cleanup. Provider failure,
+exhaustion, and `Drop` use the same cleanup path. No provider effect,
+certificate validation, signature, accelerator implementation, protocol
+engine, cryptographic result, or FIPS evidence is implemented.
+
+Version `0.15.0` added non-interchangeable typed wall and monotonic clocks
+to `brynja-core`. Signed Unix wall values support checked arithmetic and
+inclusive validity ranges for later PKI policy. Opaque monotonic instants bind
+an explicit runtime/boot generation, redact raw ticks, reject cross-generation
+arithmetic, and permanently fail their source wrapper after rollback.
 
 Version `0.14.0` implemented the upstream entropy and initialized secure-random
 contract in `brynja-core`. Caller-provided raw
@@ -142,7 +150,7 @@ provider identity. Unsupported operations fail without registry search or
 fallback. Request holders cannot manufacture success or failure receipts, and
 work can only be charged against the installed provider's monotonic meter. No
 provider effect, algorithm, entropy source, clock, certificate-chain engine,
-storage backend, or pending-operation lifecycle is implemented.
+or storage backend is implemented by that authority layer.
 
 Version `0.12.0` implemented Brynja's first constant-time foundation in
 `brynja-core`: normalized one-byte `Choice` and `CtMask` values,
@@ -179,8 +187,9 @@ The exceptional v0.11.2 repository-owner assessment of the production adapter
 passed with no findings and zero open findings. Its permanent
 [v0.11.2 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.11.2.md)
 records the assessed implementation commit, scope, exact release evidence, and
-residual risks. v0.11.2 remains in the cumulative v0.10.0-through-v0.15.0
-checkpoint scope and publishes no crate.
+residual risks. The v0.11.2 tag published no crate; the adapter was later
+included in the completed v0.10.0-through-v0.15.0 cumulative assessment and
+published at the v0.15.0 checkpoint.
 
 The initial v0.12.0 pentest found a High RV32 timing flaw: LLVM selection was
 lowered into branches controlled by `Choice`, while the assembly gate inspected
@@ -209,11 +218,11 @@ published to crates.io. Supporting crates keep independent versions and are
 published only when their cumulative changes require it at a checkpoint.
 
 Pentests look backwards over the complete change range between public
-checkpoints. The v0.15.0 assessment covers all changes after signed public tag
-v0.10.0 through the exact v0.15.0 candidate, including every v0.11.0-v0.14.0
-and patch milestone. The v0.20.0 assessment then covers all changes after
-v0.15.0 through v0.20.0, and the same pattern continues every fifth minor
-version. Each checkpoint report records its previous public tag as `Baseline`
+checkpoints. The v0.15.0 assessment covered all changes after signed public tag
+v0.10.0 through v0.15.0. The v0.20.0 assessment covers all changes after
+v0.15.0 through v0.20.0, including the current v0.16.0 milestone, and the same
+pattern continues every fifth minor version. Each checkpoint report records
+its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
 can require an earlier exceptional pentest; that does not weaken the next
 scheduled cumulative review.
@@ -227,18 +236,14 @@ an independent pentest.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-crates.io checkpoint is `0.10.0`; the latest signed development milestone is
-v0.14.0. The current v0.15.0 typed-clock checkpoint candidate awaits its
-hosted checks after the scheduled cumulative pentest of all changes after
-v0.10.0 through exact signed candidate
-`1aa4ad938438f0f2dc996b74b6364f1026c05e0f` passed with zero findings.
-Fourteen packages are selected, but no upload or tag is allowed before green
-GitHub and CodeQL and explicit authorization.
+crates.io checkpoint and signed tag are `0.15.0`. The current `0.16.0`
+pending-operation milestone selects no crates.io publication and awaits its
+complete local and hosted gates before explicit signed-tag authorization.
 The published dependency is:
 
 ```toml
 [dependencies]
-brynja = "0.10"
+brynja = "0.15"
 ```
 
 Every tag advances the `brynja` facade manifest to the tag version. Only
@@ -312,7 +317,8 @@ selected set in dependency order and publishes the facade last.
 - The v0.13 provider boundary freezes capabilities, limits, destruction duties,
   opaque handles, and request metadata only. It has no provider registry or
   fallback, mutable effect buffer, algorithm/key identifier, platform effect,
-  request-side completion, pending lifecycle, or FIPS approval claim. MAC
+  request-side completion or FIPS approval claim. Pending lifecycle is owned
+  separately by the v0.16 upstream contract, still without an effect. MAC
   generation and verification are distinct, verification cannot request byte
   output, requests retain exact provider identity, and actual work must be
   charged by a later trusted effect boundary.
@@ -342,7 +348,7 @@ certificate-bound operational-environment claim.
 
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, and typed-clock state contracts | ❌ Not verified |
+| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, and pending-operation state contracts | ❌ Not verified |
 | Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
@@ -361,7 +367,8 @@ certificate-bound operational-environment claim.
 Only the shared alert/failure, bounded numeric/resource, borrowed read,
 transactional caller-buffer write, exact workspace/arena, abstract secret
 lifetime, owned-region zeroization, fixed-width constant-time, and provider
-capability/authorization, entropy/secure-random, and typed-clock foundations
+capability/authorization, entropy/secure-random, typed-clock, and pending-
+operation foundations
 described for `brynja-core` plus the
 separately selected sanitization adapter are implemented. No
 cryptographic primitive, PKI processor, protocol parser, or protocol engine in
@@ -389,7 +396,7 @@ formal proof, pentest, or release status.
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 implemented over exact `sanitization 2.0.3`; selected for v0.15.0 and not yet published |
+| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
@@ -487,6 +494,10 @@ python3 scripts/check-provider-contract.py
 python3 scripts/test-provider-contract.py
 python3 scripts/check-entropy-contract.py
 python3 scripts/test-entropy-contract.py
+python3 scripts/check-clock-contract.py
+python3 scripts/test-clock-contract.py
+python3 scripts/check-pending-contract.py
+python3 scripts/test-pending-contract.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-evidence.py
@@ -503,7 +514,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.15.0
+scripts/tag_gate.sh v0.16.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

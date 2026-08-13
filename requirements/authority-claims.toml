@@ -32,12 +32,13 @@ rationale = "These effects, memory, provider, integration, rotation, API, portab
 [[plan_boundary]]
 class = "planned-authority-admission"
 versions = [
-  "0.163.0", "0.163.1", "0.164.0", "0.164.1", "0.165.0",
-  "0.166.0", "0.166.1", "0.167.0", "0.167.1", "0.168.0",
-  "0.168.1", "0.169.0", "0.169.1", "0.169.2", "0.169.3", "0.170.0", "0.171.0",
-  "0.171.1", "0.172.0", "0.172.1", "0.173.0", "0.173.1",
+  "0.163.0", "0.163.1", "0.164.0", "0.164.1", "0.164.2", "0.165.0",
+  "0.166.0", "0.166.1", "0.166.2", "0.167.0", "0.167.1", "0.168.0",
+  "0.168.1", "0.169.0", "0.169.1", "0.169.2", "0.169.3", "0.169.4",
+  "0.169.5", "0.169.6", "0.170.0", "0.171.0", "0.171.1", "0.171.2",
+  "0.172.0", "0.172.1", "0.173.0", "0.173.1", "0.173.2",
   "0.174.0", "0.174.1", "0.175.0", "0.176.0", "0.176.1",
-  "0.177.0", "0.177.1", "0.178.0", "0.178.1", "0.179.0",
+  "0.177.0", "0.177.1", "0.178.0", "0.178.1", "0.178.2", "0.179.0",
   "0.179.1", "0.179.2", "0.179.3", "0.180.0"
 ]
 rationale = "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."

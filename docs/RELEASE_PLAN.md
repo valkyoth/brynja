@@ -7606,6 +7606,32 @@ Exit criteria:
 - no unrecognized identifier can select code or gain capability without a numbered review;
 - `v0.164.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.164.2 - OpenPGP Packet Body Semantic Closure
+
+Status: planned
+
+Plan scope: Implement or explicitly disposition every RFC 9580 packet body and version not owned by a later cryptographic engine, including Marker, Trust, User ID, User Attribute and Image, MDC and Padding packets; preserve bounded opaque and private-use values where forward compatibility permits, prevent Trust or Marker data from gaining authority, and machine-check that every registered packet/version has an implementation, later owner, safe-ignore rule or normative rejection.
+
+Goal: close packet-body semantics before armored or higher-level inputs can hide
+an unowned packet, version, authority field or compatibility path.
+
+Deliverables:
+
+- implement bounded codecs and exact semantic dispositions for simple, metadata, compatibility and padding packet bodies;
+- preserve safe opaque values and authenticated bytes while keeping Trust, Marker, image and private-use content informational and caller-owned;
+- extend the generated packet/version register so every executable entry names its implementation milestone and every other entry names its normative rejection or ignore rule.
+
+Verification:
+
+- exercise every registered tag and version, malformed body, duplicate, placement, boundary length, unknown criticality and private-use case;
+- use broken fixtures to reject missing owners, wildcard handling, accidental authority, unbounded image or padding data and registry drift;
+- pass packet differentials, fuzz, formal length and state checks, no_std, documentation and repository gates.
+
+Exit criteria:
+
+- every RFC 9580 packet body has an exact tested disposition without granting metadata or unknown values implicit authority;
+- `v0.164.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.165.0 - OpenPGP Wire And ASCII Armor Conformance Gate
 
 Status: planned
@@ -7683,6 +7709,32 @@ Exit criteria:
 
 - every signature byte and hashed field is deterministic and bounded, with no verification claim before later milestones;
 - `v0.166.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.166.2 - OpenPGP Signature-Subpacket Semantic Closure
+
+Status: planned
+
+Plan scope: Implement exact length, placement, multiplicity, authentication-domain and authority semantics for every RFC 9580 signature subpacket, including all preferred-algorithm sets, Features, Key Flags, revocation fields, Intended Recipient Fingerprint, Signature Target, Embedded Signature, Notation Data, Policy URI, Regular Expression and private or unknown values; require safe defaults to mandatory algorithms, preserve forward compatibility without trusting unhashed data, and prove every registry value has a tested disposition.
+
+Goal: make every signature subpacket either executable under exact rules or
+conspicuously non-authoritative before certificate validation consumes it.
+
+Deliverables:
+
+- implement typed codecs and context rules for all current signature subpackets, including required preference, feature, revocation and intended-recipient semantics;
+- distinguish hashed authority, unhashed hints, caller-owned policy metadata, safely retained unknowns and critical validation failures in the type system;
+- generate exhaustive subpacket ownership and disposition tables with mandatory-algorithm defaults and no wildcard authorization.
+
+Verification:
+
+- test every registered type, length, location, duplication, critical bit, version, signature-type context and hashed-versus-unhashed transition;
+- exercise downgrade, surreptitious-forwarding, embedded-signature recursion, revocation-target, unknown-critical and preference-conflict corpora;
+- pass differential, fuzz, formal state and bound, no_std, documentation, generated-artifact and repository checks.
+
+Exit criteria:
+
+- every RFC 9580 signature subpacket has exact tested semantics and no unauthenticated subpacket can influence cryptographic or trust authority;
+- `v0.166.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.167.0 - OpenPGP Certificates, Bindings, Revocation, And Validity
 
@@ -7818,7 +7870,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze generation, encryption, signing, verification and decryption policy for RSA, DSA, Elgamal, IDEA, TripleDES, CAST5, SHA-1, RIPEMD-160 and every deprecated or reserved algorithm; permit only explicitly justified read, decrypt or verify compatibility in optional `brynja-openpgp-legacy`, never generate weak material, never enable it through the modern facade, and never mistake interoperability for security approval.
+Plan scope: Freeze generation, encryption, signing, verification and decryption policy for RSA, DSA, Elgamal, IDEA, TripleDES, CAST5, SHA-1, RIPEMD-160 and every deprecated or reserved algorithm; permit only explicitly justified compatibility operations in optional `brynja-openpgp-legacy`, with signing or encryption limited to separately admitted strong v4 profiles and weak algorithms limited to necessary read, decrypt or verify paths; never generate weak key, digest or cipher forms, enable compatibility through the modern facade, or mistake interoperability for security approval.
 
 Goal: make historical interoperability an explicit isolated risk boundary rather
 than a fallback path in modern OpenPGP.
@@ -7870,7 +7922,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Permit only `brynja-openpgp-legacy` to consume `brynja-legacy-sha1` before 1.0, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and prove no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.
+Plan scope: Admit the first `brynja-openpgp-legacy` consumer of `brynja-legacy-sha1`, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and reserve the protected-key and v1 SEIPD consumers for their separate v0.169.5 and v0.171.2 reviews while proving no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.
 
 Goal: admit one exact RFC 9580 compatibility use while preserving the complete
 legacy primitive as the sole SHA-1 implementation.
@@ -7892,11 +7944,89 @@ Exit criteria:
 - v4 fingerprints interoperate through one exact legacy edge while SHA-1 signing, generation and every unauthorized consumer remain impossible;
 - `v0.169.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.169.4 - First-Party AES Key Wrap And OpenPGP Curve Wrapping Profiles
+
+Status: planned
+
+Plan scope: Implement RFC 3394 AES-128 and AES-256 key wrap and unwrap in first-party Rust with caller-owned buffers, exact integrity checks, uniform failures and zeroization; bind the exact RFC 9580 X25519 and X448 HKDF inputs, labels, output sizes and wrapped-session-key formats, and provide the separately typed ECDH wrapping primitive needed by admitted v4 compatibility profiles without generic cross-protocol key reuse.
+
+Goal: make mandatory X25519 encryption executable through an exact reviewed
+key-wrapping construction rather than an implicit provider promise.
+
+Deliverables:
+
+- implement RFC 3394 wrap and unwrap over exact first-party AES symbols with checked block counts, overlap policy and complete temporary destruction;
+- implement profile-specific X25519/SHA-256/AES-128 and X448/SHA-512/AES-256 HKDF input, label, field and wrapped-session-key construction;
+- expose a distinct ECDH wrapping primitive for separately admitted v4 profiles without generic key, context or protocol interchange.
+
+Verification:
+
+- run RFC 3394 and RFC 9580 vectors, every supported key and payload width, integrity corruption, truncation, overlap, output-capacity and exhaustion case;
+- differentially test wrap/unwrap and complete X25519/X448 PKESK construction while fault-injecting HKDF, AES, entropy and provider failures;
+- complete constant-time, zeroization, formal bounds, fuzz, no_std, independent cryptographic and repository review.
+
+Exit criteria:
+
+- mandatory modern curve encryption has an exact first-party key-wrap path and no malformed unwrap can release a session key;
+- `v0.169.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.5 - OpenPGP CFB And Protected Secret-Key Compatibility
+
+Status: planned
+
+Plan scope: Implement first-party OpenPGP conventional CFB over admitted AES widths and the exact version 4 protected-secret-key usage-254 SHA-1 and usage-255 checksum formats inside `brynja-openpgp-legacy`; admit those narrowly defined additional `brynja-legacy-sha1` and checksum consumers, require verify-before-release, uniform password/corruption failures and immediate secret destruction, and prohibit weak S2K hashes, obsolete ciphers, automatic fallback or any modern/FIPS edge.
+
+Goal: permit secure custody and import of common protected v4 secret keys
+without allowing their historical protection formats into modern OpenPGP.
+
+Deliverables:
+
+- implement conventional CFB over admitted AES widths with exact IV, prefix, streaming, overlap, finalization and caller-buffer rules;
+- connect usage 254 solely to exact SHA-1 integrity verification and usage 255 solely to the defined checksum after complete protected-secret decryption;
+- isolate every compatibility operation, warning, key lifetime and dependency edge inside `brynja-openpgp-legacy` and prohibit weak S2K hash or obsolete-cipher execution.
+
+Verification:
+
+- run archived and independently generated protected-key vectors for every admitted AES/S2K combination, wrong passwords, corruption, truncation and malformed secret material;
+- prove no decrypted secret escapes before checksum, hash, structure and public/private consistency validation and inspect complete failure-path destruction;
+- pass oracle, side-channel, fuzz, formal state, Miri, no_std, graph-isolation, independent risk and repository gates.
+
+Exit criteria:
+
+- admitted protected v4 secret keys can be imported without exposing plaintext early or granting legacy protection a modern or FIPS claim;
+- `v0.169.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.6 - OpenPGP Strong V4 Public-Key Compatibility Profiles
+
+Status: planned
+
+Plan scope: Implement explicitly selected strong-algorithm v4 compatibility profiles in `brynja-openpgp-legacy`, including RSA PKCS#1 v1.5 SHA-2 signatures, oracle-resistant RSA session-key encryption and decryption, Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH curves; permit existing-key signing or encryption only through conspicuous compatibility policy, never generate deprecated key forms, and give every omitted optional or obsolete algorithm an explicit tested rejection.
+
+Goal: support common strong v4 certificates and messages through reviewed
+profiles rather than claiming compatibility from packet parsing alone.
+
+Deliverables:
+
+- implement exact OpenPGP RSA signature and PKESK encodings with strict padding, blinding, fault checks, uniform failure and SHA-2-only generation policy;
+- implement exact Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH key, signature, KDF, wrap and wire profiles over existing first-party primitives;
+- publish an operation matrix for every RFC 9580 public-key algorithm and curve, including explicit generation, signing, encryption, verification, decryption or rejection decisions.
+
+Verification:
+
+- interoperate on archived and generated v4 RSA, legacy-25519 and admitted ECDSA/ECDH certificates, signatures and encrypted messages;
+- exercise PKCS#1 oracles, invalid points, malformed MPIs, KDF confusion, weak hashes, key-size policy, cross-profile substitution and every rejected algorithm;
+- pass constant-time, zeroization, formal, fuzz, no_std, graph-isolation, independent compatibility-risk and repository review.
+
+Exit criteria:
+
+- common strong v4 operations are executable only through explicit compatibility policy and every unsupported optional or obsolete profile fails predictably;
+- `v0.169.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.170.0 - OpenPGP Key And Cryptography Audit Gate
 
 Status: planned
 
-Plan scope: Independently audit OpenPGP key parsing, fingerprints, certificate validity, signature hashing, secret-key protection, S2K, Argon2, OCB, EAX, curve profiles, compatibility isolation, constant-time behavior, zeroization and provider composition; remediate all admitted findings before message encryption or signature execution.
+Plan scope: Independently audit OpenPGP key parsing, fingerprints, certificate validity, signature hashing, secret-key protection, S2K, Argon2, OCB, EAX, RFC 3394 key wrap, modern curve profiles, OpenPGP CFB, protected-v4-key handling, strong v4 public-key profiles, compatibility isolation, constant-time behavior, zeroization and provider composition; remediate all admitted findings before message encryption or signature execution.
 
 Goal: stop higher-level message construction until every key and cryptographic
 foundation has clean independent evidence.
@@ -7969,6 +8099,32 @@ Exit criteria:
 
 - encrypted streaming is complete only after all required chunk and final authentication decisions succeed;
 - `v0.171.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.171.2 - OpenPGP V1 SEIPD And MDC Compatibility
+
+Status: planned
+
+Plan scope: Implement RFC 9580 version 1 SEIPD decryption with OpenPGP CFB prefix handling, quick-check oracle resistance, exact MDC construction and constant-time SHA-1 verification entirely inside `brynja-openpgp-legacy`; allow AES-only generation solely through an explicit compatibility operation for recipients that cannot consume v2 SEIPD, never as automatic fallback, and withhold the complete plaintext until MDC, packet grammar and final-length validation succeed.
+
+Goal: support the RFC-defined v1 encrypted-message compatibility path without
+letting its malleability and oracle risks weaken the modern v2 engine.
+
+Deliverables:
+
+- implement exact random prefix, repeated-octet quick check, CFB stream, MDC packet and SHA-1 preimage processing over the separately admitted legacy primitives;
+- stage the complete decrypted packet sequence until prefix, MDC, final length and nested message grammar are authoritative, returning one uniform failure class;
+- expose optional AES-only v1 generation through an explicit legacy operation with recipient capability evidence, warnings and no negotiation or automatic-fallback edge.
+
+Verification:
+
+- run RFC 9580 Appendix A.12 and independent v1 SEIPD vectors, every AES width, boundary split, wrong key, corruption, truncation, extension and trailing-data case;
+- exercise quick-check and MDC oracle corpora, timing distributions, provider faults and plaintext-release attempts across every failure point;
+- pass differential, fuzz, formal state and bounds, Miri, zeroization, no_std, legacy-isolation, independent risk and repository gates.
+
+Exit criteria:
+
+- v1 SEIPD compatibility is complete, whole-message authenticated before release and unable to become an implicit alternative to modern v2 SEIPD;
+- `v0.171.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.172.0 - OpenPGP Signed, One-Pass, And Detached Messages
 
@@ -8074,6 +8230,32 @@ Exit criteria:
 - ZIP and ZLIB decoding is bounded, allocation-free, first-party and incapable of bypassing message authentication or output policy;
 - `v0.173.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.173.2 - First-Party BZip2 OpenPGP Compatibility Decoder
+
+Status: planned
+
+Plan scope: Implement an optional isolated first-party Rust BZip2 decoder sufficient for RFC 9580 Compressed Data packets, with caller-owned bounded workspace, exact block and stream checks, decompression-bomb and recursion defenses, no generation requirement and no default/facade edge; differentially qualify archived BZip2 OpenPGP messages and keep unsupported future compression identifiers fail closed.
+
+Goal: read the remaining registered RFC 9580 compression form without making
+an optional complex decoder part of modern or default dependency graphs.
+
+Deliverables:
+
+- implement bounded BZip2 framing, Huffman, move-to-front, Burrows-Wheeler reversal, run decoding and CRC verification in small first-party modules;
+- require caller-owned workspace, exact input/output accounting, block, expansion, recursion and total-work ceilings and transactional decompressed output;
+- expose the decoder only through an explicit OpenPGP compatibility capability with no compressor, default feature, native code or hidden allocation.
+
+Verification:
+
+- run published, generated and archived BZip2 OpenPGP corpora across block sizes, CRCs, randomized flags, truncation, malformed trees, cycles and trailing bytes;
+- differentially decode against two independent process-isolated tools and attack expansion, recursion, CPU, memory and output limits;
+- pass fuzz, formal bound and state, Miri, sanitizer, no_std, graph-isolation, emitted-code and repository checks.
+
+Exit criteria:
+
+- every RFC 9580 compression identifier is implemented or explicitly rejected, and optional BZip2 input cannot escape its bounded compatibility edge;
+- `v0.173.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.174.0 - OpenPGP Encrypt, Decrypt, Sign, And Verify Pipelines
 
 Status: planned
@@ -8130,7 +8312,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete RFC 9580 vectors, generated edge cases, malformed and adversarial corpora, independent differential tests and interoperability for armored, signed, compressed, password-encrypted, public-key-encrypted and multi-recipient messages; audit no-plaintext-release and cumulative resource guarantees before checkpoint publication.
+Plan scope: Complete RFC 9580 vectors, generated edge cases, malformed and adversarial corpora, independent differential tests and interoperability for armored, signed, compressed, password-encrypted, public-key-encrypted and multi-recipient messages across v2 SEIPD and the isolated v1 SEIPD/MDC compatibility path; audit no-plaintext-release and cumulative resource guarantees before checkpoint publication.
 
 Goal: stop key-management work until complete message operations have clean
 conformance, interoperability and independent security evidence.
@@ -8286,7 +8468,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Qualify strong-algorithm v4 certificate and message compatibility, verify optional deprecated read paths against archived corpora, prove modern generation never emits deprecated forms, and prove `brynja-openpgp-legacy` is absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.
+Plan scope: Qualify strong-algorithm v4 certificates, protected secret keys, public-key profiles, v1 SEIPD/MDC messages and optional BZip2 input; verify every admitted deprecated read path against archived corpora, prove modern generation never emits deprecated forms or silently falls back, and prove `brynja-openpgp-legacy` and optional compression compatibility are absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.
 
 Goal: retain explicitly useful compatibility while guaranteeing modern users do
 not acquire weak algorithms or formats transitively.
@@ -8307,6 +8489,32 @@ Exit criteria:
 
 - compatibility is bounded and conspicuous, and installing modern Brynja cannot activate or expose legacy OpenPGP code;
 - `v0.178.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.178.2 - OpenPGP Downstream Client-Foundation Gate
+
+Status: planned
+
+Plan scope: Build and test independent downstream no_std and hosted client fixtures that use only published Brynja APIs to import and export keys, generate and revoke modern keys, encrypt and decrypt public-key and passphrase messages, sign and verify embedded, detached and cleartext content, process modern and admitted v4 compatibility data, and recover from bounded failures; document that UI, persistence, networking, key discovery, identity trust and PGP/MIME remain application-owned rather than hidden Brynja effects.
+
+Goal: prove an independent developer can build a complete OpenPGP protocol
+client without private APIs, hidden effects or reimplementing protocol logic.
+
+Deliverables:
+
+- provide downstream fixtures covering complete modern key, certificate, message, armor, signing, encryption, password, revocation and compatibility workflows;
+- exercise hosted adapters through caller-provided files, clocks, entropy, key stores and network payloads while retaining the same Sans-I/O core and explicit effects;
+- publish a client-foundation boundary showing which protocol services Brynja supplies and which UI, persistence, discovery, trust, MIME and transport responsibilities remain application-owned.
+
+Verification:
+
+- build every fixture from packaged crates on MSRV and latest Rust with no workspace path leakage, unpublished dependency or private symbol;
+- interoperate fixture outputs and inputs with at least two independent implementations across modern and admitted v4 workflows and failure recovery;
+- pass package, feature-graph, no_std, hosted-platform, documentation-example, resource, clean-room and repository gates.
+
+Exit criteria:
+
+- a downstream developer can implement a full OpenPGP protocol client using public Brynja packages while every non-protocol application responsibility remains explicit;
+- `v0.178.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.179.0 - OpenPGP Public API And Documentation Freeze
 
@@ -8364,7 +8572,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Obtain an exact-commit independent review of RFC 9580 requirement closure, registry decisions, packet and message grammars, cryptographic composition, key validity, trust separation, compatibility isolation, Base64-ng boundary, compression, resource limits, plaintext release, constant-time behavior, zeroization and documentation claims.
+Plan scope: Obtain an exact-commit independent review of RFC 9580 requirement closure, packet and subpacket dispositions, registry decisions, message grammars, cryptographic composition, key wrap, key validity, trust separation, protected-key and v1 SEIPD compatibility, strong v4 profiles, Base64-ng and compression boundaries, downstream client completeness, resource limits, plaintext release, constant-time behavior, zeroization and documentation claims.
 
 Goal: subject the complete frozen OpenPGP implementation and its external
 encoding edge to independent expert review.

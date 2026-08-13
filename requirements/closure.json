@@ -4036,6 +4036,17 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
+      "scope": "Implement or explicitly disposition every RFC 9580 packet body and version not owned by a later cryptographic engine, including Marker, Trust, User ID, User Attribute and Image, MDC and Padding packets; preserve bounded opaque and private-use values where forward compatibility permits, prevent Trust or Marker data from gaining authority, and machine-check that every registered packet/version has an implementation, later owner, safe-ignore rule or normative rejection.",
+      "source_ids": [],
+      "title": "OpenPGP Packet Body Semantic Closure",
+      "version": "0.164.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
       "scope": "Implement RFC 9580 ASCII Armor and CRC-24 policy through the admitted Base64 boundary, including multi-block, label, header, line, whitespace, checksum and trailing-data rules; differentially test packet framing and armor against independent implementations and pentest the cumulative v0.160.0-through-v0.165.0 delta before publication.",
       "source_ids": [],
       "title": "OpenPGP Wire And ASCII Armor Conformance Gate",
@@ -4062,6 +4073,17 @@
       "source_ids": [],
       "title": "OpenPGP Signature Packets, Subpackets, And Hashing",
       "version": "0.166.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Implement exact length, placement, multiplicity, authentication-domain and authority semantics for every RFC 9580 signature subpacket, including all preferred-algorithm sets, Features, Key Flags, revocation fields, Intended Recipient Fingerprint, Signature Target, Embedded Signature, Notation Data, Policy URI, Regular Expression and private or unknown values; require safe defaults to mandatory algorithms, preserve forward compatibility without trusting unhashed data, and prove every registry value has a tested disposition.",
+      "source_ids": [],
+      "title": "OpenPGP Signature-Subpacket Semantic Closure",
+      "version": "0.166.2"
     },
     {
       "boundary": {
@@ -4124,7 +4146,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Freeze generation, encryption, signing, verification and decryption policy for RSA, DSA, Elgamal, IDEA, TripleDES, CAST5, SHA-1, RIPEMD-160 and every deprecated or reserved algorithm; permit only explicitly justified read, decrypt or verify compatibility in optional `brynja-openpgp-legacy`, never generate weak material, never enable it through the modern facade, and never mistake interoperability for security approval.",
+      "scope": "Freeze generation, encryption, signing, verification and decryption policy for RSA, DSA, Elgamal, IDEA, TripleDES, CAST5, SHA-1, RIPEMD-160 and every deprecated or reserved algorithm; permit only explicitly justified compatibility operations in optional `brynja-openpgp-legacy`, with signing or encryption limited to separately admitted strong v4 profiles and weak algorithms limited to necessary read, decrypt or verify paths; never generate weak key, digest or cipher forms, enable compatibility through the modern facade, or mistake interoperability for security approval.",
       "source_ids": [],
       "title": "OpenPGP Compatibility Algorithm Containment",
       "version": "0.169.1"
@@ -4146,7 +4168,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Permit only `brynja-openpgp-legacy` to consume `brynja-legacy-sha1` before 1.0, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and prove no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.",
+      "scope": "Admit the first `brynja-openpgp-legacy` consumer of `brynja-legacy-sha1`, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and reserve the protected-key and v1 SEIPD consumers for their separate v0.169.5 and v0.171.2 reviews while proving no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.",
       "source_ids": [],
       "title": "OpenPGP V4 Fingerprint SHA-1 Integration",
       "version": "0.169.3"
@@ -4157,7 +4179,40 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Independently audit OpenPGP key parsing, fingerprints, certificate validity, signature hashing, secret-key protection, S2K, Argon2, OCB, EAX, curve profiles, compatibility isolation, constant-time behavior, zeroization and provider composition; remediate all admitted findings before message encryption or signature execution.",
+      "scope": "Implement RFC 3394 AES-128 and AES-256 key wrap and unwrap in first-party Rust with caller-owned buffers, exact integrity checks, uniform failures and zeroization; bind the exact RFC 9580 X25519 and X448 HKDF inputs, labels, output sizes and wrapped-session-key formats, and provide the separately typed ECDH wrapping primitive needed by admitted v4 compatibility profiles without generic cross-protocol key reuse.",
+      "source_ids": [],
+      "title": "First-Party AES Key Wrap And OpenPGP Curve Wrapping Profiles",
+      "version": "0.169.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Implement first-party OpenPGP conventional CFB over admitted AES widths and the exact version 4 protected-secret-key usage-254 SHA-1 and usage-255 checksum formats inside `brynja-openpgp-legacy`; admit those narrowly defined additional `brynja-legacy-sha1` and checksum consumers, require verify-before-release, uniform password/corruption failures and immediate secret destruction, and prohibit weak S2K hashes, obsolete ciphers, automatic fallback or any modern/FIPS edge.",
+      "source_ids": [],
+      "title": "OpenPGP CFB And Protected Secret-Key Compatibility",
+      "version": "0.169.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Implement explicitly selected strong-algorithm v4 compatibility profiles in `brynja-openpgp-legacy`, including RSA PKCS#1 v1.5 SHA-2 signatures, oracle-resistant RSA session-key encryption and decryption, Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH curves; permit existing-key signing or encryption only through conspicuous compatibility policy, never generate deprecated key forms, and give every omitted optional or obsolete algorithm an explicit tested rejection.",
+      "source_ids": [],
+      "title": "OpenPGP Strong V4 Public-Key Compatibility Profiles",
+      "version": "0.169.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Independently audit OpenPGP key parsing, fingerprints, certificate validity, signature hashing, secret-key protection, S2K, Argon2, OCB, EAX, RFC 3394 key wrap, modern curve profiles, OpenPGP CFB, protected-v4-key handling, strong v4 public-key profiles, compatibility isolation, constant-time behavior, zeroization and provider composition; remediate all admitted findings before message encryption or signature execution.",
       "source_ids": [],
       "title": "OpenPGP Key And Cryptography Audit Gate",
       "version": "0.170.0"
@@ -4183,6 +4238,17 @@
       "source_ids": [],
       "title": "OpenPGP V2 SEIPD Chunked AEAD",
       "version": "0.171.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Implement RFC 9580 version 1 SEIPD decryption with OpenPGP CFB prefix handling, quick-check oracle resistance, exact MDC construction and constant-time SHA-1 verification entirely inside `brynja-openpgp-legacy`; allow AES-only generation solely through an explicit compatibility operation for recipients that cannot consume v2 SEIPD, never as automatic fallback, and withhold the complete plaintext until MDC, packet grammar and final-length validation succeed.",
+      "source_ids": [],
+      "title": "OpenPGP V1 SEIPD And MDC Compatibility",
+      "version": "0.171.2"
     },
     {
       "boundary": {
@@ -4234,6 +4300,17 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
+      "scope": "Implement an optional isolated first-party Rust BZip2 decoder sufficient for RFC 9580 Compressed Data packets, with caller-owned bounded workspace, exact block and stream checks, decompression-bomb and recursion defenses, no generation requirement and no default/facade edge; differentially qualify archived BZip2 OpenPGP messages and keep unsupported future compression identifiers fail closed.",
+      "source_ids": [],
+      "title": "First-Party BZip2 OpenPGP Compatibility Decoder",
+      "version": "0.173.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
       "scope": "Compose packet, armor, compression, key, signature and encryption components into allocation-free Sans-I/O APIs for encryption, decryption, signing and verification; enforce verify-before-release, exact operation tokens, no implicit algorithm fallback, rollback-safe outputs, cancellation and terminal secret destruction.",
       "source_ids": [],
       "title": "OpenPGP Encrypt, Decrypt, Sign, And Verify Pipelines",
@@ -4256,7 +4333,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Complete RFC 9580 vectors, generated edge cases, malformed and adversarial corpora, independent differential tests and interoperability for armored, signed, compressed, password-encrypted, public-key-encrypted and multi-recipient messages; audit no-plaintext-release and cumulative resource guarantees before checkpoint publication.",
+      "scope": "Complete RFC 9580 vectors, generated edge cases, malformed and adversarial corpora, independent differential tests and interoperability for armored, signed, compressed, password-encrypted, public-key-encrypted and multi-recipient messages across v2 SEIPD and the isolated v1 SEIPD/MDC compatibility path; audit no-plaintext-release and cumulative resource guarantees before checkpoint publication.",
       "source_ids": [],
       "title": "OpenPGP Message Conformance And Audit Gate",
       "version": "0.175.0"
@@ -4322,10 +4399,21 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Qualify strong-algorithm v4 certificate and message compatibility, verify optional deprecated read paths against archived corpora, prove modern generation never emits deprecated forms, and prove `brynja-openpgp-legacy` is absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.",
+      "scope": "Qualify strong-algorithm v4 certificates, protected secret keys, public-key profiles, v1 SEIPD/MDC messages and optional BZip2 input; verify every admitted deprecated read path against archived corpora, prove modern generation never emits deprecated forms or silently falls back, and prove `brynja-openpgp-legacy` and optional compression compatibility are absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.",
       "source_ids": [],
       "title": "OpenPGP V4 Compatibility And Legacy Isolation Gate",
       "version": "0.178.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Build and test independent downstream no_std and hosted client fixtures that use only published Brynja APIs to import and export keys, generate and revoke modern keys, encrypt and decrypt public-key and passphrase messages, sign and verify embedded, detached and cleartext content, process modern and admitted v4 compatibility data, and recover from bounded failures; document that UI, persistence, networking, key discovery, identity trust and PGP/MIME remain application-owned rather than hidden Brynja effects.",
+      "source_ids": [],
+      "title": "OpenPGP Downstream Client-Foundation Gate",
+      "version": "0.178.2"
     },
     {
       "boundary": {
@@ -4355,7 +4443,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Obtain an exact-commit independent review of RFC 9580 requirement closure, registry decisions, packet and message grammars, cryptographic composition, key validity, trust separation, compatibility isolation, Base64-ng boundary, compression, resource limits, plaintext release, constant-time behavior, zeroization and documentation claims.",
+      "scope": "Obtain an exact-commit independent review of RFC 9580 requirement closure, packet and subpacket dispositions, registry decisions, message grammars, cryptographic composition, key wrap, key validity, trust separation, protected-key and v1 SEIPD compatibility, strong v4 profiles, Base64-ng and compression boundaries, downstream client completeness, resource limits, plaintext release, constant-time behavior, zeroization and documentation claims.",
       "source_ids": [],
       "title": "Independent OpenPGP Standards And Cryptography Audit",
       "version": "0.179.2"

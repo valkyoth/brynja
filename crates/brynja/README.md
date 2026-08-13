@@ -66,8 +66,12 @@ Brynja algorithm.
 The final pre-1.0 phase adds `brynja-openpgp-core`,
 `brynja-openpgp-armor`, and `brynja-openpgp`. Packet framing, certificates,
 keys, signatures, encryption, compression, trust policy, and deprecated
-compatibility remain separate review boundaries. OpenPGP is outside the FIPS
-validated-module plan. Base64 is the one encoding algorithm Brynja does not
+compatibility remain separate review boundaries. The plan includes exact
+modern RFC 9580 operations, isolated strong-v4 and v1-SEIPD compatibility,
+exhaustive packet/subpacket dispositions, and downstream fixtures proving that
+public Brynja APIs are sufficient to build an OpenPGP protocol client. UI,
+storage, networking, key discovery, identity trust, and PGP/MIME remain
+application-owned. OpenPGP is outside the FIPS validated-module plan. Base64 is the one encoding algorithm Brynja does not
 plan to duplicate: v0.47.1 will audit the latest stable first-party
 `base64-ng` family and admit only an exact-pinned, allocation-free `no_std`
 edge suitable for PEM and OpenPGP armor.
@@ -460,7 +464,7 @@ formal proof, pentest, or release status.
 | Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.165.0 |
 | Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.180.0 |
 | Future `brynja-openpgp-legacy` | Optional deprecated-algorithm compatibility with no modern facade edge | Conditional and separately isolated |
-| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.169.2; OpenPGP v4 fingerprint use is separately admitted at v0.169.3 and every later consumer needs its own review |
+| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.169.2; OpenPGP v4 fingerprints, protected v4 keys, and v1 SEIPD/MDC receive separate consumer reviews at v0.169.3, v0.169.5, and v0.171.2 |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |

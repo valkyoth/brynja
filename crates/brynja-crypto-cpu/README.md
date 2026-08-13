@@ -30,7 +30,7 @@ reserved for separately admitted first-party ISA kernels and static selection.
 It is downstream from portable scalar ownership and cannot be an implicit
 dependency of a protocol engine or default feature.
 
-Version 0.1.0 contains no detector, intrinsic, assembly, executable backend,
+Version 0.1.1 contains no detector, intrinsic, assembly, executable backend,
 cryptographic algorithm, dispatch implementation, low-level-code allowance,
 performance claim, or FIPS validation. Every future backend symbol requires
 its own source hash, feature and ABI preconditions, safe-wrapper invariants,
@@ -56,7 +56,8 @@ pentesting do not by themselves constitute independent verification.
 | --- | --- | --- |
 | `brynja-crypto-cpu` | Future first-party CPU cryptographic kernels and static selection | ❌ Not implemented or verified |
 
-Version `0.1.0` was published at the v0.15.0 cumulative checkpoint after its
-pentest and hosted gates passed with zero findings. The project-wide
+Version `0.1.0` was published at v0.15.0. Metadata candidate `0.1.1` is selected
+for v0.20.0 and remains unpublished pending its cumulative pentest and hosted
+gates. The project-wide
 first-party Rust, `no_std`, source-size, platform, FIPS, and unsafe-code
 policies apply here.

@@ -50,7 +50,7 @@ def test_current_repository() -> None:
     assert coverage["mapped_normative_section_count"] == 352
     assert coverage["excluded_normative_section_count"] == 12
     assert coverage["normative_section_count"] == 364
-    assert coverage["surface_count"] == 3323
+    assert coverage["surface_count"] == 3324
     assert standards.json_bytes(coverage) == lib.DOMAIN_COVERAGE.read_bytes()
 
 

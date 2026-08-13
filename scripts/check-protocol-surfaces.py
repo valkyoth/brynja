@@ -33,7 +33,8 @@ def validate_sources(
         lib.fail(f"{label} has duplicate or invalid normative sources")
     rfc_ids = {f"rfc:{entry['number']}" for entry in ledger["rfcs"]}
     local_ids = {
-        f"nist:{entry['filename']}" for entry in ledger["local_authorities"]
+        ("nist:" if entry["filename"].startswith("NIST.") else "itu:")
+        + entry["filename"] for entry in ledger["local_authorities"]
     }
     registry_ids = {
         f"iana:{entry['id']}" for entry in ledger["registries"]
@@ -43,7 +44,6 @@ def validate_sources(
     if unknown:
         lib.fail(f"{label} has unknown normative sources: {sorted(unknown)}")
     return sources
-
 
 def validate_decision(
     decision: dict,

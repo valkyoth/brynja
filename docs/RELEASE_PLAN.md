@@ -1768,7 +1768,7 @@ Exit criteria:
 
 ### v0.20.0 - Bounded DER Reader
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement a non-recursive DER tag, length and value reader with definite, minimal, overflow-safe, depth-, node-, size-, and work-bounded parsing.
 
@@ -1777,22 +1777,48 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- add a borrowed `brynja-pki` DER reader that separates identifier parsing,
+  definite-length parsing, primitive values, constructed starts, and balanced
+  constructed ends without recursion, allocation, copying, or global state;
+- require an explicitly and immutably configured input, depth, node, per-parent
+  child, identifier-octet, length-octet, value-size, and total-work ceiling,
+  backed by a caller-selected fixed compile-time traversal stack;
+- reject indefinite and non-minimal lengths, non-canonical high-tag encodings,
+  universal end-of-contents, arithmetic overflow, truncation, value escape
+  across a parent boundary, and every exhausted resource before exposing an
+  element; preserve the reader position after every failed call;
+- expose borrowed exact header, content, and encoded slices plus closed,
+  payload-free errors without claiming ASN.1 primitive semantics, X.509,
+  cryptography, signatures, validation, or protocol integration;
+- promote `BRY-REQ-ENC-0001` to implemented revision 2 and bind a dedicated
+  implemented `format.der.framing` surface to the exact X.690 and mandatory
+  erratum authorities;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- run canonical low/high tag and short/long length cases, nested and empty
+  constructed values, multiple roots, every header/value truncation, malformed
+  identifiers and lengths, boundary escape, arithmetic overflow, every runtime
+  ceiling, stack mismatch, and failure-no-mutation tests;
+- exhaustively parse all 65,536 two-octet byte strings and require deterministic
+  bounded completion; compile-fail positional/default limit construction and
+  formatting of reader state and elements;
+- lock all six implementation source hashes and reject thirty-two fixtures for
+  allocation, recursion, unsafe/FFI, I/O, OS/provider/crypto coupling, public
+  mutable state, missing canonical checks, weakened limits, graph drift, source
+  drift, or files above 500 lines;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- the DER framing layer is deterministic, borrowed, non-recursive,
+  allocation-free, failure-atomic, platform-independent, and bounded before
+  any type-specific ASN.1 or PKIX interpretation;
+- the scheduled repository-owner pentest covers every change after signed
+  v0.15.0 through the exact v0.20.0 candidate and reports zero open findings;
 - `v0.20.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.21.0 - Canonical ASN.1 Primitives

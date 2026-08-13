@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "626dd488164cf87c96ad8b8234db02dc1f43048add5b4aedb0245173cab9a51e",
+  "policy_sha256": "f3a4c329f651297f55d3fb57dc330f4c6897d92e96f655580e645bde6cf25186",
   "schema": 2,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
   "surfaces": [
@@ -510,6 +510,20 @@
       "owner": "0.144.0",
       "rationale": "Delegated credentials require strict lifetime, algorithm, transcript, and certificate binding.",
       "test_target": "tests/surface/delegated_credentials.rs#profile"
+    },
+    {
+      "code_target": "crates/brynja-pki/src/der.rs",
+      "disposition": "implemented",
+      "domain": "pkix",
+      "id": "format.der.framing",
+      "kind": "semantic",
+      "normative_sources": [
+        "itu:ITU-T.X.690-202102.pdf",
+        "itu:ITU-T.X.690-202109-Err1.pdf"
+      ],
+      "owner": "0.20.0",
+      "rationale": "Canonical identifier, definite minimal length, borrowed value, and bounded constructed traversal form a reusable DER substrate without claiming ASN.1 or X.509 semantics.",
+      "test_target": "crates/brynja-pki/tests/der_reader.rs#nested_constructed_values_emit_balanced_events"
     },
     {
       "code_target": "crates/brynja-pki/src/algorithm.rs",

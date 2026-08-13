@@ -25,7 +25,7 @@
 
 # brynja-core
 
-`brynja-core 0.8.0` now carries the cumulative v0.18.1 bounded observational
+`brynja-core 0.9.0` carries the cumulative v0.18.1 bounded observational
 security-event schema, v0.18 mandatory security-outcome authority contract,
 v0.17 FIPS-aware provider architecture, v0.16
 pending-operation lifecycle, v0.15 typed wall and monotonic
@@ -35,8 +35,8 @@ and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. Version
-`0.8.0` was published at the v0.15.0 public checkpoint; v0.16 through v0.18.1 code
-remain unpublished until a later public checkpoint.
+`0.8.0` was published at v0.15.0; `0.9.0` is selected for v0.20.0 and remains
+unpublished pending the cumulative pentest and hosted release gates.
 
 Every arithmetic operation is checked independently of build profile.
 Sequence and epoch exhaustion cannot wrap or reuse zero. Budget checks return

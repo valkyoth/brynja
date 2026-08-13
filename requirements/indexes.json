@@ -2047,7 +2047,7 @@
         "current"
       ],
       "decisions": [
-        "format.x509.signed"
+        "format.der.framing"
       ],
       "domains": [
         "encoding"
@@ -2067,11 +2067,11 @@
         "itu:ITU-T.X.690-202109-Err1.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-pki/src/der.rs#Reader"
+        "actual-symbol:crates/brynja-pki/src/der.rs#Reader"
       ],
       "tests": [
-        "planned:positive:tests/requirements/der.rs#canonical_values",
-        "planned:negative:tests/requirements/der.rs#noncanonical_depth_and_length"
+        "planned:positive:crates/brynja-pki/tests/der_reader.rs#nested_constructed_values_emit_balanced_events",
+        "planned:negative:crates/brynja-pki/tests/der_reader.rs#indefinite_and_nonminimal_lengths_are_rejected"
       ]
     },
     "BRY-REQ-ENC-0002": {
@@ -6256,6 +6256,9 @@
       "format.delegated-credential": [
         "BRY-REQ-OPTIONAL-0144"
       ],
+      "format.der.framing": [
+        "BRY-REQ-ENC-0001"
+      ],
       "format.ml-kem-pkix-credentials": [
         "BRY-REQ-PQPKIX-0046"
       ],
@@ -6269,7 +6272,6 @@
         "BRY-REQ-OPTIONAL-0137"
       ],
       "format.x509.signed": [
-        "BRY-REQ-ENC-0001",
         "BRY-REQ-ENC-0002",
         "BRY-REQ-PKIX-0001",
         "BRY-REQ-PKIX-0002",
@@ -10637,6 +10639,9 @@
       "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
       ],
+      "actual-symbol:crates/brynja-pki/src/der.rs#Reader": [
+        "BRY-REQ-ENC-0001"
+      ],
       "actual-symbol:crates/brynja-protocol/src/tls/content_type.rs#WirePolicy": [
         "BRY-REQ-TLS-0019"
       ],
@@ -10856,9 +10861,6 @@
       ],
       "planned-symbol:crates/brynja-pki/src/ct.rs#CertificateTransparency": [
         "BRY-REQ-CT-0001"
-      ],
-      "planned-symbol:crates/brynja-pki/src/der.rs#Reader": [
-        "BRY-REQ-ENC-0001"
       ],
       "planned-symbol:crates/brynja-pki/src/identity.rs#ServiceIdentity": [
         "BRY-REQ-PKIX-0002"
@@ -11134,6 +11136,9 @@
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:negative:crates/brynja-pki/tests/der_reader.rs#indefinite_and_nonminimal_lengths_are_rejected": [
+        "BRY-REQ-ENC-0001"
+      ],
       "planned:negative:crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing": [
         "BRY-REQ-TLS-0018"
       ],
@@ -11212,9 +11217,6 @@
       ],
       "planned:negative:tests/requirements/ct.rs#rejects_cross_version_or_malformed_proof": [
         "BRY-REQ-CT-0001"
-      ],
-      "planned:negative:tests/requirements/der.rs#noncanonical_depth_and_length": [
-        "BRY-REQ-ENC-0001"
       ],
       "planned:negative:tests/requirements/dtls12_cid.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0107"
@@ -11536,6 +11538,9 @@
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:positive:crates/brynja-pki/tests/der_reader.rs#nested_constructed_values_emit_balanced_events": [
+        "BRY-REQ-ENC-0001"
+      ],
       "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion": [
         "BRY-REQ-TLS-0019"
       ],
@@ -11616,9 +11621,6 @@
       ],
       "planned:positive:tests/requirements/ct.rs#accepts_valid_versioned_proof": [
         "BRY-REQ-CT-0001"
-      ],
-      "planned:positive:tests/requirements/der.rs#canonical_values": [
-        "BRY-REQ-ENC-0001"
       ],
       "planned:positive:tests/requirements/dtls12_cid.rs#routing_and_privacy": [
         "BRY-REQ-DTLS-0107"

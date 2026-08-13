@@ -93,7 +93,7 @@ def test() -> None:
         copy_fixture(root)
 
         release = root / "release-crates.toml"
-        replace(release, 'milestone = "0.19.0"', 'milestone = "0.11.2"')
+        replace(release, 'milestone = "0.20.0"', 'milestone = "0.11.2"')
         require_rejection(root, "version and milestone")
         copy_fixture(root)
 

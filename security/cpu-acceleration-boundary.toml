@@ -10,7 +10,7 @@ approved_cpu_low_level_allowances = 0
 
 [packages.kernel]
 name = "brynja-crypto-cpu"
-version = "0.1.0"
+version = "0.1.1"
 runtime = "no_std"
 dependencies = []
 default_features = []
@@ -19,7 +19,7 @@ facade_feature = "none"
 
 [packages.detector]
 name = "brynja-crypto-cpu-std"
-version = "0.1.0"
+version = "0.1.1"
 runtime = "reserved-std-currently-no_std"
 dependencies = ["brynja-crypto-cpu"]
 default_features = []

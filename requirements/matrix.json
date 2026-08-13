@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0c20cf8793ca60dc420cb6b87998131a50edc295979e0ee2e48e15c0c56c824f",
-  "domain_policy_sha256": "120203a0a091b8760d36a3f676d00c441bd167b9eb0d5698687e169a2f1ba4ce",
-  "policy_sha256": "8213e3a3249e0c9d19742811ca9c45e365191159e144b07a72dcf7ede0f1beb4",
+  "domain_policy_sha256": "9cf7302a9d087461eab61ef23dc0df5a87c8e3c205c1a496567c71f0d80fcdca",
+  "policy_sha256": "df613ad8b52c60a38f75237587d7d6d2d276b2a992cb16c52485b131d52f7c62",
   "requirements": [
     {
       "applicability": "delegate",
@@ -8580,12 +8580,12 @@
       "applicability": "apply",
       "decision": "enforce",
       "decision_ids": [
-        "format.x509.signed"
+        "format.der.framing"
       ],
       "deviation_rationale": null,
       "domain": "encoding",
       "evidence": [],
-      "evidence_gap": "A malformed DER corpus, bound proofs, exact X.690 clause mapping, fuzzing, and independent parser review remain unresolved until v0.20.0.",
+      "evidence_gap": "Canonical framing, bounded traversal, an exhaustive two-octet corpus, source policy, and adversarial fixtures are implemented; type-specific ASN.1 canonicality, external differential fuzzing, formal bound proofs, and independent parser review remain unresolved.",
       "id": "BRY-REQ-ENC-0001",
       "invariants": [
         "canonical-encoding",
@@ -8593,13 +8593,13 @@
         "validation",
         "work-bound"
       ],
-      "lifecycle": "planned",
-      "mapping_rationale": "This reviewed cross-domain rule maps the foundational DER authority to signed X.509 because every admitted certificate and key container depends on the bounded canonical reader.",
+      "lifecycle": "implemented",
+      "mapping_rationale": "This reviewed cross-domain rule maps the foundational DER authority to the bounded framing substrate that every later ASN.1, certificate, and key-container decoder must use.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.20.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The ITU publications remain local-only provenance inputs, and the implementation must retain the original signed bytes where PKIX requires them.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -8641,7 +8641,7 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-pki/src/der.rs#Reader"
         }
       ],
@@ -8649,12 +8649,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/der.rs#canonical_values"
+          "target": "crates/brynja-pki/tests/der_reader.rs#nested_constructed_values_emit_balanced_events"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/der.rs#noncanonical_depth_and_length"
+          "target": "crates/brynja-pki/tests/der_reader.rs#indefinite_and_nonminimal_lengths_are_rejected"
         }
       ],
       "work_bound": "Parsing is non-recursive and bounded by immutable input-byte, depth, node, child, length-octet, and total-work ceilings."
@@ -29548,9 +29548,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "d599415e93915911eac03eb30bc631e469952ef38eb28d943760b52792e4b305",
+  "residual_policy_sha256": "865bf824c495c06fb04f05cbbde1a209f00bbe61aae50f881537100a3bb69247",
   "schema": 5,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "25f792eb887cf6c9892c8d7a0c9c3fd20ee41bf9caa2f13ae8c6987413b24aad",
-  "transport_policy_sha256": "b5756c51a831c3fd571a029659b7343b9caf8f163c3a3c95c5cb2d2c13a8907c"
+  "surface_register_sha256": "931e81e7c289e63012e1f5055ef001009796e7f0429251cdd5da59ad3d6c2a15",
+  "transport_policy_sha256": "7b3e4c46c55a6c5e9228af64777871330e444b397d0647252d1799e894abc9cf"
 }

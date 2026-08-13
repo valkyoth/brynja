@@ -7,6 +7,19 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add `brynja-pki 0.2.0` bounded DER framing with borrowed exact slices,
+  non-recursive event traversal, canonical identifier and definite minimal
+  length checks, checked parent containment, and failure-atomic reader state.
+- Add immutable input, depth, node, child, identifier-octet, length-octet,
+  value-size, work, and fixed-stack ceilings, thirteen integration tests,
+  three compile-fail examples, an exhaustive 65,536-input corpus, six locked
+  source hashes, and thirty-two broken policy fixtures.
+- Promote `BRY-REQ-ENC-0001` to implemented revision 2 and add the dedicated
+  X.690-bound `format.der.framing` surface without claiming ASN.1 semantics,
+  X.509, cryptography, independent verification, or FIPS validation.
+- Prepare the scheduled v0.20.0 cumulative checkpoint with 15 selected
+  packages; publication remains blocked pending the v0.15.0-to-v0.20.0
+  pentest report and green GitHub and CodeQL.
 - Add unpublished `brynja-protocol 0.1.0` with typed external wire policies,
   borrowed TLS 1.2/TLS 1.3 and DTLS 1.2/DTLS 1.3 record-envelope parsing, and
   transactional caller-buffer encoding.

@@ -86,7 +86,23 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.19.0` development milestone adds `brynja-protocol`, a shared
+The current `0.20.0` scheduled public checkpoint adds a bounded, borrowed DER
+reader in `brynja-pki 0.2.0`. Its non-recursive event traversal accepts only
+definite, minimal DER framing, returns exact input slices without allocation or
+copying, and enforces immutable input, depth, node, child, identifier, length,
+value, and work ceilings with a caller-selected fixed stack. It rejects
+truncation, overflow, non-canonical tags and lengths, universal end-of-contents,
+and child values that escape their parent. Every failed read preserves the
+reader position.
+
+This checkpoint implements framing only. It does not interpret ASN.1 primitive
+types, validate X.509, perform cryptography, authenticate input, or make a FIPS
+claim. The selected 15-package publication set remains unpublished until the
+scheduled cumulative pentest covers every change after signed v0.15.0 through
+the exact v0.20.0 candidate, the permanent PASS report is committed, and
+GitHub and CodeQL are green.
+
+The signed `0.19.0` development milestone adds `brynja-protocol`, a shared
 allocation-free TLS and DTLS record-envelope boundary. An already selected
 typed `WirePolicy` is required before parsing, so record bytes cannot choose a
 protocol version, downgrade, or trigger fallback. Borrowed parsers and
@@ -101,8 +117,8 @@ The framing boundary performs no allocation, I/O, cryptography, decryption,
 authentication, DTLS sequence reconstruction, replay processing, version
 selection, handshake transition, or alert decision. The TLS 1.2, TLS 1.3, and
 DTLS engine packages consume the shared crate but remain unimplemented.
-Because this is Brynja's first hostile protocol parser, v0.19.0 requires an
-exceptional pentest before its signed tag even though it selects no crates.io
+Because this was Brynja's first hostile protocol parser, v0.19.0 required an
+exceptional pentest before its signed tag even though it selected no crates.io
 publication and remains in the cumulative v0.15.0-to-v0.20.0 review range.
 The initial assessment found one High cleartext-exposure flaw: TLS 1.3
 plaintext admission inherited TLS 1.2 application-data allowance. TLS 1.3
@@ -110,8 +126,8 @@ application data is now categorically rejected during both parsing and caller
 construction with a dedicated closed error. Focused regression and policy
 fixtures pass. Repository-owner retest of exact signed remediation candidate
 `238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed with zero open findings,
-and the permanent report records `PASS`/`PASS`. The final release-check commit
-now awaits green GitHub and CodeQL before tag.
+and the permanent report records `PASS`/`PASS`; signed tag v0.19.0 contains the
+reviewed remediation.
 
 The signed `0.18.0` development milestone adds a protocol-neutral mandatory
 security-outcome authority contract in `brynja-core`. Sealed type-level domains
@@ -314,7 +330,7 @@ published only when their cumulative changes require it at a checkpoint.
 Pentests look backwards over the complete change range between public
 checkpoints. The v0.15.0 assessment covered all changes after signed public tag
 v0.10.0 through v0.15.0. The v0.20.0 assessment covers all changes after
-v0.15.0 through v0.20.0, including the current v0.19.0 milestone, and the same
+v0.15.0 through the current v0.20.0 candidate, and the same
 pattern continues every fifth minor version. Each checkpoint report records
 its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
@@ -342,10 +358,9 @@ v0.15.0-to-v0.20.0 checkpoint assessment.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
-`0.18.1`. The current `0.19.0` shared record-framing milestone selects no
-crates.io publication, has passed its exceptional retest with zero open
-findings, and awaits green hosted checks before tagging. It remains inside the
-cumulative v0.20.0 assessment range.
+`0.19.0`. The current `0.20.0` DER-framing checkpoint selects 15 packages but
+publishes none until its scheduled cumulative pentest report and green hosted
+checks are complete.
 The published dependency is:
 
 ```toml
@@ -485,8 +500,9 @@ lifetime, owned-region zeroization, fixed-width constant-time, and provider
 capability/authorization, entropy/secure-random, typed-clock, and pending-
 operation foundations
 described for `brynja-core`, the shared record-envelope boundary in
-`brynja-protocol`, and the separately selected sanitization adapter are
-implemented. No cryptographic primitive, PKI processor, handshake parser, or
+`brynja-protocol`, the bounded DER framing reader in `brynja-pki`, and the
+separately selected sanitization adapter are implemented. No cryptographic
+primitive, ASN.1 semantic processor, X.509 validator, handshake parser, or
 protocol engine in this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
 formal proof, pentest, or release status.
@@ -495,7 +511,7 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations and shared record framing through v0.19; no TLS engine or provider implementation |
+| `brynja` | Modern production facade | Exposes cumulative foundations, shared record framing, and bounded DER framing through v0.20; no TLS engine or provider implementation |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
@@ -503,7 +519,7 @@ formal proof, pentest, or release status.
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Foundation only |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
-| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
+| `brynja-pki` | Bounded DER framing now; ASN.1 semantics, X.509, path validation, and revocation later | DER reader only |
 | `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented; unpublished; v0.19.0 exceptional pentest and retest passed |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
 | `brynja-tls13` | Version-specific TLS 1.3 stream engine | Foundation only |
@@ -517,7 +533,7 @@ formal proof, pentest, or release status.
 | Future `brynja-openpgp-legacy` | Optional deprecated-algorithm compatibility with no modern facade edge | Conditional and separately isolated |
 | Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.169.2; OpenPGP v4 fingerprints, protected v4 keys, and v1 SEIPD/MDC receive separate consumer reviews at v0.169.3, v0.169.5, and v0.171.2 |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.0 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
+| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 exact core-pin checkpoint candidate over `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
@@ -641,7 +657,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.19.0
+scripts/tag_gate.sh v0.20.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

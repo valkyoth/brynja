@@ -34,7 +34,9 @@ CONFIG = bundle.Config(
     source_domains=frozenset(SOURCE_DOMAINS),
     surface_domains=frozenset(SURFACE_DOMAINS),
     authority_roles=frozenset(AUTHORITY_ROLES),
-    lifecycles=frozenset({"planned", "rejected"}),
+    lifecycles=frozenset(
+        {"evidenced", "implemented", "planned", "rejected", "tested"}
+    ),
     section_policy=lib.DIRECTORY / "domain-sections.toml",
 )
 

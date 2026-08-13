@@ -109,13 +109,13 @@ incorrect revisions, unrelated decision links, lifecycle/disposition or owner
 conflicts, protocol use of global mappings, released-scope changes, or stale
 generated artifacts. Its 12 foundation requirements exercise all eight
 lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
-encoding, PKIX, OCSP, and CT authorities plus 3,323 current selected surfaces; 70
+encoding, PKIX, OCSP, and CT authorities plus 3,324 current selected surfaces; 70
 transport requirements cover 40 authorities, 550 normative sections, 63
 implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty
 residual requirements cover 33 authorities, 182 reviewed normative sections,
 and all 765 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 127 sources and 4,447 surfaces.
+closure across all 127 sources and 4,448 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.

@@ -419,6 +419,17 @@ remains available. The framing layer does
 not decrypt, authenticate, reconstruct truncated DTLS sequence numbers,
 enforce anti-replay, interpret handshake messages, perform I/O, or decide
 alerts; those later authorities must not infer trust from framing success.
+v0.20.0 treats every DER identifier, length, nesting transition, declared
+content extent, sibling count, and trailing root as hostile. The reader accepts
+only definite minimal framing, uses checked offsets, rejects non-canonical
+high tags and universal end-of-contents, prevents a child from escaping its
+parent, and exposes only borrowed slices after all framing checks pass. Input,
+depth, node, child, identifier-octet, length-octet, value-size, total-work, and
+fixed-stack ceilings are immutable. Parsing is non-recursive and a failed call
+does not advance observable reader state. A successfully framed element is not
+proof of ASN.1 type canonicality, SET ordering, X.509 validity, signature
+authenticity, trust, cryptographic safety, independent verification, or FIPS
+validation; those decisions remain owned by later milestones.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

@@ -296,7 +296,9 @@ def validate_release_state(root: Path) -> None:
         crates = table(release, "crates")
         adapter = table(crates, "brynja-sanitization")
         require(adapter.get("previous_version") == "0.1.0" and
-                adapter.get("version") == "0.1.0",
+                adapter.get("version") == "0.1.1" and
+                adapter.get("change") == "dependency" and
+                adapter.get("publish") is True,
                 "published adapter release history drift")
 
 

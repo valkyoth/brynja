@@ -5939,10 +5939,10 @@
     },
     {
       "decision_ids": [
-        "format.x509.signed"
+        "format.der.framing"
       ],
       "id": "BRY-REQ-ENC-0001",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.20.0",
       "source_ids": [
         "itu:ITU-T.X.690-202102.pdf",
@@ -10438,6 +10438,12 @@
       "id": "format.delegated-credential",
       "requirement_ids": [
         "BRY-REQ-OPTIONAL-0144"
+      ]
+    },
+    {
+      "id": "format.der.framing",
+      "requirement_ids": [
+        "BRY-REQ-ENC-0001"
       ]
     },
     {

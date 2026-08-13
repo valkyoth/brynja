@@ -30,7 +30,7 @@ dispatch-initialization boundary. It depends only on `brynja-crypto-cpu`, is
 selected directly by host applications, and can never enter Brynja defaults,
 protocol engines, bare-metal graphs, or a FIPS validated-module artifact.
 
-The v0.1.0 placeholder deliberately remains `no_std`. It contains no runtime
+The v0.1.1 placeholder deliberately remains `no_std`. It contains no runtime
 detection, global initializer, detector dependency, platform service,
 executable backend, cryptographic code, or low-level-code allowance. A later
 implementation milestone must explicitly authorize standard-library use and
@@ -56,7 +56,8 @@ and pentesting do not by themselves constitute independent verification.
 | --- | --- | --- |
 | `brynja-crypto-cpu-std` | Future host feature detection and dispatch initialization | ❌ Not implemented or verified |
 
-Version `0.1.0` was published at the v0.15.0 cumulative checkpoint after its
-pentest and hosted gates passed with zero findings. The project-wide
+Version `0.1.0` was published at v0.15.0. Candidate `0.1.1` updates its exact
+CPU-boundary dependency for v0.20.0 and remains unpublished pending the
+cumulative pentest and hosted gates. The project-wide
 first-party Rust, dependency, source-size, platform, FIPS, and low-level-code
 policies apply here.

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.18.1 signed; v0.19.0 exceptional pentest PASS and awaiting green GitHub and CodeQL
+Status: v0.19.0 signed; v0.20.0 implementation complete and awaiting scheduled cumulative pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -27,8 +27,8 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It still has no integer
-encoding, TLS handshake parser, TLS state machine, cryptography, PKI, QUIC-TLS,
+It now has bounded DER tag-length-value framing but still has no ASN.1
+primitive semantics, TLS handshake parser, TLS state machine, cryptography, X.509, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -96,8 +96,21 @@ plaintext behavior. Focused regression and policy fixtures pass; the exact
 signed remediation candidate
 `238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed repository-owner retest
 with zero open findings. The permanent `security/pentest/v0.19.0.md` report
-records `PASS`/`PASS`; the final release-check commit now awaits green GitHub
-and CodeQL before tag.
+records `PASS`/`PASS`; signed tag v0.19.0 contains that remediation.
+
+The facade now advances to `0.20.0`. `brynja-pki 0.2.0` implements a borrowed,
+allocation-free, non-recursive DER reader with immutable input, depth, node,
+child, identifier, length, value, and work ceilings plus a caller-selected
+fixed stack. Canonical identifier and definite minimal length checks,
+parent-boundary enforcement, failure-atomic reader position, and exact borrowed
+slices are implemented. ASN.1 primitive semantics, SET ordering, X.509,
+cryptography, signature verification, and FIPS validation remain absent.
+
+This scheduled public checkpoint selects 15 packages, including the initial
+`brynja-protocol 0.1.0` publication and the changed `brynja-pki 0.2.0`, but
+publishes nothing until the cumulative pentest reviews every change after
+signed v0.15.0 through the exact v0.20.0 candidate, its PASS report is
+committed, and GitHub and CodeQL are green.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io
@@ -164,7 +177,7 @@ Version 0.3.3 completes the cryptography, encoding, and PKIX population pass:
 - all 53 exact authorities in the symmetric, public-key, key-container, PKIX,
   OCSP, and CT domains are cited with current, compatibility, evidence, or
   exclusion roles;
-- all 3,323 current cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
+- all 3,324 current cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
   or one of two explicit v0.3.5 ML-KEM deferrals;
 - every uppercase normative RFC section is hash-bound with occurrence counts,
   and every domain rule records assurance invariants, a work bound, positive
@@ -210,7 +223,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 - all 743 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,424 surfaces;
 - the generated closure maps all 127 locked sources, all 273 roadmap rows, all
-  4,447 surfaces, and all 167 requirements in both directions;
+  4,448 surfaces, and all 167 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
@@ -303,7 +316,7 @@ Version 0.6.0 adds bounded numeric and resource foundations:
   surfaces without admitting draft authority or runtime code;
 - the later reviewed 2026-08-11 TLS ExtensionType refresh adds C509 Certificate
   type value 4 and moves the unassigned range start to 5, bringing the current
-  register to 4,447 surfaces while retaining the provisional C509 draft as
+  register to 4,448 surfaces while retaining the provisional C509 draft as
   non-authoritative future work and admitting no runtime code; and
 - no protocol surface or normative protocol requirement advances because
   these types are source-free shared foundations; later wire widths,

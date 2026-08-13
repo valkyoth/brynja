@@ -3,19 +3,20 @@ domain = "encoding"
 
 [[requirement]]
 id = "BRY-REQ-ENC-0001"
+revision = 2
 owner = "0.20.0"
-lifecycle = "planned"
-decision_ids = ["format.x509.signed"]
+lifecycle = "implemented"
+decision_ids = ["format.der.framing"]
 sources = [{ id = "itu:ITU-T.X.690-202102.pdf", authority_role = "current" }, { id = "itu:ITU-T.X.690-202109-Err1.pdf", authority_role = "current" }]
 statement = "The DER reader accepts only definite, minimal, canonical encodings under the in-force X.690 edition and its mandatory erratum."
 invariants = ["canonical-encoding", "resource-bound", "validation", "work-bound"]
 target = "crates/brynja-pki/src/der.rs#Reader"
-positive_test = "tests/requirements/der.rs#canonical_values"
-negative_test = "tests/requirements/der.rs#noncanonical_depth_and_length"
+positive_test = "crates/brynja-pki/tests/der_reader.rs#nested_constructed_values_emit_balanced_events"
+negative_test = "crates/brynja-pki/tests/der_reader.rs#indefinite_and_nonminimal_lengths_are_rejected"
 work_bound = "Parsing is non-recursive and bounded by immutable input-byte, depth, node, child, length-octet, and total-work ceilings."
-evidence_gap = "A malformed DER corpus, bound proofs, exact X.690 clause mapping, fuzzing, and independent parser review remain unresolved until v0.20.0."
+evidence_gap = "Canonical framing, bounded traversal, an exhaustive two-octet corpus, source policy, and adversarial fixtures are implemented; type-specific ASN.1 canonicality, external differential fuzzing, formal bound proofs, and independent parser review remain unresolved."
 residual = "The ITU publications remain local-only provenance inputs, and the implementation must retain the original signed bytes where PKIX requires them."
-mapping_rationale = "This reviewed cross-domain rule maps the foundational DER authority to signed X.509 because every admitted certificate and key container depends on the bounded canonical reader."
+mapping_rationale = "This reviewed cross-domain rule maps the foundational DER authority to the bounded framing substrate that every later ASN.1, certificate, and key-container decoder must use."
 
 [[requirement]]
 id = "BRY-REQ-ENC-0002"

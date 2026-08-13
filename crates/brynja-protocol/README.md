@@ -43,9 +43,10 @@ available only through the separate post-decryption inner-content classifier.
 This crate does not negotiate versions, decrypt or authenticate records,
 reconstruct DTLS sequence numbers, enforce replay policy, process handshakes,
 perform I/O, allocate, implement cryptography, or provide a TLS/DTLS engine.
-It is an unpublished v0.19.0 development boundary whose initial High
-cleartext-exposure finding is remediated and awaiting exceptional retest. It
-remains inside the cumulative v0.15.0-to-v0.20.0 review range.
+It is selected for initial publication at v0.20.0. Its v0.19.0 initial High
+cleartext-exposure finding passed repository-owner remediation retest with zero
+open findings, and it remains inside the cumulative v0.15.0-to-v0.20.0 review
+range. It stays unpublished until that scheduled review and hosted gates pass.
 
 ## Cryptography Verification Status
 

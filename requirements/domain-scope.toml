@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.3"
 source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a"
-surface_register_sha256 = "25f792eb887cf6c9892c8d7a0c9c3fd20ee41bf9caa2f13ae8c6987413b24aad"
+surface_register_sha256 = "931e81e7c289e63012e1f5055ef001009796e7f0429251cdd5da59ad3d6c2a15"
 source_domains = ["ct", "key-containers", "ocsp", "pkix", "public-key", "symmetric"]
 surface_domains = ["cryptography", "ct", "ocsp", "pki", "pkix"]
 
@@ -11,13 +11,6 @@ surface_id = "iana.tls-parameters.tls-kdf-ids"
 authority_ids = ["iana:tls-parameters", "rfc:9846"]
 expected_owner = "0.46.0"
 rationale = "The PKIX algorithm-admission milestone owns the decision, while this TLS registry subtree is referenced solely to deny unsupported KDF identifiers across the certificate and handshake boundary."
-
-[[surface_link_exception]]
-requirement_id = "BRY-REQ-ENC-0001"
-surface_id = "format.x509.signed"
-authority_ids = ["rfc:5280", "rfc:9525"]
-expected_owner = "0.50.0"
-rationale = "The shared signed-certificate surface is owned by X.509 decoding, while the earlier DER milestone supplies its canonical encoding substrate without claiming certificate semantics."
 
 [[surface_link_exception]]
 requirement_id = "BRY-REQ-ENC-0002"
@@ -170,6 +163,11 @@ requirement_id = "BRY-REQ-CRYPTO-0012"
 domain = "cryptography"
 owner = "0.46.0"
 requirement_id = "BRY-REQ-CRYPTO-0013"
+
+[[surface_group]]
+domain = "pkix"
+owner = "0.20.0"
+requirement_id = "BRY-REQ-ENC-0001"
 
 [[surface_group]]
 domain = "pkix"

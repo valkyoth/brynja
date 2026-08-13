@@ -12,7 +12,7 @@ from pathlib import Path
 POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
-EXPECTED_POLICY_SHA256 = "dfebd0f108f7fe5f543969022f15c0ae1c4bedf7767d30008213ada64694811e"
+EXPECTED_POLICY_SHA256 = "0658616b8fa766bebb934036b163b1880141bab88a85dc4c62f92a8aab7d3b39"
 EXPECTED_SOURCE_SHA256 = {
     (CPU, "src/lib.rs"): "614731a47da9364a16d62b71335b5cbeffb7554b117d4c2c8661fd5b2b2ec438",
     (DETECTOR, "src/lib.rs"): "db734d07aca12e88b560d732d977d97f9e86e438ef913f6b3d5d19c733a9d7a2",
@@ -202,7 +202,7 @@ def validate_manifests(root: Path) -> None:
     workspace = read_toml(root / "Cargo.toml")
     workspace_dependencies = workspace.get("workspace", {}).get("dependencies", {})
     for name in (CPU, DETECTOR):
-        expected = {"path": f"crates/{name}", "version": "=0.1.0"}
+        expected = {"path": f"crates/{name}", "version": "=0.1.1"}
         if workspace_dependencies.get(name) != expected:
             fail(f"workspace dependency pin drifted: {name}")
 
@@ -341,7 +341,7 @@ def validate_policy_shape(policy: dict) -> None:
     if policy["packages"] != {
         "kernel": {
             "name": CPU,
-            "version": "0.1.0",
+            "version": "0.1.1",
             "runtime": "no_std",
             "dependencies": [],
             "default_features": [],
@@ -350,7 +350,7 @@ def validate_policy_shape(policy: dict) -> None:
         },
         "detector": {
             "name": DETECTOR,
-            "version": "0.1.0",
+            "version": "0.1.1",
             "runtime": "reserved-std-currently-no_std",
             "dependencies": [CPU],
             "default_features": [],

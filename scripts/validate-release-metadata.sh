@@ -110,6 +110,9 @@ test -f scripts/security_event_policy.py
 test -x scripts/check-record-framing.py
 test -x scripts/test-record-framing.py
 test -f scripts/record_framing_policy.py
+test -x scripts/check-der-reader.py
+test -x scripts/test-der-reader.py
+test -f scripts/der_reader_policy.py
 test -x scripts/check-cpu-boundary.py
 test -x scripts/test-cpu-boundary.py
 test -f scripts/cpu_boundary_policy.py

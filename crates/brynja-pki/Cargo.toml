@@ -1,13 +1,13 @@
 [package]
 name = "brynja-pki"
-version = "0.1.7"
+version = "0.2.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
-description = "First-party ASN.1, DER, and X.509 validation for Brynja"
+description = "Bounded DER framing and future first-party PKI for Brynja"
 publish = ["crates-io"]
 
 [features]

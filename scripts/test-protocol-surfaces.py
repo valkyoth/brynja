@@ -58,13 +58,13 @@ def bind(policy: dict, ledger: dict) -> None:
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
-    assert len(register["surfaces"]) == 4447
+    assert len(register["surfaces"]) == 4448
     implemented = {
         surface["id"]
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 65
+    assert len(implemented) == 66
     assert all(
         surface_id.startswith("iana.tls-parameters.tls-parameters-5")
         or surface_id.startswith("iana.tls-parameters.tls-parameters-6")
@@ -72,7 +72,7 @@ def test_current_repository() -> None:
         in {
             "facility.sslkeylogfile.test-support",
             "facility.entropy.secure-random-contract",
-            "state.tls.secret-lifetime",
+            "format.der.framing", "state.tls.secret-lifetime",
         }
         for surface_id in implemented
     )

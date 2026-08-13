@@ -1,9 +1,10 @@
 # Crate Version Matrix
 
-Status: v0.18.1 signed; v0.19.0 exceptional pentest PASS and awaiting green GitHub and CodeQL
+Status: v0.19.0 signed; v0.20.0 implementation complete and awaiting scheduled cumulative pentest
 
-The `brynja` facade advances to `0.19.0` for the current development milestone
-and selects no crates.io publication. The latest signed and published
+The `brynja` facade advances to `0.20.0` for the scheduled public checkpoint
+and selects 15 crates.io packages, which remain unpublished pending the
+cumulative pentest and hosted checks. The latest signed and published
 checkpoint is v0.15.0: `brynja 0.15.0`, `brynja-core 0.8.0`,
 `brynja-crypto 0.1.1`, the eight modern support packages at `0.1.7`, and the
 initial CPU-boundary and sanitization packages at `0.1.0`. Package publication
@@ -87,23 +88,26 @@ hostile-parser boundary requires an exceptional pentest and selects no package
 publication. Its initial assessment found one High TLS 1.3 cleartext-
 application-data flaw. Repository-owner retest of exact signed remediation
 candidate `238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed with
-`PASS`/`PASS` and zero open findings; the final release-check commit now awaits
-green GitHub and CodeQL before tag.
+`PASS`/`PASS` and zero open findings; signed tag v0.19.0 contains that
+remediation. The v0.20.0 stage adds bounded DER framing in `brynja-pki`,
+promotes the unpublished shared protocol crate, and selects every package
+changed since v0.15.0 plus exact-pin dependents for publication only after the
+scheduled cumulative assessment passes.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.19.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
-| `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16-v0.18.1 authority, architecture, and event code remains unreleased on crates.io |
-| `brynja-crypto` | `0.1.1` | no | Published provider/composition boundary retained; cryptographic effects remain unimplemented |
-| `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Published inert boundaries; no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
-| `brynja-pki`, `brynja-platform` | `0.1.7` | no | Published boundaries retained; PKI and platform effects remain unimplemented |
-| `brynja-protocol` | `0.1.0` | no | New shared TLS and DTLS record-envelope boundary; unpublished until a later public checkpoint |
-| `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.7` | no | Published boundaries retained; engines remain unimplemented |
-| `brynja-dtls`, `brynja-quic-tls` | `0.1.7` | no | Published boundaries retained; engines/adapters remain unimplemented |
+| `brynja` | `0.20.0` | pending | Facade checkpoint; published last after every selected dependency |
+| `brynja-core` | `0.9.0` | pending | Cumulative code since v0.15.0 |
+| `brynja-crypto` | `0.1.2` | pending | Exact core dependency update; cryptographic effects remain unimplemented |
+| `brynja-crypto-cpu` | `0.1.1` | pending | Metadata release of the inert CPU boundary; no executable kernel |
+| `brynja-crypto-cpu-std` | `0.1.1` | pending | Exact CPU dependency update; no runtime detector |
+| `brynja-pki` | `0.2.0` | pending | Bounded DER framing code; no ASN.1 semantics or X.509 |
+| `brynja-protocol` | `0.1.0` | pending | Initial shared TLS/DTLS record-envelope publication |
+| `brynja-platform`, `brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`, `brynja-dtls`, `brynja-quic-tls` | `0.1.8` | pending | Exact-pin dependency updates; platform and protocol engines remain unimplemented |
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |
 | `brynja-research-ssl1` | `0.1.0` | never | Research boundary only |
 | Test, interop, xtask, and proof packages | `0.1.0` | no | Repository tooling; test support now includes a deterministic/fault engine that production cannot reach |
-| `brynja-sanitization` | `0.1.0` | no | Published separate adapter over exact `sanitization 2.0.3`; absent from every facade, engine, default, and FIPS boundary |
+| `brynja-sanitization` | `0.1.1` | pending | Exact core-pin update for the separate `sanitization 2.0.3` adapter; absent from every facade, engine, default, and FIPS boundary |
 
 ## Enforced crates.io Release Policy
 

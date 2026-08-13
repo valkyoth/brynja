@@ -153,16 +153,23 @@ def load_policy(config: Config) -> tuple[dict, list[dict], str]:
         if document["schema"] != 1:
             lib.fail(f"{path}: unsupported domain policy schema")
         for raw in document["requirement"]:
-            if set(raw) != RAW_FIELDS:
+            if set(raw) not in (RAW_FIELDS, RAW_FIELDS | {"revision"}):
                 lib.fail(f"{path}: invalid compact requirement fields")
+            revision = raw.get("revision", 1)
+            if isinstance(revision, bool) or not isinstance(revision, int) or revision < 1:
+                lib.fail(f"{path}: invalid compact requirement revision")
             lifecycle = raw["lifecycle"]
             decision = lib.LIFECYCLE_DECISIONS.get(lifecycle)
             if decision is None:
                 lib.fail(f"{path}: unknown compact requirement lifecycle")
-            target_kind = (
-                "boundary"
-                if lifecycle in {"caller-owned", "rejected"}
-                else "planned-symbol"
+            if lifecycle in {"caller-owned", "rejected"}:
+                target_kind = "boundary"
+            elif lifecycle in {"evidenced", "implemented", "tested"}:
+                target_kind = "actual-symbol"
+            else:
+                target_kind = "planned-symbol"
+            test_status = (
+                "actual" if lifecycle in {"evidenced", "tested"} else "planned"
             )
             requirements.append(
                 {
@@ -181,7 +188,7 @@ def load_policy(config: Config) -> tuple[dict, list[dict], str]:
                     "owner": raw["owner"],
                     "profile": config.profile,
                     "residual": raw["residual"],
-                    "revision": 1,
+                    "revision": revision,
                     "scope": "protocol",
                     "sources": raw["sources"],
                     "statement": raw["statement"],
@@ -190,12 +197,12 @@ def load_policy(config: Config) -> tuple[dict, list[dict], str]:
                     "tests": [
                         {
                             "polarity": "positive",
-                            "status": "planned",
+                            "status": test_status,
                             "target": raw["positive_test"],
                         },
                         {
                             "polarity": "negative",
-                            "status": "planned",
+                            "status": test_status,
                             "target": raw["negative_test"],
                         },
                     ],
@@ -344,8 +351,9 @@ def validate_requirement(
         requirement_id
     ) is None:
         lib.fail(f"invalid stable requirement ID {requirement_id!r}")
-    if requirement["revision"] != 1:
-        lib.fail(f"{requirement_id} new domain requirement must begin at revision 1")
+    revision = requirement["revision"]
+    if isinstance(revision, bool) or not isinstance(revision, int) or revision < 1:
+        lib.fail(f"{requirement_id} has invalid domain requirement revision")
     if requirement["owner"] not in versions:
         lib.fail(f"{requirement_id} has absent or unknown owner")
     expected = lib.LIFECYCLE_DECISIONS.get(requirement["lifecycle"])

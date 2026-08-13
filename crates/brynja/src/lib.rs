@@ -12,8 +12,9 @@
 //! including token-gated external-key destruction. Bounded observational
 //! events duplicate those outcomes without gaining authority. Shared TLS and
 //! DTLS record envelopes are now parsed and encoded independently of protocol
-//! selection. This crate does not provide a TLS connection API, provider
-//! implementation, or cryptographic algorithm.
+//! selection. A bounded borrowed DER reader now exposes canonical framing
+//! without ASN.1 or X.509 semantics. This crate does not provide a TLS
+//! connection API, provider implementation, or cryptographic algorithm.
 
 #![no_std]
 
@@ -82,6 +83,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::protocol::TLS_DTLS_RECORD_FRAMING_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::pki::BOUNDED_DER_READER_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

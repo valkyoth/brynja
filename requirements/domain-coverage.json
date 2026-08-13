@@ -5527,10 +5527,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "120203a0a091b8760d36a3f676d00c441bd167b9eb0d5698687e169a2f1ba4ce",
+  "policy_sha256": "9cf7302a9d087461eab61ef23dc0df5a87c8e3c205c1a496567c71f0d80fcdca",
   "requirement_count": 34,
   "schema": 1,
-  "surface_count": 3323,
+  "surface_count": 3324,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5636,6 +5636,14 @@
       "id": "algorithm.sha3-shake",
       "owner": "0.24.0",
       "requirement_id": "BRY-REQ-CRYPTO-0002"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "implemented",
+      "domain": "pkix",
+      "id": "format.der.framing",
+      "owner": "0.20.0",
+      "requirement_id": "BRY-REQ-ENC-0001"
     },
     {
       "coverage": "deferred",

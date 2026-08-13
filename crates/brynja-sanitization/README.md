@@ -25,7 +25,7 @@
 
 # brynja-sanitization
 
-`brynja-sanitization 0.1.0` is a separately selected, `no_std`, downstream
+`brynja-sanitization 0.1.1` is a separately selected, `no_std`, downstream
 secret-storage adapter. It wraps exact `sanitization 2.0.3` with default
 features disabled and no activated transitive package. It is not enabled by
 `brynja`, any TLS or DTLS engine, any default or all-features build, or the
@@ -38,17 +38,16 @@ errors cannot cross its boundary. Modern and legacy callers use the same
 protocol-neutral type; there is no legacy-specific adapter.
 
 The package was implemented at Brynja v0.11.2 and published as version `0.1.0`
-at the v0.15.0 scheduled public checkpoint after the cumulative pentest and
-hosted release gates passed with zero findings.
+at v0.15.0. Dependency-pin candidate `0.1.1` is selected for v0.20.0 and remains
+unpublished pending its cumulative pentest and hosted release gates.
 
 ```toml
 [dependencies]
 brynja-sanitization = { version = "0.1", default-features = false }
 ```
 
-Until that checkpoint publication completes, downstream repository users must
-use an exact reviewed Git revision or local path and accept the development
-risk.
+Downstream users may select published `0.1.0`; the `0.1.1` metadata candidate
+is not available until its checkpoint publication completes.
 
 ## Cryptography Verification Status
 

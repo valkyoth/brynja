@@ -25,9 +25,18 @@
 
 # brynja-pki
 
-`brynja-pki 0.1.7` repins its exact `brynja-core 0.8.0` dependency. It remains
-a compile-time boundary only and does not provide a working TLS,
-cryptographic, PKI, platform, or legacy-protocol implementation.
+`brynja-pki 0.2.0` implements Brynja's first PKI substrate: a borrowed,
+allocation-free, non-recursive DER framing reader. It accepts canonical
+identifier and definite minimal length encodings, emits primitive and balanced
+constructed traversal events, and exposes exact header, content, and encoded
+input slices without copying.
+
+Every reader is created with named immutable limits for input bytes, depth,
+nodes, children per parent, identifier octets, length octets, value bytes, and
+total parsing work. A caller-selected const stack capacity bounds traversal
+storage. Truncation, overflow, indefinite or non-minimal lengths,
+non-canonical high tags, universal end-of-contents, parent-boundary escape, and
+resource exhaustion fail closed without advancing reader state.
 
 ## Cryptography Verification Status
 
@@ -41,7 +50,11 @@ verification.
 | --- | --- | --- |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
 
-The component is not implemented yet.
+Only DER tag-length-value framing is implemented. ASN.1 primitive semantics,
+SET ordering, X.509, path validation, revocation, cryptography, signature
+verification, and FIPS validation remain unimplemented. Passing project tests,
+the scheduled pentest, CI, Kani, Miri, or fuzzing does not make this component
+independently cryptographically verified.
 
 Most application users will eventually depend on the modern facade:
 
@@ -50,8 +63,9 @@ Most application users will eventually depend on the modern facade:
 brynja = "0.15"
 ```
 
-This `0.1.7` package was published at the v0.15.0 cumulative checkpoint
-after its pentest and hosted checks passed. It is governed by the
+The last published package is `0.1.7`. This `0.2.0` candidate is selected for
+the v0.20.0 checkpoint and remains unpublished until the cumulative v0.15.0 to
+v0.20.0 pentest, committed PASS report, and hosted checks pass. It is governed by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

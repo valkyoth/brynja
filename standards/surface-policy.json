@@ -484,6 +484,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-pki/src/der.rs",
+        "disposition": "implemented",
+        "domain": "pkix",
+        "owner": "0.20.0",
+        "rationale": "Canonical identifier, definite minimal length, borrowed value, and bounded constructed traversal form a reusable DER substrate without claiming ASN.1 or X.509 semantics.",
+        "sources": ["itu:ITU-T.X.690-202102.pdf", "itu:ITU-T.X.690-202109-Err1.pdf"],
+        "test_target": "crates/brynja-pki/tests/der_reader.rs#nested_constructed_values_emit_balanced_events"
+      },
+      "id": "format.der.framing"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-pki/src/x509.rs",
         "disposition": "future-work",
         "domain": "pkix",

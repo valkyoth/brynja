@@ -2,9 +2,13 @@
 
 use core::{cell::Cell, marker::PhantomData};
 
+use super::outcome::{
+    SecurityAccepted, SecurityCanceled, SecurityFailed, SecurityNonApproved, SecurityOutcome,
+    SecurityRejected,
+};
 use super::resolution::{failure_matches_domain, rejection_matches_domain};
 use super::{
-    SecurityDecision, SecurityDecisionKind, SecurityFailureKind, SecurityRejection,
+    SecurityDecision, SecurityDecisionKind, SecurityDisposition, SecurityFailureKind,
     SecurityResolution, SecurityTerminal, ServiceApprovalDecision,
 };
 
@@ -16,7 +20,12 @@ pub enum SecurityAuthorityState {
     /// One exact decision is incomplete.
     Pending(SecurityDecisionKind),
     /// One resolved outcome must still be committed by the protocol engine.
-    AwaitingCommit(SecurityDecisionKind),
+    AwaitingCommit {
+        /// Exact decision awaiting commitment.
+        decision: SecurityDecisionKind,
+        /// Exact authority-validated disposition awaiting commitment.
+        disposition: SecurityDisposition,
+    },
     /// A terminal failure permanently forbids further decisions.
     Terminal,
 }
@@ -103,9 +112,11 @@ impl SecurityAuthority {
         let record = self.record.get();
         match record.state {
             SecurityAuthorityState::Ready => {}
-            SecurityAuthorityState::Pending(kind)
-            | SecurityAuthorityState::AwaitingCommit(kind) => {
+            SecurityAuthorityState::Pending(kind) => {
                 return Err(SecurityAuthorityError::Busy(kind));
+            }
+            SecurityAuthorityState::AwaitingCommit { decision, .. } => {
+                return Err(SecurityAuthorityError::Busy(decision));
             }
             SecurityAuthorityState::Terminal => {
                 return Err(SecurityAuthorityError::Terminal(
@@ -220,21 +231,42 @@ impl SecurityAuthority {
                 SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND))
             }
             other => {
+                let disposition = match other {
+                    SecurityResolution::Accepted => SecurityDisposition::Accepted,
+                    SecurityResolution::NonApproved => SecurityDisposition::NonApproved,
+                    SecurityResolution::Rejected(reason) => SecurityDisposition::Rejected(reason),
+                    SecurityResolution::Canceled => SecurityDisposition::Canceled,
+                    SecurityResolution::Failed(reason) => SecurityDisposition::Failed(reason),
+                    SecurityResolution::Approved
+                    | SecurityResolution::Pending
+                    | SecurityResolution::Terminal(_) => {
+                        self.fail_terminal(SecurityTerminal::ContractInvariant);
+                        return SecurityOutcome::Terminal(SecurityReceipt::new(self, D::KIND));
+                    }
+                };
                 self.record.set(AuthorityRecord {
-                    state: SecurityAuthorityState::AwaitingCommit(D::KIND),
+                    state: SecurityAuthorityState::AwaitingCommit {
+                        decision: D::KIND,
+                        disposition,
+                    },
                     generation,
                     terminal: None,
                 });
-                let completion = SecurityCompletion::new(self, generation);
                 match other {
-                    SecurityResolution::Accepted => SecurityOutcome::Accepted(completion),
-                    SecurityResolution::NonApproved => SecurityOutcome::NonApproved(completion),
-                    SecurityResolution::Rejected(reason) => {
-                        SecurityOutcome::Rejected(completion, reason)
+                    SecurityResolution::Accepted => {
+                        SecurityOutcome::Accepted(SecurityAccepted::new(self, generation))
                     }
-                    SecurityResolution::Canceled => SecurityOutcome::Canceled(completion),
+                    SecurityResolution::NonApproved => {
+                        SecurityOutcome::NonApproved(SecurityNonApproved::new(self, generation))
+                    }
+                    SecurityResolution::Rejected(reason) => {
+                        SecurityOutcome::Rejected(SecurityRejected::new(self, generation, reason))
+                    }
+                    SecurityResolution::Canceled => {
+                        SecurityOutcome::Canceled(SecurityCanceled::new(self, generation))
+                    }
                     SecurityResolution::Failed(reason) => {
-                        SecurityOutcome::Failed(completion, reason)
+                        SecurityOutcome::Failed(SecurityFailed::new(self, generation, reason))
                     }
                     SecurityResolution::Approved
                     | SecurityResolution::Pending
@@ -247,9 +279,17 @@ impl SecurityAuthority {
         }
     }
 
-    fn commit<D: SecurityDecision>(&self, generation: u64) -> SecurityReceipt<'_, D> {
+    pub(super) fn commit<D: SecurityDecision>(
+        &self,
+        generation: u64,
+        disposition: SecurityDisposition,
+    ) -> SecurityReceipt<'_, D> {
         let current = self.record.get();
-        if current.state != SecurityAuthorityState::AwaitingCommit(D::KIND)
+        if current.state
+            != (SecurityAuthorityState::AwaitingCommit {
+                decision: D::KIND,
+                disposition,
+            })
             || current.generation != generation
         {
             self.fail_terminal(SecurityTerminal::ContractInvariant);
@@ -342,62 +382,6 @@ impl<D: SecurityDecision> Drop for SecurityPending<'_, D> {
     }
 }
 
-/// Affine completion that must be committed before another decision can begin.
-///
-/// ```compile_fail
-/// use brynja_core::{AuthenticationDecision, SecurityCompletion};
-/// fn require_clone<T: Clone>() {}
-/// require_clone::<SecurityCompletion<'static, AuthenticationDecision>>();
-/// ```
-#[must_use = "a resolved security outcome must be committed to engine state"]
-pub struct SecurityCompletion<'authority, D: SecurityDecision> {
-    authority: &'authority SecurityAuthority,
-    generation: u64,
-    armed: bool,
-    marker: PhantomData<D>,
-    thread_bound: PhantomData<*mut ()>,
-}
-
-impl<'authority, D: SecurityDecision> SecurityCompletion<'authority, D> {
-    const fn new(authority: &'authority SecurityAuthority, generation: u64) -> Self {
-        Self {
-            authority,
-            generation,
-            armed: true,
-            marker: PhantomData,
-            thread_bound: PhantomData,
-        }
-    }
-
-    /// Returns the exact decision awaiting commitment.
-    #[must_use]
-    pub const fn decision(&self) -> SecurityDecisionKind {
-        D::KIND
-    }
-
-    /// Returns the generation bound to this completion.
-    #[must_use]
-    pub const fn generation(&self) -> u64 {
-        self.generation
-    }
-
-    /// Commits the already-handled outcome and unlocks the authority.
-    pub fn commit(mut self) -> SecurityReceipt<'authority, D> {
-        let receipt = self.authority.commit::<D>(self.generation);
-        self.armed = false;
-        receipt
-    }
-}
-
-impl<D: SecurityDecision> Drop for SecurityCompletion<'_, D> {
-    fn drop(&mut self) {
-        if self.armed {
-            self.authority
-                .fail_terminal(SecurityTerminal::OutcomeAbandoned);
-        }
-    }
-}
-
 /// Non-forgeable receipt for one completed authoritative transition.
 pub struct SecurityReceipt<'authority, D: SecurityDecision> {
     authority: &'authority SecurityAuthority,
@@ -439,30 +423,3 @@ impl<'authority, D: SecurityDecision> SecurityReceipt<'authority, D> {
         core::ptr::eq(self.authority, authority)
     }
 }
-
-/// Exhaustive mandatory result of one exact security decision.
-#[must_use = "the authoritative security outcome must govern the next state"]
-pub enum SecurityOutcome<'authority, D: SecurityDecision> {
-    /// A verified ordinary decision succeeded and awaits explicit commitment.
-    Accepted(SecurityCompletion<'authority, D>),
-    /// A verified exact service is approved and awaits explicit commitment.
-    Approved(SecurityCompletion<'authority, D>),
-    /// The exact service is explicitly non-approved.
-    NonApproved(SecurityCompletion<'authority, D>),
-    /// The subject was authoritatively rejected.
-    Rejected(SecurityCompletion<'authority, D>, SecurityRejection),
-    /// Work remains incomplete and retains affine authority.
-    Pending(SecurityPending<'authority, D>),
-    /// Cancellation completed without acceptance.
-    Canceled(SecurityCompletion<'authority, D>),
-    /// Processing failed without acceptance.
-    Failed(SecurityCompletion<'authority, D>, SecurityFailureKind),
-    /// Permanent terminal state forbids further work.
-    Terminal(SecurityReceipt<'authority, D>),
-}
-
-/// Type alias for the cancellation result receipt.
-pub type SecurityCanceled<'authority, D> = SecurityCompletion<'authority, D>;
-
-/// Type alias for a non-terminal failure result receipt and reason.
-pub type SecurityFailure<'authority, D> = (SecurityCompletion<'authority, D>, SecurityFailureKind);

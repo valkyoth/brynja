@@ -26,8 +26,8 @@ Keep a Changelog and Semantic Versioning.
 - Add affine token-gated external-key destruction whose success requires the
   exact consumed external-store token and whose duplicate, substituted,
   provider-failed, abandoned, or dropped transitions fail closed.
-- Add fourteen authority behavior tests, four compile-fail boundary examples, a
-  SHA-256-bound five-file source policy, and twenty-three decision, reason-binding,
+- Add fourteen authority behavior tests, seven compile-fail boundary examples, a
+  SHA-256-bound six-file source policy, and twenty-nine decision, reason-binding,
   approval, terminal, token, low-level, size, and drift fixtures.
 - Add broad FIPS-aware service-category sets with approved classification
   fail-closed until exact algorithm identities exist, transactional complete
@@ -147,6 +147,10 @@ Keep a Changelog and Semantic Versioning.
 - Hold every resolved non-terminal outcome in `AwaitingCommit` behind an affine
   completion, terminalize dropped pending decisions and dropped completions,
   and map mandatory self-test failure directly to permanent integrity failure.
+- Bind each accepted, approved, non-approved, rejected, canceled, and failed
+  disposition to its own opaque non-interchangeable outcome type; keep validated
+  rejection/failure reasons private and require commit to match the exact
+  disposition retained by authority state.
 - Advance the development facade to `brynja 0.18.0`, retain every supporting-
   crate publication version, include v0.18.0 in the cumulative v0.20.0 range,
   and select zero crates for crates.io publication.

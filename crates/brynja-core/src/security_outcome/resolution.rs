@@ -92,6 +92,23 @@ pub enum SecurityResolution {
     Terminal(SecurityTerminal),
 }
 
+/// Exact validated disposition retained until the protocol commits it.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub enum SecurityDisposition {
+    /// Verified ordinary acceptance.
+    Accepted,
+    /// Verified exact-service approval.
+    Approved,
+    /// Exact service classified as non-approved.
+    NonApproved,
+    /// Exact subject and reason were rejected.
+    Rejected(SecurityRejection),
+    /// Cancellation completed without acceptance.
+    Canceled,
+    /// Exact processing failure occurred.
+    Failed(SecurityFailureKind),
+}
+
 pub(super) const fn rejection_matches_domain(
     decision: SecurityDecisionKind,
     reason: SecurityRejection,

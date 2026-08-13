@@ -131,22 +131,68 @@ def test() -> None:
         reject(root, "state or result drift")
         copy_fixture(root)
 
-        state = root / security_outcome_policy.STATE
+        outcome = root / security_outcome_policy.OUTCOME
         replace(
-            state,
+            outcome,
             "SecurityTerminal::OutcomeAbandoned",
             "SecurityTerminal::ContractInvariant",
         )
-        reject(root, "state or result drift")
+        reject(root, "disposition-bound outcome drift")
+        copy_fixture(root)
+
+        outcome = root / security_outcome_policy.OUTCOME
+        replace(
+            outcome,
+            "struct Completion",
+            "#[derive(Clone)]\nstruct Completion",
+        )
+        reject(root, "gained duplication")
+        copy_fixture(root)
+
+        outcome = root / security_outcome_policy.OUTCOME
+        replace(outcome, "Accepted(SecurityAccepted", "Accepted(SecurityRejected")
+        reject(root, "mandatory disposition-bound outcome")
+        copy_fixture(root)
+
+        outcome = root / security_outcome_policy.OUTCOME
+        replace(
+            outcome,
+            "Approved(SecurityApproved",
+            "Approved(SecurityNonApproved",
+        )
+        reject(root, "mandatory disposition-bound outcome")
+        copy_fixture(root)
+
+        outcome = root / security_outcome_policy.OUTCOME
+        replace(outcome, "reason: SecurityRejection", "pub reason: SecurityRejection")
+        reject(root, "exposed construction or relabeling fields")
+        copy_fixture(root)
+
+        outcome = root / security_outcome_policy.OUTCOME
+        replace(
+            outcome,
+            ".commit::<D>(self.generation, self.disposition)",
+            ".commit::<D>(self.generation, SecurityDisposition::Accepted)",
+        )
+        reject(root, "disposition-bound outcome drift")
         copy_fixture(root)
 
         state = root / security_outcome_policy.STATE
         replace(
             state,
-            "pub struct SecurityCompletion",
-            "#[derive(Clone)]\npub struct SecurityCompletion",
+            "disposition: SecurityDisposition,",
+            "disposition_removed: SecurityDisposition,",
         )
-        reject(root, "gained duplication")
+        reject(root, "state or result drift")
+        copy_fixture(root)
+
+        outcome = root / security_outcome_policy.OUTCOME
+        replace(
+            outcome,
+            "impl<'authority, D: SecurityDecision> SecurityApproved<'authority, D> {",
+            "impl<'authority, D: SecurityDecision> SecurityApproved<'authority, D> {\n    pub fn new() -> Self { todo!() }",
+        )
+        reject(root, "approved outcome gained a constructor")
         copy_fixture(root)
 
         external = root / security_outcome_policy.EXTERNAL_KEY
@@ -212,4 +258,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("security-outcome policy rejects twenty-three domain, authority, evidence, commit, abandonment, self-test, destruction, low-level, size, and hash regressions")
+    print("security-outcome policy rejects twenty-nine domain, authority, evidence, disposition, commit, abandonment, self-test, destruction, low-level, size, and hash regressions")

@@ -381,7 +381,9 @@ token-gated external-key destruction completion. Informational snapshots
 cannot change state; public resolutions cannot forge positive authority;
 future accepted or approved paths require sealed exact-subject evidence;
 resolved non-terminal outcomes cannot unlock the authority until explicit
-affine commitment; dropping pending work or an uncommitted outcome is terminal;
+affine commitment; each disposition has an opaque non-interchangeable type,
+rejection/failure reasons are read-only, and commit must match the exact
+disposition retained in authority state; dropping pending work or an uncommitted outcome is terminal;
 mandatory self-test failure permanently latches integrity failure; terminal
 transitions cannot report ordinary success; and external-key completion cannot
 exist without consuming its exact authority- and generation-bound token. The

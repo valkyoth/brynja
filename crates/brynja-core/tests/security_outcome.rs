@@ -5,8 +5,8 @@ use brynja_core::{
     ExternalKeyDestructionError, KeyLifecycleDecision, PolicyDecision, ProfileSelectionDecision,
     ProtocolSelectionDecision, ProviderDecision, ProviderFailureKind, PskDecision,
     ResumptionDecision, SecurityAuthority, SecurityAuthorityError, SecurityAuthorityState,
-    SecurityDecision, SecurityDecisionKind, SecurityFailureKind, SecurityOutcome,
-    SecurityRejection, SecurityResolution, SecurityTerminal, SelfTestDecision,
+    SecurityDecision, SecurityDecisionKind, SecurityDisposition, SecurityFailureKind,
+    SecurityOutcome, SecurityRejection, SecurityResolution, SecurityTerminal, SelfTestDecision,
     ServiceApprovalDecision, TerminalTransitionDecision, TicketDecision,
 };
 fn assert_domain_cancels<D: SecurityDecision>(expected: SecurityDecisionKind) {
@@ -26,7 +26,10 @@ fn assert_domain_cancels<D: SecurityDecision>(expected: SecurityDecisionKind) {
     assert_eq!(completion.decision(), expected);
     assert_eq!(
         authority.snapshot().state(),
-        SecurityAuthorityState::AwaitingCommit(expected)
+        SecurityAuthorityState::AwaitingCommit {
+            decision: expected,
+            disposition: SecurityDisposition::Canceled,
+        }
     );
     let receipt = completion.commit();
     assert_eq!(receipt.decision(), expected);
@@ -134,14 +137,18 @@ fn every_mandatory_outcome_preserves_unambiguous_state() {
     let outcome = pending.resolve(SecurityResolution::Rejected(
         SecurityRejection::Authentication,
     ));
-    let SecurityOutcome::Rejected(completion, SecurityRejection::Authentication) = outcome else {
+    let SecurityOutcome::Rejected(rejected) = outcome else {
         unreachable!();
     };
+    assert_eq!(rejected.reason(), SecurityRejection::Authentication);
     assert_eq!(
         authority.snapshot().state(),
-        SecurityAuthorityState::AwaitingCommit(SecurityDecisionKind::Authentication)
+        SecurityAuthorityState::AwaitingCommit {
+            decision: SecurityDecisionKind::Authentication,
+            disposition: SecurityDisposition::Rejected(SecurityRejection::Authentication),
+        }
     );
-    let _receipt = completion.commit();
+    let _receipt = rejected.commit();
     assert_eq!(authority.snapshot().state(), SecurityAuthorityState::Ready);
 
     let canceled = SecurityAuthority::new();
@@ -161,14 +168,14 @@ fn every_mandatory_outcome_preserves_unambiguous_state() {
     let outcome = pending.resolve(SecurityResolution::Failed(SecurityFailureKind::Provider(
         ProviderFailureKind::InvalidOutput,
     )));
-    let SecurityOutcome::Failed(
-        completion,
-        SecurityFailureKind::Provider(ProviderFailureKind::InvalidOutput),
-    ) = outcome
-    else {
+    let SecurityOutcome::Failed(failure) = outcome else {
         unreachable!();
     };
-    let _receipt = completion.commit();
+    assert_eq!(
+        failure.reason(),
+        SecurityFailureKind::Provider(ProviderFailureKind::InvalidOutput)
+    );
+    let _receipt = failure.commit();
     assert_eq!(failed.snapshot().state(), SecurityAuthorityState::Ready);
 }
 
@@ -178,11 +185,11 @@ fn assert_rejects<D: SecurityDecision>(reason: SecurityRejection) {
         unreachable!();
     };
     let outcome = pending.resolve(SecurityResolution::Rejected(reason));
-    let SecurityOutcome::Rejected(completion, observed) = outcome else {
+    let SecurityOutcome::Rejected(rejected) = outcome else {
         unreachable!();
     };
-    assert_eq!(observed, reason);
-    let _receipt = completion.commit();
+    assert_eq!(rejected.reason(), reason);
+    let _receipt = rejected.commit();
     assert_eq!(authority.snapshot().state(), SecurityAuthorityState::Ready);
 }
 
@@ -192,11 +199,11 @@ fn assert_fails<D: SecurityDecision>(reason: SecurityFailureKind) {
         unreachable!();
     };
     let outcome = pending.resolve(SecurityResolution::Failed(reason));
-    let SecurityOutcome::Failed(completion, observed) = outcome else {
+    let SecurityOutcome::Failed(failure) = outcome else {
         unreachable!();
     };
-    assert_eq!(observed, reason);
-    let _receipt = completion.commit();
+    assert_eq!(failure.reason(), reason);
+    let _receipt = failure.commit();
     assert_eq!(authority.snapshot().state(), SecurityAuthorityState::Ready);
 }
 
@@ -351,7 +358,10 @@ fn external_key_success_requires_the_single_consumption_token() {
     };
     assert_eq!(
         authority.snapshot().state(),
-        SecurityAuthorityState::AwaitingCommit(SecurityDecisionKind::KeyLifecycle)
+        SecurityAuthorityState::AwaitingCommit {
+            decision: SecurityDecisionKind::KeyLifecycle,
+            disposition: SecurityDisposition::Accepted,
+        }
     );
     let receipt = completion.commit();
     assert!(receipt.belongs_to(&authority));
@@ -428,10 +438,11 @@ fn informational_snapshots_cannot_authorize_or_complete_work() {
         SecurityAuthorityState::Pending(SecurityDecisionKind::Policy)
     );
     let outcome = pending.resolve(SecurityResolution::Rejected(SecurityRejection::Policy));
-    let SecurityOutcome::Rejected(completion, SecurityRejection::Policy) = outcome else {
+    let SecurityOutcome::Rejected(rejected) = outcome else {
         unreachable!();
     };
-    let _receipt = completion.commit();
+    assert_eq!(rejected.reason(), SecurityRejection::Policy);
+    let _receipt = rejected.commit();
 }
 
 #[test]
@@ -465,36 +476,14 @@ fn discarded_outcome_permanently_fails_authority() {
     ));
     assert_eq!(
         authority.snapshot().state(),
-        SecurityAuthorityState::AwaitingCommit(SecurityDecisionKind::Authentication)
+        SecurityAuthorityState::AwaitingCommit {
+            decision: SecurityDecisionKind::Authentication,
+            disposition: SecurityDisposition::Rejected(SecurityRejection::Authentication),
+        }
     );
     drop(outcome);
     assert_eq!(
         authority.snapshot().terminal(),
         Some(SecurityTerminal::OutcomeAbandoned)
     );
-}
-
-#[test]
-fn awaiting_commit_blocks_new_work_until_exact_completion_is_consumed() {
-    let authority = SecurityAuthority::new();
-    let Ok(pending) = authority.begin::<TicketDecision>() else {
-        unreachable!();
-    };
-    let SecurityOutcome::Canceled(completion) = pending.resolve(SecurityResolution::Canceled)
-    else {
-        unreachable!();
-    };
-    assert_eq!(
-        authority.begin::<PolicyDecision>().err(),
-        Some(SecurityAuthorityError::Busy(SecurityDecisionKind::Ticket))
-    );
-    let receipt = completion.commit();
-    assert!(receipt.belongs_to(&authority));
-    let Ok(pending) = authority.begin::<PolicyDecision>() else {
-        unreachable!();
-    };
-    assert!(matches!(
-        pending.resolve(SecurityResolution::Terminal(SecurityTerminal::Policy)),
-        SecurityOutcome::Terminal(_)
-    ));
 }

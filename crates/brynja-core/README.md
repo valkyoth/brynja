@@ -247,8 +247,11 @@ failed, and terminal work. Public resolutions cannot forge accepted or approved
 authority. A future positive path must supply sealed exact-subject evidence;
 the current external-key path alone can establish its exact token-bound
 acceptance. Resolved non-terminal work remains `AwaitingCommit` until its affine
-completion is explicitly committed. Dropping pending work or an uncommitted
-outcome permanently fails closed, mandatory self-test failure permanently
+disposition-specific outcome is explicitly committed. Accepted, approved,
+non-approved, rejected, canceled, and failed wrappers are opaque and
+non-interchangeable; rejection/failure reasons are read-only, while the
+authority retains and verifies the exact disposition at commit. Dropping
+pending work or an uncommitted outcome permanently fails closed, mandatory self-test failure permanently
 latches integrity failure, and explicit terminal transitions cannot report
 non-terminal success.
 
@@ -256,8 +259,8 @@ External-key destruction begins only as a typed key-lifecycle decision and
 issues one non-cloneable token for the external-store target. Only consuming a
 correct authority- and generation-bound token can produce a successful result;
 duplicate, cross-boundary, failed, or abandoned completion is terminal.
-Fourteen behavior tests, four compile-fail examples, five reviewed source
-hashes, the 500-line ceiling, and twenty-three broken fixtures enforce the
+Fourteen behavior tests, seven compile-fail examples, six reviewed source
+hashes, the 500-line ceiling, and twenty-nine broken fixtures enforce the
 contract. Rejection and failure reasons must match their exact decision domain. It
 implements no policy, authentication, protocol/profile selection, ticket,
 resumption, PSK, early-data, replay, amplification, ECH, provider effect,

@@ -1578,7 +1578,7 @@ Exit criteria:
 
 Status: awaiting pentest
 
-Plan scope: Define authoritative engine state and exhaustive mandatory typed results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, anti-replay, amplification, exhaustion, provider failure, key lifecycle, ECH, policy, and terminal transitions; public inputs cannot forge accepted or approved authority without sealed exact-subject evidence, self-test failure is permanently terminal, every resolved non-terminal result requires an affine commit whose abandonment fails closed, pending abandonment fails closed, external-key destruction completes only through an exact mandatory token transition, and ignoring every informational output cannot make rejected, non-approved, incomplete, or failed work appear accepted, approved, complete, or successful.
+Plan scope: Define authoritative engine state and exhaustive mandatory typed results for self-tests, service approval, protocol and profile selection, authentication, tickets, resumption, PSKs, early data, anti-replay, amplification, exhaustion, provider failure, key lifecycle, ECH, policy, and terminal transitions; public inputs cannot forge accepted or approved authority without sealed exact-subject evidence, each validated disposition has an opaque non-interchangeable result with private reasons and an exact authority-retained commit match, self-test failure is permanently terminal, every resolved non-terminal result requires an affine commit whose abandonment fails closed, pending abandonment fails closed, external-key destruction completes only through an exact mandatory token transition, and ignoring every informational output cannot make rejected, non-approved, incomplete, or failed work appear accepted, approved, complete, or successful.
 
 Goal: complete the **Mandatory Security Outcome Authority Contract** implementation stop without admitting or
 claiming adjacent capability.
@@ -1595,6 +1595,10 @@ Deliverables:
 - prevent public resolution values from establishing accepted or approved
   authority; require every future positive path to consume sealed evidence
   bound to its exact subject, operation, provider, authority, and generation;
+- give each accepted, approved, non-approved, rejected, canceled, and failed
+  disposition an opaque non-interchangeable result, keep validated reasons
+  private and read-only, and retain the exact disposition in authority state
+  for commit-time comparison;
 - hold resolved non-terminal work in an authoritative `AwaitingCommit` state
   behind an affine completion, permanently fail on pending or completion
   abandonment, and permanently latch mandatory self-test failure as integrity
@@ -1614,8 +1618,9 @@ Verification:
 - discard pending and resolved authoritative values, inject self-test,
   cancellation and provider failure, and prove abandonment terminalizes rather
   than unlocking or permanently busying the authority;
-- compile-fail pending-decision, completion, and external-key token cloning and
-  pending cross-thread movement; enforce reviewed hashes, private state, the
+- compile-fail rejection-to-acceptance, non-approval-to-approval, reason
+  substitution, cross-disposition conversion, pending-decision and external-key
+  token cloning, and pending cross-thread movement; enforce reviewed hashes, private state, the
   500-line ceiling, and
   no std/alloc/unsafe/FFI/provider-effect/audit-event boundary with eighteen
   or more broken policy fixtures;
@@ -1627,8 +1632,9 @@ Exit criteria:
 - every security decision and completion is authoritative, mandatory, and
   unambiguous without relying on an audit or informational path; no public
   resolution can forge positive authority, every future positive path requires
-  sealed exact-subject evidence, uncommitted resolution and pending abandonment
-  fail terminally, mandatory self-test failure cannot recover, rejection and
+  sealed exact-subject evidence, no validated disposition or reason can be
+  relabeled before commit, commit matches exact authority-retained disposition,
+  uncommitted resolution and pending abandonment fail terminally, mandatory self-test failure cannot recover, rejection and
   failure reasons cannot cross their typed domains, terminal transitions cannot
   claim non-terminal success, and external-key
   destruction cannot complete without its exact consumed token;

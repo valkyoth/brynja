@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.17.0 signed; v0.18.0 pentest remediation complete and awaiting retest
+Status: v0.17.0 signed; v0.18.0 second pentest remediation complete and awaiting retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -663,8 +663,10 @@ approved authority; future positive paths require sealed exact-subject
 evidence, while external-key completion alone has an internal exact-token
 acceptance path. Resolved non-terminal outcomes hold the authority in
 `AwaitingCommit` until their affine completion is explicitly committed.
-Abandoned pending decisions and uncommitted outcomes permanently fail closed,
-and mandatory self-test failure permanently latches integrity failure. Checked
+Each disposition is carried by an opaque, non-interchangeable result type;
+rejection/failure reasons are read-only, and commit verifies the exact
+disposition retained in authority state. Abandoned pending decisions and
+uncommitted outcomes permanently fail closed, and mandatory self-test failure permanently latches integrity failure. Checked
 generations bind affine pending values, completions, and receipts; rejection
 and failure reasons cannot cross their typed domains, and terminal transitions
 cannot claim ordinary success.
@@ -673,8 +675,8 @@ External-key destruction succeeds only through one consumed non-cloneable,
 thread-bound token bound to the exact authority, generation, and external-store
 target. Duplicate token requests, cross-authority substitution, provider
 failure, and explicit abandonment fail closed. Informational snapshots cannot
-authorize or complete work. Fourteen behavior tests, four compile-fail
-examples, five reviewed-source hashes, and twenty-three broken fixtures enforce
+authorize or complete work. Fourteen behavior tests, seven compile-fail
+examples, six reviewed-source hashes, and twenty-nine broken fixtures enforce
 the boundary.
 No decision logic, policy implementation, authentication, protocol engine,
 provider effect, external key store, audit event, cryptography, independent

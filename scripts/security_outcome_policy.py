@@ -12,13 +12,15 @@ MODULE = Path("crates/brynja-core/src/security_outcome.rs")
 DOMAIN = Path("crates/brynja-core/src/security_outcome/domain.rs")
 RESOLUTION = Path("crates/brynja-core/src/security_outcome/resolution.rs")
 STATE = Path("crates/brynja-core/src/security_outcome/state.rs")
+OUTCOME = Path("crates/brynja-core/src/security_outcome/outcome.rs")
 EXTERNAL_KEY = Path("crates/brynja-core/src/security_outcome/external_key.rs")
-SOURCES = (MODULE, DOMAIN, RESOLUTION, STATE, EXTERNAL_KEY)
+SOURCES = (MODULE, DOMAIN, RESOLUTION, STATE, OUTCOME, EXTERNAL_KEY)
 EXPECTED_SHA256 = {
-    MODULE: "1c46e03a0f4d64bf73e43fc3e2532fe2a578bfb6c6cfcdb4aba7b7a784464d01",
+    MODULE: "fc7284cbd1cc8c0b2344a5fd79d1a21e04a6e554aaf7679bb35ae02f8db0dc06",
     DOMAIN: "4a8f5229187076ce664487aa595cd9bbe13928073f9b4bded0e03330563a19c4",
-    RESOLUTION: "c6def440089f3df4575d5844b3027a4feb77771ba11fcf2ff77e2e49a9a316e4",
-    STATE: "1f7ab613e4e6639f64ead9bc3d35a2f538bd5199ec51f673d890320dd852f219",
+    RESOLUTION: "993ec40e9864cdcbf1b0c56670f320e038db274811b26a6b7f00d80cea0dd4d3",
+    STATE: "f8d5a0c146c84c8f5a2527852d1c9c083842865b33ecaa54bcc74910b9617a61",
+    OUTCOME: "1533eac2c54cfdd7fd23c188fa0233ce64111792a4589f4ea8537563bba8bb1c",
     EXTERNAL_KEY: "7cf4b61affa120becd63a7ea4112df3a0e30f8305555c6a7956cd32251c47202",
 }
 
@@ -101,6 +103,7 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     resolution = sources[RESOLUTION][1]
     for required in (
         "pub enum SecurityResolution",
+        "pub enum SecurityDisposition",
         "Approved,",
         "NonApproved,",
         "Rejected(SecurityRejection)",
@@ -120,7 +123,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "pub enum SecurityAuthorityState",
         "Ready,",
         "Pending(SecurityDecisionKind)",
-        "AwaitingCommit(SecurityDecisionKind)",
+        "AwaitingCommit {",
+        "disposition: SecurityDisposition",
         "Terminal,",
         "record: Cell<AuthorityRecord>",
         "pub fn begin<D: SecurityDecision>",
@@ -140,33 +144,67 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "resolve_verified_accepted",
         "impl<D: SecurityDecision> Drop for SecurityPending",
         "SecurityTerminal::DecisionAbandoned",
-        "pub struct SecurityCompletion",
-        "pub fn commit(mut self)",
-        "impl<D: SecurityDecision> Drop for SecurityCompletion",
-        "SecurityTerminal::OutcomeAbandoned",
-        "pub enum SecurityOutcome",
+        "pub(super) fn commit<D: SecurityDecision>",
+        "disposition: SecurityDisposition",
+        "decision: D::KIND",
         "PhantomData<*mut ()>",
     ):
         if required not in state:
             fail(f"authoritative state or result drift: {required}")
-    for variant in (
-        "\n    Accepted(SecurityCompletion",
-        "\n    Approved(SecurityCompletion",
-        "\n    NonApproved(SecurityCompletion",
-        "\n    Rejected(SecurityCompletion",
-        "\n    Pending(SecurityPending",
-        "\n    Canceled(SecurityCompletion",
-        "\n    Failed(SecurityCompletion",
-        "\n    Terminal(SecurityReceipt",
-    ):
-        require_once(state, variant, "mandatory outcome")
+    if state.count("disposition: SecurityDisposition") != 2:
+        fail("authoritative state or result drift: disposition")
     if re.search(
-        r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct (?:SecurityPending|SecurityCompletion)",
+        r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct SecurityPending",
         state,
     ):
         fail("pending security authority gained duplication or formatting")
     if re.search(r"pub\s+(?:record|authority|generation|armed):", state):
         fail("authoritative security state exposed construction fields")
+
+    outcome = sources[OUTCOME][1]
+    for required in (
+        "struct Completion",
+        "disposition: SecurityDisposition",
+        ".commit::<D>(self.generation, self.disposition)",
+        "impl<D: SecurityDecision> Drop for Completion",
+        "SecurityTerminal::OutcomeAbandoned",
+        "pub struct SecurityAccepted",
+        "pub struct SecurityApproved",
+        "pub struct SecurityNonApproved",
+        "pub struct SecurityRejected",
+        "pub struct SecurityCanceled",
+        "pub struct SecurityFailed",
+        "reason: SecurityRejection",
+        "reason: SecurityFailureKind",
+        "pub enum SecurityOutcome",
+    ):
+        if required not in outcome:
+            fail(f"disposition-bound outcome drift: {required}")
+    for variant in (
+        "\n    Accepted(SecurityAccepted",
+        "\n    Approved(SecurityApproved",
+        "\n    NonApproved(SecurityNonApproved",
+        "\n    Rejected(SecurityRejected",
+        "\n    Pending(SecurityPending",
+        "\n    Canceled(SecurityCanceled",
+        "\n    Failed(SecurityFailed",
+        "\n    Terminal(SecurityReceipt",
+    ):
+        require_once(outcome, variant, "mandatory disposition-bound outcome")
+    if re.search(
+        r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*(?:pub )?struct (?:Completion|SecurityAccepted|SecurityApproved|SecurityNonApproved|SecurityRejected|SecurityCanceled|SecurityFailed)",
+        outcome,
+    ):
+        fail("security outcome gained duplication or formatting")
+    if re.search(r"pub\s+(?:completion|reason|authority|generation|disposition|armed):", outcome):
+        fail("security outcome exposed construction or relabeling fields")
+    if "impl<'authority, D: SecurityDecision> SecurityApproved" not in outcome:
+        fail("approved outcome boundary drift")
+    approved_impl = outcome.split(
+        "impl<'authority, D: SecurityDecision> SecurityApproved", 1
+    )[1].split("pub struct SecurityRejected", 1)[0]
+    if "fn new(" in approved_impl:
+        fail("approved outcome gained a constructor before exact proof admission")
 
     external = sources[EXTERNAL_KEY][1]
     for required in (

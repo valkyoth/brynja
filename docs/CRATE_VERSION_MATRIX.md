@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.17.0 signed; v0.18.0 pentest remediation complete and awaiting retest
+Status: v0.17.0 signed; v0.18.0 second pentest remediation complete and awaiting retest
 
 The `brynja` facade advances to `0.18.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published
@@ -64,7 +64,10 @@ state machine, exhaustive typed outcomes, and token-gated external-key
 destruction. Its assessment findings are remediated by making public positive
 resolutions non-authorizing, requiring explicit affine outcome commitment,
 terminalizing abandoned pending/outcome values, and permanently latching
-mandatory self-test failure; repository-owner retest is pending. It implements
+mandatory self-test failure. Its first retest found one remaining High
+disposition-relabeling flaw; opaque non-interchangeable outcome types, private
+validated reasons, and exact disposition retention/checking now close that
+bypass. A second repository-owner retest is pending. It implements
 no policy, authentication, protocol engine,
 provider effect, external key store, event schema, algorithm, independent
 verification, or validation and selects no package publication.

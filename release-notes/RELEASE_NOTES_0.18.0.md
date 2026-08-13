@@ -1,6 +1,6 @@
 # Brynja v0.18.0 Development Milestone
 
-Status: pentest remediation complete; awaiting repository-owner retest
+Status: second pentest remediation complete; awaiting repository-owner retest
 
 Brynja v0.18.0 adds the mandatory security-outcome authority contract to
 `brynja-core`. It advances only the `brynja` facade version, selects no
@@ -29,6 +29,10 @@ scheduled v0.20.0 checkpoint will assess.
 - Every resolved non-terminal outcome owns an affine completion and leaves the
   authority in `AwaitingCommit`. Only explicit commitment returns it to ready;
   dropping the completion permanently fails closed.
+- Accepted, approved, non-approved, rejected, canceled, and failed outcomes use
+  distinct opaque non-interchangeable types. Rejection/failure reasons are
+  private and read-only, while the authority retains and verifies the exact
+  validated disposition at commit.
 - Dropping an incomplete decision permanently fails closed, rather than
   leaving an unrecoverable busy state.
 - A mandatory self-test failure maps directly to permanent integrity failure
@@ -60,24 +64,30 @@ scheduled v0.20.0 checkpoint will assess.
   amplification, ticket, PSK, early-data, and ECH decisions; failure matrices
   cover self-test, provider, exhaustion, authentication, key lifecycle, and
   policy failures. Cross-domain reasons fail terminally.
-- Four compile-fail examples reject pending/completion cloning, pending thread
-  movement, and external-key token cloning.
-- A SHA-256-bound five-file policy enforces private authority state,
+- Seven compile-fail examples reject disposition laundering, reason
+  substitution, cross-disposition conversion, pending cloning/thread movement,
+  and external-key token cloning.
+- A SHA-256-bound six-file policy enforces private authority state,
   non-forgeable positive authority, mandatory outcome commitment, fail-closed
-  abandonment, terminal self-test failure, single-consumption destruction, the
+  abandonment, non-interchangeable dispositions, private validated reasons,
+  exact commit matching, terminal self-test failure, single-consumption destruction, the
   500-line source ceiling, and no `std`, allocation, unsafe, FFI, provider
-  effect, or audit-event coupling. Twenty-three broken fixtures test the gate.
+  effect, or audit-event coupling. Twenty-nine broken fixtures test the gate.
 
 ## Pentest Remediation
 
 The exceptional v0.18.0 assessment found three High architectural issues and
-one Medium abandonment issue. The implementation now makes positive authority
+one Medium abandonment issue. The first remediation made positive authority
 unreachable through caller-constructible resolutions, permanently latches a
 failed mandatory self-test, requires explicit affine commitment before any
 resolved result unlocks the authority, and terminalizes abandoned pending or
-completion values. Permanent regression tests and source-policy fixtures cover
-all four findings. Repository-owner retest of this remediation is pending; no
-PASS claim is made yet.
+completion values. The first retest confirmed those lifecycle fixes but found
+one remaining High capability-laundering bypass because all public outcome
+variants shared one completion type. The second remediation introduces opaque
+disposition-specific outcomes, private validated reasons, and exact disposition
+checking at commit. Permanent regression tests and source-policy fixtures cover
+all five findings. A clean repository-owner retest of the second remediation is
+pending; no PASS claim is made yet.
 
 ## Limits
 
@@ -116,7 +126,7 @@ the same implementation rather than building SHA-1 again.
 
 v0.18.0 is a tagged development milestone with no scheduled cumulative
 pentest or crates.io publication. Its implementation received an exceptional
-assessment; the four findings are remediated and now require a clean
-repository-owner retest, followed by the complete local gate, green GitHub and
+assessment; its original four findings and the High found by the first retest
+are remediated and now require a clean second repository-owner retest, followed by the complete local gate, green GitHub and
 CodeQL, and explicit authorization before its signed tag. Every change after
 v0.15.0 remains in the scheduled cumulative v0.20.0 assessment.

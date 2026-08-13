@@ -97,8 +97,11 @@ rejected, pending, canceled, failed, or terminal results. Public resolutions
 cannot forge accepted or approved authority: positive outcomes remain
 unreachable until a sealed, subject-bound execution path supplies exact
 evidence. Resolved non-terminal work remains `AwaitingCommit` until its affine
-completion is explicitly committed. Abandoning pending work or an uncommitted
-outcome permanently fails closed, mandatory self-test failure permanently
+disposition-specific outcome is explicitly committed. Accepted, approved,
+non-approved, rejected, canceled, and failed values are opaque and
+non-interchangeable; rejection/failure reasons are read-only, and the authority
+verifies the exact retained disposition at commit. Abandoning pending work or
+an uncommitted outcome permanently fails closed, mandatory self-test failure permanently
 latches integrity failure, rejection and failure reasons remain confined to
 their exact typed domains, and terminal transitions cannot report ordinary
 success.
@@ -302,7 +305,7 @@ Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.17.0`. The current `0.18.0` mandatory security-outcome authority milestone
 selects no crates.io publication; its pentest findings are remediated and await
-repository-owner retest.
+a second repository-owner retest.
 The published dependency is:
 
 ```toml

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.18.1 signed; v0.19.0 High finding remediated and awaiting exceptional retest
+Status: v0.18.1 signed; v0.19.0 exceptional pentest PASS and awaiting green GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -93,7 +93,11 @@ plaintext admission path inherited TLS 1.2 application-data allowance. TLS
 1.3 application data is now categorically rejected during both parsing and
 construction with a dedicated closed error, while TLS 1.2 retains its required
 plaintext behavior. Focused regression and policy fixtures pass; the exact
-remediation candidate awaits repository-owner retest.
+signed remediation candidate
+`238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed repository-owner retest
+with zero open findings. The permanent `security/pentest/v0.19.0.md` report
+records `PASS`/`PASS`; the final release-check commit now awaits green GitHub
+and CodeQL before tag.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

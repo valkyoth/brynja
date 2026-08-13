@@ -13,13 +13,17 @@ Keep a Changelog and Semantic Versioning.
 - Enforce profile-specific record constants and length bounds, preserve
   permitted legacy-version and unknown content-type bytes, and reject RFC 6520
   Heartbeat content and negotiation in every modern profile.
-- Add seventeen behavior tests, three compile-fail examples, seven reviewed
-  source hashes, twenty-nine negative policy fixtures, and generated protocol-
+- Add eighteen behavior tests, three compile-fail examples, seven reviewed
+  source hashes, thirty negative policy fixtures, and generated protocol-
   surface and requirement evidence for the first hostile parser boundary.
 - Remediate the initial v0.19.0 High cleartext-exposure finding by separating
   TLS 1.2 and TLS 1.3 plaintext admission, categorically rejecting TLS 1.3
   application data during parsing and construction, and adding a dedicated
   closed error plus regression coverage.
+- Record the repository-owner retest of exact signed v0.19.0 remediation
+  candidate `238d4bac75eecce9dde63700c53f13e6f7a9aaed` as `PASS`/`PASS`
+  with zero open findings while retaining the milestone in the cumulative
+  v0.15.0-to-v0.20.0 checkpoint assessment.
 - Advance the development facade to `brynja 0.19.0`, expose the shared framing
   crate, wire it into the modern TLS/DTLS engine packages, select zero crates
   for publication, and require an exceptional pentest before the signed tag.

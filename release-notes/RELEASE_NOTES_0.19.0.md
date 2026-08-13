@@ -1,6 +1,6 @@
 # Brynja v0.19.0 Development Milestone
 
-Status: initial High finding remediated; exceptional retest required before tag
+Status: exceptional pentest PASS; awaiting green GitHub and CodeQL before tag
 
 Brynja v0.19.0 adds the first hostile protocol parser boundary in unpublished
 `brynja-protocol 0.1.0`. The `brynja` facade advances to `0.19.0`; all
@@ -59,8 +59,10 @@ trigger. The initial assessment found one High cleartext-exposure flaw because
 TLS 1.3 plaintext admission inherited TLS 1.2 application-data allowance. The
 profiles are now separated, parsing and construction return a dedicated closed
 error, and focused regression and policy fixtures enforce the remediation. The
-exact signed remediation candidate must receive a committed
-`PASS`/`PASS` report with zero open findings, followed by green GitHub and
-CodeQL, before the signed tag is created. The milestone publishes no crate.
+repository-owner retest of exact signed remediation candidate
+`238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed with zero open findings,
+and `security/pentest/v0.19.0.md` permanently records `PASS`/`PASS`. Green
+GitHub and CodeQL are still required before the signed tag is created. The
+milestone publishes no crate.
 Its complete delta also remains inside the scheduled cumulative review of all
 changes after v0.15.0 through v0.20.0.

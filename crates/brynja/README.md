@@ -108,7 +108,10 @@ The initial assessment found one High cleartext-exposure flaw: TLS 1.3
 plaintext admission inherited TLS 1.2 application-data allowance. TLS 1.3
 application data is now categorically rejected during both parsing and caller
 construction with a dedicated closed error. Focused regression and policy
-fixtures pass; the exact remediation candidate awaits exceptional retest.
+fixtures pass. Repository-owner retest of exact signed remediation candidate
+`238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed with zero open findings,
+and the permanent report records `PASS`/`PASS`. The final release-check commit
+now awaits green GitHub and CodeQL before tag.
 
 The signed `0.18.0` development milestone adds a protocol-neutral mandatory
 security-outcome authority contract in `brynja-core`. Sealed type-level domains
@@ -329,13 +332,20 @@ v0.18.1 implementation commit `9ff9a459d8caae7e7f5c18b6576647487ba5b251`
 and reported zero findings. That assessment is recorded permanently without
 removing v0.18.1 from the broader v0.15.0-to-v0.20.0 cumulative review range.
 
+The exceptional v0.19.0 review initially found one High TLS 1.3 cleartext-
+exposure flaw. The repository-owner retest of exact signed remediation commit
+`238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed with zero open findings.
+The permanent `PASS`/`PASS` report does not remove v0.19.0 from the cumulative
+v0.15.0-to-v0.20.0 checkpoint assessment.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.18.1`. The current `0.19.0` shared record-framing milestone selects no
-crates.io publication and awaits its exceptional retest before hosted checks
-and tagging. It remains inside the cumulative v0.20.0 assessment range.
+crates.io publication, has passed its exceptional retest with zero open
+findings, and awaits green hosted checks before tagging. It remains inside the
+cumulative v0.20.0 assessment range.
 The published dependency is:
 
 ```toml
@@ -494,7 +504,7 @@ formal proof, pentest, or release status.
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
-| `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented; unpublished pending v0.19.0 exceptional pentest |
+| `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented; unpublished; v0.19.0 exceptional pentest and retest passed |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
 | `brynja-tls13` | Version-specific TLS 1.3 stream engine | Foundation only |
 | `brynja-tls13-handshake` | Record-independent TLS 1.3 handshake shared with QUIC | Foundation only |

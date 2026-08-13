@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.18.1 signed; v0.19.0 High finding remediated and awaiting exceptional retest
+Status: v0.18.1 signed; v0.19.0 exceptional pentest PASS and awaiting green GitHub and CodeQL
 
 | Control | Foundation enforcement |
 | --- | --- |

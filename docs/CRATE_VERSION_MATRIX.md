@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.18.1 signed; v0.19.0 High finding remediated and awaiting exceptional retest
+Status: v0.18.1 signed; v0.19.0 exceptional pentest PASS and awaiting green GitHub and CodeQL
 
 The `brynja` facade advances to `0.19.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published
@@ -84,7 +84,11 @@ from the facade, and wires it into the TLS 1.2, TLS 1.3, and DTLS package
 boundaries. It implements shared bounded record-envelope parsing and encoding,
 not negotiation, protection, replay, handshake, I/O, or an engine. Its first
 hostile-parser boundary requires an exceptional pentest and selects no package
-publication.
+publication. Its initial assessment found one High TLS 1.3 cleartext-
+application-data flaw. Repository-owner retest of exact signed remediation
+candidate `238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed with
+`PASS`/`PASS` and zero open findings; the final release-check commit now awaits
+green GitHub and CodeQL before tag.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

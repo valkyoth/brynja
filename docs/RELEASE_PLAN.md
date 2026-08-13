@@ -1695,7 +1695,7 @@ Exit criteria:
 
 ### v0.19.0 - TLS And DTLS Record Framing
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Keep record framing independent of protocol selection and fallback; ignore TLSPlaintext legacy_record_version where required, validate TLSCiphertext constants where applicable, preserve bytes, reject RFC 6520 Heartbeat content and negotiation in every modern profile, and leave version choice exclusively to typed handshake policy.
 
@@ -1750,7 +1750,11 @@ Implementation evidence:
   including the regression for the initial High cleartext-exposure finding;
 - `scripts/{record_framing_policy,check-record-framing,test-record-framing}.py`;
 - `standards/protocol-surfaces.json` and the generated requirement matrix,
-  indexes, and coverage artifacts.
+  indexes, and coverage artifacts;
+- the exceptional assessment found one High TLS 1.3 cleartext application-data
+  flaw, and repository-owner retest of exact signed remediation candidate
+  `238d4bac75eecce9dde63700c53f13e6f7a9aaed` passed with zero open findings;
+  `security/pentest/v0.19.0.md` permanently records `PASS`/`PASS`.
 
 Exit criteria:
 

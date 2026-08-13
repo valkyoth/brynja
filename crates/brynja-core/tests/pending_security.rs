@@ -27,6 +27,27 @@ fn authorized_request_rejects_a_substituted_provider_before_effects() {
 }
 
 #[test]
+fn identity_change_during_preparation_fails_before_activation() {
+    let authorized = provider();
+    let substituted = provider();
+    let request = request(&authorized);
+    let mut effect = DeterministicProvider::active(&authorized, &[], &[]);
+    effect.switch_identity_during_prepare(&substituted);
+
+    assert!(matches!(
+        PendingOperation::begin(request, &mut effect),
+        PendingStart::Failed(failure)
+            if failure.kind() == PendingFailureKind::ProviderMismatch
+    ));
+    assert_eq!(effect.begin_calls, 0);
+    assert_eq!(effect.destroyed, 1);
+    assert_eq!(
+        effect.last_cause,
+        Some(PendingDestructionCause::ProviderFailure)
+    );
+}
+
+#[test]
 fn provider_derived_work_is_charged_before_each_effect() {
     let provider = provider();
     let mut effect = DeterministicProvider::active(&provider, &[Step::Complete], &[]);

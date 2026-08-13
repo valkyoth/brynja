@@ -11,9 +11,7 @@ use super::{
 };
 
 /// Affine ownership of one exact pending provider operation.
-///
-/// Dropping an active value synchronously destroys its provider state and
-/// routes any failure through [`PendingProvider::handle_drop_failure`].
+/// Drop destroys provider state; failures use [`PendingProvider::handle_drop_failure`].
 ///
 /// ```compile_fail
 /// use brynja_core::PendingOperation;
@@ -112,6 +110,11 @@ impl<'provider, 'data, 'effect, Effect: PendingProvider>
             attempts,
             backpressure,
         };
+        if !operation.identity_matches() {
+            return PendingStart::Failed(
+                operation.finish_begin_failure(PendingFailureKind::ProviderMismatch),
+            );
+        }
         let guarded_request = operation
             .request
             .as_ref()

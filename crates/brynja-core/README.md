@@ -180,7 +180,8 @@ effect is bound to the exact opaque provider that authorized the request.
 Provider-derived, effect-free nonzero costs are charged by the lifecycle before
 it issues a non-forgeable work permit. The provider prepares only inert local
 state, then the lifecycle owns that state before activation may create an
-external resource. Activation, resume, cancellation, and destruction borrow
+external resource. Identity is rechecked after guarded preparation and
+immediately before activation. Activation, resume, cancellation, and destruction borrow
 lifecycle-owned state so recoverable unwinding cannot move even partial state
 beyond `Drop`. Completion, cancellation, provider failure, exhaustion, and `Drop`
 synchronously destroy state with one non-cloneable destruction token that carries all frozen local,
@@ -188,8 +189,8 @@ external-store, accelerator, cache, and DMA duties. Completion and cancellation
 remain unavailable until that token becomes a complete result, and failed
 cleanup reached through `Drop` invokes the mandatory durable/fail-stop hook.
 
-Fifteen deterministic and adversarial tests, four compile-fail examples,
-reviewed hashes, and twenty broken fixtures enforce exact kinds and directions,
+Sixteen deterministic and adversarial tests, four compile-fail examples,
+reviewed hashes, and twenty-one broken fixtures enforce exact kinds and directions,
 provider identity, provider-derived work charging, guarded activation,
 begin/resume/cancel unwind-safe state ownership, missing capability and duty rejection, unchanged input,
 bounded retries/backpressure, cancellation, failure, exhaustion, authoritative

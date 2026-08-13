@@ -286,8 +286,8 @@ confusion; missing poll, cancel, external-store, or accelerator duties fail
 before state exists. Checked effect and backpressure limits bound retry.
 Bounded effect-free cost derivation precedes authoritative charging and a
 single-use work permit. Effect-free preparation creates inert local state;
-only after the lifecycle owns it may borrowed activation create external
-resources. Activation, resume, cancellation, and destruction borrow state
+after the lifecycle owns it, identity is rechecked immediately before borrowed
+activation may create external resources. Activation, resume, cancellation, and destruction borrow state
 owned by the lifecycle, so recoverable callback unwinding reaches `Drop` with
 partial state intact. Completion, cancellation, provider failure, exhaustion, and
 `Drop` require non-cloneable destruction authority. An informational event

@@ -170,6 +170,15 @@ def test() -> None:
         reject(root, "pending lifecycle transition drift")
         copy_fixture(root)
 
+        lifecycle = root / pending_contract_policy.SOURCES[4]
+        replace(
+            lifecycle,
+            "if !operation.identity_matches()",
+            "if false",
+        )
+        reject(root, "identity must be rechecked after guarded preparation")
+        copy_fixture(root)
+
         module = root / pending_contract_policy.SOURCES[0]
         module.write_text(module.read_text(encoding="utf-8") + "\n// review drift\n", encoding="utf-8")
         reject(root, "reviewed source hash drift")
@@ -177,4 +186,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("pending policy rejects twenty admission, identity, work, begin/unwind, cleanup, low-level, size, and hash regressions")
+    print("pending policy rejects twenty-one admission, identity, work, begin/unwind, cleanup, low-level, size, and hash regressions")

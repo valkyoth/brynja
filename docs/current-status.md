@@ -633,7 +633,8 @@ non-forgeable work permit is issued, and activation/resume/cancel/destruction
 borrow state owned by the lifecycle so recoverable unwinding still reaches
 `Drop` cleanup.
 Effect-free preparation creates inert local state, the lifecycle takes
-ownership, and only then may borrowed activation create an external resource.
+ownership, and provider identity is rechecked after preparation immediately
+before borrowed activation may create an external resource.
 Completion, cancellation, provider
 failure, exhaustion, or `Drop` destroys it through mandatory destruction
 authority. Completion and cancellation are unavailable

@@ -25,7 +25,8 @@ cumulative change range that the scheduled v0.20.0 checkpoint will assess.
   state before borrowed activation may create an external resource.
 - Every effect exposes the exact opaque installed-provider handle it
   implements. A request authorized by another provider fails before effectful
-  work, and identity is rechecked before later transitions.
+  work. Identity is rechecked after cost derivation and again after guarded
+  preparation immediately before activation, as well as before later transitions.
 - Activation, resume, cancellation, and destruction borrow state owned by the
   lifecycle. Recoverable provider unwinding therefore leaves even partially
   initialized state available to mandatory `Drop` cleanup.
@@ -54,16 +55,17 @@ cumulative change range that the scheduled v0.20.0 checkpoint will assess.
 
 ## Verification And Limits
 
-Fifteen deterministic and adversarial state-machine tests cover exact admission,
+Sixteen deterministic and adversarial state-machine tests cover exact admission,
 provider substitution, provider-derived and zero work charges, begin before and
 after resource creation, partial begin mutation, failed begin-unwind cleanup,
+preparation-time provider identity mutation,
 resume/cancel unwinding, no-state begin, retry, backpressure, completion, cancellation,
 provider failure, exhaustion, destruction failure, `Drop`, and unchanged input.
 Compile-fail tests reject request, operation, and destruction-token duplication
 plus work-permit forgery. A SHA-256-bound policy
 keeps each source below 500 lines, requires the security transitions, forbids
 standard-library, allocation, unsafe, FFI, platform, and architecture access,
-and rejects twenty broken fixtures.
+and rejects twenty-one broken fixtures.
 
 ## Security Assessment And Remediation
 
@@ -77,9 +79,14 @@ provider-derived precharged work permits close those paths. The remediation is
 locally green, and the repository owner confirmed all three fixes on
 `b5d0049c4943111926e568ba5dd7504075c7beac`. That retest found an adjacent High
 begin-unwind gap: activation could create state before lifecycle ownership.
-Effect-free inert preparation and lifecycle-owned borrowed activation close the
-remaining gap, with four dedicated unwind/destruction regressions. This second
-remediation is locally green and awaits repository-owner retest; the permanent report is
+Effect-free inert preparation and lifecycle-owned borrowed activation closed
+that gap, with four dedicated unwind/destruction regressions. The repository
+owner confirmed that fix on `fc27b6602d1d5e28a090c20e91f024e91173f574`, then
+found a Medium identity TOCTOU if a contract-violating provider changed its
+reported handle during preparation. A guarded post-preparation identity check
+now destroys prepared state and fails before activation, with exact behavior
+and policy regressions. This third remediation is locally green and awaits
+repository-owner retest; the permanent report is
 [`security/pentest/v0.16.0.md`](../security/pentest/v0.16.0.md).
 
 This milestone implements no downstream provider, certificate validator,

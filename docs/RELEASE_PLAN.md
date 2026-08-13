@@ -1446,7 +1446,8 @@ Deliverables:
   non-forgeable, nonzero work permit before the corresponding effect;
 - split bounded effect-free inert state preparation from effectful activation;
   construct `PendingOperation` with prepared state before activation can create
-  an external resource, and make activation, resume, cancellation, and
+  an external resource; recheck exact provider identity after guarded
+  preparation immediately before activation; and make activation, resume, cancellation, and
   destruction borrow that state so recoverable unwinding leaves partial state
   available to mandatory `Drop` cleanup;
 - make completion, cancellation, provider failure, exhaustion, and `Drop`
@@ -1466,7 +1467,7 @@ Deliverables:
 Verification:
 
 - run exact-kind, wrong-direction, missing-capability, missing-duty, zero-limit,
-  provider-substitution, provider-derived charge, zero-charge, work-exhaustion,
+  provider-substitution, preparation-time identity change, provider-derived charge, zero-charge, work-exhaustion,
   pre-resource, post-resource, and partial-mutation begin unwind, begin-unwind
   destruction failure, resume/cancel unwind, no-state begin, retry,
   backpressure, active, complete, cancel, provider-fail,
@@ -1477,7 +1478,7 @@ Verification:
   borrowed callback state, lifecycle-only work charging, exact single-
   consumption methods, terminal `Drop` handling, reviewed hashes, private
   state, the 500-line ceiling, and no std/alloc/unsafe/FFI/platform access with
-  twenty broken policy fixtures;
+  twenty-one broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -1487,7 +1488,8 @@ Exit criteria:
   and backpressure cannot duplicate state or bypass caller bounds; an
   authorizing provider cannot be substituted; effect work cannot run without a
   provider-derived accepted charge; no effectful activation runs before state
-  is lifecycle-owned; recoverable callback panic cannot evade cleanup; every
+  is lifecycle-owned or without a post-preparation identity check; recoverable
+  callback panic cannot evade cleanup; every
   state-owning terminal path attempts authoritative destruction;
   and no provider implementation, certificate validation,
   signature, accelerator, platform effect, protocol engine, independent

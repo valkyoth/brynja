@@ -16,11 +16,12 @@ Keep a Changelog and Semantic Versioning.
   completion consumes one non-cloneable destruction token covering all frozen
   external-store, accelerator, cache, DMA, and other provider duties.
 - Bind every pending effect to the exact authorizing provider; retain state
-  through activation and later unwinding callbacks; and charge
+  through activation and later unwinding callbacks; recheck identity after
+  guarded preparation immediately before activation; and charge
   provider-derived nonzero work before issuing a non-forgeable permit for each
   effectful transition.
-- Add fifteen deterministic and adversarial lifecycle tests, four compile-fail
-  ownership/forgery tests, a SHA-256-bound six-file policy, and twenty
+- Add sixteen deterministic and adversarial lifecycle tests, four compile-fail
+  ownership/forgery tests, a SHA-256-bound six-file policy, and twenty-one
   admission, identity, work, begin/unwind, cleanup, low-level, source-size, and drift
   fixtures.
 - Add canonical checked durations, signed Unix wall time, inclusive validity

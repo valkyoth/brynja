@@ -2,6 +2,8 @@
 
 #![allow(dead_code)]
 
+use std::cell::Cell;
+
 use brynja_core::{
     DestructionTargets, PendingBackpressure, PendingBeginStep, PendingCancelStep,
     PendingDestructionCause, PendingDestructionFailure, PendingDestructionFailureKind,
@@ -26,6 +28,9 @@ pub(crate) struct State {
 
 pub(crate) struct DeterministicProvider<'provider> {
     provider: &'provider brynja_core::InstalledProvider,
+    alternate_provider: Option<&'provider brynja_core::InstalledProvider>,
+    identity_switched: Cell<bool>,
+    switch_identity_on_prepare: bool,
     begin: Option<PendingBeginStep>,
     resume: &'static [Step],
     cancel: &'static [Step],
@@ -42,6 +47,7 @@ pub(crate) struct DeterministicProvider<'provider> {
     pub(crate) panic_begin_after_external: bool,
     pub(crate) external_resources: usize,
     pub(crate) last_destroyed_cursor: Option<usize>,
+    pub(crate) begin_calls: usize,
 }
 
 impl<'provider> DeterministicProvider<'provider> {
@@ -52,6 +58,9 @@ impl<'provider> DeterministicProvider<'provider> {
     ) -> Self {
         Self {
             provider,
+            alternate_provider: None,
+            identity_switched: Cell::new(false),
+            switch_identity_on_prepare: false,
             begin: Some(PendingBeginStep::Active),
             resume,
             cancel,
@@ -68,6 +77,7 @@ impl<'provider> DeterministicProvider<'provider> {
             panic_begin_after_external: false,
             external_resources: 0,
             last_destroyed_cursor: None,
+            begin_calls: 0,
         }
     }
 
@@ -77,6 +87,9 @@ impl<'provider> DeterministicProvider<'provider> {
     ) -> Self {
         Self {
             provider,
+            alternate_provider: None,
+            identity_switched: Cell::new(false),
+            switch_identity_on_prepare: false,
             begin: Some(begin),
             resume: &[],
             cancel: &[],
@@ -93,7 +106,16 @@ impl<'provider> DeterministicProvider<'provider> {
             panic_begin_after_external: false,
             external_resources: 0,
             last_destroyed_cursor: None,
+            begin_calls: 0,
         }
+    }
+
+    pub(crate) fn switch_identity_during_prepare(
+        &mut self,
+        provider: &'provider brynja_core::InstalledProvider,
+    ) {
+        self.alternate_provider = Some(provider);
+        self.switch_identity_on_prepare = true;
     }
 
     fn step(state: &mut State, script: &[Step]) -> Step {
@@ -107,7 +129,10 @@ impl PendingProvider for DeterministicProvider<'_> {
     type State = State;
 
     fn provider_handle(&self) -> ProviderHandle<'_> {
-        self.provider.handle()
+        match (self.identity_switched.get(), self.alternate_provider) {
+            (true, Some(provider)) => provider.handle(),
+            _ => self.provider.handle(),
+        }
     }
 
     fn begin_cost(
@@ -121,6 +146,9 @@ impl PendingProvider for DeterministicProvider<'_> {
         &self,
         _request: &PendingEffectRequest<'_, '_>,
     ) -> Result<Self::State, ProviderFailureKind> {
+        if self.switch_identity_on_prepare {
+            self.identity_switched.set(true);
+        }
         Ok(State { cursor: 0 })
     }
 
@@ -130,6 +158,7 @@ impl PendingProvider for DeterministicProvider<'_> {
         request: PendingEffectRequest<'_, '_>,
         permit: PendingWorkPermit,
     ) -> PendingBeginStep {
+        self.begin_calls = self.begin_calls.saturating_add(1);
         assert!(request.attempt() >= 1);
         assert_eq!(permit.units(), self.step_cost);
         self.charged_units = self.charged_units.saturating_add(permit.units());

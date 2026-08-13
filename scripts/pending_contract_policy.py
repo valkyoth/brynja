@@ -21,7 +21,7 @@ EXPECTED_SHA256 = {
     SOURCES[1]: "cd770f4d2af3bd02b321f7ad8bde2976804b81c56df1909ac546222b18669836",
     SOURCES[2]: "2b98ab88bde482ca6b82db1eee7d6ecb825c13750af4244ad6fcf0693b7f13be",
     SOURCES[3]: "0aef23d94769122abff337e7da7ac2c73a3706cc2a4d7bcf02b031b7453bc0ce",
-    SOURCES[4]: "0c316190aada645c92c4d01835402fb864055dc51145a9470a02bd96af6291df",
+    SOURCES[4]: "3f275cc39cf028c01a652da5a2a507531612ad7cc4062c421c98b42f312dcde4",
     SOURCES[5]: "28ec8d61126287aa8e7e7d65c014f1f3a942070f0736812928494f69e3278381",
 }
 
@@ -171,11 +171,17 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
             fail(f"pending lifecycle transition drift: {required}")
     if lifecycle.count("request.is_bound_to(&effect.provider_handle())") != 2:
         fail("pending provider identity binding drift")
+    if "if !operation.identity_matches()" not in lifecycle:
+        fail("pending provider identity must be rechecked after guarded preparation")
+    guard = lifecycle.index("let mut operation = Self")
+    final_identity = lifecycle.index("if !operation.identity_matches()")
+    activation = lifecycle.index(".begin(state, effect_request")
+    if not guard < final_identity < activation:
+        fail("pending provider identity must be rechecked after guarded preparation")
     if lifecycle.count("self.request_mut().charge_work(units)") != 2:
         fail("pending authoritative work charging drift")
     prepare = lifecycle.index("effect.prepare_state(&prepare_request)")
     guarded = lifecycle.index("let mut operation = Self")
-    activation = lifecycle.index(".begin(state, effect_request")
     if not prepare < guarded < activation:
         fail("pending activation must follow lifecycle state ownership")
     if re.search(

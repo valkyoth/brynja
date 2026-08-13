@@ -25,9 +25,10 @@
 
 # brynja-dtls
 
-`brynja-dtls 0.1.7` only repins its exact v0.15 dependencies. It remains a
-compile-time boundary and does not provide a working TLS,
-cryptographic, PKI, platform, or legacy-protocol implementation.
+`brynja-dtls 0.1.7` now consumes the unpublished shared
+`brynja-protocol 0.1.0` record-envelope boundary. It remains a compile-time
+boundary and does not provide a working TLS, cryptographic, PKI, platform, or
+legacy-protocol implementation.
 
 ## Cryptography Verification Status
 

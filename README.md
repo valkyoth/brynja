@@ -86,26 +86,24 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.18.1` development milestone adds a protocol-neutral bounded
-observational security-event schema in `brynja-core`. Opaque events can only be
-derived from the mandatory v0.18 authority values or a non-ready authoritative
-snapshot. They duplicate pending, accepted, approved, non-approved, rejected,
-canceled, failed, and terminal state without carrying an authority generation,
-secret, handle, identity, plaintext, transcript, PSK identity, ticket, ECH
-inner name, arbitrary string, byte payload, or stable cross-connection
-identifier. Events are format-safe values and remain separate from peer-visible
-alerts.
+The current `0.19.0` development milestone adds `brynja-protocol`, a shared
+allocation-free TLS and DTLS record-envelope boundary. An already selected
+typed `WirePolicy` is required before parsing, so record bytes cannot choose a
+protocol version, downgrade, or trigger fallback. Borrowed parsers and
+transactional caller-buffer encoders cover TLS 1.2 and TLS 1.3 plaintext and
+ciphertext envelopes, DTLS 1.2 plaintext/ciphertext envelopes, and DTLS 1.3
+plaintext and unified ciphertext headers. They enforce profile-specific
+constants and bounds, preserve permitted legacy-version and unknown
+content-type bytes, reject malformed or truncated records, and reject RFC 6520
+Heartbeat content and negotiation in every modern profile.
 
-`SecurityEventQueue<N>` is a caller-owned, allocation-free FIFO. Enqueue and
-drain perform no callback, I/O, retry, wait, provider action, or protocol
-transition. A full or zero-capacity queue drops the incoming observational
-record immediately and increments a visible saturating counter; loss never
-changes or obscures the mandatory authoritative outcome. Records begin
-explicitly untimestamped and may receive one caller-provided wall or monotonic
-timestamp later, without clock access or relabeling inside Brynja. The schema
-cannot authorize, commit, complete, latch, alert, or alter cryptographic or
-protocol state and makes no audit-delivery, persistence, independent-review, or
-FIPS claim.
+The framing boundary performs no allocation, I/O, cryptography, decryption,
+authentication, DTLS sequence reconstruction, replay processing, version
+selection, handshake transition, or alert decision. The TLS 1.2, TLS 1.3, and
+DTLS engine packages consume the shared crate but remain unimplemented.
+Because this is Brynja's first hostile protocol parser, v0.19.0 requires an
+exceptional pentest before its signed tag even though it selects no crates.io
+publication and remains in the cumulative v0.15.0-to-v0.20.0 review range.
 
 The signed `0.18.0` development milestone adds a protocol-neutral mandatory
 security-outcome authority contract in `brynja-core`. Sealed type-level domains
@@ -308,7 +306,7 @@ published only when their cumulative changes require it at a checkpoint.
 Pentests look backwards over the complete change range between public
 checkpoints. The v0.15.0 assessment covered all changes after signed public tag
 v0.10.0 through v0.15.0. The v0.20.0 assessment covers all changes after
-v0.15.0 through v0.20.0, including the current v0.18.1 milestone, and the same
+v0.15.0 through v0.20.0, including the current v0.19.0 milestone, and the same
 pattern continues every fifth minor version. Each checkpoint report records
 its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
@@ -330,10 +328,9 @@ removing v0.18.1 from the broader v0.15.0-to-v0.20.0 cumulative review range.
 
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
-`0.18.0`. The current `0.18.1` bounded observational security-event milestone
-has passed its exceptional pentest, selects no crates.io publication, awaits
-green GitHub and CodeQL before tagging, and remains inside the cumulative
-v0.20.0 assessment range.
+`0.18.1`. The current `0.19.0` shared record-framing milestone selects no
+crates.io publication and awaits its exceptional pentest before hosted checks
+and tagging. It remains inside the cumulative v0.20.0 assessment range.
 The published dependency is:
 
 ```toml
@@ -453,6 +450,7 @@ certificate-bound operational-environment claim.
 | `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
 | `brynja-crypto-cpu-std` | Future host CPU detection and dispatch initialization | ❌ Not implemented or verified |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
+| `brynja-protocol` | Shared TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |
 | `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |
 | `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |
 | `brynja-tls13` / `brynja-tls13-handshake` | TLS 1.3 record and handshake engine | ❌ Not verified |
@@ -471,10 +469,10 @@ transactional caller-buffer write, exact workspace/arena, abstract secret
 lifetime, owned-region zeroization, fixed-width constant-time, and provider
 capability/authorization, entropy/secure-random, typed-clock, and pending-
 operation foundations
-described for `brynja-core` plus the
-separately selected sanitization adapter are implemented. No
-cryptographic primitive, PKI processor, protocol parser, or protocol engine in
-this table is implemented.
+described for `brynja-core`, the shared record-envelope boundary in
+`brynja-protocol`, and the separately selected sanitization adapter are
+implemented. No cryptographic primitive, PKI processor, handshake parser, or
+protocol engine in this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
 formal proof, pentest, or release status.
 
@@ -482,7 +480,7 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations through v0.18; no TLS engine or provider implementation |
+| `brynja` | Modern production facade | Exposes cumulative foundations and shared record framing through v0.19; no TLS engine or provider implementation |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
@@ -491,6 +489,7 @@ formal proof, pentest, or release status.
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | Foundation only |
+| `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented; unpublished pending v0.19.0 exceptional pentest |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
 | `brynja-tls13` | Version-specific TLS 1.3 stream engine | Foundation only |
 | `brynja-tls13-handshake` | Record-independent TLS 1.3 handshake shared with QUIC | Foundation only |
@@ -627,7 +626,7 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.18.1
+scripts/tag_gate.sh v0.19.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

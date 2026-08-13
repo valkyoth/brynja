@@ -55,7 +55,6 @@ def bind(policy: dict, ledger: dict) -> None:
         standards.json_bytes(ledger)
     )
 
-
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
@@ -65,9 +64,10 @@ def test_current_repository() -> None:
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 54
+    assert len(implemented) == 65
     assert all(
-        surface_id.startswith("iana.tls-parameters.tls-parameters-6")
+        surface_id.startswith("iana.tls-parameters.tls-parameters-5")
+        or surface_id.startswith("iana.tls-parameters.tls-parameters-6")
         or surface_id
         in {
             "facility.sslkeylogfile.test-support",

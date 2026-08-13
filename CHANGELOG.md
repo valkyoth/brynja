@@ -7,6 +7,18 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add unpublished `brynja-protocol 0.1.0` with typed external wire policies,
+  borrowed TLS 1.2/TLS 1.3 and DTLS 1.2/DTLS 1.3 record-envelope parsing, and
+  transactional caller-buffer encoding.
+- Enforce profile-specific record constants and length bounds, preserve
+  permitted legacy-version and unknown content-type bytes, and reject RFC 6520
+  Heartbeat content and negotiation in every modern profile.
+- Add seventeen behavior tests, three compile-fail examples, seven reviewed
+  source hashes, twenty-nine negative policy fixtures, and generated protocol-
+  surface and requirement evidence for the first hostile parser boundary.
+- Advance the development facade to `brynja 0.19.0`, expose the shared framing
+  crate, wire it into the modern TLS/DTLS engine packages, select zero crates
+  for publication, and require an exceptional pentest before the signed tag.
 - Add a final pre-1.0 RFC 9580 OpenPGP phase with 44 small standards,
   resource, packet, key, cryptography, message, lifecycle, interoperability,
   audit, remediation, and publication milestones, followed by whole-project

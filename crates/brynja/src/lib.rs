@@ -10,9 +10,10 @@
 //! without implementing or claiming a validated module. Mandatory typed
 //! security outcomes now bind exact decision domains to authoritative state,
 //! including token-gated external-key destruction. Bounded observational
-//! events duplicate those outcomes without gaining authority. This crate does
-//! not provide a TLS connection API, provider implementation, or
-//! cryptographic algorithm.
+//! events duplicate those outcomes without gaining authority. Shared TLS and
+//! DTLS record envelopes are now parsed and encoded independently of protocol
+//! selection. This crate does not provide a TLS connection API, provider
+//! implementation, or cryptographic algorithm.
 
 #![no_std]
 
@@ -25,6 +26,7 @@ pub const IMPLEMENTED: bool = false;
 pub use brynja_core as core;
 pub use brynja_crypto as crypto;
 pub use brynja_pki as pki;
+pub use brynja_protocol as protocol;
 pub use brynja_tls as tls;
 
 #[cfg(feature = "dtls")]
@@ -77,6 +79,9 @@ mod tests {
         ));
         assert!(::core::hint::black_box(
             super::core::SECURITY_EVENT_SCHEMA_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::protocol::TLS_DTLS_RECORD_FRAMING_IMPLEMENTED
         ));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);

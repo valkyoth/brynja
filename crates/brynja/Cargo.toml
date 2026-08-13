@@ -1,6 +1,6 @@
 [package]
 name = "brynja"
-version = "0.18.1"
+version = "0.19.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -20,6 +20,7 @@ quic = ["dep:brynja-quic-tls"]
 brynja-core = { workspace = true }
 brynja-crypto = { workspace = true }
 brynja-pki = { workspace = true }
+brynja-protocol = { workspace = true }
 brynja-tls = { workspace = true }
 brynja-dtls = { workspace = true, optional = true }
 brynja-platform = { workspace = true, optional = true }

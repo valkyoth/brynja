@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.18.0 signed; v0.18.1 exceptional pentest PASS and awaiting green GitHub and CodeQL
+Status: v0.18.1 signed; v0.19.0 implementation complete and awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -28,7 +28,7 @@ destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
 It still has no integer
-encoding, TLS framing or parser, TLS state machine, cryptography, PKI, QUIC-TLS,
+encoding, TLS handshake parser, TLS state machine, cryptography, PKI, QUIC-TLS,
 DTLS engine, platform provider, or legacy protocol implementation and must not
 be used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -71,12 +71,23 @@ issue across its initial review and first retest. The clean second retest of
 exact signed remediation commit
 `635b229296be45b195d37d8111fd8ad8f8b1e571` records `PASS`/`PASS` with
 zero open findings. Signed tag v0.18.0 contains that remediation. The facade now
-advances to `0.18.1`; supporting versions remain unchanged and no crate is
+advanced to `0.18.1`; supporting versions remained unchanged and no crate was
 selected for publication. The repository-owner assessment of exact signed
 v0.18.1 implementation commit
 `9ff9a459d8caae7e7f5c18b6576647487ba5b251` passed with zero findings and
 required no remediation; its permanent report is
-`security/pentest/v0.18.1.md`.
+`security/pentest/v0.18.1.md`. Signed tag v0.18.1 contains that candidate.
+
+The facade now advances to `0.19.0`. New unpublished
+`brynja-protocol 0.1.0` implements shared allocation-free TLS 1.2, TLS 1.3,
+DTLS 1.2, and DTLS 1.3 record-envelope parsing and transactional encoding
+behind externally selected typed policies. It rejects RFC 6520 Heartbeat in
+all modern profiles and cannot negotiate versions, decrypt, authenticate,
+reconstruct DTLS sequence numbers, process replay, perform I/O, or transition
+a handshake. The TLS and DTLS engine packages consume the shared boundary but
+remain unimplemented. No package is selected for publication. As the first
+hostile protocol parser, v0.19.0 requires an exceptional pentest before tag and
+also remains in the scheduled v0.15.0-to-v0.20.0 cumulative assessment.
 
 Every roadmap version now completes the full automated tag gate and waits for
 green GitHub and CodeQL before its signed tag. Scheduled pentests and crates.io

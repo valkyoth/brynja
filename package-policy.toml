@@ -4,7 +4,7 @@ version = 1
 [packages.brynja]
 class = "modern-facade"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-tls"]
+required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-protocol", "brynja-tls"]
 optional = { dtls = "brynja-dtls", platform = "brynja-platform", quic = "brynja-quic-tls" }
 
 [packages.brynja-core]
@@ -37,6 +37,12 @@ publish = "crates-io"
 required = ["brynja-core"]
 optional = {}
 
+[packages.brynja-protocol]
+class = "modern-shared"
+publish = "crates-io"
+required = ["brynja-core"]
+optional = {}
+
 [packages.brynja-platform]
 class = "platform-adapter"
 publish = "crates-io"
@@ -52,13 +58,13 @@ optional = {}
 [packages.brynja-tls12]
 class = "modern-engine"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-pki"]
+required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-protocol"]
 optional = {}
 
 [packages.brynja-tls13]
 class = "modern-engine"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-tls13-handshake"]
+required = ["brynja-core", "brynja-crypto", "brynja-protocol", "brynja-tls13-handshake"]
 optional = {}
 
 [packages.brynja-tls]
@@ -70,7 +76,7 @@ optional = {}
 [packages.brynja-dtls]
 class = "modern-engine"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-pki"]
+required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-protocol"]
 optional = {}
 
 [packages.brynja-quic-tls]

@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0c20cf8793ca60dc420cb6b87998131a50edc295979e0ee2e48e15c0c56c824f",
-  "domain_policy_sha256": "4cfc6a2839682d1fe6dbe469341ecb30e27ab25d1e229fc6cfaa92b228d5ce5a",
-  "policy_sha256": "af78edc413f9798d71511ddf99661a90f18f3724fc1c094e8344892c7f684091",
+  "domain_policy_sha256": "120203a0a091b8760d36a3f676d00c441bd167b9eb0d5698687e169a2f1ba4ce",
+  "policy_sha256": "8213e3a3249e0c9d19742811ca9c45e365191159e144b07a72dcf7ede0f1beb4",
   "requirements": [
     {
       "applicability": "delegate",
@@ -20179,7 +20179,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.19.0",
       "residual": "Every modern stream and datagram parser must retain an explicit negative test for negotiation and content.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
@@ -20200,8 +20200,8 @@
       ],
       "tests": [
         {
-          "status": "planned",
-          "target": "tests/requirements/heartbeat.rs#negotiation_and_content_rejected"
+          "status": "actual",
+          "target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
         }
       ]
     },
@@ -20573,7 +20573,7 @@
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
-      "evidence_gap": "Executable feature-graph, wire, registry, resumption, and cross-version rejection tests remain unresolved until v0.19.0.",
+      "evidence_gap": "Wire content, inner-content, and negotiation rejection are executable; future engine feature and resumption state must retain the same exclusion.",
       "id": "BRY-REQ-TLS-0018",
       "invariants": [
         "resource-bound",
@@ -20586,7 +20586,7 @@
       "owner": "0.19.0",
       "profile": "tls-dtls-quic",
       "residual": "Applications needing liveness must implement it above the authenticated application protocol without gaining access to TLS Heartbeat.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -20673,12 +20673,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/tls_exclusions.rs#heartbeat_absent"
+          "target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/tls_exclusions.rs#reject_heartbeat_wire_values"
+          "target": "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
         }
       ],
       "work_bound": "Heartbeat recognition performs bounded identifier and context checks and rejects before allocation, echoing, cryptography, or state mutation."
@@ -20692,7 +20692,7 @@
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
-      "evidence_gap": "Executable registry projections, truncation tests, context matrices, and drift corpora remain unresolved until v0.19.0.",
+      "evidence_gap": "Record-level ContentType projection and local tests are implemented; the staged normative lifecycle still requires later tested and evidenced promotions.",
       "id": "BRY-REQ-TLS-0019",
       "invariants": [
         "canonical-encoding",
@@ -20700,13 +20700,13 @@
         "validation",
         "version-separation"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The shared TLS wire-policy surface governs registry representation and fail-closed dispatch before individual version-specific protocol facilities are implemented.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.19.0",
       "profile": "tls-dtls-quic",
       "residual": "Individual algorithms and facilities remain unavailable until their owning milestone changes the corresponding future-work decision.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -20795,20 +20795,20 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
-          "target": "crates/brynja-protocol/src/tls.rs#WirePolicy"
+          "kind": "actual-symbol",
+          "target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/tls_wire.rs#known_and_unknown_values"
+          "target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/tls_wire.rs#reject_context_and_version_confusion"
+          "target": "crates/brynja-protocol/tests/wire_policy.rs#inner_content_is_closed_and_heartbeat_is_never_admitted"
         }
       ],
       "work_bound": "Identifier parsing, lookup, preservation, context checks, and failure selection are bounded by the enclosing message and registry domain."
@@ -29548,9 +29548,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "c874385fbb82d9eaa997287b179dfdc7375e84c2f751bc103e00cb478673a02f",
+  "residual_policy_sha256": "d599415e93915911eac03eb30bc631e469952ef38eb28d943760b52792e4b305",
   "schema": 5,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "d4ef3cd564ef77138e9f7e7779302b654e633b15405357c9d5ab19e7e6c51bc2",
-  "transport_policy_sha256": "9b66827d4eb2f9d86c95c2c49cdf2186ab9363038ee9d7a8254f1e7ba6e908da"
+  "surface_register_sha256": "25f792eb887cf6c9892c8d7a0c9c3fd20ee41bf9caa2f13ae8c6987413b24aad",
+  "transport_policy_sha256": "b5756c51a831c3fd571a029659b7343b9caf8f163c3a3c95c5cb2d2c13a8907c"
 }

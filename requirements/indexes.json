@@ -4428,7 +4428,7 @@
         "boundary:boundary:modern-heartbeat-rejection"
       ],
       "tests": [
-        "planned:tests/requirements/heartbeat.rs#negotiation_and_content_rejected"
+        "actual:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
       ]
     },
     "BRY-REQ-TLS-0005": {
@@ -4522,8 +4522,8 @@
         "boundary:boundary:tls-heartbeat-excluded"
       ],
       "tests": [
-        "planned:positive:tests/requirements/tls_exclusions.rs#heartbeat_absent",
-        "planned:negative:tests/requirements/tls_exclusions.rs#reject_heartbeat_wire_values"
+        "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile",
+        "planned:negative:crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
       ]
     },
     "BRY-REQ-TLS-0019": {
@@ -4550,11 +4550,11 @@
         "rfc:9846"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-protocol/src/tls.rs#WirePolicy"
+        "actual-symbol:crates/brynja-protocol/src/tls/content_type.rs#WirePolicy"
       ],
       "tests": [
-        "planned:positive:tests/requirements/tls_wire.rs#known_and_unknown_values",
-        "planned:negative:tests/requirements/tls_wire.rs#reject_context_and_version_confusion"
+        "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion",
+        "planned:negative:crates/brynja-protocol/tests/wire_policy.rs#inner_content_is_closed_and_heartbeat_is_never_admitted"
       ]
     },
     "BRY-REQ-TLS-0068": {
@@ -10637,6 +10637,9 @@
       "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
       ],
+      "actual-symbol:crates/brynja-protocol/src/tls/content_type.rs#WirePolicy": [
+        "BRY-REQ-TLS-0019"
+      ],
       "actual-symbol:crates/brynja-test-support/src/keylog.rs": [
         "BRY-REQ-TESTING-0010"
       ],
@@ -10899,9 +10902,6 @@
       "planned-symbol:crates/brynja-pki/src/x509.rs#Certificate": [
         "BRY-REQ-PKIX-0001"
       ],
-      "planned-symbol:crates/brynja-protocol/src/tls.rs#WirePolicy": [
-        "BRY-REQ-TLS-0019"
-      ],
       "planned-symbol:crates/brynja-quic-tls/src/driver.rs#QuicHandshake": [
         "BRY-REQ-QUIC-0098"
       ],
@@ -11091,6 +11091,9 @@
       ]
     },
     "tests": {
+      "actual:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [
+        "BRY-REQ-TLS-0002"
+      ],
       "actual:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0010"
       ],
@@ -11130,6 +11133,12 @@
       ],
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
+      ],
+      "planned:negative:crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing": [
+        "BRY-REQ-TLS-0018"
+      ],
+      "planned:negative:crates/brynja-protocol/tests/wire_policy.rs#inner_content_is_closed_and_heartbeat_is_never_admitted": [
+        "BRY-REQ-TLS-0019"
       ],
       "planned:negative:tests/conformance/dtls.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0116"
@@ -11422,9 +11431,6 @@
       "planned:negative:tests/requirements/tls13_terminal.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS13-0073"
       ],
-      "planned:negative:tests/requirements/tls_exclusions.rs#reject_heartbeat_wire_values": [
-        "BRY-REQ-TLS-0018"
-      ],
       "planned:negative:tests/requirements/tls_exporter.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0079"
       ],
@@ -11433,9 +11439,6 @@
       ],
       "planned:negative:tests/requirements/tls_version.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0068"
-      ],
-      "planned:negative:tests/requirements/tls_wire.rs#reject_context_and_version_confusion": [
-        "BRY-REQ-TLS-0019"
       ],
       "planned:negative:tests/requirements/trust.rs#distrust_ambiguity_and_algorithm_positions": [
         "BRY-REQ-PKIX-0007"
@@ -11532,6 +11535,12 @@
       ],
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
+      ],
+      "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion": [
+        "BRY-REQ-TLS-0019"
+      ],
+      "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [
+        "BRY-REQ-TLS-0018"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"
@@ -11830,9 +11839,6 @@
       "planned:positive:tests/requirements/tls13_terminal.rs#all_failures": [
         "BRY-REQ-TLS13-0073"
       ],
-      "planned:positive:tests/requirements/tls_exclusions.rs#heartbeat_absent": [
-        "BRY-REQ-TLS-0018"
-      ],
       "planned:positive:tests/requirements/tls_exporter.rs#versioned_bindings": [
         "BRY-REQ-TLS-0079"
       ],
@@ -11841,9 +11847,6 @@
       ],
       "planned:positive:tests/requirements/tls_version.rs#one_pass_selection": [
         "BRY-REQ-TLS-0068"
-      ],
-      "planned:positive:tests/requirements/tls_wire.rs#known_and_unknown_values": [
-        "BRY-REQ-TLS-0019"
       ],
       "planned:positive:tests/requirements/trust.rs#anchors_cross_signing_and_selection": [
         "BRY-REQ-PKIX-0007"
@@ -11985,9 +11988,6 @@
       ],
       "planned:tests/requirements/alpn.rs#opaque_round_trip": [
         "BRY-REQ-APP-0001"
-      ],
-      "planned:tests/requirements/heartbeat.rs#negotiation_and_content_rejected": [
-        "BRY-REQ-TLS-0002"
       ],
       "planned:tests/requirements/hybrid.rs#standard_groups": [
         "BRY-REQ-HYB-0001"

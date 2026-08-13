@@ -26,16 +26,16 @@ mapping_rationale = "The shared TLS failure semantic surface owns the pre-implem
 domain = "tls"
 id = "BRY-REQ-TLS-0019"
 owner = "0.19.0"
-lifecycle = "planned"
+lifecycle = "implemented"
 decision_ids = ["iana.tls-parameters.tls-parameters-5"]
 sources = [{ id = "rfc:9846", authority_role = "current" }]
 statement = "TLS wire identifiers use closed typed domains, preserve unknown values where required, and deny unsupported values without ambiguous coercion."
 invariants = ["canonical-encoding", "resource-bound", "validation", "version-separation"]
-target = "crates/brynja-protocol/src/tls.rs#WirePolicy"
-positive_test = "tests/requirements/tls_wire.rs#known_and_unknown_values"
-negative_test = "tests/requirements/tls_wire.rs#reject_context_and_version_confusion"
+target = "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy"
+positive_test = "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
+negative_test = "crates/brynja-protocol/tests/wire_policy.rs#inner_content_is_closed_and_heartbeat_is_never_admitted"
 work_bound = "Identifier parsing, lookup, preservation, context checks, and failure selection are bounded by the enclosing message and registry domain."
-evidence_gap = "Executable registry projections, truncation tests, context matrices, and drift corpora remain unresolved until v0.19.0."
+evidence_gap = "Record-level ContentType projection and local tests are implemented; the staged normative lifecycle still requires later tested and evidenced promotions."
 residual = "Individual algorithms and facilities remain unavailable until their owning milestone changes the corresponding future-work decision."
 mapping_rationale = "The shared TLS wire-policy surface governs registry representation and fail-closed dispatch before individual version-specific protocol facilities are implemented."
 
@@ -49,10 +49,10 @@ sources = [{ id = "rfc:6520", authority_role = "exclusion" }]
 statement = "TLS and DTLS Heartbeat is excluded from every modern Brynja engine, facade, feature, configuration, and resumption state."
 invariants = ["resource-bound", "validation", "version-separation"]
 target = "boundary:tls-heartbeat-excluded"
-positive_test = "tests/requirements/tls_exclusions.rs#heartbeat_absent"
-negative_test = "tests/requirements/tls_exclusions.rs#reject_heartbeat_wire_values"
+positive_test = "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
+negative_test = "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
 work_bound = "Heartbeat recognition performs bounded identifier and context checks and rejects before allocation, echoing, cryptography, or state mutation."
-evidence_gap = "Executable feature-graph, wire, registry, resumption, and cross-version rejection tests remain unresolved until v0.19.0."
+evidence_gap = "Wire content, inner-content, and negotiation rejection are executable; future engine feature and resumption state must retain the same exclusion."
 residual = "Applications needing liveness must implement it above the authenticated application protocol without gaining access to TLS Heartbeat."
 mapping_rationale = "RFC 6520 is pinned solely as exclusion authority, and its semantic rejection surface owns every TLS registry entry classified intentionally rejected at the wire-policy milestone."
 

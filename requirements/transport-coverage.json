@@ -7919,7 +7919,7 @@
     "0.99.0",
     "0.99.1"
   ],
-  "policy_sha256": "9b66827d4eb2f9d86c95c2c49cdf2186ab9363038ee9d7a8254f1e7ba6e908da",
+  "policy_sha256": "b5756c51a831c3fd571a029659b7343b9caf8f163c3a3c95c5cb2d2c13a8907c",
   "requirement_count": 71,
   "schema": 2,
   "surface_count": 485,
@@ -10527,7 +10527,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5",
       "owner": "0.19.0",
@@ -10535,7 +10535,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.ack.1",
       "owner": "0.19.0",
@@ -10543,7 +10543,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.alert.1",
       "owner": "0.19.0",
@@ -10551,7 +10551,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.application-data.1",
       "owner": "0.19.0",
@@ -10559,7 +10559,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.change-cipher-spec.1",
       "owner": "0.19.0",
@@ -10567,7 +10567,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.handshake.1",
       "owner": "0.19.0",
@@ -10583,7 +10583,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.reserved.1",
       "owner": "0.19.0",
@@ -10600,7 +10600,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.tls12-cid.1",
       "owner": "0.19.0",
@@ -10608,7 +10608,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.unassigned-requires-coordination-see.1",
       "owner": "0.19.0",
@@ -10616,7 +10616,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.unassigned-requires-coordination-see.2",
       "owner": "0.19.0",
@@ -10624,7 +10624,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.unassigned.1",
       "owner": "0.19.0",

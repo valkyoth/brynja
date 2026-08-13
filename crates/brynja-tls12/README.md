@@ -26,8 +26,9 @@
 # brynja-tls12
 
 `brynja-tls12` is the version-specific hardened TLS 1.2 engine boundary.
-Version `0.1.7` only repins its exact v0.15 dependencies; it does not provide a
-working TLS, cryptographic, PKI, or platform implementation.
+Version `0.1.7` now consumes the unpublished shared `brynja-protocol 0.1.0`
+record-envelope boundary in the workspace. It still does not provide a working
+TLS, cryptographic, PKI, or platform implementation.
 
 ## Cryptography Verification Status
 

@@ -36,6 +36,7 @@ PUBLISH_ORDER = (
     "brynja-crypto-cpu",
     "brynja-crypto-cpu-std",
     "brynja-pki",
+    "brynja-protocol",
     "brynja-platform",
     "brynja-tls13-handshake",
     "brynja-tls12",

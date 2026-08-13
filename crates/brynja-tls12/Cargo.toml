@@ -17,6 +17,7 @@ default = []
 brynja-core = { workspace = true }
 brynja-crypto = { workspace = true }
 brynja-pki = { workspace = true }
+brynja-protocol = { workspace = true }
 
 [lints]
 workspace = true

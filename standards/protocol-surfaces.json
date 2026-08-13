@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "2710586beb986fe96d1feb640a1a21ccdfd2ea5788fb8972440dc88b679abee7",
+  "policy_sha256": "626dd488164cf87c96ad8b8234db02dc1f43048add5b4aedb0245173cab9a51e",
   "schema": 2,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
   "surfaces": [
@@ -393,7 +393,7 @@
       "test_target": "tests/surface/external_psk.rs#certificate_mode_rejected"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
       "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "facility.heartbeat",
@@ -403,7 +403,7 @@
       ],
       "owner": "0.19.0",
       "rationale": "Heartbeat negotiation and content are rejected in every modern TLS and DTLS profile.",
-      "test_target": "tests/surface/heartbeat.rs#rejected"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
     },
     {
       "code_target": "crates/brynja-tls/src/record_size_limit.rs",
@@ -91009,7 +91009,7 @@
       "test_target": "tests/surface/extensions.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/extensions.rs",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
       "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1",
@@ -91040,7 +91040,7 @@
         "collection": "tls-extensiontype-values",
         "id": "tls-extensiontype-values-1"
       },
-      "test_target": "tests/surface/heartbeat.rs#extension"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
     },
     {
       "code_target": "crates/brynja-tls/src/extensions.rs",
@@ -114855,8 +114855,8 @@
       "test_target": "tests/surface/algorithms.rs#registry"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5",
       "kind": "iana-registry",
@@ -114865,18 +114865,18 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-5",
         "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
         "title": "TLS ContentType"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.ack.1",
       "kind": "iana-entry",
@@ -114886,7 +114886,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "date": "2021-06-02"
@@ -114907,11 +114907,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.alert.1",
       "kind": "iana-entry",
@@ -114920,7 +114920,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "updated": "2025-08-12"
@@ -114941,11 +114941,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.application-data.1",
       "kind": "iana-entry",
@@ -114954,7 +114954,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "updated": "2025-08-12"
@@ -114975,11 +114975,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.change-cipher-spec.1",
       "kind": "iana-entry",
@@ -114988,7 +114988,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "updated": "2025-08-12"
@@ -115009,11 +115009,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.handshake.1",
       "kind": "iana-entry",
@@ -115022,7 +115022,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "updated": "2025-08-12"
@@ -115043,10 +115043,10 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
       "disposition": "intentionally-rejected",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.heartbeat.1",
@@ -115075,11 +115075,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/heartbeat.rs#content_type"
+      "test_target": "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.reserved.1",
       "kind": "iana-entry",
@@ -115089,7 +115089,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "date": "2021-06-02"
@@ -115110,7 +115110,7 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
       "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcContentType",
@@ -115148,8 +115148,8 @@
       "test_target": "tests/requirements/dtls_routability.rs#reject_rrc_content_type_outside_dtls"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.tls12-cid.1",
       "kind": "iana-entry",
@@ -115159,7 +115159,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "date": "2019-07-02",
@@ -115181,11 +115181,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.unassigned-requires-coordination-see.1",
       "kind": "iana-entry",
@@ -115194,7 +115194,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "updated": "2023-04-05"
@@ -115218,11 +115218,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.unassigned-requires-coordination-see.2",
       "kind": "iana-entry",
@@ -115231,7 +115231,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {
           "updated": "2023-04-05"
@@ -115255,11 +115255,11 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
-      "code_target": "crates/brynja-core/src/record.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+      "disposition": "implemented",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.unassigned.1",
       "kind": "iana-entry",
@@ -115268,7 +115268,7 @@
         "rfc:9846"
       ],
       "owner": "0.19.0",
-      "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+      "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
       "record": {
         "attributes": {},
         "fields": {
@@ -115281,7 +115281,7 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-5"
       },
-      "test_target": "tests/surface/content_types.rs#registry"
+      "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
     },
     {
       "code_target": "crates/brynja-core/src/alert.rs",

@@ -1642,7 +1642,7 @@ Exit criteria:
 
 ### v0.18.1 - Bounded Observational Security Event Schema
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Define an upstream no_std Sans-I/O SecurityEvent audit schema that only duplicates the authoritative outcomes frozen at v0.18.0; events are caller-drained, allocation-free, bounded, secret-free, format-safe, alert-independent, optionally caller-timestamped or explicitly untimestamped for later enrichment, use saturating drop counters with visible saturation, contain no secret or stable correlating identifier, never reenter, and cannot block, authorize, complete, or alter cryptographic or protocol state.
 
@@ -1695,31 +1695,68 @@ Exit criteria:
 
 ### v0.19.0 - TLS And DTLS Record Framing
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Keep record framing independent of protocol selection and fallback; ignore TLSPlaintext legacy_record_version where required, validate TLSCiphertext constants where applicable, preserve bytes, reject RFC 6520 Heartbeat content and negotiation in every modern profile, and leave version choice exclusively to typed handshake policy.
 
-Goal: complete the **TLS And DTLS Record Framing** implementation stop without admitting or
-claiming adjacent capability.
+Goal: establish one bounded, allocation-free record-envelope boundary shared
+by the modern TLS and DTLS engines, without permitting wire bytes to choose a
+protocol version or claiming a record-protection or handshake engine.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- add unpublished `brynja-protocol 0.1.0`, directly exposed by the development
+  facade and consumed by the TLS 1.2, TLS 1.3, and DTLS engine boundaries;
+- add typed `WirePolicy` profiles supplied only after external protocol
+  selection; keep their fields private and never infer, negotiate, downgrade,
+  or fall back from record bytes;
+- parse and encode borrowed TLS 1.2/TLS 1.3 plaintext and ciphertext envelopes,
+  including profile-specific length, nonempty, content-type, and
+  `legacy_record_version` rules;
+- parse and encode borrowed DTLS 1.2 plaintext/ciphertext envelopes and DTLS
+  1.3 plaintext and unified ciphertext headers, including exact CID length,
+  short/long sequence-number forms, and optional-length datagram semantics;
+- preserve permitted legacy-version and unknown content-type bytes, reject RFC
+  6520 Heartbeat content and extension negotiation in every modern profile,
+  and keep all errors closed and payload-free;
+- use caller-owned output only, preflight complete writes, and leave buffers
+  unchanged on failure; perform no allocation, I/O, cryptography, decryption,
+  authentication, replay processing, or handshake transition;
+- bind reviewed source hashes, file-size and forbidden-boundary rules, 29
+  negative policy fixtures, requirements and protocol-surface evidence, threat
+  model, controls, status, release notes, and crate documentation.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- exhaustively classify all 256 content-type bytes; test known, unknown, and
+  forbidden Heartbeat values plus rejected Heartbeat extension admission;
+- test TLS and DTLS profile/version separation, exact maximum lengths,
+  ciphertext constants, empty-record rules, all header truncations, trailing
+  stream/datagram bytes, DTLS epoch/CID/sequence layouts, and transactional
+  short-output rejection;
+- compile-fail private content-type construction, policy-field construction,
+  and record formatting; run the crate tests, documentation tests, no-default
+  and all-feature graphs, `no_std` targets, lint, package, and policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
+Implementation evidence:
+
+- `crates/brynja-protocol/src/lib.rs` and
+  `crates/brynja-protocol/src/tls/{content_type,error,record,dtls,dtls12_ciphertext}.rs`;
+- `crates/brynja-protocol/tests/{wire_policy,tls_records,dtls_records}.rs`;
+- `scripts/{record_framing_policy,check-record-framing,test-record-framing}.py`;
+- `standards/protocol-surfaces.json` and the generated requirement matrix,
+  indexes, and coverage artifacts.
+
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- framing is deterministic, allocation-free, caller-buffer transactional,
+  independent of version selection, and bounded before any future
+  cryptographic or state-machine processing;
+- because this is Brynja's first hostile protocol parser, v0.19.0 is an
+  exceptional pentest trigger even though it remains an internal milestone
+  with zero crates.io publication;
 - `v0.19.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.20.0 - Bounded DER Reader

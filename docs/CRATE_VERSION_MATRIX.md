@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Status: v0.18.0 signed; v0.18.1 implementation complete and awaiting repository-owner review
+Status: v0.18.1 signed; v0.19.0 implementation complete and awaiting exceptional pentest
 
-The `brynja` facade advances to `0.18.1` for the current development milestone
+The `brynja` facade advances to `0.19.0` for the current development milestone
 and selects no crates.io publication. The latest signed and published
 checkpoint is v0.15.0: `brynja 0.15.0`, `brynja-core 0.8.0`,
 `brynja-crypto 0.1.1`, the eight modern support packages at `0.1.7`, and the
@@ -78,14 +78,22 @@ FIFO, and visible saturating loss accounting. Events duplicate mandatory v0.18
 state but cannot authorize, commit, complete, latch, alert, call a provider, or
 mutate security state. It adds no sink, delivery, persistence, protocol,
 cryptographic, independent-review, or FIPS claim and selects no publication.
+Signed tag v0.18.1 contains its zero-finding exceptional assessment candidate.
+The v0.19.0 stage adds unpublished `brynja-protocol 0.1.0`, directly exposes it
+from the facade, and wires it into the TLS 1.2, TLS 1.3, and DTLS package
+boundaries. It implements shared bounded record-envelope parsing and encoding,
+not negotiation, protection, replay, handshake, I/O, or an engine. Its first
+hostile-parser boundary requires an exceptional pentest and selects no package
+publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.18.1` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
+| `brynja` | `0.19.0` | no | Current development version; latest crates.io checkpoint is `0.15.0` |
 | `brynja-core` | `0.8.0` | no | Published v0.15 boundary retained while v0.16-v0.18.1 authority, architecture, and event code remains unreleased on crates.io |
 | `brynja-crypto` | `0.1.1` | no | Published provider/composition boundary retained; cryptographic effects remain unimplemented |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | `0.1.0` | no | Published inert boundaries; no kernel, runtime detector, native result, low-level allowance, performance claim, or FIPS claim |
 | `brynja-pki`, `brynja-platform` | `0.1.7` | no | Published boundaries retained; PKI and platform effects remain unimplemented |
+| `brynja-protocol` | `0.1.0` | no | New shared TLS and DTLS record-envelope boundary; unpublished until a later public checkpoint |
 | `brynja-tls`, `brynja-tls12`, `brynja-tls13`, and `brynja-tls13-handshake` | `0.1.7` | no | Published boundaries retained; engines remain unimplemented |
 | `brynja-dtls`, `brynja-quic-tls` | `0.1.7` | no | Published boundaries retained; engines/adapters remain unimplemented |
 | `brynja-legacy` and `brynja-legacy-*` engines | `0.1.0` | no | Explicit legacy isolation boundary only |

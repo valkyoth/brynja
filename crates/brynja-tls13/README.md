@@ -26,8 +26,9 @@
 # brynja-tls13
 
 `brynja-tls13` is the version-specific TLS 1.3 stream engine boundary. Version
-`0.1.7` only repins its exact v0.15 dependencies; it does not provide a
-working TLS, cryptographic, PKI, or platform implementation.
+`0.1.7` now consumes the unpublished shared `brynja-protocol 0.1.0`
+record-envelope boundary in the workspace. It still does not provide a working
+TLS, cryptographic, PKI, or platform implementation.
 
 ## Cryptography Verification Status
 

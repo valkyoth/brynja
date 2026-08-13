@@ -34,16 +34,16 @@
         },
         {
           "decision": {
-            "code_target": "crates/brynja-core/src/record.rs",
-            "disposition": "future-work",
+            "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
+            "disposition": "implemented",
             "domain": "tls",
             "owner": "0.19.0",
-            "rationale": "Content types and record framing are deferred to the bounded record-layer implementation milestone.",
+            "rationale": "The bounded record layer preserves every ContentType byte, classifies assigned and unknown values without coercion, and applies exact profile admission.",
             "sources": [
               "iana:tls-parameters",
               "rfc:9846"
             ],
-            "test_target": "tests/surface/content_types.rs#registry"
+            "test_target": "crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion"
           },
           "ids": [
             "tls-parameters-5"
@@ -664,13 +664,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/rejected.rs",
+        "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
         "disposition": "intentionally-rejected",
         "domain": "tls",
         "owner": "0.19.0",
         "rationale": "Heartbeat negotiation and content are rejected in every modern TLS and DTLS profile.",
         "sources": ["rfc:6520"],
-        "test_target": "tests/surface/heartbeat.rs#rejected"
+        "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
       },
       "id": "facility.heartbeat"
     },
@@ -1277,13 +1277,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/rejected.rs",
+        "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
         "disposition": "intentionally-rejected",
         "domain": "tls",
         "owner": "0.19.0",
         "rationale": "The Heartbeat content type is rejected in every modern stream and datagram profile.",
         "sources": ["iana:tls-parameters", "rfc:6520"],
-        "test_target": "tests/surface/heartbeat.rs#content_type"
+        "test_target": "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
       },
       "selector": {
         "collection": "tls-parameters",
@@ -1294,13 +1294,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/extensions.rs",
+        "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
         "disposition": "intentionally-rejected",
         "domain": "tls",
         "owner": "0.19.0",
         "rationale": "Heartbeat extension negotiation is rejected in every modern TLS and DTLS profile.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6520"],
-        "test_target": "tests/surface/heartbeat.rs#extension"
+        "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
       },
       "selector": {
         "collection": "tls-extensiontype-values",

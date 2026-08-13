@@ -6963,7 +6963,7 @@
         "iana.tls-parameters.tls-parameters-5"
       ],
       "id": "BRY-REQ-TLS-0019",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.19.0",
       "source_ids": [
         "rfc:9846"

@@ -309,7 +309,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.19.0",
       "residual": "Every modern stream and datagram parser must retain an explicit negative test for negotiation and content.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -325,8 +325,8 @@
       ],
       "tests": [
         {
-          "status": "planned",
-          "target": "tests/requirements/heartbeat.rs#negotiation_and_content_rejected"
+          "status": "actual",
+          "target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
         }
       ]
     },
@@ -442,5 +442,5 @@
   ],
   "schema": 1,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "d4ef3cd564ef77138e9f7e7779302b654e633b15405357c9d5ab19e7e6c51bc2"
+  "surface_register_sha256": "25f792eb887cf6c9892c8d7a0c9c3fd20ee41bf9caa2f13ae8c6987413b24aad"
 }

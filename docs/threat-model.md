@@ -404,6 +404,18 @@ queues drop immediately; exact-until-saturated loss remains visible, while the
 mandatory result remains independently authoritative. Caller mishandling of
 drained events, timestamp privacy, audit persistence, transport, access
 control, serialization, and log retention remain outside the trust boundary.
+v0.19.0 treats every TLS and DTLS record byte, declared length, content type,
+legacy version, epoch, sequence number, CID, and trailing byte as hostile.
+Record parsing receives an already selected typed protocol profile, so wire
+bytes cannot choose a version, trigger fallback, or cross an engine boundary.
+Parsers borrow immutable input and validate complete headers and bounded
+fragments before exposure. Encoders preflight exact caller-owned output and
+preserve it on failure. TLS 1.3 and DTLS 1.3 legacy-version exceptions are
+explicit, ciphertext constants are exact, and RFC 6520 Heartbeat content and
+negotiation are rejected across all modern profiles. The framing layer does
+not decrypt, authenticate, reconstruct truncated DTLS sequence numbers,
+enforce anti-replay, interpret handshake messages, perform I/O, or decide
+alerts; those later authorities must not infer trust from framing success.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.16.0 signed; v0.17.0 implementation complete and awaiting green CI
+Status: v0.16.0 signed; v0.17.0 remediation complete and awaiting owner retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -18,8 +18,9 @@ Unix wall time, inclusive validity ranges, opaque generation-bound monotonic
 instants, purpose-bound deadlines, explicit unavailability, and permanent
 rollback failure, plus affine bounded pending certificate, external-signature,
 and accelerator request state whose completion and cancellation require an
-authoritative single-consumption destruction transition, plus exact FIPS-aware
-service classification, module-owned environment/build/SSP assumptions,
+authoritative single-consumption destruction transition, plus fail-closed
+FIPS-aware non-approved operation classification, module-owned
+environment/build assumptions, provider-derived SSP destruction duties,
 trusted self-test entry, permanent-failure state, and generation-bound service
 indicators. It currently admits zero backends and implements no FIPS module.
 It still has no integer
@@ -647,26 +648,30 @@ provider, key store, accelerator, certificate validator, signature,
 cryptographic algorithm, protocol engine, independent verification, or FIPS
 validation. v0.16.0 selects no crates.io publication.
 
-Version 0.17.0 implements an inert FIPS-aware provider architecture. Exact,
-possibly empty service sets classify every capability of one installed
-provider exactly once. Transactional configuration rejects overlap, omission,
-unsupported services, duplicate fields, empty build digests, empty SSP
-destruction duties, the ordinary validated-module placeholder, and scalar or
-accelerated backend/feature mismatch. Deterministic source, toolchain, flags,
-and dependency digests remain expectations rather than a validated binary
-identity.
+Version 0.17.0 implements an inert FIPS-aware provider architecture. Broad
+operation-category sets classify every capability of one installed provider
+explicitly non-approved. Transactional configuration rejects every nonempty
+approved set until exact algorithm, parameter, backend, and usage identities
+exist, plus overlap, omission, unsupported services, duplicate fields, empty
+build digests, the ordinary validated-module placeholder, and scalar or
+accelerated backend/feature mismatch. SSP destruction duties derive directly
+from the installed provider. Deterministic source, toolchain, flags, and
+dependency digests remain expectations rather than a validated binary identity.
 
 An explicitly trusted runner receives the mandatory integrity and algorithm
-known-answer plan. Services remain unavailable before success; failure,
+known-answer plan. Service indicators remain unavailable before success; failure,
 reentry, interruption, unwind, generation exhaustion, or a later catastrophic
 event permanently fails the caller-owned session. Non-cloneable thread-bound
-service indicators bind one operation, disposition, provider, and generation
-and become stale after failure. Ordinary `BackendPolicy`, opportunistic
+service indicators report one operation category, disposition, provider, and
+generation, cannot authorize execution, and become stale after failure.
+Ordinary `BackendPolicy`, opportunistic
 dispatch, std runtime detection, and the std CPU adapter cannot enter this
 boundary. The milestone adds no module, algorithm, provider effect, self-test
 algorithm, CPU kernel, environment measurement, deterministic binary
 reproduction, SSP effect, independent verification, CMVP submission,
-certificate, or FIPS validation. v0.17.0 selects no crates.io publication.
+certificate, or FIPS validation. An exceptional assessment found and locally
+remediated two High design issues; repository-owner retest is pending. v0.17.0
+selects no crates.io publication.
 
 The package was held from crates.io until the v0.15.0 public checkpoint.
 Because this is the first production adapter around external unsafe

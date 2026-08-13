@@ -1503,61 +1503,71 @@ Exit criteria:
 
 ### v0.17.0 - FIPS-Aware Provider Architecture
 
-Status: awaiting green CI
+Status: remediation complete; awaiting repository-owner retest
 
-Plan scope: Freeze approved and non-approved service separation, self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, service indicators, SSP boundaries, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.
+Plan scope: Freeze broad operation classification with every current service explicitly non-approved until exact identities exist, self-test and permanent-failure hooks, exact scalar and CPU-backend dispatch ownership, non-authorizing service indicators, provider-derived SSP destruction duties, deterministic module-build expectations, CPU-feature and operational-environment assumptions, and sealed-provider exclusions; ordinary opportunistic or std-adapter selection can never enter or alter the future module, and no validation claim is made.
 
 Goal: complete the **FIPS-Aware Provider Architecture** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:
 
-- add exact, possibly empty approved and non-approved service sets and require
-  a transactional configuration to classify every installed-provider
-  capability exactly once, rejecting overlap, omission, and unsupported work;
+- add broad operation-category service sets, require every current
+  installed-provider capability to be explicitly non-approved, and reject
+  every nonempty approved set until exact algorithm, parameter, backend and
+  usage identities span provider manifests, requests, effects and results;
+  reject overlap, omission, and unsupported work;
 - bind one nonzero operational-environment identity to an exact module-owned
   scalar or accelerated backend and its complete required feature bundle;
   explicitly reject the ordinary validated-module placeholder and expose no
   `BackendPolicy`, opportunistic dispatch, std detection, or std adapter;
 - freeze nonzero deterministic source, toolchain, flags, and dependency digest
   expectations without claiming the final validated binary identity;
-- freeze internal/import/export SSP-flow intent and mandatory nonempty
-  complete-copy destruction targets without implementing a port or erasure;
+- freeze internal/import/export SSP-flow intent and derive mandatory nonempty
+  complete-copy destruction targets directly from the installed provider,
+  without a caller-configurable second source or an implemented port or erasure;
 - require exact integrity and algorithm-known-answer self-tests through an
   explicitly trusted runner; keep the completion guard private and permanently
   latch failure on rejection, reentry, interruption, unwind, impossible state,
   generation exhaustion, or a later catastrophic event;
-- issue only non-cloneable, non-formattable, thread-bound service indicators
-  tied to one exact operation, disposition, provider and health generation;
-  invalidate all outstanding indicators after terminal failure;
+- issue only non-cloneable, non-formattable, thread-bound informational service
+  indicators tied to one broad operation category, disposition, provider and
+  health generation; give them no provider-execution authority and invalidate
+  all outstanding indicators after terminal failure;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run exact service-set, duplicate, empty-side, overlap, omission, unsupported,
-  environment identity, backend owner, feature bundle, build digest, SSP duty,
-  pre-test authorization, successful test, failed test, interrupted test,
+- run service-set, duplicate, empty-side, overlap, omission, unsupported,
+  nonempty-approved rejection, environment identity, backend owner, feature
+  bundle, build digest, provider-derived SSP duty, pre-test indication,
+  successful test, failed test, interrupted test,
   reentry, catastrophic failure, generation invalidation and unsupported-service
   tests;
 - compile-fail raw service-set construction, ordinary backend-policy injection,
   and service-indicator cloning; enforce reviewed hashes, private state,
   permanent-failure transitions, exact provider classification, the 500-line
   ceiling, and no std/alloc/unsafe/FFI/runtime-detection/ordinary-dispatch/global
-  state with twenty-three broken policy fixtures;
+  state with twenty-four broken policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- every provider capability has one declared disposition; service use is
-  impossible before the exact self-test plan passes; failure is permanent and
-  invalidates earlier indicators; module backend identity and feature
+- every provider capability is explicitly non-approved until an exact service
+  identity exists; an operation-only indicator cannot authorize execution;
+  indication is impossible before the exact self-test plan passes; failure is
+  permanent and invalidates earlier indicators; provider-derived destruction
+  duties cannot be weakened; module backend identity and feature
   assumptions are exact; ordinary dispatch cannot alter the boundary; and no
   module, algorithm, self-test implementation, service execution, build
   reproduction, SSP effect, provider effect, independent verification,
   certificate, CMVP submission, or FIPS validation is implied;
-- `v0.17.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the exceptional assessment's two High findings are remediated, the exact
+  signed remediation candidate receives a green repository-owner retest, and
+  the permanent report records `PASS`/`PASS` with zero open findings;
+- `v0.17.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without crates.io publication.`
 
 ### v0.18.0 - Mandatory Security Outcome Authority Contract
 

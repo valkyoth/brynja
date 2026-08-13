@@ -8,7 +8,7 @@ use brynja_core::{
     FipsModuleConfig, FipsModuleError, FipsModuleFault, FipsModuleSession, FipsModuleState,
     FipsOperationalEnvironment, FipsSelfTest, FipsSelfTestPlan, FipsSelfTestResult,
     FipsSelfTestRunner, FipsServiceDisposition, FipsServiceError, FipsServiceSet,
-    FipsServiceSetError, FipsSspError, FipsSspFlow, FipsSspPolicy, ProviderOperation,
+    FipsServiceSetError, FipsSspFlow, ProviderOperation,
 };
 
 fn digest(byte: u8) -> [u8; 32] {
@@ -55,18 +55,14 @@ fn try_config<'provider>(
     let builder = builder.non_approved_services(non_approved)?;
     let builder = builder.build(build())?;
     let builder = builder.environment(environment())?;
-    let ssp = match FipsSspPolicy::new(FipsSspFlow::InternalOnly, DestructionTargets::all()) {
-        Ok(value) => value,
-        Err(_) => unreachable!(),
-    };
-    builder.ssp(ssp)?.freeze()
+    builder.ssp_flow(FipsSspFlow::InternalOnly)?.freeze()
 }
 
 fn config(provider: &brynja_core::InstalledProvider) -> FipsModuleConfig<'_> {
     match try_config(
         provider,
-        set(&[ProviderOperation::Hash]),
         FipsServiceSet::empty(),
+        set(&[ProviderOperation::Hash]),
     ) {
         Ok(value) => value,
         Err(_) => unreachable!(),
@@ -101,7 +97,7 @@ fn service_sets_are_exact_and_may_be_empty() {
 }
 
 #[test]
-fn environment_build_and_ssp_assumptions_fail_closed() {
+fn environment_and_build_assumptions_fail_closed() {
     assert!(matches!(
         FipsOperationalEnvironment::new(
             [0; 32],
@@ -133,13 +129,6 @@ fn environment_build_and_ssp_assumptions_fail_closed() {
         FipsBuildExpectations::new(digest(1), [0; 32], digest(3), digest(4)),
         Err(FipsBuildError::EmptyDigest)
     ));
-    assert!(matches!(
-        FipsSspPolicy::new(
-            FipsSspFlow::Import,
-            DestructionTargets::new(false, false, false, false, false),
-        ),
-        Err(FipsSspError::EmptyDestructionTargets)
-    ));
 }
 
 #[test]
@@ -169,6 +158,14 @@ fn configuration_is_complete_disjoint_and_provider_exact() {
         ))
     ));
     assert!(matches!(
+        try_config(
+            &provider,
+            set(&[ProviderOperation::Hash]),
+            FipsServiceSet::empty()
+        ),
+        Err(FipsConfigurationError::ApprovedServicesRequireExactIdentity)
+    ));
+    assert!(matches!(
         try_config(&provider, FipsServiceSet::empty(), FipsServiceSet::empty()),
         Err(FipsConfigurationError::ServiceUnclassified(
             ProviderOperation::Hash
@@ -194,15 +191,16 @@ fn configuration_is_complete_disjoint_and_provider_exact() {
     ));
 
     let frozen = config(&provider);
-    assert_eq!(frozen.approved_services().count(), 1);
-    assert!(frozen.non_approved_services().is_empty());
+    assert!(frozen.approved_services().is_empty());
+    assert_eq!(frozen.non_approved_services().count(), 1);
     assert_eq!(
         frozen.disposition(ProviderOperation::Hash),
-        Some(FipsServiceDisposition::Approved)
+        Some(FipsServiceDisposition::NonApproved)
     );
     assert_eq!(frozen.disposition(ProviderOperation::AeadOpen), None);
     assert_eq!(frozen.environment().identity(), &digest(5));
     assert_eq!(frozen.ssp_policy().flow(), FipsSspFlow::InternalOnly);
+    assert!(frozen.ssp_policy().destruction_targets() == provider.destruction_targets());
     assert_eq!(frozen.build_expectations(), &build());
     assert_eq!(frozen.build_expectations().source(), &digest(1));
     assert_eq!(frozen.build_expectations().toolchain(), &digest(2));
@@ -212,14 +210,11 @@ fn configuration_is_complete_disjoint_and_provider_exact() {
     let conditional = FipsModuleConfig::builder(&provider).require_conditional_self_tests();
     assert!(
         conditional
-            .approved_services(set(&[ProviderOperation::Hash]))
-            .and_then(|builder| builder.non_approved_services(FipsServiceSet::empty()))
+            .approved_services(FipsServiceSet::empty())
+            .and_then(|builder| builder.non_approved_services(set(&[ProviderOperation::Hash])))
             .and_then(|builder| builder.build(build()))
             .and_then(|builder| builder.environment(environment()))
-            .and_then(|builder| builder.ssp(
-                FipsSspPolicy::new(FipsSspFlow::InternalOnly, DestructionTargets::all())
-                    .unwrap_or_else(|_| unreachable!())
-            ))
+            .and_then(|builder| builder.ssp_flow(FipsSspFlow::InternalOnly))
             .and_then(|builder| builder.freeze())
             .map(|value| value.self_test_plan().contains(FipsSelfTest::Conditional))
             .unwrap_or(false)
@@ -237,7 +232,7 @@ fn self_tests_gate_services_and_failure_is_permanent() {
     let config = config(&provider);
     let session = FipsModuleSession::new(&config);
     assert!(matches!(
-        session.authorize(ProviderOperation::Hash),
+        session.service_indicator(ProviderOperation::Hash),
         Err(FipsServiceError::NotOperational)
     ));
     assert!(
@@ -245,23 +240,20 @@ fn self_tests_gate_services_and_failure_is_permanent() {
             .run_self_tests(&mut Runner(FipsSelfTestResult::Passed))
             .is_ok()
     );
-    let authorization = session.authorize(ProviderOperation::Hash);
-    assert!(authorization.is_ok());
-    let Ok(authorization) = authorization else {
+    let indicator = session.service_indicator(ProviderOperation::Hash);
+    assert!(indicator.is_ok());
+    let Ok(indicator) = indicator else {
         return;
     };
-    assert_eq!(authorization.operation(), ProviderOperation::Hash);
-    assert_eq!(
-        authorization.disposition(),
-        FipsServiceDisposition::Approved
-    );
-    assert!(authorization.is_current());
+    assert_eq!(indicator.operation(), ProviderOperation::Hash);
+    assert_eq!(indicator.disposition(), FipsServiceDisposition::NonApproved);
+    assert!(indicator.is_current());
     assert!(matches!(
-        session.authorize(ProviderOperation::AeadOpen),
+        session.service_indicator(ProviderOperation::AeadOpen),
         Err(FipsServiceError::Unsupported(ProviderOperation::AeadOpen))
     ));
     session.catastrophic_failure();
-    assert!(!authorization.is_current());
+    assert!(!indicator.is_current());
     let snapshot = session.snapshot();
     assert_eq!(snapshot.state(), FipsModuleState::Failed);
     assert_eq!(snapshot.fault(), Some(FipsModuleFault::CatastrophicFailure));

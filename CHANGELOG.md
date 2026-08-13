@@ -7,16 +7,18 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
-- Add exact, possibly empty FIPS-aware approved and non-approved service sets,
-  transactional complete provider classification, module-owned scalar or
+- Add broad FIPS-aware service-category sets with approved classification
+  fail-closed until exact algorithm identities exist, transactional complete
+  non-approved provider classification, module-owned scalar or
   accelerated environment assumptions, deterministic-build digest
-  expectations, and explicit SSP-flow/destruction policy.
+  expectations, explicit SSP flow, and provider-derived destruction policy.
 - Add an explicit trusted self-test runner boundary, private interruption-safe
-  guard, permanent failure latch, and generation-bound non-cloneable service
-  indicators that become stale after catastrophic failure.
+  guard, permanent failure latch, and generation-bound non-cloneable
+  informational service indicators that cannot authorize execution and become stale
+  after catastrophic failure.
 - Add six FIPS architecture behavior groups, four compile-fail boundary
-  examples, a SHA-256-bound four-file source policy, and twenty-three isolation,
-  classification, lifecycle, authorization, source-size, unsafe, and drift
+  examples, a SHA-256-bound four-file source policy, and twenty-four isolation,
+  classification, lifecycle, indicator, source-size, unsafe, and drift
   fixtures, including broad provider-handle escape.
 - Add exact affine pending certificate, external-signature, and accelerator
   requests with mandatory poll/cancel capability admission, applicable

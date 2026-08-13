@@ -73,21 +73,24 @@ algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
 The current `0.17.0` development milestone freezes an inert FIPS-aware provider
-architecture in `brynja-core`. Exact, possibly empty service sets classify
-every installed-provider operation once as intended approved or explicitly
-non-approved. A module configuration binds nonzero deterministic-build digests,
+architecture in `brynja-core`. Broad operation-category sets classify every
+installed-provider capability explicitly non-approved. Any nonempty approved
+set fails closed until exact algorithm, parameter, backend, and usage identities
+span the provider request and result path. A module configuration binds nonzero deterministic-build digests,
 one exact operational-environment identity, a module-owned scalar or
-accelerated backend with its complete feature bundle, and explicit SSP flow
-plus complete-copy destruction duties. The ordinary validated-module
+accelerated backend with its complete feature bundle, and explicit SSP flow;
+complete-copy destruction duties come directly from the installed provider.
+The ordinary validated-module
 placeholder, opportunistic `BackendPolicy`, runtime std detection, and the std
 CPU adapter cannot enter this boundary.
 
 An explicitly trusted self-test runner receives the exact integrity and
-algorithm-known-answer plan. Services remain unavailable until it succeeds;
+algorithm-known-answer plan. Service indicators remain unavailable until it succeeds;
 failure, reentry, interruption, unwind, or a later catastrophic event latches
 the caller-owned module session failed. Non-cloneable thread-bound service
-indicators bind one operation, disposition, provider, and health generation,
-and become stale after terminal failure. This implements no cryptographic
+indicators report one operation category, disposition, provider, and health
+generation, and become stale after terminal failure. They cannot authorize or
+execute provider work. This implements no cryptographic
 module, algorithm, provider effect, self-test algorithm, CPU kernel, SSP
 transport or erasure, deterministic binary reproduction, CMVP submission,
 certificate, independent verification, or FIPS validation.
@@ -246,8 +249,9 @@ an independent pentest.
 Brynja is not ready for application use and does not implement TLS. The latest
 crates.io checkpoint is `0.15.0`; the latest signed development tag is
 `0.16.0`. The current `0.17.0` FIPS-aware architecture milestone selects no
-crates.io publication and awaits complete local and hosted gates plus explicit
-signed-tag authorization.
+crates.io publication. Its exceptional assessment found two High design
+issues; remediation is locally green and awaits the repository-owner retest
+before hosted gates and signed-tag authorization.
 The published dependency is:
 
 ```toml

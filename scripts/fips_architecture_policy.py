@@ -15,10 +15,10 @@ SOURCES = (
     Path("crates/brynja-core/src/fips_session.rs"),
 )
 EXPECTED_SHA256 = {
-    SOURCES[0]: "373da59ccd03bbc928f21061c2eba9b2a6c7947c3a3ffc213e9c61554ac01a88",
+    SOURCES[0]: "609d08f7a449582d13dcbbcd287e2f8ff52537ffe20e4d33bf21343d0c04183c",
     SOURCES[1]: "e5816bf17e8346c9e79c698b7865c629adeccaec284f6f5c11b10b06d7254ce9",
     SOURCES[2]: "11c1011eb321ac52c391742d14254d114cbdb7832e2a263596806d1eb25d5a7f",
-    SOURCES[3]: "3ba9d21fe6db400fb059f16cda9cc40a285b94f9569dada7b0f10aeb5bcc4890",
+    SOURCES[3]: "9f5cc62c6526262d0cf382668c93c16f3bba86b86847d6d4db7b7782a028014c",
 }
 
 
@@ -83,7 +83,9 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "FipsEnvironmentError::SealedProviderExcluded",
         "features != backend.required_features()",
         "pub enum FipsSspFlow",
-        "destruction_targets.is_empty()",
+        "ssp_flow: Option<FipsSspFlow>",
+        "FipsSspPolicy::from_provider(",
+        "self.provider.destruction_targets()",
         "pub struct FipsModuleConfig",
         "approved: FipsServiceSet",
         "non_approved: FipsServiceSet",
@@ -91,6 +93,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "ServiceOverlap(operation)",
         "ServiceUnclassified(operation)",
         "ServiceUnsupported(operation)",
+        "ApprovedServicesRequireExactIdentity",
+        "if !approved.is_empty()",
         "self_tests: FipsSelfTestPlan::mandatory()",
         "pub const fn require_conditional_self_tests",
         "self.self_tests = self.self_tests.require(FipsSelfTest::Conditional)",
@@ -99,6 +103,9 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
             fail(f"FIPS configuration boundary drift: {required}")
     if re.search(r"pub\s+(?:approved|non_approved|provider|build|environment|ssp):", architecture):
         fail("FIPS configuration exposed mutable construction fields")
+    for forbidden in ("FipsSspPolicy::new(", "pub const fn ssp("):
+        if forbidden in architecture:
+            fail(f"FIPS SSP destruction duties became caller-configurable: {forbidden}")
 
     build = sources[SOURCES[1]][1]
     for required in (
@@ -141,7 +148,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         ".fail_permanently(FipsModuleFault::SelfTestFailed)",
         "self.fail_permanently(FipsModuleFault::CatastrophicFailure)",
         ".fail_permanently(FipsModuleFault::SelfTestInterrupted)",
-        "pub struct FipsServiceAuthorization",
+        "pub struct FipsServiceIndicator",
+        "pub fn service_indicator",
         "generation: record.generation",
         "snapshot.generation() == self.generation",
         "PhantomData<*mut ()>",
@@ -152,13 +160,14 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "pub fn begin_self_tests",
         "pub struct FipsSelfTestGuard",
         "pub const fn provider_handle",
-        "impl Clone for FipsServiceAuthorization",
-        "impl Copy for FipsServiceAuthorization",
+        "pub fn authorize(",
+        "impl Clone for FipsServiceIndicator",
+        "impl Copy for FipsServiceIndicator",
     ):
         if forbidden in session:
             fail(f"FIPS authorization boundary became forgeable: {forbidden}")
     if re.search(
-        r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct FipsServiceAuthorization",
+        r"#\[derive\([^]]*(?:Clone|Copy|Debug)[^]]*\)\]\s*pub struct FipsServiceIndicator",
         session,
     ):
         fail("FIPS service authorization gained duplication or formatting")

@@ -199,24 +199,26 @@ destruction, and drop handling. This upstream contract implements no provider, p
 signature, external key store, accelerator, platform effect, cryptographic
 algorithm, protocol engine, independent verification, or FIPS validation.
 
-v0.17 adds an inert FIPS-aware provider architecture. Exact, possibly empty
-service sets classify every capability of one installed provider exactly once
-as intended approved or explicitly non-approved. Transactional configuration
-rejects overlap, omission, unsupported services, duplicate fields, empty build
-digests, empty SSP destruction duties, mismatched backend ownership, and
-incomplete feature assumptions. One nonzero operational-environment identity
+v0.17 adds an inert FIPS-aware provider architecture. Broad operation-category
+sets classify every capability of one installed provider explicitly
+non-approved. Transactional configuration rejects nonempty approved sets until
+exact algorithm identities exist, plus overlap, omission, unsupported services,
+duplicate fields, empty build digests, mismatched backend ownership, and
+incomplete feature assumptions. SSP destruction duties are derived from the
+installed provider and cannot be weakened independently. One nonzero operational-environment identity
 binds one module-owned scalar or accelerated symbol class and its exact feature
 bundle. The ordinary validated-module placeholder, opportunistic
 `BackendPolicy`, runtime std detector, and std CPU adapter are excluded.
 
 An explicitly trusted runner receives the exact mandatory integrity and
-algorithm-known-answer plan. Before it passes, no service can be authorized.
+algorithm-known-answer plan. Before it passes, no service indicator is available.
 Failure, reentry, interruption, unwind, impossible state, generation
 exhaustion, or a later catastrophic event permanently fails the caller-owned
-session. A non-cloneable, non-formattable, thread-bound service indicator binds
-one operation, disposition, provider, and health generation and becomes stale
-after failure. Six behavior groups, four compile-fail examples, exact source
-hashes, and twenty-three broken policy fixtures enforce this architecture. It
+session. A non-cloneable, non-formattable, thread-bound informational service
+indicator reports one broad operation category, disposition, provider, and
+health generation, cannot authorize execution, and becomes stale after failure.
+Six behavior groups, four compile-fail examples, exact source hashes, and
+twenty-four broken policy fixtures enforce this architecture. It
 implements no module, algorithm, provider effect, self-test algorithm, CPU
 kernel, runtime detector, environment measurement, deterministic binary
 reproduction, SSP movement or erasure, CMVP submission, certificate,

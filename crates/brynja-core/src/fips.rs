@@ -5,10 +5,11 @@ use crate::{
     FipsServiceSet, InstalledProvider, ProviderOperation,
 };
 
-/// Policy classification for one exact future module service.
+/// Policy classification for one future module service.
 ///
-/// `Approved` is configuration intent only. It is not a FIPS validation claim
-/// and grants no provider or backend execution authority.
+/// `Approved` is reserved for a later exact algorithm-and-parameter identity.
+/// The current operation-category model rejects every nonempty approved set.
+/// Neither variant grants provider or backend execution authority.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[non_exhaustive]
 pub enum FipsServiceDisposition {
@@ -122,14 +123,6 @@ pub enum FipsSspFlow {
     ImportAndExport,
 }
 
-/// A closed SSP-policy construction failure.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-#[non_exhaustive]
-pub enum FipsSspError {
-    /// No destruction location was declared.
-    EmptyDestructionTargets,
-}
-
 /// Frozen SSP port and complete-copy destruction expectations.
 #[derive(Clone, Copy, Eq, Hash, PartialEq)]
 pub struct FipsSspPolicy {
@@ -138,18 +131,10 @@ pub struct FipsSspPolicy {
 }
 
 impl FipsSspPolicy {
-    /// Freezes SSP flow and all places that may retain a copy.
-    pub const fn new(
-        flow: FipsSspFlow,
-        destruction_targets: DestructionTargets,
-    ) -> Result<Self, FipsSspError> {
-        if destruction_targets.is_empty() {
-            Err(FipsSspError::EmptyDestructionTargets)
-        } else {
-            Ok(Self {
-                flow,
-                destruction_targets,
-            })
+    const fn from_provider(flow: FipsSspFlow, destruction_targets: DestructionTargets) -> Self {
+        Self {
+            flow,
+            destruction_targets,
         }
     }
 
@@ -243,6 +228,8 @@ pub enum FipsConfigurationError {
     ServiceUnclassified(ProviderOperation),
     /// A classified service was absent from the provider contract.
     ServiceUnsupported(ProviderOperation),
+    /// Operation categories are not exact enough to identify approved services.
+    ApprovedServicesRequireExactIdentity,
 }
 
 /// Transactional builder for one inert future module configuration.
@@ -253,7 +240,7 @@ pub struct FipsModuleBuilder<'provider> {
     non_approved: Option<FipsServiceSet>,
     build: Option<FipsBuildExpectations>,
     environment: Option<FipsOperationalEnvironment>,
-    ssp: Option<FipsSspPolicy>,
+    ssp_flow: Option<FipsSspFlow>,
     self_tests: FipsSelfTestPlan,
 }
 
@@ -277,7 +264,7 @@ impl<'provider> FipsModuleConfig<'provider> {
             non_approved: None,
             build: None,
             environment: None,
-            ssp: None,
+            ssp_flow: None,
             self_tests: FipsSelfTestPlan::mandatory(),
         }
     }
@@ -297,13 +284,13 @@ impl<'provider> FipsModuleConfig<'provider> {
         }
     }
 
-    /// Returns the exact intended approved-service classification.
+    /// Returns the reserved approved-category set, currently always empty.
     #[must_use]
     pub const fn approved_services(&self) -> FipsServiceSet {
         self.approved
     }
 
-    /// Returns the exact intentionally non-approved classification.
+    /// Returns the complete explicitly non-approved operation categories.
     #[must_use]
     pub const fn non_approved_services(&self) -> FipsServiceSet {
         self.non_approved
@@ -339,7 +326,7 @@ impl<'provider> FipsModuleConfig<'provider> {
 }
 
 impl<'provider> FipsModuleBuilder<'provider> {
-    /// Assigns the exact intended approved-service set.
+    /// Assigns reserved approval intent; any nonempty set fails at freeze.
     pub const fn approved_services(
         mut self,
         value: FipsServiceSet,
@@ -354,7 +341,7 @@ impl<'provider> FipsModuleBuilder<'provider> {
         }
     }
 
-    /// Assigns the exact explicitly non-approved service set.
+    /// Assigns explicitly non-approved operation categories.
     pub const fn non_approved_services(
         mut self,
         value: FipsServiceSet,
@@ -399,14 +386,14 @@ impl<'provider> FipsModuleBuilder<'provider> {
         }
     }
 
-    /// Assigns SSP port and destruction rules.
-    pub const fn ssp(mut self, value: FipsSspPolicy) -> Result<Self, FipsConfigurationError> {
-        if self.ssp.is_some() {
+    /// Assigns SSP port flow; destruction duties come from the provider.
+    pub const fn ssp_flow(mut self, value: FipsSspFlow) -> Result<Self, FipsConfigurationError> {
+        if self.ssp_flow.is_some() {
             Err(FipsConfigurationError::Duplicate(
                 FipsConfigurationField::Ssp,
             ))
         } else {
-            self.ssp = Some(value);
+            self.ssp_flow = Some(value);
             Ok(self)
         }
     }
@@ -431,7 +418,7 @@ impl<'provider> FipsModuleBuilder<'provider> {
         let environment = self.environment.ok_or(FipsConfigurationError::Incomplete(
             FipsConfigurationField::Environment,
         ))?;
-        let ssp = self.ssp.ok_or(FipsConfigurationError::Incomplete(
+        let ssp_flow = self.ssp_flow.ok_or(FipsConfigurationError::Incomplete(
             FipsConfigurationField::Ssp,
         ))?;
         for operation in ProviderOperation::ALL {
@@ -448,6 +435,10 @@ impl<'provider> FipsModuleBuilder<'provider> {
                 return Err(FipsConfigurationError::ServiceUnsupported(operation));
             }
         }
+        if !approved.is_empty() {
+            return Err(FipsConfigurationError::ApprovedServicesRequireExactIdentity);
+        }
+        let ssp = FipsSspPolicy::from_provider(ssp_flow, self.provider.destruction_targets());
         Ok(FipsModuleConfig {
             provider: self.provider,
             approved,

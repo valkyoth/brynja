@@ -41,9 +41,10 @@ def test() -> None:
     fixtures = (
         (0, "BackendIdentity::ValidatedModule", "BackendIdentity::Scalar", "configuration boundary"),
         (0, "features != backend.required_features()", "false", "configuration boundary"),
-        (0, "destruction_targets.is_empty()", "false", "configuration boundary"),
+        (0, "self.provider.destruction_targets()", "DestructionTargets::local_memory()", "configuration boundary"),
         (0, "for operation in ProviderOperation::ALL", "for operation in []", "configuration boundary"),
         (0, "ServiceOverlap(operation)", "ServiceUnclassified(operation)", "configuration boundary"),
+        (0, "if !approved.is_empty()", "if false", "configuration boundary"),
         (0, "approved: FipsServiceSet", "pub approved: FipsServiceSet", "exposed mutable"),
         (0, "self.self_tests = self.self_tests.require(FipsSelfTest::Conditional)", "return self", "configuration boundary"),
         (1, ".contains(&[0; 32])", ".contains(&[9; 32])", "deterministic-build boundary"),
@@ -57,7 +58,7 @@ def test() -> None:
         (3, ".fail_permanently(FipsModuleFault::SelfTestInterrupted)", ".fail_permanently(FipsModuleFault::ImpossibleState)", "permanent-failure boundary"),
         (3, "snapshot.generation() == self.generation", "true", "permanent-failure boundary"),
         (3, "struct FipsSelfTestGuard", "pub struct FipsSelfTestGuard", "became forgeable"),
-        (3, "pub struct FipsServiceAuthorization", "#[derive(Clone)]\npub struct FipsServiceAuthorization", "gained duplication"),
+        (3, "pub struct FipsServiceIndicator", "#[derive(Clone)]\npub struct FipsServiceIndicator", "gained duplication"),
     )
     with tempfile.TemporaryDirectory(prefix="brynja-fips-") as temporary:
         root = Path(temporary)
@@ -91,4 +92,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("FIPS policy rejects twenty-three architecture, isolation, lifecycle, authorization, size, unsafe, and hash regressions")
+    print("FIPS policy rejects twenty-four architecture, isolation, lifecycle, indicator, size, unsafe, and hash regressions")

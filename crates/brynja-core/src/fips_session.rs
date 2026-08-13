@@ -1,20 +1,20 @@
-//! Permanent-failure self-test and service-authorization state for one module.
+//! Permanent-failure self-test and service-indicator state for one module.
 //!
-//! Authorization cannot be copied or formatted into an accidental durable
+//! An indicator cannot be copied or formatted into an accidental durable
 //! service indicator:
 //!
 //! ```compile_fail
-//! use brynja_core::FipsServiceAuthorization;
+//! use brynja_core::FipsServiceIndicator;
 //! fn require_clone<T: Clone>() {}
-//! require_clone::<FipsServiceAuthorization<'static, 'static, 'static>>();
+//! require_clone::<FipsServiceIndicator<'static, 'static, 'static>>();
 //! ```
 //!
-//! Authorization also cannot cross threads:
+//! An indicator also cannot cross threads:
 //!
 //! ```compile_fail
-//! use brynja_core::FipsServiceAuthorization;
+//! use brynja_core::FipsServiceIndicator;
 //! fn require_send<T: Send>() {}
-//! require_send::<FipsServiceAuthorization<'static, 'static, 'static>>();
+//! require_send::<FipsServiceIndicator<'static, 'static, 'static>>();
 //! ```
 //!
 //! Ordinary backend policy cannot be supplied as FIPS service classification:
@@ -137,7 +137,7 @@ pub enum FipsModuleError {
     StateChanged,
 }
 
-/// A closed service-authorization failure.
+/// A closed service-indicator failure.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[non_exhaustive]
 pub enum FipsServiceError {
@@ -227,11 +227,13 @@ impl<'config, 'provider> FipsModuleSession<'config, 'provider> {
         self.fail_permanently(FipsModuleFault::CatastrophicFailure);
     }
 
-    /// Authorizes classification of one configured service only when operational.
-    pub fn authorize(
+    /// Reports one configured service classification only when operational.
+    ///
+    /// This does not authorize or execute a provider operation.
+    pub fn service_indicator(
         &self,
         operation: ProviderOperation,
-    ) -> Result<FipsServiceAuthorization<'_, 'config, 'provider>, FipsServiceError> {
+    ) -> Result<FipsServiceIndicator<'_, 'config, 'provider>, FipsServiceError> {
         let record = self.state.get();
         match record.state {
             FipsModuleState::Uninitialized | FipsModuleState::SelfTesting => {
@@ -247,7 +249,7 @@ impl<'config, 'provider> FipsModuleSession<'config, 'provider> {
             self.fail_permanently(FipsModuleFault::ImpossibleState);
             return Err(FipsServiceError::ModuleFailed);
         };
-        Ok(FipsServiceAuthorization {
+        Ok(FipsServiceIndicator {
             session: self,
             operation,
             disposition,
@@ -343,11 +345,11 @@ impl Drop for FipsSelfTestGuard<'_, '_, '_> {
     }
 }
 
-/// Non-forgeable authorization bound to one operational module session.
+/// Non-forgeable informational indicator bound to one operational session.
 ///
-/// The token reports configuration classification only. It neither executes a
-/// provider operation nor proves FIPS validation.
-pub struct FipsServiceAuthorization<'session, 'config, 'provider> {
+/// It neither authorizes nor executes a provider operation and does not prove
+/// FIPS validation.
+pub struct FipsServiceIndicator<'session, 'config, 'provider> {
     session: &'session FipsModuleSession<'config, 'provider>,
     operation: ProviderOperation,
     disposition: FipsServiceDisposition,
@@ -355,20 +357,20 @@ pub struct FipsServiceAuthorization<'session, 'config, 'provider> {
     thread_bound: PhantomData<*mut ()>,
 }
 
-impl FipsServiceAuthorization<'_, '_, '_> {
-    /// Returns the one exact operation bound to this token.
+impl FipsServiceIndicator<'_, '_, '_> {
+    /// Returns the broad operation category reported by this indicator.
     #[must_use]
     pub const fn operation(&self) -> ProviderOperation {
         self.operation
     }
 
-    /// Returns approved or non-approved configuration intent.
+    /// Returns configuration intent; currently only non-approved is reachable.
     #[must_use]
     pub const fn disposition(&self) -> FipsServiceDisposition {
         self.disposition
     }
 
-    /// Reports whether the token still matches operational module state.
+    /// Reports whether the indicator still matches operational module state.
     #[must_use]
     pub fn is_current(&self) -> bool {
         let snapshot = self.session.snapshot();

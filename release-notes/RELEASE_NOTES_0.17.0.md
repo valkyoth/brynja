@@ -1,6 +1,6 @@
 # Brynja v0.17.0 Development Milestone
 
-Status: implementation complete; awaiting green GitHub and CodeQL
+Status: remediation complete; awaiting repository-owner retest
 
 Brynja v0.17.0 freezes an inert `no_std` FIPS-aware provider architecture in
 `brynja-core`. It advances only the `brynja` facade version, selects no
@@ -9,14 +9,15 @@ scheduled v0.20.0 checkpoint will assess.
 
 ## Exact Service Separation
 
-- `FipsServiceSet` classifies each exact installed-provider operation as
-  intended approved or explicitly non-approved without implying an opposite
-  direction. Either side may be intentionally empty.
+- `FipsServiceSet` classifies broad installed-provider operation categories.
+  Every current capability must be explicitly non-approved; configuration
+  rejects every nonempty approved set until algorithm, parameter, backend, and
+  usage identities exist across the provider request and result path.
 - Transactional configuration rejects duplicate fields, overlap, an
   unclassified provider capability, or a classified operation absent from the
   exact provider contract.
-- Approved is configuration intent only. No type, value, feature, build, or
-  result represents FIPS validation.
+- The reserved approved disposition is unreachable. No operation-only value
+  authorizes provider execution or represents FIPS validation.
 
 ## Module-Owned Environment And Build Expectations
 
@@ -35,7 +36,7 @@ scheduled v0.20.0 checkpoint will assess.
 - An explicitly trusted `FipsSelfTestRunner` receives the exact mandatory
   integrity and algorithm-known-answer plan. Application code cannot directly
   obtain or complete the internal self-test guard.
-- Service authorization remains unavailable before successful self-tests.
+- Service indication remains unavailable before successful self-tests.
   Failure, reentry, interruption, panic, cancellation, impossible transition,
 generation exhaustion, or a later catastrophic event permanently latches
 the caller-owned session failed.
@@ -46,7 +47,8 @@ the caller-owned session failed.
 ## SSP Boundary
 
 - `FipsSspPolicy` freezes internal, import, export, or combined SSP movement
-  intent together with a mandatory nonempty complete-copy destruction set.
+  intent. Its complete-copy destruction set is derived from the installed
+  provider and cannot be independently weakened by a caller.
 - No memory pinning, OS service, provider effect, secret import/export,
   cryptographic operation, or erasure implementation is added by this policy
   type.
@@ -54,16 +56,33 @@ the caller-owned session failed.
 ## Verification And Limits
 
 Six behavior groups cover empty and duplicate service sets, environment and
-feature mismatch, sealed-provider exclusion, empty build digests and
-destruction duties, complete/disjoint provider classification, pre-test and
-unsupported-service rejection, successful authorization, catastrophic token
+feature mismatch, sealed-provider exclusion, empty build digests,
+complete/disjoint provider classification, nonempty-approved rejection,
+provider-derived SSP duties, pre-test and unsupported-service rejection,
+successful non-approved indication, catastrophic indicator
 invalidation, explicit test failure, interrupted test unwind, reentry, and
 permanent failure. Four compile-fail examples reject raw service-set
 fabrication, ordinary backend-policy injection, service-indicator cloning, and
 cross-thread movement.
 A SHA-256-bound four-file policy keeps every source below 500 lines, forbids
 standard-library, allocation, unsafe, FFI, runtime detection, ordinary dispatch,
-global/atomic state, and std-adapter access, and rejects twenty-three broken fixtures.
+global/atomic state, and std-adapter access, and rejects twenty-four broken fixtures.
+
+## Security Assessment And Remediation
+
+The exceptional repository-owner assessment of initial implementation commit
+`d3b8a23d42dbeb80643b1c41ce626364cbca1d9a` found two High latent design
+issues. Broad operation categories could be configured as approved before an
+exact algorithm-and-parameter identity existed, and caller-supplied SSP
+destruction duties could omit copies declared by the installed provider.
+
+Configuration now rejects every nonempty approved set, and the operation-only
+output has been renamed and constrained to an informational service indicator
+that cannot authorize or execute provider work. SSP destruction duties now
+come directly from the provider contract, removing the second source of truth.
+The local remediation is green and awaits repository-owner retest. The
+permanent report is
+[`security/pentest/v0.17.0.md`](../security/pentest/v0.17.0.md).
 
 This milestone does not implement a FIPS cryptographic module, cryptographic
 algorithm, provider effect, self-test algorithm, service execution, CPU kernel,
@@ -74,9 +93,8 @@ self-test runner remain security-critical trusted code.
 
 ## Release Process
 
-v0.17.0 is an ordinary tagged development milestone. The complete local gate,
-green GitHub and CodeQL, and explicit authorization are mandatory before its
-signed tag. It has no scheduled standalone pentest and selects no crates.io
-publication. Every change after v0.15.0 remains in the scheduled cumulative
-v0.20.0 assessment; a material finding may still trigger an earlier exceptional
-review under the release policy.
+v0.17.0 is now an exceptionally assessed development milestone. A green owner
+retest, a committed `PASS`/`PASS` report, the complete local gate, green GitHub
+and CodeQL, and explicit authorization are mandatory before its signed tag. It
+selects no crates.io publication. Every change after v0.15.0 remains in the
+scheduled cumulative v0.20.0 assessment.

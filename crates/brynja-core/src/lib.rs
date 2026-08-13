@@ -95,13 +95,13 @@ pub use exhaustion::{ExhaustionPhase, ResourceExhaustion, ResourceKind};
 pub use fips::{
     FipsBackendOwner, FipsConfigurationError, FipsConfigurationField, FipsEnvironmentError,
     FipsModuleBuilder, FipsModuleConfig, FipsOperationalEnvironment, FipsSelfTest,
-    FipsSelfTestPlan, FipsServiceDisposition, FipsSspError, FipsSspFlow, FipsSspPolicy,
+    FipsSelfTestPlan, FipsServiceDisposition, FipsSspFlow, FipsSspPolicy,
 };
 pub use fips_build::{FipsBuildError, FipsBuildExpectations};
 pub use fips_service::{FipsServiceSet, FipsServiceSetBuilder, FipsServiceSetError};
 pub use fips_session::{
     FipsModuleError, FipsModuleFault, FipsModuleSession, FipsModuleSnapshot, FipsModuleState,
-    FipsSelfTestResult, FipsSelfTestRunner, FipsServiceAuthorization, FipsServiceError,
+    FipsSelfTestResult, FipsSelfTestRunner, FipsServiceError, FipsServiceIndicator,
 };
 pub use numeric::{BoundedU64, BoundedUsize, NumericError};
 pub use pending::{

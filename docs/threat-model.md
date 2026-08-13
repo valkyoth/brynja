@@ -230,9 +230,12 @@ continuation state across recoverable activation, resume, cancellation, and
 terminal-cleanup unwinding
 without implementing a provider effect; application code cannot forge a work
 permit or authoritative completion from an informational event.
-v0.17 FIPS-aware types classify one installed provider's complete operation
-surface and bind exact build, operational-environment, backend-feature, SSP,
+v0.17 FIPS-aware types classify one installed provider's complete broad
+operation surface explicitly non-approved and bind exact build,
+operational-environment, backend-feature, provider-derived SSP destruction,
 self-test and permanent-failure assumptions without implementing a service.
+Nonempty approved sets fail until exact service identities exist, and an
+operation-only indicator cannot authorize execution.
 Ordinary backend policy, opportunistic/std dispatch, and the sealed-provider
 placeholder cannot cross that boundary. The self-test runner is explicitly
 trusted; dishonest runner success remains an operating-boundary violation, not

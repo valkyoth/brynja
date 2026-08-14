@@ -304,9 +304,10 @@ pentest, and release line. Code never changes classification silently in place.
    conflating connection failure with a FIPS-defined module error state.
 8. Add each planned v1 optional protocol facility against the unstable internal
    model without repeating ALPN, SNI, exporter, or channel-binding work.
-   Complete HPKE Base mode with bounded secret export, ordered-delivery and
-   loss invalidation, role separation, context destruction, and explicit
-   rejection of unadmitted modes before ECH consumes it. ECH
+   Complete every RFC 9180 KEM, KDF, AEAD, export-only suite and Base, PSK,
+   Auth, and AuthPSK mode with bounded secret export, ordered-delivery and loss
+   invalidation, role separation, context destruction, and a packaged public
+   usability gate before ECH consumes the exact Base-mode subset. ECH
    treats caller-resolved ECHConfigList input as hostile and separately types
    intended origin, caller-asserted provenance, generation, lifetime, and
    Required, Preferred, or GREASE-only policy; Required never falls through to

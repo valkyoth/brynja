@@ -16,10 +16,10 @@ source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a2
 "BRY-REQ-ECHEXT-0140" = 3
 "BRY-REQ-ECHREG-0140" = 1
 "BRY-REQ-HPKE-0138" = 2
-"BRY-REQ-HPKE-0139" = 2
+"BRY-REQ-HPKE-0139" = 3
 "BRY-REQ-HPKE-1391" = 2
 "BRY-REQ-HPKEREG-0138" = 1
-"BRY-REQ-HPKEX-1391" = 2
+"BRY-REQ-HPKEX-1391" = 3
 "BRY-REQ-KEYLOGREG-0010" = 3
 "BRY-REQ-LEGACY-0100" = 2
 "BRY-REQ-LEGACY-0300" = 2
@@ -168,7 +168,7 @@ rationale = "These explicitly enumerated rfc:9180 sections define HPKE KEM, KDF,
 source_id = "rfc:9180"
 requirement_id = "BRY-REQ-HPKEX-1391"
 sections = ["5.1.2", "5.1.4", "9.1.1", "9.5"]
-rationale = "These explicitly enumerated rfc:9180 sections define the explicit rejection of non-base HPKE modes; they are assigned only to BRY-REQ-HPKEX-1391, and no RFC-wide section inheritance is permitted."
+rationale = "These explicitly enumerated rfc:9180 sections define the separately versioned PSK, Auth, and AuthPSK modes; they are assigned only to BRY-REQ-HPKEX-1391, and no RFC-wide section inheritance is permitted."
 
 [[binding]]
 source_id = "rfc:9345"

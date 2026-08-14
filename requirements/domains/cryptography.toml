@@ -149,6 +149,7 @@ mapping_rationale = "The combined ChaCha20-Poly1305 semantic surface directly re
 id = "BRY-REQ-CRYPTO-0010"
 owner = "0.33.0"
 lifecycle = "planned"
+revision = 3
 decision_ids = ["algorithm.elliptic-curve"]
 sources = [{ id = "nist:NIST.FIPS.186-5.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-186.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-56Ar3.pdf", authority_role = "current" }, { id = "rfc:5480", authority_role = "current" }, { id = "rfc:5758", authority_role = "current" }, { id = "rfc:6979", authority_role = "current" }, { id = "rfc:7748", authority_role = "current" }, { id = "rfc:8813", authority_role = "current" }]
 statement = "Elliptic-curve arithmetic, encodings, key agreement, and ECDSA inputs use admitted curves, canonical values, fixed schedules, and validated public points."
@@ -158,7 +159,7 @@ positive_test = "tests/requirements/crypto_ecc.rs#official_group_and_signature_v
 negative_test = "tests/requirements/crypto_ecc.rs#invalid_points_scalars_and_shared_secrets"
 work_bound = "Field and group operations use fixed public widths and schedules with no attacker-selected allocation, limb count, or secret-dependent loop bound."
 evidence_gap = "Full-width arithmetic proofs, exceptional-input campaigns, lifecycle tests, emitted-code review, and side-channel evidence remain unresolved across v0.33.0 through v0.41.0."
-residual = "Each concrete curve and operation still requires its own milestone evidence; this bundle does not admit P-521, Ed448, or arbitrary explicit curves."
+residual = "Each concrete curve and operation still requires its own milestone evidence; this foundation does not itself admit P-521 or Ed448, which receive complete later v0.45 milestones, and arbitrary explicit curves remain excluded."
 mapping_rationale = "The elliptic-curve semantic surface directly cites the core EC, X25519, and NIST curve authorities; cross-document algorithm details remain versioned."
 
 [[requirement]]
@@ -181,6 +182,7 @@ mapping_rationale = "The RSA semantic surface directly cites RFC 8017 while the 
 id = "BRY-REQ-CRYPTO-0012"
 owner = "0.45.0"
 lifecycle = "planned"
+revision = 3
 decision_ids = ["algorithm.ed25519"]
 sources = [{ id = "rfc:8032", authority_role = "current" }, { id = "rfc:8410", authority_role = "current" }, { id = "rfc:9295", authority_role = "current" }]
 statement = "Ed25519 signing and verification enforce canonical encodings, scalar and point validity, small-order and malleability rejection, and absent AlgorithmIdentifier parameters."
@@ -190,7 +192,7 @@ positive_test = "tests/requirements/crypto_ed25519.rs#rfc8032_vectors"
 negative_test = "tests/requirements/crypto_ed25519.rs#noncanonical_and_small_order_inputs"
 work_bound = "Signing and verification use fixed public widths and bounded schedules, with no attacker-selected group size or secret-dependent iteration."
 evidence_gap = "Official vectors, malformed corpora, key-lifecycle tests, emitted-code review, and target side-channel evidence remain unresolved until v0.45.0."
-residual = "Ed448 remains excluded, and newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes."
+residual = "Ed448 remains outside this Ed25519 owner and receives its own complete v0.45.3-v0.45.5 milestones; newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes."
 mapping_rationale = "The Ed25519 semantic surface directly cites the algorithm and PKIX identifier authorities, including the current RFC 9295 clarification."
 
 [[requirement]]

@@ -120,7 +120,9 @@ The preceding v0.22.0 milestone introduced allocation-free `no_std` one-shot
 and streaming SHA-256, checked FIPS message-length exhaustion, consuming
 finalization, and an exact 32-byte digest type. `brynja-crypto` and `brynja`
 reuse that implementation rather than carrying private copies. SHA-224,
-SHA-384, SHA-512, HMAC, and final public chain acceptance remain later scope.
+SHA-384, SHA-512, SHA-512/224, SHA-512/256, the complete FIPS 202 family,
+isolated legacy SHA-1/MD5 compatibility, HMAC, and their public chain
+acceptance remain explicitly numbered later scope before 1.0.
 
 The exceptional assessment found no vulnerability and required no source
 remediation. It retained one correctly disclosed future constraint: portable
@@ -572,8 +574,8 @@ security policy, or certificate-bound operational-environment claim.
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 implements portable SHA-256; acceleration and chain acceptance remain v0.22.1-v0.22.3 |
-| Future `brynja-hash-sha3` | Reusable SHA-3 and SHAKE family ownership | Planned at v0.24.0 |
-| Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
+| Future `brynja-hash-sha3` | Complete FIPS 202 SHA-3 and SHAKE family ownership | Planned from v0.24.0 through v0.24.2 |
+| Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports portable SHA-256; other planned cryptography and provider effects remain absent |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
@@ -589,7 +591,8 @@ security policy, or certificate-bound operational-environment claim.
 | Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.165.0 |
 | Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.180.0 |
 | Future `brynja-openpgp-legacy` | Optional deprecated-algorithm compatibility with no modern facade edge | Conditional and separately isolated |
-| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.169.2; OpenPGP v4 fingerprints, protected v4 keys, and v1 SEIPD/MDC receive separate consumer reviews at v0.169.3, v0.169.5, and v0.171.2 |
+| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.24.3 and accepted at v0.24.5; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
+| Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Planned at v0.24.4 and accepted at v0.24.5 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |

@@ -199,7 +199,7 @@ def test_mandatory_explicit_decisions() -> None:
         "algorithm.legacy-pkcs1-client-signature":
             "intentionally-rejected",
         "format.ml-kem-pkix-credentials": "intentionally-rejected",
-        "protocol.hpke.non-base-modes": "intentionally-rejected",
+        "protocol.hpke.non-base-modes": "future-work",
         "format.x509.unsigned": "intentionally-rejected",
         "protocol.quic.version-specific-cryptography": "future-work",
         "facility.certificate-compression": "future-work",

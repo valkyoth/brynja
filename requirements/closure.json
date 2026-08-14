@@ -680,7 +680,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Extend the reusable `brynja-hash-sha2` family with SHA-384 and SHA-512 using official vectors and checked length and exhaustion behavior; preserve one compression, padding, streaming, CPU-backend, and provider ownership model that later standalone SHA-2 variants can reuse without duplicating TLS cryptography.",
+      "scope": "Complete `brynja-hash-sha2` with streaming and fixed-message SHA-224, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 beside the existing SHA-256 implementation; use the exact FIPS 180-4 initial values, padding, length domains, digest sizes, and SHA-512/t derivation rules, and expose all six named SHA-2 algorithms through documented public APIs without treating SHA-512/224 or SHA-512/256 as ordinary truncation.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -693,7 +693,7 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "SHA-384 And SHA-512",
+      "title": "Complete Portable SHA-2 Family",
       "version": "0.23.0"
     },
     {
@@ -702,17 +702,28 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V SHA-384/SHA-512 backends using exact specialized or parallel feature bundles; require byte-for-byte scalar equivalence for every chunking and boundary, forced-path KAT and quarantine behavior, safe static and runtime selection, native AMD, Intel, M2, AWS Arm, and available qualifying RISC-V evidence, and an explicit scalar decision wherever a backend is unavailable or fails the frozen performance margin.",
+      "scope": "Extend every admitted SHA-256-family and SHA-512-family backend to the complete six-algorithm SHA-2 surface on x86_64, AArch64, and qualifying RISC-V; reuse compression kernels without merging algorithm identities, and require per-variant KAT, chunking, exhaustion, forced-path, quarantine, native performance, emitted-code, and scalar-equivalence evidence.",
       "source_ids": [],
-      "title": "SHA-384 And SHA-512 CPU Acceleration",
+      "title": "Complete SHA-2 CPU Acceleration",
       "version": "0.23.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the SHA-2 chain with a packaged downstream fixture that uses only public APIs to hash representative real content through SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 in one-shot and irregular streaming modes, forces every admitted backend, and detects wrong IVs, wrong truncation, packaging gaps, or incomplete family documentation.",
+      "source_ids": [],
+      "title": "Complete SHA-2 Public API Usability Acceptance",
+      "version": "0.23.2"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002"
       ],
-      "scope": "Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement SHA3-256, SHA3-512, SHAKE128, and SHAKE256 as the required ML-KEM foundation; keep domain-separated fixed-output and XOF interfaces extensible for post-1.0 variants without exposing a raw permutation or duplicating protocol cryptography.",
+      "scope": "Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement all six FIPS 202 functions: SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256; expose complete fixed-output and arbitrary-length XOF APIs with exact domain separation, absorb, finalization, squeeze, length, and state-lifecycle rules without exposing a raw permutation.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -725,7 +736,7 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "Keccak SHA-3 And SHAKE",
+      "title": "Complete FIPS 202 SHA-3 And SHAKE Family",
       "version": "0.24.0"
     },
     {
@@ -734,17 +745,61 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add architecture-specific Keccak-f[1600], SHA3, and SHAKE backends for admitted x86_64, AArch64, and RISC-V vector or bit-manipulation bundles only where native benchmarks justify them; preserve domain separation, absorb, squeeze, permutation, and arbitrary-output equivalence, force every backend and tail path, and record scalar-only decisions for CPUs or operations that do not beat the portable implementation.",
+      "scope": "Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve each rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, and arbitrary tail exactly, and record scalar-only decisions where acceleration is not supportable or useful.",
       "source_ids": [],
-      "title": "Keccak SHA-3 And SHAKE CPU Acceleration",
+      "title": "Complete SHA-3 And SHAKE CPU Acceleration",
       "version": "0.24.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the FIPS 202 chain with a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental-squeeze, scalar, and every admitted accelerated path, including zero-length and multi-block output, authoritative vectors, no_std installation, and domain-separation negative tests.",
+      "source_ids": [],
+      "title": "Complete SHA-3 And SHAKE Public API Usability Acceptance",
+      "version": "0.24.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation.",
+      "source_ids": [],
+      "title": "Complete First-Party Legacy SHA-1",
+      "version": "0.24.3"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use.",
+      "source_ids": [],
+      "title": "Complete First-Party Legacy MD5",
+      "version": "0.24.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters.",
+      "source_ids": [],
+      "title": "Legacy SHA-1 And MD5 Usability And Isolation Acceptance",
+      "version": "0.24.5"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0003"
       ],
-      "scope": "Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types, require secret-owned hash state plus hardened cleanup of keys, inner/outer state, schedules, and buffered input with emitted-store evidence across the supported compiler/target matrix before keyed use, and preserve precise register/spill residuals so later standalone hashing reuses rather than copies the construction.",
+      "scope": "Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement the complete HMAC construction with long-key normalization, empty and block-boundary keys, arbitrary message partitioning, exact and policy-bounded truncation, constant-time verification, affine finalization, and hardened destruction; expose typed HMAC instantiations for every modern pre-1.0 fixed-output SHA-2 and SHA-3 digest without confusing MAC tags with unkeyed digests.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -757,15 +812,37 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "HMAC",
+      "title": "Complete Generic HMAC Construction",
       "version": "0.25.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement explicit legacy-only HMAC-SHA-1 and HMAC-MD5 adapters over the exact v0.24 implementations, with RFC vectors, truncation policy, constant-time verification, secret-state cleanup, and hard type and package isolation; keep them absent from modern defaults, TLS, PKIX, OpenPGP modern profiles, FIPS approved services, and generic algorithm negotiation.",
+      "source_ids": [],
+      "title": "Isolated HMAC-SHA-1 And HMAC-MD5 Compatibility",
+      "version": "0.25.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the HMAC chain with downstream fixtures for every modern SHA-2/SHA-3 instantiation and the separately selected legacy SHA-1/MD5 adapters, exercising one-shot, streaming, long keys, truncated verification, invalid tags, package installation, cleanup evidence, and compile-time prevention of digest/tag or modern/legacy substitution.",
+      "source_ids": [],
+      "title": "HMAC Public API Usability Acceptance",
+      "version": "0.25.2"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0004"
       ],
-      "scope": "Implement HKDF extract and expand and TLS HKDF-Expand-Label with all input and output limits explicit, introducing symbolic or bounded proof harnesses for output-length and counter exhaustion beside the implementation.",
+      "scope": "Implement complete generic RFC 5869 HKDF Extract and Expand over admitted HMAC algorithms plus TLS HKDF-Expand-Label, including absent versus empty salt, empty input and info, exact 255-block bounds, checked output and counter exhaustion, aliasing policy, secret-owned intermediate state, cleanup, and symbolic or bounded proof harnesses; modern profiles admit SHA-2 while any SHA-1 compatibility use remains isolated and explicit.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -778,15 +855,26 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "HKDF And TLS Labels",
+      "title": "Complete HKDF And TLS Labels",
       "version": "0.26.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise the packaged public HKDF API with all RFC 5869 cases, representative TLS 1.3 labels, multi-block outputs, boundary failures, irregular input ownership, modern SHA-2 instantiations, and the separately selected legacy SHA-1 compatibility path, proving no private API, allocation, std, implicit hash selection, or partial output is required.",
+      "source_ids": [],
+      "title": "HKDF Public API Usability Acceptance",
+      "version": "0.26.1"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0005"
       ],
-      "scope": "Implement portable constant-time AES-128 and AES-256 without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.",
+      "scope": "Implement the complete FIPS 197 AES-128, AES-192, and AES-256 forward and inverse ciphers with key expansion, encrypt and decrypt block APIs, official vectors, typed key sizes, immediate schedule destruction, and portable constant-time code without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -799,7 +887,7 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "Portable AES",
+      "title": "Complete Portable AES",
       "version": "0.27.0"
     },
     {
@@ -808,9 +896,9 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add isolated AES-128 and AES-256 encrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain the portable constant-time implementation, typed key ownership, identical round and key-schedule semantics, startup KAT quarantine, no_std static selection, opt-in std runtime selection, and exact per-backend side-channel and destruction residuals.",
+      "scope": "Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical key expansion, inverse, KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.",
       "source_ids": [],
-      "title": "AES x86_64 And AArch64 Acceleration",
+      "title": "Complete AES x86_64 And AArch64 Acceleration",
       "version": "0.27.1"
     },
     {
@@ -819,10 +907,21 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add RISC-V AES backends for exact ratified scalar-crypto or vector-crypto bundles only when the supported compiler line and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission, while every unsupported RISC-V build remains portable scalar without an acceleration claim.",
+      "scope": "Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission.",
       "source_ids": [],
-      "title": "AES RISC-V Acceleration Candidate",
+      "title": "Complete AES RISC-V Acceleration Candidate",
       "version": "0.27.2"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation.",
+      "source_ids": [],
+      "title": "AES Public API Usability Acceptance",
+      "version": "0.27.3"
     },
     {
       "boundary": null,
@@ -857,11 +956,22 @@
       "version": "0.28.1"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the GHASH chain with a packaged downstream fixture covering empty, partial, multi-block, incremental, scalar, and every admitted accelerated path against authoritative field and GCM-derived vectors, while proving canonical field representation, length accounting, finalization, and no_std package usability.",
+      "source_ids": [],
+      "title": "GHASH Public API Usability Acceptance",
+      "version": "0.28.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0007"
       ],
-      "scope": "Implement AES-GCM seal and open with nonce and usage limits, authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on authentication failure, and introduce its failure-atomicity proof harness beside the implementation.",
+      "scope": "Implement the complete admitted NIST SP 800-38D AES-GCM and GMAC surface over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, AAD-only GMAC, nonce and invocation limits, checked length domains, and official vectors; authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on failure, and introduce its failure-atomicity proof harness beside the implementation.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -874,7 +984,7 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "AES-GCM",
+      "title": "Complete AES-GCM And GMAC",
       "version": "0.29.0"
     },
     {
@@ -887,6 +997,17 @@
       "source_ids": [],
       "title": "Integrated Accelerated AES-GCM",
       "version": "0.29.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status.",
+      "source_ids": [],
+      "title": "AES-GCM And GMAC Public API Usability Acceptance",
+      "version": "0.29.2"
     },
     {
       "boundary": null,
@@ -951,6 +1072,17 @@
       "source_ids": [],
       "title": "Poly1305 And ChaCha20-Poly1305 CPU Acceleration",
       "version": "0.31.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the RFC 8439 chain with packaged downstream ChaCha20, Poly1305, and ChaCha20-Poly1305 operations using only public APIs, covering block and tail counters, one-time keys, AAD, in-place and disjoint buffers, tamper and exhaustion failures, official vectors, scalar and every admitted backend, and no plaintext release before authentication.",
+      "source_ids": [],
+      "title": "ChaCha20 Poly1305 And AEAD Public API Usability Acceptance",
+      "version": "0.31.2"
     },
     {
       "boundary": null,
@@ -1062,6 +1194,17 @@
       "version": "0.35.1"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the X25519 chain with a packaged downstream fixture that generates and imports keys, computes both sides of real exchanges, checks RFC 7748 vectors and iteration cases, rejects low-order and all-zero results, exercises lifecycle and cleanup failures, and forces scalar and every admitted backend without private hooks.",
+      "source_ids": [],
+      "title": "X25519 Public API Usability Acceptance",
+      "version": "0.35.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [],
       "scope": "Implement P-256 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors; introduce point-rejection, scalar-range, group-exception, and canonicalization proof harnesses beside the implementation.",
@@ -1145,6 +1288,17 @@
       "version": "0.38.1"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the P-256 chain with packaged downstream key import and generation, SEC1 point encoding and decoding, ECDH agreement, deterministic and randomized ECDSA signing and verification, malformed and low-S policy cases, scalar and admitted accelerated paths, authoritative vectors, and immediate secret-lifecycle evidence.",
+      "source_ids": [],
+      "title": "P-256 Public API Usability Acceptance",
+      "version": "0.38.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [],
       "scope": "Implement P-384 point decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, and official group vectors; introduce point-rejection, scalar-range, group-exception, and canonicalization proof harnesses beside the implementation.",
@@ -1226,6 +1380,17 @@
       "source_ids": [],
       "title": "P-384 CPU Acceleration",
       "version": "0.41.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the P-384 chain with the same packaged downstream key, point, ECDH, ECDSA, malformed-input, nonce, low-S, lifecycle, vector, scalar, and accelerated-path evidence required for P-256, using only the ordinary public P-384 API and package artifacts.",
+      "source_ids": [],
+      "title": "P-384 Public API Usability Acceptance",
+      "version": "0.41.2"
     },
     {
       "boundary": null,
@@ -1313,11 +1478,22 @@
       "version": "0.44.1"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the admitted RSA chain with packaged downstream RSA-PSS and strict PKCS1 v1.5 verification plus blinded RSA-PSS signing using validated imported keys, official and adversarial vectors, malformed encodings, CRT and fault failures, scalar and admitted accelerated arithmetic, external-signer composition, and complete intermediate destruction.",
+      "source_ids": [],
+      "title": "RSA Public API Usability Acceptance",
+      "version": "0.44.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0012"
       ],
-      "scope": "Implement Ed25519 signing and verification with canonical encoding, small-order and malleability rejection, official vectors, and constant-time secret operations.",
+      "scope": "Implement Ed25519, Ed25519ctx, and Ed25519ph signing and verification with exact domain separation, prehash and context limits, canonical encoding, small-order and malleability rejection, official vectors, and constant-time secret operations; protocol profiles can admit only the exact mode they name.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -1335,7 +1511,7 @@
         "rfc:8813",
         "rfc:9295"
       ],
-      "title": "Ed25519",
+      "title": "Complete Ed25519 RFC 8032 Family",
       "version": "0.45.0"
     },
     {
@@ -1344,10 +1520,76 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519 field, scalar, and group backends only when canonical encoding, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence remain identical; otherwise retain the portable implementation and record the decision.",
+      "scope": "Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519-family field, scalar, and group backends only when every pure, context, and prehash mode preserves canonical encoding, domain separation, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence.",
       "source_ids": [],
-      "title": "Ed25519 CPU Acceleration",
+      "title": "Ed25519 Family CPU Acceleration",
       "version": "0.45.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the complete RFC 7748 X448 field, canonical decoding policy, clamping, fixed Montgomery ladder, low-order and all-zero handling, imported-key consistency, unbiased ephemeral generation, no reuse, immediate scalar destruction, and provider-token lifecycle through a documented public API.",
+      "source_ids": [],
+      "title": "Complete X448 Field And ECDH Lifecycle",
+      "version": "0.45.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement Ed448 and Ed448ph signing and verification with exact context and prehash domain separation, canonical field, scalar and point encodings, subgroup and malleability rejection, deterministic nonce derivation, official vectors, and constant-time secret operations through a documented public API.",
+      "source_ids": [],
+      "title": "Complete Ed448 RFC 8032 Family",
+      "version": "0.45.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and admit x86_64, AArch64, and qualifying RISC-V X448 and Ed448 field, ladder, scalar, and group backends only where native performance and per-mode correctness, canonicalization, lifecycle, fault, emitted-code, and side-channel evidence pass; otherwise retain explicit scalar-only support.",
+      "source_ids": [],
+      "title": "Curve448 CPU Acceleration",
+      "version": "0.45.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the Curve25519/Curve448 signature and key-agreement families with packaged downstream X25519, X448, Ed25519, Ed25519ctx, Ed25519ph, Ed448, and Ed448ph fixtures, authoritative vectors, cross-party agreements, sign/verify and negative cases, protocol-mode separation, no_std installation, secret cleanup, and every admitted backend.",
+      "source_ids": [],
+      "title": "Complete RFC 7748 And RFC 8032 Usability Acceptance",
+      "version": "0.45.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement P-521 field and scalar arithmetic, SEC1 point encoding and decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, unbiased private generation, imported-key consistency, ECDH, invalid-secret handling, immediate destruction, and official vectors through a public API for later complete HPKE support.",
+      "source_ids": [],
+      "title": "Complete P-521 Group And ECDH",
+      "version": "0.45.6"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark separately admissible P-521 x86_64, AArch64, and qualifying RISC-V paths, retain scalar where evidence or performance is insufficient, and close the chain with packaged point, key, ECDH, malformed-input, lifecycle, vector, scalar, and admitted-backend consumer evidence.",
+      "source_ids": [],
+      "title": "P-521 Acceleration And Public API Usability Acceptance",
+      "version": "0.45.7"
     },
     {
       "boundary": null,
@@ -1357,9 +1599,9 @@
         "BRY-REQ-PQPKIX-0046",
         "BRY-REQ-TLS13-0046"
       ],
-      "scope": "Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing including RFC 9963 legacy client CertificateVerify code points, encrypted private-key containers, first-party RSA key generation, RFC 9935 ML-KEM PKIX credentials, ML-DSA, SLH-DSA, and every unimplemented algorithm family.",
+      "scope": "Freeze explicit v1 admission or exclusion for finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing including RFC 9963 legacy client CertificateVerify code points, encrypted private-key containers, first-party RSA key generation, RFC 9935 ML-KEM PKIX credentials, ML-DSA, SLH-DSA, and every unimplemented algorithm family; generate a transitive construction-to-algorithm dependency closure and prove every named instantiation, mandatory algorithm, advertised standardized family member, public operation, acceptance gate and pre-1.0 consumer has one complete owner before the substrate audit, while P-521, X448, Ed448, complete SHA-2/SHA-3, and isolated MD5/SHA-1 compatibility remain bound to their numbered owners.",
       "source_ids": [],
-      "title": "Version-One Algorithm Decisions",
+      "title": "Version-One Algorithm And Transitive Completeness Decisions",
       "version": "0.46.0"
     },
     {
@@ -3600,12 +3842,12 @@
         "BRY-REQ-HPKE-0138",
         "BRY-REQ-HPKEREG-0138"
       ],
-      "scope": "Implement HPKE DHKEM X25519 and P-256 context derivation, labeled HKDF, public-key validation, domain separation, and bounded contexts strictly downstream of validated provider ports, with no symbol, dependency, feature, dispatch, build-input, or source change to a validated FIPS module.",
+      "scope": "Implement every RFC 9180 DHKEM over P-256, P-384, P-521, X25519, and X448, all specified HKDF-SHA-256/384/512 KDF identities, AES-128-GCM, AES-256-GCM, ChaCha20-Poly1305, and export-only AEAD selection, labeled extract and expand, public-key validation, serialization, domain separation, and bounded context foundations strictly downstream of validated provider ports without changing a validated FIPS module.",
       "source_ids": [
         "iana:hpke",
         "rfc:9180"
       ],
-      "title": "HPKE KEM And Context Foundation",
+      "title": "Complete HPKE KEM KDF AEAD And Context Foundation",
       "version": "0.138.0"
     },
     {
@@ -3613,7 +3855,7 @@
       "requirement_ids": [
         "BRY-REQ-HPKE-0139"
       ],
-      "scope": "Implement RFC 9180 HPKE base mode with admitted AEADs, sequence and nonce exhaustion, seal and open failure atomicity, official vectors, and independent differential tests.",
+      "scope": "Implement complete RFC 9180 base mode across every admitted standard KEM/KDF/AEAD combination with sequence and nonce exhaustion, seal and open failure atomicity, official vectors, and independent differential tests.",
       "source_ids": [
         "rfc:9180"
       ],
@@ -3623,15 +3865,57 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-HPKE-1391",
-        "BRY-REQ-HPKEX-1391"
+        "BRY-REQ-HPKE-1391"
       ],
-      "scope": "Implement RFC 9180 Context.Export with exact exporter-context and 255*Nh output bounds, role separation, export-only AEAD policy, single-shot API decisions, ordered-open requirements, loss and cancellation invalidation, sequence-exhaustion closure, replay ownership, and immediate destruction of key, base nonce, exporter secret, and failed or discarded contexts; reject PSK, Auth, and AuthPSK modes unless separately admitted.",
+      "scope": "Implement RFC 9180 Context.Export with exact exporter-context and 255*Nh output bounds, role separation, export-only AEAD policy, ordered-open and replay ownership, loss and cancellation invalidation, sequence-exhaustion closure, and immediate destruction of key, base nonce, exporter secret, and failed or discarded contexts for every mode.",
       "source_ids": [
         "rfc:9180"
       ],
       "title": "HPKE Secret Export And Context Lifecycle",
       "version": "0.139.1"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-HPKEX-1391"
+      ],
+      "scope": "Implement RFC 9180 PSK mode with exact PSK and PSK-ID input validation, setup transcript binding, mode separation, empty-or-mismatched input rejection, caller provisioning and lifecycle rules, vectors, and no fallback to base mode.",
+      "source_ids": [],
+      "title": "HPKE PSK Mode",
+      "version": "0.139.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement RFC 9180 authenticated mode for every admitted DHKEM with sender static-key validation and possession, receiver authentication, exact KEM context, role and identity binding, vectors, uniform failure, and no substitution with signatures, certificates, or base-mode acceptance.",
+      "source_ids": [],
+      "title": "HPKE Auth Mode",
+      "version": "0.139.3"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement RFC 9180 authenticated-PSK mode by composing both independent authentication inputs without collapsing either, binding sender key, PSK, PSK ID, info, KEM/KDF/AEAD suite and role into the exact schedule, and testing every missing, swapped, mismatched, replayed, or cross-mode input.",
+      "source_ids": [],
+      "title": "HPKE AuthPSK Mode",
+      "version": "0.139.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close RFC 9180 with packaged sender and receiver fixtures for Base, PSK, Auth, and AuthPSK across every standard KEM, KDF, AEAD, and export-only combination; verify official vectors, multi-record contexts, export, exhaustion, tamper, cancellation, wrong keys and PSKs, no_std package use, exact mode reporting, and scalar or admitted accelerated primitive paths.",
+      "source_ids": [],
+      "title": "Complete HPKE Public API Usability Acceptance",
+      "version": "0.139.5"
     },
     {
       "boundary": null,
@@ -4069,7 +4353,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement bounded v4 and v6 public- and secret-key packet fields, algorithm-specific material framing, exact v4 fingerprint preimages, executable v6 fingerprints and both key-ID derivation rules, collision-aware lookup domains, exact-byte retention and uniform malformed-key rejection; defer v4 SHA-1 execution to v0.169.2 and do not yet authorize certificate validity or private-key use.",
+      "scope": "Implement bounded v4 and v6 public- and secret-key packet fields, algorithm-specific material framing, exact v4 fingerprint preimages, executable v6 fingerprints and both key-ID derivation rules, collision-aware lookup domains, exact-byte retention and uniform malformed-key rejection; defer the v4 SHA-1 consumer review to v0.169.2 and fingerprint execution to v0.169.3, and do not yet authorize certificate validity or private-key use.",
       "source_ids": [],
       "title": "OpenPGP Key Material, Fingerprints, And Key IDs",
       "version": "0.166.0"
@@ -4124,9 +4408,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement RFC 9106 Argon2id in first-party Rust with bounded memory and passes, caller-provided workspace, zeroization, KATs and hostile-parameter rejection; implement RFC 9580 Simple, Salted, Iterated and Argon2 S2K parsing and derivation with explicit deprecated-read policy, algorithm-use separation and no password-dependent diagnostics.",
+      "scope": "Implement complete RFC 9106 Argon2d, Argon2i, and Argon2id version 0x13 APIs in first-party Rust with exact indexing, lanes, segments, passes, memory rounding, variable output, caller-provided workspace, parameter and overflow bounds, KATs, differential and proof evidence, data-independent or data-dependent memory-access disclosures, cancellation, and complete password, salt, secret, associated-data, block-memory, and output-intermediate destruction.",
       "source_ids": [],
-      "title": "First-Party Argon2 And OpenPGP S2K",
+      "title": "Complete First-Party Argon2 Family",
       "version": "0.168.0"
     },
     {
@@ -4135,10 +4419,43 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement and independently evidence first-party OCB as the mandatory RFC 9580 AEAD, EAX as an optional first-party construction, and the exact optional OpenPGP GCM profile over existing first-party AES-GCM; bind nonces, associated data, chunk indices and final tags, enforce message and key limits, transactional output and uniform authentication failure, and keep OCB, EAX and every OpenPGP profile outside all FIPS-approved-service claims even when it reuses an individually approved primitive.",
+      "scope": "Close the Argon2 family through packaged downstream Argon2d/i/id fixtures and then bind only the exact RFC 9580 Argon2 S2K profile to Argon2id; implement Simple, Salted, Iterated and Argon2 S2K parsing and derivation with explicit deprecated-read policy, algorithm-use separation, hostile-parameter rejection, and no password-dependent diagnostics.",
       "source_ids": [],
-      "title": "First-Party OCB, EAX, GCM, And OpenPGP AEAD Profiles",
+      "title": "Argon2 Public API Acceptance And OpenPGP S2K",
       "version": "0.168.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party OCB3 and EAX AEAD constructions over admitted AES widths with their authoritative nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and public API requirements before any OpenPGP-specific profile consumes them.",
+      "source_ids": [],
+      "title": "Complete First-Party OCB And EAX Constructions",
+      "version": "0.168.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Bind the complete OCB, EAX, and existing GCM constructions to the exact RFC 9580 algorithm identifiers, nonces, associated data, chunk indices, final tags, message and key limits, transactional output, uniform failure, and selection policy; keep every OpenPGP profile outside FIPS-approved-service claims even when an underlying primitive is individually approved.",
+      "source_ids": [],
+      "title": "OpenPGP OCB EAX And GCM AEAD Profiles",
+      "version": "0.168.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise packaged standalone OCB3 and EAX APIs plus OpenPGP OCB, EAX, and GCM profile fixtures against authoritative vectors and real multi-chunk messages, all AES widths admitted by each standard, tamper and truncation failures, scalar and accelerated AES paths, package isolation, cleanup, and no unauthenticated plaintext release.",
+      "source_ids": [],
+      "title": "OCB EAX And OpenPGP AEAD Usability Acceptance",
+      "version": "0.168.4"
     },
     {
       "boundary": {
@@ -4146,9 +4463,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Bind RFC 9580 Ed25519 signature and X25519 encryption requirements to existing first-party curve symbols; add separately evidenced Ed448 and X448 only where admitted by the algorithm register; validate encodings, subgroup and low-order rules, ephemeral-key lifecycle, KDF context and algorithm-specific signature formatting without generic cross-protocol key reuse.",
+      "scope": "Bind RFC 9580 Ed25519 signature, X25519 encryption, Ed448 signature, and X448 encryption requirements solely to the already complete first-party RFC 8032 and RFC 7748 symbols; validate exact OpenPGP encodings, mode selection, subgroup and low-order rules, ephemeral-key lifecycle, KDF context and signature formatting without private curve copies or generic cross-protocol key reuse.",
       "source_ids": [],
-      "title": "OpenPGP Ed25519, X25519, Ed448, And X448 Profiles",
+      "title": "OpenPGP Ed25519 X25519 Ed448 And X448 Profiles",
       "version": "0.169.0"
     },
     {
@@ -4168,9 +4485,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement complete streaming and fixed-message SHA-1 once in `brynja-legacy-sha1` with official vectors, boundary lengths, checked exhaustion, caller-owned state, constant-time applicability, zeroization policy, differential, formal, fuzz, emitted-code and independent cryptographic-risk evidence; publish conspicuous collision-resistance warnings, expose no MAC, signature, certificate or protocol policy, and keep the package outside `brynja`, every modern/default/general-hash/TLS/PKIX/FIPS graph and approved claim. Direct use is explicit and unsafe for collision-resistant purposes; each internal consumer requires its own numbered admission.",
+      "scope": "Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.3 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.",
       "source_ids": [],
-      "title": "First-Party Brynja Legacy SHA-1",
+      "title": "OpenPGP Legacy SHA-1 Consumer Admission Review",
       "version": "0.169.2"
     },
     {
@@ -4179,7 +4496,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Admit the first `brynja-openpgp-legacy` consumer of `brynja-legacy-sha1`, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and reserve the protected-key and v1 SEIPD consumers for their separate v0.169.5 and v0.171.2 reviews while proving no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.",
+      "scope": "Admit the first reviewed `brynja-openpgp-legacy` SHA-1 consumer solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and reserve protected-key and v1 SEIPD consumers for v0.169.5 and v0.171.2 without reimplementing SHA-1.",
       "source_ids": [],
       "title": "OpenPGP V4 Fingerprint SHA-1 Integration",
       "version": "0.169.3"
@@ -4190,9 +4507,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement RFC 3394 AES-128 and AES-256 key wrap and unwrap in first-party Rust with caller-owned buffers, exact integrity checks, uniform failures and zeroization; bind the exact RFC 9580 X25519 and X448 HKDF inputs, labels, output sizes and wrapped-session-key formats, and provide the separately typed ECDH wrapping primitive needed by admitted v4 compatibility profiles without generic cross-protocol key reuse.",
+      "scope": "Implement complete RFC 3394 AES-128, AES-192, and AES-256 key wrap and unwrap in first-party Rust with every valid input length, caller-owned buffers, exact integrity checks, uniform failures, zeroization, authoritative vectors and public usability; bind the exact RFC 9580 X25519 and X448 HKDF inputs, labels, output sizes and wrapped-session-key formats, and provide the separately typed ECDH wrapping primitive needed by admitted v4 compatibility profiles without generic cross-protocol key reuse.",
       "source_ids": [],
-      "title": "First-Party AES Key Wrap And OpenPGP Curve Wrapping Profiles",
+      "title": "Complete First-Party AES Key Wrap And OpenPGP Curve Wrapping Profiles",
       "version": "0.169.4"
     },
     {
@@ -4212,10 +4529,32 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement explicitly selected strong-algorithm v4 compatibility profiles in `brynja-openpgp-legacy`, including RSA PKCS#1 v1.5 SHA-2 signatures, oracle-resistant RSA session-key encryption and decryption, Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH curves; permit existing-key signing or encryption only through conspicuous compatibility policy, never generate deprecated key forms, and give every omitted optional or obsolete algorithm an explicit tested rejection.",
+      "scope": "Complete strict RSASSA-PKCS1-v1_5 SHA-2 signing beside existing verification and complete oracle-resistant RSAES-PKCS1-v1_5 encryption and decryption in an isolated legacy RSA package, with exact RFC 8017 encoding, randomness, modulus, message, padding, uniform-failure, blinding, fault, cleanup, vector and public API requirements; admit no TLS key exchange, certificate-signature policy, automatic negotiation, weak digest, facade, default, or FIPS-approved edge.",
+      "source_ids": [],
+      "title": "Complete Legacy RSA PKCS1 V1.5 Operations",
+      "version": "0.169.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Bind the complete isolated RSA PKCS1 v1.5 operations and existing Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH curves into explicitly selected strong-algorithm v4 compatibility profiles in `brynja-openpgp-legacy`; permit existing-key signing or encryption only through conspicuous compatibility policy, never generate deprecated key forms, and give every omitted optional or obsolete algorithm an explicit tested rejection.",
       "source_ids": [],
       "title": "OpenPGP Strong V4 Public-Key Compatibility Profiles",
-      "version": "0.169.6"
+      "version": "0.169.7"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise complete AES key wrap, OpenPGP CFB, SHA-1 consumers, RSA PKCS1 v1.5 signing/encryption/decryption and every admitted strong-v4 profile through packaged public compatibility fixtures and archived interoperability cases, while proving uniform failures, no unauthenticated plaintext, complete cleanup, conspicuous policy, and absence from every modern, default, facade, TLS, PKIX, FIPS and implicit-negotiation graph.",
+      "source_ids": [],
+      "title": "OpenPGP Legacy Primitive Usability And Isolation Acceptance",
+      "version": "0.169.8"
     },
     {
       "boundary": {
@@ -4300,9 +4639,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement the smallest separately reusable first-party Rust DEFLATE decoder and ZLIB wrapper required by RFC 9580, with bounded history workspace, checksum, canonical error, malformed-stream and decompression-bomb defenses; add compression only when it preserves no-allocation and no-native-code rules, with compression generation remaining policy-selectable.",
+      "scope": "Implement complete first-party Rust RFC 1951 DEFLATE compression and decompression plus RFC 1950 ZLIB framing and raw ZIP profile use required by RFC 9580, with stored, fixed and dynamic blocks, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, deterministic generation policy, exact stream completion, malformed-stream and decompression-bomb defenses, public APIs, vectors, differentials and no allocation or native code.",
       "source_ids": [],
-      "title": "First-Party DEFLATE, ZIP, And ZLIB Profiles",
+      "title": "Complete First-Party DEFLATE ZIP And ZLIB Profiles",
       "version": "0.173.1"
     },
     {
@@ -6140,8 +6479,8 @@
         "protocol.hpke.non-base-modes"
       ],
       "id": "BRY-REQ-HPKEX-1391",
-      "lifecycle": "rejected",
-      "owner": "0.139.1",
+      "lifecycle": "planned",
+      "owner": "0.139.2",
       "source_ids": [
         "rfc:9180"
       ]

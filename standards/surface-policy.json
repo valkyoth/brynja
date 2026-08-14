@@ -596,7 +596,7 @@
         "disposition": "future-work",
         "domain": "hpke",
         "owner": "0.139.0",
-        "rationale": "HPKE base mode is the only admitted mode and remains future bounded cryptographic work.",
+        "rationale": "HPKE Base is implemented first and the remaining RFC 9180 modes receive their own following milestones.",
         "sources": ["rfc:9180", "iana:hpke"],
         "test_target": "tests/surface/hpke.rs#base_mode"
       },
@@ -605,12 +605,12 @@
     {
       "decision": {
         "code_target": "crates/brynja-crypto/src/hpke.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "hpke",
-        "owner": "0.139.1",
-        "rationale": "HPKE authenticated and PSK modes are excluded from the version-one API and composition model.",
+        "owner": "0.139.2",
+        "rationale": "HPKE PSK, Auth, and AuthPSK modes are implemented separately at v0.139.2 through v0.139.4 and closed by v0.139.5.",
         "sources": ["rfc:9180"],
-        "test_target": "tests/surface/hpke.rs#non_base_rejected"
+        "test_target": "tests/surface/hpke.rs#all_modes"
       },
       "id": "protocol.hpke.non-base-modes"
     },

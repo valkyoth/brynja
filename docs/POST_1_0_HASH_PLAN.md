@@ -2,9 +2,12 @@
 
 Status: non-normative post-1.0 design plan; no versions assigned
 
-This document records a potential expansion of Brynja from its TLS and RFC
-9580 OpenPGP production scope into a broader first-party Rust hashing ecosystem
-after the serious production-ready `1.0.0` release. It does not add an
+This document records only genuinely independent catalogue expansion beyond
+Brynja's complete pre-1.0 TLS, RFC 9580 OpenPGP, and transitive primitive
+scope. It is deliberately low priority: `1.0.0` has no deadline or version-count
+limit, and no standardized family member, named construction, mandatory
+algorithm, or implementation dependency of a pre-1.0 capability may be left
+here merely to shorten the pre-1.0 line. It does not add an
 implementation claim, reserve crates.io names, authorize an algorithm, or
 change the v1 secure-protocol scope.
 Actual versions, ordering, release trains, and publication selections will be
@@ -69,6 +72,10 @@ distinction visible.
   a NIST standard. FIPS use requires an exact certificate-bound module
   artifact, approved service, parameter set, self-test, operational
   environment, and service indicator.
+- Before assigning a post-1.0 version, mechanically prove that the item is not
+  a missing member, named instantiation, normative dependency, compatibility
+  dependency, or advertised consumer of any pre-1.0 family. If it is, update
+  the normative pre-1.0 plans instead.
 
 ## Dependency Architecture
 
@@ -198,7 +205,7 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | --- | --- |
 | Keyed BLAKE2 | `brynja-hash-blake2`; typed keyed mode, never confused with HMAC |
 | Keyed BLAKE3 | `brynja-hash-blake3`; keyed and derive-key modes separated |
-| HMAC | `brynja-mac-hmac`; generic only over admitted fixed-output hash traits |
+| HMAC | Reuse the complete pre-1.0 `brynja-mac-hmac`; post-1.0 work may add only independently admitted hash adapters or convenience facades |
 | KMAC | `brynja-mac-kmac`; KMAC128/KMAC256 and customization explicit |
 | Keyed MD6 | `brynja-legacy-hash-md6` or research depending security review |
 | OMAC/CMAC | `brynja-mac-cmac`; exact block-cipher and tag parameters |
@@ -224,13 +231,13 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | HAVAL | `brynja-legacy-hash-haval`; passes and output sizes explicit |
 | JH | Standalone competition family after review |
 | LSH | Standalone family with LSH-256/LSH-512 parameters explicit |
-| MD2, MD4, MD5 | Separate `brynja-legacy-hash-md*` crates with hard warnings |
+| MD2 and MD4 | Separate post-1.0 `brynja-legacy-hash-md2` and `brynja-legacy-hash-md4` crates with hard warnings; MD5 already has one complete pre-1.0 compatibility implementation and must only be re-exported, never reimplemented |
 | MD6 | Research/legacy family; tree and keyed modes separated |
 | RadioGatún | Research family with word width and output profile explicit |
 | RIPEMD, RIPEMD-128/160/256/320 | `brynja-legacy-hash-ripemd`; variants never aliased |
 | SHA-1 | Reuse the complete pre-1.0 `brynja-legacy-sha1` implementation; a post-1.0 legacy hash facade may re-export it only after a numbered consumer-specific admission and fresh audit, never by reimplementation |
-| SHA-224/256/384/512 | `brynja-hash-sha2`; pre-1.0 SHA-256/384/512 cores are reused and SHA-224 is a post-1.0 extension |
-| SHA-3 | `brynja-hash-sha3`; pre-1.0 SHA3-256/512 core is reused and other named FIPS 202 instances follow post-1.0 |
+| SHA-224/256/384/512 and SHA-512/224/256 | Reuse the complete six-member pre-1.0 `brynja-hash-sha2`; post-1.0 may add only a convenience facade or a separately standardized future SHA-2 extension |
+| SHA-3 and SHAKE | Reuse the complete pre-1.0 FIPS 202 SHA3-224/256/384/512 and SHAKE128/256 family; post-1.0 may add only derived standards such as SP 800-185, not missing FIPS 202 members |
 | Skein | Standalone family with state/output/tree parameters explicit |
 | Snefru | Legacy/research family with security status documented |
 | Spectral Hash | Research until stable authority, rights, and vectors are admitted |
@@ -248,9 +255,8 @@ gap list, not a claim that no other hash exists.
 | Missing family or variant | Required disposition |
 | --- | --- |
 | SHA-0 | Legacy/research compatibility, isolated from SHA-1 |
-| SHA-512/224, SHA-512/256, and SHA-512/t rules | Add to `brynja-hash-sha2`; FIPS 180-4 authority |
-| SHA3-224 and SHA3-384 | Add to pre-1.0 SHA-3 family without duplicating Keccak-f[1600] |
-| SHAKE128 and SHAKE256 | Already pre-1.0 for ML-KEM; expose through the XOF trait post-1.0 |
+| Future standardized SHA-2 extensions | Only algorithms published after the pre-1.0 FIPS 180-4 closure; SHA-512/224, SHA-512/256, and the required SHA-512/t derivation rules are already pre-1.0 |
+| Future standardized FIPS 202 extensions | Only algorithms outside the complete pre-1.0 SHA3-224/256/384/512 and SHAKE128/256 family |
 | cSHAKE128/256, TupleHash128/256, ParallelHash128/256 | NIST SP 800-185 derived-function family |
 | TurboSHAKE128/256 and KT128/KT256 | RFC 9861 family; separate domain and tree modes |
 | Ascon-Hash256, Ascon-XOF128, Ascon-CXOF128 | NIST SP 800-232 lightweight family |
@@ -268,10 +274,10 @@ gap list, not a claim that no other hash exists.
 | XXH3-64/128, wyhash, rapidhash, SeaHash, FxHash | Modern non-cryptographic candidates with version/seed rules |
 | aHash, MeowHash, CLHash, PolymurHash, MumHash, CrapWow | Source/rights/CPU-reviewed non-cryptographic candidates |
 | HalfSipHash and SipHash parameter variants | MAC/PRF domain with rounds, key, and output explicit |
-| GMAC | MAC construction over an admitted GCM boundary, never an unkeyed hash |
+| GMAC | Reuse the complete pre-1.0 SP 800-38D GMAC implementation; post-1.0 may add only convenience adapters |
 | Poly1305 without AES | Modern one-time authenticator; separate from historical Poly1305-AES |
 | KangarooTwelve's related experimental tree profiles | Research-only unless a stable authority is admitted |
-| Password hashing: Argon2, scrypt, bcrypt, PBKDF2, Balloon | Separate future `brynja-password-hash-*` domain; never implement through Digest |
+| Password hashing: scrypt, bcrypt, PBKDF2, Balloon | Separate future `brynja-password-hash-*` domain; never implement through Digest. Reuse the complete pre-1.0 Argon2d/i/id implementation rather than reimplementing Argon2 |
 | Content-defined chunking: Gear and FastCDC | Rolling/chunking domain with caller-owned chunk policy |
 | Consistent/rendezvous/jump hashing | Placement algorithms, not byte-hash implementations |
 | Perceptual aHash, wHash, color hash, PDQ and video profiles | Media-profile domain with exact normalization and distance thresholds |
@@ -331,10 +337,15 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
   downstream crates; do not add the external RustCrypto `digest` crate to the
   dependency-free core graph.
 
-### 3. Pre-1.0 Reuse Audit
+### 3. Pre-1.0 Completeness And Reuse Audit
 
-- Confirm SHA-2 lives in `brynja-hash-sha2`, SHA-3/SHAKE lives in
-  `brynja-hash-sha3`, and HMAC lives in `brynja-mac-hmac`.
+- Confirm all six SHA-2 functions live in `brynja-hash-sha2`, all six FIPS 202
+  SHA-3/SHAKE functions live in `brynja-hash-sha3`, complete generic HMAC lives
+  in `brynja-mac-hmac`, and legacy SHA-1, MD5, HMAC-SHA-1 and HMAC-MD5 retain
+  their exact isolated pre-1.0 owners.
+- Confirm complete AES-128/192/256 forward and inverse operations, GCM/GMAC,
+  RFC 7748/8032 curves, HPKE modes, Argon2d/i/id, OCB3 and EAX remain reused by
+  any catalogue-facing adapters instead of gaining parallel implementations.
 - Confirm `brynja-crypto`, TLS, PKI, ML-KEM, and FIPS consume those exact
   symbols rather than private copies.
 - Freeze the compression/permutation boundary so later variants reuse the
@@ -354,7 +365,8 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
 
 ### 5. Modern Cryptographic Families
 
-- Complete SHA-2 and SHA-3 variants around the pre-1.0 cores.
+- Re-export or adapt the already complete pre-1.0 SHA-2 and FIPS 202 families;
+  do not create a second implementation or defer a named standardized member.
 - Add cSHAKE/TupleHash/ParallelHash, TurboSHAKE/KangarooTwelve, Ascon,
   BLAKE2, BLAKE3, and other admitted modern families one family at a time.
 - Separate fixed digest, XOF, keyed, derive-key, personalization,
@@ -365,8 +377,9 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
 
 ### 6. MAC Families
 
-- Keep HMAC, KMAC, CMAC, PMAC, Poly1305, SipHash, HighwayHash, UMAC, VMAC,
-  and GMAC in MAC packages even when the catalogue calls them keyed hashes.
+- Reuse the complete pre-1.0 HMAC, Poly1305, and GMAC owners; keep future KMAC,
+  CMAC, PMAC, SipHash, HighwayHash, UMAC, and VMAC in MAC packages even when
+  the catalogue calls them keyed hashes.
 - Type keys, nonces, one-time-key consumption, tag sizes, verification, and
   truncation policy; comparisons are constant-time.
 - A general hash facade never offers a MAC through an unkeyed Digest trait.

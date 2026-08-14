@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
 source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a"
-surface_register_sha256 = "5f59fdf0a1f615f0b6f8c1d9b9b0239819fd6e43928c136d9f4b24a8a29800cb"
+surface_register_sha256 = "32163f1788dd27d9d99b6b08f8e022ec92c6fe7d6966b609f8b0b84100fcd729"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -818,6 +818,7 @@ id = "BRY-REQ-HPKE-0139"
 domain = "hpke"
 owner = "0.139.0"
 disposition = "future-work"
+revision = 3
 sources = ["iana:hpke", "rfc:9180"]
 surface_ids = [
   "protocol.hpke.base-mode",
@@ -889,8 +890,9 @@ surface_ids = [
 [[surface_group]]
 id = "BRY-REQ-HPKEX-1391"
 domain = "hpke"
-owner = "0.139.1"
-disposition = "intentionally-rejected"
+owner = "0.139.2"
+disposition = "future-work"
+revision = 3
 sources = ["rfc:9180"]
 surface_ids = [
   "protocol.hpke.non-base-modes",

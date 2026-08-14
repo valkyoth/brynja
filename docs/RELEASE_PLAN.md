@@ -59,6 +59,17 @@ API examples, official vectors, boundary cases, malformed or misuse cases,
 streaming or stateful use where applicable, and downstream composition tests
 are additive; private unit tests alone never establish usability.
 
+`v1.0.0` is a completeness and production-readiness boundary, not a deadline.
+The pre-1.0 line may grow to any required version. Every named instantiation,
+mandatory algorithm, advertised standardized family member, and transitive
+implementation dependency of a pre-1.0 consumer must close before `v1.0.0`
+with one complete first-party implementation and explicit evidence. A generic
+construction does not implicitly admit every historical registry value, but a
+named compatibility profile does: admitting HMAC-MD5, for example, first
+requires complete isolated MD5. Post-1.0 work is limited to genuinely
+independent catalogue families and adapters and cannot contain missing members
+or required consumers of a family already advertised before `v1.0.0`.
+
 Completeness gaps discovered before a tag are added to that milestone and block
 its exit. A gap discovered after an immutable tag must receive the next
 available patch-numbered roadmap milestone before any dependent or adjacent
@@ -2114,42 +2125,52 @@ Exit criteria:
   requirement; any discovered gap is fixed here before v0.23.0 starts;
 - `v0.22.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.23.0 - SHA-384 And SHA-512
+### v0.23.0 - Complete Portable SHA-2 Family
 
 Status: planned
 
-Plan scope: Extend the reusable `brynja-hash-sha2` family with SHA-384 and SHA-512 using official vectors and checked length and exhaustion behavior; preserve one compression, padding, streaming, CPU-backend, and provider ownership model that later standalone SHA-2 variants can reuse without duplicating TLS cryptography.
+Plan scope: Complete `brynja-hash-sha2` with streaming and fixed-message SHA-224, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 beside the existing SHA-256 implementation; use the exact FIPS 180-4 initial values, padding, length domains, digest sizes, and SHA-512/t derivation rules, and expose all six named SHA-2 algorithms through documented public APIs without treating SHA-512/224 or SHA-512/256 as ordinary truncation.
 
-Goal: complete the **SHA-384 And SHA-512** implementation stop without admitting or
-claiming adjacent capability.
+Goal: finish the complete named FIPS 180-4 SHA-2 family through reusable public
+APIs without deferring any family member past `v1.0.0`.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
+- implement distinct SHA-224, SHA-384, SHA-512, SHA-512/224 and SHA-512/256
+  public streaming, one-shot and digest types over the correct shared 32-bit or
+  64-bit compression owners;
+- encode exact per-algorithm IV, output, block, padding and checked bit-length
+  domains; implement and test the FIPS SHA-512/t IV derivation rule without
+  exposing arbitrary unsafe truncation as a named hash;
 - record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
+- run official short, long, Monte Carlo and boundary vectors for every named
+  member, including tests that distinguish SHA-512/224 and SHA-512/256 from
+  naively truncated SHA-512;
+- differentially test every streaming partition, padding boundary, checked
+  exhaustion, finalization state and public one-shot API under no_std;
 - review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- all six named SHA-2 algorithms are directly usable, independently identified
+  and fully evidenced before HMAC, HKDF, PKI, TLS, OpenPGP or FIPS consumption;
 - `v0.23.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.23.1 - SHA-384 And SHA-512 CPU Acceleration
+### v0.23.1 - Complete SHA-2 CPU Acceleration
 
 Status: planned
 
-Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V SHA-384/SHA-512 backends using exact specialized or parallel feature bundles; require byte-for-byte scalar equivalence for every chunking and boundary, forced-path KAT and quarantine behavior, safe static and runtime selection, native AMD, Intel, M2, AWS Arm, and available qualifying RISC-V evidence, and an explicit scalar decision wherever a backend is unavailable or fails the frozen performance margin.
+Plan scope: Extend every admitted SHA-256-family and SHA-512-family backend to the complete six-algorithm SHA-2 surface on x86_64, AArch64, and qualifying RISC-V; reuse compression kernels without merging algorithm identities, and require per-variant KAT, chunking, exhaustion, forced-path, quarantine, native performance, emitted-code, and scalar-equivalence evidence.
 
-Goal: accelerate the SHA-512 family only where an exact native backend improves the TLS and signature workloads that use it.
+Goal: accelerate every SHA-2 family member through shared exact kernels while
+keeping algorithm identity, output and admission evidence separate.
 
 Deliverables:
 
@@ -2159,7 +2180,9 @@ Deliverables:
 
 Verification:
 
-- differential-test official SHA-384 and SHA-512 vectors, every block and padding boundary, arbitrary chunking, truncation and exhaustion through every forced path;
+- differential-test official vectors for all six SHA-2 algorithms, every block
+  and padding boundary, arbitrary chunking, named output rule and exhaustion
+  through every forced path;
 - exercise native AMD, observed-feature Intel, M2, AWS Arm and qualifying RISC-V paths plus unsupported, KAT failure, quarantine and required-mode processes;
 - inspect per-compiler emitted code and measure transcript, HMAC, certificate-signature and long-stream sizes without averaging unsupported paths into an admission result.
 
@@ -2168,14 +2191,47 @@ Exit criteria:
 - every CPU family has an explicit evidenced backend or scalar-only decision and no wider ISA is admitted merely because it is available;
 - `v0.23.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.0 - Keccak SHA-3 And SHAKE
+### v0.23.2 - Complete SHA-2 Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement SHA3-256, SHA3-512, SHAKE128, and SHAKE256 as the required ML-KEM foundation; keep domain-separated fixed-output and XOF interfaces extensible for post-1.0 variants without exposing a raw permutation or duplicating protocol cryptography.
+Plan scope: Close the SHA-2 chain with a packaged downstream fixture that uses only public APIs to hash representative real content through SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 in one-shot and irregular streaming modes, forces every admitted backend, and detects wrong IVs, wrong truncation, packaging gaps, or incomplete family documentation.
 
-Goal: complete the **Keccak SHA-3 And SHAKE** implementation stop without admitting or
-claiming adjacent capability.
+Goal: prove an ordinary consumer can use the complete SHA-2 family exactly as
+advertised before another hash or keyed construction begins.
+
+Deliverables:
+
+- add one separately packaged downstream fixture and one documented command
+  covering every named family member without workspace-private access;
+- report the exact algorithm and actual backend and preserve the independent-
+  verification and FIPS-validation status for each result;
+- update requirements, examples, verification tables and package inventories.
+
+Verification:
+
+- hash empty, text, binary, multi-block, million-byte and file-like inputs
+  through one-shot and irregular streaming public APIs against independent
+  expected digests;
+- corrupt every IV, output length and expected digest in negative fixtures and
+  force scalar plus every natively admitted backend;
+- package, docs-test and no_std-build the normal crates across Rust 1.90.0
+  through 1.97.1 and the promised target matrix.
+
+Exit criteria:
+
+- no SHA-2 algorithm, usable API, standard behavior, package artifact or
+  documentation claim remains deferred;
+- `v0.23.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.0 - Complete FIPS 202 SHA-3 And SHAKE Family
+
+Status: planned
+
+Plan scope: Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement all six FIPS 202 functions: SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256; expose complete fixed-output and arbitrary-length XOF APIs with exact domain separation, absorb, finalization, squeeze, length, and state-lifecycle rules without exposing a raw permutation.
+
+Goal: complete the entire FIPS 202 public hash and XOF family before ML-KEM or
+other consumers depend on the permutation.
 
 Deliverables:
 
@@ -2197,11 +2253,11 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.24.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.1 - Keccak SHA-3 And SHAKE CPU Acceleration
+### v0.24.1 - Complete SHA-3 And SHAKE CPU Acceleration
 
 Status: planned
 
-Plan scope: Add architecture-specific Keccak-f[1600], SHA3, and SHAKE backends for admitted x86_64, AArch64, and RISC-V vector or bit-manipulation bundles only where native benchmarks justify them; preserve domain separation, absorb, squeeze, permutation, and arbitrary-output equivalence, force every backend and tail path, and record scalar-only decisions for CPUs or operations that do not beat the portable implementation.
+Plan scope: Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve each rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, and arbitrary tail exactly, and record scalar-only decisions where acceleration is not supportable or useful.
 
 Goal: improve SHA-3, SHAKE and later ML-KEM workloads without weakening Keccak domain or variable-output correctness.
 
@@ -2222,14 +2278,130 @@ Exit criteria:
 - every admitted permutation is domain-correct, scalar-equivalent and useful for its declared operation and length range;
 - `v0.24.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.25.0 - HMAC
+### v0.24.2 - Complete SHA-3 And SHAKE Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types, require secret-owned hash state plus hardened cleanup of keys, inner/outer state, schedules, and buffered input with emitted-store evidence across the supported compiler/target matrix before keyed use, and preserve precise register/spill residuals so later standalone hashing reuses rather than copies the construction.
+Plan scope: Close the FIPS 202 chain with a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental-squeeze, scalar, and every admitted accelerated path, including zero-length and multi-block output, authoritative vectors, no_std installation, and domain-separation negative tests.
 
-Goal: complete the **HMAC** implementation stop without admitting or
-claiming adjacent capability.
+Goal: prove the complete FIPS 202 family is usable without private permutation
+access or deferred XOF behavior.
+
+Deliverables:
+
+- provide a package-external fixture and command for SHA3-224/256/384/512 and
+  SHAKE128/256 fixed, streaming and repeated-squeeze use;
+- make algorithm, rate, suffix and backend reporting explicit and secret-free;
+- update the public verification tables and complete-family documentation.
+
+Verification:
+
+- run official examples and independent expected outputs at every rate and
+  squeeze boundary, including empty and output longer than one rate;
+- swap suffixes, rates and output types in negative fixtures and require failure;
+- package and no_std-build the exact public API across the supported matrix.
+
+Exit criteria:
+
+- all six functions work through ordinary artifacts and no family member or
+  XOF lifecycle behavior remains postponed;
+- `v0.24.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.3 - Complete First-Party Legacy SHA-1
+
+Status: planned
+
+Plan scope: Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation.
+
+Goal: provide one honest, complete compatibility implementation for every
+explicit pre-1.0 SHA-1 consumer without normalizing SHA-1 as modern security.
+
+Deliverables:
+
+- implement one-shot and streaming SHA-1, checked length, padding, finalization
+  and digest access in the isolated legacy package;
+- bind collision warnings and non-security policy into package metadata, types,
+  docs and compile-time dependency direction;
+- expose no automatic consumer or algorithm negotiation edge.
+
+Verification:
+
+- run FIPS and independent vectors, padding boundaries, million-byte,
+  partition, exhaustion, fuzz, proof and emitted-code checks;
+- prove modern graphs and policy traits cannot select or receive SHA-1;
+- package and no_std-test the direct opt-in compatibility API.
+
+Exit criteria:
+
+- SHA-1 is complete but isolated, and every use still requires a later named
+  consumer admission;
+- `v0.24.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.4 - Complete First-Party Legacy MD5
+
+Status: planned
+
+Plan scope: Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use.
+
+Goal: satisfy the explicitly planned HMAC-MD5 compatibility dependency without
+leaving a partial private MD5 or implying modern security.
+
+Deliverables:
+
+- implement complete one-shot and streaming RFC 1321 behavior and typed digest;
+- freeze hard package and policy isolation plus collision and chosen-prefix
+  warnings on every direct-use path;
+- reserve only the separately admitted legacy HMAC adapter as a pre-1.0 consumer.
+
+Verification:
+
+- run RFC 1321 and independent vectors, bit-length and padding boundaries,
+  streaming partitions, exhaustion, malformed-state and consumer tests;
+- prove no modern cryptographic policy trait, facade or protocol graph can
+  accept MD5 output;
+- package and no_std-test the explicit compatibility crate.
+
+Exit criteria:
+
+- the HMAC-MD5 dependency is fully implemented and mechanically contained;
+- `v0.24.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.5 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
+
+Status: planned
+
+Plan scope: Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters.
+
+Goal: close both legacy hash implementations with usable evidence and stronger
+containment evidence than documentation warnings alone.
+
+Deliverables:
+
+- add direct opt-in downstream fixtures and one documented compatibility command;
+- generate negative modern-graph, facade, policy-trait and FIPS fixtures;
+- record every admitted consumer identity in the algorithm register.
+
+Verification:
+
+- hash representative files via public one-shot and streaming APIs and compare
+  independent digests;
+- fail builds that introduce either package into a modern or approved graph;
+- verify warnings, package metadata, no_std support and source isolation.
+
+Exit criteria:
+
+- both legacy hashes are demonstrably usable only through explicit legacy
+  selection and cannot masquerade as modern primitives;
+- `v0.24.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.25.0 - Complete Generic HMAC Construction
+
+Status: planned
+
+Plan scope: Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement the complete HMAC construction with long-key normalization, empty and block-boundary keys, arbitrary message partitioning, exact and policy-bounded truncation, constant-time verification, affine finalization, and hardened destruction; expose typed HMAC instantiations for every modern pre-1.0 fixed-output SHA-2 and SHA-3 digest without confusing MAC tags with unkeyed digests.
+
+Goal: complete generic modern HMAC once over the admitted fixed-output hash
+contract, including every already advertised modern digest family member.
 
 Deliverables:
 
@@ -2258,14 +2430,70 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.25.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
-### v0.26.0 - HKDF And TLS Labels
+### v0.25.1 - Isolated HMAC-SHA-1 And HMAC-MD5 Compatibility
 
 Status: planned
 
-Plan scope: Implement HKDF extract and expand and TLS HKDF-Expand-Label with all input and output limits explicit, introducing symbolic or bounded proof harnesses for output-length and counter exhaustion beside the implementation.
+Plan scope: Implement explicit legacy-only HMAC-SHA-1 and HMAC-MD5 adapters over the exact v0.24 implementations, with RFC vectors, truncation policy, constant-time verification, secret-state cleanup, and hard type and package isolation; keep them absent from modern defaults, TLS, PKIX, OpenPGP modern profiles, FIPS approved services, and generic algorithm negotiation.
 
-Goal: complete the **HKDF And TLS Labels** implementation stop without admitting or
-claiming adjacent capability.
+Goal: complete the requested historical HMAC instantiations without allowing
+their hash security status to leak into modern policy.
+
+Deliverables:
+
+- bind the generic HMAC engine to exact legacy digest adapters in an isolated
+  compatibility package with distinct types and capability identities;
+- implement full key normalization, streaming, finalization, truncation,
+  verification and cleanup behavior for both profiles;
+- register every permitted and forbidden dependency edge.
+
+Verification:
+
+- run RFC HMAC-MD5 and HMAC-SHA-1 vectors plus key, message and tag boundaries;
+- inspect cleanup stores and constant-time verification and test malformed tags;
+- reject every modern, default, FIPS and implicit-negotiation graph edge.
+
+Exit criteria:
+
+- both compatibility profiles work through explicit APIs and cannot be selected
+  as modern or approved services;
+- `v0.25.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.25.2 - HMAC Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the HMAC chain with downstream fixtures for every modern SHA-2/SHA-3 instantiation and the separately selected legacy SHA-1/MD5 adapters, exercising one-shot, streaming, long keys, truncated verification, invalid tags, package installation, cleanup evidence, and compile-time prevention of digest/tag or modern/legacy substitution.
+
+Goal: prove complete modern and isolated legacy HMAC use through ordinary public
+artifacts before HKDF or protocol integration.
+
+Deliverables:
+
+- add package-external modern and legacy fixtures and documented commands;
+- enumerate every admitted hash instantiation and tag policy in generated docs;
+- make verification results authoritative typed outcomes, never equality hints.
+
+Verification:
+
+- exercise public one-shot and streaming APIs against authoritative vectors for
+  every instantiation, key class and admitted tag size;
+- force invalid, truncated, cross-algorithm and digest-as-tag misuse failures;
+- package, no_std-test and inspect cleanup for normal and legacy graphs.
+
+Exit criteria:
+
+- no named HMAC profile or public usability requirement remains incomplete;
+- `v0.25.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.26.0 - Complete HKDF And TLS Labels
+
+Status: planned
+
+Plan scope: Implement complete generic RFC 5869 HKDF Extract and Expand over admitted HMAC algorithms plus TLS HKDF-Expand-Label, including absent versus empty salt, empty input and info, exact 255-block bounds, checked output and counter exhaustion, aliasing policy, secret-owned intermediate state, cleanup, and symbolic or bounded proof harnesses; modern profiles admit SHA-2 while any SHA-1 compatibility use remains isolated and explicit.
+
+Goal: complete generic HKDF and the exact TLS label construction without hidden
+hash selection, partial output or deferred RFC behavior.
 
 Deliverables:
 
@@ -2287,11 +2515,38 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.26.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.0 - Portable AES
+### v0.26.1 - HKDF Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Implement portable constant-time AES-128 and AES-256 without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.
+Plan scope: Exercise the packaged public HKDF API with all RFC 5869 cases, representative TLS 1.3 labels, multi-block outputs, boundary failures, irregular input ownership, modern SHA-2 instantiations, and the separately selected legacy SHA-1 compatibility path, proving no private API, allocation, std, implicit hash selection, or partial output is required.
+
+Goal: close HKDF with a downstream proof of real extract, expand and TLS-label use.
+
+Deliverables:
+
+- add package-external modern and legacy fixtures plus one documented command;
+- expose exact algorithm, limit and failure behavior without secret diagnostics;
+- connect the fixture to packaging, no_std and version-matrix gates.
+
+Verification:
+
+- run every RFC 5869 vector and representative TLS labels through public APIs;
+- test 0, 1, 255 and 256-block requests, absent/empty salt and partial-output
+  rollback plus cleanup on success and failure;
+- reject implicit legacy selection and cross-hash PRK substitution.
+
+Exit criteria:
+
+- downstream consumers can perform every admitted HKDF operation without later
+  implementation work;
+- `v0.26.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.27.0 - Complete Portable AES
+
+Status: planned
+
+Plan scope: Implement the complete FIPS 197 AES-128, AES-192, and AES-256 forward and inverse ciphers with key expansion, encrypt and decrypt block APIs, official vectors, typed key sizes, immediate schedule destruction, and portable constant-time code without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.
 
 Goal: complete the **Portable AES** implementation stop without admitting or
 claiming adjacent capability.
@@ -2316,11 +2571,11 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.27.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.1 - AES x86_64 And AArch64 Acceleration
+### v0.27.1 - Complete AES x86_64 And AArch64 Acceleration
 
 Status: planned
 
-Plan scope: Add isolated AES-128 and AES-256 encrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain the portable constant-time implementation, typed key ownership, identical round and key-schedule semantics, startup KAT quarantine, no_std static selection, opt-in std runtime selection, and exact per-backend side-channel and destruction residuals.
+Plan scope: Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical key expansion, inverse, KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.
 
 Goal: admit hardware AES on the available x86_64 and AArch64 systems while preserving the portable implementation as the semantic and unsupported-target fallback.
 
@@ -2341,11 +2596,11 @@ Exit criteria:
 - each admitted AES backend is exact-feature guarded, scalar-equivalent, independently healthy and measurably useful on its named native systems;
 - `v0.27.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.2 - AES RISC-V Acceleration Candidate
+### v0.27.2 - Complete AES RISC-V Acceleration Candidate
 
 Status: planned
 
-Plan scope: Add RISC-V AES backends for exact ratified scalar-crypto or vector-crypto bundles only when the supported compiler line and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission, while every unsupported RISC-V build remains portable scalar without an acceleration claim.
+Plan scope: Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission.
 
 Goal: prepare RISC-V AES acceleration without conflating generic RV64, the base vector extension and the exact AES crypto extensions.
 
@@ -2365,6 +2620,34 @@ Exit criteria:
 
 - RISC-V AES is natively evidenced before admission and all other RISC-V deployments stay visibly scalar;
 - `v0.27.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.27.3 - AES Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation.
+
+Goal: prove complete AES-128/192/256 encryption and decryption are usable before
+GHASH, GCM, key wrap, OCB, EAX or CFB composition.
+
+Deliverables:
+
+- add one external-style fixture for every key width and direction;
+- expose exact backend identity without exposing unsafe dispatch authority;
+- record public examples, key lifetime and non-mode limitations.
+
+Verification:
+
+- run FIPS 197 cipher, inverse-cipher and key-schedule vectors plus round trips;
+- force scalar and every admitted backend, wrong keys, corrupt rounds and KAT
+  quarantine while checking schedule destruction;
+- package and no_std-test all three typed APIs across the matrix.
+
+Exit criteria:
+
+- the complete AES block cipher is directly usable and no inverse or key-width
+  behavior is deferred to a later mode;
+- `v0.27.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.28.0 - GHASH
 
@@ -2420,14 +2703,39 @@ Exit criteria:
 - every active GHASH path is independently admitted and representation-equivalent before AES-GCM may pair with it;
 - `v0.28.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.29.0 - AES-GCM
+### v0.28.2 - GHASH Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Implement AES-GCM seal and open with nonce and usage limits, authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on authentication failure, and introduce its failure-atomicity proof harness beside the implementation.
+Plan scope: Close the GHASH chain with a packaged downstream fixture covering empty, partial, multi-block, incremental, scalar, and every admitted accelerated path against authoritative field and GCM-derived vectors, while proving canonical field representation, length accounting, finalization, and no_std package usability.
 
-Goal: complete the **AES-GCM** implementation stop without admitting or
-claiming adjacent capability.
+Goal: make the GHASH boundary independently executable and reviewable before GCM composition.
+
+Deliverables:
+
+- provide a package-external incremental fixture and documented command;
+- expose only the bounded GHASH operation, never raw backend authority;
+- document that GHASH alone is not a general digest or authentication decision.
+
+Verification:
+
+- run authoritative multiplication and composed vectors over every partition and tail;
+- force scalar, accelerated, corrupt, unsupported and quarantined paths;
+- package and no_std-test the exact ordinary API.
+
+Exit criteria:
+
+- GHASH is complete, scalar-equivalent and independently usable for its precise construction role;
+- `v0.28.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.29.0 - Complete AES-GCM And GMAC
+
+Status: planned
+
+Plan scope: Implement the complete admitted NIST SP 800-38D AES-GCM and GMAC surface over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, AAD-only GMAC, nonce and invocation limits, checked length domains, and official vectors; authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on failure, and introduce its failure-atomicity proof harness beside the implementation.
+
+Goal: complete GCM encryption/authentication and its GMAC authentication-only
+specialization across the complete AES key-width family.
 
 Deliverables:
 
@@ -2473,6 +2781,33 @@ Exit criteria:
 
 - every accelerated pair preserves scalar AEAD semantics and exceeds the frozen end-to-end margin on its declared native range;
 - `v0.29.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.29.2 - AES-GCM And GMAC Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status.
+
+Goal: prove the complete admitted SP 800-38D surface is usable without weakening
+failure atomicity or confusing algorithm approval with module validation.
+
+Deliverables:
+
+- add downstream GCM and GMAC fixtures and documented commands;
+- enumerate supported IV/tag domains and invocation limits in generated docs;
+- expose actual paired-backend and validation status without selection authority.
+
+Verification:
+
+- run authoritative vectors across every key, IV, tag, AAD and message class;
+- tamper every input and verify unchanged failure output and no plaintext release;
+- force every pair, quarantine and exhaustion path and package/no_std-test them.
+
+Exit criteria:
+
+- GCM and GMAC have no missing admitted operation, parameter, packaging or
+  public-usability behavior before protocol use;
+- `v0.29.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.30.0 - ChaCha20
 
@@ -2581,6 +2916,31 @@ Exit criteria:
 
 - admitted component pairs are scalar-equivalent, failure-atomic, independently reportable and useful at representative TLS sizes;
 - `v0.31.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.31.2 - ChaCha20 Poly1305 And AEAD Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the RFC 8439 chain with packaged downstream ChaCha20, Poly1305, and ChaCha20-Poly1305 operations using only public APIs, covering block and tail counters, one-time keys, AAD, in-place and disjoint buffers, tamper and exhaustion failures, official vectors, scalar and every admitted backend, and no plaintext release before authentication.
+
+Goal: prove every RFC 8439 primitive and composed operation is complete and usable.
+
+Deliverables:
+
+- add package-external stream, authenticator and AEAD fixtures and commands;
+- expose exact overlap, counter, nonce, tag and one-time-key contracts;
+- update public verification and backend tables.
+
+Verification:
+
+- run all RFC vectors and representative streaming messages through public APIs;
+- force counters, tails, invalid tags, overlaps, exhaustion and every backend;
+- prove cleanup and unchanged failure output under package and no_std builds.
+
+Exit criteria:
+
+- no RFC 8439 operation or consumer-facing behavior remains deferred;
+- `v0.31.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.32.0 - Fixed-Limb RSA Arithmetic
 
@@ -2723,6 +3083,32 @@ Exit criteria:
 - each admitted X25519 path retains the complete scalar security contract and independent native evidence;
 - `v0.35.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.35.2 - X25519 Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the X25519 chain with a packaged downstream fixture that generates and imports keys, computes both sides of real exchanges, checks RFC 7748 vectors and iteration cases, rejects low-order and all-zero results, exercises lifecycle and cleanup failures, and forces scalar and every admitted backend without private hooks.
+
+Goal: demonstrate complete, interoperable X25519 through the public package.
+
+Deliverables:
+
+- provide public two-party exchange and imported-key fixtures;
+- expose authoritative agreement or rejection outcomes and exact backend identity;
+- document key generation, reuse, input and destruction rules.
+
+Verification:
+
+- run RFC vectors, iteration cases and cross-party agreement plus malformed,
+  low-order, all-zero, reused and faulted paths;
+- force scalar and every admitted backend and verify secret cleanup;
+- package and no_std-test the ordinary API.
+
+Exit criteria:
+
+- a downstream user can safely complete the entire advertised X25519 lifecycle;
+- `v0.35.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.36.0 - P-256 Group Operations
 
 Status: planned
@@ -2834,6 +3220,32 @@ Exit criteria:
 
 - no P-256 operation inherits admission from a different operation and every secret path retains fixed-schedule evidence;
 - `v0.38.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.38.2 - P-256 Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the P-256 chain with packaged downstream key import and generation, SEC1 point encoding and decoding, ECDH agreement, deterministic and randomized ECDSA signing and verification, malformed and low-S policy cases, scalar and admitted accelerated paths, authoritative vectors, and immediate secret-lifecycle evidence.
+
+Goal: prove the complete advertised P-256 group, ECDH and ECDSA surface through public artifacts.
+
+Deliverables:
+
+- add package-external key, point, agreement and signature fixtures;
+- document encoding, nonce, low-S, validation and destruction policy;
+- report exact operation and backend without cross-operation substitution.
+
+Verification:
+
+- run authoritative group, ECDH and ECDSA vectors plus real two-party and
+  sign/verify workflows;
+- test invalid points, scalars, encodings, nonces, signatures, faults and cleanup;
+- force scalar and every admitted backend under package/no_std builds.
+
+Exit criteria:
+
+- P-256 is fully usable without private helpers or later completion work;
+- `v0.38.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.39.0 - P-384 Group Operations
 
@@ -2947,6 +3359,32 @@ Exit criteria:
 - every P-384 CPU path is independently useful and evidenced or explicitly rejected in favor of scalar;
 - `v0.41.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.41.2 - P-384 Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the P-384 chain with the same packaged downstream key, point, ECDH, ECDSA, malformed-input, nonce, low-S, lifecycle, vector, scalar, and accelerated-path evidence required for P-256, using only the ordinary public P-384 API and package artifacts.
+
+Goal: prove the complete advertised P-384 surface independently of P-256.
+
+Deliverables:
+
+- add P-384-specific package-external key, point, agreement and signature fixtures;
+- document all parameter, encoding, nonce, policy and lifecycle rules;
+- keep P-256/P-384 types and backend identities non-interchangeable.
+
+Verification:
+
+- repeat authoritative group, ECDH, ECDSA, malformed, fault and cleanup matrices
+  at P-384 widths;
+- force scalar and every admitted P-384 backend;
+- package and no_std-test only public symbols.
+
+Exit criteria:
+
+- P-384 has complete independent public usability evidence;
+- `v0.41.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.42.0 - RSA-PSS Verification
 
 Status: planned
@@ -3059,11 +3497,37 @@ Exit criteria:
 - accelerated RSA cannot bypass blinding, validation or fault detection and each arithmetic symbol has traceable proof and native evidence;
 - `v0.44.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.0 - Ed25519
+### v0.44.2 - RSA Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Implement Ed25519 signing and verification with canonical encoding, small-order and malleability rejection, official vectors, and constant-time secret operations.
+Plan scope: Close the admitted RSA chain with packaged downstream RSA-PSS and strict PKCS1 v1.5 verification plus blinded RSA-PSS signing using validated imported keys, official and adversarial vectors, malformed encodings, CRT and fault failures, scalar and admitted accelerated arithmetic, external-signer composition, and complete intermediate destruction.
+
+Goal: demonstrate every admitted RSA operation through its public API before PKI or protocol use.
+
+Deliverables:
+
+- add external-style verification, signing and external-signer fixtures;
+- document key validation, modulus, exponent, salt, encoding and lifecycle policy;
+- preserve strict operation and padding-scheme type separation.
+
+Verification:
+
+- run official and adversarial PSS/PKCS1 vectors and real sign/verify workflows;
+- inject malformed keys, padding, CRT, blinding, provider and arithmetic faults;
+- force scalar and admitted arithmetic backends and verify all cleanup duties.
+
+Exit criteria:
+
+- admitted RSA is directly usable and no required verification or PSS signing
+  behavior remains deferred;
+- `v0.44.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.0 - Complete Ed25519 RFC 8032 Family
+
+Status: planned
+
+Plan scope: Implement Ed25519, Ed25519ctx, and Ed25519ph signing and verification with exact domain separation, prehash and context limits, canonical encoding, small-order and malleability rejection, official vectors, and constant-time secret operations; protocol profiles can admit only the exact mode they name.
 
 Goal: complete the **Ed25519** implementation stop without admitting or
 claiming adjacent capability.
@@ -3088,11 +3552,11 @@ Exit criteria:
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
 - `v0.45.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
-### v0.45.1 - Ed25519 CPU Acceleration
+### v0.45.1 - Ed25519 Family CPU Acceleration
 
 Status: planned
 
-Plan scope: Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519 field, scalar, and group backends only when canonical encoding, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence remain identical; otherwise retain the portable implementation and record the decision.
+Plan scope: Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519-family field, scalar, and group backends only when every pure, context, and prehash mode preserves canonical encoding, domain separation, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence.
 
 Goal: optimize Ed25519 without accepting a faster but weaker verification equation, encoding policy or secret-scalar schedule.
 
@@ -3113,11 +3577,163 @@ Exit criteria:
 - no optimized verification path weakens canonical or subgroup policy and every signing path retains fixed-schedule evidence;
 - `v0.45.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.0 - Version-One Algorithm Decisions
+### v0.45.2 - Complete X448 Field And ECDH Lifecycle
 
 Status: planned
 
-Plan scope: Freeze explicit v1 admission or exclusion for P-521, Ed448, finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing including RFC 9963 legacy client CertificateVerify code points, encrypted private-key containers, first-party RSA key generation, RFC 9935 ML-KEM PKIX credentials, ML-DSA, SLH-DSA, and every unimplemented algorithm family.
+Plan scope: Implement the complete RFC 7748 X448 field, canonical decoding policy, clamping, fixed Montgomery ladder, low-order and all-zero handling, imported-key consistency, unbiased ephemeral generation, no reuse, immediate scalar destruction, and provider-token lifecycle through a documented public API.
+
+Goal: complete X448 as a first-class key-agreement primitive before HPKE and OpenPGP consume it.
+
+Deliverables:
+
+- implement field, ladder, encoding, key generation/import and full ECDH lifecycle;
+- add proof harnesses for field bounds, ladder schedule and exceptional inputs;
+- keep X25519 and X448 keys, groups and tokens non-interchangeable.
+
+Verification:
+
+- run RFC vectors and iterations, scalar differentials, low-order/all-zero and
+  imported-key cases, lifecycle misuse and cleanup evidence;
+- test no_std and supported targets without requiring acceleration;
+- run public two-party agreement examples.
+
+Exit criteria:
+
+- X448 is complete and directly usable before any profile binding;
+- `v0.45.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.3 - Complete Ed448 RFC 8032 Family
+
+Status: planned
+
+Plan scope: Implement Ed448 and Ed448ph signing and verification with exact context and prehash domain separation, canonical field, scalar and point encodings, subgroup and malleability rejection, deterministic nonce derivation, official vectors, and constant-time secret operations through a documented public API.
+
+Goal: complete the Curve448 signature family before OpenPGP profile integration.
+
+Deliverables:
+
+- implement pure and prehash modes with exact RFC domain separation and contexts;
+- add field, scalar, point, encoding, nonce and signature proof harnesses;
+- expose typed modes that protocol profiles cannot confuse.
+
+Verification:
+
+- run every RFC vector plus malformed encoding, subgroup, context, prehash,
+  nonce and malleability cases;
+- inspect constant-time and cleanup evidence across compilers and targets;
+- run public sign/verify examples under no_std-compatible APIs.
+
+Exit criteria:
+
+- both Ed448 modes are complete before protocol consumption;
+- `v0.45.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.4 - Curve448 CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and admit x86_64, AArch64, and qualifying RISC-V X448 and Ed448 field, ladder, scalar, and group backends only where native performance and per-mode correctness, canonicalization, lifecycle, fault, emitted-code, and side-channel evidence pass; otherwise retain explicit scalar-only support.
+
+Goal: accelerate Curve448 only where exact native evidence justifies the added code.
+
+Deliverables:
+
+- isolate each kernel and exact feature bundle behind existing backend contracts;
+- retain scalar encoding, domain, lifecycle and policy ownership;
+- register separate X448 and Ed448 KAT, health and quarantine identities.
+
+Verification:
+
+- force every direct kernel and complete operation against scalar corpora;
+- test unsupported features, KAT faults, quarantine and required mode;
+- collect native and emitted-code evidence on each qualifying architecture.
+
+Exit criteria:
+
+- every active Curve448 path is exact, useful and independently quarantinable;
+- `v0.45.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.5 - Complete RFC 7748 And RFC 8032 Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the Curve25519/Curve448 signature and key-agreement families with packaged downstream X25519, X448, Ed25519, Ed25519ctx, Ed25519ph, Ed448, and Ed448ph fixtures, authoritative vectors, cross-party agreements, sign/verify and negative cases, protocol-mode separation, no_std installation, secret cleanup, and every admitted backend.
+
+Goal: prove every named RFC 7748 and RFC 8032 operation is publicly complete.
+
+Deliverables:
+
+- add package-external agreement and signature fixtures for every named mode;
+- document precise protocol-safe selection and non-interchangeable types;
+- update verification tables per algorithm and backend.
+
+Verification:
+
+- run authoritative vectors and representative real workflows for every mode;
+- test cross-mode, context, encoding, low-order, all-zero and signature misuse;
+- force scalar and every admitted backend under package/no_std builds.
+
+Exit criteria:
+
+- neither RFC family has an unimplemented named operation or hidden API gap;
+- `v0.45.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.6 - Complete P-521 Group And ECDH
+
+Status: planned
+
+Plan scope: Implement P-521 field and scalar arithmetic, SEC1 point encoding and decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, unbiased private generation, imported-key consistency, ECDH, invalid-secret handling, immediate destruction, and official vectors through a public API for later complete HPKE support.
+
+Goal: provide the complete P-521 DHKEM dependency required by the full RFC 9180 suite set.
+
+Deliverables:
+
+- implement P-521 arithmetic, points, validation, encodings and ECDH lifecycle;
+- introduce production-width and reduced-width proof claims with residual gaps;
+- maintain distinct P-256/P-384/P-521 types and backend identities.
+
+Verification:
+
+- run official field, point, scalar and ECDH vectors and malformed cases;
+- inspect fixed schedules, constant-time behavior and secret cleanup;
+- exercise public key import, generation and two-party agreement.
+
+Exit criteria:
+
+- P-521 ECDH is complete before HPKE KEM construction begins;
+- `v0.45.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.7 - P-521 Acceleration And Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Benchmark separately admissible P-521 x86_64, AArch64, and qualifying RISC-V paths, retain scalar where evidence or performance is insufficient, and close the chain with packaged point, key, ECDH, malformed-input, lifecycle, vector, scalar, and admitted-backend consumer evidence.
+
+Goal: close P-521 with honest backend decisions and downstream usability evidence.
+
+Deliverables:
+
+- register optimized candidates or reviewed scalar-only decisions per CPU family;
+- provide one package-external P-521 ECDH fixture and command;
+- update backend, proof and verification-status evidence.
+
+Verification:
+
+- force each candidate/admitted backend against scalar and official vectors;
+- test invalid points, keys, secrets, lifecycle and cleanup failures;
+- package and no_std-test the direct public P-521 API.
+
+Exit criteria:
+
+- P-521 is usable and every architecture has an evidenced acceleration disposition;
+- `v0.45.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.0 - Version-One Algorithm And Transitive Completeness Decisions
+
+Status: planned
+
+Plan scope: Freeze explicit v1 admission or exclusion for finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing including RFC 9963 legacy client CertificateVerify code points, encrypted private-key containers, first-party RSA key generation, RFC 9935 ML-KEM PKIX credentials, ML-DSA, SLH-DSA, and every unimplemented algorithm family; generate a transitive construction-to-algorithm dependency closure and prove every named instantiation, mandatory algorithm, advertised standardized family member, public operation, acceptance gate and pre-1.0 consumer has one complete owner before the substrate audit, while P-521, X448, Ed448, complete SHA-2/SHA-3, and isolated MD5/SHA-1 compatibility remain bound to their numbered owners.
 
 Goal: complete the **Version-One Algorithm Decisions** implementation stop without admitting or
 claiming adjacent capability.
@@ -6808,11 +7424,11 @@ Exit criteria:
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.137.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.138.0 - HPKE KEM And Context Foundation
+### v0.138.0 - Complete HPKE KEM KDF AEAD And Context Foundation
 
 Status: planned
 
-Plan scope: Implement HPKE DHKEM X25519 and P-256 context derivation, labeled HKDF, public-key validation, domain separation, and bounded contexts strictly downstream of validated provider ports, with no symbol, dependency, feature, dispatch, build-input, or source change to a validated FIPS module.
+Plan scope: Implement every RFC 9180 DHKEM over P-256, P-384, P-521, X25519, and X448, all specified HKDF-SHA-256/384/512 KDF identities, AES-128-GCM, AES-256-GCM, ChaCha20-Poly1305, and export-only AEAD selection, labeled extract and expand, public-key validation, serialization, domain separation, and bounded context foundations strictly downstream of validated provider ports without changing a validated FIPS module.
 
 Goal: complete the **HPKE KEM And Context Foundation** implementation stop without admitting or
 claiming adjacent capability.
@@ -6841,7 +7457,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement RFC 9180 HPKE base mode with admitted AEADs, sequence and nonce exhaustion, seal and open failure atomicity, official vectors, and independent differential tests.
+Plan scope: Implement complete RFC 9180 base mode across every admitted standard KEM/KDF/AEAD combination with sequence and nonce exhaustion, seal and open failure atomicity, official vectors, and independent differential tests.
 
 Goal: complete the **HPKE Base Mode** implementation stop without admitting or
 claiming adjacent capability.
@@ -6870,7 +7486,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement RFC 9180 Context.Export with exact exporter-context and 255*Nh output bounds, role separation, export-only AEAD policy, single-shot API decisions, ordered-open requirements, loss and cancellation invalidation, sequence-exhaustion closure, replay ownership, and immediate destruction of key, base nonce, exporter secret, and failed or discarded contexts; reject PSK, Auth, and AuthPSK modes unless separately admitted.
+Plan scope: Implement RFC 9180 Context.Export with exact exporter-context and 255*Nh output bounds, role separation, export-only AEAD policy, ordered-open and replay ownership, loss and cancellation invalidation, sequence-exhaustion closure, and immediate destruction of key, base nonce, exporter secret, and failed or discarded contexts for every mode.
 
 Goal: complete the **HPKE Secret Export And Context Lifecycle** implementation stop without admitting or
 claiming adjacent capability.
@@ -6901,6 +7517,107 @@ Exit criteria:
 - the complete admitted HPKE base-mode context interface includes bounded
   export and deterministic destruction, and no unsupported mode is reachable;
 - `v0.139.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.139.2 - HPKE PSK Mode
+
+Status: planned
+
+Plan scope: Implement RFC 9180 PSK mode with exact PSK and PSK-ID input validation, setup transcript binding, mode separation, empty-or-mismatched input rejection, caller provisioning and lifecycle rules, vectors, and no fallback to base mode.
+
+Goal: complete the HPKE PSK authentication mode as an exact, non-fallback construction.
+
+Deliverables:
+
+- implement sender and receiver setup with typed PSK and PSK-ID ownership;
+- bind mode, suite, info and PSK inputs to the schedule and context lifecycle;
+- preserve uniform failure, cleanup and resource bounds.
+
+Verification:
+
+- run official PSK vectors across admitted suites and multi-record contexts;
+- reject absent, empty, mismatched, substituted and cross-mode inputs;
+- test sequence exhaustion, tamper, cancellation and secret destruction.
+
+Exit criteria:
+
+- PSK mode is complete and cannot fall back to or be confused with Base;
+- `v0.139.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.139.3 - HPKE Auth Mode
+
+Status: planned
+
+Plan scope: Implement RFC 9180 authenticated mode for every admitted DHKEM with sender static-key validation and possession, receiver authentication, exact KEM context, role and identity binding, vectors, uniform failure, and no substitution with signatures, certificates, or base-mode acceptance.
+
+Goal: complete sender-authenticated HPKE with exact DHKEM and context semantics.
+
+Deliverables:
+
+- implement Auth setup for every admitted KEM and suite;
+- bind sender static and ephemeral keys, receiver key, mode and info exactly;
+- define external-key operation tokens without exporting static secrets.
+
+Verification:
+
+- run official Auth vectors and real sender/receiver exchanges;
+- reject wrong sender, receiver, role, key, mode, encoding and context inputs;
+- test provider failure, cancellation, exhaustion and cleanup.
+
+Exit criteria:
+
+- Auth mode is complete and independently typed from signatures and Base mode;
+- `v0.139.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.139.4 - HPKE AuthPSK Mode
+
+Status: planned
+
+Plan scope: Implement RFC 9180 authenticated-PSK mode by composing both independent authentication inputs without collapsing either, binding sender key, PSK, PSK ID, info, KEM/KDF/AEAD suite and role into the exact schedule, and testing every missing, swapped, mismatched, replayed, or cross-mode input.
+
+Goal: complete the fourth RFC 9180 mode without weakening either authentication input.
+
+Deliverables:
+
+- implement sender and receiver AuthPSK setup over all admitted suites;
+- maintain distinct key and PSK ownership, lifecycle and diagnostics;
+- prohibit downgrade or fallback when either authentication input fails.
+
+Verification:
+
+- run official AuthPSK vectors and multi-record contexts;
+- exhaustively swap, omit, corrupt and cross-bind all identity inputs;
+- test tamper, exhaustion, cancellation, provider failure and cleanup.
+
+Exit criteria:
+
+- AuthPSK requires and authenticates both inputs on every successful context;
+- `v0.139.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.139.5 - Complete HPKE Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close RFC 9180 with packaged sender and receiver fixtures for Base, PSK, Auth, and AuthPSK across every standard KEM, KDF, AEAD, and export-only combination; verify official vectors, multi-record contexts, export, exhaustion, tamper, cancellation, wrong keys and PSKs, no_std package use, exact mode reporting, and scalar or admitted accelerated primitive paths.
+
+Goal: prove the complete RFC 9180 algorithm and mode matrix through public packages.
+
+Deliverables:
+
+- add external-style sender/receiver fixtures and one matrix-driving command;
+- generate the supported KEM/KDF/AEAD/mode register from executable cases;
+- document FIPS disposition per underlying service and complete HPKE context.
+
+Verification:
+
+- execute every official vector and representative real exchange across the matrix;
+- test wrong mode, suite, key, PSK, identity, order, tamper and exhaustion;
+- package and no_std-test public APIs with every admitted primitive backend.
+
+Exit criteria:
+
+- all four modes and every RFC 9180 standard algorithm identity are complete,
+  packaged and usable before ECH consumption;
+- `v0.139.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.140.0 - ECH Origin And Downgrade Policy
 
@@ -7949,7 +8666,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement bounded v4 and v6 public- and secret-key packet fields, algorithm-specific material framing, exact v4 fingerprint preimages, executable v6 fingerprints and both key-ID derivation rules, collision-aware lookup domains, exact-byte retention and uniform malformed-key rejection; defer v4 SHA-1 execution to v0.169.2 and do not yet authorize certificate validity or private-key use.
+Plan scope: Implement bounded v4 and v6 public- and secret-key packet fields, algorithm-specific material framing, exact v4 fingerprint preimages, executable v6 fingerprints and both key-ID derivation rules, collision-aware lookup domains, exact-byte retention and uniform malformed-key rejection; defer the v4 SHA-1 consumer review to v0.169.2 and fingerprint execution to v0.169.3, and do not yet authorize certificate validity or private-key use.
 
 Goal: parse and identify key material without conflating identifiers with
 authentication, trust or authority to execute cryptography.
@@ -8075,11 +8792,11 @@ Exit criteria:
 - protected secret material has a complete custody contract and cannot be exposed by a partial or unauthenticated transition;
 - `v0.167.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.168.0 - First-Party Argon2 And OpenPGP S2K
+### v0.168.0 - Complete First-Party Argon2 Family
 
 Status: planned
 
-Plan scope: Implement RFC 9106 Argon2id in first-party Rust with bounded memory and passes, caller-provided workspace, zeroization, KATs and hostile-parameter rejection; implement RFC 9580 Simple, Salted, Iterated and Argon2 S2K parsing and derivation with explicit deprecated-read policy, algorithm-use separation and no password-dependent diagnostics.
+Plan scope: Implement complete RFC 9106 Argon2d, Argon2i, and Argon2id version 0x13 APIs in first-party Rust with exact indexing, lanes, segments, passes, memory rounding, variable output, caller-provided workspace, parameter and overflow bounds, KATs, differential and proof evidence, data-independent or data-dependent memory-access disclosures, cancellation, and complete password, salt, secret, associated-data, block-memory, and output-intermediate destruction.
 
 Goal: provide a from-scratch password derivation boundary that cannot allocate,
 overcommit resources or import a foreign cryptographic implementation.
@@ -8101,11 +8818,11 @@ Exit criteria:
 - S2K execution is bounded, first-party, independently evidenced and cannot weaken modern password policy silently;
 - `v0.168.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.168.1 - First-Party OCB, EAX, GCM, And OpenPGP AEAD Profiles
+### v0.168.1 - Argon2 Public API Acceptance And OpenPGP S2K
 
 Status: planned
 
-Plan scope: Implement and independently evidence first-party OCB as the mandatory RFC 9580 AEAD, EAX as an optional first-party construction, and the exact optional OpenPGP GCM profile over existing first-party AES-GCM; bind nonces, associated data, chunk indices and final tags, enforce message and key limits, transactional output and uniform authentication failure, and keep OCB, EAX and every OpenPGP profile outside all FIPS-approved-service claims even when it reuses an individually approved primitive.
+Plan scope: Close the Argon2 family through packaged downstream Argon2d/i/id fixtures and then bind only the exact RFC 9580 Argon2 S2K profile to Argon2id; implement Simple, Salted, Iterated and Argon2 S2K parsing and derivation with explicit deprecated-read policy, algorithm-use separation, hostile-parameter rejection, and no password-dependent diagnostics.
 
 Goal: add the RFC 9580 AEAD requirements without creating a FIPS claim or an
 external cryptographic dependency.
@@ -8127,11 +8844,86 @@ Exit criteria:
 - OCB and EAX are reusable first-party constructions, all three exact OpenPGP profiles are bounded, and their non-FIPS status is unambiguous;
 - `v0.168.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.169.0 - OpenPGP Ed25519, X25519, Ed448, And X448 Profiles
+### v0.168.2 - Complete First-Party OCB And EAX Constructions
 
 Status: planned
 
-Plan scope: Bind RFC 9580 Ed25519 signature and X25519 encryption requirements to existing first-party curve symbols; add separately evidenced Ed448 and X448 only where admitted by the algorithm register; validate encodings, subgroup and low-order rules, ephemeral-key lifecycle, KDF context and algorithm-specific signature formatting without generic cross-protocol key reuse.
+Plan scope: Implement complete first-party OCB3 and EAX AEAD constructions over admitted AES widths with their authoritative nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and public API requirements before any OpenPGP-specific profile consumes them.
+
+Goal: complete both standalone AEAD constructions before protocol profiling.
+
+Deliverables:
+
+- implement full OCB3 and EAX public APIs over admitted AES widths;
+- freeze nonce, tag, AAD, streaming, overlap, limit and key-lifecycle domains;
+- introduce failure-atomicity, arithmetic and cleanup harnesses.
+
+Verification:
+
+- run authoritative vectors across every admitted parameter and boundary;
+- test tamper, truncation, overlap, nonce/key limits and unchanged failures;
+- differentially exercise scalar and accelerated AES with no_std packages.
+
+Exit criteria:
+
+- both AEADs are independently usable and evidenced before OpenPGP binding;
+- `v0.168.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.168.3 - OpenPGP OCB EAX And GCM AEAD Profiles
+
+Status: planned
+
+Plan scope: Bind the complete OCB, EAX, and existing GCM constructions to the exact RFC 9580 algorithm identifiers, nonces, associated data, chunk indices, final tags, message and key limits, transactional output, uniform failure, and selection policy; keep every OpenPGP profile outside FIPS-approved-service claims even when an underlying primitive is individually approved.
+
+Goal: add exact OpenPGP AEAD profiles without duplicating or weakening their primitives.
+
+Deliverables:
+
+- map every profile field and limit to the exact underlying typed construction;
+- bind chunk/final authentication and plaintext release to authoritative state;
+- keep profile and underlying-service approval identities distinct.
+
+Verification:
+
+- run RFC profile vectors and generated multi-chunk boundary cases;
+- reorder, truncate, duplicate and tamper chunks, indices, AAD and final tags;
+- prove complete output withholding and cleanup across provider failures.
+
+Exit criteria:
+
+- every admitted RFC 9580 AEAD profile is exact and no FIPS status is inferred;
+- `v0.168.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.168.4 - OCB EAX And OpenPGP AEAD Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise packaged standalone OCB3 and EAX APIs plus OpenPGP OCB, EAX, and GCM profile fixtures against authoritative vectors and real multi-chunk messages, all AES widths admitted by each standard, tamper and truncation failures, scalar and accelerated AES paths, package isolation, cleanup, and no unauthenticated plaintext release.
+
+Goal: close the standalone and OpenPGP AEAD chains through downstream evidence.
+
+Deliverables:
+
+- add package-external standalone and profile fixtures and commands;
+- document exact supported parameter matrices and validation status;
+- update algorithm, provider and OpenPGP verification tables.
+
+Verification:
+
+- execute authoritative and real message cases through only public APIs;
+- force every parameter, backend, tamper, truncation and exhaustion path;
+- package/no_std-test and prove unchanged failure output and secret cleanup.
+
+Exit criteria:
+
+- OCB, EAX and admitted OpenPGP profiles have no deferred usable behavior;
+- `v0.168.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.0 - OpenPGP Ed25519 X25519 Ed448 And X448 Profiles
+
+Status: planned
+
+Plan scope: Bind RFC 9580 Ed25519 signature, X25519 encryption, Ed448 signature, and X448 encryption requirements solely to the already complete first-party RFC 8032 and RFC 7748 symbols; validate exact OpenPGP encodings, mode selection, subgroup and low-order rules, ephemeral-key lifecycle, KDF context and signature formatting without private curve copies or generic cross-protocol key reuse.
 
 Goal: expose only exact OpenPGP curve profiles over already reviewed primitive
 symbols, with no generic or cross-protocol key ambiguity.
@@ -8179,37 +8971,42 @@ Exit criteria:
 - weak historical capability is either absent or conspicuously isolated and can never be negotiated or selected by the modern facade;
 - `v0.169.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.169.2 - First-Party Brynja Legacy SHA-1
+### v0.169.2 - OpenPGP Legacy SHA-1 Consumer Admission Review
 
 Status: planned
 
-Plan scope: Implement complete streaming and fixed-message SHA-1 once in `brynja-legacy-sha1` with official vectors, boundary lengths, checked exhaustion, caller-owned state, constant-time applicability, zeroization policy, differential, formal, fuzz, emitted-code and independent cryptographic-risk evidence; publish conspicuous collision-resistance warnings, expose no MAC, signature, certificate or protocol policy, and keep the package outside `brynja`, every modern/default/general-hash/TLS/PKIX/FIPS graph and approved claim. Direct use is explicit and unsafe for collision-resistant purposes; each internal consumer requires its own numbered admission.
+Plan scope: Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.3 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.
 
-Goal: implement SHA-1 exactly once as a complete but visibly legacy primitive
-whose dangerous properties and downstream authority cannot be hidden.
+Goal: review the already complete SHA-1 owner once for three narrowly bounded
+OpenPGP compatibility consumers without changing its implementation identity.
 
 Deliverables:
 
-- implement complete caller-buffer streaming, reset and fixed-message SHA-1 with checked bit-length accounting, exact digest output and no hidden allocation;
-- publish warnings and types that never claim collision resistance, MAC safety, signature suitability, password security, certificate policy or FIPS approval;
-- freeze package and feature isolation from `brynja`, modern/default/general-hash/TLS/PKIX/FIPS graphs while requiring a numbered review for every internal consumer.
+- verify the v0.24.3 implementation, package, vectors, warning and evidence
+  hashes remain exact and suitable for only the named input domains;
+- assign separate non-interchangeable fingerprint, protected-key and MDC
+  consumer identities with their own data, output and cleanup rules;
+- freeze package and feature isolation from every modern/default/general-hash/
+  TLS/PKIX/password/MAC/FIPS graph.
 
 Verification:
 
-- run official and published SHA-1 vectors, million-byte, padding-boundary, chunking, reset, fixed/streaming equivalence, overflow and independent differential cases;
-- fuzz state transitions and lengths, prove checked accounting and transactional output, inspect emitted code and document constant-time and zeroization applicability;
-- complete independent cryptographic-risk, package-warning, no_std, MSRV/latest, graph-isolation and repository review.
+- rerun the complete v0.24.3-v0.24.5 SHA-1 evidence on the exact candidate;
+- test consumer-domain and preimage separation plus collision-risk policy and
+  complete cleanup for each proposed use;
+- graph-test every permitted and forbidden edge and complete independent risk review.
 
 Exit criteria:
 
-- complete SHA-1 is reusable without reimplementation, but no Brynja internal graph may consume it until a separate numbered admission defines exact safe compatibility use;
+- the exact complete SHA-1 owner is approved only as input to later separate
+  fingerprint, protected-key and MDC integration milestones;
 - `v0.169.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.169.3 - OpenPGP V4 Fingerprint SHA-1 Integration
 
 Status: planned
 
-Plan scope: Admit the first `brynja-openpgp-legacy` consumer of `brynja-legacy-sha1`, solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and reserve the protected-key and v1 SEIPD consumers for their separate v0.169.5 and v0.171.2 reviews while proving no modern OpenPGP, facade, default, TLS, PKIX, password, MAC or FIPS edge. Later legacy protocols and the post-1.0 legacy hash facade may reuse the exact implementation only after their own numbered integration review, without reimplementing SHA-1.
+Plan scope: Admit the first reviewed `brynja-openpgp-legacy` SHA-1 consumer solely for RFC 9580 v4 fingerprint and key-ID derivation; bind exact key-packet preimages, require full-fingerprint collision-aware comparisons, prohibit SHA-1 signatures and generation, and reserve protected-key and v1 SEIPD consumers for v0.169.5 and v0.171.2 without reimplementing SHA-1.
 
 Goal: admit one exact RFC 9580 compatibility use while preserving the complete
 legacy primitive as the sole SHA-1 implementation.
@@ -8231,11 +9028,11 @@ Exit criteria:
 - v4 fingerprints interoperate through one exact legacy edge while SHA-1 signing, generation and every unauthorized consumer remain impossible;
 - `v0.169.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.169.4 - First-Party AES Key Wrap And OpenPGP Curve Wrapping Profiles
+### v0.169.4 - Complete First-Party AES Key Wrap And OpenPGP Curve Wrapping Profiles
 
 Status: planned
 
-Plan scope: Implement RFC 3394 AES-128 and AES-256 key wrap and unwrap in first-party Rust with caller-owned buffers, exact integrity checks, uniform failures and zeroization; bind the exact RFC 9580 X25519 and X448 HKDF inputs, labels, output sizes and wrapped-session-key formats, and provide the separately typed ECDH wrapping primitive needed by admitted v4 compatibility profiles without generic cross-protocol key reuse.
+Plan scope: Implement complete RFC 3394 AES-128, AES-192, and AES-256 key wrap and unwrap in first-party Rust with every valid input length, caller-owned buffers, exact integrity checks, uniform failures, zeroization, authoritative vectors and public usability; bind the exact RFC 9580 X25519 and X448 HKDF inputs, labels, output sizes and wrapped-session-key formats, and provide the separately typed ECDH wrapping primitive needed by admitted v4 compatibility profiles without generic cross-protocol key reuse.
 
 Goal: make mandatory X25519 encryption executable through an exact reviewed
 key-wrapping construction rather than an implicit provider promise.
@@ -8283,31 +9080,94 @@ Exit criteria:
 - admitted protected v4 secret keys can be imported without exposing plaintext early or granting legacy protection a modern or FIPS claim;
 - `v0.169.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.169.6 - OpenPGP Strong V4 Public-Key Compatibility Profiles
+### v0.169.6 - Complete Legacy RSA PKCS1 V1.5 Operations
 
 Status: planned
 
-Plan scope: Implement explicitly selected strong-algorithm v4 compatibility profiles in `brynja-openpgp-legacy`, including RSA PKCS#1 v1.5 SHA-2 signatures, oracle-resistant RSA session-key encryption and decryption, Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH curves; permit existing-key signing or encryption only through conspicuous compatibility policy, never generate deprecated key forms, and give every omitted optional or obsolete algorithm an explicit tested rejection.
+Plan scope: Complete strict RSASSA-PKCS1-v1_5 SHA-2 signing beside existing verification and complete oracle-resistant RSAES-PKCS1-v1_5 encryption and decryption in an isolated legacy RSA package, with exact RFC 8017 encoding, randomness, modulus, message, padding, uniform-failure, blinding, fault, cleanup, vector and public API requirements; admit no TLS key exchange, certificate-signature policy, automatic negotiation, weak digest, facade, default, or FIPS-approved edge.
 
-Goal: support common strong v4 certificates and messages through reviewed
-profiles rather than claiming compatibility from packet parsing alone.
+Goal: complete the exact legacy RSA primitives needed by strong OpenPGP v4
+compatibility before binding them to packet profiles.
 
 Deliverables:
 
-- implement exact OpenPGP RSA signature and PKESK encodings with strict padding, blinding, fault checks, uniform failure and SHA-2-only generation policy;
-- implement exact Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH key, signature, KDF, wrap and wire profiles over existing first-party primitives;
-- publish an operation matrix for every RFC 9580 public-key algorithm and curve, including explicit generation, signing, encryption, verification, decryption or rejection decisions.
+- implement complete RSAES encrypt/decrypt and RSASSA sign/verify compatibility
+  APIs with strict RFC 8017 encodings and SHA-2-only signature selection;
+- enforce randomness, blinding, CRT/fault, uniform-failure, input-limit and
+  complete intermediate destruction requirements;
+- isolate every symbol and type from modern RSA policy and protocol negotiation.
 
 Verification:
 
-- interoperate on archived and generated v4 RSA, legacy-25519 and admitted ECDSA/ECDH certificates, signatures and encrypted messages;
-- exercise PKCS#1 oracles, invalid points, malformed MPIs, KDF confusion, weak hashes, key-size policy, cross-profile substitution and every rejected algorithm;
-- pass constant-time, zeroization, formal, fuzz, no_std, graph-isolation, independent compatibility-risk and repository review.
+- run RFC 8017 and independent signing, verification, encryption and decryption
+  vectors across admitted modulus and SHA-2 profiles;
+- exercise every padding byte, short message, wrong key, oracle, blinding, CRT,
+  randomness, fault and cleanup path with uniform external failure;
+- pass formal, fuzz, side-channel, no_std, graph-isolation and independent risk review.
 
 Exit criteria:
 
-- common strong v4 operations are executable only through explicit compatibility policy and every unsupported optional or obsolete profile fails predictably;
+- all required legacy RSA operations are complete but remain unusable by a
+  protocol until a separately typed profile integration admits them;
 - `v0.169.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.7 - OpenPGP Strong V4 Public-Key Compatibility Profiles
+
+Status: planned
+
+Plan scope: Bind the complete isolated RSA PKCS1 v1.5 operations and existing Ed25519Legacy, Curve25519Legacy and admitted ECDSA/ECDH curves into explicitly selected strong-algorithm v4 compatibility profiles in `brynja-openpgp-legacy`; permit existing-key signing or encryption only through conspicuous compatibility policy, never generate deprecated key forms, and give every omitted optional or obsolete algorithm an explicit tested rejection.
+
+Goal: support common strong v4 certificates and messages through reviewed
+profiles rather than claiming compatibility from primitive availability.
+
+Deliverables:
+
+- bind exact OpenPGP RSA, legacy-25519 and admitted ECDSA/ECDH wire profiles to
+  their complete first-party primitive owners;
+- enforce existing-key, SHA-2, algorithm, KDF, wrap, purpose and warning policy;
+- publish an operation matrix for every RFC 9580 public-key algorithm and curve.
+
+Verification:
+
+- interoperate on archived and generated v4 certificates, signatures and messages;
+- exercise malformed MPIs, KDF confusion, weak hashes, key policy,
+  cross-profile substitution and every rejected algorithm;
+- pass oracle, constant-time, cleanup, fuzz, no_std and graph-isolation review.
+
+Exit criteria:
+
+- strong v4 operations require explicit compatibility policy and every omitted
+  optional or obsolete profile fails predictably;
+- `v0.169.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.8 - OpenPGP Legacy Primitive Usability And Isolation Acceptance
+
+Status: planned
+
+Plan scope: Exercise complete AES key wrap, OpenPGP CFB, SHA-1 consumers, RSA PKCS1 v1.5 signing/encryption/decryption and every admitted strong-v4 profile through packaged public compatibility fixtures and archived interoperability cases, while proving uniform failures, no unauthenticated plaintext, complete cleanup, conspicuous policy, and absence from every modern, default, facade, TLS, PKIX, FIPS and implicit-negotiation graph.
+
+Goal: close all admitted legacy primitives and strong-v4 profiles through public
+compatibility evidence before the OpenPGP cryptography audit.
+
+Deliverables:
+
+- add package-external fixtures for each primitive and composed v4 operation;
+- provide one explicit compatibility command and generated warning matrix;
+- mechanically enumerate every allowed and forbidden consumer edge.
+
+Verification:
+
+- run authoritative vectors and archived interoperable keys/messages through
+  only public package APIs;
+- force tamper, oracle, wrong-key, weak-algorithm, cleanup and plaintext-release
+  cases across scalar and admitted accelerated primitives;
+- package/no_std-test the compatibility closure and reject every modern graph edge.
+
+Exit criteria:
+
+- every admitted legacy operation is complete, usable only by explicit choice,
+  and isolated before independent audit;
+- `v0.169.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.170.0 - OpenPGP Key And Cryptography Audit Gate
 
@@ -8491,26 +9351,32 @@ Exit criteria:
 - packet sequences are bounded and no compression path exists without explicit caller resource authority;
 - `v0.173.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.173.1 - First-Party DEFLATE, ZIP, And ZLIB Profiles
+### v0.173.1 - Complete First-Party DEFLATE ZIP And ZLIB Profiles
 
 Status: planned
 
-Plan scope: Implement the smallest separately reusable first-party Rust DEFLATE decoder and ZLIB wrapper required by RFC 9580, with bounded history workspace, checksum, canonical error, malformed-stream and decompression-bomb defenses; add compression only when it preserves no-allocation and no-native-code rules, with compression generation remaining policy-selectable.
+Plan scope: Implement complete first-party Rust RFC 1951 DEFLATE compression and decompression plus RFC 1950 ZLIB framing and raw ZIP profile use required by RFC 9580, with stored, fixed and dynamic blocks, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, deterministic generation policy, exact stream completion, malformed-stream and decompression-bomb defenses, public APIs, vectors, differentials and no allocation or native code.
 
-Goal: satisfy RFC 9580 decompression expectations without importing a native or
-third-party compression engine into the protocol graph.
+Goal: provide complete bounded DEFLATE and ZLIB generation and consumption so
+OpenPGP does not depend on a partial decoder or foreign compression engine.
 
 Deliverables:
 
-- implement bit, Huffman, stored and back-reference decoding in small reviewed modules over caller-owned history storage;
-- implement raw ZIP/DEFLATE and ZLIB framing, Adler-32, stream completion and exact consumed/written accounting;
-- expose bounded decompression through the frozen provider port and keep compression generation separately selectable and nonessential.
+- implement stored, fixed and dynamic block encoding and decoding, canonical
+  Huffman construction and back-reference processing in small reviewed modules;
+- implement raw ZIP/DEFLATE and ZLIB framing, Adler-32, deterministic encoder
+  choices, stream completion and exact consumed/written accounting;
+- expose bounded compression and decompression through public caller-workspace
+  APIs and the frozen OpenPGP provider port.
 
 Verification:
 
-- run published, independently generated and adversarial fixed, dynamic and stored-block corpora including invalid trees and distances;
+- run published, independently generated and adversarial compression and
+  decompression corpora for fixed, dynamic and stored blocks including invalid
+  trees and distances;
 - test bombs, ratio, output, history, work, nesting, truncation, checksum, capacity and cancellation at every byte and bit boundary;
-- complete differentials, fuzzing, formal bounds, Miri, no_std, independent parser audit and repository checks.
+- complete round-trip and independent encode/decode differentials, fuzzing,
+  formal bounds, Miri, no_std, independent codec audit and repository checks.
 
 Exit criteria:
 

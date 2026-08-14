@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "6fe29840bfd83d1278c2a960d977b468ac7da44c6c5e190c1a0a8cec0319b0b3",
+  "policy_sha256": "903e373da6f93960458a048ea35ad47ab1757e51ada2d2a2a0f12152e0324000",
   "schema": 2,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
   "surfaces": [
@@ -141662,7 +141662,7 @@
         "iana:hpke"
       ],
       "owner": "0.139.0",
-      "rationale": "HPKE base mode is the only admitted mode and remains future bounded cryptographic work.",
+      "rationale": "HPKE Base is implemented first and the remaining RFC 9180 modes receive their own following milestones.",
       "test_target": "tests/surface/hpke.rs#base_mode"
     },
     {
@@ -141695,16 +141695,16 @@
     },
     {
       "code_target": "crates/brynja-crypto/src/hpke.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "hpke",
       "id": "protocol.hpke.non-base-modes",
       "kind": "semantic",
       "normative_sources": [
         "rfc:9180"
       ],
-      "owner": "0.139.1",
-      "rationale": "HPKE authenticated and PSK modes are excluded from the version-one API and composition model.",
-      "test_target": "tests/surface/hpke.rs#non_base_rejected"
+      "owner": "0.139.2",
+      "rationale": "HPKE PSK, Auth, and AuthPSK modes are implemented separately at v0.139.2 through v0.139.4 and closed by v0.139.5.",
+      "test_target": "tests/surface/hpke.rs#all_modes"
     },
     {
       "code_target": "crates/brynja-pki/src/ocsp.rs",

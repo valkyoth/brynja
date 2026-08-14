@@ -32,8 +32,9 @@ owner milestones, and 483 surfaces. v0.3.5 adds 49 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
 authorities, 182 reviewed normative sections, and 765 formerly uncovered
 surfaces.
-The complete closure covers 127 currently locked authorities, 274 roadmap
-rows, and 4,449 currently registered surfaces. The 36 new OpenPGP-phase rows are
+The complete closure covers 127 currently locked authorities, 305 modern roadmap
+rows plus eight independent legacy stages, and 4,449 currently registered
+surfaces. The OpenPGP-phase rows are
 explicitly fenced as planned-authority admission: v0.163.0 must authenticate
 RFC 9580, its obsoleted lineage, referenced algorithm and compression sources,
 errata, and the OpenPGP Parameters registry and then generate exact requirement
@@ -89,8 +90,10 @@ The following are deliberate boundaries rather than omissions:
   ML-KEM is used only in the separately gated ephemeral hybrid key exchange.
 - TLS 1.2 and DTLS 1.2 reject static RSA, finite-field DH, static ECDH, CBC,
   compression, MD5/SHA-1 signatures, renegotiation, and automatic fallback.
-- HPKE v1 admits Base mode only. PSK, Auth, and AuthPSK modes require a future
-  separately versioned decision.
+- HPKE v1 implements Base, PSK, Auth, and AuthPSK plus every RFC 9180 standard
+  KEM, KDF, AEAD, and export-only identity through v0.138.0-v0.139.5. ECH
+  consumes only its exact required Base-mode subset and cannot widen itself to
+  another mode.
 - QUIC transport versions, Initial secrets, packet protection, Retry integrity,
   packet numbers, loss recovery, congestion control, key phase, and transport
   semantic enforcement remain outside `brynja-quic-tls`.

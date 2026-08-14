@@ -182,12 +182,14 @@ Version 0.3.1 adds explicit protocol-surface decisions:
   formats, legacy protocols, and operational facilities;
 - all 192 nested registries and all 4,106 individual records across the eight
   pinned IANA collections receive a deterministic disposition;
-- every one of the 4,424 total surfaces records normative sources, owning
+- every one of the 4,449 current generated surfaces records normative sources, owning
   milestone, planned code target, planned test target, and rationale;
 - required exclusions explicitly cover Heartbeat, status_request_v2,
   production SSLKEYLOGFILE, TLS 1.3 post-handshake authentication,
   certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX
-  credentials, HPKE non-base modes, and unsigned X.509 certificates;
+  credentials and unsigned X.509 certificates; the original HPKE non-base-mode
+  exclusion is now superseded by separately planned v0.139.2-v0.139.5
+  PSK/Auth/AuthPSK implementation and acceptance milestones;
 - QUIC version-specific cryptography and certificate compression remain
   explicit bounded future work, while unknown extensions are safely ignored
   only where protocol rules permit; and
@@ -265,9 +267,10 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   local-only checksum-pinned authorities;
 - 33 residual authorities and 182 normative RFC sections are reviewed through
   165 exact mappings and 17 explicit dispositions;
-- all 743 surfaces left by the foundation, domain, and transport bundles are
-  assigned, producing complete coverage of all 4,424 surfaces;
-- the generated closure maps all 127 locked sources, all 274 roadmap rows, all
+- all 765 surfaces left by the foundation, domain, and transport bundles are
+  assigned, producing complete coverage of all 4,449 surfaces;
+- the generated closure maps all 127 locked sources, all 305 modern roadmap rows
+  plus eight independent legacy stages, all
   4,449 surfaces, and all 167 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners

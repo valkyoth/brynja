@@ -2503,16 +2503,16 @@
         "side-channel"
       ],
       "owners": [
-        "0.139.1"
+        "0.139.2"
       ],
       "sources": [
         "rfc:9180"
       ],
       "targets": [
-        "boundary:boundary:hpke.0.139.1"
+        "planned-symbol:crates/brynja-crypto/src/hpke.rs"
       ],
       "tests": [
-        "planned:positive:tests/surface/hpke.rs#non_base_rejected",
+        "planned:positive:tests/surface/hpke.rs#all_modes",
         "planned:negative:tests/surface/hpke.rs#reject_invalid_and_exhausted"
       ]
     },
@@ -9734,7 +9734,9 @@
         "BRY-REQ-HPKE-0139"
       ],
       "0.139.1": [
-        "BRY-REQ-HPKE-1391",
+        "BRY-REQ-HPKE-1391"
+      ],
+      "0.139.2": [
         "BRY-REQ-HPKEX-1391"
       ],
       "0.14.0": [
@@ -10681,9 +10683,6 @@
       "boundary:boundary:dns.0.140.0": [
         "BRY-REQ-DNS-0140"
       ],
-      "boundary:boundary:hpke.0.139.1": [
-        "BRY-REQ-HPKEX-1391"
-      ],
       "boundary:boundary:iana-designated-expert": [
         "BRY-REQ-IANA-0002"
       ],
@@ -10784,7 +10783,8 @@
         "BRY-REQ-HPKE-0138",
         "BRY-REQ-HPKE-0139",
         "BRY-REQ-HPKE-1391",
-        "BRY-REQ-HPKEREG-0138"
+        "BRY-REQ-HPKEREG-0138",
+        "BRY-REQ-HPKEX-1391"
       ],
       "planned-symbol:crates/brynja-crypto/src/ml_kem.rs": [
         "BRY-REQ-PQ-0117"
@@ -11924,6 +11924,9 @@
       "planned:positive:tests/surface/extensions.rs#registry": [
         "BRY-REQ-COMPOSE-0148"
       ],
+      "planned:positive:tests/surface/hpke.rs#all_modes": [
+        "BRY-REQ-HPKEX-1391"
+      ],
       "planned:positive:tests/surface/hpke.rs#base_mode": [
         "BRY-REQ-HPKE-0139"
       ],
@@ -11932,9 +11935,6 @@
       ],
       "planned:positive:tests/surface/hpke.rs#export_lifecycle": [
         "BRY-REQ-HPKE-1391"
-      ],
-      "planned:positive:tests/surface/hpke.rs#non_base_rejected": [
-        "BRY-REQ-HPKEX-1391"
       ],
       "planned:positive:tests/surface/hpke_registry.rs#registry": [
         "BRY-REQ-HPKEREG-0138"

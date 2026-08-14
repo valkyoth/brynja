@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "3132ab3c94ef2657976a180b6fec5600555faef2f327fe8ec2461fded8ca810a",
-  "domain_policy_sha256": "3b2fd0c35bf7bad30ed829d0304b8ac8d45e0ba8ce1451e5a60c70af9fcc90b9",
-  "policy_sha256": "306000567dbf117746ad964505cb8979d82ca8d2b0df36a070ee8039ba7b344e",
+  "closure_policy_sha256": "7a8952a482ca8845a34608f0455deed3fc6b9a91cfac66c6f601c6c5e23fbbbf",
+  "domain_policy_sha256": "8fb8730c38bd464192f98869c8e8632ff656452b1f64335de518138120a1de74",
+  "policy_sha256": "92ac221dc4df334bbe991a85ba3e0a4fee849811a95c89ee7a2d4221686a0428",
   "requirements": [
     {
       "applicability": "delegate",
@@ -1772,8 +1772,8 @@
       "mapping_scope": "reviewed-domain",
       "owner": "0.33.0",
       "profile": "crypto-encoding-pkix",
-      "residual": "Each concrete curve and operation still requires its own milestone evidence; this bundle does not admit P-521, Ed448, or arbitrary explicit curves.",
-      "revision": 2,
+      "residual": "Each concrete curve and operation still requires its own milestone evidence; this foundation does not itself admit P-521 or Ed448, which receive complete later v0.45 milestones, and arbitrary explicit curves remain excluded.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -2611,8 +2611,8 @@
       "mapping_scope": "reviewed-domain",
       "owner": "0.45.0",
       "profile": "crypto-encoding-pkix",
-      "residual": "Ed448 remains excluded, and newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes.",
-      "revision": 2,
+      "residual": "Ed448 remains outside this Ed25519 owner and receives its own complete v0.45.3-v0.45.5 milestones; newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -9748,7 +9748,7 @@
       "owner": "0.139.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -9854,7 +9854,7 @@
           "status": "INFORMATIONAL"
         }
       ],
-      "statement": "HPKE base mode is the only admitted mode and remains future bounded cryptographic work.",
+      "statement": "HPKE Base is implemented first and the remaining RFC 9180 modes receive their own following milestones.",
       "strength": "INVARIANT",
       "targets": [
         {
@@ -10261,15 +10261,15 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "protocol.hpke.non-base-modes"
       ],
       "deviation_rationale": null,
       "domain": "hpke",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.139.1.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.139.2.",
       "id": "BRY-REQ-HPKEX-1391",
       "invariants": [
         "resource-bound",
@@ -10279,13 +10279,13 @@
         "key-lifecycle",
         "side-channel"
       ],
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.139.1",
+      "owner": "0.139.2",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -10374,19 +10374,19 @@
           "status": "INFORMATIONAL"
         }
       ],
-      "statement": "HPKE authenticated and PSK modes are excluded from the version-one API and composition model.",
+      "statement": "HPKE PSK, Auth, and AuthPSK modes are implemented separately at v0.139.2 through v0.139.4 and closed by v0.139.5.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:hpke.0.139.1"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-crypto/src/hpke.rs"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/surface/hpke.rs#non_base_rejected"
+          "target": "tests/surface/hpke.rs#all_modes"
         },
         {
           "polarity": "negative",
@@ -29548,9 +29548,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "b3a535e4c71aa7f051edc8677a42f4bd6ce45ee4d00f1ac2b2fbca58ba5de638",
+  "residual_policy_sha256": "7ac564cac251eda04000f30802eda7a2dd45ee9c5eceaee0681111d4b50eda50",
   "schema": 5,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "5f59fdf0a1f615f0b6f8c1d9b9b0239819fd6e43928c136d9f4b24a8a29800cb",
-  "transport_policy_sha256": "1cc7595519322dc5840fc8c39b4efb03721f7ed5cc891492e392c7b7f5489ec7"
+  "surface_register_sha256": "32163f1788dd27d9d99b6b08f8e022ec92c6fe7d6966b609f8b0b84100fcd729",
+  "transport_policy_sha256": "59560d621bed23b3bfa19a827c2c3bfeee2a4ab4a9c68e84a996a84ae05fbd69"
 }

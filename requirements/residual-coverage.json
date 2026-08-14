@@ -2536,7 +2536,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "b3a535e4c71aa7f051edc8677a42f4bd6ce45ee4d00f1ac2b2fbca58ba5de638",
+  "policy_sha256": "7ac564cac251eda04000f30802eda7a2dd45ee9c5eceaee0681111d4b50eda50",
   "requirement_count": 50,
   "schema": 1,
   "surface_count": 765,
@@ -8655,10 +8655,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "hpke",
       "id": "protocol.hpke.non-base-modes",
-      "owner": "0.139.1",
+      "owner": "0.139.2",
       "requirement_id": "BRY-REQ-HPKEX-1391"
     }
   ]

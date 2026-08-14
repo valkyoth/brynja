@@ -37,8 +37,14 @@ independent reviewer and linked review evidence can change status.
 """
 ROOT = (
     BASE
+    + "\nThese concrete public capabilities require a complete public API. "
+    "Implemented does not mean independently verified. See component "
+    "verification status.\n"
     + "\nFIPS validation is a separate official claim. Brynja has no FIPS 140-3 "
     "validation and no certificate-bound operational-environment claim.\n"
+)
+IMPLEMENTED = (
+    "| Example capability | ✅ Implemented | ❌ Not independently verified |"
 )
 
 
@@ -79,6 +85,16 @@ def main() -> int:
         "✅ Independently verified by Alice Example — "
         "[review report](security/reviews/example.md) |"
     )
+    MODULE.validate_checkmarks(IMPLEMENTED)
+    try:
+        MODULE.validate_checkmarks(
+            "| Example capability | ✅ Probably implemented | ❌ Not verified |"
+        )
+    except MODULE.VerificationStatusError as error:
+        if "exactly" not in str(error):
+            raise
+    else:
+        raise AssertionError("ambiguous implementation checkmark unexpectedly passed")
     MODULE.validate_support_document(Path("support.md"), SUPPORT)
     try:
         MODULE.validate_support_document(

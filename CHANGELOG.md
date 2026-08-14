@@ -7,6 +7,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Replace the root crate-level verification matrix with smaller concrete
+  capability tables that distinguish public usability from independent review,
+  retain the architectural component inventory in `docs/VERIFICATION_STATUS.md`,
+  and require SHA-256 to wait for v0.22.3 acceptance before appearing as
+  implemented.
 - Require every named implementation milestone to expose a complete usable
   public API with consumer-style end-to-end evidence, block or immediately
   patch completeness gaps, and close every multi-version implementation chain

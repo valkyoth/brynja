@@ -485,51 +485,52 @@ selected set in dependency order and publishes the facade last.
 
 ## Cryptography Verification Status
 
-No cryptographic or protocol code in this repository has been independently
-reviewed. A component only moves from ❌ to ✅ when a named independent
-reviewer signs off and that evidence is linked from its status entry in this
-table. Passing the project's own tests, CI, Kani, Miri, sanitizers, fuzzing,
-differential testing, or release pentests does not, by itself,
-constitute independent cryptographic or protocol verification.
+These tables track concrete public capabilities, not internal crate names or
+reserved architecture. A capability is listed as implemented only after its
+complete public API and final downstream usability-acceptance milestone pass.
+For example, SHA-256 will be added after v0.22.3, rather than when an internal
+module or partial implementation first exists. The broader crate-level audit
+inventory remains available in the
+[component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
-FIPS validation is a separate official claim. Brynja has no FIPS 140-3
-validation, certificate, validated module, approved security policy, or
-certificate-bound operational-environment claim.
+✅ Implemented means the named capability has a documented, consumer-usable
+public API and passed the repository's required acceptance evidence. It does
+not mean independently verified. Independent status moves from ❌ to ✅ only
+when a named independent reviewer signs off and linked evidence identifies the
+reviewed implementation. The project's own tests, CI, Kani, Miri, sanitizers,
+fuzzing, differential testing, and pentests do not by themselves constitute
+independent cryptographic or protocol verification.
 
-| Component | Cryptographic or protocol scope | Independent review or official validation status |
+### Hash Functions
+
+| Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
-| Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
-| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
-| `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
-| `brynja-crypto-cpu-std` | Future host CPU detection and dispatch initialization | ❌ Not implemented or verified |
-| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
-| `brynja-protocol` | Shared TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |
-| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |
-| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |
-| `brynja-tls13` / `brynja-tls13-handshake` | TLS 1.3 record and handshake engine | ❌ Not verified |
-| `brynja-quic-tls` | QUIC/TLS handshake integration | ❌ Not verified |
-| `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |
-| Future `brynja-openpgp-core` / `brynja-openpgp-armor` / `brynja-openpgp` | RFC 9580 packet, armor, certificate, key, signature, encryption, compression, and message processing | ❌ Not implemented or verified |
-| Future `brynja-openpgp-legacy` | Explicitly isolated deprecated OpenPGP read, decrypt, or verify compatibility | ❌ Not implemented or verified |
-| Future `brynja-legacy-sha1` | Complete isolated SHA-1 implementation for explicit legacy compatibility | ❌ Not implemented or verified |
-| `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |
-| `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |
-| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
-| Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
+| _No accepted hash implementation yet_ | — | — |
 
-Only the shared alert/failure, bounded numeric/resource, borrowed read,
-transactional caller-buffer write, exact workspace/arena, abstract secret
-lifetime, owned-region zeroization, fixed-width constant-time, and provider
-capability/authorization, entropy/secure-random, typed-clock, and pending-
-operation foundations
-described for `brynja-core`, the shared record-envelope boundary in
-`brynja-protocol`, the bounded DER reader and admitted canonical ASN.1 values
-in `brynja-pki`, and the separately selected sanitization adapter are
-implemented. No cryptographic primitive, schema-driven ASN.1 processor, X.509
-validator, handshake parser, or protocol engine in this table is implemented.
-Independent-review status cannot be inferred from implementation, testing,
-formal proof, pentest, or release status.
+### Protocol And PKI Building Blocks
+
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |
+| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |
+
+### Security Foundations
+
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |
+| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | ❌ Not independently verified |
+
+### Official Validation
+
+FIPS validation is a separate official claim from implementation and
+independent source review.
+Brynja has no FIPS 140-3 validation, certificate, validated module, approved
+security policy, or certificate-bound operational-environment claim.
+
+| Validation scope | Implemented | Officially validated |
+| --- | --- | --- |
+| FIPS 140-3 cryptographic module | ❌ Not implemented | ❌ Not FIPS validated |
 
 ## Workspace
 
@@ -721,6 +722,7 @@ candidate can be tagged and published.
 - [Version plan](https://github.com/valkyoth/brynja/blob/main/docs/VERSION_PLAN.md)
 - [Threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md)
 - [First-party Rust cryptography golden rule](https://github.com/valkyoth/brynja/blob/main/docs/first-party-rust-cryptography.md)
+- [Component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md)
 - [Standards source policy](https://github.com/valkyoth/brynja/blob/main/docs/rfc-source-policy.md)
 - [Machine-readable standards evidence](https://github.com/valkyoth/brynja/blob/main/standards/README.md)
 - [Normative requirement evidence](https://github.com/valkyoth/brynja/blob/main/requirements/README.md)

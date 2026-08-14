@@ -11,15 +11,30 @@ from pathlib import Path
 HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
+    "| _No accepted hash implementation yet_ | — | — |",
+    "| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |",
+    "| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |",
+    "| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |",
+    "| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | ❌ Not independently verified |",
+    "| FIPS 140-3 cryptographic module | ❌ Not implemented | ❌ Not FIPS validated |",
+)
+COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
+COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
     "| Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
+    "| `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |",
+    "| `brynja-crypto-cpu-std` | Future host CPU detection and dispatch initialization | ❌ Not implemented or verified |",
     "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
+    "| `brynja-protocol` | Shared TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |",
     "| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |",
     "| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |",
     "| `brynja-tls13` / `brynja-tls13-handshake` | TLS 1.3 record and handshake engine | ❌ Not verified |",
     "| `brynja-quic-tls` | QUIC/TLS handshake integration | ❌ Not verified |",
     "| `brynja-dtls` | DTLS record and handshake engines | ❌ Not verified |",
+    "| Future `brynja-openpgp-core` / `brynja-openpgp-armor` / `brynja-openpgp` | RFC 9580 packet, armor, certificate, key, signature, encryption, compression, and message processing | ❌ Not implemented or verified |",
+    "| Future `brynja-openpgp-legacy` | Explicitly isolated deprecated OpenPGP read, decrypt, or verify compatibility | ❌ Not implemented or verified |",
+    "| Future `brynja-legacy-sha1` | Complete isolated SHA-1 implementation for explicit legacy compatibility | ❌ Not implemented or verified |",
     "| `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |",
     "| `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |",
     "| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |",
@@ -72,7 +87,15 @@ def validate_checkmarks(section: str) -> None:
         if not line.startswith("|") or "✅" not in line:
             continue
         cells = [cell.strip() for cell in line.strip("|").split("|")]
-        if len(cells) != 3 or not VERIFIED.fullmatch(cells[2]):
+        if len(cells) != 3:
+            raise VerificationStatusError("status tables must have three columns")
+        if "✅" in cells[0]:
+            raise VerificationStatusError("✅ is forbidden in the capability name")
+        if "✅" in cells[1] and cells[1] != "✅ Implemented":
+            raise VerificationStatusError(
+                "implemented ✅ must be exactly: ✅ Implemented"
+            )
+        if "✅" in cells[2] and not VERIFIED.fullmatch(cells[2]):
             raise VerificationStatusError(
                 "✅ requires a named independent reviewer and linked evidence"
             )
@@ -96,6 +119,10 @@ def validate_document(path: Path, text: str, required_rows: tuple[str, ...]) -> 
                 raise VerificationStatusError(f"missing disclaimer phrase: {phrase}")
         if path in ROOT_READMES:
             for phrase in (
+                "concrete public capabilities",
+                "complete public API",
+                "does not mean independently verified",
+                "component verification status",
                 "FIPS validation is a separate official claim",
                 "no FIPS 140-3 validation",
                 "certificate-bound operational-environment claim",
@@ -108,6 +135,30 @@ def validate_document(path: Path, text: str, required_rows: tuple[str, ...]) -> 
             if row not in section:
                 raise VerificationStatusError(f"missing required status row: {row}")
         validate_checkmarks(section)
+    except VerificationStatusError as error:
+        raise VerificationStatusError(f"{path}: {error}") from error
+
+
+def validate_component_document(path: Path, text: str) -> None:
+    try:
+        prose = " ".join(text.split())
+        for phrase in (
+            "crate-level assurance inventory",
+            "does not claim",
+            "consumer-usable cryptographic capability",
+            "named independent reviewer",
+            "no FIPS 140-3 validation",
+        ):
+            if phrase not in prose:
+                raise VerificationStatusError(
+                    f"missing component-inventory phrase: {phrase}"
+                )
+        for row in COMPONENT_ROWS:
+            if row not in text:
+                raise VerificationStatusError(
+                    f"missing component-inventory row: {row}"
+                )
+        validate_checkmarks(text)
     except VerificationStatusError as error:
         raise VerificationStatusError(f"{path}: {error}") from error
 
@@ -131,6 +182,10 @@ def validate_support_document(path: Path, text: str) -> None:
 def check(root: Path) -> None:
     for path in ROOT_READMES:
         validate_document(path, (root / path).read_text(encoding="utf-8"), ROOT_ROWS)
+    validate_component_document(
+        COMPONENT_DOCUMENT,
+        (root / COMPONENT_DOCUMENT).read_text(encoding="utf-8"),
+    )
     for path, row in SCOPED_ROWS.items():
         validate_document(path, (root / path).read_text(encoding="utf-8"), (row,))
     for path in SUPPORT_NOTES:

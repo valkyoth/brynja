@@ -22,6 +22,11 @@ Keep a Changelog and Semantic Versioning.
   because qualifying native correctness, migration, performance, side-channel,
   authenticated-provenance, independent-review, and FIPS evidence is absent;
   retain the `Zvknha`/`Zvknhb` vector route as an unimplemented reservation.
+- Record a sanitized inventory of the registered eight-hart SpacemiT X60 lane:
+  user-local Rust 1.97.1 is available, but every hart lacks `Zknh`, `Zvknha`,
+  and `Zvknhb`, so the preflight stops before candidate execution and the lane
+  remains useful only for focused scalar, portability, generic-vector, and
+  bit-manipulation work.
 - Advance the facade to internal v0.22.2 with no crates.io publication and
   require an exceptional pentest before tagging because inline cryptographic
   assembly creates a new unsafe ISA boundary.

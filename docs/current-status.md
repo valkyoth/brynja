@@ -66,9 +66,12 @@ source-hash-bound first-party Rust inline-assembly statements. Rust 1.90.0 and
 complete accelerated differential corpus passes under explicit QEMU RISC-V
 execution. Generic RV64 and base-vector support do not qualify, the reserved
 `Zvknha`/`Zvknhb` route remains absent, and the std adapter does not detect or
-activate RISC-V. No qualifying native RISC-V correctness, performance,
-side-channel, or migration evidence exists, so the candidate is unadmitted and
-ordinary execution remains scalar. The new inline-assembly boundary triggers
+activate RISC-V. A sanitized preflight found that the registered native lane
+has Rust 1.97.1 and generic vector/bit-manipulation support but lacks `Zknh`,
+`Zvknha`, and `Zvknhb` on every hart, so it cannot execute this candidate. No
+qualifying native RISC-V correctness, performance, side-channel, or migration
+evidence exists, so the candidate is unadmitted and ordinary execution remains
+scalar. The new inline-assembly boundary triggers
 an exceptional v0.22.2 pentest before tagging; no crate is selected for
 publication.
 
@@ -684,8 +687,9 @@ harness:
   firmware, exact observed features and operating state, OS, compiler, flags,
   target, clock, frequency policy, workload, schedule, and raw artifact hashes;
 - five native AMD, AWS Intel, Apple M2, AWS AArch64, and RISC-V lanes plus
-  three QEMU supplemental lanes are explicit, with Intel currently unavailable
-  and every lane unmeasured or supplemental-only;
+  three QEMU supplemental lanes are explicit, with Intel currently unavailable,
+  the RISC-V lane capability-inventoried but SHA-ineligible, and no lane carrying
+  admission evidence;
 - thirteen harness contracts cover forced and required modes, unsupported
   features, KAT and quarantine faults, scalar differential and concurrency,
   emitted code, code size, cold start, latency, throughput, and statistical

@@ -50,7 +50,10 @@ require a separate reviewed policy amendment.
 There is no native RISC-V correctness, performance, code-size, side-channel,
 CPU-migration, authenticated-provenance, independent-review, register-erasure,
 or FIPS-validation evidence. QEMU and cross-compilation remain supplemental
-only. RV32, RISC-V vector crypto, automatic RISC-V runtime detection, SHA-224,
+only. A sanitized preflight found the registered native lane has Rust 1.97.1
+and generic RV64 vector/bit-manipulation support but no scalar or vector SHA
+extension, so it stopped before candidate execution. RV32, RISC-V vector
+crypto, automatic RISC-V runtime detection, SHA-224,
 SHA-384, SHA-512, HMAC, and final SHA-256 public-API chain acceptance remain
 outside this milestone.
 

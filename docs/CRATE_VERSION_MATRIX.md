@@ -131,9 +131,11 @@ review, register-erasure, FIPS-validation, or complete hardware-support claim.
 The v0.22.2 stage adds the RV64 `Zknh` scalar-crypto candidate through four
 hash-bound first-party Rust inline-assembly instructions. Both endpoint
 compilers emit the exact instruction set and QEMU differentials pass, but no
-qualifying native RISC-V evidence exists. Automatic RISC-V detection remains
-disabled, the backend remains unadmitted, and the new unsafe boundary requires
-an exceptional pentest before its signed tag.
+qualifying native RISC-V evidence exists. The registered native lane has Rust
+1.97.1 but lacks scalar and vector SHA extensions on every hart, so its
+preflight stopped before candidate execution. Automatic RISC-V detection
+remains disabled, the backend remains unadmitted, and the new unsafe boundary
+requires an exceptional pentest before its signed tag.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

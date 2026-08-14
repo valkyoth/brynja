@@ -36,9 +36,13 @@ manifest's logical-CPU identity hash is deterministically derived from all CPU,
 firmware, feature, state, and logical-CPU fields so model substitution cannot
 retain the earlier identity. The AWS Intel lane is currently marked unavailable. That is an ordinary
 unadmitted result, not a reason to block scalar builds or infer Intel support.
-The other lanes are registered but unmeasured. Product names never substitute
-for direct CPU, microcode or firmware, feature, operating-state, compiler, OS,
-clock, frequency, isolation, and logical-CPU evidence.
+The RISC-V lane has a sanitized capability preflight recorded in
+`docs/riscv-native-host-inventory.md`: all harts lack `Zknh`, `Zvknha`, and
+`Zvknhb`, so no candidate was executed and the lane is ineligible for SHA-2
+acceleration evidence. The remaining lanes are registered but unmeasured.
+Product names never substitute for direct CPU, microcode or firmware, feature,
+operating-state, compiler, OS, clock, frequency, isolation, and logical-CPU
+evidence.
 
 The recorded runner owner is inventory metadata, not authentication. Version
 0.13.3 has no admitted lane trust root and no reviewed signature or attestation

@@ -112,8 +112,10 @@ All three kernels are implemented but deliberately unadmitted. Private
 commit-bound correctness and emitted-code observations passed on local AMD,
 observed-feature AWS Intel, Apple M2, and AWS Arm, but remain explicitly
 non-authorizing. Authenticated runner, CPU-migration, performance,
-side-channel, and final-admission evidence remains incomplete; no qualifying
-native RISC-V observation exists. Ordinary builds therefore cannot execute any
+side-channel, and final-admission evidence remains incomplete. A sanitized
+preflight of the registered RISC-V lane found generic RV64 vector and
+bit-manipulation support but no `Zknh`, `Zvknha`, or `Zvknhb`, so no native
+candidate was executed. Ordinary builds therefore cannot execute any
 candidate: opportunistic selection uses scalar and reports why, while required
 acceleration fails closed. The RV64 path requires exact `zknh`, uses four
 hash-bound Rust inline-assembly instructions because stable intrinsics are
@@ -442,8 +444,10 @@ the scheduled v0.20.0-to-v0.25.0 assessment.
 The v0.22.2 RV64 `Zknh` candidate is implemented but unadmitted. Rust 1.90.0
 and 1.97.1 emitted all four required scalar SHA-256 instructions and the QEMU
 differential corpus passed, but those results are supplemental and create no
-native RISC-V support claim. The new inline-assembly boundary requires an
-exceptional pentest before v0.22.2 can be tagged.
+native RISC-V support claim. The registered native lane was also inventoried
+and rejected before execution because every hart lacks scalar and vector SHA
+extensions. The new inline-assembly boundary requires an exceptional pentest
+before v0.22.2 can be tagged.
 
 ## Install
 

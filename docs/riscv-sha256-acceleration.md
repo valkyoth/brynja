@@ -69,9 +69,13 @@ QEMU's explicit RISC-V model. Generated assembly from both supported endpoint
 compilers contains all four required mnemonics. Builds without `+zknh` do not
 select the backend.
 
-QEMU and cross-compilation are supplemental only. No qualifying native RISC-V
-observation, native performance result, side-channel result, register or spill
-erasure claim, independent cryptographic review, or FIPS validation exists.
+QEMU and cross-compilation are supplemental only. A sanitized preflight of the
+registered native lane found RV64 vector and bit-manipulation support but no
+`Zknh`, `Zvknha`, or `Zvknhb`; see
+[RISC-V Native Host Inventory](riscv-native-host-inventory.md). No qualifying
+native RISC-V candidate execution, native performance result, side-channel
+result, register or spill erasure claim, independent cryptographic review, or
+FIPS validation exists.
 Consequently the candidate is mechanically non-dispatchable in ordinary use,
 portable scalar SHA-256 remains authoritative, and Brynja makes no RISC-V
 acceleration support claim at v0.22.2.

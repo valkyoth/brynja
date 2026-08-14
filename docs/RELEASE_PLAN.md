@@ -45,6 +45,43 @@ or production-width vector and differential evidence. Reduced-width evidence
 never establishes production-width equivalence, and every residual proof gap is
 published through the final v0.155.0 coverage gate.
 
+Every milestone whose title or scope says **implement** must deliver a complete,
+usable public API for the exact named capability. It cannot exit with a stub,
+inert placeholder, test-only entry point, inaccessible internal algorithm, or
+an API that only demonstrates component pieces. Acceleration, additional
+algorithms, protocol integration, independent review, and certification may be
+separate later milestones only when the portable implementation is already
+fully functional for its documented input domain. Its verification must include
+at least one consumer-style end-to-end test that imports only public API,
+performs the real advertised operation on representative data, and checks the
+externally observable result against authoritative evidence. Compiled README or
+API examples, official vectors, boundary cases, malformed or misuse cases,
+streaming or stateful use where applicable, and downstream composition tests
+are additive; private unit tests alone never establish usability.
+
+Completeness gaps discovered before a tag are added to that milestone and block
+its exit. A gap discovered after an immutable tag must receive the next
+available patch-numbered roadmap milestone before any dependent or adjacent
+capability proceeds. Both plans, requirements, evidence, release notes, and
+tests must name the inserted patch. A patch may repair or complete the already
+named capability but cannot hide unrelated scope, and the earlier tag remains
+honestly documented rather than rewritten.
+
+Every multi-version implementation chain additionally ends with a dedicated
+patch-numbered **Public API Usability Acceptance** milestone. Before work on a
+new chain begins, both plans must reserve that exact closing patch. The
+acceptance patch builds a downstream-style fixture using only normal public
+packages and features, exposes one documented command any repository user can
+run, exercises representative real data and every scalar or admitted backend,
+and compares externally visible results with authoritative or independent
+evidence. It also packages the involved crates without private paths or test
+configuration. This is executable usability evidence, not mathematical proof,
+independent review, or certification. The original implementation milestone
+must already pass its own public consumer test; the closing patch repeats and
+composes the completed chain rather than deferring missing behavior. A chain
+that reaches a crates.io checkpoint must pass this acceptance contract in the
+checkpoint itself even when its separately tagged closing patch follows later.
+
 Portable scalar cryptography precedes acceleration. CPU candidates live only
 in the optional first-party `no_std` backend package; standard-library runtime
 detection lives in a separate opt-in adapter. Exact feature evidence, direct
@@ -1908,28 +1945,70 @@ claiming adjacent capability.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit,
-  import-only RSA, ephemeral-lifecycle, constant-time, exclusion, registry, and
-  provider-token invariants;
+- add a complete byte-oriented public SHA-256 API in `brynja-hash-sha2` with
+  reusable fixed-output interfaces from `brynja-hash-core`, supporting both
+  one-shot hashing and arbitrary caller-selected streaming partitions;
+- implement the complete portable FIPS 180-4 SHA-256 compression, state,
+  padding, finalization, checked bit-length accounting, and deterministic
+  exhaustion behavior without allocation, unsafe code, foreign code, I/O,
+  global mutable state, or a hardware requirement;
+- make the public digest value usable for exact-byte retrieval and equality
+  without confusing an unkeyed digest with a MAC, signature, password hash, or
+  authentication decision;
+- expose the one authoritative implementation through `brynja-crypto` for
+  later TLS, PKI, HMAC, HKDF, signature, and FIPS consumers while keeping the
+  post-1.0 standalone facade and every unimplemented SHA-2 variant absent;
+- document the complete supported input and failure domain, including the
+  byte-oriented interface, the FIPS 180-4 less-than-2^64-bit limit, state
+  consumption at finalization, non-secret digest output, and absence of an
+  independent-review or FIPS-validation claim;
+- introduce the applicable proof harness beside the implementation and record
+  arithmetic, rotation, schedule, block, padding, length, state, work,
+  constant-time, exclusion, dependency, and package invariants;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed
-  inputs, invalid secrets, exhaustion, reuse, fault attacks, zeroization, and
-  negative RFC 9935 and RFC 9963 code-point reachability;
+- run authoritative NIST known-answer vectors for empty, short, multi-block,
+  long, and repeated-input messages, plus every padding boundary around 55,
+  56, 63, 64, and 65 bytes;
+- add a consumer-style integration test that imports only the public API,
+  hashes real representative byte content through both one-shot and deliberately
+  irregular streaming updates, and checks the published SHA-256 digest; compile
+  the same ordinary-use path as public API documentation;
+- differentially compare fixed-message and streaming results across empty,
+  generated, block-aligned, multi-block, and every chunk-partition corpus;
+  verify finalization ownership, exact digest bytes, zero-length updates,
+  deterministic length exhaustion, and unchanged state after rejected input;
+- run the portable implementation and public consumer test under `no_std`, Rust
+  1.90.0 through 1.97.1, every promised bare-metal target, Miri, sanitizer,
+  fuzz/property infrastructure, and the applicable proof harness;
+- review MIR, LLVM IR, and assembly for fixed-round compression and absence of
+  input-dependent branches or addresses inside the compression schedule while
+  documenting that unkeyed SHA-256 is not itself an authentication operation
+  and makes no register-erasure claim;
+- reject public construction of invalid state, unimplemented SHA-224/384/512
+  aliases, allocation, unsafe/FFI/native code, external cryptographic
+  providers, hidden std/I/O, dependency-graph drift, source drift, and files
+  over 500 lines through compile-fail and adversarial policy fixtures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- admitted and rejected algorithms have complete registry decisions, and every
-  admitted algorithm has functional, caller-buffer, lifecycle, resource, and
-  side-channel evidence before downstream use;
+- an ordinary downstream consumer can hash every supported byte message through
+  the documented public one-shot or streaming API and obtain the exact standard
+  SHA-256 digest without private hooks, test features, allocation, std, a CPU
+  extension, or any later milestone;
+- every advertised operation and failure is covered by public consumer,
+  official-vector, boundary, differential, misuse, exhaustion, portability,
+  source-policy, and applicable proof evidence; SHA-256 has no knowingly
+  incomplete behavior deferred to acceleration or integration milestones;
+- SHA-224, SHA-384, SHA-512, HMAC, HKDF, password hashing, signatures,
+  authentication, accelerated backends, independent verification, and FIPS
+  validation remain explicitly absent rather than partially implemented or
+  implied;
 - `v0.22.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.22.1 - SHA-256 x86_64 And AArch64 Acceleration
@@ -1981,6 +2060,59 @@ Exit criteria:
 
 - the candidate is either natively admitted with complete evidence or remains mechanically non-dispatchable with no RISC-V acceleration claim;
 - `v0.22.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.22.3 - SHA-256 Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close the SHA-256 implementation chain with a runnable downstream-style fixture that uses only the documented public `brynja-hash-sha2` and `brynja-crypto` APIs to hash representative real byte content through one-shot, irregular streaming, scalar, and every admitted accelerated route; verify authoritative digests, package installability, no_std portability, honest backend reporting, and deterministic misuse and exhaustion behavior without private hooks, test-only features, or adding algorithm scope.
+
+Goal: independently demonstrate that the completed SHA-256 chain is usable as
+advertised by an ordinary downstream caller before SHA-384 or SHA-512 work
+begins.
+
+Deliverables:
+
+- add one repository-owned downstream consumer fixture that depends on the
+  ordinary package manifests and imports only documented public symbols;
+- provide one documented command that hashes representative text, binary,
+  empty, multi-block, and file-like byte content through one-shot and irregular
+  streaming use and checks exact published digests;
+- force scalar and every admitted acceleration path where the executing host
+  has authoritative feature evidence, while treating unavailable candidates
+  as explicit skips rather than false passes or support claims;
+- package the SHA-256 crates and verify the fixture against package contents,
+  normal features, and the documented Rust and `no_std` support contract;
+- retain SHA-256's limitations, non-authentication semantics, verification
+  status, and absence of FIPS validation in the runnable output and docs.
+
+Verification:
+
+- run the public fixture with no private module access, `cfg(test)` API,
+  workspace-private API, hidden environment dependency, network requirement,
+  or precomputed result supplied by implementation code;
+- verify authoritative empty, `abc`, multi-block, million-byte, binary-zero,
+  and realistic chunked-content digests, then compare one-shot and every
+  streaming partition used by the fixture;
+- corrupt expected digests, remove public exports, alter package contents,
+  misreport a backend, bypass exhaustion, or enable an unadmitted feature in
+  negative fixtures and require deterministic failure;
+- run the fixture across Rust 1.90.0 through 1.97.1, promised hosted and
+  bare-metal compile targets, and each available native backend lane;
+- pass repository checks, dependency and advisory policy, SBOM, documentation,
+  package, source-policy, and protocol-isolation gates.
+
+Exit criteria:
+
+- a fresh downstream-style consumer can run one documented command and obtain
+  the authoritative SHA-256 results solely through the API and package artifacts
+  that Brynja actually exposes;
+- scalar and every admitted backend preserve identical public behavior, while
+  unavailable or candidate routes remain honestly non-admitted;
+- the acceptance fixture reveals no missing SHA-256 behavior, private-only
+  dependency, documentation ambiguity, packaging gap, or deferred usability
+  requirement; any discovered gap is fixed here before v0.23.0 starts;
+- `v0.22.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.23.0 - SHA-384 And SHA-512
 

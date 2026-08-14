@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Require every named implementation milestone to expose a complete usable
+  public API with consumer-style end-to-end evidence, block or immediately
+  patch completeness gaps, and close every multi-version implementation chain
+  with a separately tagged public-API usability-acceptance milestone.
+- Add v0.22.3 as the SHA-256 chain acceptance stop with one runnable downstream
+  fixture covering real one-shot and streaming inputs, authoritative digests,
+  package contents, portability, and every admitted backend.
 - Add allocation-free canonical ASN.1 BOOLEAN, INTEGER, BIT STRING, OCTET
   STRING, OBJECT IDENTIFIER, admitted character-string, UTCTime, and
   GeneralizedTime value types to `brynja-pki`.

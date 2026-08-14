@@ -46,6 +46,35 @@ symbolic proofs, limb-count-parameterized proofs, reduced-width exhaustive
 models, and production-width vector or differential evidence; residual gaps
 remain explicit and reduced-width evidence never claims full-width equivalence.
 
+Every row that says **implement** completes a real, documented public API for
+the exact named capability. A milestone cannot close with only internal pieces,
+a stub, a test-only path, or an implementation that requires a later
+acceleration or integration row to perform its advertised operation. At least
+one consumer-style end-to-end test must import only public API and perform the
+real operation against an authoritative expected result; official vectors,
+boundary and misuse cases, compiled documentation examples, stateful or
+streaming paths, and downstream composition tests remain additionally required
+where applicable. Passing private unit tests alone is not usable-API evidence.
+
+Any completeness gap found before tagging expands and blocks the current row.
+If an immutable tag already exists, insert the next available patch-numbered
+row and complete it before dependent or adjacent work continues. Reconcile both
+plans, requirements, evidence, tests, and release notes around that patch; do
+not rewrite the older tag or defer essential behavior silently to a distant
+milestone.
+
+Every multi-version implementation chain reserves a final patch-numbered
+**Public API Usability Acceptance** row before that chain starts. It provides a
+runnable downstream fixture and documented command using only ordinary public
+packages, features, and symbols; validates representative real data against
+authoritative or independent expected results; forces every available admitted
+backend; and checks package contents and portability. This executable evidence
+does not replace formal proof, independent review, or certification, and it
+cannot become the first point at which the implementation is actually usable.
+If a chain crosses a crates.io checkpoint, the checkpoint itself must already
+pass the same consumer acceptance even though the separately tagged closing
+patch remains in the roadmap.
+
 Every CPU-accelerated implementation remains an optional first-party backend
 behind the same `no_std` provider contract as its portable scalar reference.
 Candidate detection is separate from activation; safe code can activate only an
@@ -142,6 +171,7 @@ AEADs, import-only RSA signing, and explicit algorithm exclusions pass independe
 | `0.22.0` | SHA-256 | Freeze the reusable no_std `brynja-hash-core` interface and `brynja-hash-sha2` family boundary, then implement streaming and fixed-message SHA-256 with official vectors, boundary lengths, and exhaustion handling; make `brynja-crypto`, TLS, PKI, and later FIPS consumers use that exact implementation without exposing the post-1.0 standalone facade or admitting unrelated hash families. |
 | `0.22.1` | SHA-256 x86_64 And AArch64 Acceleration | Add separately forced and reported SHA-256 backends using exact x86_64 SHA-extension bundles on AMD and Intel and exact AArch64 SHA2 bundles on Apple M2 and AWS Arm; preserve the scalar state and digest API, streaming and fixed-message equivalence, checked length and exhaustion behavior, safe std and static no_std dispatch, startup KAT quarantine, and per-compiler constant-time and emitted-code evidence without claiming register erasure. |
 | `0.22.2` | SHA-256 RISC-V Acceleration Candidate | Implement a first-party RISC-V SHA-256 backend only for an exact ratified scalar-crypto or vector-crypto feature bundle expressible across the supported Rust line; run it on the available RISC-V host when its observed ISA qualifies, otherwise retain it as a non-dispatchable candidate with emulator and generated-code evidence, keep scalar fallback authoritative, and prohibit an accelerated support claim until matching native correctness, performance, and side-channel evidence exists. |
+| `0.22.3` | SHA-256 Public API Usability Acceptance | Close the SHA-256 implementation chain with a runnable downstream-style fixture that uses only the documented public `brynja-hash-sha2` and `brynja-crypto` APIs to hash representative real byte content through one-shot, irregular streaming, scalar, and every admitted accelerated route; verify authoritative digests, package installability, no_std portability, honest backend reporting, and deterministic misuse and exhaustion behavior without private hooks, test-only features, or adding algorithm scope. |
 | `0.23.0` | SHA-384 And SHA-512 | Extend the reusable `brynja-hash-sha2` family with SHA-384 and SHA-512 using official vectors and checked length and exhaustion behavior; preserve one compression, padding, streaming, CPU-backend, and provider ownership model that later standalone SHA-2 variants can reuse without duplicating TLS cryptography. |
 | `0.23.1` | SHA-384 And SHA-512 CPU Acceleration | Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V SHA-384/SHA-512 backends using exact specialized or parallel feature bundles; require byte-for-byte scalar equivalence for every chunking and boundary, forced-path KAT and quarantine behavior, safe static and runtime selection, native AMD, Intel, M2, AWS Arm, and available qualifying RISC-V evidence, and an explicit scalar decision wherever a backend is unavailable or fails the frozen performance margin. |
 | `0.24.0` | Keccak SHA-3 And SHAKE | Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement SHA3-256, SHA3-512, SHAKE128, and SHAKE256 as the required ML-KEM foundation; keep domain-separated fixed-output and XOF interfaces extensible for post-1.0 variants without exposing a raw permutation or duplicating protocol cryptography. |

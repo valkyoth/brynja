@@ -238,7 +238,16 @@ pentest, and release line. Code never changes classification silently in place.
 3. Freeze reusable hash-family ownership before SHA-256, then implement and
    independently audit cryptographic primitives from official vectors outward,
    always completing the portable scalar reference before its
-   acceleration patches. Admit exact x86_64 SHA/AES/carry-less/vector bundles on
+   acceleration patches. Each named implementation stop exposes a complete
+   documented public API and must pass a consumer-style end-to-end operation
+   through public imports; private component tests and later integration cannot
+   substitute for present usability. A completeness gap blocks the current tag
+   or, if found after an immutable tag, becomes the next patch-numbered stop
+   before dependent work. Every multi-version implementation chain ends with a
+   separately tagged public-API usability-acceptance patch that packages and
+   exercises the whole chain through one runnable downstream fixture; it repeats
+   rather than postpones the implementation milestone's own public acceptance.
+   Admit exact x86_64 SHA/AES/carry-less/vector bundles on
    local AMD and observed-feature AWS Intel, exact AArch64 crypto/vector bundles
    on Apple M2 and AWS Arm, and exact ratified RISC-V crypto/vector bundles only
    after matching native evidence; generic RISC-V remains scalar and QEMU never

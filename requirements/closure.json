@@ -667,6 +667,17 @@
       "version": "0.22.2"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Close the SHA-256 implementation chain with a runnable downstream-style fixture that uses only the documented public `brynja-hash-sha2` and `brynja-crypto` APIs to hash representative real byte content through one-shot, irregular streaming, scalar, and every admitted accelerated route; verify authoritative digests, package installability, no_std portability, honest backend reporting, and deterministic misuse and exhaustion behavior without private hooks, test-only features, or adding algorithm scope.",
+      "source_ids": [],
+      "title": "SHA-256 Public API Usability Acceptance",
+      "version": "0.22.3"
+    },
+    {
       "boundary": null,
       "requirement_ids": [],
       "scope": "Extend the reusable `brynja-hash-sha2` family with SHA-384 and SHA-512 using official vectors and checked length and exhaustion behavior; preserve one compression, padding, streaming, CPU-backend, and provider ownership model that later standalone SHA-2 variants can reuse without duplicating TLS cryptography.",

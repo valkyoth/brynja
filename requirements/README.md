@@ -75,7 +75,7 @@ RFC, NIST, FIPS, or independent-verification evidence.
   no section can be both mapped and excluded or carry conflicting exclusions.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
-  requirement-to-owner reports across 127 currently locked authorities, 273 roadmap rows,
+  requirement-to-owner reports across 127 currently locked authorities, 274 roadmap rows,
   4,449 surfaces, and 167 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,

@@ -26,6 +26,9 @@ Keep a Changelog and Semantic Versioning.
   candidate `6e3ca63305fd3923ca723c9d7f559a9b12843002` as `PASS`/`PASS`
   with zero findings and no source remediation, while retaining explicit
   schema-validation and independent-review cautions.
+- Record the repository owner's green v0.21.0 retest and the complete local
+  tag-gate pass on signed pentest-report candidate
+  `5c6a819a1fc6f12129ca75ce93201de2549d1563` before hosted verification.
 - Record that signed v0.20.0 passed hosted checks and published all 15 selected
   packages, including `brynja 0.20.0`, `brynja-pki 0.2.0`, and initial
   `brynja-protocol 0.1.0`.

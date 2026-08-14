@@ -34,8 +34,11 @@ v0.20.0-to-v0.25.0 assessment.
   allocation, unsafe or foreign code, I/O, provider/crypto coupling, public
   fields, missing canonical checks, graph drift, source drift, and source files
   above 500 lines.
-- The complete Rust 1.90.0 through 1.97.1 and promised-target gates remain
-  mandatory before the release candidate can be committed.
+- The complete tag gate passed on signed pentest-report candidate
+  `5c6a819a1fc6f12129ca75ce93201de2549d1563`, including Rust 1.90.0 through
+  1.97.1, promised targets, current tools, online admission, dependency and
+  advisory policy, standards evidence, GitHub release controls, and SBOM
+  equality. The same gate remains mandatory on the final commit.
 
 ## Deliberate exclusions
 
@@ -50,7 +53,7 @@ Canonical value decoding extends a hostile parser boundary, so v0.21.0 is an
 exceptional pentest trigger. The repository-owner assessment of exact signed
 implementation candidate `6e3ca63305fd3923ca723c9d7f559a9b12843002`
 reported no findings and required no source remediation. The permanent report
-records `PASS`/`PASS`, zero open findings, and the residual schema-validation
-and independent-review cautions. The report commit must now pass green GitHub
-and CodeQL and receive explicit authorization before the signed tag is
-created. No crates.io publication follows this tag.
+records `PASS`/`PASS`, the repository owner's green retest, zero open findings,
+and the residual schema-validation and independent-review cautions. The final
+commit must now pass green GitHub and CodeQL and receive explicit authorization
+before the signed tag is created. No crates.io publication follows this tag.

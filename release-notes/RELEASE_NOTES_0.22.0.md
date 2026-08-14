@@ -1,6 +1,6 @@
 # Brynja 0.22.0 Release Notes
 
-Status: implementation candidate in progress; exceptional pentest required
+Status: pentest PASS/PASS; zero open findings; awaiting green GitHub and CodeQL
 
 Brynja 0.22.0 is an internal development milestone. It selects zero crates.io
 packages. The signed v0.20.0 checkpoint remains the latest published release,
@@ -27,6 +27,13 @@ CPU detector, or accelerated backend. SHA-256 output is an unkeyed public
 digest and must not be treated as a MAC, password hash, signature, or
 authentication result.
 
+The assessment confirmed as a disclosed future constraint—not a current
+finding—that working state, the message schedule, and buffered input are not
+explicitly zeroized because this release exposes only unkeyed hashing. Before
+HMAC or other key-derived use, the owning construction must add hardened
+secret-state cleanup and emitted-code verification across the supported
+compiler and target matrix.
+
 ## Deliberate Exclusions
 
 SHA-224, SHA-384, SHA-512, HMAC, HKDF, password hashing, signatures,
@@ -36,8 +43,8 @@ unimplemented.
 
 ## Release Process
 
-The first executable cryptographic primitive is an exceptional pentest
-trigger. After implementation and local verification complete, the exact
-signed candidate must receive a committed PASS/PASS report, green GitHub and
-CodeQL, and explicit tag authorization. No crates.io publication follows this
-internal tag.
+The first executable cryptographic primitive triggered an exceptional pentest.
+The exact signed implementation candidate received a committed PASS/PASS
+report with zero open findings. The final report commit still requires the
+complete local tag gate, green GitHub and CodeQL, and explicit tag
+authorization. No crates.io publication follows this internal tag.

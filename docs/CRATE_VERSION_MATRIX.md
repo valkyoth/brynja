@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 signed; v0.22.0 implementation candidate
+Status: v0.20.0 signed and published; v0.21.0 signed; v0.22.0 pentest PASS/PASS and awaiting hosted checks
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.22.0`; new `brynja-hash-core 0.1.0` and
@@ -108,7 +108,10 @@ is signed and selects no crates.io publication. The v0.22.0 stage adds the
 first executable cryptographic primitive: portable SHA-256 in two new leaf
 packages, reused through `brynja-crypto` and the facade. It requires an
 exceptional pentest before tagging, remains unpublished until the v0.25.0
-checkpoint, and makes no independent-review or FIPS-validation claim.
+checkpoint, and makes no independent-review or FIPS-validation claim. Its
+assessment found no vulnerability, required no source remediation, and records
+`PASS`/`PASS` with zero open findings. The report retains the future requirement
+to harden and verify SHA working-state cleanup before keyed HMAC use.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

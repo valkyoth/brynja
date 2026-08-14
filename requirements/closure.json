@@ -744,7 +744,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0003"
       ],
-      "scope": "Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types so later standalone hashing reuses rather than copies the construction.",
+      "scope": "Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types, require secret-owned hash state plus hardened cleanup of keys, inner/outer state, schedules, and buffered input with emitted-store evidence across the supported compiler/target matrix before keyed use, and preserve precise register/spill residuals so later standalone hashing reuses rather than copies the construction.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",

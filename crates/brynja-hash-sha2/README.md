@@ -60,7 +60,10 @@ verification.
 
 This is an unkeyed hash. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS
-140-3 validation claim.
+140-3 validation claim. Working state, the message schedule, and buffered input
+are not explicitly zeroized in this unkeyed release. HMAC and any future
+secret-derived consumer must add hardened secret ownership and emitted-code-
+verified cleanup before admission.
 
 See the [full project documentation](https://github.com/valkyoth/brynja),
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md),

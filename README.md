@@ -102,6 +102,15 @@ Because this is Brynja's first executable cryptographic primitive, v0.22.0 is
 an exceptional pentest stop. It selects no crates.io publication and remains
 inside the scheduled v0.20.0-to-v0.25.0 cumulative review range.
 
+The exceptional assessment found no vulnerability and required no source
+remediation. It retained one correctly disclosed future constraint: portable
+SHA-256 working state, schedule, and buffered input are not explicitly
+zeroized because v0.22.0 exposes only unkeyed hashing. Before HMAC or other
+key-derived processing uses this path, the owning construction must add
+secret-owned cleanup through Brynja's hardened volatile boundary and verify
+the emitted stores across the supported compiler and target matrix. The
+permanent report records `PASS`/`PASS` and zero open findings.
+
 The signed and published `0.20.0` checkpoint introduced the underlying
 borrowed, non-recursive DER framing reader. Its scheduled assessment found one
 Low adjacent-byte semantic-boundary oracle; pre-access parent-boundary checks
@@ -376,6 +385,12 @@ retains the essential boundary: canonical sequence framing is not
 schema-specific validation, and X.509, cryptography, independent review, and
 FIPS validation remain absent. The v0.21.0 delta remains included in the
 scheduled v0.20.0-to-v0.25.0 assessment.
+
+The exceptional v0.22.0 assessment found no vulnerability in the portable
+SHA-256 delta and required no source remediation. Its permanent `PASS`/`PASS`
+report records zero open findings and preserves the future secret-state
+cleanup requirement before HMAC or other keyed processing. The v0.22.0 delta
+remains included in the scheduled v0.20.0-to-v0.25.0 assessment.
 
 ## Install
 

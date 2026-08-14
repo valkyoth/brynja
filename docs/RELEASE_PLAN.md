@@ -2226,7 +2226,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types so later standalone hashing reuses rather than copies the construction.
+Plan scope: Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512 with constant-time verification and misuse tests; keep MAC keys, tags, verification, and truncation distinct from unkeyed digest types, require secret-owned hash state plus hardened cleanup of keys, inner/outer state, schedules, and buffered input with emitted-store evidence across the supported compiler/target matrix before keyed use, and preserve precise register/spill residuals so later standalone hashing reuses rather than copies the construction.
 
 Goal: complete the **HMAC** implementation stop without admitting or
 claiming adjacent capability.
@@ -2235,6 +2235,13 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
+- close the v0.22.0 pentest constraint before any keyed path is admitted:
+  own all key-derived SHA state as secret, clear keys, inner and outer hash
+  state, message schedules, and buffered input through the hardened volatile
+  zeroization boundary on success, failure, replacement, and drop, verify those
+  stores in MIR, LLVM IR, and target assembly across the supported compiler and
+  target matrix, and document registers, spills, caches, and OS context state
+  as residuals rather than claiming their erasure;
 - record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.

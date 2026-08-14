@@ -158,6 +158,29 @@ def open_store(path: Path) -> sqlite3.Connection:
     return connection
 
 
+def archive_existing_state(path: Path) -> None:
+    if not path.exists():
+        return
+    connection = open_store(path)
+    try:
+        running = connection.execute(
+            "SELECT lane FROM jobs WHERE status='running' LIMIT 1"
+        ).fetchone()
+        if running is not None:
+            raise ManagerError(
+                f"cannot archive state while {running['lane']} is marked running"
+            )
+    finally:
+        connection.close()
+    archive = path.parent / "archive" / f"{int(time.time())}-{uuid.uuid4().hex[:8]}"
+    archive.mkdir(parents=True, exist_ok=False)
+    for suffix in ("", "-wal", "-shm"):
+        candidate = Path(f"{path}{suffix}")
+        if candidate.exists():
+            shutil.move(str(candidate), archive / candidate.name)
+    print(f"archived_previous_state={archive}")
+
+
 def initialize(connection: sqlite3.Connection, repository: str, state: Path) -> None:
     if connection.execute("SELECT 1 FROM session").fetchone() is not None:
         raise ManagerError("CPU evidence session already exists")
@@ -392,6 +415,9 @@ def parser() -> argparse.ArgumentParser:
     commands = result.add_subparsers(dest="command", required=True)
     initialize_parser = commands.add_parser("init")
     initialize_parser.add_argument("--repository", default=DEFAULT_REPOSITORY)
+    initialize_parser.add_argument(
+        "--new", action="store_true", help="archive completed/failed state and start again"
+    )
     for name in ("start-local", "check", "reset"):
         child = commands.add_parser(name)
         child.add_argument("lane", choices=LANES)
@@ -413,6 +439,8 @@ def main() -> int:
     arguments = parser().parse_args()
     state = arguments.state.expanduser().resolve()
     try:
+        if arguments.command == "init" and arguments.new:
+            archive_existing_state(state)
         connection = open_store(state)
         try:
             if arguments.command == "init":

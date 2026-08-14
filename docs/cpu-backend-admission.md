@@ -153,6 +153,11 @@ Initialize one session after the final pentest remediation commit:
 python3 scripts/manage-cpu-evidence.py init
 ```
 
+If pentest remediation or another reviewed change creates a new exact commit,
+start a new session with `init --new`. The manager refuses this while any job
+is marked running and archives the prior SQLite files instead of deleting or
+relabeling them.
+
 Run the local AMD lane and inspect it later:
 
 ```bash

@@ -113,6 +113,8 @@ job state, retrieves completed bundles, and validates the lane, accelerated
 test transcript, emitted instruction, and every checksum locally. These
 candidate bundles remain explicitly non-authorizing; they do not replace the
 later authenticated performance, side-channel, and admission records.
+New source commits receive new sessions; prior orchestration databases are
+archived rather than reused or relabelled.
 
 The preceding v0.22.0 milestone introduced allocation-free `no_std` one-shot
 and streaming SHA-256, checked FIPS message-length exhaustion, consuming

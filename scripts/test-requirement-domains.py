@@ -46,7 +46,7 @@ def test_current_repository() -> None:
     ledger, register, versions = inputs()
     requirements, coverage, _digest = domain.build(ledger, register, versions)
     assert len(requirements) == 34
-    assert coverage["authority_count"] == 53
+    assert coverage["authority_count"] == 55
     assert coverage["mapped_normative_section_count"] == 352
     assert coverage["excluded_normative_section_count"] == 12
     assert coverage["normative_section_count"] == 364

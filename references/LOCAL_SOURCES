@@ -14,3 +14,5 @@ NIST.SP.800-227.pdf https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.S
 NIST.SP.800-107r1.pdf https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-107r1.pdf hash-usage
 ITU-T.X.690-202102.pdf https://www.itu.int/rec/dologin_pub.asp?id=T-REC-X.690-202102-I%21%21PDF-E&lang=e&type=items der
 ITU-T.X.690-202109-Err1.pdf https://www.itu.int/rec/dologin_pub.asp?id=T-REC-X.690-202109-I%21Err1%21PDF-E&lang=e&type=items der-erratum
+RISCV.Crypto.Scalar-1.0.1.pdf https://docs.riscv.org/reference/isa/extensions/crypto-scalar/_attachments/riscv-crypto-spec-scalar.pdf riscv-scalar-crypto
+RISCV.Crypto.Vector-1.0.pdf https://docs.riscv.org/reference/isa/extensions/crypto-vector/_attachments/riscv-crypto-spec-vector.pdf riscv-vector-crypto

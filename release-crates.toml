@@ -1,19 +1,19 @@
 [release]
-version = "0.22.1"
-milestone = "0.22.1"
+version = "0.22.2"
+milestone = "0.22.2"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "The first unsafe ISA-specific cryptographic kernels and runtime CPU dispatch are material security boundaries requiring an exceptional pentest before this internal tag."
+exception_reason = "The first RISC-V cryptographic inline-assembly kernel is a new unsafe ISA boundary requiring an exceptional pentest before this internal tag."
 
 [crates."brynja"]
-previous_version = "0.22.0"
-version = "0.22.1"
+previous_version = "0.22.1"
+version = "0.22.2"
 change = "code"
 publish = false
-reason = "Advance the internal facade milestone while keeping optional SHA-256 acceleration outside the facade and crates.io publication."
+reason = "Advance the internal facade milestone while keeping the optional unadmitted RISC-V SHA-256 candidate outside the facade and crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -48,14 +48,14 @@ previous_version = "0.1.1"
 version = "0.1.1"
 change = "code"
 publish = false
-reason = "Retain published 0.1.1 while adding unpublished first-party x86 SHA and AArch64 SHA2 kernels, static selection, KAT health, quarantine, and reporting for v0.25.0."
+reason = "Retain published 0.1.1 while adding an unpublished first-party RISC-V Zknh SHA-256 kernel beside the x86 SHA and AArch64 SHA2 candidates for v0.25.0."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.1.1"
 version = "0.1.1"
 change = "code"
 publish = false
-reason = "Retain published 0.1.1 while adding unpublished opt-in std runtime detection, required/opportunistic selection, scalar fallback, streaming, and reporting for v0.25.0."
+reason = "Retain published 0.1.1 and its x86/AArch64 detector unchanged; RISC-V automatic detection stays disabled while the Zknh candidate is unadmitted."
 
 [crates."brynja-pki"]
 previous_version = "0.2.0"

@@ -38,8 +38,9 @@ Reports distinguish accelerated execution from unavailable hardware,
 unadmitted candidate code, and quarantine. No global default or hidden
 initialization is installed.
 
-The x86_64 and AArch64 kernels remain unadmitted in v0.22.1 pending complete
-native evidence, so ordinary runtime selection currently reports
+The x86_64, AArch64, and RV64 Zknh kernels remain unadmitted in v0.22.2 pending complete
+native evidence. This adapter detects only the stable x86_64 and AArch64
+feature bundles; RISC-V automatic detection stays intentionally disabled, so ordinary runtime selection reports
 `ScalarBackendUnadmitted` on qualifying machines. QEMU and cross-compilation
 can supplement instruction and portability evidence but cannot establish a
 native admission claim.
@@ -75,7 +76,7 @@ and pentesting do not by themselves constitute independent verification.
 
 | Component | Cryptographic scope | Independently verified |
 | --- | --- | --- |
-| SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection with explicit scalar fallback | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |
+| SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection, explicit scalar fallback, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |
 
 Version `0.1.1`, with its exact CPU-boundary dependency update, was published
 at v0.20.0 after the cumulative pentest, remediation retest, and hosted gates

@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "25e1352987910f7acbb84e7335dd97bd86bebf1a14fd69cb24971f913a2099be",
-  "domain_policy_sha256": "0872366bf2aaa23cb2d4928cbed2694613357a310f61ab010f30a43fb442b71e",
-  "policy_sha256": "ab0519f7cd6f92749aa20801bc71aa8e42f7e89b32c034bdba5a9cc51e2af5f3",
+  "closure_policy_sha256": "e1e400be4192eef3fdbce922795b4f863c9a5b7a6a5e990d98a244db8c70a406",
+  "domain_policy_sha256": "df1d5ee94b6942b5a9d10ebf8285546d675a07d2e38ff89e8df740f8d043eee3",
+  "policy_sha256": "7c46ff57ccf600fdfcb77bb3d6e687f13911e6eb7f4961c017be4df080659670",
   "requirements": [
     {
       "applicability": "delegate",
@@ -763,7 +763,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Official vectors, differential tests, proof bounds, emitted-code review, and target side-channel evidence remain unresolved until v0.22.0 and v0.23.0.",
+      "evidence_gap": "Complete SHA-2 family vectors and proof bounds remain unresolved until v0.23.0; the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -772,12 +772,12 @@
         "work-bound"
       ],
       "lifecycle": "planned",
-      "mapping_rationale": "The SHA-2 semantic surface is the exact implementation decision governed by both pinned NIST hash authorities.",
+      "mapping_rationale": "The SHA-2 semantic surface is governed by the pinned NIST hash authorities; the ratified RISC-V publications govern only optional acceleration of that same implementation.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
-      "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze.",
-      "revision": 1,
+      "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -823,9 +823,35 @@
           ],
           "role": "hash-usage",
           "sha256": "2b691bd8895cbc6793e442b1e5a45398f5ca777edc2a79072469ad05405b093b"
+        },
+        {
+          "authority_role": "current",
+          "domains": [
+            "riscv-acceleration"
+          ],
+          "id": "riscv:RISCV.Crypto.Scalar-1.0.1.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.2"
+          ],
+          "role": "riscv-scalar-crypto",
+          "sha256": "c96e33d91410639eef0bc34cd099e914dae8f44a51966e13416dc38d2cd9d18a"
+        },
+        {
+          "authority_role": "current",
+          "domains": [
+            "riscv-acceleration"
+          ],
+          "id": "riscv:RISCV.Crypto.Vector-1.0.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.2"
+          ],
+          "role": "riscv-vector-crypto",
+          "sha256": "442a3ac8b63ad1ce34f9563d4ea85ee6d1115d129e0b458890937a1175a72973"
         }
       ],
-      "statement": "SHA-256, SHA-384, and SHA-512 follow the pinned secure-hash algorithms, length rules, and approved hash-use constraints.",
+      "statement": "SHA-256, SHA-384, and SHA-512 follow the pinned secure-hash algorithms, length rules, and approved hash-use constraints; any RISC-V acceleration uses only an exact ratified cryptographic extension and preserves those semantics.",
       "strength": "INVARIANT",
       "targets": [
         {
@@ -29746,9 +29772,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "e52fb706404aabf84653e746b924a7ad6f5e05f9794be6382c5dd2a7c5223a36",
+  "residual_policy_sha256": "f0fd597ee25e8f358328d17a3c268d0ce29b6490c260257632043bced8ea93eb",
   "schema": 5,
-  "source_ledger_sha256": "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c",
-  "surface_register_sha256": "e23cf056c118bd7473fff4c175a9398330630f771740d66b5e76faed9b54f125",
-  "transport_policy_sha256": "c0f33bb09ea5153a641884eb8adcbbaebae5576c6976906342f76cbb584b2bb7"
+  "source_ledger_sha256": "df2d5e51f5471ddcac4b2968f9c1e49741f167145f34cb7c590b45ef3c2091e2",
+  "surface_register_sha256": "c69f1f112c849d389c39a662466338dbf466d95a6ce7ab2b420b30ed29842e9b",
+  "transport_policy_sha256": "f0ff23d2add913955774c70dd5bba0a9eb7e73f852bce983dd30ec44282051c3"
 }

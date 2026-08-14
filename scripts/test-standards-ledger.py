@@ -46,7 +46,7 @@ def load_inputs() -> tuple[dict, dict, dict, dict, dict]:
 def test_current_repository() -> None:
     ledger = checker.build_ledger()
     assert len(ledger["rfcs"]) == 104
-    assert len(ledger["local_authorities"]) == 15
+    assert len(ledger["local_authorities"]) == 17
     assert len(ledger["registries"]) == 8
     assert any(item["number"] == 10024 for item in ledger["rfcs"])
     hybrid = next(

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Broken-fixture tests for the v0.22.1 CPU boundary."""
+"""Broken-fixture tests for the v0.22.2 CPU boundary."""
 
 from __future__ import annotations
 
@@ -60,16 +60,16 @@ def test() -> None:
         document = root / policy.POLICY
 
         cases = (
-            ("implemented_backend_count = 2", "implemented_backend_count = 3", "limits"),
+            ("implemented_backend_count = 3", "implemented_backend_count = 4", "limits"),
             ("active_backend_count = 0", "active_backend_count = 1", "limits"),
             (
-                "approved_cpu_low_level_allowances = 4",
                 "approved_cpu_low_level_allowances = 5",
+                "approved_cpu_low_level_allowances = 6",
                 "limits",
             ),
-            ("milestone = \"0.22.1\"", "milestone = \"0.22.2\"", "schema"),
+            ("milestone = \"0.22.2\"", "milestone = \"0.22.3\"", "schema"),
             (
-                "status = \"sha256-x86-and-aarch64-candidates\"",
+                "status = \"sha256-x86-aarch64-and-riscv-candidates\"",
                 "status = \"all-admitted\"",
                 "schema",
             ),
@@ -101,6 +101,11 @@ def test() -> None:
 
         source = root / "crates/brynja-crypto-cpu/src/aarch64_sha2.rs"
         replace(source, '#[target_feature(enable = "sha2")]', '#[target_feature(enable = "neon")]')
+        require_rejection(root, "source changed")
+        reset(root)
+
+        source = root / "crates/brynja-crypto-cpu/src/riscv64_zknh.rs"
+        replace(source, "sha256sum1", "sha256sum0")
         require_rejection(root, "source changed")
         reset(root)
 

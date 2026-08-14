@@ -1,8 +1,8 @@
 # CPU Backend Evidence Records
 
 This directory accepts committed, reproducible evidence for exact backend
-candidates. Version 0.22.1 implements x86 SHA and AArch64 SHA2 SHA-256
-candidates but intentionally contains no `manifest.toml`: neither candidate
+candidates. Versions 0.22.1 and 0.22.2 implement x86 SHA, AArch64 SHA2, and
+RV64 Zknh SHA-256 candidates but intentionally contain no `manifest.toml`: no candidate
 has authenticated complete native evidence, and every backend remains
 unadmitted.
 

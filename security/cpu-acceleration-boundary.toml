@@ -1,13 +1,13 @@
 [schema]
 version = 2
-milestone = "0.22.1"
-status = "sha256-x86-and-aarch64-candidates"
+milestone = "0.22.2"
+status = "sha256-x86-aarch64-and-riscv-candidates"
 
 [limits]
 maximum_source_lines = 500
-implemented_backend_count = 2
+implemented_backend_count = 3
 active_backend_count = 0
-approved_cpu_low_level_allowances = 4
+approved_cpu_low_level_allowances = 5
 
 [packages.kernel]
 name = "brynja-crypto-cpu"
@@ -59,6 +59,7 @@ current_cpu_allowances = [
   "brynja-crypto-cpu:src/sha256.rs:runtime-attestation",
   "brynja-crypto-cpu:src/x86_sha.rs:sha-intrinsics",
   "brynja-crypto-cpu:src/aarch64_sha2.rs:sha2-intrinsics",
+  "brynja-crypto-cpu:src/riscv64_zknh.rs:zknh-inline-assembly",
   "brynja-crypto-cpu-std:src/runtime_detection.rs:std-feature-attestation",
 ]
 approval_scope = "one-exact-symbol"
@@ -111,19 +112,19 @@ invariants = [
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "a7fad9a9d8cae3f784ad3136c95c82276d8551083519f535754ed41631ee8fed"
+sha256 = "a66bbeaa1f4ef2a8b208f997c4796a19c4223d12e014ca7e996fb04b41ea9383"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/sha256.rs"
 status = "safe-session-and-attestation-boundary"
-sha256 = "3db27c1e35b73345c5513833bbc8367ec620cd735355cd3065da648bd8fccb93"
+sha256 = "ab654d3dc132c6401a19497c4893fa1b000de7c298ae864c5b849843f5ffb27b"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/sha256_schedule.rs"
 status = "portable-message-schedule"
-sha256 = "c9fc99faed2a370606729f478d81a3ce4db80fb1dd1d1dc2a14c231b918ef1a2"
+sha256 = "4737d9abde63ca18911dbaf514f28b4995af115586e608c0e66b998d28b1dc3c"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -136,6 +137,12 @@ package = "brynja-crypto-cpu"
 path = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-candidate-kernel"
 sha256 = "27b71c0b4eb183c4e3e66c30c420aa41cc153a77e84a5dba720124b6f7b170c4"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/riscv64_zknh.rs"
+status = "implemented-unadmitted-candidate-kernel"
+sha256 = "148eb17e4ccddadd9357ff4fda4a302c422d4ec63d7221144c3bff87961a045c"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -223,16 +230,16 @@ module = "src/riscv_vector.rs"
 status = "reserved"
 sha256 = "absent"
 low_level_allowed = false
-instructions = ["v"]
-abi_preconditions = ["ratified-vector-isa", "vector-state-enabled", "v-usable-on-current-hart"]
+instructions = ["zvknha"]
+abi_preconditions = ["riscv64", "ratified-vector-crypto", "vector-state-enabled", "zvknha-usable-on-current-hart"]
 
 [[backends]]
 id = "riscv-scalar-crypto"
 identity = "RiscVScalarCrypto"
 architecture = "riscv"
-module = "src/riscv_scalar_crypto.rs"
-status = "reserved"
-sha256 = "absent"
-low_level_allowed = false
-instructions = ["ratified-scalar-crypto-subset"]
-abi_preconditions = ["matching-riscv-width", "exact-scalar-crypto-subset-usable-on-current-hart"]
+module = "src/riscv64_zknh.rs"
+status = "implemented-unadmitted-native-evidence-pending"
+sha256 = "148eb17e4ccddadd9357ff4fda4a302c422d4ec63d7221144c3bff87961a045c"
+low_level_allowed = true
+instructions = ["zknh"]
+abi_preconditions = ["riscv64", "zknh-usable-on-current-hart"]

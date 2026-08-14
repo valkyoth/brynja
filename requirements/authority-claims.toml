@@ -13,7 +13,7 @@ versions = [
   "0.6.0", "0.7.0", "0.8.0", "0.9.0", "0.11.0", "0.11.1",
   "0.11.2", "0.12.0", "0.13.0", "0.13.1", "0.13.2", "0.13.3",
   "0.15.0", "0.16.0", "0.17.0", "0.18.0", "0.18.1", "0.22.1",
-  "0.22.2", "0.22.3", "0.23.1", "0.24.1", "0.27.1", "0.27.2", "0.28.1",
+  "0.22.3", "0.23.1", "0.24.1", "0.27.1", "0.27.2", "0.28.1",
   "0.29.1", "0.30.1", "0.31.1", "0.35.1", "0.38.1", "0.41.1",
   "0.44.1", "0.45.1", "0.46.1", "0.47.0", "0.60.0", "0.119.1",
   "0.47.1",
@@ -164,6 +164,16 @@ review = "Official final entropy-source guidance is checksum pinned locally and 
 authority = "nist:NIST.SP.800-90C.pdf"
 distribution = "local-only"
 review = "Official final RBG-construction guidance is checksum pinned locally and never redistributed in Git or crates.io packages."
+
+[[local_right]]
+authority = "riscv:RISCV.Crypto.Scalar-1.0.1.pdf"
+distribution = "local-only"
+review = "Official CC-BY-4.0 RISC-V scalar-cryptography bytes are checksum pinned locally; conservative local-only handling avoids silently expanding repository-distribution scope."
+
+[[local_right]]
+authority = "riscv:RISCV.Crypto.Vector-1.0.pdf"
+distribution = "local-only"
+review = "Official CC-BY-4.0 RISC-V vector-cryptography bytes are checksum pinned locally; conservative local-only handling avoids silently expanding repository-distribution scope."
 
 [[mutable_authority]]
 authority = "nist:NIST.FIPS.203.pdf"

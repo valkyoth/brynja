@@ -99,8 +99,8 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.22.1` development milestone adds isolated first-party x86_64
-SHA and AArch64 SHA2 compression candidates for the complete portable SHA-256
+The current `0.22.2` development milestone adds an isolated first-party RV64
+Zknh compression candidate beside the x86_64 SHA and AArch64 SHA2 candidates for the complete portable SHA-256
 implemented at v0.22.0. Portable `brynja-hash-sha2` still owns the public
 digest, streaming state, padding, checked length, finalization, and scalar
 fallback. The optional zero-dependency `no_std` `brynja-crypto-cpu` crate owns
@@ -108,14 +108,18 @@ only static selection, direct KAT, caller-owned health/quarantine, and exact
 one-block kernels. The separate opt-in `std` `brynja-crypto-cpu-std` crate owns
 runtime feature detection and explicit opportunistic or required selection.
 
-Both kernels are implemented but deliberately unadmitted. Private
+All three kernels are implemented but deliberately unadmitted. Private
 commit-bound correctness and emitted-code observations passed on local AMD,
 observed-feature AWS Intel, Apple M2, and AWS Arm, but remain explicitly
 non-authorizing. Authenticated runner, CPU-migration, performance,
-side-channel, and final-admission evidence remains incomplete. Ordinary builds
-therefore cannot execute either candidate: opportunistic selection uses scalar
-and reports why, while required acceleration fails closed. The candidates use no external C module,
-assembly source, build script, detector dependency, allocation, I/O, or global
+side-channel, and final-admission evidence remains incomplete; no qualifying
+native RISC-V observation exists. Ordinary builds therefore cannot execute any
+candidate: opportunistic selection uses scalar and reports why, while required
+acceleration fails closed. The RV64 path requires exact `zknh`, uses four
+hash-bound Rust inline-assembly instructions because stable intrinsics are
+unavailable, and has no automatic std detection. Generic RV64, RVV, and QEMU
+do not qualify it for admission. The candidates use no external C module,
+external assembly source, build script, detector dependency, allocation, I/O, or global
 registry, and make no register-erasure, independent-review, or FIPS 140-3
 validation claim.
 
@@ -430,16 +434,22 @@ remains included in the scheduled v0.20.0-to-v0.25.0 assessment.
 The exceptional v0.22.1 assessment and final retest found no open
 vulnerability in the SHA-256 acceleration delta. Exact signed commit
 `7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` records `PASS`/`PASS`.
-Its private four-lane candidate observations do not admit either backend or
+Its private four-lane candidate observations do not admit either v0.22.1 backend or
 replace authenticated native, CPU-migration, performance, side-channel,
 independent-review, or FIPS evidence. The v0.22.1 delta remains included in
 the scheduled v0.20.0-to-v0.25.0 assessment.
 
+The v0.22.2 RV64 `Zknh` candidate is implemented but unadmitted. Rust 1.90.0
+and 1.97.1 emitted all four required scalar SHA-256 instructions and the QEMU
+differential corpus passed, but those results are supplemental and create no
+native RISC-V support claim. The new inline-assembly boundary requires an
+exceptional pentest before v0.22.2 can be tagged.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.22.1`
-SHA-256-acceleration milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.22.2`
+RISC-V SHA-256-acceleration milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -598,8 +608,8 @@ security policy, or certificate-bound operational-environment claim.
 | Future `brynja-hash-sha3` | Complete FIPS 202 SHA-3 and SHAKE family ownership | Planned from v0.24.0 through v0.24.2 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports portable SHA-256; other planned cryptography and provider effects remain absent |
-| `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
-| `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
+| `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; x86 SHA, AArch64 SHA2, and RV64 Zknh candidates implemented; zero admitted backends |
+| `brynja-crypto-cpu-std` | Directly selected host detector adapter | Published metadata v0.1.1; opt-in x86/AArch64 detection, RISC-V auto-detection disabled; absent from facade and FIPS graphs |
 | `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |
 | `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented and published at v0.20.0; v0.19.0 exceptional pentest and retest passed |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
@@ -647,7 +657,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
 | External crates | Rejected unless a numbered admission freezes an exact minimal graph; planned `base64-ng` use is encoding-only and future rustls/Tokio API dependencies remain isolated |
 | First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
-| Unsafe Rust | Five exact source-hash-bound modules admit the v0.11 volatile clearer plus v0.22.1 SHA-256 attestation, x86 SHA, AArch64 SHA2, and std detector boundaries; every other site is mechanically forbidden |
+| Unsafe Rust | Six exact source-hash-bound modules admit the v0.11 volatile clearer plus SHA-256 attestation, x86 SHA, AArch64 SHA2, RV64 Zknh inline assembly, and std detector boundaries; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
 | FIPS 140-3 status | Planned Level 1 software-module path; not validated |
@@ -744,7 +754,7 @@ python3 scripts/test-sha256.py
 scripts/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.22.1
+scripts/tag_gate.sh v0.22.2
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

@@ -27,7 +27,9 @@ jobs:
       - name: Install OS-less Rust targets
         run: rustup target add riscv32imac-unknown-none-elf thumbv7em-none-eabi x86_64-unknown-none
       - name: Install SHA-256 codegen target
-        run: rustup target add aarch64-unknown-linux-gnu
+        run: rustup target add aarch64-unknown-linux-gnu riscv64gc-unknown-linux-gnu
+      - name: Install SHA-256 MSRV codegen toolchain
+        run: rustup toolchain install 1.90.0 --profile minimal --target riscv64gc-unknown-linux-gnu
       - name: Install security and SBOM tools
         run: scripts/install-ci-tools.sh
       - name: Run repository gate

@@ -13,6 +13,9 @@ case "$architecture:$instruction" in
         # ELF uses `sha256h`; Mach-O uses Apple's `sha256h.4s` spelling.
         pattern='(^|[[:space:]])sha256h([.]4s)?([[:space:]]|$)'
         ;;
+    riscv64:sha256sig0|riscv64:sha256sig1|riscv64:sha256sum0|riscv64:sha256sum1)
+        pattern="(^|[[:space:]])${instruction}([[:space:]]|$)"
+        ;;
     *)
         echo "unsupported SHA-256 assembly instruction check" >&2
         exit 64

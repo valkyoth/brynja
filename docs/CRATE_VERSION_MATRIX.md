@@ -1,14 +1,15 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 final candidate awaiting hosted verification and tag
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 RISC-V candidate implemented and awaiting exceptional pentest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.22.1`. `brynja-hash-core 0.1.0` and
+advances to internal `0.22.2`. `brynja-hash-core 0.1.0` and
 `brynja-hash-sha2 0.1.0` retain the reusable interface and complete portable
 SHA-256 while gaining an optional CPU session edge. Published
-`brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA
-and AArch64 SHA2 candidates; `brynja-crypto-cpu-std 0.1.1` contains the
-separate opt-in host detector and runtime selection API. Supporting manifest
+`brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
+AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
+the separate opt-in x86/AArch64 host detector and runtime selection API while
+RISC-V automatic detection remains disabled. Supporting manifest
 versions remain unchanged until the v0.25.0 public checkpoint. This milestone
 selects zero crates.io packages. Package publication does not imply a TLS
 implementation or production readiness.
@@ -127,16 +128,22 @@ exceptional assessment and final retest of signed commit
 `7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` passed with zero open
 findings. The stage selects no package publication and makes no independent-
 review, register-erasure, FIPS-validation, or complete hardware-support claim.
+The v0.22.2 stage adds the RV64 `Zknh` scalar-crypto candidate through four
+hash-bound first-party Rust inline-assembly instructions. Both endpoint
+compilers emit the exact instruction set and QEMU differentials pass, but no
+qualifying native RISC-V evidence exists. Automatic RISC-V detection remains
+disabled, the backend remains unadmitted, and the new unsafe boundary requires
+an exceptional pentest before its signed tag.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.22.1` | no | Internal facade milestone; v0.20.0 is published |
+| `brynja` | `0.22.2` | no | Internal facade milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | New unpublished allocation-free fixed-output hash interfaces |
 | `brynja-hash-sha2` | `0.1.0` | no | New unpublished complete portable SHA-256; acceleration and acceptance continue through v0.22.3 |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports the exact SHA-256 leaf implementation |
-| `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; unpublished x86_64 SHA and AArch64 SHA2 candidates remain unadmitted |
-| `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished opt-in detector falls back or fails closed while candidates are unadmitted |
+| `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; unpublished x86_64 SHA, AArch64 SHA2, and RV64 Zknh candidates remain unadmitted |
+| `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished opt-in x86/AArch64 detector falls back or fails closed; RISC-V auto-detection is disabled |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |
 | `brynja-protocol` | `0.1.0` | no | Published shared TLS/DTLS record-envelope boundary |
 | `brynja-platform`, `brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`, `brynja-dtls`, `brynja-quic-tls` | `0.1.8` | no | Published versions retained; README metadata only |

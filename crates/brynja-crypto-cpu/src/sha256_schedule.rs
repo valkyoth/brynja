@@ -65,6 +65,7 @@ pub(crate) const ROUND_CONSTANTS: [u32; 64] = [
     0xc671_78f2,
 ];
 
+#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 pub(crate) fn expanded(block: &[u8; 64]) -> [u32; 64] {
     let mut words = [0_u32; 64];
     for (word, bytes) in words.iter_mut().take(16).zip(block.chunks_exact(4)) {
@@ -87,14 +88,17 @@ pub(crate) fn expanded(block: &[u8; 64]) -> [u32; 64] {
     words
 }
 
+#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 fn word(words: &[u32; 64], index: usize) -> u32 {
     words.get(index).copied().unwrap_or(0)
 }
 
+#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 const fn small_sigma0(value: u32) -> u32 {
     value.rotate_right(7) ^ value.rotate_right(18) ^ (value >> 3)
 }
 
+#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 const fn small_sigma1(value: u32) -> u32 {
     value.rotate_right(17) ^ value.rotate_right(19) ^ (value >> 10)
 }

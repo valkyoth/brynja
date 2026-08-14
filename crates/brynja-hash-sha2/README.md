@@ -27,7 +27,8 @@
 
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
 v0.22.0 implementation candidate provides complete portable SHA-256 one-shot
-and streaming APIs. The optional `cpu` feature added at v0.22.1 accepts an
+and streaming APIs. The optional `cpu` feature added at v0.22.1 and extended
+with the unadmitted RV64 Zknh candidate at v0.22.2 accepts an
 already tested `brynja-crypto-cpu` session without changing scalar ownership.
 Its x86_64 and AArch64 candidates remain unadmitted pending native evidence;
 final chain usability acceptance remains assigned to v0.22.3. SHA-224,

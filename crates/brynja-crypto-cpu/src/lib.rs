@@ -1,7 +1,7 @@
 //! First-party `no_std` CPU acceleration for Brynja cryptography.
 //!
 //! This crate owns isolated SHA-256 kernels for the x86 SHA extensions and
-//! AArch64 SHA2 extensions. Safe execution requires either complete static
+//! AArch64 SHA2 extensions, and the RISC-V Zknh extension. Safe execution requires either complete static
 //! target-feature proof or a reviewed detector's explicit runtime attestation,
 //! followed by a direct startup known-answer test. It performs no runtime CPU
 //! probing, allocation, I/O, global registration, or protocol work.
@@ -13,6 +13,8 @@ mod sha256_schedule;
 
 #[cfg(target_arch = "aarch64")]
 mod aarch64_sha2;
+#[cfg(target_arch = "riscv64")]
+mod riscv64_zknh;
 #[cfg(target_arch = "x86_64")]
 mod x86_sha;
 
@@ -22,13 +24,17 @@ pub use sha256::{
 };
 
 /// The Brynja milestone that admitted the first CPU kernels.
-pub const BOUNDARY_MILESTONE: &str = "0.22.1";
+pub const BOUNDARY_MILESTONE: &str = "0.22.2";
 
 /// Whether an accelerated SHA-256 implementation is present for supported targets.
-pub const IMPLEMENTED: bool = cfg!(any(target_arch = "x86_64", target_arch = "aarch64"));
+pub const IMPLEMENTED: bool = cfg!(any(
+    target_arch = "x86_64",
+    target_arch = "aarch64",
+    target_arch = "riscv64"
+));
 
 /// Number of complete source implementations in this release.
-pub const IMPLEMENTED_BACKEND_COUNT: usize = 2;
+pub const IMPLEMENTED_BACKEND_COUNT: usize = 3;
 
 /// Number of accelerated backend identities admitted by current native evidence.
 pub const ADMITTED_BACKEND_COUNT: usize = 0;
@@ -56,22 +62,29 @@ mod tests {
     #[test]
     fn boundary_reports_exact_admitted_backends() {
         assert!(::core::hint::black_box(IMPLEMENTED));
-        assert_eq!(IMPLEMENTED_BACKEND_COUNT, 2);
+        assert_eq!(IMPLEMENTED_BACKEND_COUNT, 3);
         assert_eq!(ADMITTED_BACKEND_COUNT, 0);
-        assert_eq!(BOUNDARY_MILESTONE, "0.22.1");
+        assert_eq!(BOUNDARY_MILESTONE, "0.22.2");
         assert_eq!(Sha256Backend::X86Sha.required_features(), &["sha"]);
         assert_eq!(
             Sha256Backend::Aarch64Sha2.required_features(),
             &["neon", "sha2"]
         );
+        assert_eq!(
+            Sha256Backend::RiscVScalarCrypto.required_features(),
+            &["zknh"]
+        );
         assert!(!Sha256Backend::X86Sha.is_admitted());
         assert!(!Sha256Backend::Aarch64Sha2.is_admitted());
+        assert!(!Sha256Backend::RiscVScalarCrypto.is_admitted());
     }
 
     #[test]
     fn unsupported_architecture_is_rejected_before_instruction_use() {
         let unavailable = if cfg!(target_arch = "x86_64") {
             Sha256Backend::Aarch64Sha2
+        } else if cfg!(target_arch = "aarch64") {
+            Sha256Backend::RiscVScalarCrypto
         } else {
             Sha256Backend::X86Sha
         };
@@ -139,6 +152,8 @@ mod tests {
         {
             return Some(Sha256Backend::Aarch64Sha2);
         }
+        #[cfg(all(target_arch = "riscv64", target_feature = "zknh"))]
+        return Some(Sha256Backend::RiscVScalarCrypto);
         None
     }
 

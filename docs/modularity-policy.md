@@ -98,10 +98,11 @@ yet split into a narrower reviewed family. This prepares the versionless
 [post-1.0 hashing plan](POST_1_0_HASH_PLAN.md) without adding the future facade
 or catalogue to the v1 graph.
 
-`brynja-crypto-cpu` is an optional zero-dependency `no_std` package reserved for
-separately admitted, hashed ISA kernels, compile-time selection, capability
-tokens, KAT health, quarantine and reporting. The currently inert
-`brynja-crypto-cpu-std` boundary may use `std` in a later milestone only for CPU feature detection and
+`brynja-crypto-cpu` is an optional zero-dependency `no_std` package for
+separately reviewed, hashed ISA kernels, compile-time selection, capability
+tokens, KAT health, quarantine and reporting. Its x86 SHA, AArch64 SHA2, and
+RV64 Zknh SHA-256 candidates are implemented but unadmitted. The opt-in
+`brynja-crypto-cpu-std` boundary uses `std` only for x86/AArch64 CPU feature detection and
 dispatch initialization. It cannot provide entropy or other OS services and
 cannot enter a default, protocol-engine, bare-metal or validated-module graph.
 No CPU package or feature may alter scalar public type layout or protocol

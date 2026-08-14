@@ -49,7 +49,7 @@ that no source, relationship, erratum, registry assignment, or date can change
 silently.
 
 Fetch and refresh operations cannot generate their own trust anchors. RFC and
-local NIST/ITU lock scripts only validate pre-existing reviewed hash manifests;
+local NIST/ITU/RISC-V lock scripts only validate pre-existing reviewed hash manifests;
 the standards refresh refuses both `--check` and `--write` unless every result
 matches the policy pin. A legitimate change requires manual pin entry from a
 separate resolver, egress, or signed upstream channel before refresh. All URLs
@@ -92,7 +92,7 @@ normative authority, disposition, and owner. Broader reviewed-global mappings
 are governance-only, RFC-backed, and require explicit reviewed rationale.
 The v0.3.3 domain policy completes classical cryptography, encoding,
 key-container, PKIX, OCSP, and CT coverage. It binds 34 new requirements to all
-53 assigned exact authorities, records current, compatibility, evidence, and
+55 assigned exact authorities, records current, compatibility, evidence, and
 exclusion roles, hashes every applicable normative RFC section, and assigns
 all 3,325 current selected surfaces or explicitly defers the two ML-KEM surfaces to
 v0.3.5. FIPS 202 and the in-force ITU-T X.690 (2021) plus Erratum 1 are
@@ -112,7 +112,7 @@ FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C join the local-only checksum
 manifest. Fifty-one residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
 explicit exclusions while assigning every one of the 787 surfaces left by the
-earlier bundles. The generated closure proves that all 127 locked authorities,
+earlier bundles. The generated closure proves that all 129 locked authorities,
 all 391 ordered pre-1.0 roadmap rows, all 4,449 current surfaces, and all 168 requirements have
 bidirectional ownership. The new OpenPGP rows are fenced from implementation
 until v0.163.0 authenticates their RFC, errata, registry, algorithm, and

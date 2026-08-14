@@ -6,7 +6,13 @@ use brynja_hash_sha2::{Sha256, Sha256BackendSession, sha256};
 
 #[test]
 fn statically_proven_backend_matches_scalar_when_available() {
-    let Some(backend) = Sha256BackendSession::for_compiled_target() else {
+    let selected = Sha256BackendSession::for_compiled_target();
+    #[cfg(all(target_arch = "riscv64", target_feature = "zknh"))]
+    assert!(
+        selected.is_some(),
+        "Zknh build did not select its exact backend"
+    );
+    let Some(backend) = selected else {
         return;
     };
     let mut content = [0_u8; 193];

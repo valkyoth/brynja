@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 final acceleration candidate awaiting hosted verification and tag
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 RISC-V acceleration candidate implemented and awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -12,8 +12,8 @@ provider capability, installation, opaque-handle, authorization, and bounded
 request-metadata contracts, plus inert CPU-backend profiles, exact feature and
 operation bundles, explicit selection policy, caller-owned KAT/health state,
 permanent quarantine, thread-bound dispatch authority, a fail-closed
-native CPU evidence and performance-admission harness, isolated x86_64 SHA and
-AArch64 SHA2 compression candidates, a direct startup KAT, caller-owned health
+native CPU evidence and performance-admission harness, isolated x86_64 SHA,
+AArch64 SHA2, and RV64 Zknh compression candidates, a direct startup KAT, caller-owned health
 and quarantine, static `no_std` selection, and separate opt-in `std` runtime
 detection with explicit scalar fallback or fail-closed required mode, and affine raw-entropy
 plus initialized secure-random contracts, canonical checked durations, signed
@@ -58,6 +58,19 @@ open findings. The final Apple-only tooling correction recognizes Mach-O
 kernel, public API, dependency, or admission state. Both kernels remain
 unadmitted because candidate observations are not authenticated performance,
 side-channel, CPU-migration, independent-review, or FIPS evidence.
+
+The facade now advances to internal `0.22.2`. A third isolated candidate uses
+the exact ratified RV64 `Zknh` scalar-cryptography bundle through four
+source-hash-bound first-party Rust inline-assembly statements. Rust 1.90.0 and
+1.97.1 emit `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1`; the
+complete accelerated differential corpus passes under explicit QEMU RISC-V
+execution. Generic RV64 and base-vector support do not qualify, the reserved
+`Zvknha`/`Zvknhb` route remains absent, and the std adapter does not detect or
+activate RISC-V. No qualifying native RISC-V correctness, performance,
+side-channel, or migration evidence exists, so the candidate is unadmitted and
+ordinary execution remains scalar. The new inline-assembly boundary triggers
+an exceptional v0.22.2 pentest before tagging; no crate is selected for
+publication.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
@@ -176,7 +189,7 @@ tags remain inside that cumulative change range.
 
 Version 0.3.0 provides the exact source foundation:
 
-- 104 locked RFCs and fifteen local NIST/ITU authorities map to lifecycle, domain,
+- 104 locked RFCs and seventeen local NIST/ITU/RISC-V authorities map to lifecycle, domain,
   and roadmap ownership;
 - RFC status and update/obsolescence relationships are closed or explicitly
   excluded;
@@ -231,7 +244,7 @@ Version 0.3.2 added the normative-requirement foundation:
 Version 0.3.3 completes the cryptography, encoding, and PKIX population pass:
 
 - 34 new domain requirements bring the matrix to 46 stable records;
-- all 53 exact authorities in the symmetric, public-key, key-container, PKIX,
+- all 55 exact authorities in the symmetric, RISC-V acceleration, public-key, key-container, PKIX,
   OCSP, and CT domains are cited with current, compatibility, evidence, or
   exclusion roles;
 - all 3,325 current cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
@@ -279,7 +292,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   165 exact mappings and 17 explicit dispositions;
 - all 787 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,449 surfaces;
-- the generated closure maps all 127 locked sources, all 391 ordered pre-1.0
+- the generated closure maps all 129 locked sources, all 391 ordered pre-1.0
   roadmap rows, all 4,449 surfaces, and all 168 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners

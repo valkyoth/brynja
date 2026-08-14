@@ -29,6 +29,7 @@ USER_AGENT = "brynja-standards-ledger/0.3 (+https://github.com/valkyoth/brynja)"
 RFC_NS = {"r": "https://www.rfc-editor.org/rfc-index"}
 IANA_NS = {"i": "http://www.iana.org/assignments"}
 ALLOWED_HOSTS = {
+    "docs.riscv.org",
     "errata.rfc-editor.org",
     "nvlpubs.nist.gov",
     "www.itu.int",

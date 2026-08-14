@@ -1,11 +1,11 @@
 # Unsafe Rust Policy
 
-Status: five exact source-hash-bound modules approved; every other unsafe site forbidden
+Status: six exact source-hash-bound modules approved; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only five exact modules: the private core volatile clearer, the
+Rust in only six exact modules: the private core volatile clearer, the
 SHA-256 session attestation boundary, the x86_64 SHA kernel, the AArch64 SHA2
-kernel, and the opt-in standard-library runtime detector. Each complete source
+kernel, the RISC-V RV64 Zknh kernel, and the opt-in standard-library runtime detector. Each complete source
 is pinned by SHA-256 with exact unsafe-block, unsafe-item, local safety-proof,
 target-feature, intrinsic, and detector invariants. Any byte change reopens
 review before semantic checks run. Every other Rust source rejects unsafe,
@@ -19,6 +19,33 @@ safe alternative analysis, isolated module or crate, documented invariants,
 Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
+
+## v0.22.2 RISC-V Zknh Inline-Assembly Exception
+
+Rust 1.90.0 through 1.97.1 recognizes the ratified RISC-V `zknh` target
+feature but does not expose stable SHA-256 intrinsic functions for it. The
+smallest stable first-party implementation therefore owns exactly four inline
+`asm!` statements in `riscv64_zknh.rs`: `sha256sig0`, `sha256sig1`,
+`sha256sum0`, and `sha256sum1`. The complete module is source-hash-bound with
+five unsafe blocks, one target-feature unsafe function, and five local safety
+arguments. It has no memory operand, stack use, foreign ABI, external assembly,
+native object, or build script.
+
+The safe wrapper is reachable only on RV64 after compiler-proven `zknh` or an
+explicit repository evidence attestation. It accepts one fixed block and one
+exclusive state, runs the existing direct startup KAT, and keeps failed state
+permanently quarantined. Ordinary activation remains forbidden because the
+candidate has no qualifying native RISC-V correctness, migration, performance,
+side-channel, or independent-review evidence. Generated code under Rust 1.90.0
+and 1.97.1 must retain all four mnemonics; QEMU differential execution is
+supplemental only.
+
+The exception authorizes neither vector crypto nor generic RISC-V. `Zvknha`
+and `Zvknhb` remain reserved because the supported Rust line lacks the stable
+vector intrinsic, detection, and vector-state boundary required here. No
+register/spill erasure, FIPS validation, or RISC-V acceleration support claim
+is created. Because this is a new unsafe cryptographic assembly boundary,
+v0.22.2 requires an exceptional pentest before tagging.
 
 ## v0.22.1 SHA-256 CPU-Intrinsic Exceptions
 

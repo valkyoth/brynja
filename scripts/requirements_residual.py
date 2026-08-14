@@ -30,6 +30,8 @@ DISPOSITION_LIFECYCLE = {
     "legacy-only": "legacy",
     "safely-ignored": "planned",
 }
+def local_prefix(filename: str) -> str:
+    return "riscv:" if filename.startswith("RISCV.") else "nist:" if filename.startswith("NIST.") else "itu:"
 def read_policy() -> dict:
     try:
         with POLICY.open("rb") as handle:
@@ -43,8 +45,7 @@ def source_map(ledger: dict) -> dict[str, dict]:
     }
     result.update(
         {
-            ("nist:" if entry["filename"].startswith("NIST.") else "itu:")
-            + entry["filename"]: {**entry, "kind": "local"}
+            local_prefix(entry["filename"]) + entry["filename"]: {**entry, "kind": "local"}
             for entry in ledger["local_authorities"]
         }
     )

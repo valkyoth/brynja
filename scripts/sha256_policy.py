@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the reviewed v0.22.1 portable and optional CPU SHA-256 boundary."""
+"""Validate the reviewed v0.22.2 portable and optional CPU SHA-256 boundary."""
 
 from __future__ import annotations
 

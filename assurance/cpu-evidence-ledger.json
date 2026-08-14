@@ -1,7 +1,7 @@
 {
   "admissions": {
     "path": "security/cpu-backend-admissions.toml",
-    "sha256": "f74155bc885d7d3edfd605cc47650fc7cdfce939e48ce1dd1014a9aa0e1de5fc"
+    "sha256": "f43f819c27cd1b02c168e2258ba5203ba841abdffab46bc9f472c8d7c565c8e5"
   },
   "backends": [
     {
@@ -120,12 +120,13 @@
       ],
       "reason": "no-primitive-implementation-or-qualifying-native-isa-evidence",
       "required_features": [
-        "v"
+        "zvknha"
       ],
       "required_operating_state": [
-        "ratified-vector-isa",
+        "riscv64",
+        "ratified-vector-crypto",
         "vector-state-enabled",
-        "v-usable-on-current-hart"
+        "zvknha-usable-on-current-hart"
       ],
       "status": "unadmitted"
     },
@@ -135,13 +136,13 @@
       "native_lanes": [
         "riscv64-cloud"
       ],
-      "reason": "no-primitive-implementation-or-qualifying-native-isa-evidence",
+      "reason": "sha256-implementation-present-qualifying-native-evidence-pending",
       "required_features": [
-        "ratified-scalar-crypto-subset"
+        "zknh"
       ],
       "required_operating_state": [
-        "matching-riscv-width",
-        "exact-scalar-crypto-subset-usable-on-current-hart"
+        "riscv64",
+        "zknh-usable-on-current-hart"
       ],
       "status": "unadmitted"
     }
@@ -223,7 +224,7 @@
     "sha256": "609548b1a4d72908dd0ec57f5d15456aeb517223579410f60fa1fae07ccb5bf3"
   },
   "schema": {
-    "milestone": "0.22.1",
+    "milestone": "0.22.2",
     "version": 2
   }
 }

@@ -362,7 +362,9 @@
       ],
       "sources": [
         "nist:NIST.FIPS.180-4.pdf",
-        "nist:NIST.SP.800-107r1.pdf"
+        "nist:NIST.SP.800-107r1.pdf",
+        "riscv:RISCV.Crypto.Scalar-1.0.1.pdf",
+        "riscv:RISCV.Crypto.Vector-1.0.pdf"
       ],
       "targets": [
         "planned-symbol:crates/brynja-crypto/src/hash.rs#Sha2"
@@ -10772,6 +10774,12 @@
       ],
       "rfc:9973": [
         "BRY-REQ-TLS13-0763"
+      ],
+      "riscv:RISCV.Crypto.Scalar-1.0.1.pdf": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "riscv:RISCV.Crypto.Vector-1.0.pdf": [
+        "BRY-REQ-CRYPTO-0001"
       ]
     },
     "targets": {

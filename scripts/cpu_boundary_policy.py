@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Brynja's v0.22.1 SHA-256 CPU boundary."""
+"""Validate Brynja's v0.22.2 SHA-256 CPU boundary."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
-EXPECTED_POLICY_SHA256 = "1ed7ea7f425dcbd424ed61e9a149bcec56de64260ceb1ffc83496abfce58e95b"
+EXPECTED_POLICY_SHA256 = "322f4b7f1d6eb172a9ee6e5bb768116b63645da5c23e4839f8600bb71fc2100c"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -30,6 +30,7 @@ SOURCE_STATUS = {
     (CPU, "src/sha256_schedule.rs"): "portable-message-schedule",
     (CPU, "src/x86_sha.rs"): "implemented-unadmitted-candidate-kernel",
     (CPU, "src/aarch64_sha2.rs"): "implemented-unadmitted-candidate-kernel",
+    (CPU, "src/riscv64_zknh.rs"): "implemented-unadmitted-candidate-kernel",
     (DETECTOR, "src/lib.rs"): "boundary-only",
     (DETECTOR, "src/runtime_detection.rs"): "runtime-feature-attestation-boundary",
 }
@@ -64,15 +65,15 @@ BACKENDS = {
         ("aarch64", "neon-aes-and-pmull-usable-on-current-logical-cpu"), "reserved",
     ),
     "riscv-vector": (
-        "RiscVVector", "riscv", "src/riscv_vector.rs", ("v",),
-        ("ratified-vector-isa", "vector-state-enabled", "v-usable-on-current-hart"),
+        "RiscVVector", "riscv", "src/riscv_vector.rs", ("zvknha",),
+        ("riscv64", "ratified-vector-crypto", "vector-state-enabled",
+         "zvknha-usable-on-current-hart"),
         "reserved",
     ),
     "riscv-scalar-crypto": (
-        "RiscVScalarCrypto", "riscv", "src/riscv_scalar_crypto.rs",
-        ("ratified-scalar-crypto-subset",),
-        ("matching-riscv-width", "exact-scalar-crypto-subset-usable-on-current-hart"),
-        "reserved",
+        "RiscVScalarCrypto", "riscv", "src/riscv64_zknh.rs", ("zknh",),
+        ("riscv64", "zknh-usable-on-current-hart"),
+        "implemented-unadmitted-native-evidence-pending",
     ),
 }
 BACKEND_KEYS = {
@@ -114,15 +115,15 @@ def validate_policy_shape(policy: dict) -> None:
     }, "CPU boundary policy")
     if policy["schema"] != {
         "version": 2,
-        "milestone": "0.22.1",
-        "status": "sha256-x86-and-aarch64-candidates",
+        "milestone": "0.22.2",
+        "status": "sha256-x86-aarch64-and-riscv-candidates",
     }:
         fail("CPU boundary schema drifted")
     if policy["limits"] != {
         "maximum_source_lines": 500,
-        "implemented_backend_count": 2,
+        "implemented_backend_count": 3,
         "active_backend_count": 0,
-        "approved_cpu_low_level_allowances": 4,
+        "approved_cpu_low_level_allowances": 5,
     }:
         fail("CPU boundary limits drifted")
     if policy["packages"] != {
@@ -159,7 +160,7 @@ def validate_policy_shape(policy: dict) -> None:
     }:
         fail("FIPS CPU-package boundary drifted")
     allowances = policy["low_level_boundary"].get("current_cpu_allowances", [])
-    if len(allowances) != 4 or len(allowances) != len(set(allowances)):
+    if len(allowances) != 5 or len(allowances) != len(set(allowances)):
         fail("CPU low-level allowance inventory drifted")
     invariants = policy["safe_wrapper"].get("invariants", [])
     if len(invariants) != 15 or len(invariants) != len(set(invariants)):
@@ -243,10 +244,25 @@ def validate_sources(root: Path, policy: dict) -> None:
     for token in ('#[target_feature(enable = "sha2")]', "vsha256hq_u32", "vsha256h2q_u32", "// SAFETY:"):
         if token not in arm:
             fail(f"AArch64 SHA2 kernel drifted: {token}")
+    riscv = text[(CPU, "src/riscv64_zknh.rs")]
+    for token in (
+        '#[target_feature(enable = "zknh")]', "sha256sig0", "sha256sig1",
+        "sha256sum0", "sha256sum1", "options(pure, nomem, nostack)", "// SAFETY:",
+    ):
+        if token not in riscv:
+            fail(f"RISC-V Zknh kernel drifted: {token}")
+    if re.search(r'extern\s+"C"|\bglobal_asm\s*!', riscv):
+        fail("RISC-V Zknh kernel introduced external assembly or native linkage")
     detector = text[(DETECTOR, "src/runtime_detection.rs")]
     for token in ('is_x86_feature_detected!("sha")', 'is_aarch64_feature_detected!("sha2")', "// SAFETY:"):
         if token not in detector:
             fail(f"runtime detector drifted: {token}")
+    if "is_riscv_feature_detected" in detector or "RiscVScalarCrypto" in detector:
+        fail("RISC-V automatic runtime activation is not authorized")
+    session = text[(CPU, "src/sha256.rs")]
+    for token in ('target_arch = "riscv64"', 'target_feature = "zknh"'):
+        if token not in session:
+            fail(f"RISC-V static selection lost exact compiler proof: {token}")
     schedule = text[(CPU, "src/sha256_schedule.rs")]
     if re.search(r"\b(?:unsafe|core::arch|std::|alloc::)\b", schedule):
         fail("portable CPU message schedule crossed a low-level boundary")

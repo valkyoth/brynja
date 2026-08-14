@@ -18,6 +18,7 @@ LANES = {
     "aws-intel-x86_64": ("x86-sha", "x86_64", "linux"),
     "apple-m2-aarch64": ("aarch64-sha2", "aarch64", "macos"),
     "aws-aarch64": ("aarch64-sha2", "aarch64", "linux"),
+    "riscv64-cloud": ("riscv-scalar-crypto", "riscv64", "linux"),
 }
 REQUIRED_FILES = {
     "cargo.txt",
@@ -124,7 +125,7 @@ def validate_bundle(directory: Path) -> dict[str, str]:
         fail("candidate timestamp is invalid")
     lane = manifest["lane"]
     if lane not in LANES:
-        fail("candidate lane is outside v0.22.1")
+        fail("candidate lane is outside v0.22.2")
     backend, architecture, operating_system = LANES[lane]
     if (manifest["backend"], manifest["architecture"], manifest["os"]) != (
         backend,
@@ -137,10 +138,19 @@ def validate_bundle(directory: Path) -> dict[str, str]:
     if manifest["authority"] != "non-authorizing-native-candidate-observation":
         fail("candidate run gained unsupported admission authority")
     test_log = read_regular(directory / "candidate-tests.log").decode("utf-8", "strict")
-    if "evidence_route_is_exact_and_accelerated" not in test_log or "test result: ok" not in test_log:
+    expected_test = (
+        "statically_proven_backend_matches_scalar_when_available"
+        if backend == "riscv-scalar-crypto"
+        else "evidence_route_is_exact_and_accelerated"
+    )
+    if expected_test not in test_log or "test result: ok" not in test_log:
         fail("candidate test transcript lacks exact accelerated execution")
     codegen = read_regular(directory / "codegen.log").decode("utf-8", "strict")
-    instruction = "sha256rnds2" if backend == "x86-sha" else "sha256h"
+    instruction = {
+        "x86-sha": "sha256rnds2",
+        "aarch64-sha2": "sha256h",
+        "riscv-scalar-crypto": "sha256sum0",
+    }[backend]
     if f"required_instruction={instruction}" not in codegen or "status=pass" not in codegen:
         fail("candidate codegen transcript lacks the required instruction")
     return manifest

@@ -76,8 +76,30 @@ def rejects(label: str, mutate: object) -> None:
 
 
 def main() -> int:
+    capture_text = Path("scripts/capture-sha256-cpu-native.sh").read_text(
+        encoding="utf-8"
+    )
+    arm_start = capture_text.index('elif test "$architecture" = aarch64; then')
+    riscv_start = capture_text.index("    else\n        isa=", arm_start)
+    feature_end = capture_text.index("    fi", riscv_start)
+    assert "AArch64 SIMD" in capture_text[arm_start:riscv_start]
+    assert "RISC-V Zknh" in capture_text[riscv_start:feature_end]
+    assert "AArch64" not in capture_text[riscv_start:feature_end]
     with tempfile.TemporaryDirectory() as temporary:
         assert runner.validate_bundle(write_bundle(Path(temporary)))["backend"] == "x86-sha"
+    with tempfile.TemporaryDirectory() as temporary:
+        bundle = write_bundle(Path(temporary))
+        replace(bundle, "manifest.txt", "lane=local-amd-x86_64", "lane=riscv64-cloud")
+        replace(bundle, "manifest.txt", "backend=x86-sha", "backend=riscv-scalar-crypto")
+        replace(bundle, "manifest.txt", "architecture=x86_64", "architecture=riscv64")
+        replace(
+            bundle,
+            "candidate-tests.log",
+            "evidence_route_is_exact_and_accelerated",
+            "statically_proven_backend_matches_scalar_when_available",
+        )
+        replace(bundle, "codegen.log", "sha256rnds2", "sha256sum0")
+        assert runner.validate_bundle(bundle)["backend"] == "riscv-scalar-crypto"
     rejects("extra file", lambda bundle: (bundle / "extra").write_text("x"))
     rejects("checksum drift", lambda bundle: (bundle / "host.txt").write_text("changed"))
     rejects(
@@ -145,6 +167,15 @@ def main() -> int:
         subprocess.run(
             [instruction_check, "x86_64", "sha256rnds2", assembly], check=True
         )
+        for instruction in ("sha256sig0", "sha256sig1", "sha256sum0", "sha256sum1"):
+            assembly.write_text(f"\t{instruction} a0, a1\n", encoding="ascii")
+            subprocess.run(
+                [instruction_check, "riscv64", instruction, assembly], check=True
+            )
+        assembly.write_text("\tsha256sum01 a0, a1\n", encoding="ascii")
+        assert subprocess.run(
+            [instruction_check, "riscv64", "sha256sum0", assembly], check=False
+        ).returncode != 0
     for path in (
         Path("scripts/manage-cpu-evidence.py"),
         Path("scripts/cpu_evidence_run.py"),
@@ -154,7 +185,7 @@ def main() -> int:
     ):
         assert path.is_file() and not path.is_symlink()
         assert len(path.read_text(encoding="utf-8").splitlines()) <= 500
-    print("CPU evidence runner rejects ten provenance and bundle regressions")
+    print("CPU evidence runner validates RISC-V Zknh and rejects ten provenance and bundle regressions")
     return 0
 
 

@@ -1,7 +1,7 @@
 [schema]
 version = 2
-milestone = "0.22.1"
-status = "two-sha256-candidates-zero-backends-admitted"
+milestone = "0.22.2"
+status = "three-sha256-candidates-zero-backends-admitted"
 
 [[backends]]
 id = "x86-sha"
@@ -60,8 +60,8 @@ reason = "no-primitive-implementation-or-native-evidence"
 [[backends]]
 id = "riscv-vector"
 architecture = "riscv64"
-required_features = ["v"]
-required_operating_state = ["ratified-vector-isa", "vector-state-enabled", "v-usable-on-current-hart"]
+required_features = ["zvknha"]
+required_operating_state = ["riscv64", "ratified-vector-crypto", "vector-state-enabled", "zvknha-usable-on-current-hart"]
 native_lanes = ["riscv64-cloud"]
 status = "unadmitted"
 reason = "no-primitive-implementation-or-qualifying-native-isa-evidence"
@@ -69,8 +69,8 @@ reason = "no-primitive-implementation-or-qualifying-native-isa-evidence"
 [[backends]]
 id = "riscv-scalar-crypto"
 architecture = "riscv64"
-required_features = ["ratified-scalar-crypto-subset"]
-required_operating_state = ["matching-riscv-width", "exact-scalar-crypto-subset-usable-on-current-hart"]
+required_features = ["zknh"]
+required_operating_state = ["riscv64", "zknh-usable-on-current-hart"]
 native_lanes = ["riscv64-cloud"]
 status = "unadmitted"
-reason = "no-primitive-implementation-or-qualifying-native-isa-evidence"
+reason = "sha256-implementation-present-qualifying-native-evidence-pending"

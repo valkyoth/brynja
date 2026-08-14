@@ -26,13 +26,13 @@ This document records planning coverage, not protocol conformance. v0.3.2
 establishes stable machine-readable identifiers, lifecycle states, exact
 authority binding, bidirectional mappings, and fail-closed pilot verification.
 v0.3.3 populates every currently scoped cryptography, encoding, PKIX, OCSP,
-and CT rule across 53 authorities and 3,325 current surfaces. v0.3.4 populates 71 TLS,
+and CT rule across 55 authorities and 3,325 current surfaces. v0.3.4 populates 71 TLS,
 DTLS, and QUIC-TLS rules across 40 authorities, 550 normative sections, 64
 owner milestones, and 485 surfaces. v0.3.5 contains 51 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
 authorities, 182 reviewed normative sections, and 787 formerly uncovered
 surfaces.
-The complete closure covers 127 currently locked authorities, 391 ordered
+The complete closure covers 129 currently locked authorities, 391 ordered
 pre-1.0 roadmap rows, 4,449 currently registered surfaces, and 168 stable
 requirements. The OpenPGP-phase rows are
 explicitly fenced as planned-authority admission: v0.163.0 must authenticate

@@ -5521,13 +5521,43 @@
       ],
       "sha256": "dbc7f877f180c511e954f32dac4dd9552ceed6d478fd83daa151f2b8c5ffaf6d",
       "status": "PROPOSED STANDARD"
+    },
+    {
+      "authority_role": "current",
+      "domains": [
+        "riscv-acceleration"
+      ],
+      "id": "riscv:RISCV.Crypto.Scalar-1.0.1.pdf",
+      "milestones": [
+        "0.22.2"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "role": "riscv-scalar-crypto",
+      "sha256": "c96e33d91410639eef0bc34cd099e914dae8f44a51966e13416dc38d2cd9d18a"
+    },
+    {
+      "authority_role": "current",
+      "domains": [
+        "riscv-acceleration"
+      ],
+      "id": "riscv:RISCV.Crypto.Vector-1.0.pdf",
+      "milestones": [
+        "0.22.2"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "role": "riscv-vector-crypto",
+      "sha256": "442a3ac8b63ad1ce34f9563d4ea85ee6d1115d129e0b458890937a1175a72973"
     }
   ],
-  "authority_count": 53,
+  "authority_count": 55,
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "0872366bf2aaa23cb2d4928cbed2694613357a310f61ab010f30a43fb442b71e",
+  "policy_sha256": "df1d5ee94b6942b5a9d10ebf8285546d675a07d2e38ff89e8df740f8d043eee3",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3325,

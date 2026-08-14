@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repository binding and deterministic ledger for v0.22.1 CPU evidence."""
+"""Repository binding and deterministic ledger for v0.22.2 CPU evidence."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ LEDGER = ROOT / "assurance/cpu-evidence-ledger.json"
 EVIDENCE_ROOT = ROOT / "assurance/cpu-evidence"
 ATTRIBUTES = ROOT / ".gitattributes"
 EXPECTED_POLICY_SHA256 = "609548b1a4d72908dd0ec57f5d15456aeb517223579410f60fa1fae07ccb5bf3"
-EXPECTED_ADMISSIONS_SHA256 = "f74155bc885d7d3edfd605cc47650fc7cdfce939e48ce1dd1014a9aa0e1de5fc"
+EXPECTED_ADMISSIONS_SHA256 = "f43f819c27cd1b02c168e2258ba5203ba841abdffab46bc9f472c8d7c565c8e5"
 BACKEND_FIELDS = {
     "id", "architecture", "required_features", "required_operating_state",
     "native_lanes", "status", "reason",
@@ -33,7 +33,7 @@ EXPECTED_REASONS = {
     "aarch64-sha2": "sha256-implementation-present-native-admission-evidence-pending",
     "aarch64-aes-gcm": "no-primitive-implementation-or-native-evidence",
     "riscv-vector": "no-primitive-implementation-or-qualifying-native-isa-evidence",
-    "riscv-scalar-crypto": "no-primitive-implementation-or-qualifying-native-isa-evidence",
+    "riscv-scalar-crypto": "sha256-implementation-present-qualifying-native-evidence-pending",
 }
 ARCHITECTURE_MAP = {"x86_64": "x86_64", "aarch64": "aarch64", "riscv": "riscv64"}
 
@@ -57,8 +57,8 @@ def validate_admissions(policy: dict, admissions: dict, boundary: dict) -> None:
     schema.exact_keys(admissions, {"schema", "backends"}, "CPU admission register")
     if admissions["schema"] != {
         "version": 2,
-        "milestone": "0.22.1",
-        "status": "two-sha256-candidates-zero-backends-admitted",
+        "milestone": "0.22.2",
+        "status": "three-sha256-candidates-zero-backends-admitted",
     }:
         fail("CPU admission-register identity drifted")
     lanes = schema.lane_map(policy)
@@ -217,7 +217,7 @@ def build_ledger(policy: dict, admissions: dict) -> dict:
             "sha256": file_hash(path),
         })
     return {
-        "schema": {"version": 2, "milestone": "0.22.1"},
+        "schema": {"version": 2, "milestone": "0.22.2"},
         "claims": {
             "admitted_backend_count": sum(item["status"] == "admitted" for item in admissions["backends"]),
             "native_result_count": native_result_count,

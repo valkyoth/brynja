@@ -1,6 +1,6 @@
 # Native CPU Backend Evidence And Admission
 
-Status: v0.22.1 has two implemented SHA-256 candidates; zero backend admissions
+Status: v0.22.2 has three implemented SHA-256 candidates; zero backend admissions
 
 ## Purpose
 
@@ -11,8 +11,9 @@ created that admission route before any cryptographic ISA kernel existed.
 
 The machine-readable policy is
 `assurance/cpu-evidence-policy.toml`. The current decision register is
-`security/cpu-backend-admissions.toml`. Version 0.22.1 implements the `x86-sha`
-and `aarch64-sha2` SHA-256 candidates; all eight registered identities remain
+`security/cpu-backend-admissions.toml`. Versions 0.22.1 and 0.22.2 implement
+the `x86-sha`, `aarch64-sha2`, and `riscv-scalar-crypto` SHA-256 candidates;
+all eight registered identities remain
 `unadmitted`. The generated
 `assurance/cpu-evidence-ledger.json` binds those decisions, registered lanes,
 harnesses, and future evidence manifests reproducibly.
@@ -72,6 +73,27 @@ admission, the safe adapter must also bind each later instruction call to a
 reviewed migration-safe feature guarantee; making a session non-`Send` does
 not itself prevent the operating system from moving its thread between logical
 CPUs.
+
+## v0.22.2 RISC-V Candidate Disposition
+
+The implemented RISC-V identity is exactly RV64 `Zknh`. Its isolated kernel
+uses `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1`; generic RV64,
+`Zkn`, RVV, and processor naming are not substitutes. Rust 1.90.0 and 1.97.1
+both emit those four instructions, and the full accelerated SHA-256
+differential corpus passes under QEMU's explicit RISC-V model. The reserved
+vector identity now names exact `Zvknha`; a future `Zvknhb` route requires its
+own policy amendment. The vector identity
+has no source implementation or low-level authority because the supported
+Rust line lacks the stable vector intrinsic, runtime-detection, and
+vector-state boundary needed by this project.
+
+The scalar-crypto candidate is deliberately absent from automatic std runtime
+detection. Ordinary construction rejects it as unadmitted, and a build without
+compiler-proven `zknh` cannot select it statically. The registered native cloud
+lane has not supplied qualifying ISA, correctness, performance, migration,
+side-channel, or provenance evidence. QEMU cannot satisfy those duties.
+Therefore the admission register retains zero active backends and makes no
+RISC-V acceleration claim.
 
 ## Evidence Contract
 
@@ -139,7 +161,7 @@ independent review, and every v0.13.3 gate.
 
 ## Detached Native Candidate Runs
 
-The v0.22.1 runner applies the operational controls already proven useful in
+The v0.22.2 runner applies the operational controls already proven useful in
 `base64-ng` without copying its fuzz-specific targets. It creates a persistent
 local session bound to one clean commit and tree. Local and SSH workers run in
 detached sessions, and remote workers clone and check out that exact commit
@@ -175,7 +197,8 @@ python3 scripts/manage-cpu-evidence.py start-remote aws-intel-x86_64 \
 python3 scripts/manage-cpu-evidence.py check aws-intel-x86_64
 ```
 
-The same command accepts `aws-aarch64`. On the non-remotely accessible Apple
+The same command accepts `aws-aarch64` and `riscv64-cloud`; the latter exits
+before compilation unless `/proc/cpuinfo` identifies exact `zknh`. On the non-remotely accessible Apple
 M2, the repository owner checks out the exact session commit and runs:
 
 ```bash

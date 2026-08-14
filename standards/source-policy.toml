@@ -86,6 +86,12 @@ rfcs = [2104, 4231, 5116, 5869, 8439]
 local = ["NIST.FIPS.180-4.pdf", "NIST.FIPS.197-upd1.pdf", "NIST.FIPS.202.pdf", "NIST.SP.800-38D.pdf", "NIST.SP.800-107r1.pdf"]
 
 [[domain]]
+id = "riscv-acceleration"
+milestones = ["0.22.2"]
+rfcs = []
+local = ["RISCV.Crypto.Scalar-1.0.1.pdf", "RISCV.Crypto.Vector-1.0.pdf"]
+
+[[domain]]
 id = "public-key"
 milestones = ["0.32.0", "0.33.0", "0.34.0", "0.35.0", "0.36.0", "0.37.0", "0.38.0", "0.39.0", "0.40.0", "0.41.0", "0.42.0", "0.43.0", "0.44.0", "0.45.0"]
 rfcs = [3279, 4055, 5480, 5756, 5758, 6979, 7748, 8017, 8032, 8410, 8813, 9295]

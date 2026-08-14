@@ -55,7 +55,13 @@ def authority_map(ledger: dict) -> dict[str, dict]:
     }
     result.update(
         {
-            ("nist:" if item["filename"].startswith("NIST.") else "itu:")
+            (
+                "nist:"
+                if item["filename"].startswith("NIST.")
+                else "riscv:"
+                if item["filename"].startswith("RISCV.")
+                else "itu:"
+            )
             + item["filename"]: item
             for item in ledger["local_authorities"]
         }

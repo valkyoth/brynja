@@ -32,8 +32,15 @@ case "$lane" in
         expected_vendor=
         required_instruction=sha256h
         ;;
+    riscv64-cloud)
+        backend=riscv-scalar-crypto
+        architecture=riscv64
+        operating_system=linux
+        expected_vendor=
+        required_instruction=sha256sum0
+        ;;
     *)
-        echo "native SHA-256 capture requires one registered v0.22.1 lane" >&2
+        echo "native SHA-256 capture requires one registered v0.22.2 lane" >&2
         exit 64
         ;;
 esac
@@ -65,6 +72,10 @@ if test "$architecture" = aarch64 && test "$host_arch" != aarch64 && test "$host
     echo "native SHA-256 capture lane requires AArch64" >&2
     exit 66
 fi
+if test "$architecture" = riscv64 && test "$host_arch" != riscv64; then
+    echo "native SHA-256 capture lane requires RISC-V 64-bit" >&2
+    exit 66
+fi
 if test "$operating_system" = linux && test "$host_os" != Linux; then
     echo "native SHA-256 capture lane requires Linux" >&2
     exit 66
@@ -86,13 +97,19 @@ if test "$host_os" = Linux; then
             echo "native SHA-256 capture did not observe x86 SHA instructions" >&2
             exit 66
         }
-    else
+    elif test "$architecture" = aarch64; then
         printf '%s\n' "$flags" | grep -Eq '(^|[[:space:]])sha2([[:space:]]|$)' || {
             echo "native SHA-256 capture did not observe AArch64 SHA2" >&2
             exit 66
         }
         printf '%s\n' "$flags" | grep -Eq '(^|[[:space:]])(asimd|neon)([[:space:]]|$)' || {
             echo "native SHA-256 capture did not observe AArch64 SIMD" >&2
+            exit 66
+        }
+    else
+        isa="$(awk -F ': *' '/^isa/ { print tolower($2); exit }' /proc/cpuinfo)"
+        printf '%s\n' "$isa" | grep -Eq '(^|_)zknh([0-9]+p[0-9]+)?(_|$)' || {
+            echo "native SHA-256 capture did not observe exact RISC-V Zknh" >&2
             exit 66
         }
     fi
@@ -122,10 +139,17 @@ source_tree="$(git rev-parse 'HEAD^{tree}')"
 rustc -Vv >"$output/rustc.txt"
 cargo -Vv >"$output/cargo.txt"
 
-BRYNJA_CPU_EVIDENCE_EXPECTED_BACKEND="$backend" \
-RUSTFLAGS='--cfg brynja_cpu_evidence' \
-    cargo test --locked -p brynja-crypto-cpu-std --test sha256_runtime \
-    -- --test-threads=1 >"$output/candidate-tests.log" 2>&1
+if test "$architecture" = riscv64; then
+    RUSTFLAGS='--cfg brynja_cpu_evidence -C target-feature=+zknh' \
+        cargo test --locked -p brynja-hash-sha2 --features cpu \
+        --test sha256_accelerated -- --test-threads=1 \
+        >"$output/candidate-tests.log" 2>&1
+else
+    BRYNJA_CPU_EVIDENCE_EXPECTED_BACKEND="$backend" \
+    RUSTFLAGS='--cfg brynja_cpu_evidence' \
+        cargo test --locked -p brynja-crypto-cpu-std --test sha256_runtime \
+        -- --test-threads=1 >"$output/candidate-tests.log" 2>&1
+fi
 
 temporary="$(mktemp -d "${TMPDIR:-/tmp}/brynja-native-codegen-XXXXXX")"
 cleanup() {
@@ -145,6 +169,15 @@ if ! scripts/check-sha256-assembly-instruction.sh \
     "$architecture" "$required_instruction" "$assembly"; then
     echo "native SHA-256 capture omitted $required_instruction" >&2
     exit 67
+fi
+if test "$architecture" = riscv64; then
+    for instruction in sha256sig0 sha256sig1 sha256sum0 sha256sum1; do
+        scripts/check-sha256-assembly-instruction.sh \
+            "$architecture" "$instruction" "$assembly" || {
+            echo "native SHA-256 capture omitted $instruction" >&2
+            exit 67
+        }
+    done
 fi
 hash_file() {
     if command -v sha256sum >/dev/null 2>&1; then

@@ -108,7 +108,7 @@ def read_toml(path: Path) -> dict:
 def source_id(entry: dict) -> str:
     if "number" in entry:
         return f"rfc:{entry['number']}"
-    prefix = "nist" if entry["filename"].startswith("NIST.") else "itu"
+    prefix = "nist" if entry["filename"].startswith("NIST.") else ("riscv" if entry["filename"].startswith("RISCV.") else "itu")
     return f"{prefix}:{entry['filename']}"
 
 

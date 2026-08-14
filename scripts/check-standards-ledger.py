@@ -85,10 +85,22 @@ def validate_policy(policy: dict, rfcs: dict, local: dict) -> None:
             "id=T-REC-X.690-202109-I%21Err1%21PDF-E&lang=e&type=items"
         ),
     }
+    riscv_sources = {
+        "RISCV.Crypto.Scalar-1.0.1.pdf": (
+            "https://docs.riscv.org/reference/isa/extensions/crypto-scalar/"
+            "_attachments/riscv-crypto-spec-scalar.pdf"
+        ),
+        "RISCV.Crypto.Vector-1.0.pdf": (
+            "https://docs.riscv.org/reference/isa/extensions/crypto-vector/"
+            "_attachments/riscv-crypto-spec-vector.pdf"
+        ),
+    }
     for name, source in local.items():
         url = source["url"]
-        allowed = url.startswith("https://nvlpubs.nist.gov/") or (
-            name in itu_sources and url == itu_sources[name]
+        allowed = (
+            url.startswith("https://nvlpubs.nist.gov/")
+            or (name in itu_sources and url == itu_sources[name])
+            or (name in riscv_sources and url == riscv_sources[name])
         )
         if "/" in name or not allowed:
             fail(f"local authority {name} URL is not allowlisted")

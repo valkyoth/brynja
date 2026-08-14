@@ -7,6 +7,24 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add an isolated first-party RV64 `Zknh` SHA-256 candidate using exactly
+  `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1` in one
+  source-hash-bound Rust inline-assembly module, with static exact-feature
+  selection, direct startup KAT, health, quarantine, and scalar ownership.
+- Verify all four Zknh mnemonics under Rust 1.90.0 and 1.97.1 and run the full
+  accelerated SHA-256 differential corpus under explicit RISC-V QEMU, while
+  treating cross-build and emulation evidence as supplemental only.
+- Extend detached native evidence capture and its adversarial validator for the
+  registered RISC-V cloud lane, requiring an exact observed `zknh` ISA string
+  and rejecting generic RV64, RVV, lane, transcript, or instruction
+  substitution.
+- Keep the RV64 candidate unadmitted and absent from automatic std detection
+  because qualifying native correctness, migration, performance, side-channel,
+  authenticated-provenance, independent-review, and FIPS evidence is absent;
+  retain the `Zvknha`/`Zvknhb` vector route as an unimplemented reservation.
+- Advance the facade to internal v0.22.2 with no crates.io publication and
+  require an exceptional pentest before tagging because inline cryptographic
+  assembly creates a new unsafe ISA boundary.
 - Add isolated first-party x86_64 SHA and AArch64 SHA2 compression candidates,
   static `no_std` selection, direct startup KAT, caller-owned health and
   permanent quarantine in `brynja-crypto-cpu`.

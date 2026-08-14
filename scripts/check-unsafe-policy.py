@@ -8,7 +8,7 @@ import unsafe_policy
 
 def main() -> int:
     unsafe_policy.validate(Path(__file__).resolve().parents[1])
-    print("unsafe policy confines volatile clearing and SHA-256 CPU intrinsics to five reviewed modules")
+    print("unsafe policy confines volatile clearing and SHA-256 CPU low-level code to six reviewed modules")
     return 0
 
 

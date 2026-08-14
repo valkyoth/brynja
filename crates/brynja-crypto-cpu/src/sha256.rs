@@ -10,6 +10,8 @@ pub enum Sha256Backend {
     X86Sha,
     /// AArch64 Advanced SIMD and SHA2 extensions.
     Aarch64Sha2,
+    /// RISC-V 64-bit scalar Zknh extension.
+    RiscVScalarCrypto,
 }
 
 impl Sha256Backend {
@@ -19,6 +21,7 @@ impl Sha256Backend {
         match self {
             Self::X86Sha => "x86-sha",
             Self::Aarch64Sha2 => "aarch64-sha2",
+            Self::RiscVScalarCrypto => "riscv-scalar-crypto",
         }
     }
 
@@ -28,6 +31,7 @@ impl Sha256Backend {
         match self {
             Self::X86Sha => &["sha"],
             Self::Aarch64Sha2 => &["neon", "sha2"],
+            Self::RiscVScalarCrypto => &["zknh"],
         }
     }
 
@@ -35,7 +39,7 @@ impl Sha256Backend {
     #[must_use]
     pub const fn is_admitted(self) -> bool {
         match self {
-            Self::X86Sha | Self::Aarch64Sha2 => false,
+            Self::X86Sha | Self::Aarch64Sha2 | Self::RiscVScalarCrypto => false,
         }
     }
 }
@@ -224,7 +228,8 @@ fn require_architecture(backend: Sha256Backend) -> Result<(), Sha256BackendError
     match backend {
         Sha256Backend::X86Sha if cfg!(target_arch = "x86_64") => Ok(()),
         Sha256Backend::Aarch64Sha2 if cfg!(target_arch = "aarch64") => Ok(()),
-        Sha256Backend::X86Sha | Sha256Backend::Aarch64Sha2 => {
+        Sha256Backend::RiscVScalarCrypto if cfg!(target_arch = "riscv64") => Ok(()),
+        Sha256Backend::X86Sha | Sha256Backend::Aarch64Sha2 | Sha256Backend::RiscVScalarCrypto => {
             Err(Sha256BackendError::WrongArchitecture)
         }
     }
@@ -239,6 +244,8 @@ fn compiled_backend() -> Option<Sha256Backend> {
         target_feature = "sha2"
     ))]
     return Some(Sha256Backend::Aarch64Sha2);
+    #[cfg(all(target_arch = "riscv64", target_feature = "zknh"))]
+    return Some(Sha256Backend::RiscVScalarCrypto);
     #[allow(unreachable_code)]
     None
 }
@@ -256,6 +263,11 @@ fn compress_direct(
     #[cfg(target_arch = "aarch64")]
     if backend == Sha256Backend::Aarch64Sha2 {
         crate::aarch64_sha2::compress(state, block);
+        return Ok(());
+    }
+    #[cfg(target_arch = "riscv64")]
+    if backend == Sha256Backend::RiscVScalarCrypto {
+        crate::riscv64_zknh::compress(state, block);
         return Ok(());
     }
     Err(Sha256BackendError::WrongArchitecture)

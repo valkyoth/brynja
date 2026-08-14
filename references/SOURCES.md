@@ -29,6 +29,7 @@ inspected local bytes are pinned by `LOCAL_SHA256SUMS`.
 | NIST FIPS 203 and SP 800-227 | ML-KEM and KEM use | downloaded and checksum-pinned local-only; errata, CMVP approval, and final TLS group standards remain separate gates |
 | NIST CAVP vector archives | algorithm known-answer tests | review each archive before tracking |
 | ITU-T X.690 (02/2021) and Erratum 1 (09/2021) | ASN.1 BER/CER/DER | downloaded local-only from the current in-force ITU publication; the erratum is mandatory |
+| RISC-V Scalar Cryptography 1.0.1 and Vector Cryptography 1.0 | SHA-256 and future ISA acceleration | official CC-BY-4.0 publications downloaded and checksum-pinned local-only; scalar Zknh is consumed at v0.22.2, while vector crypto remains unimplemented |
 | ITU-T X.509 | certificate model | local-only licensed standard; RFC 5280 drives Internet PKI |
 | TLS 1.0, TLS 1.1, and legacy SSL 3.0 RFC publications | brynja-legacy-tls10, brynja-legacy-tls11, and brynja-legacy-ssl3 baselines | tracked under `rfc/` as RFC 2246, RFC 4346, and RFC 6101; current prohibition documents remain mandatory context |
 | Original SSL 3.0 specification | legacy brynja-legacy-ssl3 provenance comparison | local-only pending provenance/rights review; compare with RFC 6101 before implementation |

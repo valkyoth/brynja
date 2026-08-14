@@ -16,13 +16,16 @@ ALLOWED = {
         1,
     ),
     Path("crates/brynja-crypto-cpu/src/sha256.rs"): (
-        "3db27c1e35b73345c5513833bbc8367ec620cd735355cd3065da648bd8fccb93", 0, 2, 0,
+        "ab654d3dc132c6401a19497c4893fa1b000de7c298ae864c5b849843f5ffb27b", 0, 2, 0,
     ),
     Path("crates/brynja-crypto-cpu/src/x86_sha.rs"): (
         "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28", 2, 1, 2,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2.rs"): (
         "27b71c0b4eb183c4e3e66c30c420aa41cc153a77e84a5dba720124b6f7b170c4", 4, 1, 4,
+    ),
+    Path("crates/brynja-crypto-cpu/src/riscv64_zknh.rs"): (
+        "148eb17e4ccddadd9357ff4fda4a302c422d4ec63d7221144c3bff87961a045c", 5, 1, 5,
     ),
     Path("crates/brynja-crypto-cpu-std/src/runtime_detection.rs"): (
         "ec29948d1cdc1440f50b163417dd198e8394487c797ac9ce4f896f17d73d17aa", 1, 0, 1,
@@ -108,10 +111,13 @@ def validate_allowed(
             fail("volatile pointer must derive from each live exclusive byte reference")
         if "compiler_fence(Ordering::SeqCst)" not in text:
             fail("volatile loop must retain its final compiler barrier")
-    elif relative.name in {"x86_sha.rs", "aarch64_sha2.rs"}:
+    elif relative.name in {"x86_sha.rs", "aarch64_sha2.rs", "riscv64_zknh.rs"}:
         if "#[target_feature" not in text or "core::arch" not in text:
             fail(f"CPU kernel lost its intrinsic boundary: {relative}")
-        if re.search(r'extern\s+"C"|\basm\s*!|\bglobal_asm\s*!', text):
+        if relative.name == "riscv64_zknh.rs":
+            if text.count("asm!(") != 4 or "global_asm!(" in text:
+                fail("RISC-V kernel inline-assembly inventory drifted")
+        elif re.search(r'extern\s+"C"|\basm\s*!|\bglobal_asm\s*!', text):
             fail(f"CPU kernel introduced native linkage or assembly: {relative}")
     elif relative.name == "runtime_detection.rs":
         if "is_x86_feature_detected!" not in text or "from_runtime_detection" not in text:

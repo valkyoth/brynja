@@ -8,8 +8,9 @@ trap 'rm -rf "$temporary"' EXIT
 compile_and_find() {
     local target="$1"
     local output="$2"
+    local toolchain="${3:-1.97.1}"
     CARGO_TARGET_DIR="$temporary/$output" \
-        cargo rustc --quiet --locked --release -p brynja-crypto-cpu \
+        cargo "+$toolchain" rustc --quiet --locked --release -p brynja-crypto-cpu \
         --target "$target" --lib -- --emit=asm
     mapfile -t assembly < <(find "$temporary/$output" -type f -name '*.s' -print)
     if test "${#assembly[@]}" -ne 1; then
@@ -33,4 +34,14 @@ for instruction in 'sha256h' 'sha256h2'; do
     }
 done
 
-echo "SHA-256 CPU codegen contains x86 SHA and AArch64 SHA2 instructions"
+for toolchain in 1.90.0 1.97.1; do
+    riscv_assembly="$(compile_and_find riscv64gc-unknown-linux-gnu "riscv-$toolchain" "$toolchain")"
+    for instruction in sha256sig0 sha256sig1 sha256sum0 sha256sum1; do
+        grep -Fq -- "$instruction" "$riscv_assembly" || {
+            echo "RISC-V SHA-256 codegen under $toolchain omitted $instruction" >&2
+            exit 1
+        }
+    done
+done
+
+echo "SHA-256 CPU codegen contains x86 SHA, AArch64 SHA2, and RISC-V Zknh instructions"

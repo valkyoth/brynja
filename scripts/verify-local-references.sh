@@ -9,7 +9,7 @@ sources="$(
         NF && $1 !~ /^#/ {
             if (NF != 3 ||
                 $1 !~ /^[A-Za-z0-9._-]+\.pdf$/ ||
-                $2 !~ /^https:\/\/(nvlpubs\.nist\.gov|www\.itu\.int)\// ||
+                $2 !~ /^https:\/\/(docs\.riscv\.org|nvlpubs\.nist\.gov|www\.itu\.int)\// ||
                 $3 !~ /^[a-z0-9-]+$/) {
                 exit 1
             }

@@ -110,6 +110,16 @@
       "authority": "nist:NIST.SP.800-90C.pdf",
       "distribution": "local-only",
       "review": "Official final RBG-construction guidance is checksum pinned locally and never redistributed in Git or crates.io packages."
+    },
+    {
+      "authority": "riscv:RISCV.Crypto.Scalar-1.0.1.pdf",
+      "distribution": "local-only",
+      "review": "Official CC-BY-4.0 RISC-V scalar-cryptography bytes are checksum pinned locally; conservative local-only handling avoids silently expanding repository-distribution scope."
+    },
+    {
+      "authority": "riscv:RISCV.Crypto.Vector-1.0.pdf",
+      "distribution": "local-only",
+      "review": "Official CC-BY-4.0 RISC-V vector-cryptography bytes are checksum pinned locally; conservative local-only handling avoids silently expanding repository-distribution scope."
     }
   ],
   "mutable_authorities": [
@@ -654,13 +664,13 @@
       "version": "0.22.1"
     },
     {
-      "boundary": {
-        "class": "internal-security-design",
-        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
-      },
+      "boundary": null,
       "requirement_ids": [],
       "scope": "Implement a first-party RISC-V SHA-256 backend only for an exact ratified scalar-crypto or vector-crypto feature bundle expressible across the supported Rust line; run it on the available RISC-V host when its observed ISA qualifies, otherwise retain it as a non-dispatchable candidate with emulator and generated-code evidence, keep scalar fallback authoritative, and prohibit an accelerated support claim until matching native correctness, performance, and side-channel evidence exists.",
-      "source_ids": [],
+      "source_ids": [
+        "riscv:RISCV.Crypto.Scalar-1.0.1.pdf",
+        "riscv:RISCV.Crypto.Vector-1.0.pdf"
+      ],
       "title": "SHA-256 RISC-V Acceleration Candidate",
       "version": "0.22.2"
     },
@@ -6310,7 +6320,9 @@
       "owner": "0.22.0",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
-        "nist:NIST.SP.800-107r1.pdf"
+        "nist:NIST.SP.800-107r1.pdf",
+        "riscv:RISCV.Crypto.Scalar-1.0.1.pdf",
+        "riscv:RISCV.Crypto.Vector-1.0.pdf"
       ]
     },
     {
@@ -11619,6 +11631,26 @@
         "BRY-REQ-TLS13-0763"
       ],
       "sha256": "ee3268e5974e323d4cbb67d017e03e684fb6f0f39c530b9ec9211b982dbd79fa"
+    },
+    {
+      "id": "riscv:RISCV.Crypto.Scalar-1.0.1.pdf",
+      "milestones": [
+        "0.22.2"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "sha256": "c96e33d91410639eef0bc34cd099e914dae8f44a51966e13416dc38d2cd9d18a"
+    },
+    {
+      "id": "riscv:RISCV.Crypto.Vector-1.0.pdf",
+      "milestones": [
+        "0.22.2"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
+      "sha256": "442a3ac8b63ad1ce34f9563d4ea85ee6d1115d129e0b458890937a1175a72973"
     }
   ],
   "surfaces": [

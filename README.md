@@ -106,6 +106,14 @@ assembly source, build script, detector dependency, allocation, I/O, or global
 registry, and make no register-erasure, independent-review, or FIPS 140-3
 validation claim.
 
+Native candidate runs use a repository-owned detached runner derived from the
+same operational model as `base64-ng`: it pins one clean commit and tree,
+clones that exact commit on SSH workers, survives disconnects, persists local
+job state, retrieves completed bundles, and validates the lane, accelerated
+test transcript, emitted instruction, and every checksum locally. These
+candidate bundles remain explicitly non-authorizing; they do not replace the
+later authenticated performance, side-channel, and admission records.
+
 The preceding v0.22.0 milestone introduced allocation-free `no_std` one-shot
 and streaming SHA-256, checked FIPS message-length exhaustion, consuming
 finalization, and an exact 32-byte digest type. `brynja-crypto` and `brynja`
@@ -613,7 +621,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
 | External crates | Rejected unless a numbered admission freezes an exact minimal graph; planned `base64-ng` use is encoding-only and future rustls/Tokio API dependencies remain isolated |
 | First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
-| Unsafe Rust | One v0.11 volatile-store block admitted in a private module; every other site is mechanically forbidden |
+| Unsafe Rust | Five exact source-hash-bound modules admit the v0.11 volatile clearer plus v0.22.1 SHA-256 attestation, x86 SHA, AArch64 SHA2, and std detector boundaries; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
 | FIPS 140-3 status | Planned Level 1 software-module path; not validated |

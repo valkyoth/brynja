@@ -38,6 +38,17 @@ engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
 
+The v0.22.1 candidate also provides a persistent detached native-run manager.
+It can launch the exact clean candidate locally or over SSH, records the source
+commit and tree before execution, continues after the operator disconnects,
+polls without relabeling results, downloads completed bundles, and validates
+their exact lane, accelerated execution transcript, generated instruction,
+file inventory, and checksums. Apple M2 bundles can be produced locally and
+imported through the same validator without granting remote access. These are
+non-authorizing candidate observations only; the trusted-runner signature,
+performance, statistical side-channel, and final backend-admission contracts
+remain deliberately unsatisfied.
+
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added

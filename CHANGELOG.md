@@ -18,6 +18,10 @@ Keep a Changelog and Semantic Versioning.
   commit-bound native evidence exists, and require generated x86 SHA and
   AArch64 SHA2 instructions without making register-erasure, independent-
   review or FIPS-validation claims.
+- Add a clean-commit-bound detached native candidate runner that can execute
+  locally or over SSH, survive operator disconnects, persist job state, fetch
+  completed bundles, and reject source, lane, transcript, checksum, symlink,
+  or admission-authority substitution before formal evidence review.
 - Give the published `brynja` package a compact crates.io-specific README with
   current capability examples, design boundaries, verification tables, a
   reduced workspace guide, and links to the detailed repository documentation;

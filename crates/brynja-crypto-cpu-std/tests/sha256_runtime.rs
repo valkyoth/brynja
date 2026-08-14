@@ -101,3 +101,26 @@ fn reusable_selection_has_no_cross_operation_state() {
 fn map_error(_: brynja_hash_sha2::Sha256Error) -> RuntimeSha256Error {
     RuntimeSha256Error::MessageTooLong
 }
+
+#[cfg(brynja_cpu_evidence)]
+#[test]
+fn evidence_route_is_exact_and_accelerated() {
+    let expected = std::env::var("BRYNJA_CPU_EVIDENCE_EXPECTED_BACKEND");
+    assert!(expected.is_ok());
+    let Ok(expected) = expected else {
+        return;
+    };
+    let backend = RuntimeSha256Backend::required();
+    assert!(backend.is_ok());
+    let Ok(backend) = backend else {
+        return;
+    };
+    let report = backend.report();
+    assert_eq!(report.selection(), RuntimeSha256Selection::Accelerated);
+    assert_eq!(
+        report.backend().map(|value| value.as_str()),
+        Some(expected.as_str())
+    );
+    assert!(report.backend_report().is_some());
+    assert!(backend.hash(b"commit-bound native candidate route").is_ok());
+}

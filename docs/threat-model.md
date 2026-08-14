@@ -58,7 +58,8 @@ termination after one failed destruction target, value-bearing diagnostics,
 false local-memory erasure assertions, or production reachability of the RFC
 9850 traffic-secret key logger.
 Owned-memory attackers additionally try to elide clearing stores through
-optimization, escape the one approved unsafe block, read partial initialization,
+optimization, escape the one core-memory unsafe block or any separately
+inventoried CPU-kernel boundary, read partial initialization,
 retain prior caller bytes, overrun a region, create mutable aliases, confuse a
 returned local-memory completion with cache or DMA completion, or extend the
 claim to registers, copies, dumps, suspend images, physical memory, forgotten

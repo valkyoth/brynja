@@ -83,7 +83,7 @@ bytes; sequential writes are failure-atomic; only exact complete initialization
 becomes readable; and incomplete finish, initialization Drop, explicit owner
 clear, and owner Drop clear the entire allocation through a per-byte volatile
 zero store plus compiler barrier. One private 23-line module contains the only
-unsafe block. Repository policy rejects every other unsafe site, while CI
+unsafe block. Repository policy rejects every other core unsafe site, while CI
 checks MIR, LLVM IR, and assembly for Rust 1.90.0 through 1.97.1 and all nine
 promised targets, then runs the secret-memory tests under pinned Miri and
 AddressSanitizer. The guarantee stops at that Rust allocation: registers,

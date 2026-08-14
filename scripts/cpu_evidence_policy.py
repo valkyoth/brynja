@@ -104,6 +104,7 @@ def validate_repository_binding() -> None:
     for command in (
         "python3 scripts/check-cpu-evidence.py",
         "python3 scripts/test-cpu-evidence.py",
+        "python3 scripts/test-cpu-evidence-runner.py",
         "scripts/check-cpu-admission-fixture.sh",
     ):
         if checks.count(command) != 1:
@@ -119,6 +120,11 @@ def validate_repository_binding() -> None:
         "scripts/validate-cpu-evidence.py",
         "scripts/test-cpu-evidence.py",
         "scripts/cpu_evidence_fixture_tests.py",
+        "scripts/cpu_evidence_run.py",
+        "scripts/validate-cpu-evidence-run.py",
+        "scripts/test-cpu-evidence-runner.py",
+        "scripts/manage-cpu-evidence.py",
+        "scripts/capture-sha256-cpu-native.sh",
         "scripts/check-cpu-admission-fixture.sh",
     ):
         path = ROOT / relative

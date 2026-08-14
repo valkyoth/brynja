@@ -58,6 +58,13 @@ scripts/validate-cpu-evidence.py assurance/cpu-evidence/<run-id>/manifest.toml
 python3 scripts/check-cpu-evidence.py
 ```
 
+The separate detached candidate runner under `scripts/manage-cpu-evidence.py`
+produces transferable clean-commit native observations before formal manifests
+exist. Its bundles are validated by `scripts/validate-cpu-evidence-run.py` and
+always say `authority=non-authorizing-native-candidate-observation`. They are
+input for later review, not entries in this directory and not backend admission
+evidence by themselves.
+
 QEMU runs may populate supplemental instruction-coverage evidence, but they
 can never satisfy native performance or side-channel gates. An unavailable
 runner or a CPU without the exact required ISA remains explicitly unadmitted

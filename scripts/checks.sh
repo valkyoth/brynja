@@ -43,6 +43,7 @@ python3 scripts/check-cpu-boundary.py
 python3 scripts/test-cpu-boundary.py
 python3 scripts/check-cpu-evidence.py
 python3 scripts/test-cpu-evidence.py
+python3 scripts/test-cpu-evidence-runner.py
 scripts/check-cpu-admission-fixture.sh
 python3 scripts/check-zeroization-evidence.py
 python3 scripts/test-zeroization-evidence.py

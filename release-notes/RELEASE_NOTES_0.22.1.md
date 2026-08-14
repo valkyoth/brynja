@@ -31,6 +31,11 @@ assessment range.
 - Non-authorizing native candidate execution on detected GitHub-hosted x86_64,
   macOS Arm, and Linux Arm runners; these CI observations catch portability
   faults but do not satisfy the separate trusted-runner admission contract.
+- A clean-commit-bound detached native runner for local AMD, SSH-hosted Intel
+  and AWS Arm, plus transferable Apple M2 bundles. It persists local job state,
+  survives SSH disconnects, retrieves successful results, and validates source,
+  lane, accelerated execution, emitted instructions, file inventory, symlinks,
+  and checksums locally before accepting a non-authorizing candidate bundle.
 
 ## Security Boundaries
 

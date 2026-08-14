@@ -417,6 +417,11 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
   evidence, performance thresholds, and honest scalar-only decisions.
 - Parallel multi-buffer APIs are separate from single-message streaming APIs;
   AVX/NEON lanes cannot silently change semantics or memory ownership.
+- Follow the repository-wide
+  [`POST_1_0_RISCV_QUALIFICATION_PLAN.md`](POST_1_0_RISCV_QUALIFICATION_PLAN.md)
+  for community-assisted native coverage when an exact RISC-V extension is not
+  present on the registered host; community observations remain separate from
+  backend admission.
 
 ### 10. Facades And Publication
 

@@ -29,6 +29,10 @@ assessment range.
 - Checksum-pinned local copies and machine-readable authority records for the
   ratified RISC-V scalar-cryptography 1.0.1 and vector-cryptography 1.0
   specifications.
+- A documented exact-feature policy that retains the registered host for
+  native scalar and supported common-hart work, identifies missing crypto
+  extensions as QEMU/codegen-only, and schedules a reproducible post-v1.0.0
+  community campaign for broader real-hardware evidence.
 
 ## Security Boundaries
 

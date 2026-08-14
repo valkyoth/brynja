@@ -85,3 +85,23 @@ review, FIPS validation, or backend admission.
 The unavailable native lane is a valid fail-closed outcome. The candidate
 remains mechanically non-dispatchable in ordinary builds, while the portable
 scalar implementation remains authoritative.
+
+## Ongoing Evidence Policy
+
+This host is not discarded merely because it lacks cryptographic SHA
+extensions. Brynja may use it for focused native work whose exact required
+features are present in the all-hart intersection above, including portable
+scalar RV64 behavior and separately reviewed generic-vector or
+bit-manipulation experiments. Each result must name the exact operation and
+feature bundle it exercises and cannot be generalized to another backend.
+
+For `Zknh`, `Zvknha`, `Zvknhb`, and every other absent cryptographic extension,
+the project records the current route as **QEMU/codegen-only**. Emulation and
+generated-instruction checks support implementation testing but never count as
+native execution, performance, migration, side-channel, or admission evidence.
+
+After v1.0.0, Brynja will seek additional real-hardware observations through
+the reproducible community process in
+[`POST_1_0_RISCV_QUALIFICATION_PLAN.md`](POST_1_0_RISCV_QUALIFICATION_PLAN.md).
+The registered host remains useful in that campaign for supported common-hart
+features and as a negative-feature, scalar-portability, and fail-closed lane.

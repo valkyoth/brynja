@@ -43,7 +43,11 @@ native evidence. This adapter detects only the stable x86_64 and AArch64
 feature bundles; RISC-V automatic detection stays intentionally disabled, so ordinary runtime selection reports
 `ScalarBackendUnadmitted` on qualifying machines. QEMU and cross-compilation
 can supplement instruction and portability evidence but cannot establish a
-native admission claim.
+native admission claim. The registered RISC-V host lacks the required SHA
+extensions, so this candidate is explicitly QEMU/codegen-only there. Brynja
+will seek additional exact-feature native observations through a reproducible
+post-v1.0.0 community campaign, while retaining the normal authenticated
+admission gates.
 
 ## Example
 

@@ -615,3 +615,15 @@ historical primitive or protocol with no dependency or integration edge into
 the modern or named legacy Brynja scope, may remain post-1.0. Discovery that an
 apparently standalone item is required by a pre-1.0 consumer immediately moves
 it into a new numbered pre-1.0 milestone.
+
+## Post-1.0 RISC-V Native Qualification
+
+RISC-V operations may use the registered native host before v1.0.0 only when
+their exact required feature bundle is present on every eligible hart.
+Unavailable instruction-specific paths remain explicitly QEMU/codegen-only,
+unadmitted, and scalar-backed. After v1.0.0, the project will publish
+reproducible capture instructions and seek qualifying real-hardware evidence
+from Rust and RISC-V community members. Candidate reports remain distinct from
+backend admission and cannot create performance, side-channel, independent-
+review, or FIPS claims. The complete campaign and acceptance boundary are in
+[`POST_1_0_RISCV_QUALIFICATION_PLAN.md`](POST_1_0_RISCV_QUALIFICATION_PLAN.md).

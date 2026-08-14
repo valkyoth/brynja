@@ -27,6 +27,13 @@ Keep a Changelog and Semantic Versioning.
   and `Zvknhb`, so the preflight stops before candidate execution and the lane
   remains useful only for focused scalar, portability, generic-vector, and
   bit-manipulation work.
+- Define the RISC-V evidence split explicitly: use that host natively only for
+  exact features in its all-hart intersection, label absent cryptographic
+  extensions QEMU/codegen-only, and keep both routes separate from admission.
+- Add a post-v1.0.0 community RISC-V qualification plan with reproducible,
+  privacy-conscious capture instructions, exact-feature hardware requests,
+  local bundle validation, and an explicit rule that community observations
+  alone cannot admit a backend.
 - Advance the facade to internal v0.22.2 with no crates.io publication and
   require an exceptional pentest before tagging because inline cryptographic
   assembly creates a new unsafe ISA boundary.

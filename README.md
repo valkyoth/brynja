@@ -125,6 +125,15 @@ external assembly source, build script, detector dependency, allocation, I/O, or
 registry, and make no register-erasure, independent-review, or FIPS 140-3
 validation claim.
 
+RISC-V testing follows an exact-feature policy. The registered native host is
+used for scalar portability and only those generic-vector or bit-manipulation
+operations supported by every eligible hart; missing cryptographic extensions
+remain explicitly QEMU/codegen-only. After v1.0.0, Brynja will publish a
+reproducible, privacy-conscious capture kit and ask Rust and RISC-V community
+members for additional real-hardware evidence. Community observations do not
+by themselves admit a backend. See the
+[post-1.0 RISC-V qualification plan](docs/POST_1_0_RISCV_QUALIFICATION_PLAN.md).
+
 Native candidate runs use a repository-owned detached runner derived from the
 same operational model as `base64-ng`: it pins one clean commit and tree,
 clones that exact commit on SSH workers, survives disconnects, persists local

@@ -258,7 +258,13 @@ pentest, and release line. Code never changes classification silently in place.
    local AMD and observed-feature AWS Intel, exact AArch64 crypto/vector bundles
    on Apple M2 and AWS Arm, and exact ratified RISC-V crypto/vector bundles only
    after matching native evidence; generic RISC-V remains scalar and QEMU never
-   substitutes for hardware qualification. Every CPU path retains per-compiler
+   substitutes for hardware qualification. Use the registered RISC-V host for
+   native scalar, portability, vector, or bit-manipulation work only when the
+   operation's exact feature bundle occurs in its all-hart intersection;
+   otherwise label the path QEMU/codegen-only and keep it unadmitted. After
+   v1.0.0, use the reproducible community qualification campaign to seek
+   additional real hardware without treating public reports as admission.
+   Every CPU path retains per-compiler
    constant-time, emitted-code, KAT, quarantine, differential, performance and
    residual-risk evidence. Each arithmetic or cryptographic milestone
    introduces its applicable proof harness beside the implementation; v0.155.0
@@ -358,8 +364,10 @@ The repository will maintain:
   opportunistic scalar fallback, and secret-free actual-backend reporting;
 - reproducible native CPU evidence from local AMD x86_64, an AWS Intel x86_64
   host selected by observed features, Apple M2, AWS AArch64, and the available
-  RISC-V host, with CPU, microcode or firmware, OS, compiler, flags, frequency
-  policy and raw-result hashes; QEMU and cross-builds remain supplemental;
+  RISC-V host only for exact features in its all-hart intersection, with CPU,
+  microcode or firmware, OS, compiler, flags, frequency policy and raw-result
+  hashes; absent RISC-V extensions remain explicitly QEMU/codegen-only, and
+  QEMU and cross-builds remain supplemental;
 - per-operation code-size, stack, cold-start, latency and throughput thresholds
   over representative TLS message sizes so a wider ISA is never assumed faster;
 - generated exhaustive tests for small domains;

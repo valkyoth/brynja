@@ -33,10 +33,17 @@ streaming state, padding, length accounting, finalization, and scalar fallback.
 
 All three candidates are deliberately unadmitted in v0.22.2 while commit-bound
 native evidence is incomplete. Ordinary construction therefore cannot execute
-either kernel: static selection returns `None`, runtime-attested construction
+any kernel: static selection returns `None`, runtime-attested construction
 returns `NotAdmitted`, opportunistic host use falls back to scalar, and
 required acceleration fails closed. Evidence builds can directly exercise a
 candidate only through the repository-only `brynja_cpu_evidence` configuration.
+
+The registered RISC-V host lacks `Zknh`, `Zvknha`, and `Zvknhb`. The RV64
+candidate is therefore QEMU/codegen-only until qualifying real hardware is
+available; generic RV64, RVV, or bit-manipulation support cannot qualify it.
+The host remains useful for native scalar and exact-feature tests it really
+supports, and a post-v1.0.0 community campaign will seek broader hardware
+coverage without treating submitted observations as backend admission.
 
 Every backend session is caller-owned and thread-bound. Construction checks
 the architecture, runs a direct `abc` known-answer test, reports its exact

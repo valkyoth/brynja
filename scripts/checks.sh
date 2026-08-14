@@ -34,6 +34,8 @@ python3 scripts/check-der-reader.py
 python3 scripts/test-der-reader.py
 python3 scripts/check-asn1-values.py
 python3 scripts/test-asn1-values.py
+python3 scripts/check-sha256.py
+python3 scripts/test-sha256.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-boundary.py
@@ -80,7 +82,7 @@ python3 scripts/test-requirement-history.py
 python3 scripts/test-requirement-residuals.py
 python3 scripts/check-assurance.py
 python3 scripts/test-assurance.py
-scripts/check-kani.sh
+scripts/check-kani.sh --policy-only
 cargo check --workspace --all-features
 cargo check --workspace --no-default-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings

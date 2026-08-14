@@ -1,0 +1,27 @@
+//! Small algorithm-independent interfaces for fixed-output hashes.
+//!
+//! This crate defines interfaces only. It contains no hash implementation,
+//! algorithm identifier, allocation, I/O, runtime dispatch, or protocol code.
+
+#![no_std]
+
+/// Incremental byte input for a hash computation.
+///
+/// Implementations must reject an update before changing observable state when
+/// accepting its bytes would exceed the algorithm's message-length domain.
+pub trait Update {
+    /// Closed update failure type.
+    type Error;
+
+    /// Absorbs the complete byte slice or leaves the state unchanged.
+    fn update(&mut self, input: &[u8]) -> Result<(), Self::Error>;
+}
+
+/// A hash state that produces one fixed-size digest and is consumed by doing so.
+pub trait FixedOutput: Update {
+    /// Algorithm-specific digest value.
+    type Output: AsRef<[u8]>;
+
+    /// Consumes the state and returns the digest.
+    fn finalize(self) -> Self::Output;
+}

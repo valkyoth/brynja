@@ -1,7 +1,9 @@
 //! Security-first, first-party Rust `no_std` cryptography and protocol facade.
 //!
-//! This release exposes checked numeric/resource domains, transactional
-//! borrowed cursors, caller-owned workspaces, secret-lifetime and owned-memory
+//! This release also exposes complete portable SHA-256 through
+//! [`crypto::sha256`] and [`crypto::Sha256`]. It exposes checked
+//! numeric/resource domains, transactional borrowed cursors, caller-owned
+//! workspaces, secret-lifetime and owned-memory
 //! foundations, fixed-width constant-time operations, provider capability
 //! contracts with opaque exact-operation handles, and typed wall and monotonic
 //! clocks. Pending certificate, external-signature, and accelerator operations
@@ -12,9 +14,10 @@
 //! including token-gated external-key destruction. Bounded observational
 //! events duplicate those outcomes without gaining authority. Shared TLS and
 //! DTLS record envelopes are now parsed and encoded independently of protocol
-//! selection. A bounded borrowed DER reader now exposes canonical framing
-//! without ASN.1 or X.509 semantics. This crate does not provide a TLS
-//! connection API, provider implementation, or cryptographic algorithm.
+//! selection. A bounded borrowed DER reader exposes canonical framing and
+//! values without schema-driven ASN.1 or X.509 semantics. This crate does not
+//! provide a TLS connection API, provider effect, or any cryptographic
+//! algorithm other than SHA-256.
 
 #![no_std]
 
@@ -87,6 +90,7 @@ mod tests {
         assert!(::core::hint::black_box(
             super::pki::BOUNDED_DER_READER_IMPLEMENTED
         ));
+        assert!(::core::hint::black_box(super::crypto::SHA256_IMPLEMENTED));
         let mut output = [];
         let cursor = super::core::WriteCursor::new(&mut output);
         assert_eq!(cursor.finish().map(|finished| finished.len()), Ok(0));

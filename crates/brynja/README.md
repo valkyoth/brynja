@@ -95,6 +95,24 @@ assert!(remaining.is_empty());
 This parses only the bounded record envelope. It does not negotiate TLS,
 authenticate data, decrypt a record, or perform network I/O.
 
+### Compute Portable SHA-256
+
+```rust
+let digest = brynja::crypto::sha256(b"abc").unwrap();
+
+assert_eq!(
+    digest.as_bytes(),
+    &[
+        0xba, 0x78, 0x16, 0xbf, 0x8f, 0x01, 0xcf, 0xea,
+        0x41, 0x41, 0x40, 0xde, 0x5d, 0xae, 0x22, 0x23,
+        0xb0, 0x03, 0x61, 0xa3, 0x96, 0x17, 0x7a, 0x9c,
+        0xb4, 0x10, 0xff, 0x61, 0xf2, 0x00, 0x15, 0xad,
+    ]
+);
+```
+
+SHA-256 is an unkeyed digest, not authentication, a MAC, or password hashing.
+
 ## Cryptography Verification Status
 
 These tables track concrete public capabilities, not internal crate names or
@@ -152,11 +170,13 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | --- | --- |
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
+| `brynja-hash-core` | Small allocation-free fixed-output hash interfaces |
+| `brynja-hash-sha2` | Portable SHA-256 implementation and future SHA-2 family ownership |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |
 | `brynja-tls12`, `brynja-tls13`, `brynja-dtls`, `brynja-quic-tls` | Separately reviewable modern protocol engines |
-| Future `brynja-hash-*` and `brynja-mac-*` | Small reusable algorithm-family crates beginning with SHA-256 |
+| Future `brynja-hash-sha3` and `brynja-mac-*` | Further small reusable algorithm-family crates |
 | `brynja-platform` | Explicit operating-system integrations |
 | `brynja-sanitization` | Optional first-party secret-sanitization adapter |
 | `brynja-legacy-*` | Explicitly isolated obsolete-protocol compatibility |

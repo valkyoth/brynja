@@ -34,8 +34,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: scripts/check-github-release-controls.py --public
-      - name: Validate committed pentest report when present
-        run: scripts/validate-current-pentest.sh
       - name: Check dependency policy
         run: cargo deny check
       - name: Check RustSec advisories
@@ -118,7 +116,7 @@ jobs:
         run: scripts/check-constant-time-codegen.sh 1.97.1 "${{ matrix.target }}"
 
   zeroization-unsafe:
-    name: Zeroization Miri and sanitizer evidence
+    name: Miri and sanitizer evidence
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -126,7 +124,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install pinned nightly assurance toolchain
         run: rustup toolchain install nightly-2026-08-14 --profile minimal --component miri,rust-src
-      - name: Run zeroization under Miri
+      - name: Run zeroization and SHA-256 under Miri
         run: scripts/check-zeroization-miri.sh
-      - name: Run zeroization under AddressSanitizer
+      - name: Run zeroization and SHA-256 under AddressSanitizer
         run: scripts/check-zeroization-sanitizer.sh

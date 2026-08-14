@@ -21,7 +21,8 @@ ROOT_ROWS = (
 COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
 COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
-    "| Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |",
+    "| `brynja-hash-sha2` | Complete portable SHA-256; later SHA-2 algorithms and accelerated backends remain planned | ❌ Not verified |",
+    "| Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |",
     "| `brynja-crypto-cpu-std` | Future host CPU detection and dispatch initialization | ❌ Not implemented or verified |",
@@ -43,6 +44,7 @@ COMPONENT_ROWS = (
 SCOPED_ROWS = {
     Path("crates/brynja-core/README.md"): "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
     Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
+    Path("crates/brynja-hash-sha2/README.md"): "| SHA-256 | 🟡 Portable implementation complete; acceptance pending v0.22.3 | ❌ Not verified |",
     Path("crates/brynja-pki/README.md"): "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
     Path("crates/brynja-tls/README.md"): "| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |",
     Path("crates/brynja-tls12/README.md"): "| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |",
@@ -62,6 +64,7 @@ SCOPED_ROWS = {
     Path("crates/brynja-research-ssl1/README.md"): "| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |",
 }
 SUPPORT_NOTES = (
+    Path("crates/brynja-hash-core/README.md"),
     Path("crates/brynja-interop/README.md"),
     Path("crates/brynja-proofs/README.md"),
     Path("crates/brynja-test-support/README.md"),

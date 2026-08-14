@@ -21,7 +21,8 @@ certificate-bound operational-environment claim.
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
-| Future `brynja-hash-*` / `brynja-mac-*` | Reusable hashes, XOFs, and MACs | ❌ Not implemented or verified |
+| `brynja-hash-sha2` | Complete portable SHA-256; later SHA-2 algorithms and accelerated backends remain planned | ❌ Not verified |
+| Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
 | `brynja-crypto-cpu-std` | Future host CPU detection and dispatch initialization | ❌ Not implemented or verified |
@@ -40,14 +41,15 @@ certificate-bound operational-environment claim.
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
-The implemented portion currently consists of the shared alert/failure,
+The implemented portion currently consists of portable SHA-256; the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
 provider, entropy/secure-random, typed-clock, and pending-operation foundations;
 the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
-No cryptographic primitive, schema-driven ASN.1 processor, X.509 validator,
-handshake parser, or complete protocol engine in this inventory is currently
-implemented. Independent-review status cannot be inferred from implementation,
-testing, formal proof, pentest, or release status.
+No cryptographic primitive other than portable SHA-256, schema-driven ASN.1
+processor, X.509 validator, handshake parser, or complete protocol engine in
+this inventory is currently implemented. Independent-review status cannot be
+inferred from implementation, testing, formal proof, pentest, or release
+status.

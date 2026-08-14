@@ -86,24 +86,21 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.21.0` development milestone extends the bounded DER reader with
-canonical ASN.1 value foundations in `brynja-pki`. Allocation-free borrowed
-types validate DER BOOLEAN, INTEGER, BIT STRING, OCTET STRING, OBJECT
-IDENTIFIER, admitted restricted character strings, UTCTime, and
-GeneralizedTime values. Validated SEQUENCE, SET, and SET OF wrappers enforce
-the existing immutable resource ceilings, direct-component tag order, and
-canonical padded-octet ordering without copying values.
+The current `0.22.0` development milestone implements complete portable
+SHA-256 in the new `brynja-hash-sha2` leaf crate over the small
+`brynja-hash-core` interface. It provides allocation-free `no_std` one-shot
+and streaming APIs, checked FIPS message-length exhaustion, consuming
+finalization, and an exact 32-byte digest type. `brynja-crypto` and `brynja`
+reuse that implementation rather than carrying private copies.
 
-This milestone does not implement schema-driven decoding, DEFAULT omission,
-escape-bearing ISO 2022 string types, AlgorithmIdentifier, X.509, signatures,
-cryptography, independent verification, or FIPS validation. It is an internal
-development tag and selects no crates.io publication. Its exceptional
-assessment of exact signed implementation candidate
-`6e3ca63305fd3923ca723c9d7f559a9b12843002` reported no findings and required
-no source remediation. The permanent report records `PASS`/`PASS`, zero open
-findings, and the schema-validation and independent-review cautions. The tag
-now awaits green GitHub and CodeQL; these changes also remain inside the
-scheduled v0.20.0-to-v0.25.0 cumulative review range.
+This milestone intentionally excludes SHA-224, SHA-384, SHA-512, HMAC, CPU
+acceleration, runtime dispatch, independent verification, and FIPS 140-3
+validation. Official vectors, padding boundaries, every tested streaming
+partition, a downstream-style consumer, Miri, sanitizer, and two bounded Kani
+proofs provide repository evidence without constituting independent review.
+Because this is Brynja's first executable cryptographic primitive, v0.22.0 is
+an exceptional pentest stop. It selects no crates.io publication and remains
+inside the scheduled v0.20.0-to-v0.25.0 cumulative review range.
 
 The signed and published `0.20.0` checkpoint introduced the underlying
 borrowed, non-recursive DER framing reader. Its scheduled assessment found one
@@ -383,8 +380,8 @@ scheduled v0.20.0-to-v0.25.0 assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.21.0`
-canonical-ASN.1 milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.22.0`
+portable-SHA-256 milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -536,12 +533,13 @@ security policy, or certificate-bound operational-environment claim.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations, shared record framing, bounded DER framing, and admitted canonical ASN.1 values through v0.21; no TLS engine or provider implementation |
+| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and portable SHA-256 through v0.22; no TLS engine or provider effect |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
-| Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
-| Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
+| `brynja-hash-core` | Fixed-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 implements portable SHA-256; acceleration and chain acceptance remain v0.22.1-v0.22.3 |
+| Future `brynja-hash-sha3` | Reusable SHA-3 and SHAKE family ownership | Planned at v0.24.0 |
 | Future `brynja-mac-hmac` | Reusable HMAC construction over admitted hash interfaces | Planned at v0.25.0 |
-| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Foundation only |
+| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports portable SHA-256; other planned cryptography and provider effects remain absent |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
 | `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |
@@ -684,7 +682,7 @@ python3 scripts/check-asn1-values.py
 python3 scripts/test-asn1-values.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.21.0
+scripts/tag_gate.sh v0.22.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

@@ -1,13 +1,14 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 pentest PASS/PASS and awaiting green hosted checks
+Status: v0.20.0 signed and published; v0.21.0 signed; v0.22.0 implementation candidate
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.21.0`; `brynja-pki` gains canonical ASN.1 values while
-retaining published package version `0.2.0`, and every other support package
-retains its published version. This milestone selects zero crates.io packages.
-Package publication does not imply a TLS implementation or production
-readiness.
+advances to internal `0.22.0`; new `brynja-hash-core 0.1.0` and
+`brynja-hash-sha2 0.1.0` packages provide the reusable interface and complete
+portable SHA-256. `brynja-crypto` retains published version `0.1.2` while
+reexporting the new leaf implementation. This milestone selects zero crates.io
+packages. Package publication does not imply a TLS implementation or
+production readiness.
 
 The optional adapter is a material production secret-storage boundary. Its
 exceptional v0.11.2 assessment passed with zero findings. The v0.12.0
@@ -103,13 +104,19 @@ container values to `brynja-pki` without schema decoding, X.509, or
 cryptography. Its exceptional assessment reported no findings, required no
 source remediation, and records `PASS`/`PASS` with zero open findings. The
 schema-validation and independent-review cautions remain explicit. The stage
-awaits green hosted checks and selects no crates.io publication.
+is signed and selects no crates.io publication. The v0.22.0 stage adds the
+first executable cryptographic primitive: portable SHA-256 in two new leaf
+packages, reused through `brynja-crypto` and the facade. It requires an
+exceptional pentest before tagging, remains unpublished until the v0.25.0
+checkpoint, and makes no independent-review or FIPS-validation claim.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.21.0` | no | Internal facade milestone; v0.20.0 is published |
+| `brynja` | `0.22.0` | no | Internal facade milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
-| `brynja-crypto` | `0.1.2` | no | Published at v0.20.0; cryptographic effects remain unimplemented |
+| `brynja-hash-core` | `0.1.0` | no | New unpublished allocation-free fixed-output hash interfaces |
+| `brynja-hash-sha2` | `0.1.0` | no | New unpublished complete portable SHA-256; acceleration and acceptance continue through v0.22.3 |
+| `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports the exact SHA-256 leaf implementation |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published inert CPU boundary; no executable kernel |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published inert adapter boundary; no runtime detector |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |

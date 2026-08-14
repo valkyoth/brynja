@@ -212,7 +212,7 @@ if cmp -s README.md crates/brynja/README.md; then
 fi
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml
 grep -q 'python3 scripts/check-assurance.py' scripts/checks.sh
-grep -q 'scripts/check-kani.sh' scripts/checks.sh
+grep -q 'scripts/check-kani.sh --policy-only' scripts/checks.sh
 grep -q 'python3 scripts/check-commit-classification.py' scripts/checks.sh
 grep -q 'python3 scripts/test-commit-classification.py' scripts/checks.sh
 grep -q 'python3 scripts/check-verification-status.py' scripts/checks.sh
@@ -231,6 +231,12 @@ grep -q 'scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' s
 grep -q 'scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
 grep -q 'scripts/check-sanitization-admission.py --online' scripts/tag_gate.sh
 grep -q 'scripts/check-sanitization-candidate.sh --matrix' scripts/tag_gate.sh
+grep -q 'scripts/check-kani.sh --required' scripts/tag_gate.sh
+if grep -q 'run: scripts/validate-current-pentest.sh' .github/workflows/ci.yml; then
+    echo "ordinary CI must not enforce pentest freshness; tag and release gates own it" >&2
+    exit 1
+fi
+grep -q 'run: scripts/validate-current-pentest.sh --required' .github/workflows/release.yml
 python3 -c '
 from pathlib import Path
 workflow = Path(".github/workflows/ci.yml").read_text(encoding="utf-8")

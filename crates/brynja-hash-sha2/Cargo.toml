@@ -1,20 +1,20 @@
 [package]
-name = "brynja-crypto"
-version = "0.1.2"
+name = "brynja-hash-sha2"
+version = "0.1.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
-description = "Cryptographic provider, policy, and composition layer for Brynja"
+description = "First-party no_std SHA-2 implementations for Brynja"
 publish = ["crates-io"]
 
 [features]
 default = []
 
 [dependencies]
-brynja-hash-sha2 = { workspace = true }
+brynja-hash-core = { workspace = true }
 
 [lints]
 workspace = true

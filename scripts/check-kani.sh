@@ -1,6 +1,16 @@
 #!/usr/bin/env sh
 set -eu
 
+mode="${1:---run}"
+if [ "$#" -gt 1 ] || {
+    [ "$mode" != "--policy-only" ] &&
+        [ "$mode" != "--required" ] &&
+        [ "$mode" != "--run" ]
+}; then
+    echo "usage: scripts/check-kani.sh [--policy-only|--required|--run]" >&2
+    exit 2
+fi
+
 kani_toolchain="$(
     sed -n 's/^kani = "\([^"]*\)"$/\1/p' assurance/policy.toml |
         head -n 1
@@ -15,26 +25,58 @@ kani_version="$(
 test -n "$kani_toolchain"
 test -n "$kani_version"
 
-if ! rustup toolchain list | grep -Eq "^${kani_toolchain}($|-)"; then
-    echo "Kani policy: SKIP; verifier Rust ${kani_toolchain} is not installed"
+harnesses="$(
+    grep -R -h --include='*.rs' '#\[kani::proof\]' crates |
+        wc -l |
+        tr -d ' '
+)"
+test "$harnesses" = "2" || {
+    echo "Kani policy: expected exactly two admitted SHA-256 harnesses, found ${harnesses}" >&2
+    exit 1
+}
+
+confined_harnesses="$(
+    grep -R -l --include='*.rs' '#\[kani::proof\]' crates |
+        sort
+)"
+test "$confined_harnesses" = "crates/brynja-hash-sha2/src/lib.rs" || {
+    echo "Kani policy: admitted harnesses escaped brynja-hash-sha2/src/lib.rs" >&2
+    exit 1
+}
+
+if [ "$mode" = "--policy-only" ]; then
+    echo "Kani policy: two SHA-256 harnesses are inventoried; full proofs are local tag-gate evidence"
     exit 0
+fi
+
+require_kani=0
+if [ "$mode" = "--required" ]; then
+    require_kani=1
+fi
+
+skip_or_fail() {
+    if [ "$require_kani" = "1" ]; then
+        echo "Kani proof: $1; verifier evidence is required by the local tag gate" >&2
+        exit 1
+    fi
+    echo "Kani proof: SKIP; $1"
+    exit 0
+}
+
+if ! rustup toolchain list | grep -Eq "^${kani_toolchain}($|-)"; then
+    skip_or_fail "verifier Rust ${kani_toolchain} is not installed"
 fi
 
 installed="$(
     rustup run "$kani_toolchain" cargo kani --version 2>/dev/null || true
 )"
 if [ -z "$installed" ]; then
-    echo "Kani policy: SKIP; cargo-kani ${kani_version} is not installed"
-    exit 0
+    skip_or_fail "cargo-kani ${kani_version} is not installed"
 fi
 test "$installed" = "cargo-kani ${kani_version}" || {
-    echo "Kani policy: installed ${installed}, expected cargo-kani ${kani_version}" >&2
+    echo "Kani proof: installed ${installed}, expected cargo-kani ${kani_version}" >&2
     exit 1
 }
 
-if grep -R -q --include='*.rs' '#\\[kani::proof\\]' crates; then
-    echo "Kani policy: proof harness exists before its numbered admission" >&2
-    exit 1
-fi
-
-echo "Kani policy: cargo-kani ${kani_version} with ${kani_toolchain}; no proof harness admitted"
+rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; two SHA-256 harnesses passed"

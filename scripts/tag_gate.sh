@@ -29,3 +29,10 @@ if test "$stage" = "internal"; then
 else
     scripts/validate-release-readiness.sh "$version"
 fi
+
+if test -z "${BRYNJA_RELEASE_PUBLISH_TAG:-}"; then
+    echo "tag gate: required local Kani proofs"
+    scripts/check-kani.sh --required
+else
+    echo "tag gate: using the Kani evidence already required before tag creation"
+fi

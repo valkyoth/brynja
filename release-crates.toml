@@ -1,19 +1,19 @@
 [release]
-version = "0.21.0"
-milestone = "0.21.0"
+version = "0.22.0"
+milestone = "0.22.0"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0"]
+cumulative_milestones = ["0.21.0", "0.22.0"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "Canonical ASN.1 semantic decoding extends the hostile DER parser boundary and requires an exceptional pentest before its internal tag."
+exception_reason = "The first executable cryptographic primitive is a material security boundary requiring an exceptional pentest before its internal tag."
 
 [crates."brynja"]
-previous_version = "0.20.0"
-version = "0.21.0"
+previous_version = "0.21.0"
+version = "0.22.0"
 change = "code"
 publish = false
-reason = "Advance to v0.21.0 and expose canonical ASN.1 primitives and ordered containers without crates.io publication."
+reason = "Advance to v0.22.0 and expose complete portable SHA-256 through the modern facade without crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -25,9 +25,23 @@ reason = "Retain published 0.9.0 unchanged at the internal v0.21.0 milestone."
 [crates."brynja-crypto"]
 previous_version = "0.1.2"
 version = "0.1.2"
-change = "metadata"
+change = "code"
 publish = false
-reason = "Retain published 0.1.2 unchanged; cryptographic effects remain unimplemented."
+reason = "Expose the exact brynja-hash-sha2 SHA-256 implementation for later protocol and provider consumers while retaining it for v0.25.0 publication."
+
+[crates."brynja-hash-core"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Add the small no_std fixed-output hash interface boundary and retain it for the v0.25.0 checkpoint."
+
+[crates."brynja-hash-sha2"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Add complete portable SHA-256 one-shot and streaming APIs and retain them for the v0.25.0 checkpoint."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"
@@ -67,23 +81,23 @@ reason = "Retain published 0.1.8 unchanged; the TLS router remains unimplemented
 [crates."brynja-tls12"]
 previous_version = "0.1.8"
 version = "0.1.8"
-change = "metadata"
+change = "dependency"
 publish = false
-reason = "Retain published 0.1.8 unchanged; the TLS 1.2 engine remains unimplemented."
+reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the TLS 1.2 engine remains unimplemented."
 
 [crates."brynja-tls13"]
 previous_version = "0.1.8"
 version = "0.1.8"
-change = "metadata"
+change = "dependency"
 publish = false
-reason = "Retain published 0.1.8 unchanged; the TLS 1.3 engine remains unimplemented."
+reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the TLS 1.3 engine remains unimplemented."
 
 [crates."brynja-tls13-handshake"]
 previous_version = "0.1.8"
 version = "0.1.8"
-change = "metadata"
+change = "dependency"
 publish = false
-reason = "Retain published 0.1.8 unchanged; the TLS 1.3 handshake engine remains unimplemented."
+reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the TLS 1.3 handshake engine remains unimplemented."
 
 [crates."brynja-quic-tls"]
 previous_version = "0.1.8"
@@ -102,9 +116,9 @@ reason = "Retain published 0.1.1 unchanged and isolated from facades, engines, d
 [crates."brynja-dtls"]
 previous_version = "0.1.8"
 version = "0.1.8"
-change = "metadata"
+change = "dependency"
 publish = false
-reason = "Retain published 0.1.8 unchanged; the DTLS engine remains unimplemented."
+reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the DTLS engine remains unimplemented."
 
 [crates."brynja-platform"]
 previous_version = "0.1.8"

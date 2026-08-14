@@ -125,6 +125,7 @@ def validate_repository_binding() -> None:
         "scripts/test-cpu-evidence-runner.py",
         "scripts/manage-cpu-evidence.py",
         "scripts/capture-sha256-cpu-native.sh",
+        "scripts/check-sha256-assembly-instruction.sh",
         "scripts/check-cpu-admission-fixture.sh",
     ):
         path = ROOT / relative

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -128,11 +129,28 @@ def main() -> int:
             pass
         else:
             raise AssertionError("candidate runner accepted a symlinked bundle")
+    instruction_check = Path("scripts/check-sha256-assembly-instruction.sh")
+    with tempfile.TemporaryDirectory() as temporary:
+        assembly = Path(temporary) / "candidate.s"
+        for source in ("\tsha256h q0, q1, v2.4s\n", "\tsha256h.4s q0, q1, v2\n"):
+            assembly.write_text(source, encoding="ascii")
+            subprocess.run(
+                [instruction_check, "aarch64", "sha256h", assembly], check=True
+            )
+        assembly.write_text("\tsha256h2.4s q0, q1, v2\n", encoding="ascii")
+        assert subprocess.run(
+            [instruction_check, "aarch64", "sha256h", assembly], check=False
+        ).returncode != 0
+        assembly.write_text("\tsha256rnds2 xmm0, xmm1, xmm2\n", encoding="ascii")
+        subprocess.run(
+            [instruction_check, "x86_64", "sha256rnds2", assembly], check=True
+        )
     for path in (
         Path("scripts/manage-cpu-evidence.py"),
         Path("scripts/cpu_evidence_run.py"),
         Path("scripts/validate-cpu-evidence-run.py"),
         Path("scripts/test-cpu-evidence-runner.py"),
+        instruction_check,
     ):
         assert path.is_file() and not path.is_symlink()
         assert len(path.read_text(encoding="utf-8").splitlines()) <= 500

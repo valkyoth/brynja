@@ -141,7 +141,8 @@ if test "$assembly_count" -ne 1; then
     echo "native SHA-256 capture expected exactly one assembly file" >&2
     exit 67
 fi
-if ! grep -Eq "(^|[[:space:]])$required_instruction([[:space:]]|$)" "$assembly"; then
+if ! scripts/check-sha256-assembly-instruction.sh \
+    "$architecture" "$required_instruction" "$assembly"; then
     echo "native SHA-256 capture omitted $required_instruction" >&2
     exit 67
 fi

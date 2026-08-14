@@ -1,12 +1,13 @@
 [schema]
-version = 1
-milestone = "0.13.2"
-status = "reserved-no-implementation"
+version = 2
+milestone = "0.22.1"
+status = "sha256-x86-and-aarch64-candidates"
 
 [limits]
 maximum_source_lines = 500
+implemented_backend_count = 2
 active_backend_count = 0
-approved_cpu_low_level_allowances = 0
+approved_cpu_low_level_allowances = 4
 
 [packages.kernel]
 name = "brynja-crypto-cpu"
@@ -20,14 +21,14 @@ facade_feature = "none"
 [packages.detector]
 name = "brynja-crypto-cpu-std"
 version = "0.1.1"
-runtime = "reserved-std-currently-no_std"
-dependencies = ["brynja-crypto-cpu"]
+runtime = "std"
+dependencies = ["brynja-crypto-cpu", "brynja-hash-sha2"]
 default_features = []
 publication = "deferred-crates-io"
 facade_feature = "none"
 
 [graph]
-scalar_owner = "brynja-crypto"
+scalar_owner = "brynja-hash-sha2"
 facade = "brynja"
 forbidden_consumers = [
   "brynja-crypto",
@@ -54,7 +55,12 @@ dispatch_table = "artifact-owned"
 operational_environment = "artifact-owned"
 
 [low_level_boundary]
-current_cpu_allowances = []
+current_cpu_allowances = [
+  "brynja-crypto-cpu:src/sha256.rs:runtime-attestation",
+  "brynja-crypto-cpu:src/x86_sha.rs:sha-intrinsics",
+  "brynja-crypto-cpu:src/aarch64_sha2.rs:sha2-intrinsics",
+  "brynja-crypto-cpu-std:src/runtime_detection.rs:std-feature-attestation",
+]
 approval_scope = "one-exact-symbol"
 amendment_requires = [
   "primitive-and-operation",
@@ -86,39 +92,71 @@ forbidden_mechanisms = [
 invariants = [
   "exact-backend-identity",
   "complete-feature-bundle",
-  "operating-state-preconditions",
-  "exact-session-and-instance",
+  "architecture-match-before-kat",
+  "compile-time-proof-or-reviewed-runtime-detection",
+  "thread-bound-caller-owned-session",
   "successful-direct-kat",
-  "healthy-current-generation",
-  "exact-operation-authority",
-  "migration-exclusion-through-call",
-  "post-callback-logical-revalidation",
-  "guarded-direct-kernel-call",
-  "bounded-caller-owned-buffers",
+  "permanent-session-quarantine",
+  "health-check-before-state-mutation",
+  "exact-one-block-bounds",
   "scalar-differential-equivalence",
+  "actual-backend-reporting",
+  "opportunistic-only-scalar-fallback",
+  "required-mode-fails-closed",
   "secret-free-failure",
+  "no-register-erasure-claim",
 ]
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "614731a47da9364a16d62b71335b5cbeffb7554b117d4c2c8661fd5b2b2ec438"
+sha256 = "a7fad9a9d8cae3f784ad3136c95c82276d8551083519f535754ed41631ee8fed"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha256.rs"
+status = "safe-session-and-attestation-boundary"
+sha256 = "3db27c1e35b73345c5513833bbc8367ec620cd735355cd3065da648bd8fccb93"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha256_schedule.rs"
+status = "portable-message-schedule"
+sha256 = "c9fc99faed2a370606729f478d81a3ce4db80fb1dd1d1dc2a14c231b918ef1a2"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/x86_sha.rs"
+status = "implemented-unadmitted-candidate-kernel"
+sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/aarch64_sha2.rs"
+status = "implemented-unadmitted-candidate-kernel"
+sha256 = "27b71c0b4eb183c4e3e66c30c420aa41cc153a77e84a5dba720124b6f7b170c4"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "db734d07aca12e88b560d732d977d97f9e86e438ef913f6b3d5d19c733a9d7a2"
+sha256 = "5cd77fe776e5707a61195df10986fe95d46f19c21bd31ce109a6676ad39d11e5"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/runtime_detection.rs"
+status = "runtime-feature-attestation-boundary"
+sha256 = "ec29948d1cdc1440f50b163417dd198e8394487c797ac9ce4f896f17d73d17aa"
 
 [[backends]]
 id = "x86-sha"
 identity = "X86Sha"
 architecture = "x86_64"
 module = "src/x86_sha.rs"
-status = "reserved"
-sha256 = "absent"
-low_level_allowed = false
+status = "implemented-unadmitted-native-evidence-pending"
+sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
+low_level_allowed = true
 instructions = ["sha"]
 abi_preconditions = ["x86_64", "sha-usable-on-current-logical-cpu"]
 
@@ -160,9 +198,9 @@ id = "aarch64-sha2"
 identity = "Aarch64Sha2"
 architecture = "aarch64"
 module = "src/aarch64_sha2.rs"
-status = "reserved"
-sha256 = "absent"
-low_level_allowed = false
+status = "implemented-unadmitted-native-evidence-pending"
+sha256 = "27b71c0b4eb183c4e3e66c30c420aa41cc153a77e84a5dba720124b6f7b170c4"
+low_level_allowed = true
 instructions = ["neon", "sha2"]
 abi_preconditions = ["aarch64", "neon-and-sha2-usable-on-current-logical-cpu"]
 

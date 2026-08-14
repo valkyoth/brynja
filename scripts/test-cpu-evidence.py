@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Positive and broken-fixture tests for v0.13.3 CPU evidence admission."""
+"""Positive and broken-fixture tests for v0.22.1 CPU evidence admission."""
 
 from __future__ import annotations
 

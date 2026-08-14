@@ -16,7 +16,7 @@ unsafe_code = "deny"
 unsafe_op_in_unsafe_fn = "forbid"
 unused_must_use = "deny"
 missing_docs = "deny"
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)'] }
 
 [workspace.lints.clippy]
 panic = "forbid"

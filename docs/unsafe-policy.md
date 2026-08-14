@@ -1,19 +1,18 @@
 # Unsafe Rust Policy
 
-Status: one v0.11.0 exception approved; every other unsafe site forbidden
+Status: five exact source-hash-bound modules approved; every other unsafe site forbidden
 
-Workspace lints deny unsafe code by default. Repository policy permits exactly
-one documented block in the private
-`crates/brynja-core/src/secret_memory_volatile.rs` module and rejects unsafe
-blocks, unsafe items, local lint allowances, assembly, and FFI everywhere else.
-The approved module is pinned by SHA-256. Any byte change reopens review before
-semantic checks run. Every other Rust source is rejected if it contains any
-complete identifier in the fail-closed set `unsafe`, `unsafe_code`, `extern`,
-`asm`, `global_asm`, `llvm_asm`, `naked_asm`, `include`, or `path`. This broad
-rule intentionally also matches comments and ordinary identifiers, so Rust
-comments cannot be used as token whitespace and nested attributes cannot hide
-code inclusion. Library targets must resolve to their classified `src/lib.rs`,
-and Rust sources must be regular files beneath non-symlink package directories.
+Workspace lints deny unsafe code by default. Repository policy permits unsafe
+Rust in only five exact modules: the private core volatile clearer, the
+SHA-256 session attestation boundary, the x86_64 SHA kernel, the AArch64 SHA2
+kernel, and the opt-in standard-library runtime detector. Each complete source
+is pinned by SHA-256 with exact unsafe-block, unsafe-item, local safety-proof,
+target-feature, intrinsic, and detector invariants. Any byte change reopens
+review before semantic checks run. Every other Rust source rejects unsafe,
+local unsafe allowances, assembly, FFI, and code inclusion. Foreign source,
+native objects, build scripts, native links, and external C cryptographic
+modules remain forbidden repository-wide. Rust sources must be regular files
+beneath non-symlink package directories.
 
 A future exception requires a versioned milestone, written necessity analysis,
 safe alternative analysis, isolated module or crate, documented invariants,
@@ -21,33 +20,26 @@ Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
 
-## Reserved CPU-Acceleration Boundary; No Low-Level Site Approved
+## v0.22.1 SHA-256 CPU-Intrinsic Exceptions
 
-Versions 0.13.1 and 0.13.2 establish capability and package policy contracts
-only. The latter reserves `brynja-crypto-cpu` and
-`brynja-crypto-cpu-std`, eight machine-readable backend identities, and exact
-future amendment duties while admitting zero active kernels and zero new
-low-level allowances. Version 0.13.3 implements evidence and test contracts
-without admitting a native result, backend, or low-level site. None of these
-milestones permits another unsafe site. Later
-primitive-specific acceleration milestones may request exact intrinsics or
-assembly inside the separately classified `brynja-crypto-cpu` package. Each
-request must identify the primitive and operation, exact source symbol and
-hash, compiler and CPU feature bundle, ABI and vector-state assumptions, safe
-wrapper preconditions, register and spill residuals, scalar reference,
-known-answer test, quarantine behavior, native hardware, side-channel and
-performance evidence, and FIPS disposition. Approval for one symbol never
-extends to another architecture, primitive, operation or compiler path.
+Versions 0.13.1 through 0.13.3 established the capability, package, unsafe
+amendment, native-evidence, and performance-admission contracts without a
+kernel. Version 0.22.1 uses that process for exactly two implemented SHA-256
+candidates. `x86_sha.rs` is restricted to the x86 SHA-extension compression
+entry; `aarch64_sha2.rs` is restricted to the AArch64 NEON/SHA2 compression
+entry. `sha256.rs` owns the unsafe attestation constructors but no unsafe
+block. `runtime_detection.rs` is the separate opt-in `std` adapter and uses
+only standard-library feature detection before invoking that constructor.
 
-The optional `brynja-crypto-cpu-std` package may later request only the smallest
-boundary needed for first-party runtime feature detection where safe standard
-library macros are insufficient. It may not contain a cryptographic kernel,
-entropy or general OS integration. Compile-time `target_feature` evidence and
-safe standard-library detection remain preferred. A public platform-attestation
-constructor is unsafe by contract, thread-bound unless CPU migration is proven
-safe, and cannot bypass a direct backend KAT. Until the applicable milestone
-amends the machine inventory and passes its exceptional external review, the
-current scanner must continue to reject all such code.
+The candidates accept one exact block behind a caller-owned, thread-bound
+session that checks architecture, runs a direct KAT, records a health
+generation, and permanently quarantines a bad answer. They use no external
+assembly or ABI. Static selection requires complete compile-time features;
+runtime selection requires the complete reviewed detector result. The
+implementations make no register/spill erasure claim. Both remain unadmitted
+and unreachable from ordinary execution until native evidence is complete;
+cross-compilation or QEMU alone cannot authorize them. Approval never extends
+to another primitive, architecture, symbol, feature bundle, or compiler path.
 
 ## v0.11.0 Volatile-Store Exception
 

@@ -24,8 +24,8 @@ certificate-bound operational-environment claim.
 | `brynja-hash-sha2` | Complete portable SHA-256; later SHA-2 algorithms and accelerated backends remain planned | ❌ Not verified |
 | Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
-| `brynja-crypto-cpu` | Future first-party ISA-specific cryptographic kernels and static selection | ❌ Not implemented or verified |
-| `brynja-crypto-cpu-std` | Future host CPU detection and dispatch initialization | ❌ Not implemented or verified |
+| `brynja-crypto-cpu` | Implemented but unadmitted x86_64 SHA and AArch64 SHA2 compression candidates, static selection, direct KAT, health and quarantine | ❌ Not independently verified; native admission evidence incomplete |
+| `brynja-crypto-cpu-std` | Implemented opt-in host detection, actual-backend reporting, opportunistic scalar fallback and fail-closed required mode | ❌ Not independently verified; accelerated candidates remain unadmitted |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
 | `brynja-protocol` | Shared TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |
 | `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |

@@ -25,25 +25,27 @@
 
 # brynja-crypto-cpu
 
-`brynja-crypto-cpu` is the optional, zero-dependency, `no_std` package boundary
-reserved for separately admitted first-party ISA kernels and static selection.
-It is downstream from portable scalar ownership and cannot be an implicit
-dependency of a protocol engine or default feature.
+`brynja-crypto-cpu` is the optional, zero-dependency, `no_std` package for
+separately reviewed first-party ISA kernels and static selection. Version
+0.1.1 now contains isolated SHA-256 candidates for x86_64 SHA instructions and
+AArch64 SHA2 instructions. Portable `brynja-hash-sha2` continues to own
+streaming state, padding, length accounting, finalization, and scalar fallback.
 
-Version 0.1.1 contains no detector, intrinsic, assembly, executable backend,
-cryptographic algorithm, dispatch implementation, low-level-code allowance,
-performance claim, or FIPS validation. Every future backend symbol requires
-its own source hash, feature and ABI preconditions, safe-wrapper invariants,
-KAT and quarantine path, native evidence, and primitive-specific review.
-Version 0.13.3 provides the repository-level evidence schema, native/QEMU lane
-registry, fault and differential fixtures, and performance admission budgets;
-it records no backend result and admits no implementation in this package.
-Candidate/native claims are forbidden until an independently reviewed
-trusted-runner verifier exists, and observed operating state must exactly match
-the reviewed ABI prerequisites.
-Brynja v0.17.0 additionally requires every future FIPS-selected backend to be
-owned by one exact module environment and complete feature bundle; ordinary
-dispatch identity and this package alone cannot authorize or validate it.
+Both candidates are deliberately unadmitted in v0.22.1 while commit-bound
+native evidence is incomplete. Ordinary construction therefore cannot execute
+either kernel: static selection returns `None`, runtime-attested construction
+returns `NotAdmitted`, opportunistic host use falls back to scalar, and
+required acceleration fails closed. Evidence builds can directly exercise a
+candidate only through the repository-only `brynja_cpu_evidence` configuration.
+
+Every backend session is caller-owned and thread-bound. Construction checks
+the architecture, runs a direct `abc` known-answer test, reports its exact
+backend and health generation, and permanently quarantines that session after
+a bad answer. The safe compression surface accepts exactly one 64-byte block.
+The package does not detect CPU features, allocate, perform I/O, use foreign
+code or assembly, own a global registry, promise register erasure, or claim
+FIPS validation. It cannot be an implicit dependency of a protocol engine or
+default feature.
 
 ## Cryptography Verification Status
 
@@ -54,7 +56,8 @@ pentesting do not by themselves constitute independent verification.
 
 | Component | Cryptographic scope | Independently verified |
 | --- | --- | --- |
-| `brynja-crypto-cpu` | Future first-party CPU cryptographic kernels and static selection | ❌ Not implemented or verified |
+| x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |
+| AArch64 SHA-256 candidate | NEON/SHA2 compression | ❌ Implemented but unadmitted and not independently verified |
 
 Metadata version `0.1.1` was published at v0.20.0 after the committed
 cumulative pentest, remediation retest, and hosted gates recorded

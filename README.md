@@ -86,21 +86,31 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.22.0` development milestone implements complete portable
-SHA-256 in the new `brynja-hash-sha2` leaf crate over the small
-`brynja-hash-core` interface. It provides allocation-free `no_std` one-shot
-and streaming APIs, checked FIPS message-length exhaustion, consuming
-finalization, and an exact 32-byte digest type. `brynja-crypto` and `brynja`
-reuse that implementation rather than carrying private copies.
+The current `0.22.1` development milestone adds isolated first-party x86_64
+SHA and AArch64 SHA2 compression candidates for the complete portable SHA-256
+implemented at v0.22.0. Portable `brynja-hash-sha2` still owns the public
+digest, streaming state, padding, checked length, finalization, and scalar
+fallback. The optional zero-dependency `no_std` `brynja-crypto-cpu` crate owns
+only static selection, direct KAT, caller-owned health/quarantine, and exact
+one-block kernels. The separate opt-in `std` `brynja-crypto-cpu-std` crate owns
+runtime feature detection and explicit opportunistic or required selection.
 
-This milestone intentionally excludes SHA-224, SHA-384, SHA-512, HMAC, CPU
-acceleration, runtime dispatch, independent verification, and FIPS 140-3
-validation. Official vectors, padding boundaries, every tested streaming
-partition, a downstream-style consumer, Miri, sanitizer, and two bounded Kani
-proofs provide repository evidence without constituting independent review.
-Because this is Brynja's first executable cryptographic primitive, v0.22.0 is
-an exceptional pentest stop. It selects no crates.io publication and remains
-inside the scheduled v0.20.0-to-v0.25.0 cumulative review range.
+Both kernels are implemented but deliberately unadmitted until commit-bound
+native correctness, emitted-code, side-channel, and performance evidence is
+complete for the named AMD/Intel and Apple/AWS Arm lanes. Ordinary builds
+therefore cannot execute either candidate: opportunistic selection uses scalar
+and reports why, while required acceleration fails closed. Cross-compilation
+and generated assembly verify the AArch64 instruction path but do not replace
+native M2 or AWS Arm evidence. The candidates use no external C module,
+assembly source, build script, detector dependency, allocation, I/O, or global
+registry, and make no register-erasure, independent-review, or FIPS 140-3
+validation claim.
+
+The preceding v0.22.0 milestone introduced allocation-free `no_std` one-shot
+and streaming SHA-256, checked FIPS message-length exhaustion, consuming
+finalization, and an exact 32-byte digest type. `brynja-crypto` and `brynja`
+reuse that implementation rather than carrying private copies. SHA-224,
+SHA-384, SHA-512, HMAC, and final public chain acceptance remain later scope.
 
 The exceptional assessment found no vulnerability and required no source
 remediation. It retained one correctly disclosed future constraint: portable
@@ -395,8 +405,8 @@ remains included in the scheduled v0.20.0-to-v0.25.0 assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.22.0`
-portable-SHA-256 milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.22.1`
+SHA-256-acceleration milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -695,9 +705,12 @@ python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
 python3 scripts/check-asn1-values.py
 python3 scripts/test-asn1-values.py
+python3 scripts/check-sha256.py
+python3 scripts/test-sha256.py
+scripts/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.22.0
+scripts/tag_gate.sh v0.22.1
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

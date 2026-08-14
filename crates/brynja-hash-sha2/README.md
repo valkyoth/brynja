@@ -27,8 +27,11 @@
 
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
 v0.22.0 implementation candidate provides complete portable SHA-256 one-shot
-and streaming APIs. Accelerated backends and final chain usability acceptance
-remain assigned to v0.22.1-v0.22.3. SHA-224, SHA-384, and SHA-512 are absent.
+and streaming APIs. The optional `cpu` feature added at v0.22.1 accepts an
+already tested `brynja-crypto-cpu` session without changing scalar ownership.
+Its x86_64 and AArch64 candidates remain unadmitted pending native evidence;
+final chain usability acceptance remains assigned to v0.22.3. SHA-224,
+SHA-384, and SHA-512 are absent.
 
 ## Example
 
@@ -43,6 +46,24 @@ streaming.update(b"bc")?;
 assert_eq!(streaming.finalize(), one_shot);
 # Ok::<(), brynja_hash_sha2::Sha256Error>(())
 ```
+
+Static `no_std` callers may explicitly request a compile-time-proven backend:
+
+```rust
+# #[cfg(feature = "cpu")]
+# {
+use brynja_hash_sha2::{Sha256BackendSession, sha256_with_backend};
+
+if let Some(backend) = Sha256BackendSession::for_compiled_target() {
+    let digest = sha256_with_backend(b"abc", &backend)?;
+    assert_eq!(digest.as_bytes().len(), 32);
+}
+# }
+# Ok::<(), brynja_hash_sha2::Sha256AcceleratedError>(())
+```
+
+Until native admission evidence is accepted, the constructor returns `None`.
+The default feature set always remains portable scalar SHA-256.
 
 ## Cryptography Verification Status
 

@@ -27,6 +27,7 @@ def reject(label: str, mutation) -> None:
         copied = (
             *policy.SOURCES,
             policy.TEST,
+            policy.ACCEL_TEST,
             policy.CORE_MANIFEST,
             policy.MANIFEST,
             policy.CRYPTO_MANIFEST,

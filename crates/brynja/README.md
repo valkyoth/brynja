@@ -31,10 +31,10 @@ not depend on a C cryptographic library.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet be
 > used to secure application traffic. The current facade provides completed
-> security foundations, bounded TLS/DTLS record-envelope framing, bounded DER
-> framing, and selected canonical ASN.1 values. It does not yet provide a
-> cryptographic algorithm, TLS connection, certificate validator, or working
-> protocol engine.
+> security foundations, portable SHA-256, bounded TLS/DTLS record-envelope
+> framing, bounded DER framing, and selected canonical ASN.1 values. It does
+> not yet provide a TLS connection, certificate validator, or working protocol
+> engine.
 
 ## Design Boundaries
 
@@ -172,6 +172,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-core` | Small allocation-free fixed-output hash interfaces |
 | `brynja-hash-sha2` | Portable SHA-256 implementation and future SHA-2 family ownership |
+| `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | Optional first-party ISA kernels and separate host runtime detection; absent from this facade |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

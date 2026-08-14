@@ -36,6 +36,7 @@ python3 scripts/check-asn1-values.py
 python3 scripts/test-asn1-values.py
 python3 scripts/check-sha256.py
 python3 scripts/test-sha256.py
+scripts/check-sha256-cpu-codegen.sh
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-boundary.py

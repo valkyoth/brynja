@@ -29,7 +29,7 @@ optional = {}
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-hash-core"]
-optional = {}
+optional = { cpu = "brynja-crypto-cpu" }
 
 [packages.brynja-crypto-cpu]
 class = "cpu-backend"
@@ -40,7 +40,7 @@ optional = {}
 [packages.brynja-crypto-cpu-std]
 class = "host-adapter"
 publish = "crates-io"
-required = ["brynja-crypto-cpu"]
+required = ["brynja-crypto-cpu", "brynja-hash-sha2"]
 optional = {}
 
 [packages.brynja-pki]

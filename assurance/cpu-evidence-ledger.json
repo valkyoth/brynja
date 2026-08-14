@@ -1,7 +1,7 @@
 {
   "admissions": {
     "path": "security/cpu-backend-admissions.toml",
-    "sha256": "be2b120d289cb7b2b0dee7a51eb8a819268488e221fef7d2fc3d283f6573133b"
+    "sha256": "f74155bc885d7d3edfd605cc47650fc7cdfce939e48ce1dd1014a9aa0e1de5fc"
   },
   "backends": [
     {
@@ -11,7 +11,7 @@
         "local-amd-x86_64",
         "aws-intel-x86_64"
       ],
-      "reason": "no-primitive-implementation-or-native-evidence",
+      "reason": "sha256-implementation-present-native-admission-evidence-pending",
       "required_features": [
         "sha"
       ],
@@ -82,7 +82,7 @@
         "apple-m2-aarch64",
         "aws-aarch64"
       ],
-      "reason": "no-primitive-implementation-or-native-evidence",
+      "reason": "sha256-implementation-present-native-admission-evidence-pending",
       "required_features": [
         "neon",
         "sha2"
@@ -223,7 +223,7 @@
     "sha256": "609548b1a4d72908dd0ec57f5d15456aeb517223579410f60fa1fae07ccb5bf3"
   },
   "schema": {
-    "milestone": "0.13.3",
-    "version": 1
+    "milestone": "0.22.1",
+    "version": 2
   }
 }

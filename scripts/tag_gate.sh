@@ -9,6 +9,7 @@ test "$#" -eq 1 || {
 
 scripts/checks.sh
 scripts/check-bare-metal.sh
+scripts/check-sha256-cpu-qemu.sh
 scripts/update-standards-snapshots.py --check
 scripts/release_crates.py --check
 scripts/check-rust-version-matrix.sh

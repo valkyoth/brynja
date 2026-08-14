@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""Broken-fixture tests for the v0.13.2 CPU package boundary."""
+"""Broken-fixture tests for the v0.22.1 CPU boundary."""
 
 from __future__ import annotations
 
-import hashlib
 import shutil
 import tempfile
 from pathlib import Path
 
-import cpu_boundary_policy
+import cpu_boundary_policy as policy
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,16 +21,13 @@ def copy_file(root: Path, relative: Path) -> None:
 
 def fixture(root: Path) -> None:
     root.mkdir(parents=True, exist_ok=True)
-    for relative in (
-        Path("Cargo.toml"),
-        Path("package-policy.toml"),
-        cpu_boundary_policy.POLICY,
-    ):
+    for relative in (Path("Cargo.toml"), Path("package-policy.toml"), policy.POLICY):
         copy_file(root, relative)
     for manifest in sorted((ROOT / "crates").glob("*/Cargo.toml")):
         copy_file(root, manifest.relative_to(ROOT))
-    for package in (cpu_boundary_policy.CPU, cpu_boundary_policy.DETECTOR):
-        copy_file(root, Path("crates") / package / "src/lib.rs")
+    for package in (policy.CPU, policy.DETECTOR):
+        for source in sorted((ROOT / "crates" / package / "src").glob("*.rs")):
+            copy_file(root, source.relative_to(ROOT))
 
 
 def reset(root: Path) -> None:
@@ -48,159 +44,87 @@ def replace(path: Path, old: str, new: str) -> None:
 
 def require_rejection(root: Path, expected: str) -> None:
     try:
-        cpu_boundary_policy.validate(root)
-    except cpu_boundary_policy.CpuBoundaryPolicyError as error:
+        policy.validate(root)
+    except policy.CpuBoundaryPolicyError as error:
         if expected not in str(error):
             raise AssertionError(f"expected {expected!r}, received {error!s}") from error
     else:
         raise AssertionError(f"CPU boundary accepted broken fixture: {expected}")
 
 
-def source(root: Path, package: str) -> Path:
-    return root / "crates" / package / "src/lib.rs"
-
-
-def refresh_source_hash(root: Path, package: str) -> None:
-    path = source(root, package)
-    digest = hashlib.sha256(path.read_bytes()).hexdigest()
-    policy = root / cpu_boundary_policy.POLICY
-    text = policy.read_text(encoding="utf-8")
-    marker = f'package = "{package}"'
-    start = text.index(marker)
-    hash_start = text.index('sha256 = "', start) + len('sha256 = "')
-    hash_end = text.index('"', hash_start)
-    policy.write_text(text[:hash_start] + digest + text[hash_end:], encoding="utf-8")
-
-
 def test() -> None:
     with tempfile.TemporaryDirectory(prefix="brynja-cpu-boundary-") as temporary:
         root = Path(temporary) / "fixture"
         fixture(root)
-        cpu_boundary_policy.validate(root)
-        policy = root / cpu_boundary_policy.POLICY
+        policy.validate(root)
+        document = root / policy.POLICY
 
-        replace(policy, 'active_backend_count = 0', 'active_backend_count = 1')
-        require_rejection(root, "limits")
-        reset(root)
-        policy = root / cpu_boundary_policy.POLICY
+        cases = (
+            ("implemented_backend_count = 2", "implemented_backend_count = 3", "limits"),
+            ("active_backend_count = 0", "active_backend_count = 1", "limits"),
+            (
+                "approved_cpu_low_level_allowances = 4",
+                "approved_cpu_low_level_allowances = 5",
+                "limits",
+            ),
+            ("milestone = \"0.22.1\"", "milestone = \"0.22.2\"", "schema"),
+            (
+                "status = \"sha256-x86-and-aarch64-candidates\"",
+                "status = \"all-admitted\"",
+                "schema",
+            ),
+            (
+                "scalar_owner = \"brynja-hash-sha2\"",
+                "scalar_owner = \"brynja-crypto-cpu\"",
+                "scalar owner",
+            ),
+            (
+                "detector_adapter = \"excluded\"",
+                "detector_adapter = \"included\"",
+                "FIPS",
+            ),
+        )
+        for old, new, expected in cases:
+            replace(document, old, new)
+            require_rejection(root, expected)
+            reset(root)
+            document = root / policy.POLICY
 
-        replace(policy, 'approved_cpu_low_level_allowances = 0', 'approved_cpu_low_level_allowances = 1')
-        require_rejection(root, "limits")
-        reset(root)
-        policy = root / cpu_boundary_policy.POLICY
-
-        replace(policy, 'current_cpu_allowances = []', 'current_cpu_allowances = ["x86-sha"]')
-        require_rejection(root, "amendment contract")
-        reset(root)
-        policy = root / cpu_boundary_policy.POLICY
-
-        replace(policy, 'maximum_source_lines = 500', 'maximum_source_lines = 600')
-        require_rejection(root, "limits")
-        reset(root)
-        policy = root / cpu_boundary_policy.POLICY
-
-        replace(policy, 'detector_adapter = "excluded"', 'detector_adapter = "included"')
-        require_rejection(root, "FIPS")
-        reset(root)
-        policy = root / cpu_boundary_policy.POLICY
-
-        replace(policy, '  "secret-free-failure",\n', "")
-        require_rejection(root, "safe wrapper invariant")
-        reset(root)
-        policy = root / cpu_boundary_policy.POLICY
-
-        replace(policy, 'status = "reserved"', 'status = "active"')
-        require_rejection(root, "implementation authority")
-        reset(root)
-        policy = root / cpu_boundary_policy.POLICY
-
-        replace(policy, 'instructions = ["sha"]', 'instructions = ["sha", "avx2"]')
-        require_rejection(root, "backend contract")
+        replace(document, '  "no-register-erasure-claim",\n', "")
+        require_rejection(root, "safe wrapper")
         reset(root)
 
-        cpu_source = source(root, cpu_boundary_policy.CPU)
-        cpu_source.write_text(cpu_source.read_text(encoding="utf-8") + "\n// drift\n", encoding="utf-8")
-        require_rejection(root, "reopen security review")
+        source = root / "crates/brynja-crypto-cpu/src/x86_sha.rs"
+        source.write_text(source.read_text(encoding="utf-8") + "\n// drift\n", encoding="utf-8")
+        require_rejection(root, "source changed")
         reset(root)
 
-        cpu_source = source(root, cpu_boundary_policy.CPU)
-        cpu_source.write_text(cpu_source.read_text(encoding="utf-8") + "\n// unsafe\n", encoding="utf-8")
-        refresh_source_hash(root, cpu_boundary_policy.CPU)
-        require_rejection(root, "reopen security review")
+        source = root / "crates/brynja-crypto-cpu/src/aarch64_sha2.rs"
+        replace(source, '#[target_feature(enable = "sha2")]', '#[target_feature(enable = "neon")]')
+        require_rejection(root, "source changed")
         reset(root)
 
-        cpu_source = source(root, cpu_boundary_policy.CPU)
-        cpu_source.write_text(cpu_source.read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8")
+        source = root / "crates/brynja-crypto-cpu-std/src/runtime_detection.rs"
+        replace(source, 'is_x86_feature_detected!("sha")', "true")
+        require_rejection(root, "source changed")
+        reset(root)
+
+        extra = root / "crates/brynja-crypto-cpu/src/unreviewed.rs"
+        extra.write_text("pub fn unreviewed() {}\n", encoding="utf-8")
+        require_rejection(root, "unreviewed source")
+        reset(root)
+
+        source = root / "crates/brynja-crypto-cpu/src/sha256_schedule.rs"
+        source.write_text(source.read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8")
         require_rejection(root, "exceeds 500 lines")
         reset(root)
 
-        module = root / "crates" / cpu_boundary_policy.CPU / "src/x86_sha.rs"
-        module.write_text("pub fn candidate() {}\n", encoding="utf-8")
-        require_rejection(root, "unadmitted source")
+        reserved = root / "crates/brynja-crypto-cpu/src/x86_avx2.rs"
+        reserved.write_text("pub fn candidate() {}\n", encoding="utf-8")
+        require_rejection(root, "unreviewed source")
         reset(root)
 
-        cpu_source = source(root, cpu_boundary_policy.CPU)
-        replace(cpu_source, "IMPLEMENTED: bool = false", "IMPLEMENTED: bool = true")
-        refresh_source_hash(root, cpu_boundary_policy.CPU)
-        require_rejection(root, "reopen security review")
-        reset(root)
-
-        cpu_source = source(root, cpu_boundary_policy.CPU)
-        replace(cpu_source, "#![no_std]", "// #![no_std]")
-        cpu_source.write_text(
-            cpu_source.read_text(encoding="utf-8")
-            + "\npub fn host_probe() { let _ = std::thread::available_parallelism(); }\n",
-            encoding="utf-8",
-        )
-        refresh_source_hash(root, cpu_boundary_policy.CPU)
-        require_rejection(root, "reopen security review")
-        reset(root)
-
-        cpu_source = source(root, cpu_boundary_policy.CPU)
-        cpu_source.write_text(
-            cpu_source.read_text(encoding="utf-8")
-            + "\npub fn executable_operation(value: u8) -> u8 { value.wrapping_add(1) }\n",
-            encoding="utf-8",
-        )
-        refresh_source_hash(root, cpu_boundary_policy.CPU)
-        require_rejection(root, "reopen security review")
-        reset(root)
-
-        policy = root / cpu_boundary_policy.POLICY
-        replace(policy, '  "side-channel-evidence",', '  "side-channel-review-waived",')
-        require_rejection(root, "amendment contract")
-        reset(root)
-
-        policy = root / cpu_boundary_policy.POLICY
-        replace(policy, '  "secret-free-failure",', '  "secret-bearing-failure",')
-        require_rejection(root, "safe wrapper invariant")
-        reset(root)
-
-        policy = root / cpu_boundary_policy.POLICY
-        replace(
-            policy,
-            'abi_preconditions = ["x86_64", "sha-usable-on-current-logical-cpu"]',
-            'abi_preconditions = ["none"]',
-        )
-        require_rejection(root, "backend contract")
-        reset(root)
-
-        policy = root / cpu_boundary_policy.POLICY
-        replace(policy, '  "foreign-abi",', '  "foreign-abi-allowed",')
-        require_rejection(root, "amendment contract")
-        reset(root)
-
-        policy = root / cpu_boundary_policy.POLICY
-        replace(policy, 'future_module = "brynja-fips-module"', 'future_module = "unbound"')
-        require_rejection(root, "FIPS")
-        reset(root)
-
-        policy = root / cpu_boundary_policy.POLICY
-        policy.write_text(policy.read_text(encoding="utf-8") + "\n# unreviewed drift\n", encoding="utf-8")
-        require_rejection(root, "CPU security policy changed")
-        reset(root)
-
-        cpu_manifest = root / "crates" / cpu_boundary_policy.CPU / "Cargo.toml"
+        cpu_manifest = root / "crates/brynja-crypto-cpu/Cargo.toml"
         cpu_manifest.write_text(
             cpu_manifest.read_text(encoding="utf-8")
             + "\n[dependencies]\nbrynja-core = { workspace = true }\n",
@@ -209,13 +133,18 @@ def test() -> None:
         require_rejection(root, "zero dependencies")
         reset(root)
 
-        detector_manifest = root / "crates" / cpu_boundary_policy.DETECTOR / "Cargo.toml"
+        detector = root / "crates/brynja-crypto-cpu-std/Cargo.toml"
         replace(
-            detector_manifest,
-            "brynja-crypto-cpu = { workspace = true }",
-            'brynja-crypto-cpu = { workspace = true }\nthird-party-detector = "1"',
+            detector,
+            "brynja-hash-sha2 = { workspace = true, features = [\"cpu\"] }",
+            'brynja-hash-sha2 = { workspace = true, features = ["cpu"] }\nthird-party = "1"',
         )
-        require_rejection(root, "may depend only")
+        require_rejection(root, "dependency boundary")
+        reset(root)
+
+        sha2 = root / "crates/brynja-hash-sha2/Cargo.toml"
+        replace(sha2, 'cpu = ["dep:brynja-crypto-cpu"]', "cpu = []")
+        require_rejection(root, "optional CPU feature")
         reset(root)
 
         facade = root / "crates/brynja/Cargo.toml"
@@ -224,16 +153,7 @@ def test() -> None:
             "[dependencies]",
             "[dependencies]\nbrynja-crypto-cpu = { workspace = true }",
         )
-        require_rejection(root, "entered the ordinary facade")
-        reset(root)
-
-        facade = root / "crates/brynja/Cargo.toml"
-        replace(
-            facade,
-            "[dependencies]",
-            "[dependencies]\nbrynja-crypto-cpu-std = { workspace = true }",
-        )
-        require_rejection(root, "entered the ordinary facade")
+        require_rejection(root, "ordinary facade")
         reset(root)
 
         engine = root / "crates/brynja-tls13/Cargo.toml"
@@ -242,14 +162,14 @@ def test() -> None:
             "[dependencies]",
             "[dependencies]\nbrynja-crypto-cpu = { workspace = true }",
         )
-        require_rejection(root, "dependency direction")
+        require_rejection(root, "forbidden CPU package consumer")
         reset(root)
 
-        cpu_manifest = root / "crates" / cpu_boundary_policy.CPU / "Cargo.toml"
+        cpu_manifest = root / "crates/brynja-crypto-cpu/Cargo.toml"
         replace(cpu_manifest, "[package]", '[package]\nbuild = "build.rs"')
         require_rejection(root, "build or native linking")
 
 
 if __name__ == "__main__":
     test()
-    print("CPU boundary rejects twenty-six package, graph, source, FIPS, and admission regressions")
+    print("CPU boundary rejects twenty package, source, dispatch, and admission regressions")

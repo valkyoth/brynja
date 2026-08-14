@@ -1,9 +1,10 @@
 # CPU Backend Evidence Records
 
-This directory accepts committed, reproducible evidence only after an exact
-backend implementation becomes a candidate. Version 0.13.3 intentionally
-contains no `manifest.toml`: every backend remains unimplemented, unmeasured,
-and unadmitted.
+This directory accepts committed, reproducible evidence for exact backend
+candidates. Version 0.22.1 implements x86 SHA and AArch64 SHA2 SHA-256
+candidates but intentionally contains no `manifest.toml`: neither candidate
+has authenticated complete native evidence, and every backend remains
+unadmitted.
 
 Each future run occupies one directory:
 

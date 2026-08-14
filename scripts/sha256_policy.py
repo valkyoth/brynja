@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the reviewed v0.22.0 portable SHA-256 boundary."""
+"""Validate the reviewed v0.22.1 portable and optional CPU SHA-256 boundary."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ DIGEST = Path("crates/brynja-hash-sha2/src/digest.rs")
 ERROR = Path("crates/brynja-hash-sha2/src/error.rs")
 SHA256 = Path("crates/brynja-hash-sha2/src/sha256.rs")
 TEST = Path("crates/brynja-hash-sha2/tests/sha256.rs")
+ACCEL_TEST = Path("crates/brynja-hash-sha2/tests/sha256_accelerated.rs")
 CORE_MANIFEST = Path("crates/brynja-hash-core/Cargo.toml")
 MANIFEST = Path("crates/brynja-hash-sha2/Cargo.toml")
 CRYPTO_MANIFEST = Path("crates/brynja-crypto/Cargo.toml")
@@ -23,11 +24,11 @@ PACKAGE_POLICY = Path("package-policy.toml")
 SOURCES = (CORE_LIB, LIB, COMPRESS, DIGEST, ERROR, SHA256)
 EXPECTED_SHA256 = {
     CORE_LIB: "4655d8df05873a89689af1250dfeab76b82ac05d165a92c99ff65565624c7827",
-    LIB: "c16ed03155d210e3ac633ee6cd7f73dae7f6eaa271c2c1f566bec3f746f78ed3",
+    LIB: "172e3cc57ee9ff58ffb76ef3511a42bfec86fcb11473b6be89b854bd5699cc08",
     COMPRESS: "d4229f08e40392976f354eaf81f5d5cd03069d5f3c497e2cf481f65a9848e4b1",
     DIGEST: "352b84138acf77180889aa9ea0bfaea5fe8c4e198ff4449c4f0133923853ff0c",
     ERROR: "bbfbf26c2be4363f76365f5bc149d8c086c790d18d445c3809532aa035214f9b",
-    SHA256: "3350a68e0b1e7c4c64819b6ead057c4d3d8d73b9acfef49e4814965de00b76ec",
+    SHA256: "8fba67dc87dc70a9b67a68a5eb52b5bd1936eabdb2366c4ade59b9a248e2d1c6",
 }
 
 
@@ -130,14 +131,17 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "pub struct Sha256",
         "pub const MAX_MESSAGE_BYTES: u64 = u64::MAX / 8;",
         "u64::try_from(input.len())",
-        "checked_message_length(self.message_bytes, additional)?",
+        "checked_message_length(self.message_bytes, additional)",
         ".checked_add(additional)",
         "*length <= Sha256::MAX_MESSAGE_BYTES",
         "padding_block_count(self.buffer_len) == 2",
         ".skip(FINAL_BLOCK_PREFIX_BYTES)",
-        "compress(&mut self.state, &self.buffer);",
+        "compress_block(&mut self.state, &self.buffer)?;",
         "impl Update for Sha256",
         "impl FixedOutput for Sha256",
+        "pub fn update_with_backend",
+        "pub fn finalize_with_backend",
+        ".ensure_healthy()",
     ):
         require(state, token, "streaming state")
     for forbidden in ("impl Clone for Sha256", "impl Copy for Sha256"):
@@ -177,6 +181,20 @@ def validate_tests(root: Path) -> None:
         "for chunk_size in 1..=80",
     ):
         require(text, token, "SHA-256 tests")
+    accelerated = root / ACCEL_TEST
+    if not accelerated.is_file() or accelerated.is_symlink():
+        fail("accelerated SHA-256 tests must be a regular file")
+    accelerated_text = accelerated.read_text(encoding="utf-8")
+    if len(accelerated_text.splitlines()) > 500:
+        fail("accelerated SHA-256 tests exceed 500 lines")
+    for token in (
+        "fn statically_proven_backend_matches_scalar_when_available",
+        "Sha256BackendSession::for_compiled_target()",
+        "for length in [0_usize, 1, 55, 56, 63, 64, 65, 127, 128, 192, 193]",
+        "for width in 1..=67",
+        "state.update_with_backend(chunk, &backend)",
+    ):
+        require(accelerated_text, token, "accelerated SHA-256 tests")
 
 
 def validate_packages(root: Path) -> None:
@@ -184,14 +202,18 @@ def validate_packages(root: Path) -> None:
     if core.get("dependencies"):
         fail("brynja-hash-core gained a dependency")
     manifest = tomllib.loads((root / MANIFEST).read_text(encoding="utf-8"))
-    if set(manifest.get("dependencies", {})) != {"brynja-hash-core"}:
+    if set(manifest.get("dependencies", {})) != {"brynja-hash-core", "brynja-crypto-cpu"}:
         fail("brynja-hash-sha2 dependency boundary changed")
     crypto = tomllib.loads((root / CRYPTO_MANIFEST).read_text(encoding="utf-8"))
     if set(crypto.get("dependencies", {})) != {"brynja-hash-sha2"}:
         fail("brynja-crypto SHA-256 ownership changed")
-    for document, label in ((core, "hash core"), (manifest, "SHA-2")):
-        if document.get("features") != {"default": []}:
-            fail(f"{label} feature boundary changed")
+    if core.get("features") != {"default": []}:
+        fail("hash core feature boundary changed")
+    if manifest.get("features") != {
+        "default": [],
+        "cpu": ["dep:brynja-crypto-cpu"],
+    }:
+        fail("SHA-2 feature boundary changed")
 
     policy = tomllib.loads((root / PACKAGE_POLICY).read_text(encoding="utf-8"))
     expected = {
@@ -205,7 +227,7 @@ def validate_packages(root: Path) -> None:
             "class": "modern-shared",
             "publish": "crates-io",
             "required": ["brynja-hash-core"],
-            "optional": {},
+            "optional": {"cpu": "brynja-crypto-cpu"},
         },
     }
     for name, entry in expected.items():

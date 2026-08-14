@@ -22,10 +22,10 @@ def fixture(root: Path) -> None:
     (source / "lib.rs").write_text(
         "mod secret_memory_volatile;\npub mod safe {}\n", encoding="utf-8"
     )
-    shutil.copyfile(
-        ROOT / unsafe_policy.ALLOWED,
-        source / "secret_memory_volatile.rs",
-    )
+    for relative in unsafe_policy.ALLOWED:
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / relative, target)
 
 
 def require_rejection(root: Path, expected: str) -> None:
@@ -122,7 +122,7 @@ mod injected {
         require_rejection(root, "code-inclusion")
         extra.unlink()
 
-        allowed = root / unsafe_policy.ALLOWED
+        allowed = root / "crates/brynja-core/src/secret_memory_volatile.rs"
         allowed.write_text(
             allowed.read_text(encoding="utf-8").replace(
                 "unsafe { core::ptr::write_volatile(destination, 0_u8) };",

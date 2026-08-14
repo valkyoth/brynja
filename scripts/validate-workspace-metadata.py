@@ -180,7 +180,13 @@ def validate_dependencies(
             raise ValueError(f"{name} has a non-production dependency")
         if dependency.get("optional") != (dependency_name in optional):
             raise ValueError(f"{name} optionality drifted for {dependency_name}")
-        if dependency.get("features") != []:
+        allowed_features = (
+            ["cpu"]
+            if name == "brynja-crypto-cpu-std"
+            and dependency_name == "brynja-hash-sha2"
+            else []
+        )
+        if dependency.get("features") != allowed_features:
             raise ValueError(f"{name} directly enables features on {dependency_name}")
         if dependency.get("uses_default_features") is not (not external):
             raise ValueError(f"{name} default-feature policy drifted for {dependency_name}")
@@ -279,6 +285,13 @@ def validate_resolved_mode(
         if mode == "all-features":
             expected_dependencies.update(entry["optional"].values())
             expected_features.update(package["features"])
+        if name == "brynja-hash-sha2":
+            # Cargo metadata resolves all workspace members together. The host
+            # adapter is a root and explicitly enables this optional edge even
+            # in the no-default-features metadata run. Facade isolation is
+            # checked below after removing that unrelated root's unification.
+            expected_dependencies.add("brynja-crypto-cpu")
+            expected_features.add("cpu")
         package_id = names[name]
         actual_dependencies = {
             packages_by_id[dependency_id]["name"]
@@ -292,7 +305,9 @@ def validate_resolved_mode(
         if actual_features != expected_features:
             raise ValueError(f"{name} resolved {mode} feature set drifted")
 
-    modern = reachable_names("brynja", names, packages_by_id, edges)
+    modern_edges = {package_id: set(dependencies) for package_id, dependencies in edges.items()}
+    modern_edges[names["brynja-hash-sha2"]].discard(names["brynja-crypto-cpu"])
+    modern = reachable_names("brynja", names, packages_by_id, modern_edges)
     if any(policy[name]["class"] not in MODERN_CLASSES for name in modern):
         raise ValueError("modern facade reaches a non-modern package class")
     legacy = reachable_names("brynja-legacy", names, packages_by_id, edges)
@@ -333,7 +348,12 @@ def validate_resolved_mode(
     if cpu != {"brynja-crypto-cpu"}:
         raise ValueError("no_std CPU backend package gained a dependency")
     detector = reachable_names("brynja-crypto-cpu-std", names, packages_by_id, edges)
-    if detector != {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}:
+    if detector != {
+        "brynja-crypto-cpu",
+        "brynja-crypto-cpu-std",
+        "brynja-hash-core",
+        "brynja-hash-sha2",
+    }:
         raise ValueError("host CPU detector package graph drifted")
     if {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}.intersection(modern):
         raise ValueError("modern facade must remain independent of CPU packages")
@@ -345,7 +365,7 @@ def validate_resolved_mode(
         "brynja-dtls",
         "brynja-quic-tls",
     ):
-        reached = reachable_names(engine, names, packages_by_id, edges)
+        reached = reachable_names(engine, names, packages_by_id, modern_edges)
         if {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}.intersection(reached):
             raise ValueError(f"protocol engine reaches a CPU adapter: {engine}")
 

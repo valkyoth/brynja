@@ -25,25 +25,46 @@
 
 # brynja-crypto-cpu-std
 
-`brynja-crypto-cpu-std` reserves the separate opt-in host CPU-detection and
-dispatch-initialization boundary. It depends only on `brynja-crypto-cpu`, is
-selected directly by host applications, and can never enter Brynja defaults,
-protocol engines, bare-metal graphs, or a FIPS validated-module artifact.
+`brynja-crypto-cpu-std` is the separate opt-in host detector and SHA-256
+dispatch adapter. It uses the standard library's architecture feature macros,
+depends only on `brynja-crypto-cpu` and `brynja-hash-sha2`, and is selected
+directly by host applications. It never enters Brynja defaults, protocol
+engines, bare-metal graphs, or a FIPS validated-module artifact.
 
-The v0.1.1 placeholder deliberately remains `no_std`. It contains no runtime
-detection, global initializer, detector dependency, platform service,
-executable backend, cryptographic code, or low-level-code allowance. A later
-implementation milestone must explicitly authorize standard-library use and
-prove that detection evidence cannot activate a backend without its direct KAT
-and migration-safe execution authority.
-Version 0.13.3 registers native host lanes and a strict evidence-admission
-schema without implementing detection here. An unavailable host stays
-unadmitted, QEMU evidence cannot be promoted to a native claim, and recorded
-runner metadata cannot authenticate evidence. Candidate/native claims remain
-forbidden until a reviewed trusted-runner verifier is separately admitted.
-Brynja v0.17.0 makes this exclusion structural: no std detector, ordinary
-backend policy, opportunistic result, or adapter-owned global can enter or
-alter its FIPS-aware module configuration or session.
+`RuntimeSha256Backend::opportunistic()` detects an exact supported feature
+bundle once, runs the backend's startup KAT, and otherwise retains portable
+scalar SHA-256. `RuntimeSha256Backend::required()` never silently falls back.
+Reports distinguish accelerated execution from unavailable hardware,
+unadmitted candidate code, and quarantine. No global default or hidden
+initialization is installed.
+
+The x86_64 and AArch64 kernels remain unadmitted in v0.22.1 pending complete
+native evidence, so ordinary runtime selection currently reports
+`ScalarBackendUnadmitted` on qualifying machines. QEMU and cross-compilation
+can supplement instruction and portability evidence but cannot establish a
+native admission claim.
+
+## Example
+
+```rust
+use brynja_crypto_cpu_std::{RuntimeSha256Backend, RuntimeSha256Selection};
+
+let backend = RuntimeSha256Backend::opportunistic();
+let digest = backend.hash(b"abc")?;
+let report = backend.report();
+
+assert_eq!(digest.as_bytes().len(), 32);
+assert!(matches!(
+    report.selection(),
+    RuntimeSha256Selection::ScalarNoFeature
+        | RuntimeSha256Selection::ScalarBackendUnadmitted
+));
+# Ok::<(), brynja_crypto_cpu_std::RuntimeSha256Error>(())
+```
+
+Applications that require acceleration use `RuntimeSha256Backend::required()`
+and handle `RequiredAccelerationUnavailable` rather than receiving scalar
+output.
 
 ## Cryptography Verification Status
 
@@ -54,7 +75,7 @@ and pentesting do not by themselves constitute independent verification.
 
 | Component | Cryptographic scope | Independently verified |
 | --- | --- | --- |
-| `brynja-crypto-cpu-std` | Future host feature detection and dispatch initialization | ❌ Not implemented or verified |
+| SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection with explicit scalar fallback | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |
 
 Version `0.1.1`, with its exact CPU-boundary dependency update, was published
 at v0.20.0 after the cumulative pentest, remediation retest, and hosted gates

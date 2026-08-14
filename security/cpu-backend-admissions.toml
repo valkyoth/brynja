@@ -1,7 +1,7 @@
 [schema]
-version = 1
-milestone = "0.13.3"
-status = "zero-backends-admitted"
+version = 2
+milestone = "0.22.1"
+status = "two-sha256-candidates-zero-backends-admitted"
 
 [[backends]]
 id = "x86-sha"
@@ -10,7 +10,7 @@ required_features = ["sha"]
 required_operating_state = ["x86_64", "sha-usable-on-current-logical-cpu"]
 native_lanes = ["local-amd-x86_64", "aws-intel-x86_64"]
 status = "unadmitted"
-reason = "no-primitive-implementation-or-native-evidence"
+reason = "sha256-implementation-present-native-admission-evidence-pending"
 
 [[backends]]
 id = "x86-aes-gcm"
@@ -46,7 +46,7 @@ required_features = ["neon", "sha2"]
 required_operating_state = ["aarch64", "neon-and-sha2-usable-on-current-logical-cpu"]
 native_lanes = ["apple-m2-aarch64", "aws-aarch64"]
 status = "unadmitted"
-reason = "no-primitive-implementation-or-native-evidence"
+reason = "sha256-implementation-present-native-admission-evidence-pending"
 
 [[backends]]
 id = "aarch64-aes-gcm"

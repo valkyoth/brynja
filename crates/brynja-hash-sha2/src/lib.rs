@@ -17,6 +17,14 @@ pub use digest::Sha256Digest;
 pub use error::Sha256Error;
 pub use sha256::Sha256;
 
+#[cfg(feature = "cpu")]
+pub use brynja_crypto_cpu::{
+    Sha256Backend, Sha256BackendError, Sha256BackendHealth, Sha256BackendReport,
+    Sha256BackendSession,
+};
+#[cfg(feature = "cpu")]
+pub use sha256::Sha256AcceleratedError;
+
 /// Whether the complete portable SHA-256 API is implemented.
 pub const SHA256_IMPLEMENTED: bool = true;
 
@@ -39,6 +47,19 @@ pub fn sha256(input: &[u8]) -> Result<Sha256Digest, Sha256Error> {
     let mut state = Sha256::new();
     state.update(input)?;
     Ok(state.finalize())
+}
+
+/// Computes SHA-256 with one already-tested accelerated backend.
+///
+/// The ordinary [`sha256`] API and default feature set remain portable scalar.
+#[cfg(feature = "cpu")]
+pub fn sha256_with_backend(
+    input: &[u8],
+    backend: &Sha256BackendSession,
+) -> Result<Sha256Digest, Sha256AcceleratedError> {
+    let mut state = Sha256::new();
+    state.update_with_backend(input, backend)?;
+    state.finalize_with_backend(backend)
 }
 
 #[cfg(test)]

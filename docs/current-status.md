@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 pentest PASS/PASS and awaiting green hosted checks
+Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 SHA-256 acceleration candidates in progress
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -12,7 +12,10 @@ provider capability, installation, opaque-handle, authorization, and bounded
 request-metadata contracts, plus inert CPU-backend profiles, exact feature and
 operation bundles, explicit selection policy, caller-owned KAT/health state,
 permanent quarantine, thread-bound dispatch authority, a fail-closed
-native CPU evidence and performance-admission harness, and affine raw-entropy
+native CPU evidence and performance-admission harness, isolated x86_64 SHA and
+AArch64 SHA2 compression candidates, a direct startup KAT, caller-owned health
+and quarantine, static `no_std` selection, and separate opt-in `std` runtime
+detection with explicit scalar fallback or fail-closed required mode, and affine raw-entropy
 plus initialized secure-random contracts, canonical checked durations, signed
 Unix wall time, inclusive validity ranges, opaque generation-bound monotonic
 instants, purpose-bound deadlines, explicit unavailability, and permanent
@@ -27,9 +30,10 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It now has bounded DER tag-length-value framing and admitted canonical ASN.1
-primitive/container foundations, but still has no schema-driven ASN.1 decoder,
-TLS handshake parser, TLS state machine, cryptography, X.509, QUIC-TLS, DTLS
+It now has complete portable SHA-256 plus bounded DER tag-length-value framing
+and admitted canonical ASN.1 primitive/container foundations, but still has no
+schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
+cryptographic algorithm, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.

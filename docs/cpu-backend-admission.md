@@ -1,18 +1,19 @@
 # Native CPU Backend Evidence And Admission
 
-Status: v0.13.3 contracts implemented; zero backend implementations or admissions
+Status: v0.22.1 has two implemented SHA-256 candidates; zero backend admissions
 
 ## Purpose
 
 Brynja admits an optimized CPU backend because one exact implementation is
 correct, guarded, useful, and evidenced on the hardware where it will run—not
 because a build target or processor brand appears compatible. Version 0.13.3
-creates that admission route before any cryptographic ISA kernel exists.
+created that admission route before any cryptographic ISA kernel existed.
 
 The machine-readable policy is
 `assurance/cpu-evidence-policy.toml`. The current decision register is
-`security/cpu-backend-admissions.toml`; every one of the eight reserved
-x86_64, AArch64, and RISC-V backends is `unadmitted`. The generated
+`security/cpu-backend-admissions.toml`. Version 0.22.1 implements the `x86-sha`
+and `aarch64-sha2` SHA-256 candidates; all eight registered identities remain
+`unadmitted`. The generated
 `assurance/cpu-evidence-ledger.json` binds those decisions, registered lanes,
 harnesses, and future evidence manifests reproducibly.
 
@@ -50,6 +51,27 @@ QEMU x86_64, AArch64, and RISC-V lanes are registered separately as
 supplemental instruction-coverage routes. Emulation cannot satisfy native
 performance, cold-start, latency, throughput, or side-channel evidence and can
 never make a backend admission-eligible.
+
+## v0.22.1 Candidate Disposition
+
+The two SHA-256 kernels, direct KAT, static selection, optional host detector,
+scalar fallback, required mode, reporting, and quarantine paths are present.
+Generated release assembly contains x86 `sha256rnds2` and AArch64 `sha256h`
+plus `sha256h2`. The local AMD lane and supplemental forced AArch64 QEMU route
+pass scalar differentials over official vectors, padding boundaries, and
+arbitrary streaming partitions. GitHub also runs the non-authorizing candidate
+configuration on x86_64, macOS Arm, and Linux Arm hosts.
+
+Those observations are tests, not admission. The repository has not recorded
+the canonical authenticated manifests, side-channel results, balanced
+performance samples, or complete AMD, Intel, Apple M2, and AWS Arm evidence
+required by this policy. Ordinary construction therefore rejects each
+candidate before instruction use. An unavailable lane never weakens scalar
+portability or turns a candidate into a support claim. Before runtime
+admission, the safe adapter must also bind each later instruction call to a
+reviewed migration-safe feature guarantee; making a session non-`Send` does
+not itself prevent the operating system from moving its thread between logical
+CPUs.
 
 ## Evidence Contract
 
@@ -121,4 +143,6 @@ Run the current controls with:
 python3 scripts/check-cpu-evidence.py
 python3 scripts/test-cpu-evidence.py
 scripts/check-cpu-admission-fixture.sh
+scripts/check-sha256-cpu-codegen.sh
+scripts/check-sha256-cpu-qemu.sh
 ```

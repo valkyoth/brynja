@@ -1,14 +1,17 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 signed; v0.22.0 pentest PASS/PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 implementation in progress
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.22.0`; new `brynja-hash-core 0.1.0` and
-`brynja-hash-sha2 0.1.0` packages provide the reusable interface and complete
-portable SHA-256. `brynja-crypto` retains published version `0.1.2` while
-reexporting the new leaf implementation. This milestone selects zero crates.io
-packages. Package publication does not imply a TLS implementation or
-production readiness.
+advances to internal `0.22.1`. `brynja-hash-core 0.1.0` and
+`brynja-hash-sha2 0.1.0` retain the reusable interface and complete portable
+SHA-256 while gaining an optional CPU session edge. Published
+`brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA
+and AArch64 SHA2 candidates; `brynja-crypto-cpu-std 0.1.1` contains the
+separate opt-in host detector and runtime selection API. Supporting manifest
+versions remain unchanged until the v0.25.0 public checkpoint. This milestone
+selects zero crates.io packages. Package publication does not imply a TLS
+implementation or production readiness.
 
 The optional adapter is a material production secret-storage boundary. Its
 exceptional v0.11.2 assessment passed with zero findings. The v0.12.0
@@ -112,16 +115,23 @@ checkpoint, and makes no independent-review or FIPS-validation claim. Its
 assessment found no vulnerability, required no source remediation, and records
 `PASS`/`PASS` with zero open findings. The report retains the future requirement
 to harden and verify SHA working-state cleanup before keyed HMAC use.
+The v0.22.1 stage implements isolated x86_64 SHA and AArch64 SHA2 compression
+candidates plus static `no_std` and separate opt-in `std` selection. The scalar
+implementation remains authoritative. Both accelerated candidates remain
+unadmitted until complete commit-bound native evidence is available, so
+ordinary opportunistic use falls back and required acceleration fails closed.
+The stage selects no package publication and makes no independent-review,
+register-erasure, FIPS-validation, or complete hardware-support claim.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.22.0` | no | Internal facade milestone; v0.20.0 is published |
+| `brynja` | `0.22.1` | no | Internal facade milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | New unpublished allocation-free fixed-output hash interfaces |
 | `brynja-hash-sha2` | `0.1.0` | no | New unpublished complete portable SHA-256; acceleration and acceptance continue through v0.22.3 |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports the exact SHA-256 leaf implementation |
-| `brynja-crypto-cpu` | `0.1.1` | no | Published inert CPU boundary; no executable kernel |
-| `brynja-crypto-cpu-std` | `0.1.1` | no | Published inert adapter boundary; no runtime detector |
+| `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; unpublished x86_64 SHA and AArch64 SHA2 candidates remain unadmitted |
+| `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished opt-in detector falls back or fails closed while candidates are unadmitted |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |
 | `brynja-protocol` | `0.1.0` | no | Published shared TLS/DTLS record-envelope boundary |
 | `brynja-platform`, `brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`, `brynja-dtls`, `brynja-quic-tls` | `0.1.8` | no | Published versions retained; README metadata only |

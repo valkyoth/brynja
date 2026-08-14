@@ -11,6 +11,13 @@ if [[ -n "$violations" ]]; then
 fi
 
 while IFS= read -r source; do
+    if [[ "$source" == "crates/brynja-crypto-cpu-std/src/lib.rs" ]]; then
+        if grep -q '#!\[no_std\]' "$source"; then
+            echo "opt-in CPU host adapter must remain an explicit std crate: $source" >&2
+            exit 1
+        fi
+        continue
+    fi
     grep -q '#!\[no_std\]' "$source" || {
         echo "missing no_std crate attribute: $source" >&2
         exit 1

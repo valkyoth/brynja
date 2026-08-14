@@ -33,9 +33,9 @@ CHANGE_KINDS = (
 PUBLISH_ORDER = (
     "brynja-core",
     "brynja-hash-core",
+    "brynja-crypto-cpu",
     "brynja-hash-sha2",
     "brynja-crypto",
-    "brynja-crypto-cpu",
     "brynja-crypto-cpu-std",
     "brynja-pki",
     "brynja-protocol",

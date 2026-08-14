@@ -15,6 +15,7 @@ default = []
 
 [dependencies]
 brynja-crypto-cpu = { workspace = true }
+brynja-hash-sha2 = { workspace = true, features = ["cpu"] }
 
 [lints]
 workspace = true

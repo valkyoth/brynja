@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the inert v0.13.2 CPU-package and future admission boundary."""
+"""Validate Brynja's v0.22.1 SHA-256 CPU boundary."""
 
 from __future__ import annotations
 
@@ -12,18 +12,8 @@ from pathlib import Path
 POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
-EXPECTED_POLICY_SHA256 = "0658616b8fa766bebb934036b163b1880141bab88a85dc4c62f92a8aab7d3b39"
-EXPECTED_SOURCE_SHA256 = {
-    (CPU, "src/lib.rs"): "614731a47da9364a16d62b71335b5cbeffb7554b117d4c2c8661fd5b2b2ec438",
-    (DETECTOR, "src/lib.rs"): "db734d07aca12e88b560d732d977d97f9e86e438ef913f6b3d5d19c733a9d7a2",
-}
-NO_STD_ATTRIBUTE = re.compile(r"(?m)^#!\[no_std\]$")
-FALSE_STATUS = {
-    (CPU, "src/lib.rs"): re.compile(r"(?m)^pub const IMPLEMENTED: bool = false;$"),
-    (DETECTOR, "src/lib.rs"): re.compile(
-        r"(?m)^pub const RUNTIME_DETECTION_IMPLEMENTED: bool = false;$"
-    ),
-}
+SHA2 = "brynja-hash-sha2"
+EXPECTED_POLICY_SHA256 = "1ed7ea7f425dcbd424ed61e9a149bcec56de64260ceb1ffc83496abfce58e95b"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -34,132 +24,70 @@ FORBIDDEN_CONSUMERS = (
     "brynja-quic-tls",
     "brynja-legacy",
 )
-LOW_LEVEL = re.compile(
-    r"\b(?:unsafe|unsafe_code|extern|asm|global_asm|llvm_asm|naked_asm|include|path)\b"
-)
+SOURCE_STATUS = {
+    (CPU, "src/lib.rs"): "boundary-only",
+    (CPU, "src/sha256.rs"): "safe-session-and-attestation-boundary",
+    (CPU, "src/sha256_schedule.rs"): "portable-message-schedule",
+    (CPU, "src/x86_sha.rs"): "implemented-unadmitted-candidate-kernel",
+    (CPU, "src/aarch64_sha2.rs"): "implemented-unadmitted-candidate-kernel",
+    (DETECTOR, "src/lib.rs"): "boundary-only",
+    (DETECTOR, "src/runtime_detection.rs"): "runtime-feature-attestation-boundary",
+}
 BACKENDS = {
     "x86-sha": (
-        "X86Sha",
-        "x86_64",
-        "src/x86_sha.rs",
-        ("sha",),
+        "X86Sha", "x86_64", "src/x86_sha.rs", ("sha",),
         ("x86_64", "sha-usable-on-current-logical-cpu"),
+        "implemented-unadmitted-native-evidence-pending",
     ),
     "x86-aes-gcm": (
-        "X86AesGcm",
-        "x86_64",
-        "src/x86_aes_gcm.rs",
-        ("aes", "pclmulqdq"),
-        ("x86_64", "aes-and-pclmulqdq-usable-on-current-logical-cpu"),
+        "X86AesGcm", "x86_64", "src/x86_aes_gcm.rs", ("aes", "pclmulqdq"),
+        ("x86_64", "aes-and-pclmulqdq-usable-on-current-logical-cpu"), "reserved",
     ),
     "x86-avx2": (
-        "X86Avx2",
-        "x86_64",
-        "src/x86_avx2.rs",
-        ("avx2",),
+        "X86Avx2", "x86_64", "src/x86_avx2.rs", ("avx2",),
         ("x86_64", "osxsave-and-xcr0-ymm-state", "avx2-usable-on-current-logical-cpu"),
+        "reserved",
     ),
     "x86-avx512": (
-        "X86Avx512",
-        "x86_64",
-        "src/x86_avx512.rs",
-        ("avx512f",),
+        "X86Avx512", "x86_64", "src/x86_avx512.rs", ("avx512f",),
         ("x86_64", "osxsave-and-xcr0-zmm-state", "avx512f-usable-on-current-logical-cpu"),
+        "reserved",
     ),
     "aarch64-sha2": (
-        "Aarch64Sha2",
-        "aarch64",
-        "src/aarch64_sha2.rs",
-        ("neon", "sha2"),
+        "Aarch64Sha2", "aarch64", "src/aarch64_sha2.rs", ("neon", "sha2"),
         ("aarch64", "neon-and-sha2-usable-on-current-logical-cpu"),
+        "implemented-unadmitted-native-evidence-pending",
     ),
     "aarch64-aes-gcm": (
-        "Aarch64AesGcm",
-        "aarch64",
-        "src/aarch64_aes_gcm.rs",
+        "Aarch64AesGcm", "aarch64", "src/aarch64_aes_gcm.rs",
         ("neon", "aes", "pmull"),
-        ("aarch64", "neon-aes-and-pmull-usable-on-current-logical-cpu"),
+        ("aarch64", "neon-aes-and-pmull-usable-on-current-logical-cpu"), "reserved",
     ),
     "riscv-vector": (
-        "RiscVVector",
-        "riscv",
-        "src/riscv_vector.rs",
-        ("v",),
+        "RiscVVector", "riscv", "src/riscv_vector.rs", ("v",),
         ("ratified-vector-isa", "vector-state-enabled", "v-usable-on-current-hart"),
+        "reserved",
     ),
     "riscv-scalar-crypto": (
-        "RiscVScalarCrypto",
-        "riscv",
-        "src/riscv_scalar_crypto.rs",
+        "RiscVScalarCrypto", "riscv", "src/riscv_scalar_crypto.rs",
         ("ratified-scalar-crypto-subset",),
         ("matching-riscv-width", "exact-scalar-crypto-subset-usable-on-current-hart"),
+        "reserved",
     ),
 }
-AMENDMENT_REQUIREMENTS = (
-    "primitive-and-operation",
-    "source-symbol-and-sha256",
-    "compiler-and-feature-bundle",
-    "instruction-preconditions",
-    "abi-and-vector-state-preconditions",
-    "safe-wrapper-invariants",
-    "register-and-spill-residuals",
-    "scalar-reference",
-    "known-answer-test",
-    "quarantine-path",
-    "native-hardware-evidence",
-    "side-channel-evidence",
-    "performance-evidence",
-    "fips-disposition",
-    "independent-review",
-)
-FORBIDDEN_MECHANISMS = (
-    "foreign-abi",
-    "external-assembly",
-    "native-object",
-    "build-script",
-    "generated-source-inclusion",
-    "global-registry",
-)
-SAFE_WRAPPER_INVARIANTS = (
-    "exact-backend-identity",
-    "complete-feature-bundle",
-    "operating-state-preconditions",
-    "exact-session-and-instance",
-    "successful-direct-kat",
-    "healthy-current-generation",
-    "exact-operation-authority",
-    "migration-exclusion-through-call",
-    "post-callback-logical-revalidation",
-    "guarded-direct-kernel-call",
-    "bounded-caller-owned-buffers",
-    "scalar-differential-equivalence",
-    "secret-free-failure",
-)
-SOURCE_KEYS = {"package", "path", "status", "sha256"}
 BACKEND_KEYS = {
-    "id",
-    "identity",
-    "architecture",
-    "module",
-    "status",
-    "sha256",
-    "low_level_allowed",
-    "instructions",
-    "abi_preconditions",
+    "id", "identity", "architecture", "module", "status", "sha256",
+    "low_level_allowed", "instructions", "abi_preconditions",
 }
+SOURCE_KEYS = {"package", "path", "status", "sha256"}
 
 
 class CpuBoundaryPolicyError(RuntimeError):
-    """The reserved CPU boundary or future-admission contract drifted."""
+    """The reviewed CPU boundary differs from policy."""
 
 
 def fail(message: str) -> None:
     raise CpuBoundaryPolicyError(message)
-
-
-def exact_keys(value: dict, expected: set[str], label: str) -> None:
-    if set(value) != expected:
-        fail(f"{label} fields drifted")
 
 
 def read_toml(path: Path) -> dict:
@@ -170,215 +98,56 @@ def read_toml(path: Path) -> dict:
         fail(f"cannot read {path}: {error}")
 
 
-def package_manifest(root: Path, name: str) -> dict:
+def exact_keys(value: dict, expected: set[str], label: str) -> None:
+    if set(value) != expected:
+        fail(f"{label} fields drifted")
+
+
+def manifest(root: Path, name: str) -> dict:
     return read_toml(root / "crates" / name / "Cargo.toml")
 
 
-def validate_package_policy(root: Path) -> None:
-    packages = read_toml(root / "package-policy.toml").get("packages", {})
-    expected = {
-        CPU: {
-            "class": "cpu-backend",
-            "publish": "crates-io",
-            "required": [],
-            "optional": {},
-        },
-        DETECTOR: {
-            "class": "host-adapter",
-            "publish": "crates-io",
-            "required": [CPU],
-            "optional": {},
-        },
-    }
-    for name, entry in expected.items():
-        if packages.get(name) != entry:
-            fail(f"package classification drifted: {name}")
-    facade = packages.get("brynja", {})
-    if CPU in facade.get("required", []) or CPU in facade.get("optional", {}).values():
-        fail("ordinary facade must remain independent of CPU packages")
-
-
-def validate_manifests(root: Path) -> None:
-    workspace = read_toml(root / "Cargo.toml")
-    workspace_dependencies = workspace.get("workspace", {}).get("dependencies", {})
-    for name in (CPU, DETECTOR):
-        expected = {"path": f"crates/{name}", "version": "=0.1.1"}
-        if workspace_dependencies.get(name) != expected:
-            fail(f"workspace dependency pin drifted: {name}")
-
-    cpu = package_manifest(root, CPU)
-    detector = package_manifest(root, DETECTOR)
-    facade = package_manifest(root, "brynja")
-    if cpu.get("features") != {"default": []} or cpu.get("dependencies"):
-        fail("no_std CPU package must have empty features and zero dependencies")
-    if detector.get("features") != {"default": []}:
-        fail("host detector default feature set drifted")
-    if detector.get("dependencies") != {CPU: {"workspace": True}}:
-        fail("host detector may depend only on the no_std CPU package")
-    facade_dependencies = facade.get("dependencies", {})
-    if (
-        CPU in facade_dependencies
-        or DETECTOR in facade_dependencies
-        or CPU in facade.get("features", {})
-        or DETECTOR in facade.get("features", {})
-    ):
-        fail("CPU package entered the ordinary facade")
-    if facade.get("features", {}).get("default") != []:
-        fail("facade default feature set activated CPU code")
-
-    allowed_owners = {DETECTOR: {CPU}}
-    for manifest_path in sorted((root / "crates").glob("*/Cargo.toml")):
-        manifest = read_toml(manifest_path)
-        owner = manifest.get("package", {}).get("name")
-        dependencies = set(manifest.get("dependencies", {}))
-        cpu_dependencies = dependencies.intersection({CPU, DETECTOR})
-        if cpu_dependencies != allowed_owners.get(owner, set()):
-            fail(f"CPU package dependency direction drifted: {owner}")
-        package = manifest.get("package", {})
-        if "build" in package or "links" in package:
-            fail(f"CPU boundary package introduced build or native linking: {owner}")
-    for consumer in FORBIDDEN_CONSUMERS:
-        dependencies = package_manifest(root, consumer).get("dependencies", {})
-        if CPU in dependencies or DETECTOR in dependencies:
-            fail(f"forbidden CPU package consumer: {consumer}")
-
-
-def validate_sources(root: Path, policy: dict) -> None:
-    maximum = policy["limits"]["maximum_source_lines"]
-    records = policy.get("sources", [])
-    if len(records) != 2:
-        fail("boundary source inventory must contain exactly two files")
-    seen: set[tuple[str, str]] = set()
-    for record in records:
-        exact_keys(record, SOURCE_KEYS, "boundary source")
-        key = (record["package"], record["path"])
-        if key in seen or key not in {(CPU, "src/lib.rs"), (DETECTOR, "src/lib.rs")}:
-            fail("boundary source inventory drifted")
-        seen.add(key)
-        if record["status"] != "boundary-only":
-            fail("boundary source claimed implementation")
-        path = root / "crates" / record["package"] / record["path"]
-        if not path.is_file() or path.is_symlink():
-            fail(f"boundary source is not a regular file: {path}")
-        text = path.read_text(encoding="utf-8")
-        if len(text.splitlines()) > maximum:
-            fail(f"boundary source exceeds {maximum} lines")
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        expected = EXPECTED_SOURCE_SHA256[key]
-        if record["sha256"] != expected or digest != expected:
-            fail(f"inert boundary source changed; reopen security review: {key}")
-        if len(NO_STD_ATTRIBUTE.findall(text)) != 1:
-            fail(f"real no_std attribute missing: {key}")
-        if FALSE_STATUS[key].search(text) is None:
-            fail(f"exact false implementation declaration missing: {key}")
-        if LOW_LEVEL.search(text):
-            fail(f"boundary source gained a low-level token: {key}")
-        rust_sources = sorted(path.parent.rglob("*.rs"))
-        if rust_sources != [path]:
-            fail(f"unadmitted source entered reserved package: {record['package']}")
-        if (path.parents[1] / "build.rs").exists():
-            fail(f"build-time source generation entered: {record['package']}")
-
-
-def validate_backends(root: Path, policy: dict) -> None:
-    records = policy.get("backends", [])
-    if len(records) != len(BACKENDS):
-        fail("reserved backend inventory is incomplete")
-    seen: set[str] = set()
-    for record in records:
-        exact_keys(record, BACKEND_KEYS, "reserved backend")
-        identifier = record["id"]
-        if identifier in seen or identifier not in BACKENDS:
-            fail("reserved backend identity drifted")
-        seen.add(identifier)
-        identity, architecture, module, instructions, abi_preconditions = BACKENDS[identifier]
-        if (
-            record["identity"] != identity
-            or record["architecture"] != architecture
-            or record["module"] != module
-            or tuple(record["instructions"]) != instructions
-            or tuple(record["abi_preconditions"]) != abi_preconditions
-        ):
-            fail(f"reserved backend contract drifted: {identifier}")
-        if (
-            record["status"] != "reserved"
-            or record["sha256"] != "absent"
-            or record["low_level_allowed"] is not False
-        ):
-            fail(f"reserved backend gained implementation authority: {identifier}")
-        if (root / "crates" / CPU / record["module"]).exists():
-            fail(f"reserved backend module exists without admission: {identifier}")
-
-
 def validate_policy_shape(policy: dict) -> None:
-    exact_keys(
-        policy,
-        {
-            "schema",
-            "limits",
-            "packages",
-            "graph",
-            "fips",
-            "low_level_boundary",
-            "safe_wrapper",
-            "sources",
-            "backends",
-        },
-        "CPU boundary policy",
-    )
+    exact_keys(policy, {
+        "schema", "limits", "packages", "graph", "fips", "low_level_boundary",
+        "safe_wrapper", "sources", "backends",
+    }, "CPU boundary policy")
     if policy["schema"] != {
-        "version": 1,
-        "milestone": "0.13.2",
-        "status": "reserved-no-implementation",
+        "version": 2,
+        "milestone": "0.22.1",
+        "status": "sha256-x86-and-aarch64-candidates",
     }:
         fail("CPU boundary schema drifted")
     if policy["limits"] != {
         "maximum_source_lines": 500,
+        "implemented_backend_count": 2,
         "active_backend_count": 0,
-        "approved_cpu_low_level_allowances": 0,
+        "approved_cpu_low_level_allowances": 4,
     }:
         fail("CPU boundary limits drifted")
     if policy["packages"] != {
         "kernel": {
-            "name": CPU,
-            "version": "0.1.1",
-            "runtime": "no_std",
-            "dependencies": [],
-            "default_features": [],
-            "publication": "deferred-crates-io",
-            "facade_feature": "none",
+            "name": CPU, "version": "0.1.1", "runtime": "no_std",
+            "dependencies": [], "default_features": [],
+            "publication": "deferred-crates-io", "facade_feature": "none",
         },
         "detector": {
-            "name": DETECTOR,
-            "version": "0.1.1",
-            "runtime": "reserved-std-currently-no_std",
-            "dependencies": [CPU],
-            "default_features": [],
-            "publication": "deferred-crates-io",
-            "facade_feature": "none",
+            "name": DETECTOR, "version": "0.1.1", "runtime": "std",
+            "dependencies": [CPU, SHA2], "default_features": [],
+            "publication": "deferred-crates-io", "facade_feature": "none",
         },
     }:
         fail("CPU boundary package contract drifted")
-    graph = policy["graph"]
-    if (
-        graph.get("scalar_owner") != "brynja-crypto"
-        or graph.get("facade") != "brynja"
-        or graph.get("forbidden_consumers") != list(FORBIDDEN_CONSUMERS)
-        or graph.get("third_party_detection_crates") != "forbidden"
-        or graph.get("build_time_source_inclusion") != "forbidden"
-        or graph.get("implicit_std") != "forbidden"
-        or graph.get("os_entropy_and_platform_services") != "forbidden"
+    if policy["graph"].get("scalar_owner") != SHA2:
+        fail("CPU scalar owner drifted")
+    if policy["graph"].get("forbidden_consumers") != list(FORBIDDEN_CONSUMERS):
+        fail("CPU forbidden-consumer inventory drifted")
+    for key in (
+        "third_party_detection_crates", "build_time_source_inclusion",
+        "implicit_std", "os_entropy_and_platform_services",
     ):
-        fail("CPU boundary graph contract drifted")
-    if policy["low_level_boundary"] != {
-        "current_cpu_allowances": [],
-        "approval_scope": "one-exact-symbol",
-        "amendment_requires": list(AMENDMENT_REQUIREMENTS),
-        "forbidden_mechanisms": list(FORBIDDEN_MECHANISMS),
-    }:
-        fail("future backend amendment contract drifted")
-    if policy["safe_wrapper"] != {"invariants": list(SAFE_WRAPPER_INVARIANTS)}:
-        fail("safe wrapper invariant inventory drifted")
+        if policy["graph"].get(key) != "forbidden":
+            fail(f"CPU graph prohibition drifted: {key}")
     if policy["fips"] != {
         "future_module": "brynja-fips-module",
         "ordinary_facade_claim": "forbidden",
@@ -389,14 +158,136 @@ def validate_policy_shape(policy: dict) -> None:
         "operational_environment": "artifact-owned",
     }:
         fail("FIPS CPU-package boundary drifted")
+    allowances = policy["low_level_boundary"].get("current_cpu_allowances", [])
+    if len(allowances) != 4 or len(allowances) != len(set(allowances)):
+        fail("CPU low-level allowance inventory drifted")
+    invariants = policy["safe_wrapper"].get("invariants", [])
+    if len(invariants) != 15 or len(invariants) != len(set(invariants)):
+        fail("safe wrapper invariant inventory drifted")
+
+
+def validate_packages(root: Path) -> None:
+    workspace = read_toml(root / "Cargo.toml")["workspace"]["dependencies"]
+    expected_pins = {CPU: "=0.1.1", DETECTOR: "=0.1.1", SHA2: "=0.1.0"}
+    for name, version in expected_pins.items():
+        if workspace.get(name) != {"path": f"crates/{name}", "version": version}:
+            fail(f"workspace dependency pin drifted: {name}")
+    cpu = manifest(root, CPU)
+    detector = manifest(root, DETECTOR)
+    sha2 = manifest(root, SHA2)
+    if cpu.get("features") != {"default": []} or cpu.get("dependencies"):
+        fail("no_std CPU package must retain zero dependencies")
+    if detector.get("features") != {"default": []}:
+        fail("host detector default feature set drifted")
+    if set(detector.get("dependencies", {})) != {CPU, SHA2}:
+        fail("host detector dependency boundary drifted")
+    if sha2.get("features") != {"default": [], "cpu": ["dep:brynja-crypto-cpu"]}:
+        fail("SHA-2 optional CPU feature drifted")
+    if set(sha2.get("dependencies", {})) != {"brynja-hash-core", CPU}:
+        fail("SHA-2 CPU dependency boundary drifted")
+    packages = read_toml(root / "package-policy.toml")["packages"]
+    if packages[SHA2]["optional"] != {"cpu": CPU}:
+        fail("SHA-2 package classification lost optional CPU isolation")
+    if packages[DETECTOR]["required"] != [CPU, SHA2]:
+        fail("detector package classification drifted")
+    facade = manifest(root, "brynja")
+    if CPU in facade.get("dependencies", {}) or DETECTOR in facade.get("dependencies", {}):
+        fail("CPU packages entered the ordinary facade")
+    for consumer in FORBIDDEN_CONSUMERS:
+        dependencies = manifest(root, consumer).get("dependencies", {})
+        if CPU in dependencies or DETECTOR in dependencies:
+            fail(f"forbidden CPU package consumer: {consumer}")
+    for name in (CPU, DETECTOR):
+        package = manifest(root, name)["package"]
+        if "build" in package or "links" in package or (root / "crates" / name / "build.rs").exists():
+            fail(f"CPU boundary introduced build or native linking: {name}")
+
+
+def validate_sources(root: Path, policy: dict) -> None:
+    records = policy["sources"]
+    if len(records) != len(SOURCE_STATUS):
+        fail("CPU source inventory is incomplete")
+    seen = set()
+    for record in records:
+        exact_keys(record, SOURCE_KEYS, "CPU source")
+        key = (record["package"], record["path"])
+        if key in seen or SOURCE_STATUS.get(key) != record["status"]:
+            fail("CPU source inventory or status drifted")
+        seen.add(key)
+        path = root / "crates" / key[0] / key[1]
+        if not path.is_file() or path.is_symlink():
+            fail(f"CPU source must be a regular file: {key}")
+        if len(path.read_text(encoding="utf-8").splitlines()) > policy["limits"]["maximum_source_lines"]:
+            fail(f"CPU source exceeds 500 lines: {key}")
+        if hashlib.sha256(path.read_bytes()).hexdigest() != record["sha256"]:
+            fail(f"CPU source changed; reopen security review: {key}")
+    if seen != set(SOURCE_STATUS):
+        fail("CPU source inventory is incomplete")
+    actual = {
+        (name, str(path.relative_to(root / "crates" / name)))
+        for name in (CPU, DETECTOR)
+        for path in (root / "crates" / name / "src").glob("*.rs")
+    }
+    if actual != set(SOURCE_STATUS):
+        fail("unreviewed source entered CPU packages")
+    text = {key: (root / "crates" / key[0] / key[1]).read_text(encoding="utf-8") for key in SOURCE_STATUS}
+    if "#![no_std]" not in text[(CPU, "src/lib.rs")]:
+        fail("CPU kernel package lost no_std")
+    if "#![no_std]" in text[(DETECTOR, "src/lib.rs")]:
+        fail("std detector still claims no_std")
+    x86 = text[(CPU, "src/x86_sha.rs")]
+    for token in ('#[target_feature(enable = "sha")]', "_mm_sha256rnds2_epu32", "// SAFETY:"):
+        if token not in x86:
+            fail(f"x86 SHA kernel drifted: {token}")
+    arm = text[(CPU, "src/aarch64_sha2.rs")]
+    for token in ('#[target_feature(enable = "sha2")]', "vsha256hq_u32", "vsha256h2q_u32", "// SAFETY:"):
+        if token not in arm:
+            fail(f"AArch64 SHA2 kernel drifted: {token}")
+    detector = text[(DETECTOR, "src/runtime_detection.rs")]
+    for token in ('is_x86_feature_detected!("sha")', 'is_aarch64_feature_detected!("sha2")', "// SAFETY:"):
+        if token not in detector:
+            fail(f"runtime detector drifted: {token}")
+    schedule = text[(CPU, "src/sha256_schedule.rs")]
+    if re.search(r"\b(?:unsafe|core::arch|std::|alloc::)\b", schedule):
+        fail("portable CPU message schedule crossed a low-level boundary")
+
+
+def validate_backends(root: Path, policy: dict) -> None:
+    records = policy["backends"]
+    if len(records) != len(BACKENDS):
+        fail("CPU backend inventory is incomplete")
+    seen = set()
+    for record in records:
+        exact_keys(record, BACKEND_KEYS, "CPU backend")
+        identifier = record["id"]
+        expected = BACKENDS.get(identifier)
+        if identifier in seen or expected is None:
+            fail("CPU backend identity drifted")
+        seen.add(identifier)
+        identity, architecture, module, instructions, preconditions, status = expected
+        if (
+            record["identity"] != identity or record["architecture"] != architecture
+            or record["module"] != module or tuple(record["instructions"]) != instructions
+            or tuple(record["abi_preconditions"]) != preconditions or record["status"] != status
+        ):
+            fail(f"CPU backend contract drifted: {identifier}")
+        path = root / "crates" / CPU / module
+        if status == "reserved":
+            if record["sha256"] != "absent" or record["low_level_allowed"] is not False or path.exists():
+                fail(f"reserved backend gained implementation authority: {identifier}")
+        else:
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            if record["sha256"] != digest or record["low_level_allowed"] is not True:
+                fail(f"candidate backend source binding drifted: {identifier}")
+    if seen != set(BACKENDS):
+        fail("CPU backend inventory is incomplete")
 
 
 def validate(root: Path) -> None:
     policy_path = root / POLICY
     policy = read_toml(policy_path)
     validate_policy_shape(policy)
-    validate_package_policy(root)
-    validate_manifests(root)
+    validate_packages(root)
     validate_sources(root, policy)
     validate_backends(root, policy)
     if hashlib.sha256(policy_path.read_bytes()).hexdigest() != EXPECTED_POLICY_SHA256:

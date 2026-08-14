@@ -7,6 +7,17 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add isolated first-party x86_64 SHA and AArch64 SHA2 compression candidates,
+  static `no_std` selection, direct startup KAT, caller-owned health and
+  permanent quarantine in `brynja-crypto-cpu`.
+- Add an optional SHA-256 CPU-session edge that retains scalar ownership of
+  streaming state, padding, checked length and finalization, plus a separate
+  opt-in `std` detector with actual-backend reporting, scalar fallback and
+  fail-closed required mode.
+- Keep both v0.22.1 accelerated candidates unadmitted until complete
+  commit-bound native evidence exists, and require generated x86 SHA and
+  AArch64 SHA2 instructions without making register-erasure, independent-
+  review or FIPS-validation claims.
 - Give the published `brynja` package a compact crates.io-specific README with
   current capability examples, design boundaries, verification tables, a
   reduced workspace guide, and links to the detailed repository documentation;

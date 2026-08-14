@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the repository's v0.11.0 unsafe exception."""
+"""Check the repository's exact unsafe exception inventory."""
 
 from pathlib import Path
 
@@ -8,7 +8,7 @@ import unsafe_policy
 
 def main() -> int:
     unsafe_policy.validate(Path(__file__).resolve().parents[1])
-    print("unsafe policy confines one documented volatile store to one private module")
+    print("unsafe policy confines volatile clearing and SHA-256 CPU intrinsics to five reviewed modules")
     return 0
 
 

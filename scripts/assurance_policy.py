@@ -276,10 +276,10 @@ def validate_manifest_text(contents: str, tools: list[dict], label: str) -> None
     if label == "Cargo.toml":
         admitted_cfg = (
             "unexpected_cfgs = { level = \"warn\", "
-            "check-cfg = ['cfg(kani)'] }"
+            "check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)'] }"
         )
         if lowered.count(admitted_cfg) != 1:
-            fail("workspace Kani check-cfg admission drifted")
+            fail("workspace assurance check-cfg admission drifted")
         lowered = lowered.replace(admitted_cfg, "")
     for tool in tools:
         if any(token in lowered for token in TOOL_MANIFEST_TOKENS[tool["id"]]):

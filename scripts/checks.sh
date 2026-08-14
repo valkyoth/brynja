@@ -32,6 +32,8 @@ python3 scripts/check-record-framing.py
 python3 scripts/test-record-framing.py
 python3 scripts/check-der-reader.py
 python3 scripts/test-der-reader.py
+python3 scripts/check-asn1-values.py
+python3 scripts/test-asn1-values.py
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py
 python3 scripts/check-cpu-boundary.py

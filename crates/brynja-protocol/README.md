@@ -43,12 +43,10 @@ available only through the separate post-decryption inner-content classifier.
 This crate does not negotiate versions, decrypt or authenticate records,
 reconstruct DTLS sequence numbers, enforce replay policy, process handshakes,
 perform I/O, allocate, implement cryptography, or provide a TLS/DTLS engine.
-It is selected for initial publication at v0.20.0. Its v0.19.0 initial High
+Version `0.1.0` was published at v0.20.0. Its v0.19.0 initial High
 cleartext-exposure finding passed repository-owner remediation retest with zero
-open findings, and it remains inside the cumulative v0.15.0-to-v0.20.0 review
-range. That scheduled assessment and its DER remediation retest record
-`PASS`/`PASS` with zero open findings. It stays unpublished until the committed
-release-check candidate and hosted gates pass.
+open findings. The scheduled v0.15.0-to-v0.20.0 assessment and its DER
+remediation retest record `PASS`/`PASS` with zero open findings.
 
 ## Cryptography Verification Status
 

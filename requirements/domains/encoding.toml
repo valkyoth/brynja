@@ -20,19 +20,20 @@ mapping_rationale = "This reviewed cross-domain rule maps the foundational DER a
 
 [[requirement]]
 id = "BRY-REQ-ENC-0002"
+revision = 3
 owner = "0.21.0"
-lifecycle = "planned"
-decision_ids = ["format.x509.signed"]
+lifecycle = "implemented"
+decision_ids = ["format.asn1.values"]
 sources = [{ id = "itu:ITU-T.X.690-202102.pdf", authority_role = "current" }, { id = "itu:ITU-T.X.690-202109-Err1.pdf", authority_role = "current" }, { id = "rfc:5912", authority_role = "current" }]
 statement = "ASN.1 integers, bit and octet strings, identifiers, booleans, strings, sequences, sets, and times use canonical DER representations."
 invariants = ["canonical-encoding", "resource-bound", "validation", "work-bound"]
 target = "crates/brynja-pki/src/asn1.rs#CanonicalValue"
-positive_test = "tests/requirements/asn1.rs#canonical_primitives"
-negative_test = "tests/requirements/asn1.rs#malformed_and_noncanonical_primitives"
+positive_test = "crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries"
+negative_test = "crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora"
 work_bound = "Every primitive decoder consumes a bounded slice once, rejects overflow before conversion, and shares the reader's depth, node, and work budgets."
-evidence_gap = "Per-type canonical corpora, round-trip properties, ambiguous AlgorithmIdentifier cases, and time-boundary tests remain unresolved until v0.21.0."
-residual = "RFC 5912 modules do not replace X.690 encoding rules, and unsupported ASN.1 types cannot enter through generic open-type handling."
-mapping_rationale = "This reviewed cross-domain rule joins the in-force X.690 encoding contract and RFC 5912 PKIX modules at the common signed-certificate surface."
+evidence_gap = "Canonical primitive, calendar, container-order, exhaustive small-domain, source-policy, and adversarial-fixture evidence is implemented; escape-bearing ISO/IEC 2022 string types, schema-specific DEFAULT omission, AlgorithmIdentifier policy, cross-implementation differentials, formal proofs, and independent review remain unresolved."
+residual = "RFC 5912 is downstream schema context only: its modules, open types, AlgorithmIdentifier rules, and certificate structures remain unimplemented; unsupported ASN.1 types cannot enter through generic open-type handling."
+mapping_rationale = "X.690 is the canonical-value authority. RFC 5912 sections are retained only as reviewed downstream PKIX schema context and do not make this value-layer requirement a module, AlgorithmIdentifier, certificate, or signature implementation claim."
 
 [[requirement]]
 id = "BRY-REQ-ENC-0003"

@@ -1,6 +1,6 @@
 # Brynja v0.20.0 Scheduled Public Checkpoint
 
-Status: cumulative pentest and remediation retest passed; awaiting green hosted checks
+Status: signed, hosted checks green, and all 15 selected packages published
 
 Brynja v0.20.0 adds bounded DER framing in `brynja-pki 0.2.0`. The
 checkpoint selects 15 packages for eventual crates.io publication. Its

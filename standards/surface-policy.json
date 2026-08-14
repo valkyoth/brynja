@@ -496,6 +496,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-pki/src/asn1.rs#CanonicalValue",
+        "disposition": "implemented",
+        "domain": "pkix",
+        "owner": "0.21.0",
+        "rationale": "Canonical bounded ASN.1 primitive values, calendar times, SET components, and SET OF ordering extend the DER substrate without claiming schema, AlgorithmIdentifier, or X.509 semantics.",
+        "sources": ["itu:ITU-T.X.690-202102.pdf", "itu:ITU-T.X.690-202109-Err1.pdf"],
+        "test_target": "crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries"
+      },
+      "id": "format.asn1.values"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-pki/src/x509.rs",
         "disposition": "future-work",
         "domain": "pkix",

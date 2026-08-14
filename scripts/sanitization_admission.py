@@ -291,14 +291,14 @@ def validate_release_state(root: Path) -> None:
         require(milestones[:3] == ["0.11.0", "0.11.1", "0.11.2"],
                 "cumulative milestone history lost the v0.11.2 adapter boundary")
     else:
-        require(baseline == "0.15.0",
+        require(baseline == "0.20.0",
                 "post-publication cumulative baseline drift")
         crates = table(release, "crates")
         adapter = table(crates, "brynja-sanitization")
-        require(adapter.get("previous_version") == "0.1.0" and
+        require(adapter.get("previous_version") == "0.1.1" and
                 adapter.get("version") == "0.1.1" and
-                adapter.get("change") == "dependency" and
-                adapter.get("publish") is True,
+                adapter.get("change") in {"unchanged", "metadata"} and
+                adapter.get("publish") is False,
                 "published adapter release history drift")
 
 

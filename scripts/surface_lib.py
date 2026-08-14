@@ -225,8 +225,8 @@ def render_coverage(register: dict) -> bytes:
     lines.extend(
         [
             "",
-            "An `implemented` count of zero is required at this planning-only",
-            "milestone. `future-work` is not an implementation claim.",
+            "`implemented` is an exact source-and-test-bound claim.",
+            "`future-work` is not an implementation claim.",
             "",
             "## Surface Kinds",
             "",

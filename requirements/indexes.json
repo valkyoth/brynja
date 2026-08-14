@@ -2079,7 +2079,7 @@
         "current"
       ],
       "decisions": [
-        "format.x509.signed"
+        "format.asn1.values"
       ],
       "domains": [
         "encoding"
@@ -2100,11 +2100,11 @@
         "rfc:5912"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue"
+        "actual-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue"
       ],
       "tests": [
-        "planned:positive:tests/requirements/asn1.rs#canonical_primitives",
-        "planned:negative:tests/requirements/asn1.rs#malformed_and_noncanonical_primitives"
+        "planned:positive:crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries",
+        "planned:negative:crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora"
       ]
     },
     "BRY-REQ-ENC-0003": {
@@ -6253,6 +6253,9 @@
       "facility.tls13.post-handshake-authentication": [
         "BRY-REQ-TLS13-0721"
       ],
+      "format.asn1.values": [
+        "BRY-REQ-ENC-0002"
+      ],
       "format.delegated-credential": [
         "BRY-REQ-OPTIONAL-0144"
       ],
@@ -6272,7 +6275,6 @@
         "BRY-REQ-OPTIONAL-0137"
       ],
       "format.x509.signed": [
-        "BRY-REQ-ENC-0002",
         "BRY-REQ-PKIX-0001",
         "BRY-REQ-PKIX-0002",
         "BRY-REQ-PKIX-0003",
@@ -10639,6 +10641,9 @@
       "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
       ],
+      "actual-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue": [
+        "BRY-REQ-ENC-0002"
+      ],
       "actual-symbol:crates/brynja-pki/src/der.rs#Reader": [
         "BRY-REQ-ENC-0001"
       ],
@@ -10849,9 +10854,6 @@
       ],
       "planned-symbol:crates/brynja-fips-module/src/rbg.rs": [
         "BRY-REQ-ENTROPY-1242"
-      ],
-      "planned-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue": [
-        "BRY-REQ-ENC-0002"
       ],
       "planned-symbol:crates/brynja-pki/src/crl.rs#CrlValidator": [
         "BRY-REQ-PKIX-0008"
@@ -11136,6 +11138,9 @@
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:negative:crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora": [
+        "BRY-REQ-ENC-0002"
+      ],
       "planned:negative:crates/brynja-pki/tests/der_reader.rs#indefinite_and_nonminimal_lengths_are_rejected": [
         "BRY-REQ-ENC-0001"
       ],
@@ -11160,9 +11165,6 @@
       ],
       "planned:negative:tests/conformance/tls_router.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0093"
-      ],
-      "planned:negative:tests/requirements/asn1.rs#malformed_and_noncanonical_primitives": [
-        "BRY-REQ-ENC-0002"
       ],
       "planned:negative:tests/requirements/certificate_policy.rs#cycles_explosion_and_invalid_mappings": [
         "BRY-REQ-PKIX-0006"
@@ -11538,6 +11540,9 @@
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:positive:crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries": [
+        "BRY-REQ-ENC-0002"
+      ],
       "planned:positive:crates/brynja-pki/tests/der_reader.rs#nested_constructed_values_emit_balanced_events": [
         "BRY-REQ-ENC-0001"
       ],
@@ -11564,9 +11569,6 @@
       ],
       "planned:positive:tests/conformance/tls_router.rs#audit_regression": [
         "BRY-REQ-TLS-0093"
-      ],
-      "planned:positive:tests/requirements/asn1.rs#canonical_primitives": [
-        "BRY-REQ-ENC-0002"
       ],
       "planned:positive:tests/requirements/certificate_policy.rs#valid_policy_graphs": [
         "BRY-REQ-PKIX-0006"

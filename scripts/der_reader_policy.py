@@ -19,7 +19,7 @@ MANIFEST = Path("crates/brynja-pki/Cargo.toml")
 PACKAGE_POLICY = Path("package-policy.toml")
 SOURCES = (LIB, DER, ERROR, LIMITS, READER, TAG)
 EXPECTED_SHA256 = {
-    LIB: "ed8f9b415a574f28cb785a99362ada70a8c015827ca828c6ba090e1eeba298ea",
+    LIB: "e20139511f8eaacd172318451582f46634aff0bb619e39dc4091b9dd18279855",
     DER: "9cdbade4dc46c56a0cb82e185b74f3991a53a8a817ef242e7ddbcbb2f0399c5a",
     ERROR: "e5a46237a5c3ad984ed9295b0f26da3bd8bee13d3488cf3b57f59413bfc566b9",
     LIMITS: "3f096993234a72694cddea3fce988bd68029a8fd1d4fd34e20e56c7dc3215827",
@@ -66,7 +66,6 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "std::",
         "alloc::",
         "Vec<",
-        "String",
         "Box<",
         "HashMap",
         "Provider",
@@ -81,6 +80,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     ):
         if forbidden in all_code:
             fail(f"DER reader crossed forbidden boundary: {forbidden}")
+    if re.search(r"\bString\b", all_code):
+        fail("DER reader crossed forbidden boundary: String")
 
     library = sources[LIB][1]
     for token in (

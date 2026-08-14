@@ -1695,7 +1695,7 @@ Exit criteria:
 
 ### v0.19.0 - TLS And DTLS Record Framing
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Keep record framing independent of protocol selection and fallback; ignore TLSPlaintext legacy_record_version where required, validate TLSCiphertext constants where applicable, preserve bytes, reject RFC 6520 Heartbeat content and negotiation in every modern profile, and leave version choice exclusively to typed handshake policy.
 
@@ -1768,7 +1768,7 @@ Exit criteria:
 
 ### v0.20.0 - Bounded DER Reader
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement a non-recursive DER tag, length and value reader with definite, minimal, overflow-safe, depth-, node-, size-, and work-bounded parsing.
 
@@ -1829,31 +1829,64 @@ Exit criteria:
 
 ### v0.21.0 - Canonical ASN.1 Primitives
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Add canonical ASN.1 integer, bit and octet string, OID, Boolean, string, sequence and set, and time primitives with malformed and non-canonical corpora.
 
-Goal: complete the **Canonical ASN.1 Primitives** implementation stop without admitting or
-claiming adjacent capability.
+Goal: establish a bounded canonical-value layer above the v0.20.0 DER framing
+reader without admitting schema interpretation, X.509, or cryptography.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- freeze upstream capability types, caller limits, transactional effects, mandatory zeroization, version-neutral framing, provider failure, and secret-free errors;
+- add borrowed canonical BOOLEAN, INTEGER, BIT STRING, OCTET STRING, OBJECT
+  IDENTIFIER, NumericString, PrintableString, IA5String, VisibleString,
+  UniversalString, BMPString, UTF8String, UTCTime, and GeneralizedTime value
+  types with closed payload-free errors;
+- enforce exact DER Boolean octets, minimal two's-complement integers, valid
+  bit counts and zero padding, minimal terminated base-128 OID arcs, admitted
+  character repertoires and encodings, real calendar dates, required seconds,
+  `Z` time zones, and minimal GeneralizedTime fractions;
+- add validated SEQUENCE, SET, and SET OF wrappers over borrowed DER content;
+  apply the caller's immutable framing/resource limits, enforce ascending
+  direct SET component tags, and use X.690's trailing-zero-padded octet
+  comparison for SET OF values;
+- expose one closed `CanonicalValue` dispatch boundary for only the admitted
+  universal types, retaining private construction and non-formatting values;
+- explicitly reject schema-driven decoding, DEFAULT omission, escape-bearing
+  ISO 2022 string types, AlgorithmIdentifier, X.509, cryptography, signatures,
+  independent verification, and FIPS validation;
+- promote `BRY-REQ-ENC-0002` to implemented revision 3 and bind the dedicated
+  `format.asn1.values` surface to the locked X.690 authority;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run boundary, truncation, overflow, exhaustion, compile-fail, no-mutation, no_std, direction, zeroization, and deterministic-provider tests;
-- test arena overlap, malformed framing, unavailable effects, dependency inversion, cancellation, optimization, cache and DMA duties, and terminal states;
+- test canonical and malformed values for every admitted type, integer signed
+  and unsigned conversion boundaries, invalid Unicode scalar values, leap
+  years and date bounds, nested/truncated containers, duplicate/out-of-order
+  SET tags, and SET OF prefix/padded-octet ordering;
+- exhaustively classify all 256 one-octet Boolean values, all 65,536 two-octet
+  BIT STRING payloads, and all 65,536 two-octet OID bodies;
+- compile-fail private construction and secret-adjacent formatting boundaries;
+  run all crate and documentation tests under `no_std` and both feature graphs;
+- lock ten implementation source hashes and reject forty fixtures for
+  allocation, unsafe/FFI, I/O, provider/crypto coupling, raw strings, missing
+  canonical checks, public fields, graph drift, source drift, or files over
+  500 lines;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the upstream foundation is deterministic, hostile-input safe, platform-independent, and reviewably destroys owned secrets;
+- all admitted values have one deterministic canonical interpretation under
+  caller-owned bounds, malformed or unsupported values fail closed, and the
+  package remains allocation-free, safe Rust, platform-independent, and below
+  the 500-line source-file ceiling;
+- because this milestone extends hostile DER framing into semantic decoding,
+  it is an exceptional pentest trigger even though it selects zero crates.io
+  publication; it remains part of the scheduled v0.20.0-to-v0.25.0 cumulative
+  review range;
 - `v0.21.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 1: First-Party Cryptography, Identity Formats, And PKI

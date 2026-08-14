@@ -37,10 +37,9 @@ clear, and named copies to and from `brynja-core` owned regions. Rich source
 errors cannot cross its boundary. Modern and legacy callers use the same
 protocol-neutral type; there is no legacy-specific adapter.
 
-The package was implemented at Brynja v0.11.2 and published as version `0.1.0`
-at v0.15.0. Dependency-pin candidate `0.1.1` is selected for v0.20.0 and remains
-unpublished until the committed release-check candidate and hosted release
-gates pass. The cumulative pentest and remediation retest record `PASS`/`PASS`
+The package was implemented at Brynja v0.11.2. Dependency-pin version `0.1.1`
+was published at v0.20.0 after the cumulative pentest, remediation retest, and
+hosted release gates recorded `PASS`/`PASS`
 with zero open findings.
 
 ```toml
@@ -48,8 +47,7 @@ with zero open findings.
 brynja-sanitization = { version = "0.1", default-features = false }
 ```
 
-Downstream users may select published `0.1.0`; the `0.1.1` metadata candidate
-is not available until its checkpoint publication completes.
+Downstream users may select published `0.1.1`.
 
 ## Cryptography Verification Status
 

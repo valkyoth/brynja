@@ -55,13 +55,12 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.15"
+brynja = "0.20"
 ```
 
-Version `0.1.1` was published at v0.15.0. Candidate `0.1.2` exact-pins
-`brynja-core 0.9.0` for v0.20.0 and remains unpublished until the committed
-release-check candidate and hosted gates pass. The cumulative pentest and
-remediation retest record `PASS`/`PASS` with zero open findings under the
+Version `0.1.2`, exact-pinned to `brynja-core 0.9.0`, was published at
+v0.20.0 after the cumulative pentest, remediation retest, and hosted gates
+recorded `PASS`/`PASS` with zero open findings under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide first-party-cryptography, `no_std`, 500-line source-file,

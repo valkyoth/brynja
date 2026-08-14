@@ -113,6 +113,9 @@ test -f scripts/record_framing_policy.py
 test -x scripts/check-der-reader.py
 test -x scripts/test-der-reader.py
 test -f scripts/der_reader_policy.py
+test -x scripts/check-asn1-values.py
+test -x scripts/test-asn1-values.py
+test -f scripts/asn1_value_policy.py
 test -x scripts/check-cpu-boundary.py
 test -x scripts/test-cpu-boundary.py
 test -f scripts/cpu_boundary_policy.py
@@ -143,6 +146,8 @@ grep -q 'python3 scripts/check-security-event.py' scripts/checks.sh
 grep -q 'python3 scripts/test-security-event.py' scripts/checks.sh
 grep -q 'python3 scripts/check-record-framing.py' scripts/checks.sh
 grep -q 'python3 scripts/test-record-framing.py' scripts/checks.sh
+grep -q 'python3 scripts/check-asn1-values.py' scripts/checks.sh
+grep -q 'python3 scripts/test-asn1-values.py' scripts/checks.sh
 grep -q 'python3 scripts/check-cpu-boundary.py' scripts/checks.sh
 grep -q 'python3 scripts/test-cpu-boundary.py' scripts/checks.sh
 test -s docs/first-party-rust-cryptography.md

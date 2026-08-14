@@ -5951,10 +5951,10 @@
     },
     {
       "decision_ids": [
-        "format.x509.signed"
+        "format.asn1.values"
       ],
       "id": "BRY-REQ-ENC-0002",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.21.0",
       "source_ids": [
         "itu:ITU-T.X.690-202102.pdf",
@@ -10432,6 +10432,12 @@
       "id": "facility.unknown-ignorable-extension",
       "requirement_ids": [
         "BRY-REQ-TLS13-0061"
+      ]
+    },
+    {
+      "id": "format.asn1.values",
+      "requirement_ids": [
+        "BRY-REQ-ENC-0002"
       ]
     },
     {

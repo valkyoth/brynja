@@ -49,12 +49,11 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.15"
+brynja = "0.20"
 ```
 
-Version `0.1.7` was published at v0.15.0. Candidate `0.1.8` remains
-unpublished until the committed v0.20.0 release-check candidate and hosted
-checks pass. The cumulative pentest and remediation retest record `PASS`/`PASS`
+Version `0.1.8` was published at v0.20.0 after the cumulative pentest,
+remediation retest, and hosted checks recorded `PASS`/`PASS`
 with zero open findings. It is governed by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 

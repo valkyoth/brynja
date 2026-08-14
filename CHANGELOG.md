@@ -7,6 +7,27 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add allocation-free canonical ASN.1 BOOLEAN, INTEGER, BIT STRING, OCTET
+  STRING, OBJECT IDENTIFIER, admitted character-string, UTCTime, and
+  GeneralizedTime value types to `brynja-pki`.
+- Add validated SEQUENCE, SET, and SET OF wrappers with caller-supplied DER
+  limits, direct-component tag ordering, and X.690 padded-octet ordering.
+- Add nine behavior groups, exhaustive 256-value BOOLEAN, 65,536-value bit
+  padding, and 65,536-value two-octet OID corpora, six compile-fail examples,
+  ten reviewed source hashes, and forty adversarial policy fixtures.
+- Promote `BRY-REQ-ENC-0002` to implemented revision 3 and add the dedicated
+  `format.asn1.values` surface without claiming schema decoding, DEFAULT
+  omission, AlgorithmIdentifier, X.509, cryptography, independent review, or
+  FIPS validation.
+- Advance the facade to internal v0.21.0 with zero crates.io publication and
+  require an exceptional pentest because canonical semantic decoding extends
+  a hostile parser boundary.
+- Record that signed v0.20.0 passed hosted checks and published all 15 selected
+  packages, including `brynja 0.20.0`, `brynja-pki 0.2.0`, and initial
+  `brynja-protocol 0.1.0`.
+- Refresh Miri and sanitizer evidence to `nightly-2026-08-14` at exact Rust
+  revision `ba28ff76f353a722f31c4f3dd2ac4e437d36411b` after the online
+  freshness gate.
 - Add `brynja-pki 0.2.0` bounded DER framing with borrowed exact slices,
   non-recursive event traversal, canonical identifier and definite minimal
   length checks, checked parent containment, and failure-atomic reader state.
@@ -23,10 +44,10 @@ Keep a Changelog and Semantic Versioning.
 - Promote `BRY-REQ-ENC-0001` to implemented revision 2 and add the dedicated
   X.690-bound `format.der.framing` surface without claiming ASN.1 semantics,
   X.509, cryptography, independent verification, or FIPS validation.
-- Prepare the scheduled v0.20.0 cumulative checkpoint with 15 selected
-  packages after the v0.15.0-to-v0.20.0 pentest and remediation retest passed;
-  publication remains blocked pending green GitHub and CodeQL and explicit
-  authorization.
+- Complete the scheduled v0.20.0 cumulative checkpoint with 15 selected
+  packages after the v0.15.0-to-v0.20.0 pentest and remediation retest passed,
+  hosted checks became green, the signed tag was created, and publication
+  completed.
 - Add unpublished `brynja-protocol 0.1.0` with typed external wire policies,
   borrowed TLS 1.2/TLS 1.3 and DTLS 1.2/DTLS 1.3 record-envelope parsing, and
   transactional caller-buffer encoding.

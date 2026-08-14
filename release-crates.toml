@@ -1,117 +1,117 @@
 [release]
-version = "0.20.0"
-milestone = "0.20.0"
-baseline = "0.15.0"
-cumulative_milestones = ["0.16.0", "0.17.0", "0.18.0", "0.18.1", "0.19.0", "0.20.0"]
+version = "0.21.0"
+milestone = "0.21.0"
+baseline = "0.20.0"
+cumulative_milestones = ["0.21.0"]
 policy = "independent"
-stage = "public"
-exceptional = false
-exception_reason = ""
+stage = "internal"
+exceptional = true
+exception_reason = "Canonical ASN.1 semantic decoding extends the hostile DER parser boundary and requires an exceptional pentest before its internal tag."
 
 [crates."brynja"]
-previous_version = "0.19.0"
-version = "0.20.0"
+previous_version = "0.20.0"
+version = "0.21.0"
 change = "code"
-publish = true
-reason = "Publish the cumulative v0.15.0-to-v0.20.0 checkpoint with bounded DER framing after its scheduled pentest, green hosted checks, and explicit authorization."
+publish = false
+reason = "Advance to v0.21.0 and expose canonical ASN.1 primitives and ordered containers without crates.io publication."
 
 [crates."brynja-core"]
-previous_version = "0.8.0"
+previous_version = "0.9.0"
 version = "0.9.0"
-change = "code"
-publish = true
-reason = "Publish cumulative pending-operation, FIPS-aware, mandatory-outcome, and observational-event foundations added after v0.15.0."
+change = "metadata"
+publish = false
+reason = "Retain published 0.9.0 unchanged at the internal v0.21.0 milestone."
 
 [crates."brynja-crypto"]
-previous_version = "0.1.1"
+previous_version = "0.1.2"
 version = "0.1.2"
-change = "dependency"
-publish = true
-reason = "Publish the exact brynja-core 0.9.0 dependency update; cryptographic effects remain unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.2 unchanged; cryptographic effects remain unimplemented."
 
 [crates."brynja-crypto-cpu"]
-previous_version = "0.1.0"
+previous_version = "0.1.1"
 version = "0.1.1"
 change = "metadata"
-publish = true
-reason = "Publish cumulative documentation for the inert CPU-kernel boundary; no executable backend is admitted."
+publish = false
+reason = "Retain published 0.1.1 unchanged; no executable backend is admitted."
 
 [crates."brynja-crypto-cpu-std"]
-previous_version = "0.1.0"
+previous_version = "0.1.1"
 version = "0.1.1"
-change = "dependency"
-publish = true
-reason = "Publish the exact brynja-crypto-cpu 0.1.1 dependency update; no runtime detector is implemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.1 unchanged; no runtime detector is implemented."
 
 [crates."brynja-pki"]
-previous_version = "0.1.7"
+previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
-publish = true
-reason = "Publish the first bounded allocation-free DER identifier, length, value, and constructed-nesting reader without claiming ASN.1 or X.509 semantics."
+publish = false
+reason = "Retain published 0.2.0 while adding canonical ASN.1 primitives and ordered containers for the future v0.25.0 checkpoint."
 
 [crates."brynja-protocol"]
-previous_version = "unpublished"
+previous_version = "0.1.0"
 version = "0.1.0"
-change = "initial"
-publish = true
-reason = "Publish the initial shared no_std TLS and DTLS record-framing crate accumulated at v0.19.0 and remediated after its exceptional pentest."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.0 shared record framing unchanged."
 
 [crates."brynja-tls"]
-previous_version = "0.1.7"
+previous_version = "0.1.8"
 version = "0.1.8"
-change = "dependency"
-publish = true
-reason = "Publish exact updated core and TLS-engine dependency pins; the TLS router remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.8 unchanged; the TLS router remains unimplemented."
 
 [crates."brynja-tls12"]
-previous_version = "0.1.7"
+previous_version = "0.1.8"
 version = "0.1.8"
-change = "dependency"
-publish = true
-reason = "Publish exact updated core, crypto, PKI, and shared record-framing dependencies; the TLS 1.2 engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.8 unchanged; the TLS 1.2 engine remains unimplemented."
 
 [crates."brynja-tls13"]
-previous_version = "0.1.7"
+previous_version = "0.1.8"
 version = "0.1.8"
-change = "dependency"
-publish = true
-reason = "Publish exact updated core, crypto, handshake, and shared record-framing dependencies; the TLS 1.3 engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.8 unchanged; the TLS 1.3 engine remains unimplemented."
 
 [crates."brynja-tls13-handshake"]
-previous_version = "0.1.7"
+previous_version = "0.1.8"
 version = "0.1.8"
-change = "dependency"
-publish = true
-reason = "Publish exact updated core, crypto, and PKI dependency pins; the TLS 1.3 handshake engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.8 unchanged; the TLS 1.3 handshake engine remains unimplemented."
 
 [crates."brynja-quic-tls"]
-previous_version = "0.1.7"
+previous_version = "0.1.8"
 version = "0.1.8"
-change = "dependency"
-publish = true
-reason = "Publish exact updated core and handshake dependency pins; QUIC-TLS remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.8 unchanged; QUIC-TLS remains unimplemented."
 
 [crates."brynja-sanitization"]
-previous_version = "0.1.0"
+previous_version = "0.1.1"
 version = "0.1.1"
-change = "dependency"
-publish = true
-reason = "Publish the exact brynja-core 0.9.0 dependency update while retaining adapter isolation from facades, engines, defaults, and FIPS boundaries."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.1 unchanged and isolated from facades, engines, defaults, and FIPS boundaries."
 
 [crates."brynja-dtls"]
-previous_version = "0.1.7"
+previous_version = "0.1.8"
 version = "0.1.8"
-change = "dependency"
-publish = true
-reason = "Publish exact updated core, crypto, PKI, and shared record-framing dependencies; the DTLS engine remains unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.8 unchanged; the DTLS engine remains unimplemented."
 
 [crates."brynja-platform"]
-previous_version = "0.1.7"
+previous_version = "0.1.8"
 version = "0.1.8"
-change = "dependency"
-publish = true
-reason = "Publish the exact brynja-core 0.9.0 dependency update; platform and pending-provider effects remain unimplemented."
+change = "metadata"
+publish = false
+reason = "Retain published 0.1.8 unchanged; platform and provider effects remain unimplemented."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"

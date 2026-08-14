@@ -35,9 +35,8 @@ and v0.13 provider capability and opaque-handle
 contracts alongside the v0.12 constant-time foundation, v0.11
 owned-memory zeroization implementation, v0.10 abstract secret-lifetime
 contract, and transactional foundations from earlier milestones. Version
-`0.8.0` was published at v0.15.0; `0.9.0` is selected for v0.20.0 and remains
-unpublished until the committed release-check candidate and hosted release
-gates pass. The cumulative pentest and remediation retest record `PASS`/`PASS`
+`0.9.0` was published at v0.20.0 after the cumulative pentest, remediation
+retest, and hosted release gates recorded `PASS`/`PASS`
 with zero open findings.
 
 Every arithmetic operation is checked independently of build profile.
@@ -346,13 +345,12 @@ Most application users will eventually depend on the modern facade:
 
 ```toml
 [dependencies]
-brynja = "0.15"
+brynja = "0.20"
 ```
 
-Version `0.8.0` was published at the Brynja v0.15.0 cumulative checkpoint after
-its scheduled assessment passed with zero findings. The v0.16.0, v0.17.0,
-v0.18.0, and v0.18.1 development deltas remain unpublished until a later
-checkpoint under the
+Version `0.9.0` was published at the Brynja v0.20.0 cumulative checkpoint after
+the scheduled assessment and remediation retest passed with zero open
+findings. Later development deltas remain unpublished until a checkpoint under the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 The exceptional repository-owner assessment of the exact v0.18.1
 implementation candidate passed with zero findings; v0.18.1 remains in the

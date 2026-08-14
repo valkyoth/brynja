@@ -434,6 +434,20 @@ does not advance observable reader state. A successfully framed element is not
 proof of ASN.1 type canonicality, SET ordering, X.509 validity, signature
 authenticity, trust, cryptographic safety, independent verification, or FIPS
 validation; those decisions remain owned by later milestones.
+v0.21.0 additionally treats every ASN.1 value octet, integer sign extension,
+bit-padding bit, OID continuation group, character code unit, calendar field,
+fraction digit, child encoding, and ordering comparison as hostile. Value
+objects borrow already-bounded DER content and admit only exact canonical
+encodings. Integer and OID arithmetic is checked, Unicode scalar and admitted
+repertoire validation is explicit, UTC/GeneralizedTime validates real dates,
+and SET/SET OF ordering is determined from the encoded direct components under
+the caller's immutable DER ceilings. Private construction and payload-free
+errors prevent unchecked values or attacker-controlled diagnostics from
+crossing the boundary. Successful value validation is not schema validation,
+DEFAULT omission, AlgorithmIdentifier interpretation, X.509 validity,
+signature authenticity, cryptographic safety, independent verification, or
+FIPS validation. Escape-bearing ISO 2022 types remain unsupported rather than
+being partially accepted.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

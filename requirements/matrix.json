@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "0c20cf8793ca60dc420cb6b87998131a50edc295979e0ee2e48e15c0c56c824f",
-  "domain_policy_sha256": "9cf7302a9d087461eab61ef23dc0df5a87c8e3c205c1a496567c71f0d80fcdca",
-  "policy_sha256": "df613ad8b52c60a38f75237587d7d6d2d276b2a992cb16c52485b131d52f7c62",
+  "domain_policy_sha256": "3b2fd0c35bf7bad30ed829d0304b8ac8d45e0ba8ce1451e5a60c70af9fcc90b9",
+  "policy_sha256": "306000567dbf117746ad964505cb8979d82ca8d2b0df36a070ee8039ba7b344e",
   "requirements": [
     {
       "applicability": "delegate",
@@ -8663,12 +8663,12 @@
       "applicability": "apply",
       "decision": "enforce",
       "decision_ids": [
-        "format.x509.signed"
+        "format.asn1.values"
       ],
       "deviation_rationale": null,
       "domain": "encoding",
       "evidence": [],
-      "evidence_gap": "Per-type canonical corpora, round-trip properties, ambiguous AlgorithmIdentifier cases, and time-boundary tests remain unresolved until v0.21.0.",
+      "evidence_gap": "Canonical primitive, calendar, container-order, exhaustive small-domain, source-policy, and adversarial-fixture evidence is implemented; escape-bearing ISO/IEC 2022 string types, schema-specific DEFAULT omission, AlgorithmIdentifier policy, cross-implementation differentials, formal proofs, and independent review remain unresolved.",
       "id": "BRY-REQ-ENC-0002",
       "invariants": [
         "canonical-encoding",
@@ -8676,13 +8676,13 @@
         "validation",
         "work-bound"
       ],
-      "lifecycle": "planned",
-      "mapping_rationale": "This reviewed cross-domain rule joins the in-force X.690 encoding contract and RFC 5912 PKIX modules at the common signed-certificate surface.",
+      "lifecycle": "implemented",
+      "mapping_rationale": "X.690 is the canonical-value authority. RFC 5912 sections are retained only as reviewed downstream PKIX schema context and do not make this value-layer requirement a module, AlgorithmIdentifier, certificate, or signature implementation claim.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.21.0",
       "profile": "crypto-encoding-pkix",
-      "residual": "RFC 5912 modules do not replace X.690 encoding rules, and unsupported ASN.1 types cannot enter through generic open-type handling.",
-      "revision": 2,
+      "residual": "RFC 5912 is downstream schema context only: its modules, open types, AlgorithmIdentifier rules, and certificate structures remain unimplemented; unsupported ASN.1 types cannot enter through generic open-type handling.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -8830,7 +8830,7 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-pki/src/asn1.rs#CanonicalValue"
         }
       ],
@@ -8838,12 +8838,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/asn1.rs#canonical_primitives"
+          "target": "crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/asn1.rs#malformed_and_noncanonical_primitives"
+          "target": "crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora"
         }
       ],
       "work_bound": "Every primitive decoder consumes a bounded slice once, rejects overflow before conversion, and shares the reader's depth, node, and work budgets."
@@ -29548,9 +29548,9 @@
       "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
     }
   ],
-  "residual_policy_sha256": "865bf824c495c06fb04f05cbbde1a209f00bbe61aae50f881537100a3bb69247",
+  "residual_policy_sha256": "b3a535e4c71aa7f051edc8677a42f4bd6ce45ee4d00f1ac2b2fbca58ba5de638",
   "schema": 5,
   "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "931e81e7c289e63012e1f5055ef001009796e7f0429251cdd5da59ad3d6c2a15",
-  "transport_policy_sha256": "7b3e4c46c55a6c5e9228af64777871330e444b397d0647252d1799e894abc9cf"
+  "surface_register_sha256": "5f59fdf0a1f615f0b6f8c1d9b9b0239819fd6e43928c136d9f4b24a8a29800cb",
+  "transport_policy_sha256": "1cc7595519322dc5840fc8c39b4efb03721f7ed5cc891492e392c7b7f5489ec7"
 }

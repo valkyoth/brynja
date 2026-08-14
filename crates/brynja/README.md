@@ -86,22 +86,27 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.20.0` scheduled public checkpoint adds a bounded, borrowed DER
-reader in `brynja-pki 0.2.0`. Its non-recursive event traversal accepts only
-definite, minimal DER framing, returns exact input slices without allocation or
-copying, and enforces immutable input, depth, node, child, identifier, length,
-value, and work ceilings with a caller-selected fixed stack. It rejects
-truncation, overflow, non-canonical tags and lengths, universal end-of-contents,
-and child values that escape their parent. Every failed read preserves the
-reader position.
+The current `0.21.0` development milestone extends the bounded DER reader with
+canonical ASN.1 value foundations in `brynja-pki`. Allocation-free borrowed
+types validate DER BOOLEAN, INTEGER, BIT STRING, OCTET STRING, OBJECT
+IDENTIFIER, admitted restricted character strings, UTCTime, and
+GeneralizedTime values. Validated SEQUENCE, SET, and SET OF wrappers enforce
+the existing immutable resource ceilings, direct-component tag order, and
+canonical padded-octet ordering without copying values.
 
-This checkpoint implements framing only. It does not interpret ASN.1 primitive
-types, validate X.509, perform cryptography, authenticate input, or make a FIPS
-claim. The scheduled cumulative pentest found one Low nested-header semantic-
-boundary oracle and no Critical, High, or Medium issue. Header byte access is
-now parent-boundary-aware with focused regressions; repository-owner retest is
-pending. The selected 15-package set remains unpublished until the permanent
-report records PASS and GitHub and CodeQL are green.
+This milestone does not implement schema-driven decoding, DEFAULT omission,
+escape-bearing ISO 2022 string types, AlgorithmIdentifier, X.509, signatures,
+cryptography, independent verification, or FIPS validation. It is an internal
+development tag and selects no crates.io publication. Because it extends a
+hostile semantic parser boundary, it requires an exceptional pentest before
+tagging; its changes also remain inside the scheduled v0.20.0-to-v0.25.0
+cumulative review range.
+
+The signed and published `0.20.0` checkpoint introduced the underlying
+borrowed, non-recursive DER framing reader. Its scheduled assessment found one
+Low adjacent-byte semantic-boundary oracle; pre-access parent-boundary checks
+closed it, repository-owner retest passed with zero findings, GitHub and
+CodeQL became green, and all 15 selected packages were published.
 
 The signed `0.19.0` development milestone adds `brynja-protocol`, a shared
 allocation-free TLS and DTLS record-envelope boundary. An already selected
@@ -330,9 +335,10 @@ published only when their cumulative changes require it at a checkpoint.
 
 Pentests look backwards over the complete change range between public
 checkpoints. The v0.15.0 assessment covered all changes after signed public tag
-v0.10.0 through v0.15.0. The v0.20.0 assessment covers all changes after
-v0.15.0 through the current v0.20.0 candidate, and the same
-pattern continues every fifth minor version. Each checkpoint report records
+v0.10.0 through v0.15.0. The v0.20.0 assessment covered all changes after
+v0.15.0 through v0.20.0. The next scheduled assessment covers every change
+after v0.20.0 through v0.25.0, and the same pattern continues every fifth
+minor version. Each checkpoint report records
 its previous public tag as `Baseline`
 and names both ends of the reviewed range in `Scope`. Material security changes
 can require an earlier exceptional pentest; that does not weaken the next
@@ -367,15 +373,13 @@ passed with zero open findings, and the permanent report records
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-crates.io checkpoint is `0.15.0`; the latest signed development tag is
-`0.19.0`. The current `0.20.0` DER-framing checkpoint selects 15 packages but
-publishes none until its committed release-check candidate passes green GitHub
-and CodeQL and the repository owner explicitly authorizes tagging.
-The published dependency is:
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.21.0`
+canonical-ASN.1 milestone selects no crates.io publication. The published
+dependency is:
 
 ```toml
 [dependencies]
-brynja = "0.15"
+brynja = "0.20"
 ```
 
 Every tag advances the `brynja` facade manifest to the tag version. Only
@@ -510,10 +514,10 @@ lifetime, owned-region zeroization, fixed-width constant-time, and provider
 capability/authorization, entropy/secure-random, typed-clock, and pending-
 operation foundations
 described for `brynja-core`, the shared record-envelope boundary in
-`brynja-protocol`, the bounded DER framing reader in `brynja-pki`, and the
-separately selected sanitization adapter are implemented. No cryptographic
-primitive, ASN.1 semantic processor, X.509 validator, handshake parser, or
-protocol engine in this table is implemented.
+`brynja-protocol`, the bounded DER reader and admitted canonical ASN.1 values
+in `brynja-pki`, and the separately selected sanitization adapter are
+implemented. No cryptographic primitive, schema-driven ASN.1 processor, X.509
+validator, handshake parser, or protocol engine in this table is implemented.
 Independent-review status cannot be inferred from implementation, testing,
 formal proof, pentest, or release status.
 
@@ -521,7 +525,7 @@ formal proof, pentest, or release status.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations, shared record framing, and bounded DER framing through v0.20; no TLS engine or provider implementation |
+| `brynja` | Modern production facade | Exposes cumulative foundations, shared record framing, bounded DER framing, and admitted canonical ASN.1 values through v0.21; no TLS engine or provider implementation |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | Future `brynja-hash-core` | Fixed-output and XOF interfaces without algorithms | Planned at v0.22.0 |
 | Future `brynja-hash-sha2` / `brynja-hash-sha3` | Reusable SHA-2, SHA-3, and SHAKE family ownership | Planned across v0.22.0-v0.24.0 |
@@ -529,8 +533,8 @@ formal proof, pentest, or release status.
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Foundation only |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | v0.1.0 reserved; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected future host detector adapter | v0.1.0 inert no_std placeholder; absent from facade and FIPS graphs |
-| `brynja-pki` | Bounded DER framing now; ASN.1 semantics, X.509, path validation, and revocation later | DER reader only |
-| `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented; unpublished; v0.19.0 exceptional pentest and retest passed |
+| `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |
+| `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented and published at v0.20.0; v0.19.0 exceptional pentest and retest passed |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
 | `brynja-tls13` | Version-specific TLS 1.3 stream engine | Foundation only |
 | `brynja-tls13-handshake` | Record-independent TLS 1.3 handshake shared with QUIC | Foundation only |
@@ -543,7 +547,7 @@ formal proof, pentest, or release status.
 | Future `brynja-openpgp-legacy` | Optional deprecated-algorithm compatibility with no modern facade edge | Conditional and separately isolated |
 | Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.169.2; OpenPGP v4 fingerprints, protected v4 keys, and v1 SEIPD/MDC receive separate consumer reviews at v0.169.3, v0.169.5, and v0.171.2 |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 exact core-pin checkpoint candidate over `sanitization 2.0.3`; absent from facade and FIPS graphs |
+| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
@@ -584,7 +588,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.97.1`, the current stable patch release checked on 2026-08-11.
+to Rust `1.97.1`, the current stable patch release checked on 2026-08-14.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 
@@ -665,9 +669,11 @@ scripts/check-github-release-controls.py
 python3 scripts/check-standards-ledger.py
 python3 scripts/check-protocol-surfaces.py
 python3 scripts/check-requirements.py
+python3 scripts/check-asn1-values.py
+python3 scripts/test-asn1-values.py
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.20.0
+scripts/tag_gate.sh v0.21.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a
@@ -682,7 +688,7 @@ After an exact green public-checkpoint candidate is pentested and tagged, the
 interactive crates.io publisher is, for example:
 
 ```bash
-scripts/release_crates.py --version 0.15.0
+scripts/release_crates.py --version 0.20.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

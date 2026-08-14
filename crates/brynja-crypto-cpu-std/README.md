@@ -56,9 +56,8 @@ and pentesting do not by themselves constitute independent verification.
 | --- | --- | --- |
 | `brynja-crypto-cpu-std` | Future host feature detection and dispatch initialization | ❌ Not implemented or verified |
 
-Version `0.1.0` was published at v0.15.0. Candidate `0.1.1` updates its exact
-CPU-boundary dependency for v0.20.0 and remains unpublished until the committed
-release-check candidate and hosted gates pass. The cumulative pentest and
-remediation retest record `PASS`/`PASS` with zero open findings. The project-wide
+Version `0.1.1`, with its exact CPU-boundary dependency update, was published
+at v0.20.0 after the cumulative pentest, remediation retest, and hosted gates
+recorded `PASS`/`PASS` with zero open findings. The project-wide
 first-party Rust, dependency, source-size, platform, FIPS, and low-level-code
 policies apply here.

@@ -455,8 +455,10 @@ and 1.97.1 emitted all four required scalar SHA-256 instructions and the QEMU
 differential corpus passed, but those results are supplemental and create no
 native RISC-V support claim. The registered native lane was also inventoried
 and rejected before execution because every hart lacks scalar and vector SHA
-extensions. The new inline-assembly boundary requires an exceptional pentest
-before v0.22.2 can be tagged.
+extensions. Its exceptional assessment found no Critical, High, or Medium
+issue, required no source remediation, and records `PASS`/`PASS` with zero open
+findings. The signed tag still requires the committed report candidate to pass
+green GitHub and CodeQL.
 
 ## Install
 

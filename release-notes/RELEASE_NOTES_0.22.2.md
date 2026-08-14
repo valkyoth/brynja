@@ -1,6 +1,6 @@
 # Brynja 0.22.2 Release Notes
 
-Status: implementation candidate; exceptional pentest, hosted verification,
+Status: exceptional pentest PASS/PASS; committed-report hosted verification
 and tag pending
 
 Brynja 0.22.2 is an internal development milestone. It selects zero crates.io
@@ -65,6 +65,8 @@ outside this milestone.
 
 This milestone introduces a cryptographic inline-assembly module and therefore
 meets the project's exceptional pentest trigger even though no crates.io
-publication is selected. Tagging requires a passing assessment and retest of
-the exact implementation candidate, a committed pentest report, the complete
-local tag gate, and green GitHub and CodeQL on the final report commit.
+publication is selected. The assessment reported zero Critical, High, or
+Medium findings, required no source remediation, and records `PASS`/`PASS`
+with zero open findings. Tagging requires the committed pentest report, the
+complete local tag gate, and green GitHub and CodeQL on the final report
+commit.

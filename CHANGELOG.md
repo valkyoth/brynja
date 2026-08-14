@@ -34,6 +34,10 @@ Keep a Changelog and Semantic Versioning.
   privacy-conscious capture instructions, exact-feature hardware requests,
   local bundle validation, and an explicit rule that community observations
   alone cannot admit a backend.
+- Record the exceptional v0.22.2 assessment as `PASS`/`PASS` with zero open
+  Critical, High, or Medium findings and no source remediation; retain the
+  QEMU/codegen-only, native-evidence, erasure, independent-review, admission,
+  and FIPS restrictions.
 - Advance the facade to internal v0.22.2 with no crates.io publication and
   require an exceptional pentest before tagging because inline cryptographic
   assembly creates a new unsafe ISA boundary.

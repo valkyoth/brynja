@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 RISC-V acceleration candidate implemented and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 exceptional pentest PASS/PASS and awaiting final hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -72,8 +72,10 @@ has Rust 1.97.1 and generic vector/bit-manipulation support but lacks `Zknh`,
 qualifying native RISC-V correctness, performance, side-channel, or migration
 evidence exists, so the candidate is unadmitted and ordinary execution remains
 scalar. The new inline-assembly boundary triggers
-an exceptional v0.22.2 pentest before tagging; no crate is selected for
-publication.
+an exceptional v0.22.2 pentest; it reported zero Critical, High, or Medium
+findings, required no source remediation, and records `PASS`/`PASS` with zero
+open findings. No crate is selected for publication. The exact committed
+report candidate must receive green GitHub and CodeQL before tagging.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

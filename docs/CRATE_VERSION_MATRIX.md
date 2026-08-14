@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 RISC-V candidate implemented and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 exceptional pentest PASS/PASS and awaiting final hosted checks
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.22.2`. `brynja-hash-core 0.1.0` and
@@ -135,7 +135,9 @@ qualifying native RISC-V evidence exists. The registered native lane has Rust
 1.97.1 but lacks scalar and vector SHA extensions on every hart, so its
 preflight stopped before candidate execution. Automatic RISC-V detection
 remains disabled, the backend remains unadmitted, and the new unsafe boundary
-requires an exceptional pentest before its signed tag.
+received an exceptional assessment with zero Critical, High, or Medium
+findings, no remediation, and `PASS`/`PASS`. The stage awaits green hosted
+checks on its committed report before the signed tag.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

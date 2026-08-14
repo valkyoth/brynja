@@ -16,6 +16,16 @@ printf '%s\n' 'value="no interpreter"' > "$missing_shebang"
 
 scripts/check_shell_syntax.sh "$posix_script" "$bash_script"
 
+for portable_script in \
+    scripts/check-cpu-admission-fixture.sh \
+    scripts/check-sha256-cpu-codegen.sh \
+    scripts/check-sha256-cpu-qemu.sh; do
+    if grep -Eq '(^|[^[:alnum:]_])rg([^[:alnum:]_]|$)' "$portable_script"; then
+        echo "CI-facing script requires uninstalled ripgrep: ${portable_script}" >&2
+        exit 1
+    fi
+done
+
 if scripts/check_shell_syntax.sh "$invalid_script" >/dev/null 2>&1; then
     echo "shell syntax validator accepted invalid Bash syntax" >&2
     exit 1

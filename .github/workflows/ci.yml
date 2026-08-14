@@ -50,7 +50,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            expected_backend: x86-sha
+          - os: ubuntu-24.04-arm
+            expected_backend: aarch64-sha2
+          - os: macos-latest
+            expected_backend: aarch64-sha2
+          - os: windows-latest
+            expected_backend: x86-sha
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -61,6 +69,7 @@ jobs:
         run: cargo test --workspace --all-features
       - name: Exercise detected SHA-256 candidate without granting admission
         env:
+          BRYNJA_CPU_EVIDENCE_EXPECTED_BACKEND: ${{ matrix.expected_backend }}
           RUSTFLAGS: --cfg brynja_cpu_evidence
         run: cargo test -p brynja-crypto-cpu-std
       - name: Test assurance platform boundary
@@ -112,8 +121,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install Rust target
         run: rustup target add ${{ matrix.target }}
-      - name: Check complete workspace
-        run: cargo check --workspace --all-features --target ${{ matrix.target }}
+      - name: Check complete no_std workspace
+        run: cargo check --workspace --exclude brynja-crypto-cpu-std --all-features --target ${{ matrix.target }}
       - name: Check CPU admission fixture
         run: cargo check --manifest-path assurance/cpu-admission-fixture/Cargo.toml --target ${{ matrix.target }}
       - name: Verify zeroization emitted code

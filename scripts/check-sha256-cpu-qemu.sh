@@ -5,7 +5,7 @@ command -v qemu-aarch64 >/dev/null 2>&1 || {
     echo "SHA-256 CPU QEMU check requires qemu-aarch64" >&2
     exit 1
 }
-rustup target list --installed | rg --quiet '^aarch64-unknown-linux-musl$' || {
+rustup target list --installed | grep -Eq '^aarch64-unknown-linux-musl$' || {
     echo "SHA-256 CPU QEMU check requires aarch64-unknown-linux-musl" >&2
     exit 1
 }

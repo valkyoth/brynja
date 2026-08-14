@@ -263,9 +263,24 @@ def validate_workflow(workflow: str) -> None:
     install = "run: rustup target add " + " ".join(TARGETS)
     if workflow.count(install) != 1:
         fail("CI bare-metal target installation drifted")
-    command = "run: cargo check --workspace --all-features --target ${{ matrix.target }}"
+    command = (
+        "run: cargo check --workspace --exclude brynja-crypto-cpu-std "
+        "--all-features --target ${{ matrix.target }}"
+    )
     if workflow.count(command) != 1:
         fail("CI bare-metal target command drifted")
+    evidence_environment = "BRYNJA_CPU_EVIDENCE_EXPECTED_BACKEND: ${{ matrix.expected_backend }}"
+    if workflow.count(evidence_environment) != 1:
+        fail("CI native CPU evidence expectation drifted")
+    for operating_system, backend in (
+        ("ubuntu-latest", "x86-sha"),
+        ("ubuntu-24.04-arm", "aarch64-sha2"),
+        ("macos-latest", "aarch64-sha2"),
+        ("windows-latest", "x86-sha"),
+    ):
+        binding = f"          - os: {operating_system}\n            expected_backend: {backend}\n"
+        if workflow.count(binding) != 1:
+            fail(f"CI native CPU evidence backend drifted: {operating_system}")
     platform_command = "run: python scripts/test-assurance.py"
     if workflow.count(platform_command) != 1:
         fail("native host assurance test command drifted")

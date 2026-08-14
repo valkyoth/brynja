@@ -4,7 +4,7 @@ set -euo pipefail
 manifest="assurance/cpu-admission-fixture/Cargo.toml"
 source_file="assurance/cpu-admission-fixture/src/lib.rs"
 
-if rg -n '\b(unsafe|Atomic[A-Za-z0-9_]*|std::|alloc::)\b' "$source_file"; then
+if grep -En '(^|[^[:alnum:]_])(unsafe|Atomic[A-Za-z0-9_]*|std::|alloc::)([^[:alnum:]_]|$)' "$source_file"; then
     echo "CPU admission fixture gained forbidden low-level, atomic, std, or alloc code" >&2
     exit 1
 fi

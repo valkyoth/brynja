@@ -22,6 +22,10 @@ Keep a Changelog and Semantic Versioning.
 - Advance the facade to internal v0.21.0 with zero crates.io publication and
   require an exceptional pentest because canonical semantic decoding extends
   a hostile parser boundary.
+- Record the exceptional assessment of exact signed v0.21.0 implementation
+  candidate `6e3ca63305fd3923ca723c9d7f559a9b12843002` as `PASS`/`PASS`
+  with zero findings and no source remediation, while retaining explicit
+  schema-validation and independent-review cautions.
 - Record that signed v0.20.0 passed hosted checks and published all 15 selected
   packages, including `brynja 0.20.0`, `brynja-pki 0.2.0`, and initial
   `brynja-protocol 0.1.0`.

@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 pentest PASS/PASS and awaiting green hosted checks
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.21.0`; `brynja-pki` gains canonical ASN.1 values while
@@ -100,8 +100,10 @@ with zero open findings.
 Hosted checks became green, signed v0.20.0 was created, and all 15 selected
 packages were published. The v0.21.0 stage adds canonical ASN.1 primitive and
 container values to `brynja-pki` without schema decoding, X.509, or
-cryptography. It requires an exceptional pentest for the hostile semantic
-parser delta and selects no crates.io publication.
+cryptography. Its exceptional assessment reported no findings, required no
+source remediation, and records `PASS`/`PASS` with zero open findings. The
+schema-validation and independent-review cautions remain explicit. The stage
+awaits green hosted checks and selects no crates.io publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

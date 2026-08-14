@@ -97,10 +97,13 @@ canonical padded-octet ordering without copying values.
 This milestone does not implement schema-driven decoding, DEFAULT omission,
 escape-bearing ISO 2022 string types, AlgorithmIdentifier, X.509, signatures,
 cryptography, independent verification, or FIPS validation. It is an internal
-development tag and selects no crates.io publication. Because it extends a
-hostile semantic parser boundary, it requires an exceptional pentest before
-tagging; its changes also remain inside the scheduled v0.20.0-to-v0.25.0
-cumulative review range.
+development tag and selects no crates.io publication. Its exceptional
+assessment of exact signed implementation candidate
+`6e3ca63305fd3923ca723c9d7f559a9b12843002` reported no findings and required
+no source remediation. The permanent report records `PASS`/`PASS`, zero open
+findings, and the schema-validation and independent-review cautions. The tag
+now awaits green GitHub and CodeQL; these changes also remain inside the
+scheduled v0.20.0-to-v0.25.0 cumulative review range.
 
 The signed and published `0.20.0` checkpoint introduced the underlying
 borrowed, non-recursive DER framing reader. Its scheduled assessment found one
@@ -369,6 +372,13 @@ focused regressions and source policy pass. Repository-owner retest of exact
 signed remediation commit `7fd31b4cc536cb2dce1a565fa3551365b086000f`
 passed with zero open findings, and the permanent report records
 `PASS`/`PASS`.
+
+The exceptional v0.21.0 assessment found no issue in the canonical ASN.1 value
+delta and required no source remediation. Its permanent `PASS`/`PASS` report
+retains the essential boundary: canonical sequence framing is not
+schema-specific validation, and X.509, cryptography, independent review, and
+FIPS validation remain absent. The v0.21.0 delta remains included in the
+scheduled v0.20.0-to-v0.25.0 assessment.
 
 ## Install
 

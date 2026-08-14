@@ -69,8 +69,10 @@ Version `0.2.0` was published at v0.20.0 after the cumulative assessment and
 remediation retest recorded PASS/PASS with zero open findings. The current
 v0.21.0 work retains that package version and adds canonical ASN.1 values for
 the future v0.25.0 checkpoint; no crate is published at this internal tag.
-Because this work extends hostile semantic decoding, v0.21.0 requires an
-exceptional pentest. This crate is governed by the
+Because this work extends hostile semantic decoding, v0.21.0 received an
+exceptional assessment. It reported no findings, required no source
+remediation, and permanently retains the warning that canonical container
+validation is not schema-specific validation. This crate is governed by the
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md).
 
 The project-wide no-third-party-crates, `no_std`, 500-line source-file,

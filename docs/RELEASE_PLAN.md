@@ -1829,7 +1829,7 @@ Exit criteria:
 
 ### v0.21.0 - Canonical ASN.1 Primitives
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Add canonical ASN.1 integer, bit and octet string, OID, Boolean, string, sequence and set, and time primitives with malformed and non-canonical corpora.
 
@@ -1887,6 +1887,10 @@ Exit criteria:
   it is an exceptional pentest trigger even though it selects zero crates.io
   publication; it remains part of the scheduled v0.20.0-to-v0.25.0 cumulative
   review range;
+- the repository-owner assessment of exact signed implementation candidate
+  `6e3ca63305fd3923ca723c9d7f559a9b12843002` reports no findings; the committed
+  report records `PASS`/`PASS`, zero open findings, and the schema-boundary and
+  independent-review cautions that future consumers must retain;
 - `v0.21.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 1: First-Party Cryptography, Identity Formats, And PKI

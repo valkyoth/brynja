@@ -1,6 +1,6 @@
 # Brynja 0.21.0 Release Notes
 
-Status: implementation complete; awaiting exceptional pentest
+Status: exceptional pentest PASS/PASS; awaiting green hosted checks
 
 Brynja 0.21.0 is an internal development milestone. It selects zero crates.io
 packages. The signed v0.20.0 checkpoint remains the latest published release,
@@ -47,7 +47,10 @@ validation. It must not be used to secure application traffic.
 ## Release process
 
 Canonical value decoding extends a hostile parser boundary, so v0.21.0 is an
-exceptional pentest trigger. After implementation verification, the exact
-signed candidate must receive a committed PASS/PASS report with zero open
-findings, pass green GitHub and CodeQL, and receive explicit authorization
-before the signed tag is created. No crates.io publication follows this tag.
+exceptional pentest trigger. The repository-owner assessment of exact signed
+implementation candidate `6e3ca63305fd3923ca723c9d7f559a9b12843002`
+reported no findings and required no source remediation. The permanent report
+records `PASS`/`PASS`, zero open findings, and the residual schema-validation
+and independent-review cautions. The report commit must now pass green GitHub
+and CodeQL and receive explicit authorization before the signed tag is
+created. No crates.io publication follows this tag.

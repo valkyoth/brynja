@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 pentest PASS/PASS and awaiting green hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -133,9 +133,13 @@ cryptography, independent verification, and FIPS validation remain absent.
 Nine behavior groups include exhaustive Boolean, bit-padding, and two-octet OID
 corpora; six compile-fail examples, ten locked source hashes, and forty broken
 fixtures protect the boundary. `BRY-REQ-ENC-0002` is implemented at revision 3
-and binds the new `format.asn1.values` surface. Because this extends hostile
-semantic decoding, v0.21.0 requires an exceptional pentest before its signed
-tag. It selects zero crates.io publication and remains inside the future
+and binds the new `format.asn1.values` surface. The exceptional assessment of
+exact signed implementation candidate
+`6e3ca63305fd3923ca723c9d7f559a9b12843002` reported no findings and required
+no source remediation. Its permanent report records `PASS`/`PASS`, zero open
+findings, and the warning that canonical sequence framing is not
+schema-specific validation. The tag awaits green GitHub and CodeQL. It selects
+zero crates.io publication and remains inside the future
 v0.20.0-to-v0.25.0 cumulative assessment.
 
 Every roadmap version now completes the full automated tag gate and waits for

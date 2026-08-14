@@ -108,13 +108,13 @@ only static selection, direct KAT, caller-owned health/quarantine, and exact
 one-block kernels. The separate opt-in `std` `brynja-crypto-cpu-std` crate owns
 runtime feature detection and explicit opportunistic or required selection.
 
-Both kernels are implemented but deliberately unadmitted until commit-bound
-native correctness, emitted-code, side-channel, and performance evidence is
-complete for the named AMD/Intel and Apple/AWS Arm lanes. Ordinary builds
+Both kernels are implemented but deliberately unadmitted. Private
+commit-bound correctness and emitted-code observations passed on local AMD,
+observed-feature AWS Intel, Apple M2, and AWS Arm, but remain explicitly
+non-authorizing. Authenticated runner, CPU-migration, performance,
+side-channel, and final-admission evidence remains incomplete. Ordinary builds
 therefore cannot execute either candidate: opportunistic selection uses scalar
-and reports why, while required acceleration fails closed. Cross-compilation
-and generated assembly verify the AArch64 instruction path but do not replace
-native M2 or AWS Arm evidence. The candidates use no external C module,
+and reports why, while required acceleration fails closed. The candidates use no external C module,
 assembly source, build script, detector dependency, allocation, I/O, or global
 registry, and make no register-erasure, independent-review, or FIPS 140-3
 validation claim.
@@ -426,6 +426,14 @@ SHA-256 delta and required no source remediation. Its permanent `PASS`/`PASS`
 report records zero open findings and preserves the future secret-state
 cleanup requirement before HMAC or other keyed processing. The v0.22.0 delta
 remains included in the scheduled v0.20.0-to-v0.25.0 assessment.
+
+The exceptional v0.22.1 assessment and final retest found no open
+vulnerability in the SHA-256 acceleration delta. Exact signed commit
+`7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` records `PASS`/`PASS`.
+Its private four-lane candidate observations do not admit either backend or
+replace authenticated native, CPU-migration, performance, side-channel,
+independent-review, or FIPS evidence. The v0.22.1 delta remains included in
+the scheduled v0.20.0-to-v0.25.0 assessment.
 
 ## Install
 

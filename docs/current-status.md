@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 SHA-256 acceleration candidates in progress
+Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 final acceleration candidate awaiting hosted verification and tag
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -48,6 +48,16 @@ imported through the same validator without granting remote access. These are
 non-authorizing candidate observations only; the trusted-runner signature,
 performance, statistical side-channel, and final backend-admission contracts
 remain deliberately unsatisfied.
+
+The repository owner collected and locally validated exact-commit candidate
+observations on local AMD x86_64, observed-feature AWS Intel x86_64, Apple M2
+macOS AArch64, and AWS AArch64. The exceptional assessment and retest of exact
+signed commit `7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` passed with zero
+open findings. The final Apple-only tooling correction recognizes Mach-O
+`sha256h.4s` without accepting `sha256h2` as a false match and changes no Rust
+kernel, public API, dependency, or admission state. Both kernels remain
+unadmitted because candidate observations are not authenticated performance,
+side-channel, CPU-migration, independent-review, or FIPS evidence.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

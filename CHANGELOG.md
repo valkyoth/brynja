@@ -22,6 +22,18 @@ Keep a Changelog and Semantic Versioning.
   locally or over SSH, survive operator disconnects, persist job state, fetch
   completed bundles, and reject source, lane, transcript, checksum, symlink,
   or admission-authority substitution before formal evidence review.
+- Collect and locally validate private non-authorizing candidate observations
+  for local AMD, observed-feature AWS Intel, Apple M2, and AWS Arm at exact
+  signed commit `7d6dc573d8aaf049085d4bc4007642ee3b9ed82f`, while retaining
+  zero admitted backends pending authenticated, performance, side-channel, and
+  CPU-migration evidence.
+- Accept both ELF `sha256h` and Apple Mach-O `sha256h.4s` emitted-instruction
+  spellings through a narrow regression-tested matcher that rejects
+  `sha256h2` prefix substitution.
+- Record the exceptional v0.22.1 assessment and retest of exact signed commit
+  `7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` as `PASS`/`PASS`
+  with zero open findings and no cryptographic implementation, admission,
+  dependency, or public-API change after the final evidence-tool correction.
 - Give the published `brynja` package a compact crates.io-specific README with
   current capability examples, design boundaries, verification tables, a
   reduced workspace guide, and links to the detailed repository documentation;

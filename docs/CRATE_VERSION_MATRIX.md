@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 implementation in progress
+Status: v0.20.0 signed and published; v0.21.0 and v0.22.0 signed; v0.22.1 final candidate awaiting hosted verification and tag
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.22.1`. `brynja-hash-core 0.1.0` and
@@ -118,10 +118,15 @@ to harden and verify SHA working-state cleanup before keyed HMAC use.
 The v0.22.1 stage implements isolated x86_64 SHA and AArch64 SHA2 compression
 candidates plus static `no_std` and separate opt-in `std` selection. The scalar
 implementation remains authoritative. Both accelerated candidates remain
-unadmitted until complete commit-bound native evidence is available, so
-ordinary opportunistic use falls back and required acceleration fails closed.
-The stage selects no package publication and makes no independent-review,
-register-erasure, FIPS-validation, or complete hardware-support claim.
+unadmitted. Exact-commit native candidate observations passed on local AMD,
+observed-feature AWS Intel, Apple M2, and AWS Arm, but remain private and
+explicitly non-authorizing. Authenticated runner, CPU-migration, performance,
+side-channel, and final admission evidence remains absent, so ordinary
+opportunistic use falls back and required acceleration fails closed. The
+exceptional assessment and final retest of signed commit
+`7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` passed with zero open
+findings. The stage selects no package publication and makes no independent-
+review, register-erasure, FIPS-validation, or complete hardware-support claim.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

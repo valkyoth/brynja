@@ -1,6 +1,6 @@
 # Brynja 0.22.1 Release Notes
 
-Status: implementation candidate; native backend admission evidence and release gates pending
+Status: final candidate; exceptional pentest PASS, hosted verification and tag pending
 
 Brynja 0.22.1 is an internal development milestone. It selects zero crates.io
 packages. The signed v0.20.0 checkpoint remains the latest published release,
@@ -39,13 +39,15 @@ assessment range.
 
 ## Security Boundaries
 
-Both kernels are implemented candidates but remain unadmitted while complete
-commit-bound native correctness, emitted-code, side-channel, and performance
-evidence is unavailable for all named lanes. Ordinary builds cannot execute
-them. Static selection returns no session, runtime-attested construction rejects
-the unadmitted identity, opportunistic mode uses scalar, and required mode
-fails closed. Repository evidence builds can exercise candidates explicitly
-without granting admission authority.
+Both kernels are implemented candidates but remain unadmitted. Private
+commit-bound correctness and emitted-code observations passed on local AMD,
+observed-feature AWS Intel, Apple M2, and AWS Arm, but they are explicitly
+non-authorizing and do not satisfy authenticated-runner, CPU-migration,
+performance, side-channel, or final-admission requirements. Ordinary builds
+cannot execute the candidates. Static selection returns no session,
+runtime-attested construction rejects the unadmitted identity, opportunistic
+mode uses scalar, and required mode fails closed. Repository evidence builds
+can exercise candidates explicitly without granting admission authority.
 
 The implementation uses Rust intrinsics only. It contains no C module, foreign
 ABI, external assembly, native object, build script, allocation, I/O, global
@@ -55,9 +57,9 @@ M2 or AWS Arm execution evidence.
 
 ## Deliberate Exclusions
 
-No accelerated backend is admitted by this candidate. Intel-native, Apple M2,
-AWS Arm, statistically meaningful side-channel, complete performance, and
-authenticated evidence records remain pending. SHA-224, SHA-384, SHA-512,
+No accelerated backend is admitted by this candidate. Authenticated native,
+CPU-migration, statistically meaningful side-channel, and complete performance
+records remain pending. SHA-224, SHA-384, SHA-512,
 HMAC, register or spill erasure, independent cryptographic verification, FIPS
 140-3 validation, and final SHA-256 chain acceptance remain absent. Runtime
 admission also requires a reviewed proof that a standard-library feature
@@ -69,6 +71,7 @@ that thread to an incompatible logical CPU.
 
 This milestone introduces new unsafe cryptographic kernels and therefore meets
 the project's exceptional pentest trigger even though no crates.io publication
-is selected. Tagging requires a committed passing assessment, complete local
-tag gate, and green GitHub and CodeQL after the native-evidence disposition is
-settled.
+is selected. The assessment and retest of exact signed commit
+`7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` passed with zero open
+findings. Tagging requires the committed report, complete local tag gate, and
+green GitHub and CodeQL on the final report commit.

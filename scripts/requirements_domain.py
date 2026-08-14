@@ -25,7 +25,7 @@ SOURCE_DOMAINS = {
     "symmetric",
 }
 SURFACE_DOMAINS = {"cryptography", "ct", "ocsp", "pki", "pkix"}
-AUTHORITY_ROLES = {"compatibility", "current", "evidence", "exclusion"}
+AUTHORITY_ROLES = {"compatibility", "current", "evidence"}
 CONFIG = bundle.Config(
     scope=SCOPE,
     policy_files=POLICY_FILES,

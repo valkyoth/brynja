@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "903e373da6f93960458a048ea35ad47ab1757e51ada2d2a2a0f12152e0324000",
+  "policy_sha256": "d2e272e860c1111a6fd47b5ac6ce01a5c568114f037fd531a3075226fa45ea0a",
   "schema": 2,
-  "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
+  "source_ledger_sha256": "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -142,15 +142,15 @@
     },
     {
       "code_target": "crates/brynja-tls13-handshake/src/signature.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "algorithm.legacy-pkcs1-client-signature",
       "kind": "semantic",
       "normative_sources": [
         "rfc:9963"
       ],
-      "owner": "0.46.0",
-      "rationale": "Legacy PKCS1 client CertificateVerify signature code points are excluded from TLS 1.3 version one.",
+      "owner": "0.82.4",
+      "rationale": "Legacy PKCS1 client CertificateVerify code points receive their complete exact-role compatibility profile.",
       "test_target": "tests/surface/signatures.rs#legacy_client_pkcs1_rejected"
     },
     {
@@ -381,28 +381,28 @@
     },
     {
       "code_target": "crates/brynja-tls13/src/psk.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "facility.external-psk.certificate-authentication",
       "kind": "semantic",
       "normative_sources": [
         "rfc:9973"
       ],
-      "owner": "0.76.2",
-      "rationale": "Certificate authentication combined with an external PSK is excluded from version one.",
+      "owner": "0.82.3",
+      "rationale": "Certificate authentication combined with an external PSK receives a complete explicitly selected RFC 9973 profile.",
       "test_target": "tests/surface/external_psk.rs#certificate_mode_rejected"
     },
     {
       "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "facility.heartbeat",
       "kind": "semantic",
       "normative_sources": [
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Heartbeat negotiation and content are rejected in every modern TLS and DTLS profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat receives a complete bounded opt-in TLS and DTLS implementation and remains disabled by default.",
       "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
     },
     {
@@ -420,8 +420,8 @@
       "test_target": "tests/surface/record_size_limit.rs#profile"
     },
     {
-      "code_target": "crates/brynja-tls/src/configuration.rs#UnsupportedLegacyExtensions",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/configuration.rs#LegacyExtensionConfiguration",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "facility.rfc6066-unsupported-configuration",
       "kind": "semantic",
@@ -429,9 +429,9 @@
         "iana:tls-extensiontype-values",
         "rfc:6066"
       ],
-      "owner": "0.148.0",
-      "rationale": "Local configuration cannot enable, offer, echo, or negotiate unsupported RFC 6066 facilities even though bounded peer ClientHello inputs are safely ignored.",
-      "test_target": "tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent"
+      "owner": "0.148.4",
+      "rationale": "The authenticated legacy RFC 6066 facilities receive complete explicit configuration and protocol implementations.",
+      "test_target": "tests/requirements/rfc6066_configuration.rs#complete_legacy_profiles"
     },
     {
       "code_target": "crates/brynja-core/src/secret.rs",
@@ -461,28 +461,28 @@
     },
     {
       "code_target": "crates/brynja-tls12/src/extensions.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls12",
       "id": "facility.status-request-v2",
       "kind": "semantic",
       "normative_sources": [
         "rfc:6961"
       ],
-      "owner": "0.58.0",
-      "rationale": "status_request_v2 is excluded from the hardened TLS 1.2 version-one profile.",
+      "owner": "0.148.2",
+      "rationale": "status_request_v2 receives a complete separately selected implementation without changing hardened defaults.",
       "test_target": "tests/surface/status_request_v2.rs#rejected"
     },
     {
       "code_target": "crates/brynja-tls13-handshake/src/authentication.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "facility.tls13.post-handshake-authentication",
       "kind": "semantic",
       "normative_sources": [
         "rfc:9846"
       ],
-      "owner": "0.72.0",
-      "rationale": "TLS 1.3 post-handshake authentication is excluded from the version-one state machine.",
+      "owner": "0.82.2",
+      "rationale": "TLS 1.3 post-handshake authentication receives a complete explicit client and server state machine.",
       "test_target": "tests/surface/post_handshake_auth.rs#rejected"
     },
     {
@@ -541,15 +541,15 @@
     },
     {
       "code_target": "crates/brynja-pki/src/algorithm.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "pkix",
       "id": "format.ml-kem-pkix-credentials",
       "kind": "semantic",
       "normative_sources": [
         "rfc:9935"
       ],
-      "owner": "0.46.0",
-      "rationale": "ML-KEM PKIX credentials are excluded; ML-KEM is admitted only for explicitly approved key establishment.",
+      "owner": "0.60.3",
+      "rationale": "RFC 9935 ML-KEM PKIX credentials receive complete typed generation, parsing and validation profiles.",
       "test_target": "tests/surface/ml_kem.rs#pkix_rejected"
     },
     {
@@ -608,15 +608,15 @@
     },
     {
       "code_target": "crates/brynja-pki/src/x509.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "pkix",
       "id": "format.x509.unsigned",
       "kind": "semantic",
       "normative_sources": [
         "rfc:9925"
       ],
-      "owner": "0.46.0",
-      "rationale": "Unsigned X.509 certificates are excluded from the version-one authentication and trust model.",
+      "owner": "0.60.3",
+      "rationale": "The authenticated unsigned X.509 profile receives a complete explicitly non-authenticating typed implementation.",
       "test_target": "tests/surface/x509.rs#unsigned_rejected"
     },
     {
@@ -89701,15 +89701,15 @@
     },
     {
       "code_target": "crates/brynja-tls/src/cached_info.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype",
       "kind": "iana-registry",
       "normative_sources": [
         "iana:tls-extensiontype-values"
       ],
-      "owner": "0.148.0",
-      "rationale": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+      "owner": "0.148.2",
+      "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
       "registry": {
         "collection": "tls-extensiontype-values",
         "id": "cachedinformationtype",
@@ -89720,15 +89720,15 @@
     },
     {
       "code_target": "crates/brynja-tls/src/cached_info.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.cert-req.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values"
       ],
-      "owner": "0.148.0",
-      "rationale": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+      "owner": "0.148.2",
+      "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
       "record": {
         "attributes": {
           "date": "2016-05-20"
@@ -89752,15 +89752,15 @@
     },
     {
       "code_target": "crates/brynja-tls/src/cached_info.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.cert.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values"
       ],
-      "owner": "0.148.0",
-      "rationale": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+      "owner": "0.148.2",
+      "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
       "record": {
         "attributes": {
           "date": "2016-05-20"
@@ -89784,15 +89784,15 @@
     },
     {
       "code_target": "crates/brynja-tls/src/cached_info.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.reserved-for-private-use.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values"
       ],
-      "owner": "0.148.0",
-      "rationale": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+      "owner": "0.148.2",
+      "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
       "record": {
         "attributes": {},
         "fields": {
@@ -89814,15 +89814,15 @@
     },
     {
       "code_target": "crates/brynja-tls/src/cached_info.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.reserved.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values"
       ],
-      "owner": "0.148.0",
-      "rationale": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+      "owner": "0.148.2",
+      "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
       "record": {
         "attributes": {},
         "fields": {
@@ -89844,15 +89844,15 @@
     },
     {
       "code_target": "crates/brynja-tls/src/cached_info.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.unassigned.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:tls-extensiontype-values"
       ],
-      "owner": "0.148.0",
-      "rationale": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+      "owner": "0.148.2",
+      "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
       "record": {
         "attributes": {},
         "fields": {
@@ -91038,7 +91038,7 @@
     },
     {
       "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1",
       "kind": "iana-entry",
@@ -91046,8 +91046,8 @@
         "iana:tls-extensiontype-values",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Heartbeat extension negotiation is rejected in every modern TLS and DTLS profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat extension negotiation receives complete bounded opt-in TLS and DTLS handling.",
       "record": {
         "attributes": {},
         "fields": {
@@ -91266,7 +91266,7 @@
     },
     {
       "code_target": "crates/brynja-tls13-handshake/src/authentication.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.post-handshake-auth.1",
       "kind": "iana-entry",
@@ -91274,8 +91274,8 @@
         "iana:tls-extensiontype-values",
         "rfc:9846"
       ],
-      "owner": "0.72.0",
-      "rationale": "The post_handshake_auth extension is excluded from the version-one state machine.",
+      "owner": "0.82.2",
+      "rationale": "The post_handshake_auth extension receives a complete explicit client and server state machine.",
       "record": {
         "attributes": {
           "date": "2018-05-18",
@@ -92672,7 +92672,7 @@
     },
     {
       "code_target": "crates/brynja-tls12/src/extensions.rs",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls12",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1",
       "kind": "iana-entry",
@@ -92680,8 +92680,8 @@
         "iana:tls-extensiontype-values",
         "rfc:6961"
       ],
-      "owner": "0.58.0",
-      "rationale": "The status_request_v2 extension is excluded from the hardened TLS 1.2 profile.",
+      "owner": "0.148.2",
+      "rationale": "The status_request_v2 extension receives a complete separately selected implementation.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94174,37 +94174,35 @@
       "test_target": "tests/surface/certificate_types.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data",
       "kind": "iana-registry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "registry": {
         "collection": "tls-parameters",
         "id": "authorization-data",
         "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
         "title": "TLS Authorization Data Formats"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.dtcp-authorization.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {
           "date": "2015-05-12"
@@ -94225,20 +94223,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94257,20 +94254,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.keynote-assertion-list.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94289,20 +94285,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.reserved-for-private-use.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94320,20 +94315,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.saml-assertion-url.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94352,20 +94346,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.saml-assertion.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94384,20 +94377,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.unassigned.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94410,20 +94402,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.unassigned.2",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94436,20 +94427,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.x509-attr-cert-url.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94468,20 +94458,19 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.x509-attr-cert.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -94500,7 +94489,7 @@
         "collection": "tls-parameters",
         "id": "authorization-data"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
       "code_target": "crates/brynja-tls13/src/exporter.rs",
@@ -95850,8 +95839,8 @@
       "test_target": "tests/surface/exporter_labels.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types",
       "kind": "iana-registry",
@@ -95859,19 +95848,19 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "registry": {
         "collection": "tls-parameters",
         "id": "heartbeat-message-types",
         "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
         "title": "TLS Heartbeat Message Types"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.heartbeat-request.1",
       "kind": "iana-entry",
@@ -95879,8 +95868,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -95899,11 +95888,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-message-types"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.heartbeat-response.1",
       "kind": "iana-entry",
@@ -95911,8 +95900,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -95931,11 +95920,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-message-types"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.reserved.1",
       "kind": "iana-entry",
@@ -95943,8 +95932,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -95962,11 +95951,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-message-types"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.reserved.2",
       "kind": "iana-entry",
@@ -95974,8 +95963,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -95993,11 +95982,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-message-types"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.unassigned.1",
       "kind": "iana-entry",
@@ -96005,8 +95994,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96019,11 +96008,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-message-types"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes",
       "kind": "iana-registry",
@@ -96031,19 +96020,19 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "registry": {
         "collection": "tls-parameters",
         "id": "heartbeat-modes",
         "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
         "title": "TLS Heartbeat Modes"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.peer-allowed-to-send.1",
       "kind": "iana-entry",
@@ -96051,8 +96040,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96071,11 +96060,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-modes"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.peer-not-allowed-to-send.1",
       "kind": "iana-entry",
@@ -96083,8 +96072,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96103,11 +96092,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-modes"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.reserved.1",
       "kind": "iana-entry",
@@ -96115,8 +96104,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96134,11 +96123,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-modes"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.reserved.2",
       "kind": "iana-entry",
@@ -96146,8 +96135,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96165,11 +96154,11 @@
         "collection": "tls-parameters",
         "id": "heartbeat-modes"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/heartbeat.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.unassigned.1",
       "kind": "iana-entry",
@@ -96177,8 +96166,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.1",
+      "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96191,7 +96180,7 @@
         "collection": "tls-parameters",
         "id": "heartbeat-modes"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/heartbeat.rs#registry"
     },
     {
       "code_target": "crates/brynja-crypto/src/algorithm.rs",
@@ -96385,8 +96374,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-10",
@@ -96406,8 +96395,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96439,8 +96428,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96472,8 +96461,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96505,8 +96494,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96536,8 +96525,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96562,8 +96551,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96579,37 +96568,35 @@
       "test_target": "tests/surface/legacy_registry.rs#isolation"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12",
       "kind": "iana-registry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-12",
         "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
         "title": "TLS Supplemental Data Formats (SupplementalDataType)"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.authz-data.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96628,20 +96615,19 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-12"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96659,20 +96645,19 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-12"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.unassigned.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96685,20 +96670,19 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-12"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.unassigned.2",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96711,20 +96695,19 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-12"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.user-mapping-data.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96743,40 +96726,38 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-12"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14",
       "kind": "iana-registry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-14",
         "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff",
         "title": "TLS UserMappingType Values"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96794,20 +96775,19 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-14"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.unassigned.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96820,20 +96800,19 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-14"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.unassigned.2",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96846,20 +96825,19 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-14"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
-      "code_target": "crates/brynja-tls/src/rejected.rs",
-      "disposition": "intentionally-rejected",
+      "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1",
       "kind": "iana-entry",
       "normative_sources": [
-        "iana:tls-parameters",
-        "rfc:6520"
+        "iana:tls-parameters"
       ],
-      "owner": "0.19.0",
-      "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+      "owner": "0.148.3",
+      "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
       "record": {
         "attributes": {},
         "fields": {
@@ -96878,7 +96856,7 @@
         "collection": "tls-parameters",
         "id": "tls-parameters-14"
       },
-      "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+      "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
     },
     {
       "code_target": "crates/brynja-legacy/src/registry.rs",
@@ -96890,8 +96868,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-16",
@@ -96911,8 +96889,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -96951,8 +96929,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -96991,8 +96969,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97032,8 +97010,8 @@
         "rfc:8422",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "date": "2017-05-16",
@@ -97074,8 +97052,8 @@
         "rfc:8422",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "date": "2017-05-16",
@@ -97115,8 +97093,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "date": "2019-02-07",
@@ -97160,8 +97138,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "date": "2019-02-07",
@@ -97204,8 +97182,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -97236,8 +97214,8 @@
         "rfc:5246",
         "rfc:8447"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2018-05-29"
@@ -97270,8 +97248,8 @@
         "rfc:5246",
         "rfc:8447"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2018-05-29"
@@ -97304,8 +97282,8 @@
         "rfc:5246",
         "rfc:8447"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2018-05-29"
@@ -97338,8 +97316,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97377,8 +97355,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-18",
@@ -97399,8 +97377,8 @@
         "rfc:8422",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "date": "2017-05-16",
@@ -97440,8 +97418,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97480,8 +97458,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97519,8 +97497,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -97551,8 +97529,8 @@
         "rfc:5246",
         "rfc:8447"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2018-05-29"
@@ -97585,8 +97563,8 @@
         "rfc:5246",
         "rfc:8447"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2018-05-29"
@@ -97619,8 +97597,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97659,8 +97637,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97699,8 +97677,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97739,8 +97717,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97779,8 +97757,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97818,8 +97796,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-2",
@@ -97839,8 +97817,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97880,8 +97858,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2026-01-13"
@@ -97924,8 +97902,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -97966,8 +97944,8 @@
         "rfc:8422",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2026-01-13"
@@ -98011,8 +97989,8 @@
         "rfc:8422",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -98051,8 +98029,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -98091,8 +98069,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "date": "2019-02-07",
@@ -98132,8 +98110,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "date": "2019-02-07",
@@ -98172,8 +98150,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -98204,8 +98182,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -98245,8 +98223,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2026-01-13"
@@ -98291,8 +98269,8 @@
         "rfc:8422",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2026-01-13"
@@ -98335,8 +98313,8 @@
         "rfc:5246",
         "rfc:9847"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {
           "updated": "2025-06-26"
@@ -98374,8 +98352,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -98400,8 +98378,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -98426,8 +98404,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -98452,8 +98430,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -115075,7 +115053,7 @@
     },
     {
       "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.heartbeat.1",
       "kind": "iana-entry",
@@ -115083,8 +115061,8 @@
         "iana:tls-parameters",
         "rfc:6520"
       ],
-      "owner": "0.19.0",
-      "rationale": "The Heartbeat content type is rejected in every modern stream and datagram profile.",
+      "owner": "0.148.1",
+      "rationale": "The Heartbeat content type receives complete bounded opt-in TLS and DTLS handling.",
       "record": {
         "attributes": {},
         "fields": {
@@ -121504,8 +121482,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "registry": {
         "collection": "tls-parameters",
         "id": "tls-parameters-9",
@@ -121525,8 +121503,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -121558,8 +121536,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -121591,8 +121569,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -121622,8 +121600,8 @@
         "iana:tls-parameters",
         "rfc:5246"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -121649,8 +121627,8 @@
         "rfc:5246",
         "rfc:8422"
       ],
-      "owner": "H0.8.0",
-      "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "owner": "0.180.1",
+      "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "record": {
         "attributes": {},
         "fields": {
@@ -141443,7 +141421,7 @@
       "id": "legacy.pct",
       "kind": "semantic",
       "normative_sources": [],
-      "owner": "H0.6.0",
+      "owner": "0.180.20",
       "rationale": "PCT remains blocked until authenticated protocol-source provenance and rights are recorded.",
       "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#pct_isolation"
@@ -141455,7 +141433,7 @@
       "id": "legacy.snp",
       "kind": "semantic",
       "normative_sources": [],
-      "owner": "H0.7.0",
+      "owner": "0.180.22",
       "rationale": "Secure Network Programming remains blocked until authenticated protocol-source provenance and rights are recorded.",
       "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#snp_isolation"
@@ -141467,7 +141445,7 @@
       "id": "legacy.ssl1-research",
       "kind": "semantic",
       "normative_sources": [],
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "rationale": "SSL 1 reconstruction research remains source-blocked and can never become a secure or published protocol product.",
       "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#ssl1_research_isolation"
@@ -141481,7 +141459,7 @@
       "normative_sources": [
         "rfc:6176"
       ],
-      "owner": "H0.4.0",
+      "owner": "0.180.14",
       "rationale": "SSL 2.0 remains source-blocked before any independent insecure legacy release line can begin.",
       "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#ssl2_isolation"
@@ -141496,7 +141474,7 @@
         "rfc:6101",
         "rfc:7568"
       ],
-      "owner": "H0.3.0",
+      "owner": "0.180.11",
       "rationale": "SSL 3.0 is confined to an independently packaged insecure legacy release line and remains prohibited by current TLS policy.",
       "test_target": "tests/surface/legacy.rs#ssl3_isolation"
     },
@@ -141509,7 +141487,7 @@
       "normative_sources": [
         "rfc:2246"
       ],
-      "owner": "H0.2.0",
+      "owner": "0.180.5",
       "rationale": "TLS 1.0 is confined to an independently packaged insecure legacy release line.",
       "test_target": "tests/surface/legacy.rs#tls10_isolation"
     },
@@ -141522,7 +141500,7 @@
       "normative_sources": [
         "rfc:4346"
       ],
-      "owner": "H0.1.0",
+      "owner": "0.180.2",
       "rationale": "TLS 1.1 is confined to an independently packaged insecure legacy release line.",
       "test_target": "tests/surface/legacy.rs#tls11_isolation"
     },
@@ -141533,7 +141511,7 @@
       "id": "legacy.wtls",
       "kind": "semantic",
       "normative_sources": [],
-      "owner": "H0.5.0",
+      "owner": "0.180.17",
       "rationale": "WTLS research and implementation remain blocked until authenticated protocol-source provenance and rights are recorded.",
       "source_blocker": "legacy-non-rfc-sources",
       "test_target": "tests/surface/legacy.rs#wtls_isolation"

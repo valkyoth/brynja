@@ -125,8 +125,8 @@
             "code_target": "crates/brynja-legacy/src/registry.rs",
             "disposition": "legacy-only",
             "domain": "legacy",
-            "owner": "H0.8.0",
-            "rationale": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+            "owner": "0.180.1",
+            "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
             "sources": [
               "iana:tls-parameters",
               "rfc:5246"
@@ -143,21 +143,36 @@
         },
         {
           "decision": {
-            "code_target": "crates/brynja-tls/src/rejected.rs",
-            "disposition": "intentionally-rejected",
+            "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
+            "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.19.0",
-            "rationale": "Supplemental data, user mapping, authorization data, and Heartbeat are outside every modern Brynja profile.",
+            "owner": "0.148.3",
+            "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
             "sources": [
-              "iana:tls-parameters",
-              "rfc:6520"
+              "iana:tls-parameters"
             ],
-            "test_target": "tests/surface/rejected_tls_facilities.rs#registry"
+            "test_target": "tests/surface/legacy_tls_facilities.rs#registry"
           },
           "ids": [
             "tls-parameters-12",
             "tls-parameters-14",
-            "authorization-data",
+            "authorization-data"
+          ]
+        },
+        {
+          "decision": {
+            "code_target": "crates/brynja-tls/src/heartbeat.rs",
+            "disposition": "future-work",
+            "domain": "tls",
+            "owner": "0.148.1",
+            "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
+            "sources": [
+              "iana:tls-parameters",
+              "rfc:6520"
+            ],
+            "test_target": "tests/surface/heartbeat.rs#registry"
+          },
+          "ids": [
             "heartbeat-message-types",
             "heartbeat-modes"
           ]
@@ -250,10 +265,10 @@
         {
           "decision": {
             "code_target": "crates/brynja-tls/src/cached_info.rs",
-            "disposition": "intentionally-rejected",
+            "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.148.0",
-            "rationale": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+            "owner": "0.148.2",
+            "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
             "sources": [
               "iana:tls-extensiontype-values"
             ],
@@ -521,10 +536,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-pki/src/x509.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.46.0",
-        "rationale": "Unsigned X.509 certificates are excluded from the version-one authentication and trust model.",
+        "owner": "0.60.3",
+        "rationale": "The authenticated unsigned X.509 profile receives a complete explicitly non-authenticating typed implementation.",
         "sources": ["rfc:9925"],
         "test_target": "tests/surface/x509.rs#unsigned_rejected"
       },
@@ -689,10 +704,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.19.0",
-        "rationale": "Heartbeat negotiation and content are rejected in every modern TLS and DTLS profile.",
+        "owner": "0.148.1",
+        "rationale": "Heartbeat receives a complete bounded opt-in TLS and DTLS implementation and remains disabled by default.",
         "sources": ["rfc:6520"],
         "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
       },
@@ -701,10 +716,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-tls12/src/extensions.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls12",
-        "owner": "0.58.0",
-        "rationale": "status_request_v2 is excluded from the hardened TLS 1.2 version-one profile.",
+        "owner": "0.148.2",
+        "rationale": "status_request_v2 receives a complete separately selected implementation without changing hardened defaults.",
         "sources": ["rfc:6961"],
         "test_target": "tests/surface/status_request_v2.rs#rejected"
       },
@@ -737,10 +752,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-tls13-handshake/src/authentication.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.72.0",
-        "rationale": "TLS 1.3 post-handshake authentication is excluded from the version-one state machine.",
+        "owner": "0.82.2",
+        "rationale": "TLS 1.3 post-handshake authentication receives a complete explicit client and server state machine.",
         "sources": ["rfc:9846"],
         "test_target": "tests/surface/post_handshake_auth.rs#rejected"
       },
@@ -749,10 +764,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-tls13/src/psk.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.76.2",
-        "rationale": "Certificate authentication combined with an external PSK is excluded from version one.",
+        "owner": "0.82.3",
+        "rationale": "Certificate authentication combined with an external PSK receives a complete explicitly selected RFC 9973 profile.",
         "sources": ["rfc:9973"],
         "test_target": "tests/surface/external_psk.rs#certificate_mode_rejected"
       },
@@ -761,10 +776,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-tls13-handshake/src/signature.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.46.0",
-        "rationale": "Legacy PKCS1 client CertificateVerify signature code points are excluded from TLS 1.3 version one.",
+        "owner": "0.82.4",
+        "rationale": "Legacy PKCS1 client CertificateVerify code points receive their complete exact-role compatibility profile.",
         "sources": ["rfc:9963"],
         "test_target": "tests/surface/signatures.rs#legacy_client_pkcs1_rejected"
       },
@@ -773,10 +788,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-pki/src/algorithm.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.46.0",
-        "rationale": "ML-KEM PKIX credentials are excluded; ML-KEM is admitted only for explicitly approved key establishment.",
+        "owner": "0.60.3",
+        "rationale": "RFC 9935 ML-KEM PKIX credentials receive complete typed generation, parsing and validation profiles.",
         "sources": ["rfc:9935"],
         "test_target": "tests/surface/ml_kem.rs#pkix_rejected"
       },
@@ -832,13 +847,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-tls/src/configuration.rs#UnsupportedLegacyExtensions",
-        "disposition": "intentionally-rejected",
+        "code_target": "crates/brynja-tls/src/configuration.rs#LegacyExtensionConfiguration",
+        "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.148.0",
-        "rationale": "Local configuration cannot enable, offer, echo, or negotiate unsupported RFC 6066 facilities even though bounded peer ClientHello inputs are safely ignored.",
+        "owner": "0.148.4",
+        "rationale": "The authenticated legacy RFC 6066 facilities receive complete explicit configuration and protocol implementations.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
-        "test_target": "tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent"
+        "test_target": "tests/requirements/rfc6066_configuration.rs#complete_legacy_profiles"
       },
       "id": "facility.rfc6066-unsupported-configuration"
     },
@@ -1099,7 +1114,7 @@
         "code_target": "crates/brynja-legacy-tls11/src/lib.rs",
         "disposition": "legacy-only",
         "domain": "legacy",
-        "owner": "H0.1.0",
+        "owner": "0.180.2",
         "rationale": "TLS 1.1 is confined to an independently packaged insecure legacy release line.",
         "sources": ["rfc:4346"],
         "test_target": "tests/surface/legacy.rs#tls11_isolation"
@@ -1111,7 +1126,7 @@
         "code_target": "crates/brynja-legacy-tls10/src/lib.rs",
         "disposition": "legacy-only",
         "domain": "legacy",
-        "owner": "H0.2.0",
+        "owner": "0.180.5",
         "rationale": "TLS 1.0 is confined to an independently packaged insecure legacy release line.",
         "sources": ["rfc:2246"],
         "test_target": "tests/surface/legacy.rs#tls10_isolation"
@@ -1123,7 +1138,7 @@
         "code_target": "crates/brynja-legacy-ssl3/src/lib.rs",
         "disposition": "legacy-only",
         "domain": "legacy",
-        "owner": "H0.3.0",
+        "owner": "0.180.11",
         "rationale": "SSL 3.0 is confined to an independently packaged insecure legacy release line and remains prohibited by current TLS policy.",
         "sources": ["rfc:6101", "rfc:7568"],
         "test_target": "tests/surface/legacy.rs#ssl3_isolation"
@@ -1135,7 +1150,7 @@
         "code_target": "crates/brynja-legacy-ssl2/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "H0.4.0",
+        "owner": "0.180.14",
         "rationale": "SSL 2.0 remains source-blocked before any independent insecure legacy release line can begin.",
         "sources": ["rfc:6176"],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1148,7 +1163,7 @@
         "code_target": "crates/brynja-legacy-wtls/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "H0.5.0",
+        "owner": "0.180.17",
         "rationale": "WTLS research and implementation remain blocked until authenticated protocol-source provenance and rights are recorded.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1161,7 +1176,7 @@
         "code_target": "crates/brynja-legacy-pct/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "H0.6.0",
+        "owner": "0.180.20",
         "rationale": "PCT remains blocked until authenticated protocol-source provenance and rights are recorded.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1174,7 +1189,7 @@
         "code_target": "crates/brynja-legacy-snp/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "H0.7.0",
+        "owner": "0.180.22",
         "rationale": "Secure Network Programming remains blocked until authenticated protocol-source provenance and rights are recorded.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1187,7 +1202,7 @@
         "code_target": "crates/brynja-research-ssl1/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "H0.8.0",
+        "owner": "0.180.1",
         "rationale": "SSL 1 reconstruction research remains source-blocked and can never become a secure or published protocol product.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1302,10 +1317,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.19.0",
-        "rationale": "The Heartbeat content type is rejected in every modern stream and datagram profile.",
+        "owner": "0.148.1",
+        "rationale": "The Heartbeat content type receives complete bounded opt-in TLS and DTLS handling.",
         "sources": ["iana:tls-parameters", "rfc:6520"],
         "test_target": "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
       },
@@ -1319,10 +1334,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.19.0",
-        "rationale": "Heartbeat extension negotiation is rejected in every modern TLS and DTLS profile.",
+        "owner": "0.148.1",
+        "rationale": "Heartbeat extension negotiation receives complete bounded opt-in TLS and DTLS handling.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6520"],
         "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
       },
@@ -1353,10 +1368,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-tls12/src/extensions.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls12",
-        "owner": "0.58.0",
-        "rationale": "The status_request_v2 extension is excluded from the hardened TLS 1.2 profile.",
+        "owner": "0.148.2",
+        "rationale": "The status_request_v2 extension receives a complete separately selected implementation.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6961"],
         "test_target": "tests/surface/status_request_v2.rs#extension"
       },
@@ -1370,10 +1385,10 @@
     {
       "decision": {
         "code_target": "crates/brynja-tls13-handshake/src/authentication.rs",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.72.0",
-        "rationale": "The post_handshake_auth extension is excluded from the version-one state machine.",
+        "owner": "0.82.2",
+        "rationale": "The post_handshake_auth extension receives a complete explicit client and server state machine.",
         "sources": ["iana:tls-extensiontype-values", "rfc:9846"],
         "test_target": "tests/surface/post_handshake_auth.rs#extension"
       },
@@ -1573,5 +1588,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a"
+  "source_ledger_sha256": "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c"
 }

@@ -60,15 +60,27 @@ streaming or stateful use where applicable, and downstream composition tests
 are additive; private unit tests alone never establish usability.
 
 `v1.0.0` is a completeness and production-readiness boundary, not a deadline.
-The pre-1.0 line may grow to any required version. Every named instantiation,
-mandatory algorithm, advertised standardized family member, and transitive
-implementation dependency of a pre-1.0 consumer must close before `v1.0.0`
-with one complete first-party implementation and explicit evidence. A generic
-construction does not implicitly admit every historical registry value, but a
-named compatibility profile does: admitting HMAC-MD5, for example, first
-requires complete isolated MD5. Post-1.0 work is limited to genuinely
-independent catalogue families and adapters and cannot contain missing members
-or required consumers of a family already advertised before `v1.0.0`.
+The pre-1.0 line may grow to any required version. Every authenticated
+standardized capability attached to a named modern or historical Brynja
+protocol, every operation direction and parameter, every named instantiation,
+mandatory or optional registered algorithm, advertised family member, and
+transitive implementation dependency must close before `v1.0.0` with one
+complete first-party implementation and explicit evidence. Deprecation or
+weakness changes package and policy placement, never completeness: dangerous
+capabilities live behind conspicuously warned `brynja-legacy-*` APIs and cannot
+enter modern defaults or fallback, but still implement every specified send,
+receive, generation, verification, encryption, decryption, import and export
+direction. A future legacy facade reuses the exact implementation if a modern
+algorithm later becomes obsolete; cryptographic code is never copied.
+
+Rejection is limited to malformed or noncanonical input, standard-forbidden
+combinations, reserved or unassigned values, private-use values without caller
+authority, unsafe implicit downgrade, intrinsically non-production diagnostics,
+or sources that cannot be authenticated or lawfully implemented. A totally
+standalone historical primitive or protocol with no dependency or integration
+edge into the named pre-1.0 scope may remain post-1.0. Post-1.0 cannot contain a
+missing operation, member, dependency, or compatibility surface of anything
+Brynja promises before `v1.0.0`.
 
 Completeness gaps discovered before a tag are added to that milestone and block
 its exit. A gap discovered after an immutable tag must receive the next
@@ -263,23 +275,16 @@ created. Any continuation starts a separate
 `brynja-legacy-tls1N` SemVer, warning, audit, and pentest line; the former
 modern package is explicitly deprecated and never forwards to legacy code.
 
-## Legacy Package Release Line
+## Complete Named Legacy Package Release Line
 
-Legacy packages use independent SemVer and separately pass source, codec,
-state, primitive, client, optional server, containment, and audit/pentest stages.
-SSL 1 remains research-only and unpublished.
-
-| Legacy stage | Required result |
-| --- | --- |
-| `H0.1.0` | Authenticate sources and rights, record errata, publish conspicuous insecurity warnings, and freeze the protocol threat model. |
-| `H0.1.1` | Freeze the exact per-protocol cipher-suite, compression, extension, message, certificate, key-format, and primitive admission register before codec or weak-primitive work. |
-| `H0.2.0` | Implement only the protocol-specific bounded wire codec. |
-| `H0.3.0` | Implement isolated state with no shared modern configuration, negotiation, credentials, caches, tickets, paths, or fallback. |
-| `H0.4.0` | Bind audited shared primitives and keep required weak primitives in a legacy-only crypto package. |
-| `H0.5.0` | Complete controlled client-only interoperability and containment evidence. |
-| `H0.6.0` | Add server interoperability only when separately justified and reviewed for amplification and hostile load. |
-| `H0.7.0` | Require separate listeners, paths, policy, credentials, storage, diagnostics, and process containment. |
-| `H0.8.0` | Complete a protocol-specific external audit and pentest and verify every warning and non-fallback property. |
+Legacy packages retain independent package SemVer, conspicuous warnings,
+separate configuration, listeners, credentials, caches, process containment,
+audits and pentests. They nevertheless block repository `v1.0.0` through the
+numbered v0.180.1-v0.180.24 sequence: every authenticated named protocol must
+implement complete client and server operations, not a selected interoperability
+subset. SSL 1 remains source-blocked, research-only and unpublished; it or any
+other totally standalone historical protocol may remain post-1.0 only while it
+has no dependency or integration edge into Brynja's named pre-1.0 scope.
 
 ## Phase 0: Repository, Effects, Memory, And Wire Foundations
 
@@ -3729,20 +3734,19 @@ Exit criteria:
 - P-521 is usable and every architecture has an evidenced acceleration disposition;
 - `v0.45.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.0 - Version-One Algorithm And Transitive Completeness Decisions
+### v0.46.0 - Version-One Algorithm And Transitive Completeness Register
 
 Status: planned
 
-Plan scope: Freeze explicit v1 admission or exclusion for finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing including RFC 9963 legacy client CertificateVerify code points, encrypted private-key containers, first-party RSA key generation, RFC 9935 ML-KEM PKIX credentials, ML-DSA, SLH-DSA, and every unimplemented algorithm family; generate a transitive construction-to-algorithm dependency closure and prove every named instantiation, mandatory algorithm, advertised standardized family member, public operation, acceptance gate and pre-1.0 consumer has one complete owner before the substrate audit, while P-521, X448, Ed448, complete SHA-2/SHA-3, and isolated MD5/SHA-1 compatibility remain bound to their numbered owners.
+Plan scope: Freeze the authenticated modern and historical algorithm, operation, parameter, format, protocol-consumer, and registry closure for every pre-1.0 Brynja capability; assign every real standardized item to one complete modern or opt-in legacy implementation owner, permit rejection only for malformed, forbidden, reserved, private-use-without-authority, source-blocked, or intrinsically non-production surfaces, and generate a transitive construction-to-algorithm dependency graph that blocks the substrate audit on every partial family, read-only shortcut, missing generation direction, duplicated implementation, or unspecified compatibility edge.
 
-Goal: complete the **Version-One Algorithm Decisions** implementation stop without admitting or
-claiming adjacent capability.
+Goal: make the complete modern and named-legacy algorithm closure executable and mechanically blocking before any final substrate claim.
 
 Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
+- record every operation direction, parameter, consumer, single implementation owner, modern or legacy policy, source blocker and provider-token invariant;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
@@ -3755,7 +3759,7 @@ Verification:
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- no real standardized pre-1.0 capability is left as recognition-only rejection, a partial operation, or a duplicate private implementation;
 - `v0.46.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.46.1 - Cross-Backend Performance And Admission Gate
@@ -3782,6 +3786,657 @@ Exit criteria:
 
 - no implemented cryptographic operation or CPU family has an unclassified acceleration status and only complete native evidence can produce admission;
 - `v0.46.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.2 - Complete Legacy MD2 And PKIX Hash Boundary
+
+Status: planned
+
+Plan scope: Implement complete streaming and fixed-message MD2 in an isolated `brynja-legacy-md2` package with RFC 1319 vectors, padding, checksum, checked lengths, public compatibility API, collision warnings, and no modern or FIPS edge; reserve its use solely for separately admitted historical certificate and container profiles.
+
+Goal: provide the one complete MD2 owner required by historical PKIX without normalizing it as secure.
+
+Deliverables:
+
+- ship the public no_std implementation, warnings, policy boundary, requirement mapping and consumer register.
+
+Verification:
+
+- run RFC vectors, streaming partitions, padding/checksum boundaries, exhaustion, package-isolation and downstream file-digest fixtures.
+
+Exit criteria:
+
+- MD2 is complete, usable only by explicit compatibility callers, and absent from modern and FIPS graphs;
+- `v0.46.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.3 - Complete Legacy RIPEMD-160
+
+Status: planned
+
+Plan scope: Implement complete streaming and fixed-message RIPEMD-160 in an isolated `brynja-legacy-ripemd160` package with authoritative vectors, checked exhaustion, public compatibility API, collision and strength warnings, and typed later OpenPGP and certificate consumers without duplicating state or compression code.
+
+Goal: close the exact historical digest needed by OpenPGP and certificate compatibility.
+
+Deliverables:
+
+- ship one public implementation, typed consumer admission, warnings, cleanup disposition and requirement evidence.
+
+Verification:
+
+- run authoritative vectors, every padding boundary, irregular streaming, exhaustion, differential and graph-isolation tests.
+
+Exit criteria:
+
+- RIPEMD-160 is complete and later consumers can only reach its exact legacy owner;
+- `v0.46.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.4 - Complete Finite-Field Groups And FFDHE
+
+Status: planned
+
+Plan scope: Implement reusable first-party finite-field arithmetic, validated safe-prime group parameters, public-key validation, fixed-schedule exponentiation, unbiased private exponents, FFDHE2048 through FFDHE8192, imported-key consistency, lifecycle, cleanup, vectors, proofs, and public APIs for modern and legacy DH consumers.
+
+Goal: provide complete shared finite-field key agreement rather than protocol-private DHE fragments.
+
+Deliverables:
+
+- implement arithmetic, all standardized FFDHE groups, key APIs, validation, lifecycle and provider ownership.
+
+Verification:
+
+- run official group and exchange vectors, invalid subgroup and boundary keys, proofs, differentials, timing and cleanup evidence.
+
+Exit criteria:
+
+- every FFDHE group and both exchange roles work through one public, evidenced implementation;
+- `v0.46.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.5 - Complete Legacy DSA Family
+
+Status: planned
+
+Plan scope: Implement complete FIPS 186 historical DSA parameter validation and generation, key generation and import, deterministic and randomized signing, strict verification, encoding, nonce, subgroup, range, fault, cleanup, vector, and public compatibility APIs across every parameter profile required by authenticated PKIX, TLS, and OpenPGP sources.
+
+Goal: make every linked DSA operation available through one isolated compatibility implementation.
+
+Deliverables:
+
+- implement parameter/key generation and validation, sign/verify, encodings, nonce policies and public legacy APIs.
+
+Verification:
+
+- run official and archived vectors, malformed domains and signatures, nonce faults, subgroup tests, timing, proof and cleanup campaigns.
+
+Exit criteria:
+
+- all authenticated DSA profiles and directions are complete and never enter secure defaults;
+- `v0.46.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.6 - Complete Legacy ElGamal Family
+
+Status: planned
+
+Plan scope: Implement complete OpenPGP-compatible ElGamal parameter and key generation, validation, encryption, decryption, randomness, subgroup and message encoding, uniform failure, blinding, fault resistance, cleanup, authoritative vectors, and public compatibility APIs; do not expose unauthenticated plaintext or silently treat ElGamal encryption as a signature scheme.
+
+Goal: close the complete ElGamal encryption dependency for historical OpenPGP.
+
+Deliverables:
+
+- implement parameter and key lifecycle, encrypt/decrypt, encoding, blinding and explicit legacy APIs.
+
+Verification:
+
+- test authoritative and archived vectors, malformed groups and ciphertexts, oracle behavior, fault paths, cleanup and public round trips.
+
+Exit criteria:
+
+- ElGamal encryption is complete with uniform failure and no signature or modern-policy confusion;
+- `v0.46.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.7 - Complete AES-CCM And CCM-8
+
+Status: planned
+
+Plan scope: Implement complete first-party AES-CCM over AES-128, AES-192, and AES-256 with every standards-admitted nonce, length and tag parameter plus the exact CCM-8 profiles, AAD, empty and boundary messages, in-place and disjoint operation, failure atomicity, invocation limits, vectors, proofs, public APIs, and optional admitted acceleration.
+
+Goal: complete CCM as a standalone AEAD before TLS profiles consume it.
+
+Deliverables:
+
+- ship all AES widths, parameters, seal/open APIs, usage limits, overlap rules, proofs and backend integration.
+
+Verification:
+
+- run official vectors over every parameter boundary, tamper and unchanged-output tests, differentials, proofs, acceleration and package fixtures.
+
+Exit criteria:
+
+- complete CCM and CCM-8 public operations pass failure-atomic and usability evidence;
+- `v0.46.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.8 - Complete First-Party Block-Cipher Modes
+
+Status: planned
+
+Plan scope: Implement reusable constant-time ECB building-block, CBC, CTR, CFB including standardized segment widths, and OFB encryption and decryption over admitted block ciphers with exact IV, padding-separation, streaming, overlap, length, counter-exhaustion, error, cleanup, vector, and public APIs; insecure modes remain legacy-policy selected even when their implementation is shared.
+
+Goal: give every linked block-cipher mode one complete reusable implementation and explicit policy.
+
+Deliverables:
+
+- implement both directions, streaming state, all standardized segment widths, overlap and exhaustion contracts without embedding padding policy.
+
+Verification:
+
+- run mode vectors across admitted ciphers, chunk and tail matrices, aliasing, invalid IV, exhaustion, timing and downstream fixtures.
+
+Exit criteria:
+
+- every named mode works completely and unsafe selection remains explicit;
+- `v0.46.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.9 - Complete Legacy DES And TripleDES
+
+Status: planned
+
+Plan scope: Implement complete DES and two-key and three-key TripleDES encrypt/decrypt, parity and weak-key policy, schedules, official vectors, constant-time portable code, cleanup, and public compatibility APIs, then bind no default, modern, FIPS-approved, or implicit-negotiation edge.
+
+Goal: provide the exact complete DES family required by named historical protocols.
+
+Deliverables:
+
+- implement all keying options, both directions, parity and weak-key policy, schedules, cleanup and warnings.
+
+Verification:
+
+- run official vectors, weak and semi-weak keys, mode composition, timing, emitted-code, cleanup and isolation tests.
+
+Exit criteria:
+
+- DES and TripleDES are complete but available only through explicit legacy policy;
+- `v0.46.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.10 - Complete Legacy RC2 RC4 And RC5
+
+Status: planned
+
+Plan scope: Implement complete RC2 with effective-key-bit handling, RC4 with exact historical key scheduling and stream semantics, and every authenticated RC5 parameter profile required by Brynja's named legacy protocols; provide vectors, key and state cleanup, exhaustion, public compatibility APIs, prominent bias and cryptanalytic warnings, and no modern graph edge.
+
+Goal: complete the RC-family dependencies of named legacy protocol profiles.
+
+Deliverables:
+
+- implement all admitted keys, parameters and directions with typed identities, state limits, cleanup and warnings.
+
+Verification:
+
+- run authoritative and archived vectors, effective-key and stream boundaries, bias-sensitive policy tests, mode composition and graph isolation.
+
+Exit criteria:
+
+- every required RC2, RC4 and RC5 profile is usable only by explicit compatibility callers;
+- `v0.46.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.11 - Complete Legacy IDEA And CAST5
+
+Status: planned
+
+Plan scope: Implement complete IDEA and CAST5/CAST-128 key schedules and forward and inverse block operations with every standardized key rule, vectors, constant-time evidence, cleanup, public compatibility APIs, and isolated later OpenPGP, TLS, WTLS, PCT, or SNP consumers.
+
+Goal: close the complete IDEA and CAST5 primitive families for historical consumers.
+
+Deliverables:
+
+- ship both ciphers, both directions, schedules, public APIs, warnings and exact consumer registration.
+
+Verification:
+
+- run authoritative vectors, round trips, key boundaries, differentials, timing, emitted-code, cleanup and isolation tests.
+
+Exit criteria:
+
+- IDEA and CAST5 have complete single owners and no implicit modern edge;
+- `v0.46.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.12 - Complete Legacy Blowfish And Twofish
+
+Status: planned
+
+Plan scope: Implement complete Blowfish and Twofish key schedules and encrypt/decrypt operations for every standardized key size and profile required by authenticated Brynja protocols, with vectors, weak-key and block-limit policy, constant-time evidence, cleanup, public compatibility APIs, and no modern default edge.
+
+Goal: close complete Blowfish and Twofish ownership for authenticated compatibility profiles.
+
+Deliverables:
+
+- implement all admitted key sizes, schedules, directions, limits, warnings and public legacy APIs.
+
+Verification:
+
+- run authoritative vectors, key and round boundaries, mode composition, differentials, timing, cleanup and package isolation.
+
+Exit criteria:
+
+- both families are complete and selectable only through explicit profile policy;
+- `v0.46.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.13 - Complete Camellia Family
+
+Status: planned
+
+Plan scope: Implement complete Camellia-128, Camellia-192, and Camellia-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for modern or legacy TLS, PKIX, and OpenPGP consumers without private copies.
+
+Goal: provide the complete Camellia family through one reusable implementation.
+
+Deliverables:
+
+- ship all key widths, both directions, schedules, acceleration boundary, cleanup and consumer adapters.
+
+Verification:
+
+- run official vectors, round trips, mode suites, forced backends, timing, emitted-code, cleanup and public fixtures.
+
+Exit criteria:
+
+- all Camellia family members are complete and reused by exact profiles;
+- `v0.46.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.14 - Complete SEED Family
+
+Status: planned
+
+Plan scope: Implement complete SEED encrypt/decrypt, key schedule, vectors, constant-time portable code, cleanup, block limits, and public compatibility APIs for every authenticated TLS and legacy consumer, isolated from modern defaults unless current policy explicitly selects it.
+
+Goal: close complete SEED ownership for every linked profile.
+
+Deliverables:
+
+- implement both directions, key schedule, modes, limits, cleanup, public API and explicit selection policy.
+
+Verification:
+
+- run authoritative vectors, mode and suite composition, timing, emitted-code, cleanup and isolation campaigns.
+
+Exit criteria:
+
+- SEED is complete and no profile receives it implicitly;
+- `v0.46.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.15 - Complete ARIA Family
+
+Status: planned
+
+Plan scope: Implement complete ARIA-128, ARIA-192, and ARIA-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for every authenticated TLS profile without duplicating mode implementations.
+
+Goal: provide all ARIA family members to their standardized TLS profiles.
+
+Deliverables:
+
+- ship all key widths, both directions, schedules, backend boundary, public APIs and exact suite adapters.
+
+Verification:
+
+- run official vectors, mode and suite matrices, forced backends, timing, cleanup and package tests.
+
+Exit criteria:
+
+- complete ARIA operations and profiles reuse one evidenced implementation;
+- `v0.46.15 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.16 - Complete SM3 And SM4 Families
+
+Status: planned
+
+Plan scope: Implement complete SM3 hashing plus SM4 block encryption/decryption and every standards-required TLS mode profile, with streaming, vectors, checked lengths, key schedules, constant-time and accelerated evidence, cleanup, public APIs, and an explicit regional-profile policy rather than implicit global defaults.
+
+Goal: close the complete SM3 and SM4 foundations for authenticated regional profiles.
+
+Deliverables:
+
+- implement SM3 one-shot/streaming and SM4 both directions, modes, backends, public APIs and profile policy.
+
+Verification:
+
+- run official vectors, hash and block boundaries, suite composition, timing, emitted-code, cleanup and regional-policy tests.
+
+Exit criteria:
+
+- SM3 and SM4 are complete with exact regional selection and no global-default substitution;
+- `v0.46.16 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.17 - Complete SM2 Family
+
+Status: planned
+
+Plan scope: Implement complete SM2 field, group, key generation, import, signing, verification, key agreement and encryption operations required by authenticated standards, including identity binding, encodings, subgroup and nonce rules, vectors, proofs, cleanup, public APIs, and separately typed TLS and PKIX profiles.
+
+Goal: provide every standardized SM2 operation through one complete implementation.
+
+Deliverables:
+
+- implement arithmetic, keys, signatures, agreement, encryption, identity domains, public APIs and typed profile adapters.
+
+Verification:
+
+- run official vectors, invalid encodings and groups, identity and nonce negatives, proofs, timing, faults and cleanup.
+
+Exit criteria:
+
+- SM2 is complete and each TLS or PKIX use is exactly typed;
+- `v0.46.17 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.18 - Complete GOST Hash Families
+
+Status: planned
+
+Plan scope: Implement complete GOST R 34.11-94 and Streebog-256/512 hashing with every authenticated parameter set, byte-order and padding rule, streaming and fixed-message APIs, vectors, checked exhaustion, constant-time applicability, public compatibility APIs, and exact later signature, TLS, and PKIX bindings.
+
+Goal: close all GOST digest dependencies in one family boundary.
+
+Deliverables:
+
+- implement every admitted parameter set, output, streaming state, public API, warnings and consumer identities.
+
+Verification:
+
+- run official vectors, byte-order, padding and exhaustion boundaries, differentials and package isolation.
+
+Exit criteria:
+
+- all authenticated GOST hashes are complete and unambiguously selected;
+- `v0.46.18 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.19 - Complete GOST Symmetric Families
+
+Status: planned
+
+Plan scope: Implement complete GOST 28147-89 profiles plus Magma and Kuznyechik block ciphers and every authenticated MAC, mode, key-meshing, parameter-set and wrapping construction needed by registered TLS, PKIX, or named legacy consumers, with vectors, cleanup, constant-time evidence, and public compatibility APIs.
+
+Goal: provide the complete GOST symmetric construction closure used by Brynja protocols.
+
+Deliverables:
+
+- implement all ciphers, directions, parameter sets, MACs, modes, meshing, wrapping, APIs and cleanup policy.
+
+Verification:
+
+- run official vectors and profile matrices, malformed parameters, timing, emitted-code, limits, cleanup and round trips.
+
+Exit criteria:
+
+- every linked GOST symmetric profile has one complete public owner;
+- `v0.46.19 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.20 - Complete GOST Signature And Agreement Families
+
+Status: planned
+
+Plan scope: Implement complete authenticated GOST R 34.10 signature and key-agreement generations, curves, parameter sets, encodings, key generation and validation, sign, verify, derive, VKO or related KDF composition, vectors, proofs, cleanup, public APIs, and exact TLS and PKIX profile separation.
+
+Goal: close every GOST public-key operation required by authenticated profiles.
+
+Deliverables:
+
+- implement all generations, curves, parameters, key lifecycle, sign/verify, agreement/KDF, encodings and adapters.
+
+Verification:
+
+- run official vectors, cross-party exchanges, malformed keys and signatures, proofs, timing, faults and cleanup.
+
+Exit criteria:
+
+- GOST signature and agreement families are complete with exact profile identities;
+- `v0.46.20 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.21 - Complete First-Party RSA Family
+
+Status: planned
+
+Plan scope: Complete RSA key generation, import and validation plus RSA-PSS sign/verify, RSAES-OAEP encrypt/decrypt, strict RSASSA-PKCS1-v1_5 sign/verify and oracle-resistant RSAES-PKCS1-v1_5 encrypt/decrypt across every admitted digest and parameter profile; require blinding, CRT and fault checks, uniform failures, vectors, proofs, cleanup, public modern or legacy APIs, and policy isolation instead of later private reimplementation.
+
+Goal: replace import-only and verify-only RSA fragments with one complete family.
+
+Deliverables:
+
+- ship key generation/import/export, every named encoding operation, public APIs, blinding, faults, cleanup and policy types.
+
+Verification:
+
+- run official and adversarial vectors, generation health, malformed encodings, oracle campaigns, CRT faults, proofs, timing and cleanup.
+
+Exit criteria:
+
+- all admitted RSA operations are complete and modern or legacy policy selects the same implementation;
+- `v0.46.21 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.22 - Complete Password KDF And Encrypted-Key Containers
+
+Status: planned
+
+Plan scope: Implement complete PBKDF2 over admitted HMACs, authenticated PKCS #5 PBES1 compatibility profiles, PBES2, PBKDF2 PRFs, encryption schemes, parameters and limits, plus EncryptedPrivateKeyInfo import and export with uniform password failures, caller workspaces, cleanup, vectors, public APIs, and modern-versus-legacy policy for every linked PKCS #8 container.
+
+Goal: make every linked encrypted private-key format usable in both directions.
+
+Deliverables:
+
+- implement KDFs, schemes, parameter codecs, container import/export, workspace and password lifecycle APIs.
+
+Verification:
+
+- run authoritative vectors and independent files, parameter and work limits, wrong-password uniformity, round trips, cleanup and no_std tests.
+
+Exit criteria:
+
+- encrypted key containers are complete and weak PBES profiles remain explicit legacy selections;
+- `v0.46.22 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.23 - Complete Legacy TLS PRFs MACs And Export KDFs
+
+Status: planned
+
+Plan scope: Implement exact SSL 3.0 MAC and key schedule, TLS 1.0/1.1 MD5-plus-SHA-1 PRF, TLS 1.2 PRFs across every admitted hash, truncated-HMAC profiles, export-grade key expansion, finished and certificate-verify digests, constant-time verification, limits, vectors, cleanup, and isolated public compatibility APIs without enabling protocol fallback.
+
+Goal: close all shared historical TLS derivation and authentication constructions before protocol engines.
+
+Deliverables:
+
+- implement every PRF, MAC, export KDF and transcript digest with typed version/profile APIs and cleanup.
+
+Verification:
+
+- run RFC and archived vectors, split-secret boundaries, truncation, export limits, transcript cases, timing and isolation.
+
+Exit criteria:
+
+- every named historical TLS construction is complete and version-bound;
+- `v0.46.23 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.24 - Complete SRP Cryptographic Family
+
+Status: planned
+
+Plan scope: Implement complete SRP-6a group validation, verifier and credential generation, client and server ephemeral operations, proofs, session derivation, invalid-public-value and offline-attack policy, vectors, cleanup, public APIs, and exact later TLS-SRP profile binding without hidden password storage or network effects.
+
+Goal: provide the full SRP construction required by registered TLS profiles.
+
+Deliverables:
+
+- implement credential/verifier lifecycle, both roles, proofs, derivation, public APIs and caller-owned storage effects.
+
+Verification:
+
+- run official and independent vectors, cross-party sessions, invalid public values, wrong passwords, group faults, timing and cleanup.
+
+Exit criteria:
+
+- SRP-6a is complete without hidden persistence or protocol coupling;
+- `v0.46.24 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.25 - Complete DEFLATE ZLIB And TLS Compression Profiles
+
+Status: planned
+
+Plan scope: Implement complete first-party RFC 1951 DEFLATE compression and decompression, RFC 1950 ZLIB, raw ZIP use, and authenticated TLS DEFLATE framing with all block types, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, stream completion, reset semantics, bomb defenses, vectors, differential tests, and public APIs.
+
+Goal: provide one complete reusable DEFLATE family for TLS and OpenPGP.
+
+Deliverables:
+
+- implement both directions and every framing/profile with caller workspaces, deterministic policy and public APIs.
+
+Verification:
+
+- run RFC and differential corpora, every block type, malformed streams, checksums, reset, bombs, round trips and no_std fixtures.
+
+Exit criteria:
+
+- DEFLATE, ZLIB, ZIP and TLS profiles are complete and share one codec owner;
+- `v0.46.25 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.26 - Complete Brotli And Zstandard Families
+
+Status: planned
+
+Plan scope: Implement complete first-party Brotli and Zstandard compression and decompression profiles required by TLS certificate compression, including dictionaries only where the governing profile admits them, bounded caller workspaces, deterministic generation, exact framing and checksums, bomb defenses, vectors, differential evidence, and public APIs without native code.
+
+Goal: make every standardized TLS certificate-compression algorithm first-party and bidirectional.
+
+Deliverables:
+
+- implement Brotli and Zstandard encode/decode, framing, checksums, workspace contracts, limits and public APIs.
+
+Verification:
+
+- run official and differential corpora, dictionaries, malformed frames, bombs, deterministic round trips, resource and no-native-code checks.
+
+Exit criteria:
+
+- both compression families are complete and usable without an external provider;
+- `v0.46.26 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.27 - Complete Legacy LZS Compression
+
+Status: planned
+
+Plan scope: Implement complete first-party LZS compression and decompression plus exact TLS compression framing, reset, history, boundary, malformed-stream, bomb, vector, public API, and legacy-policy behavior required by authenticated TLS sources.
+
+Goal: close the complete LZS dependency of historical TLS compression.
+
+Deliverables:
+
+- implement encode/decode, state reset, framing, workspaces, limits, public API and explicit legacy policy.
+
+Verification:
+
+- run authenticated vectors and archived streams, round trips, malformed and bomb cases, reset boundaries and isolation tests.
+
+Exit criteria:
+
+- LZS and its TLS profile are complete and never enabled implicitly;
+- `v0.46.27 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.28 - Complete BZip2 Family
+
+Status: planned
+
+Plan scope: Implement complete first-party BZip2 compression and decompression with exact block and stream framing, transforms, Huffman coding, CRCs, bounded caller workspaces, deterministic generation, malformed-stream and bomb defenses, vectors, differential evidence, public APIs, and later OpenPGP compatibility reuse.
+
+Goal: make BZip2 a complete reusable family rather than an OpenPGP-only decoder.
+
+Deliverables:
+
+- implement encode/decode, all blocks and framing, CRCs, workspaces, generation policy and public APIs.
+
+Verification:
+
+- run authoritative and differential corpora, every level and boundary, malformed streams, CRCs, bombs, round trips and no_std checks.
+
+Exit criteria:
+
+- BZip2 is complete in both directions and OpenPGP can only reuse this owner;
+- `v0.46.28 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.29 - Complete ML-DSA Family
+
+Status: planned
+
+Plan scope: Implement complete first-party FIPS 204 ML-DSA-44, ML-DSA-65, and ML-DSA-87 key generation, signing, verification, deterministic and hedged operation, external randomness, context, encoding, rejection-sampling, malformed-input, key-consistency, fault, cleanup, vector, proof, public API, and optional acceleration requirements for every authenticated PKIX or protocol profile.
+
+Goal: provide the complete finalized ML-DSA family before any credential profile names it.
+
+Deliverables:
+
+- implement all parameter sets and operations, encodings, randomness modes, public APIs, proofs and backend boundaries.
+
+Verification:
+
+- run official vectors, malformed keys/signatures, deterministic and hedged cases, faults, proofs, timing, cleanup and package fixtures.
+
+Exit criteria:
+
+- all ML-DSA parameter sets and operations are complete and profile-ready;
+- `v0.46.29 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.30 - Complete SLH-DSA Family
+
+Status: planned
+
+Plan scope: Implement complete first-party FIPS 205 SLH-DSA SHA2 and SHAKE families across all 128, 192, and 256 security categories and `s`/`f` parameter sets, key generation, pure and prehash signing and verification where standardized, context and randomization, encodings, bounds, fault, cleanup, vectors, proofs, public APIs, and explicit performance policy.
+
+Goal: provide the entire finalized SLH-DSA family without omitting expensive parameter sets.
+
+Deliverables:
+
+- implement every SHA2/SHAKE parameter set and operation, encodings, contexts, randomness, APIs and performance disclosures.
+
+Verification:
+
+- run official vectors, pure/prehash and context cases, malformed inputs, faults, proofs, resource ceilings, cleanup and public fixtures.
+
+Exit criteria:
+
+- every standardized SLH-DSA member is complete with honest resource policy;
+- `v0.46.30 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.31 - Legacy And Optional Primitive Public Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise every v0.46.2-v0.46.30 hash, cipher, mode, public-key operation, KDF, MAC, compression direction and parameter family through packaged public fixtures and authoritative vectors; prove single implementation ownership, explicit dangerous selection, no implicit modern negotiation, no unauthenticated output, cleanup, no_std portability where applicable, and exact modern, legacy, regional, PQ, FIPS and source-blocked status.
+
+Goal: close every newly completed primitive through ordinary downstream use and policy evidence.
+
+Deliverables:
+
+- publish runnable fixtures, commands, package manifests, claim-register rows and exact consumer ownership for every family.
+
+Verification:
+
+- force all operations, parameters and backends; test round trips, negative paths, cleanup, package graphs and modern/legacy substitution failures.
+
+Exit criteria:
+
+- no new family relies only on private tests or incomplete operation directions;
+- `v0.46.31 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.32 - Complete Registered Algorithm Closure Gate
+
+Status: planned
+
+Plan scope: Regenerate the transitive register from all authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT and SNP sources and registries; block v0.47.0 unless every assigned real capability and every send, receive, generation, import, export and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, private-use-without-authority, standard-forbidden, lawfully unavailable or source-blocked entries remaining rejected.
+
+Goal: mechanically prevent any attached standardized algorithm from escaping the pre-1.0 closure.
+
+Deliverables:
+
+- regenerate source-to-registry-to-owner-to-symbol-to-test mappings and broken fixtures for every permitted rejection class.
+
+Verification:
+
+- fail the gate for recognition-only entries, missing directions, partial families, duplicated code, stale sources, generic unsupported fallbacks and unjustified exclusions.
+
+Exit criteria:
+
+- the complete authenticated registry closure is implemented or carries one narrowly valid blocker;
+- `v0.46.32 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.47.0 - Cryptographic Substrate Audit Gate
 
@@ -3867,11 +4522,11 @@ Exit criteria:
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
 - `v0.48.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.49.0 - Private-Key Input Formats
+### v0.49.0 - Complete Private-Key Container APIs
 
 Status: planned
 
-Plan scope: Implement bounded unencrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key decoding with algorithm and key consistency and secret-arena ownership; keep encrypted PKCS#8 an explicit v1 non-goal unless separately versioned.
+Plan scope: Implement bounded import and export for unencrypted and v0.46.22-encrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key containers with strict algorithm and parameter binding, key consistency, canonical DER, caller-owned secret arenas, uniform password failures, cleanup, and public round-trip APIs.
 
 Goal: complete the **Private-Key Input Formats** implementation stop without admitting or
 claiming adjacent capability.
@@ -4326,11 +4981,11 @@ Exit criteria:
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
 - `v0.59.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.0 - PKI Audit Gate
+### v0.60.0 - Modern PKI Audit Gate
 
 Status: planned
 
-Plan scope: Complete PKI adversarial, differential, fuzz, path-complexity, revocation, Certificate Transparency, and external audit campaigns with clean remediation.
+Plan scope: Complete adversarial, differential, fuzz, path-complexity, revocation, Certificate Transparency, and external audit campaigns for the modern PKI surface before historical and optional algorithm profiles are admitted.
 
 Goal: complete the **PKI Audit Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -4354,6 +5009,111 @@ Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
 - `v0.60.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+
+### v0.60.1 - Complete Legacy PKIX Algorithm Profiles
+
+Status: planned
+
+Plan scope: Implement exact PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP and path-validation profiles for authenticated MD2, MD5 and SHA-1 RSA signatures, DSA, legacy EC, GOST, SM2 and every other historical algorithm assigned by the pinned PKIX source closure; reuse the exact v0.46 implementations, enforce conspicuous legacy policy and algorithm constraints, and never admit a legacy trust decision through modern defaults.
+
+Goal: make historical PKIX objects fully processable through explicit legacy trust policy.
+
+Deliverables:
+
+- implement every assigned algorithm profile, encoding, constraint and trust disposition over the sole primitive owners.
+
+Verification:
+
+- run archived and generated certificate, CRL and OCSP corpora, malformed identifiers, weak-chain policy, path and graph-isolation tests.
+
+Exit criteria:
+
+- every authenticated historical PKIX algorithm has complete parse, generation and validation ownership;
+- `v0.60.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.2 - Complete PKIX Issuance And Request APIs
+
+Status: planned
+
+Plan scope: Implement bounded public generation, canonical DER and validation APIs for PKCS #10 requests, certificates, cross-certificates, trust-anchor information, CRLs, delta and indirect CRLs, OCSP requests and responses, extensions, serials and signature profiles across admitted modern and legacy algorithms, with caller-owned signing, entropy, time and storage effects.
+
+Goal: complete PKIX generation and issuance rather than providing validation-only components.
+
+Deliverables:
+
+- ship builders and parsers for every named object with canonical encoding, effect boundaries and public round trips.
+
+Verification:
+
+- generate and validate complete hierarchies, requests, revocation and OCSP objects across algorithms and independent tools, including malformed and resource cases.
+
+Exit criteria:
+
+- every supported PKIX object can be created, encoded, parsed and validated through public APIs;
+- `v0.60.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.3 - Unsigned X509 ML-KEM And PQ PKIX Profiles
+
+Status: planned
+
+Plan scope: Implement the authenticated unsigned X.509 profile with explicit non-authentication types, complete RFC 9935 ML-KEM public-key and certificate profiles, and every finalized authenticated ML-DSA, SLH-DSA or hybrid PKIX profile available to the source closure; keep each credential kind typed, validate exact parameters and encodings, and prohibit unsupported trust substitution.
+
+Goal: close finalized optional and PQ PKIX profiles without confusing unsigned material with authentication.
+
+Deliverables:
+
+- implement exact formats, parameters, credential types, generation, parsing and validation for each admitted profile.
+
+Verification:
+
+- run official and independent vectors and objects, wrong-algorithm and substitution cases, path composition, hybrid policy and package tests.
+
+Exit criteria:
+
+- optional and PQ credentials are complete and their distinct trust semantics are unforgeable;
+- `v0.60.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.4 - Complete PKIX Public Usability And Interoperability Acceptance
+
+Status: planned
+
+Plan scope: Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned objects, classical, regional, PQ and legacy profiles through packaged public fixtures and at least two independent toolchains where available; verify every algorithm direction, malformed and policy failure, no network ownership, bounded resources, cleanup, single implementation reuse and modern-versus-legacy isolation.
+
+Goal: prove the entire PKIX surface through ordinary downstream workflows.
+
+Deliverables:
+
+- publish runnable CA, requester, verifier, revocation, CT, PQ and compatibility fixtures and evidence mappings.
+
+Verification:
+
+- run all workflows, algorithms, formats and failure matrices on public packages and supported targets.
+
+Exit criteria:
+
+- no PKIX capability remains internal-only, one-directional or recognition-only;
+- `v0.60.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.5 - Complete PKI Audit And Remediation Gate
+
+Status: planned
+
+Plan scope: Independently audit and cleanly retest the complete modern, optional, regional, PQ and legacy PKI surface, including generation and validation symmetry, encrypted containers, algorithm constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.
+
+Goal: establish one clean independent PKI boundary after all attached profiles exist.
+
+Deliverables:
+
+- obtain exact-commit review, remediate findings, add permanent regressions and update claims and evidence.
+
+Verification:
+
+- repeat affected vectors, interoperability, fuzz, path, resource, timing, cleanup and package-isolation campaigns.
+
+Exit criteria:
+
+- the complete PKI scope has no unresolved critical or high finding;
+- `v0.60.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ## Phase 2: Shared Handshake, Internal Sans-I/O, And Modern TLS
 
@@ -4688,7 +5448,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement client authentication, CertificateVerify, Finished, authenticated application-data transition, and explicit rejection of post-handshake authentication for v1.
+Plan scope: Implement handshake-time client authentication, CertificateVerify, Finished, authenticated application-data transition, and the state boundary later reused by separately versioned post-handshake authentication.
 
 Goal: complete the **Client Authentication And Finished** implementation stop without admitting or
 claiming adjacent capability.
@@ -4869,7 +5629,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Apply RFC 9257 with a mandatory 128-bit minimum key length, typed entropy provenance, client/server role and logical-node binding, pairwise-or-imported group policy, opaque identity comparison and collision domains, peer-identifier confirmation, privacy warnings, rotation and main-key destruction; reject low-entropy PSKs and RFC 9973 certificate-with-external-PSK mode for v1.
+Plan scope: Apply RFC 9257 with a mandatory 128-bit minimum key length, typed entropy provenance, client/server role and logical-node binding, pairwise-or-imported group policy, opaque identity comparison and collision domains, peer-identifier confirmation, privacy warnings, rotation and main-key destruction; reject low-entropy PSKs while reserving exact certificate-plus-external-PSK composition for v0.82.3.
 
 Goal: complete the **External PSK Provisioning And Role Security** implementation stop without admitting or
 claiming adjacent capability.
@@ -4960,11 +5720,11 @@ Exit criteria:
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.78.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.79.0 - Exporters And TLS-Exporter Channel Binding
+### v0.79.0 - Exporters And Modern TLS-Exporter Channel Binding
 
 Status: planned
 
-Plan scope: Implement the RFC 5705 exporter for TLS 1.2 and the RFC 9846 exporter for TLS 1.3, then admit only the RFC 9266 tls-exporter channel binding with exact label, context, transcript, and protocol-version rules; exclude tls-unique for TLS 1.3 and tls-server-end-point for v1; release outputs only after protocol-specific authorization as typed, non-formatting secrets with explicit ownership, use, and zeroization policy.
+Plan scope: Implement the RFC 5705 exporter for TLS 1.2 and the RFC 9846 exporter for TLS 1.3, then admit RFC 9266 tls-exporter with exact label, context, transcript, and protocol-version rules; release outputs only after protocol-specific authorization as typed, non-formatting secrets with explicit ownership, use, and zeroization policy, while legacy channel bindings receive a separate v0.148.5 owner.
 
 Goal: complete the **Exporters And TLS-Exporter Channel Binding** implementation stop without admitting or
 claiming adjacent capability.
@@ -4989,11 +5749,11 @@ Exit criteria:
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.79.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.80.0 - TLS 1.3 Suite Completion
+### v0.80.0 - TLS 1.3 Core Suite Completion
 
 Status: planned
 
-Plan scope: Admit only AES-128-GCM/SHA-256, AES-256-GCM/SHA-384, and ChaCha20-Poly1305/SHA-256 for the initial TLS 1.3 profile.
+Plan scope: Admit AES-128-GCM/SHA-256, AES-256-GCM/SHA-384, and ChaCha20-Poly1305/SHA-256 as secure defaults while preserving a typed suite registry for the complete standardized TLS 1.3 suite profiles added at v0.82.1.
 
 Goal: complete the **TLS 1.3 Suite Completion** implementation stop without admitting or
 claiming adjacent capability.
@@ -5075,6 +5835,111 @@ Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.82.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.82.1 - Complete TLS 1.3 Cipher-Suite And Regional Profiles
+
+Status: planned
+
+Plan scope: Implement every authenticated standardized TLS 1.3 cipher-suite profile, including AES-128-CCM, AES-128-CCM-8 and admitted SM-family regional suites, with exact hash, HKDF, nonce, record, certificate, negotiation, limit, provider and policy binding; retain only current broadly recommended suites in defaults.
+
+Goal: complete the assigned TLS 1.3 suite registry while keeping secure defaults narrow.
+
+Deliverables:
+
+- bind every suite to sole primitive owners, typed regional policy, records, handshake and limits.
+
+Verification:
+
+- run official vectors, independent client/server matrices, wrong-suite and downgrade cases, limits, providers and default-isolation tests.
+
+Exit criteria:
+
+- every authenticated TLS 1.3 suite is fully usable through explicit policy;
+- `v0.82.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.82.2 - TLS 1.3 Post-Handshake Authentication
+
+Status: planned
+
+Plan scope: Implement complete client and server post-handshake authentication with transcript, request-context, certificate selection, ordering, concurrency, KeyUpdate interaction, cancellation, resumption-state, application-authorization, resource and terminal-failure semantics through explicit opt-in configuration.
+
+Goal: complete the standardized post-handshake authentication state machine in both roles.
+
+Deliverables:
+
+- implement codecs, states, effects, authorization and public opt-in APIs for every defined direction.
+
+Verification:
+
+- run independent peers, ordering and concurrency matrices, KeyUpdate and resumption interactions, malformed requests, cancellation and resource faults.
+
+Exit criteria:
+
+- post-handshake authentication is complete, bounded and never enabled implicitly;
+- `v0.82.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.82.3 - TLS 1.3 Certificate With External PSK
+
+Status: planned
+
+Plan scope: Implement the complete authenticated RFC 9973 certificate-plus-external-PSK mode with exact binder, certificate, Finished, identity, role, importer, transcript, resumption, early-data, privacy, downgrade and provisioning policy; make it explicit and never substitute it for certificate-only or PSK-only authentication.
+
+Goal: provide the complete combined-authentication mode without collapsing either credential.
+
+Deliverables:
+
+- implement both roles, all transcript and provisioning rules, public configuration and authoritative outcomes.
+
+Verification:
+
+- run RFC and independent cases, wrong certificates and PSKs, role and importer mismatch, downgrade, resumption, early data and privacy failures.
+
+Exit criteria:
+
+- combined authentication works completely and cannot substitute or fall back across modes;
+- `v0.82.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.82.4 - TLS 1.3 Legacy PKCS1 Client Signatures
+
+Status: planned
+
+Plan scope: Implement the authenticated RFC 9963 legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points through the exact v0.46.21 legacy RSA operations, strict signature negotiation, certificate and role binding, explicit server policy, warnings, vectors and interoperability; keep them absent from server signatures and modern defaults.
+
+Goal: close the exact standardized legacy client-signature compatibility surface.
+
+Deliverables:
+
+- implement negotiation, transcript/signature binding, client operation, server verification and explicit policy over the sole RSA owner.
+
+Verification:
+
+- run RFC and independent peers, wrong roles and schemes, malformed signatures, downgrade, warning and default-isolation cases.
+
+Exit criteria:
+
+- legacy client signatures are complete only in their exact standardized role;
+- `v0.82.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.82.5 - Complete TLS 1.3 Optional-Surface Acceptance And Audit
+
+Status: planned
+
+Plan scope: Exercise every core, CCM, regional, post-handshake-authentication, certificate-plus-PSK and legacy-client-signature path through public client/server fixtures, independent peers, state and resource faults, algorithm and downgrade negatives, modern-default isolation and exact legacy selection, then obtain clean independent review before TLS 1.2 integration.
+
+Goal: close the complete TLS 1.3 standards surface with downstream and independent evidence.
+
+Deliverables:
+
+- publish runnable fixtures, interoperability records, audit results, remediations and exact capability claims.
+
+Verification:
+
+- rerun complete conformance, fuzz, state, provider, resource, isolation and cross-feature matrices after remediation.
+
+Exit criteria:
+
+- complete TLS 1.3 has no unresolved critical or high finding and no recognition-only standardized feature;
+- `v0.82.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.83.0 - TLS 1.2 Engine And Policy Boundary
 
@@ -5479,6 +6344,132 @@ Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
 - `v0.92.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.92.1 - Complete Legacy TLS 1.2 Cipher-Suite Profiles
+
+Status: planned
+
+Plan scope: Create separately selected `brynja-legacy-tls12` suite policy and implement every authenticated TLS 1.2 cipher-suite profile over the exact shared AES, CCM, CBC, Camellia, ARIA, SEED, SM, GOST, DES, TripleDES, RC2, RC4, IDEA and NULL compatibility primitives, with exact MAC, PRF, nonce, IV, padding, limit, downgrade and warning behavior and no modern-router edge.
+
+Goal: close the complete historical TLS 1.2 suite registry outside the hardened engine.
+
+Deliverables:
+
+- implement every assigned suite and record profile with exact primitive ownership, limits, warnings and explicit configuration.
+
+Verification:
+
+- run vectors and independent peers across all suite families, padding and MAC faults, limits, downgrade and graph-isolation tests.
+
+Exit criteria:
+
+- every authenticated TLS 1.2 suite has complete record protection and explicit legacy policy;
+- `v0.92.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.92.2 - Complete Legacy TLS 1.2 Authentication And Key Exchange
+
+Status: planned
+
+Plan scope: Implement complete client and server static RSA, finite-field DHE, static DH, static ECDH, ECDHE, anonymous, PSK, DHE-PSK, RSA-PSK, SRP, Kerberos, GOST, SM and every other authenticated TLS 1.2 key-exchange and authentication profile, using caller-owned external Kerberos credentials where appropriate and never hiding network or realm effects.
+
+Goal: implement every registered TLS 1.2 authentication and establishment direction.
+
+Deliverables:
+
+- ship both-role states, credentials and typed caller effects over exact cryptographic owners.
+
+Verification:
+
+- run independent peers for every family, wrong credentials and groups, anonymous and PSK policy, oracle, downgrade, cleanup and effect failures.
+
+Exit criteria:
+
+- every authenticated key-exchange profile is complete without hidden external systems;
+- `v0.92.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.92.3 - Complete Legacy TLS 1.2 Extensions Compression And Renegotiation
+
+Status: planned
+
+Plan scope: Implement all authenticated TLS 1.2 extension and facility semantics not present in the hardened engine, including secure renegotiation, max_fragment_length, client_certificate_url, trusted_ca_keys, truncated_hmac, status_request_v2, cached information, supplemental data, user mapping, authorization data, Heartbeat and admitted DEFLATE or LZS compression, with bounded resources and explicit dangerous policy.
+
+Goal: close the complete TLS 1.2 extension, compression and renegotiation surface.
+
+Deliverables:
+
+- implement every applicable direction, state transition and caller effect with public legacy configuration.
+
+Verification:
+
+- run independent negotiation, resumption and renegotiation matrices, compression bombs, Heartbeat disclosure regressions, malformed and resource cases.
+
+Exit criteria:
+
+- no authenticated TLS 1.2 facility remains recognition-only or implicitly enabled;
+- `v0.92.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.92.4 - Complete Legacy TLS 1.2 Signatures Certificates And Resumption
+
+Status: planned
+
+Plan scope: Bind complete SHA-1, MD5, DSA, legacy RSA, GOST, SM and historical PKIX profiles into client and server Certificate, CertificateRequest, CertificateVerify, Finished, session-ID and ticket resumption behavior, including every authenticated signature code point, exact transcript, failure, cache, cleanup and cross-version isolation rule.
+
+Goal: complete historical credential and resumption behavior for both TLS 1.2 roles.
+
+Deliverables:
+
+- implement all certificate/signature profiles, transcript states, session and ticket operations over sole owners.
+
+Verification:
+
+- run archived and generated chains, signature matrices, resumption and cache faults, cross-version substitution, cleanup and peer tests.
+
+Exit criteria:
+
+- every assigned credential and resumption profile works completely under legacy policy;
+- `v0.92.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.92.5 - Complete Legacy TLS 1.2 Client And Server Operations
+
+Status: planned
+
+Plan scope: Close every authenticated TLS 1.2 handshake, record, alert, extension, compression, resumption, renegotiation, exporter and channel-binding send and receive direction through documented `brynja-legacy-tls12` public client and server APIs; reserved and private-use values remain typed but cannot gain authority without caller policy.
+
+Goal: establish complete downstream TLS 1.2 compatibility rather than component coverage.
+
+Deliverables:
+
+- publish full client/server constructors, operations, examples, capability reports and dangerous-policy types.
+
+Verification:
+
+- execute every registry owner and operation through public packages, both roles, no_std Sans-I/O and hosted fixtures, including cancellation and exhaustion.
+
+Exit criteria:
+
+- every authenticated TLS 1.2 operation is publicly usable in both roles;
+- `v0.92.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.92.6 - Legacy TLS 1.2 Interoperability Isolation And Audit Gate
+
+Status: planned
+
+Plan scope: Interoperate across complete suite and feature families with independent and archived peers, fuzz every negotiation and record boundary, test downgrade and oracle resistance, prove separate configuration, listeners, credentials, caches and process containment, and obtain clean audit and pentest evidence without weakening modern `brynja-tls12` or the evergreen router.
+
+Goal: close the complete legacy TLS 1.2 package with independent security evidence.
+
+Deliverables:
+
+- retain exact interop transcripts, audit and pentest reports, remediations, regressions and graph proofs.
+
+Verification:
+
+- rerun every affected suite, feature, role, oracle, downgrade, resource and isolation campaign on the exact candidate.
+
+Exit criteria:
+
+- legacy TLS 1.2 has no unresolved critical or high implementation finding and no modern edge;
+- `v0.92.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.93.0 - Modern Multi-Version Routing Audit Gate
 
@@ -6195,6 +7186,48 @@ Exit criteria:
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
 - `v0.114.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.114.1 - Complete Legacy DTLS 1.2 Profiles
+
+Status: planned
+
+Plan scope: Implement a separately selected `brynja-legacy-dtls12` client and server engine covering every authenticated DTLS 1.2 cipher suite, signature, key exchange, certificate, PSK, compression, extension, Heartbeat, fragmentation, replay, epoch, cookie, retransmission, resumption and failure profile that applies from the complete legacy TLS 1.2 closure.
+
+Goal: provide full DTLS 1.2 compatibility without weakening the hardened engine.
+
+Deliverables:
+
+- implement every applicable TLS 1.2 compatibility profile plus exact datagram states and public legacy APIs.
+
+Verification:
+
+- run all suite and feature matrices under loss, reorder, duplication, fragmentation, replay, migration, compression, Heartbeat and oracle faults.
+
+Exit criteria:
+
+- every authenticated DTLS 1.2 capability is complete in both roles and isolated from modern policy;
+- `v0.114.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.114.2 - Legacy DTLS 1.2 Interoperability Isolation And Audit Gate
+
+Status: planned
+
+Plan scope: Qualify the complete legacy DTLS 1.2 engine against independent and archived peers under reordering, duplication, loss, amplification, migration, fragmentation, compression, weak-suite and oracle campaigns; prove modern DTLS policy and graphs remain unchanged and obtain clean external audit and pentest evidence.
+
+Goal: close legacy DTLS 1.2 with exact interoperability and security evidence.
+
+Deliverables:
+
+- retain interop corpora, audit and pentest reports, remediations, regressions and dependency proofs.
+
+Verification:
+
+- repeat every affected datagram, suite, feature, resource and isolation campaign on the exact candidate.
+
+Exit criteria:
+
+- legacy DTLS 1.2 has no unresolved critical or high implementation finding and no modern edge;
+- `v0.114.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.115.0 - Integrated One-Pass DTLS Router
 
 Status: planned
@@ -6452,7 +7485,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete PQ external review and standards freeze; keep ML-DSA and SLH-DSA excluded from v1 authentication unless a separately reviewed final standard, TLS mapping, and interoperability milestone is added.
+Plan scope: Complete PQ external review and standards freeze; bind the complete v0.46 ML-DSA and SLH-DSA families to every finalized authenticated TLS, DTLS, PKIX or OpenPGP mapping present in the source closure, require a separate interoperability milestone for each mapping, and classify only unavailable draft or unauthenticated future mappings as source-blocked rather than algorithmically unsupported.
 
 Goal: complete the **PQ Standards And Audit Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -7917,11 +8950,11 @@ Exit criteria:
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.147.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.148.0 - Generated Optional-Feature Composition Gate
+### v0.148.0 - Generated Optional-Feature Composition Foundation
 
 Status: planned
 
-Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration, offer, echo, negotiation, ticket, and imported state while preserving the v0.90.1 bounded peer ClientHello ignore path; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.
+Plan scope: Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, QUIC, modern, regional and legacy applicability, plus targeted higher-order combinations across ECH, authentication, credentials, compression, revocation, PSKs, early data, hybrid groups, FIPS profiles, record limits, fragmentation and return routability; bind identity and ticket state exactly and make forbidden combinations unrepresentable before the remaining separately selected standardized facilities are added.
 
 Goal: complete the **Generated Optional-Feature Composition Gate** implementation stop without admitting or
 claiming adjacent capability.
@@ -7942,11 +8975,9 @@ Verification:
 
 - generate and execute every pairwise feature and protocol-applicability case plus targeted ECH, authentication, resumption, hybrid, FIPS and compression higher-order combinations;
 - exercise ECH with hybrid ClientHello size, HRR, padding, transcript and downgrade, ECH with RPK, hybrid tickets, PSKs, resumption and zero-RTT, hybrid approved-only policy, rotating OCSP and SCT compression inputs, and configuration-time rejection of every forbidden combination;
-- inject all four unsupported RFC 6066 extension identifiers in every stream
-  TLS, DTLS, resumption, imported-state, and configuration context; require
-  bounded opaque ignore only for permitted peer ClientHello inputs and bounded
-  rejection for unsolicited responses and local admission before allocation,
-  fetching, cryptography, or state change;
+- exercise the complete current feature matrix and fail every forbidden,
+  ambiguous, cross-version, cross-profile, stale-state, or implicit legacy
+  composition before allocation, fetching, cryptography, or state change;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
@@ -7954,6 +8985,153 @@ Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.148.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.148.1 - Complete TLS And DTLS Heartbeat Facility
+
+Status: planned
+
+Plan scope: Implement RFC 6520 Heartbeat request, response and peer-not-allowed handling for every applicable TLS and DTLS version with exact payload and padding bounds, response-length derivation from authenticated input, rate and amplification limits, path ownership, no secret or adjacent-memory disclosure, public opt-in APIs, interoperability and permanent regression evidence; keep it disabled by default.
+
+Goal: provide complete Heartbeat interoperability without recreating disclosure or amplification classes.
+
+Deliverables:
+
+- implement all messages, roles and applicable versions with fixed bounds, rate/path policy and public opt-in configuration.
+
+Verification:
+
+- exhaust payload and padding lengths, malformed claims, adjacent-memory sentinels, rate and amplification limits, independent peers and fuzzing.
+
+Exit criteria:
+
+- Heartbeat is complete, memory-safe, bounded and disabled unless explicitly selected;
+- `v0.148.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.148.2 - Complete Status Request V2 And Cached Information
+
+Status: planned
+
+Plan scope: Implement complete RFC 6961 multi-status request and response negotiation, certificate-status association and resumption behavior plus every authenticated Cached Information type and hash, cache, mismatch, freshness and fallback rule; expose bounded opt-in configuration and exact TLS-version applicability without weakening ordinary OCSP or certificate validation.
+
+Goal: close both standardized certificate-status and cached-information facilities.
+
+Deliverables:
+
+- implement all messages, extensions, types, cache effects, resumption binding and public configuration.
+
+Verification:
+
+- run independent peers, multiple-chain statuses, cache hit/miss/stale/mismatch, unsolicited responses, malformed lengths and trust negatives.
+
+Exit criteria:
+
+- both facilities are complete and cannot bypass certificate or revocation authority;
+- `v0.148.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.148.3 - Complete Supplemental User-Mapping And Authorization Data
+
+Status: planned
+
+Plan scope: Implement every authenticated TLS Supplemental Data, User Mapping and Authorization Data message, extension, registry, direction, ordering, criticality, resumption, privacy, resource and application-authorization effect with typed public opt-in APIs and no implicit trust or identity authority.
+
+Goal: complete the linked auxiliary TLS message families without turning application data into protocol authority.
+
+Deliverables:
+
+- implement all codecs, states, registries, both roles, effects and public opt-in APIs.
+
+Verification:
+
+- run RFC and independent cases, unknown/critical values, ordering, resumption, privacy, malformed, resource and ignored-effect failures.
+
+Exit criteria:
+
+- every authenticated auxiliary facility is complete and its authority remains caller-owned;
+- `v0.148.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.148.4 - Complete RFC 6066 Legacy Extension Facilities
+
+Status: planned
+
+Plan scope: Implement max_fragment_length, client_certificate_url, trusted_ca_keys and truncated_hmac in their exact applicable protocol versions with fetch and trust remaining typed caller effects, bounded URLs and lists, fragment and MAC limits, resumption association, downgrade policy, public legacy configuration, and no modern default negotiation.
+
+Goal: replace recognition-only handling of RFC 6066 legacy facilities with complete explicit compatibility.
+
+Deliverables:
+
+- implement every extension direction, effect, resumption rule and public legacy configuration over exact shared primitives.
+
+Verification:
+
+- run independent peers, fetch/trust failures, bounds, truncation, resumption mismatch, downgrade and default-isolation matrices.
+
+Exit criteria:
+
+- all four RFC 6066 facilities are complete in applicable versions and absent from defaults;
+- `v0.148.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.148.5 - Complete Historical TLS Channel Bindings
+
+Status: planned
+
+Plan scope: Implement every authenticated applicable tls-unique and tls-server-end-point channel-binding profile beside tls-exporter, including renegotiation, resumption, signature-hash substitution, version, endpoint, authorization, ownership and deprecation rules; expose them only through exact legacy protocol contexts and never fabricate unavailable binding material.
+
+Goal: complete historical channel-binding interoperability with precise availability and warning semantics.
+
+Deliverables:
+
+- implement each binding derivation, context type, lifecycle, public legacy API and unavailability result.
+
+Verification:
+
+- run RFC vectors and peer fixtures across versions, renegotiation, resumption, endpoint algorithms, missing material and cross-context substitution.
+
+Exit criteria:
+
+- every applicable binding is exact and unavailable profiles fail without fabrication;
+- `v0.148.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.148.6 - First-Party Certificate Compression Algorithms
+
+Status: planned
+
+Plan scope: Bind the exact v0.46 DEFLATE, Brotli and Zstandard implementations into complete TLS certificate-compression send and receive profiles, force each algorithm and direction through public client/server APIs, preserve transcript and artifact validation, enforce bomb and workspace limits, and retain external providers only as an optional separately evidenced effect rather than the sole usable implementation.
+
+Goal: make certificate compression fully usable without third-party or caller-supplied codecs.
+
+Deliverables:
+
+- integrate every assigned compressor, both roles and directions, public configuration, artifacts and provider alternatives.
+
+Verification:
+
+- run independent peers, all algorithms, transcript equality, malformed and bomb inputs, rotation, workspace, provider and public-package fixtures.
+
+Exit criteria:
+
+- every standardized certificate compressor is first-party and end-to-end usable;
+- `v0.148.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.148.7 - Complete Optional TLS Facility Composition And Audit Gate
+
+Status: planned
+
+Plan scope: Regenerate the full feature matrix including Heartbeat, status_request_v2, Cached Information, supplemental data, user mapping, authorization data, every RFC 6066 facility, historical channel bindings and all certificate compressors; run pairwise and risk-selected higher-order interop, fuzz, resource, downgrade, resumption, FIPS and legacy-isolation campaigns and obtain clean independent review before facade freeze.
+
+Goal: close the complete optional standardized TLS surface before freezing public configuration.
+
+Deliverables:
+
+- publish the full composition matrix, interop evidence, audit, remediations, regressions and exact default/legacy claims.
+
+Verification:
+
+- execute all pairs and risk-selected combinations under both roles, versions, resumption, cancellation, malformed inputs, resource and provider faults.
+
+Exit criteria:
+
+- optional facilities are complete, composable and have no unresolved critical or high finding;
+- `v0.148.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.149.0 - Facade Configuration Typestates
 
@@ -8588,7 +9766,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement typed packet tags, versions, algorithm identifiers, signature types, subpacket headers and registries with exhaustive implemented, rejected, safely ignored, critical-failure, compatibility-read, private-use and experimental dispositions; retain unknown values without stringly dispatch or accidental capability admission.
+Plan scope: Implement typed packet tags, versions, algorithm identifiers, signature types, subpacket headers and registries with exhaustive modern, explicit legacy-only, rejected, safely ignored, critical-failure, private-use and experimental dispositions; retain unknown values without stringly dispatch or accidental capability admission, while every authenticated assigned capability remains bound to its complete later implementation owner.
 
 Goal: prevent unknown or deprecated identifiers from becoming implicit
 algorithm selection or silently weakened policy.
@@ -8945,30 +10123,30 @@ Exit criteria:
 - mandatory modern curve operations are profile-exact and no OpenPGP key can cross an algorithm or protocol domain silently;
 - `v0.169.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.169.1 - OpenPGP Compatibility Algorithm Containment
+### v0.169.1 - OpenPGP Complete Compatibility Algorithm Register
 
 Status: planned
 
-Plan scope: Freeze generation, encryption, signing, verification and decryption policy for RSA, DSA, Elgamal, IDEA, TripleDES, CAST5, SHA-1, RIPEMD-160 and every deprecated or reserved algorithm; permit only explicitly justified compatibility operations in optional `brynja-openpgp-legacy`, with signing or encryption limited to separately admitted strong v4 profiles and weak algorithms limited to necessary read, decrypt or verify paths; never generate weak key, digest or cipher forms, enable compatibility through the modern facade, or mistake interoperability for security approval.
+Plan scope: Assign every authenticated OpenPGP public-key, symmetric, AEAD, hash, compression and S2K algorithm plus every defined operation and parameter to one complete modern or `brynja-openpgp-legacy` owner; distinguish secure defaults from explicit dangerous compatibility without using age or weakness as a reason to omit generation, signing, encryption, import or export, and reject only reserved, unassigned, private-use-without-authority, standard-forbidden or source-blocked values.
 
 Goal: make historical interoperability an explicit isolated risk boundary rather
 than a fallback path in modern OpenPGP.
 
 Deliverables:
 
-- publish a per-operation matrix of modern, compatibility-read, legacy-only, rejected and unimplemented algorithms with normative rationale;
+- publish a per-operation matrix of modern, complete legacy-only, legitimately rejected, source-blocked and not-yet-implemented algorithms with normative rationale;
 - freeze the optional legacy package graph, warnings, key separation and absence from modern features, defaults and re-exports;
-- require uniform oracle-resistant RSA compatibility failures and prohibit new weak key, signature, ciphertext or digest generation.
+- require uniform oracle-resistant compatibility failures and confine weak key, signature, ciphertext and digest generation to conspicuous explicit legacy APIs.
 
 Verification:
 
 - graph-test modern and legacy isolation and broken fixtures for feature unification, re-export, default, FIPS and fallback regressions;
-- exercise archived compatible material and reject every prohibited generation or encryption request with authoritative typed outcomes;
+- exercise archived and independently generated compatibility material in every standardized direction and reject every modern-facade or implicit weak-generation request with authoritative typed outcomes;
 - pass source-closure, cryptographic, oracle, documentation, package and independent risk review.
 
 Exit criteria:
 
-- weak historical capability is either absent or conspicuously isolated and can never be negotiated or selected by the modern facade;
+- every authenticated historical capability is complete and conspicuously isolated, while reserved, forbidden, source-blocked and unauthenticated claims remain absent and no legacy capability can be negotiated or selected by the modern facade;
 - `v0.169.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.169.2 - OpenPGP Legacy SHA-1 Consumer Admission Review
@@ -9080,11 +10258,11 @@ Exit criteria:
 - admitted protected v4 secret keys can be imported without exposing plaintext early or granting legacy protection a modern or FIPS claim;
 - `v0.169.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.169.6 - Complete Legacy RSA PKCS1 V1.5 Operations
+### v0.169.6 - OpenPGP Legacy RSA PKCS1 V1.5 Profiles
 
 Status: planned
 
-Plan scope: Complete strict RSASSA-PKCS1-v1_5 SHA-2 signing beside existing verification and complete oracle-resistant RSAES-PKCS1-v1_5 encryption and decryption in an isolated legacy RSA package, with exact RFC 8017 encoding, randomness, modulus, message, padding, uniform-failure, blinding, fault, cleanup, vector and public API requirements; admit no TLS key exchange, certificate-signature policy, automatic negotiation, weak digest, facade, default, or FIPS-approved edge.
+Plan scope: Bind the exact complete v0.46.21 RSA PKCS1 v1.5 signing, verification, encryption and decryption operations into every authenticated OpenPGP RSA compatibility profile with exact digest, session-key encoding, modulus, message, randomness, fingerprint, key-version, failure and policy rules; do not reimplement RSA or admit implicit modern selection.
 
 Goal: complete the exact legacy RSA primitives needed by strong OpenPGP v4
 compatibility before binding them to packet profiles.
@@ -9168,6 +10346,153 @@ Exit criteria:
 - every admitted legacy operation is complete, usable only by explicit choice,
   and isolated before independent audit;
 - `v0.169.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.9 - Complete OpenPGP DSA Profiles
+
+Status: planned
+
+Plan scope: Bind the exact v0.46.5 DSA implementation into every authenticated OpenPGP key, signature, certificate, import, export, generation, signing and verification profile with exact parameter, hash, encoding, fingerprint and key-version rules, explicit dangerous policy, archived vectors and no modern-default edge.
+
+Goal: provide every historical OpenPGP DSA operation without a private implementation.
+
+Deliverables:
+
+- implement all wire/profile adapters, operations, public APIs, capability policy and archival evidence over the sole DSA owner.
+
+Verification:
+
+- run generated and archived keys and signatures across parameters, hashes and versions, malformed and nonce cases, import/export and isolation tests.
+
+Exit criteria:
+
+- every authenticated OpenPGP DSA direction is complete and explicitly legacy;
+- `v0.169.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.10 - Complete OpenPGP ElGamal Profiles
+
+Status: planned
+
+Plan scope: Bind the exact v0.46.6 ElGamal implementation into every authenticated OpenPGP key, session-key encryption, decryption, import, export and generation profile with exact encoding, randomness, subgroup, fingerprint, version, uniform-failure and plaintext-release rules and explicit dangerous policy.
+
+Goal: complete both-role OpenPGP ElGamal interoperability safely.
+
+Deliverables:
+
+- implement key and packet adapters, all directions, public APIs, failure atomicity and capability policy.
+
+Verification:
+
+- run archived and generated keys/messages, malformed groups and ciphertexts, oracle campaigns, import/export, cleanup and isolation.
+
+Exit criteria:
+
+- all authenticated ElGamal profiles are complete with no unauthenticated plaintext release;
+- `v0.169.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.11 - Complete OpenPGP Legacy Symmetric Profiles
+
+Status: planned
+
+Plan scope: Bind complete TripleDES, IDEA, CAST5, Blowfish, Twofish, Camellia and every other authenticated historical OpenPGP block cipher to exact CFB, S2K, secret-key, SKESK, SEIPD and applicable AEAD profiles, covering key generation, encryption, decryption, import, export, limits, checksums, MDCs, warnings and no implicit fallback.
+
+Goal: close every historical OpenPGP symmetric algorithm and operation.
+
+Deliverables:
+
+- implement exact identifiers, modes, packet profiles, key lifecycles, both directions, public APIs and explicit policy.
+
+Verification:
+
+- run archived and generated messages and keys across every cipher/profile, tamper, checksum, MDC, limit, cleanup and fallback negatives.
+
+Exit criteria:
+
+- every authenticated symmetric profile is complete and selected only explicitly;
+- `v0.169.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.12 - Complete OpenPGP Legacy Hash And S2K Profiles
+
+Status: planned
+
+Plan scope: Bind complete RIPEMD-160, SHA-1, MD5 and every other authenticated historical OpenPGP digest to exact signature, fingerprint, S2K, MDC or checksum consumers; implement all defined Simple, Salted, Iterated and private-or-experimental-with-authority parameter semantics, generation and verification directions, collision-aware policy, cleanup and exact algorithm negotiation.
+
+Goal: complete every historical OpenPGP digest and S2K consumer relationship.
+
+Deliverables:
+
+- implement exact hash/S2K profiles, all directions, parameters, public APIs, warnings and cleanup over sole digest owners.
+
+Verification:
+
+- run RFC and archived vectors, password and count boundaries, wrong algorithms, collision-policy cases, cleanup and negotiation isolation.
+
+Exit criteria:
+
+- every authenticated hash and S2K profile is complete or carries a narrowly valid source blocker;
+- `v0.169.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.13 - Complete OpenPGP V3 V4 And Historical Key Operations
+
+Status: planned
+
+Plan scope: Implement every authenticated historical OpenPGP key and signature version, packet operation, key-ID and fingerprint rule, key generation, import, export, binding, revocation, expiration, signing, verification, encryption and decryption direction that remains representable under the pinned source closure, isolated from modern v6 defaults.
+
+Goal: make historical OpenPGP key lifecycles fully usable rather than read-only.
+
+Deliverables:
+
+- implement every versioned key lifecycle, packet operation, public API, warning and exact compatibility boundary.
+
+Verification:
+
+- exercise generation-to-import round trips, bindings, revocations, expirations, all message operations, archived peers and cross-version negatives.
+
+Exit criteria:
+
+- every authenticated historical key operation is complete and modern generation remains unaffected;
+- `v0.169.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.14 - OpenPGP Dangerous Compatibility API And Policy
+
+Status: planned
+
+Plan scope: Provide documented public compatibility constructors requiring explicit algorithm and dangerous-operation policy for weak key generation, signing and encryption while retaining safe parse, verify and decrypt entry points, hard warnings, no automatic preference or fallback, exact capability reporting and compile-time separation from `brynja-openpgp`.
+
+Goal: make completeness explicit without turning dangerous generation into an accidental default.
+
+Deliverables:
+
+- ship affine policy tokens, constructors, warnings, capability reports, compile-fail separation and migration guidance.
+
+Verification:
+
+- compile-fail implicit and modern access, test every explicit operation, warning and report, and prove no preference/fallback or facade edge.
+
+Exit criteria:
+
+- dangerous compatibility is usable only after deliberate typed selection;
+- `v0.169.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.169.15 - Complete OpenPGP Legacy Algorithm Acceptance Gate
+
+Status: planned
+
+Plan scope: Exercise every authenticated legacy algorithm, key version, operation direction, S2K, cipher, digest, signature, encryption and packet profile through packaged public fixtures and archived independent implementations; prove exact single-owner reuse, deterministic failure, bounded resources, cleanup, modern/default/FIPS isolation and no registry entry silently reduced to recognition-only rejection.
+
+Goal: close the full OpenPGP compatibility registry before its cryptographic audit.
+
+Deliverables:
+
+- publish complete fixtures, interop corpora, owner/status matrices, package checks and residual blockers.
+
+Verification:
+
+- execute every registry entry, role and direction plus malformed, downgrade, cleanup, resource and graph-isolation tests.
+
+Exit criteria:
+
+- every authenticated OpenPGP compatibility capability is publicly usable or narrowly source-blocked;
+- `v0.169.15 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.170.0 - OpenPGP Key And Cryptography Audit Gate
 
@@ -9351,11 +10676,11 @@ Exit criteria:
 - packet sequences are bounded and no compression path exists without explicit caller resource authority;
 - `v0.173.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.173.1 - Complete First-Party DEFLATE ZIP And ZLIB Profiles
+### v0.173.1 - Complete OpenPGP DEFLATE ZIP And ZLIB Profiles
 
 Status: planned
 
-Plan scope: Implement complete first-party Rust RFC 1951 DEFLATE compression and decompression plus RFC 1950 ZLIB framing and raw ZIP profile use required by RFC 9580, with stored, fixed and dynamic blocks, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, deterministic generation policy, exact stream completion, malformed-stream and decompression-bomb defenses, public APIs, vectors, differentials and no allocation or native code.
+Plan scope: Bind the exact complete v0.46.25 DEFLATE and ZLIB implementation into OpenPGP ZIP and ZLIB Compressed Data generation and parsing with exact algorithm identifiers, reset, nesting, deterministic-generation, workspace, bomb, checksum, malformed-stream and public API behavior without a private codec copy.
 
 Goal: provide complete bounded DEFLATE and ZLIB generation and consumption so
 OpenPGP does not depend on a partial decoder or foreign compression engine.
@@ -9383,11 +10708,11 @@ Exit criteria:
 - ZIP and ZLIB decoding is bounded, allocation-free, first-party and incapable of bypassing message authentication or output policy;
 - `v0.173.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.173.2 - First-Party BZip2 OpenPGP Compatibility Decoder
+### v0.173.2 - Complete OpenPGP BZip2 Profiles
 
 Status: planned
 
-Plan scope: Implement an optional isolated first-party Rust BZip2 decoder sufficient for RFC 9580 Compressed Data packets, with caller-owned bounded workspace, exact block and stream checks, decompression-bomb and recursion defenses, no generation requirement and no default/facade edge; differentially qualify archived BZip2 OpenPGP messages and keep unsupported future compression identifiers fail closed.
+Plan scope: Bind the exact complete v0.46.28 BZip2 encoder and decoder into optional `brynja-openpgp-legacy` Compressed Data generation and parsing with exact identifiers, nesting, block and stream checks, caller workspaces, bomb defenses, archived interoperability, public APIs and no default modern edge.
 
 Goal: read the remaining registered RFC 9580 compression form without making
 an optional complex decoder part of modern or default dependency graphs.
@@ -9621,20 +10946,20 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Qualify strong-algorithm v4 certificates, protected secret keys, public-key profiles, v1 SEIPD/MDC messages and optional BZip2 input; verify every admitted deprecated read path against archived corpora, prove modern generation never emits deprecated forms or silently falls back, and prove `brynja-openpgp-legacy` and optional compression compatibility are absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.
+Plan scope: Qualify strong-algorithm v4 certificates, protected secret keys, public-key profiles, v1 SEIPD/MDC messages and BZip2 in both standardized directions; verify every admitted deprecated operation against archived corpora and independently generated artifacts, prove modern generation never emits deprecated forms without an explicit legacy API, and prove `brynja-openpgp-legacy` and optional compression compatibility are absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.
 
 Goal: retain explicitly useful compatibility while guaranteeing modern users do
 not acquire weak algorithms or formats transitively.
 
 Deliverables:
 
-- publish the final v4 strong-profile and legacy read-only algorithm matrix with warnings and artifact identity;
+- publish the final v4 strong-profile and complete legacy-operation algorithm matrix with warnings and artifact identity;
 - separate modern and legacy credentials, configuration, APIs, package archives, SBOMs and interoperability evidence;
-- machine-enforce absence of weak generation, feature forwarding, fallback and modern re-export edges.
+- machine-enforce that weak generation exists only behind explicit legacy APIs and that feature forwarding, fallback and modern re-export edges remain absent.
 
 Verification:
 
-- test v4 strong profiles and every admitted legacy specimen, rejection, warning and no-generation invariant;
+- test v4 strong profiles and every admitted legacy generation, import, export, sign, verify, encrypt, decrypt, warning and modern-isolation invariant;
 - inspect no-default and all-feature metadata, lockfiles, packages and symbols for modern/legacy/FIPS separation;
 - pass independent compatibility, downgrade, oracle, documentation and repository audits.
 
@@ -9673,7 +10998,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze OpenPGP package APIs, feature graph, supported and rejected algorithms, modern and compatibility profiles, resource formulas, trust boundary, key lifecycle, error semantics, security guidance, interoperability limits, verification status and migration policy without claiming independent verification or FIPS validation.
+Plan scope: Freeze OpenPGP package APIs, feature graph, complete assigned algorithm ownership, reserved/private/source-blocked dispositions, modern and compatibility profiles, resource formulas, trust boundary, key lifecycle, error semantics, security guidance, interoperability limits, verification status and migration policy without claiming independent verification or FIPS validation.
 
 Goal: make the exact intended OpenPGP contract reviewable before final evidence
 and independent audit.
@@ -9799,11 +11124,515 @@ Exit criteria:
 - the exact OpenPGP artifact set is ready for integration freeze with honest, evidence-linked scope and no unresolved critical or high finding;
 - `v0.180.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
+### v0.180.1 - Named Legacy Protocol Authority And Completeness Register
+
+Status: planned
+
+Plan scope: Authenticate and lawfully admit the complete available specifications, errata, registries, archives and interoperability corpora for TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP; assign every message, version, suite, primitive, compression method, extension, certificate, key format, role and send/receive operation to one complete owner, and block 1.0 rather than silently reduce any named protocol to a subset.
+
+Goal: freeze a complete, source-authenticated closure for every named historical protocol.
+
+Deliverables:
+
+- publish per-protocol source, rights, registry, operation, owner, warning, blocker and test mappings with no generic subset status.
+
+Verification:
+
+- fail on missing sources, owners, directions, roles, suites, formats, operations, rights, warnings or unjustified rejection classifications.
+
+Exit criteria:
+
+- every named protocol is completely assigned or explicitly blocks 1.0 pending authentic authority;
+- `v0.180.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.2 - Complete TLS 1.1 Codec And State Machines
+
+Status: planned
+
+Plan scope: Implement the complete bounded TLS 1.1 record, handshake, alert, extension, compression, renegotiation, resumption and shutdown codecs and client/server state machines in `brynja-legacy-tls11`, with exact transcripts, versions, errors, resources, cancellation and no modern routing or fallback.
+
+Goal: implement the complete protocol machinery for both TLS 1.1 roles.
+
+Deliverables:
+
+- ship all codecs, states, effects, resources, failures and public Sans-I/O client/server APIs.
+
+Verification:
+
+- exhaust messages, ordering, fragmentation, renegotiation, resumption, compression, cancellation, malformed and resource paths.
+
+Exit criteria:
+
+- complete TLS 1.1 state is publicly usable without any modern router edge;
+- `v0.180.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.3 - Complete TLS 1.1 Suites Credentials And Operations
+
+Status: planned
+
+Plan scope: Bind every authenticated TLS 1.1 cipher suite, MAC, PRF, key exchange, signature, certificate, PSK or external-credential profile and every generation, import, export, send and receive direction to the exact shared primitive owners with explicit dangerous policy and complete key lifecycle.
+
+Goal: close every TLS 1.1 cryptographic and credential operation.
+
+Deliverables:
+
+- implement all suite/profile adapters, both roles, credential directions, dangerous policy and lifecycle over sole owners.
+
+Verification:
+
+- run registry-wide vectors and peer fixtures, wrong credentials and suites, oracle, downgrade, cleanup and no-fallback matrices.
+
+Exit criteria:
+
+- every authenticated TLS 1.1 operation is complete and explicitly selected;
+- `v0.180.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.4 - TLS 1.1 Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Exercise complete TLS 1.1 public client and server APIs across every assigned suite and facility against independent and archived peers, hostile records, renegotiation, compression, downgrade and oracle cases; prove isolation and obtain clean protocol-specific audit and pentest evidence.
+
+Goal: establish complete and independently reviewed TLS 1.1 compatibility.
+
+Deliverables:
+
+- retain public fixtures, interop transcripts, audit/pentest reports, remediations, regressions and graph proofs.
+
+Verification:
+
+- rerun every role, suite, feature, hostile case, resource limit and isolation check on the exact candidate.
+
+Exit criteria:
+
+- TLS 1.1 has no unresolved critical or high implementation finding and no implicit fallback;
+- `v0.180.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.5 - Complete TLS 1.0 Codec And State Machines
+
+Status: planned
+
+Plan scope: Implement the complete bounded TLS 1.0 record, implicit-IV, handshake, alert, extension, compression, renegotiation, resumption and shutdown codecs and client/server state machines in `brynja-legacy-tls10`, with exact transcripts, resources, cancellation and no modern routing or fallback.
+
+Goal: implement complete TLS 1.0 protocol machinery in both roles.
+
+Deliverables:
+
+- ship every codec, state, effect, failure, resource and public client/server API including exact implicit-IV state.
+
+Verification:
+
+- exhaust messages, records, implicit IVs, ordering, renegotiation, resumption, compression, cancellation and malformed/resource paths.
+
+Exit criteria:
+
+- complete TLS 1.0 state is publicly usable only through its legacy package;
+- `v0.180.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.6 - Complete TLS 1.0 Suites Credentials And Operations
+
+Status: planned
+
+Plan scope: Bind every authenticated TLS 1.0 cipher suite, export profile, MAC, MD5-plus-SHA-1 PRF, key exchange, signature, certificate, PSK or external-credential profile and every operation direction to exact shared primitive owners with explicit dangerous policy and complete lifecycle.
+
+Goal: close every TLS 1.0 suite and credential direction.
+
+Deliverables:
+
+- implement every suite/profile adapter, both roles, export behavior, credentials, lifecycle and public dangerous-policy API.
+
+Verification:
+
+- run registry-wide vectors and peer fixtures, export and weak suites, oracle, downgrade, cleanup and no-fallback cases.
+
+Exit criteria:
+
+- every authenticated TLS 1.0 cryptographic operation is complete;
+- `v0.180.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.7 - TLS 1.0 Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Exercise complete TLS 1.0 public client and server APIs across all assigned suites and facilities against independent and archived peers, BEAST-relevant record behavior, renegotiation, compression, downgrade and oracle cases; prove isolation and obtain clean audit and pentest evidence.
+
+Goal: establish complete, warned and independently reviewed TLS 1.0 compatibility.
+
+Deliverables:
+
+- retain public fixtures, peer transcripts, audit/pentest reports, remediations, regressions and process isolation evidence.
+
+Verification:
+
+- rerun every role, suite, feature, BEAST/oracle case, resource and containment campaign on the exact candidate.
+
+Exit criteria:
+
+- TLS 1.0 has no unresolved critical or high implementation finding and no modern edge;
+- `v0.180.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.8 - Complete DTLS 1.0 Codec And State Machines
+
+Status: planned
+
+Plan scope: Implement complete DTLS 1.0 records, epochs, replay, cookies, fragmentation, reassembly, flights, timers, retransmission, alerts, extensions, compression, resumption, path and client/server state in `brynja-legacy-dtls10`, preserving exact version-specific semantics and bounded Sans-I/O effects.
+
+Goal: implement the complete DTLS 1.0 datagram protocol in both roles.
+
+Deliverables:
+
+- ship all codecs, states, timers, path effects, replay and public client/server APIs.
+
+Verification:
+
+- exhaust loss, duplication, reorder, fragmentation, cookies, replay, timers, compression, resumption, malformed and amplification cases.
+
+Exit criteria:
+
+- all DTLS 1.0 protocol machinery is complete and version-isolated;
+- `v0.180.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.9 - Complete DTLS 1.0 Suites Credentials And Operations
+
+Status: planned
+
+Plan scope: Bind every authenticated DTLS 1.0 suite, MAC, PRF, key exchange, signature, certificate, PSK, compression and operation direction to exact shared legacy primitive and TLS-profile owners while preserving datagram-specific limits, replay and amplification policy.
+
+Goal: close every DTLS 1.0 cryptographic, credential and compression operation.
+
+Deliverables:
+
+- implement every suite/profile adapter in both roles with exact datagram lifecycle and public policy.
+
+Verification:
+
+- run registry-wide peers and vectors under loss/reorder, weak suites, oracle, replay, amplification, cleanup and isolation tests.
+
+Exit criteria:
+
+- every authenticated DTLS 1.0 operation is complete over sole shared owners;
+- `v0.180.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.10 - DTLS 1.0 Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Qualify complete DTLS 1.0 client and server APIs against independent and archived peers under loss, duplication, reordering, fragmentation, migration, compression, weak-suite and oracle campaigns; prove isolation and obtain clean audit and pentest evidence.
+
+Goal: establish complete and independently reviewed DTLS 1.0 compatibility.
+
+Deliverables:
+
+- retain public fixtures, datagram corpora, audit/pentest reports, remediations, regressions and graph proofs.
+
+Verification:
+
+- repeat every role, suite, datagram fault, weak-profile, resource and containment campaign on the exact candidate.
+
+Exit criteria:
+
+- DTLS 1.0 has no unresolved critical or high implementation finding and no modern edge;
+- `v0.180.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.11 - Complete SSL 3.0 Codec And State Machines
+
+Status: planned
+
+Plan scope: Implement complete SSL 3.0 record, handshake, alert, compression, renegotiation, resumption and shutdown codecs and client/server state machines in `brynja-legacy-ssl3`, including exact padding and MAC-then-encrypt semantics, with no TLS state reuse or fallback.
+
+Goal: implement complete SSL 3.0 protocol machinery without TLS-state confusion.
+
+Deliverables:
+
+- ship every codec, state, record rule, effect, failure and public client/server API.
+
+Verification:
+
+- exhaust messages, padding, MAC order, renegotiation, resumption, compression, malformed, resource and cross-protocol cases.
+
+Exit criteria:
+
+- SSL 3.0 protocol state is complete and isolated;
+- `v0.180.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.12 - Complete SSL 3.0 Suites Credentials And Operations
+
+Status: planned
+
+Plan scope: Bind every authenticated SSL 3.0 cipher suite, export profile, SSL MAC and key schedule, key exchange, certificate, signature and operation direction to exact shared primitive owners with explicit POODLE, downgrade and cryptanalytic warnings and complete secret lifecycle.
+
+Goal: close every SSL 3.0 suite and credential direction.
+
+Deliverables:
+
+- implement every suite/profile adapter, both roles, export behavior, credentials, lifecycle and dangerous policy.
+
+Verification:
+
+- run archived vectors and peers, weak/export suites, padding and oracle cases, downgrade, cleanup and no-fallback tests.
+
+Exit criteria:
+
+- every authenticated SSL 3.0 operation is complete and explicitly dangerous;
+- `v0.180.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.13 - SSL 3.0 Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Exercise complete SSL 3.0 client and server APIs across all assigned suites and facilities against archived peers and oracle, padding, truncation, renegotiation, downgrade and exhaustion campaigns; prove process and graph containment and obtain clean audit and pentest evidence.
+
+Goal: establish complete, warned and independently reviewed SSL 3.0 compatibility.
+
+Deliverables:
+
+- retain public fixtures, archived transcripts, audit/pentest reports, remediations, regressions and containment evidence.
+
+Verification:
+
+- repeat every role, suite, facility, oracle, downgrade, resource and isolation campaign on the exact candidate.
+
+Exit criteria:
+
+- SSL 3.0 has no unresolved critical or high implementation finding despite its disclosed protocol insecurity;
+- `v0.180.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.14 - Complete SSL 2.0 Authority Codec And State Machines
+
+Status: planned
+
+Plan scope: Authenticate the non-RFC SSL 2.0 specification and archives, then implement complete records, handshakes, errors, cipher-spec negotiation, session reuse, client and server state and bounded effects in `brynja-legacy-ssl2`; if authority or lawful implementation cannot be established, remove the production package claim rather than ship a subset.
+
+Goal: admit SSL 2.0 only from complete authentic authority and then implement all protocol state.
+
+Deliverables:
+
+- bind sources and rights, then ship every codec, state, effect, error and public client/server API or close the production claim.
+
+Verification:
+
+- verify source provenance and run complete message, state, malformed, resource and archived corpus matrices.
+
+Exit criteria:
+
+- SSL 2.0 is either completely source-backed and implemented or absent as a production capability;
+- `v0.180.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.15 - Complete SSL 2.0 Suites Credentials And Operations
+
+Status: planned
+
+Plan scope: Bind every authenticated SSL 2.0 cipher kind, export derivation, MAC, challenge, connection ID, certificate, key exchange and client/server operation to exact shared primitives, including NULL or weak profiles only behind explicit dangerous policy and uniform oracle-resistant wrappers where possible.
+
+Goal: close every authenticated SSL 2.0 cryptographic and credential operation.
+
+Deliverables:
+
+- implement every cipher kind and operation direction with exact owner, lifecycle, warning and public policy.
+
+Verification:
+
+- run archived vectors and peers, challenge/connection IDs, export/NULL suites, rollback, oracle, cleanup and graph isolation.
+
+Exit criteria:
+
+- every authenticated SSL 2.0 operation is complete with unavoidable insecurity documented;
+- `v0.180.15 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.16 - SSL 2.0 Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Exercise complete SSL 2.0 public client and server APIs against archived independent peers and downgrade, rollback, truncation, export, oracle and resource campaigns; publish unavoidable protocol insecurity, prove isolation and obtain clean implementation audit and pentest evidence.
+
+Goal: establish honest, complete and independently reviewed SSL 2.0 compatibility.
+
+Deliverables:
+
+- retain public fixtures, transcripts, disclosures, audit/pentest reports, remediations, regressions and isolation proofs.
+
+Verification:
+
+- rerun every role, cipher kind, operation, hostile case, resource and containment campaign on the exact candidate.
+
+Exit criteria:
+
+- SSL 2.0 has no unresolved critical or high implementation finding and no fallback path;
+- `v0.180.16 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.17 - Complete WTLS Codec And State Machines
+
+Status: planned
+
+Plan scope: Authenticate each admitted WAP WTLS specification and implement every defined record, handshake, alert, sequence, retransmission, certificate, abbreviated-handshake, key-refresh and client/server state in `brynja-legacy-wtls` with bounded datagram effects and exact version separation.
+
+Goal: implement complete WTLS protocol state for every authenticated version.
+
+Deliverables:
+
+- bind sources and ship all codecs, roles, states, timers, effects, errors and public APIs.
+
+Verification:
+
+- exhaust versions, messages, sequencing, retransmission, certificates, abbreviated handshakes, refresh, malformed and resource paths.
+
+Exit criteria:
+
+- every authenticated WTLS protocol operation is complete in both roles;
+- `v0.180.17 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.18 - Complete WTLS Suites Credentials And Operations
+
+Status: planned
+
+Plan scope: Bind every authenticated WTLS cipher, MAC, hash, key exchange, curve, RSA, certificate, anonymous, shared-secret, compression and operation direction to exact shared or isolated primitive owners with explicit dangerous policy, constrained-device resource models and complete lifecycle.
+
+Goal: close every WTLS cryptographic, credential and compression profile.
+
+Deliverables:
+
+- implement every profile and direction with exact owners, lifecycle, resource formulas, warnings and public policy.
+
+Verification:
+
+- run authenticated vectors and corpora across profiles, constrained resources, wrong credentials, oracle, cleanup and isolation cases.
+
+Exit criteria:
+
+- every authenticated WTLS profile is complete and explicitly selected;
+- `v0.180.18 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.19 - WTLS Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Exercise complete WTLS public client and server APIs across every assigned profile on constrained and hosted targets against archived corpora or peers, hostile datagrams and resource exhaustion; prove isolation and obtain clean source, cryptography, protocol audit and pentest evidence.
+
+Goal: establish complete and independently reviewed WTLS compatibility.
+
+Deliverables:
+
+- retain public fixtures, corpora, target evidence, audit/pentest reports, remediations and isolation proofs.
+
+Verification:
+
+- repeat every role, version, profile, datagram fault, constrained-resource and containment campaign on the exact candidate.
+
+Exit criteria:
+
+- WTLS has no unresolved critical or high implementation finding and no modern edge;
+- `v0.180.19 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.20 - Complete PCT Codec State And Operations
+
+Status: planned
+
+Plan scope: Authenticate the complete PCT specification lineage and implement every defined record, handshake, error, cipher and hash negotiation, certificate, key exchange, client-authentication, connection and client/server operation in `brynja-legacy-pct`, binding exact shared primitives and explicit dangerous policy without TLS fallback.
+
+Goal: deliver complete source-backed PCT in both roles.
+
+Deliverables:
+
+- bind sources and implement every codec, state, profile, credential, operation, public API and warning.
+
+Verification:
+
+- run exact corpora or archived peers across every operation, negotiation, malformed, downgrade, oracle and resource case.
+
+Exit criteria:
+
+- every authenticated PCT capability is complete and isolated;
+- `v0.180.20 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.21 - PCT Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Exercise complete PCT client and server APIs across every authenticated profile against archived implementations or exact corpus replays, hostile parsing, downgrade, export, oracle and resource campaigns; prove process and graph isolation and obtain clean audit and pentest evidence.
+
+Goal: establish complete and independently reviewed PCT compatibility.
+
+Deliverables:
+
+- retain public fixtures, replay corpora, audit/pentest reports, remediations, regressions and containment evidence.
+
+Verification:
+
+- repeat every role, profile, hostile case, resource and isolation campaign on the exact candidate.
+
+Exit criteria:
+
+- PCT has no unresolved critical or high implementation finding and no TLS fallback;
+- `v0.180.21 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.22 - Complete SNP Codec State And Operations
+
+Status: planned
+
+Plan scope: Authenticate the complete SNP specification lineage and implement every defined message, state, role, negotiation, credential, cryptographic profile, error and operation in `brynja-legacy-snp`, using exact shared primitive owners, explicit dangerous policy and no hidden transport, trust or fallback effects.
+
+Goal: deliver complete source-backed SNP without hidden system ownership.
+
+Deliverables:
+
+- bind sources and implement every codec, role, state, profile, effect, operation, public API and warning.
+
+Verification:
+
+- run exact corpora or archived peers across every role and operation, malformed, downgrade, effect and resource cases.
+
+Exit criteria:
+
+- every authenticated SNP capability is complete and isolated;
+- `v0.180.22 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.23 - SNP Public Usability Interoperability And Audit Gate
+
+Status: planned
+
+Plan scope: Exercise complete SNP public APIs across all authenticated roles and profiles against archived implementations or exact corpus replays, hostile inputs, downgrade and resource campaigns; prove package and process isolation and obtain clean source, protocol and cryptographic audit and pentest evidence.
+
+Goal: establish complete and independently reviewed SNP compatibility.
+
+Deliverables:
+
+- retain public fixtures, replay corpora, audit/pentest reports, remediations, regressions and isolation proofs.
+
+Verification:
+
+- repeat every role, profile, hostile input, resource and containment campaign on the exact candidate.
+
+Exit criteria:
+
+- SNP has no unresolved critical or high implementation finding and no hidden fallback;
+- `v0.180.23 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.180.24 - Complete Named Legacy Ecosystem Acceptance Gate
+
+Status: planned
+
+Plan scope: Regenerate the legacy register and prove TLS 1.2 compatibility, DTLS 1.2 compatibility, TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP each provide complete public operations rather than subsets; run cross-protocol key, credential, cache, listener, downgrade and fallback negatives and obtain a cumulative independent review and pentest with no unresolved critical or high finding.
+
+Goal: close the complete named legacy ecosystem as one isolated pre-1.0 deliverable.
+
+Deliverables:
+
+- publish the final legacy capability register, package and process graph, cumulative audit/pentest, remediation and exact security claims.
+
+Verification:
+
+- execute every protocol's public fixture and registry owner plus cross-protocol substitution, fallback, listener, credential, cache and containment campaigns.
+
+Exit criteria:
+
+- every named legacy package is complete, deliberately selected, independently reviewed and blocks 1.0 if incomplete;
+- `v0.180.24 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.181.0 - Integrated TLS And OpenPGP Package Freeze
 
 Status: planned
 
-Plan scope: Reconcile the complete TLS, PKI, cryptography, FIPS, OpenPGP and facade dependency graph, shared primitive identities, feature combinations, package versions, documentation and security claims; prove neither protocol stack creates implicit cross-protocol keys, trust, configuration, fallback, state or release authority.
+Plan scope: Reconcile the complete modern TLS, DTLS, QUIC-TLS integration, PKIX, cryptography, FIPS, OpenPGP, named legacy protocol and facade dependency graph, shared primitive identities, feature combinations, package versions, documentation and security claims; prove no protocol stack creates implicit cross-protocol keys, trust, configuration, fallback, state or release authority.
 
 Goal: freeze one coherent Brynja product graph without coupling independent
 protocol security domains.
@@ -9958,13 +11787,13 @@ Exit criteria:
 - stable artifacts are byte-identical to the approved candidate and every claim maps to exact-commit evidence;
 - `v1.0.0-rc.1 implementation stop reached. Run pentest for this release candidate and commit the updated report.`
 
-### v1.0.0 - First Serious Production-Ready Brynja TLS And OpenPGP Release
+### v1.0.0 - First Serious Production-Ready Complete Brynja Release
 
 Status: planned
 
-Plan scope: Promote only the byte-identical approved candidate without rebuild, source change, metadata drift, or expanded capability claim.
+Plan scope: Promote only the byte-identical approved candidate covering modern TLS, DTLS, QUIC-TLS integration, PKIX, OpenPGP and the separately selected complete named legacy ecosystem without rebuild, source change, metadata drift, or expanded capability claim.
 
-Goal: complete the **First Serious Production-Ready Brynja TLS And OpenPGP Release** implementation stop without admitting or
+Goal: complete the **First Serious Production-Ready Complete Brynja Release** implementation stop without admitting or
 claiming adjacent capability.
 
 Deliverables:

@@ -295,38 +295,41 @@
       ]
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
-        "facility.heartbeat",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       ],
       "deviation_rationale": null,
       "evidence": [],
       "id": "BRY-REQ-TLS-0002",
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.19.0",
-      "residual": "Every modern stream and datagram parser must retain an explicit negative test for negotiation and content.",
-      "revision": 5,
+      "owner": "0.148.1",
+      "residual": "Heartbeat remains disabled by default and cannot be treated as implicit application liveness; malformed, unsolicited, excessive, or unnegotiated messages remain rejected.",
+      "revision": 6,
       "scope": "protocol",
       "source": {
         "kind": "iana",
         "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       },
-      "statement": "The registered Heartbeat extension is excluded from every modern Brynja TLS and DTLS profile.",
+      "statement": "The registered Heartbeat extension is completely implemented for every applicable TLS and DTLS role through explicit bounded opt-in policy.",
       "strength": "REGISTRY",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:modern-heartbeat-rejection"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility"
         }
       ],
       "tests": [
         {
-          "status": "actual",
+          "status": "planned",
           "target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
+        },
+        {
+          "status": "planned",
+          "target": "tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles"
         }
       ]
     },
@@ -377,9 +380,9 @@
       "lifecycle": "legacy",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "H0.2.0",
+      "owner": "0.180.5",
       "residual": "Legacy package presence never permits modern-facade reachability, automatic fallback, or a security claim.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
         "anchor": "TLS 1.0 and SSL 3.0 do not interoperate",
@@ -387,7 +390,7 @@
         "kind": "rfc",
         "section": "3"
       },
-      "statement": "TLS 1.0 requirements remain confined to the independently packaged legacy TLS 1.0 boundary.",
+      "statement": "TLS 1.0 is completely implemented for both roles and every authenticated standardized operation while remaining confined to the independently packaged legacy TLS 1.0 boundary.",
       "strength": "INVARIANT",
       "targets": [
         {
@@ -441,6 +444,6 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "32163f1788dd27d9d99b6b08f8e022ec92c6fe7d6966b609f8b0b84100fcd729"
+  "source_ledger_sha256": "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c",
+  "surface_register_sha256": "e23cf056c118bd7473fff4c175a9398330630f771740d66b5e76faed9b54f125"
 }

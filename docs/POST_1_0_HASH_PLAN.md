@@ -225,23 +225,23 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | BLAKE3 | `brynja-hash-blake3`; hash, XOF, keyed, derive-key, and tree modes separated |
 | ECOH | Research or legacy after source/security review |
 | FSB | Research/NIST-competition history; no modern facade by default |
-| GOST hash | Split GOST R 34.11-94 from Streebog; legacy compatibility only |
+| GOST hash | Reuse the complete pre-1.0 GOST R 34.11-94 and Streebog-256/512 owners; a post-1.0 catalogue may only re-export them |
 | Grøstl | Standalone family after source and security review |
 | HAS-160 | `brynja-legacy-hash-has160` |
 | HAVAL | `brynja-legacy-hash-haval`; passes and output sizes explicit |
 | JH | Standalone competition family after review |
 | LSH | Standalone family with LSH-256/LSH-512 parameters explicit |
-| MD2 and MD4 | Separate post-1.0 `brynja-legacy-hash-md2` and `brynja-legacy-hash-md4` crates with hard warnings; MD5 already has one complete pre-1.0 compatibility implementation and must only be re-exported, never reimplemented |
+| MD2 and MD4 | Reuse the complete pre-1.0 MD2 compatibility owner; only standalone MD4 remains post-1.0. Any catalogue crate re-exports MD2 rather than reimplementing it |
 | MD6 | Research/legacy family; tree and keyed modes separated |
 | RadioGatún | Research family with word width and output profile explicit |
-| RIPEMD, RIPEMD-128/160/256/320 | `brynja-legacy-hash-ripemd`; variants never aliased |
+| RIPEMD, RIPEMD-128/160/256/320 | Reuse the complete pre-1.0 RIPEMD-160 owner; add the otherwise standalone RIPEMD, RIPEMD-128/256/320 variants post-1.0 without aliasing them |
 | SHA-1 | Reuse the complete pre-1.0 `brynja-legacy-sha1` implementation; a post-1.0 legacy hash facade may re-export it only after a numbered consumer-specific admission and fresh audit, never by reimplementation |
 | SHA-224/256/384/512 and SHA-512/224/256 | Reuse the complete six-member pre-1.0 `brynja-hash-sha2`; post-1.0 may add only a convenience facade or a separately standardized future SHA-2 extension |
 | SHA-3 and SHAKE | Reuse the complete pre-1.0 FIPS 202 SHA3-224/256/384/512 and SHAKE128/256 family; post-1.0 may add only derived standards such as SP 800-185, not missing FIPS 202 members |
 | Skein | Standalone family with state/output/tree parameters explicit |
 | Snefru | Legacy/research family with security status documented |
 | Spectral Hash | Research until stable authority, rights, and vectors are admitted |
-| Streebog-256/512 | Standalone GOST R 34.11-2012 family after authority review |
+| Streebog-256/512 | Reuse the complete pre-1.0 GOST R 34.11-2012 owners; post-1.0 catalogue crates may only re-export them |
 | SWIFFT | Research family; do not infer general-purpose security from its proof claim |
 | Tiger | `brynja-legacy-hash-tiger`; Tiger and Tiger2 padding distinguished |
 | Whirlpool | Standalone or legacy family after current security review |
@@ -277,7 +277,7 @@ gap list, not a claim that no other hash exists.
 | GMAC | Reuse the complete pre-1.0 SP 800-38D GMAC implementation; post-1.0 may add only convenience adapters |
 | Poly1305 without AES | Modern one-time authenticator; separate from historical Poly1305-AES |
 | KangarooTwelve's related experimental tree profiles | Research-only unless a stable authority is admitted |
-| Password hashing: scrypt, bcrypt, PBKDF2, Balloon | Separate future `brynja-password-hash-*` domain; never implement through Digest. Reuse the complete pre-1.0 Argon2d/i/id implementation rather than reimplementing Argon2 |
+| Password hashing: scrypt, bcrypt, Balloon | Separate future `brynja-password-hash-*` domain; never implement through Digest. Reuse the complete pre-1.0 PBKDF2 and Argon2d/i/id implementations rather than reimplementing either family |
 | Content-defined chunking: Gear and FastCDC | Rolling/chunking domain with caller-owned chunk policy |
 | Consistent/rendezvous/jump hashing | Placement algorithms, not byte-hash implementations |
 | Perceptual aHash, wHash, color hash, PDQ and video profiles | Media-profile domain with exact normalization and distance thresholds |

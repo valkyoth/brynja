@@ -23,7 +23,7 @@
     },
     {
       "id": "legacy-non-rfc-sources",
-      "owner": "H0.1.0",
+      "owner": "0.180.1",
       "rationale": "Each non-RFC legacy specification requires authenticated provenance, exact bytes, hashes, errata, redistribution-rights review, cipher decisions, and a separate insecure-package pentest before implementation.",
       "status": "blocked",
       "surfaces": [
@@ -580,8 +580,6 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-TLS-0002",
-        "BRY-REQ-TLS-0018",
         "BRY-REQ-TLS-0019"
       ],
       "scope": "Keep record framing independent of protocol selection and fallback; ignore TLSPlaintext legacy_record_version where required, validate TLSCiphertext constants where applicable, preserve bytes, reject RFC 6520 Heartbeat content and negotiation in every modern profile, and leave version choice exclusively to typed handshake policy.",
@@ -1594,14 +1592,11 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0013",
-        "BRY-REQ-PKIX-0010",
-        "BRY-REQ-PQPKIX-0046",
-        "BRY-REQ-TLS13-0046"
+        "BRY-REQ-CRYPTO-0013"
       ],
-      "scope": "Freeze explicit v1 admission or exclusion for finite-field DHE, AES-CCM, SHA-1 certificate chains, PKCS1 v1.5 signing including RFC 9963 legacy client CertificateVerify code points, encrypted private-key containers, first-party RSA key generation, RFC 9935 ML-KEM PKIX credentials, ML-DSA, SLH-DSA, and every unimplemented algorithm family; generate a transitive construction-to-algorithm dependency closure and prove every named instantiation, mandatory algorithm, advertised standardized family member, public operation, acceptance gate and pre-1.0 consumer has one complete owner before the substrate audit, while P-521, X448, Ed448, complete SHA-2/SHA-3, and isolated MD5/SHA-1 compatibility remain bound to their numbered owners.",
+      "scope": "Freeze the authenticated modern and historical algorithm, operation, parameter, format, protocol-consumer, and registry closure for every pre-1.0 Brynja capability; assign every real standardized item to one complete modern or opt-in legacy implementation owner, permit rejection only for malformed, forbidden, reserved, private-use-without-authority, source-blocked, or intrinsically non-production surfaces, and generate a transitive construction-to-algorithm dependency graph that blocks the substrate audit on every partial family, read-only shortcut, missing generation direction, duplicated implementation, or unspecified compatibility edge.",
       "source_ids": [],
-      "title": "Version-One Algorithm And Transitive Completeness Decisions",
+      "title": "Version-One Algorithm And Transitive Completeness Register",
       "version": "0.46.0"
     },
     {
@@ -1614,6 +1609,347 @@
       "source_ids": [],
       "title": "Cross-Backend Performance And Admission Gate",
       "version": "0.46.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete streaming and fixed-message MD2 in an isolated `brynja-legacy-md2` package with RFC 1319 vectors, padding, checksum, checked lengths, public compatibility API, collision warnings, and no modern or FIPS edge; reserve its use solely for separately admitted historical certificate and container profiles.",
+      "source_ids": [],
+      "title": "Complete Legacy MD2 And PKIX Hash Boundary",
+      "version": "0.46.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete streaming and fixed-message RIPEMD-160 in an isolated `brynja-legacy-ripemd160` package with authoritative vectors, checked exhaustion, public compatibility API, collision and strength warnings, and typed later OpenPGP and certificate consumers without duplicating state or compression code.",
+      "source_ids": [],
+      "title": "Complete Legacy RIPEMD-160",
+      "version": "0.46.3"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement reusable first-party finite-field arithmetic, validated safe-prime group parameters, public-key validation, fixed-schedule exponentiation, unbiased private exponents, FFDHE2048 through FFDHE8192, imported-key consistency, lifecycle, cleanup, vectors, proofs, and public APIs for modern and legacy DH consumers.",
+      "source_ids": [],
+      "title": "Complete Finite-Field Groups And FFDHE",
+      "version": "0.46.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete FIPS 186 historical DSA parameter validation and generation, key generation and import, deterministic and randomized signing, strict verification, encoding, nonce, subgroup, range, fault, cleanup, vector, and public compatibility APIs across every parameter profile required by authenticated PKIX, TLS, and OpenPGP sources.",
+      "source_ids": [],
+      "title": "Complete Legacy DSA Family",
+      "version": "0.46.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete OpenPGP-compatible ElGamal parameter and key generation, validation, encryption, decryption, randomness, subgroup and message encoding, uniform failure, blinding, fault resistance, cleanup, authoritative vectors, and public compatibility APIs; do not expose unauthenticated plaintext or silently treat ElGamal encryption as a signature scheme.",
+      "source_ids": [],
+      "title": "Complete Legacy ElGamal Family",
+      "version": "0.46.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party AES-CCM over AES-128, AES-192, and AES-256 with every standards-admitted nonce, length and tag parameter plus the exact CCM-8 profiles, AAD, empty and boundary messages, in-place and disjoint operation, failure atomicity, invocation limits, vectors, proofs, public APIs, and optional admitted acceleration.",
+      "source_ids": [],
+      "title": "Complete AES-CCM And CCM-8",
+      "version": "0.46.7"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement reusable constant-time ECB building-block, CBC, CTR, CFB including standardized segment widths, and OFB encryption and decryption over admitted block ciphers with exact IV, padding-separation, streaming, overlap, length, counter-exhaustion, error, cleanup, vector, and public APIs; insecure modes remain legacy-policy selected even when their implementation is shared.",
+      "source_ids": [],
+      "title": "Complete First-Party Block-Cipher Modes",
+      "version": "0.46.8"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete DES and two-key and three-key TripleDES encrypt/decrypt, parity and weak-key policy, schedules, official vectors, constant-time portable code, cleanup, and public compatibility APIs, then bind no default, modern, FIPS-approved, or implicit-negotiation edge.",
+      "source_ids": [],
+      "title": "Complete Legacy DES And TripleDES",
+      "version": "0.46.9"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete RC2 with effective-key-bit handling, RC4 with exact historical key scheduling and stream semantics, and every authenticated RC5 parameter profile required by Brynja's named legacy protocols; provide vectors, key and state cleanup, exhaustion, public compatibility APIs, prominent bias and cryptanalytic warnings, and no modern graph edge.",
+      "source_ids": [],
+      "title": "Complete Legacy RC2 RC4 And RC5",
+      "version": "0.46.10"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete IDEA and CAST5/CAST-128 key schedules and forward and inverse block operations with every standardized key rule, vectors, constant-time evidence, cleanup, public compatibility APIs, and isolated later OpenPGP, TLS, WTLS, PCT, or SNP consumers.",
+      "source_ids": [],
+      "title": "Complete Legacy IDEA And CAST5",
+      "version": "0.46.11"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete Blowfish and Twofish key schedules and encrypt/decrypt operations for every standardized key size and profile required by authenticated Brynja protocols, with vectors, weak-key and block-limit policy, constant-time evidence, cleanup, public compatibility APIs, and no modern default edge.",
+      "source_ids": [],
+      "title": "Complete Legacy Blowfish And Twofish",
+      "version": "0.46.12"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete Camellia-128, Camellia-192, and Camellia-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for modern or legacy TLS, PKIX, and OpenPGP consumers without private copies.",
+      "source_ids": [],
+      "title": "Complete Camellia Family",
+      "version": "0.46.13"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SEED encrypt/decrypt, key schedule, vectors, constant-time portable code, cleanup, block limits, and public compatibility APIs for every authenticated TLS and legacy consumer, isolated from modern defaults unless current policy explicitly selects it.",
+      "source_ids": [],
+      "title": "Complete SEED Family",
+      "version": "0.46.14"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete ARIA-128, ARIA-192, and ARIA-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for every authenticated TLS profile without duplicating mode implementations.",
+      "source_ids": [],
+      "title": "Complete ARIA Family",
+      "version": "0.46.15"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SM3 hashing plus SM4 block encryption/decryption and every standards-required TLS mode profile, with streaming, vectors, checked lengths, key schedules, constant-time and accelerated evidence, cleanup, public APIs, and an explicit regional-profile policy rather than implicit global defaults.",
+      "source_ids": [],
+      "title": "Complete SM3 And SM4 Families",
+      "version": "0.46.16"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SM2 field, group, key generation, import, signing, verification, key agreement and encryption operations required by authenticated standards, including identity binding, encodings, subgroup and nonce rules, vectors, proofs, cleanup, public APIs, and separately typed TLS and PKIX profiles.",
+      "source_ids": [],
+      "title": "Complete SM2 Family",
+      "version": "0.46.17"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete GOST R 34.11-94 and Streebog-256/512 hashing with every authenticated parameter set, byte-order and padding rule, streaming and fixed-message APIs, vectors, checked exhaustion, constant-time applicability, public compatibility APIs, and exact later signature, TLS, and PKIX bindings.",
+      "source_ids": [],
+      "title": "Complete GOST Hash Families",
+      "version": "0.46.18"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete GOST 28147-89 profiles plus Magma and Kuznyechik block ciphers and every authenticated MAC, mode, key-meshing, parameter-set and wrapping construction needed by registered TLS, PKIX, or named legacy consumers, with vectors, cleanup, constant-time evidence, and public compatibility APIs.",
+      "source_ids": [],
+      "title": "Complete GOST Symmetric Families",
+      "version": "0.46.19"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete authenticated GOST R 34.10 signature and key-agreement generations, curves, parameter sets, encodings, key generation and validation, sign, verify, derive, VKO or related KDF composition, vectors, proofs, cleanup, public APIs, and exact TLS and PKIX profile separation.",
+      "source_ids": [],
+      "title": "Complete GOST Signature And Agreement Families",
+      "version": "0.46.20"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Complete RSA key generation, import and validation plus RSA-PSS sign/verify, RSAES-OAEP encrypt/decrypt, strict RSASSA-PKCS1-v1_5 sign/verify and oracle-resistant RSAES-PKCS1-v1_5 encrypt/decrypt across every admitted digest and parameter profile; require blinding, CRT and fault checks, uniform failures, vectors, proofs, cleanup, public modern or legacy APIs, and policy isolation instead of later private reimplementation.",
+      "source_ids": [],
+      "title": "Complete First-Party RSA Family",
+      "version": "0.46.21"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete PBKDF2 over admitted HMACs, authenticated PKCS #5 PBES1 compatibility profiles, PBES2, PBKDF2 PRFs, encryption schemes, parameters and limits, plus EncryptedPrivateKeyInfo import and export with uniform password failures, caller workspaces, cleanup, vectors, public APIs, and modern-versus-legacy policy for every linked PKCS #8 container.",
+      "source_ids": [],
+      "title": "Complete Password KDF And Encrypted-Key Containers",
+      "version": "0.46.22"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement exact SSL 3.0 MAC and key schedule, TLS 1.0/1.1 MD5-plus-SHA-1 PRF, TLS 1.2 PRFs across every admitted hash, truncated-HMAC profiles, export-grade key expansion, finished and certificate-verify digests, constant-time verification, limits, vectors, cleanup, and isolated public compatibility APIs without enabling protocol fallback.",
+      "source_ids": [],
+      "title": "Complete Legacy TLS PRFs MACs And Export KDFs",
+      "version": "0.46.23"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SRP-6a group validation, verifier and credential generation, client and server ephemeral operations, proofs, session derivation, invalid-public-value and offline-attack policy, vectors, cleanup, public APIs, and exact later TLS-SRP profile binding without hidden password storage or network effects.",
+      "source_ids": [],
+      "title": "Complete SRP Cryptographic Family",
+      "version": "0.46.24"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party RFC 1951 DEFLATE compression and decompression, RFC 1950 ZLIB, raw ZIP use, and authenticated TLS DEFLATE framing with all block types, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, stream completion, reset semantics, bomb defenses, vectors, differential tests, and public APIs.",
+      "source_ids": [],
+      "title": "Complete DEFLATE ZLIB And TLS Compression Profiles",
+      "version": "0.46.25"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party Brotli and Zstandard compression and decompression profiles required by TLS certificate compression, including dictionaries only where the governing profile admits them, bounded caller workspaces, deterministic generation, exact framing and checksums, bomb defenses, vectors, differential evidence, and public APIs without native code.",
+      "source_ids": [],
+      "title": "Complete Brotli And Zstandard Families",
+      "version": "0.46.26"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party LZS compression and decompression plus exact TLS compression framing, reset, history, boundary, malformed-stream, bomb, vector, public API, and legacy-policy behavior required by authenticated TLS sources.",
+      "source_ids": [],
+      "title": "Complete Legacy LZS Compression",
+      "version": "0.46.27"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party BZip2 compression and decompression with exact block and stream framing, transforms, Huffman coding, CRCs, bounded caller workspaces, deterministic generation, malformed-stream and bomb defenses, vectors, differential evidence, public APIs, and later OpenPGP compatibility reuse.",
+      "source_ids": [],
+      "title": "Complete BZip2 Family",
+      "version": "0.46.28"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party FIPS 204 ML-DSA-44, ML-DSA-65, and ML-DSA-87 key generation, signing, verification, deterministic and hedged operation, external randomness, context, encoding, rejection-sampling, malformed-input, key-consistency, fault, cleanup, vector, proof, public API, and optional acceleration requirements for every authenticated PKIX or protocol profile.",
+      "source_ids": [],
+      "title": "Complete ML-DSA Family",
+      "version": "0.46.29"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party FIPS 205 SLH-DSA SHA2 and SHAKE families across all 128, 192, and 256 security categories and `s`/`f` parameter sets, key generation, pure and prehash signing and verification where standardized, context and randomization, encodings, bounds, fault, cleanup, vectors, proofs, public APIs, and explicit performance policy.",
+      "source_ids": [],
+      "title": "Complete SLH-DSA Family",
+      "version": "0.46.30"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every v0.46.2-v0.46.30 hash, cipher, mode, public-key operation, KDF, MAC, compression direction and parameter family through packaged public fixtures and authoritative vectors; prove single implementation ownership, explicit dangerous selection, no implicit modern negotiation, no unauthenticated output, cleanup, no_std portability where applicable, and exact modern, legacy, regional, PQ, FIPS and source-blocked status.",
+      "source_ids": [],
+      "title": "Legacy And Optional Primitive Public Usability Acceptance",
+      "version": "0.46.31"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Regenerate the transitive register from all authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT and SNP sources and registries; block v0.47.0 unless every assigned real capability and every send, receive, generation, import, export and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, private-use-without-authority, standard-forbidden, lawfully unavailable or source-blocked entries remaining rejected.",
+      "source_ids": [],
+      "title": "Complete Registered Algorithm Closure Gate",
+      "version": "0.46.32"
     },
     {
       "boundary": {
@@ -1660,7 +1996,7 @@
       "requirement_ids": [
         "BRY-REQ-ENC-0004"
       ],
-      "scope": "Implement bounded unencrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key decoding with algorithm and key consistency and secret-arena ownership; keep encrypted PKCS#8 an explicit v1 non-goal unless separately versioned.",
+      "scope": "Implement bounded import and export for unencrypted and v0.46.22-encrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key containers with strict algorithm and parameter binding, key consistency, canonical DER, caller-owned secret arenas, uniform password failures, cleanup, and public round-trip APIs.",
       "source_ids": [
         "itu:ITU-T.X.690-202102.pdf",
         "itu:ITU-T.X.690-202109-Err1.pdf",
@@ -1669,7 +2005,7 @@
         "rfc:7468",
         "rfc:8017"
       ],
-      "title": "Private-Key Input Formats",
+      "title": "Complete Private-Key Container APIs",
       "version": "0.49.0"
     },
     {
@@ -1907,10 +2243,7 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-OCSP-0001",
-        "BRY-REQ-OCSP-0005",
-        "BRY-REQ-TLS12EXT-0058",
-        "BRY-REQ-TLS12X-0058"
+        "BRY-REQ-OCSP-0001"
       ],
       "scope": "Validate stapled and offline OCSP responses, responder authorization, freshness, issuer and serial matching, and RFC 9654 nonce generation, encoding, bounds, echo, mismatch, omission, and malformed-request behavior under explicit hard and soft-fail policy.",
       "source_ids": [
@@ -2000,10 +2333,65 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Complete PKI adversarial, differential, fuzz, path-complexity, revocation, Certificate Transparency, and external audit campaigns with clean remediation.",
+      "scope": "Complete adversarial, differential, fuzz, path-complexity, revocation, Certificate Transparency, and external audit campaigns for the modern PKI surface before historical and optional algorithm profiles are admitted.",
       "source_ids": [],
-      "title": "PKI Audit Gate",
+      "title": "Modern PKI Audit Gate",
       "version": "0.60.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement exact PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP and path-validation profiles for authenticated MD2, MD5 and SHA-1 RSA signatures, DSA, legacy EC, GOST, SM2 and every other historical algorithm assigned by the pinned PKIX source closure; reuse the exact v0.46 implementations, enforce conspicuous legacy policy and algorithm constraints, and never admit a legacy trust decision through modern defaults.",
+      "source_ids": [],
+      "title": "Complete Legacy PKIX Algorithm Profiles",
+      "version": "0.60.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement bounded public generation, canonical DER and validation APIs for PKCS #10 requests, certificates, cross-certificates, trust-anchor information, CRLs, delta and indirect CRLs, OCSP requests and responses, extensions, serials and signature profiles across admitted modern and legacy algorithms, with caller-owned signing, entropy, time and storage effects.",
+      "source_ids": [],
+      "title": "Complete PKIX Issuance And Request APIs",
+      "version": "0.60.2"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0010",
+        "BRY-REQ-PQPKIX-0046"
+      ],
+      "scope": "Implement the authenticated unsigned X.509 profile with explicit non-authentication types, complete RFC 9935 ML-KEM public-key and certificate profiles, and every finalized authenticated ML-DSA, SLH-DSA or hybrid PKIX profile available to the source closure; keep each credential kind typed, validate exact parameters and encodings, and prohibit unsupported trust substitution.",
+      "source_ids": [],
+      "title": "Unsigned X509 ML-KEM And PQ PKIX Profiles",
+      "version": "0.60.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned objects, classical, regional, PQ and legacy profiles through packaged public fixtures and at least two independent toolchains where available; verify every algorithm direction, malformed and policy failure, no network ownership, bounded resources, cleanup, single implementation reuse and modern-versus-legacy isolation.",
+      "source_ids": [],
+      "title": "Complete PKIX Public Usability And Interoperability Acceptance",
+      "version": "0.60.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Independently audit and cleanly retest the complete modern, optional, regional, PQ and legacy PKI surface, including generation and validation symmetry, encrypted containers, algorithm constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.",
+      "source_ids": [],
+      "title": "Complete PKI Audit And Remediation Gate",
+      "version": "0.60.5"
     },
     {
       "boundary": null,
@@ -2271,10 +2659,9 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-TLS13-0072",
-        "BRY-REQ-TLS13-0721"
+        "BRY-REQ-TLS13-0072"
       ],
-      "scope": "Implement client authentication, CertificateVerify, Finished, authenticated application-data transition, and explicit rejection of post-handshake authentication for v1.",
+      "scope": "Implement handshake-time client authentication, CertificateVerify, Finished, authenticated application-data transition, and the state boundary later reused by separately versioned post-handshake authentication.",
       "source_ids": [
         "rfc:6066",
         "rfc:6520",
@@ -2438,10 +2825,9 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-TLS13-0762",
-        "BRY-REQ-TLS13-0763"
+        "BRY-REQ-TLS13-0762"
       ],
-      "scope": "Apply RFC 9257 with a mandatory 128-bit minimum key length, typed entropy provenance, client/server role and logical-node binding, pairwise-or-imported group policy, opaque identity comparison and collision domains, peer-identifier confirmation, privacy warnings, rotation and main-key destruction; reject low-entropy PSKs and RFC 9973 certificate-with-external-PSK mode for v1.",
+      "scope": "Apply RFC 9257 with a mandatory 128-bit minimum key length, typed entropy provenance, client/server role and logical-node binding, pairwise-or-imported group policy, opaque identity comparison and collision domains, peer-identifier confirmation, privacy warnings, rotation and main-key destruction; reject low-entropy PSKs while reserving exact certificate-plus-external-PSK composition for v0.82.3.",
       "source_ids": [
         "rfc:5077",
         "rfc:5705",
@@ -2531,7 +2917,7 @@
       "requirement_ids": [
         "BRY-REQ-TLS-0079"
       ],
-      "scope": "Implement the RFC 5705 exporter for TLS 1.2 and the RFC 9846 exporter for TLS 1.3, then admit only the RFC 9266 tls-exporter channel binding with exact label, context, transcript, and protocol-version rules; exclude tls-unique for TLS 1.3 and tls-server-end-point for v1; release outputs only after protocol-specific authorization as typed, non-formatting secrets with explicit ownership, use, and zeroization policy.",
+      "scope": "Implement the RFC 5705 exporter for TLS 1.2 and the RFC 9846 exporter for TLS 1.3, then admit RFC 9266 tls-exporter with exact label, context, transcript, and protocol-version rules; release outputs only after protocol-specific authorization as typed, non-formatting secrets with explicit ownership, use, and zeroization policy, while legacy channel bindings receive a separate v0.148.5 owner.",
       "source_ids": [
         "rfc:5077",
         "rfc:5705",
@@ -2553,7 +2939,7 @@
         "rfc:9963",
         "rfc:9973"
       ],
-      "title": "Exporters And TLS-Exporter Channel Binding",
+      "title": "Exporters And Modern TLS-Exporter Channel Binding",
       "version": "0.79.0"
     },
     {
@@ -2561,7 +2947,7 @@
       "requirement_ids": [
         "BRY-REQ-TLS13-0080"
       ],
-      "scope": "Admit only AES-128-GCM/SHA-256, AES-256-GCM/SHA-384, and ChaCha20-Poly1305/SHA-256 for the initial TLS 1.3 profile.",
+      "scope": "Admit AES-128-GCM/SHA-256, AES-256-GCM/SHA-384, and ChaCha20-Poly1305/SHA-256 as secure defaults while preserving a typed suite registry for the complete standardized TLS 1.3 suite profiles added at v0.82.1.",
       "source_ids": [
         "rfc:6066",
         "rfc:6520",
@@ -2576,7 +2962,7 @@
         "rfc:9852",
         "rfc:9963"
       ],
-      "title": "TLS 1.3 Suite Completion",
+      "title": "TLS 1.3 Core Suite Completion",
       "version": "0.80.0"
     },
     {
@@ -2624,6 +3010,58 @@
       ],
       "title": "TLS 1.3 Audit Gate",
       "version": "0.82.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated standardized TLS 1.3 cipher-suite profile, including AES-128-CCM, AES-128-CCM-8 and admitted SM-family regional suites, with exact hash, HKDF, nonce, record, certificate, negotiation, limit, provider and policy binding; retain only current broadly recommended suites in defaults.",
+      "source_ids": [],
+      "title": "Complete TLS 1.3 Cipher-Suite And Regional Profiles",
+      "version": "0.82.1"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-TLS13-0721"
+      ],
+      "scope": "Implement complete client and server post-handshake authentication with transcript, request-context, certificate selection, ordering, concurrency, KeyUpdate interaction, cancellation, resumption-state, application-authorization, resource and terminal-failure semantics through explicit opt-in configuration.",
+      "source_ids": [],
+      "title": "TLS 1.3 Post-Handshake Authentication",
+      "version": "0.82.2"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-TLS13-0763"
+      ],
+      "scope": "Implement the complete authenticated RFC 9973 certificate-plus-external-PSK mode with exact binder, certificate, Finished, identity, role, importer, transcript, resumption, early-data, privacy, downgrade and provisioning policy; make it explicit and never substitute it for certificate-only or PSK-only authentication.",
+      "source_ids": [],
+      "title": "TLS 1.3 Certificate With External PSK",
+      "version": "0.82.3"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-TLS13-0046"
+      ],
+      "scope": "Implement the authenticated RFC 9963 legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points through the exact v0.46.21 legacy RSA operations, strict signature negotiation, certificate and role binding, explicit server policy, warnings, vectors and interoperability; keep them absent from server signatures and modern defaults.",
+      "source_ids": [],
+      "title": "TLS 1.3 Legacy PKCS1 Client Signatures",
+      "version": "0.82.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every core, CCM, regional, post-handshake-authentication, certificate-plus-PSK and legacy-client-signature path through public client/server fixtures, independent peers, state and resource faults, algorithm and downgrade negatives, modern-default isolation and exact legacy selection, then obtain clean independent review before TLS 1.2 integration.",
+      "source_ids": [],
+      "title": "Complete TLS 1.3 Optional-Surface Acceptance And Audit",
+      "version": "0.82.5"
     },
     {
       "boundary": null,
@@ -2972,6 +3410,72 @@
       ],
       "title": "Integrated Evergreen One-Pass TLS Router",
       "version": "0.92.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Create separately selected `brynja-legacy-tls12` suite policy and implement every authenticated TLS 1.2 cipher-suite profile over the exact shared AES, CCM, CBC, Camellia, ARIA, SEED, SM, GOST, DES, TripleDES, RC2, RC4, IDEA and NULL compatibility primitives, with exact MAC, PRF, nonce, IV, padding, limit, downgrade and warning behavior and no modern-router edge.",
+      "source_ids": [],
+      "title": "Complete Legacy TLS 1.2 Cipher-Suite Profiles",
+      "version": "0.92.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete client and server static RSA, finite-field DHE, static DH, static ECDH, ECDHE, anonymous, PSK, DHE-PSK, RSA-PSK, SRP, Kerberos, GOST, SM and every other authenticated TLS 1.2 key-exchange and authentication profile, using caller-owned external Kerberos credentials where appropriate and never hiding network or realm effects.",
+      "source_ids": [],
+      "title": "Complete Legacy TLS 1.2 Authentication And Key Exchange",
+      "version": "0.92.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement all authenticated TLS 1.2 extension and facility semantics not present in the hardened engine, including secure renegotiation, max_fragment_length, client_certificate_url, trusted_ca_keys, truncated_hmac, status_request_v2, cached information, supplemental data, user mapping, authorization data, Heartbeat and admitted DEFLATE or LZS compression, with bounded resources and explicit dangerous policy.",
+      "source_ids": [],
+      "title": "Complete Legacy TLS 1.2 Extensions Compression And Renegotiation",
+      "version": "0.92.3"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind complete SHA-1, MD5, DSA, legacy RSA, GOST, SM and historical PKIX profiles into client and server Certificate, CertificateRequest, CertificateVerify, Finished, session-ID and ticket resumption behavior, including every authenticated signature code point, exact transcript, failure, cache, cleanup and cross-version isolation rule.",
+      "source_ids": [],
+      "title": "Complete Legacy TLS 1.2 Signatures Certificates And Resumption",
+      "version": "0.92.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close every authenticated TLS 1.2 handshake, record, alert, extension, compression, resumption, renegotiation, exporter and channel-binding send and receive direction through documented `brynja-legacy-tls12` public client and server APIs; reserved and private-use values remain typed but cannot gain authority without caller policy.",
+      "source_ids": [],
+      "title": "Complete Legacy TLS 1.2 Client And Server Operations",
+      "version": "0.92.5"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Interoperate across complete suite and feature families with independent and archived peers, fuzz every negotiation and record boundary, test downgrade and oracle resistance, prove separate configuration, listeners, credentials, caches and process containment, and obtain clean audit and pentest evidence without weakening modern `brynja-tls12` or the evergreen router.",
+      "source_ids": [],
+      "title": "Legacy TLS 1.2 Interoperability Isolation And Audit Gate",
+      "version": "0.92.6"
     },
     {
       "boundary": null,
@@ -3368,6 +3872,28 @@
       "version": "0.114.0"
     },
     {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement a separately selected `brynja-legacy-dtls12` client and server engine covering every authenticated DTLS 1.2 cipher suite, signature, key exchange, certificate, PSK, compression, extension, Heartbeat, fragmentation, replay, epoch, cookie, retransmission, resumption and failure profile that applies from the complete legacy TLS 1.2 closure.",
+      "source_ids": [],
+      "title": "Complete Legacy DTLS 1.2 Profiles",
+      "version": "0.114.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Qualify the complete legacy DTLS 1.2 engine against independent and archived peers under reordering, duplication, loss, amplification, migration, fragmentation, compression, weak-suite and oracle campaigns; prove modern DTLS policy and graphs remain unchanged and obtain clean external audit and pentest evidence.",
+      "source_ids": [],
+      "title": "Legacy DTLS 1.2 Interoperability Isolation And Audit Gate",
+      "version": "0.114.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-DTLS-0115"
@@ -3501,7 +4027,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Complete PQ external review and standards freeze; keep ML-DSA and SLH-DSA excluded from v1 authentication unless a separately reviewed final standard, TLS mapping, and interoperability milestone is added.",
+      "scope": "Complete PQ external review and standards freeze; bind the complete v0.46 ML-DSA and SLH-DSA families to every finalized authenticated TLS, DTLS, PKIX or OpenPGP mapping present in the source closure, require a separate interoperability milestone for each mapping, and classify only unavailable draft or unauthenticated future mappings as source-blocked rather than algorithmically unsupported.",
       "source_ids": [
         "nist:NIST.FIPS.203.pdf",
         "nist:NIST.SP.800-227.pdf",
@@ -4074,14 +4600,89 @@
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-COMPOSE-0148",
+        "BRY-REQ-IANA-0003"
+      ],
+      "scope": "Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, QUIC, modern, regional and legacy applicability, plus targeted higher-order combinations across ECH, authentication, credentials, compression, revocation, PSKs, early data, hybrid groups, FIPS profiles, record limits, fragmentation and return routability; bind identity and ticket state exactly and make forbidden combinations unrepresentable before the remaining separately selected standardized facilities are added.",
+      "source_ids": [],
+      "title": "Generated Optional-Feature Composition Foundation",
+      "version": "0.148.0"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-TLS-0002",
+        "BRY-REQ-TLS-0018"
+      ],
+      "scope": "Implement RFC 6520 Heartbeat request, response and peer-not-allowed handling for every applicable TLS and DTLS version with exact payload and padding bounds, response-length derivation from authenticated input, rate and amplification limits, path ownership, no secret or adjacent-memory disclosure, public opt-in APIs, interoperability and permanent regression evidence; keep it disabled by default.",
+      "source_ids": [],
+      "title": "Complete TLS And DTLS Heartbeat Facility",
+      "version": "0.148.1"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
         "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-IANA-0003",
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12X-0058"
+      ],
+      "scope": "Implement complete RFC 6961 multi-status request and response negotiation, certificate-status association and resumption behavior plus every authenticated Cached Information type and hash, cache, mismatch, freshness and fallback rule; expose bounded opt-in configuration and exact TLS-version applicability without weakening ordinary OCSP or certificate validation.",
+      "source_ids": [],
+      "title": "Complete Status Request V2 And Cached Information",
+      "version": "0.148.2"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "scope": "Implement every authenticated TLS Supplemental Data, User Mapping and Authorization Data message, extension, registry, direction, ordering, criticality, resumption, privacy, resource and application-authorization effect with typed public opt-in APIs and no implicit trust or identity authority.",
+      "source_ids": [],
+      "title": "Complete Supplemental User-Mapping And Authorization Data",
+      "version": "0.148.3"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
         "BRY-REQ-RFC6066CFG-0148"
       ],
-      "scope": "Generate a compatibility matrix for every pair of admitted optional features and their explicit stream TLS, DTLS, and QUIC applicability, plus targeted higher-order combinations across ECH, X.509 and RPK authentication, delegated credentials, tickets, resumption, imported and raw PSKs, pairwise external-PSK roles, zero-RTT, HybridRequired and HybridPreferred groups, the validated-module manifest and brynja-fips approved-only profile, noRevAvail, Must-Staple, ordinary and lightweight OCSP, versioned CT, HPKE export, certificate compression, rotating OCSP and SCT extensions, Record Size Limit, DTLS fragmentation, and return routability; keep RFC 6066 max_fragment_length, client_certificate_url, trusted_ca_keys, and truncated_hmac absent from every modern configuration, offer, echo, negotiation, ticket, and imported state while preserving the v0.90.1 bounded peer ClientHello ignore path; bind ECH tickets to inner identity, policy, and configuration generation; test ClientHello size, HRR, padding, transcript, downgrade, rotation, migration, cancellation, storage, and exhaustion; make forbidden combinations unrepresentable or reject them during configuration before any handshake.",
+      "scope": "Implement max_fragment_length, client_certificate_url, trusted_ca_keys and truncated_hmac in their exact applicable protocol versions with fetch and trust remaining typed caller effects, bounded URLs and lists, fragment and MAC limits, resumption association, downgrade policy, public legacy configuration, and no modern default negotiation.",
       "source_ids": [],
-      "title": "Generated Optional-Feature Composition Gate",
-      "version": "0.148.0"
+      "title": "Complete RFC 6066 Legacy Extension Facilities",
+      "version": "0.148.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated applicable tls-unique and tls-server-end-point channel-binding profile beside tls-exporter, including renegotiation, resumption, signature-hash substitution, version, endpoint, authorization, ownership and deprecation rules; expose them only through exact legacy protocol contexts and never fabricate unavailable binding material.",
+      "source_ids": [],
+      "title": "Complete Historical TLS Channel Bindings",
+      "version": "0.148.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind the exact v0.46 DEFLATE, Brotli and Zstandard implementations into complete TLS certificate-compression send and receive profiles, force each algorithm and direction through public client/server APIs, preserve transcript and artifact validation, enforce bomb and workspace limits, and retain external providers only as an optional separately evidenced effect rather than the sole usable implementation.",
+      "source_ids": [],
+      "title": "First-Party Certificate Compression Algorithms",
+      "version": "0.148.6"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Regenerate the full feature matrix including Heartbeat, status_request_v2, Cached Information, supplemental data, user mapping, authorization data, every RFC 6066 facility, historical channel bindings and all certificate compressors; run pairwise and risk-selected higher-order interop, fuzz, resource, downgrade, resumption, FIPS and legacy-isolation campaigns and obtain clean independent review before facade freeze.",
+      "source_ids": [],
+      "title": "Complete Optional TLS Facility Composition And Audit Gate",
+      "version": "0.148.7"
     },
     {
       "boundary": {
@@ -4320,7 +4921,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement typed packet tags, versions, algorithm identifiers, signature types, subpacket headers and registries with exhaustive implemented, rejected, safely ignored, critical-failure, compatibility-read, private-use and experimental dispositions; retain unknown values without stringly dispatch or accidental capability admission.",
+      "scope": "Implement typed packet tags, versions, algorithm identifiers, signature types, subpacket headers and registries with exhaustive modern, explicit legacy-only, rejected, safely ignored, critical-failure, private-use and experimental dispositions; retain unknown values without stringly dispatch or accidental capability admission, while every authenticated assigned capability remains bound to its complete later implementation owner.",
       "source_ids": [],
       "title": "OpenPGP Packet Values, Unknowns, And Criticality",
       "version": "0.164.1"
@@ -4474,9 +5075,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Freeze generation, encryption, signing, verification and decryption policy for RSA, DSA, Elgamal, IDEA, TripleDES, CAST5, SHA-1, RIPEMD-160 and every deprecated or reserved algorithm; permit only explicitly justified compatibility operations in optional `brynja-openpgp-legacy`, with signing or encryption limited to separately admitted strong v4 profiles and weak algorithms limited to necessary read, decrypt or verify paths; never generate weak key, digest or cipher forms, enable compatibility through the modern facade, or mistake interoperability for security approval.",
+      "scope": "Assign every authenticated OpenPGP public-key, symmetric, AEAD, hash, compression and S2K algorithm plus every defined operation and parameter to one complete modern or `brynja-openpgp-legacy` owner; distinguish secure defaults from explicit dangerous compatibility without using age or weakness as a reason to omit generation, signing, encryption, import or export, and reject only reserved, unassigned, private-use-without-authority, standard-forbidden or source-blocked values.",
       "source_ids": [],
-      "title": "OpenPGP Compatibility Algorithm Containment",
+      "title": "OpenPGP Complete Compatibility Algorithm Register",
       "version": "0.169.1"
     },
     {
@@ -4529,9 +5130,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Complete strict RSASSA-PKCS1-v1_5 SHA-2 signing beside existing verification and complete oracle-resistant RSAES-PKCS1-v1_5 encryption and decryption in an isolated legacy RSA package, with exact RFC 8017 encoding, randomness, modulus, message, padding, uniform-failure, blinding, fault, cleanup, vector and public API requirements; admit no TLS key exchange, certificate-signature policy, automatic negotiation, weak digest, facade, default, or FIPS-approved edge.",
+      "scope": "Bind the exact complete v0.46.21 RSA PKCS1 v1.5 signing, verification, encryption and decryption operations into every authenticated OpenPGP RSA compatibility profile with exact digest, session-key encoding, modulus, message, randomness, fingerprint, key-version, failure and policy rules; do not reimplement RSA or admit implicit modern selection.",
       "source_ids": [],
-      "title": "Complete Legacy RSA PKCS1 V1.5 Operations",
+      "title": "OpenPGP Legacy RSA PKCS1 V1.5 Profiles",
       "version": "0.169.6"
     },
     {
@@ -4555,6 +5156,83 @@
       "source_ids": [],
       "title": "OpenPGP Legacy Primitive Usability And Isolation Acceptance",
       "version": "0.169.8"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind the exact v0.46.5 DSA implementation into every authenticated OpenPGP key, signature, certificate, import, export, generation, signing and verification profile with exact parameter, hash, encoding, fingerprint and key-version rules, explicit dangerous policy, archived vectors and no modern-default edge.",
+      "source_ids": [],
+      "title": "Complete OpenPGP DSA Profiles",
+      "version": "0.169.9"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind the exact v0.46.6 ElGamal implementation into every authenticated OpenPGP key, session-key encryption, decryption, import, export and generation profile with exact encoding, randomness, subgroup, fingerprint, version, uniform-failure and plaintext-release rules and explicit dangerous policy.",
+      "source_ids": [],
+      "title": "Complete OpenPGP ElGamal Profiles",
+      "version": "0.169.10"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind complete TripleDES, IDEA, CAST5, Blowfish, Twofish, Camellia and every other authenticated historical OpenPGP block cipher to exact CFB, S2K, secret-key, SKESK, SEIPD and applicable AEAD profiles, covering key generation, encryption, decryption, import, export, limits, checksums, MDCs, warnings and no implicit fallback.",
+      "source_ids": [],
+      "title": "Complete OpenPGP Legacy Symmetric Profiles",
+      "version": "0.169.11"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind complete RIPEMD-160, SHA-1, MD5 and every other authenticated historical OpenPGP digest to exact signature, fingerprint, S2K, MDC or checksum consumers; implement all defined Simple, Salted, Iterated and private-or-experimental-with-authority parameter semantics, generation and verification directions, collision-aware policy, cleanup and exact algorithm negotiation.",
+      "source_ids": [],
+      "title": "Complete OpenPGP Legacy Hash And S2K Profiles",
+      "version": "0.169.12"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated historical OpenPGP key and signature version, packet operation, key-ID and fingerprint rule, key generation, import, export, binding, revocation, expiration, signing, verification, encryption and decryption direction that remains representable under the pinned source closure, isolated from modern v6 defaults.",
+      "source_ids": [],
+      "title": "Complete OpenPGP V3 V4 And Historical Key Operations",
+      "version": "0.169.13"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Provide documented public compatibility constructors requiring explicit algorithm and dangerous-operation policy for weak key generation, signing and encryption while retaining safe parse, verify and decrypt entry points, hard warnings, no automatic preference or fallback, exact capability reporting and compile-time separation from `brynja-openpgp`.",
+      "source_ids": [],
+      "title": "OpenPGP Dangerous Compatibility API And Policy",
+      "version": "0.169.14"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every authenticated legacy algorithm, key version, operation direction, S2K, cipher, digest, signature, encryption and packet profile through packaged public fixtures and archived independent implementations; prove exact single-owner reuse, deterministic failure, bounded resources, cleanup, modern/default/FIPS isolation and no registry entry silently reduced to recognition-only rejection.",
+      "source_ids": [],
+      "title": "Complete OpenPGP Legacy Algorithm Acceptance Gate",
+      "version": "0.169.15"
     },
     {
       "boundary": {
@@ -4639,9 +5317,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party Rust RFC 1951 DEFLATE compression and decompression plus RFC 1950 ZLIB framing and raw ZIP profile use required by RFC 9580, with stored, fixed and dynamic blocks, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, deterministic generation policy, exact stream completion, malformed-stream and decompression-bomb defenses, public APIs, vectors, differentials and no allocation or native code.",
+      "scope": "Bind the exact complete v0.46.25 DEFLATE and ZLIB implementation into OpenPGP ZIP and ZLIB Compressed Data generation and parsing with exact algorithm identifiers, reset, nesting, deterministic-generation, workspace, bomb, checksum, malformed-stream and public API behavior without a private codec copy.",
       "source_ids": [],
-      "title": "Complete First-Party DEFLATE ZIP And ZLIB Profiles",
+      "title": "Complete OpenPGP DEFLATE ZIP And ZLIB Profiles",
       "version": "0.173.1"
     },
     {
@@ -4650,9 +5328,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement an optional isolated first-party Rust BZip2 decoder sufficient for RFC 9580 Compressed Data packets, with caller-owned bounded workspace, exact block and stream checks, decompression-bomb and recursion defenses, no generation requirement and no default/facade edge; differentially qualify archived BZip2 OpenPGP messages and keep unsupported future compression identifiers fail closed.",
+      "scope": "Bind the exact complete v0.46.28 BZip2 encoder and decoder into optional `brynja-openpgp-legacy` Compressed Data generation and parsing with exact identifiers, nesting, block and stream checks, caller workspaces, bomb defenses, archived interoperability, public APIs and no default modern edge.",
       "source_ids": [],
-      "title": "First-Party BZip2 OpenPGP Compatibility Decoder",
+      "title": "Complete OpenPGP BZip2 Profiles",
       "version": "0.173.2"
     },
     {
@@ -4749,7 +5427,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Qualify strong-algorithm v4 certificates, protected secret keys, public-key profiles, v1 SEIPD/MDC messages and optional BZip2 input; verify every admitted deprecated read path against archived corpora, prove modern generation never emits deprecated forms or silently falls back, and prove `brynja-openpgp-legacy` and optional compression compatibility are absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.",
+      "scope": "Qualify strong-algorithm v4 certificates, protected secret keys, public-key profiles, v1 SEIPD/MDC messages and BZip2 in both standardized directions; verify every admitted deprecated operation against archived corpora and independently generated artifacts, prove modern generation never emits deprecated forms without an explicit legacy API, and prove `brynja-openpgp-legacy` and optional compression compatibility are absent from the `brynja` facade, defaults, all modern protocol graphs and FIPS artifacts.",
       "source_ids": [],
       "title": "OpenPGP V4 Compatibility And Legacy Isolation Gate",
       "version": "0.178.1"
@@ -4771,7 +5449,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Freeze OpenPGP package APIs, feature graph, supported and rejected algorithms, modern and compatibility profiles, resource formulas, trust boundary, key lifecycle, error semantics, security guidance, interoperability limits, verification status and migration policy without claiming independent verification or FIPS validation.",
+      "scope": "Freeze OpenPGP package APIs, feature graph, complete assigned algorithm ownership, reserved/private/source-blocked dispositions, modern and compatibility profiles, resource formulas, trust boundary, key lifecycle, error semantics, security guidance, interoperability limits, verification status and migration policy without claiming independent verification or FIPS validation.",
       "source_ids": [],
       "title": "OpenPGP Public API And Documentation Freeze",
       "version": "0.179.0"
@@ -4821,12 +5499,413 @@
       "version": "0.180.0"
     },
     {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACY-0800",
+        "BRY-REQ-LEGACYSSL1-0800"
+      ],
+      "scope": "Authenticate and lawfully admit the complete available specifications, errata, registries, archives and interoperability corpora for TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP; assign every message, version, suite, primitive, compression method, extension, certificate, key format, role and send/receive operation to one complete owner, and block 1.0 rather than silently reduce any named protocol to a subset.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Named Legacy Protocol Authority And Completeness Register",
+      "version": "0.180.1"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACY-0100"
+      ],
+      "scope": "Implement the complete bounded TLS 1.1 record, handshake, alert, extension, compression, renegotiation, resumption and shutdown codecs and client/server state machines in `brynja-legacy-tls11`, with exact transcripts, versions, errors, resources, cancellation and no modern routing or fallback.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete TLS 1.1 Codec And State Machines",
+      "version": "0.180.2"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Bind every authenticated TLS 1.1 cipher suite, MAC, PRF, key exchange, signature, certificate, PSK or external-credential profile and every generation, import, export, send and receive direction to the exact shared primitive owners with explicit dangerous policy and complete key lifecycle.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete TLS 1.1 Suites Credentials And Operations",
+      "version": "0.180.3"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Exercise complete TLS 1.1 public client and server APIs across every assigned suite and facility against independent and archived peers, hostile records, renegotiation, compression, downgrade and oracle cases; prove isolation and obtain clean protocol-specific audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "TLS 1.1 Public Usability Interoperability And Audit Gate",
+      "version": "0.180.4"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEG-0001"
+      ],
+      "scope": "Implement the complete bounded TLS 1.0 record, implicit-IV, handshake, alert, extension, compression, renegotiation, resumption and shutdown codecs and client/server state machines in `brynja-legacy-tls10`, with exact transcripts, resources, cancellation and no modern routing or fallback.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete TLS 1.0 Codec And State Machines",
+      "version": "0.180.5"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Bind every authenticated TLS 1.0 cipher suite, export profile, MAC, MD5-plus-SHA-1 PRF, key exchange, signature, certificate, PSK or external-credential profile and every operation direction to exact shared primitive owners with explicit dangerous policy and complete lifecycle.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete TLS 1.0 Suites Credentials And Operations",
+      "version": "0.180.6"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Exercise complete TLS 1.0 public client and server APIs across all assigned suites and facilities against independent and archived peers, BEAST-relevant record behavior, renegotiation, compression, downgrade and oracle cases; prove isolation and obtain clean audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "TLS 1.0 Public Usability Interoperability And Audit Gate",
+      "version": "0.180.7"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Implement complete DTLS 1.0 records, epochs, replay, cookies, fragmentation, reassembly, flights, timers, retransmission, alerts, extensions, compression, resumption, path and client/server state in `brynja-legacy-dtls10`, preserving exact version-specific semantics and bounded Sans-I/O effects.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete DTLS 1.0 Codec And State Machines",
+      "version": "0.180.8"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Bind every authenticated DTLS 1.0 suite, MAC, PRF, key exchange, signature, certificate, PSK, compression and operation direction to exact shared legacy primitive and TLS-profile owners while preserving datagram-specific limits, replay and amplification policy.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete DTLS 1.0 Suites Credentials And Operations",
+      "version": "0.180.9"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Qualify complete DTLS 1.0 client and server APIs against independent and archived peers under loss, duplication, reordering, fragmentation, migration, compression, weak-suite and oracle campaigns; prove isolation and obtain clean audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "DTLS 1.0 Public Usability Interoperability And Audit Gate",
+      "version": "0.180.10"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACY-0300"
+      ],
+      "scope": "Implement complete SSL 3.0 record, handshake, alert, compression, renegotiation, resumption and shutdown codecs and client/server state machines in `brynja-legacy-ssl3`, including exact padding and MAC-then-encrypt semantics, with no TLS state reuse or fallback.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete SSL 3.0 Codec And State Machines",
+      "version": "0.180.11"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Bind every authenticated SSL 3.0 cipher suite, export profile, SSL MAC and key schedule, key exchange, certificate, signature and operation direction to exact shared primitive owners with explicit POODLE, downgrade and cryptanalytic warnings and complete secret lifecycle.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete SSL 3.0 Suites Credentials And Operations",
+      "version": "0.180.12"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Exercise complete SSL 3.0 client and server APIs across all assigned suites and facilities against archived peers and oracle, padding, truncation, renegotiation, downgrade and exhaustion campaigns; prove process and graph containment and obtain clean audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "SSL 3.0 Public Usability Interoperability And Audit Gate",
+      "version": "0.180.13"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACY-0400"
+      ],
+      "scope": "Authenticate the non-RFC SSL 2.0 specification and archives, then implement complete records, handshakes, errors, cipher-spec negotiation, session reuse, client and server state and bounded effects in `brynja-legacy-ssl2`; if authority or lawful implementation cannot be established, remove the production package claim rather than ship a subset.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete SSL 2.0 Authority Codec And State Machines",
+      "version": "0.180.14"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Bind every authenticated SSL 2.0 cipher kind, export derivation, MAC, challenge, connection ID, certificate, key exchange and client/server operation to exact shared primitives, including NULL or weak profiles only behind explicit dangerous policy and uniform oracle-resistant wrappers where possible.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete SSL 2.0 Suites Credentials And Operations",
+      "version": "0.180.15"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Exercise complete SSL 2.0 public client and server APIs against archived independent peers and downgrade, rollback, truncation, export, oracle and resource campaigns; publish unavoidable protocol insecurity, prove isolation and obtain clean implementation audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "SSL 2.0 Public Usability Interoperability And Audit Gate",
+      "version": "0.180.16"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACY-0500"
+      ],
+      "scope": "Authenticate each admitted WAP WTLS specification and implement every defined record, handshake, alert, sequence, retransmission, certificate, abbreviated-handshake, key-refresh and client/server state in `brynja-legacy-wtls` with bounded datagram effects and exact version separation.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete WTLS Codec And State Machines",
+      "version": "0.180.17"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Bind every authenticated WTLS cipher, MAC, hash, key exchange, curve, RSA, certificate, anonymous, shared-secret, compression and operation direction to exact shared or isolated primitive owners with explicit dangerous policy, constrained-device resource models and complete lifecycle.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete WTLS Suites Credentials And Operations",
+      "version": "0.180.18"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Exercise complete WTLS public client and server APIs across every assigned profile on constrained and hosted targets against archived corpora or peers, hostile datagrams and resource exhaustion; prove isolation and obtain clean source, cryptography, protocol audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "WTLS Public Usability Interoperability And Audit Gate",
+      "version": "0.180.19"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACY-0600"
+      ],
+      "scope": "Authenticate the complete PCT specification lineage and implement every defined record, handshake, error, cipher and hash negotiation, certificate, key exchange, client-authentication, connection and client/server operation in `brynja-legacy-pct`, binding exact shared primitives and explicit dangerous policy without TLS fallback.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete PCT Codec State And Operations",
+      "version": "0.180.20"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Exercise complete PCT client and server APIs across every authenticated profile against archived implementations or exact corpus replays, hostile parsing, downgrade, export, oracle and resource campaigns; prove process and graph isolation and obtain clean audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "PCT Public Usability Interoperability And Audit Gate",
+      "version": "0.180.21"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-LEGACY-0700"
+      ],
+      "scope": "Authenticate the complete SNP specification lineage and implement every defined message, state, role, negotiation, credential, cryptographic profile, error and operation in `brynja-legacy-snp`, using exact shared primitive owners, explicit dangerous policy and no hidden transport, trust or fallback effects.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete SNP Codec State And Operations",
+      "version": "0.180.22"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Exercise complete SNP public APIs across all authenticated roles and profiles against archived implementations or exact corpus replays, hostile inputs, downgrade and resource campaigns; prove package and process isolation and obtain clean source, protocol and cryptographic audit and pentest evidence.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "SNP Public Usability Interoperability And Audit Gate",
+      "version": "0.180.23"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Regenerate the legacy register and prove TLS 1.2 compatibility, DTLS 1.2 compatibility, TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP each provide complete public operations rather than subsets; run cross-protocol key, credential, cache, listener, downgrade and fallback negatives and obtain a cumulative independent review and pentest with no unresolved critical or high finding.",
+      "source_ids": [
+        "rfc:2246",
+        "rfc:4346",
+        "rfc:6101",
+        "rfc:6151",
+        "rfc:6176",
+        "rfc:7568",
+        "rfc:8996"
+      ],
+      "title": "Complete Named Legacy Ecosystem Acceptance Gate",
+      "version": "0.180.24"
+    },
+    {
       "boundary": {
         "class": "internal-security-design",
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Reconcile the complete TLS, PKI, cryptography, FIPS, OpenPGP and facade dependency graph, shared primitive identities, feature combinations, package versions, documentation and security claims; prove neither protocol stack creates implicit cross-protocol keys, trust, configuration, fallback, state or release authority.",
+      "scope": "Reconcile the complete modern TLS, DTLS, QUIC-TLS integration, PKIX, cryptography, FIPS, OpenPGP, named legacy protocol and facade dependency graph, shared primitive identities, feature combinations, package versions, documentation and security claims; prove no protocol stack creates implicit cross-protocol keys, trust, configuration, fallback, state or release authority.",
       "source_ids": [],
       "title": "Integrated TLS And OpenPGP Package Freeze",
       "version": "0.181.0"
@@ -4881,171 +5960,10 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Promote only the byte-identical approved candidate without rebuild, source change, metadata drift, or expanded capability claim.",
+      "scope": "Promote only the byte-identical approved candidate covering modern TLS, DTLS, QUIC-TLS integration, PKIX, OpenPGP and the separately selected complete named legacy ecosystem without rebuild, source change, metadata drift, or expanded capability claim.",
       "source_ids": [],
-      "title": "First Serious Production-Ready Brynja TLS And OpenPGP Release",
+      "title": "First Serious Production-Ready Complete Brynja Release",
       "version": "1.0.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEGACY-0100"
-      ],
-      "scope": "Authenticate sources and rights, track errata, publish conspicuous insecurity warnings, and define the protocol-specific threat model.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.1.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [],
-      "scope": "Freeze a per-protocol machine-readable cipher-suite, compression, extension, message, certificate, key-format, and primitive admission register from the authenticated source closure; distinguish implemented interoperability subsets from rejected or research-only surfaces and prohibit an unspecified weak primitive from entering H0.4.0.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.1.1"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEG-0001"
-      ],
-      "scope": "Implement only the protocol-specific bounded wire codec.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.2.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEGACY-0300"
-      ],
-      "scope": "Implement isolated state with no shared modern configuration, negotiation, credentials, caches, tickets, paths, or fallback.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.3.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEGACY-0400"
-      ],
-      "scope": "Bind audited shared primitives and isolate required weak primitives in a legacy-only crypto package.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.4.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEGACY-0500"
-      ],
-      "scope": "Complete controlled client-only interoperability and containment evidence.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.5.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEGACY-0600"
-      ],
-      "scope": "Add server interoperability only when separately justified, with amplification and hostile-load review.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.6.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEGACY-0700"
-      ],
-      "scope": "Require separate listeners, paths, policy, credentials, storage, diagnostics, and process containment.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.7.0"
-    },
-    {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-LEGACYSSL1-0800"
-      ],
-      "scope": "Complete a protocol-specific external audit and pentest and verify every warning and non-fallback property.",
-      "source_ids": [
-        "rfc:2246",
-        "rfc:4346",
-        "rfc:6101",
-        "rfc:6151",
-        "rfc:6176",
-        "rfc:7568",
-        "rfc:8996"
-      ],
-      "title": "Legacy package stage",
-      "version": "H0.8.0"
     }
   ],
   "provisional_surface_count": 100,
@@ -5377,8 +6295,8 @@
         "iana.tls-extensiontype-values.cachedinformationtype.unassigned.1"
       ],
       "id": "BRY-REQ-COMPOSEX-0148",
-      "lifecycle": "rejected",
-      "owner": "0.148.0",
+      "lifecycle": "planned",
+      "owner": "0.148.2",
       "source_ids": [
         "iana:tls-extensiontype-values"
       ]
@@ -6557,7 +7475,7 @@
       ],
       "id": "BRY-REQ-LEG-0001",
       "lifecycle": "legacy",
-      "owner": "H0.2.0",
+      "owner": "0.180.5",
       "source_ids": [
         "rfc:2246"
       ]
@@ -6568,7 +7486,7 @@
       ],
       "id": "BRY-REQ-LEGACY-0100",
       "lifecycle": "legacy",
-      "owner": "H0.1.0",
+      "owner": "0.180.2",
       "source_ids": [
         "rfc:4346"
       ]
@@ -6579,7 +7497,7 @@
       ],
       "id": "BRY-REQ-LEGACY-0300",
       "lifecycle": "legacy",
-      "owner": "H0.3.0",
+      "owner": "0.180.11",
       "source_ids": [
         "rfc:6101",
         "rfc:7568"
@@ -6591,7 +7509,7 @@
       ],
       "id": "BRY-REQ-LEGACY-0400",
       "lifecycle": "blocked",
-      "owner": "H0.4.0",
+      "owner": "0.180.14",
       "source_ids": [
         "rfc:6176"
       ]
@@ -6602,7 +7520,7 @@
       ],
       "id": "BRY-REQ-LEGACY-0500",
       "lifecycle": "blocked",
-      "owner": "H0.5.0",
+      "owner": "0.180.17",
       "source_ids": []
     },
     {
@@ -6611,7 +7529,7 @@
       ],
       "id": "BRY-REQ-LEGACY-0600",
       "lifecycle": "blocked",
-      "owner": "H0.6.0",
+      "owner": "0.180.20",
       "source_ids": []
     },
     {
@@ -6620,7 +7538,7 @@
       ],
       "id": "BRY-REQ-LEGACY-0700",
       "lifecycle": "blocked",
-      "owner": "H0.7.0",
+      "owner": "0.180.22",
       "source_ids": []
     },
     {
@@ -6684,7 +7602,7 @@
       ],
       "id": "BRY-REQ-LEGACY-0800",
       "lifecycle": "legacy",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "source_ids": [
         "iana:tls-parameters",
         "rfc:6151",
@@ -6698,8 +7616,40 @@
       ],
       "id": "BRY-REQ-LEGACYSSL1-0800",
       "lifecycle": "blocked",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "source_ids": []
+    },
+    {
+      "decision_ids": [
+        "iana.tls-parameters.authorization-data",
+        "iana.tls-parameters.authorization-data.dtcp-authorization.1",
+        "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1",
+        "iana.tls-parameters.authorization-data.keynote-assertion-list.1",
+        "iana.tls-parameters.authorization-data.reserved-for-private-use.1",
+        "iana.tls-parameters.authorization-data.saml-assertion-url.1",
+        "iana.tls-parameters.authorization-data.saml-assertion.1",
+        "iana.tls-parameters.authorization-data.unassigned.1",
+        "iana.tls-parameters.authorization-data.unassigned.2",
+        "iana.tls-parameters.authorization-data.x509-attr-cert-url.1",
+        "iana.tls-parameters.authorization-data.x509-attr-cert.1",
+        "iana.tls-parameters.tls-parameters-12",
+        "iana.tls-parameters.tls-parameters-12.authz-data.1",
+        "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1",
+        "iana.tls-parameters.tls-parameters-12.unassigned.1",
+        "iana.tls-parameters.tls-parameters-12.unassigned.2",
+        "iana.tls-parameters.tls-parameters-12.user-mapping-data.1",
+        "iana.tls-parameters.tls-parameters-14",
+        "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1",
+        "iana.tls-parameters.tls-parameters-14.unassigned.1",
+        "iana.tls-parameters.tls-parameters-14.unassigned.2",
+        "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1"
+      ],
+      "id": "BRY-REQ-LEGACYTLSFACREG-0148",
+      "lifecycle": "planned",
+      "owner": "0.148.3",
+      "source_ids": [
+        "iana:tls-parameters"
+      ]
     },
     {
       "decision_ids": [
@@ -6752,8 +7702,8 @@
         "facility.status-request-v2"
       ],
       "id": "BRY-REQ-OCSP-0005",
-      "lifecycle": "rejected",
-      "owner": "0.58.0",
+      "lifecycle": "planned",
+      "owner": "0.148.2",
       "source_ids": [
         "rfc:6961"
       ]
@@ -6972,8 +7922,8 @@
         "format.x509.unsigned"
       ],
       "id": "BRY-REQ-PKIX-0010",
-      "lifecycle": "rejected",
-      "owner": "0.46.0",
+      "lifecycle": "planned",
+      "owner": "0.60.3",
       "source_ids": [
         "rfc:9925"
       ]
@@ -7007,8 +7957,8 @@
         "format.ml-kem-pkix-credentials"
       ],
       "id": "BRY-REQ-PQPKIX-0046",
-      "lifecycle": "rejected",
-      "owner": "0.46.0",
+      "lifecycle": "planned",
+      "owner": "0.60.3",
       "source_ids": [
         "rfc:9935"
       ]
@@ -7147,8 +8097,8 @@
         "facility.rfc6066-unsupported-configuration"
       ],
       "id": "BRY-REQ-RFC6066CFG-0148",
-      "lifecycle": "rejected",
-      "owner": "0.148.0",
+      "lifecycle": "planned",
+      "owner": "0.148.4",
       "source_ids": [
         "iana:tls-extensiontype-values"
       ]
@@ -7264,12 +8214,11 @@
     },
     {
       "decision_ids": [
-        "facility.heartbeat",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       ],
       "id": "BRY-REQ-TLS-0002",
-      "lifecycle": "rejected",
-      "owner": "0.19.0",
+      "lifecycle": "planned",
+      "owner": "0.148.1",
       "source_ids": [
         "iana:tls-extensiontype-values"
       ]
@@ -7302,8 +8251,8 @@
         "facility.heartbeat"
       ],
       "id": "BRY-REQ-TLS-0018",
-      "lifecycle": "rejected",
-      "owner": "0.19.0",
+      "lifecycle": "planned",
+      "owner": "0.148.1",
       "source_ids": [
         "rfc:6520"
       ]
@@ -7517,8 +8466,8 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1"
       ],
       "id": "BRY-REQ-TLS12EXT-0058",
-      "lifecycle": "rejected",
-      "owner": "0.58.0",
+      "lifecycle": "planned",
+      "owner": "0.148.2",
       "source_ids": [
         "iana:tls-extensiontype-values",
         "rfc:6961"
@@ -7541,8 +8490,8 @@
         "facility.status-request-v2"
       ],
       "id": "BRY-REQ-TLS12X-0058",
-      "lifecycle": "rejected",
-      "owner": "0.58.0",
+      "lifecycle": "planned",
+      "owner": "0.148.2",
       "source_ids": [
         "rfc:6961"
       ]
@@ -7552,8 +8501,8 @@
         "algorithm.legacy-pkcs1-client-signature"
       ],
       "id": "BRY-REQ-TLS13-0046",
-      "lifecycle": "rejected",
-      "owner": "0.46.0",
+      "lifecycle": "planned",
+      "owner": "0.82.4",
       "source_ids": [
         "rfc:9963"
       ]
@@ -7798,8 +8747,8 @@
         "facility.tls13.post-handshake-authentication"
       ],
       "id": "BRY-REQ-TLS13-0721",
-      "lifecycle": "rejected",
-      "owner": "0.72.0",
+      "lifecycle": "planned",
+      "owner": "0.82.2",
       "source_ids": [
         "rfc:9846"
       ]
@@ -7831,8 +8780,8 @@
         "facility.external-psk.certificate-authentication"
       ],
       "id": "BRY-REQ-TLS13-0763",
-      "lifecycle": "rejected",
-      "owner": "0.76.2",
+      "lifecycle": "planned",
+      "owner": "0.82.3",
       "source_ids": [
         "rfc:9973"
       ]
@@ -7949,6 +8898,7 @@
       "requirement_ids": [
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-LEGACY-0800",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0001"
@@ -8349,15 +9299,30 @@
     {
       "id": "rfc:2246",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEG-0001"
@@ -8453,15 +9418,30 @@
     {
       "id": "rfc:4346",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0100"
@@ -8905,15 +9885,30 @@
     {
       "id": "rfc:6101",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0300"
@@ -8923,15 +9918,30 @@
     {
       "id": "rfc:6151",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0800"
@@ -8954,15 +9964,30 @@
         "0.91.0",
         "0.92.0",
         "0.93.0",
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0400",
@@ -9226,15 +10251,30 @@
     {
       "id": "rfc:7568",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0300"
@@ -9709,15 +10749,30 @@
         "0.80.0",
         "0.81.0",
         "0.82.0",
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-TLS-0068"
@@ -10738,7 +11793,6 @@
     {
       "id": "facility.heartbeat",
       "requirement_ids": [
-        "BRY-REQ-TLS-0002",
         "BRY-REQ-TLS-0018"
       ]
     },
@@ -28303,67 +29357,67 @@
     {
       "id": "iana.tls-parameters.authorization-data",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.dtcp-authorization.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.keynote-assertion-list.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.reserved-for-private-use.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.saml-assertion-url.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.saml-assertion.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.unassigned.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.unassigned.2",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.x509-attr-cert-url.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.authorization-data.x509-attr-cert.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
@@ -28753,67 +29807,67 @@
     {
       "id": "iana.tls-parameters.tls-parameters-12",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-12.authz-data.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-12.unassigned.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-12.unassigned.2",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-12.user-mapping-data.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-14",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-14.unassigned.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-14.unassigned.2",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {
       "id": "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1",
       "requirement_ids": [
-        "BRY-REQ-TLS-0018"
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ]
     },
     {

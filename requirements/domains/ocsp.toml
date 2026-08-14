@@ -67,19 +67,19 @@ mapping_rationale = "The OCSP semantic surface cites RFC 9919 directly, while th
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0005"
-owner = "0.58.0"
-lifecycle = "rejected"
+owner = "0.148.2"
+lifecycle = "planned"
 decision_ids = ["facility.status-request-v2"]
-sources = [{ id = "rfc:6961", authority_role = "exclusion" }]
-statement = "The TLS multiple certificate status request extension remains excluded from every version-one TLS and OCSP composition."
+sources = [{ id = "rfc:6961", authority_role = "compatibility" }]
+statement = "The TLS multiple certificate status request extension is completely implemented through explicit bounded configuration and exact certificate-status association."
 invariants = ["algorithm-admission", "resource-bound", "validation", "work-bound"]
-target = "boundary:status-request-v2"
-positive_test = "tests/requirements/ocsp_exclusions.rs#status_request_v1_remains_available"
-negative_test = "tests/requirements/ocsp_exclusions.rs#status_request_v2_rejected"
-work_bound = "Negotiation rejects the extension by exact bounded identifier comparison before allocating or parsing any response vector."
-evidence_gap = "Negative negotiation and parser fixtures across TLS 1.2, TLS 1.3, and all facades remain unresolved until the OCSP integration gate."
-residual = "A registered or peer-offered value never admits the excluded facility, and no generic unknown-extension path may activate it."
-mapping_rationale = "The status_request_v2 semantic exclusion cites RFC 6961 directly and records the intentionally rejected version-one boundary."
+target = "crates/brynja-tls/src/certificate_status.rs#StatusRequestV2"
+positive_test = "tests/requirements/status_request_v2.rs#complete_multi_certificate_status"
+negative_test = "tests/requirements/status_request_v2.rs#association_unsolicited_resumption_and_bound_failures"
+work_bound = "Request items, response vectors, responder identifiers, certificate associations and aggregate status work have immutable ceilings."
+evidence_gap = "Complete role, version, association, resumption, malformed and independent-peer evidence remains unresolved until v0.148.2."
+residual = "The facility remains separately selected and cannot weaken ordinary OCSP or certificate validation."
+mapping_rationale = "RFC 6961 defines a real optional facility, so v0.148.2 owns its complete implementation rather than an exclusion boundary."
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0006"

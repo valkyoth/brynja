@@ -69,15 +69,14 @@ RFC, NIST, FIPS, or independent-verification evidence.
   normative RFC sections, 64 owner milestones, and 485 transport surfaces,
   including requirement IDs or reviewed dispositions for every section.
 - `residual-coverage.json` proves exact coverage of 33 residual authorities,
-  182 normative RFC sections, and 765 previously uncovered surfaces, including
+  182 normative RFC sections, and 787 previously uncovered surfaces, including
   165 mapped sections, 17 explicit exclusions, and 266 exact section links.
 - Domain, transport, and residual section policies are reconciled globally so
   no section can be both mapped and excluded or carry conflicting exclusions.
 - `closure.json` provides complete source-to-plan, plan-to-source,
   source-to-requirement, surface-to-requirement, and
-  requirement-to-owner reports across 127 currently locked authorities, 305
-  modern roadmap rows plus eight independent legacy stages, 4,449 surfaces,
-  and 167 requirements.
+  requirement-to-owner reports across 127 currently locked authorities, 391
+  ordered pre-1.0 roadmap rows, 4,449 surfaces, and 168 requirements.
 
 The lifecycle values are `planned`, `implemented`, `tested`, `evidenced`,
 `rejected`, `caller-owned`, `legacy`, and `blocked`. An implementation claim
@@ -106,7 +105,7 @@ governance requirements and requires a substantive human-reviewed rationale.
 A `reviewed-domain` mapping is restricted to the five v0.3.3 policy domains
 and their allowlisted surface domains. All 53 in-scope authorities must be
 cited with their exact current, compatibility, evidence, or exclusion role.
-Every one of the 3,324 current selected surfaces must map to an owning requirement or
+Every one of the 3,325 current selected surfaces must map to an owning requirement or
 an explicit later milestone. The only deferrals are the two ML-KEM surfaces
 owned by v0.3.5.
 Every linked surface must independently share both an admitted authority and

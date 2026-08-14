@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.3"
-source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a"
-surface_register_sha256 = "32163f1788dd27d9d99b6b08f8e022ec92c6fe7d6966b609f8b0b84100fcd729"
+source_ledger_sha256 = "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c"
+surface_register_sha256 = "e23cf056c118bd7473fff4c175a9398330630f771740d66b5e76faed9b54f125"
 source_domains = ["ct", "key-containers", "ocsp", "pkix", "public-key", "symmetric"]
 surface_domains = ["cryptography", "ct", "ocsp", "pki", "pkix"]
 
@@ -90,7 +90,7 @@ rationale = "ML-KEM and hybrid normative population is explicitly owned by v0.3.
 [[surface_exclusion]]
 id = "format.ml-kem-pkix-credentials"
 deferred_to = "0.3.5"
-rationale = "ML-KEM PKIX credential exclusion remains explicit but its complete hybrid authority review is owned by v0.3.5."
+rationale = "ML-KEM PKIX credential implementation is owned by v0.60.3 after its complete hybrid authority review at v0.3.5."
 
 [[surface_group]]
 domain = "cryptography"
@@ -169,7 +169,7 @@ requirement_id = "BRY-REQ-ENC-0002"
 
 [[surface_group]]
 domain = "pkix"
-owner = "0.46.0"
+owner = "0.60.3"
 requirement_id = "BRY-REQ-PKIX-0010"
 
 [[surface_group]]

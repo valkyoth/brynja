@@ -11,9 +11,9 @@ errata = "https://errata.rfc-editor.org/search/"
 errata_sha256 = "ac71f12e680d90827dd38d00b7d3abef03b7ac5caa93e4dc17832c8bd33992a7"
 
 [lifecycle]
-compatibility = [5077, 5246, 6347, 6962, 7507, 7627, 8422]
+compatibility = [5077, 5246, 6347, 6961, 6962, 7507, 7627, 8422]
 legacy = [2246, 4346, 6101, 6151]
-exclusion = [6520, 6961, 9850, 9925, 9935, 9963, 9973]
+exclusion = [9850]
 caller_owned = [9000, 9002, 9369, 9460]
 evidence = [4231, 8448]
 
@@ -177,7 +177,13 @@ local = []
 
 [[domain]]
 id = "legacy"
-milestones = ["H0.1.0", "H0.1.1", "H0.2.0", "H0.3.0", "H0.4.0", "H0.5.0", "H0.6.0", "H0.7.0", "H0.8.0"]
+milestones = [
+  "0.180.1", "0.180.2", "0.180.3", "0.180.4", "0.180.5", "0.180.6",
+  "0.180.7", "0.180.8", "0.180.9", "0.180.10", "0.180.11", "0.180.12",
+  "0.180.13", "0.180.14", "0.180.15", "0.180.16", "0.180.17",
+  "0.180.18", "0.180.19", "0.180.20", "0.180.21", "0.180.22",
+  "0.180.23", "0.180.24",
+]
 rfcs = [2246, 4346, 6101, 6151, 6176, 7568, 8996]
 local = []
 
@@ -197,13 +203,13 @@ reason = "Superseded TLS extension baseline; RFC 6066 is locked."
 source = 3279
 relation = "updated-by"
 target = 4491
-reason = "GOST PKIX algorithms are not admitted."
+reason = "Not yet locked: v0.46.18-v0.46.20 and v0.60.1 must authenticate and admit the complete GOST primitive and legacy-PKIX profiles before implementation."
 
 [[closure_exclusion]]
 source = 3279
 relation = "updated-by"
 target = 8692
-reason = "SHAKE PKIX algorithms are not admitted."
+reason = "Not yet locked: v0.60.1 must authenticate and admit the complete SHAKE-based legacy-PKIX profiles before implementation."
 
 [[closure_exclusion]]
 source = 3986

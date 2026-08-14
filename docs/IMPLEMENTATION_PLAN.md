@@ -49,6 +49,10 @@ claim.
   separately hashes, reviews, tests, pentests, and admits one exact CPU kernel.
 - Modern and legacy engines have separate packages, APIs, configuration,
   state machines, caches, ticket keys, and connection paths.
+- Every authenticated standardized capability attached to a named pre-1.0
+  modern or legacy protocol is implemented completely for every defined role,
+  direction, parameter, and operation before 1.0. Only wholly standalone
+  historical work with no such integration edge may remain post-1.0.
 - Every legacy implementation package uses the
   `brynja-legacy-<protocol>` prefix so manifests, lockfiles, SBOMs, and
   policy tools expose the risk without requiring feature inspection.
@@ -91,7 +95,7 @@ brynja
 ├── future brynja-openpgp-core (packet, registry, resource, certificate and key models)
 ├── future brynja-openpgp-armor (admitted Base64 boundary only)
 ├── future brynja-openpgp (modern RFC 9580 Sans-I/O facade and engines)
-├── optional brynja-openpgp-legacy (deprecated read/decrypt/verify compatibility)
+├── optional brynja-openpgp-legacy (complete warned historical OpenPGP operations)
 │   └── future brynja-legacy-sha1 (complete legacy hash; OpenPGP is first admitted consumer)
 └── future brynja-sanitization (explicit downstream adapter only)
 
@@ -100,8 +104,11 @@ future downstream companion integration workspaces (never brynja dependencies)
 └── brynja-tokio (Tokio AsyncRead/AsyncWrite over Brynja TLS)
 
 brynja-legacy (never a brynja dependency)
+├── brynja-legacy-tls12
+├── brynja-legacy-dtls12
 ├── brynja-legacy-tls11
 ├── brynja-legacy-tls10
+├── brynja-legacy-dtls10
 ├── brynja-legacy-ssl3
 ├── brynja-legacy-ssl2
 ├── brynja-legacy-wtls

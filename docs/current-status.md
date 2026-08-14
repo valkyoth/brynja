@@ -224,7 +224,7 @@ Version 0.3.3 completes the cryptography, encoding, and PKIX population pass:
 - all 53 exact authorities in the symmetric, public-key, key-container, PKIX,
   OCSP, and CT domains are cited with current, compatibility, evidence, or
   exclusion roles;
-- all 3,324 current cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
+- all 3,325 current cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
   or one of two explicit v0.3.5 ML-KEM deferrals;
 - every uppercase normative RFC section is hash-bound with occurrence counts,
   and every domain rule records assurance invariants, a work bound, positive
@@ -262,16 +262,15 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 
 Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 
-- 50 new requirements bring the matrix to 167 stable records;
+- 51 residual requirements bring the matrix to 168 stable records;
 - final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are added as
   local-only checksum-pinned authorities;
 - 33 residual authorities and 182 normative RFC sections are reviewed through
   165 exact mappings and 17 explicit dispositions;
-- all 765 surfaces left by the foundation, domain, and transport bundles are
+- all 787 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,449 surfaces;
-- the generated closure maps all 127 locked sources, all 305 modern roadmap rows
-  plus eight independent legacy stages, all
-  4,449 surfaces, and all 167 requirements in both directions;
+- the generated closure maps all 127 locked sources, all 391 ordered pre-1.0
+  roadmap rows, all 4,449 surfaces, and all 168 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and

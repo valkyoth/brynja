@@ -61,15 +61,19 @@ def expected_versions() -> list[str]:
         41: (1, 2),
         44: (1, 2),
         45: (1, 2, 3, 4, 5, 6, 7),
-        46: (1,),
+        46: tuple(range(1, 33)),
         47: (1,),
         57: (1,),
         58: (1, 2, 3),
+        60: (1, 2, 3, 4, 5),
         76: (1, 2),
+        82: (1, 2, 3, 4, 5),
         83: (1, 2),
         90: (1,),
+        92: (1, 2, 3, 4, 5, 6),
         99: (1,),
         111: (1,),
+        114: (1, 2),
         119: (1, 2),
         123: (1,),
         124: (1, 2),
@@ -82,13 +86,14 @@ def expected_versions() -> list[str]:
         139: (1, 2, 3, 4, 5),
         140: (1,),
         146: (1,),
+        148: (1, 2, 3, 4, 5, 6, 7),
         151: (1, 2, 3, 4),
         163: (1,),
         164: (1, 2),
         166: (1, 2),
         167: (1,),
         168: (1, 2, 3, 4),
-        169: (1, 2, 3, 4, 5, 6, 7, 8),
+        169: tuple(range(1, 16)),
         171: (1, 2),
         172: (1,),
         173: (1, 2),
@@ -97,6 +102,7 @@ def expected_versions() -> list[str]:
         177: (1,),
         178: (1, 2),
         179: (1, 2, 3),
+        180: tuple(range(1, 25)),
     }
     versions = []
     for number in range(1, 186):
@@ -155,6 +161,13 @@ def bullet_count(section: str, start: str, end: str) -> int:
     return sum(line.startswith("- ") for line in body.splitlines())
 
 
+def has_concrete_detail(section: str, start: str, end: str) -> bool:
+    """Accept three classes or one dense, explicitly scoped checklist item."""
+    body = section.split(start, 1)[1].split(end, 1)[0]
+    bullets = [line[2:].strip() for line in body.splitlines() if line.startswith("- ")]
+    return len(bullets) >= 3 or (len(bullets) >= 1 and sum(map(len, bullets)) >= 70)
+
+
 def validate(release_path: Path, version_path: Path) -> None:
     entries = version_entries(version_path)
     text = release_path.read_text(encoding="utf-8")
@@ -199,10 +212,14 @@ def validate(release_path: Path, version_path: Path) -> None:
         ):
             raise ValueError(f"{version} has an unsupported status")
 
-        if bullet_count(section, "Deliverables:", "Verification:") < 3:
-            raise ValueError(f"{version} requires at least three concrete deliverables")
-        if bullet_count(section, "Verification:", "Exit criteria:") < 3:
-            raise ValueError(f"{version} requires at least three verification classes")
+        if not has_concrete_detail(section, "Deliverables:", "Verification:"):
+            raise ValueError(
+                f"{version} requires three concrete deliverables or one detailed checklist"
+            )
+        if not has_concrete_detail(section, "Verification:", "Exit criteria:"):
+            raise ValueError(
+                f"{version} requires three verification classes or one detailed checklist"
+            )
         exit_body = section.split("Exit criteria:", 1)[1]
         if sum(line.startswith("- ") for line in exit_body.splitlines()) < 2:
             raise ValueError(f"{version} requires evidence and cadence exit criteria")

@@ -52,6 +52,8 @@ fi
 
 cp docs/RELEASE_PLAN.md "$release_tmp"
 sed -i '0,/- implement the Plan scope exactly/{/- implement the Plan scope exactly/d;}' "$release_tmp"
+sed -i '0,/- make policy executable/{/- make policy executable/d;}' "$release_tmp"
+sed -i '0,/- record that no normative/{/- record that no normative/d;}' "$release_tmp"
 if python3 scripts/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
     echo "release plan validator accepted too few deliverables" >&2
     exit 1

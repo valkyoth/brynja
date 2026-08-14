@@ -1316,15 +1316,30 @@
         "0.91.0",
         "0.92.0",
         "0.93.0",
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "normative_sections": [
         {
@@ -1630,7 +1645,7 @@
       "status": "PROPOSED STANDARD"
     },
     {
-      "authority_role": "exclusion",
+      "authority_role": "current",
       "domains": [
         "tls13"
       ],
@@ -2716,15 +2731,30 @@
         "0.80.0",
         "0.81.0",
         "0.82.0",
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "normative_sections": [
         {
@@ -7679,7 +7709,7 @@
       "status": "PROPOSED STANDARD"
     },
     {
-      "authority_role": "exclusion",
+      "authority_role": "current",
       "domains": [
         "tls13"
       ],
@@ -7757,7 +7787,7 @@
       "status": "PROPOSED STANDARD"
     },
     {
-      "authority_role": "exclusion",
+      "authority_role": "current",
       "domains": [
         "tls13-session"
       ],
@@ -7919,17 +7949,17 @@
     "0.99.0",
     "0.99.1"
   ],
-  "policy_sha256": "59560d621bed23b3bfa19a827c2c3bfeee2a4ab4a9c68e84a996a84ae05fbd69",
+  "policy_sha256": "c0f33bb09ea5153a641884eb8adcbbaebae5576c6976906342f76cbb584b2bb7",
   "requirement_count": 71,
   "schema": 2,
   "surface_count": 485,
   "surfaces": [
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "algorithm.legacy-pkcs1-client-signature",
-      "owner": "0.46.0",
+      "owner": "0.82.4",
       "requirement_id": "BRY-REQ-TLS13-0046"
     },
     {
@@ -8001,18 +8031,18 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "facility.external-psk.certificate-authentication",
-      "owner": "0.76.2",
+      "owner": "0.82.3",
       "requirement_id": "BRY-REQ-TLS13-0763"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "facility.heartbeat",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
@@ -8027,27 +8057,27 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "facility.rfc6066-unsupported-configuration",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.148.4",
+      "rationale": "The complete RFC 6066 compatibility configuration facility is normatively populated by the residual closure and implemented through its explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
-      "deferred_to": "0.3.3",
-      "disposition": "intentionally-rejected",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls12",
       "id": "facility.status-request-v2",
-      "owner": "0.58.0",
-      "rationale": "The status_request_v2 rejection is already normatively owned and reviewed by the v0.3.3 OCSP coverage bundle."
+      "owner": "0.148.2",
+      "rationale": "The complete status_request_v2 compatibility registry and protocol surfaces are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "facility.tls13.post-handshake-authentication",
-      "owner": "0.72.0",
+      "owner": "0.82.2",
       "requirement_id": "BRY-REQ-TLS13-0721"
     },
     {
@@ -8887,56 +8917,56 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.148.2",
+      "rationale": "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.cert-req.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.148.2",
+      "rationale": "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.cert.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.148.2",
+      "rationale": "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.reserved-for-private-use.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.148.2",
+      "rationale": "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.reserved.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.148.2",
+      "rationale": "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.unassigned.1",
-      "owner": "0.148.0",
-      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+      "owner": "0.148.2",
+      "rationale": "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
@@ -9192,10 +9222,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
@@ -9245,10 +9275,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls13",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.post-handshake-auth.1",
-      "owner": "0.72.0",
+      "owner": "0.82.2",
       "requirement_id": "BRY-REQ-TLS13-0721"
     },
     {
@@ -9577,12 +9607,12 @@
     },
     {
       "coverage": "deferred",
-      "deferred_to": "0.3.3",
-      "disposition": "intentionally-rejected",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls12",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1",
-      "owner": "0.58.0",
-      "rationale": "The status_request_v2 rejection is already normatively owned and reviewed by the v0.3.3 OCSP coverage bundle."
+      "owner": "0.148.2",
+      "rationale": "The complete status_request_v2 compatibility registry and protocol surfaces are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "deferred",
@@ -9918,92 +9948,103 @@
       "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.dtcp-authorization.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.keynote-assertion-list.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.reserved-for-private-use.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.saml-assertion-url.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.saml-assertion.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.unassigned.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.unassigned.2",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.x509-attr-cert-url.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.authorization-data.x509-attr-cert.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "requirement",
@@ -10319,187 +10360,198 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.heartbeat-request.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.heartbeat-response.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.reserved.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.reserved.2",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-message-types.unassigned.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.peer-allowed-to-send.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.peer-not-allowed-to-send.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.reserved.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.reserved.2",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.heartbeat-modes.unassigned.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.authz-data.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.unassigned.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.unassigned.2",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-12.user-mapping-data.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.unassigned.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.unassigned.2",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
-      "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1",
-      "owner": "0.19.0",
-      "requirement_id": "BRY-REQ-TLS-0018"
+      "owner": "0.148.3",
+      "rationale": "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
     },
     {
       "coverage": "requirement",
@@ -10575,10 +10627,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-parameters.tls-parameters-5.heartbeat.1",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "requirement_id": "BRY-REQ-TLS-0018"
     },
     {

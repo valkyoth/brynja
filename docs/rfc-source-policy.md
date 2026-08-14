@@ -94,14 +94,14 @@ The v0.3.3 domain policy completes classical cryptography, encoding,
 key-container, PKIX, OCSP, and CT coverage. It binds 34 new requirements to all
 53 assigned exact authorities, records current, compatibility, evidence, and
 exclusion roles, hashes every applicable normative RFC section, and assigns
-all 3,324 current selected surfaces or explicitly defers the two ML-KEM surfaces to
+all 3,325 current selected surfaces or explicitly defers the two ML-KEM surfaces to
 v0.3.5. FIPS 202 and the in-force ITU-T X.690 (2021) plus Erratum 1 are
 local-only checksum-pinned authorities. The following v0.3.4 transport pass
 and v0.3.5 residual pass populate the remaining normative domains.
 
 The v0.3.4 transport policy completes current and compatibility TLS, hardened
-TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3 coverage. Seventy requirements bind
-40 admitted authorities, 550 normative RFC sections, 63 exact implementation
+TLS 1.2, QUIC-TLS, DTLS 1.2, and DTLS 1.3 coverage. Seventy-one requirements bind
+40 admitted authorities, 550 normative RFC sections, 64 exact implementation
 owner milestones, and 485 selected surfaces. Current, compatibility, evidence,
 exclusion, and caller-owned roles are distinct. RFC 9850 and optional TLS
 facility groups remain explicit v0.3.5 deferrals; no deferred source can be
@@ -109,11 +109,11 @@ silently treated as admitted transport authority.
 
 The v0.3.5 residual policy completes the pre-implementation closure. Final
 FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C join the local-only checksum
-manifest. Fifty residual requirements bind 33 authorities and review
+manifest. Fifty-one residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
-explicit exclusions while assigning every one of the 763 surfaces left by the
+explicit exclusions while assigning every one of the 787 surfaces left by the
 earlier bundles. The generated closure proves that all 127 locked authorities,
-all 305 modern roadmap rows plus eight independent legacy stages, all 4,449 current surfaces, and all 167 requirements have
+all 391 ordered pre-1.0 roadmap rows, all 4,449 current surfaces, and all 168 requirements have
 bidirectional ownership. The new OpenPGP rows are fenced from implementation
 until v0.163.0 authenticates their RFC, errata, registry, algorithm, and
 compression authority closure and generates the corresponding requirements

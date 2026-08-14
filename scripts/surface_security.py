@@ -80,13 +80,13 @@ def validate(surfaces: list[dict]) -> None:
     if (
         configuration is None
         or configuration["domain"] != "tls"
-        or configuration["owner"] != "0.148.0"
-        or configuration["disposition"] != "intentionally-rejected"
+        or configuration["owner"] != "0.148.4"
+        or configuration["disposition"] != "future-work"
         or configuration["code_target"]
         != "crates/brynja-tls/src/configuration.rs#"
-        "UnsupportedLegacyExtensions"
+        "LegacyExtensionConfiguration"
         or configuration["test_target"]
         != "tests/requirements/rfc6066_configuration.rs#"
-        "legacy_extensions_absent"
+        "complete_legacy_profiles"
     ):
         lib.fail("RFC 6066 configuration boundary drift")

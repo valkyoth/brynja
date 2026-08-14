@@ -147,16 +147,16 @@ mapping_rationale = "This reviewed cross-domain rule maps RFC 9608 into the sign
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0010"
-owner = "0.46.0"
-lifecycle = "rejected"
+owner = "0.60.3"
+lifecycle = "planned"
 decision_ids = ["format.x509.unsigned"]
-sources = [{ id = "rfc:9925", authority_role = "exclusion" }]
-statement = "Unsigned X.509 certificates are excluded from every authentication, trust, signature-verification, and secure transport context."
+sources = [{ id = "rfc:9925", authority_role = "current" }]
+statement = "Unsigned X.509 objects are completely implemented through explicit non-authenticating types that cannot satisfy trust, signature-verification, or secure-transport authentication."
 invariants = ["algorithm-admission", "resource-bound", "validation", "work-bound"]
-target = "boundary:unsigned-x509"
-positive_test = "tests/requirements/x509_exclusions.rs#signed_certificates_remain_admitted"
-negative_test = "tests/requirements/x509_exclusions.rs#unsigned_certificates_rejected"
-work_bound = "Rejection occurs during bounded AlgorithmIdentifier and signature-field validation before path construction or trust evaluation."
-evidence_gap = "Negative corpus coverage across every certificate-consuming API and facade composition remains unresolved until the v0.46.0 decision gate."
-residual = "Research or non-authentication uses require a separately named downstream format and can never reuse the Brynja trust path."
-mapping_rationale = "The unsigned X.509 semantic exclusion cites RFC 9925 directly and records the version-one authentication boundary without admitting its format."
+target = "crates/brynja-pki/src/x509.rs#UnsignedCertificate"
+positive_test = "tests/requirements/unsigned_x509.rs#complete_non_authenticating_round_trip"
+negative_test = "tests/requirements/unsigned_x509.rs#trust_signature_and_transport_substitution_rejected"
+work_bound = "Unsigned parsing, generation and validation share bounded DER, extension, object and aggregate-work ceilings without entering path construction."
+evidence_gap = "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.60.3."
+residual = "Unsigned objects can never satisfy authentication even though their standardized format is completely implemented."
+mapping_rationale = "RFC 9925 defines a real format owned by v0.60.3 with an unforgeable non-authentication boundary."

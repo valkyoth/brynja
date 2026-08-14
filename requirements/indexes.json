@@ -327,13 +327,13 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.0"
+        "0.148.2"
       ],
       "sources": [
         "iana:tls-extensiontype-values"
       ],
       "targets": [
-        "boundary:boundary:tls.0.148.0"
+        "planned-symbol:crates/brynja-tls/src/cached_info.rs"
       ],
       "tests": [
         "planned:positive:tests/surface/cached_info.rs#rejected",
@@ -2653,7 +2653,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "H0.2.0"
+        "0.180.5"
       ],
       "sources": [
         "rfc:2246#3"
@@ -2683,7 +2683,7 @@
         "algorithm-admission"
       ],
       "owners": [
-        "H0.1.0"
+        "0.180.2"
       ],
       "sources": [
         "rfc:4346"
@@ -2715,7 +2715,7 @@
         "algorithm-admission"
       ],
       "owners": [
-        "H0.3.0"
+        "0.180.11"
       ],
       "sources": [
         "rfc:6101",
@@ -2746,7 +2746,7 @@
         "work-bound"
       ],
       "owners": [
-        "H0.4.0"
+        "0.180.14"
       ],
       "sources": [
         "rfc:6176"
@@ -2774,7 +2774,7 @@
         "work-bound"
       ],
       "owners": [
-        "H0.5.0"
+        "0.180.17"
       ],
       "sources": [],
       "targets": [
@@ -2800,7 +2800,7 @@
         "work-bound"
       ],
       "owners": [
-        "H0.6.0"
+        "0.180.20"
       ],
       "sources": [],
       "targets": [
@@ -2826,7 +2826,7 @@
         "work-bound"
       ],
       "owners": [
-        "H0.7.0"
+        "0.180.22"
       ],
       "sources": [],
       "targets": [
@@ -2911,7 +2911,7 @@
         "algorithm-admission"
       ],
       "owners": [
-        "H0.8.0"
+        "0.180.1"
       ],
       "sources": [
         "iana:tls-parameters",
@@ -2942,7 +2942,7 @@
         "work-bound"
       ],
       "owners": [
-        "H0.8.0"
+        "0.180.1"
       ],
       "sources": [],
       "targets": [
@@ -2951,6 +2951,58 @@
       "tests": [
         "planned:positive:tests/surface/legacy.rs#ssl1_research_isolation",
         "planned:negative:tests/surface/legacy.rs#reject_invalid_and_exhausted"
+      ]
+    },
+    "BRY-REQ-LEGACYTLSFACREG-0148": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "iana.tls-parameters.authorization-data",
+        "iana.tls-parameters.authorization-data.dtcp-authorization.1",
+        "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1",
+        "iana.tls-parameters.authorization-data.keynote-assertion-list.1",
+        "iana.tls-parameters.authorization-data.reserved-for-private-use.1",
+        "iana.tls-parameters.authorization-data.saml-assertion-url.1",
+        "iana.tls-parameters.authorization-data.saml-assertion.1",
+        "iana.tls-parameters.authorization-data.unassigned.1",
+        "iana.tls-parameters.authorization-data.unassigned.2",
+        "iana.tls-parameters.authorization-data.x509-attr-cert-url.1",
+        "iana.tls-parameters.authorization-data.x509-attr-cert.1",
+        "iana.tls-parameters.tls-parameters-12",
+        "iana.tls-parameters.tls-parameters-12.authz-data.1",
+        "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1",
+        "iana.tls-parameters.tls-parameters-12.unassigned.1",
+        "iana.tls-parameters.tls-parameters-12.unassigned.2",
+        "iana.tls-parameters.tls-parameters-12.user-mapping-data.1",
+        "iana.tls-parameters.tls-parameters-14",
+        "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1",
+        "iana.tls-parameters.tls-parameters-14.unassigned.1",
+        "iana.tls-parameters.tls-parameters-14.unassigned.2",
+        "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1"
+      ],
+      "domains": [
+        "tls"
+      ],
+      "evidence": [],
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "owners": [
+        "0.148.3"
+      ],
+      "sources": [
+        "iana:tls-parameters"
+      ],
+      "targets": [
+        "planned-symbol:crates/brynja-tls/src/legacy_extensions.rs"
+      ],
+      "tests": [
+        "planned:positive:tests/surface/legacy_tls_facilities.rs#registry",
+        "planned:negative:tests/surface/legacy_tls_facilities.rs#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-OCSP-0001": {
@@ -3082,7 +3134,7 @@
     },
     "BRY-REQ-OCSP-0005": {
       "authority_roles": [
-        "exclusion"
+        "compatibility"
       ],
       "decisions": [
         "facility.status-request-v2"
@@ -3098,17 +3150,17 @@
         "work-bound"
       ],
       "owners": [
-        "0.58.0"
+        "0.148.2"
       ],
       "sources": [
         "rfc:6961"
       ],
       "targets": [
-        "boundary:boundary:status-request-v2"
+        "planned-symbol:crates/brynja-tls/src/certificate_status.rs#StatusRequestV2"
       ],
       "tests": [
-        "planned:positive:tests/requirements/ocsp_exclusions.rs#status_request_v1_remains_available",
-        "planned:negative:tests/requirements/ocsp_exclusions.rs#status_request_v2_rejected"
+        "planned:positive:tests/requirements/status_request_v2.rs#complete_multi_certificate_status",
+        "planned:negative:tests/requirements/status_request_v2.rs#association_unsolicited_resumption_and_bound_failures"
       ]
     },
     "BRY-REQ-OCSP-0006": {
@@ -3660,7 +3712,7 @@
     },
     "BRY-REQ-PKIX-0010": {
       "authority_roles": [
-        "exclusion"
+        "current"
       ],
       "decisions": [
         "format.x509.unsigned"
@@ -3676,17 +3728,17 @@
         "work-bound"
       ],
       "owners": [
-        "0.46.0"
+        "0.60.3"
       ],
       "sources": [
         "rfc:9925"
       ],
       "targets": [
-        "boundary:boundary:unsigned-x509"
+        "planned-symbol:crates/brynja-pki/src/x509.rs#UnsignedCertificate"
       ],
       "tests": [
-        "planned:positive:tests/requirements/x509_exclusions.rs#signed_certificates_remain_admitted",
-        "planned:negative:tests/requirements/x509_exclusions.rs#unsigned_certificates_rejected"
+        "planned:positive:tests/requirements/unsigned_x509.rs#complete_non_authenticating_round_trip",
+        "planned:negative:tests/requirements/unsigned_x509.rs#trust_signature_and_transport_substitution_rejected"
       ]
     },
     "BRY-REQ-PKIXREG-0053": {
@@ -3755,7 +3807,7 @@
     },
     "BRY-REQ-PQPKIX-0046": {
       "authority_roles": [
-        "exclusion"
+        "current"
       ],
       "decisions": [
         "format.ml-kem-pkix-credentials"
@@ -3770,13 +3822,13 @@
         "work-bound"
       ],
       "owners": [
-        "0.46.0"
+        "0.60.3"
       ],
       "sources": [
         "rfc:9935"
       ],
       "targets": [
-        "boundary:boundary:pkix.0.46.0"
+        "planned-symbol:crates/brynja-pki/src/algorithm.rs"
       ],
       "tests": [
         "planned:positive:tests/surface/ml_kem.rs#pkix_rejected",
@@ -4156,16 +4208,16 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.0"
+        "0.148.4"
       ],
       "sources": [
         "iana:tls-extensiontype-values"
       ],
       "targets": [
-        "boundary:boundary:tls.0.148.0"
+        "planned-symbol:crates/brynja-tls/src/configuration.rs#LegacyExtensionConfiguration"
       ],
       "tests": [
-        "planned:positive:tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent",
+        "planned:positive:tests/requirements/rfc6066_configuration.rs#complete_legacy_profiles",
         "planned:negative:tests/requirements/rfc6066_configuration.rs#reject_invalid_and_exhausted"
       ]
     },
@@ -4412,23 +4464,23 @@
     "BRY-REQ-TLS-0002": {
       "authority_roles": [],
       "decisions": [
-        "facility.heartbeat",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       ],
       "domains": [],
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.19.0"
+        "0.148.1"
       ],
       "sources": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       ],
       "targets": [
-        "boundary:boundary:modern-heartbeat-rejection"
+        "planned-symbol:crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility"
       ],
       "tests": [
-        "actual:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
+        "planned:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile",
+        "planned:tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles"
       ]
     },
     "BRY-REQ-TLS-0005": {
@@ -4498,7 +4550,7 @@
     },
     "BRY-REQ-TLS-0018": {
       "authority_roles": [
-        "exclusion"
+        "current"
       ],
       "decisions": [
         "facility.heartbeat"
@@ -4513,17 +4565,17 @@
         "version-separation"
       ],
       "owners": [
-        "0.19.0"
+        "0.148.1"
       ],
       "sources": [
         "rfc:6520"
       ],
       "targets": [
-        "boundary:boundary:tls-heartbeat-excluded"
+        "planned-symbol:crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility"
       ],
       "tests": [
-        "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile",
-        "planned:negative:crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
+        "planned:positive:tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles",
+        "planned:negative:tests/requirements/heartbeat.rs#length_disclosure_amplification_and_default_rejection"
       ]
     },
     "BRY-REQ-TLS-0019": {
@@ -5055,8 +5107,8 @@
     },
     "BRY-REQ-TLS12EXT-0058": {
       "authority_roles": [
-        "current",
-        "exclusion"
+        "compatibility",
+        "current"
       ],
       "decisions": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1"
@@ -5072,14 +5124,14 @@
         "version-separation"
       ],
       "owners": [
-        "0.58.0"
+        "0.148.2"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
         "rfc:6961"
       ],
       "targets": [
-        "boundary:boundary:tls12.0.58.0"
+        "planned-symbol:crates/brynja-tls12/src/extensions.rs"
       ],
       "tests": [
         "planned:positive:tests/surface/status_request_v2.rs#extension",
@@ -5120,7 +5172,7 @@
     },
     "BRY-REQ-TLS12X-0058": {
       "authority_roles": [
-        "exclusion"
+        "compatibility"
       ],
       "decisions": [
         "facility.status-request-v2"
@@ -5136,13 +5188,13 @@
         "version-separation"
       ],
       "owners": [
-        "0.58.0"
+        "0.148.2"
       ],
       "sources": [
         "rfc:6961"
       ],
       "targets": [
-        "boundary:boundary:tls12.0.58.0"
+        "planned-symbol:crates/brynja-tls12/src/extensions.rs"
       ],
       "tests": [
         "planned:positive:tests/surface/status_request_v2.rs#rejected",
@@ -5151,7 +5203,7 @@
     },
     "BRY-REQ-TLS13-0046": {
       "authority_roles": [
-        "exclusion"
+        "current"
       ],
       "decisions": [
         "algorithm.legacy-pkcs1-client-signature"
@@ -5167,17 +5219,17 @@
         "version-separation"
       ],
       "owners": [
-        "0.46.0"
+        "0.82.4"
       ],
       "sources": [
         "rfc:9963"
       ],
       "targets": [
-        "boundary:boundary:tls13-legacy-pkcs1-client-signatures"
+        "planned-symbol:crates/brynja-tls13-handshake/src/signature.rs#LegacyClientPkcs1"
       ],
       "tests": [
-        "planned:positive:tests/requirements/tls13_exclusions.rs#legacy_pkcs1_absent",
-        "planned:negative:tests/requirements/tls13_exclusions.rs#reject_legacy_pkcs1_selection"
+        "planned:positive:tests/requirements/tls13_legacy_client_signature.rs#client_sign_server_verify",
+        "planned:negative:tests/requirements/tls13_legacy_client_signature.rs#role_scheme_and_default_rejection"
       ]
     },
     "BRY-REQ-TLS13-0061": {
@@ -5840,17 +5892,17 @@
         "version-separation"
       ],
       "owners": [
-        "0.72.0"
+        "0.82.2"
       ],
       "sources": [
         "rfc:9846"
       ],
       "targets": [
-        "boundary:boundary:tls13-post-handshake-authentication"
+        "planned-symbol:crates/brynja-tls13-handshake/src/authentication.rs#PostHandshakeAuthentication"
       ],
       "tests": [
-        "planned:positive:tests/requirements/tls13_exclusions.rs#post_handshake_auth_absent",
-        "planned:negative:tests/requirements/tls13_exclusions.rs#reject_post_handshake_auth"
+        "planned:positive:tests/requirements/tls13_post_handshake_auth.rs#complete_client_server_flow",
+        "planned:negative:tests/requirements/tls13_post_handshake_auth.rs#ordering_context_concurrency_and_default_rejection"
       ]
     },
     "BRY-REQ-TLS13-0761": {
@@ -5919,7 +5971,7 @@
     },
     "BRY-REQ-TLS13-0763": {
       "authority_roles": [
-        "exclusion"
+        "current"
       ],
       "decisions": [
         "facility.external-psk.certificate-authentication"
@@ -5936,17 +5988,17 @@
         "version-separation"
       ],
       "owners": [
-        "0.76.2"
+        "0.82.3"
       ],
       "sources": [
         "rfc:9973"
       ],
       "targets": [
-        "boundary:boundary:tls13-certificate-with-external-psk"
+        "planned-symbol:crates/brynja-tls13/src/psk.rs#CertificateExternalPskMode"
       ],
       "tests": [
-        "planned:positive:tests/requirements/tls13_exclusions.rs#certificate_psk_absent",
-        "planned:negative:tests/requirements/tls13_exclusions.rs#reject_certificate_psk_mode"
+        "planned:positive:tests/requirements/tls13_certificate_psk.rs#complete_client_server_flow",
+        "planned:negative:tests/requirements/tls13_certificate_psk.rs#credential_role_importer_and_fallback_failures"
       ]
     }
   },
@@ -5971,6 +6023,7 @@
         "BRY-REQ-DTLS-0114",
         "BRY-REQ-DTLS-0115",
         "BRY-REQ-DTLS-0116",
+        "BRY-REQ-OCSP-0005",
         "BRY-REQ-TLS12-0083",
         "BRY-REQ-TLS12-0084",
         "BRY-REQ-TLS12-0085",
@@ -5978,6 +6031,8 @@
         "BRY-REQ-TLS12-0087",
         "BRY-REQ-TLS12-0088",
         "BRY-REQ-TLS12-0090",
+        "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12X-0058",
         "BRY-REQ-TLS13-0074",
         "BRY-REQ-TLS13-0075"
       ],
@@ -6043,6 +6098,7 @@
         "BRY-REQ-LEGACY-0300",
         "BRY-REQ-LEGACY-0400",
         "BRY-REQ-LEGACY-0800",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-OCSP-0001",
         "BRY-REQ-OCSP-0002",
         "BRY-REQ-OCSP-0003",
@@ -6063,8 +6119,10 @@
         "BRY-REQ-PKIX-0007",
         "BRY-REQ-PKIX-0008",
         "BRY-REQ-PKIX-0009",
+        "BRY-REQ-PKIX-0010",
         "BRY-REQ-PKIXREG-0053",
         "BRY-REQ-PQ-0117",
+        "BRY-REQ-PQPKIX-0046",
         "BRY-REQ-QUIC-0094",
         "BRY-REQ-QUIC-0095",
         "BRY-REQ-QUIC-0096",
@@ -6081,6 +6139,7 @@
         "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0005",
         "BRY-REQ-TLS-0010",
+        "BRY-REQ-TLS-0018",
         "BRY-REQ-TLS-0019",
         "BRY-REQ-TLS-0068",
         "BRY-REQ-TLS-0079",
@@ -6097,6 +6156,7 @@
         "BRY-REQ-TLS12-0832",
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12EXT-0901",
+        "BRY-REQ-TLS13-0046",
         "BRY-REQ-TLS13-0061",
         "BRY-REQ-TLS13-0062",
         "BRY-REQ-TLS13-0063",
@@ -6119,7 +6179,8 @@
         "BRY-REQ-TLS13-0082",
         "BRY-REQ-TLS13-0721",
         "BRY-REQ-TLS13-0761",
-        "BRY-REQ-TLS13-0762"
+        "BRY-REQ-TLS13-0762",
+        "BRY-REQ-TLS13-0763"
       ],
       "evidence": [
         "BRY-REQ-CRYPTO-0003",
@@ -6128,16 +6189,8 @@
       ],
       "exclusion": [
         "BRY-REQ-KEYLOGREG-0010",
-        "BRY-REQ-OCSP-0005",
         "BRY-REQ-OPERATIONS-0010",
-        "BRY-REQ-PKIX-0010",
-        "BRY-REQ-PQPKIX-0046",
-        "BRY-REQ-TESTING-0010",
-        "BRY-REQ-TLS-0018",
-        "BRY-REQ-TLS12EXT-0058",
-        "BRY-REQ-TLS12X-0058",
-        "BRY-REQ-TLS13-0046",
-        "BRY-REQ-TLS13-0763"
+        "BRY-REQ-TESTING-0010"
       ],
       "legacy": [
         "BRY-REQ-LEGACY-0100",
@@ -6231,7 +6284,6 @@
         "BRY-REQ-TLS13-0763"
       ],
       "facility.heartbeat": [
-        "BRY-REQ-TLS-0002",
         "BRY-REQ-TLS-0018"
       ],
       "facility.record-size-limit": [
@@ -8292,6 +8344,39 @@
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.user-mapping.1": [
         "BRY-REQ-COMPOSE-0148"
       ],
+      "iana.tls-parameters.authorization-data": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.dtcp-authorization.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.keynote-assertion-list.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.reserved-for-private-use.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.saml-assertion-url.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.saml-assertion.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.unassigned.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.unassigned.2": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.x509-attr-cert-url.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.authorization-data.x509-attr-cert.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
       "iana.tls-parameters.tls-kdf-ids": [
         "BRY-REQ-CRYPTO-0013"
       ],
@@ -8315,6 +8400,39 @@
       ],
       "iana.tls-parameters.tls-parameters-10.unassigned.2": [
         "BRY-REQ-LEGACY-0800"
+      ],
+      "iana.tls-parameters.tls-parameters-12": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-12.authz-data.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-12.unassigned.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-12.unassigned.2": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-12.user-mapping-data.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-14": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-14.unassigned.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-14.unassigned.2": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ],
       "iana.tls-parameters.tls-parameters-16": [
         "BRY-REQ-LEGACY-0800"
@@ -8905,6 +9023,7 @@
         "BRY-REQ-CERTREG-0146",
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-COMPOSEX-0148",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-OPTIONAL-0136",
         "BRY-REQ-OPTIONAL-0137",
         "BRY-REQ-OPTIONAL-0144",
@@ -9127,6 +9246,7 @@
         "BRY-REQ-LEGACY-0700",
         "BRY-REQ-LEGACY-0800",
         "BRY-REQ-LEGACYSSL1-0800",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-OCSP-0001",
         "BRY-REQ-OCSP-0002",
         "BRY-REQ-OCSP-0003",
@@ -9297,6 +9417,7 @@
         "BRY-REQ-LEGACY-0700",
         "BRY-REQ-LEGACY-0800",
         "BRY-REQ-LEGACYSSL1-0800",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-OCSP-0001",
         "BRY-REQ-OCSP-0002",
         "BRY-REQ-OCSP-0003",
@@ -9421,6 +9542,7 @@
         "BRY-REQ-HPKE-1391",
         "BRY-REQ-HPKEREG-0138",
         "BRY-REQ-HPKEX-1391",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-OPTIONAL-0136",
         "BRY-REQ-OPTIONAL-0137",
         "BRY-REQ-OPTIONAL-0144",
@@ -9551,6 +9673,7 @@
         "BRY-REQ-LEGACY-0700",
         "BRY-REQ-LEGACY-0800",
         "BRY-REQ-LEGACYSSL1-0800",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-OCSP-0001",
         "BRY-REQ-OCSP-0002",
         "BRY-REQ-OCSP-0003",
@@ -9776,13 +9899,50 @@
       ],
       "0.148.0": [
         "BRY-REQ-COMPOSE-0148",
+        "BRY-REQ-IANA-0003"
+      ],
+      "0.148.1": [
+        "BRY-REQ-TLS-0002",
+        "BRY-REQ-TLS-0018"
+      ],
+      "0.148.2": [
         "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-IANA-0003",
+        "BRY-REQ-OCSP-0005",
+        "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12X-0058"
+      ],
+      "0.148.3": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
+      "0.148.4": [
         "BRY-REQ-RFC6066CFG-0148"
       ],
+      "0.180.1": [
+        "BRY-REQ-LEGACY-0800",
+        "BRY-REQ-LEGACYSSL1-0800"
+      ],
+      "0.180.11": [
+        "BRY-REQ-LEGACY-0300"
+      ],
+      "0.180.14": [
+        "BRY-REQ-LEGACY-0400"
+      ],
+      "0.180.17": [
+        "BRY-REQ-LEGACY-0500"
+      ],
+      "0.180.2": [
+        "BRY-REQ-LEGACY-0100"
+      ],
+      "0.180.20": [
+        "BRY-REQ-LEGACY-0600"
+      ],
+      "0.180.22": [
+        "BRY-REQ-LEGACY-0700"
+      ],
+      "0.180.5": [
+        "BRY-REQ-LEG-0001"
+      ],
       "0.19.0": [
-        "BRY-REQ-TLS-0002",
-        "BRY-REQ-TLS-0018",
         "BRY-REQ-TLS-0019"
       ],
       "0.20.0": [
@@ -9837,10 +9997,7 @@
         "BRY-REQ-CRYPTO-0012"
       ],
       "0.46.0": [
-        "BRY-REQ-CRYPTO-0013",
-        "BRY-REQ-PKIX-0010",
-        "BRY-REQ-PQPKIX-0046",
-        "BRY-REQ-TLS13-0046"
+        "BRY-REQ-CRYPTO-0013"
       ],
       "0.48.0": [
         "BRY-REQ-ENC-0003"
@@ -9880,10 +10037,7 @@
         "BRY-REQ-PKIX-0009"
       ],
       "0.58.0": [
-        "BRY-REQ-OCSP-0001",
-        "BRY-REQ-OCSP-0005",
-        "BRY-REQ-TLS12EXT-0058",
-        "BRY-REQ-TLS12X-0058"
+        "BRY-REQ-OCSP-0001"
       ],
       "0.58.1": [
         "BRY-REQ-OCSP-0002"
@@ -9897,6 +10051,10 @@
       "0.59.0": [
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059"
+      ],
+      "0.60.3": [
+        "BRY-REQ-PKIX-0010",
+        "BRY-REQ-PQPKIX-0046"
       ],
       "0.61.0": [
         "BRY-REQ-TLS13-0061"
@@ -9934,8 +10092,7 @@
         "BRY-REQ-TLS13-0071"
       ],
       "0.72.0": [
-        "BRY-REQ-TLS13-0072",
-        "BRY-REQ-TLS13-0721"
+        "BRY-REQ-TLS13-0072"
       ],
       "0.73.0": [
         "BRY-REQ-TLS13-0073"
@@ -9953,8 +10110,7 @@
         "BRY-REQ-TLS13-0761"
       ],
       "0.76.2": [
-        "BRY-REQ-TLS13-0762",
-        "BRY-REQ-TLS13-0763"
+        "BRY-REQ-TLS13-0762"
       ],
       "0.77.0": [
         "BRY-REQ-TLS13-0077"
@@ -9973,6 +10129,15 @@
       ],
       "0.82.0": [
         "BRY-REQ-TLS13-0082"
+      ],
+      "0.82.2": [
+        "BRY-REQ-TLS13-0721"
+      ],
+      "0.82.3": [
+        "BRY-REQ-TLS13-0763"
+      ],
+      "0.82.4": [
+        "BRY-REQ-TLS13-0046"
       ],
       "0.83.0": [
         "BRY-REQ-TLS12-0083"
@@ -10038,31 +10203,6 @@
       ],
       "0.99.1": [
         "BRY-REQ-QUIC-0991"
-      ],
-      "H0.1.0": [
-        "BRY-REQ-LEGACY-0100"
-      ],
-      "H0.2.0": [
-        "BRY-REQ-LEG-0001"
-      ],
-      "H0.3.0": [
-        "BRY-REQ-LEGACY-0300"
-      ],
-      "H0.4.0": [
-        "BRY-REQ-LEGACY-0400"
-      ],
-      "H0.5.0": [
-        "BRY-REQ-LEGACY-0500"
-      ],
-      "H0.6.0": [
-        "BRY-REQ-LEGACY-0600"
-      ],
-      "H0.7.0": [
-        "BRY-REQ-LEGACY-0700"
-      ],
-      "H0.8.0": [
-        "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-LEGACYSSL1-0800"
       ]
     },
     "sources": {
@@ -10116,6 +10256,7 @@
       "iana:tls-parameters": [
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-LEGACY-0800",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111"
       ],
@@ -10686,15 +10827,9 @@
       "boundary:boundary:iana-designated-expert": [
         "BRY-REQ-IANA-0002"
       ],
-      "boundary:boundary:modern-heartbeat-rejection": [
-        "BRY-REQ-TLS-0002"
-      ],
       "boundary:boundary:operations.0.10.0": [
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-OPERATIONS-0010"
-      ],
-      "boundary:boundary:pkix.0.46.0": [
-        "BRY-REQ-PQPKIX-0046"
       ],
       "boundary:boundary:pkix.0.53.0": [
         "BRY-REQ-PKIXREG-0053"
@@ -10707,32 +10842,6 @@
       ],
       "boundary:boundary:quic.0.94.0": [
         "BRY-REQ-QUICREG-0094"
-      ],
-      "boundary:boundary:status-request-v2": [
-        "BRY-REQ-OCSP-0005"
-      ],
-      "boundary:boundary:tls-heartbeat-excluded": [
-        "BRY-REQ-TLS-0018"
-      ],
-      "boundary:boundary:tls.0.148.0": [
-        "BRY-REQ-COMPOSEX-0148",
-        "BRY-REQ-RFC6066CFG-0148"
-      ],
-      "boundary:boundary:tls12.0.58.0": [
-        "BRY-REQ-TLS12EXT-0058",
-        "BRY-REQ-TLS12X-0058"
-      ],
-      "boundary:boundary:tls13-certificate-with-external-psk": [
-        "BRY-REQ-TLS13-0763"
-      ],
-      "boundary:boundary:tls13-legacy-pkcs1-client-signatures": [
-        "BRY-REQ-TLS13-0046"
-      ],
-      "boundary:boundary:tls13-post-handshake-authentication": [
-        "BRY-REQ-TLS13-0721"
-      ],
-      "boundary:boundary:unsigned-x509": [
-        "BRY-REQ-PKIX-0010"
       ],
       "legacy-boundary:crates/brynja-legacy-ssl3/src/lib.rs": [
         "BRY-REQ-LEGACY-0300"
@@ -10855,6 +10964,9 @@
       "planned-symbol:crates/brynja-fips-module/src/rbg.rs": [
         "BRY-REQ-ENTROPY-1242"
       ],
+      "planned-symbol:crates/brynja-pki/src/algorithm.rs": [
+        "BRY-REQ-PQPKIX-0046"
+      ],
       "planned-symbol:crates/brynja-pki/src/crl.rs#CrlValidator": [
         "BRY-REQ-PKIX-0008"
       ],
@@ -10906,6 +11018,9 @@
       "planned-symbol:crates/brynja-pki/src/x509.rs#Certificate": [
         "BRY-REQ-PKIX-0001"
       ],
+      "planned-symbol:crates/brynja-pki/src/x509.rs#UnsignedCertificate": [
+        "BRY-REQ-PKIX-0010"
+      ],
       "planned-symbol:crates/brynja-quic-tls/src/driver.rs#QuicHandshake": [
         "BRY-REQ-QUIC-0098"
       ],
@@ -10939,6 +11054,9 @@
       "planned-symbol:crates/brynja-tls-core/src/version.rs#VersionPolicy": [
         "BRY-REQ-TLS-0068"
       ],
+      "planned-symbol:crates/brynja-tls/src/cached_info.rs": [
+        "BRY-REQ-COMPOSEX-0148"
+      ],
       "planned-symbol:crates/brynja-tls/src/certificate_compression.rs": [
         "BRY-REQ-CERTEXT-0146",
         "BRY-REQ-CERTREG-0146",
@@ -10949,11 +11067,24 @@
       "planned-symbol:crates/brynja-tls/src/certificate_status.rs#CertificateStatusType": [
         "BRY-REQ-OCSP-0006"
       ],
+      "planned-symbol:crates/brynja-tls/src/certificate_status.rs#StatusRequestV2": [
+        "BRY-REQ-OCSP-0005"
+      ],
+      "planned-symbol:crates/brynja-tls/src/configuration.rs#LegacyExtensionConfiguration": [
+        "BRY-REQ-RFC6066CFG-0148"
+      ],
       "planned-symbol:crates/brynja-tls/src/delegated_credentials.rs": [
         "BRY-REQ-OPTIONAL-0144"
       ],
       "planned-symbol:crates/brynja-tls/src/extensions.rs": [
         "BRY-REQ-COMPOSE-0148"
+      ],
+      "planned-symbol:crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility": [
+        "BRY-REQ-TLS-0002",
+        "BRY-REQ-TLS-0018"
+      ],
+      "planned-symbol:crates/brynja-tls/src/legacy_extensions.rs": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
       ],
       "planned-symbol:crates/brynja-tls/src/raw_public_key.rs": [
         "BRY-REQ-OPTIONAL-0137"
@@ -10963,6 +11094,10 @@
       ],
       "planned-symbol:crates/brynja-tls/src/router.rs#Router": [
         "BRY-REQ-TLS-0092"
+      ],
+      "planned-symbol:crates/brynja-tls12/src/extensions.rs": [
+        "BRY-REQ-TLS12EXT-0058",
+        "BRY-REQ-TLS12X-0058"
       ],
       "planned-symbol:crates/brynja-tls12/src/extensions.rs#Tls12Extensions": [
         "BRY-REQ-TLS12EXT-0901"
@@ -10996,6 +11131,9 @@
       ],
       "planned-symbol:crates/brynja-tls12/src/suite.rs#SuiteProfile": [
         "BRY-REQ-TLS12-0089"
+      ],
+      "planned-symbol:crates/brynja-tls13-handshake/src/authentication.rs#PostHandshakeAuthentication": [
+        "BRY-REQ-TLS13-0721"
       ],
       "planned-symbol:crates/brynja-tls13-handshake/src/certificate.rs#CertificateEvidence": [
         "BRY-REQ-TLS13-0071"
@@ -11045,6 +11183,9 @@
       "planned-symbol:crates/brynja-tls13-handshake/src/server_flight.rs#ServerFlight": [
         "BRY-REQ-TLS13-0069"
       ],
+      "planned-symbol:crates/brynja-tls13-handshake/src/signature.rs#LegacyClientPkcs1": [
+        "BRY-REQ-TLS13-0046"
+      ],
       "planned-symbol:crates/brynja-tls13-handshake/src/terminal.rs#TerminalState": [
         "BRY-REQ-TLS13-0073"
       ],
@@ -11065,6 +11206,9 @@
       ],
       "planned-symbol:crates/brynja-tls13/src/key_update.rs#KeyUpdate": [
         "BRY-REQ-TLS13-0078"
+      ],
+      "planned-symbol:crates/brynja-tls13/src/psk.rs#CertificateExternalPskMode": [
+        "BRY-REQ-TLS13-0763"
       ],
       "planned-symbol:crates/brynja-tls13/src/record.rs#RecordState": [
         "BRY-REQ-TLS13-0063"
@@ -11095,9 +11239,6 @@
       ]
     },
     "tests": {
-      "actual:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [
-        "BRY-REQ-TLS-0002"
-      ],
       "actual:negative:crates/brynja-core/tests/secret_lifecycle.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS-0010"
       ],
@@ -11135,6 +11276,9 @@
       "actual:scripts/test-requirements.py#test_missing_residual_fails": [
         "BRY-REQ-STD-0002"
       ],
+      "planned:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [
+        "BRY-REQ-TLS-0002"
+      ],
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
@@ -11143,9 +11287,6 @@
       ],
       "planned:negative:crates/brynja-pki/tests/der_reader.rs#indefinite_and_nonminimal_lengths_are_rejected": [
         "BRY-REQ-ENC-0001"
-      ],
-      "planned:negative:crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing": [
-        "BRY-REQ-TLS-0018"
       ],
       "planned:negative:crates/brynja-protocol/tests/wire_policy.rs#inner_content_is_closed_and_heartbeat_is_never_admitted": [
         "BRY-REQ-TLS-0019"
@@ -11267,6 +11408,9 @@
       "planned:negative:tests/requirements/dtls_version.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0103"
       ],
+      "planned:negative:tests/requirements/heartbeat.rs#length_disclosure_amplification_and_default_rejection": [
+        "BRY-REQ-TLS-0018"
+      ],
       "planned:negative:tests/requirements/must_staple.rs#missing_invalid_and_unknown_features": [
         "BRY-REQ-OCSP-0002"
       ],
@@ -11278,9 +11422,6 @@
       ],
       "planned:negative:tests/requirements/ocsp.rs#identity_nonce_freshness_and_signature_failures": [
         "BRY-REQ-OCSP-0001"
-      ],
-      "planned:negative:tests/requirements/ocsp_exclusions.rs#status_request_v2_rejected": [
-        "BRY-REQ-OCSP-0005"
       ],
       "planned:negative:tests/requirements/ocsp_lightweight.rs#profile_order_and_freshness_failures": [
         "BRY-REQ-OCSP-0003"
@@ -11333,6 +11474,9 @@
       "planned:negative:tests/requirements/service_identity.rs#wildcards_unicode_and_cross_type_confusion": [
         "BRY-REQ-PKIX-0002"
       ],
+      "planned:negative:tests/requirements/status_request_v2.rs#association_unsolicited_resumption_and_bound_failures": [
+        "BRY-REQ-OCSP-0005"
+      ],
       "planned:negative:tests/requirements/tls12_deprecation.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS12-0831"
       ],
@@ -11369,6 +11513,9 @@
       "planned:negative:tests/requirements/tls13_certificate.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS13-0070"
       ],
+      "planned:negative:tests/requirements/tls13_certificate_psk.rs#credential_role_importer_and_fallback_failures": [
+        "BRY-REQ-TLS13-0763"
+      ],
       "planned:negative:tests/requirements/tls13_client_hello.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS13-0066"
       ],
@@ -11384,15 +11531,6 @@
       "planned:negative:tests/requirements/tls13_evidence.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS13-0071"
       ],
-      "planned:negative:tests/requirements/tls13_exclusions.rs#reject_certificate_psk_mode": [
-        "BRY-REQ-TLS13-0763"
-      ],
-      "planned:negative:tests/requirements/tls13_exclusions.rs#reject_legacy_pkcs1_selection": [
-        "BRY-REQ-TLS13-0046"
-      ],
-      "planned:negative:tests/requirements/tls13_exclusions.rs#reject_post_handshake_auth": [
-        "BRY-REQ-TLS13-0721"
-      ],
       "planned:negative:tests/requirements/tls13_external_psk.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS13-0076"
       ],
@@ -11401,6 +11539,12 @@
       ],
       "planned:negative:tests/requirements/tls13_key_update.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS13-0078"
+      ],
+      "planned:negative:tests/requirements/tls13_legacy_client_signature.rs#role_scheme_and_default_rejection": [
+        "BRY-REQ-TLS13-0046"
+      ],
+      "planned:negative:tests/requirements/tls13_post_handshake_auth.rs#ordering_context_concurrency_and_default_rejection": [
+        "BRY-REQ-TLS13-0721"
       ],
       "planned:negative:tests/requirements/tls13_psk_importer.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-TLS13-0761"
@@ -11447,11 +11591,11 @@
       "planned:negative:tests/requirements/trust.rs#distrust_ambiguity_and_algorithm_positions": [
         "BRY-REQ-PKIX-0007"
       ],
+      "planned:negative:tests/requirements/unsigned_x509.rs#trust_signature_and_transport_substitution_rejected": [
+        "BRY-REQ-PKIX-0010"
+      ],
       "planned:negative:tests/requirements/x509.rs#ambiguous_algorithms_and_malformed_der": [
         "BRY-REQ-PKIX-0001"
-      ],
-      "planned:negative:tests/requirements/x509_exclusions.rs#unsigned_certificates_rejected": [
-        "BRY-REQ-PKIX-0010"
       ],
       "planned:negative:tests/surface/alpn.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-APPLICATION-0130"
@@ -11515,6 +11659,9 @@
       "planned:negative:tests/surface/legacy_registry.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-LEGACY-0800"
       ],
+      "planned:negative:tests/surface/legacy_tls_facilities.rs#reject_invalid_and_exhausted": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
       "planned:negative:tests/surface/ml_kem.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-PQPKIX-0046"
       ],
@@ -11548,9 +11695,6 @@
       ],
       "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion": [
         "BRY-REQ-TLS-0019"
-      ],
-      "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [
-        "BRY-REQ-TLS-0018"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"
@@ -11675,6 +11819,9 @@
       "planned:positive:tests/requirements/dtls_version.rs#one_pass_selection": [
         "BRY-REQ-DTLS-0103"
       ],
+      "planned:positive:tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles": [
+        "BRY-REQ-TLS-0018"
+      ],
       "planned:positive:tests/requirements/must_staple.rs#satisfied_status_request": [
         "BRY-REQ-OCSP-0002"
       ],
@@ -11686,9 +11833,6 @@
       ],
       "planned:positive:tests/requirements/ocsp.rs#authorized_fresh_responses": [
         "BRY-REQ-OCSP-0001"
-      ],
-      "planned:positive:tests/requirements/ocsp_exclusions.rs#status_request_v1_remains_available": [
-        "BRY-REQ-OCSP-0005"
       ],
       "planned:positive:tests/requirements/ocsp_lightweight.rs#rfc9919_messages": [
         "BRY-REQ-OCSP-0003"
@@ -11732,7 +11876,7 @@
       "planned:positive:tests/requirements/quic_resumption.rs#completion_confirmation": [
         "BRY-REQ-QUIC-0099"
       ],
-      "planned:positive:tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent": [
+      "planned:positive:tests/requirements/rfc6066_configuration.rs#complete_legacy_profiles": [
         "BRY-REQ-RFC6066CFG-0148"
       ],
       "planned:positive:tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies": [
@@ -11740,6 +11884,9 @@
       ],
       "planned:positive:tests/requirements/service_identity.rs#typed_reference_identifiers": [
         "BRY-REQ-PKIX-0002"
+      ],
+      "planned:positive:tests/requirements/status_request_v2.rs#complete_multi_certificate_status": [
+        "BRY-REQ-OCSP-0005"
       ],
       "planned:positive:tests/requirements/tls12_deprecation.rs#forbidden_entries": [
         "BRY-REQ-TLS12-0831"
@@ -11777,6 +11924,9 @@
       "planned:positive:tests/requirements/tls13_certificate.rs#bounded_selection": [
         "BRY-REQ-TLS13-0070"
       ],
+      "planned:positive:tests/requirements/tls13_certificate_psk.rs#complete_client_server_flow": [
+        "BRY-REQ-TLS13-0763"
+      ],
       "planned:positive:tests/requirements/tls13_client_hello.rs#offers": [
         "BRY-REQ-TLS13-0066"
       ],
@@ -11792,15 +11942,6 @@
       "planned:positive:tests/requirements/tls13_evidence.rs#bounded_handoff": [
         "BRY-REQ-TLS13-0071"
       ],
-      "planned:positive:tests/requirements/tls13_exclusions.rs#certificate_psk_absent": [
-        "BRY-REQ-TLS13-0763"
-      ],
-      "planned:positive:tests/requirements/tls13_exclusions.rs#legacy_pkcs1_absent": [
-        "BRY-REQ-TLS13-0046"
-      ],
-      "planned:positive:tests/requirements/tls13_exclusions.rs#post_handshake_auth_absent": [
-        "BRY-REQ-TLS13-0721"
-      ],
       "planned:positive:tests/requirements/tls13_external_psk.rs#policy": [
         "BRY-REQ-TLS13-0076"
       ],
@@ -11809,6 +11950,12 @@
       ],
       "planned:positive:tests/requirements/tls13_key_update.rs#transition": [
         "BRY-REQ-TLS13-0078"
+      ],
+      "planned:positive:tests/requirements/tls13_legacy_client_signature.rs#client_sign_server_verify": [
+        "BRY-REQ-TLS13-0046"
+      ],
+      "planned:positive:tests/requirements/tls13_post_handshake_auth.rs#complete_client_server_flow": [
+        "BRY-REQ-TLS13-0721"
       ],
       "planned:positive:tests/requirements/tls13_psk_importer.rs#domain_separation": [
         "BRY-REQ-TLS13-0761"
@@ -11855,11 +12002,11 @@
       "planned:positive:tests/requirements/trust.rs#anchors_cross_signing_and_selection": [
         "BRY-REQ-PKIX-0007"
       ],
+      "planned:positive:tests/requirements/unsigned_x509.rs#complete_non_authenticating_round_trip": [
+        "BRY-REQ-PKIX-0010"
+      ],
       "planned:positive:tests/requirements/x509.rs#current_signed_certificates": [
         "BRY-REQ-PKIX-0001"
-      ],
-      "planned:positive:tests/requirements/x509_exclusions.rs#signed_certificates_remain_admitted": [
-        "BRY-REQ-PKIX-0010"
       ],
       "planned:positive:tests/surface/alpn.rs#opaque_round_trip": [
         "BRY-REQ-APPLICATION-0130"
@@ -11963,6 +12110,9 @@
       "planned:positive:tests/surface/legacy_registry.rs#isolation": [
         "BRY-REQ-LEGACY-0800"
       ],
+      "planned:positive:tests/surface/legacy_tls_facilities.rs#registry": [
+        "BRY-REQ-LEGACYTLSFACREG-0148"
+      ],
       "planned:positive:tests/surface/ml_kem.rs#pkix_rejected": [
         "BRY-REQ-PQPKIX-0046"
       ],
@@ -11992,6 +12142,9 @@
       ],
       "planned:tests/requirements/alpn.rs#opaque_round_trip": [
         "BRY-REQ-APP-0001"
+      ],
+      "planned:tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles": [
+        "BRY-REQ-TLS-0002"
       ],
       "planned:tests/requirements/hybrid.rs#standard_groups": [
         "BRY-REQ-HYB-0001"

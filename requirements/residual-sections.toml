@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a"
+source_ledger_sha256 = "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c"
 
 [revisions]
 "BRY-REQ-APPLICATION-0130" = 4
@@ -21,10 +21,10 @@ source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a2
 "BRY-REQ-HPKEREG-0138" = 1
 "BRY-REQ-HPKEX-1391" = 3
 "BRY-REQ-KEYLOGREG-0010" = 3
-"BRY-REQ-LEGACY-0100" = 2
-"BRY-REQ-LEGACY-0300" = 2
-"BRY-REQ-LEGACY-0400" = 3
-"BRY-REQ-LEGACY-0800" = 3
+"BRY-REQ-LEGACY-0100" = 3
+"BRY-REQ-LEGACY-0300" = 3
+"BRY-REQ-LEGACY-0400" = 4
+"BRY-REQ-LEGACY-0800" = 4
 "BRY-REQ-OPERATIONS-0010" = 3
 "BRY-REQ-OPTIONAL-0136" = 4
 "BRY-REQ-OPTIONAL-0137" = 2
@@ -33,10 +33,10 @@ source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a2
 "BRY-REQ-OPTIONAL-0146" = 4
 "BRY-REQ-OPTIONAL-1461" = 4
 "BRY-REQ-PQ-0117" = 2
-"BRY-REQ-PQPKIX-0046" = 2
+"BRY-REQ-PQPKIX-0046" = 3
 "BRY-REQ-TESTING-0010" = 4
-"BRY-REQ-TLS12EXT-0058" = 3
-"BRY-REQ-TLS12X-0058" = 2
+"BRY-REQ-TLS12EXT-0058" = 4
+"BRY-REQ-TLS12X-0058" = 3
 
 [[binding]]
 source_id = "rfc:4346"
@@ -54,13 +54,13 @@ rationale = "These explicitly enumerated rfc:6176 sections define the isolated S
 source_id = "rfc:6961"
 requirement_id = "BRY-REQ-TLS12EXT-0058"
 sections = ["2.2"]
-rationale = "These explicitly enumerated rfc:6961 sections define the status_request_v2 extension registry exclusion; they are assigned only to BRY-REQ-TLS12EXT-0058, and no RFC-wide section inheritance is permitted."
+rationale = "These explicitly enumerated rfc:6961 sections define the status_request_v2 extension registry surface; they are assigned only to BRY-REQ-TLS12EXT-0058, and no RFC-wide section inheritance is permitted."
 
 [[binding]]
 source_id = "rfc:6961"
 requirement_id = "BRY-REQ-TLS12X-0058"
 sections = ["2.2", "4.1"]
-rationale = "These explicitly enumerated rfc:6961 sections define the status_request_v2 protocol exclusion; they are assigned only to BRY-REQ-TLS12X-0058, and no RFC-wide section inheritance is permitted."
+rationale = "These explicitly enumerated rfc:6961 sections define the status_request_v2 protocol surface; they are assigned only to BRY-REQ-TLS12X-0058, and no RFC-wide section inheritance is permitted."
 
 [[binding]]
 source_id = "rfc:7250"
@@ -288,7 +288,7 @@ rationale = "These explicitly enumerated rfc:9850 sections define isolated test-
 source_id = "rfc:9935"
 requirement_id = "BRY-REQ-PQPKIX-0046"
 sections = ["3", "5", "6", "8"]
-rationale = "These explicitly enumerated rfc:9935 sections define the explicit ML-KEM PKIX credential exclusion; they are assigned only to BRY-REQ-PQPKIX-0046, and no RFC-wide section inheritance is permitted."
+rationale = "These explicitly enumerated rfc:9935 sections define the complete ML-KEM PKIX credential profile; they are assigned only to BRY-REQ-PQPKIX-0046, and no RFC-wide section inheritance is permitted."
 
 [[binding]]
 source_id = "rfc:9954"

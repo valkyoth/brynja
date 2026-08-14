@@ -1,11 +1,13 @@
 # Legacy Protocol Implementation Plan
 
-Status: deferred and isolated
+Status: normative pre-1.0 completeness boundary; isolated from modern defaults
 
-Legacy support is not part of the modern `brynja` facade or its 1.0
-production claim. Work begins only after the shared primitive it needs has
-passed external audit. Every package has an independent version line, threat
-model, source ledger, test corpus, warnings, audit, pentest, and publish
+Legacy support is not part of the modern `brynja` facade or its secure-default
+claim, but every named legacy package is part of Brynja's complete `1.0.0`
+ecosystem claim and therefore blocks `1.0.0` until its authenticated standard
+surface is complete. Work begins only after every shared primitive it needs has
+passed external audit. Every package retains an independent crate version line,
+threat model, source ledger, test corpus, warnings, audit, pentest, and publish
 decision.
 
 ## Universal Isolation Rules
@@ -49,35 +51,37 @@ security-boundary milestone. It must:
 The former modern crate never changes meaning in place and never forwards to
 the legacy package.
 
-## Independent Small-Pass Sequence
+## Numbered Pre-1.0 Completion Sequence
 
-Each implementation package follows versions `0.1.0` through `0.8.0`, with a
-separate admission freeze before codec work:
+Repository milestones v0.180.1-v0.180.24 apply separately to
+`brynja-legacy-tls12`, `brynja-legacy-dtls12`, `brynja-legacy-tls11`,
+`brynja-legacy-tls10`, `brynja-legacy-dtls10`, `brynja-legacy-ssl3`,
+`brynja-legacy-ssl2`, `brynja-legacy-wtls`, `brynja-legacy-pct`, and
+`brynja-legacy-snp`. Completion in one package cannot satisfy another.
 
-| Version | Goal | Required verification |
-| --- | --- | --- |
-| `0.1.0` | Lock authentic specifications, rights, errata, insecurity statement, and threat model | provenance review and source hashes |
-| `0.1.1` | Freeze the exact cipher-suite, compression, extension, message, certificate, key-format, and primitive admission register | source-to-register completeness, IANA or source-value checks, explicit rejection and research-only decisions, and no unspecified primitive |
-| `0.2.0` | Strict bounded wire codec | truncation, canonicality, mutation, and resource tests |
-| `0.3.0` | Typed handshake state machine without cryptography | complete transition and illegal-message model |
-| `0.4.0` | Bind only required reviewed primitives | official/derived vectors and cross-protocol separation |
-| `0.5.0` | Client-only controlled interoperability | isolated mature-peer fixtures and expected failures |
-| `0.6.0` | Server-only controlled interoperability, if justified | amplification, downgrade, credential, and load tests |
-| `0.7.0` | Operational containment API | separate listener/config/cache proofs and misuse tests |
-| `0.8.0` | External legacy-protocol review | remediation, clean retest, release warnings, pentest |
+Each named protocol must complete all of these duties before its acceptance
+gate:
 
-This sequence applies separately to `brynja-legacy-tls11`,
-`brynja-legacy-tls10`, `brynja-legacy-ssl3`,
-`brynja-legacy-ssl2`, `brynja-legacy-wtls`,
-`brynja-legacy-pct`, and `brynja-legacy-snp`; completion in one package
-cannot satisfy another.
+- authenticated specification, rights, errata, warning, threat model and exact
+  registry closure;
+- every bounded wire codec and every client and server state and operation;
+- every specified suite, compression method, extension, credential, key format,
+  import/export and generation direction over the exact shared primitive owner;
+- public client and server usability fixtures, independent or archived
+  interoperability, hostile-input and resource campaigns;
+- separate configuration, listeners, credentials, caches, storage,
+  diagnostics, process containment, audit and pentest.
+
+Deprecation or weakness requires explicit dangerous policy; it cannot justify a
+read-only, client-only, subset, recognition-only, or unimplemented status.
+Reserved, unassigned and unauthenticated values remain non-capabilities.
 
 `brynja-research-ssl1` stops after source/provenance reconstruction,
 documentation, and parser research. It remains `publish = false`, exposes no
 secure transport API, and must not accept production credentials.
 
-Every version exits with: `vX.Y.Z implementation stop reached. Run pentest for
-this release candidate and commit the updated report.`
+Each repository milestone follows the ordinary signed-tag cadence. Package
+publication remains selected independently by the checkpoint release closure.
 
 ## RFC Source Baselines
 
@@ -87,6 +91,8 @@ prohibition and deprecation documents remain mandatory warning and containment
 inputs; they never make a legacy protocol modern or recommended.
 
 SSL 2.0, SSL 1.0 research, WTLS, PCT, and SNP depend on separately authenticated
-local-only sources. No package may leave H0.1.0 or H0.1.1 until exact source
-identity, rights, errata, wire values, cipher subset, and primitive ownership
-are frozen.
+local-only sources. No production package may proceed until exact source
+identity, rights, errata, wire values, complete cipher and operation surface,
+and primitive ownership are frozen. SSL 1 remains the only standalone
+source-blocked post-1.0 research exception unless a future authenticated source
+and explicit scope decision move it into a numbered pre-1.0 milestone.

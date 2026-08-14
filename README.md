@@ -42,12 +42,25 @@ companion-adapter exceptions follow explicit admission and isolation policy.
 
 ## Project Direction
 
-The roadmap through `1.0.0` implements TLS first and then a separately bounded
-RFC 9580 OpenPGP family before the final candidate. Standalone hashing does not
+The roadmap through `1.0.0` implements complete modern TLS, DTLS, QUIC-TLS
+integration, PKIX and RFC 9580 OpenPGP plus complete, separately selected named
+legacy protocol packages before the final candidate. Standalone hashing does not
 expand or delay that v1 protocol claim. SHA-2, SHA-3, SHAKE, and HMAC are
 already required by TLS, PKI, ML-KEM, and OpenPGP, so their planned
 implementation ownership lives in small reusable family crates instead of
 private copies inside a protocol crate.
+
+Every authenticated standardized capability attached to that scope must be
+complete before `1.0.0`, including optional and deprecated algorithms, both
+client and server roles, and every defined generation, import, export, send,
+receive, sign, verify, encrypt and decrypt direction. Secure choices remain in
+modern packages; obsolete or dangerous choices require conspicuously warned
+`brynja-legacy-*` packages and explicit policy. Rejection is reserved for
+malformed or forbidden input, reserved or unassigned values, unauthorised
+private use, unsafe implicit fallback, unavailable lawful authority, or
+non-production diagnostics. There is one implementation per algorithm: a
+future legacy facade wraps or reexports an implementation that becomes obsolete
+instead of copying it.
 
 | Boundary | Responsibility |
 | --- | --- |
@@ -590,19 +603,19 @@ security policy, or certificate-bound operational-environment claim.
 | Future `brynja-openpgp-core` | RFC 9580 packet, registry, resource, certificate, and key models | Planned from v0.163.0 |
 | Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.165.0 |
 | Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.180.0 |
-| Future `brynja-openpgp-legacy` | Optional deprecated-algorithm compatibility with no modern facade edge | Conditional and separately isolated |
+| Future `brynja-openpgp-legacy` | Complete deprecated-algorithm and historical-key compatibility with no modern facade edge | Required before 1.0 and separately isolated |
 | Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.24.3 and accepted at v0.24.5; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
 | Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Planned at v0.24.4 and accepted at v0.24.5 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
-| `brynja-legacy-*` engines | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP isolation | Boundary only |
+| `brynja-legacy-*` engines | Complete TLS 1.2/1.1/1.0, DTLS 1.2/1.0, SSL, WTLS, PCT, and SNP compatibility with independent package policy | Boundaries exist; complete v0.180.1-v0.180.24 implementation chains are required before 1.0 |
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
 | Other repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
 
 See the [legacy protocol plan](https://github.com/valkyoth/brynja/blob/main/docs/LEGACY_PROTOCOL_PLAN.md)
-for the independent warning, containment, audit, and pentest line required for
-every obsolete protocol.
+for the complete pre-1.0 implementation, warning, containment, audit, and
+pentest line required for every named obsolete protocol.
 
 ## Platform Policy
 

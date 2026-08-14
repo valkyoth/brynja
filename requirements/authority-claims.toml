@@ -61,6 +61,28 @@ versions = [
 rationale = "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
 
 [[plan_boundary]]
+class = "planned-authority-admission"
+versions = [
+  "0.46.2", "0.46.3", "0.46.4", "0.46.5", "0.46.6", "0.46.7",
+  "0.46.8", "0.46.9", "0.46.10", "0.46.11", "0.46.12", "0.46.13",
+  "0.46.14", "0.46.15", "0.46.16", "0.46.17", "0.46.18", "0.46.19",
+  "0.46.20", "0.46.21", "0.46.22", "0.46.23", "0.46.24", "0.46.25",
+  "0.46.26", "0.46.27", "0.46.28", "0.46.29", "0.46.30", "0.46.32",
+  "0.60.1", "0.60.2", "0.82.1", "0.92.1", "0.92.2", "0.92.3",
+  "0.92.4", "0.114.1", "0.148.5", "0.148.6", "0.169.9", "0.169.10",
+  "0.169.11", "0.169.12", "0.169.13",
+]
+rationale = "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+
+[[plan_boundary]]
+class = "internal-security-design"
+versions = [
+  "0.46.31", "0.60.4", "0.60.5", "0.82.5", "0.92.5", "0.92.6",
+  "0.114.2", "0.148.7", "0.169.14", "0.169.15",
+]
+rationale = "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+
+[[plan_boundary]]
 class = "authority-blocked"
 versions = [
   "0.123.0", "0.123.1", "0.134.0", "0.134.1", "0.134.2", "0.134.3"
@@ -243,7 +265,7 @@ rationale = "Final RFC 10024 and final non-provisional IANA assignments satisfy 
 
 [[blocker]]
 id = "legacy-non-rfc-sources"
-owner = "H0.1.0"
+owner = "0.180.1"
 status = "blocked"
 surfaces = ["legacy.ssl2", "legacy.wtls", "legacy.pct", "legacy.snp", "legacy.ssl1-research"]
 rationale = "Each non-RFC legacy specification requires authenticated provenance, exact bytes, hashes, errata, redistribution-rights review, cipher decisions, and a separate insecure-package pentest before implementation."

@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a"
-surface_register_sha256 = "32163f1788dd27d9d99b6b08f8e022ec92c6fe7d6966b609f8b0b84100fcd729"
+source_ledger_sha256 = "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c"
+surface_register_sha256 = "e23cf056c118bd7473fff4c175a9398330630f771740d66b5e76faed9b54f125"
 source_domains = ["dtls", "quic", "tls12", "tls13", "tls13-session"]
 surface_domains = ["dtls", "quic", "tls", "tls12", "tls13"]
 surface_auto_requirements = true
@@ -70,6 +70,12 @@ rationale = "The optional HPKE-authenticated TLS facility and exclusions are nor
 
 [[surface_defer_group]]
 domain = "tls"
+owner = "0.148.4"
+deferred_to = "0.3.5"
+rationale = "The complete RFC 6066 compatibility configuration facility is normatively populated by the residual closure and implemented through its explicit pre-1.0 owner."
+
+[[surface_defer_group]]
+domain = "tls"
 owner = "0.64.0"
 deferred_to = "0.3.5"
 rationale = "The four explicitly known unsupported RFC 6066 registry entries are shared handshake-codec wire surfaces closed by the v0.3.5 residual bundle, while the TLS 1.2 semantic engine state remains in transport coverage."
@@ -82,9 +88,21 @@ rationale = "The DTLS RRC extension and IANA message registry share the v0.111.1
 
 [[surface_defer_group]]
 domain = "tls12"
-owner = "0.58.0"
-deferred_to = "0.3.3"
-rationale = "The status_request_v2 rejection is already normatively owned and reviewed by the v0.3.3 OCSP coverage bundle."
+owner = "0.148.2"
+deferred_to = "0.3.5"
+rationale = "The complete status_request_v2 compatibility registry and protocol surfaces are normatively populated by the residual closure under their explicit pre-1.0 owner."
+
+[[surface_defer_group]]
+domain = "tls"
+owner = "0.148.2"
+deferred_to = "0.3.5"
+rationale = "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
+
+[[surface_defer_group]]
+domain = "tls"
+owner = "0.148.3"
+deferred_to = "0.3.5"
+rationale = "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
 
 [[surface_group]]
 domain = "tls"
@@ -99,8 +117,8 @@ requirement_id = "BRY-REQ-TLS-0019"
 
 [[surface_group]]
 domain = "tls"
-owner = "0.19.0"
-disposition = "intentionally-rejected"
+owner = "0.148.1"
+disposition = "future-work"
 requirement_id = "BRY-REQ-TLS-0018"
 
 [[surface_group]]
@@ -125,7 +143,8 @@ requirement_id = "BRY-REQ-TLS12-0083"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.46.0"
+owner = "0.82.4"
+disposition = "future-work"
 requirement_id = "BRY-REQ-TLS13-0046"
 
 [[surface_group]]
@@ -150,14 +169,14 @@ requirement_id = "BRY-REQ-TLS13-0069"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.72.0"
-disposition = "intentionally-rejected"
+owner = "0.82.2"
+disposition = "future-work"
 requirement_id = "BRY-REQ-TLS13-0721"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.76.2"
-disposition = "intentionally-rejected"
+owner = "0.82.3"
+disposition = "future-work"
 requirement_id = "BRY-REQ-TLS13-0763"
 
 [[surface_group]]

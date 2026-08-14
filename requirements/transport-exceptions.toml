@@ -42,70 +42,70 @@ mapping_rationale = "The shared TLS wire-policy surface governs registry represe
 [[requirement]]
 domain = "tls"
 id = "BRY-REQ-TLS-0018"
-owner = "0.19.0"
-lifecycle = "rejected"
+owner = "0.148.1"
+lifecycle = "planned"
 decision_ids = ["facility.heartbeat"]
-sources = [{ id = "rfc:6520", authority_role = "exclusion" }]
-statement = "TLS and DTLS Heartbeat is excluded from every modern Brynja engine, facade, feature, configuration, and resumption state."
+sources = [{ id = "rfc:6520", authority_role = "current" }]
+statement = "TLS and DTLS Heartbeat is implemented completely for every applicable version through explicit bounded opt-in policy and remains disabled by default."
 invariants = ["resource-bound", "validation", "version-separation"]
-target = "boundary:tls-heartbeat-excluded"
-positive_test = "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
-negative_test = "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
-work_bound = "Heartbeat recognition performs bounded identifier and context checks and rejects before allocation, echoing, cryptography, or state mutation."
-evidence_gap = "Wire content, inner-content, and negotiation rejection are executable; future engine feature and resumption state must retain the same exclusion."
-residual = "Applications needing liveness must implement it above the authenticated application protocol without gaining access to TLS Heartbeat."
-mapping_rationale = "RFC 6520 is pinned solely as exclusion authority, and its semantic rejection surface owns every TLS registry entry classified intentionally rejected at the wire-policy milestone."
+target = "crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility"
+positive_test = "tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles"
+negative_test = "tests/requirements/heartbeat.rs#length_disclosure_amplification_and_default_rejection"
+work_bound = "Payload, padding, response, rate, amplification, path and aggregate work are bounded before echo or output mutation."
+evidence_gap = "Complete TLS/DTLS version, role, resumption, path, resource and interoperability evidence remains unresolved until v0.148.1."
+residual = "Heartbeat remains unsuitable as implicit application liveness and is never enabled by a modern default."
+mapping_rationale = "RFC 6520 defines a real standardized facility, so v0.148.1 owns its complete opt-in implementation rather than recognition-only rejection."
 
 [[requirement]]
 domain = "tls13"
 id = "BRY-REQ-TLS13-0046"
-owner = "0.46.0"
-lifecycle = "rejected"
+owner = "0.82.4"
+lifecycle = "planned"
 decision_ids = ["algorithm.legacy-pkcs1-client-signature"]
-sources = [{ id = "rfc:9963", authority_role = "exclusion" }]
-statement = "Legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points are excluded from the modern TLS 1.3 profile."
+sources = [{ id = "rfc:9963", authority_role = "current" }]
+statement = "Legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points are fully implemented for their exact TLS 1.3 client role through explicit server compatibility policy."
 invariants = ["algorithm-admission", "resource-bound", "validation", "version-separation"]
-target = "boundary:tls13-legacy-pkcs1-client-signatures"
-positive_test = "tests/requirements/tls13_exclusions.rs#legacy_pkcs1_absent"
-negative_test = "tests/requirements/tls13_exclusions.rs#reject_legacy_pkcs1_selection"
-work_bound = "Code-point recognition and rejection are bounded and occur before certificate selection, signing requests, or transcript-state mutation."
-evidence_gap = "Executable offer, selection, configuration, resumption, and import rejection matrices remain unresolved until v0.46.0."
-residual = "Compatibility with peers requiring these code points is deliberately unavailable in the modern TLS 1.3 engine."
-mapping_rationale = "RFC 9963 is retained only as exclusion authority and maps exactly to the legacy client-signature semantic surface owned by algorithm admission."
+target = "crates/brynja-tls13-handshake/src/signature.rs#LegacyClientPkcs1"
+positive_test = "tests/requirements/tls13_legacy_client_signature.rs#client_sign_server_verify"
+negative_test = "tests/requirements/tls13_legacy_client_signature.rs#role_scheme_and_default_rejection"
+work_bound = "Negotiation, certificate selection, signing, verification and transcript work share the fixed TLS 1.3 handshake and RSA limits."
+evidence_gap = "Complete role, certificate, signature, transcript, interop and isolation evidence remains unresolved until v0.82.4."
+residual = "The code points remain absent from server signatures and modern defaults despite complete explicit compatibility."
+mapping_rationale = "RFC 9963 defines an exact compatibility capability owned by v0.82.4 over the sole legacy RSA implementation."
 
 [[requirement]]
 domain = "tls13"
 id = "BRY-REQ-TLS13-0721"
-owner = "0.72.0"
-lifecycle = "rejected"
+owner = "0.82.2"
+lifecycle = "planned"
 decision_ids = ["facility.tls13.post-handshake-authentication"]
 sources = [{ id = "rfc:9846", authority_role = "current" }]
-statement = "TLS 1.3 post-handshake client authentication is deliberately excluded from the version-one protocol profile."
+statement = "TLS 1.3 post-handshake authentication is completely implemented in both roles through explicit opt-in policy."
 invariants = ["key-lifecycle", "resource-bound", "validation", "version-separation"]
-target = "boundary:tls13-post-handshake-authentication"
-positive_test = "tests/requirements/tls13_exclusions.rs#post_handshake_auth_absent"
-negative_test = "tests/requirements/tls13_exclusions.rs#reject_post_handshake_auth"
-work_bound = "Extension and message recognition reject in bounded work without creating authentication state, retaining transcript data, or requesting credentials."
-evidence_gap = "Executable configuration, offer, message-order, transcript, resumption, and cancellation rejection tests remain unresolved until v0.72.0."
-residual = "Applications requiring renewed authentication must establish a new connection or use an authenticated application-layer mechanism."
-mapping_rationale = "The TLS 1.3 authority permits this optional facility, but the reviewed semantic surface explicitly rejects it at the client-authentication milestone."
+target = "crates/brynja-tls13-handshake/src/authentication.rs#PostHandshakeAuthentication"
+positive_test = "tests/requirements/tls13_post_handshake_auth.rs#complete_client_server_flow"
+negative_test = "tests/requirements/tls13_post_handshake_auth.rs#ordering_context_concurrency_and_default_rejection"
+work_bound = "Requests, transcripts, credentials, concurrent states and aggregate post-handshake work have explicit connection-scoped ceilings."
+evidence_gap = "Complete configuration, role, ordering, transcript, KeyUpdate, resumption, cancellation and interop evidence remains unresolved until v0.82.2."
+residual = "The facility remains disabled by default and cannot silently grant renewed application authorization."
+mapping_rationale = "The TLS 1.3 authority defines a real optional state machine, so v0.82.2 owns its complete explicit implementation."
 
 [[requirement]]
 domain = "tls13"
 id = "BRY-REQ-TLS13-0763"
-owner = "0.76.2"
-lifecycle = "rejected"
+owner = "0.82.3"
+lifecycle = "planned"
 decision_ids = ["facility.external-psk.certificate-authentication"]
-sources = [{ id = "rfc:9973", authority_role = "exclusion" }]
-statement = "Certificate authentication combined with an external TLS 1.3 PSK is excluded from the version-one Brynja profile."
+sources = [{ id = "rfc:9973", authority_role = "current" }]
+statement = "Certificate authentication combined with an external TLS 1.3 PSK is implemented as a complete explicitly selected authentication mode."
 invariants = ["algorithm-admission", "key-lifecycle", "resource-bound", "validation", "version-separation"]
-target = "boundary:tls13-certificate-with-external-psk"
-positive_test = "tests/requirements/tls13_exclusions.rs#certificate_psk_absent"
-negative_test = "tests/requirements/tls13_exclusions.rs#reject_certificate_psk_mode"
-work_bound = "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
-evidence_gap = "Executable offer, selection, binder, certificate, ticket, configuration, and fallback rejection tests remain unresolved until v0.76.2."
-residual = "Deployments must choose the admitted certificate-authenticated handshake or the separately provisioned external-PSK profile."
-mapping_rationale = "RFC 9973 is pinned solely as exclusion authority and maps exactly to the certificate-with-external-PSK semantic rejection surface."
+target = "crates/brynja-tls13/src/psk.rs#CertificateExternalPskMode"
+positive_test = "tests/requirements/tls13_certificate_psk.rs#complete_client_server_flow"
+negative_test = "tests/requirements/tls13_certificate_psk.rs#credential_role_importer_and_fallback_failures"
+work_bound = "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
+evidence_gap = "Complete binder, certificate, role, importer, resumption, early-data, privacy and interop evidence remains unresolved until v0.82.3."
+residual = "The combined mode remains explicit and cannot substitute for certificate-only or PSK-only authentication."
+mapping_rationale = "RFC 9973 defines a complete combined mode owned by v0.82.3 rather than an exclusion surface."
 
 [[requirement]]
 domain = "quic"

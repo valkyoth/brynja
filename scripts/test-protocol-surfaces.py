@@ -188,19 +188,19 @@ def test_mandatory_explicit_decisions() -> None:
         for surface in register["surfaces"]
     }
     expected = {
-        "facility.heartbeat": "intentionally-rejected",
-        "facility.status-request-v2": "intentionally-rejected",
+        "facility.heartbeat": "future-work",
+        "facility.status-request-v2": "future-work",
         "facility.sslkeylogfile.production": "intentionally-rejected",
         "facility.sslkeylogfile.test-support": "implemented",
         "facility.tls13.post-handshake-authentication":
-            "intentionally-rejected",
+            "future-work",
         "facility.external-psk.certificate-authentication":
-            "intentionally-rejected",
+            "future-work",
         "algorithm.legacy-pkcs1-client-signature":
-            "intentionally-rejected",
-        "format.ml-kem-pkix-credentials": "intentionally-rejected",
+            "future-work",
+        "format.ml-kem-pkix-credentials": "future-work",
         "protocol.hpke.non-base-modes": "future-work",
-        "format.x509.unsigned": "intentionally-rejected",
+        "format.x509.unsigned": "future-work",
         "protocol.quic.version-specific-cryptography": "future-work",
         "facility.certificate-compression": "future-work",
         "facility.unknown-ignorable-extension": "safely-ignored",

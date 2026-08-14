@@ -327,9 +327,9 @@ authority, lifecycle, errata, registry, and roadmap ownership. v0.3.1
 classifies every pinned registry entry and explicit semantic surface. v0.3.2
 proves stable requirement identity, lifecycle, mapping, and drift enforcement
 with a 12-requirement authority pilot. v0.3.3 adds 34 cryptography, encoding,
-PKIX, OCSP, and CT requirements. v0.3.4 adds 70 TLS, DTLS, and QUIC-TLS
+PKIX, OCSP, and CT requirements. v0.3.4 adds 71 TLS, DTLS, and QUIC-TLS
 requirements with exact version, state, rejection, and caller-owned
-boundaries. v0.3.5 adds 50 optional, HPKE, ECH, ML-KEM, entropy, operational,
+boundaries. v0.3.5 adds 51 optional, HPKE, ECH, ML-KEM, entropy, operational,
 legacy, and residual requirements and closes every locked source, roadmap row,
 and protocol surface. v0.4.0 adds assurance policy, runners, and OS-less compile
 evidence but no protocol corpus, differential backend, Kani proof harness, or

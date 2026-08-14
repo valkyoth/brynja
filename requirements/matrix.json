@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "7a8952a482ca8845a34608f0455deed3fc6b9a91cfac66c6f601c6c5e23fbbbf",
-  "domain_policy_sha256": "8fb8730c38bd464192f98869c8e8632ff656452b1f64335de518138120a1de74",
-  "policy_sha256": "92ac221dc4df334bbe991a85ba3e0a4fee849811a95c89ee7a2d4221686a0428",
+  "closure_policy_sha256": "25e1352987910f7acbb84e7335dd97bd86bebf1a14fd69cb24971f913a2099be",
+  "domain_policy_sha256": "0872366bf2aaa23cb2d4928cbed2694613357a310f61ab010f30a43fb442b71e",
+  "policy_sha256": "ab0519f7cd6f92749aa20801bc71aa8e42f7e89b32c034bdba5a9cc51e2af5f3",
   "requirements": [
     {
       "applicability": "delegate",
@@ -682,8 +682,8 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "iana.tls-extensiontype-values.cachedinformationtype",
         "iana.tls-extensiontype-values.cachedinformationtype.cert-req.1",
@@ -695,7 +695,7 @@
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.2.",
       "id": "BRY-REQ-COMPOSEX-0148",
       "invariants": [
         "resource-bound",
@@ -703,13 +703,13 @@
         "work-bound",
         "version-separation"
       ],
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.148.0",
+      "owner": "0.148.2",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -732,12 +732,12 @@
           "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d"
         }
       ],
-      "statement": "Cached information types are outside the version-one feature set and must not be negotiated accidentally.",
+      "statement": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls.0.148.0"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls/src/cached_info.rs"
         }
       ],
       "tests": [
@@ -10718,9 +10718,9 @@
       "lifecycle": "legacy",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "H0.2.0",
+      "owner": "0.180.5",
       "residual": "Legacy package presence never permits modern-facade reachability, automatic fallback, or a security claim.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "source": {
         "anchor": "TLS 1.0 and SSL 3.0 do not interoperate",
@@ -10744,7 +10744,7 @@
         "sha256": "d6489dc4c87b821146724e00db9a9ed31fb317e3bd628387a8adf50e9033eea1",
         "status": "HISTORIC"
       },
-      "statement": "TLS 1.0 requirements remain confined to the independently packaged legacy TLS 1.0 boundary.",
+      "statement": "TLS 1.0 is completely implemented for both roles and every authenticated standardized operation while remaining confined to the independently packaged legacy TLS 1.0 boundary.",
       "strength": "INVARIANT",
       "targets": [
         {
@@ -10768,7 +10768,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.1.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.2.",
       "id": "BRY-REQ-LEGACY-0100",
       "invariants": [
         "resource-bound",
@@ -10779,10 +10779,10 @@
       "lifecycle": "legacy",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.1.0",
+      "owner": "0.180.2",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -10815,15 +10815,30 @@
           "id": "rfc:4346",
           "kind": "rfc",
           "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
+            "0.180.1",
+            "0.180.2",
+            "0.180.3",
+            "0.180.4",
+            "0.180.5",
+            "0.180.6",
+            "0.180.7",
+            "0.180.8",
+            "0.180.9",
+            "0.180.10",
+            "0.180.11",
+            "0.180.12",
+            "0.180.13",
+            "0.180.14",
+            "0.180.15",
+            "0.180.16",
+            "0.180.17",
+            "0.180.18",
+            "0.180.19",
+            "0.180.20",
+            "0.180.21",
+            "0.180.22",
+            "0.180.23",
+            "0.180.24"
           ],
           "sections": [
             {
@@ -10982,7 +10997,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.3.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.11.",
       "id": "BRY-REQ-LEGACY-0300",
       "invariants": [
         "resource-bound",
@@ -10993,10 +11008,10 @@
       "lifecycle": "legacy",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.3.0",
+      "owner": "0.180.11",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -11008,15 +11023,30 @@
           "id": "rfc:6101",
           "kind": "rfc",
           "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
+            "0.180.1",
+            "0.180.2",
+            "0.180.3",
+            "0.180.4",
+            "0.180.5",
+            "0.180.6",
+            "0.180.7",
+            "0.180.8",
+            "0.180.9",
+            "0.180.10",
+            "0.180.11",
+            "0.180.12",
+            "0.180.13",
+            "0.180.14",
+            "0.180.15",
+            "0.180.16",
+            "0.180.17",
+            "0.180.18",
+            "0.180.19",
+            "0.180.20",
+            "0.180.21",
+            "0.180.22",
+            "0.180.23",
+            "0.180.24"
           ],
           "sections": [],
           "sha256": "9571fe931f68204163a8e8a374a104fd1389ff7056f2e9e5d3fac886f7d180bb",
@@ -11037,15 +11067,30 @@
           "id": "rfc:7568",
           "kind": "rfc",
           "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
+            "0.180.1",
+            "0.180.2",
+            "0.180.3",
+            "0.180.4",
+            "0.180.5",
+            "0.180.6",
+            "0.180.7",
+            "0.180.8",
+            "0.180.9",
+            "0.180.10",
+            "0.180.11",
+            "0.180.12",
+            "0.180.13",
+            "0.180.14",
+            "0.180.15",
+            "0.180.16",
+            "0.180.17",
+            "0.180.18",
+            "0.180.19",
+            "0.180.20",
+            "0.180.21",
+            "0.180.22",
+            "0.180.23",
+            "0.180.24"
           ],
           "sections": [
             {
@@ -11089,7 +11134,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.4.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.14.",
       "id": "BRY-REQ-LEGACY-0400",
       "invariants": [
         "resource-bound",
@@ -11099,10 +11144,10 @@
       "lifecycle": "blocked",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.4.0",
+      "owner": "0.180.14",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -11139,15 +11184,30 @@
             "0.91.0",
             "0.92.0",
             "0.93.0",
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
+            "0.180.1",
+            "0.180.2",
+            "0.180.3",
+            "0.180.4",
+            "0.180.5",
+            "0.180.6",
+            "0.180.7",
+            "0.180.8",
+            "0.180.9",
+            "0.180.10",
+            "0.180.11",
+            "0.180.12",
+            "0.180.13",
+            "0.180.14",
+            "0.180.15",
+            "0.180.16",
+            "0.180.17",
+            "0.180.18",
+            "0.180.19",
+            "0.180.20",
+            "0.180.21",
+            "0.180.22",
+            "0.180.23",
+            "0.180.24"
           ],
           "sections": [
             {
@@ -11191,7 +11251,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.5.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.17.",
       "id": "BRY-REQ-LEGACY-0500",
       "invariants": [
         "resource-bound",
@@ -11201,10 +11261,10 @@
       "lifecycle": "blocked",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.5.0",
+      "owner": "0.180.17",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [],
       "statement": "WTLS research and implementation remain blocked until authenticated protocol-source provenance and rights are recorded.",
@@ -11238,7 +11298,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.6.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.20.",
       "id": "BRY-REQ-LEGACY-0600",
       "invariants": [
         "resource-bound",
@@ -11248,10 +11308,10 @@
       "lifecycle": "blocked",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.6.0",
+      "owner": "0.180.20",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [],
       "statement": "PCT remains blocked until authenticated protocol-source provenance and rights are recorded.",
@@ -11285,7 +11345,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.7.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.22.",
       "id": "BRY-REQ-LEGACY-0700",
       "invariants": [
         "resource-bound",
@@ -11295,10 +11355,10 @@
       "lifecycle": "blocked",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.7.0",
+      "owner": "0.180.22",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [],
       "statement": "Secure Network Programming remains blocked until authenticated protocol-source provenance and rights are recorded.",
@@ -11387,7 +11447,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.8.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.1.",
       "id": "BRY-REQ-LEGACY-0800",
       "invariants": [
         "resource-bound",
@@ -11398,10 +11458,10 @@
       "lifecycle": "legacy",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -11433,15 +11493,30 @@
           "id": "rfc:6151",
           "kind": "rfc",
           "milestones": [
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
+            "0.180.1",
+            "0.180.2",
+            "0.180.3",
+            "0.180.4",
+            "0.180.5",
+            "0.180.6",
+            "0.180.7",
+            "0.180.8",
+            "0.180.9",
+            "0.180.10",
+            "0.180.11",
+            "0.180.12",
+            "0.180.13",
+            "0.180.14",
+            "0.180.15",
+            "0.180.16",
+            "0.180.17",
+            "0.180.18",
+            "0.180.19",
+            "0.180.20",
+            "0.180.21",
+            "0.180.22",
+            "0.180.23",
+            "0.180.24"
           ],
           "sections": [],
           "sha256": "4e5599d99a0d335560c0a47a959e91469ee47d49edcd224aa2b7b0b0a6b8588d",
@@ -11500,7 +11575,7 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "Obsolete certificate, curve, signature, and hash registries can only inform independently packaged legacy work.",
+      "statement": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
       "strength": "INVARIANT",
       "targets": [
         {
@@ -11531,7 +11606,7 @@
       "deviation_rationale": null,
       "domain": "legacy",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until H0.8.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.180.1.",
       "id": "BRY-REQ-LEGACYSSL1-0800",
       "invariants": [
         "resource-bound",
@@ -11541,10 +11616,10 @@
       "lifecycle": "blocked",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [],
       "statement": "SSL 1 reconstruction research remains source-blocked and can never become a secure or published protocol product.",
@@ -11565,6 +11640,96 @@
           "polarity": "negative",
           "status": "planned",
           "target": "tests/surface/legacy.rs#reject_invalid_and_exhausted"
+        }
+      ],
+      "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "iana.tls-parameters.authorization-data",
+        "iana.tls-parameters.authorization-data.dtcp-authorization.1",
+        "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1",
+        "iana.tls-parameters.authorization-data.keynote-assertion-list.1",
+        "iana.tls-parameters.authorization-data.reserved-for-private-use.1",
+        "iana.tls-parameters.authorization-data.saml-assertion-url.1",
+        "iana.tls-parameters.authorization-data.saml-assertion.1",
+        "iana.tls-parameters.authorization-data.unassigned.1",
+        "iana.tls-parameters.authorization-data.unassigned.2",
+        "iana.tls-parameters.authorization-data.x509-attr-cert-url.1",
+        "iana.tls-parameters.authorization-data.x509-attr-cert.1",
+        "iana.tls-parameters.tls-parameters-12",
+        "iana.tls-parameters.tls-parameters-12.authz-data.1",
+        "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1",
+        "iana.tls-parameters.tls-parameters-12.unassigned.1",
+        "iana.tls-parameters.tls-parameters-12.unassigned.2",
+        "iana.tls-parameters.tls-parameters-12.user-mapping-data.1",
+        "iana.tls-parameters.tls-parameters-14",
+        "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1",
+        "iana.tls-parameters.tls-parameters-14.unassigned.1",
+        "iana.tls-parameters.tls-parameters-14.unassigned.2",
+        "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1"
+      ],
+      "deviation_rationale": null,
+      "domain": "tls",
+      "evidence": [],
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.3.",
+      "id": "BRY-REQ-LEGACYTLSFACREG-0148",
+      "invariants": [
+        "resource-bound",
+        "validation",
+        "work-bound",
+        "version-separation"
+      ],
+      "lifecycle": "planned",
+      "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.148.3",
+      "profile": "optional-legacy-residual",
+      "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "collection": "tls-parameters",
+          "domains": [
+            "standards",
+            "tls12",
+            "tls13",
+            "dtls",
+            "hybrid"
+          ],
+          "id": "iana:tls-parameters",
+          "kind": "iana",
+          "milestones": [
+            "0.3.0",
+            "0.3.1",
+            "0.3.4",
+            "0.120.0"
+          ],
+          "sha256": "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
+        }
+      ],
+      "statement": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls/src/legacy_extensions.rs"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "tests/surface/legacy_tls_facilities.rs#registry"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "tests/surface/legacy_tls_facilities.rs#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -12255,15 +12420,15 @@
       "work_bound": "AIA, Base64, URI, request, response, cache metadata, retry, and effect counts each have immutable size and aggregate-work ceilings."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "facility.status-request-v2"
       ],
       "deviation_rationale": null,
       "domain": "ocsp",
       "evidence": [],
-      "evidence_gap": "Negative negotiation and parser fixtures across TLS 1.2, TLS 1.3, and all facades remain unresolved until the OCSP integration gate.",
+      "evidence_gap": "Complete role, version, association, resumption, malformed and independent-peer evidence remains unresolved until v0.148.2.",
       "id": "BRY-REQ-OCSP-0005",
       "invariants": [
         "algorithm-admission",
@@ -12271,17 +12436,17 @@
         "validation",
         "work-bound"
       ],
-      "lifecycle": "rejected",
-      "mapping_rationale": "The status_request_v2 semantic exclusion cites RFC 6961 directly and records the intentionally rejected version-one boundary.",
+      "lifecycle": "planned",
+      "mapping_rationale": "RFC 6961 defines a real optional facility, so v0.148.2 owns its complete implementation rather than an exclusion boundary.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.58.0",
+      "owner": "0.148.2",
       "profile": "crypto-encoding-pkix",
-      "residual": "A registered or peer-offered value never admits the excluded facility, and no generic unknown-extension path may activate it.",
-      "revision": 3,
+      "residual": "The facility remains separately selected and cannot weaken ordinary OCSP or certificate validation.",
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
-          "authority_role": "exclusion",
+          "authority_role": "compatibility",
           "domains": [
             "ocsp"
           ],
@@ -12317,27 +12482,27 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "The TLS multiple certificate status request extension remains excluded from every version-one TLS and OCSP composition.",
+      "statement": "The TLS multiple certificate status request extension is completely implemented through explicit bounded configuration and exact certificate-status association.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:status-request-v2"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls/src/certificate_status.rs#StatusRequestV2"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/ocsp_exclusions.rs#status_request_v1_remains_available"
+          "target": "tests/requirements/status_request_v2.rs#complete_multi_certificate_status"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/ocsp_exclusions.rs#status_request_v2_rejected"
+          "target": "tests/requirements/status_request_v2.rs#association_unsolicited_resumption_and_bound_failures"
         }
       ],
-      "work_bound": "Negotiation rejects the extension by exact bounded identifier comparison before allocating or parsing any response vector."
+      "work_bound": "Request items, response vectors, responder identifiers, certificate associations and aggregate status work have immutable ceilings."
     },
     {
       "applicability": "apply",
@@ -16281,15 +16446,15 @@
       "work_bound": "The extension decision uses bounded exact extension scans and shares certificate duplicate, criticality, and aggregate-work ceilings."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "format.x509.unsigned"
       ],
       "deviation_rationale": null,
       "domain": "pkix",
       "evidence": [],
-      "evidence_gap": "Negative corpus coverage across every certificate-consuming API and facade composition remains unresolved until the v0.46.0 decision gate.",
+      "evidence_gap": "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.60.3.",
       "id": "BRY-REQ-PKIX-0010",
       "invariants": [
         "algorithm-admission",
@@ -16297,17 +16462,17 @@
         "validation",
         "work-bound"
       ],
-      "lifecycle": "rejected",
-      "mapping_rationale": "The unsigned X.509 semantic exclusion cites RFC 9925 directly and records the version-one authentication boundary without admitting its format.",
+      "lifecycle": "planned",
+      "mapping_rationale": "RFC 9925 defines a real format owned by v0.60.3 with an unforgeable non-authentication boundary.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.46.0",
+      "owner": "0.60.3",
       "profile": "crypto-encoding-pkix",
-      "residual": "Research or non-authentication uses require a separately named downstream format and can never reuse the Brynja trust path.",
-      "revision": 2,
+      "residual": "Unsigned objects can never satisfy authentication even though their standardized format is completely implemented.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
-          "authority_role": "exclusion",
+          "authority_role": "current",
           "domains": [
             "pkix"
           ],
@@ -16361,27 +16526,27 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "Unsigned X.509 certificates are excluded from every authentication, trust, signature-verification, and secure transport context.",
+      "statement": "Unsigned X.509 objects are completely implemented through explicit non-authenticating types that cannot satisfy trust, signature-verification, or secure-transport authentication.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:unsigned-x509"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-pki/src/x509.rs#UnsignedCertificate"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/x509_exclusions.rs#signed_certificates_remain_admitted"
+          "target": "tests/requirements/unsigned_x509.rs#complete_non_authenticating_round_trip"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/x509_exclusions.rs#unsigned_certificates_rejected"
+          "target": "tests/requirements/unsigned_x509.rs#trust_signature_and_transport_substitution_rejected"
         }
       ],
-      "work_bound": "Rejection occurs during bounded AlgorithmIdentifier and signature-field validation before path construction or trust evaluation."
+      "work_bound": "Unsigned parsing, generation and validation share bounded DER, extension, object and aggregate-work ceilings without entering path construction."
     },
     {
       "applicability": "delegate",
@@ -16576,32 +16741,32 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "format.ml-kem-pkix-credentials"
       ],
       "deviation_rationale": null,
       "domain": "pkix",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.46.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.60.3.",
       "id": "BRY-REQ-PQPKIX-0046",
       "invariants": [
         "resource-bound",
         "validation",
         "work-bound"
       ],
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.46.0",
+      "owner": "0.60.3",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
-          "authority_role": "exclusion",
+          "authority_role": "current",
           "domains": [
             "hybrid"
           ],
@@ -16653,12 +16818,12 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "ML-KEM PKIX credentials are excluded; ML-KEM is admitted only for explicitly approved key establishment.",
+      "statement": "RFC 9935 ML-KEM PKIX credentials receive complete typed generation, parsing and validation profiles.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:pkix.0.46.0"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-pki/src/algorithm.rs"
         }
       ],
       "tests": [
@@ -19376,15 +19541,15 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "facility.rfc6066-unsupported-configuration"
       ],
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.4.",
       "id": "BRY-REQ-RFC6066CFG-0148",
       "invariants": [
         "resource-bound",
@@ -19392,13 +19557,13 @@
         "work-bound",
         "version-separation"
       ],
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.148.0",
+      "owner": "0.148.4",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -19421,19 +19586,19 @@
           "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d"
         }
       ],
-      "statement": "Local configuration cannot enable, offer, echo, or negotiate unsupported RFC 6066 facilities even though bounded peer ClientHello inputs are safely ignored.",
+      "statement": "The authenticated legacy RFC 6066 facilities receive complete explicit configuration and protocol implementations.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls.0.148.0"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls/src/configuration.rs#LegacyExtensionConfiguration"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/rfc6066_configuration.rs#legacy_extensions_absent"
+          "target": "tests/requirements/rfc6066_configuration.rs#complete_legacy_profiles"
         },
         {
           "polarity": "negative",
@@ -20165,43 +20330,46 @@
       ]
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
-        "facility.heartbeat",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       ],
       "deviation_rationale": null,
       "evidence": [],
       "id": "BRY-REQ-TLS-0002",
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.19.0",
-      "residual": "Every modern stream and datagram parser must retain an explicit negative test for negotiation and content.",
-      "revision": 5,
+      "owner": "0.148.1",
+      "residual": "Heartbeat remains disabled by default and cannot be treated as implicit application liveness; malformed, unsolicited, excessive, or unnegotiated messages remain rejected.",
+      "revision": 6,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
-        "disposition": "intentionally-rejected",
+        "disposition": "future-work",
         "kind": "iana",
         "record_sha256": "4bc716f3aebdf0c14656d60d125f46a303adf4634c57a7b8a45cf5d70ef1d754",
         "registry": "tls-extensiontype-values-1",
         "snapshot_sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
         "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       },
-      "statement": "The registered Heartbeat extension is excluded from every modern Brynja TLS and DTLS profile.",
+      "statement": "The registered Heartbeat extension is completely implemented for every applicable TLS and DTLS role through explicit bounded opt-in policy.",
       "strength": "REGISTRY",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:modern-heartbeat-rejection"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility"
         }
       ],
       "tests": [
         {
-          "status": "actual",
+          "status": "planned",
           "target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
+        },
+        {
+          "status": "planned",
+          "target": "tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles"
         }
       ]
     },
@@ -20565,32 +20733,32 @@
       "work_bound": "Parsing, state transitions, provider operations, retained bytes, retries, and output must consume explicit caller-owned budgets."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "facility.heartbeat"
       ],
       "deviation_rationale": null,
       "domain": "tls",
       "evidence": [],
-      "evidence_gap": "Wire content, inner-content, and negotiation rejection are executable; future engine feature and resumption state must retain the same exclusion.",
+      "evidence_gap": "Complete TLS/DTLS version, role, resumption, path, resource and interoperability evidence remains unresolved until v0.148.1.",
       "id": "BRY-REQ-TLS-0018",
       "invariants": [
         "resource-bound",
         "validation",
         "version-separation"
       ],
-      "lifecycle": "rejected",
-      "mapping_rationale": "RFC 6520 is pinned solely as exclusion authority, and its semantic rejection surface owns every TLS registry entry classified intentionally rejected at the wire-policy milestone.",
+      "lifecycle": "planned",
+      "mapping_rationale": "RFC 6520 defines a real standardized facility, so v0.148.1 owns its complete opt-in implementation rather than recognition-only rejection.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.19.0",
+      "owner": "0.148.1",
       "profile": "tls-dtls-quic",
-      "residual": "Applications needing liveness must implement it above the authenticated application protocol without gaining access to TLS Heartbeat.",
-      "revision": 3,
+      "residual": "Heartbeat remains unsuitable as implicit application liveness and is never enabled by a modern default.",
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
-          "authority_role": "exclusion",
+          "authority_role": "current",
           "domains": [
             "tls13"
           ],
@@ -20661,27 +20829,27 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "TLS and DTLS Heartbeat is excluded from every modern Brynja engine, facade, feature, configuration, and resumption state.",
+      "statement": "TLS and DTLS Heartbeat is implemented completely for every applicable version through explicit bounded opt-in policy and remains disabled by default.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls-heartbeat-excluded"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
+          "target": "tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
+          "target": "tests/requirements/heartbeat.rs#length_disclosure_amplification_and_default_rejection"
         }
       ],
-      "work_bound": "Heartbeat recognition performs bounded identifier and context checks and rejects before allocation, echoing, cryptography, or state mutation."
+      "work_bound": "Payload, padding, response, rate, amplification, path and aggregate work are bounded before echo or output mutation."
     },
     {
       "applicability": "apply",
@@ -20835,7 +21003,7 @@
       "owner": "0.68.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -20889,15 +21057,30 @@
             "0.80.0",
             "0.81.0",
             "0.82.0",
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
+            "0.180.1",
+            "0.180.2",
+            "0.180.3",
+            "0.180.4",
+            "0.180.5",
+            "0.180.6",
+            "0.180.7",
+            "0.180.8",
+            "0.180.9",
+            "0.180.10",
+            "0.180.11",
+            "0.180.12",
+            "0.180.13",
+            "0.180.14",
+            "0.180.15",
+            "0.180.16",
+            "0.180.17",
+            "0.180.18",
+            "0.180.19",
+            "0.180.20",
+            "0.180.21",
+            "0.180.22",
+            "0.180.23",
+            "0.180.24"
           ],
           "sections": [
             {
@@ -21919,7 +22102,7 @@
       "owner": "0.83.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -22165,15 +22348,30 @@
             "0.91.0",
             "0.92.0",
             "0.93.0",
-            "H0.1.0",
-            "H0.1.1",
-            "H0.2.0",
-            "H0.3.0",
-            "H0.4.0",
-            "H0.5.0",
-            "H0.6.0",
-            "H0.7.0",
-            "H0.8.0"
+            "0.180.1",
+            "0.180.2",
+            "0.180.3",
+            "0.180.4",
+            "0.180.5",
+            "0.180.6",
+            "0.180.7",
+            "0.180.8",
+            "0.180.9",
+            "0.180.10",
+            "0.180.11",
+            "0.180.12",
+            "0.180.13",
+            "0.180.14",
+            "0.180.15",
+            "0.180.16",
+            "0.180.17",
+            "0.180.18",
+            "0.180.19",
+            "0.180.20",
+            "0.180.21",
+            "0.180.22",
+            "0.180.23",
+            "0.180.24"
           ],
           "sections": [
             {
@@ -24810,15 +25008,15 @@
       "work_bound": "Parsing, state transitions, provider operations, retained bytes, retries, and output must consume explicit caller-owned budgets."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1"
       ],
       "deviation_rationale": null,
       "domain": "tls12",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.58.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.2.",
       "id": "BRY-REQ-TLS12EXT-0058",
       "invariants": [
         "resource-bound",
@@ -24826,13 +25024,13 @@
         "work-bound",
         "version-separation"
       ],
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.58.0",
+      "owner": "0.148.2",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -24855,7 +25053,7 @@
           "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d"
         },
         {
-          "authority_role": "exclusion",
+          "authority_role": "compatibility",
           "domains": [
             "ocsp"
           ],
@@ -24886,12 +25084,12 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "The status_request_v2 extension is excluded from the hardened TLS 1.2 profile.",
+      "statement": "The status_request_v2 extension receives a complete separately selected implementation.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls12.0.58.0"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls12/src/extensions.rs"
         }
       ],
       "tests": [
@@ -25156,15 +25354,15 @@
       "work_bound": "Parsing, state transitions, provider operations, retained bytes, retries, and output must consume explicit caller-owned budgets."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "facility.status-request-v2"
       ],
       "deviation_rationale": null,
       "domain": "tls12",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.58.0.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.148.2.",
       "id": "BRY-REQ-TLS12X-0058",
       "invariants": [
         "resource-bound",
@@ -25172,17 +25370,17 @@
         "work-bound",
         "version-separation"
       ],
-      "lifecycle": "rejected",
+      "lifecycle": "planned",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.58.0",
+      "owner": "0.148.2",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
-          "authority_role": "exclusion",
+          "authority_role": "compatibility",
           "domains": [
             "ocsp"
           ],
@@ -25218,12 +25416,12 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "status_request_v2 is excluded from the hardened TLS 1.2 version-one profile.",
+      "statement": "status_request_v2 receives a complete separately selected implementation without changing hardened defaults.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls12.0.58.0"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls12/src/extensions.rs"
         }
       ],
       "tests": [
@@ -25241,15 +25439,15 @@
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "algorithm.legacy-pkcs1-client-signature"
       ],
       "deviation_rationale": null,
       "domain": "tls13",
       "evidence": [],
-      "evidence_gap": "Executable offer, selection, configuration, resumption, and import rejection matrices remain unresolved until v0.46.0.",
+      "evidence_gap": "Complete role, certificate, signature, transcript, interop and isolation evidence remains unresolved until v0.82.4.",
       "id": "BRY-REQ-TLS13-0046",
       "invariants": [
         "algorithm-admission",
@@ -25257,17 +25455,17 @@
         "validation",
         "version-separation"
       ],
-      "lifecycle": "rejected",
-      "mapping_rationale": "RFC 9963 is retained only as exclusion authority and maps exactly to the legacy client-signature semantic surface owned by algorithm admission.",
+      "lifecycle": "planned",
+      "mapping_rationale": "RFC 9963 defines an exact compatibility capability owned by v0.82.4 over the sole legacy RSA implementation.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.46.0",
+      "owner": "0.82.4",
       "profile": "tls-dtls-quic",
-      "residual": "Compatibility with peers requiring these code points is deliberately unavailable in the modern TLS 1.3 engine.",
-      "revision": 2,
+      "residual": "The code points remain absent from server signatures and modern defaults despite complete explicit compatibility.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
-          "authority_role": "exclusion",
+          "authority_role": "current",
           "domains": [
             "tls13"
           ],
@@ -25322,27 +25520,27 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "Legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points are excluded from the modern TLS 1.3 profile.",
+      "statement": "Legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points are fully implemented for their exact TLS 1.3 client role through explicit server compatibility policy.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls13-legacy-pkcs1-client-signatures"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls13-handshake/src/signature.rs#LegacyClientPkcs1"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/tls13_exclusions.rs#legacy_pkcs1_absent"
+          "target": "tests/requirements/tls13_legacy_client_signature.rs#client_sign_server_verify"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/tls13_exclusions.rs#reject_legacy_pkcs1_selection"
+          "target": "tests/requirements/tls13_legacy_client_signature.rs#role_scheme_and_default_rejection"
         }
       ],
-      "work_bound": "Code-point recognition and rejection are bounded and occur before certificate selection, signing requests, or transcript-state mutation."
+      "work_bound": "Negotiation, certificate selection, signing, verification and transcript work share the fixed TLS 1.3 handshake and RSA limits."
     },
     {
       "applicability": "apply",
@@ -29133,15 +29331,15 @@
       "work_bound": "Parsing, state transitions, provider operations, retained bytes, retries, and output must consume explicit caller-owned budgets."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "facility.tls13.post-handshake-authentication"
       ],
       "deviation_rationale": null,
       "domain": "tls13",
       "evidence": [],
-      "evidence_gap": "Executable configuration, offer, message-order, transcript, resumption, and cancellation rejection tests remain unresolved until v0.72.0.",
+      "evidence_gap": "Complete configuration, role, ordering, transcript, KeyUpdate, resumption, cancellation and interop evidence remains unresolved until v0.82.2.",
       "id": "BRY-REQ-TLS13-0721",
       "invariants": [
         "key-lifecycle",
@@ -29149,13 +29347,13 @@
         "validation",
         "version-separation"
       ],
-      "lifecycle": "rejected",
-      "mapping_rationale": "The TLS 1.3 authority permits this optional facility, but the reviewed semantic surface explicitly rejects it at the client-authentication milestone.",
+      "lifecycle": "planned",
+      "mapping_rationale": "The TLS 1.3 authority defines a real optional state machine, so v0.82.2 owns its complete explicit implementation.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.72.0",
+      "owner": "0.82.2",
       "profile": "tls-dtls-quic",
-      "residual": "Applications requiring renewed authentication must establish a new connection or use an authenticated application-layer mechanism.",
-      "revision": 2,
+      "residual": "The facility remains disabled by default and cannot silently grant renewed application authorization.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -29240,27 +29438,27 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "TLS 1.3 post-handshake client authentication is deliberately excluded from the version-one protocol profile.",
+      "statement": "TLS 1.3 post-handshake authentication is completely implemented in both roles through explicit opt-in policy.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls13-post-handshake-authentication"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls13-handshake/src/authentication.rs#PostHandshakeAuthentication"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/tls13_exclusions.rs#post_handshake_auth_absent"
+          "target": "tests/requirements/tls13_post_handshake_auth.rs#complete_client_server_flow"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/tls13_exclusions.rs#reject_post_handshake_auth"
+          "target": "tests/requirements/tls13_post_handshake_auth.rs#ordering_context_concurrency_and_default_rejection"
         }
       ],
-      "work_bound": "Extension and message recognition reject in bounded work without creating authentication state, retaining transcript data, or requesting credentials."
+      "work_bound": "Requests, transcripts, credentials, concurrent states and aggregate post-handshake work have explicit connection-scoped ceilings."
     },
     {
       "applicability": "apply",
@@ -29450,15 +29648,15 @@
       "work_bound": "Parsing, state transitions, provider operations, retained bytes, retries, and output must consume explicit caller-owned budgets."
     },
     {
-      "applicability": "reject",
-      "decision": "exclude",
+      "applicability": "apply",
+      "decision": "enforce",
       "decision_ids": [
         "facility.external-psk.certificate-authentication"
       ],
       "deviation_rationale": null,
       "domain": "tls13",
       "evidence": [],
-      "evidence_gap": "Executable offer, selection, binder, certificate, ticket, configuration, and fallback rejection tests remain unresolved until v0.76.2.",
+      "evidence_gap": "Complete binder, certificate, role, importer, resumption, early-data, privacy and interop evidence remains unresolved until v0.82.3.",
       "id": "BRY-REQ-TLS13-0763",
       "invariants": [
         "algorithm-admission",
@@ -29467,17 +29665,17 @@
         "validation",
         "version-separation"
       ],
-      "lifecycle": "rejected",
-      "mapping_rationale": "RFC 9973 is pinned solely as exclusion authority and maps exactly to the certificate-with-external-PSK semantic rejection surface.",
+      "lifecycle": "planned",
+      "mapping_rationale": "RFC 9973 defines a complete combined mode owned by v0.82.3 rather than an exclusion surface.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.76.2",
+      "owner": "0.82.3",
       "profile": "tls-dtls-quic",
-      "residual": "Deployments must choose the admitted certificate-authenticated handshake or the separately provisioned external-PSK profile.",
-      "revision": 2,
+      "residual": "The combined mode remains explicit and cannot substitute for certificate-only or PSK-only authentication.",
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
-          "authority_role": "exclusion",
+          "authority_role": "current",
           "domains": [
             "tls13-session"
           ],
@@ -29525,32 +29723,32 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "Certificate authentication combined with an external TLS 1.3 PSK is excluded from the version-one Brynja profile.",
+      "statement": "Certificate authentication combined with an external TLS 1.3 PSK is implemented as a complete explicitly selected authentication mode.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "boundary",
-          "target": "boundary:tls13-certificate-with-external-psk"
+          "kind": "planned-symbol",
+          "target": "crates/brynja-tls13/src/psk.rs#CertificateExternalPskMode"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/tls13_exclusions.rs#certificate_psk_absent"
+          "target": "tests/requirements/tls13_certificate_psk.rs#complete_client_server_flow"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/tls13_exclusions.rs#reject_certificate_psk_mode"
+          "target": "tests/requirements/tls13_certificate_psk.rs#credential_role_importer_and_fallback_failures"
         }
       ],
-      "work_bound": "Mode recognition rejects before certificate selection, binder continuation, signature requests, or retention of provisional authentication state."
+      "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "7ac564cac251eda04000f30802eda7a2dd45ee9c5eceaee0681111d4b50eda50",
+  "residual_policy_sha256": "e52fb706404aabf84653e746b924a7ad6f5e05f9794be6382c5dd2a7c5223a36",
   "schema": 5,
-  "source_ledger_sha256": "71c159c6e111c815d5f23535c480b22980285c828a9029c0eb2d94a29d7f124a",
-  "surface_register_sha256": "32163f1788dd27d9d99b6b08f8e022ec92c6fe7d6966b609f8b0b84100fcd729",
-  "transport_policy_sha256": "59560d621bed23b3bfa19a827c2c3bfeee2a4ab4a9c68e84a996a84ae05fbd69"
+  "source_ledger_sha256": "c7ba7147eef7e37cca2cd98ab4bb34deeb592154207631a7779119ef0ea3567c",
+  "surface_register_sha256": "e23cf056c118bd7473fff4c175a9398330630f771740d66b5e76faed9b54f125",
+  "transport_policy_sha256": "c0f33bb09ea5153a641884eb8adcbbaebae5576c6976906342f76cbb584b2bb7"
 }

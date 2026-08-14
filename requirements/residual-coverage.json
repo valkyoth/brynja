@@ -156,6 +156,7 @@
       "requirement_ids": [
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-LEGACY-0800",
+        "BRY-REQ-LEGACYTLSFACREG-0148",
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111"
       ],
@@ -320,15 +321,30 @@
       "id": "rfc:4346",
       "kind": "rfc",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "normative_sections": [
         {
@@ -546,15 +562,30 @@
       "id": "rfc:6101",
       "kind": "rfc",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0300"
@@ -571,15 +602,30 @@
       "id": "rfc:6151",
       "kind": "rfc",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "requirement_ids": [
         "BRY-REQ-LEGACY-0800"
@@ -621,15 +667,30 @@
         "0.91.0",
         "0.92.0",
         "0.93.0",
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "normative_sections": [
         {
@@ -655,7 +716,7 @@
       "status": "PROPOSED STANDARD"
     },
     {
-      "authority_role": "exclusion",
+      "authority_role": "compatibility",
       "domains": [
         "ocsp"
       ],
@@ -864,15 +925,30 @@
       "id": "rfc:7568",
       "kind": "rfc",
       "milestones": [
-        "H0.1.0",
-        "H0.1.1",
-        "H0.2.0",
-        "H0.3.0",
-        "H0.4.0",
-        "H0.5.0",
-        "H0.6.0",
-        "H0.7.0",
-        "H0.8.0"
+        "0.180.1",
+        "0.180.2",
+        "0.180.3",
+        "0.180.4",
+        "0.180.5",
+        "0.180.6",
+        "0.180.7",
+        "0.180.8",
+        "0.180.9",
+        "0.180.10",
+        "0.180.11",
+        "0.180.12",
+        "0.180.13",
+        "0.180.14",
+        "0.180.15",
+        "0.180.16",
+        "0.180.17",
+        "0.180.18",
+        "0.180.19",
+        "0.180.20",
+        "0.180.21",
+        "0.180.22",
+        "0.180.23",
+        "0.180.24"
       ],
       "normative_sections": [
         {
@@ -2396,7 +2472,7 @@
       "status": "INFORMATIONAL"
     },
     {
-      "authority_role": "exclusion",
+      "authority_role": "current",
       "domains": [
         "hybrid"
       ],
@@ -2536,10 +2612,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "7ac564cac251eda04000f30802eda7a2dd45ee9c5eceaee0681111d4b50eda50",
-  "requirement_count": 50,
+  "policy_sha256": "e52fb706404aabf84653e746b924a7ad6f5e05f9794be6382c5dd2a7c5223a36",
+  "requirement_count": 51,
   "schema": 1,
-  "surface_count": 765,
+  "surface_count": 787,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -2615,10 +2691,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "facility.rfc6066-unsupported-configuration",
-      "owner": "0.148.0",
+      "owner": "0.148.4",
       "requirement_id": "BRY-REQ-RFC6066CFG-0148"
     },
     {
@@ -2639,10 +2715,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls12",
       "id": "facility.status-request-v2",
-      "owner": "0.58.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-TLS12X-0058"
     },
     {
@@ -2655,10 +2731,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "pkix",
       "id": "format.ml-kem-pkix-credentials",
-      "owner": "0.46.0",
+      "owner": "0.60.3",
       "requirement_id": "BRY-REQ-PQPKIX-0046"
     },
     {
@@ -7031,50 +7107,50 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype",
-      "owner": "0.148.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-COMPOSEX-0148"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.cert-req.1",
-      "owner": "0.148.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-COMPOSEX-0148"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.cert.1",
-      "owner": "0.148.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-COMPOSEX-0148"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.reserved-for-private-use.1",
-      "owner": "0.148.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-COMPOSEX-0148"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.reserved.1",
-      "owner": "0.148.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-COMPOSEX-0148"
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.cachedinformationtype.unassigned.1",
-      "owner": "0.148.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-COMPOSEX-0148"
     },
     {
@@ -7639,10 +7715,10 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "intentionally-rejected",
+      "disposition": "future-work",
       "domain": "tls12",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.status-request-v2.1",
-      "owner": "0.58.0",
+      "owner": "0.148.2",
       "requirement_id": "BRY-REQ-TLS12EXT-0058"
     },
     {
@@ -7943,10 +8019,98 @@
     },
     {
       "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.dtcp-authorization.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.keynote-assertion-list-url.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.keynote-assertion-list.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.reserved-for-private-use.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.saml-assertion-url.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.saml-assertion.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.unassigned.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.unassigned.2",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.x509-attr-cert-url.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.authorization-data.x509-attr-cert.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-10",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -7954,7 +8118,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-10.explicit-char2.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -7962,7 +8126,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-10.explicit-prime.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -7970,7 +8134,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-10.named-curve.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -7978,7 +8142,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-10.reserved-for-private-use.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -7986,7 +8150,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-10.unassigned.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -7994,15 +8158,103 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-10.unassigned.2",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-12",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-12.authz-data.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-12.reserved-for-private-use.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-12.unassigned.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-12.unassigned.2",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-12.user-mapping-data.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-14",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-14.reserved-for-private-use.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-14.unassigned.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-14.unassigned.2",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-parameters.tls-parameters-14.upn-domain-hint.1",
+      "owner": "0.148.3",
+      "requirement_id": "BRY-REQ-LEGACYTLSFACREG-0148"
     },
     {
       "coverage": "requirement",
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8010,7 +8262,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.anonymous.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8018,7 +8270,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.dsa.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8026,7 +8278,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.ecdsa.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8034,7 +8286,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.ed25519.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8042,7 +8294,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.ed448.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8050,7 +8302,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.gostr34102012-256.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8058,7 +8310,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.gostr34102012-512.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8066,7 +8318,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.reserved-for-private-use.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8074,7 +8326,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.reserved.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8082,7 +8334,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.reserved.2",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8090,7 +8342,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.reserved.3",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8098,7 +8350,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-16.rsa.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8106,7 +8358,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8114,7 +8366,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.intrinsic.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8122,7 +8374,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.md5.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8130,7 +8382,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.none.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8138,7 +8390,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.reserved-for-private-use.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8146,7 +8398,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.reserved.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8154,7 +8406,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.reserved.2",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8162,7 +8414,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.sha1.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8170,7 +8422,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.sha224.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8178,7 +8430,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.sha256.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8186,7 +8438,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.sha384.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8194,7 +8446,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-18.sha512.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8202,7 +8454,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8210,7 +8462,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.dss-ephemeral-dh-reserved.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8218,7 +8470,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.dss-fixed-dh.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8226,7 +8478,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.dss-sign.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8234,7 +8486,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.ecdsa-fixed-ecdh.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8242,7 +8494,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.ecdsa-sign.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8250,7 +8502,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.fortezza-dms-reserved.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8258,7 +8510,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.gost-sign256.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8266,7 +8518,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.gost-sign512.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8274,7 +8526,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.reserved-for-private-use.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8282,7 +8534,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.rsa-ephemeral-dh-reserved.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8290,7 +8542,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.rsa-fixed-dh.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8298,7 +8550,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.rsa-fixed-ecdh.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8306,7 +8558,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.rsa-sign.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8314,7 +8566,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.unassigned.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8322,7 +8574,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.unassigned.2",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8330,7 +8582,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.unassigned.3",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8338,7 +8590,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-2.unassigned.4",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8354,7 +8606,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-9",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8362,7 +8614,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-9.ansix962-compressed-char2.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8370,7 +8622,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-9.ansix962-compressed-prime.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8378,7 +8630,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-9.reserved-for-private-use.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8386,7 +8638,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-9.unassigned.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8394,7 +8646,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "iana.tls-parameters.tls-parameters-9.uncompressed.1",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACY-0800"
     },
     {
@@ -8538,7 +8790,7 @@
       "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.pct",
-      "owner": "H0.6.0",
+      "owner": "0.180.20",
       "requirement_id": "BRY-REQ-LEGACY-0600"
     },
     {
@@ -8546,7 +8798,7 @@
       "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.snp",
-      "owner": "H0.7.0",
+      "owner": "0.180.22",
       "requirement_id": "BRY-REQ-LEGACY-0700"
     },
     {
@@ -8554,7 +8806,7 @@
       "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.ssl1-research",
-      "owner": "H0.8.0",
+      "owner": "0.180.1",
       "requirement_id": "BRY-REQ-LEGACYSSL1-0800"
     },
     {
@@ -8562,7 +8814,7 @@
       "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.ssl2",
-      "owner": "H0.4.0",
+      "owner": "0.180.14",
       "requirement_id": "BRY-REQ-LEGACY-0400"
     },
     {
@@ -8570,7 +8822,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "legacy.ssl3",
-      "owner": "H0.3.0",
+      "owner": "0.180.11",
       "requirement_id": "BRY-REQ-LEGACY-0300"
     },
     {
@@ -8578,7 +8830,7 @@
       "disposition": "legacy-only",
       "domain": "legacy",
       "id": "legacy.tls11",
-      "owner": "H0.1.0",
+      "owner": "0.180.2",
       "requirement_id": "BRY-REQ-LEGACY-0100"
     },
     {
@@ -8586,7 +8838,7 @@
       "disposition": "future-work",
       "domain": "legacy",
       "id": "legacy.wtls",
-      "owner": "H0.5.0",
+      "owner": "0.180.17",
       "requirement_id": "BRY-REQ-LEGACY-0500"
     },
     {

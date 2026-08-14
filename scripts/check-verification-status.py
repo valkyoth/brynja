@@ -179,6 +179,18 @@ def validate_support_document(path: Path, text: str) -> None:
         raise VerificationStatusError(f"{path}: {error}") from error
 
 
+def validate_readme_split(root_readme: bytes, crate_readme: bytes) -> None:
+    if root_readme == crate_readme:
+        raise VerificationStatusError(
+            "GitHub and crates.io READMEs must remain purpose-specific"
+        )
+    crate_lines = len(crate_readme.splitlines())
+    if crate_lines > 200:
+        raise VerificationStatusError(
+            f"crates.io README exceeds compact 200-line ceiling: {crate_lines}"
+        )
+
+
 def check(root: Path) -> None:
     for path in ROOT_READMES:
         validate_document(path, (root / path).read_text(encoding="utf-8"), ROOT_ROWS)
@@ -190,8 +202,10 @@ def check(root: Path) -> None:
         validate_document(path, (root / path).read_text(encoding="utf-8"), (row,))
     for path in SUPPORT_NOTES:
         validate_support_document(path, (root / path).read_text(encoding="utf-8"))
-    if (root / ROOT_READMES[0]).read_bytes() != (root / ROOT_READMES[1]).read_bytes():
-        raise VerificationStatusError("root and brynja crate READMEs differ")
+    validate_readme_split(
+        (root / ROOT_READMES[0]).read_bytes(),
+        (root / ROOT_READMES[1]).read_bytes(),
+    )
 
 
 def main() -> int:

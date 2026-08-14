@@ -7,6 +7,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Give the published `brynja` package a compact crates.io-specific README with
+  current capability examples, design boundaries, verification tables, a
+  reduced workspace guide, and links to the detailed repository documentation;
+  keep the full project narrative in the GitHub README.
 - Replace the root crate-level verification matrix with smaller concrete
   capability tables that distinguish public usability from independent review,
   retain the architectural component inventory in `docs/VERIFICATION_STATUS.md`,

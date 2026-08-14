@@ -81,11 +81,6 @@ python3 scripts/test-requirement-residuals.py
 python3 scripts/check-assurance.py
 python3 scripts/test-assurance.py
 scripts/check-kani.sh
-if ! cmp -s README.md crates/brynja/README.md; then
-    echo "README.md and crates/brynja/README.md must remain identical" >&2
-    diff -u README.md crates/brynja/README.md >&2 || true
-    exit 1
-fi
 cargo check --workspace --all-features
 cargo check --workspace --no-default-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings

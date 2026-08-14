@@ -95,6 +95,18 @@ def main() -> int:
             raise
     else:
         raise AssertionError("ambiguous implementation checkmark unexpectedly passed")
+    MODULE.validate_readme_split(b"full GitHub README\n", b"compact crate README\n")
+    for root_readme, crate_readme, expected in (
+        (b"same\n", b"same\n", "purpose-specific"),
+        (b"full\n", b"line\n" * 201, "200-line ceiling"),
+    ):
+        try:
+            MODULE.validate_readme_split(root_readme, crate_readme)
+        except MODULE.VerificationStatusError as error:
+            if expected not in str(error):
+                raise
+        else:
+            raise AssertionError(f"README split regression passed: {expected}")
     MODULE.validate_support_document(Path("support.md"), SUPPORT)
     try:
         MODULE.validate_support_document(

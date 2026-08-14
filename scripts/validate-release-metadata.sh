@@ -206,7 +206,10 @@ test -s standards/transport-surfaces/tls12.toml
 test -s standards/transport-surfaces/quic.toml
 test -s standards/transport-surfaces/dtls.toml
 test -f release-crates.toml
-cmp -s README.md crates/brynja/README.md
+if cmp -s README.md crates/brynja/README.md; then
+    echo "GitHub and crates.io READMEs must remain purpose-specific" >&2
+    exit 1
+fi
 grep -q 'run: scripts/install-ci-tools.sh' .github/workflows/ci.yml
 grep -q 'python3 scripts/check-assurance.py' scripts/checks.sh
 grep -q 'scripts/check-kani.sh' scripts/checks.sh

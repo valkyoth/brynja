@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "df2d5e51f5471ddcac4b2968f9c1e49741f167145f34cb7c590b45ef3c2091e2"
-surface_register_sha256 = "c69f1f112c849d389c39a662466338dbf466d95a6ce7ab2b420b30ed29842e9b"
+source_ledger_sha256 = "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6"
+surface_register_sha256 = "5fdf5d436062c8bba2c8f6d6a99c37fc84164e1d685d2ac21afe446f99032dba"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -1158,8 +1158,9 @@ surface_ids = [
 [[surface_group]]
 id = "BRY-REQ-PQPKIX-0046"
 domain = "pkix"
-owner = "0.60.3"
+owner = "0.60.11"
 disposition = "future-work"
+revision = 4
 sources = ["rfc:9935"]
 surface_ids = [
   "format.ml-kem-pkix-credentials",

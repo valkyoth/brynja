@@ -753,7 +753,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002"
       ],
-      "scope": "Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement all six FIPS 202 functions: SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256; expose complete fixed-output and arbitrary-length XOF APIs with exact domain separation, absorb, finalization, squeeze, length, and state-lifecycle rules without exposing a raw permutation.",
+      "scope": "Freeze reusable no_std `brynja-hash-sha3` sponge ownership around one private Keccak-f[1600] permutation, then complete SHA3-224 and SHA3-256 with distinct rates, suffixes, fixed-output states, one-shot and streaming APIs, authoritative vectors, padding boundaries, checked lengths, proofs, and no raw public permutation.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -766,8 +766,30 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "Complete FIPS 202 SHA-3 And SHAKE Family",
+      "title": "Keccak Foundation And Complete SHA3-224/SHA3-256",
       "version": "0.24.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration.",
+      "source_ids": [],
+      "title": "Complete SHA3-384 And SHA3-512",
+      "version": "0.24.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].",
+      "source_ids": [],
+      "title": "Complete SHAKE128 And SHAKE256",
+      "version": "0.24.2"
     },
     {
       "boundary": {
@@ -775,10 +797,10 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve each rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, and arbitrary tail exactly, and record scalar-only decisions where acceleration is not supportable or useful.",
+      "scope": "Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve every rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, arbitrary tail, KAT, quarantine, and scalar-equivalence rule.",
       "source_ids": [],
       "title": "Complete SHA-3 And SHAKE CPU Acceleration",
-      "version": "0.24.1"
+      "version": "0.24.3"
     },
     {
       "boundary": {
@@ -789,7 +811,7 @@
       "scope": "Close the FIPS 202 chain with a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental-squeeze, scalar, and every admitted accelerated path, including zero-length and multi-block output, authoritative vectors, no_std installation, and domain-separation negative tests.",
       "source_ids": [],
       "title": "Complete SHA-3 And SHAKE Public API Usability Acceptance",
-      "version": "0.24.2"
+      "version": "0.24.4"
     },
     {
       "boundary": {
@@ -800,7 +822,7 @@
       "scope": "Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation.",
       "source_ids": [],
       "title": "Complete First-Party Legacy SHA-1",
-      "version": "0.24.3"
+      "version": "0.24.5"
     },
     {
       "boundary": {
@@ -811,7 +833,7 @@
       "scope": "Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use.",
       "source_ids": [],
       "title": "Complete First-Party Legacy MD5",
-      "version": "0.24.4"
+      "version": "0.24.6"
     },
     {
       "boundary": {
@@ -822,7 +844,7 @@
       "scope": "Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters.",
       "source_ids": [],
       "title": "Legacy SHA-1 And MD5 Usability And Isolation Acceptance",
-      "version": "0.24.5"
+      "version": "0.24.7"
     },
     {
       "boundary": null,
@@ -904,7 +926,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0005"
       ],
-      "scope": "Implement the complete FIPS 197 AES-128, AES-192, and AES-256 forward and inverse ciphers with key expansion, encrypt and decrypt block APIs, official vectors, typed key sizes, immediate schedule destruction, and portable constant-time code without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.",
+      "scope": "Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, immediate schedule destruction, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -917,8 +939,19 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "Complete Portable AES",
+      "title": "Complete Portable AES-128",
       "version": "0.27.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Complete FIPS 197 AES-192 and AES-256 key expansion and forward and inverse block operations over the reviewed portable owner while preserving distinct key and round identities, typed APIs, official vectors, cleanup, proofs, and per-compiler and per-target constant-time evidence.",
+      "source_ids": [],
+      "title": "Complete Portable AES-192 And AES-256",
+      "version": "0.27.1"
     },
     {
       "boundary": {
@@ -926,10 +959,10 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical key expansion, inverse, KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.",
+      "scope": "Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.",
       "source_ids": [],
       "title": "Complete AES x86_64 And AArch64 Acceleration",
-      "version": "0.27.1"
+      "version": "0.27.2"
     },
     {
       "boundary": {
@@ -940,7 +973,7 @@
       "scope": "Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission.",
       "source_ids": [],
       "title": "Complete AES RISC-V Acceleration Candidate",
-      "version": "0.27.2"
+      "version": "0.27.3"
     },
     {
       "boundary": {
@@ -951,7 +984,7 @@
       "scope": "Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation.",
       "source_ids": [],
       "title": "AES Public API Usability Acceptance",
-      "version": "0.27.3"
+      "version": "0.27.4"
     },
     {
       "boundary": null,
@@ -1001,7 +1034,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0007"
       ],
-      "scope": "Implement the complete admitted NIST SP 800-38D AES-GCM and GMAC surface over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, AAD-only GMAC, nonce and invocation limits, checked length domains, and official vectors; authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on failure, and introduce its failure-atomicity proof harness beside the implementation.",
+      "scope": "Implement complete NIST SP 800-38D AES-GCM seal and open over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, nonce and invocation limits, checked length domains, official vectors, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, and failure-atomicity proofs.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -1014,8 +1047,19 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "Complete AES-GCM And GMAC",
+      "title": "Complete AES-GCM",
       "version": "0.29.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the complete AAD-only GMAC surface over every admitted AES width with exact IV and tag policies, invocation and length limits, constant-time verification, official vectors, state cleanup, distinct MAC tag types, and public APIs that cannot be confused with AES-GCM ciphertext operations.",
+      "source_ids": [],
+      "title": "Complete GMAC",
+      "version": "0.29.1"
     },
     {
       "boundary": {
@@ -1023,10 +1067,10 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Integrate only admitted AES and GHASH backend pairs into an accelerated AES-GCM provider with per-operation dispatch, preserving nonce and use limits, exact in-place or disjoint buffer rules, partial-overlap rejection, authenticate-before-release, complete failure atomicity, cancellation, output equivalence, and scalar fallback; benchmark combined rather than component speed and prohibit mixed, unhealthy, or unvalidated pairings.",
+      "scope": "Integrate only admitted AES and GHASH backend pairs into accelerated AES-GCM and GMAC providers with per-operation dispatch, preserving every nonce, limit, buffer, authentication, failure-atomicity, cancellation, equivalence, health, and scalar-fallback rule; prohibit mixed, unhealthy, or unvalidated pairings.",
       "source_ids": [],
-      "title": "Integrated Accelerated AES-GCM",
-      "version": "0.29.1"
+      "title": "Integrated Accelerated AES-GCM And GMAC",
+      "version": "0.29.2"
     },
     {
       "boundary": {
@@ -1037,14 +1081,14 @@
       "scope": "Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status.",
       "source_ids": [],
       "title": "AES-GCM And GMAC Public API Usability Acceptance",
-      "version": "0.29.2"
+      "version": "0.29.3"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0008"
       ],
-      "scope": "Implement ChaCha20 with checked counters and deterministic exhaustion closure.",
+      "scope": "Implement complete ChaCha20 with original and IETF nonce/counter profiles only where authenticated consumers require them, checked counters, deterministic exhaustion, exact block and tail behavior, overlap rules, official vectors, proofs, and a packaged public consumer so the scheduled checkpoint publishes a directly usable scalar implementation.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -1057,7 +1101,7 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "ChaCha20",
+      "title": "Complete Portable ChaCha20 And Public Acceptance",
       "version": "0.30.0"
     },
     {
@@ -1072,11 +1116,22 @@
       "version": "0.30.1"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering original and IETF profiles, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence.",
+      "source_ids": [],
+      "title": "ChaCha20 Accelerated Public API Usability Acceptance",
+      "version": "0.30.2"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0009"
       ],
-      "scope": "Implement Poly1305 and ChaCha20-Poly1305 with constant-time tag verification, authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on failure, and introduce its failure-atomicity proof harness beside the implementation.",
+      "scope": "Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -1089,8 +1144,19 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "Poly1305 And ChaCha20-Poly1305",
+      "title": "Complete Poly1305",
       "version": "0.31.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.",
+      "source_ids": [],
+      "title": "Complete ChaCha20-Poly1305",
+      "version": "0.31.1"
     },
     {
       "boundary": {
@@ -1098,10 +1164,10 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with a compatible admitted ChaCha20 path; preserve one-time-key handling, canonical reduction, constant-time tag verification, exact buffer aliasing rules, authenticate-before-release, complete failure atomicity, startup and continuous backend health policy, and scalar equivalence for every message and tail length.",
+      "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with compatible admitted ChaCha20 paths; preserve one-time-key, reduction, verification, aliasing, plaintext-release, failure-atomicity, health, and scalar-equivalence rules.",
       "source_ids": [],
       "title": "Poly1305 And ChaCha20-Poly1305 CPU Acceleration",
-      "version": "0.31.1"
+      "version": "0.31.2"
     },
     {
       "boundary": {
@@ -1112,12 +1178,12 @@
       "scope": "Close the RFC 8439 chain with packaged downstream ChaCha20, Poly1305, and ChaCha20-Poly1305 operations using only public APIs, covering block and tail counters, one-time keys, AAD, in-place and disjoint buffers, tamper and exhaustion failures, official vectors, scalar and every admitted backend, and no plaintext release before authentication.",
       "source_ids": [],
       "title": "ChaCha20 Poly1305 And AEAD Public API Usability Acceptance",
-      "version": "0.31.2"
+      "version": "0.31.3"
     },
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement fixed-limb unsigned arithmetic, Montgomery operations, modular exponentiation, and RSA-size policies with no attacker-selected allocation, normalization schedule, or limb count; introduce carry, borrow, reduction, conversion, and multiplication harnesses, preferring limb-count-generic or full-width proofs and recording reduced-width limits.",
+      "scope": "Implement fixed-limb unsigned representation, canonical conversion, comparison, addition, subtraction, shifts, carry, borrow, normalization, and RSA-size policies without attacker-selected allocation, schedule, or limb count; introduce full-width or limb-generic harnesses and a directly testable internal arithmetic API.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -1135,15 +1201,37 @@
         "rfc:8813",
         "rfc:9295"
       ],
-      "title": "Fixed-Limb RSA Arithmetic",
+      "title": "Fixed-Limb Integer Foundation",
       "version": "0.32.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Complete fixed-schedule multiplication, squaring, Montgomery conversion, multiplication, reduction, and modulus validation over the reviewed limb owner with production-width vectors, carry and reduction proofs, aliasing rules, and no variable-time secret normalization.",
+      "source_ids": [],
+      "title": "Fixed-Limb Multiplication And Montgomery Arithmetic",
+      "version": "0.32.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Complete fixed-schedule public and secret modular exponentiation, window and table-access policy, RSA modulus and exponent bounds, cleanup, proof claims, differential vectors, and a packaged arithmetic fixture before RSA encoding or key operations consume the foundation.",
+      "source_ids": [],
+      "title": "Fixed-Limb Modular Exponentiation Acceptance",
+      "version": "0.32.2"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0010"
       ],
-      "scope": "Implement fixed-width prime-field arithmetic, inversion, square roots, scalar primitives, and complete-formula foundations needed by admitted curves, separate from RSA limbs; introduce field canonicalization, scalar-range, and exceptional-case proof harnesses beside the implementation.",
+      "scope": "Implement fixed-width canonical prime-field representation, conversion, addition, subtraction, multiplication, squaring, reduction, equality, conditional selection, and zero/one rules separately from RSA limbs, with field-modulus identity and full-width or explicitly bounded proofs.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -1161,8 +1249,30 @@
         "rfc:8813",
         "rfc:9295"
       ],
-      "title": "Prime-Field And ECC Arithmetic",
+      "title": "Fixed-Width Prime-Field Foundation",
       "version": "0.33.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Complete fixed-schedule inversion, square-root and nonsquare handling, scalar representation and range validation, reduction, conditional negation, batch policy, exceptional inputs, cleanup, and proof harnesses needed by admitted curves without exposing a generic unsafe modulus API.",
+      "source_ids": [],
+      "title": "Prime-Field Inversion Square Roots And Scalar Primitives",
+      "version": "0.33.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Freeze the complete-formula and coordinate invariants shared by admitted curves, exercise identity, doubling, addition, negation, exceptional and canonicalization cases through concrete test fields, and package the arithmetic evidence required before X25519 or short-Weierstrass curve milestones begin.",
+      "source_ids": [],
+      "title": "ECC Complete-Formula Foundation Acceptance",
+      "version": "0.33.2"
     },
     {
       "boundary": null,
@@ -1523,7 +1633,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0012"
       ],
-      "scope": "Implement Ed25519, Ed25519ctx, and Ed25519ph signing and verification with exact domain separation, prehash and context limits, canonical encoding, small-order and malleability rejection, official vectors, and constant-time secret operations; protocol profiles can admit only the exact mode they name.",
+      "scope": "Implement complete RFC 8032 Ed25519 signing and verification with canonical encodings, small-order and malleability rejection, deterministic nonce derivation, official vectors, constant-time secret operations, cleanup, and a packaged public fixture so the scheduled checkpoint publishes a directly usable pure Ed25519 capability.",
       "source_ids": [
         "nist:NIST.FIPS.186-5.pdf",
         "nist:NIST.SP.800-186.pdf",
@@ -1541,18 +1651,18 @@
         "rfc:8813",
         "rfc:9295"
       ],
-      "title": "Complete Ed25519 RFC 8032 Family",
+      "title": "Complete Ed25519 And Checkpoint Acceptance",
       "version": "0.45.0"
     },
     {
       "boundary": {
-        "class": "internal-security-design",
-        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
       },
       "requirement_ids": [],
-      "scope": "Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519-family field, scalar, and group backends only when every pure, context, and prehash mode preserves canonical encoding, domain separation, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence.",
+      "scope": "Implement complete Ed25519ctx signing and verification over the reviewed Ed25519 owner with exact domain separation, context length and empty-context semantics, canonical validation, official vectors, public types that cannot be confused with pure Ed25519, constant-time secret operations, and cleanup.",
       "source_ids": [],
-      "title": "Ed25519 Family CPU Acceleration",
+      "title": "Complete Ed25519ctx",
       "version": "0.45.1"
     },
     {
@@ -1561,20 +1671,20 @@
         "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
       },
       "requirement_ids": [],
-      "scope": "Implement the complete RFC 7748 X448 field, canonical decoding policy, clamping, fixed Montgomery ladder, low-order and all-zero handling, imported-key consistency, unbiased ephemeral generation, no reuse, immediate scalar destruction, and provider-token lifecycle through a documented public API.",
+      "scope": "Implement complete Ed25519ph signing and verification over the reviewed Ed25519 owner with exact prehash and context domain separation, streaming prehash ownership, context limits, canonical validation, official vectors, public types that cannot be confused with Ed25519 or Ed25519ctx, constant-time secret operations, and cleanup.",
       "source_ids": [],
-      "title": "Complete X448 Field And ECDH Lifecycle",
+      "title": "Complete Ed25519ph",
       "version": "0.45.2"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Implement Ed448 and Ed448ph signing and verification with exact context and prehash domain separation, canonical field, scalar and point encodings, subgroup and malleability rejection, deterministic nonce derivation, official vectors, and constant-time secret operations through a documented public API.",
+      "scope": "Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519-family field, scalar, and group backends only when pure, context, and prehash modes preserve canonical encoding, domain separation, rejection, lifecycle, fault handling, scalar equivalence, and per-target constant-time evidence.",
       "source_ids": [],
-      "title": "Complete Ed448 RFC 8032 Family",
+      "title": "Ed25519 Family CPU Acceleration",
       "version": "0.45.3"
     },
     {
@@ -1583,21 +1693,10 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Benchmark and admit x86_64, AArch64, and qualifying RISC-V X448 and Ed448 field, ladder, scalar, and group backends only where native performance and per-mode correctness, canonicalization, lifecycle, fault, emitted-code, and side-channel evidence pass; otherwise retain explicit scalar-only support.",
+      "scope": "Close Ed25519, Ed25519ctx, and Ed25519ph with packaged public sign and verify fixtures, authoritative positive and negative vectors, cross-mode rejection, no_std installation, secret cleanup, external-signer composition, and scalar plus every admitted backend.",
       "source_ids": [],
-      "title": "Curve448 CPU Acceleration",
+      "title": "Ed25519 Family Public API Usability Acceptance",
       "version": "0.45.4"
-    },
-    {
-      "boundary": {
-        "class": "internal-security-design",
-        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
-      },
-      "requirement_ids": [],
-      "scope": "Close the Curve25519/Curve448 signature and key-agreement families with packaged downstream X25519, X448, Ed25519, Ed25519ctx, Ed25519ph, Ed448, and Ed448ph fixtures, authoritative vectors, cross-party agreements, sign/verify and negative cases, protocol-mode separation, no_std installation, secret cleanup, and every admitted backend.",
-      "source_ids": [],
-      "title": "Complete RFC 7748 And RFC 8032 Usability Acceptance",
-      "version": "0.45.5"
     },
     {
       "boundary": {
@@ -1605,10 +1704,10 @@
         "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
       },
       "requirement_ids": [],
-      "scope": "Implement P-521 field and scalar arithmetic, SEC1 point encoding and decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, unbiased private generation, imported-key consistency, ECDH, invalid-secret handling, immediate destruction, and official vectors through a public API for later complete HPKE support.",
+      "scope": "Implement complete RFC 7748 X448 field arithmetic, encoding and canonical-decoding policy, scalar clamping, fixed Montgomery ladder, low-order and all-zero handling, official vectors, proofs, constant-time evidence, and a public raw agreement primitive without yet admitting reusable ECDH key lifecycle.",
       "source_ids": [],
-      "title": "Complete P-521 Group And ECDH",
-      "version": "0.45.6"
+      "title": "Complete X448 Field And Ladder",
+      "version": "0.45.5"
     },
     {
       "boundary": {
@@ -1616,17 +1715,105 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Benchmark separately admissible P-521 x86_64, AArch64, and qualifying RISC-V paths, retain scalar where evidence or performance is insufficient, and close the chain with packaged point, key, ECDH, malformed-input, lifecycle, vector, scalar, and admitted-backend consumer evidence.",
+      "scope": "Complete X448 key import and consistency validation, unbiased ephemeral generation, single-use agreement, invalid-secret handling, immediate scalar destruction, provider-token lifecycle, and packaged cross-party public ECDH usability over the exact v0.45.5 primitive.",
       "source_ids": [],
-      "title": "P-521 Acceleration And Public API Usability Acceptance",
+      "title": "Complete X448 ECDH Lifecycle",
+      "version": "0.45.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete RFC 8032 Ed448 signing and verification with exact context domain separation, canonical field, scalar and point encodings, subgroup and malleability rejection, deterministic nonce derivation, official vectors, constant-time secret operations, cleanup, and a documented public API.",
+      "source_ids": [],
+      "title": "Complete Ed448",
       "version": "0.45.7"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete Ed448ph signing and verification over the reviewed Ed448 owner with exact prehash and context domain separation, streaming prehash ownership, canonical validation, official vectors, distinct public types, constant-time secret operations, and cleanup.",
+      "source_ids": [],
+      "title": "Complete Ed448ph",
+      "version": "0.45.8"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and admit x86_64, AArch64, and qualifying RISC-V X448 and Ed448 field, ladder, scalar, and group backends only where native performance and per-mode correctness, canonicalization, lifecycle, fault, emitted-code, side-channel, KAT, quarantine, and scalar-equivalence evidence pass.",
+      "source_ids": [],
+      "title": "Curve448 CPU Acceleration",
+      "version": "0.45.9"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close X448, Ed448, and Ed448ph with packaged downstream agreement, sign, and verify fixtures, authoritative vectors, cross-party agreement, negative and cross-mode cases, no_std installation, secret cleanup, and every admitted backend without merging protocol identities.",
+      "source_ids": [],
+      "title": "Curve448 Public API Usability Acceptance",
+      "version": "0.45.10"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement P-521 field and scalar arithmetic, SEC1 point encoding and decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, official vectors, proofs, and public point operations as the reviewed foundation for later ECDH.",
+      "source_ids": [],
+      "title": "Complete P-521 Field And Group Operations",
+      "version": "0.45.11"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Complete P-521 unbiased private generation, public-key import and consistency validation, single-use ECDH, invalid-secret handling, immediate destruction, provider-token lifecycle, official agreement vectors, and a documented public API over the exact v0.45.11 group owner.",
+      "source_ids": [],
+      "title": "Complete P-521 ECDH Lifecycle",
+      "version": "0.45.12"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Benchmark and admit separately reviewable P-521 x86_64, AArch64, and qualifying RISC-V field, scalar, group, validation, and ECDH paths only where proofs, emitted-code, side-channel, native correctness, performance, KAT, quarantine, fault, lifecycle, and scalar-equivalence evidence pass.",
+      "source_ids": [],
+      "title": "P-521 CPU Acceleration",
+      "version": "0.45.13"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close P-521 with packaged point, key-import, cross-party ECDH, malformed-input, invalid-secret, lifecycle, cleanup, authoritative-vector, scalar, and every admitted accelerated consumer path, preserving no_std installation and future HPKE integration boundaries.",
+      "source_ids": [],
+      "title": "P-521 Public API Usability Acceptance",
+      "version": "0.45.14"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0013"
       ],
-      "scope": "Freeze the authenticated modern and historical algorithm, operation, parameter, format, protocol-consumer, and registry closure for every pre-1.0 Brynja capability; assign every real standardized item to one complete modern or opt-in legacy implementation owner, permit rejection only for malformed, forbidden, reserved, private-use-without-authority, source-blocked, or intrinsically non-production surfaces, and generate a transitive construction-to-algorithm dependency graph that blocks the substrate audit on every partial family, read-only shortcut, missing generation direction, duplicated implementation, or unspecified compatibility edge.",
+      "scope": "Freeze the authenticated modern and historical algorithm, operation, parameter, format, protocol-consumer, and registry closure for every pre-1.0 Brynja capability; assign every standardized item to one modern or opt-in legacy owner, generate its transitive dependency graph, and reject partial families, missing directions, duplicate implementations, or unspecified compatibility edges.",
       "source_ids": [],
       "title": "Version-One Algorithm And Transitive Completeness Register",
       "version": "0.46.0"
@@ -1637,9 +1824,9 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Before the cryptographic-substrate audit, reconcile every implemented primitive and operation against the scalar reference and CPU-backend register; require an explicit admitted, candidate, rejected, or scalar-only decision for AMD x86_64, observed-feature AWS Intel x86_64, Apple M2, AWS AArch64, and RISC-V, verify dispatch precedence, required-mode failure, KAT and quarantine, no_std and std package isolation, code size, latency, throughput, side-channel and native-hardware evidence, and prohibit any backend whose exact symbol, feature bundle, residual risk, or FIPS disposition is missing.",
+      "scope": "Convert the v0.46.0 register into the exact review-sized tagged schedule below before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, separate portable code from acceleration, give every family a package-external acceptance row, and insert additional patch rows rather than enlarging a frozen row when authenticated sources disclose more work.",
       "source_ids": [],
-      "title": "Cross-Backend Performance And Admission Gate",
+      "title": "Review-Sized Cryptographic Substrate Schedule Freeze",
       "version": "0.46.1"
     },
     {
@@ -1648,7 +1835,7 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete streaming and fixed-message MD2 in an isolated `brynja-legacy-md2` package with RFC 1319 vectors, padding, checksum, checked lengths, public compatibility API, collision warnings, and no modern or FIPS edge; reserve its use solely for separately admitted historical certificate and container profiles.",
+      "scope": "Implement complete streaming and fixed-message MD2 in isolated `brynja-legacy-md2` with RFC 1319 vectors, padding, checksum, checked lengths, collision warnings, a public compatibility API, and only separately admitted historical certificate or container consumers.",
       "source_ids": [],
       "title": "Complete Legacy MD2 And PKIX Hash Boundary",
       "version": "0.46.2"
@@ -1659,7 +1846,7 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete streaming and fixed-message RIPEMD-160 in an isolated `brynja-legacy-ripemd160` package with authoritative vectors, checked exhaustion, public compatibility API, collision and strength warnings, and typed later OpenPGP and certificate consumers without duplicating state or compression code.",
+      "scope": "Implement complete streaming and fixed-message RIPEMD-160 in isolated `brynja-legacy-ripemd160` with authoritative vectors, checked exhaustion, collision and strength warnings, public compatibility APIs, and typed later OpenPGP or certificate consumers.",
       "source_ids": [],
       "title": "Complete Legacy RIPEMD-160",
       "version": "0.46.3"
@@ -1670,20 +1857,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement reusable first-party finite-field arithmetic, validated safe-prime group parameters, public-key validation, fixed-schedule exponentiation, unbiased private exponents, FFDHE2048 through FFDHE8192, imported-key consistency, lifecycle, cleanup, vectors, proofs, and public APIs for modern and legacy DH consumers.",
+      "scope": "Implement reusable finite-field arithmetic, validated safe-prime parameters, public-key validation, fixed-schedule exponentiation, unbiased private exponents, imported-key consistency, cleanup, vectors, and proof harnesses for finite-field DH consumers without yet claiming every FFDHE named group.",
       "source_ids": [],
-      "title": "Complete Finite-Field Groups And FFDHE",
+      "title": "Finite-Field Group Arithmetic And Validation",
       "version": "0.46.4"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete FIPS 186 historical DSA parameter validation and generation, key generation and import, deterministic and randomized signing, strict verification, encoding, nonce, subgroup, range, fault, cleanup, vector, and public compatibility APIs across every parameter profile required by authenticated PKIX, TLS, and OpenPGP sources.",
+      "scope": "Complete FFDHE2048 through FFDHE8192 over the v0.46.4 owner and exercise every group through packaged key-generation, validation, two-party agreement, invalid-key, lifecycle, cleanup, no_std, vector, and public API fixtures.",
       "source_ids": [],
-      "title": "Complete Legacy DSA Family",
+      "title": "Complete FFDHE Groups And Public Acceptance",
       "version": "0.46.5"
     },
     {
@@ -1692,20 +1879,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete OpenPGP-compatible ElGamal parameter and key generation, validation, encryption, decryption, randomness, subgroup and message encoding, uniform failure, blinding, fault resistance, cleanup, authoritative vectors, and public compatibility APIs; do not expose unauthenticated plaintext or silently treat ElGamal encryption as a signature scheme.",
+      "scope": "Implement every authenticated historical DSA parameter profile required by PKIX, TLS, or OpenPGP, including parameter validation and generation, key generation and import, subgroup and range rules, deterministic test seams, cleanup, vectors, and isolated public key APIs.",
       "source_ids": [],
-      "title": "Complete Legacy ElGamal Family",
+      "title": "Complete Legacy DSA Parameters And Keys",
       "version": "0.46.6"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party AES-CCM over AES-128, AES-192, and AES-256 with every standards-admitted nonce, length and tag parameter plus the exact CCM-8 profiles, AAD, empty and boundary messages, in-place and disjoint operation, failure atomicity, invocation limits, vectors, proofs, public APIs, and optional admitted acceleration.",
+      "scope": "Complete deterministic and randomized DSA signing, strict verification, encodings, nonce lifecycle, fault defenses, authoritative vectors, and packaged public compatibility fixtures across every v0.46.6 parameter profile with no modern default or FIPS-approved edge.",
       "source_ids": [],
-      "title": "Complete AES-CCM And CCM-8",
+      "title": "Complete Legacy DSA Signing Verification And Acceptance",
       "version": "0.46.7"
     },
     {
@@ -1714,20 +1901,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement reusable constant-time ECB building-block, CBC, CTR, CFB including standardized segment widths, and OFB encryption and decryption over admitted block ciphers with exact IV, padding-separation, streaming, overlap, length, counter-exhaustion, error, cleanup, vector, and public APIs; insecure modes remain legacy-policy selected even when their implementation is shared.",
+      "scope": "Implement OpenPGP-compatible ElGamal parameter and key generation, import, validation, subgroup policy, randomness ownership, encodings, cleanup, proof harnesses, and public key APIs without yet releasing decrypted plaintext.",
       "source_ids": [],
-      "title": "Complete First-Party Block-Cipher Modes",
+      "title": "Complete Legacy ElGamal Parameters And Keys",
       "version": "0.46.8"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete DES and two-key and three-key TripleDES encrypt/decrypt, parity and weak-key policy, schedules, official vectors, constant-time portable code, cleanup, and public compatibility APIs, then bind no default, modern, FIPS-approved, or implicit-negotiation edge.",
+      "scope": "Complete ElGamal encryption and oracle-resistant decryption over v0.46.8 with uniform failure, blinding, fault resistance, authoritative vectors, transactional plaintext release, packaged public fixtures, and no signature or modern-default confusion.",
       "source_ids": [],
-      "title": "Complete Legacy DES And TripleDES",
+      "title": "Complete Legacy ElGamal Encryption Decryption And Acceptance",
       "version": "0.46.9"
     },
     {
@@ -1736,20 +1923,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete RC2 with effective-key-bit handling, RC4 with exact historical key scheduling and stream semantics, and every authenticated RC5 parameter profile required by Brynja's named legacy protocols; provide vectors, key and state cleanup, exhaustion, public compatibility APIs, prominent bias and cryptanalytic warnings, and no modern graph edge.",
+      "scope": "Implement complete AES-CCM over AES-128, AES-192, and AES-256 with every standards-admitted nonce, message, AAD, and tag domain, invocation limits, exact in-place or disjoint operation, partial-overlap rejection, failure atomicity, vectors, proofs, and public APIs.",
       "source_ids": [],
-      "title": "Complete Legacy RC2 RC4 And RC5",
+      "title": "Complete AES-CCM",
       "version": "0.46.10"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete IDEA and CAST5/CAST-128 key schedules and forward and inverse block operations with every standardized key rule, vectors, constant-time evidence, cleanup, public compatibility APIs, and isolated later OpenPGP, TLS, WTLS, PCT, or SNP consumers.",
+      "scope": "Bind exact CCM-8 profiles to v0.46.10, then exercise CCM and CCM-8 through packaged public fixtures across every AES width, nonce, tag, AAD, boundary, tamper, overlap, exhaustion, scalar, and admitted accelerated path.",
       "source_ids": [],
-      "title": "Complete Legacy IDEA And CAST5",
+      "title": "Complete CCM-8 Profiles And CCM Acceptance",
       "version": "0.46.11"
     },
     {
@@ -1758,9 +1945,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete Blowfish and Twofish key schedules and encrypt/decrypt operations for every standardized key size and profile required by authenticated Brynja protocols, with vectors, weak-key and block-limit policy, constant-time evidence, cleanup, public compatibility APIs, and no modern default edge.",
+      "scope": "Implement the internal ECB building-block and complete CBC encrypt/decrypt over admitted block ciphers with exact IV, caller-selected padding separation, streaming, overlap, length, error, cleanup, vectors, and explicit legacy-policy selection.",
       "source_ids": [],
-      "title": "Complete Legacy Blowfish And Twofish",
+      "title": "Complete ECB Building Block And CBC Mode",
       "version": "0.46.12"
     },
     {
@@ -1769,9 +1956,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete Camellia-128, Camellia-192, and Camellia-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for modern or legacy TLS, PKIX, and OpenPGP consumers without private copies.",
+      "scope": "Implement complete CTR over admitted block ciphers with exact counter layouts selected by typed profiles, preflighted counter exhaustion, streaming and random partition equivalence, overlap rules, cleanup, vectors, and public APIs.",
       "source_ids": [],
-      "title": "Complete Camellia Family",
+      "title": "Complete CTR Mode",
       "version": "0.46.13"
     },
     {
@@ -1780,20 +1967,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete SEED encrypt/decrypt, key schedule, vectors, constant-time portable code, cleanup, block limits, and public compatibility APIs for every authenticated TLS and legacy consumer, isolated from modern defaults unless current policy explicitly selects it.",
+      "scope": "Implement complete CFB at every authenticated segment width and complete OFB over admitted block ciphers with exact IV, streaming, feedback, overlap, exhaustion, cleanup, vectors, and public compatibility APIs.",
       "source_ids": [],
-      "title": "Complete SEED Family",
+      "title": "Complete CFB And OFB Modes",
       "version": "0.46.14"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete ARIA-128, ARIA-192, and ARIA-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for every authenticated TLS profile without duplicating mode implementations.",
+      "scope": "Exercise v0.46.12-v0.46.14 through packaged mode fixtures and authoritative vectors for every admitted cipher, direction, segment width, IV, padding boundary, partition, overlap, malformed input, exhaustion, no_std, and modern-versus-legacy policy.",
       "source_ids": [],
-      "title": "Complete ARIA Family",
+      "title": "Block-Cipher Modes Public API Usability Acceptance",
       "version": "0.46.15"
     },
     {
@@ -1802,9 +1989,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete SM3 hashing plus SM4 block encryption/decryption and every standards-required TLS mode profile, with streaming, vectors, checked lengths, key schedules, constant-time and accelerated evidence, cleanup, public APIs, and an explicit regional-profile policy rather than implicit global defaults.",
+      "scope": "Implement complete DES encrypt/decrypt, key schedule, parity and weak-key policy, official vectors, constant-time portable code, cleanup, and a public compatibility API with no default, modern, approved-service, or implicit-negotiation edge.",
       "source_ids": [],
-      "title": "Complete SM3 And SM4 Families",
+      "title": "Complete Legacy DES",
       "version": "0.46.16"
     },
     {
@@ -1813,20 +2000,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete SM2 field, group, key generation, import, signing, verification, key agreement and encryption operations required by authenticated standards, including identity binding, encodings, subgroup and nonce rules, vectors, proofs, cleanup, public APIs, and separately typed TLS and PKIX profiles.",
+      "scope": "Implement complete two-key TripleDES encrypt/decrypt over the reviewed DES owner with exact keying option, parity, weak-key, block-limit, cleanup, vector, and isolated public compatibility behavior.",
       "source_ids": [],
-      "title": "Complete SM2 Family",
+      "title": "Complete Two-Key TripleDES",
       "version": "0.46.17"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete GOST R 34.11-94 and Streebog-256/512 hashing with every authenticated parameter set, byte-order and padding rule, streaming and fixed-message APIs, vectors, checked exhaustion, constant-time applicability, public compatibility APIs, and exact later signature, TLS, and PKIX bindings.",
+      "scope": "Implement complete three-key TripleDES and close DES, two-key TripleDES, and three-key TripleDES through packaged vectors, round trips, weak-key, parity, limit, cleanup, no_std, and isolation fixtures.",
       "source_ids": [],
-      "title": "Complete GOST Hash Families",
+      "title": "Complete Three-Key TripleDES And DES Family Acceptance",
       "version": "0.46.18"
     },
     {
@@ -1835,9 +2022,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete GOST 28147-89 profiles plus Magma and Kuznyechik block ciphers and every authenticated MAC, mode, key-meshing, parameter-set and wrapping construction needed by registered TLS, PKIX, or named legacy consumers, with vectors, cleanup, constant-time evidence, and public compatibility APIs.",
+      "scope": "Implement complete RC2 with effective-key-bit processing, key expansion, encrypt/decrypt, all authenticated parameter profiles, authoritative vectors, constant-time evidence, cleanup, and an isolated public compatibility API.",
       "source_ids": [],
-      "title": "Complete GOST Symmetric Families",
+      "title": "Complete Legacy RC2",
       "version": "0.46.19"
     },
     {
@@ -1846,9 +2033,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete authenticated GOST R 34.10 signature and key-agreement generations, curves, parameter sets, encodings, key generation and validation, sign, verify, derive, VKO or related KDF composition, vectors, proofs, cleanup, public APIs, and exact TLS and PKIX profile separation.",
+      "scope": "Implement complete RC4 key scheduling and stream processing with exact historical key and state semantics, exhaustion, bias and cryptanalytic warnings, vectors, cleanup, and an isolated public compatibility API.",
       "source_ids": [],
-      "title": "Complete GOST Signature And Agreement Families",
+      "title": "Complete Legacy RC4",
       "version": "0.46.20"
     },
     {
@@ -1857,20 +2044,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Complete RSA key generation, import and validation plus RSA-PSS sign/verify, RSAES-OAEP encrypt/decrypt, strict RSASSA-PKCS1-v1_5 sign/verify and oracle-resistant RSAES-PKCS1-v1_5 encrypt/decrypt across every admitted digest and parameter profile; require blinding, CRT and fault checks, uniform failures, vectors, proofs, cleanup, public modern or legacy APIs, and policy isolation instead of later private reimplementation.",
+      "scope": "Implement every authenticated RC5 word-size, round-count, and key-length profile required by named legacy protocols, including key expansion, encrypt/decrypt, vectors, bounds, cleanup, and isolated public APIs.",
       "source_ids": [],
-      "title": "Complete First-Party RSA Family",
+      "title": "Complete Legacy RC5",
       "version": "0.46.21"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete PBKDF2 over admitted HMACs, authenticated PKCS #5 PBES1 compatibility profiles, PBES2, PBKDF2 PRFs, encryption schemes, parameters and limits, plus EncryptedPrivateKeyInfo import and export with uniform password failures, caller workspaces, cleanup, vectors, public APIs, and modern-versus-legacy policy for every linked PKCS #8 container.",
+      "scope": "Exercise RC2, RC4, and every admitted RC5 parameter profile through packaged public fixtures, authoritative vectors, boundaries, streaming where applicable, cleanup, no_std support, warnings, and hard modern/FIPS graph isolation.",
       "source_ids": [],
-      "title": "Complete Password KDF And Encrypted-Key Containers",
+      "title": "RC2 RC4 And RC5 Public Acceptance",
       "version": "0.46.22"
     },
     {
@@ -1879,9 +2066,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement exact SSL 3.0 MAC and key schedule, TLS 1.0/1.1 MD5-plus-SHA-1 PRF, TLS 1.2 PRFs across every admitted hash, truncated-HMAC profiles, export-grade key expansion, finished and certificate-verify digests, constant-time verification, limits, vectors, cleanup, and isolated public compatibility APIs without enabling protocol fallback.",
+      "scope": "Implement complete IDEA key schedule and forward and inverse block operations with every standardized key rule, authoritative vectors, constant-time evidence, cleanup, block limits, and an isolated public compatibility API.",
       "source_ids": [],
-      "title": "Complete Legacy TLS PRFs MACs And Export KDFs",
+      "title": "Complete Legacy IDEA",
       "version": "0.46.23"
     },
     {
@@ -1890,20 +2077,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete SRP-6a group validation, verifier and credential generation, client and server ephemeral operations, proofs, session derivation, invalid-public-value and offline-attack policy, vectors, cleanup, public APIs, and exact later TLS-SRP profile binding without hidden password storage or network effects.",
+      "scope": "Implement complete CAST5/CAST-128 key schedule and encrypt/decrypt operations with every standardized key rule, authoritative vectors, constant-time evidence, cleanup, block limits, and an isolated public compatibility API.",
       "source_ids": [],
-      "title": "Complete SRP Cryptographic Family",
+      "title": "Complete Legacy CAST5",
       "version": "0.46.24"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party RFC 1951 DEFLATE compression and decompression, RFC 1950 ZLIB, raw ZIP use, and authenticated TLS DEFLATE framing with all block types, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, stream completion, reset semantics, bomb defenses, vectors, differential tests, and public APIs.",
+      "scope": "Exercise IDEA and CAST5 through packaged public encrypt/decrypt, vector, boundary, weak-key, cleanup, no_std, and isolation fixtures before any OpenPGP, TLS, WTLS, PCT, or SNP consumer selects them.",
       "source_ids": [],
-      "title": "Complete DEFLATE ZLIB And TLS Compression Profiles",
+      "title": "IDEA And CAST5 Public Acceptance",
       "version": "0.46.25"
     },
     {
@@ -1912,9 +2099,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party Brotli and Zstandard compression and decompression profiles required by TLS certificate compression, including dictionaries only where the governing profile admits them, bounded caller workspaces, deterministic generation, exact framing and checksums, bomb defenses, vectors, differential evidence, and public APIs without native code.",
+      "scope": "Implement complete Blowfish key expansion and encrypt/decrypt for every authenticated key-size profile, with vectors, weak-key and block-limit policy, constant-time evidence, cleanup, and an isolated public compatibility API.",
       "source_ids": [],
-      "title": "Complete Brotli And Zstandard Families",
+      "title": "Complete Legacy Blowfish",
       "version": "0.46.26"
     },
     {
@@ -1923,20 +2110,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party LZS compression and decompression plus exact TLS compression framing, reset, history, boundary, malformed-stream, bomb, vector, public API, and legacy-policy behavior required by authenticated TLS sources.",
+      "scope": "Implement complete Twofish key schedules and encrypt/decrypt for every standardized key size required by authenticated Brynja protocols, with vectors, limits, constant-time evidence, cleanup, and isolated public APIs.",
       "source_ids": [],
-      "title": "Complete Legacy LZS Compression",
+      "title": "Complete Legacy Twofish",
       "version": "0.46.27"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party BZip2 compression and decompression with exact block and stream framing, transforms, Huffman coding, CRCs, bounded caller workspaces, deterministic generation, malformed-stream and bomb defenses, vectors, differential evidence, public APIs, and later OpenPGP compatibility reuse.",
+      "scope": "Exercise Blowfish and Twofish through packaged public fixtures across every admitted key size, direction, vector, boundary, weak-key, block-limit, cleanup, no_std, and modern-versus-legacy isolation case.",
       "source_ids": [],
-      "title": "Complete BZip2 Family",
+      "title": "Blowfish And Twofish Public Acceptance",
       "version": "0.46.28"
     },
     {
@@ -1945,9 +2132,9 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party FIPS 204 ML-DSA-44, ML-DSA-65, and ML-DSA-87 key generation, signing, verification, deterministic and hedged operation, external randomness, context, encoding, rejection-sampling, malformed-input, key-consistency, fault, cleanup, vector, proof, public API, and optional acceleration requirements for every authenticated PKIX or protocol profile.",
+      "scope": "Implement complete Camellia-128 key schedule and encrypt/decrypt with authoritative vectors, constant-time portable code, cleanup, block limits, public APIs, and distinct algorithm identity.",
       "source_ids": [],
-      "title": "Complete ML-DSA Family",
+      "title": "Complete Camellia-128",
       "version": "0.46.29"
     },
     {
@@ -1956,20 +2143,20 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party FIPS 205 SLH-DSA SHA2 and SHAKE families across all 128, 192, and 256 security categories and `s`/`f` parameter sets, key generation, pure and prehash signing and verification where standardized, context and randomization, encodings, bounds, fault, cleanup, vectors, proofs, public APIs, and explicit performance policy.",
+      "scope": "Implement complete Camellia-192 and Camellia-256 over the reviewed Camellia owner with distinct key schedules and identities, authoritative vectors, constant-time portable code, cleanup, block limits, and public APIs.",
       "source_ids": [],
-      "title": "Complete SLH-DSA Family",
+      "title": "Complete Camellia-192 And Camellia-256",
       "version": "0.46.30"
     },
     {
       "boundary": {
         "class": "internal-security-design",
-        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Exercise every v0.46.2-v0.46.30 hash, cipher, mode, public-key operation, KDF, MAC, compression direction and parameter family through packaged public fixtures and authoritative vectors; prove single implementation ownership, explicit dangerous selection, no implicit modern negotiation, no unauthenticated output, cleanup, no_std portability where applicable, and exact modern, legacy, regional, PQ, FIPS and source-blocked status.",
+      "scope": "Admit Camellia acceleration only with native evidence, then exercise all three Camellia widths through packaged scalar and accelerated encrypt/decrypt, vector, limit, cleanup, no_std, protocol-policy, KAT, quarantine, and public API fixtures.",
       "source_ids": [],
-      "title": "Legacy And Optional Primitive Public Usability Acceptance",
+      "title": "Camellia Acceleration And Public Acceptance",
       "version": "0.46.31"
     },
     {
@@ -1978,10 +2165,681 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Regenerate the transitive register from all authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT and SNP sources and registries; block v0.47.0 unless every assigned real capability and every send, receive, generation, import, export and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, private-use-without-authority, standard-forbidden, lawfully unavailable or source-blocked entries remaining rejected.",
+      "scope": "Implement complete SEED key schedule and encrypt/decrypt with authoritative vectors, constant-time portable code, cleanup, block limits, and an isolated public compatibility API for authenticated TLS and legacy consumers.",
+      "source_ids": [],
+      "title": "Complete SEED",
+      "version": "0.46.32"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise SEED through packaged public encrypt/decrypt, authoritative vector, boundary, block-limit, cleanup, no_std, protocol-policy, and isolation fixtures before any consumer binding.",
+      "source_ids": [],
+      "title": "SEED Public API Usability Acceptance",
+      "version": "0.46.33"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete ARIA-128 key schedule and encrypt/decrypt with authoritative vectors, constant-time portable code, cleanup, block limits, public APIs, and distinct algorithm identity.",
+      "source_ids": [],
+      "title": "Complete ARIA-128",
+      "version": "0.46.34"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete ARIA-192 and ARIA-256 over the reviewed ARIA owner with distinct key schedules and identities, authoritative vectors, constant-time portable code, cleanup, block limits, and public APIs.",
+      "source_ids": [],
+      "title": "Complete ARIA-192 And ARIA-256",
+      "version": "0.46.35"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Admit ARIA acceleration only with native evidence, then exercise all three ARIA widths through packaged scalar and accelerated encrypt/decrypt, vector, limit, cleanup, no_std, protocol-profile, KAT, quarantine, and public API fixtures.",
+      "source_ids": [],
+      "title": "ARIA Acceleration And Public Acceptance",
+      "version": "0.46.36"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete streaming and fixed-message SM3 with authoritative vectors, checked lengths and exhaustion, constant-time applicability, optional admitted acceleration, cleanup policy, a public hash API, and explicit regional-profile selection.",
+      "source_ids": [],
+      "title": "Complete SM3",
+      "version": "0.46.37"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SM4 key schedule and encrypt/decrypt with authoritative vectors, constant-time portable and admitted accelerated paths, cleanup, block limits, public APIs, and exact later TLS mode bindings.",
+      "source_ids": [],
+      "title": "Complete SM4",
+      "version": "0.46.38"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise SM3 and SM4 through separate packaged public hash and block-cipher fixtures, vectors, boundaries, streaming, encrypt/decrypt, scalar and accelerated paths, cleanup, no_std, backend health, and explicit regional-policy selection.",
+      "source_ids": [],
+      "title": "SM3 And SM4 Public Acceptance",
+      "version": "0.46.39"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SM2 field and scalar arithmetic, point operations, encodings, subgroup rules, key generation, import and validation, official vectors, proofs, cleanup, and typed public key APIs.",
+      "source_ids": [],
+      "title": "Complete SM2 Field Group And Keys",
+      "version": "0.46.40"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SM2 signing and verification over v0.46.40 with identity binding, nonce and digest rules, encodings, range and malleability policy, fault defenses, vectors, cleanup, and public APIs.",
+      "source_ids": [],
+      "title": "Complete SM2 Signing And Verification",
+      "version": "0.46.41"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SM2 key agreement, KDF composition, encryption and oracle-resistant decryption with identity, confirmation, randomness, subgroup, failure-atomicity, lifecycle, vectors, cleanup, and public APIs.",
+      "source_ids": [],
+      "title": "Complete SM2 Key Agreement And Encryption",
+      "version": "0.46.42"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise SM2 keys, sign/verify, agreement, encrypt/decrypt, identities, encodings, malformed inputs, faults, cleanup, no_std, and separately typed TLS and PKIX profiles through packaged public fixtures.",
+      "source_ids": [],
+      "title": "SM2 Family Public API Usability Acceptance",
+      "version": "0.46.43"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete streaming and fixed-message GOST R 34.11-94 for every authenticated parameter set, byte-order and padding rule, authoritative vectors, checked exhaustion, warnings, and isolated public compatibility APIs.",
+      "source_ids": [],
+      "title": "Complete GOST R 34.11-94",
+      "version": "0.46.44"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete streaming and fixed-message Streebog-256 and Streebog-512 with distinct identities, byte order, padding, authoritative vectors, checked exhaustion, constant-time applicability, and public APIs.",
+      "source_ids": [],
+      "title": "Complete Streebog-256 And Streebog-512",
+      "version": "0.46.45"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise GOST R 34.11-94 and both Streebog variants through packaged one-shot, streaming, vector, boundary, parameter-set, byte-order, exhaustion, no_std, warning, and protocol-binding fixtures.",
+      "source_ids": [],
+      "title": "GOST Hash Family Public Acceptance",
+      "version": "0.46.46"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete GOST 28147-89 encrypt/decrypt for every authenticated parameter set with key schedule, vectors, constant-time evidence, cleanup, limits, and isolated public compatibility APIs.",
+      "source_ids": [],
+      "title": "Complete GOST 28147-89",
+      "version": "0.46.47"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete Magma key schedule and encrypt/decrypt with exact standardized byte order, authoritative vectors, constant-time evidence, cleanup, limits, and public APIs.",
+      "source_ids": [],
+      "title": "Complete Magma",
+      "version": "0.46.48"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete Kuznyechik key schedule and encrypt/decrypt with exact standardized byte order, authoritative vectors, constant-time evidence, cleanup, limits, and public APIs.",
+      "source_ids": [],
+      "title": "Complete Kuznyechik",
+      "version": "0.46.49"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated GOST MAC, block-cipher mode, key-meshing, parameter-set, and key-wrapping construction required by registered TLS, PKIX, or named legacy consumers over the exact v0.46.47-v0.46.49 owners.",
+      "source_ids": [],
+      "title": "Complete GOST MAC Modes Key Meshing And Wrapping",
+      "version": "0.46.50"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every admitted GOST symmetric cipher, parameter set, direction, MAC, mode, meshing, and wrapping profile through packaged vectors, malformed cases, limits, cleanup, no_std, and exact consumer-policy fixtures.",
+      "source_ids": [],
+      "title": "GOST Symmetric Family Public Acceptance",
+      "version": "0.46.51"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated GOST R 34.10 signature generation, curve and parameter set with key generation and validation, sign, verify, encodings, vectors, proofs, faults, cleanup, and typed public APIs.",
+      "source_ids": [],
+      "title": "Complete GOST Signature Families",
+      "version": "0.46.52"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated GOST agreement profile, VKO or related KDF composition, curve and parameter set with validation, derive, confirmation where required, lifecycle, vectors, proofs, cleanup, and public APIs.",
+      "source_ids": [],
+      "title": "Complete GOST Agreement And KDF Composition",
+      "version": "0.46.53"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every admitted GOST signature and agreement generation, curve, parameter set, encoding, key lifecycle, vector, negative, cleanup, no_std, TLS, and PKIX profile through packaged public fixtures.",
+      "source_ids": [],
+      "title": "GOST Public-Key Family Acceptance",
+      "version": "0.46.54"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Complete RSA key generation plus public and private import, structural and mathematical validation, modulus and exponent policy, prime generation, CRT construction, consistency checks, randomness, faults, proofs, cleanup, and public key APIs.",
+      "source_ids": [],
+      "title": "Complete RSA Key Generation Import And Validation",
+      "version": "0.46.55"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Complete RSA-PSS sign and verify over v0.46.55 across every admitted digest, salt, modulus, and parameter profile with blinding, CRT and fault checks, uniform failures, vectors, cleanup, and modern public APIs.",
+      "source_ids": [],
+      "title": "Complete RSA-PSS Signing And Verification",
+      "version": "0.46.56"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Complete RSAES-OAEP encrypt and oracle-resistant decrypt across every admitted digest, MGF, label, modulus, and parameter profile with blinding, fault checks, uniform failures, transactional plaintext release, vectors, cleanup, and public APIs.",
+      "source_ids": [],
+      "title": "Complete RSAES-OAEP Encryption And Decryption",
+      "version": "0.46.57"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Complete strict RSASSA-PKCS1-v1_5 sign and verify across every admitted digest and modulus profile with exact DigestInfo parsing, blinding, CRT and fault checks, uniform failures, vectors, cleanup, and explicitly selected modern or legacy APIs.",
+      "source_ids": [],
+      "title": "Complete RSASSA-PKCS1-v1_5 Signing And Verification",
+      "version": "0.46.58"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Complete RSAES-PKCS1-v1_5 encrypt and oracle-resistant decrypt across every authenticated compatibility profile with exact padding, randomness, blinding, fault checks, uniform failures, transactional plaintext release, vectors, cleanup, warnings, and isolated APIs.",
+      "source_ids": [],
+      "title": "Complete RSAES-PKCS1-v1_5 Encryption And Decryption",
+      "version": "0.46.59"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise RSA key generation/import, PSS, OAEP, signature PKCS1 v1.5, and encryption PKCS1 v1.5 through packaged vectors, malformed encodings, oracle and fault cases, cleanup, scalar and accelerated arithmetic, no_std, external-key, and policy-isolation fixtures.",
+      "source_ids": [],
+      "title": "RSA Family Public API Usability Acceptance",
+      "version": "0.46.60"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete PBKDF2 over every admitted HMAC with exact PRF identity, password, salt, iteration, block-counter, output, overflow and work limits, caller workspaces, cleanup, authoritative vectors, and public APIs.",
+      "source_ids": [],
+      "title": "Complete PBKDF2",
+      "version": "0.46.61"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated PKCS #5 PBES1 compatibility profile with exact KDF, cipher, parameters, limits, uniform password failures, cleanup, vectors, warnings, and isolated public APIs.",
+      "source_ids": [],
+      "title": "Complete Legacy PBES1 Profiles",
+      "version": "0.46.62"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete PBES2, every admitted PBKDF2 PRF and encryption scheme, strict parameters and limits, plus EncryptedPrivateKeyInfo import/export with canonical DER, uniform password failures, caller workspaces, cleanup, vectors, and public APIs.",
+      "source_ids": [],
+      "title": "Complete PBES2 And EncryptedPrivateKeyInfo",
+      "version": "0.46.63"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise PBKDF2, every PBES1 compatibility profile, PBES2, and EncryptedPrivateKeyInfo import/export through packaged vectors, password failures, hostile parameters, round trips, cleanup, no_std, and modern-versus-legacy policy fixtures.",
+      "source_ids": [],
+      "title": "Password KDF And Encrypted-Key Public Acceptance",
+      "version": "0.46.64"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement exact SSL 3.0 MAC, master-secret and key-block schedules, finished and certificate-verify digests, limits, constant-time verification, cleanup, authoritative vectors, and isolated public compatibility APIs.",
+      "source_ids": [],
+      "title": "Complete SSL 3.0 MAC And Key Schedule",
+      "version": "0.46.65"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement exact TLS 1.0/1.1 MD5-plus-SHA-1 PRF, master-secret, key-block, finished, and certificate-verify derivations with secret-state cleanup, length and label rules, vectors, and isolated public APIs.",
+      "source_ids": [],
+      "title": "Complete TLS 1.0 And TLS 1.1 PRF",
+      "version": "0.46.66"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement TLS 1.2 PRFs across every admitted hash plus every authenticated truncated-HMAC profile, with exact labels, lengths, constant-time verification, cleanup, vectors, and typed public compatibility APIs.",
+      "source_ids": [],
+      "title": "Complete TLS 1.2 PRFs And Truncated HMAC Profiles",
+      "version": "0.46.67"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated export-grade key expansion, then exercise v0.46.65-v0.46.68 MAC, PRF, finished, certificate-verify, truncation, export, limit, cleanup, and cross-version negative behavior through packaged fixtures without enabling protocol fallback.",
+      "source_ids": [],
+      "title": "Complete Export KDFs And Legacy TLS Crypto Acceptance",
+      "version": "0.46.68"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SRP-6a group and public-value validation, verifier and credential generation, password and salt handling, invalid-value and offline-attack policy, vectors, proofs, cleanup, and public credential APIs.",
+      "source_ids": [],
+      "title": "Complete SRP-6a Groups Verifiers And Credentials",
+      "version": "0.46.69"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Complete client and server ephemeral operations, proofs, session derivation, confirmation, lifecycle and failure behavior over v0.46.69, then exercise both roles through packaged vectors, invalid values, cleanup, no_std, and exact later TLS-SRP profile fixtures.",
+      "source_ids": [],
+      "title": "Complete SRP-6a Sessions And Public Acceptance",
+      "version": "0.46.70"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party RFC 1951 DEFLATE compression and decompression with all block types, canonical Huffman construction, bounded history and encoder workspaces, deterministic generation, stream completion, malformed-input and bomb defenses, vectors, differentials, and public APIs.",
+      "source_ids": [],
+      "title": "Complete DEFLATE Codec",
+      "version": "0.46.71"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party RFC 1950 ZLIB compression and decompression over v0.46.71 with exact header, dictionary policy, Adler-32, reset, completion, malformed-input, bomb, deterministic-generation, vector, differential, and public API behavior.",
+      "source_ids": [],
+      "title": "Complete ZLIB Codec",
+      "version": "0.46.72"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Bind raw ZIP and authenticated TLS DEFLATE framing to v0.46.71-v0.46.72, then exercise every direction, block type, checksum, reset, boundary, workspace, malformed stream, bomb defense, no_std, and public profile through packaged fixtures.",
+      "source_ids": [],
+      "title": "DEFLATE ZLIB ZIP And TLS Compression Acceptance",
+      "version": "0.46.73"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party Brotli compression and decompression required by TLS certificate compression with admitted dictionary policy, bounded caller workspaces, deterministic generation, exact framing, bomb defenses, vectors, differential evidence, and public APIs without native code.",
+      "source_ids": [],
+      "title": "Complete Brotli Family",
+      "version": "0.46.74"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party Zstandard compression and decompression required by TLS certificate compression with admitted dictionary policy, bounded caller workspaces, deterministic generation, exact framing and checksums, bomb defenses, vectors, differential evidence, and public APIs without native code.",
+      "source_ids": [],
+      "title": "Complete Zstandard Family",
+      "version": "0.46.75"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise Brotli and Zstandard encoding, decoding, certificate-compression profiles, dictionaries, framing, checksums, workspaces, deterministic output, malformed input, bombs, no_std boundaries, and public APIs through packaged fixtures.",
+      "source_ids": [],
+      "title": "Brotli And Zstandard Public Acceptance",
+      "version": "0.46.76"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party LZS compression and decompression plus exact TLS framing, reset, history, boundaries, malformed-stream and bomb defenses, vectors, bounded workspaces, public APIs, and legacy-policy behavior.",
+      "source_ids": [],
+      "title": "Complete Legacy LZS Compression",
+      "version": "0.46.77"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise LZS encode/decode and TLS framing through packaged public fixtures across history, reset, boundary, malformed, truncation, bomb, workspace, no_std, warning, and graph-isolation cases.",
+      "source_ids": [],
+      "title": "LZS Public API Usability Acceptance",
+      "version": "0.46.78"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party BZip2 decompression with exact stream and block framing, transforms, Huffman decoding, CRCs, bounded caller workspaces, completion, malformed-input and bomb defenses, vectors, differentials, and public APIs.",
+      "source_ids": [],
+      "title": "Complete BZip2 Decoder",
+      "version": "0.46.79"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party BZip2 compression over the v0.46.79 format owner with transforms, Huffman construction, CRCs, bounded caller workspaces, deterministic generation, stream and block completion, vectors, differentials, and public APIs.",
+      "source_ids": [],
+      "title": "Complete BZip2 Encoder",
+      "version": "0.46.80"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise BZip2 encode/decode and later OpenPGP compatibility boundaries through packaged round trips, authoritative corpora, framing, CRC, deterministic-generation, malformed-input, bomb, workspace, no_std, and public API fixtures.",
+      "source_ids": [],
+      "title": "BZip2 Public API Usability Acceptance",
+      "version": "0.46.81"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the shared FIPS 204 arithmetic, sampling, encoding, key-consistency, randomness, context, cleanup, and proof foundation plus complete ML-DSA-44 key generation, deterministic and hedged signing, verification, vectors, malformed-input handling, and public APIs.",
+      "source_ids": [],
+      "title": "ML-DSA Foundation And Complete ML-DSA-44",
+      "version": "0.46.82"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete ML-DSA-65 over the reviewed v0.46.82 foundation with distinct parameters and types, key generation, deterministic and hedged signing, external randomness, context, verification, encodings, rejection sampling, vectors, faults, cleanup, and public APIs.",
+      "source_ids": [],
+      "title": "Complete ML-DSA-65",
+      "version": "0.46.83"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete ML-DSA-87 over the reviewed v0.46.82 foundation with distinct parameters and types, key generation, deterministic and hedged signing, external randomness, context, verification, encodings, rejection sampling, vectors, faults, cleanup, and public APIs.",
+      "source_ids": [],
+      "title": "Complete ML-DSA-87",
+      "version": "0.46.84"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Admit optional acceleration only with parameter-specific native evidence, then exercise ML-DSA-44, ML-DSA-65, and ML-DSA-87 through packaged keygen, deterministic and hedged sign, verify, context, malformed, fault, cleanup, no_std, scalar, and accelerated fixtures.",
+      "source_ids": [],
+      "title": "ML-DSA Acceleration And Public Acceptance",
+      "version": "0.46.85"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete FIPS 205 SLH-DSA SHA2-128s and SHA2-128f key generation, pure and prehash signing and verification where standardized, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, public APIs, and performance policy.",
+      "source_ids": [],
+      "title": "Complete SLH-DSA SHA2-128 Parameter Sets",
+      "version": "0.46.86"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SLH-DSA SHA2 192s/192f and 256s/256f parameter sets over reviewed SHA2 foundations with distinct types, all standardized operations, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, and public APIs.",
+      "source_ids": [],
+      "title": "Complete SLH-DSA SHA2-192 And SHA2-256 Parameter Sets",
+      "version": "0.46.87"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SLH-DSA SHAKE-128s and SHAKE-128f key generation, pure and prehash signing and verification where standardized, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, public APIs, and performance policy.",
+      "source_ids": [],
+      "title": "Complete SLH-DSA SHAKE-128 Parameter Sets",
+      "version": "0.46.88"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete SLH-DSA SHAKE 192s/192f and 256s/256f parameter sets over reviewed SHAKE foundations with distinct types, all standardized operations, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, and public APIs.",
+      "source_ids": [],
+      "title": "Complete SLH-DSA SHAKE-192 And SHAKE-256 Parameter Sets",
+      "version": "0.46.89"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise all twelve SHA2 and SHAKE `s` and `f` SLH-DSA parameter sets through packaged keygen, pure and prehash sign/verify where standardized, context, randomization, encoding, malformed, fault, cleanup, no_std, vector, proof-claim, and performance-policy fixtures.",
+      "source_ids": [],
+      "title": "SLH-DSA Public API Usability Acceptance",
+      "version": "0.46.90"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Reconcile every implemented primitive and operation against the scalar reference and CPU-backend register; require explicit admitted, candidate, rejected, or scalar-only decisions for AMD x86_64, observed-feature AWS Intel, Apple M2, AWS AArch64, and RISC-V with exact symbols, bundles, KAT, quarantine, dispatch, native evidence, residual risks, and FIPS dispositions.",
+      "source_ids": [],
+      "title": "Cross-Backend Performance And Admission Gate",
+      "version": "0.46.91"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every v0.46.2-v0.46.90 primitive, construction, mode, KDF, MAC, public-key operation, compression direction, and parameter family through its package-external fixture; prove single ownership, explicit dangerous selection, no implicit modern negotiation, no unauthenticated output, cleanup, no_std portability, and exact modern, legacy, regional, PQ, and FIPS status.",
+      "source_ids": [],
+      "title": "Cryptographic Substrate Cross-Family Usability Acceptance",
+      "version": "0.46.92"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Regenerate the transitive register from every authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT, and SNP source; block v0.47.0 unless every assigned capability and every send, receive, generation, import, export, and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, forbidden, lawfully unavailable, or source-blocked entries rejected.",
       "source_ids": [],
       "title": "Complete Registered Algorithm Closure Gate",
-      "version": "0.46.32"
+      "version": "0.46.93"
     },
     {
       "boundary": {
@@ -2025,10 +2883,8 @@
     },
     {
       "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-ENC-0004"
-      ],
-      "scope": "Implement bounded import and export for unencrypted and v0.46.22-encrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key containers with strict algorithm and parameter binding, key consistency, canonical DER, caller-owned secret arenas, uniform password failures, cleanup, and public round-trip APIs.",
+      "requirement_ids": [],
+      "scope": "Implement bounded PKCS #8 PrivateKeyInfo and OneAsymmetricKey import and export with strict version, algorithm and parameter binding, optional public-key consistency, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.",
       "source_ids": [
         "itu:ITU-T.X.690-202102.pdf",
         "itu:ITU-T.X.690-202109-Err1.pdf",
@@ -2037,8 +2893,51 @@
         "rfc:7468",
         "rfc:8017"
       ],
-      "title": "Complete Private-Key Container APIs",
+      "title": "Complete PKCS8 Unencrypted Private-Key Containers",
       "version": "0.49.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement bounded SEC1 ECPrivateKey import and export for every admitted curve with exact named-curve, optional parameters and public-key consistency rules, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.",
+      "source_ids": [],
+      "title": "Complete SEC1 EC Private-Key Containers",
+      "version": "0.49.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement bounded PKCS #1 RSAPrivateKey import and export with exact multi-prime disposition, mathematical and CRT consistency, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.",
+      "source_ids": [],
+      "title": "Complete PKCS1 RSA Private-Key Containers",
+      "version": "0.49.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind the exact v0.46.63 PBES2 and EncryptedPrivateKeyInfo owner to admitted PKCS #8 keys with strict algorithm parameters, hostile-work rejection, uniform password failures, transactional import/export, caller workspaces, cleanup, and public round trips.",
+      "source_ids": [],
+      "title": "Complete EncryptedPrivateKeyInfo Integration",
+      "version": "0.49.3"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "scope": "Exercise PKCS #8, SEC1, PKCS #1, and encrypted PKCS #8 import/export through packaged public round trips for every admitted key family, malformed and inconsistent structures, hostile parameters, wrong passwords, cleanup, no_std, and cross-format substitution failures.",
+      "source_ids": [],
+      "title": "Private-Key Container Public API Usability Acceptance",
+      "version": "0.49.4"
     },
     {
       "boundary": null,
@@ -2372,13 +3271,13 @@
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Implement exact PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP and path-validation profiles for authenticated MD2, MD5 and SHA-1 RSA signatures, DSA, legacy EC, GOST, SM2 and every other historical algorithm assigned by the pinned PKIX source closure; reuse the exact v0.46 implementations, enforce conspicuous legacy policy and algorithm constraints, and never admit a legacy trust decision through modern defaults.",
+      "scope": "Regenerate the authenticated PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP, request, issuance, regional, PQ, and hybrid profile register; assign every generation and validation direction to the review-sized rows below, insert additional tagged rows for any newly authenticated independent family, and block implementation rather than enlarging a frozen row.",
       "source_ids": [],
-      "title": "Complete Legacy PKIX Algorithm Profiles",
+      "title": "Legacy And PQ PKIX Profile Schedule Freeze",
       "version": "0.60.1"
     },
     {
@@ -2387,10 +3286,98 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Implement bounded public generation, canonical DER and validation APIs for PKCS #10 requests, certificates, cross-certificates, trust-anchor information, CRLs, delta and indirect CRLs, OCSP requests and responses, extensions, serials and signature profiles across admitted modern and legacy algorithms, with caller-owned signing, entropy, time and storage effects.",
+      "scope": "Implement exact PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP, and path-validation profiles for authenticated MD2, MD5, and SHA-1 RSA signatures over exact v0.46 owners with strict parameters, algorithm constraints, warnings, vectors, and no modern-default trust edge.",
       "source_ids": [],
-      "title": "Complete PKIX Issuance And Request APIs",
+      "title": "Complete Legacy RSA Hash PKIX Profiles",
       "version": "0.60.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated historical DSA and legacy EC PKIX AlgorithmIdentifier, key, signature, certificate, CRL, OCSP, and path-validation profile over exact primitive owners with strict parameters, algorithm constraints, warnings, vectors, and no modern-default trust edge.",
+      "source_ids": [],
+      "title": "Complete DSA And Legacy EC PKIX Profiles",
+      "version": "0.60.3"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated GOST PKIX AlgorithmIdentifier, key, signature, agreement, certificate, CRL, OCSP, and path-validation profile over v0.46.44-v0.46.54 with exact parameter sets, byte orders, constraints, warnings, vectors, and explicit regional or legacy policy.",
+      "source_ids": [],
+      "title": "Complete GOST PKIX Profiles",
+      "version": "0.60.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every authenticated SM2 and remaining assigned regional or historical PKIX AlgorithmIdentifier, key, signature, agreement, certificate, CRL, OCSP, and path-validation profile over exact owners with strict parameters, constraints, warnings, vectors, and explicit policy.",
+      "source_ids": [],
+      "title": "Complete SM2 Regional And Residual Legacy PKIX Profiles",
+      "version": "0.60.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement bounded public signed-object generation, canonical DER assembly, serial and extension construction, exact AlgorithmIdentifier binding, caller-owned signer, entropy, time and storage effects, transactional output, cleanup, and reusable issuance proof harnesses without yet combining every object type.",
+      "source_ids": [],
+      "title": "PKIX Canonical Issuance Foundation",
+      "version": "0.60.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete bounded PKCS #10 request generation, canonical DER, attribute and extension-request handling, signing, parsing, validation, malformed and duplicate policy, round trips, and public APIs across every admitted modern and legacy signature profile.",
+      "source_ids": [],
+      "title": "Complete PKCS10 Certification Request APIs",
+      "version": "0.60.7"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete bounded certificate, cross-certificate, and trust-anchor-information generation and validation over v0.60.6 with exact versions, names, validity, keys, extensions, constraints, serials, signature profiles, external signer effects, canonical DER, round trips, and public APIs.",
+      "source_ids": [],
+      "title": "Complete Certificate Cross-Certificate And Trust-Anchor Issuance",
+      "version": "0.60.8"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete bounded base, delta, and indirect CRL generation and validation with issuers, distribution points, entries, reasons, freshness, numbers, extensions, signature profiles, external signer effects, canonical DER, round trips, and public APIs.",
+      "source_ids": [],
+      "title": "Complete CRL Issuance APIs",
+      "version": "0.60.9"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete bounded OCSP request, BasicOCSPResponse, and response generation and validation with CertID, nonce, responder identity and authorization, freshness, status, extensions, signature profiles, external signer effects, canonical DER, round trips, and public APIs.",
+      "source_ids": [],
+      "title": "Complete OCSP Request And Response Issuance APIs",
+      "version": "0.60.10"
     },
     {
       "boundary": null,
@@ -2398,32 +3385,54 @@
         "BRY-REQ-PKIX-0010",
         "BRY-REQ-PQPKIX-0046"
       ],
-      "scope": "Implement the authenticated unsigned X.509 profile with explicit non-authentication types, complete RFC 9935 ML-KEM public-key and certificate profiles, and every finalized authenticated ML-DSA, SLH-DSA or hybrid PKIX profile available to the source closure; keep each credential kind typed, validate exact parameters and encodings, and prohibit unsupported trust substitution.",
+      "scope": "Implement the authenticated unsigned X.509 profile with explicit non-authentication types plus complete RFC 9935 ML-KEM public-key and certificate profiles, exact parameters and encodings, malformed and substitution rejection, round trips, and public APIs.",
       "source_ids": [],
-      "title": "Unsigned X509 ML-KEM And PQ PKIX Profiles",
-      "version": "0.60.3"
+      "title": "Complete Unsigned X509 And ML-KEM PKIX Profiles",
+      "version": "0.60.11"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every finalized authenticated ML-DSA PKIX AlgorithmIdentifier, public-key, certificate, CRL, OCSP, request, issuance, and validation profile available to the source closure with exact parameter sets, encodings, constraints, round trips, and public APIs.",
+      "source_ids": [],
+      "title": "Complete ML-DSA PKIX Profiles",
+      "version": "0.60.12"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every finalized authenticated SLH-DSA and hybrid PKIX AlgorithmIdentifier, public-key, certificate, CRL, OCSP, request, issuance, and validation profile available to the source closure with exact parameter sets, encodings, constraints, round trips, and public APIs.",
+      "source_ids": [],
+      "title": "Complete SLH-DSA And Hybrid PKIX Profiles",
+      "version": "0.60.13"
     },
     {
       "boundary": {
         "class": "internal-security-design",
-        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned objects, classical, regional, PQ and legacy profiles through packaged public fixtures and at least two independent toolchains where available; verify every algorithm direction, malformed and policy failure, no network ownership, bounded resources, cleanup, single implementation reuse and modern-versus-legacy isolation.",
+      "scope": "Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned, classical, regional, PQ, hybrid, and legacy profiles through packaged public fixtures and at least two independent toolchains where available, verifying every direction, malformed and policy failure, bounded resources, cleanup, reuse, and isolation.",
       "source_ids": [],
       "title": "Complete PKIX Public Usability And Interoperability Acceptance",
-      "version": "0.60.4"
+      "version": "0.60.14"
     },
     {
       "boundary": {
         "class": "internal-security-design",
-        "rationale": "These public-usability, dangerous-compatibility-policy, cumulative interoperability, isolation, remediation, and audit gates consume the normative owners immediately before them and add executable acceptance evidence without inventing a separate standards surface."
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Independently audit and cleanly retest the complete modern, optional, regional, PQ and legacy PKI surface, including generation and validation symmetry, encrypted containers, algorithm constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.",
+      "scope": "Independently audit and cleanly retest the complete modern, optional, regional, PQ, hybrid, and legacy PKI surface, including generation/validation symmetry, encrypted containers, constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.",
       "source_ids": [],
       "title": "Complete PKI Audit And Remediation Gate",
-      "version": "0.60.5"
+      "version": "0.60.15"
     },
     {
       "boundary": null,
@@ -3079,7 +4088,7 @@
       "requirement_ids": [
         "BRY-REQ-TLS13-0046"
       ],
-      "scope": "Implement the authenticated RFC 9963 legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points through the exact v0.46.21 legacy RSA operations, strict signature negotiation, certificate and role binding, explicit server policy, warnings, vectors and interoperability; keep them absent from server signatures and modern defaults.",
+      "scope": "Implement the authenticated RFC 9963 legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points through the exact v0.46.58 RSA operations, strict signature negotiation, certificate and role binding, explicit server policy, warnings, vectors and interoperability; keep them absent from server signatures and modern defaults.",
       "source_ids": [],
       "title": "TLS 1.3 Legacy PKCS1 Client Signatures",
       "version": "0.82.4"
@@ -4026,6 +5035,17 @@
       "version": "0.119.2"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Close ML-KEM-512, ML-KEM-768, and ML-KEM-1024 with packaged public key-generation, encapsulation, and decapsulation fixtures using deterministic vector entropy and production caller entropy, valid and malformed ciphertexts, implicit rejection, key consistency, cleanup, no_std installation, scalar and every admitted accelerated backend, and exact FIPS-versus-unvalidated status.",
+      "source_ids": [],
+      "title": "ML-KEM Public API Usability Acceptance",
+      "version": "0.119.3"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-HYB-0001"
@@ -4113,13 +5133,13 @@
       "requirement_ids": [
         "BRY-REQ-ENTROPY-1241"
       ],
-      "scope": "Select and implement the final approved DRBG mechanisms with exact instantiate, generate, reseed, uninstantiate, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, and catastrophic-error behavior plus algorithm and state-machine test harnesses.",
+      "scope": "Implement every selected SP 800-90A Hash_DRBG instantiation with exact instantiate, generate, reseed, uninstantiate, derivation, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, catastrophic-error, vector, and state-machine behavior.",
       "source_ids": [
         "nist:NIST.SP.800-90Ar1.pdf",
         "nist:NIST.SP.800-90B.pdf",
         "nist:NIST.SP.800-90C.pdf"
       ],
-      "title": "SP 800-90A DRBG Implementation",
+      "title": "Complete Hash_DRBG",
       "version": "0.124.1"
     },
     {
@@ -4127,14 +5147,47 @@
       "requirement_ids": [
         "BRY-REQ-ENTROPY-1242"
       ],
-      "scope": "Bind only admitted SP 800-90B entropy sources to the final SP 800-90A DRBGs through selected SP 800-90C RBG constructions; define primary and subordinate DRBG topology, entropy and nonce inputs, reseed chains, health and catastrophic propagation, operational-environment identity, and the exact RBG service boundary for later ESV testing.",
+      "scope": "Implement every selected SP 800-90A HMAC_DRBG instantiation with exact instantiate, update, generate, reseed, uninstantiate, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, catastrophic-error, vector, and state-machine behavior.",
       "source_ids": [
         "nist:NIST.SP.800-90Ar1.pdf",
         "nist:NIST.SP.800-90B.pdf",
         "nist:NIST.SP.800-90C.pdf"
       ],
-      "title": "SP 800-90C RBG Construction",
+      "title": "Complete HMAC_DRBG",
       "version": "0.124.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every selected SP 800-90A CTR_DRBG instantiation with exact block-cipher, derivation-function, instantiate, update, generate, reseed, uninstantiate, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, catastrophic-error, vector, and state-machine behavior.",
+      "source_ids": [],
+      "title": "Complete CTR_DRBG",
+      "version": "0.124.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every selected Hash_DRBG, HMAC_DRBG, and CTR_DRBG instantiation through packaged provider fixtures covering entropy and nonce inputs, personalization, additional input, reseed, prediction resistance, request limits, fork and rollback, concurrency, state corruption, uninstantiate, cleanup, KATs, and permanent failure.",
+      "source_ids": [],
+      "title": "DRBG Public API And Provider Acceptance",
+      "version": "0.124.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
+      },
+      "requirement_ids": [],
+      "scope": "Bind only admitted SP 800-90B entropy sources to admitted SP 800-90A DRBGs through selected SP 800-90C RBG constructions; define primary and subordinate topology, entropy and nonce inputs, reseed chains, health and catastrophic propagation, operational-environment identity, and the exact RBG service boundary for ESV testing.",
+      "source_ids": [],
+      "title": "SP 800-90C RBG Construction",
+      "version": "0.124.5"
     },
     {
       "boundary": null,
@@ -4400,13 +5453,101 @@
         "BRY-REQ-HPKE-0138",
         "BRY-REQ-HPKEREG-0138"
       ],
-      "scope": "Implement every RFC 9180 DHKEM over P-256, P-384, P-521, X25519, and X448, all specified HKDF-SHA-256/384/512 KDF identities, AES-128-GCM, AES-256-GCM, ChaCha20-Poly1305, and export-only AEAD selection, labeled extract and expand, public-key validation, serialization, domain separation, and bounded context foundations strictly downstream of validated provider ports without changing a validated FIPS module.",
+      "scope": "Implement complete RFC 9180 DHKEM(X25519, HKDF-SHA256) with exact key generation, import and validation, serialization, encapsulation, decapsulation, labeled extract/expand, KEM context, domain separation, failure, cleanup, vectors, and public APIs downstream of provider ports.",
       "source_ids": [
         "iana:hpke",
         "rfc:9180"
       ],
-      "title": "Complete HPKE KEM KDF AEAD And Context Foundation",
+      "title": "Complete HPKE DHKEM(X25519 HKDF-SHA256)",
       "version": "0.138.0"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete RFC 9180 DHKEM(P-256, HKDF-SHA256) over the admitted P-256 owner with exact SEC1 serialization, validation, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.",
+      "source_ids": [],
+      "title": "Complete HPKE DHKEM(P-256 HKDF-SHA256)",
+      "version": "0.138.1"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete RFC 9180 DHKEM(P-384, HKDF-SHA384) over the admitted P-384 owner with exact SEC1 serialization, validation, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.",
+      "source_ids": [],
+      "title": "Complete HPKE DHKEM(P-384 HKDF-SHA384)",
+      "version": "0.138.2"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete RFC 9180 DHKEM(P-521, HKDF-SHA512) over the admitted P-521 owner with exact SEC1 serialization, validation, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.",
+      "source_ids": [],
+      "title": "Complete HPKE DHKEM(P-521 HKDF-SHA512)",
+      "version": "0.138.3"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete RFC 9180 DHKEM(X448, HKDF-SHA512) over the admitted X448 owner with exact serialization, validation and all-zero policy, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.",
+      "source_ids": [],
+      "title": "Complete HPKE DHKEM(X448 HKDF-SHA512)",
+      "version": "0.138.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement every RFC 9180 HKDF-SHA256, HKDF-SHA384, and HKDF-SHA512 KDF identity plus exact labeled extract and expand, suite-ID, context, length and 255-block limits, secret cleanup, cross-suite rejection, vectors, and public APIs.",
+      "source_ids": [],
+      "title": "Complete HPKE KDF Identities And Labeled Operations",
+      "version": "0.138.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Bind AES-128-GCM, AES-256-GCM, ChaCha20-Poly1305, and export-only AEAD identities with exact key, nonce, tag, sequence, limit, overlap, failure-atomicity, provider, and cross-suite rules without duplicating any underlying AEAD.",
+      "source_ids": [],
+      "title": "Complete HPKE AEAD Identities",
+      "version": "0.138.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the bounded RFC 9180 suite, mode, role, key-schedule context, nonce derivation, sequence, exporter, invalidation, cancellation, serialization, domain-separation, secret ownership, and provider-token foundations used by later Base, PSK, Auth, and AuthPSK modes.",
+      "source_ids": [],
+      "title": "Complete HPKE Context Foundation",
+      "version": "0.138.7"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise every standard DHKEM, KDF, AEAD and export-only identity plus context creation through packaged public fixtures, official vectors, wrong-suite and malformed-key cases, sequence and length limits, cleanup, no_std, scalar and admitted backends, and exact FIPS-module separation before implementing HPKE modes.",
+      "source_ids": [],
+      "title": "HPKE Foundation Public API Usability Acceptance",
+      "version": "0.138.8"
     },
     {
       "boundary": null,
@@ -4920,7 +6061,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Pin RFC 9580, its obsoleted RFC lineage, errata, and the OpenPGP Parameters registry; classify every packet, version, algorithm, signature type, subpacket, armor form, criticality rule, compatibility surface and trust responsibility; freeze separate `brynja-openpgp-core`, `brynja-openpgp-armor`, `brynja-openpgp`, and optional `brynja-openpgp-legacy` boundaries with no implicit network, keyserver, filesystem, global trust, TLS, legacy-protocol, or FIPS-module edge.",
+      "scope": "Pin RFC 9580, its obsoleted lineage, errata, and the OpenPGP Parameters registry; classify every packet, version, algorithm, signature type, subpacket, armor form, criticality rule, compatibility surface and trust responsibility; freeze separate package boundaries with no implicit external effects; and before v0.163.1 replace any later OpenPGP umbrella row that combines independent packet families, algorithms, directions, pipelines, or acceptance work with explicit review-sized tagged child rows.",
       "source_ids": [],
       "title": "OpenPGP Authority, Registry, Threat Model, And Package Boundary",
       "version": "0.163.0"
@@ -5041,9 +6182,9 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement complete RFC 9106 Argon2d, Argon2i, and Argon2id version 0x13 APIs in first-party Rust with exact indexing, lanes, segments, passes, memory rounding, variable output, caller-provided workspace, parameter and overflow bounds, KATs, differential and proof evidence, data-independent or data-dependent memory-access disclosures, cancellation, and complete password, salt, secret, associated-data, block-memory, and output-intermediate destruction.",
+      "scope": "Implement complete RFC 9106 Argon2i version 0x13 in first-party Rust, including the shared block and indexing foundation, lanes, segments, passes, memory rounding, variable output, caller workspace, parameter and overflow bounds, KATs, proofs, data-independent access claims, cancellation, cleanup, and public APIs.",
       "source_ids": [],
-      "title": "Complete First-Party Argon2 Family",
+      "title": "Complete First-Party Argon2i",
       "version": "0.168.0"
     },
     {
@@ -5052,43 +6193,109 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Close the Argon2 family through packaged downstream Argon2d/i/id fixtures and then bind only the exact RFC 9580 Argon2 S2K profile to Argon2id; implement Simple, Salted, Iterated and Argon2 S2K parsing and derivation with explicit deprecated-read policy, algorithm-use separation, hostile-parameter rejection, and no password-dependent diagnostics.",
+      "scope": "Implement complete RFC 9106 Argon2d version 0x13 over the reviewed Argon2 foundation with distinct type and indexing mode, all lanes, segments, passes, memory and output rules, caller workspace, bounds, KATs, proofs, data-dependent access disclosure, cancellation, cleanup, and public APIs.",
       "source_ids": [],
-      "title": "Argon2 Public API Acceptance And OpenPGP S2K",
+      "title": "Complete First-Party Argon2d",
       "version": "0.168.1"
     },
     {
       "boundary": {
         "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Implement complete first-party OCB3 and EAX AEAD constructions over admitted AES widths with their authoritative nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and public API requirements before any OpenPGP-specific profile consumes them.",
+      "scope": "Implement complete RFC 9106 Argon2id version 0x13 over the reviewed Argon2 foundation with distinct hybrid indexing, all lanes, segments, passes, memory and output rules, caller workspace, bounds, KATs, proofs, cancellation, cleanup, and public APIs suitable for the later OpenPGP profile.",
       "source_ids": [],
-      "title": "Complete First-Party OCB And EAX Constructions",
+      "title": "Complete First-Party Argon2id",
       "version": "0.168.2"
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Bind the complete OCB, EAX, and existing GCM constructions to the exact RFC 9580 algorithm identifiers, nonces, associated data, chunk indices, final tags, message and key limits, transactional output, uniform failure, and selection policy; keep every OpenPGP profile outside FIPS-approved-service claims even when an underlying primitive is individually approved.",
+      "scope": "Benchmark and admit architecture-specific Argon2 block-processing paths only when Argon2d/i/id indexing, memory fill order, lane synchronization, cancellation, cleanup, memory-hardness, side-channel disclosures, output, and scalar equivalence remain exact; retain scalar-only decisions where hardware paths do not justify their complexity.",
       "source_ids": [],
-      "title": "OpenPGP OCB EAX And GCM AEAD Profiles",
+      "title": "Argon2 CPU Acceleration And Memory-Hardness Evidence",
       "version": "0.168.3"
     },
     {
       "boundary": {
         "class": "internal-security-design",
-        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Exercise packaged standalone OCB3 and EAX APIs plus OpenPGP OCB, EAX, and GCM profile fixtures against authoritative vectors and real multi-chunk messages, all AES widths admitted by each standard, tamper and truncation failures, scalar and accelerated AES paths, package isolation, cleanup, and no unauthenticated plaintext release.",
+      "scope": "Exercise Argon2d, Argon2i, and Argon2id through packaged public fixtures for passwords, salts, secrets, associated data, variable outputs, every parameter boundary, caller workspaces, cancellation, cleanup, KATs, differentials, no_std, scalar, and every admitted backend without yet binding OpenPGP.",
       "source_ids": [],
-      "title": "OCB EAX And OpenPGP AEAD Usability Acceptance",
+      "title": "Argon2 Public API Usability Acceptance",
       "version": "0.168.4"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Bind only the exact RFC 9580 Argon2 S2K profile to v0.168.2 and implement Simple, Salted, Iterated, and Argon2 S2K parsing and derivation with exact algorithm-use separation, deprecated-read policy, hostile-parameter rejection, cleanup, vectors, public APIs, and no password-dependent diagnostics.",
+      "source_ids": [],
+      "title": "Complete OpenPGP S2K Profiles",
+      "version": "0.168.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party OCB3 over every admitted AES width with exact nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public API behavior.",
+      "source_ids": [],
+      "title": "Complete First-Party OCB3",
+      "version": "0.168.6"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Implement complete first-party EAX over every admitted AES width with exact nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public API behavior.",
+      "source_ids": [],
+      "title": "Complete First-Party EAX",
+      "version": "0.168.7"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
+      },
+      "requirement_ids": [],
+      "scope": "Bind the complete OCB3, EAX, and existing GCM constructions to exact RFC 9580 identifiers, nonces, associated data, chunk indices, final tags, message and key limits, transactional output, uniform failure, and selection policy while keeping all OpenPGP profiles outside approved-service claims.",
+      "source_ids": [],
+      "title": "OpenPGP OCB EAX And GCM AEAD Profiles",
+      "version": "0.168.8"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise packaged standalone OCB3 and EAX APIs against authoritative vectors across every admitted AES width, nonce, tag, AAD, empty, partial, multi-block, in-place, disjoint, tamper, cleanup, scalar and accelerated AES path, no_std, and failure-atomicity case.",
+      "source_ids": [],
+      "title": "OCB3 And EAX Public API Usability Acceptance",
+      "version": "0.168.9"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Exercise packaged Simple, Salted, Iterated, and Argon2 S2Ks plus OpenPGP OCB, EAX, and GCM profiles against authoritative vectors and real multi-chunk messages, hostile parameters, wrong passwords, tamper, truncation, cleanup, package isolation, and no unauthenticated plaintext release.",
+      "source_ids": [],
+      "title": "OpenPGP S2K And AEAD Usability Acceptance",
+      "version": "0.168.10"
     },
     {
       "boundary": {
@@ -5118,7 +6325,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.3 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.",
+      "scope": "Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.5 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.",
       "source_ids": [],
       "title": "OpenPGP Legacy SHA-1 Consumer Admission Review",
       "version": "0.169.2"
@@ -5162,7 +6369,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Bind the exact complete v0.46.21 RSA PKCS1 v1.5 signing, verification, encryption and decryption operations into every authenticated OpenPGP RSA compatibility profile with exact digest, session-key encoding, modulus, message, randomness, fingerprint, key-version, failure and policy rules; do not reimplement RSA or admit implicit modern selection.",
+      "scope": "Bind the exact complete v0.46.58-v0.46.59 RSA PKCS1 v1.5 signing, verification, encryption and decryption operations into every authenticated OpenPGP RSA compatibility profile with exact digest, session-key encoding, modulus, message, randomness, fingerprint, key-version, failure and policy rules; do not reimplement RSA or admit implicit modern selection.",
       "source_ids": [],
       "title": "OpenPGP Legacy RSA PKCS1 V1.5 Profiles",
       "version": "0.169.6"
@@ -5195,7 +6402,7 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Bind the exact v0.46.5 DSA implementation into every authenticated OpenPGP key, signature, certificate, import, export, generation, signing and verification profile with exact parameter, hash, encoding, fingerprint and key-version rules, explicit dangerous policy, archived vectors and no modern-default edge.",
+      "scope": "Bind the exact v0.46.6-v0.46.7 DSA implementation into every authenticated OpenPGP key, signature, certificate, import, export, generation, signing and verification profile with exact parameter, hash, encoding, fingerprint and key-version rules, explicit dangerous policy, archived vectors and no modern-default edge.",
       "source_ids": [],
       "title": "Complete OpenPGP DSA Profiles",
       "version": "0.169.9"
@@ -5206,7 +6413,7 @@
         "rationale": "These complete primitive, credential, protocol-profile, compression, channel-binding, and legacy-compatibility implementations require exact authenticated standards, registries, errata, vectors, and security-status decisions before code is admitted; family names and neighboring protocol requirements cannot substitute for per-capability authority."
       },
       "requirement_ids": [],
-      "scope": "Bind the exact v0.46.6 ElGamal implementation into every authenticated OpenPGP key, session-key encryption, decryption, import, export and generation profile with exact encoding, randomness, subgroup, fingerprint, version, uniform-failure and plaintext-release rules and explicit dangerous policy.",
+      "scope": "Bind the exact v0.46.8-v0.46.9 ElGamal implementation into every authenticated OpenPGP key, session-key encryption, decryption, import, export and generation profile with exact encoding, randomness, subgroup, fingerprint, version, uniform-failure and plaintext-release rules and explicit dangerous policy.",
       "source_ids": [],
       "title": "Complete OpenPGP ElGamal Profiles",
       "version": "0.169.10"
@@ -5349,7 +6556,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Bind the exact complete v0.46.25 DEFLATE and ZLIB implementation into OpenPGP ZIP and ZLIB Compressed Data generation and parsing with exact algorithm identifiers, reset, nesting, deterministic-generation, workspace, bomb, checksum, malformed-stream and public API behavior without a private codec copy.",
+      "scope": "Bind the exact complete v0.46.71-v0.46.72 DEFLATE and ZLIB implementations into OpenPGP ZIP and ZLIB Compressed Data generation and parsing with exact algorithm identifiers, reset, nesting, deterministic-generation, workspace, bomb, checksum, malformed-stream and public API behavior without a private codec copy.",
       "source_ids": [],
       "title": "Complete OpenPGP DEFLATE ZIP And ZLIB Profiles",
       "version": "0.173.1"
@@ -5360,7 +6567,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Bind the exact complete v0.46.28 BZip2 encoder and decoder into optional `brynja-openpgp-legacy` Compressed Data generation and parsing with exact identifiers, nesting, block and stream checks, caller workspaces, bomb defenses, archived interoperability, public APIs and no default modern edge.",
+      "scope": "Bind the exact complete v0.46.79-v0.46.80 BZip2 decoder and encoder into optional `brynja-openpgp-legacy` Compressed Data generation and parsing with exact identifiers, nesting, block and stream checks, caller workspaces, bomb defenses, archived interoperability, public APIs and no default modern edge.",
       "source_ids": [],
       "title": "Complete OpenPGP BZip2 Profiles",
       "version": "0.173.2"
@@ -5536,7 +6743,7 @@
         "BRY-REQ-LEGACY-0800",
         "BRY-REQ-LEGACYSSL1-0800"
       ],
-      "scope": "Authenticate and lawfully admit the complete available specifications, errata, registries, archives and interoperability corpora for TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP; assign every message, version, suite, primitive, compression method, extension, certificate, key format, role and send/receive operation to one complete owner, and block 1.0 rather than silently reduce any named protocol to a subset.",
+      "scope": "Authenticate and lawfully admit the complete available specifications, errata, registries, archives and interoperability corpora for TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP; assign every message, version, suite, primitive, compression method, extension, certificate, key format, role and send/receive operation to one complete owner; insert review-sized tagged child rows whenever a listed protocol row combines independent codecs, state-machine roles, suites, operations, or acceptance work; and block 1.0 rather than silently ship a subset.",
       "source_ids": [
         "rfc:2246",
         "rfc:4346",
@@ -7281,7 +8488,7 @@
       ],
       "id": "BRY-REQ-ENC-0004",
       "lifecycle": "planned",
-      "owner": "0.49.0",
+      "owner": "0.49.4",
       "source_ids": [
         "rfc:5958",
         "rfc:8017"
@@ -7957,7 +9164,7 @@
       ],
       "id": "BRY-REQ-PKIX-0010",
       "lifecycle": "planned",
-      "owner": "0.60.3",
+      "owner": "0.60.11",
       "source_ids": [
         "rfc:9925"
       ]
@@ -7992,7 +9199,7 @@
       ],
       "id": "BRY-REQ-PQPKIX-0046",
       "lifecycle": "planned",
-      "owner": "0.60.3",
+      "owner": "0.60.11",
       "source_ids": [
         "rfc:9935"
       ]

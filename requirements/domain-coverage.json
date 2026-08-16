@@ -5557,7 +5557,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "65a4f9de6b26068dd2d50b961762417e2f926ad042f6970c4a08483bbf53a088",
+  "policy_sha256": "3980148d4bf7168ba0a4cb6a6a7c807e49f397b601985529963bbdd08e276a13",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3325,
@@ -5689,8 +5689,8 @@
       "disposition": "future-work",
       "domain": "pkix",
       "id": "format.ml-kem-pkix-credentials",
-      "owner": "0.60.3",
-      "rationale": "ML-KEM PKIX credential implementation is owned by v0.60.3 after its complete hybrid authority review at v0.3.5."
+      "owner": "0.60.11",
+      "rationale": "ML-KEM PKIX credential implementation is owned by v0.60.11 after its complete hybrid authority review at v0.3.5."
     },
     {
       "coverage": "requirement",
@@ -5705,7 +5705,7 @@
       "disposition": "future-work",
       "domain": "pkix",
       "id": "format.private-key-containers",
-      "owner": "0.49.0",
+      "owner": "0.49.4",
       "requirement_id": "BRY-REQ-ENC-0004"
     },
     {
@@ -5721,7 +5721,7 @@
       "disposition": "future-work",
       "domain": "pkix",
       "id": "format.x509.unsigned",
-      "owner": "0.60.3",
+      "owner": "0.60.11",
       "requirement_id": "BRY-REQ-PKIX-0010"
     },
     {

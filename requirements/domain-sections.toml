@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.3"
-source_ledger_sha256 = "df2d5e51f5471ddcac4b2968f9c1e49741f167145f34cb7c590b45ef3c2091e2"
+source_ledger_sha256 = "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6"
 
 [revisions]
 "BRY-REQ-CRYPTO-0003" = 2
@@ -10,11 +10,11 @@ source_ledger_sha256 = "df2d5e51f5471ddcac4b2968f9c1e49741f167145f34cb7c590b45ef
 "BRY-REQ-CRYPTO-0009" = 2
 "BRY-REQ-CRYPTO-0010" = 3
 "BRY-REQ-CRYPTO-0011" = 2
-"BRY-REQ-CRYPTO-0012" = 3
+"BRY-REQ-CRYPTO-0012" = 4
 "BRY-REQ-CT-0001" = 2
 "BRY-REQ-ENC-0002" = 3
 "BRY-REQ-ENC-0003" = 2
-"BRY-REQ-ENC-0004" = 2
+"BRY-REQ-ENC-0004" = 3
 "BRY-REQ-OCSP-0001" = 2
 "BRY-REQ-OCSP-0002" = 2
 "BRY-REQ-OCSP-0003" = 2
@@ -30,7 +30,7 @@ source_ledger_sha256 = "df2d5e51f5471ddcac4b2968f9c1e49741f167145f34cb7c590b45ef
 "BRY-REQ-PKIX-0007" = 2
 "BRY-REQ-PKIX-0008" = 2
 "BRY-REQ-PKIX-0009" = 2
-"BRY-REQ-PKIX-0010" = 3
+"BRY-REQ-PKIX-0010" = 4
 
 [[binding]]
 source_id = "rfc:10007"

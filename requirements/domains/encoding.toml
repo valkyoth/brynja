@@ -53,8 +53,9 @@ mapping_rationale = "The PEM semantic surface cites RFC 7468 directly and is own
 
 [[requirement]]
 id = "BRY-REQ-ENC-0004"
-owner = "0.49.0"
+owner = "0.49.4"
 lifecycle = "planned"
+revision = 3
 decision_ids = ["format.private-key-containers"]
 sources = [{ id = "rfc:5958", authority_role = "current" }, { id = "rfc:8017", authority_role = "current" }]
 statement = "Unencrypted PKCS8 and PKCS1 key containers require exact algorithms, parameters, public-private consistency, canonical DER, and secret ownership."
@@ -63,6 +64,6 @@ target = "crates/brynja-pki/src/key_format.rs#PrivateKeyInput"
 positive_test = "tests/requirements/private_keys.rs#admitted_formats"
 negative_test = "tests/requirements/private_keys.rs#encrypted_ambiguous_and_inconsistent_keys"
 work_bound = "Private-key decoding uses fixed policy size ceilings, bounded DER work, and no attacker-selected arithmetic width or automatic decryption."
-evidence_gap = "Format vectors, malformed corpora, key-consistency tests, owned-region destruction, and integration review remain unresolved until v0.49.0."
+evidence_gap = "Format vectors, malformed corpora, key-consistency tests, owned-region destruction, and integration review remain unresolved until v0.49.4."
 residual = "Encrypted PKCS8, arbitrary algorithms, RSA key generation, and secret-bearing diagnostic formatting remain explicit version-one exclusions."
 mapping_rationale = "The private-key-container semantic surface directly cites RFC 5958 and RFC 8017 and remains bound to its dedicated secret-owning input milestone."

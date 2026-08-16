@@ -7,6 +7,15 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Split oversized future implementation families into review-sized tagged
+  milestones with separate portable implementation, acceleration, and
+  package-external acceptance gates. The revised roadmap now decomposes SHA-3,
+  AES, GCM, ChaCha20/Poly1305, integer and field arithmetic, EdDSA/Curve448,
+  P-521, the complete v0.46 cryptographic substrate, private-key containers,
+  PKIX generation and legacy/PQ profiles, ML-KEM acceptance, SP 800-90A DRBGs,
+  HPKE foundations, and Argon2/OCB/EAX; registry-driven OpenPGP and named
+  legacy-protocol phases must insert further child rows before implementation
+  if authenticated source closure reveals another oversized unit.
 - Record the exceptional v0.23.2 repository-owner SHA-512/224 and SHA-512/256
   assessment of exact signed implementation candidate
   `0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` as `PASS`/`PASS` with zero open

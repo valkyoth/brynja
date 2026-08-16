@@ -2300,175 +2300,317 @@ Exit criteria:
   documentation claim remains deferred;
 - `v0.23.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.0 - Complete FIPS 202 SHA-3 And SHAKE Family
+### v0.24.0 - Keccak Foundation And Complete SHA3-224/SHA3-256
 
 Status: planned
 
-Plan scope: Freeze a reusable no_std `brynja-hash-sha3` family around one private Keccak-f[1600] ownership boundary, then implement all six FIPS 202 functions: SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256; expose complete fixed-output and arbitrary-length XOF APIs with exact domain separation, absorb, finalization, squeeze, length, and state-lifecycle rules without exposing a raw permutation.
+Plan scope: Freeze reusable no_std `brynja-hash-sha3` sponge ownership around one private Keccak-f[1600] permutation, then complete SHA3-224 and SHA3-256 with distinct rates, suffixes, fixed-output states, one-shot and streaming APIs, authoritative vectors, padding boundaries, checked lengths, proofs, and no raw public permutation.
 
-Goal: complete the entire FIPS 202 public hash and XOF family before ML-KEM or
-other consumers depend on the permutation.
+Goal: close the **Keccak Foundation And Complete SHA3-224/SHA3-256** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.24.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.1 - Complete SHA-3 And SHAKE CPU Acceleration
+### v0.24.1 - Complete SHA3-384 And SHA3-512
 
 Status: planned
 
-Plan scope: Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve each rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, and arbitrary tail exactly, and record scalar-only decisions where acceleration is not supportable or useful.
+Plan scope: Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration.
 
-Goal: improve SHA-3, SHAKE and later ML-KEM workloads without weakening Keccak domain or variable-output correctness.
+Goal: close the **Complete SHA3-384 And SHA3-512** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement isolated permutation backends and parallel lanes only for exact, reviewed feature bundles and operation-size ranges;
-- retain scalar sponge state, domain suffix, padding, absorb and squeeze accounting as the semantic reference and expose each direct permutation symbol to tests;
-- integrate KAT, quarantine, static no_std and opt-in std selection while keeping candidate and active backend reporting distinct.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official permutation, SHA3 and SHAKE vectors, zero and long output, partial absorb and squeeze, every rate boundary and scalar differential corpus;
-- force each width, lane count and tail, inject permutation and KAT faults, and test unsupported features, quarantine, required mode and scalar fallback;
-- collect native AMD, Intel, M2, AWS Arm and qualifying RISC-V emitted-code, side-channel and performance evidence for hash and ML-KEM-size workloads.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- every admitted permutation is domain-correct, scalar-equivalent and useful for its declared operation and length range;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.24.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.2 - Complete SHA-3 And SHAKE Public API Usability Acceptance
+### v0.24.2 - Complete SHAKE128 And SHAKE256
+
+Status: planned
+
+Plan scope: Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].
+
+Goal: close the **Complete SHAKE128 And SHAKE256** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.24.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.3 - Complete SHA-3 And SHAKE CPU Acceleration
+
+Status: planned
+
+Plan scope: Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve every rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, arbitrary tail, KAT, quarantine, and scalar-equivalence rule.
+
+Goal: close the **Complete SHA-3 And SHAKE CPU Acceleration** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.24.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.4 - Complete SHA-3 And SHAKE Public API Usability Acceptance
 
 Status: planned
 
 Plan scope: Close the FIPS 202 chain with a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental-squeeze, scalar, and every admitted accelerated path, including zero-length and multi-block output, authoritative vectors, no_std installation, and domain-separation negative tests.
 
-Goal: prove the complete FIPS 202 family is usable without private permutation
-access or deferred XOF behavior.
+Goal: close the **Complete SHA-3 And SHAKE Public API Usability Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- provide a package-external fixture and command for SHA3-224/256/384/512 and
-  SHAKE128/256 fixed, streaming and repeated-squeeze use;
-- make algorithm, rate, suffix and backend reporting explicit and secret-free;
-- update the public verification tables and complete-family documentation.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official examples and independent expected outputs at every rate and
-  squeeze boundary, including empty and output longer than one rate;
-- swap suffixes, rates and output types in negative fixtures and require failure;
-- package and no_std-build the exact public API across the supported matrix.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- all six functions work through ordinary artifacts and no family member or
-  XOF lifecycle behavior remains postponed;
-- `v0.24.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.24.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.3 - Complete First-Party Legacy SHA-1
+### v0.24.5 - Complete First-Party Legacy SHA-1
 
 Status: planned
 
 Plan scope: Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation.
 
-Goal: provide one honest, complete compatibility implementation for every
-explicit pre-1.0 SHA-1 consumer without normalizing SHA-1 as modern security.
+Goal: close the **Complete First-Party Legacy SHA-1** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement one-shot and streaming SHA-1, checked length, padding, finalization
-  and digest access in the isolated legacy package;
-- bind collision warnings and non-security policy into package metadata, types,
-  docs and compile-time dependency direction;
-- expose no automatic consumer or algorithm negotiation edge.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run FIPS and independent vectors, padding boundaries, million-byte,
-  partition, exhaustion, fuzz, proof and emitted-code checks;
-- prove modern graphs and policy traits cannot select or receive SHA-1;
-- package and no_std-test the direct opt-in compatibility API.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- SHA-1 is complete but isolated, and every use still requires a later named
-  consumer admission;
-- `v0.24.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.24.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.4 - Complete First-Party Legacy MD5
+### v0.24.6 - Complete First-Party Legacy MD5
 
 Status: planned
 
 Plan scope: Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use.
 
-Goal: satisfy the explicitly planned HMAC-MD5 compatibility dependency without
-leaving a partial private MD5 or implying modern security.
+Goal: close the **Complete First-Party Legacy MD5** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement complete one-shot and streaming RFC 1321 behavior and typed digest;
-- freeze hard package and policy isolation plus collision and chosen-prefix
-  warnings on every direct-use path;
-- reserve only the separately admitted legacy HMAC adapter as a pre-1.0 consumer.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run RFC 1321 and independent vectors, bit-length and padding boundaries,
-  streaming partitions, exhaustion, malformed-state and consumer tests;
-- prove no modern cryptographic policy trait, facade or protocol graph can
-  accept MD5 output;
-- package and no_std-test the explicit compatibility crate.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- the HMAC-MD5 dependency is fully implemented and mechanically contained;
-- `v0.24.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.24.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.5 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
+### v0.24.7 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
 
 Status: planned
 
 Plan scope: Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters.
 
-Goal: close both legacy hash implementations with usable evidence and stronger
-containment evidence than documentation warnings alone.
+Goal: close the **Legacy SHA-1 And MD5 Usability And Isolation Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- add direct opt-in downstream fixtures and one documented compatibility command;
-- generate negative modern-graph, facade, policy-trait and FIPS fixtures;
-- record every admitted consumer identity in the algorithm register.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- hash representative files via public one-shot and streaming APIs and compare
-  independent digests;
-- fail builds that introduce either package into a modern or approved graph;
-- verify warnings, package metadata, no_std support and source isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- both legacy hashes are demonstrably usable only through explicit legacy
-  selection and cannot masquerade as modern primitives;
-- `v0.24.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.24.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - Complete Generic HMAC Construction
 
@@ -2618,112 +2760,200 @@ Exit criteria:
   implementation work;
 - `v0.26.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.0 - Complete Portable AES
+### v0.27.0 - Complete Portable AES-128
 
 Status: planned
 
-Plan scope: Implement the complete FIPS 197 AES-128, AES-192, and AES-256 forward and inverse ciphers with key expansion, encrypt and decrypt block APIs, official vectors, typed key sizes, immediate schedule destruction, and portable constant-time code without secret-indexed tables; require layered emitted-code and statistical evidence for every admitted compiler and target.
+Plan scope: Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, immediate schedule destruction, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.
 
-Goal: complete the **Portable AES** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **Complete Portable AES-128** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.27.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.1 - Complete AES x86_64 And AArch64 Acceleration
+### v0.27.1 - Complete Portable AES-192 And AES-256
 
 Status: planned
 
-Plan scope: Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical key expansion, inverse, KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.
+Plan scope: Complete FIPS 197 AES-192 and AES-256 key expansion and forward and inverse block operations over the reviewed portable owner while preserving distinct key and round identities, typed APIs, official vectors, cleanup, proofs, and per-compiler and per-target constant-time evidence.
 
-Goal: admit hardware AES on the available x86_64 and AArch64 systems while preserving the portable implementation as the semantic and unsupported-target fallback.
+Goal: close the **Complete Portable AES-192 And AES-256** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement isolated AES-NI, benchmark-qualified VAES and AArch64 AES encrypt and key-schedule paths with exact feature bundles and operation identities;
-- bind secret key ownership, expanded-key destruction, KAT state, health generation and backend reporting to the existing AES API without exposing raw backend selection through safe protocol configuration;
-- define single-block, parallel-block and message-size dispatch ranges from native evidence rather than ISA width and document all register, spill and termination exclusions.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official AES-128 and AES-256 vectors, key-schedule and round differentials, every admitted block count, overlap contract and injected backend corruption;
-- exercise local AMD, observed-feature AWS Intel, M2 and AWS Arm runtime and static selection, unsupported-feature processes, quarantine, required mode and scalar fallback;
-- inspect MIR, LLVM and assembly and collect constant-time, cache, branch, code-size, initialization and performance evidence for every supported compiler and target path.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- each admitted AES backend is exact-feature guarded, scalar-equivalent, independently healthy and measurably useful on its named native systems;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.27.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.2 - Complete AES RISC-V Acceleration Candidate
+### v0.27.2 - Complete AES x86_64 And AArch64 Acceleration
+
+Status: planned
+
+Plan scope: Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.
+
+Goal: close the **Complete AES x86_64 And AArch64 Acceleration** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.27.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.27.3 - Complete AES RISC-V Acceleration Candidate
 
 Status: planned
 
 Plan scope: Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission.
 
-Goal: prepare RISC-V AES acceleration without conflating generic RV64, the base vector extension and the exact AES crypto extensions.
+Goal: close the **Complete AES RISC-V Acceleration Candidate** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- freeze exact scalar and vector AES extension bundles, stable compiler compatibility, ABI and vector-state assumptions, and candidate versus admitted status;
-- implement isolated candidate key-schedule and encrypt paths, direct tests, KAT health and static selection without enabling automatic dispatch prematurely;
-- keep portable AES available on every RISC-V build and make absent native evidence or insufficient performance an explicit non-admission.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, round and key-schedule differentials, block-count and overlap cases under cross-build and QEMU coverage;
-- inspect every supported compiler's output and test safe negative selection on images lacking one required feature;
-- run on the RISC-V cloud host when its ISA qualifies and otherwise prove the candidate cannot become active or be reported as supported.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- RISC-V AES is natively evidenced before admission and all other RISC-V deployments stay visibly scalar;
-- `v0.27.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.27.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.3 - AES Public API Usability Acceptance
+### v0.27.4 - AES Public API Usability Acceptance
 
 Status: planned
 
 Plan scope: Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation.
 
-Goal: prove complete AES-128/192/256 encryption and decryption are usable before
-GHASH, GCM, key wrap, OCB, EAX or CFB composition.
+Goal: close the **AES Public API Usability Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- add one external-style fixture for every key width and direction;
-- expose exact backend identity without exposing unsafe dispatch authority;
-- record public examples, key lifetime and non-mode limitations.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run FIPS 197 cipher, inverse-cipher and key-schedule vectors plus round trips;
-- force scalar and every admitted backend, wrong keys, corrupt rounds and KAT
-  quarantine while checking schedule destruction;
-- package and no_std-test all three typed APIs across the matrix.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- the complete AES block cipher is directly usable and no inverse or key-width
-  behavior is deferred to a later mode;
-- `v0.27.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.27.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.28.0 - GHASH
 
@@ -2804,114 +3034,199 @@ Exit criteria:
 - GHASH is complete, scalar-equivalent and independently usable for its precise construction role;
 - `v0.28.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.29.0 - Complete AES-GCM And GMAC
+### v0.29.0 - Complete AES-GCM
 
 Status: planned
 
-Plan scope: Implement the complete admitted NIST SP 800-38D AES-GCM and GMAC surface over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, AAD-only GMAC, nonce and invocation limits, checked length domains, and official vectors; authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on failure, and introduce its failure-atomicity proof harness beside the implementation.
+Plan scope: Implement complete NIST SP 800-38D AES-GCM seal and open over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, nonce and invocation limits, checked length domains, official vectors, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, and failure-atomicity proofs.
 
-Goal: complete GCM encryption/authentication and its GMAC authentication-only
-specialization across the complete AES key-width family.
+Goal: close the **Complete AES-GCM** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.29.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.29.1 - Integrated Accelerated AES-GCM
+### v0.29.1 - Complete GMAC
 
 Status: planned
 
-Plan scope: Integrate only admitted AES and GHASH backend pairs into an accelerated AES-GCM provider with per-operation dispatch, preserving nonce and use limits, exact in-place or disjoint buffer rules, partial-overlap rejection, authenticate-before-release, complete failure atomicity, cancellation, output equivalence, and scalar fallback; benchmark combined rather than component speed and prohibit mixed, unhealthy, or unvalidated pairings.
+Plan scope: Implement the complete AAD-only GMAC surface over every admitted AES width with exact IV and tag policies, invocation and length limits, constant-time verification, official vectors, state cleanup, distinct MAC tag types, and public APIs that cannot be confused with AES-GCM ciphertext operations.
 
-Goal: obtain real record-level AES-GCM performance without letting component acceleration weaken AEAD transactional security.
+Goal: close the **Complete GMAC** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- define an immutable compatible-pair register and combined backend identity covering AES, GHASH, operation, feature bundle, KAT generations and FIPS disposition;
-- implement seal and open paths that complete every fallible precondition before mutation and stage or authenticate as required to preserve complete failure atomicity;
-- add combined KAT, quarantine propagation, required-mode behavior, cancellation and actual-pair reporting with no implicit mixed-generation fallback.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official AEAD vectors, nonce and use exhaustion, every AAD, plaintext and tag boundary, exact in-place, disjoint, partial-overlap and unchanged-failure matrices for each forced pair;
-- inject AES, GHASH, KAT, generation, cancellation and tag faults and prove no unauthenticated plaintext or partial output becomes caller-visible;
-- benchmark complete TLS-sized seal and open operations on AMD, Intel, M2, AWS Arm and qualifying RISC-V rather than admitting from isolated component throughput.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- every accelerated pair preserves scalar AEAD semantics and exceeds the frozen end-to-end margin on its declared native range;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.29.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.29.2 - AES-GCM And GMAC Public API Usability Acceptance
+### v0.29.2 - Integrated Accelerated AES-GCM And GMAC
+
+Status: planned
+
+Plan scope: Integrate only admitted AES and GHASH backend pairs into accelerated AES-GCM and GMAC providers with per-operation dispatch, preserving every nonce, limit, buffer, authentication, failure-atomicity, cancellation, equivalence, health, and scalar-fallback rule; prohibit mixed, unhealthy, or unvalidated pairings.
+
+Goal: close the **Integrated Accelerated AES-GCM And GMAC** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.29.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.29.3 - AES-GCM And GMAC Public API Usability Acceptance
 
 Status: planned
 
 Plan scope: Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status.
 
-Goal: prove the complete admitted SP 800-38D surface is usable without weakening
-failure atomicity or confusing algorithm approval with module validation.
+Goal: close the **AES-GCM And GMAC Public API Usability Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- add downstream GCM and GMAC fixtures and documented commands;
-- enumerate supported IV/tag domains and invocation limits in generated docs;
-- expose actual paired-backend and validation status without selection authority.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run authoritative vectors across every key, IV, tag, AAD and message class;
-- tamper every input and verify unchanged failure output and no plaintext release;
-- force every pair, quarantine and exhaustion path and package/no_std-test them.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- GCM and GMAC have no missing admitted operation, parameter, packaging or
-  public-usability behavior before protocol use;
-- `v0.29.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.29.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.30.0 - ChaCha20
+### v0.30.0 - Complete Portable ChaCha20 And Public Acceptance
 
 Status: planned
 
-Plan scope: Implement ChaCha20 with checked counters and deterministic exhaustion closure.
+Plan scope: Implement complete ChaCha20 with original and IETF nonce/counter profiles only where authenticated consumers require them, checked counters, deterministic exhaustion, exact block and tail behavior, overlap rules, official vectors, proofs, and a packaged public consumer so the scheduled checkpoint publishes a directly usable scalar implementation.
 
-Goal: complete the **ChaCha20** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **Complete Portable ChaCha20 And Public Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.30.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
 ### v0.30.1 - ChaCha20 CPU Acceleration
@@ -2920,161 +3235,467 @@ Status: planned
 
 Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes.
 
-Goal: use parallel vector lanes where they benefit ChaCha20 while retaining exact scalar counter and exhaustion behavior.
+Goal: close the **ChaCha20 CPU Acceleration** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement isolated fixed-width parallel block backends for exact x86_64, AArch64 and qualifying RISC-V bundles;
-- preserve scalar ownership of counter preflight, nonce formation, tails, overlap and all-or-no-operation exhaustion checks;
-- bind operation size to benchmark-admitted dispatch ranges, KAT state, quarantine and visible backend identity.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, quarter-round references, every counter boundary, block count, tail length, exact overlap and exhaustion differential through every forced width;
-- exercise unsupported bundles, KAT and data-path faults, quarantine, required mode and scalar fallback on native and supplemental emulated lanes;
-- inspect emitted code and collect timing and performance evidence for short records, common TLS records and long streams without frequency-biased width selection.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- every active width is scalar-equivalent and measurably beneficial over its complete admitted size range;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.30.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.31.0 - Poly1305 And ChaCha20-Poly1305
+### v0.30.2 - ChaCha20 Accelerated Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Implement Poly1305 and ChaCha20-Poly1305 with constant-time tag verification, authenticate ciphertext before caller-visible decryption, permit only exact in-place or disjoint buffers, reject partial overlap, leave the complete destination unchanged on failure, and introduce its failure-atomicity proof harness beside the implementation.
+Plan scope: Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering original and IETF profiles, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence.
 
-Goal: complete the **Poly1305 And ChaCha20-Poly1305** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **ChaCha20 Accelerated Public API Usability Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.30.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.31.0 - Complete Poly1305
+
+Status: planned
+
+Plan scope: Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.
+
+Goal: close the **Complete Poly1305** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.31.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.31.1 - Poly1305 And ChaCha20-Poly1305 CPU Acceleration
+### v0.31.1 - Complete ChaCha20-Poly1305
 
 Status: planned
 
-Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with a compatible admitted ChaCha20 path; preserve one-time-key handling, canonical reduction, constant-time tag verification, exact buffer aliasing rules, authenticate-before-release, complete failure atomicity, startup and continuous backend health policy, and scalar equivalence for every message and tail length.
+Plan scope: Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.
 
-Goal: accelerate the complete ChaCha20-Poly1305 AEAD while keeping the one-time authenticator key and failure paths inside the existing secret and transactional contracts.
+Goal: close the **Complete ChaCha20-Poly1305** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement isolated Poly1305 arithmetic backends with exact limb representation, reduction, carry and final-tag contracts and architecture-specific identities;
-- define compatible ChaCha20 and Poly1305 pairings, key derivation and destruction, KAT generations, quarantine propagation and required-mode behavior;
-- integrate seal and open without exposing unauthenticated plaintext, partial failure output or a backend-dependent diagnostic.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official Poly1305 and AEAD vectors, carry and reduction boundaries, every message and tail length, AAD partition, nonce, use-limit, overlap and unchanged-failure differential;
-- fault-inject either component, KAT, health generation, tag, cancellation and scalar retry and verify one-time keys and staged plaintext follow exact destruction duties;
-- collect per-compiler emitted-code, constant-time, code-size and end-to-end native performance evidence across AMD, Intel, M2, AWS Arm and qualifying RISC-V.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted component pairs are scalar-equivalent, failure-atomic, independently reportable and useful at representative TLS sizes;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.31.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.31.2 - ChaCha20 Poly1305 And AEAD Public API Usability Acceptance
+### v0.31.2 - Poly1305 And ChaCha20-Poly1305 CPU Acceleration
+
+Status: planned
+
+Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with compatible admitted ChaCha20 paths; preserve one-time-key, reduction, verification, aliasing, plaintext-release, failure-atomicity, health, and scalar-equivalence rules.
+
+Goal: close the **Poly1305 And ChaCha20-Poly1305 CPU Acceleration** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.31.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.31.3 - ChaCha20 Poly1305 And AEAD Public API Usability Acceptance
 
 Status: planned
 
 Plan scope: Close the RFC 8439 chain with packaged downstream ChaCha20, Poly1305, and ChaCha20-Poly1305 operations using only public APIs, covering block and tail counters, one-time keys, AAD, in-place and disjoint buffers, tamper and exhaustion failures, official vectors, scalar and every admitted backend, and no plaintext release before authentication.
 
-Goal: prove every RFC 8439 primitive and composed operation is complete and usable.
+Goal: close the **ChaCha20 Poly1305 And AEAD Public API Usability Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- add package-external stream, authenticator and AEAD fixtures and commands;
-- expose exact overlap, counter, nonce, tag and one-time-key contracts;
-- update public verification and backend tables.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run all RFC vectors and representative streaming messages through public APIs;
-- force counters, tails, invalid tags, overlaps, exhaustion and every backend;
-- prove cleanup and unchanged failure output under package and no_std builds.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- no RFC 8439 operation or consumer-facing behavior remains deferred;
-- `v0.31.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.31.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.32.0 - Fixed-Limb RSA Arithmetic
+### v0.32.0 - Fixed-Limb Integer Foundation
 
 Status: planned
 
-Plan scope: Implement fixed-limb unsigned arithmetic, Montgomery operations, modular exponentiation, and RSA-size policies with no attacker-selected allocation, normalization schedule, or limb count; introduce carry, borrow, reduction, conversion, and multiplication harnesses, preferring limb-count-generic or full-width proofs and recording reduced-width limits.
+Plan scope: Implement fixed-limb unsigned representation, canonical conversion, comparison, addition, subtraction, shifts, carry, borrow, normalization, and RSA-size policies without attacker-selected allocation, schedule, or limb count; introduce full-width or limb-generic harnesses and a directly testable internal arithmetic API.
 
-Goal: complete the **Fixed-Limb RSA Arithmetic** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **Fixed-Limb Integer Foundation** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.32.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.33.0 - Prime-Field And ECC Arithmetic
+### v0.32.1 - Fixed-Limb Multiplication And Montgomery Arithmetic
 
 Status: planned
 
-Plan scope: Implement fixed-width prime-field arithmetic, inversion, square roots, scalar primitives, and complete-formula foundations needed by admitted curves, separate from RSA limbs; introduce field canonicalization, scalar-range, and exceptional-case proof harnesses beside the implementation.
+Plan scope: Complete fixed-schedule multiplication, squaring, Montgomery conversion, multiplication, reduction, and modulus validation over the reviewed limb owner with production-width vectors, carry and reduction proofs, aliasing rules, and no variable-time secret normalization.
 
-Goal: complete the **Prime-Field And ECC Arithmetic** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **Fixed-Limb Multiplication And Montgomery Arithmetic** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.32.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.32.2 - Fixed-Limb Modular Exponentiation Acceptance
+
+Status: planned
+
+Plan scope: Complete fixed-schedule public and secret modular exponentiation, window and table-access policy, RSA modulus and exponent bounds, cleanup, proof claims, differential vectors, and a packaged arithmetic fixture before RSA encoding or key operations consume the foundation.
+
+Goal: close the **Fixed-Limb Modular Exponentiation Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.32.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.0 - Fixed-Width Prime-Field Foundation
+
+Status: planned
+
+Plan scope: Implement fixed-width canonical prime-field representation, conversion, addition, subtraction, multiplication, squaring, reduction, equality, conditional selection, and zero/one rules separately from RSA limbs, with field-modulus identity and full-width or explicitly bounded proofs.
+
+Goal: close the **Fixed-Width Prime-Field Foundation** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
 - `v0.33.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.1 - Prime-Field Inversion Square Roots And Scalar Primitives
+
+Status: planned
+
+Plan scope: Complete fixed-schedule inversion, square-root and nonsquare handling, scalar representation and range validation, reduction, conditional negation, batch policy, exceptional inputs, cleanup, and proof harnesses needed by admitted curves without exposing a generic unsafe modulus API.
+
+Goal: close the **Prime-Field Inversion Square Roots And Scalar Primitives** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.33.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.33.2 - ECC Complete-Formula Foundation Acceptance
+
+Status: planned
+
+Plan scope: Freeze the complete-formula and coordinate invariants shared by admitted curves, exercise identity, doubling, addition, negation, exceptional and canonicalization cases through concrete test fields, and package the arithmetic evidence required before X25519 or short-Weierstrass curve milestones begin.
+
+Goal: close the **ECC Complete-Formula Foundation Acceptance** review unit as a complete named capability
+without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+Deliverables:
+
+- implement the exact Plan scope through the named first-party Rust and no_std
+  package boundaries, with explicit types, ownership, resource, failure, and
+  lifecycle rules;
+- keep portable semantics, accelerated authority, legacy isolation, secret
+  destruction, and downstream usability separate wherever the Plan scope
+  requires them;
+- update normative requirements, threat model, controls, claim register,
+  public documentation, release notes, and permanent evidence references.
+
+Verification:
+
+- run every applicable authoritative vector, boundary, streaming or partition,
+  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
+  differential campaign named by the Plan scope;
+- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
+  package-external, no_std, and forced-failure evidence without broadening the
+  claim beyond what was measured;
+- pass repository checks, supported Rust versions and targets, dependency and
+  advisory policy, SBOM, package installation, documentation, and modern versus
+  legacy graph isolation.
+
+Exit criteria:
+
+- the named capability is complete and usable at its declared boundary, its
+  residual gaps are explicit, and the next row does not inherit hidden
+  implementation work;
+- `v0.33.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.34.0 - X25519 Field And Ladder
 
@@ -3599,916 +4220,3834 @@ Exit criteria:
   behavior remains deferred;
 - `v0.44.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.0 - Complete Ed25519 RFC 8032 Family
+### v0.45.0 - Complete Ed25519 And Checkpoint Acceptance
 
 Status: planned
 
-Plan scope: Implement Ed25519, Ed25519ctx, and Ed25519ph signing and verification with exact domain separation, prehash and context limits, canonical encoding, small-order and malleability rejection, official vectors, and constant-time secret operations; protocol profiles can admit only the exact mode they name.
+Plan scope: Implement complete RFC 8032 Ed25519 signing and verification with canonical encodings, small-order and malleability rejection, deterministic nonce derivation, official vectors, constant-time secret operations, cleanup, and a packaged public fixture so the scheduled checkpoint publishes a directly usable pure Ed25519 capability.
 
-Goal: complete the **Ed25519** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **Complete Ed25519 And Checkpoint Acceptance** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
-### v0.45.1 - Ed25519 Family CPU Acceleration
+### v0.45.1 - Complete Ed25519ctx
 
 Status: planned
 
-Plan scope: Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519-family field, scalar, and group backends only when every pure, context, and prehash mode preserves canonical encoding, domain separation, small-order and malleability rejection, signing lifecycle, verification behavior, scalar differentials, fault handling, and per-target constant-time evidence.
+Plan scope: Implement complete Ed25519ctx signing and verification over the reviewed Ed25519 owner with exact domain separation, context length and empty-context semantics, canonical validation, official vectors, public types that cannot be confused with pure Ed25519, constant-time secret operations, and cleanup.
 
-Goal: optimize Ed25519 without accepting a faster but weaker verification equation, encoding policy or secret-scalar schedule.
+Goal: close the **Complete Ed25519ctx** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- implement isolated field, scalar and group kernels with explicit signing and verification operation identities;
-- preserve canonical point and scalar encodings, small-order rejection, malleability rules, nonce and secret lifecycle and destruction duties;
-- add operation-specific KATs, health, fault injection, quarantine, backend reporting and reviewed scalar-only outcomes.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, non-canonical encodings, small-order points, scalar boundaries, malleability corpus, signing and verification differentials and injected faults;
-- inspect every secret schedule and memory access with emitted-code, cache, branch and statistical tests across supported compilers;
-- benchmark native AMD, Intel, M2, AWS Arm and qualifying RISC-V signing and verification separately and enforce code-size and stack ceilings.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- no optimized verification path weakens canonical or subgroup policy and every signing path retains fixed-schedule evidence;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.2 - Complete X448 Field And ECDH Lifecycle
+### v0.45.2 - Complete Ed25519ph
 
 Status: planned
 
-Plan scope: Implement the complete RFC 7748 X448 field, canonical decoding policy, clamping, fixed Montgomery ladder, low-order and all-zero handling, imported-key consistency, unbiased ephemeral generation, no reuse, immediate scalar destruction, and provider-token lifecycle through a documented public API.
+Plan scope: Implement complete Ed25519ph signing and verification over the reviewed Ed25519 owner with exact prehash and context domain separation, streaming prehash ownership, context limits, canonical validation, official vectors, public types that cannot be confused with Ed25519 or Ed25519ctx, constant-time secret operations, and cleanup.
 
-Goal: complete X448 as a first-class key-agreement primitive before HPKE and OpenPGP consume it.
+Goal: close the **Complete Ed25519ph** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- implement field, ladder, encoding, key generation/import and full ECDH lifecycle;
-- add proof harnesses for field bounds, ladder schedule and exceptional inputs;
-- keep X25519 and X448 keys, groups and tokens non-interchangeable.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run RFC vectors and iterations, scalar differentials, low-order/all-zero and
-  imported-key cases, lifecycle misuse and cleanup evidence;
-- test no_std and supported targets without requiring acceleration;
-- run public two-party agreement examples.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- X448 is complete and directly usable before any profile binding;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.3 - Complete Ed448 RFC 8032 Family
+### v0.45.3 - Ed25519 Family CPU Acceleration
 
 Status: planned
 
-Plan scope: Implement Ed448 and Ed448ph signing and verification with exact context and prehash domain separation, canonical field, scalar and point encodings, subgroup and malleability rejection, deterministic nonce derivation, official vectors, and constant-time secret operations through a documented public API.
+Plan scope: Benchmark and admit fixed-schedule x86_64, AArch64, and qualifying RISC-V Ed25519-family field, scalar, and group backends only when pure, context, and prehash modes preserve canonical encoding, domain separation, rejection, lifecycle, fault handling, scalar equivalence, and per-target constant-time evidence.
 
-Goal: complete the Curve448 signature family before OpenPGP profile integration.
+Goal: close the **Ed25519 Family CPU Acceleration** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- implement pure and prehash modes with exact RFC domain separation and contexts;
-- add field, scalar, point, encoding, nonce and signature proof harnesses;
-- expose typed modes that protocol profiles cannot confuse.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run every RFC vector plus malformed encoding, subgroup, context, prehash,
-  nonce and malleability cases;
-- inspect constant-time and cleanup evidence across compilers and targets;
-- run public sign/verify examples under no_std-compatible APIs.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- both Ed448 modes are complete before protocol consumption;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.4 - Curve448 CPU Acceleration
+### v0.45.4 - Ed25519 Family Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Benchmark and admit x86_64, AArch64, and qualifying RISC-V X448 and Ed448 field, ladder, scalar, and group backends only where native performance and per-mode correctness, canonicalization, lifecycle, fault, emitted-code, and side-channel evidence pass; otherwise retain explicit scalar-only support.
+Plan scope: Close Ed25519, Ed25519ctx, and Ed25519ph with packaged public sign and verify fixtures, authoritative positive and negative vectors, cross-mode rejection, no_std installation, secret cleanup, external-signer composition, and scalar plus every admitted backend.
 
-Goal: accelerate Curve448 only where exact native evidence justifies the added code.
+Goal: close the **Ed25519 Family Public API Usability Acceptance** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- isolate each kernel and exact feature bundle behind existing backend contracts;
-- retain scalar encoding, domain, lifecycle and policy ownership;
-- register separate X448 and Ed448 KAT, health and quarantine identities.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- force every direct kernel and complete operation against scalar corpora;
-- test unsupported features, KAT faults, quarantine and required mode;
-- collect native and emitted-code evidence on each qualifying architecture.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every active Curve448 path is exact, useful and independently quarantinable;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.5 - Complete RFC 7748 And RFC 8032 Usability Acceptance
+### v0.45.5 - Complete X448 Field And Ladder
 
 Status: planned
 
-Plan scope: Close the Curve25519/Curve448 signature and key-agreement families with packaged downstream X25519, X448, Ed25519, Ed25519ctx, Ed25519ph, Ed448, and Ed448ph fixtures, authoritative vectors, cross-party agreements, sign/verify and negative cases, protocol-mode separation, no_std installation, secret cleanup, and every admitted backend.
+Plan scope: Implement complete RFC 7748 X448 field arithmetic, encoding and canonical-decoding policy, scalar clamping, fixed Montgomery ladder, low-order and all-zero handling, official vectors, proofs, constant-time evidence, and a public raw agreement primitive without yet admitting reusable ECDH key lifecycle.
 
-Goal: prove every named RFC 7748 and RFC 8032 operation is publicly complete.
+Goal: close the **Complete X448 Field And Ladder** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- add package-external agreement and signature fixtures for every named mode;
-- document precise protocol-safe selection and non-interchangeable types;
-- update verification tables per algorithm and backend.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative vectors and representative real workflows for every mode;
-- test cross-mode, context, encoding, low-order, all-zero and signature misuse;
-- force scalar and every admitted backend under package/no_std builds.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- neither RFC family has an unimplemented named operation or hidden API gap;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.6 - Complete P-521 Group And ECDH
+### v0.45.6 - Complete X448 ECDH Lifecycle
 
 Status: planned
 
-Plan scope: Implement P-521 field and scalar arithmetic, SEC1 point encoding and decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, unbiased private generation, imported-key consistency, ECDH, invalid-secret handling, immediate destruction, and official vectors through a public API for later complete HPKE support.
+Plan scope: Complete X448 key import and consistency validation, unbiased ephemeral generation, single-use agreement, invalid-secret handling, immediate scalar destruction, provider-token lifecycle, and packaged cross-party public ECDH usability over the exact v0.45.5 primitive.
 
-Goal: provide the complete P-521 DHKEM dependency required by the full RFC 9180 suite set.
+Goal: close the **Complete X448 ECDH Lifecycle** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- implement P-521 arithmetic, points, validation, encodings and ECDH lifecycle;
-- introduce production-width and reduced-width proof claims with residual gaps;
-- maintain distinct P-256/P-384/P-521 types and backend identities.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official field, point, scalar and ECDH vectors and malformed cases;
-- inspect fixed schedules, constant-time behavior and secret cleanup;
-- exercise public key import, generation and two-party agreement.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- P-521 ECDH is complete before HPKE KEM construction begins;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.45.7 - P-521 Acceleration And Public API Usability Acceptance
+### v0.45.7 - Complete Ed448
 
 Status: planned
 
-Plan scope: Benchmark separately admissible P-521 x86_64, AArch64, and qualifying RISC-V paths, retain scalar where evidence or performance is insufficient, and close the chain with packaged point, key, ECDH, malformed-input, lifecycle, vector, scalar, and admitted-backend consumer evidence.
+Plan scope: Implement complete RFC 8032 Ed448 signing and verification with exact context domain separation, canonical field, scalar and point encodings, subgroup and malleability rejection, deterministic nonce derivation, official vectors, constant-time secret operations, cleanup, and a documented public API.
 
-Goal: close P-521 with honest backend decisions and downstream usability evidence.
+Goal: close the **Complete Ed448** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
 
 Deliverables:
 
-- register optimized candidates or reviewed scalar-only decisions per CPU family;
-- provide one package-external P-521 ECDH fixture and command;
-- update backend, proof and verification-status evidence.
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
 
 Verification:
 
-- force each candidate/admitted backend against scalar and official vectors;
-- test invalid points, keys, secrets, lifecycle and cleanup failures;
-- package and no_std-test the direct public P-521 API.
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
 
 Exit criteria:
 
-- P-521 is usable and every architecture has an evidenced acceleration disposition;
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
 - `v0.45.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.45.8 - Complete Ed448ph
+
+Status: planned
+
+Plan scope: Implement complete Ed448ph signing and verification over the reviewed Ed448 owner with exact prehash and context domain separation, streaming prehash ownership, canonical validation, official vectors, distinct public types, constant-time secret operations, and cleanup.
+
+Goal: close the **Complete Ed448ph** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
+- `v0.45.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.9 - Curve448 CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and admit x86_64, AArch64, and qualifying RISC-V X448 and Ed448 field, ladder, scalar, and group backends only where native performance and per-mode correctness, canonicalization, lifecycle, fault, emitted-code, side-channel, KAT, quarantine, and scalar-equivalence evidence pass.
+
+Goal: close the **Curve448 CPU Acceleration** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
+- `v0.45.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.10 - Curve448 Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close X448, Ed448, and Ed448ph with packaged downstream agreement, sign, and verify fixtures, authoritative vectors, cross-party agreement, negative and cross-mode cases, no_std installation, secret cleanup, and every admitted backend without merging protocol identities.
+
+Goal: close the **Curve448 Public API Usability Acceptance** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
+- `v0.45.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.11 - Complete P-521 Field And Group Operations
+
+Status: planned
+
+Plan scope: Implement P-521 field and scalar arithmetic, SEC1 point encoding and decoding, on-curve and subgroup validation, complete group operations, fixed-schedule scalar multiplication, official vectors, proofs, and public point operations as the reviewed foundation for later ECDH.
+
+Goal: close the **Complete P-521 Field And Group Operations** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
+- `v0.45.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.12 - Complete P-521 ECDH Lifecycle
+
+Status: planned
+
+Plan scope: Complete P-521 unbiased private generation, public-key import and consistency validation, single-use ECDH, invalid-secret handling, immediate destruction, provider-token lifecycle, official agreement vectors, and a documented public API over the exact v0.45.11 group owner.
+
+Goal: close the **Complete P-521 ECDH Lifecycle** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
+- `v0.45.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.13 - P-521 CPU Acceleration
+
+Status: planned
+
+Plan scope: Benchmark and admit separately reviewable P-521 x86_64, AArch64, and qualifying RISC-V field, scalar, group, validation, and ECDH paths only where proofs, emitted-code, side-channel, native correctness, performance, KAT, quarantine, fault, lifecycle, and scalar-equivalence evidence pass.
+
+Goal: close the **P-521 CPU Acceleration** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
+- `v0.45.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.45.14 - P-521 Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close P-521 with packaged point, key-import, cross-party ECDH, malformed-input, invalid-secret, lifecycle, cleanup, authoritative-vector, scalar, and every admitted accelerated consumer path, preserving no_std installation and future HPKE integration boundaries.
+
+Goal: close the **P-521 Public API Usability Acceptance** review unit as a complete named capability
+without silently inheriting another curve, mode, acceleration, or lifecycle.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under the no_std,
+  zero-allocation, constant-time, secret-lifecycle, and package boundaries
+  appropriate to that operation;
+- keep algorithm modes, public-key validation, private-key lifecycle,
+  acceleration authority, and package-external acceptance distinct wherever
+  the Plan scope separates them;
+- update normative requirements, threat model, proof inventory, backend and
+  claim registers, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run authoritative vectors, canonical and malformed encodings, exceptional
+  points, invalid keys, cross-mode misuse, lifecycle, cleanup, fault, and
+  scalar-differential campaigns applicable to the named capability;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, package-external, and no_std evidence on the supported matrix;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, provider, modern/legacy, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability works through its declared public boundary, all residual
+  gaps are explicit, and the next row inherits no hidden implementation work;
+- `v0.45.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 ### v0.46.0 - Version-One Algorithm And Transitive Completeness Register
 
 Status: planned
 
-Plan scope: Freeze the authenticated modern and historical algorithm, operation, parameter, format, protocol-consumer, and registry closure for every pre-1.0 Brynja capability; assign every real standardized item to one complete modern or opt-in legacy implementation owner, permit rejection only for malformed, forbidden, reserved, private-use-without-authority, source-blocked, or intrinsically non-production surfaces, and generate a transitive construction-to-algorithm dependency graph that blocks the substrate audit on every partial family, read-only shortcut, missing generation direction, duplicated implementation, or unspecified compatibility edge.
+Plan scope: Freeze the authenticated modern and historical algorithm, operation, parameter, format, protocol-consumer, and registry closure for every pre-1.0 Brynja capability; assign every standardized item to one modern or opt-in legacy owner, generate its transitive dependency graph, and reject partial families, missing directions, duplicate implementations, or unspecified compatibility edges.
 
-Goal: make the complete modern and named-legacy algorithm closure executable and mechanically blocking before any final substrate claim.
+Goal: close the **Version-One Algorithm And Transitive Completeness Register** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- record every operation direction, parameter, consumer, single implementation owner, modern or legacy policy, source blocker and provider-token invariant;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, in-place and disjoint buffers, partial-overlap rejection, unchanged failure destinations, differentials, imported-key consistency, no_std, and provider faults;
-- review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- no real standardized pre-1.0 capability is left as recognition-only rejection, a partial operation, or a duplicate private implementation;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.1 - Cross-Backend Performance And Admission Gate
+### v0.46.1 - Review-Sized Cryptographic Substrate Schedule Freeze
 
 Status: planned
 
-Plan scope: Before the cryptographic-substrate audit, reconcile every implemented primitive and operation against the scalar reference and CPU-backend register; require an explicit admitted, candidate, rejected, or scalar-only decision for AMD x86_64, observed-feature AWS Intel x86_64, Apple M2, AWS AArch64, and RISC-V, verify dispatch precedence, required-mode failure, KAT and quarantine, no_std and std package isolation, code size, latency, throughput, side-channel and native-hardware evidence, and prohibit any backend whose exact symbol, feature bundle, residual risk, or FIPS disposition is missing.
+Plan scope: Convert the v0.46.0 register into the exact review-sized tagged schedule below before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, separate portable code from acceleration, give every family a package-external acceptance row, and insert additional patch rows rather than enlarging a frozen row when authenticated sources disclose more work.
 
-Goal: close the entire pre-PQ CPU-backend surface before independent cryptographic review and protocol consumption.
+Goal: close the **Review-Sized Cryptographic Substrate Schedule Freeze** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- generate a machine-readable register for every primitive, operation, implementation symbol, CPU family, feature bundle, size range, status, proof, native evidence, residual risk and FIPS disposition;
-- reconcile scalar, static no_std, opt-in std, opportunistic, required and validated policies, dispatch precedence, KAT generations, quarantine propagation and backend reporting;
-- freeze benchmark thresholds, code-size and stack ceilings, native runner freshness, compiler coverage and explicit candidate, rejected and scalar-only decisions.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- schema-check completeness and uniqueness and use broken fixtures for orphan symbols, missing CPUs, stale evidence, unqualified emulation, absent scalar reference, hidden fallback and FIPS ambiguity;
-- execute forced backend, unsupported feature, KAT failure, quarantine, concurrency, required-mode and scalar fallback matrices across every admitted primitive and package graph;
-- rerun native AMD, Intel, M2, AWS Arm and available RISC-V correctness, side-channel and representative TLS workload measurements under the supported compiler matrix.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- no implemented cryptographic operation or CPU family has an unclassified acceleration status and only complete native evidence can produce admission;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.46.2 - Complete Legacy MD2 And PKIX Hash Boundary
 
 Status: planned
 
-Plan scope: Implement complete streaming and fixed-message MD2 in an isolated `brynja-legacy-md2` package with RFC 1319 vectors, padding, checksum, checked lengths, public compatibility API, collision warnings, and no modern or FIPS edge; reserve its use solely for separately admitted historical certificate and container profiles.
+Plan scope: Implement complete streaming and fixed-message MD2 in isolated `brynja-legacy-md2` with RFC 1319 vectors, padding, checksum, checked lengths, collision warnings, a public compatibility API, and only separately admitted historical certificate or container consumers.
 
-Goal: provide the one complete MD2 owner required by historical PKIX without normalizing it as secure.
+Goal: close the **Complete Legacy MD2 And PKIX Hash Boundary** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- ship the public no_std implementation, warnings, policy boundary, requirement mapping and consumer register.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run RFC vectors, streaming partitions, padding/checksum boundaries, exhaustion, package-isolation and downstream file-digest fixtures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- MD2 is complete, usable only by explicit compatibility callers, and absent from modern and FIPS graphs;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.46.3 - Complete Legacy RIPEMD-160
 
 Status: planned
 
-Plan scope: Implement complete streaming and fixed-message RIPEMD-160 in an isolated `brynja-legacy-ripemd160` package with authoritative vectors, checked exhaustion, public compatibility API, collision and strength warnings, and typed later OpenPGP and certificate consumers without duplicating state or compression code.
+Plan scope: Implement complete streaming and fixed-message RIPEMD-160 in isolated `brynja-legacy-ripemd160` with authoritative vectors, checked exhaustion, collision and strength warnings, public compatibility APIs, and typed later OpenPGP or certificate consumers.
 
-Goal: close the exact historical digest needed by OpenPGP and certificate compatibility.
+Goal: close the **Complete Legacy RIPEMD-160** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- ship one public implementation, typed consumer admission, warnings, cleanup disposition and requirement evidence.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative vectors, every padding boundary, irregular streaming, exhaustion, differential and graph-isolation tests.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- RIPEMD-160 is complete and later consumers can only reach its exact legacy owner;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.4 - Complete Finite-Field Groups And FFDHE
+### v0.46.4 - Finite-Field Group Arithmetic And Validation
 
 Status: planned
 
-Plan scope: Implement reusable first-party finite-field arithmetic, validated safe-prime group parameters, public-key validation, fixed-schedule exponentiation, unbiased private exponents, FFDHE2048 through FFDHE8192, imported-key consistency, lifecycle, cleanup, vectors, proofs, and public APIs for modern and legacy DH consumers.
+Plan scope: Implement reusable finite-field arithmetic, validated safe-prime parameters, public-key validation, fixed-schedule exponentiation, unbiased private exponents, imported-key consistency, cleanup, vectors, and proof harnesses for finite-field DH consumers without yet claiming every FFDHE named group.
 
-Goal: provide complete shared finite-field key agreement rather than protocol-private DHE fragments.
+Goal: close the **Finite-Field Group Arithmetic And Validation** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement arithmetic, all standardized FFDHE groups, key APIs, validation, lifecycle and provider ownership.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official group and exchange vectors, invalid subgroup and boundary keys, proofs, differentials, timing and cleanup evidence.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every FFDHE group and both exchange roles work through one public, evidenced implementation;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.5 - Complete Legacy DSA Family
+### v0.46.5 - Complete FFDHE Groups And Public Acceptance
 
 Status: planned
 
-Plan scope: Implement complete FIPS 186 historical DSA parameter validation and generation, key generation and import, deterministic and randomized signing, strict verification, encoding, nonce, subgroup, range, fault, cleanup, vector, and public compatibility APIs across every parameter profile required by authenticated PKIX, TLS, and OpenPGP sources.
+Plan scope: Complete FFDHE2048 through FFDHE8192 over the v0.46.4 owner and exercise every group through packaged key-generation, validation, two-party agreement, invalid-key, lifecycle, cleanup, no_std, vector, and public API fixtures.
 
-Goal: make every linked DSA operation available through one isolated compatibility implementation.
+Goal: close the **Complete FFDHE Groups And Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement parameter/key generation and validation, sign/verify, encodings, nonce policies and public legacy APIs.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official and archived vectors, malformed domains and signatures, nonce faults, subgroup tests, timing, proof and cleanup campaigns.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- all authenticated DSA profiles and directions are complete and never enter secure defaults;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.6 - Complete Legacy ElGamal Family
+### v0.46.6 - Complete Legacy DSA Parameters And Keys
 
 Status: planned
 
-Plan scope: Implement complete OpenPGP-compatible ElGamal parameter and key generation, validation, encryption, decryption, randomness, subgroup and message encoding, uniform failure, blinding, fault resistance, cleanup, authoritative vectors, and public compatibility APIs; do not expose unauthenticated plaintext or silently treat ElGamal encryption as a signature scheme.
+Plan scope: Implement every authenticated historical DSA parameter profile required by PKIX, TLS, or OpenPGP, including parameter validation and generation, key generation and import, subgroup and range rules, deterministic test seams, cleanup, vectors, and isolated public key APIs.
 
-Goal: close the complete ElGamal encryption dependency for historical OpenPGP.
+Goal: close the **Complete Legacy DSA Parameters And Keys** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement parameter and key lifecycle, encrypt/decrypt, encoding, blinding and explicit legacy APIs.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- test authoritative and archived vectors, malformed groups and ciphertexts, oracle behavior, fault paths, cleanup and public round trips.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- ElGamal encryption is complete with uniform failure and no signature or modern-policy confusion;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.7 - Complete AES-CCM And CCM-8
+### v0.46.7 - Complete Legacy DSA Signing Verification And Acceptance
 
 Status: planned
 
-Plan scope: Implement complete first-party AES-CCM over AES-128, AES-192, and AES-256 with every standards-admitted nonce, length and tag parameter plus the exact CCM-8 profiles, AAD, empty and boundary messages, in-place and disjoint operation, failure atomicity, invocation limits, vectors, proofs, public APIs, and optional admitted acceleration.
+Plan scope: Complete deterministic and randomized DSA signing, strict verification, encodings, nonce lifecycle, fault defenses, authoritative vectors, and packaged public compatibility fixtures across every v0.46.6 parameter profile with no modern default or FIPS-approved edge.
 
-Goal: complete CCM as a standalone AEAD before TLS profiles consume it.
+Goal: close the **Complete Legacy DSA Signing Verification And Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- ship all AES widths, parameters, seal/open APIs, usage limits, overlap rules, proofs and backend integration.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors over every parameter boundary, tamper and unchanged-output tests, differentials, proofs, acceleration and package fixtures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- complete CCM and CCM-8 public operations pass failure-atomic and usability evidence;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.8 - Complete First-Party Block-Cipher Modes
+### v0.46.8 - Complete Legacy ElGamal Parameters And Keys
 
 Status: planned
 
-Plan scope: Implement reusable constant-time ECB building-block, CBC, CTR, CFB including standardized segment widths, and OFB encryption and decryption over admitted block ciphers with exact IV, padding-separation, streaming, overlap, length, counter-exhaustion, error, cleanup, vector, and public APIs; insecure modes remain legacy-policy selected even when their implementation is shared.
+Plan scope: Implement OpenPGP-compatible ElGamal parameter and key generation, import, validation, subgroup policy, randomness ownership, encodings, cleanup, proof harnesses, and public key APIs without yet releasing decrypted plaintext.
 
-Goal: give every linked block-cipher mode one complete reusable implementation and explicit policy.
+Goal: close the **Complete Legacy ElGamal Parameters And Keys** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement both directions, streaming state, all standardized segment widths, overlap and exhaustion contracts without embedding padding policy.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run mode vectors across admitted ciphers, chunk and tail matrices, aliasing, invalid IV, exhaustion, timing and downstream fixtures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every named mode works completely and unsafe selection remains explicit;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.9 - Complete Legacy DES And TripleDES
+### v0.46.9 - Complete Legacy ElGamal Encryption Decryption And Acceptance
 
 Status: planned
 
-Plan scope: Implement complete DES and two-key and three-key TripleDES encrypt/decrypt, parity and weak-key policy, schedules, official vectors, constant-time portable code, cleanup, and public compatibility APIs, then bind no default, modern, FIPS-approved, or implicit-negotiation edge.
+Plan scope: Complete ElGamal encryption and oracle-resistant decryption over v0.46.8 with uniform failure, blinding, fault resistance, authoritative vectors, transactional plaintext release, packaged public fixtures, and no signature or modern-default confusion.
 
-Goal: provide the exact complete DES family required by named historical protocols.
+Goal: close the **Complete Legacy ElGamal Encryption Decryption And Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement all keying options, both directions, parity and weak-key policy, schedules, cleanup and warnings.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, weak and semi-weak keys, mode composition, timing, emitted-code, cleanup and isolation tests.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- DES and TripleDES are complete but available only through explicit legacy policy;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.10 - Complete Legacy RC2 RC4 And RC5
+### v0.46.10 - Complete AES-CCM
 
 Status: planned
 
-Plan scope: Implement complete RC2 with effective-key-bit handling, RC4 with exact historical key scheduling and stream semantics, and every authenticated RC5 parameter profile required by Brynja's named legacy protocols; provide vectors, key and state cleanup, exhaustion, public compatibility APIs, prominent bias and cryptanalytic warnings, and no modern graph edge.
+Plan scope: Implement complete AES-CCM over AES-128, AES-192, and AES-256 with every standards-admitted nonce, message, AAD, and tag domain, invocation limits, exact in-place or disjoint operation, partial-overlap rejection, failure atomicity, vectors, proofs, and public APIs.
 
-Goal: complete the RC-family dependencies of named legacy protocol profiles.
+Goal: close the **Complete AES-CCM** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement all admitted keys, parameters and directions with typed identities, state limits, cleanup and warnings.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative and archived vectors, effective-key and stream boundaries, bias-sensitive policy tests, mode composition and graph isolation.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every required RC2, RC4 and RC5 profile is usable only by explicit compatibility callers;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.11 - Complete Legacy IDEA And CAST5
+### v0.46.11 - Complete CCM-8 Profiles And CCM Acceptance
 
 Status: planned
 
-Plan scope: Implement complete IDEA and CAST5/CAST-128 key schedules and forward and inverse block operations with every standardized key rule, vectors, constant-time evidence, cleanup, public compatibility APIs, and isolated later OpenPGP, TLS, WTLS, PCT, or SNP consumers.
+Plan scope: Bind exact CCM-8 profiles to v0.46.10, then exercise CCM and CCM-8 through packaged public fixtures across every AES width, nonce, tag, AAD, boundary, tamper, overlap, exhaustion, scalar, and admitted accelerated path.
 
-Goal: close the complete IDEA and CAST5 primitive families for historical consumers.
+Goal: close the **Complete CCM-8 Profiles And CCM Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- ship both ciphers, both directions, schedules, public APIs, warnings and exact consumer registration.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative vectors, round trips, key boundaries, differentials, timing, emitted-code, cleanup and isolation tests.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- IDEA and CAST5 have complete single owners and no implicit modern edge;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.12 - Complete Legacy Blowfish And Twofish
+### v0.46.12 - Complete ECB Building Block And CBC Mode
 
 Status: planned
 
-Plan scope: Implement complete Blowfish and Twofish key schedules and encrypt/decrypt operations for every standardized key size and profile required by authenticated Brynja protocols, with vectors, weak-key and block-limit policy, constant-time evidence, cleanup, public compatibility APIs, and no modern default edge.
+Plan scope: Implement the internal ECB building-block and complete CBC encrypt/decrypt over admitted block ciphers with exact IV, caller-selected padding separation, streaming, overlap, length, error, cleanup, vectors, and explicit legacy-policy selection.
 
-Goal: close complete Blowfish and Twofish ownership for authenticated compatibility profiles.
+Goal: close the **Complete ECB Building Block And CBC Mode** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement all admitted key sizes, schedules, directions, limits, warnings and public legacy APIs.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative vectors, key and round boundaries, mode composition, differentials, timing, cleanup and package isolation.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- both families are complete and selectable only through explicit profile policy;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.13 - Complete Camellia Family
+### v0.46.13 - Complete CTR Mode
 
 Status: planned
 
-Plan scope: Implement complete Camellia-128, Camellia-192, and Camellia-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for modern or legacy TLS, PKIX, and OpenPGP consumers without private copies.
+Plan scope: Implement complete CTR over admitted block ciphers with exact counter layouts selected by typed profiles, preflighted counter exhaustion, streaming and random partition equivalence, overlap rules, cleanup, vectors, and public APIs.
 
-Goal: provide the complete Camellia family through one reusable implementation.
+Goal: close the **Complete CTR Mode** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- ship all key widths, both directions, schedules, acceleration boundary, cleanup and consumer adapters.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, round trips, mode suites, forced backends, timing, emitted-code, cleanup and public fixtures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- all Camellia family members are complete and reused by exact profiles;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.14 - Complete SEED Family
+### v0.46.14 - Complete CFB And OFB Modes
 
 Status: planned
 
-Plan scope: Implement complete SEED encrypt/decrypt, key schedule, vectors, constant-time portable code, cleanup, block limits, and public compatibility APIs for every authenticated TLS and legacy consumer, isolated from modern defaults unless current policy explicitly selects it.
+Plan scope: Implement complete CFB at every authenticated segment width and complete OFB over admitted block ciphers with exact IV, streaming, feedback, overlap, exhaustion, cleanup, vectors, and public compatibility APIs.
 
-Goal: close complete SEED ownership for every linked profile.
+Goal: close the **Complete CFB And OFB Modes** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement both directions, key schedule, modes, limits, cleanup, public API and explicit selection policy.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative vectors, mode and suite composition, timing, emitted-code, cleanup and isolation campaigns.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- SEED is complete and no profile receives it implicitly;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.15 - Complete ARIA Family
+### v0.46.15 - Block-Cipher Modes Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Implement complete ARIA-128, ARIA-192, and ARIA-256 encrypt/decrypt, key schedules, vectors, constant-time portable code, admitted acceleration, cleanup, block limits, and public APIs for every authenticated TLS profile without duplicating mode implementations.
+Plan scope: Exercise v0.46.12-v0.46.14 through packaged mode fixtures and authoritative vectors for every admitted cipher, direction, segment width, IV, padding boundary, partition, overlap, malformed input, exhaustion, no_std, and modern-versus-legacy policy.
 
-Goal: provide all ARIA family members to their standardized TLS profiles.
+Goal: close the **Block-Cipher Modes Public API Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- ship all key widths, both directions, schedules, backend boundary, public APIs and exact suite adapters.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, mode and suite matrices, forced backends, timing, cleanup and package tests.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- complete ARIA operations and profiles reuse one evidenced implementation;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.15 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.16 - Complete SM3 And SM4 Families
+### v0.46.16 - Complete Legacy DES
 
 Status: planned
 
-Plan scope: Implement complete SM3 hashing plus SM4 block encryption/decryption and every standards-required TLS mode profile, with streaming, vectors, checked lengths, key schedules, constant-time and accelerated evidence, cleanup, public APIs, and an explicit regional-profile policy rather than implicit global defaults.
+Plan scope: Implement complete DES encrypt/decrypt, key schedule, parity and weak-key policy, official vectors, constant-time portable code, cleanup, and a public compatibility API with no default, modern, approved-service, or implicit-negotiation edge.
 
-Goal: close the complete SM3 and SM4 foundations for authenticated regional profiles.
+Goal: close the **Complete Legacy DES** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement SM3 one-shot/streaming and SM4 both directions, modes, backends, public APIs and profile policy.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, hash and block boundaries, suite composition, timing, emitted-code, cleanup and regional-policy tests.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- SM3 and SM4 are complete with exact regional selection and no global-default substitution;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.16 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.17 - Complete SM2 Family
+### v0.46.17 - Complete Two-Key TripleDES
 
 Status: planned
 
-Plan scope: Implement complete SM2 field, group, key generation, import, signing, verification, key agreement and encryption operations required by authenticated standards, including identity binding, encodings, subgroup and nonce rules, vectors, proofs, cleanup, public APIs, and separately typed TLS and PKIX profiles.
+Plan scope: Implement complete two-key TripleDES encrypt/decrypt over the reviewed DES owner with exact keying option, parity, weak-key, block-limit, cleanup, vector, and isolated public compatibility behavior.
 
-Goal: provide every standardized SM2 operation through one complete implementation.
+Goal: close the **Complete Two-Key TripleDES** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement arithmetic, keys, signatures, agreement, encryption, identity domains, public APIs and typed profile adapters.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, invalid encodings and groups, identity and nonce negatives, proofs, timing, faults and cleanup.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- SM2 is complete and each TLS or PKIX use is exactly typed;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.17 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.18 - Complete GOST Hash Families
+### v0.46.18 - Complete Three-Key TripleDES And DES Family Acceptance
 
 Status: planned
 
-Plan scope: Implement complete GOST R 34.11-94 and Streebog-256/512 hashing with every authenticated parameter set, byte-order and padding rule, streaming and fixed-message APIs, vectors, checked exhaustion, constant-time applicability, public compatibility APIs, and exact later signature, TLS, and PKIX bindings.
+Plan scope: Implement complete three-key TripleDES and close DES, two-key TripleDES, and three-key TripleDES through packaged vectors, round trips, weak-key, parity, limit, cleanup, no_std, and isolation fixtures.
 
-Goal: close all GOST digest dependencies in one family boundary.
+Goal: close the **Complete Three-Key TripleDES And DES Family Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement every admitted parameter set, output, streaming state, public API, warnings and consumer identities.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, byte-order, padding and exhaustion boundaries, differentials and package isolation.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- all authenticated GOST hashes are complete and unambiguously selected;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.18 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.19 - Complete GOST Symmetric Families
+### v0.46.19 - Complete Legacy RC2
 
 Status: planned
 
-Plan scope: Implement complete GOST 28147-89 profiles plus Magma and Kuznyechik block ciphers and every authenticated MAC, mode, key-meshing, parameter-set and wrapping construction needed by registered TLS, PKIX, or named legacy consumers, with vectors, cleanup, constant-time evidence, and public compatibility APIs.
+Plan scope: Implement complete RC2 with effective-key-bit processing, key expansion, encrypt/decrypt, all authenticated parameter profiles, authoritative vectors, constant-time evidence, cleanup, and an isolated public compatibility API.
 
-Goal: provide the complete GOST symmetric construction closure used by Brynja protocols.
+Goal: close the **Complete Legacy RC2** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement all ciphers, directions, parameter sets, MACs, modes, meshing, wrapping, APIs and cleanup policy.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors and profile matrices, malformed parameters, timing, emitted-code, limits, cleanup and round trips.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every linked GOST symmetric profile has one complete public owner;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.19 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.20 - Complete GOST Signature And Agreement Families
+### v0.46.20 - Complete Legacy RC4
 
 Status: planned
 
-Plan scope: Implement complete authenticated GOST R 34.10 signature and key-agreement generations, curves, parameter sets, encodings, key generation and validation, sign, verify, derive, VKO or related KDF composition, vectors, proofs, cleanup, public APIs, and exact TLS and PKIX profile separation.
+Plan scope: Implement complete RC4 key scheduling and stream processing with exact historical key and state semantics, exhaustion, bias and cryptanalytic warnings, vectors, cleanup, and an isolated public compatibility API.
 
-Goal: close every GOST public-key operation required by authenticated profiles.
+Goal: close the **Complete Legacy RC4** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement all generations, curves, parameters, key lifecycle, sign/verify, agreement/KDF, encodings and adapters.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, cross-party exchanges, malformed keys and signatures, proofs, timing, faults and cleanup.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- GOST signature and agreement families are complete with exact profile identities;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.20 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.21 - Complete First-Party RSA Family
+### v0.46.21 - Complete Legacy RC5
 
 Status: planned
 
-Plan scope: Complete RSA key generation, import and validation plus RSA-PSS sign/verify, RSAES-OAEP encrypt/decrypt, strict RSASSA-PKCS1-v1_5 sign/verify and oracle-resistant RSAES-PKCS1-v1_5 encrypt/decrypt across every admitted digest and parameter profile; require blinding, CRT and fault checks, uniform failures, vectors, proofs, cleanup, public modern or legacy APIs, and policy isolation instead of later private reimplementation.
+Plan scope: Implement every authenticated RC5 word-size, round-count, and key-length profile required by named legacy protocols, including key expansion, encrypt/decrypt, vectors, bounds, cleanup, and isolated public APIs.
 
-Goal: replace import-only and verify-only RSA fragments with one complete family.
+Goal: close the **Complete Legacy RC5** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- ship key generation/import/export, every named encoding operation, public APIs, blinding, faults, cleanup and policy types.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official and adversarial vectors, generation health, malformed encodings, oracle campaigns, CRT faults, proofs, timing and cleanup.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- all admitted RSA operations are complete and modern or legacy policy selects the same implementation;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.21 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.22 - Complete Password KDF And Encrypted-Key Containers
+### v0.46.22 - RC2 RC4 And RC5 Public Acceptance
 
 Status: planned
 
-Plan scope: Implement complete PBKDF2 over admitted HMACs, authenticated PKCS #5 PBES1 compatibility profiles, PBES2, PBKDF2 PRFs, encryption schemes, parameters and limits, plus EncryptedPrivateKeyInfo import and export with uniform password failures, caller workspaces, cleanup, vectors, public APIs, and modern-versus-legacy policy for every linked PKCS #8 container.
+Plan scope: Exercise RC2, RC4, and every admitted RC5 parameter profile through packaged public fixtures, authoritative vectors, boundaries, streaming where applicable, cleanup, no_std support, warnings, and hard modern/FIPS graph isolation.
 
-Goal: make every linked encrypted private-key format usable in both directions.
+Goal: close the **RC2 RC4 And RC5 Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement KDFs, schemes, parameter codecs, container import/export, workspace and password lifecycle APIs.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative vectors and independent files, parameter and work limits, wrong-password uniformity, round trips, cleanup and no_std tests.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- encrypted key containers are complete and weak PBES profiles remain explicit legacy selections;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.22 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.23 - Complete Legacy TLS PRFs MACs And Export KDFs
+### v0.46.23 - Complete Legacy IDEA
 
 Status: planned
 
-Plan scope: Implement exact SSL 3.0 MAC and key schedule, TLS 1.0/1.1 MD5-plus-SHA-1 PRF, TLS 1.2 PRFs across every admitted hash, truncated-HMAC profiles, export-grade key expansion, finished and certificate-verify digests, constant-time verification, limits, vectors, cleanup, and isolated public compatibility APIs without enabling protocol fallback.
+Plan scope: Implement complete IDEA key schedule and forward and inverse block operations with every standardized key rule, authoritative vectors, constant-time evidence, cleanup, block limits, and an isolated public compatibility API.
 
-Goal: close all shared historical TLS derivation and authentication constructions before protocol engines.
+Goal: close the **Complete Legacy IDEA** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement every PRF, MAC, export KDF and transcript digest with typed version/profile APIs and cleanup.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run RFC and archived vectors, split-secret boundaries, truncation, export limits, transcript cases, timing and isolation.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every named historical TLS construction is complete and version-bound;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.23 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.24 - Complete SRP Cryptographic Family
+### v0.46.24 - Complete Legacy CAST5
 
 Status: planned
 
-Plan scope: Implement complete SRP-6a group validation, verifier and credential generation, client and server ephemeral operations, proofs, session derivation, invalid-public-value and offline-attack policy, vectors, cleanup, public APIs, and exact later TLS-SRP profile binding without hidden password storage or network effects.
+Plan scope: Implement complete CAST5/CAST-128 key schedule and encrypt/decrypt operations with every standardized key rule, authoritative vectors, constant-time evidence, cleanup, block limits, and an isolated public compatibility API.
 
-Goal: provide the full SRP construction required by registered TLS profiles.
+Goal: close the **Complete Legacy CAST5** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement credential/verifier lifecycle, both roles, proofs, derivation, public APIs and caller-owned storage effects.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official and independent vectors, cross-party sessions, invalid public values, wrong passwords, group faults, timing and cleanup.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- SRP-6a is complete without hidden persistence or protocol coupling;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.24 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.25 - Complete DEFLATE ZLIB And TLS Compression Profiles
+### v0.46.25 - IDEA And CAST5 Public Acceptance
 
 Status: planned
 
-Plan scope: Implement complete first-party RFC 1951 DEFLATE compression and decompression, RFC 1950 ZLIB, raw ZIP use, and authenticated TLS DEFLATE framing with all block types, canonical Huffman construction, bounded history and encoder workspaces, Adler-32, stream completion, reset semantics, bomb defenses, vectors, differential tests, and public APIs.
+Plan scope: Exercise IDEA and CAST5 through packaged public encrypt/decrypt, vector, boundary, weak-key, cleanup, no_std, and isolation fixtures before any OpenPGP, TLS, WTLS, PCT, or SNP consumer selects them.
 
-Goal: provide one complete reusable DEFLATE family for TLS and OpenPGP.
+Goal: close the **IDEA And CAST5 Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement both directions and every framing/profile with caller workspaces, deterministic policy and public APIs.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run RFC and differential corpora, every block type, malformed streams, checksums, reset, bombs, round trips and no_std fixtures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- DEFLATE, ZLIB, ZIP and TLS profiles are complete and share one codec owner;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.25 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.26 - Complete Brotli And Zstandard Families
+### v0.46.26 - Complete Legacy Blowfish
 
 Status: planned
 
-Plan scope: Implement complete first-party Brotli and Zstandard compression and decompression profiles required by TLS certificate compression, including dictionaries only where the governing profile admits them, bounded caller workspaces, deterministic generation, exact framing and checksums, bomb defenses, vectors, differential evidence, and public APIs without native code.
+Plan scope: Implement complete Blowfish key expansion and encrypt/decrypt for every authenticated key-size profile, with vectors, weak-key and block-limit policy, constant-time evidence, cleanup, and an isolated public compatibility API.
 
-Goal: make every standardized TLS certificate-compression algorithm first-party and bidirectional.
+Goal: close the **Complete Legacy Blowfish** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement Brotli and Zstandard encode/decode, framing, checksums, workspace contracts, limits and public APIs.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official and differential corpora, dictionaries, malformed frames, bombs, deterministic round trips, resource and no-native-code checks.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- both compression families are complete and usable without an external provider;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.26 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.27 - Complete Legacy LZS Compression
+### v0.46.27 - Complete Legacy Twofish
 
 Status: planned
 
-Plan scope: Implement complete first-party LZS compression and decompression plus exact TLS compression framing, reset, history, boundary, malformed-stream, bomb, vector, public API, and legacy-policy behavior required by authenticated TLS sources.
+Plan scope: Implement complete Twofish key schedules and encrypt/decrypt for every standardized key size required by authenticated Brynja protocols, with vectors, limits, constant-time evidence, cleanup, and isolated public APIs.
 
-Goal: close the complete LZS dependency of historical TLS compression.
+Goal: close the **Complete Legacy Twofish** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement encode/decode, state reset, framing, workspaces, limits, public API and explicit legacy policy.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authenticated vectors and archived streams, round trips, malformed and bomb cases, reset boundaries and isolation tests.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- LZS and its TLS profile are complete and never enabled implicitly;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.27 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.28 - Complete BZip2 Family
+### v0.46.28 - Blowfish And Twofish Public Acceptance
 
 Status: planned
 
-Plan scope: Implement complete first-party BZip2 compression and decompression with exact block and stream framing, transforms, Huffman coding, CRCs, bounded caller workspaces, deterministic generation, malformed-stream and bomb defenses, vectors, differential evidence, public APIs, and later OpenPGP compatibility reuse.
+Plan scope: Exercise Blowfish and Twofish through packaged public fixtures across every admitted key size, direction, vector, boundary, weak-key, block-limit, cleanup, no_std, and modern-versus-legacy isolation case.
 
-Goal: make BZip2 a complete reusable family rather than an OpenPGP-only decoder.
+Goal: close the **Blowfish And Twofish Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement encode/decode, all blocks and framing, CRCs, workspaces, generation policy and public APIs.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run authoritative and differential corpora, every level and boundary, malformed streams, CRCs, bombs, round trips and no_std checks.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- BZip2 is complete in both directions and OpenPGP can only reuse this owner;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.28 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.29 - Complete ML-DSA Family
+### v0.46.29 - Complete Camellia-128
 
 Status: planned
 
-Plan scope: Implement complete first-party FIPS 204 ML-DSA-44, ML-DSA-65, and ML-DSA-87 key generation, signing, verification, deterministic and hedged operation, external randomness, context, encoding, rejection-sampling, malformed-input, key-consistency, fault, cleanup, vector, proof, public API, and optional acceleration requirements for every authenticated PKIX or protocol profile.
+Plan scope: Implement complete Camellia-128 key schedule and encrypt/decrypt with authoritative vectors, constant-time portable code, cleanup, block limits, public APIs, and distinct algorithm identity.
 
-Goal: provide the complete finalized ML-DSA family before any credential profile names it.
+Goal: close the **Complete Camellia-128** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement all parameter sets and operations, encodings, randomness modes, public APIs, proofs and backend boundaries.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, malformed keys/signatures, deterministic and hedged cases, faults, proofs, timing, cleanup and package fixtures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- all ML-DSA parameter sets and operations are complete and profile-ready;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.29 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.30 - Complete SLH-DSA Family
+### v0.46.30 - Complete Camellia-192 And Camellia-256
 
 Status: planned
 
-Plan scope: Implement complete first-party FIPS 205 SLH-DSA SHA2 and SHAKE families across all 128, 192, and 256 security categories and `s`/`f` parameter sets, key generation, pure and prehash signing and verification where standardized, context and randomization, encodings, bounds, fault, cleanup, vectors, proofs, public APIs, and explicit performance policy.
+Plan scope: Implement complete Camellia-192 and Camellia-256 over the reviewed Camellia owner with distinct key schedules and identities, authoritative vectors, constant-time portable code, cleanup, block limits, and public APIs.
 
-Goal: provide the entire finalized SLH-DSA family without omitting expensive parameter sets.
+Goal: close the **Complete Camellia-192 And Camellia-256** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- implement every SHA2/SHAKE parameter set and operation, encodings, contexts, randomness, APIs and performance disclosures.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- run official vectors, pure/prehash and context cases, malformed inputs, faults, proofs, resource ceilings, cleanup and public fixtures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every standardized SLH-DSA member is complete with honest resource policy;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.30 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.31 - Legacy And Optional Primitive Public Usability Acceptance
+### v0.46.31 - Camellia Acceleration And Public Acceptance
 
 Status: planned
 
-Plan scope: Exercise every v0.46.2-v0.46.30 hash, cipher, mode, public-key operation, KDF, MAC, compression direction and parameter family through packaged public fixtures and authoritative vectors; prove single implementation ownership, explicit dangerous selection, no implicit modern negotiation, no unauthenticated output, cleanup, no_std portability where applicable, and exact modern, legacy, regional, PQ, FIPS and source-blocked status.
+Plan scope: Admit Camellia acceleration only with native evidence, then exercise all three Camellia widths through packaged scalar and accelerated encrypt/decrypt, vector, limit, cleanup, no_std, protocol-policy, KAT, quarantine, and public API fixtures.
 
-Goal: close every newly completed primitive through ordinary downstream use and policy evidence.
+Goal: close the **Camellia Acceleration And Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- publish runnable fixtures, commands, package manifests, claim-register rows and exact consumer ownership for every family.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- force all operations, parameters and backends; test round trips, negative paths, cleanup, package graphs and modern/legacy substitution failures.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- no new family relies only on private tests or incomplete operation directions;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.31 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.46.32 - Complete Registered Algorithm Closure Gate
+### v0.46.32 - Complete SEED
 
 Status: planned
 
-Plan scope: Regenerate the transitive register from all authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT and SNP sources and registries; block v0.47.0 unless every assigned real capability and every send, receive, generation, import, export and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, private-use-without-authority, standard-forbidden, lawfully unavailable or source-blocked entries remaining rejected.
+Plan scope: Implement complete SEED key schedule and encrypt/decrypt with authoritative vectors, constant-time portable code, cleanup, block limits, and an isolated public compatibility API for authenticated TLS and legacy consumers.
 
-Goal: mechanically prevent any attached standardized algorithm from escaping the pre-1.0 closure.
+Goal: close the **Complete SEED** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
 
 Deliverables:
 
-- regenerate source-to-registry-to-owner-to-symbol-to-test mappings and broken fixtures for every permitted rejection class.
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
 
 Verification:
 
-- fail the gate for recognition-only entries, missing directions, partial families, duplicated code, stale sources, generic unsupported fallbacks and unjustified exclusions.
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
 
 Exit criteria:
 
-- the complete authenticated registry closure is implemented or carries one narrowly valid blocker;
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
 - `v0.46.32 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.46.33 - SEED Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise SEED through packaged public encrypt/decrypt, authoritative vector, boundary, block-limit, cleanup, no_std, protocol-policy, and isolation fixtures before any consumer binding.
+
+Goal: close the **SEED Public API Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.33 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.34 - Complete ARIA-128
+
+Status: planned
+
+Plan scope: Implement complete ARIA-128 key schedule and encrypt/decrypt with authoritative vectors, constant-time portable code, cleanup, block limits, public APIs, and distinct algorithm identity.
+
+Goal: close the **Complete ARIA-128** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.34 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.35 - Complete ARIA-192 And ARIA-256
+
+Status: planned
+
+Plan scope: Implement complete ARIA-192 and ARIA-256 over the reviewed ARIA owner with distinct key schedules and identities, authoritative vectors, constant-time portable code, cleanup, block limits, and public APIs.
+
+Goal: close the **Complete ARIA-192 And ARIA-256** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.35 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.36 - ARIA Acceleration And Public Acceptance
+
+Status: planned
+
+Plan scope: Admit ARIA acceleration only with native evidence, then exercise all three ARIA widths through packaged scalar and accelerated encrypt/decrypt, vector, limit, cleanup, no_std, protocol-profile, KAT, quarantine, and public API fixtures.
+
+Goal: close the **ARIA Acceleration And Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.36 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.37 - Complete SM3
+
+Status: planned
+
+Plan scope: Implement complete streaming and fixed-message SM3 with authoritative vectors, checked lengths and exhaustion, constant-time applicability, optional admitted acceleration, cleanup policy, a public hash API, and explicit regional-profile selection.
+
+Goal: close the **Complete SM3** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.37 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.38 - Complete SM4
+
+Status: planned
+
+Plan scope: Implement complete SM4 key schedule and encrypt/decrypt with authoritative vectors, constant-time portable and admitted accelerated paths, cleanup, block limits, public APIs, and exact later TLS mode bindings.
+
+Goal: close the **Complete SM4** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.38 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.39 - SM3 And SM4 Public Acceptance
+
+Status: planned
+
+Plan scope: Exercise SM3 and SM4 through separate packaged public hash and block-cipher fixtures, vectors, boundaries, streaming, encrypt/decrypt, scalar and accelerated paths, cleanup, no_std, backend health, and explicit regional-policy selection.
+
+Goal: close the **SM3 And SM4 Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.39 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.40 - Complete SM2 Field Group And Keys
+
+Status: planned
+
+Plan scope: Implement complete SM2 field and scalar arithmetic, point operations, encodings, subgroup rules, key generation, import and validation, official vectors, proofs, cleanup, and typed public key APIs.
+
+Goal: close the **Complete SM2 Field Group And Keys** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.40 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.41 - Complete SM2 Signing And Verification
+
+Status: planned
+
+Plan scope: Implement complete SM2 signing and verification over v0.46.40 with identity binding, nonce and digest rules, encodings, range and malleability policy, fault defenses, vectors, cleanup, and public APIs.
+
+Goal: close the **Complete SM2 Signing And Verification** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.41 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.42 - Complete SM2 Key Agreement And Encryption
+
+Status: planned
+
+Plan scope: Implement complete SM2 key agreement, KDF composition, encryption and oracle-resistant decryption with identity, confirmation, randomness, subgroup, failure-atomicity, lifecycle, vectors, cleanup, and public APIs.
+
+Goal: close the **Complete SM2 Key Agreement And Encryption** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.42 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.43 - SM2 Family Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise SM2 keys, sign/verify, agreement, encrypt/decrypt, identities, encodings, malformed inputs, faults, cleanup, no_std, and separately typed TLS and PKIX profiles through packaged public fixtures.
+
+Goal: close the **SM2 Family Public API Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.43 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.44 - Complete GOST R 34.11-94
+
+Status: planned
+
+Plan scope: Implement complete streaming and fixed-message GOST R 34.11-94 for every authenticated parameter set, byte-order and padding rule, authoritative vectors, checked exhaustion, warnings, and isolated public compatibility APIs.
+
+Goal: close the **Complete GOST R 34.11-94** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.44 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.45 - Complete Streebog-256 And Streebog-512
+
+Status: planned
+
+Plan scope: Implement complete streaming and fixed-message Streebog-256 and Streebog-512 with distinct identities, byte order, padding, authoritative vectors, checked exhaustion, constant-time applicability, and public APIs.
+
+Goal: close the **Complete Streebog-256 And Streebog-512** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.45 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.46 - GOST Hash Family Public Acceptance
+
+Status: planned
+
+Plan scope: Exercise GOST R 34.11-94 and both Streebog variants through packaged one-shot, streaming, vector, boundary, parameter-set, byte-order, exhaustion, no_std, warning, and protocol-binding fixtures.
+
+Goal: close the **GOST Hash Family Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.46 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.47 - Complete GOST 28147-89
+
+Status: planned
+
+Plan scope: Implement complete GOST 28147-89 encrypt/decrypt for every authenticated parameter set with key schedule, vectors, constant-time evidence, cleanup, limits, and isolated public compatibility APIs.
+
+Goal: close the **Complete GOST 28147-89** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.47 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.48 - Complete Magma
+
+Status: planned
+
+Plan scope: Implement complete Magma key schedule and encrypt/decrypt with exact standardized byte order, authoritative vectors, constant-time evidence, cleanup, limits, and public APIs.
+
+Goal: close the **Complete Magma** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.48 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.49 - Complete Kuznyechik
+
+Status: planned
+
+Plan scope: Implement complete Kuznyechik key schedule and encrypt/decrypt with exact standardized byte order, authoritative vectors, constant-time evidence, cleanup, limits, and public APIs.
+
+Goal: close the **Complete Kuznyechik** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.49 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.50 - Complete GOST MAC Modes Key Meshing And Wrapping
+
+Status: planned
+
+Plan scope: Implement every authenticated GOST MAC, block-cipher mode, key-meshing, parameter-set, and key-wrapping construction required by registered TLS, PKIX, or named legacy consumers over the exact v0.46.47-v0.46.49 owners.
+
+Goal: close the **Complete GOST MAC Modes Key Meshing And Wrapping** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.50 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.51 - GOST Symmetric Family Public Acceptance
+
+Status: planned
+
+Plan scope: Exercise every admitted GOST symmetric cipher, parameter set, direction, MAC, mode, meshing, and wrapping profile through packaged vectors, malformed cases, limits, cleanup, no_std, and exact consumer-policy fixtures.
+
+Goal: close the **GOST Symmetric Family Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.51 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.52 - Complete GOST Signature Families
+
+Status: planned
+
+Plan scope: Implement every authenticated GOST R 34.10 signature generation, curve and parameter set with key generation and validation, sign, verify, encodings, vectors, proofs, faults, cleanup, and typed public APIs.
+
+Goal: close the **Complete GOST Signature Families** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.52 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.53 - Complete GOST Agreement And KDF Composition
+
+Status: planned
+
+Plan scope: Implement every authenticated GOST agreement profile, VKO or related KDF composition, curve and parameter set with validation, derive, confirmation where required, lifecycle, vectors, proofs, cleanup, and public APIs.
+
+Goal: close the **Complete GOST Agreement And KDF Composition** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.53 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.54 - GOST Public-Key Family Acceptance
+
+Status: planned
+
+Plan scope: Exercise every admitted GOST signature and agreement generation, curve, parameter set, encoding, key lifecycle, vector, negative, cleanup, no_std, TLS, and PKIX profile through packaged public fixtures.
+
+Goal: close the **GOST Public-Key Family Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.54 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.55 - Complete RSA Key Generation Import And Validation
+
+Status: planned
+
+Plan scope: Complete RSA key generation plus public and private import, structural and mathematical validation, modulus and exponent policy, prime generation, CRT construction, consistency checks, randomness, faults, proofs, cleanup, and public key APIs.
+
+Goal: close the **Complete RSA Key Generation Import And Validation** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.55 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.56 - Complete RSA-PSS Signing And Verification
+
+Status: planned
+
+Plan scope: Complete RSA-PSS sign and verify over v0.46.55 across every admitted digest, salt, modulus, and parameter profile with blinding, CRT and fault checks, uniform failures, vectors, cleanup, and modern public APIs.
+
+Goal: close the **Complete RSA-PSS Signing And Verification** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.56 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.57 - Complete RSAES-OAEP Encryption And Decryption
+
+Status: planned
+
+Plan scope: Complete RSAES-OAEP encrypt and oracle-resistant decrypt across every admitted digest, MGF, label, modulus, and parameter profile with blinding, fault checks, uniform failures, transactional plaintext release, vectors, cleanup, and public APIs.
+
+Goal: close the **Complete RSAES-OAEP Encryption And Decryption** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.57 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.58 - Complete RSASSA-PKCS1-v1_5 Signing And Verification
+
+Status: planned
+
+Plan scope: Complete strict RSASSA-PKCS1-v1_5 sign and verify across every admitted digest and modulus profile with exact DigestInfo parsing, blinding, CRT and fault checks, uniform failures, vectors, cleanup, and explicitly selected modern or legacy APIs.
+
+Goal: close the **Complete RSASSA-PKCS1-v1_5 Signing And Verification** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.58 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.59 - Complete RSAES-PKCS1-v1_5 Encryption And Decryption
+
+Status: planned
+
+Plan scope: Complete RSAES-PKCS1-v1_5 encrypt and oracle-resistant decrypt across every authenticated compatibility profile with exact padding, randomness, blinding, fault checks, uniform failures, transactional plaintext release, vectors, cleanup, warnings, and isolated APIs.
+
+Goal: close the **Complete RSAES-PKCS1-v1_5 Encryption And Decryption** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.59 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.60 - RSA Family Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise RSA key generation/import, PSS, OAEP, signature PKCS1 v1.5, and encryption PKCS1 v1.5 through packaged vectors, malformed encodings, oracle and fault cases, cleanup, scalar and accelerated arithmetic, no_std, external-key, and policy-isolation fixtures.
+
+Goal: close the **RSA Family Public API Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.60 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.61 - Complete PBKDF2
+
+Status: planned
+
+Plan scope: Implement complete PBKDF2 over every admitted HMAC with exact PRF identity, password, salt, iteration, block-counter, output, overflow and work limits, caller workspaces, cleanup, authoritative vectors, and public APIs.
+
+Goal: close the **Complete PBKDF2** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.61 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.62 - Complete Legacy PBES1 Profiles
+
+Status: planned
+
+Plan scope: Implement every authenticated PKCS #5 PBES1 compatibility profile with exact KDF, cipher, parameters, limits, uniform password failures, cleanup, vectors, warnings, and isolated public APIs.
+
+Goal: close the **Complete Legacy PBES1 Profiles** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.62 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.63 - Complete PBES2 And EncryptedPrivateKeyInfo
+
+Status: planned
+
+Plan scope: Implement complete PBES2, every admitted PBKDF2 PRF and encryption scheme, strict parameters and limits, plus EncryptedPrivateKeyInfo import/export with canonical DER, uniform password failures, caller workspaces, cleanup, vectors, and public APIs.
+
+Goal: close the **Complete PBES2 And EncryptedPrivateKeyInfo** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.63 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.64 - Password KDF And Encrypted-Key Public Acceptance
+
+Status: planned
+
+Plan scope: Exercise PBKDF2, every PBES1 compatibility profile, PBES2, and EncryptedPrivateKeyInfo import/export through packaged vectors, password failures, hostile parameters, round trips, cleanup, no_std, and modern-versus-legacy policy fixtures.
+
+Goal: close the **Password KDF And Encrypted-Key Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.64 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.65 - Complete SSL 3.0 MAC And Key Schedule
+
+Status: planned
+
+Plan scope: Implement exact SSL 3.0 MAC, master-secret and key-block schedules, finished and certificate-verify digests, limits, constant-time verification, cleanup, authoritative vectors, and isolated public compatibility APIs.
+
+Goal: close the **Complete SSL 3.0 MAC And Key Schedule** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.65 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.66 - Complete TLS 1.0 And TLS 1.1 PRF
+
+Status: planned
+
+Plan scope: Implement exact TLS 1.0/1.1 MD5-plus-SHA-1 PRF, master-secret, key-block, finished, and certificate-verify derivations with secret-state cleanup, length and label rules, vectors, and isolated public APIs.
+
+Goal: close the **Complete TLS 1.0 And TLS 1.1 PRF** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.66 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.67 - Complete TLS 1.2 PRFs And Truncated HMAC Profiles
+
+Status: planned
+
+Plan scope: Implement TLS 1.2 PRFs across every admitted hash plus every authenticated truncated-HMAC profile, with exact labels, lengths, constant-time verification, cleanup, vectors, and typed public compatibility APIs.
+
+Goal: close the **Complete TLS 1.2 PRFs And Truncated HMAC Profiles** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.67 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.68 - Complete Export KDFs And Legacy TLS Crypto Acceptance
+
+Status: planned
+
+Plan scope: Implement every authenticated export-grade key expansion, then exercise v0.46.65-v0.46.68 MAC, PRF, finished, certificate-verify, truncation, export, limit, cleanup, and cross-version negative behavior through packaged fixtures without enabling protocol fallback.
+
+Goal: close the **Complete Export KDFs And Legacy TLS Crypto Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.68 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.69 - Complete SRP-6a Groups Verifiers And Credentials
+
+Status: planned
+
+Plan scope: Implement complete SRP-6a group and public-value validation, verifier and credential generation, password and salt handling, invalid-value and offline-attack policy, vectors, proofs, cleanup, and public credential APIs.
+
+Goal: close the **Complete SRP-6a Groups Verifiers And Credentials** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.69 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.70 - Complete SRP-6a Sessions And Public Acceptance
+
+Status: planned
+
+Plan scope: Complete client and server ephemeral operations, proofs, session derivation, confirmation, lifecycle and failure behavior over v0.46.69, then exercise both roles through packaged vectors, invalid values, cleanup, no_std, and exact later TLS-SRP profile fixtures.
+
+Goal: close the **Complete SRP-6a Sessions And Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.70 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.71 - Complete DEFLATE Codec
+
+Status: planned
+
+Plan scope: Implement complete first-party RFC 1951 DEFLATE compression and decompression with all block types, canonical Huffman construction, bounded history and encoder workspaces, deterministic generation, stream completion, malformed-input and bomb defenses, vectors, differentials, and public APIs.
+
+Goal: close the **Complete DEFLATE Codec** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.71 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.72 - Complete ZLIB Codec
+
+Status: planned
+
+Plan scope: Implement complete first-party RFC 1950 ZLIB compression and decompression over v0.46.71 with exact header, dictionary policy, Adler-32, reset, completion, malformed-input, bomb, deterministic-generation, vector, differential, and public API behavior.
+
+Goal: close the **Complete ZLIB Codec** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.72 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.73 - DEFLATE ZLIB ZIP And TLS Compression Acceptance
+
+Status: planned
+
+Plan scope: Bind raw ZIP and authenticated TLS DEFLATE framing to v0.46.71-v0.46.72, then exercise every direction, block type, checksum, reset, boundary, workspace, malformed stream, bomb defense, no_std, and public profile through packaged fixtures.
+
+Goal: close the **DEFLATE ZLIB ZIP And TLS Compression Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.73 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.74 - Complete Brotli Family
+
+Status: planned
+
+Plan scope: Implement complete first-party Brotli compression and decompression required by TLS certificate compression with admitted dictionary policy, bounded caller workspaces, deterministic generation, exact framing, bomb defenses, vectors, differential evidence, and public APIs without native code.
+
+Goal: close the **Complete Brotli Family** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.74 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.75 - Complete Zstandard Family
+
+Status: planned
+
+Plan scope: Implement complete first-party Zstandard compression and decompression required by TLS certificate compression with admitted dictionary policy, bounded caller workspaces, deterministic generation, exact framing and checksums, bomb defenses, vectors, differential evidence, and public APIs without native code.
+
+Goal: close the **Complete Zstandard Family** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.75 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.76 - Brotli And Zstandard Public Acceptance
+
+Status: planned
+
+Plan scope: Exercise Brotli and Zstandard encoding, decoding, certificate-compression profiles, dictionaries, framing, checksums, workspaces, deterministic output, malformed input, bombs, no_std boundaries, and public APIs through packaged fixtures.
+
+Goal: close the **Brotli And Zstandard Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.76 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.77 - Complete Legacy LZS Compression
+
+Status: planned
+
+Plan scope: Implement complete first-party LZS compression and decompression plus exact TLS framing, reset, history, boundaries, malformed-stream and bomb defenses, vectors, bounded workspaces, public APIs, and legacy-policy behavior.
+
+Goal: close the **Complete Legacy LZS Compression** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.77 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.78 - LZS Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise LZS encode/decode and TLS framing through packaged public fixtures across history, reset, boundary, malformed, truncation, bomb, workspace, no_std, warning, and graph-isolation cases.
+
+Goal: close the **LZS Public API Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.78 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.79 - Complete BZip2 Decoder
+
+Status: planned
+
+Plan scope: Implement complete first-party BZip2 decompression with exact stream and block framing, transforms, Huffman decoding, CRCs, bounded caller workspaces, completion, malformed-input and bomb defenses, vectors, differentials, and public APIs.
+
+Goal: close the **Complete BZip2 Decoder** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.79 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.80 - Complete BZip2 Encoder
+
+Status: planned
+
+Plan scope: Implement complete first-party BZip2 compression over the v0.46.79 format owner with transforms, Huffman construction, CRCs, bounded caller workspaces, deterministic generation, stream and block completion, vectors, differentials, and public APIs.
+
+Goal: close the **Complete BZip2 Encoder** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.80 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.81 - BZip2 Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise BZip2 encode/decode and later OpenPGP compatibility boundaries through packaged round trips, authoritative corpora, framing, CRC, deterministic-generation, malformed-input, bomb, workspace, no_std, and public API fixtures.
+
+Goal: close the **BZip2 Public API Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.81 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.82 - ML-DSA Foundation And Complete ML-DSA-44
+
+Status: planned
+
+Plan scope: Implement the shared FIPS 204 arithmetic, sampling, encoding, key-consistency, randomness, context, cleanup, and proof foundation plus complete ML-DSA-44 key generation, deterministic and hedged signing, verification, vectors, malformed-input handling, and public APIs.
+
+Goal: close the **ML-DSA Foundation And Complete ML-DSA-44** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.82 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.83 - Complete ML-DSA-65
+
+Status: planned
+
+Plan scope: Implement complete ML-DSA-65 over the reviewed v0.46.82 foundation with distinct parameters and types, key generation, deterministic and hedged signing, external randomness, context, verification, encodings, rejection sampling, vectors, faults, cleanup, and public APIs.
+
+Goal: close the **Complete ML-DSA-65** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.83 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.84 - Complete ML-DSA-87
+
+Status: planned
+
+Plan scope: Implement complete ML-DSA-87 over the reviewed v0.46.82 foundation with distinct parameters and types, key generation, deterministic and hedged signing, external randomness, context, verification, encodings, rejection sampling, vectors, faults, cleanup, and public APIs.
+
+Goal: close the **Complete ML-DSA-87** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.84 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.85 - ML-DSA Acceleration And Public Acceptance
+
+Status: planned
+
+Plan scope: Admit optional acceleration only with parameter-specific native evidence, then exercise ML-DSA-44, ML-DSA-65, and ML-DSA-87 through packaged keygen, deterministic and hedged sign, verify, context, malformed, fault, cleanup, no_std, scalar, and accelerated fixtures.
+
+Goal: close the **ML-DSA Acceleration And Public Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.85 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.86 - Complete SLH-DSA SHA2-128 Parameter Sets
+
+Status: planned
+
+Plan scope: Implement complete FIPS 205 SLH-DSA SHA2-128s and SHA2-128f key generation, pure and prehash signing and verification where standardized, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, public APIs, and performance policy.
+
+Goal: close the **Complete SLH-DSA SHA2-128 Parameter Sets** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.86 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.87 - Complete SLH-DSA SHA2-192 And SHA2-256 Parameter Sets
+
+Status: planned
+
+Plan scope: Implement complete SLH-DSA SHA2 192s/192f and 256s/256f parameter sets over reviewed SHA2 foundations with distinct types, all standardized operations, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, and public APIs.
+
+Goal: close the **Complete SLH-DSA SHA2-192 And SHA2-256 Parameter Sets** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.87 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.88 - Complete SLH-DSA SHAKE-128 Parameter Sets
+
+Status: planned
+
+Plan scope: Implement complete SLH-DSA SHAKE-128s and SHAKE-128f key generation, pure and prehash signing and verification where standardized, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, public APIs, and performance policy.
+
+Goal: close the **Complete SLH-DSA SHAKE-128 Parameter Sets** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.88 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.89 - Complete SLH-DSA SHAKE-192 And SHAKE-256 Parameter Sets
+
+Status: planned
+
+Plan scope: Implement complete SLH-DSA SHAKE 192s/192f and 256s/256f parameter sets over reviewed SHAKE foundations with distinct types, all standardized operations, context, randomization, encodings, bounds, faults, cleanup, vectors, proofs, and public APIs.
+
+Goal: close the **Complete SLH-DSA SHAKE-192 And SHAKE-256 Parameter Sets** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.89 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.90 - SLH-DSA Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise all twelve SHA2 and SHAKE `s` and `f` SLH-DSA parameter sets through packaged keygen, pure and prehash sign/verify where standardized, context, randomization, encoding, malformed, fault, cleanup, no_std, vector, proof-claim, and performance-policy fixtures.
+
+Goal: close the **SLH-DSA Public API Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.90 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.91 - Cross-Backend Performance And Admission Gate
+
+Status: planned
+
+Plan scope: Reconcile every implemented primitive and operation against the scalar reference and CPU-backend register; require explicit admitted, candidate, rejected, or scalar-only decisions for AMD x86_64, observed-feature AWS Intel, Apple M2, AWS AArch64, and RISC-V with exact symbols, bundles, KAT, quarantine, dispatch, native evidence, residual risks, and FIPS dispositions.
+
+Goal: close the **Cross-Backend Performance And Admission Gate** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.91 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.92 - Cryptographic Substrate Cross-Family Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise every v0.46.2-v0.46.90 primitive, construction, mode, KDF, MAC, public-key operation, compression direction, and parameter family through its package-external fixture; prove single ownership, explicit dangerous selection, no implicit modern negotiation, no unauthenticated output, cleanup, no_std portability, and exact modern, legacy, regional, PQ, and FIPS status.
+
+Goal: close the **Cryptographic Substrate Cross-Family Usability Acceptance** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.92 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.46.93 - Complete Registered Algorithm Closure Gate
+
+Status: planned
+
+Plan scope: Regenerate the transitive register from every authenticated TLS, DTLS, PKIX, OpenPGP, SSL, WTLS, PCT, and SNP source; block v0.47.0 unless every assigned capability and every send, receive, generation, import, export, and parameter direction has a complete owner and acceptance evidence, with only reserved, unassigned, forbidden, lawfully unavailable, or source-blocked entries rejected.
+
+Goal: close the **Complete Registered Algorithm Closure Gate** review unit completely without absorbing another
+algorithm identity, construction family, acceleration gate, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope through first-party Rust and the declared
+  no_std, package, resource, secret-lifecycle, failure, and policy boundaries;
+- expose only the named types and operations, preserve modern versus legacy and
+  approved versus non-approved separation, and leave no hidden generation,
+  import, export, send, receive, encrypt, decrypt, sign, or verify direction;
+- update normative requirements, threat model, algorithm and claim registers,
+  proof inventory, public documentation, release notes, and evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, boundary and partition tests, malformed
+  and adversarial corpora, exhaustion, misuse, failure-atomicity, cleanup,
+  differential, and package-external real-operation fixtures;
+- run applicable Kani, emitted-code, constant-time, native-backend, KAT,
+  quarantine, no_std, interoperability, compression-bomb, and fault evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, modern/legacy graph, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named capability is publicly usable at its declared boundary, every
+  residual is explicit, and no later row inherits omitted implementation work;
+- `v0.46.93 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 ### v0.47.0 - Cryptographic Substrate Audit Gate
 
 Status: planned
@@ -4593,35 +8132,175 @@ Exit criteria:
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
 - `v0.48.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.49.0 - Complete Private-Key Container APIs
+### v0.49.0 - Complete PKCS8 Unencrypted Private-Key Containers
 
 Status: planned
 
-Plan scope: Implement bounded import and export for unencrypted and v0.46.22-encrypted PKCS#8, SEC1 EC, and PKCS1 RSA private-key containers with strict algorithm and parameter binding, key consistency, canonical DER, caller-owned secret arenas, uniform password failures, cleanup, and public round-trip APIs.
+Plan scope: Implement bounded PKCS #8 PrivateKeyInfo and OneAsymmetricKey import and export with strict version, algorithm and parameter binding, optional public-key consistency, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.
 
-Goal: complete the **Private-Key Input Formats** implementation stop without admitting or
-claiming adjacent capability.
+Goal: complete the **Complete PKCS8 Unencrypted Private-Key Containers** boundary without conflating another container
+format, encryption layer, key family, or downstream acceptance gate.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- bind parsing to exact bytes and explicit normalization, CT, algorithm, trust, time, secret-arena, size, depth, count, path, and work policy;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope with canonical DER, bounded caller-owned
+  storage, strict algorithm binding, uniform failure, and secret cleanup;
+- expose the named import, export, or acceptance behavior through first-party
+  no_std APIs while preventing cross-format and modern/legacy confusion;
+- update requirements, threat model, container register, public documentation,
+  release notes, and permanent evidence.
 
 Verification:
 
-- run standards vectors, malformed key and certificate corpora, truncation, path, constraint, policy, revocation, CT, differential, selection, and exhaustion tests;
-- test ambiguity, cycles, cross-signing, stale status, disqualified logs, duplicate SCTs, operator diversity, log updates, and unavailable verifier state;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run authoritative and independent fixtures, import/export round trips,
+  truncation-at-every-byte, non-canonical DER, inconsistent keys, wrong
+  passwords, hostile parameters, cleanup, and allocation/resource boundaries;
+- run package-external no_std consumers and applicable proof, fuzz, Miri,
+  emitted-code, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, and policy-isolation checks.
 
 Exit criteria:
 
-- identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
+- the named container capability is publicly usable and no later row inherits
+  hidden format, cryptography, direction, or cleanup work;
 - `v0.49.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.49.1 - Complete SEC1 EC Private-Key Containers
+
+Status: planned
+
+Plan scope: Implement bounded SEC1 ECPrivateKey import and export for every admitted curve with exact named-curve, optional parameters and public-key consistency rules, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.
+
+Goal: complete the **Complete SEC1 EC Private-Key Containers** boundary without conflating another container
+format, encryption layer, key family, or downstream acceptance gate.
+
+Deliverables:
+
+- implement the exact Plan scope with canonical DER, bounded caller-owned
+  storage, strict algorithm binding, uniform failure, and secret cleanup;
+- expose the named import, export, or acceptance behavior through first-party
+  no_std APIs while preventing cross-format and modern/legacy confusion;
+- update requirements, threat model, container register, public documentation,
+  release notes, and permanent evidence.
+
+Verification:
+
+- run authoritative and independent fixtures, import/export round trips,
+  truncation-at-every-byte, non-canonical DER, inconsistent keys, wrong
+  passwords, hostile parameters, cleanup, and allocation/resource boundaries;
+- run package-external no_std consumers and applicable proof, fuzz, Miri,
+  emitted-code, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, and policy-isolation checks.
+
+Exit criteria:
+
+- the named container capability is publicly usable and no later row inherits
+  hidden format, cryptography, direction, or cleanup work;
+- `v0.49.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.49.2 - Complete PKCS1 RSA Private-Key Containers
+
+Status: planned
+
+Plan scope: Implement bounded PKCS #1 RSAPrivateKey import and export with exact multi-prime disposition, mathematical and CRT consistency, canonical DER, caller-owned secret arenas, uniform failures, cleanup, and public round-trip APIs.
+
+Goal: complete the **Complete PKCS1 RSA Private-Key Containers** boundary without conflating another container
+format, encryption layer, key family, or downstream acceptance gate.
+
+Deliverables:
+
+- implement the exact Plan scope with canonical DER, bounded caller-owned
+  storage, strict algorithm binding, uniform failure, and secret cleanup;
+- expose the named import, export, or acceptance behavior through first-party
+  no_std APIs while preventing cross-format and modern/legacy confusion;
+- update requirements, threat model, container register, public documentation,
+  release notes, and permanent evidence.
+
+Verification:
+
+- run authoritative and independent fixtures, import/export round trips,
+  truncation-at-every-byte, non-canonical DER, inconsistent keys, wrong
+  passwords, hostile parameters, cleanup, and allocation/resource boundaries;
+- run package-external no_std consumers and applicable proof, fuzz, Miri,
+  emitted-code, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, and policy-isolation checks.
+
+Exit criteria:
+
+- the named container capability is publicly usable and no later row inherits
+  hidden format, cryptography, direction, or cleanup work;
+- `v0.49.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.49.3 - Complete EncryptedPrivateKeyInfo Integration
+
+Status: planned
+
+Plan scope: Bind the exact v0.46.63 PBES2 and EncryptedPrivateKeyInfo owner to admitted PKCS #8 keys with strict algorithm parameters, hostile-work rejection, uniform password failures, transactional import/export, caller workspaces, cleanup, and public round trips.
+
+Goal: complete the **Complete EncryptedPrivateKeyInfo Integration** boundary without conflating another container
+format, encryption layer, key family, or downstream acceptance gate.
+
+Deliverables:
+
+- implement the exact Plan scope with canonical DER, bounded caller-owned
+  storage, strict algorithm binding, uniform failure, and secret cleanup;
+- expose the named import, export, or acceptance behavior through first-party
+  no_std APIs while preventing cross-format and modern/legacy confusion;
+- update requirements, threat model, container register, public documentation,
+  release notes, and permanent evidence.
+
+Verification:
+
+- run authoritative and independent fixtures, import/export round trips,
+  truncation-at-every-byte, non-canonical DER, inconsistent keys, wrong
+  passwords, hostile parameters, cleanup, and allocation/resource boundaries;
+- run package-external no_std consumers and applicable proof, fuzz, Miri,
+  emitted-code, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, and policy-isolation checks.
+
+Exit criteria:
+
+- the named container capability is publicly usable and no later row inherits
+  hidden format, cryptography, direction, or cleanup work;
+- `v0.49.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.49.4 - Private-Key Container Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise PKCS #8, SEC1, PKCS #1, and encrypted PKCS #8 import/export through packaged public round trips for every admitted key family, malformed and inconsistent structures, hostile parameters, wrong passwords, cleanup, no_std, and cross-format substitution failures.
+
+Goal: complete the **Private-Key Container Public API Usability Acceptance** boundary without conflating another container
+format, encryption layer, key family, or downstream acceptance gate.
+
+Deliverables:
+
+- implement the exact Plan scope with canonical DER, bounded caller-owned
+  storage, strict algorithm binding, uniform failure, and secret cleanup;
+- expose the named import, export, or acceptance behavior through first-party
+  no_std APIs while preventing cross-format and modern/legacy confusion;
+- update requirements, threat model, container register, public documentation,
+  release notes, and permanent evidence.
+
+Verification:
+
+- run authoritative and independent fixtures, import/export round trips,
+  truncation-at-every-byte, non-canonical DER, inconsistent keys, wrong
+  passwords, hostile parameters, cleanup, and allocation/resource boundaries;
+- run package-external no_std consumers and applicable proof, fuzz, Miri,
+  emitted-code, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, and policy-isolation checks.
+
+Exit criteria:
+
+- the named container capability is publicly usable and no later row inherits
+  hidden format, cryptography, direction, or cleanup work;
+- `v0.49.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 ### v0.50.0 - X.509 Decoder
 
 Status: planned
@@ -5058,138 +8737,559 @@ Status: planned
 
 Plan scope: Complete adversarial, differential, fuzz, path-complexity, revocation, Certificate Transparency, and external audit campaigns for the modern PKI surface before historical and optional algorithm profiles are admitted.
 
-Goal: complete the **PKI Audit Gate** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **Modern PKI Audit Gate** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- bind parsing to exact bytes and explicit normalization, CT, algorithm, trust, time, secret-arena, size, depth, count, path, and work policy;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run standards vectors, malformed key and certificate corpora, truncation, path, constraint, policy, revocation, CT, differential, selection, and exhaustion tests;
-- test ambiguity, cycles, cross-signing, stale status, disqualified logs, duplicate SCTs, operator diversity, log updates, and unavailable verifier state;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
 
-### v0.60.1 - Complete Legacy PKIX Algorithm Profiles
+### v0.60.1 - Legacy And PQ PKIX Profile Schedule Freeze
 
 Status: planned
 
-Plan scope: Implement exact PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP and path-validation profiles for authenticated MD2, MD5 and SHA-1 RSA signatures, DSA, legacy EC, GOST, SM2 and every other historical algorithm assigned by the pinned PKIX source closure; reuse the exact v0.46 implementations, enforce conspicuous legacy policy and algorithm constraints, and never admit a legacy trust decision through modern defaults.
+Plan scope: Regenerate the authenticated PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP, request, issuance, regional, PQ, and hybrid profile register; assign every generation and validation direction to the review-sized rows below, insert additional tagged rows for any newly authenticated independent family, and block implementation rather than enlarging a frozen row.
 
-Goal: make historical PKIX objects fully processable through explicit legacy trust policy.
+Goal: close the **Legacy And PQ PKIX Profile Schedule Freeze** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
 
-- implement every assigned algorithm profile, encoding, constraint and trust disposition over the sole primitive owners.
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run archived and generated certificate, CRL and OCSP corpora, malformed identifiers, weak-chain policy, path and graph-isolation tests.
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every authenticated historical PKIX algorithm has complete parse, generation and validation ownership;
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.2 - Complete PKIX Issuance And Request APIs
+### v0.60.2 - Complete Legacy RSA Hash PKIX Profiles
 
 Status: planned
 
-Plan scope: Implement bounded public generation, canonical DER and validation APIs for PKCS #10 requests, certificates, cross-certificates, trust-anchor information, CRLs, delta and indirect CRLs, OCSP requests and responses, extensions, serials and signature profiles across admitted modern and legacy algorithms, with caller-owned signing, entropy, time and storage effects.
+Plan scope: Implement exact PKIX AlgorithmIdentifier, key, certificate, CRL, OCSP, and path-validation profiles for authenticated MD2, MD5, and SHA-1 RSA signatures over exact v0.46 owners with strict parameters, algorithm constraints, warnings, vectors, and no modern-default trust edge.
 
-Goal: complete PKIX generation and issuance rather than providing validation-only components.
+Goal: close the **Complete Legacy RSA Hash PKIX Profiles** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
 
-- ship builders and parsers for every named object with canonical encoding, effect boundaries and public round trips.
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- generate and validate complete hierarchies, requests, revocation and OCSP objects across algorithms and independent tools, including malformed and resource cases.
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every supported PKIX object can be created, encoded, parsed and validated through public APIs;
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.3 - Unsigned X509 ML-KEM And PQ PKIX Profiles
+### v0.60.3 - Complete DSA And Legacy EC PKIX Profiles
 
 Status: planned
 
-Plan scope: Implement the authenticated unsigned X.509 profile with explicit non-authentication types, complete RFC 9935 ML-KEM public-key and certificate profiles, and every finalized authenticated ML-DSA, SLH-DSA or hybrid PKIX profile available to the source closure; keep each credential kind typed, validate exact parameters and encodings, and prohibit unsupported trust substitution.
+Plan scope: Implement every authenticated historical DSA and legacy EC PKIX AlgorithmIdentifier, key, signature, certificate, CRL, OCSP, and path-validation profile over exact primitive owners with strict parameters, algorithm constraints, warnings, vectors, and no modern-default trust edge.
 
-Goal: close finalized optional and PQ PKIX profiles without confusing unsigned material with authentication.
+Goal: close the **Complete DSA And Legacy EC PKIX Profiles** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
 
-- implement exact formats, parameters, credential types, generation, parsing and validation for each admitted profile.
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run official and independent vectors and objects, wrong-algorithm and substitution cases, path composition, hybrid policy and package tests.
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- optional and PQ credentials are complete and their distinct trust semantics are unforgeable;
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.4 - Complete PKIX Public Usability And Interoperability Acceptance
+### v0.60.4 - Complete GOST PKIX Profiles
 
 Status: planned
 
-Plan scope: Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned objects, classical, regional, PQ and legacy profiles through packaged public fixtures and at least two independent toolchains where available; verify every algorithm direction, malformed and policy failure, no network ownership, bounded resources, cleanup, single implementation reuse and modern-versus-legacy isolation.
+Plan scope: Implement every authenticated GOST PKIX AlgorithmIdentifier, key, signature, agreement, certificate, CRL, OCSP, and path-validation profile over v0.46.44-v0.46.54 with exact parameter sets, byte orders, constraints, warnings, vectors, and explicit regional or legacy policy.
 
-Goal: prove the entire PKIX surface through ordinary downstream workflows.
+Goal: close the **Complete GOST PKIX Profiles** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
 
-- publish runnable CA, requester, verifier, revocation, CT, PQ and compatibility fixtures and evidence mappings.
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run all workflows, algorithms, formats and failure matrices on public packages and supported targets.
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- no PKIX capability remains internal-only, one-directional or recognition-only;
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.60.5 - Complete PKI Audit And Remediation Gate
+### v0.60.5 - Complete SM2 Regional And Residual Legacy PKIX Profiles
 
 Status: planned
 
-Plan scope: Independently audit and cleanly retest the complete modern, optional, regional, PQ and legacy PKI surface, including generation and validation symmetry, encrypted containers, algorithm constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.
+Plan scope: Implement every authenticated SM2 and remaining assigned regional or historical PKIX AlgorithmIdentifier, key, signature, agreement, certificate, CRL, OCSP, and path-validation profile over exact owners with strict parameters, constraints, warnings, vectors, and explicit policy.
 
-Goal: establish one clean independent PKI boundary after all attached profiles exist.
+Goal: close the **Complete SM2 Regional And Residual Legacy PKIX Profiles** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
 
 Deliverables:
 
-- obtain exact-commit review, remediate findings, add permanent regressions and update claims and evidence.
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- repeat affected vectors, interoperability, fuzz, path, resource, timing, cleanup and package-isolation campaigns.
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- the complete PKI scope has no unresolved critical or high finding;
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
 - `v0.60.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-## Phase 2: Shared Handshake, Internal Sans-I/O, And Modern TLS
+### v0.60.6 - PKIX Canonical Issuance Foundation
 
-Shared handshake, separate policy, audited engines, and final routing remain ordered.
+Status: planned
 
+Plan scope: Implement bounded public signed-object generation, canonical DER assembly, serial and extension construction, exact AlgorithmIdentifier binding, caller-owned signer, entropy, time and storage effects, transactional output, cleanup, and reusable issuance proof harnesses without yet combining every object type.
+
+Goal: close the **PKIX Canonical Issuance Foundation** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.7 - Complete PKCS10 Certification Request APIs
+
+Status: planned
+
+Plan scope: Implement complete bounded PKCS #10 request generation, canonical DER, attribute and extension-request handling, signing, parsing, validation, malformed and duplicate policy, round trips, and public APIs across every admitted modern and legacy signature profile.
+
+Goal: close the **Complete PKCS10 Certification Request APIs** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.8 - Complete Certificate Cross-Certificate And Trust-Anchor Issuance
+
+Status: planned
+
+Plan scope: Implement complete bounded certificate, cross-certificate, and trust-anchor-information generation and validation over v0.60.6 with exact versions, names, validity, keys, extensions, constraints, serials, signature profiles, external signer effects, canonical DER, round trips, and public APIs.
+
+Goal: close the **Complete Certificate Cross-Certificate And Trust-Anchor Issuance** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.9 - Complete CRL Issuance APIs
+
+Status: planned
+
+Plan scope: Implement complete bounded base, delta, and indirect CRL generation and validation with issuers, distribution points, entries, reasons, freshness, numbers, extensions, signature profiles, external signer effects, canonical DER, round trips, and public APIs.
+
+Goal: close the **Complete CRL Issuance APIs** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.10 - Complete OCSP Request And Response Issuance APIs
+
+Status: planned
+
+Plan scope: Implement complete bounded OCSP request, BasicOCSPResponse, and response generation and validation with CertID, nonce, responder identity and authorization, freshness, status, extensions, signature profiles, external signer effects, canonical DER, round trips, and public APIs.
+
+Goal: close the **Complete OCSP Request And Response Issuance APIs** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.11 - Complete Unsigned X509 And ML-KEM PKIX Profiles
+
+Status: planned
+
+Plan scope: Implement the authenticated unsigned X.509 profile with explicit non-authentication types plus complete RFC 9935 ML-KEM public-key and certificate profiles, exact parameters and encodings, malformed and substitution rejection, round trips, and public APIs.
+
+Goal: close the **Complete Unsigned X509 And ML-KEM PKIX Profiles** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.12 - Complete ML-DSA PKIX Profiles
+
+Status: planned
+
+Plan scope: Implement every finalized authenticated ML-DSA PKIX AlgorithmIdentifier, public-key, certificate, CRL, OCSP, request, issuance, and validation profile available to the source closure with exact parameter sets, encodings, constraints, round trips, and public APIs.
+
+Goal: close the **Complete ML-DSA PKIX Profiles** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.13 - Complete SLH-DSA And Hybrid PKIX Profiles
+
+Status: planned
+
+Plan scope: Implement every finalized authenticated SLH-DSA and hybrid PKIX AlgorithmIdentifier, public-key, certificate, CRL, OCSP, request, issuance, and validation profile available to the source closure with exact parameter sets, encodings, constraints, round trips, and public APIs.
+
+Goal: close the **Complete SLH-DSA And Hybrid PKIX Profiles** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.14 - Complete PKIX Public Usability And Interoperability Acceptance
+
+Status: planned
+
+Plan scope: Exercise import, export, issuance, request, path construction, validation, revocation, OCSP, CT, unsigned, classical, regional, PQ, hybrid, and legacy profiles through packaged public fixtures and at least two independent toolchains where available, verifying every direction, malformed and policy failure, bounded resources, cleanup, reuse, and isolation.
+
+Goal: close the **Complete PKIX Public Usability And Interoperability Acceptance** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.60.15 - Complete PKI Audit And Remediation Gate
+
+Status: planned
+
+Plan scope: Independently audit and cleanly retest the complete modern, optional, regional, PQ, hybrid, and legacy PKI surface, including generation/validation symmetry, encrypted containers, constraints, trust separation, resource ceilings, external signer effects, and every public compatibility claim before TLS consumes it.
+
+Goal: close the **Complete PKI Audit And Remediation Gate** unit without merging another profile family,
+object direction, issuance surface, interoperability gate, or audit gate.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope with canonical DER, exact algorithm
+  and parameter binding, bounded resources, caller-owned effects, transactional
+  output, cleanup, and modern/legacy/PQ policy separation;
+- preserve one implementation owner for each primitive and expose every named
+  generation and validation direction through typed no_std public APIs;
+- update normative requirements, threat model, PKIX profile and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, canonical and malformed DER, parameter
+  substitution, import/export and generation/validation round trips, path,
+  revocation, responder, external-signer, cleanup, and resource campaigns;
+- exercise package-external fixtures, independent toolchains where available,
+  no_std, fuzz, proof, differential, and provider-failure evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, trust-isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named PKIX capability or gate is complete and the next row inherits no
+  hidden profile, direction, object, interoperability, or remediation work;
+- `v0.60.15 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 ### v0.61.0 - Shared Recordless TLS 1.3 Handshake Boundary
 
 Status: planned
@@ -5974,7 +10074,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement the authenticated RFC 9963 legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points through the exact v0.46.21 legacy RSA operations, strict signature negotiation, certificate and role binding, explicit server policy, warnings, vectors and interoperability; keep them absent from server signatures and modern defaults.
+Plan scope: Implement the authenticated RFC 9963 legacy RSASSA-PKCS1-v1_5 client CertificateVerify code points through the exact v0.46.58 RSA operations, strict signature negotiation, certificate and role binding, explicit server policy, warnings, vectors and interoperability; keep them absent from server signatures and modern defaults.
 
 Goal: close the exact standardized legacy client-signature compatibility surface.
 
@@ -7494,6 +11594,39 @@ Exit criteria:
 - RISC-V ML-KEM acceleration is either natively admitted or remains an explicit candidate that cannot be selected or described as accelerated support;
 - `v0.119.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.119.3 - ML-KEM Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Close ML-KEM-512, ML-KEM-768, and ML-KEM-1024 with packaged public key-generation, encapsulation, and decapsulation fixtures using deterministic vector entropy and production caller entropy, valid and malformed ciphertexts, implicit rejection, key consistency, cleanup, no_std installation, scalar and every admitted accelerated backend, and exact FIPS-versus-unvalidated status.
+
+Goal: prove every ML-KEM parameter set and operation is complete and usable
+through ordinary public package APIs before hybrid composition.
+
+Deliverables:
+
+- add package-external fixtures for key generation, encapsulation, and
+  decapsulation for all three parameter sets;
+- expose exact randomness, encoding, implicit-rejection, cleanup, backend, and
+  validation-status behavior without private hooks;
+- update the PQ claim register, public documentation, release notes, and
+  permanent evidence links.
+
+Verification:
+
+- run FIPS 203 vectors, deterministic entropy fixtures, independent round
+  trips, malformed ciphertexts, key-consistency and implicit-rejection cases;
+- force scalar, every admitted backend, candidate rejection, KAT, quarantine,
+  cleanup, no_std, and package-installation paths;
+- pass repository, supported Rust and target, dependency, advisory, SBOM,
+  documentation, provider, and FIPS-boundary checks.
+
+Exit criteria:
+
+- ML-KEM-512, ML-KEM-768, and ML-KEM-1024 are publicly usable and no hybrid
+  milestone inherits hidden KEM implementation work;
+- `v0.119.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.120.0 - Standard Hybrid Groups
 
 Status: planned
@@ -7658,99 +11791,203 @@ Status: planned
 
 Plan scope: Select each in-boundary, bound-module, or caller-supplied validated entropy-source construction and operational environment; define noise source, conditioning, IID or non-IID assessment, minimum entropy, startup and continuous health tests, failure handling, restart and virtualization assumptions, and complete SP 800-90B and ESV documentation without treating an arbitrary caller RNG as validated entropy.
 
-Goal: complete the **SP 800-90B Entropy Source And Health Tests** implementation stop without admitting or
-claiming adjacent capability.
+Goal: complete the **SP 800-90B Entropy Source And Health Tests** validation boundary without merging another
+DRBG mechanism, entropy assessment, provider gate, or RBG construction.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- define each entropy source, conditioning chain, assessed entropy rate,
-  operational environment, restart model, and health-test state machine;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement or freeze the exact Plan scope under the module, operational
+  environment, entropy, state-protection, failure, and zeroization boundaries;
+- expose exact typed mechanism and service identities with no implicit fallback
+  or approval inferred from algorithm correctness alone;
+- update FIPS requirements, threat model, service and claim registers, security
+  policy material, release notes, and permanent evidence references.
 
 Verification:
 
-- run IID or non-IID assessment, startup, repetition-count, adaptive-proportion,
-  restart, failure-injection, conditioning, virtualization, and environment tests;
-- prove arbitrary caller randomness cannot satisfy a validated entropy-source
-  contract and every health failure is authoritative and fail closed;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run applicable CAVP/ACVTS vectors, state-transition, request/reseed,
+  prediction-resistance, fork, rollback, concurrency, corruption, catastrophic
+  failure, cleanup, and provider fault campaigns;
+- exercise deterministic harnesses and package/provider interfaces while
+  preserving entropy-source and operational-environment identity;
+- pass repository, compiler/target, dependency, advisory, SBOM, package,
+  documentation, reproducibility, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every admitted entropy source has bounded behavior and complete SP 800-90B
-  evidence tied to its operational environment;
+- the named mechanism or construction is complete at its declared boundary and
+  no later validation row inherits hidden algorithm or state-machine work;
 - `v0.124.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.124.1 - SP 800-90A DRBG Implementation
+### v0.124.1 - Complete Hash_DRBG
 
 Status: planned
 
-Plan scope: Select and implement the final approved DRBG mechanisms with exact instantiate, generate, reseed, uninstantiate, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, and catastrophic-error behavior plus algorithm and state-machine test harnesses.
+Plan scope: Implement every selected SP 800-90A Hash_DRBG instantiation with exact instantiate, generate, reseed, uninstantiate, derivation, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, catastrophic-error, vector, and state-machine behavior.
 
-Goal: complete the **SP 800-90A DRBG Implementation** implementation stop without admitting or
-claiming adjacent capability.
+Goal: complete the **Complete Hash_DRBG** validation boundary without merging another
+DRBG mechanism, entropy assessment, provider gate, or RBG construction.
 
 Deliverables:
 
-- implement only the selected SP 800-90A mechanisms and complete request,
-  reseed, state, concurrency, fork, rollback, and zeroization contracts;
-- add official algorithm vectors, deterministic providers, fault hooks, and
-  state-machine and proof harnesses beside the implementation;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement or freeze the exact Plan scope under the module, operational
+  environment, entropy, state-protection, failure, and zeroization boundaries;
+- expose exact typed mechanism and service identities with no implicit fallback
+  or approval inferred from algorithm correctness alone;
+- update FIPS requirements, threat model, service and claim registers, security
+  policy material, release notes, and permanent evidence references.
 
 Verification:
 
-- run instantiate, generate, reseed, prediction-resistance, personalization,
-  additional-input, limit, exhaustion, rollback, fork, and concurrency matrices;
-- fault-inject entropy, state, request, reseed, and zeroization paths and prove
-  no output or reusable state escapes a catastrophic error;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run applicable CAVP/ACVTS vectors, state-transition, request/reseed,
+  prediction-resistance, fork, rollback, concurrency, corruption, catastrophic
+  failure, cleanup, and provider fault campaigns;
+- exercise deterministic harnesses and package/provider interfaces while
+  preserving entropy-source and operational-environment identity;
+- pass repository, compiler/target, dependency, advisory, SBOM, package,
+  documentation, reproducibility, and FIPS-boundary checks.
 
 Exit criteria:
 
-- the final DRBG implementation is bounded, testable, zeroizing, and ready for
-  an exact SP 800-90C construction;
+- the named mechanism or construction is complete at its declared boundary and
+  no later validation row inherits hidden algorithm or state-machine work;
 - `v0.124.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.124.2 - SP 800-90C RBG Construction
+### v0.124.2 - Complete HMAC_DRBG
 
 Status: planned
 
-Plan scope: Bind only admitted SP 800-90B entropy sources to the final SP 800-90A DRBGs through selected SP 800-90C RBG constructions; define primary and subordinate DRBG topology, entropy and nonce inputs, reseed chains, health and catastrophic propagation, operational-environment identity, and the exact RBG service boundary for later ESV testing.
+Plan scope: Implement every selected SP 800-90A HMAC_DRBG instantiation with exact instantiate, update, generate, reseed, uninstantiate, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, catastrophic-error, vector, and state-machine behavior.
 
-Goal: complete the **SP 800-90C RBG Construction** implementation stop without admitting or
-claiming adjacent capability.
+Goal: complete the **Complete HMAC_DRBG** validation boundary without merging another
+DRBG mechanism, entropy assessment, provider gate, or RBG construction.
 
 Deliverables:
 
-- implement the selected RBG construction and explicit primary, subordinate,
-  entropy, nonce, reseed, and security-strength topology;
-- bind every source, DRBG, service, state, and failure to the exact module and
-  operational-environment identity required by later ESV evidence;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement or freeze the exact Plan scope under the module, operational
+  environment, entropy, state-protection, failure, and zeroization boundaries;
+- expose exact typed mechanism and service identities with no implicit fallback
+  or approval inferred from algorithm correctness alone;
+- update FIPS requirements, threat model, service and claim registers, security
+  policy material, release notes, and permanent evidence references.
 
 Verification:
 
-- run SP 800-90C construction, source substitution, reseed chain, subordinate
-  state, strength, prediction-resistance, fork, health, and catastrophic tests;
-- prove unvalidated source, DRBG, topology, environment, and state substitutions
-  fail closed and cannot inherit an approved indicator;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run applicable CAVP/ACVTS vectors, state-transition, request/reseed,
+  prediction-resistance, fork, rollback, concurrency, corruption, catastrophic
+  failure, cleanup, and provider fault campaigns;
+- exercise deterministic harnesses and package/provider interfaces while
+  preserving entropy-source and operational-environment identity;
+- pass repository, compiler/target, dependency, advisory, SBOM, package,
+  documentation, reproducibility, and FIPS-boundary checks.
 
 Exit criteria:
 
-- one exact RBG construction connects validated entropy assumptions to the
-  module random service without ambiguous substitutions;
+- the named mechanism or construction is complete at its declared boundary and
+  no later validation row inherits hidden algorithm or state-machine work;
 - `v0.124.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.124.3 - Complete CTR_DRBG
+
+Status: planned
+
+Plan scope: Implement every selected SP 800-90A CTR_DRBG instantiation with exact block-cipher, derivation-function, instantiate, update, generate, reseed, uninstantiate, security-strength, personalization, additional-input, prediction-resistance, request, fork, rollback, concurrency, state-protection, zeroization, catastrophic-error, vector, and state-machine behavior.
+
+Goal: complete the **Complete CTR_DRBG** validation boundary without merging another
+DRBG mechanism, entropy assessment, provider gate, or RBG construction.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope under the module, operational
+  environment, entropy, state-protection, failure, and zeroization boundaries;
+- expose exact typed mechanism and service identities with no implicit fallback
+  or approval inferred from algorithm correctness alone;
+- update FIPS requirements, threat model, service and claim registers, security
+  policy material, release notes, and permanent evidence references.
+
+Verification:
+
+- run applicable CAVP/ACVTS vectors, state-transition, request/reseed,
+  prediction-resistance, fork, rollback, concurrency, corruption, catastrophic
+  failure, cleanup, and provider fault campaigns;
+- exercise deterministic harnesses and package/provider interfaces while
+  preserving entropy-source and operational-environment identity;
+- pass repository, compiler/target, dependency, advisory, SBOM, package,
+  documentation, reproducibility, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named mechanism or construction is complete at its declared boundary and
+  no later validation row inherits hidden algorithm or state-machine work;
+- `v0.124.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.124.4 - DRBG Public API And Provider Acceptance
+
+Status: planned
+
+Plan scope: Exercise every selected Hash_DRBG, HMAC_DRBG, and CTR_DRBG instantiation through packaged provider fixtures covering entropy and nonce inputs, personalization, additional input, reseed, prediction resistance, request limits, fork and rollback, concurrency, state corruption, uninstantiate, cleanup, KATs, and permanent failure.
+
+Goal: complete the **DRBG Public API And Provider Acceptance** validation boundary without merging another
+DRBG mechanism, entropy assessment, provider gate, or RBG construction.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope under the module, operational
+  environment, entropy, state-protection, failure, and zeroization boundaries;
+- expose exact typed mechanism and service identities with no implicit fallback
+  or approval inferred from algorithm correctness alone;
+- update FIPS requirements, threat model, service and claim registers, security
+  policy material, release notes, and permanent evidence references.
+
+Verification:
+
+- run applicable CAVP/ACVTS vectors, state-transition, request/reseed,
+  prediction-resistance, fork, rollback, concurrency, corruption, catastrophic
+  failure, cleanup, and provider fault campaigns;
+- exercise deterministic harnesses and package/provider interfaces while
+  preserving entropy-source and operational-environment identity;
+- pass repository, compiler/target, dependency, advisory, SBOM, package,
+  documentation, reproducibility, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named mechanism or construction is complete at its declared boundary and
+  no later validation row inherits hidden algorithm or state-machine work;
+- `v0.124.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.124.5 - SP 800-90C RBG Construction
+
+Status: planned
+
+Plan scope: Bind only admitted SP 800-90B entropy sources to admitted SP 800-90A DRBGs through selected SP 800-90C RBG constructions; define primary and subordinate topology, entropy and nonce inputs, reseed chains, health and catastrophic propagation, operational-environment identity, and the exact RBG service boundary for ESV testing.
+
+Goal: complete the **SP 800-90C RBG Construction** validation boundary without merging another
+DRBG mechanism, entropy assessment, provider gate, or RBG construction.
+
+Deliverables:
+
+- implement or freeze the exact Plan scope under the module, operational
+  environment, entropy, state-protection, failure, and zeroization boundaries;
+- expose exact typed mechanism and service identities with no implicit fallback
+  or approval inferred from algorithm correctness alone;
+- update FIPS requirements, threat model, service and claim registers, security
+  policy material, release notes, and permanent evidence references.
+
+Verification:
+
+- run applicable CAVP/ACVTS vectors, state-transition, request/reseed,
+  prediction-resistance, fork, rollback, concurrency, corruption, catastrophic
+  failure, cleanup, and provider fault campaigns;
+- exercise deterministic harnesses and package/provider interfaces while
+  preserving entropy-source and operational-environment identity;
+- pass repository, compiler/target, dependency, advisory, SBOM, package,
+  documentation, reproducibility, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named mechanism or construction is complete at its declared boundary and
+  no later validation row inherits hidden algorithm or state-machine work;
+- `v0.124.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 ### v0.125.0 - Approved Provider And Mandatory Service Indicator
 
 Status: planned
@@ -8528,35 +12765,320 @@ Exit criteria:
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
 - `v0.137.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.138.0 - Complete HPKE KEM KDF AEAD And Context Foundation
+### v0.138.0 - Complete HPKE DHKEM(X25519 HKDF-SHA256)
 
 Status: planned
 
-Plan scope: Implement every RFC 9180 DHKEM over P-256, P-384, P-521, X25519, and X448, all specified HKDF-SHA-256/384/512 KDF identities, AES-128-GCM, AES-256-GCM, ChaCha20-Poly1305, and export-only AEAD selection, labeled extract and expand, public-key validation, serialization, domain separation, and bounded context foundations strictly downstream of validated provider ports without changing a validated FIPS module.
+Plan scope: Implement complete RFC 9180 DHKEM(X25519, HKDF-SHA256) with exact key generation, import and validation, serialization, encapsulation, decapsulation, labeled extract/expand, KEM context, domain separation, failure, cleanup, vectors, and public APIs downstream of provider ports.
 
-Goal: complete the **HPKE KEM And Context Foundation** implementation stop without admitting or
-claiming adjacent capability.
+Goal: close the **Complete HPKE DHKEM(X25519 HKDF-SHA256)** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
 
 Deliverables:
 
-- implement the Plan scope exactly and preserve its input, state, resource,
-  secret, effect, storage, failure, dependency, and package boundaries;
-- exercise optional receive and send paths and cross-feature combinations before freezing APIs, then qualify downstream host and Aesynx adapters;
-- update requirements, threat model, controls, status, limitations, release
-  notes, and permanent evidence index.
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run extension, precompressed-artifact, composition, incompatible typestate, FIPS-closure, ECH, RPK, delegation, compression, trace, zero-allocation, Aesynx, rotation, and target tests;
-- exercise cross-feature cancellation, rotation, transcript, storage, exhaustion, decompression, trust confusion, unavailable entropy, and prohibited validated-module mutation;
-- pass repository checks, promised Rust versions and targets, dependency and
-  advisory policy, SBOM, packages, documentation, and protocol isolation.
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
 
 Exit criteria:
 
-- optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
 - `v0.138.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.138.1 - Complete HPKE DHKEM(P-256 HKDF-SHA256)
+
+Status: planned
+
+Plan scope: Implement complete RFC 9180 DHKEM(P-256, HKDF-SHA256) over the admitted P-256 owner with exact SEC1 serialization, validation, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.
+
+Goal: close the **Complete HPKE DHKEM(P-256 HKDF-SHA256)** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.138.2 - Complete HPKE DHKEM(P-384 HKDF-SHA384)
+
+Status: planned
+
+Plan scope: Implement complete RFC 9180 DHKEM(P-384, HKDF-SHA384) over the admitted P-384 owner with exact SEC1 serialization, validation, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.
+
+Goal: close the **Complete HPKE DHKEM(P-384 HKDF-SHA384)** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.138.3 - Complete HPKE DHKEM(P-521 HKDF-SHA512)
+
+Status: planned
+
+Plan scope: Implement complete RFC 9180 DHKEM(P-521, HKDF-SHA512) over the admitted P-521 owner with exact SEC1 serialization, validation, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.
+
+Goal: close the **Complete HPKE DHKEM(P-521 HKDF-SHA512)** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.138.4 - Complete HPKE DHKEM(X448 HKDF-SHA512)
+
+Status: planned
+
+Plan scope: Implement complete RFC 9180 DHKEM(X448, HKDF-SHA512) over the admitted X448 owner with exact serialization, validation and all-zero policy, encapsulation, decapsulation, labeled operations, KEM context, domain separation, failure, cleanup, vectors, and public APIs.
+
+Goal: close the **Complete HPKE DHKEM(X448 HKDF-SHA512)** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.138.5 - Complete HPKE KDF Identities And Labeled Operations
+
+Status: planned
+
+Plan scope: Implement every RFC 9180 HKDF-SHA256, HKDF-SHA384, and HKDF-SHA512 KDF identity plus exact labeled extract and expand, suite-ID, context, length and 255-block limits, secret cleanup, cross-suite rejection, vectors, and public APIs.
+
+Goal: close the **Complete HPKE KDF Identities And Labeled Operations** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.138.6 - Complete HPKE AEAD Identities
+
+Status: planned
+
+Plan scope: Bind AES-128-GCM, AES-256-GCM, ChaCha20-Poly1305, and export-only AEAD identities with exact key, nonce, tag, sequence, limit, overlap, failure-atomicity, provider, and cross-suite rules without duplicating any underlying AEAD.
+
+Goal: close the **Complete HPKE AEAD Identities** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.138.7 - Complete HPKE Context Foundation
+
+Status: planned
+
+Plan scope: Implement the bounded RFC 9180 suite, mode, role, key-schedule context, nonce derivation, sequence, exporter, invalidation, cancellation, serialization, domain-separation, secret ownership, and provider-token foundations used by later Base, PSK, Auth, and AuthPSK modes.
+
+Goal: close the **Complete HPKE Context Foundation** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.138.8 - HPKE Foundation Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise every standard DHKEM, KDF, AEAD and export-only identity plus context creation through packaged public fixtures, official vectors, wrong-suite and malformed-key cases, sequence and length limits, cleanup, no_std, scalar and admitted backends, and exact FIPS-module separation before implementing HPKE modes.
+
+Goal: close the **HPKE Foundation Public API Usability Acceptance** unit without merging another KEM, KDF, AEAD,
+context lifecycle, protocol mode, or package acceptance boundary.
+
+Deliverables:
+
+- implement the exact Plan scope over admitted first-party primitive and
+  provider ports with bounded no_std state, typed suite identity, transactional
+  failure, and complete secret lifecycle;
+- keep every KEM, KDF, AEAD, mode, role, and validated-module disposition
+  explicit and non-interchangeable;
+- update RFC 9180 requirements, threat model, suite and claim registers, public
+  documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable RFC 9180 vectors, malformed keys and encodings, wrong-suite
+  substitutions, lengths, sequence exhaustion, overlap, failure atomicity,
+  cancellation, cleanup, scalar/backend, and provider-fault campaigns;
+- exercise package-external no_std APIs and applicable proof, fuzz,
+  differential, emitted-code, constant-time, KAT, and quarantine evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, protocol-isolation, and FIPS-closure checks.
+
+Exit criteria:
+
+- the named HPKE capability is complete at its public boundary and later mode
+  rows inherit no hidden primitive, context, or lifecycle work;
+- `v0.138.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 ### v0.139.0 - HPKE Base Mode
 
 Status: planned
@@ -9759,7 +14281,7 @@ effects, deprecated algorithm fallback, or a FIPS-approved-service claim.
 
 Status: planned
 
-Plan scope: Pin RFC 9580, its obsoleted RFC lineage, errata, and the OpenPGP Parameters registry; classify every packet, version, algorithm, signature type, subpacket, armor form, criticality rule, compatibility surface and trust responsibility; freeze separate `brynja-openpgp-core`, `brynja-openpgp-armor`, `brynja-openpgp`, and optional `brynja-openpgp-legacy` boundaries with no implicit network, keyserver, filesystem, global trust, TLS, legacy-protocol, or FIPS-module edge.
+Plan scope: Pin RFC 9580, its obsoleted lineage, errata, and the OpenPGP Parameters registry; classify every packet, version, algorithm, signature type, subpacket, armor form, criticality rule, compatibility surface and trust responsibility; freeze separate package boundaries with no implicit external effects; and before v0.163.1 replace any later OpenPGP umbrella row that combines independent packet families, algorithms, directions, pipelines, or acceptance work with explicit review-sized tagged child rows.
 
 Goal: close the complete OpenPGP standards and security scope before any
 OpenPGP production code or dependency edge is admitted.
@@ -10041,133 +14563,401 @@ Exit criteria:
 - protected secret material has a complete custody contract and cannot be exposed by a partial or unauthenticated transition;
 - `v0.167.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.168.0 - Complete First-Party Argon2 Family
+### v0.168.0 - Complete First-Party Argon2i
 
 Status: planned
 
-Plan scope: Implement complete RFC 9106 Argon2d, Argon2i, and Argon2id version 0x13 APIs in first-party Rust with exact indexing, lanes, segments, passes, memory rounding, variable output, caller-provided workspace, parameter and overflow bounds, KATs, differential and proof evidence, data-independent or data-dependent memory-access disclosures, cancellation, and complete password, salt, secret, associated-data, block-memory, and output-intermediate destruction.
+Plan scope: Implement complete RFC 9106 Argon2i version 0x13 in first-party Rust, including the shared block and indexing foundation, lanes, segments, passes, memory rounding, variable output, caller workspace, parameter and overflow bounds, KATs, proofs, data-independent access claims, cancellation, cleanup, and public APIs.
 
-Goal: provide a from-scratch password derivation boundary that cannot allocate,
-overcommit resources or import a foreign cryptographic implementation.
+Goal: close the **Complete First-Party Argon2i** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
 
 Deliverables:
 
-- implement Argon2id compression, indexing and lane scheduling in small first-party modules with exact workspace ownership and parameter ceilings;
-- implement all admitted S2K encodings and iteration-count semantics with modern-write and deprecated-read dispositions;
-- bind derived keys to algorithm, purpose and lifetime and destroy password copies, intermediate blocks and obsolete outputs.
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run RFC 9106 and RFC 9580 vectors, boundary parameters, reduced-memory models, differentials and malformed or hostile parameter corpora;
-- prove checked indexing, no overflow, no secret-dependent diagnostics, exact memory use and zeroization across MSRV/latest and targets;
-- complete side-channel, Miri, formal, fuzz, native resource and independent cryptographic review.
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- S2K execution is bounded, first-party, independently evidenced and cannot weaken modern password policy silently;
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
 - `v0.168.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.168.1 - Argon2 Public API Acceptance And OpenPGP S2K
+### v0.168.1 - Complete First-Party Argon2d
 
 Status: planned
 
-Plan scope: Close the Argon2 family through packaged downstream Argon2d/i/id fixtures and then bind only the exact RFC 9580 Argon2 S2K profile to Argon2id; implement Simple, Salted, Iterated and Argon2 S2K parsing and derivation with explicit deprecated-read policy, algorithm-use separation, hostile-parameter rejection, and no password-dependent diagnostics.
+Plan scope: Implement complete RFC 9106 Argon2d version 0x13 over the reviewed Argon2 foundation with distinct type and indexing mode, all lanes, segments, passes, memory and output rules, caller workspace, bounds, KATs, proofs, data-dependent access disclosure, cancellation, cleanup, and public APIs.
 
-Goal: add the RFC 9580 AEAD requirements without creating a FIPS claim or an
-external cryptographic dependency.
+Goal: close the **Complete First-Party Argon2d** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
 
 Deliverables:
 
-- implement generic OCB and EAX constructions over admitted first-party AES with nonces, offsets, tags and checked use limits;
-- add separate OpenPGP OCB, EAX and GCM profile adapters for associated data, chunk and final-tag construction and exact algorithm identifiers;
-- classify all OpenPGP profile services non-approved and keep them outside the validated module and approved-only facade, including the profile that reuses AES-GCM.
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run official, published and independently generated KATs, in-place/disjoint buffers, overlap rejection, nonce, length and tag boundaries;
-- differentially test every admitted AES width and tag length and fault-inject authentication, capacity, counter and provider failures;
-- complete constant-time, zeroization, formal, fuzz, emitted-code, independent crypto and FIPS-boundary review.
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- OCB and EAX are reusable first-party constructions, all three exact OpenPGP profiles are bounded, and their non-FIPS status is unambiguous;
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
 - `v0.168.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.168.2 - Complete First-Party OCB And EAX Constructions
+### v0.168.2 - Complete First-Party Argon2id
 
 Status: planned
 
-Plan scope: Implement complete first-party OCB3 and EAX AEAD constructions over admitted AES widths with their authoritative nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and public API requirements before any OpenPGP-specific profile consumes them.
+Plan scope: Implement complete RFC 9106 Argon2id version 0x13 over the reviewed Argon2 foundation with distinct hybrid indexing, all lanes, segments, passes, memory and output rules, caller workspace, bounds, KATs, proofs, cancellation, cleanup, and public APIs suitable for the later OpenPGP profile.
 
-Goal: complete both standalone AEAD constructions before protocol profiling.
+Goal: close the **Complete First-Party Argon2id** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
 
 Deliverables:
 
-- implement full OCB3 and EAX public APIs over admitted AES widths;
-- freeze nonce, tag, AAD, streaming, overlap, limit and key-lifecycle domains;
-- introduce failure-atomicity, arithmetic and cleanup harnesses.
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run authoritative vectors across every admitted parameter and boundary;
-- test tamper, truncation, overlap, nonce/key limits and unchanged failures;
-- differentially exercise scalar and accelerated AES with no_std packages.
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- both AEADs are independently usable and evidenced before OpenPGP binding;
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
 - `v0.168.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.168.3 - OpenPGP OCB EAX And GCM AEAD Profiles
+### v0.168.3 - Argon2 CPU Acceleration And Memory-Hardness Evidence
 
 Status: planned
 
-Plan scope: Bind the complete OCB, EAX, and existing GCM constructions to the exact RFC 9580 algorithm identifiers, nonces, associated data, chunk indices, final tags, message and key limits, transactional output, uniform failure, and selection policy; keep every OpenPGP profile outside FIPS-approved-service claims even when an underlying primitive is individually approved.
+Plan scope: Benchmark and admit architecture-specific Argon2 block-processing paths only when Argon2d/i/id indexing, memory fill order, lane synchronization, cancellation, cleanup, memory-hardness, side-channel disclosures, output, and scalar equivalence remain exact; retain scalar-only decisions where hardware paths do not justify their complexity.
 
-Goal: add exact OpenPGP AEAD profiles without duplicating or weakening their primitives.
+Goal: close the **Argon2 CPU Acceleration And Memory-Hardness Evidence** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
 
 Deliverables:
 
-- map every profile field and limit to the exact underlying typed construction;
-- bind chunk/final authentication and plaintext release to authoritative state;
-- keep profile and underlying-service approval identities distinct.
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- run RFC profile vectors and generated multi-chunk boundary cases;
-- reorder, truncate, duplicate and tamper chunks, indices, AAD and final tags;
-- prove complete output withholding and cleanup across provider failures.
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- every admitted RFC 9580 AEAD profile is exact and no FIPS status is inferred;
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
 - `v0.168.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.168.4 - OCB EAX And OpenPGP AEAD Usability Acceptance
+### v0.168.4 - Argon2 Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Exercise packaged standalone OCB3 and EAX APIs plus OpenPGP OCB, EAX, and GCM profile fixtures against authoritative vectors and real multi-chunk messages, all AES widths admitted by each standard, tamper and truncation failures, scalar and accelerated AES paths, package isolation, cleanup, and no unauthenticated plaintext release.
+Plan scope: Exercise Argon2d, Argon2i, and Argon2id through packaged public fixtures for passwords, salts, secrets, associated data, variable outputs, every parameter boundary, caller workspaces, cancellation, cleanup, KATs, differentials, no_std, scalar, and every admitted backend without yet binding OpenPGP.
 
-Goal: close the standalone and OpenPGP AEAD chains through downstream evidence.
+Goal: close the **Argon2 Public API Usability Acceptance** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
 
 Deliverables:
 
-- add package-external standalone and profile fixtures and commands;
-- document exact supported parameter matrices and validation status;
-- update algorithm, provider and OpenPGP verification tables.
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
 
 Verification:
 
-- execute authoritative and real message cases through only public APIs;
-- force every parameter, backend, tamper, truncation and exhaustion path;
-- package/no_std-test and prove unchanged failure output and secret cleanup.
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
 
 Exit criteria:
 
-- OCB, EAX and admitted OpenPGP profiles have no deferred usable behavior;
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
 - `v0.168.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.168.5 - Complete OpenPGP S2K Profiles
+
+Status: planned
+
+Plan scope: Bind only the exact RFC 9580 Argon2 S2K profile to v0.168.2 and implement Simple, Salted, Iterated, and Argon2 S2K parsing and derivation with exact algorithm-use separation, deprecated-read policy, hostile-parameter rejection, cleanup, vectors, public APIs, and no password-dependent diagnostics.
+
+Goal: close the **Complete OpenPGP S2K Profiles** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
+- `v0.168.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.168.6 - Complete First-Party OCB3
+
+Status: planned
+
+Plan scope: Implement complete first-party OCB3 over every admitted AES width with exact nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public API behavior.
+
+Goal: close the **Complete First-Party OCB3** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
+- `v0.168.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.168.7 - Complete First-Party EAX
+
+Status: planned
+
+Plan scope: Implement complete first-party EAX over every admitted AES width with exact nonce, tag, AAD, empty-input, streaming, in-place/disjoint, length, key-use, failure-atomicity, verification, cleanup, vector, differential, proof, and standalone public API behavior.
+
+Goal: close the **Complete First-Party EAX** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
+- `v0.168.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.168.8 - OpenPGP OCB EAX And GCM AEAD Profiles
+
+Status: planned
+
+Plan scope: Bind the complete OCB3, EAX, and existing GCM constructions to exact RFC 9580 identifiers, nonces, associated data, chunk indices, final tags, message and key limits, transactional output, uniform failure, and selection policy while keeping all OpenPGP profiles outside approved-service claims.
+
+Goal: close the **OpenPGP OCB EAX And GCM AEAD Profiles** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
+- `v0.168.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.168.9 - OCB3 And EAX Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise packaged standalone OCB3 and EAX APIs against authoritative vectors across every admitted AES width, nonce, tag, AAD, empty, partial, multi-block, in-place, disjoint, tamper, cleanup, scalar and accelerated AES path, no_std, and failure-atomicity case.
+
+Goal: close the **OCB3 And EAX Public API Usability Acceptance** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
+- `v0.168.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.168.10 - OpenPGP S2K And AEAD Usability Acceptance
+
+Status: planned
+
+Plan scope: Exercise packaged Simple, Salted, Iterated, and Argon2 S2Ks plus OpenPGP OCB, EAX, and GCM profiles against authoritative vectors and real multi-chunk messages, hostile parameters, wrong passwords, tamper, truncation, cleanup, package isolation, and no unauthenticated plaintext release.
+
+Goal: close the **OpenPGP S2K And AEAD Usability Acceptance** unit without merging another password KDF,
+AEAD construction, OpenPGP profile, acceleration, or usability gate.
+
+Deliverables:
+
+- implement the exact Plan scope in first-party Rust under bounded no_std
+  workspace, secret-lifecycle, constant-time, failure-atomicity, and package
+  boundaries;
+- keep algorithm identities, parameter sets, standalone constructions,
+  OpenPGP profiles, acceleration authority, and approved-service status
+  explicit and non-interchangeable;
+- update normative requirements, threat model, algorithm and claim registers,
+  public documentation, release notes, and permanent evidence links.
+
+Verification:
+
+- run applicable authoritative vectors, parameter and memory boundaries,
+  password and corruption failures, partitions, overlap, tamper, cancellation,
+  cleanup, differential, scalar/backend, and package-external campaigns;
+- run applicable Kani, emitted-code, constant-time, memory-hardness,
+  zeroization, no_std, KAT, quarantine, and hostile-resource evidence;
+- pass repository, Rust-version, target, dependency, advisory, SBOM, package,
+  documentation, OpenPGP isolation, and FIPS-boundary checks.
+
+Exit criteria:
+
+- the named algorithm or profile is complete at its public boundary and the
+  next row inherits no hidden implementation or usability work;
+- `v0.168.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 ### v0.169.0 - OpenPGP Ed25519 X25519 Ed448 And X448 Profiles
 
 Status: planned
@@ -10224,14 +15014,14 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.3 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.
+Plan scope: Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.5 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.
 
 Goal: review the already complete SHA-1 owner once for three narrowly bounded
 OpenPGP compatibility consumers without changing its implementation identity.
 
 Deliverables:
 
-- verify the v0.24.3 implementation, package, vectors, warning and evidence
+- verify the v0.24.5 implementation, package, vectors, warning and evidence
   hashes remain exact and suitable for only the named input domains;
 - assign separate non-interchangeable fingerprint, protected-key and MDC
   consumer identities with their own data, output and cleanup rules;
@@ -10240,7 +15030,7 @@ Deliverables:
 
 Verification:
 
-- rerun the complete v0.24.3-v0.24.5 SHA-1 evidence on the exact candidate;
+- rerun the complete v0.24.5-v0.24.7 SHA-1 and legacy-isolation evidence on the exact candidate;
 - test consumer-domain and preimage separation plus collision-risk policy and
   complete cleanup for each proposed use;
 - graph-test every permitted and forbidden edge and complete independent risk review.
@@ -10333,7 +15123,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Bind the exact complete v0.46.21 RSA PKCS1 v1.5 signing, verification, encryption and decryption operations into every authenticated OpenPGP RSA compatibility profile with exact digest, session-key encoding, modulus, message, randomness, fingerprint, key-version, failure and policy rules; do not reimplement RSA or admit implicit modern selection.
+Plan scope: Bind the exact complete v0.46.58-v0.46.59 RSA PKCS1 v1.5 signing, verification, encryption and decryption operations into every authenticated OpenPGP RSA compatibility profile with exact digest, session-key encoding, modulus, message, randomness, fingerprint, key-version, failure and policy rules; do not reimplement RSA or admit implicit modern selection.
 
 Goal: complete the exact legacy RSA primitives needed by strong OpenPGP v4
 compatibility before binding them to packet profiles.
@@ -10422,7 +15212,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Bind the exact v0.46.5 DSA implementation into every authenticated OpenPGP key, signature, certificate, import, export, generation, signing and verification profile with exact parameter, hash, encoding, fingerprint and key-version rules, explicit dangerous policy, archived vectors and no modern-default edge.
+Plan scope: Bind the exact v0.46.6-v0.46.7 DSA implementation into every authenticated OpenPGP key, signature, certificate, import, export, generation, signing and verification profile with exact parameter, hash, encoding, fingerprint and key-version rules, explicit dangerous policy, archived vectors and no modern-default edge.
 
 Goal: provide every historical OpenPGP DSA operation without a private implementation.
 
@@ -10443,7 +15233,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Bind the exact v0.46.6 ElGamal implementation into every authenticated OpenPGP key, session-key encryption, decryption, import, export and generation profile with exact encoding, randomness, subgroup, fingerprint, version, uniform-failure and plaintext-release rules and explicit dangerous policy.
+Plan scope: Bind the exact v0.46.8-v0.46.9 ElGamal implementation into every authenticated OpenPGP key, session-key encryption, decryption, import, export and generation profile with exact encoding, randomness, subgroup, fingerprint, version, uniform-failure and plaintext-release rules and explicit dangerous policy.
 
 Goal: complete both-role OpenPGP ElGamal interoperability safely.
 
@@ -10751,7 +15541,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Bind the exact complete v0.46.25 DEFLATE and ZLIB implementation into OpenPGP ZIP and ZLIB Compressed Data generation and parsing with exact algorithm identifiers, reset, nesting, deterministic-generation, workspace, bomb, checksum, malformed-stream and public API behavior without a private codec copy.
+Plan scope: Bind the exact complete v0.46.71-v0.46.72 DEFLATE and ZLIB implementations into OpenPGP ZIP and ZLIB Compressed Data generation and parsing with exact algorithm identifiers, reset, nesting, deterministic-generation, workspace, bomb, checksum, malformed-stream and public API behavior without a private codec copy.
 
 Goal: provide complete bounded DEFLATE and ZLIB generation and consumption so
 OpenPGP does not depend on a partial decoder or foreign compression engine.
@@ -10783,7 +15573,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Bind the exact complete v0.46.28 BZip2 encoder and decoder into optional `brynja-openpgp-legacy` Compressed Data generation and parsing with exact identifiers, nesting, block and stream checks, caller workspaces, bomb defenses, archived interoperability, public APIs and no default modern edge.
+Plan scope: Bind the exact complete v0.46.79-v0.46.80 BZip2 decoder and encoder into optional `brynja-openpgp-legacy` Compressed Data generation and parsing with exact identifiers, nesting, block and stream checks, caller workspaces, bomb defenses, archived interoperability, public APIs and no default modern edge.
 
 Goal: read the remaining registered RFC 9580 compression form without making
 an optional complex decoder part of modern or default dependency graphs.
@@ -11199,7 +15989,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Authenticate and lawfully admit the complete available specifications, errata, registries, archives and interoperability corpora for TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP; assign every message, version, suite, primitive, compression method, extension, certificate, key format, role and send/receive operation to one complete owner, and block 1.0 rather than silently reduce any named protocol to a subset.
+Plan scope: Authenticate and lawfully admit the complete available specifications, errata, registries, archives and interoperability corpora for TLS 1.1, TLS 1.0, DTLS 1.0, SSL 3.0, SSL 2.0, WTLS, PCT and SNP; assign every message, version, suite, primitive, compression method, extension, certificate, key format, role and send/receive operation to one complete owner; insert review-sized tagged child rows whenever a listed protocol row combines independent codecs, state-machine roles, suites, operations, or acceptance work; and block 1.0 rather than silently ship a subset.
 
 Goal: freeze a complete, source-authenticated closure for every named historical protocol.
 

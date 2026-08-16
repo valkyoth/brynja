@@ -147,8 +147,9 @@ mapping_rationale = "This reviewed cross-domain rule maps RFC 9608 into the sign
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0010"
-owner = "0.60.3"
+owner = "0.60.11"
 lifecycle = "planned"
+revision = 4
 decision_ids = ["format.x509.unsigned"]
 sources = [{ id = "rfc:9925", authority_role = "current" }]
 statement = "Unsigned X.509 objects are completely implemented through explicit non-authenticating types that cannot satisfy trust, signature-verification, or secure-transport authentication."
@@ -157,6 +158,6 @@ target = "crates/brynja-pki/src/x509.rs#UnsignedCertificate"
 positive_test = "tests/requirements/unsigned_x509.rs#complete_non_authenticating_round_trip"
 negative_test = "tests/requirements/unsigned_x509.rs#trust_signature_and_transport_substitution_rejected"
 work_bound = "Unsigned parsing, generation and validation share bounded DER, extension, object and aggregate-work ceilings without entering path construction."
-evidence_gap = "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.60.3."
+evidence_gap = "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.60.11."
 residual = "Unsigned objects can never satisfy authentication even though their standardized format is completely implemented."
-mapping_rationale = "RFC 9925 defines a real format owned by v0.60.3 with an unforgeable non-authentication boundary."
+mapping_rationale = "RFC 9925 defines a real format owned by v0.60.11 with an unforgeable non-authentication boundary."

@@ -209,13 +209,13 @@ reason = "Superseded TLS extension baseline; RFC 6066 is locked."
 source = 3279
 relation = "updated-by"
 target = 4491
-reason = "Not yet locked: v0.46.18-v0.46.20 and v0.60.1 must authenticate and admit the complete GOST primitive and legacy-PKIX profiles before implementation."
+reason = "Not yet locked: v0.46.44-v0.46.54 and v0.60.4 must authenticate and admit the complete GOST primitive and legacy-PKIX profiles before implementation."
 
 [[closure_exclusion]]
 source = 3279
 relation = "updated-by"
 target = 8692
-reason = "Not yet locked: v0.60.1 must authenticate and admit the complete SHAKE-based legacy-PKIX profiles before implementation."
+reason = "Not yet locked: v0.60.1 must authenticate and schedule the complete SHAKE-based legacy-PKIX profiles before implementation."
 
 [[closure_exclusion]]
 source = 3986

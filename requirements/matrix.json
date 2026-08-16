@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "20dbd631f3288bde84b91b0e99480d43e289b9828447aca4db5647c090262582",
-  "domain_policy_sha256": "65a4f9de6b26068dd2d50b961762417e2f926ad042f6970c4a08483bbf53a088",
-  "policy_sha256": "7c46ff57ccf600fdfcb77bb3d6e687f13911e6eb7f4961c017be4df080659670",
+  "closure_policy_sha256": "602de44185fdc8a9b1fac44da713b33e96ffa9007be739932647d52702b16172",
+  "domain_policy_sha256": "3980148d4bf7168ba0a4cb6a6a7c807e49f397b601985529963bbdd08e276a13",
+  "policy_sha256": "b5e0681b6487df173ef8b9dc6d54ebf48b8b734320922427b5e25f611e0ed121",
   "requirements": [
     {
       "applicability": "delegate",
@@ -2637,8 +2637,8 @@
       "mapping_scope": "reviewed-domain",
       "owner": "0.45.0",
       "profile": "crypto-encoding-pkix",
-      "residual": "Ed448 remains outside this Ed25519 owner and receives its own complete v0.45.3-v0.45.5 milestones; newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes.",
-      "revision": 3,
+      "residual": "Ed448 remains outside this Ed25519 owner and receives its own complete v0.45.7-v0.45.10 milestones; newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes.",
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -9033,7 +9033,7 @@
       "deviation_rationale": null,
       "domain": "encoding",
       "evidence": [],
-      "evidence_gap": "Format vectors, malformed corpora, key-consistency tests, owned-region destruction, and integration review remain unresolved until v0.49.0.",
+      "evidence_gap": "Format vectors, malformed corpora, key-consistency tests, owned-region destruction, and integration review remain unresolved until v0.49.4.",
       "id": "BRY-REQ-ENC-0004",
       "invariants": [
         "algorithm-admission",
@@ -9046,10 +9046,10 @@
       "lifecycle": "planned",
       "mapping_rationale": "The private-key-container semantic surface directly cites RFC 5958 and RFC 8017 and remains bound to its dedicated secret-owning input milestone.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.49.0",
+      "owner": "0.49.4",
       "profile": "crypto-encoding-pkix",
       "residual": "Encrypted PKCS8, arbitrary algorithms, RSA key generation, and secret-bearing diagnostic formatting remain explicit version-one exclusions.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -16480,7 +16480,7 @@
       "deviation_rationale": null,
       "domain": "pkix",
       "evidence": [],
-      "evidence_gap": "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.60.3.",
+      "evidence_gap": "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.60.11.",
       "id": "BRY-REQ-PKIX-0010",
       "invariants": [
         "algorithm-admission",
@@ -16489,12 +16489,12 @@
         "work-bound"
       ],
       "lifecycle": "planned",
-      "mapping_rationale": "RFC 9925 defines a real format owned by v0.60.3 with an unforgeable non-authentication boundary.",
+      "mapping_rationale": "RFC 9925 defines a real format owned by v0.60.11 with an unforgeable non-authentication boundary.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.60.3",
+      "owner": "0.60.11",
       "profile": "crypto-encoding-pkix",
       "residual": "Unsigned objects can never satisfy authentication even though their standardized format is completely implemented.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -16775,7 +16775,7 @@
       "deviation_rationale": null,
       "domain": "pkix",
       "evidence": [],
-      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.60.3.",
+      "evidence_gap": "Executable vectors, fault campaigns, interoperability, and independent audit evidence remain unresolved until 0.60.11.",
       "id": "BRY-REQ-PQPKIX-0046",
       "invariants": [
         "resource-bound",
@@ -16785,10 +16785,10 @@
       "lifecycle": "planned",
       "mapping_rationale": "This residual group binds every previously uncovered surface in one exact domain, owner, and disposition class to reviewed locked authorities, a single implementation boundary, and paired tests. Exact normative sections are assigned only by the reviewed v0.3.5 residual section policy; RFC-wide inheritance is forbidden.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.60.3",
+      "owner": "0.60.11",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -29772,9 +29772,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "f0fd597ee25e8f358328d17a3c268d0ce29b6490c260257632043bced8ea93eb",
+  "residual_policy_sha256": "63dab1eef4cad9d9c9e98c86d7085eaaeb97d4ef5a5aaf99c8e2b4993aa5d8ed",
   "schema": 5,
-  "source_ledger_sha256": "df2d5e51f5471ddcac4b2968f9c1e49741f167145f34cb7c590b45ef3c2091e2",
-  "surface_register_sha256": "c69f1f112c849d389c39a662466338dbf466d95a6ce7ab2b420b30ed29842e9b",
-  "transport_policy_sha256": "f0ff23d2add913955774c70dd5bba0a9eb7e73f852bce983dd30ec44282051c3"
+  "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
+  "surface_register_sha256": "5fdf5d436062c8bba2c8f6d6a99c37fc84164e1d685d2ac21afe446f99032dba",
+  "transport_policy_sha256": "27debc8a16c01829f7597148cdbbb52bef17ef581db9d063cb1026464e36a48c"
 }

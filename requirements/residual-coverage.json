@@ -2612,7 +2612,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "f0fd597ee25e8f358328d17a3c268d0ce29b6490c260257632043bced8ea93eb",
+  "policy_sha256": "63dab1eef4cad9d9c9e98c86d7085eaaeb97d4ef5a5aaf99c8e2b4993aa5d8ed",
   "requirement_count": 51,
   "schema": 1,
   "surface_count": 787,
@@ -2734,7 +2734,7 @@
       "disposition": "future-work",
       "domain": "pkix",
       "id": "format.ml-kem-pkix-credentials",
-      "owner": "0.60.3",
+      "owner": "0.60.11",
       "requirement_id": "BRY-REQ-PQPKIX-0046"
     },
     {

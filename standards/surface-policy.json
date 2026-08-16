@@ -538,7 +538,7 @@
         "code_target": "crates/brynja-pki/src/x509.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.60.3",
+        "owner": "0.60.11",
         "rationale": "The authenticated unsigned X.509 profile receives a complete explicitly non-authenticating typed implementation.",
         "sources": ["rfc:9925"],
         "test_target": "tests/surface/x509.rs#unsigned_rejected"
@@ -550,7 +550,7 @@
         "code_target": "crates/brynja-pki/src/key_format.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.49.0",
+        "owner": "0.49.4",
         "rationale": "PKCS8, SEC1, and PKCS1 private-key containers require bounded DER and strict algorithm binding.",
         "sources": ["rfc:5958", "rfc:8017"],
         "test_target": "tests/surface/private_keys.rs#formats"
@@ -790,7 +790,7 @@
         "code_target": "crates/brynja-pki/src/algorithm.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.60.3",
+        "owner": "0.60.11",
         "rationale": "RFC 9935 ML-KEM PKIX credentials receive complete typed generation, parsing and validation profiles.",
         "sources": ["rfc:9935"],
         "test_target": "tests/surface/ml_kem.rs#pkix_rejected"
@@ -1588,5 +1588,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "df2d5e51f5471ddcac4b2968f9c1e49741f167145f34cb7c590b45ef3c2091e2"
+  "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6"
 }

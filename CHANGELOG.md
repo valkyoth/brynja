@@ -7,6 +7,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Record the voluntary v0.22.3 repository-owner assessment and retest through
+  exact signed implementation and CI-correction candidate
+  `399c9e7c5092d755dfbc22a3adf5500f85a8877e` as `PASS`/`PASS` with zero open
+  findings and no cryptographic source remediation; retain zero publication,
+  ordinary-state erasure, accelerated-admission, independent-review, FIPS, and
+  scheduled v0.25.0 cumulative-review restrictions.
 - Isolate SHA-256 package acceptance to its exact four-crate closure and an
   empty Cargo home so clean CI proves offline packaging without resolving the
   unrelated optional sanitization dependency or relying on a warm registry

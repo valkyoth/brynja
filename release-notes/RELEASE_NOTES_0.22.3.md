@@ -1,6 +1,6 @@
 # Brynja 0.22.3
 
-Status: implementation candidate; internal development tag; no crates.io publication
+Status: release candidate; pentest/retest PASS/PASS; internal development tag; no crates.io publication
 
 Brynja 0.22.3 closes the SHA-256 implementation chain with a runnable
 downstream acceptance boundary. Portable SHA-256 is now exposed as a complete,
@@ -54,10 +54,17 @@ crates.io index.
 This milestone adds no new algorithm, protocol, dependency, unsafe block, FFI,
 C implementation, runtime detector, or provider authority.
 
+The voluntary repository-owner assessment and retest of the implementation and
+CI-correction range through exact signed commit
+`399c9e7c5092d755dfbc22a3adf5500f85a8877e` passed with zero open findings and
+required no cryptographic source remediation. This assessment does not create
+an independent-review or FIPS-validation claim.
+
 ## Release process
 
 Version 0.22.3 is an internal development milestone inside the cumulative
 v0.20.0-to-v0.25.0 range. It selects no crate for crates.io publication and has
-no scheduled pentest unless the exceptional-trigger classifier requires one.
-The signed tag is created only after the complete local gate and hosted GitHub
-and CodeQL checks are green.
+not been converted into a scheduled publication checkpoint by its voluntary
+assessment. The complete delta remains in the v0.25.0 cumulative pentest. The
+signed tag is created only after the complete local gate and hosted GitHub and
+CodeQL checks are green.

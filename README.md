@@ -520,6 +520,14 @@ unadmitted candidates. Corrupted digests, missing public exports, backend
 overclaims, exhaustion bypasses, candidate-feature injection, and altered
 package contents fail deterministic negative fixtures.
 
+The voluntary v0.22.3 repository-owner assessment and retest through exact
+signed implementation and CI-correction commit
+`399c9e7c5092d755dfbc22a3adf5500f85a8877e` found no vulnerability, required
+no cryptographic source remediation, and records `PASS`/`PASS` with zero open
+findings. This remains an internal tag with zero crates.io publication; its
+complete delta is still covered again by the scheduled v0.20.0-to-v0.25.0
+cumulative assessment.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest

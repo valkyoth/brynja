@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.2 signed; v0.22.3 public SHA-256 acceptance implemented and awaiting verification
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.2 signed; v0.22.3 pentest/retest PASS/PASS and awaiting final hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -91,6 +91,11 @@ exports, backend misreporting, exhaustion bypass, an unadmitted feature, and
 altered package contents. This acceptance makes portable SHA-256 publicly
 usable; it does not admit an accelerated backend, add an algorithm, establish
 independent verification or FIPS validation, or select a crate for publication.
+The voluntary repository-owner assessment and retest through exact signed
+candidate `399c9e7c5092d755dfbc22a3adf5500f85a8877e` passed with zero open
+findings and required no cryptographic source remediation. The permanent report
+is committed with the release candidate; the tag still waits for green GitHub
+and CodeQL, and the complete delta remains in the scheduled v0.25.0 assessment.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

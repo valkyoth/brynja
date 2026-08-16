@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.2 signed; v0.22.3 public SHA-256 acceptance implemented and awaiting verification
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.2 signed; v0.22.3 pentest/retest PASS/PASS and awaiting final hosted checks
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.22.3`. `brynja-hash-core 0.1.0` and
@@ -142,7 +142,11 @@ green report candidate. The v0.22.3 stage adds a standalone public-only
 authoritative real inputs, irregular streaming, scalar and admitted-backend
 accounting, public exhaustion preflight, and executable negative fixtures. It
 closes the SHA-256 implementation chain without changing a support-package
-version or selecting a crates.io publication.
+version or selecting a crates.io publication. Its voluntary repository-owner
+assessment and retest through exact signed candidate
+`399c9e7c5092d755dfbc22a3adf5500f85a8877e` passed with zero open findings and
+required no cryptographic source remediation. It remains an internal tag in the
+scheduled v0.20.0-to-v0.25.0 cumulative range.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

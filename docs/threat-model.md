@@ -460,6 +460,17 @@ makes no secret-remnant, CPU-register, cache, dump, independent-review, or FIPS
 140-3 validation claim. Before HMAC or any secret-bearing construction consumes
 this path, that owner must provide hardened internal-state cleanup and emitted-
 code evidence; callers cannot erase private state hidden inside the hash.
+v0.23.1 applies the same hostile-input model to SHA-384 and SHA-512 while
+separating their public identities from one private shared 64-bit compression
+and buffering owner. Exact distinct IVs prevent algorithm substitution;
+128-byte blocks, the 111/112-byte padding boundary, and the 128-bit big-endian
+length field are fixed and checked before state mutation. Official vectors,
+Monte Carlo chains, independently generated boundary digests, exhaustive
+two-part partitions, fixed chunk widths, proof bounds, Miri, and sanitizer
+execution guard wrong rounds, padding, truncation, exhaustion, and memory
+safety. SHA-384 is not represented as truncated SHA-512. Both APIs remain
+ordinary unkeyed hashes with no internal-state erasure, authentication,
+independent-review, accelerated-execution, or FIPS-validation claim.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

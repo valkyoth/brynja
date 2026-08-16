@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "20dbd631f3288bde84b91b0e99480d43e289b9828447aca4db5647c090262582",
-  "domain_policy_sha256": "b94976493268ef5c4243873272d72ef634f6d083aa000e83433b61e3b4752092",
+  "domain_policy_sha256": "f98ad0031e9c43446e2433cd4acc4b8ecb4d8d243e6ea7a091a274e5c81f0f03",
   "policy_sha256": "7c46ff57ccf600fdfcb77bb3d6e687f13911e6eb7f4961c017be4df080659670",
   "requirements": [
     {
@@ -763,7 +763,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Portable SHA-224 and SHA-256 are implemented with vectors and proof bounds; portable SHA-384/SHA-512 and SHA-512/224/SHA-512/256 remain unresolved until v0.23.1-v0.23.2, whole-family acceleration and packaged acceptance remain v0.23.3-v0.23.4, and the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
+      "evidence_gap": "Portable SHA-224, SHA-256, SHA-384, and SHA-512 are implemented with vectors and proof bounds; SHA-512/224 and SHA-512/256 remain unresolved until v0.23.2, whole-family acceleration and packaged acceptance remain v0.23.3-v0.23.4, and the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -777,7 +777,7 @@
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {

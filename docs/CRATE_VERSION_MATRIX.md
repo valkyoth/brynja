@@ -1,11 +1,11 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.3 signed; v0.23.0 pentest/retest PASS/PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.0 signed; v0.23.1 implementation candidate awaiting exceptional pentest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.23.0`. `brynja-hash-core 0.1.0` and
+advances to internal `0.23.1`. `brynja-hash-core 0.1.0` and
 `brynja-hash-sha2 0.1.0` retain the reusable interface and complete portable
-SHA-224/SHA-256 implementations while gaining an optional CPU session edge. Published
+SHA-224/SHA-256/SHA-384/SHA-512 implementations while retaining an optional CPU session edge. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
 the separate opt-in x86/AArch64 host detector and runtime selection API while
@@ -156,14 +156,22 @@ exceptional repository-owner assessment and retest of exact signed candidate
 and required no remediation. It remains an internal tag, selects no crates.io
 publication, makes no independent-review or FIPS-validation claim, and stays
 inside the scheduled v0.20.0-to-v0.25.0 cumulative range.
+The v0.23.1 stage adds complete portable SHA-384 and SHA-512 over one private
+80-round 64-bit compression owner and one private 128-byte buffered state. It
+exposes exact distinct IVs, checked 128-bit length accounting, typed one-shot
+and streaming APIs, official vectors, Monte Carlo, padding, partition,
+exhaustion, proof, Miri, sanitizer, compiler, target, and package evidence.
+It requires an exceptional new-algorithm pentest, selects no crates.io
+publication, and makes no independent-review, state-erasure, acceleration, or
+FIPS-validation claim.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.23.0` | no | Internal facade milestone; v0.20.0 is published |
+| `brynja` | `0.23.1` | no | Internal facade milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | New unpublished allocation-free fixed-output hash interfaces |
-| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable SHA-224 and accepted SHA-256 APIs; CPU candidates remain unadmitted |
-| `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports the exact SHA-224/SHA-256 leaf implementations |
+| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable SHA-224/SHA-256/SHA-384/SHA-512 APIs; CPU candidates remain unadmitted |
+| `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports the exact SHA-224/SHA-256/SHA-384/SHA-512 leaf implementations |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; unpublished x86_64 SHA, AArch64 SHA2, and RV64 Zknh candidates remain unadmitted |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished opt-in x86/AArch64 detector falls back or fails closed; RISC-V auto-detection is disabled |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |

@@ -2190,8 +2190,12 @@ Verification:
   SHA-512, including arbitrary streaming partitions and independent oracles;
 - test checked exhaustion, exact 111/112/127/128-byte padding behavior,
   consuming finalization and no_std use;
+- prove the shared checked `u128` length and 128-byte padding domains with
+  Kani, and exercise both algorithms under pinned Miri and AddressSanitizer;
 - inspect portable emitted code and pass the complete supported compiler,
   target, dependency, package and documentation matrix.
+- because this milestone adds two first-party cryptographic algorithms and a
+  new compression foundation, complete an exceptional pentest before tagging.
 
 Exit criteria:
 

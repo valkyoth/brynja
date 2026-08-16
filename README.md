@@ -44,7 +44,7 @@ companion-adapter exceptions follow explicit admission and isolation policy.
 
 These tables track concrete public capabilities, not internal crate names or
 reserved architecture. A capability is listed as implemented only after its
-complete public API and final downstream usability-acceptance milestone pass.
+complete public API and required acceptance evidence for that named milestone pass.
 The broader crate-level audit inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
@@ -62,6 +62,8 @@ independent cryptographic or protocol verification.
 | --- | --- | --- |
 | SHA-224 | ✅ Implemented | ❌ Not independently verified |
 | SHA-256 | ✅ Implemented | ❌ Not independently verified |
+| SHA-384 | ✅ Implemented | ❌ Not independently verified |
+| SHA-512 | ✅ Implemented | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -158,13 +160,14 @@ only static selection, direct KAT, caller-owned health/quarantine, and exact
 one-block kernels. The separate opt-in `std` `brynja-crypto-cpu-std` crate owns
 runtime feature detection and explicit opportunistic or required selection.
 
-The current `0.23.0` milestone adds complete portable SHA-224 beside SHA-256.
-It reuses only the reviewed 32-bit compression owner while retaining its exact
-FIPS 180-4 IV, 28-byte digest identity, checked length domain, one-shot and
-streaming APIs, and consuming finalization. NIST short, long, million-byte,
-Monte Carlo, padding-boundary, split, and chunking evidence pass. SHA-224 is
-not implemented as truncated SHA-256. It remains unkeyed, not independently
-verified, and not FIPS 140-3 validated.
+The current `0.23.1` milestone adds complete portable SHA-384 and SHA-512 beside
+SHA-224 and SHA-256. One private reviewed 80-round 64-bit compression owner
+feeds distinct FIPS 180-4 IVs and exact 48-byte and 64-byte identities, while
+the shared state enforces 128-byte blocks, the 111/112-byte padding boundary,
+and the 128-bit length field. NIST short, long, million-byte, Monte Carlo,
+padding-boundary, split, and chunking evidence pass for both algorithms.
+SHA-384 is not implemented as truncated SHA-512. Both remain unkeyed, not
+independently verified, and not FIPS 140-3 validated.
 
 All three kernels are implemented but deliberately unadmitted. Private
 commit-bound correctness and emitted-code observations passed on local AMD,
@@ -205,8 +208,8 @@ archived rather than reused or relabelled.
 The preceding v0.22.0 milestone introduced allocation-free `no_std` one-shot
 and streaming SHA-256, checked FIPS message-length exhaustion, consuming
 finalization, and an exact 32-byte digest type. `brynja-crypto` and `brynja`
-reuse that implementation rather than carrying private copies. SHA-384,
-SHA-512, SHA-512/224, SHA-512/256, the complete FIPS 202 family,
+reuse those implementations rather than carrying private copies. SHA-512/224,
+SHA-512/256, the complete FIPS 202 family,
 isolated legacy SHA-1/MD5 compatibility, HMAC, and their public chain
 acceptance remain explicitly numbered later scope before 1.0.
 
@@ -547,8 +550,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.23.0`
-portable SHA-224 milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.23.1`
+portable SHA-384/SHA-512 milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -651,13 +654,13 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and portable SHA-224/SHA-256 through v0.23.0; no TLS engine or provider effect |
+| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and portable SHA-224/SHA-256/SHA-384/SHA-512 through v0.23.1; no TLS engine or provider effect |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
-| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 now contains complete portable SHA-224 and accepted SHA-256; the SHA-384/SHA-512 family and whole-family acceleration follow in v0.23.1-v0.23.4 |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 now contains complete portable SHA-224, SHA-256, SHA-384, and SHA-512; truncated variants, whole-family acceleration, and final acceptance follow in v0.23.2-v0.23.4 |
 | Future `brynja-hash-sha3` | Complete FIPS 202 SHA-3 and SHAKE family ownership | Planned from v0.24.0 through v0.24.2 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
-| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports portable SHA-224 and SHA-256; other planned cryptography and provider effects remain absent |
+| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports portable SHA-224, SHA-256, SHA-384, and SHA-512; other planned cryptography and provider effects remain absent |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; x86 SHA, AArch64 SHA2, and RV64 Zknh candidates implemented; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected host detector adapter | Published metadata v0.1.1; opt-in x86/AArch64 detection, RISC-V auto-detection disabled; absent from facade and FIPS graphs |
 | `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |
@@ -804,7 +807,7 @@ python3 scripts/test-sha256.py
 scripts/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.23.0
+scripts/tag_gate.sh v0.23.1
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

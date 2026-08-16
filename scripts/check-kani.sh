@@ -30,8 +30,8 @@ harnesses="$(
         wc -l |
         tr -d ' '
 )"
-test "$harnesses" = "4" || {
-    echo "Kani policy: expected exactly four admitted SHA-224/SHA-256 harnesses, found ${harnesses}" >&2
+test "$harnesses" = "6" || {
+    echo "Kani policy: expected exactly six admitted SHA-2 harnesses, found ${harnesses}" >&2
     exit 1
 }
 
@@ -45,7 +45,7 @@ test "$confined_harnesses" = "crates/brynja-hash-sha2/src/lib.rs" || {
 }
 
 if [ "$mode" = "--policy-only" ]; then
-    echo "Kani policy: four SHA-224/SHA-256 harnesses are inventoried; full proofs are local tag-gate evidence"
+    echo "Kani policy: six SHA-224/SHA-256/SHA-384/SHA-512 harnesses are inventoried; full proofs are local tag-gate evidence"
     exit 0
 fi
 
@@ -79,4 +79,4 @@ test "$installed" = "cargo-kani ${kani_version}" || {
 }
 
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
-echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; four SHA-224/SHA-256 harnesses passed"
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; six SHA-2 harnesses passed"

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.3 signed; v0.23.0 pentest/retest PASS/PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.0 signed; v0.23.1 implementation candidate awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -30,10 +30,10 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It now has complete portable SHA-224 and SHA-256 plus bounded DER tag-length-value framing
+It now has complete portable SHA-224, SHA-256, SHA-384, and SHA-512 plus bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm beyond SHA-224/SHA-256, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond those four SHA-2 identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -97,7 +97,7 @@ findings and required no cryptographic source remediation. The permanent report
 is committed with the signed tag, and the complete delta remains in the
 scheduled v0.25.0 assessment.
 
-The facade now advances to internal `0.23.0`. `brynja-hash-sha2` adds complete
+Signed v0.23.0 added complete
 portable SHA-224 with its distinct FIPS 180-4 initial value, exact 28-byte
 output, allocation-free `no_std` one-shot and streaming APIs, checked
 message-length domain, transactional updates, and consuming finalization. NIST
@@ -109,9 +109,22 @@ exact signed candidate `8877bda1e697db98e77637d82bdc0d0d6ecad237` passed
 with `PASS`/`PASS`, zero open findings, and no remediation. Ordinary SHA-224
 state makes no secret-remanence cleanup claim; SHA-224 acceleration,
 independent cryptographic review, and FIPS 140-3 validation remain absent. The
-milestone selects zero crates.io packages, awaits green GitHub and CodeQL
-before tagging, and remains in the scheduled v0.20.0-to-v0.25.0 cumulative
-assessment.
+milestone selected zero crates.io packages, passed GitHub and CodeQL, and is
+signed. It remains in the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
+
+The facade now advances to internal `0.23.1`. One private allocation-free
+`no_std` 80-round `u64` compression owner and one private 128-byte buffered
+state implement complete portable SHA-384 and SHA-512 through separately typed
+one-shot, streaming, error, and 48-byte/64-byte digest APIs. Distinct exact
+FIPS 180-4 IVs, the 111/112-byte padding boundary, a checked 128-bit bit-length
+field, transactional exhaustion, NIST CAVP short and Monte Carlo vectors, FIPS
+long and million-byte cases, independent padding oracles, every two-part split,
+fixed chunk widths, six cumulative Kani bounds, Miri, and AddressSanitizer are
+covered. SHA-384 is explicitly distinguished from truncated SHA-512. Ordinary
+unkeyed state makes no secret-remanence cleanup claim. Acceleration,
+SHA-512/224, SHA-512/256, independent review, and FIPS 140-3 validation remain
+absent. This new-algorithm boundary requires an exceptional pentest and selects
+zero crates.io packages before its internal tag.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

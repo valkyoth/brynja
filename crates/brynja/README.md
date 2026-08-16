@@ -31,8 +31,8 @@ not depend on a C cryptographic library.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet be
 > used to secure application traffic. The current facade provides completed
-> security foundations, portable SHA-224 and SHA-256, bounded TLS/DTLS record-envelope
-> framing, bounded DER framing, and selected canonical ASN.1 values. It does
+> security foundations, portable SHA-224, SHA-256, SHA-384, and SHA-512,
+> bounded record and DER/ASN.1 framing. It does
 > not yet provide a TLS connection, certificate validator, or working protocol
 > engine.
 
@@ -94,9 +94,11 @@ authenticate data, decrypt a record, or perform network I/O.
 ```rust
 let shorter = brynja::crypto::sha224(b"abc").unwrap();
 let digest = brynja::crypto::sha256(b"abc").unwrap();
-
+let wider = brynja::crypto::sha384(b"abc").unwrap();
+let widest = brynja::crypto::sha512(b"abc").unwrap();
 assert_eq!(shorter.as_bytes().len(), 28);
-
+assert_eq!(wider.as_bytes().len(), 48);
+assert_eq!(widest.as_bytes().len(), 64);
 assert_eq!(
     digest.as_bytes(),
     &[
@@ -108,8 +110,8 @@ assert_eq!(
 );
 ```
 
-SHA-224 and SHA-256 are unkeyed digests, not authentication, a MAC, or password
-hashing. Ordinary `Sha224` and `Sha256` do not guarantee erasure of secret-input
+These SHA-2 functions are unkeyed digests, not authentication, a MAC, or password
+hashing. Ordinary SHA-2 states do not guarantee erasure of secret-input
 remnants, including private working state that callers cannot clear; keyed use
 requires the later hardened construction.
 
@@ -135,6 +137,8 @@ independent cryptographic or protocol verification.
 | --- | --- | --- |
 | SHA-224 | ✅ Implemented | ❌ Not independently verified |
 | SHA-256 | ✅ Implemented | ❌ Not independently verified |
+| SHA-384 | ✅ Implemented | ❌ Not independently verified |
+| SHA-512 | ✅ Implemented | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -170,7 +174,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-core` | Small allocation-free fixed-output hash interfaces |
-| `brynja-hash-sha2` | Portable SHA-224/SHA-256 implementations and complete SHA-2 family ownership |
+| `brynja-hash-sha2` | Portable SHA-224/SHA-256/SHA-384/SHA-512 implementations and complete SHA-2 family ownership |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | Optional first-party ISA kernels and separate host runtime detection; absent from this facade |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
@@ -189,10 +193,8 @@ package name alone does not mean that its planned implementation exists.
 - [Full project README](https://github.com/valkyoth/brynja#readme)
 - [API documentation](https://docs.rs/brynja)
 - [Release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
-- [Version plan](https://github.com/valkyoth/brynja/blob/main/docs/VERSION_PLAN.md)
 - [Threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md)
 - [Verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md)
 - [Security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md)
-- [Changelog](https://github.com/valkyoth/brynja/blob/main/CHANGELOG.md)
 
 Licensed under either Apache-2.0 or MIT, at your option.

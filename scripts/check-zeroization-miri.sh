@@ -43,3 +43,17 @@ CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     --test sha256 \
     padding_boundaries_have_exact_digests \
     --target x86_64-unknown-linux-gnu
+
+CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+    cargo +nightly-2026-08-16 miri test \
+    -p brynja-hash-sha2 \
+    --test sha384 \
+    every_padding_boundary_matches_independent_expected_results \
+    --target x86_64-unknown-linux-gnu
+
+CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+    cargo +nightly-2026-08-16 miri test \
+    -p brynja-hash-sha2 \
+    --test sha512 \
+    every_padding_boundary_matches_independent_expected_results \
+    --target x86_64-unknown-linux-gnu

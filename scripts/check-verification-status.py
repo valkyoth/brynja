@@ -13,6 +13,8 @@ ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
     "| SHA-224 | ✅ Implemented | ❌ Not independently verified |",
     "| SHA-256 | ✅ Implemented | ❌ Not independently verified |",
+    "| SHA-384 | ✅ Implemented | ❌ Not independently verified |",
+    "| SHA-512 | ✅ Implemented | ❌ Not independently verified |",
     "| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |",
     "| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |",
     "| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |",
@@ -22,7 +24,7 @@ ROOT_ROWS = (
 COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
 COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
-    "| `brynja-hash-sha2` | Complete portable SHA-224 and accepted public portable SHA-256; SHA-384, SHA-512-family, and whole-family acceleration remain planned | ❌ Not verified |",
+    "| `brynja-hash-sha2` | Complete portable SHA-224, SHA-256, SHA-384, and SHA-512; truncated variants and whole-family acceleration remain planned | ❌ Not verified |",
     "| Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-crypto-cpu` | Implemented but unadmitted x86_64 SHA, AArch64 SHA2, and RV64 Zknh compression candidates, static selection, direct KAT, health and quarantine | ❌ Not independently verified; native admission evidence incomplete |",

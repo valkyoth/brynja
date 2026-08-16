@@ -1,22 +1,28 @@
-//! Complete portable SHA-224 and SHA-256 for Brynja.
+//! Complete portable SHA-224, SHA-256, SHA-384, and SHA-512 for Brynja.
 //!
 //! The byte-oriented one-shot and streaming APIs implement FIPS 180-4
-//! SHA-256 without allocation, low-level code, I/O, global mutable state, or a
-//! hardware requirement. The SHA-384 and SHA-512 families remain planned.
+//! SHA-2 without allocation, low-level code, I/O, global mutable state, or a
+//! hardware requirement. SHA-512/224 and SHA-512/256 remain planned.
 
 #![no_std]
 
 mod compress;
+mod compress64;
 mod digest;
 mod error;
 mod sha224;
 mod sha256;
+mod sha384;
+mod sha512;
+mod sha512_state;
 
 pub use brynja_hash_core::{FixedOutput, Update};
-pub use digest::{Sha224Digest, Sha256Digest};
-pub use error::{Sha224Error, Sha256Error};
+pub use digest::{Sha224Digest, Sha256Digest, Sha384Digest, Sha512Digest};
+pub use error::{Sha224Error, Sha256Error, Sha384Error, Sha512Error};
 pub use sha224::Sha224;
 pub use sha256::Sha256;
+pub use sha384::Sha384;
+pub use sha512::Sha512;
 
 #[cfg(feature = "cpu")]
 pub use brynja_crypto_cpu::{
@@ -31,6 +37,12 @@ pub const SHA256_IMPLEMENTED: bool = true;
 
 /// Whether the complete portable SHA-224 API is implemented.
 pub const SHA224_IMPLEMENTED: bool = true;
+
+/// Whether the complete portable SHA-384 API is implemented.
+pub const SHA384_IMPLEMENTED: bool = true;
+
+/// Whether the complete portable SHA-512 API is implemented.
+pub const SHA512_IMPLEMENTED: bool = true;
 
 /// Computes SHA-224 over one complete byte slice.
 ///
@@ -74,6 +86,32 @@ pub fn sha256(input: &[u8]) -> Result<Sha256Digest, Sha256Error> {
     Ok(state.finalize())
 }
 
+/// Computes SHA-384 over one complete byte slice.
+///
+/// ```
+/// let digest = brynja_hash_sha2::sha384(b"abc")?;
+/// assert_eq!(digest.as_bytes().len(), 48);
+/// # Ok::<(), brynja_hash_sha2::Sha384Error>(())
+/// ```
+pub fn sha384(input: &[u8]) -> Result<Sha384Digest, Sha384Error> {
+    let mut state = Sha384::new();
+    state.update(input)?;
+    Ok(state.finalize())
+}
+
+/// Computes SHA-512 over one complete byte slice.
+///
+/// ```
+/// let digest = brynja_hash_sha2::sha512(b"abc")?;
+/// assert_eq!(digest.as_bytes().len(), 64);
+/// # Ok::<(), brynja_hash_sha2::Sha512Error>(())
+/// ```
+pub fn sha512(input: &[u8]) -> Result<Sha512Digest, Sha512Error> {
+    let mut state = Sha512::new();
+    state.update(input)?;
+    Ok(state.finalize())
+}
+
 /// Computes SHA-256 with one already-tested accelerated backend.
 ///
 /// The ordinary [`sha256`] API and default feature set remain portable scalar.
@@ -90,13 +128,14 @@ pub fn sha256_with_backend(
 #[cfg(test)]
 mod tests {
     use super::{
-        Sha224, Sha224Error, Sha256, Sha256Error, sha224,
+        Sha224, Sha224Error, Sha256, Sha256Error, Sha384, Sha384Error, Sha512, Sha512Error, sha224,
         sha224::{
             checked_message_length as checked_sha224_length,
             padding_block_count as sha224_padding_block_count,
         },
         sha256,
         sha256::{checked_message_length, padding_block_count},
+        sha384, sha512,
     };
 
     #[test]
@@ -133,6 +172,8 @@ mod tests {
     fn one_shot_empty_message_is_stable() {
         assert!(sha224(&[]).is_ok());
         assert!(sha256(&[]).is_ok());
+        assert!(sha384(&[]).is_ok());
+        assert!(sha512(&[]).is_ok());
     }
 
     #[test]
@@ -145,6 +186,30 @@ mod tests {
         assert_eq!(padding_block_count(55), 1);
         assert_eq!(padding_block_count(56), 2);
         assert_eq!(padding_block_count(63), 2);
+        assert_eq!(super::sha512_state::padding_block_count(0), 1);
+        assert_eq!(super::sha512_state::padding_block_count(111), 1);
+        assert_eq!(super::sha512_state::padding_block_count(112), 2);
+        assert_eq!(super::sha512_state::padding_block_count(127), 2);
+    }
+
+    #[test]
+    fn sha512_family_checked_lengths_are_exact() {
+        assert_eq!(
+            Sha384::new().check_additional_bytes(Sha384::MAX_MESSAGE_BYTES),
+            Ok(())
+        );
+        assert_eq!(
+            Sha384::new().check_additional_bytes(Sha384::MAX_MESSAGE_BYTES + 1),
+            Err(Sha384Error::MessageTooLong)
+        );
+        assert_eq!(
+            Sha512::new().check_additional_bytes(Sha512::MAX_MESSAGE_BYTES),
+            Ok(())
+        );
+        assert_eq!(
+            Sha512::new().check_additional_bytes(Sha512::MAX_MESSAGE_BYTES + 1),
+            Err(Sha512Error::MessageTooLong)
+        );
     }
 }
 
@@ -158,6 +223,10 @@ mod proofs {
         },
         sha256::checked_message_length,
         sha256::padding_block_count,
+        sha512_state::{
+            MAX_MESSAGE_BYTES, checked_message_length as checked_sha512_length,
+            padding_block_count as sha512_padding_block_count,
+        },
     };
 
     #[kani::proof]
@@ -202,5 +271,27 @@ mod proofs {
         let blocks = padding_block_count(buffered);
         assert!(blocks == 1 || blocks == 2);
         assert_eq!(blocks == 1, buffered <= 55);
+    }
+
+    #[kani::proof]
+    fn sha512_family_checked_length_matches_fips_byte_domain() {
+        let current: u128 = kani::any();
+        let additional: u128 = kani::any();
+        let result = checked_sha512_length(current, additional);
+        match current.checked_add(additional) {
+            Some(total) if total <= MAX_MESSAGE_BYTES => {
+                assert!(matches!(result, Ok(value) if value == total));
+            }
+            _ => assert!(result.is_err()),
+        }
+    }
+
+    #[kani::proof]
+    fn sha512_family_padding_uses_one_or_two_blocks_at_exact_boundary() {
+        let buffered: usize = kani::any();
+        kani::assume(buffered < 128);
+        let blocks = sha512_padding_block_count(buffered);
+        assert!(blocks == 1 || blocks == 2);
+        assert_eq!(blocks == 1, buffered <= 111);
     }
 }

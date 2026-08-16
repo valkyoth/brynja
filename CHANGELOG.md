@@ -7,6 +7,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add complete allocation-free `no_std` SHA-384 and SHA-512 over one private
+  80-round `u64` compression owner and one private 128-byte buffered state,
+  with exact distinct FIPS 180-4 IVs, 48-byte/64-byte digests, checked `u128`
+  message domains, transactional streaming, consuming finalization, one-shot
+  functions, common traits, and facade reexports.
+- Verify SHA-384 and SHA-512 with NIST CAVP short and Monte Carlo vectors,
+  FIPS long and million-byte examples, independently generated critical
+  padding boundaries, every two-part split, every fixed chunk width, exact
+  exhaustion and padding proofs, Miri, AddressSanitizer, and adversarial
+  reviewed-source policy; explicitly reject the false truncated-SHA-512 model
+  for SHA-384.
+- Record both algorithms as implemented but not independently reviewed or FIPS
+  140-3 validated; preserve ordinary-state remanence and absent-acceleration
+  restrictions and select zero crates.io packages for internal v0.23.1.
 - Record the exceptional v0.23.0 repository-owner SHA-224 assessment and
   retest of exact signed implementation candidate
   `8877bda1e697db98e77637d82bdc0d0d6ecad237` as `PASS`/`PASS` with zero open

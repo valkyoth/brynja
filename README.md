@@ -40,6 +40,55 @@ companion-adapter exceptions follow explicit admission and isolation policy.
 > described below; a tag without a matching committed pentest report was not a
 > scheduled pentest checkpoint.
 
+## Cryptography Verification Status
+
+These tables track concrete public capabilities, not internal crate names or
+reserved architecture. A capability is listed as implemented only after its
+complete public API and final downstream usability-acceptance milestone pass.
+SHA-256 appears below only after its complete v0.22.3 public acceptance, rather
+than when an internal module or partial implementation first existed. The
+broader crate-level audit inventory remains available in the
+[component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
+
+✅ Implemented means the named capability has a documented, consumer-usable
+public API and passed the repository's required acceptance evidence. It does
+not mean independently verified. Independent status moves from ❌ to ✅ only
+when a named independent reviewer signs off and linked evidence identifies the
+reviewed implementation. The project's own tests, CI, Kani, Miri, sanitizers,
+fuzzing, differential testing, and pentests do not by themselves constitute
+independent cryptographic or protocol verification.
+
+### Hash Functions
+
+| Hash | Implemented | Independently verified |
+| --- | --- | --- |
+| SHA-256 | ✅ Implemented | ❌ Not independently verified |
+
+### Protocol And PKI Building Blocks
+
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |
+| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |
+
+### Security Foundations
+
+| Capability | Implemented | Independently verified |
+| --- | --- | --- |
+| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |
+| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | ❌ Not independently verified |
+
+### Official Validation
+
+FIPS validation is a separate official claim from implementation and
+independent source review.
+Brynja has no FIPS 140-3 validation, certificate, validated module, approved
+security policy, or certificate-bound operational-environment claim.
+
+| Validation scope | Implemented | Officially validated |
+| --- | --- | --- |
+| FIPS 140-3 cryptographic module | ❌ Not implemented | ❌ Not FIPS validated |
+
 ## Project Direction
 
 The roadmap through `1.0.0` implements complete modern TLS, DTLS, QUIC-TLS
@@ -573,55 +622,6 @@ selected set in dependency order and publishes the facade last.
   proves complete lifecycle and bidirectional mapping across the foundation,
   cryptography, encoding, PKIX, TLS, DTLS, QUIC-TLS, optional, HPKE, ECH,
   entropy, legacy, operational, and residual domains before implementation.
-
-## Cryptography Verification Status
-
-These tables track concrete public capabilities, not internal crate names or
-reserved architecture. A capability is listed as implemented only after its
-complete public API and final downstream usability-acceptance milestone pass.
-SHA-256 appears below only after its complete v0.22.3 public acceptance, rather
-than when an internal module or partial implementation first existed. The
-broader crate-level audit inventory remains available in the
-[component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
-
-✅ Implemented means the named capability has a documented, consumer-usable
-public API and passed the repository's required acceptance evidence. It does
-not mean independently verified. Independent status moves from ❌ to ✅ only
-when a named independent reviewer signs off and linked evidence identifies the
-reviewed implementation. The project's own tests, CI, Kani, Miri, sanitizers,
-fuzzing, differential testing, and pentests do not by themselves constitute
-independent cryptographic or protocol verification.
-
-### Hash Functions
-
-| Hash | Implemented | Independently verified |
-| --- | --- | --- |
-| SHA-256 | ✅ Implemented | ❌ Not independently verified |
-
-### Protocol And PKI Building Blocks
-
-| Capability | Implemented | Independently verified |
-| --- | --- | --- |
-| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |
-| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |
-
-### Security Foundations
-
-| Capability | Implemented | Independently verified |
-| --- | --- | --- |
-| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |
-| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | ❌ Not independently verified |
-
-### Official Validation
-
-FIPS validation is a separate official claim from implementation and
-independent source review.
-Brynja has no FIPS 140-3 validation, certificate, validated module, approved
-security policy, or certificate-bound operational-environment claim.
-
-| Validation scope | Implemented | Officially validated |
-| --- | --- | --- |
-| FIPS 140-3 cryptographic module | ❌ Not implemented | ❌ Not FIPS validated |
 
 ## Workspace
 

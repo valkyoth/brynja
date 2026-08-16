@@ -23,6 +23,10 @@ usable public API through both `brynja-hash-sha2` and `brynja-crypto`.
   consumer entirely offline against those package artifacts.
 - Run the acceptance fixture across Rust 1.90.0 through 1.97.1, hosted CI
   systems, and the promised bare-metal compile matrix.
+- Refresh Miri and Rust sanitizer evidence to latest available
+  `nightly-2026-08-16` at exact Rust revision
+  `67854e511de21d881bb16426996cd4259d44aa2e` after the final online freshness
+  check.
 
 ## Negative acceptance
 

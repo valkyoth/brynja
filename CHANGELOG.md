@@ -7,6 +7,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Refresh the Miri and Rust sanitizer evidence toolchain to the latest
+  available `nightly-2026-08-16` at exact Rust revision
+  `67854e511de21d881bb16426996cd4259d44aa2e`, regenerate deterministic
+  assurance evidence, and rerun both dynamic-analysis gates before v0.22.3.
 - Record the voluntary v0.22.3 repository-owner assessment and retest through
   exact signed implementation and CI-correction candidate
   `399c9e7c5092d755dfbc22a3adf5500f85a8877e` as `PASS`/`PASS` with zero open

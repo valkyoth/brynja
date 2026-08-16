@@ -2275,13 +2275,18 @@ Implementation notes:
 - AArch64 `sha3` SHA-512 instructions and RV64 Zknh SHA-512 instructions now
   provide separately KAT-gated static candidates for SHA-384, SHA-512,
   SHA-512/224, and SHA-512/256. Forced QEMU differential and compiler-endpoint
-  emitted-code evidence passes; qualifying native evidence remains pending.
+  emitted-code evidence passes. Exact-commit M2 and AWS Arm native correctness
+  and emitted-code observations pass; the registered RISC-V host lacks the
+  required ISA and remains QEMU-only.
 - x86_64 SHA-512 is recorded as scalar-only because no single-stream kernel is
   admitted. AVX2 or AVX-512 availability alone is not a correctness,
   performance, or admission claim.
-- The new low-level cryptographic kernels trigger an exceptional pentest. The
-  milestone selects zero crates.io packages and cannot be tagged until its
-  report, native-evidence disposition, full gate, GitHub, and CodeQL are green.
+- The new low-level cryptographic kernels triggered an exceptional pentest,
+  which records `PASS`/`PASS` with zero open findings. The native disposition
+  retains five unadmitted candidates pending authenticated provenance,
+  performance, migration and side-channel evidence. The milestone selects
+  zero crates.io packages and cannot be tagged until its report commit, full
+  gate, GitHub, and CodeQL are green.
 
 ### v0.23.4 - Complete SHA-2 Public API Usability Acceptance
 

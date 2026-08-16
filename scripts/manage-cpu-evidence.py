@@ -206,7 +206,7 @@ def initialize(connection: sqlite3.Connection, repository: str, state: Path) -> 
 
 def job(connection: sqlite3.Connection, lane: str) -> sqlite3.Row:
     if lane not in LANES:
-        raise ManagerError("unknown v0.22.2 CPU evidence lane")
+        raise ManagerError("unknown registered CPU evidence lane")
     row = connection.execute("SELECT * FROM jobs WHERE lane=?", (lane,)).fetchone()
     if row is None:
         raise ManagerError("CPU evidence session has no matching lane")

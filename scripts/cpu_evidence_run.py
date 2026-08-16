@@ -125,7 +125,7 @@ def validate_bundle(directory: Path) -> dict[str, str]:
         fail("candidate timestamp is invalid")
     lane = manifest["lane"]
     if lane not in LANES:
-        fail("candidate lane is outside v0.22.2")
+        fail("candidate lane is outside the registered evidence lanes")
     backend, architecture, operating_system = LANES[lane]
     if (manifest["backend"], manifest["architecture"], manifest["os"]) != (
         backend,

@@ -13,7 +13,7 @@ POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
-EXPECTED_POLICY_SHA256 = "2e08f2af700717faaf552fbe16a4397bad00450f8bbd9cb9d2024a5cdcef6aa6"
+EXPECTED_POLICY_SHA256 = "3ac7f1c95f8fd479e8247177f423f41daf0ba67b414e472ef4ef146c0cf82de4"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -41,7 +41,7 @@ BACKENDS = {
     "x86-sha": (
         "X86Sha", "x86_64", "src/x86_sha.rs", ("sha",),
         ("x86_64", "sha-usable-on-current-logical-cpu"),
-        "implemented-unadmitted-native-evidence-pending",
+        "implemented-unadmitted-native-correctness-observed",
     ),
     "x86-sha512-scalar": (
         "ScalarOnlySha512", "x86_64", "absent", (),
@@ -65,12 +65,12 @@ BACKENDS = {
     "aarch64-sha2": (
         "Aarch64Sha2", "aarch64", "src/aarch64_sha2.rs", ("neon", "sha2"),
         ("aarch64", "neon-and-sha2-usable-on-current-logical-cpu"),
-        "implemented-unadmitted-native-evidence-pending",
+        "implemented-unadmitted-native-correctness-observed",
     ),
     "aarch64-sha512": (
         "Aarch64Sha512", "aarch64", "src/aarch64_sha2.rs", ("neon", "sha3"),
         ("aarch64", "neon-and-sha3-usable-on-current-logical-cpu"),
-        "implemented-unadmitted-native-evidence-pending",
+        "implemented-unadmitted-native-correctness-observed",
     ),
     "aarch64-aes-gcm": (
         "Aarch64AesGcm", "aarch64", "src/aarch64_aes_gcm.rs",
@@ -86,12 +86,12 @@ BACKENDS = {
     "riscv-scalar-crypto": (
         "RiscVScalarCrypto", "riscv", "src/riscv64_zknh.rs", ("zknh",),
         ("riscv64", "zknh-usable-on-current-hart"),
-        "implemented-unadmitted-native-evidence-pending",
+        "implemented-unadmitted-native-isa-unavailable",
     ),
     "riscv-sha512": (
         "RiscVScalarCrypto", "riscv", "src/riscv64_zknh.rs", ("zknh",),
         ("riscv64", "zknh-usable-on-current-hart"),
-        "implemented-unadmitted-native-evidence-pending",
+        "implemented-unadmitted-native-isa-unavailable",
     ),
 }
 BACKEND_KEYS = {

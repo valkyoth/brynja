@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 implementation complete and awaiting exceptional pentest and native evidence
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 final candidate with exceptional pentest PASS and native disposition complete, awaiting hosted verification
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -154,11 +154,13 @@ and irregular chunking under AArch64 and RISC-V QEMU, and compiler-endpoint
 assembly contains the required SHA-512 instructions. The std adapter reports
 unadmitted AArch64 capability and retains scalar fallback. x86_64 SHA-512 is
 an explicit scalar-only decision; AVX2 and AVX-512 do not imply admission.
-All five candidates remain unadmitted; native SHA-512-family performance,
-migration and side-channel evidence remains pending. The new low-level code
-requires an exceptional pentest before the internal tag, selects zero
-crates.io packages, and makes no independent-review, register-erasure, or
-FIPS-validation claim.
+All five candidates remain unadmitted. Exact-commit native correctness and
+emitted-code observations pass on local AMD, observed-feature AWS Intel,
+Apple M2, and AWS Arm; the registered RISC-V host remains non-qualifying and
+QEMU-only. Authenticated provenance, performance, migration and side-channel
+evidence remains pending. The exceptional assessment records `PASS`/`PASS`
+with zero open findings. The milestone selects zero crates.io packages and
+makes no independent-review, register-erasure, or FIPS-validation claim.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

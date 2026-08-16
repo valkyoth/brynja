@@ -7,6 +7,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Record the exceptional v0.23.3 assessment as `PASS`/`PASS` with zero open
+  findings and bind the final unadmitted disposition to exact-commit native
+  AMD, Intel, Apple M2 and AWS Arm observations; retain RISC-V as a
+  non-qualifying QEMU/codegen-only lane and preserve every authenticated-
+  provenance, migration, performance, side-channel, independent-review,
+  erasure and FIPS restriction.
 - Extend the opt-in CPU surface across all six SHA-2 identities: SHA-224
   reuses the exact SHA-256-family kernels, while new static direct-KAT
   AArch64 SHA-512 and RV64 Zknh SHA-512 candidates serve SHA-384, SHA-512,

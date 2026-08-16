@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 implementation complete and awaiting exceptional pentest and native evidence
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 final candidate with exceptional pentest PASS and native disposition complete, awaiting hosted verification
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.23.3`. `brynja-hash-core 0.1.0` and
@@ -183,10 +183,12 @@ The v0.23.3 stage extends the optional CPU surface to every SHA-2 identity.
 SHA-224 reuses the three exact SHA-256-family kernels. AArch64 SHA-512 and RV64
 Zknh SHA-512 candidates serve all four 64-bit family identities behind static,
 thread-bound, direct-KAT sessions; forced AArch64 and RISC-V QEMU differential
-and emitted-code checks pass. x86_64 SHA-512 remains an explicit scalar-only
-decision, and all five candidates remain unadmitted pending qualifying native
-performance, migration and side-channel evidence. New low-level code requires
-an exceptional pentest and the internal tag selects no crates.io packages.
+and emitted-code checks pass. Exact-commit native correctness passes on local
+AMD, observed-feature AWS Intel, Apple M2 and AWS Arm; the non-qualifying
+RISC-V lane remains QEMU-only. x86_64 SHA-512 remains an explicit scalar-only
+decision, and all five candidates remain unadmitted pending authenticated,
+performance, migration and side-channel evidence. The exceptional pentest
+records `PASS`/`PASS`, and the internal tag selects no crates.io packages.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

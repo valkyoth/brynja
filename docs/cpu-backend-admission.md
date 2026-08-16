@@ -1,6 +1,6 @@
 # Native CPU Backend Evidence And Admission
 
-Status: v0.22.2 has three implemented SHA-256 candidates; zero backend admissions
+Status: v0.23.3 has five implemented SHA-2 candidates; zero backend admissions
 
 ## Purpose
 
@@ -11,9 +11,10 @@ created that admission route before any cryptographic ISA kernel existed.
 
 The machine-readable policy is
 `assurance/cpu-evidence-policy.toml`. The current decision register is
-`security/cpu-backend-admissions.toml`. Versions 0.22.1 and 0.22.2 implement
-the `x86-sha`, `aarch64-sha2`, and `riscv-scalar-crypto` SHA-256 candidates;
-all eight registered identities remain
+`security/cpu-backend-admissions.toml`. Versions 0.22.1 through 0.23.3
+implement the `x86-sha`, `aarch64-sha2`, `aarch64-sha512`,
+`riscv-scalar-crypto`, and `riscv-sha512` SHA-2 candidates; all ten registered
+identities remain
 `unadmitted`. The generated
 `assurance/cpu-evidence-ledger.json` binds those decisions, registered lanes,
 harnesses, and future evidence manifests reproducibly.
@@ -34,12 +35,15 @@ AMD, Intel, Apple, and QEMU lanes bind exact vendor identifiers; the other
 native lanes still require a nonempty directly observed vendor identity. The
 manifest's logical-CPU identity hash is deterministically derived from all CPU,
 firmware, feature, state, and logical-CPU fields so model substitution cannot
-retain the earlier identity. The AWS Intel lane is currently marked unavailable. That is an ordinary
-unadmitted result, not a reason to block scalar builds or infer Intel support.
+retain the earlier identity. The AWS Intel lane supplied an observed-feature
+SHA-224/SHA-256 execution; that observation is not admission and makes no
+SHA-512 acceleration claim.
 The RISC-V lane has a sanitized capability preflight recorded in
 `docs/riscv-native-host-inventory.md`: all harts lack `Zknh`, `Zvknha`, and
 `Zvknhb`, so no candidate was executed and the lane is ineligible for SHA-2
-acceleration evidence. The remaining lanes are registered but unmeasured.
+acceleration evidence. The AMD, Intel, Apple M2, and AWS Arm lanes supplied
+non-authorizing native candidate observations at the reviewed v0.23.3 source
+commit.
 Product names never substitute for direct CPU, microcode or firmware, feature,
 operating-state, compiler, OS, clock, frequency, isolation, and logical-CPU
 evidence.
@@ -165,7 +169,7 @@ independent review, and every v0.13.3 gate.
 
 ## Detached Native Candidate Runs
 
-The v0.22.2 runner applies the operational controls already proven useful in
+The candidate runner applies the operational controls already proven useful in
 `base64-ng` without copying its fuzz-specific targets. It creates a persistent
 local session bound to one clean commit and tree. Local and SSH workers run in
 detached sessions, and remote workers clone and check out that exact commit
@@ -215,8 +219,10 @@ After transferring that directory back without changing it, import it with:
 python3 scripts/manage-cpu-evidence.py import apple-m2-aarch64 /path/to/apple-m2-aarch64
 ```
 
-The resulting bundles prove clean-source native candidate execution and native
-instruction emission. Their manifest says
+The resulting standard bundles prove clean-source SHA-256-family candidate
+execution and native instruction emission. Supplemental exact-commit test and
+assembly transcripts cover the SHA-512-family candidates on Apple M2 and AWS
+Arm. Their manifest says
 `authority=non-authorizing-native-candidate-observation`; they deliberately do
 not satisfy the authenticated benchmark, side-channel, or admission schema.
 

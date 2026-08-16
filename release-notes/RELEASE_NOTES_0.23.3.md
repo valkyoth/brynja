@@ -1,6 +1,6 @@
 # Brynja 0.23.3 Release Notes
 
-Status: implementation complete; exceptional pentest and native evidence pending; internal development tag; no crates.io publication
+Status: final candidate; exceptional pentest PASS and native disposition complete; hosted verification and internal tag pending; no crates.io publication
 
 Brynja 0.23.3 extends its optional CPU boundary across all six complete SHA-2
 algorithm identities while keeping portable scalar behavior authoritative.
@@ -33,6 +33,10 @@ algorithm identities while keeping portable scalar behavior authoritative.
 - Exact hash-bound CPU source inventory, five candidate identities, zero
   admitted backends, one x86 scalar-only decision, and adversarial policy
   fixtures.
+- Exact-commit native candidate observations on local AMD, observed-feature
+  AWS Intel, Apple M2 and AWS Arm. Both Arm lanes execute every SHA-2 identity
+  and emit SHA-512 instructions; the registered RISC-V host remains
+  non-qualifying and QEMU-only.
 
 QEMU and compiler output are supplemental evidence. Qualifying native
 SHA-512-family correctness, performance, CPU-migration, and side-channel
@@ -53,6 +57,8 @@ stack, cache, timing, independent-review, or FIPS 140-3 validation claim.
 
 Version 0.23.3 is an internal milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. The new low-level
-cryptographic kernels trigger an exceptional pentest. After that assessment,
-the remaining native-evidence disposition, full local gate, hosted GitHub, and
-CodeQL must be green before explicit tag authorization.
+cryptographic kernels triggered an exceptional pentest. The assessment of
+exact signed candidate `61d8e829b54a1ac87d38c6bc4509e4e7a43e3ef0`
+records `PASS`/`PASS` with zero open findings. Its native disposition keeps all
+five candidates unadmitted. The full local gate, hosted GitHub, and CodeQL must
+be green before explicit tag authorization.

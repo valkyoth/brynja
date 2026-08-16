@@ -1,6 +1,6 @@
 # RISC-V Native Host Inventory
 
-Status: observed 2026-08-14; capability inventory only, not backend-admission
+Status: observed 2026-08-14 and rechecked 2026-08-16 for v0.23.3; capability inventory only, not backend-admission
 evidence
 
 This document records the sanitized capabilities of Brynja's registered
@@ -64,7 +64,7 @@ cryptographic extensions appears in any observed hart ISA string.
 | Generic vector and embedded-vector operations | `V`, `Zve*`, `Zvfh*` present | Potential future non-crypto/vectorized work requires its own stable-Rust, ABI, state, and side-channel review |
 | Scalar bit manipulation | `Zba`, `Zbb`, `Zbc`, `Zbs` present | Potential focused arithmetic and carry-less-multiply experiments; not an algorithm admission |
 | Data-independent execution-latency contracts | `Zkt` and `Zvkt` present | ISA declarations only; they do not implement a cipher or replace emitted-code and timing evidence |
-| SHA-256/SHA-512 scalar acceleration | `Zknh` absent | The v0.22.2 RV64 SHA-256 candidate cannot execute natively on this lane |
+| SHA-256/SHA-512 scalar acceleration | `Zknh` absent | The v0.23.3 RV64 SHA-256-family and SHA-512-family candidates cannot execute natively on this lane |
 | SHA-2 vector acceleration | `Zvknha` and `Zvknhb` absent | Vector SHA remains QEMU/codegen-only here |
 | AES scalar/vector acceleration | `Zkne`, `Zknd`, and `Zvkned` absent | This lane cannot qualify future AES instruction backends |
 | Vector GCM acceleration | `Zvkg` absent | Generic `Zbc` must not be represented as vector GCM support |
@@ -72,11 +72,11 @@ cryptographic extensions appears in any observed hart ISA string.
 | Architectural entropy source | `Zkr` absent | This lane supplies no RISC-V architectural entropy-source evidence |
 | Cache-block zero | `Zicboz` present | Useful capability metadata only; it provides no secret, register, spill, cache, or stack erasure guarantee |
 
-## v0.22.2 Disposition
+## v0.22.2 And v0.23.3 Disposition
 
-The v0.22.2 native preflight stopped before cloning, compilation, or candidate
+The v0.22.2 native preflight and v0.23.3 recheck stopped before candidate
 execution because exact `Zknh` was absent. Installing another compiler cannot
-create a missing CPU instruction. For this milestone, RV64 Zknh correctness is
+create a missing CPU instruction. RV64 Zknh SHA-256 and SHA-512 correctness is
 therefore supported only by endpoint code generation and supplemental QEMU
 differential execution. Those results do not establish native performance,
 side-channel behavior, migration safety, authenticated provenance, independent

@@ -489,7 +489,9 @@ output remain separate. AArch64 SHA-512 and RV64 Zknh SHA-512 candidates reuse
 only the private 64-bit schedule and accept exact 128-byte blocks. Forced
 QEMU differential tests cover all four SHA-512-family identities, critical
 padding boundaries and irregular chunking, while emitted-code checks require
-the intended instructions. x86_64 SHA-512 remains scalar-only rather than
+the intended instructions. Exact-commit native correctness and emitted-code
+observations also pass on M2 and AWS Arm; AMD and observed-feature AWS Intel
+pass the SHA-256-family routes. x86_64 SHA-512 remains scalar-only rather than
 treating AVX2 or AVX-512 presence as evidence. All five candidates remain
 unadmitted: emulator results, target-feature compilation, performance on a
 different CPU, or a healthy KAT cannot authorize ordinary execution. Native

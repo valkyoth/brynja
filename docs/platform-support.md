@@ -34,7 +34,10 @@ Version 0.13.3 binds these lanes, three supplemental QEMU routes, exact
 provenance fields, raw-artifact hashes, 90-day freshness, noise and
 benchmark-order limits, and code-size, cold-start, latency, throughput, and
 side-channel gates in `assurance/cpu-evidence-policy.toml`. All lanes remain
-unmeasured or unavailable and all eight backends remain unadmitted.
+non-authorizing or unavailable and all ten admission-register backends remain
+unadmitted. Exact-commit v0.23.3 correctness observations passed on local AMD,
+observed-feature AWS Intel, Apple M2, and AWS Arm; the RISC-V host remains a
+non-qualifying negative-feature lane.
 
 Compilation is not a complete support claim. Production support later requires
 native interoperability, entropy/time integration, lifecycle tests, packaging,

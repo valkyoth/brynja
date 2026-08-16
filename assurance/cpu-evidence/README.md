@@ -1,10 +1,12 @@
 # CPU Backend Evidence Records
 
 This directory accepts committed, reproducible evidence for exact backend
-candidates. Versions 0.22.1 and 0.22.2 implement x86 SHA, AArch64 SHA2, and
-RV64 Zknh SHA-256 candidates but intentionally contain no `manifest.toml`: no candidate
-has authenticated complete native evidence, and every backend remains
-unadmitted.
+candidates. Versions 0.22.1 through 0.23.3 implement x86 SHA, AArch64 SHA2,
+AArch64 SHA-512, and RV64 Zknh SHA-256/SHA-512 candidates but intentionally
+contain no `manifest.toml`: no candidate has authenticated complete native
+evidence, and every backend remains unadmitted. The private v0.23.3 native
+candidate bundles are non-authorizing observations and are not formal records
+in this directory.
 
 Each future run occupies one directory:
 

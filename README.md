@@ -171,9 +171,9 @@ AVX-512 exists.
 
 All five instruction kernels are implemented but deliberately unadmitted.
 Private commit-bound correctness and emitted-code observations passed on local
-AMD, observed-feature AWS Intel, Apple M2, and AWS Arm for SHA-256, while the
-new SHA-512-family candidates currently have cross-compiled and QEMU
-differential evidence only. All observations remain non-authorizing.
+AMD, observed-feature AWS Intel, Apple M2, and AWS Arm. The two Arm lanes ran
+all six identities and emitted native SHA-512 instructions; x86_64 retained
+its reviewed scalar-only SHA-512 decision. All observations remain non-authorizing.
 Authenticated runner, CPU-migration, native performance, side-channel, and
 final-admission evidence remains incomplete. A sanitized
 preflight of the registered RISC-V lane found generic RV64 vector and

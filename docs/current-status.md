@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.1 signed; v0.23.2 implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.1 signed; v0.23.2 pentest PASS and awaiting hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -137,10 +137,13 @@ XOR mask and ASCII identities and proves that both outputs equal the normative
 IV constants used by public constructors. NIST CAVP short, 1,816-bit long, and
 Monte Carlo vectors, million-byte cases, every critical padding boundary,
 every two-part split and fixed chunk width, exhaustion checks, and negative
-ordinary-SHA-512 truncation tests pass. The new algorithm identities require an
-exceptional pentest and select zero crates.io packages. Ordinary-state erasure,
-complete-family acceleration, independent review, and FIPS 140-3 validation
-remain absent.
+ordinary-SHA-512 truncation tests pass. The new algorithm identities select
+zero crates.io packages. The repository-owner assessment of exact candidate
+`0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` found no vulnerability, required
+no remediation, and records `PASS`/`PASS` with zero open findings. The
+committed report candidate must now pass hosted GitHub and CodeQL before the
+tag is authorized. Ordinary-state erasure, complete-family acceleration,
+independent review, and FIPS 140-3 validation remain absent.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

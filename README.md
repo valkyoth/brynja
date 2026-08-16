@@ -165,7 +165,11 @@ exact SHA-512/t derivation procedure and are not ordinary SHA-512 IVs; neither
 algorithm is modeled as naive truncation of SHA-512. NIST CAVP short, long,
 Monte Carlo, million-byte, padding-boundary, split, chunking, exhaustion, and
 public-trait evidence pass for both algorithms. All six SHA-2 identities remain
-unkeyed, not independently verified, and not FIPS 140-3 validated.
+unkeyed, not independently verified, and not FIPS 140-3 validated. The
+repository-owner assessment of exact implementation candidate
+`0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` passed with `PASS`/`PASS`, zero
+open findings, and no remediation. The committed report candidate now awaits
+hosted GitHub and CodeQL before the signed internal tag.
 
 All three kernels are implemented but deliberately unadmitted. Private
 commit-bound correctness and emitted-code observations passed on local AMD,

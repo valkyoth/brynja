@@ -1,6 +1,6 @@
 # Brynja 0.23.2 Release Notes
 
-Status: implementation complete; exceptional pentest required; internal development tag; no crates.io publication
+Status: exceptional pentest PASS; awaiting hosted GitHub and CodeQL; internal development tag; no crates.io publication
 
 Brynja 0.23.2 completes the portable FIPS 180-4 SHA-2 family with distinct
 SHA-512/224 and SHA-512/256 implementations. Both are directly usable through
@@ -60,7 +60,9 @@ specified by FIPS 180-4 is not FIPS 140-3 module validation.
 Version 0.23.2 is an internal milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. Adding two named
 first-party cryptographic algorithms and their IV-derivation boundary triggers
-an exceptional pentest before the tag. After the committed report and any
-required remediation retest pass, the exact report commit must pass the full
-local gate plus hosted GitHub and CodeQL checks before explicit tag
-authorization.
+an exceptional pentest before the tag. The repository-owner assessment of
+exact implementation candidate
+`0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` reported no finding and required no
+remediation. Its permanent report records `PASS`/`PASS` with zero open
+findings. The exact report commit must pass the full local gate plus hosted
+GitHub and CodeQL checks before explicit tag authorization.

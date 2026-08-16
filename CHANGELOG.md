@@ -7,6 +7,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Record the exceptional v0.23.2 repository-owner SHA-512/224 and SHA-512/256
+  assessment of exact signed implementation candidate
+  `0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` as `PASS`/`PASS` with zero open
+  findings and no remediation; retain ordinary-state erasure, complete-family
+  acceleration, packaged acceptance, independent-review, FIPS, zero-
+  publication, and scheduled v0.25.0 cumulative-review restrictions.
 - Add complete allocation-free `no_std` SHA-512/224 and SHA-512/256 as
   separately typed one-shot, streaming, digest, error, and facade APIs over the
   reviewed SHA-512-family state.

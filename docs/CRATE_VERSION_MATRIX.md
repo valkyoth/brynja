@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.1 signed; v0.23.2 implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.1 signed; v0.23.2 pentest PASS and awaiting hosted checks
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.23.2`. `brynja-hash-core 0.1.0` and
@@ -171,10 +171,12 @@ The v0.23.2 stage completes portable SHA-512/224 and SHA-512/256 as distinct
 named algorithms over the shared SHA-512-family foundation. Exact FIPS
 SHA-512/t IV derivation is executable and bound to the normative constants;
 official short, long, Monte Carlo, million-byte, padding, partition,
-exhaustion, trait, and negative ordinary-truncation evidence passes. It
-requires an exceptional new-algorithm pentest, selects no crates.io
-publication, and makes no independent-review, state-erasure, acceleration, or
-FIPS-validation claim.
+exhaustion, trait, and negative ordinary-truncation evidence passes. It selects
+no crates.io publication and makes no independent-review, state-erasure,
+acceleration, or FIPS-validation claim. Its repository-owner assessment of
+exact candidate `0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` reported no finding
+and required no remediation. The permanent report records `PASS`/`PASS` with
+zero open findings; the milestone now awaits hosted GitHub and CodeQL.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

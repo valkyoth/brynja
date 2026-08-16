@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.1 signed; v0.23.2 pentest PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 implementation complete and awaiting exceptional pentest and native evidence
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.23.2`. `brynja-hash-core 0.1.0` and
+advances to internal `0.23.3`. `brynja-hash-core 0.1.0` and
 `brynja-hash-sha2 0.1.0` retain the reusable interface and complete portable
 six-algorithm FIPS 180-4 SHA-2 implementation while retaining an optional CPU session edge. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
@@ -176,17 +176,27 @@ no crates.io publication and makes no independent-review, state-erasure,
 acceleration, or FIPS-validation claim. Its repository-owner assessment of
 exact candidate `0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` reported no finding
 and required no remediation. The permanent report records `PASS`/`PASS` with
-zero open findings; the milestone now awaits hosted GitHub and CodeQL.
+zero open findings; hosted GitHub and CodeQL passed and the milestone is
+signed.
+
+The v0.23.3 stage extends the optional CPU surface to every SHA-2 identity.
+SHA-224 reuses the three exact SHA-256-family kernels. AArch64 SHA-512 and RV64
+Zknh SHA-512 candidates serve all four 64-bit family identities behind static,
+thread-bound, direct-KAT sessions; forced AArch64 and RISC-V QEMU differential
+and emitted-code checks pass. x86_64 SHA-512 remains an explicit scalar-only
+decision, and all five candidates remain unadmitted pending qualifying native
+performance, migration and side-channel evidence. New low-level code requires
+an exceptional pentest and the internal tag selects no crates.io packages.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.23.2` | no | Internal facade milestone; v0.20.0 is published |
+| `brynja` | `0.23.3` | no | Internal facade milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | New unpublished allocation-free fixed-output hash interfaces |
-| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable six-algorithm FIPS 180-4 SHA-2 APIs; CPU candidates remain unadmitted |
+| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable six-algorithm FIPS 180-4 SHA-2 APIs plus forced candidate routes; CPU candidates remain unadmitted |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports all six exact SHA-2 leaf implementations |
-| `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; unpublished x86_64 SHA, AArch64 SHA2, and RV64 Zknh candidates remain unadmitted |
-| `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished opt-in x86/AArch64 detector falls back or fails closed; RISC-V auto-detection is disabled |
+| `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five unpublished SHA-2 candidates remain unadmitted and x86 SHA-512 remains scalar-only |
+| `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |
 | `brynja-protocol` | `0.1.0` | no | Published shared TLS/DTLS record-envelope boundary |
 | `brynja-platform`, `brynja-tls13-handshake`, `brynja-tls12`, `brynja-tls13`, `brynja-tls`, `brynja-dtls`, `brynja-quic-tls` | `0.1.8` | no | Published versions retained; README metadata only |

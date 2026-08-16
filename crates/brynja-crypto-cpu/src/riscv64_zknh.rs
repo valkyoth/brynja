@@ -3,6 +3,7 @@
 use core::arch::asm;
 
 use crate::sha256_schedule::ROUND_CONSTANTS;
+use crate::sha512_schedule::{ROUND_CONSTANTS as ROUND_CONSTANTS_512, expanded as expanded512};
 
 pub(crate) fn compress(state: &mut [u32; 8], block: &[u8; 64]) {
     // SAFETY: The only safe caller holds a thread-bound session whose direct
@@ -114,4 +115,72 @@ fn sum1(value: u32) -> u32 {
             output = lateout(reg) output, options(pure, nomem, nostack));
     }
     output as u32
+}
+
+pub(crate) fn compress512(state: &mut [u64; 8], block: &[u8; 128]) {
+    // SAFETY: Static Zknh proof gates this function and the caller's direct KAT
+    // executes it before caller data. Instructions use registers only; Rust
+    // retains exclusive ownership of both exact-size arrays.
+    unsafe { compress_zknh512(state, block) }
+}
+
+#[target_feature(enable = "zknh")]
+unsafe fn compress_zknh512(state: &mut [u64; 8], block: &[u8; 128]) {
+    let schedule = expanded512(block);
+    let [mut a, mut b, mut c, mut d, mut e, mut f, mut g, mut h] = *state;
+    let saved = *state;
+
+    for (word, constant) in schedule.iter().zip(ROUND_CONSTANTS_512.iter()) {
+        let choice = (e & f) ^ ((!e) & g);
+        let majority = (a & b) ^ (a & c) ^ (b & c);
+        let first = h
+            .wrapping_add(sum1_512(e))
+            .wrapping_add(choice)
+            .wrapping_add(*constant)
+            .wrapping_add(*word);
+        let second = sum0_512(a).wrapping_add(majority);
+        h = g;
+        g = f;
+        f = e;
+        e = d.wrapping_add(first);
+        d = c;
+        c = b;
+        b = a;
+        a = first.wrapping_add(second);
+    }
+
+    *state = [
+        saved[0].wrapping_add(a),
+        saved[1].wrapping_add(b),
+        saved[2].wrapping_add(c),
+        saved[3].wrapping_add(d),
+        saved[4].wrapping_add(e),
+        saved[5].wrapping_add(f),
+        saved[6].wrapping_add(g),
+        saved[7].wrapping_add(h),
+    ];
+}
+
+#[inline(always)]
+fn sum0_512(value: u64) -> u64 {
+    let output: usize;
+    // SAFETY: The private caller has established Zknh. The instruction has
+    // register-only inputs and output.
+    unsafe {
+        asm!("sha512sum0 {output}, {input}", input = in(reg) value as usize,
+            output = lateout(reg) output, options(pure, nomem, nostack));
+    }
+    output as u64
+}
+
+#[inline(always)]
+fn sum1_512(value: u64) -> u64 {
+    let output: usize;
+    // SAFETY: The private caller has established Zknh. The instruction has
+    // register-only inputs and output.
+    unsafe {
+        asm!("sha512sum1 {output}, {input}", input = in(reg) value as usize,
+            output = lateout(reg) output, options(pure, nomem, nostack));
+    }
+    output as u64
 }

@@ -8,6 +8,8 @@ import re
 import tomllib
 from pathlib import Path
 
+import sha2_reviewed_hashes
+
 CORE_LIB = Path("crates/brynja-hash-core/src/lib.rs")
 LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
 COMPRESS = Path("crates/brynja-hash-sha2/src/compress.rs")
@@ -29,6 +31,7 @@ SHA512_TEST = Path("crates/brynja-hash-sha2/tests/sha512.rs")
 SHA512_224_TEST = Path("crates/brynja-hash-sha2/tests/sha512_224.rs")
 SHA512_256_TEST = Path("crates/brynja-hash-sha2/tests/sha512_256.rs")
 ACCEL_TEST = Path("crates/brynja-hash-sha2/tests/sha256_accelerated.rs")
+SHA2_ACCEL_TEST = Path("crates/brynja-hash-sha2/tests/sha2_accelerated.rs")
 CORE_MANIFEST = Path("crates/brynja-hash-core/Cargo.toml")
 MANIFEST = Path("crates/brynja-hash-sha2/Cargo.toml")
 CRYPTO_MANIFEST = Path("crates/brynja-crypto/Cargo.toml")
@@ -49,31 +52,8 @@ SOURCES = (
     SHA512_224,
     SHA512_256,
 )
-EXPECTED_SHA256 = {
-    CORE_LIB: "4655d8df05873a89689af1250dfeab76b82ac05d165a92c99ff65565624c7827",
-    LIB: "c325647c9b2941b4c7920ab798d0dfb15e204561bcf6dba41a7f7fa4549793c1",
-    COMPRESS: "d4229f08e40392976f354eaf81f5d5cd03069d5f3c497e2cf481f65a9848e4b1",
-    DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
-    ERROR: "9657f1223bd80a8c16f93585f690a7b17dd2fe51486ccf161a962810f79cfa7e",
-    SHA224: "69cebc10d3e94cc0fd57f5b45e9de406e04e1c6f2029ce668be520dbf40d7659",
-    SHA256: "efbe3a588947e127dd0b0cecbe2b3e3b0a876a354d8d1f798052060d35ddb68d",
-    COMPRESS64: "40edca2d80e9f60db4a9ea793fe5c61f79232012fb439025539e6b50c93f812b",
-    SHA512_STATE: "658157733984dab954fd093184ed82cb435df6f44f74889835ccb9021afeaf53",
-    SHA384: "2c1f20a07f8bb45350f0a875e9f4980178c8f940b1c1264c33709f0e28e637cb",
-    SHA512: "bbf2af472f7cf8fcbad8ad78aafcf1cd94b1d764efba1172d5e6f3773c5c9991",
-    SHA512_T: "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
-    SHA512_224: "39d7b2391a03fcef727d75fc4441506140d97486bd6d92ff8bc883e4361d46d3",
-    SHA512_256: "150bf16750b0bca37ac6e7a03a7b18ae1742e3c49e50735c2dcff4cf81ecd51f",
-}
-EXPECTED_TEST_SHA256 = {
-    SHA224_TEST: "4a154a5293aa7fca5862fe1b383807998baa69b5eb5dd1ae2393b11d2c4fecb5",
-    TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
-    ACCEL_TEST: "576c89cbbca4f0f45ce88efe750bd2976c5fa547becaae9fdbff103a38f66ae1",
-    SHA384_TEST: "37bfa6cf7d73e4b4b15c6211f11bcdfeefcf8bd0ff44f5ddcd501ecf4ce0bf0e",
-    SHA512_TEST: "2f7ed01daeac2e92d53a06fda04603e8e50a5a059c13c8212d2584c0f3a168eb",
-    SHA512_224_TEST: "31e8eea07d54224200a1c6d40cf96fbb59a7d75e8f1acfb5c810977470497af9",
-    SHA512_256_TEST: "55532453913f4b507684fc19fae1ca6aaf274de5f6b52ab18d5cb736b9f41b80",
-}
+EXPECTED_SHA256 = {Path(path): digest for path, digest in sha2_reviewed_hashes.SOURCE_HASHES.items()}
+EXPECTED_TEST_SHA256 = {Path(path): digest for path, digest in sha2_reviewed_hashes.TEST_HASHES.items()}
 
 
 class Sha256PolicyError(RuntimeError):
@@ -441,6 +421,21 @@ def validate_tests(root: Path) -> None:
         "state.update_with_backend(chunk, &backend)",
     ):
         require(accelerated_text, token, "accelerated SHA-256 tests")
+    family_accelerated = root / SHA2_ACCEL_TEST
+    if not family_accelerated.is_file() or family_accelerated.is_symlink():
+        fail("accelerated SHA-2 family tests must be a regular file")
+    family_text = family_accelerated.read_text(encoding="utf-8")
+    if len(family_text.splitlines()) > 500:
+        fail("accelerated SHA-2 family tests exceed 500 lines")
+    for token in (
+        "fn sha256_family_backend_matches_both_algorithm_identities",
+        "fn sha512_family_backend_matches_all_four_algorithm_identities",
+        "Sha256BackendSession::for_compiled_target()",
+        "Sha512BackendSession::for_compiled_target()",
+        "state512_224.update_with_backend(chunk, &backend)",
+        "state512_256.finalize_with_backend(&backend)",
+    ):
+        require(family_text, token, "accelerated SHA-2 family tests")
     for relative, expected_hash in EXPECTED_TEST_SHA256.items():
         digest = hashlib.sha256((root / relative).read_bytes()).hexdigest()
         if digest != expected_hash:

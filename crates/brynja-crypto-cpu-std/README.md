@@ -25,8 +25,8 @@
 
 # brynja-crypto-cpu-std
 
-`brynja-crypto-cpu-std` is the separate opt-in host detector and SHA-256
-dispatch adapter. It uses the standard library's architecture feature macros,
+`brynja-crypto-cpu-std` is the separate opt-in host detector and SHA-2
+dispatch-reporting adapter. It uses the standard library's architecture feature macros,
 depends only on `brynja-crypto-cpu` and `brynja-hash-sha2`, and is selected
 directly by host applications. It never enters Brynja defaults, protocol
 engines, bare-metal graphs, or a FIPS validated-module artifact.
@@ -37,6 +37,12 @@ scalar SHA-256. `RuntimeSha256Backend::required()` never silently falls back.
 Reports distinguish accelerated execution from unavailable hardware,
 unadmitted candidate code, and quarantine. No global default or hidden
 initialization is installed.
+
+`RuntimeSha256Backend` also owns SHA-224 selection because both algorithms use
+the same exact compression kernel. `RuntimeSha512Backend` reports AArch64
+SHA-512 candidate availability and retains scalar SHA-384, SHA-512,
+SHA-512/224, and SHA-512/256 until admission. x86_64 SHA-512 is intentionally
+scalar, and required SHA-512-family acceleration fails closed.
 
 The x86_64, AArch64, and RV64 Zknh kernels remain unadmitted in v0.22.2 pending complete
 native evidence. This adapter detects only the stable x86_64 and AArch64
@@ -81,6 +87,7 @@ and pentesting do not by themselves constitute independent verification.
 | Component | Cryptographic scope | Independently verified |
 | --- | --- | --- |
 | SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection, explicit scalar fallback, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |
+| SHA-512-family host reporting | AArch64 NEON/SHA-512 observation, explicit scalar fallback, x86 scalar-only decision, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |
 
 Version `0.1.1`, with its exact CPU-boundary dependency update, was published
 at v0.20.0 after the cumulative pentest, remediation retest, and hosted gates

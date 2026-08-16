@@ -2,6 +2,9 @@ use brynja_hash_core::{FixedOutput, Update};
 
 use crate::{Sha224Digest, Sha224Error, compress::compress};
 
+#[cfg(feature = "cpu")]
+use brynja_crypto_cpu::{Sha256BackendError, Sha256BackendSession};
+
 const BLOCK_BYTES: usize = 64;
 const FINAL_BLOCK_PREFIX_BYTES: usize = 56;
 const INITIAL_STATE: [u32; 8] = [
@@ -56,8 +59,49 @@ impl Sha224 {
 
     /// Absorbs all input or rejects it before changing observable state.
     pub fn update(&mut self, input: &[u8]) -> Result<(), Sha224Error> {
-        let additional = u64::try_from(input.len()).map_err(|_| Sha224Error::MessageTooLong)?;
-        let new_length = checked_message_length(self.message_bytes, additional)?;
+        self.update_inner(input, |state, block| {
+            compress(state, block);
+            Ok::<(), core::convert::Infallible>(())
+        })
+        .map_err(|error| match error {
+            UpdateInnerError::MessageTooLong => Sha224Error::MessageTooLong,
+            UpdateInnerError::Compression(never) => match never {},
+        })
+    }
+
+    #[cfg(feature = "cpu")]
+    /// Absorbs all input through one tested SHA-256-family backend.
+    pub fn update_with_backend(
+        &mut self,
+        input: &[u8],
+        backend: &Sha256BackendSession,
+    ) -> Result<(), Sha224AcceleratedError> {
+        backend
+            .ensure_healthy()
+            .map_err(Sha224AcceleratedError::from_backend)?;
+        self.update_inner(input, |state, block| {
+            backend
+                .compress(state, block)
+                .map_err(Sha224AcceleratedError::from_backend)
+        })
+        .map_err(|error| match error {
+            UpdateInnerError::MessageTooLong => Sha224AcceleratedError::MessageTooLong,
+            UpdateInnerError::Compression(error) => error,
+        })
+    }
+
+    fn update_inner<E, F>(
+        &mut self,
+        input: &[u8],
+        mut compress_block: F,
+    ) -> Result<(), UpdateInnerError<E>>
+    where
+        F: FnMut(&mut [u32; 8], &[u8; BLOCK_BYTES]) -> Result<(), E>,
+    {
+        let additional =
+            u64::try_from(input.len()).map_err(|_| UpdateInnerError::MessageTooLong)?;
+        let new_length = checked_message_length(self.message_bytes, additional)
+            .map_err(|_| UpdateInnerError::MessageTooLong)?;
         let mut input = input.iter();
 
         if self.buffer_len != 0 {
@@ -75,7 +119,8 @@ impl Sha224 {
             }
             self.buffer_len = self.buffer_len.saturating_add(copied);
             if self.buffer_len == BLOCK_BYTES {
-                compress(&mut self.state, &self.buffer);
+                compress_block(&mut self.state, &self.buffer)
+                    .map_err(UpdateInnerError::Compression)?;
                 self.buffer.fill(0);
                 self.buffer_len = 0;
             } else {
@@ -90,7 +135,7 @@ impl Sha224 {
             for (target, byte) in block.iter_mut().zip(bytes.iter()) {
                 *target = *byte;
             }
-            compress(&mut self.state, &block);
+            compress_block(&mut self.state, &block).map_err(UpdateInnerError::Compression)?;
         }
         let remainder = blocks.remainder();
         for (target, byte) in self.buffer.iter_mut().zip(remainder.iter()) {
@@ -103,7 +148,36 @@ impl Sha224 {
 
     /// Consumes the state and returns the exact SHA-224 digest.
     #[must_use]
-    pub fn finalize(mut self) -> Sha224Digest {
+    pub fn finalize(self) -> Sha224Digest {
+        match self.finalize_inner(|state, block| {
+            compress(state, block);
+            Ok::<(), core::convert::Infallible>(())
+        }) {
+            Ok(digest) => digest,
+            Err(never) => match never {},
+        }
+    }
+
+    #[cfg(feature = "cpu")]
+    /// Consumes the state and finalizes through one tested backend.
+    pub fn finalize_with_backend(
+        self,
+        backend: &Sha256BackendSession,
+    ) -> Result<Sha224Digest, Sha224AcceleratedError> {
+        backend
+            .ensure_healthy()
+            .map_err(Sha224AcceleratedError::from_backend)?;
+        self.finalize_inner(|state, block| {
+            backend
+                .compress(state, block)
+                .map_err(Sha224AcceleratedError::from_backend)
+        })
+    }
+
+    fn finalize_inner<E, F>(mut self, mut compress_block: F) -> Result<Sha224Digest, E>
+    where
+        F: FnMut(&mut [u32; 8], &[u8; BLOCK_BYTES]) -> Result<(), E>,
+    {
         if let Some(marker) = self.buffer.get_mut(self.buffer_len) {
             *marker = 0x80;
         }
@@ -112,7 +186,7 @@ impl Sha224 {
             *byte = 0;
         }
         if padding_block_count(self.buffer_len) == 2 {
-            compress(&mut self.state, &self.buffer);
+            compress_block(&mut self.state, &self.buffer)?;
             self.buffer.fill(0);
         }
         let message_bits = self.message_bytes.saturating_mul(8);
@@ -124,7 +198,7 @@ impl Sha224 {
         {
             *target = byte;
         }
-        compress(&mut self.state, &self.buffer);
+        compress_block(&mut self.state, &self.buffer)?;
 
         let mut output = [0_u8; Sha224Digest::LENGTH];
         for (bytes, word) in output.chunks_exact_mut(4).zip(self.state.iter()) {
@@ -132,7 +206,41 @@ impl Sha224 {
                 [*first, *second, *third, *fourth] = word.to_be_bytes();
             }
         }
-        Sha224Digest::from_bytes(output)
+        Ok(Sha224Digest::from_bytes(output))
+    }
+}
+
+enum UpdateInnerError<E> {
+    MessageTooLong,
+    Compression(E),
+}
+
+/// Closed failure from an explicitly accelerated SHA-224 operation.
+#[cfg(feature = "cpu")]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[non_exhaustive]
+pub enum Sha224AcceleratedError {
+    /// The input exceeds SHA-224's byte-oriented message domain.
+    MessageTooLong,
+    /// The selected backend belongs to another architecture.
+    WrongArchitecture,
+    /// The implementation exists but lacks native admission evidence.
+    BackendNotAdmitted,
+    /// The caller-owned backend session is permanently quarantined.
+    BackendQuarantined,
+    /// A newer backend failure is unknown to this crate version.
+    BackendUnavailable,
+}
+
+#[cfg(feature = "cpu")]
+impl Sha224AcceleratedError {
+    fn from_backend(error: Sha256BackendError) -> Self {
+        match error {
+            Sha256BackendError::WrongArchitecture => Self::WrongArchitecture,
+            Sha256BackendError::NotAdmitted => Self::BackendNotAdmitted,
+            Sha256BackendError::Quarantined => Self::BackendQuarantined,
+            _ => Self::BackendUnavailable,
+        }
     }
 }
 
@@ -177,6 +285,9 @@ pub(crate) const fn padding_block_count(buffer_len: usize) -> usize {
 mod tests {
     use super::{Sha224, Sha224Error};
 
+    #[cfg(feature = "cpu")]
+    use brynja_crypto_cpu::Sha256BackendSession;
+
     #[test]
     fn rejected_update_preserves_every_owned_field() {
         let mut state = Sha224::new();
@@ -192,5 +303,36 @@ mod tests {
         assert_eq!(state.buffer, expected_buffer);
         assert_eq!(state.buffer_len, expected_buffer_len);
         assert_eq!(state.message_bytes, expected_message_bytes);
+    }
+
+    #[cfg(feature = "cpu")]
+    #[test]
+    fn accelerated_rejected_update_preserves_every_owned_field() {
+        let Some(backend) = Sha256BackendSession::for_compiled_target() else {
+            return;
+        };
+        let mut state = Sha224::new();
+        assert_eq!(state.update(b"retained prefix"), Ok(()));
+        state.message_bytes = Sha224::MAX_MESSAGE_BYTES;
+        let expected = (
+            state.state,
+            state.buffer,
+            state.buffer_len,
+            state.message_bytes,
+        );
+
+        assert_eq!(
+            state.update_with_backend(b"x", &backend),
+            Err(super::Sha224AcceleratedError::MessageTooLong)
+        );
+        assert_eq!(
+            (
+                state.state,
+                state.buffer,
+                state.buffer_len,
+                state.message_bytes
+            ),
+            expected
+        );
     }
 }

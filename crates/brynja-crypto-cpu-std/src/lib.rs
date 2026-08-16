@@ -1,4 +1,4 @@
-//! Opt-in standard-library CPU detection for accelerated Brynja SHA-256.
+//! Opt-in standard-library CPU detection and reporting for Brynja SHA-2.
 //!
 //! This adapter performs host feature detection, creates one caller-owned
 //! KAT-gated backend session, and exposes scalar-fallback or required-
@@ -6,12 +6,20 @@
 //! graph, protocol engines, or future FIPS module.
 
 mod runtime_detection;
+mod sha512_runtime;
+
+pub use sha512_runtime::{
+    RuntimeSha512Backend, RuntimeSha512Error, RuntimeSha512Report, RuntimeSha512Selection,
+};
 
 use brynja_crypto_cpu::{
     Sha256Backend, Sha256BackendError, Sha256BackendHealth, Sha256BackendReport,
     Sha256BackendSession,
 };
-use brynja_hash_sha2::{Sha256, Sha256AcceleratedError, Sha256Digest, Sha256Error};
+use brynja_hash_sha2::{
+    Sha224, Sha224AcceleratedError, Sha224Digest, Sha224Error, Sha256, Sha256AcceleratedError,
+    Sha256Digest, Sha256Error,
+};
 
 /// Why one runtime SHA-256 backend was selected.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -150,9 +158,25 @@ impl RuntimeSha256Backend {
         }
     }
 
+    /// Starts an empty streaming SHA-224 operation using this selection.
+    #[must_use]
+    pub fn start_sha224(&self) -> RuntimeSha224<'_> {
+        RuntimeSha224 {
+            state: Sha224::new(),
+            backend: self,
+        }
+    }
+
     /// Hashes one complete byte slice using this selection.
     pub fn hash(&self, input: &[u8]) -> Result<Sha256Digest, RuntimeSha256Error> {
         let mut state = self.start();
+        state.update(input)?;
+        state.finalize()
+    }
+
+    /// Hashes one complete byte slice with SHA-224 using this selection.
+    pub fn hash_sha224(&self, input: &[u8]) -> Result<Sha224Digest, RuntimeSha256Error> {
+        let mut state = self.start_sha224();
         state.update(input)?;
         state.finalize()
     }
@@ -183,6 +207,42 @@ impl Default for RuntimeSha256Backend {
 pub struct RuntimeSha256<'backend> {
     state: Sha256,
     backend: &'backend RuntimeSha256Backend,
+}
+
+/// Streaming SHA-224 state bound to one reusable SHA-256-family selection.
+pub struct RuntimeSha224<'backend> {
+    state: Sha224,
+    backend: &'backend RuntimeSha256Backend,
+}
+
+impl RuntimeSha224<'_> {
+    /// Returns the number of message bytes accepted so far.
+    #[must_use]
+    pub const fn message_bytes(&self) -> u64 {
+        self.state.message_bytes()
+    }
+
+    /// Absorbs the complete input or rejects it before visible state changes.
+    pub fn update(&mut self, input: &[u8]) -> Result<(), RuntimeSha256Error> {
+        match self.backend.session.as_ref() {
+            Some(session) => self
+                .state
+                .update_with_backend(input, session)
+                .map_err(map_sha224_accelerated_error),
+            None => self.state.update(input).map_err(map_sha224_scalar_error),
+        }
+    }
+
+    /// Consumes this state and returns the exact SHA-224 digest.
+    pub fn finalize(self) -> Result<Sha224Digest, RuntimeSha256Error> {
+        match self.backend.session.as_ref() {
+            Some(session) => self
+                .state
+                .finalize_with_backend(session)
+                .map_err(map_sha224_accelerated_error),
+            None => Ok(self.state.finalize()),
+        }
+    }
 }
 
 impl RuntimeSha256<'_> {
@@ -222,6 +282,13 @@ fn map_scalar_error(error: Sha256Error) -> RuntimeSha256Error {
     }
 }
 
+fn map_sha224_scalar_error(error: Sha224Error) -> RuntimeSha256Error {
+    match error {
+        Sha224Error::MessageTooLong => RuntimeSha256Error::MessageTooLong,
+        _ => RuntimeSha256Error::BackendUnavailable,
+    }
+}
+
 fn map_accelerated_error(error: Sha256AcceleratedError) -> RuntimeSha256Error {
     match error {
         Sha256AcceleratedError::MessageTooLong => RuntimeSha256Error::MessageTooLong,
@@ -229,6 +296,17 @@ fn map_accelerated_error(error: Sha256AcceleratedError) -> RuntimeSha256Error {
         Sha256AcceleratedError::BackendNotAdmitted => RuntimeSha256Error::BackendNotAdmitted,
         Sha256AcceleratedError::BackendQuarantined => RuntimeSha256Error::BackendQuarantined,
         Sha256AcceleratedError::BackendUnavailable => RuntimeSha256Error::BackendUnavailable,
+        _ => RuntimeSha256Error::BackendUnavailable,
+    }
+}
+
+fn map_sha224_accelerated_error(error: Sha224AcceleratedError) -> RuntimeSha256Error {
+    match error {
+        Sha224AcceleratedError::MessageTooLong => RuntimeSha256Error::MessageTooLong,
+        Sha224AcceleratedError::WrongArchitecture => RuntimeSha256Error::WrongArchitecture,
+        Sha224AcceleratedError::BackendNotAdmitted => RuntimeSha256Error::BackendNotAdmitted,
+        Sha224AcceleratedError::BackendQuarantined => RuntimeSha256Error::BackendQuarantined,
+        Sha224AcceleratedError::BackendUnavailable => RuntimeSha256Error::BackendUnavailable,
         _ => RuntimeSha256Error::BackendUnavailable,
     }
 }
@@ -289,6 +367,20 @@ mod tests {
             accelerated,
             portable.map_err(|_| super::RuntimeSha256Error::MessageTooLong)
         );
+    }
+
+    #[test]
+    fn sha224_reuses_the_exact_reported_sha256_family_selection() {
+        let backend = RuntimeSha256Backend::opportunistic();
+        let mut state = backend.start_sha224();
+        for chunk in b"shared 32-bit SHA-2 compression family".chunks(5) {
+            assert_eq!(state.update(chunk), Ok(()));
+        }
+        let selected = state.finalize();
+        let portable = brynja_hash_sha2::sha224(b"shared 32-bit SHA-2 compression family")
+            .map_err(|_| super::RuntimeSha256Error::MessageTooLong);
+        assert_eq!(selected, portable);
+        assert!(backend.hash_sha224(b"abc").is_ok());
     }
 
     #[test]

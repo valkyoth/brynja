@@ -7,6 +7,18 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Extend the opt-in CPU surface across all six SHA-2 identities: SHA-224
+  reuses the exact SHA-256-family kernels, while new static direct-KAT
+  AArch64 SHA-512 and RV64 Zknh SHA-512 candidates serve SHA-384, SHA-512,
+  SHA-512/224, and SHA-512/256 without merging public identities.
+- Add forced scalar-equivalence tests across critical padding boundaries and
+  irregular chunks under AArch64 and RISC-V QEMU, compiler-endpoint SHA-512
+  instruction checks, permanent session quarantine tests, and complete-family
+  std reporting with fail-closed required mode.
+- Record x86_64 SHA-512 as scalar-only instead of inferring acceleration from
+  AVX2 or AVX-512, retain all five candidates as unadmitted pending qualifying
+  native performance, migration, and side-channel evidence, and select zero
+  crates.io packages for exceptional internal v0.23.3.
 - Split oversized future implementation families into review-sized tagged
   milestones with separate portable implementation, acceleration, and
   package-external acceptance gates. The revised roadmap now decomposes SHA-3,

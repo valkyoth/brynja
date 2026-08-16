@@ -27,12 +27,14 @@
 
 `brynja-crypto-cpu` is the optional, zero-dependency, `no_std` package for
 separately reviewed first-party ISA kernels and static selection. Version
-0.1.1 now contains isolated SHA-256 candidates for x86_64 SHA instructions,
-AArch64 SHA2 instructions, and RV64 Zknh scalar-crypto instructions. Portable `brynja-hash-sha2` continues to own
+0.1.1 now contains isolated SHA-256-family candidates for x86_64 SHA,
+AArch64 SHA2, and RV64 Zknh instructions plus SHA-512-family candidates for
+AArch64 SHA-512 and RV64 Zknh instructions. Portable `brynja-hash-sha2` continues to own
 streaming state, padding, length accounting, finalization, and scalar fallback.
 
-All three candidates are deliberately unadmitted in v0.22.2 while commit-bound
-native evidence is incomplete. Ordinary construction therefore cannot execute
+All five candidates are deliberately unadmitted while commit-bound native
+evidence is incomplete. x86_64 SHA-512 is a reviewed scalar-only decision;
+AVX2 or AVX-512 availability alone does not authorize a backend. Ordinary construction therefore cannot execute
 any kernel: static selection returns `None`, runtime-attested construction
 returns `NotAdmitted`, opportunistic host use falls back to scalar, and
 required acceleration fails closed. Evidence builds can directly exercise a
@@ -48,12 +50,13 @@ coverage without treating submitted observations as backend admission.
 Every backend session is caller-owned and thread-bound. Construction checks
 the architecture, runs a direct `abc` known-answer test, reports its exact
 backend and health generation, and permanently quarantines that session after
-a bad answer. The safe compression surface accepts exactly one 64-byte block.
+a bad answer. The safe compression surfaces accept exactly one 64-byte or
+128-byte block.
 The package does not detect CPU features, allocate, perform I/O, use foreign
 code or external assembly, own a global registry, promise register erasure, or
-claim FIPS validation. The RV64 candidate contains four separately approved
-first-party Rust inline-assembly statements because stable Rust exposes no
-stable Zknh intrinsics. It cannot be an implicit dependency of a protocol
+claim FIPS validation. The RV64 candidates contain six separately approved
+register-only first-party Rust inline-assembly statements across SHA-256 and
+SHA-512 operations. They cannot be an implicit dependency of a protocol
 engine or default feature.
 
 ## Cryptography Verification Status
@@ -68,6 +71,9 @@ pentesting do not by themselves constitute independent verification.
 | x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |
 | AArch64 SHA-256 candidate | NEON/SHA2 compression | ❌ Implemented but unadmitted and not independently verified |
 | RV64 SHA-256 candidate | Zknh scalar-crypto compression | ❌ Implemented but unadmitted and not independently verified |
+| x86_64 SHA-512 family | Scalar-only decision; no admitted instruction kernel | ❌ No accelerated implementation claimed |
+| AArch64 SHA-512 candidate | NEON/SHA-512 compression | ❌ Implemented but unadmitted and not independently verified |
+| RV64 SHA-512 candidate | Zknh scalar-crypto compression | ❌ Implemented but unadmitted and not independently verified |
 
 Metadata version `0.1.1` was published at v0.20.0 after the committed
 cumulative pentest, remediation retest, and hosted gates recorded

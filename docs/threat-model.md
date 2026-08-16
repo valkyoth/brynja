@@ -481,6 +481,20 @@ The shared buffer retains transactional length, padding, allocation, and
 consuming-finalization properties. Both remain ordinary unkeyed hashes with no
 secret-state erasure, complete-family acceleration, independent-review, or
 FIPS-validation claim.
+v0.23.3 treats CPU feature observations, target features, backend identity,
+startup answers, and execution reports as untrusted until an exact static or
+reviewed detector proof and direct KAT establish one caller-owned session.
+SHA-224 reuses only the reviewed SHA-256 compression interface; its IV and
+output remain separate. AArch64 SHA-512 and RV64 Zknh SHA-512 candidates reuse
+only the private 64-bit schedule and accept exact 128-byte blocks. Forced
+QEMU differential tests cover all four SHA-512-family identities, critical
+padding boundaries and irregular chunking, while emitted-code checks require
+the intended instructions. x86_64 SHA-512 remains scalar-only rather than
+treating AVX2 or AVX-512 presence as evidence. All five candidates remain
+unadmitted: emulator results, target-feature compilation, performance on a
+different CPU, or a healthy KAT cannot authorize ordinary execution. Native
+performance, CPU migration, side-channel, register/spill erasure, independent
+review, and FIPS validation remain explicit residuals.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

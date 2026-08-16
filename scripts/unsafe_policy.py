@@ -22,13 +22,13 @@ ALLOWED = {
         "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28", 2, 1, 2,
     ),
     Path("crates/brynja-crypto-cpu/src/aarch64_sha2.rs"): (
-        "27b71c0b4eb183c4e3e66c30c420aa41cc153a77e84a5dba720124b6f7b170c4", 4, 1, 4,
+        "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353", 8, 2, 8,
     ),
     Path("crates/brynja-crypto-cpu/src/riscv64_zknh.rs"): (
-        "148eb17e4ccddadd9357ff4fda4a302c422d4ec63d7221144c3bff87961a045c", 5, 1, 5,
+        "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619", 8, 2, 8,
     ),
     Path("crates/brynja-crypto-cpu-std/src/runtime_detection.rs"): (
-        "ec29948d1cdc1440f50b163417dd198e8394487c797ac9ce4f896f17d73d17aa", 1, 0, 1,
+        "f80399ec92f54a4a7deaf5588e729908a1f730549f30de5bdfdc826c6cb31de5", 1, 0, 1,
     ),
 }
 UNSAFE_BLOCK = re.compile(r"\bunsafe\s*\{")
@@ -115,7 +115,7 @@ def validate_allowed(
         if "#[target_feature" not in text or "core::arch" not in text:
             fail(f"CPU kernel lost its intrinsic boundary: {relative}")
         if relative.name == "riscv64_zknh.rs":
-            if text.count("asm!(") != 4 or "global_asm!(" in text:
+            if text.count("asm!(") != 6 or "global_asm!(" in text:
                 fail("RISC-V kernel inline-assembly inventory drifted")
         elif re.search(r'extern\s+"C"|\basm\s*!|\bglobal_asm\s*!', text):
             fail(f"CPU kernel introduced native linkage or assembly: {relative}")

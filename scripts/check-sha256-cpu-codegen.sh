@@ -2,7 +2,7 @@
 set -euo pipefail
 
 workspace="$(cd "$(dirname "$0")/.." && pwd)"
-temporary="$(mktemp -d /tmp/brynja-sha256-codegen-XXXXXX)"
+temporary="$(mktemp -d /tmp/brynja-sha2-codegen-XXXXXX)"
 trap 'rm -rf "$temporary"' EXIT
 
 compile_and_find() {
@@ -14,7 +14,7 @@ compile_and_find() {
         --target "$target" --lib -- --emit=asm
     mapfile -t assembly < <(find "$temporary/$output" -type f -name '*.s' -print)
     if test "${#assembly[@]}" -ne 1; then
-        echo "SHA-256 CPU codegen expected one assembly file for $target" >&2
+        echo "SHA-2 CPU codegen expected one assembly file for $target" >&2
         exit 1
     fi
     printf '%s\n' "${assembly[0]}"
@@ -33,6 +33,12 @@ for instruction in 'sha256h' 'sha256h2'; do
         exit 1
     }
 done
+for instruction in 'sha512h' 'sha512h2'; do
+    grep -Fq -- "$instruction" "$arm_assembly" || {
+        echo "AArch64 SHA-512 codegen omitted $instruction" >&2
+        exit 1
+    }
+done
 
 for toolchain in 1.90.0 1.97.1; do
     riscv_assembly="$(compile_and_find riscv64gc-unknown-linux-gnu "riscv-$toolchain" "$toolchain")"
@@ -42,6 +48,12 @@ for toolchain in 1.90.0 1.97.1; do
             exit 1
         }
     done
+    for instruction in sha512sum0 sha512sum1; do
+        grep -Fq -- "$instruction" "$riscv_assembly" || {
+            echo "RISC-V SHA-512 codegen under $toolchain omitted $instruction" >&2
+            exit 1
+        }
+    done
 done
 
-echo "SHA-256 CPU codegen contains x86 SHA, AArch64 SHA2, and RISC-V Zknh instructions"
+echo "SHA-2 CPU codegen contains x86 SHA-256, AArch64 SHA2/SHA512, and RISC-V Zknh instructions"

@@ -2,6 +2,9 @@ use brynja_hash_core::{FixedOutput, Update};
 
 use crate::{Sha512_224Digest, Sha512_224Error, sha512_state, sha512_t};
 
+#[cfg(feature = "cpu")]
+use brynja_crypto_cpu::Sha512BackendSession;
+
 /// Portable streaming SHA-512/224 state.
 ///
 /// SHA-512/224 has its own FIPS 180-4 derived initial value; it is not ordinary
@@ -44,10 +47,32 @@ impl Sha512_224 {
             .map_err(|_| Sha512_224Error::MessageTooLong)
     }
 
+    #[cfg(feature = "cpu")]
+    /// Absorbs input through one tested SHA-512-family backend.
+    pub fn update_with_backend(
+        &mut self,
+        input: &[u8],
+        backend: &Sha512BackendSession,
+    ) -> Result<(), sha512_state::Sha512AcceleratedError> {
+        self.inner.update_with_backend(input, backend)
+    }
+
     /// Consumes the state and returns the exact SHA-512/224 digest.
     #[must_use]
     pub fn finalize(self) -> Sha512_224Digest {
         Sha512_224Digest::from_bytes(sha512_t::leftmost_bytes(self.inner.finalize()))
+    }
+
+    #[cfg(feature = "cpu")]
+    /// Consumes the state and finalizes through one tested backend.
+    pub fn finalize_with_backend(
+        self,
+        backend: &Sha512BackendSession,
+    ) -> Result<Sha512_224Digest, sha512_state::Sha512AcceleratedError> {
+        self.inner
+            .finalize_with_backend(backend)
+            .map(sha512_t::leftmost_bytes)
+            .map(Sha512_224Digest::from_bytes)
     }
 }
 

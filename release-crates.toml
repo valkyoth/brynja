@@ -1,19 +1,19 @@
 [release]
-version = "0.23.2"
-milestone = "0.23.2"
+version = "0.23.3"
+milestone = "0.23.3"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "Two new first-party SHA-512/t algorithm identities and their IV-derivation boundary require exceptional assessment before the internal tag."
+exception_reason = "New low-level AArch64 SHA-512 and RISC-V Zknh SHA-512 kernels plus complete-family accelerated APIs require exceptional assessment before the internal tag."
 
 [crates."brynja"]
-previous_version = "0.23.1"
-version = "0.23.2"
+previous_version = "0.23.2"
+version = "0.23.3"
 change = "code"
 publish = false
-reason = "Advance the internal facade milestone with complete portable SHA-512/224 and SHA-512/256 without crates.io publication."
+reason = "Advance the internal facade milestone with complete SHA-2 family acceleration boundaries without crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Expose complete portable SHA-512/224 and SHA-512/256 and the full six-algorithm SHA-2 family while retaining the cumulative package for v0.25.0 publication."
+reason = "Retain the complete portable SHA-2 facade while acceleration remains an explicit opt-in package boundary for v0.25.0 publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -41,21 +41,21 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add complete portable SHA-512/224 and SHA-512/256 with verified FIPS SHA-512/t IV derivation while retaining all SHA-2 changes for the v0.25.0 checkpoint."
+reason = "Add forced backend APIs for every SHA-2 identity while retaining all SHA-2 changes for the v0.25.0 checkpoint."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"
 version = "0.1.1"
 change = "code"
 publish = false
-reason = "Retain published 0.1.1 while adding an unpublished first-party RISC-V Zknh SHA-256 kernel beside the x86 SHA and AArch64 SHA2 candidates for v0.25.0."
+reason = "Retain published 0.1.1 while adding SHA-224 reuse, AArch64 SHA-512 and RISC-V Zknh SHA-512 candidates and an explicit x86 SHA-512 scalar-only decision for v0.25.0."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.1.1"
 version = "0.1.1"
 change = "code"
 publish = false
-reason = "Retain published 0.1.1 and its x86/AArch64 detector unchanged; RISC-V automatic detection stays disabled while the Zknh candidate is unadmitted."
+reason = "Retain published 0.1.1 while extending honest family reporting and scalar fallback; all candidates remain unadmitted and RISC-V automatic detection stays disabled."
 
 [crates."brynja-pki"]
 previous_version = "0.2.0"

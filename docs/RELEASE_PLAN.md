@@ -2267,6 +2267,22 @@ Exit criteria:
 - every CPU family has an explicit evidenced backend or scalar-only decision and no wider ISA is admitted merely because it is available;
 - `v0.23.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+Implementation notes:
+
+- SHA-224 now reuses every exact SHA-256-family candidate through distinct
+  public state and digest identities; all three 32-bit kernels remain
+  unadmitted.
+- AArch64 `sha3` SHA-512 instructions and RV64 Zknh SHA-512 instructions now
+  provide separately KAT-gated static candidates for SHA-384, SHA-512,
+  SHA-512/224, and SHA-512/256. Forced QEMU differential and compiler-endpoint
+  emitted-code evidence passes; qualifying native evidence remains pending.
+- x86_64 SHA-512 is recorded as scalar-only because no single-stream kernel is
+  admitted. AVX2 or AVX-512 availability alone is not a correctness,
+  performance, or admission claim.
+- The new low-level cryptographic kernels trigger an exceptional pentest. The
+  milestone selects zero crates.io packages and cannot be tagged until its
+  report, native-evidence disposition, full gate, GitHub, and CodeQL are green.
+
 ### v0.23.4 - Complete SHA-2 Public API Usability Acceptance
 
 Status: planned

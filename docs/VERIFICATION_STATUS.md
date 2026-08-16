@@ -21,11 +21,11 @@ certificate-bound operational-environment claim.
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
-| `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms; whole-family acceleration remains planned | ❌ Not verified |
+| `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms with forced optional CPU candidate APIs | ❌ Not verified |
 | Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
-| `brynja-crypto-cpu` | Implemented but unadmitted x86_64 SHA, AArch64 SHA2, and RV64 Zknh compression candidates, static selection, direct KAT, health and quarantine | ❌ Not independently verified; native admission evidence incomplete |
-| `brynja-crypto-cpu-std` | Implemented opt-in x86_64/AArch64 host detection, actual-backend reporting, opportunistic scalar fallback and fail-closed required mode; RISC-V auto-detection disabled | ❌ Not independently verified; accelerated candidates remain unadmitted |
+| `brynja-crypto-cpu` | Five implemented but unadmitted SHA-2 candidates across x86_64 SHA, AArch64 SHA2/SHA-512, and RV64 Zknh plus explicit x86 SHA-512 scalar-only policy | ❌ Not independently verified; native admission evidence incomplete |
+| `brynja-crypto-cpu-std` | Implemented opt-in SHA-2 host detection/reporting, opportunistic scalar fallback and fail-closed required modes; RISC-V auto-detection disabled | ❌ Not independently verified; accelerated candidates remain unadmitted |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
 | `brynja-protocol` | Shared TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |
 | `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |

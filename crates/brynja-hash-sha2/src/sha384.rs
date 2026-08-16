@@ -2,6 +2,9 @@ use brynja_hash_core::{FixedOutput, Update};
 
 use crate::{Sha384Digest, Sha384Error, sha512_state};
 
+#[cfg(feature = "cpu")]
+use brynja_crypto_cpu::Sha512BackendSession;
+
 const INITIAL_STATE: [u64; 8] = [
     0xcbbb_9d5d_c105_9ed8,
     0x629a_292a_367c_d507,
@@ -55,18 +58,40 @@ impl Sha384 {
             .map_err(|_| Sha384Error::MessageTooLong)
     }
 
+    #[cfg(feature = "cpu")]
+    /// Absorbs input through one tested SHA-512-family backend.
+    pub fn update_with_backend(
+        &mut self,
+        input: &[u8],
+        backend: &Sha512BackendSession,
+    ) -> Result<(), sha512_state::Sha512AcceleratedError> {
+        self.inner.update_with_backend(input, backend)
+    }
+
     /// Consumes the state and returns the exact SHA-384 digest.
     #[must_use]
     pub fn finalize(self) -> Sha384Digest {
-        let state = self.inner.finalize();
-        let mut output = [0_u8; Sha384Digest::LENGTH];
-        for (bytes, word) in output.chunks_exact_mut(8).zip(state.iter().take(6)) {
-            for (target, byte) in bytes.iter_mut().zip(word.to_be_bytes()) {
-                *target = byte;
-            }
-        }
-        Sha384Digest::from_bytes(output)
+        digest(self.inner.finalize())
     }
+
+    #[cfg(feature = "cpu")]
+    /// Consumes the state and finalizes through one tested backend.
+    pub fn finalize_with_backend(
+        self,
+        backend: &Sha512BackendSession,
+    ) -> Result<Sha384Digest, sha512_state::Sha512AcceleratedError> {
+        self.inner.finalize_with_backend(backend).map(digest)
+    }
+}
+
+fn digest(state: [u64; 8]) -> Sha384Digest {
+    let mut output = [0_u8; Sha384Digest::LENGTH];
+    for (bytes, word) in output.chunks_exact_mut(8).zip(state.iter().take(6)) {
+        for (target, byte) in bytes.iter_mut().zip(word.to_be_bytes()) {
+            *target = byte;
+        }
+    }
+    Sha384Digest::from_bytes(output)
 }
 
 impl Default for Sha384 {

@@ -1,5 +1,8 @@
 use crate::compress64::compress;
 
+#[cfg(feature = "cpu")]
+use brynja_crypto_cpu::{Sha512BackendError, Sha512BackendSession};
+
 const BLOCK_BYTES: usize = 128;
 const LENGTH_FIELD_BYTES: usize = 16;
 const FINAL_BLOCK_PREFIX_BYTES: usize = BLOCK_BYTES - LENGTH_FIELD_BYTES;
@@ -35,8 +38,47 @@ impl Sha512State {
     }
 
     pub(crate) fn update(&mut self, input: &[u8]) -> Result<(), MessageTooLong> {
+        self.update_inner(input, |state, block| {
+            compress(state, block);
+            Ok::<(), core::convert::Infallible>(())
+        })
+        .map_err(|error| match error {
+            UpdateInnerError::MessageTooLong => MessageTooLong,
+            UpdateInnerError::Compression(never) => match never {},
+        })
+    }
+
+    #[cfg(feature = "cpu")]
+    pub(crate) fn update_with_backend(
+        &mut self,
+        input: &[u8],
+        backend: &Sha512BackendSession,
+    ) -> Result<(), Sha512AcceleratedError> {
+        backend
+            .ensure_healthy()
+            .map_err(Sha512AcceleratedError::from_backend)?;
+        self.update_inner(input, |state, block| {
+            backend
+                .compress(state, block)
+                .map_err(Sha512AcceleratedError::from_backend)
+        })
+        .map_err(|error| match error {
+            UpdateInnerError::MessageTooLong => Sha512AcceleratedError::MessageTooLong,
+            UpdateInnerError::Compression(error) => error,
+        })
+    }
+
+    fn update_inner<E, F>(
+        &mut self,
+        input: &[u8],
+        mut compress_block: F,
+    ) -> Result<(), UpdateInnerError<E>>
+    where
+        F: FnMut(&mut [u64; 8], &[u8; BLOCK_BYTES]) -> Result<(), E>,
+    {
         let additional = input.len() as u128;
-        let new_length = checked_message_length(self.message_bytes, additional)?;
+        let new_length = checked_message_length(self.message_bytes, additional)
+            .map_err(|_| UpdateInnerError::MessageTooLong)?;
         let mut input = input.iter();
 
         if self.buffer_len != 0 {
@@ -54,7 +96,8 @@ impl Sha512State {
             }
             self.buffer_len = self.buffer_len.saturating_add(copied);
             if self.buffer_len == BLOCK_BYTES {
-                compress(&mut self.state, &self.buffer);
+                compress_block(&mut self.state, &self.buffer)
+                    .map_err(UpdateInnerError::Compression)?;
                 self.buffer.fill(0);
                 self.buffer_len = 0;
             } else {
@@ -69,7 +112,7 @@ impl Sha512State {
             for (target, byte) in block.iter_mut().zip(bytes.iter()) {
                 *target = *byte;
             }
-            compress(&mut self.state, &block);
+            compress_block(&mut self.state, &block).map_err(UpdateInnerError::Compression)?;
         }
         let remainder = blocks.remainder();
         for (target, byte) in self.buffer.iter_mut().zip(remainder.iter()) {
@@ -80,7 +123,35 @@ impl Sha512State {
         Ok(())
     }
 
-    pub(crate) fn finalize(mut self) -> [u64; 8] {
+    pub(crate) fn finalize(self) -> [u64; 8] {
+        match self.finalize_inner(|state, block| {
+            compress(state, block);
+            Ok::<(), core::convert::Infallible>(())
+        }) {
+            Ok(state) => state,
+            Err(never) => match never {},
+        }
+    }
+
+    #[cfg(feature = "cpu")]
+    pub(crate) fn finalize_with_backend(
+        self,
+        backend: &Sha512BackendSession,
+    ) -> Result<[u64; 8], Sha512AcceleratedError> {
+        backend
+            .ensure_healthy()
+            .map_err(Sha512AcceleratedError::from_backend)?;
+        self.finalize_inner(|state, block| {
+            backend
+                .compress(state, block)
+                .map_err(Sha512AcceleratedError::from_backend)
+        })
+    }
+
+    fn finalize_inner<E, F>(mut self, mut compress_block: F) -> Result<[u64; 8], E>
+    where
+        F: FnMut(&mut [u64; 8], &[u8; BLOCK_BYTES]) -> Result<(), E>,
+    {
         if let Some(marker) = self.buffer.get_mut(self.buffer_len) {
             *marker = 0x80;
         }
@@ -89,7 +160,7 @@ impl Sha512State {
             *byte = 0;
         }
         if padding_block_count(self.buffer_len) == 2 {
-            compress(&mut self.state, &self.buffer);
+            compress_block(&mut self.state, &self.buffer)?;
             self.buffer.fill(0);
         }
         let message_bits = self.message_bytes.saturating_mul(8);
@@ -101,13 +172,47 @@ impl Sha512State {
         {
             *target = byte;
         }
-        compress(&mut self.state, &self.buffer);
-        self.state
+        compress_block(&mut self.state, &self.buffer)?;
+        Ok(self.state)
     }
+}
+
+enum UpdateInnerError<E> {
+    MessageTooLong,
+    Compression(E),
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct MessageTooLong;
+
+/// Closed failure from an explicitly accelerated SHA-512-family operation.
+#[cfg(feature = "cpu")]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[non_exhaustive]
+pub enum Sha512AcceleratedError {
+    /// The input exceeds the SHA-512-family byte-oriented message domain.
+    MessageTooLong,
+    /// The selected backend belongs to another architecture.
+    WrongArchitecture,
+    /// The implementation exists but lacks native admission evidence.
+    BackendNotAdmitted,
+    /// The caller-owned backend session is permanently quarantined.
+    BackendQuarantined,
+    /// A newer backend failure is unknown to this crate version.
+    BackendUnavailable,
+}
+
+#[cfg(feature = "cpu")]
+impl Sha512AcceleratedError {
+    fn from_backend(error: Sha512BackendError) -> Self {
+        match error {
+            Sha512BackendError::WrongArchitecture => Self::WrongArchitecture,
+            Sha512BackendError::NotAdmitted => Self::BackendNotAdmitted,
+            Sha512BackendError::Quarantined => Self::BackendQuarantined,
+            _ => Self::BackendUnavailable,
+        }
+    }
+}
 
 pub(crate) fn checked_message_length(
     current: u128,
@@ -131,6 +236,9 @@ pub(crate) const fn padding_block_count(buffer_len: usize) -> usize {
 mod tests {
     use super::{MAX_MESSAGE_BYTES, Sha512State};
 
+    #[cfg(feature = "cpu")]
+    use brynja_crypto_cpu::Sha512BackendSession;
+
     #[test]
     fn rejected_update_preserves_every_shared_owned_field() {
         let mut state = Sha512State::new([0x55aa; 8]);
@@ -146,5 +254,36 @@ mod tests {
         assert_eq!(state.buffer, expected_buffer);
         assert_eq!(state.buffer_len, expected_buffer_len);
         assert_eq!(state.message_bytes, expected_message_bytes);
+    }
+
+    #[cfg(feature = "cpu")]
+    #[test]
+    fn accelerated_rejected_update_preserves_every_shared_owned_field() {
+        let Some(backend) = Sha512BackendSession::for_compiled_target() else {
+            return;
+        };
+        let mut state = Sha512State::new([0x55aa; 8]);
+        assert_eq!(state.update(b"retained prefix"), Ok(()));
+        state.message_bytes = MAX_MESSAGE_BYTES;
+        let expected = (
+            state.state,
+            state.buffer,
+            state.buffer_len,
+            state.message_bytes,
+        );
+
+        assert_eq!(
+            state.update_with_backend(b"x", &backend),
+            Err(super::Sha512AcceleratedError::MessageTooLong)
+        );
+        assert_eq!(
+            (
+                state.state,
+                state.buffer,
+                state.buffer_len,
+                state.message_bytes
+            ),
+            expected
+        );
     }
 }

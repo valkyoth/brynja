@@ -38,10 +38,15 @@ pub use sha512_256::Sha512_256;
 #[cfg(feature = "cpu")]
 pub use brynja_crypto_cpu::{
     Sha256Backend, Sha256BackendError, Sha256BackendHealth, Sha256BackendReport,
-    Sha256BackendSession,
+    Sha256BackendSession, Sha512Backend, Sha512BackendError, Sha512BackendHealth,
+    Sha512BackendReport, Sha512BackendSession,
 };
 #[cfg(feature = "cpu")]
+pub use sha224::Sha224AcceleratedError;
+#[cfg(feature = "cpu")]
 pub use sha256::Sha256AcceleratedError;
+#[cfg(feature = "cpu")]
+pub use sha512_state::Sha512AcceleratedError;
 
 /// Whether the complete portable SHA-256 API is implemented.
 pub const SHA256_IMPLEMENTED: bool = true;
@@ -164,6 +169,61 @@ pub fn sha256_with_backend(
     backend: &Sha256BackendSession,
 ) -> Result<Sha256Digest, Sha256AcceleratedError> {
     let mut state = Sha256::new();
+    state.update_with_backend(input, backend)?;
+    state.finalize_with_backend(backend)
+}
+
+/// Computes SHA-224 with one already-tested SHA-256-family backend.
+#[cfg(feature = "cpu")]
+pub fn sha224_with_backend(
+    input: &[u8],
+    backend: &Sha256BackendSession,
+) -> Result<Sha224Digest, Sha224AcceleratedError> {
+    let mut state = Sha224::new();
+    state.update_with_backend(input, backend)?;
+    state.finalize_with_backend(backend)
+}
+
+/// Computes SHA-384 with one already-tested SHA-512-family backend.
+#[cfg(feature = "cpu")]
+pub fn sha384_with_backend(
+    input: &[u8],
+    backend: &Sha512BackendSession,
+) -> Result<Sha384Digest, Sha512AcceleratedError> {
+    let mut state = Sha384::new();
+    state.update_with_backend(input, backend)?;
+    state.finalize_with_backend(backend)
+}
+
+/// Computes SHA-512 with one already-tested SHA-512-family backend.
+#[cfg(feature = "cpu")]
+pub fn sha512_with_backend(
+    input: &[u8],
+    backend: &Sha512BackendSession,
+) -> Result<Sha512Digest, Sha512AcceleratedError> {
+    let mut state = Sha512::new();
+    state.update_with_backend(input, backend)?;
+    state.finalize_with_backend(backend)
+}
+
+/// Computes SHA-512/224 with one tested SHA-512-family backend.
+#[cfg(feature = "cpu")]
+pub fn sha512_224_with_backend(
+    input: &[u8],
+    backend: &Sha512BackendSession,
+) -> Result<Sha512_224Digest, Sha512AcceleratedError> {
+    let mut state = Sha512_224::new();
+    state.update_with_backend(input, backend)?;
+    state.finalize_with_backend(backend)
+}
+
+/// Computes SHA-512/256 with one tested SHA-512-family backend.
+#[cfg(feature = "cpu")]
+pub fn sha512_256_with_backend(
+    input: &[u8],
+    backend: &Sha512BackendSession,
+) -> Result<Sha512_256Digest, Sha512AcceleratedError> {
+    let mut state = Sha512_256::new();
     state.update_with_backend(input, backend)?;
     state.finalize_with_backend(backend)
 }

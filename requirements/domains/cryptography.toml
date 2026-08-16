@@ -5,7 +5,7 @@ domain = "cryptography"
 id = "BRY-REQ-CRYPTO-0001"
 owner = "0.22.0"
 lifecycle = "planned"
-revision = 5
+revision = 6
 decision_ids = ["algorithm.sha2"]
 sources = [{ id = "nist:NIST.FIPS.180-4.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-107r1.pdf", authority_role = "current" }, { id = "riscv:RISCV.Crypto.Scalar-1.0.1.pdf", authority_role = "current" }, { id = "riscv:RISCV.Crypto.Vector-1.0.pdf", authority_role = "current" }]
 statement = "SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 follow the pinned secure-hash algorithms, distinct initial values and output rules, length domains, and approved hash-use constraints; any RISC-V acceleration uses only an exact ratified cryptographic extension and preserves those semantics."
@@ -14,7 +14,7 @@ target = "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED"
 positive_test = "crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match"
 negative_test = "crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact"
 work_bound = "Processing work is linear in complete input blocks with checked bit-length accumulation and deterministic exhaustion."
-evidence_gap = "All six portable FIPS 180-4 SHA-2 algorithms are implemented with normative IVs, official vectors, streaming and exhaustion evidence; whole-family acceleration and packaged acceptance remain v0.23.3-v0.23.4, and the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence."
+evidence_gap = "All six portable FIPS 180-4 SHA-2 algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; packaged acceptance remains v0.23.4, all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, and side-channel evidence remains incomplete."
 residual = "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented."
 mapping_rationale = "The SHA-2 semantic surface is governed by the pinned NIST hash authorities; the ratified RISC-V publications govern only optional acceleration of that same implementation."
 

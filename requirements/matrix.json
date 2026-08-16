@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "602de44185fdc8a9b1fac44da713b33e96ffa9007be739932647d52702b16172",
-  "domain_policy_sha256": "3980148d4bf7168ba0a4cb6a6a7c807e49f397b601985529963bbdd08e276a13",
+  "domain_policy_sha256": "84f6b69612f285ef6e49828f5629a0cd8f3f07ad717ee011747c872a670f51c9",
   "policy_sha256": "b5e0681b6487df173ef8b9dc6d54ebf48b8b734320922427b5e25f611e0ed121",
   "requirements": [
     {
@@ -763,7 +763,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 180-4 SHA-2 algorithms are implemented with normative IVs, official vectors, streaming and exhaustion evidence; whole-family acceleration and packaged acceptance remain v0.23.3-v0.23.4, and the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
+      "evidence_gap": "All six portable FIPS 180-4 SHA-2 algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; packaged acceptance remains v0.23.4, all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, and side-channel evidence remains incomplete.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -777,7 +777,7 @@
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {

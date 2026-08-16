@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Brynja's v0.22.2 SHA-256 CPU boundary."""
+"""Validate Brynja's v0.23.3 complete SHA-2 CPU boundary."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
-EXPECTED_POLICY_SHA256 = "322f4b7f1d6eb172a9ee6e5bb768116b63645da5c23e4839f8600bb71fc2100c"
+EXPECTED_POLICY_SHA256 = "2e08f2af700717faaf552fbe16a4397bad00450f8bbd9cb9d2024a5cdcef6aa6"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -28,17 +28,25 @@ SOURCE_STATUS = {
     (CPU, "src/lib.rs"): "boundary-only",
     (CPU, "src/sha256.rs"): "safe-session-and-attestation-boundary",
     (CPU, "src/sha256_schedule.rs"): "portable-message-schedule",
+    (CPU, "src/sha512.rs"): "static-session-and-kat-boundary",
+    (CPU, "src/sha512_schedule.rs"): "portable-message-schedule",
     (CPU, "src/x86_sha.rs"): "implemented-unadmitted-candidate-kernel",
     (CPU, "src/aarch64_sha2.rs"): "implemented-unadmitted-candidate-kernel",
     (CPU, "src/riscv64_zknh.rs"): "implemented-unadmitted-candidate-kernel",
     (DETECTOR, "src/lib.rs"): "boundary-only",
     (DETECTOR, "src/runtime_detection.rs"): "runtime-feature-attestation-boundary",
+    (DETECTOR, "src/sha512_runtime.rs"): "scalar-fallback-and-reporting-boundary",
 }
 BACKENDS = {
     "x86-sha": (
         "X86Sha", "x86_64", "src/x86_sha.rs", ("sha",),
         ("x86_64", "sha-usable-on-current-logical-cpu"),
         "implemented-unadmitted-native-evidence-pending",
+    ),
+    "x86-sha512-scalar": (
+        "ScalarOnlySha512", "x86_64", "absent", (),
+        ("x86_64", "no-admitted-single-stream-sha512-kernel"),
+        "scalar-only-reviewed",
     ),
     "x86-aes-gcm": (
         "X86AesGcm", "x86_64", "src/x86_aes_gcm.rs", ("aes", "pclmulqdq"),
@@ -59,6 +67,11 @@ BACKENDS = {
         ("aarch64", "neon-and-sha2-usable-on-current-logical-cpu"),
         "implemented-unadmitted-native-evidence-pending",
     ),
+    "aarch64-sha512": (
+        "Aarch64Sha512", "aarch64", "src/aarch64_sha2.rs", ("neon", "sha3"),
+        ("aarch64", "neon-and-sha3-usable-on-current-logical-cpu"),
+        "implemented-unadmitted-native-evidence-pending",
+    ),
     "aarch64-aes-gcm": (
         "Aarch64AesGcm", "aarch64", "src/aarch64_aes_gcm.rs",
         ("neon", "aes", "pmull"),
@@ -71,6 +84,11 @@ BACKENDS = {
         "reserved",
     ),
     "riscv-scalar-crypto": (
+        "RiscVScalarCrypto", "riscv", "src/riscv64_zknh.rs", ("zknh",),
+        ("riscv64", "zknh-usable-on-current-hart"),
+        "implemented-unadmitted-native-evidence-pending",
+    ),
+    "riscv-sha512": (
         "RiscVScalarCrypto", "riscv", "src/riscv64_zknh.rs", ("zknh",),
         ("riscv64", "zknh-usable-on-current-hart"),
         "implemented-unadmitted-native-evidence-pending",
@@ -114,14 +132,14 @@ def validate_policy_shape(policy: dict) -> None:
         "safe_wrapper", "sources", "backends",
     }, "CPU boundary policy")
     if policy["schema"] != {
-        "version": 2,
-        "milestone": "0.22.2",
-        "status": "sha256-x86-aarch64-and-riscv-candidates",
+        "version": 3,
+        "milestone": "0.23.3",
+        "status": "complete-sha2-family-candidates-and-scalar-decisions",
     }:
         fail("CPU boundary schema drifted")
     if policy["limits"] != {
         "maximum_source_lines": 500,
-        "implemented_backend_count": 3,
+        "implemented_backend_count": 5,
         "active_backend_count": 0,
         "approved_cpu_low_level_allowances": 5,
     }:
@@ -241,20 +259,28 @@ def validate_sources(root: Path, policy: dict) -> None:
         if token not in x86:
             fail(f"x86 SHA kernel drifted: {token}")
     arm = text[(CPU, "src/aarch64_sha2.rs")]
-    for token in ('#[target_feature(enable = "sha2")]', "vsha256hq_u32", "vsha256h2q_u32", "// SAFETY:"):
+    for token in (
+        '#[target_feature(enable = "sha2")]', '#[target_feature(enable = "sha3")]',
+        "vsha256hq_u32", "vsha256h2q_u32", "vsha512hq_u64", "vsha512h2q_u64",
+        "// SAFETY:",
+    ):
         if token not in arm:
             fail(f"AArch64 SHA2 kernel drifted: {token}")
     riscv = text[(CPU, "src/riscv64_zknh.rs")]
     for token in (
         '#[target_feature(enable = "zknh")]', "sha256sig0", "sha256sig1",
-        "sha256sum0", "sha256sum1", "options(pure, nomem, nostack)", "// SAFETY:",
+        "sha256sum0", "sha256sum1", "sha512sum0", "sha512sum1",
+        "options(pure, nomem, nostack)", "// SAFETY:",
     ):
         if token not in riscv:
             fail(f"RISC-V Zknh kernel drifted: {token}")
     if re.search(r'extern\s+"C"|\bglobal_asm\s*!', riscv):
         fail("RISC-V Zknh kernel introduced external assembly or native linkage")
     detector = text[(DETECTOR, "src/runtime_detection.rs")]
-    for token in ('is_x86_feature_detected!("sha")', 'is_aarch64_feature_detected!("sha2")', "// SAFETY:"):
+    for token in (
+        'is_x86_feature_detected!("sha")', 'is_aarch64_feature_detected!("sha2")',
+        'is_aarch64_feature_detected!("sha3")', "// SAFETY:",
+    ):
         if token not in detector:
             fail(f"runtime detector drifted: {token}")
     if "is_riscv_feature_detected" in detector or "RiscVScalarCrypto" in detector:
@@ -264,8 +290,17 @@ def validate_sources(root: Path, policy: dict) -> None:
         if token not in session:
             fail(f"RISC-V static selection lost exact compiler proof: {token}")
     schedule = text[(CPU, "src/sha256_schedule.rs")]
+    schedule += text[(CPU, "src/sha512_schedule.rs")]
     if re.search(r"\b(?:unsafe|core::arch|std::|alloc::)\b", schedule):
         fail("portable CPU message schedule crossed a low-level boundary")
+    sha512 = text[(CPU, "src/sha512.rs")]
+    for token in (
+        "pub enum Sha512Backend", "pub struct Sha512BackendSession",
+        "target_feature = \"sha3\"", "target_feature = \"zknh\"",
+        "Sha512BackendHealth::Quarantined",
+    ):
+        if token not in sha512:
+            fail(f"SHA-512 session boundary drifted: {token}")
 
 
 def validate_backends(root: Path, policy: dict) -> None:
@@ -291,6 +326,9 @@ def validate_backends(root: Path, policy: dict) -> None:
         if status == "reserved":
             if record["sha256"] != "absent" or record["low_level_allowed"] is not False or path.exists():
                 fail(f"reserved backend gained implementation authority: {identifier}")
+        elif status == "scalar-only-reviewed":
+            if record["sha256"] != "absent" or record["low_level_allowed"] is not False:
+                fail(f"scalar-only decision gained implementation authority: {identifier}")
         else:
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
             if record["sha256"] != digest or record["low_level_allowed"] is not True:

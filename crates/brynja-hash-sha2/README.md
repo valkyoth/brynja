@@ -35,6 +35,9 @@ evidence. The v0.22.3 packaged downstream acceptance closes the complete
 public SHA-256 chain. v0.23.0 adds complete portable SHA-224, v0.23.1 adds
 complete portable SHA-384 and SHA-512, and v0.23.2 completes SHA-512/224 and
 SHA-512/256 with exact FIPS SHA-512/t IV derivation.
+v0.23.3 extends the forced backend API to SHA-224 and all four SHA-512-family
+identities. AArch64 SHA-512 and RV64 Zknh SHA-512 candidates remain
+unadmitted; x86_64 SHA-512 remains an explicit scalar-only decision.
 
 ## Example
 
@@ -104,7 +107,9 @@ if let Some(backend) = Sha256BackendSession::for_compiled_target() {
 ```
 
 Until native admission evidence is accepted, the constructor returns `None`.
-The default feature set always remains portable scalar SHA-256.
+The default feature set always remains portable scalar SHA-2. The same static
+session model is available as `Sha512BackendSession` for SHA-384, SHA-512,
+SHA-512/224, and SHA-512/256 on exact qualifying targets.
 
 Run the repository-owned downstream acceptance from a clean checkout with:
 
@@ -117,9 +122,10 @@ Cargo package contents. It needs no network or private test hook.
 
 ## Cryptography Verification Status
 
-The complete portable FIPS 180-4 SHA-2 family is implemented through v0.23.2;
-whole-family acceleration and packaged downstream family acceptance remain
-separate later milestones. No code in this crate has been independently reviewed. A component only moves
+The complete portable FIPS 180-4 SHA-2 family is implemented through v0.23.2,
+and v0.23.3 adds complete forced candidate APIs while keeping every backend
+unadmitted pending native evidence. Packaged downstream family acceptance
+remains v0.23.4. No code in this crate has been independently reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
 fuzzing, and pentesting do not by themselves constitute independent

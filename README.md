@@ -149,8 +149,8 @@ by appearing there.
 
 The signed `0.22.2` development milestone added an isolated first-party RV64
 Zknh compression candidate beside the x86_64 SHA and AArch64 SHA2 candidates
-for the complete portable SHA-256 implemented at v0.22.0. The current
-`0.22.3` milestone closes that implementation chain with packaged downstream
+for the complete portable SHA-256 implemented at v0.22.0. The signed
+`0.22.3` milestone closed that implementation chain with packaged downstream
 public-API acceptance. Portable `brynja-hash-sha2` still owns the public
 digest, streaming state, padding, checked length, finalization, and scalar
 fallback. The optional zero-dependency `no_std` `brynja-crypto-cpu` crate owns
@@ -158,31 +158,31 @@ only static selection, direct KAT, caller-owned health/quarantine, and exact
 one-block kernels. The separate opt-in `std` `brynja-crypto-cpu-std` crate owns
 runtime feature detection and explicit opportunistic or required selection.
 
-The current `0.23.2` milestone completes the portable FIPS 180-4 SHA-2 family
-with distinct SHA-512/224 and SHA-512/256 public identities over the private
-reviewed SHA-512-family foundation. Their normative IVs are produced by the
-exact SHA-512/t derivation procedure and are not ordinary SHA-512 IVs; neither
-algorithm is modeled as naive truncation of SHA-512. NIST CAVP short, long,
-Monte Carlo, million-byte, padding-boundary, split, chunking, exhaustion, and
-public-trait evidence pass for both algorithms. All six SHA-2 identities remain
-unkeyed, not independently verified, and not FIPS 140-3 validated. The
-repository-owner assessment of exact implementation candidate
-`0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` passed with `PASS`/`PASS`, zero
-open findings, and no remediation. The committed report candidate now awaits
-hosted GitHub and CodeQL before the signed internal tag.
+The signed `0.23.2` milestone completed the portable FIPS 180-4 SHA-2 family.
+The current `0.23.3` milestone extends the optional CPU boundary across all six
+algorithm identities. SHA-224 reuses each exact SHA-256-family compression
+kernel without changing its IV or output identity. New AArch64 SHA-512 and
+RV64 Zknh SHA-512 kernels serve SHA-384, SHA-512, SHA-512/224, and SHA-512/256
+through separately typed streaming and one-shot APIs. Differential tests cover
+padding boundaries, irregular chunking, all six identities, forced routes,
+KAT health, quarantine, and emitted instructions. x86_64 deliberately remains
+scalar for the SHA-512 family: no path is admitted merely because AVX2 or
+AVX-512 exists.
 
-All three kernels are implemented but deliberately unadmitted. Private
-commit-bound correctness and emitted-code observations passed on local AMD,
-observed-feature AWS Intel, Apple M2, and AWS Arm, but remain explicitly
-non-authorizing. Authenticated runner, CPU-migration, performance,
-side-channel, and final-admission evidence remains incomplete. A sanitized
+All five instruction kernels are implemented but deliberately unadmitted.
+Private commit-bound correctness and emitted-code observations passed on local
+AMD, observed-feature AWS Intel, Apple M2, and AWS Arm for SHA-256, while the
+new SHA-512-family candidates currently have cross-compiled and QEMU
+differential evidence only. All observations remain non-authorizing.
+Authenticated runner, CPU-migration, native performance, side-channel, and
+final-admission evidence remains incomplete. A sanitized
 preflight of the registered RISC-V lane found generic RV64 vector and
 bit-manipulation support but no `Zknh`, `Zvknha`, or `Zvknhb`, so no native
 candidate was executed. Ordinary builds therefore cannot execute any
 candidate: opportunistic selection uses scalar and reports why, while required
-acceleration fails closed. The RV64 path requires exact `zknh`, uses four
-hash-bound Rust inline-assembly instructions because stable intrinsics are
-unavailable, and has no automatic std detection. Generic RV64, RVV, and QEMU
+acceleration fails closed. The RV64 path requires exact `zknh`, uses six
+hash-bound register-only Rust inline-assembly statements across its 32-bit and
+64-bit SHA-2 operations, and has no automatic std detection. Generic RV64, RVV, and QEMU
 do not qualify it for admission. The candidates use no external C module,
 external assembly source, build script, detector dependency, allocation, I/O, or global
 registry, and make no register-erasure, independent-review, or FIPS 140-3
@@ -558,8 +558,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.23.2`
-complete portable SHA-2 milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.23.3`
+complete SHA-2 CPU milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -662,15 +662,15 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and all six portable FIPS 180-4 SHA-2 algorithms through v0.23.2; no TLS engine or provider effect |
+| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and all six portable FIPS 180-4 SHA-2 algorithms through v0.23.3; no TLS engine or provider effect |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
-| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 now contains all six complete portable FIPS 180-4 algorithms; whole-family acceleration and final acceptance follow in v0.23.3-v0.23.4 |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six complete portable FIPS 180-4 algorithms and opt-in forced APIs for every CPU candidate; final packaged family acceptance follows in v0.23.4 |
 | Future `brynja-hash-sha3` | Complete FIPS 202 SHA-3 and SHAKE family ownership | Planned from v0.24.0 through v0.24.2 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six portable FIPS 180-4 SHA-2 algorithms; other planned cryptography and provider effects remain absent |
-| `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; x86 SHA, AArch64 SHA2, and RV64 Zknh candidates implemented; zero admitted backends |
-| `brynja-crypto-cpu-std` | Directly selected host detector adapter | Published metadata v0.1.1; opt-in x86/AArch64 detection, RISC-V auto-detection disabled; absent from facade and FIPS graphs |
+| `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; three SHA-256-family and two SHA-512-family candidates implemented; x86 SHA-512 is scalar-only; zero admitted backends |
+| `brynja-crypto-cpu-std` | Directly selected host detector adapter | Published metadata v0.1.1; complete-family reporting with scalar fallback, RISC-V auto-detection disabled; absent from facade and FIPS graphs |
 | `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |
 | `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented and published at v0.20.0; v0.19.0 exceptional pentest and retest passed |
 | `brynja-tls` | Evergreen modern TLS facade and one-pass version router | Foundation only |
@@ -815,7 +815,7 @@ python3 scripts/test-sha256.py
 scripts/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.23.2
+scripts/tag_gate.sh v0.23.3
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

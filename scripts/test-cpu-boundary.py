@@ -60,16 +60,16 @@ def test() -> None:
         document = root / policy.POLICY
 
         cases = (
-            ("implemented_backend_count = 3", "implemented_backend_count = 4", "limits"),
+            ("implemented_backend_count = 5", "implemented_backend_count = 6", "limits"),
             ("active_backend_count = 0", "active_backend_count = 1", "limits"),
             (
                 "approved_cpu_low_level_allowances = 5",
                 "approved_cpu_low_level_allowances = 6",
                 "limits",
             ),
-            ("milestone = \"0.22.2\"", "milestone = \"0.22.3\"", "schema"),
+            ("milestone = \"0.23.3\"", "milestone = \"0.23.4\"", "schema"),
             (
-                "status = \"sha256-x86-aarch64-and-riscv-candidates\"",
+                "status = \"complete-sha2-family-candidates-and-scalar-decisions\"",
                 "status = \"all-admitted\"",
                 "schema",
             ),

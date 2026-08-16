@@ -1,11 +1,11 @@
 [schema]
-version = 2
-milestone = "0.22.2"
-status = "sha256-x86-aarch64-and-riscv-candidates"
+version = 3
+milestone = "0.23.3"
+status = "complete-sha2-family-candidates-and-scalar-decisions"
 
 [limits]
 maximum_source_lines = 500
-implemented_backend_count = 3
+implemented_backend_count = 5
 active_backend_count = 0
 approved_cpu_low_level_allowances = 5
 
@@ -112,7 +112,7 @@ invariants = [
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "a66bbeaa1f4ef2a8b208f997c4796a19c4223d12e014ca7e996fb04b41ea9383"
+sha256 = "9a1c7bb4d0485831d35f4570c77c048f47da762a9f4bd6ff040bbb9e883927e2"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -128,6 +128,18 @@ sha256 = "4737d9abde63ca18911dbaf514f28b4995af115586e608c0e66b998d28b1dc3c"
 
 [[sources]]
 package = "brynja-crypto-cpu"
+path = "src/sha512.rs"
+status = "static-session-and-kat-boundary"
+sha256 = "8f694ee692fd36f9db66d808c4e9ac5de35983381d31c262c7a03d7f8120372a"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/sha512_schedule.rs"
+status = "portable-message-schedule"
+sha256 = "3643e358f27bc5e9f4416525a9e9f43ab26063e700e80b3cb91da44bdddc5f6f"
+
+[[sources]]
+package = "brynja-crypto-cpu"
 path = "src/x86_sha.rs"
 status = "implemented-unadmitted-candidate-kernel"
 sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
@@ -136,25 +148,31 @@ sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
 package = "brynja-crypto-cpu"
 path = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-candidate-kernel"
-sha256 = "27b71c0b4eb183c4e3e66c30c420aa41cc153a77e84a5dba720124b6f7b170c4"
+sha256 = "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/riscv64_zknh.rs"
 status = "implemented-unadmitted-candidate-kernel"
-sha256 = "148eb17e4ccddadd9357ff4fda4a302c422d4ec63d7221144c3bff87961a045c"
+sha256 = "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "5cd77fe776e5707a61195df10986fe95d46f19c21bd31ce109a6676ad39d11e5"
+sha256 = "19262f9c2cf9427b6fd27da0022f17d17f69860bf64ead25ddba0129a56cf633"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/runtime_detection.rs"
 status = "runtime-feature-attestation-boundary"
-sha256 = "ec29948d1cdc1440f50b163417dd198e8394487c797ac9ce4f896f17d73d17aa"
+sha256 = "f80399ec92f54a4a7deaf5588e729908a1f730549f30de5bdfdc826c6cb31de5"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/sha512_runtime.rs"
+status = "scalar-fallback-and-reporting-boundary"
+sha256 = "89bf759912dda76506023b9f05fc2550136854746e295c02b1bff6c20f6d4694"
 
 [[backends]]
 id = "x86-sha"
@@ -166,6 +184,17 @@ sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
 low_level_allowed = true
 instructions = ["sha"]
 abi_preconditions = ["x86_64", "sha-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "x86-sha512-scalar"
+identity = "ScalarOnlySha512"
+architecture = "x86_64"
+module = "absent"
+status = "scalar-only-reviewed"
+sha256 = "absent"
+low_level_allowed = false
+instructions = []
+abi_preconditions = ["x86_64", "no-admitted-single-stream-sha512-kernel"]
 
 [[backends]]
 id = "x86-aes-gcm"
@@ -206,10 +235,21 @@ identity = "Aarch64Sha2"
 architecture = "aarch64"
 module = "src/aarch64_sha2.rs"
 status = "implemented-unadmitted-native-evidence-pending"
-sha256 = "27b71c0b4eb183c4e3e66c30c420aa41cc153a77e84a5dba720124b6f7b170c4"
+sha256 = "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353"
 low_level_allowed = true
 instructions = ["neon", "sha2"]
 abi_preconditions = ["aarch64", "neon-and-sha2-usable-on-current-logical-cpu"]
+
+[[backends]]
+id = "aarch64-sha512"
+identity = "Aarch64Sha512"
+architecture = "aarch64"
+module = "src/aarch64_sha2.rs"
+status = "implemented-unadmitted-native-evidence-pending"
+sha256 = "b2c38b0d8fa13e3010fa3a0f85753505d8e994c00327da1bdf8651fd6f5e3353"
+low_level_allowed = true
+instructions = ["neon", "sha3"]
+abi_preconditions = ["aarch64", "neon-and-sha3-usable-on-current-logical-cpu"]
 
 [[backends]]
 id = "aarch64-aes-gcm"
@@ -239,7 +279,18 @@ identity = "RiscVScalarCrypto"
 architecture = "riscv"
 module = "src/riscv64_zknh.rs"
 status = "implemented-unadmitted-native-evidence-pending"
-sha256 = "148eb17e4ccddadd9357ff4fda4a302c422d4ec63d7221144c3bff87961a045c"
+sha256 = "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619"
+low_level_allowed = true
+instructions = ["zknh"]
+abi_preconditions = ["riscv64", "zknh-usable-on-current-hart"]
+
+[[backends]]
+id = "riscv-sha512"
+identity = "RiscVScalarCrypto"
+architecture = "riscv"
+module = "src/riscv64_zknh.rs"
+status = "implemented-unadmitted-native-evidence-pending"
+sha256 = "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619"
 low_level_allowed = true
 instructions = ["zknh"]
 abi_preconditions = ["riscv64", "zknh-usable-on-current-hart"]

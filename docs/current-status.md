@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.1 signed; v0.23.2 pentest PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 implementation complete and awaiting exceptional pentest and native evidence
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -128,7 +128,7 @@ assessment of exact candidate
 no remediation, and records `PASS`/`PASS` with zero open findings. Hosted
 GitHub and CodeQL passed, and the signed tag selects zero crates.io packages.
 
-The facade now advances to internal `0.23.2`. Distinct `Sha512_224` and
+Signed internal v0.23.2 added distinct `Sha512_224` and
 `Sha512_256` types complete the portable FIPS 180-4 SHA-2 family with exact
 28-byte and 32-byte outputs, checked 128-bit length domains, transactional
 streaming, consuming finalization, one-shot functions, common traits, and
@@ -141,9 +141,24 @@ ordinary-SHA-512 truncation tests pass. The new algorithm identities select
 zero crates.io packages. The repository-owner assessment of exact candidate
 `0129013eaae7ee3f1cd2ca5cf9671b8ea5834165` found no vulnerability, required
 no remediation, and records `PASS`/`PASS` with zero open findings. The
-committed report candidate must now pass hosted GitHub and CodeQL before the
-tag is authorized. Ordinary-state erasure, complete-family acceleration,
-independent review, and FIPS 140-3 validation remain absent.
+hosted GitHub and CodeQL passed, and the signed tag selected zero crates.io
+packages. Ordinary-state erasure, independent review, and FIPS 140-3
+validation remain absent.
+
+The facade now advances to internal `0.23.3`. SHA-224 reuses all three exact
+SHA-256-family candidate kernels through its separate IV, output, and public
+state identity. New static, caller-owned, KAT-gated AArch64 SHA-512 and RV64
+Zknh SHA-512 sessions serve SHA-384, SHA-512, SHA-512/224, and SHA-512/256.
+Forced scalar equivalence passes across all six identities, padding boundaries
+and irregular chunking under AArch64 and RISC-V QEMU, and compiler-endpoint
+assembly contains the required SHA-512 instructions. The std adapter reports
+unadmitted AArch64 capability and retains scalar fallback. x86_64 SHA-512 is
+an explicit scalar-only decision; AVX2 and AVX-512 do not imply admission.
+All five candidates remain unadmitted; native SHA-512-family performance,
+migration and side-channel evidence remains pending. The new low-level code
+requires an exceptional pentest before the internal tag, selects zero
+crates.io packages, and makes no independent-review, register-erasure, or
+FIPS-validation claim.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

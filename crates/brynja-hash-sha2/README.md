@@ -26,26 +26,32 @@
 # brynja-hash-sha2
 
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
-v0.22.0 implementation candidate provides complete portable SHA-256 one-shot
-and streaming APIs. The optional `cpu` feature added at v0.22.1 and extended
+crate provides complete portable SHA-224 and SHA-256 one-shot and streaming
+APIs. The optional `cpu` feature added at v0.22.1 and extended
 with the unadmitted RV64 Zknh candidate at v0.22.2 accepts an
 already tested `brynja-crypto-cpu` session without changing scalar ownership.
 Its x86_64, AArch64, and RISC-V candidates remain unadmitted pending native
 evidence. The v0.22.3 packaged downstream acceptance closes the complete
-public SHA-256 chain. SHA-224, SHA-384, and SHA-512 are absent.
+public SHA-256 chain. v0.23.0 adds complete portable SHA-224; SHA-384 and the
+SHA-512 family remain planned in the following small milestones.
 
 ## Example
 
 ```rust
-use brynja_hash_sha2::{Sha256, sha256};
+use brynja_hash_sha2::{Sha224, Sha256, sha224, sha256};
 
-let one_shot = sha256(b"abc")?;
+let sha224_one_shot = sha224(b"abc").unwrap();
+let one_shot = sha256(b"abc").unwrap();
+
+let mut sha224_streaming = Sha224::new();
+sha224_streaming.update(b"a").unwrap();
+sha224_streaming.update(b"bc").unwrap();
+assert_eq!(sha224_streaming.finalize(), sha224_one_shot);
 
 let mut streaming = Sha256::new();
-streaming.update(b"a")?;
-streaming.update(b"bc")?;
+streaming.update(b"a").unwrap();
+streaming.update(b"bc").unwrap();
 assert_eq!(streaming.finalize(), one_shot);
-# Ok::<(), brynja_hash_sha2::Sha256Error>(())
 ```
 
 Callers with external file or stream metadata can preflight the checked FIPS
@@ -55,8 +61,7 @@ message-length domain without allocating or mutating the state:
 use brynja_hash_sha2::Sha256;
 
 let state = Sha256::new();
-state.check_additional_bytes(4_294_967_296)?;
-# Ok::<(), brynja_hash_sha2::Sha256Error>(())
+state.check_additional_bytes(4_294_967_296).unwrap();
 ```
 
 Static `no_std` callers may explicitly request a compile-time-proven backend:
@@ -98,12 +103,14 @@ verification.
 
 | Algorithm | Implementation chain | Independently verified |
 | --- | --- | --- |
+| SHA-224 | ✅ Implemented | ❌ Not verified |
 | SHA-256 | ✅ Implemented | ❌ Not verified |
 
-This is an unkeyed hash. Digest equality is not MAC verification,
+These are unkeyed hashes. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS
-140-3 validation claim. Ordinary `Sha256` is intended for unkeyed hashing and
-does not guarantee erasure of remnants when its input contains secrets. A
+140-3 validation claim. Ordinary `Sha224` and `Sha256` are intended for
+unkeyed hashing and do not guarantee erasure of remnants when their input
+contains secrets. A
 caller cannot erase the private working state, message schedule, or buffered
 input itself. HMAC and every future secret-derived consumer must add hardened
 secret ownership and emitted-code-verified cleanup before admission.

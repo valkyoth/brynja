@@ -128,7 +128,7 @@ def test_current_residual_repository() -> None:
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 129
-    assert len(artifact["plans"]) == 391
+    assert len(artifact["plans"]) == 393
     assert len(artifact["surfaces"]) == 4449
     assert len(artifact["requirements"]) == 168
     assert len(artifact["local_rights"]) == 17

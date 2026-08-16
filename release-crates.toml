@@ -1,19 +1,19 @@
 [release]
-version = "0.22.3"
-milestone = "0.22.3"
+version = "0.23.0"
+milestone = "0.23.0"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "A new first-party cryptographic algorithm and public facade surface require exceptional assessment before the internal tag."
 
 [crates."brynja"]
-previous_version = "0.22.2"
-version = "0.22.3"
+previous_version = "0.22.3"
+version = "0.23.0"
 change = "code"
 publish = false
-reason = "Advance the internal facade milestone after complete downstream SHA-256 public API acceptance without crates.io publication."
+reason = "Advance the internal facade milestone with complete portable SHA-224 without crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Expose the exact brynja-hash-sha2 SHA-256 implementation for later protocol and provider consumers while retaining it for v0.25.0 publication."
+reason = "Expose complete portable SHA-224 beside SHA-256 for later protocol and provider consumers while retaining both for v0.25.0 publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -41,7 +41,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add an exact public message-length preflight and complete packaged downstream SHA-256 acceptance while retaining all changes for the v0.25.0 checkpoint."
+reason = "Add complete portable SHA-224 over the reviewed 32-bit compression owner while retaining all SHA-2 changes for the v0.25.0 checkpoint."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

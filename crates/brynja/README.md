@@ -31,7 +31,7 @@ not depend on a C cryptographic library.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet be
 > used to secure application traffic. The current facade provides completed
-> security foundations, portable SHA-256, bounded TLS/DTLS record-envelope
+> security foundations, portable SHA-224 and SHA-256, bounded TLS/DTLS record-envelope
 > framing, bounded DER framing, and selected canonical ASN.1 values. It does
 > not yet provide a TLS connection, certificate validator, or working protocol
 > engine.
@@ -52,12 +52,6 @@ not depend on a C cryptographic library.
 
 ```bash
 cargo add brynja --no-default-features
-```
-
-Optional facade integrations are selected explicitly:
-
-```bash
-cargo add brynja --no-default-features --features dtls
 ```
 
 ## Examples
@@ -95,10 +89,13 @@ assert!(remaining.is_empty());
 This parses only the bounded record envelope. It does not negotiate TLS,
 authenticate data, decrypt a record, or perform network I/O.
 
-### Compute Portable SHA-256
+### Compute Portable SHA-2
 
 ```rust
+let shorter = brynja::crypto::sha224(b"abc").unwrap();
 let digest = brynja::crypto::sha256(b"abc").unwrap();
+
+assert_eq!(shorter.as_bytes().len(), 28);
 
 assert_eq!(
     digest.as_bytes(),
@@ -111,10 +108,10 @@ assert_eq!(
 );
 ```
 
-SHA-256 is an unkeyed digest, not authentication, a MAC, or password hashing.
-Ordinary `Sha256` does not guarantee erasure of secret-input remnants, including
-private working state that callers cannot clear; keyed use requires the later
-hardened construction.
+SHA-224 and SHA-256 are unkeyed digests, not authentication, a MAC, or password
+hashing. Ordinary `Sha224` and `Sha256` do not guarantee erasure of secret-input
+remnants, including private working state that callers cannot clear; keyed use
+requires the later hardened construction.
 
 ## Cryptography Verification Status
 
@@ -136,6 +133,7 @@ independent cryptographic or protocol verification.
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
+| SHA-224 | ✅ Implemented | ❌ Not independently verified |
 | SHA-256 | ✅ Implemented | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
@@ -172,7 +170,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-core` | Small allocation-free fixed-output hash interfaces |
-| `brynja-hash-sha2` | Portable SHA-256 implementation and future SHA-2 family ownership |
+| `brynja-hash-sha2` | Portable SHA-224/SHA-256 implementations and complete SHA-2 family ownership |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | Optional first-party ISA kernels and separate host runtime detection; absent from this facade |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |

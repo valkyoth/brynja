@@ -688,7 +688,7 @@
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Complete `brynja-hash-sha2` with streaming and fixed-message SHA-224, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 beside the existing SHA-256 implementation; use the exact FIPS 180-4 initial values, padding, length domains, digest sizes, and SHA-512/t derivation rules, and expose all six named SHA-2 algorithms through documented public APIs without treating SHA-512/224 or SHA-512/256 as ordinary truncation.",
+      "scope": "Complete portable SHA-224 in `brynja-hash-sha2` beside SHA-256, reusing the reviewed 32-bit compression owner while preserving SHA-224's distinct FIPS 180-4 initial value, 224-bit output, checked length domain, streaming state, one-shot function, digest type, and public identity.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -701,8 +701,30 @@
         "rfc:5869",
         "rfc:8439"
       ],
-      "title": "Complete Portable SHA-2 Family",
+      "title": "Complete Portable SHA-224",
       "version": "0.23.0"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the complete portable SHA-384 and SHA-512 algorithms in `brynja-hash-sha2` over one private reviewed 64-bit compression owner, with distinct FIPS 180-4 IVs, outputs, 128-byte buffering, 128-bit length encoding, checked byte domains, streaming states, one-shot functions, digest types, and public identities.",
+      "source_ids": [],
+      "title": "Complete Portable SHA-384 And SHA-512",
+      "version": "0.23.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Complete SHA-512/224 and SHA-512/256 in `brynja-hash-sha2` as distinct named FIPS 180-4 algorithms over the reviewed 64-bit foundation, implement and verify the SHA-512/t IV-generation procedure for exactly the approved 224- and 256-bit identities, and reject the false model that either algorithm is ordinary SHA-512 truncation.",
+      "source_ids": [],
+      "title": "Complete SHA-512/224 And SHA-512/256",
+      "version": "0.23.2"
     },
     {
       "boundary": {
@@ -713,7 +735,7 @@
       "scope": "Extend every admitted SHA-256-family and SHA-512-family backend to the complete six-algorithm SHA-2 surface on x86_64, AArch64, and qualifying RISC-V; reuse compression kernels without merging algorithm identities, and require per-variant KAT, chunking, exhaustion, forced-path, quarantine, native performance, emitted-code, and scalar-equivalence evidence.",
       "source_ids": [],
       "title": "Complete SHA-2 CPU Acceleration",
-      "version": "0.23.1"
+      "version": "0.23.3"
     },
     {
       "boundary": {
@@ -724,7 +746,7 @@
       "scope": "Close the SHA-2 chain with a packaged downstream fixture that uses only public APIs to hash representative real content through SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 in one-shot and irregular streaming modes, forces every admitted backend, and detects wrong IVs, wrong truncation, packaging gaps, or incomplete family documentation.",
       "source_ids": [],
       "title": "Complete SHA-2 Public API Usability Acceptance",
-      "version": "0.23.2"
+      "version": "0.23.4"
     },
     {
       "boundary": null,

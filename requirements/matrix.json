@@ -1,6 +1,6 @@
 {
-  "closure_policy_sha256": "e1e400be4192eef3fdbce922795b4f863c9a5b7a6a5e990d98a244db8c70a406",
-  "domain_policy_sha256": "df1d5ee94b6942b5a9d10ebf8285546d675a07d2e38ff89e8df740f8d043eee3",
+  "closure_policy_sha256": "20dbd631f3288bde84b91b0e99480d43e289b9828447aca4db5647c090262582",
+  "domain_policy_sha256": "b94976493268ef5c4243873272d72ef634f6d083aa000e83433b61e3b4752092",
   "policy_sha256": "7c46ff57ccf600fdfcb77bb3d6e687f13911e6eb7f4961c017be4df080659670",
   "requirements": [
     {
@@ -763,7 +763,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Complete SHA-2 family vectors and proof bounds remain unresolved until v0.23.0; the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
+      "evidence_gap": "Portable SHA-224 and SHA-256 are implemented with vectors and proof bounds; portable SHA-384/SHA-512 and SHA-512/224/SHA-512/256 remain unresolved until v0.23.1-v0.23.2, whole-family acceleration and packaged acceptance remain v0.23.3-v0.23.4, and the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -777,7 +777,7 @@
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -851,24 +851,24 @@
           "sha256": "442a3ac8b63ad1ce34f9563d4ea85ee6d1115d129e0b458890937a1175a72973"
         }
       ],
-      "statement": "SHA-256, SHA-384, and SHA-512 follow the pinned secure-hash algorithms, length rules, and approved hash-use constraints; any RISC-V acceleration uses only an exact ratified cryptographic extension and preserves those semantics.",
+      "statement": "SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 follow the pinned secure-hash algorithms, distinct initial values and output rules, length domains, and approved hash-use constraints; any RISC-V acceleration uses only an exact ratified cryptographic extension and preserves those semantics.",
       "strength": "INVARIANT",
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "crates/brynja-crypto/src/hash.rs#Sha2"
+          "target": "crates/brynja-hash-sha2/src/lib.rs#SHA224_IMPLEMENTED"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/crypto_hash.rs#sha2_vectors_and_boundaries"
+          "target": "crates/brynja-hash-sha2/tests/sha224.rs#official_short_and_long_vectors_match_fips_and_nist_cavp"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/crypto_hash.rs#sha2_length_exhaustion"
+          "target": "crates/brynja-hash-sha2/tests/sha224.rs#sha224_is_not_truncated_sha256"
         }
       ],
       "work_bound": "Processing work is linear in complete input blocks with checked bit-length accumulation and deterministic exhaustion."

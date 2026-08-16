@@ -7,6 +7,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Split the oversized complete-SHA-2 milestone into five reviewable tagged
+  stops: complete SHA-224, complete SHA-384/SHA-512, complete SHA-512/224 and
+  SHA-512/256, whole-family acceleration, and package-external acceptance.
+- Add complete allocation-free `no_std` SHA-224 with a distinct FIPS 180-4 IV,
+  exact 28-byte digest, checked message-length preflight, transactional
+  streaming updates, consuming finalization, one-shot use, and the common
+  fixed-output hash traits; reexport it through `brynja-crypto` and `brynja`.
+- Verify SHA-224 with NIST CAVP short and Monte Carlo vectors, FIPS long and
+  million-byte examples, every critical padding boundary, every two-part split,
+  all fixed chunk widths, exact exhaustion proofs, and an explicit regression
+  showing SHA-224 is not truncated SHA-256.
+- Record SHA-224 as implemented but neither independently reviewed nor FIPS
+  140-3 validated; retain the ordinary unkeyed-state erasure limitation and
+  require a later hardened owner before HMAC or any secret-bearing use.
 - Refresh the Miri and Rust sanitizer evidence toolchain to the latest
   available `nightly-2026-08-16` at exact Rust revision
   `67854e511de21d881bb16426996cd4259d44aa2e`, regenerate deterministic

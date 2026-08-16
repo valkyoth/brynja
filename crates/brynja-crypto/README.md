@@ -33,8 +33,8 @@ for protocol callers. The
 dependency direction is always from `brynja-crypto` to the leaf families, never
 back toward TLS or the full cryptographic graph.
 
-In `0.1.2` this package reexports the exact accepted portable SHA-256
-implementation from `brynja-hash-sha2`. Its broader provider effects, AEADs,
+The current internal workspace reexports the complete portable SHA-224 and
+accepted SHA-256 implementations from `brynja-hash-sha2`. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 
@@ -50,15 +50,16 @@ verification.
 | --- | --- | --- |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
-Portable SHA-256 is usable through this component; the remaining planned
-composition layer is not implemented yet. Ordinary `Sha256` does not guarantee
-erasure of secret-input remnants or private internal state; keyed constructions
-must use the later hardened secret-owning path.
+Portable SHA-224 and SHA-256 are usable through this component; the remaining planned
+composition layer is not implemented yet. Ordinary `Sha224` and `Sha256` do not
+guarantee erasure of secret-input remnants or private internal state; keyed
+constructions must use the later hardened secret-owning path.
 
 ```rust
-let digest = brynja_crypto::sha256(b"abc")?;
+let shorter = brynja_crypto::sha224(b"abc").unwrap();
+let digest = brynja_crypto::sha256(b"abc").unwrap();
+assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(digest.as_bytes().len(), 32);
-# Ok::<(), brynja_crypto::Sha256Error>(())
 ```
 
 Most application users will eventually depend on the modern facade:

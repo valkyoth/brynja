@@ -449,6 +449,17 @@ DEFAULT omission, AlgorithmIdentifier interpretation, X.509 validity,
 signature authenticity, cryptographic safety, independent verification, or
 FIPS validation. Escape-bearing ISO 2022 types remain unsupported rather than
 being partially accepted.
+v0.23.0 treats every SHA-224 message byte, partition, block boundary, padding
+position, and accumulated byte count as untrusted. Length admission is checked
+before observable state mutation, buffering is fixed-size and allocation-free,
+finalization consumes the state, and the distinct FIPS 180-4 IV and 28-byte
+output prevent SHA-224 from being represented as truncated SHA-256. NIST short,
+long, million-byte, and Monte Carlo results plus every critical padding and
+streaming split are executable gates. The ordinary unkeyed state deliberately
+makes no secret-remnant, CPU-register, cache, dump, independent-review, or FIPS
+140-3 validation claim. Before HMAC or any secret-bearing construction consumes
+this path, that owner must provide hardened internal-state cleanup and emitted-
+code evidence; callers cannot erase private state hidden inside the hash.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

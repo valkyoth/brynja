@@ -2130,45 +2130,109 @@ Exit criteria:
   requirement; any discovered gap is fixed here before v0.23.0 starts;
 - `v0.22.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.23.0 - Complete Portable SHA-2 Family
+### v0.23.0 - Complete Portable SHA-224
 
 Status: planned
 
-Plan scope: Complete `brynja-hash-sha2` with streaming and fixed-message SHA-224, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 beside the existing SHA-256 implementation; use the exact FIPS 180-4 initial values, padding, length domains, digest sizes, and SHA-512/t derivation rules, and expose all six named SHA-2 algorithms through documented public APIs without treating SHA-512/224 or SHA-512/256 as ordinary truncation.
+Plan scope: Complete portable SHA-224 in `brynja-hash-sha2` beside SHA-256, reusing the reviewed 32-bit compression owner while preserving SHA-224's distinct FIPS 180-4 initial value, 224-bit output, checked length domain, streaming state, one-shot function, digest type, and public identity.
 
-Goal: finish the complete named FIPS 180-4 SHA-2 family through reusable public
-APIs without deferring any family member past `v1.0.0`.
+Goal: deliver a complete, directly usable SHA-224 implementation without
+mixing its algorithm identity or output rule into SHA-256.
 
 Deliverables:
 
-- implement distinct SHA-224, SHA-384, SHA-512, SHA-512/224 and SHA-512/256
-  public streaming, one-shot and digest types over the correct shared 32-bit or
-  64-bit compression owners;
-- encode exact per-algorithm IV, output, block, padding and checked bit-length
-  domains; implement and test the FIPS SHA-512/t IV derivation rule without
-  exposing arbitrary unsafe truncation as a named hash;
+- implement distinct SHA-224 public streaming, one-shot, error and digest types
+  over the existing reviewed 32-bit SHA-2 compression owner;
+- encode the exact SHA-224 IV, 28-byte output, 64-byte block, padding and
+  checked 64-bit bit-length domain without exposing SHA-256 truncation as
+  SHA-224;
 - record arithmetic, group, buffer, key, nonce, randomness, use-limit, import-only RSA, ephemeral-lifecycle, constant-time, exclusion, and provider-token invariants;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
 
 Verification:
 
-- run official short, long, Monte Carlo and boundary vectors for every named
-  member, including tests that distinguish SHA-512/224 and SHA-512/256 from
-  naively truncated SHA-512;
-- differentially test every streaming partition, padding boundary, checked
-  exhaustion, finalization state and public one-shot API under no_std;
+- run official short, long, Monte Carlo and boundary vectors for SHA-224 and
+  tests that distinguish its IV and result from truncated SHA-256;
+- differentially test every streaming partition, 55/56/63/64-byte padding
+  boundary, checked exhaustion, finalization state and public one-shot API
+  under no_std;
 - review MIR, LLVM and assembly and test timing, cache, branch, malformed inputs, invalid secrets, exhaustion, reuse, fault attacks, and zeroization;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- all six named SHA-2 algorithms are directly usable, independently identified
-  and fully evidenced before HMAC, HKDF, PKI, TLS, OpenPGP or FIPS consumption;
+- SHA-224 is directly usable, independently identified and fully evidenced;
 - `v0.23.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.23.1 - Complete SHA-2 CPU Acceleration
+### v0.23.1 - Complete Portable SHA-384 And SHA-512
+
+Status: planned
+
+Plan scope: Implement the complete portable SHA-384 and SHA-512 algorithms in `brynja-hash-sha2` over one private reviewed 64-bit compression owner, with distinct FIPS 180-4 IVs, outputs, 128-byte buffering, 128-bit length encoding, checked byte domains, streaming states, one-shot functions, digest types, and public identities.
+
+Goal: finish the two base SHA-512-family algorithms and their shared portable
+64-bit foundation without deferring a usable public behavior.
+
+Deliverables:
+
+- implement the complete 80-round 64-bit compression function and separately
+  typed SHA-384 and SHA-512 streaming, one-shot, error and digest APIs;
+- encode exact IVs, 48-byte and 64-byte results, the 111/112-byte padding
+  boundary and the FIPS 128-bit message-length field;
+- keep the shared compression and buffering owners private so callers cannot
+  invent unnamed algorithms or arbitrary truncations.
+
+Verification:
+
+- run official short, long, Monte Carlo and boundary vectors for SHA-384 and
+  SHA-512, including arbitrary streaming partitions and independent oracles;
+- test checked exhaustion, exact 111/112/127/128-byte padding behavior,
+  consuming finalization and no_std use;
+- inspect portable emitted code and pass the complete supported compiler,
+  target, dependency, package and documentation matrix.
+
+Exit criteria:
+
+- SHA-384 and SHA-512 are directly usable, independently identified and fully
+  evidenced before a truncated SHA-512 variant or keyed consumer is admitted;
+- `v0.23.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.23.2 - Complete SHA-512/224 And SHA-512/256
+
+Status: planned
+
+Plan scope: Complete SHA-512/224 and SHA-512/256 in `brynja-hash-sha2` as distinct named FIPS 180-4 algorithms over the reviewed 64-bit foundation, implement and verify the SHA-512/t IV-generation procedure for exactly the approved 224- and 256-bit identities, and reject the false model that either algorithm is ordinary SHA-512 truncation.
+
+Goal: complete every named FIPS 180-4 SHA-2 algorithm through exact public APIs
+before acceleration or a keyed construction begins.
+
+Deliverables:
+
+- implement distinct SHA-512/224 and SHA-512/256 streaming, one-shot, error and
+  digest APIs without exposing arbitrary SHA-512/t values;
+- implement the standard IV derivation procedure and prove that its two outputs
+  equal the normative constants used by the public states;
+- update requirements, threat model, controls, examples, verification status,
+  limitations, release notes and permanent evidence.
+
+Verification:
+
+- run official short, long, Monte Carlo and boundary vectors for both named
+  algorithms and distinguish them from naive SHA-512 truncation;
+- test derived-IV constants, arbitrary streaming partitions, padding,
+  exhaustion, consuming finalization and no_std use;
+- pass repository checks, supported Rust and target matrices, dependency and
+  advisory policy, SBOM, package, documentation and protocol isolation gates.
+
+Exit criteria:
+
+- all six named SHA-2 algorithms are directly usable, independently identified
+  and fully evidenced before HMAC, HKDF, PKI, TLS, OpenPGP or FIPS consumption;
+- `v0.23.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.23.3 - Complete SHA-2 CPU Acceleration
 
 Status: planned
 
@@ -2194,9 +2258,9 @@ Verification:
 Exit criteria:
 
 - every CPU family has an explicit evidenced backend or scalar-only decision and no wider ISA is admitted merely because it is available;
-- `v0.23.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.23.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.23.2 - Complete SHA-2 Public API Usability Acceptance
+### v0.23.4 - Complete SHA-2 Public API Usability Acceptance
 
 Status: planned
 
@@ -2227,7 +2291,7 @@ Exit criteria:
 
 - no SHA-2 algorithm, usable API, standard behavior, package artifact or
   documentation claim remains deferred;
-- `v0.23.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.23.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.24.0 - Complete FIPS 202 SHA-3 And SHAKE Family
 

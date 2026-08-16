@@ -55,7 +55,7 @@ EXPECTED_SHA256 = {
     CHECKS: "27c51a9cb1a8dfaeadcf337abfbd20698536f9c8d097c4991d62ffc93c0ec84c",
     RUST_MATRIX: "53c776118e5566fd60840fe1f8ac0af87d075165d720524d42836d0721d3fe8e",
     BARE_METAL: "557156b3b6c90603953b717dcd6a027c60955d459049dc2fef8b47a91e112b59",
-    WORKFLOW: "6be96531d71e9639c054e30f93f1b8dc938cadd78a92456fdc509bae896f29d6",
+    WORKFLOW: "fd9c4db449b30be25407372e509a757f67807b1763cd3336293d1ab34d61e755",
 }
 PACKAGES = (
     ("brynja-hash-core", "0.1.0", ("src/lib.rs",)),
@@ -79,6 +79,7 @@ PACKAGES = (
             "src/compress.rs",
             "src/digest.rs",
             "src/error.rs",
+            "src/sha224.rs",
             "src/sha256.rs",
         ),
     ),

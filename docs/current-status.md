@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 implementation candidate
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 final candidate with voluntary pentest PASS and local verification green, awaiting hosted verification
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -174,6 +174,15 @@ width, incomplete candidate accounting, forbidden evidence features, and
 missing package source. This closes public usability without changing
 cryptographic code, admitting a CPU backend, or adding independent-review,
 FIPS-validation, or secret-remanence claims.
+
+The repository-owner voluntary assessment of exact signed v0.23.4
+implementation candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842`
+reported no finding and required no remediation. The permanent report records
+`PASS`/`PASS` with zero open findings. This does not admit an accelerated
+backend, establish independent cryptographic review or FIPS validation, or
+replace the scheduled cumulative v0.20.0-to-v0.25.0 assessment. The complete
+local release check is green and the internal tag still awaits hosted GitHub
+and CodeQL plus explicit repository-owner authorization.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

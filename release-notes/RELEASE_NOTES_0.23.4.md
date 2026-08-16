@@ -1,7 +1,7 @@
 # Brynja 0.23.4 Release Notes
 
-Status: implementation candidate; local verification pending; no scheduled
-pentest and no crates.io publication
+Status: final candidate; voluntary pentest PASS and local verification green;
+hosted verification and internal tag pending; no crates.io publication
 
 Brynja 0.23.4 closes the complete SHA-2 implementation chain with a
 separately packaged downstream consumer that uses only documented public APIs.
@@ -43,8 +43,10 @@ remanence, independent-review, or FIPS 140-3 validation claim.
 ## Release Process
 
 Version 0.23.4 is an internal development milestone in the cumulative
-v0.20.0-to-v0.25.0 range and selects zero crates.io packages. It has no
-scheduled pentest because it introduces no exceptional trigger; the complete
-delta remains subject to the scheduled backwards-looking v0.25.0 assessment.
-The full local gate, hosted GitHub, and CodeQL must be green before explicit
-tag authorization.
+v0.20.0-to-v0.25.0 range and selects zero crates.io packages. It had no
+scheduled pentest because it introduces no exceptional trigger, but the
+repository owner voluntarily assessed exact signed implementation candidate
+`7864a8f3a8766d16fc9bb2ea89893351f29aa842` and reported `PASS`/`PASS` with
+zero open findings. The complete delta remains subject to the scheduled
+backwards-looking v0.25.0 assessment. The full local gate is green; hosted
+GitHub and CodeQL must be green before explicit tag authorization.

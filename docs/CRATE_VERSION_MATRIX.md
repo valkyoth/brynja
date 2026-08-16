@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 implementation candidate
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 final candidate with voluntary pentest PASS and local verification green, awaiting hosted verification
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.23.4`. `brynja-hash-core 0.1.0` and
@@ -198,6 +198,11 @@ closure. Negative fixtures reject digest, API, documentation, width, backend,
 feature, and package regressions. It changes no support-package version,
 admits no CPU backend, requires no scheduled pentest, and selects no crates.io
 packages.
+
+The voluntary repository-owner assessment of exact signed v0.23.4 candidate
+`7864a8f3a8766d16fc9bb2ea89893351f29aa842` records `PASS`/`PASS` with zero
+open findings and no remediation. It does not alter the zero-package
+selection or replace the scheduled cumulative v0.25.0 assessment.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

@@ -7,6 +7,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Record the voluntary v0.23.4 assessment of exact signed implementation
+  candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842` as `PASS`/`PASS`
+  with zero open findings and no remediation. Preserve all CPU-admission,
+  secret-state-erasure, independent-review, FIPS-validation, zero-publication,
+  and scheduled v0.25.0 cumulative-review restrictions.
 - Close the complete SHA-2 implementation chain at v0.23.4 with a standalone
   `no_std` downstream consumer that exercises all six algorithms through both
   leaf and facade public APIs over one-shot, irregular streaming, empty, text,

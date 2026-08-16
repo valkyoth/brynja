@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 implementation candidate
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 final candidate with voluntary pentest PASS and local verification green
 
 | Control | Foundation enforcement |
 | --- | --- |

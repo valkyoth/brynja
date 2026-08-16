@@ -199,6 +199,13 @@ accounting, feature, and package-content regressions. This establishes
 consumer usability; it does not admit a CPU backend or add independent review,
 FIPS validation, or secret-state erasure.
 
+The voluntary repository-owner assessment of exact signed v0.23.4
+implementation candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842`
+reported no finding and required no remediation. Its permanent report records
+`PASS`/`PASS` with zero open findings. This does not replace the scheduled
+cumulative v0.20.0-to-v0.25.0 assessment or alter the zero-crate publication
+selection.
+
 RISC-V testing follows an exact-feature policy. The registered native host is
 used for scalar portability and only those generic-vector or bit-manipulation
 operations supported by every eligible hart; missing cryptographic extensions

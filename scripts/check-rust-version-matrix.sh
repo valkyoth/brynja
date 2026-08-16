@@ -8,4 +8,6 @@ for toolchain in "${toolchains[@]}"; do
     fi
     cargo "+$toolchain" check --workspace --all-features
     cargo "+$toolchain" check --manifest-path assurance/cpu-admission-fixture/Cargo.toml
+    cargo "+$toolchain" run --quiet --locked \
+        --manifest-path assurance/sha256-public-api/Cargo.toml
 done

@@ -99,9 +99,11 @@ implementation order, and security gates. It is planning only: no listed
 algorithm is implemented, admitted, independently verified, or FIPS validated
 by appearing there.
 
-The current `0.22.2` development milestone adds an isolated first-party RV64
-Zknh compression candidate beside the x86_64 SHA and AArch64 SHA2 candidates for the complete portable SHA-256
-implemented at v0.22.0. Portable `brynja-hash-sha2` still owns the public
+The signed `0.22.2` development milestone added an isolated first-party RV64
+Zknh compression candidate beside the x86_64 SHA and AArch64 SHA2 candidates
+for the complete portable SHA-256 implemented at v0.22.0. The current
+`0.22.3` milestone closes that implementation chain with packaged downstream
+public-API acceptance. Portable `brynja-hash-sha2` still owns the public
 digest, streaming state, padding, checked length, finalization, and scalar
 fallback. The optional zero-dependency `no_std` `brynja-crypto-cpu` crate owns
 only static selection, direct KAT, caller-owned health/quarantine, and exact
@@ -457,14 +459,23 @@ native RISC-V support claim. The registered native lane was also inventoried
 and rejected before execution because every hart lacks scalar and vector SHA
 extensions. Its exceptional assessment found no Critical, High, or Medium
 issue, required no source remediation, and records `PASS`/`PASS` with zero open
-findings. The signed tag still requires the committed report candidate to pass
-green GitHub and CodeQL.
+findings. Signed tag v0.22.2 contains that exact report candidate.
+
+The current v0.22.3 acceptance fixture depends only on the ordinary
+`brynja-hash-sha2` and `brynja-crypto` manifests. One documented command checks
+empty, text, binary, multi-block file-like, and million-byte messages through
+one-shot and irregular streaming APIs, rebuilds and runs the fixture from
+Cargo package contents, and verifies public checked-length exhaustion. It
+reports zero admitted acceleration routes and explicitly skips all three
+unadmitted candidates. Corrupted digests, missing public exports, backend
+overclaims, exhaustion bypasses, candidate-feature injection, and altered
+package contents fail deterministic negative fixtures.
 
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.22.2`
-RISC-V SHA-256-acceleration milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.22.3`
+SHA-256 public-acceptance milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -568,9 +579,9 @@ selected set in dependency order and publishes the facade last.
 These tables track concrete public capabilities, not internal crate names or
 reserved architecture. A capability is listed as implemented only after its
 complete public API and final downstream usability-acceptance milestone pass.
-For example, SHA-256 will be added after v0.22.3, rather than when an internal
-module or partial implementation first exists. The broader crate-level audit
-inventory remains available in the
+SHA-256 appears below only after its complete v0.22.3 public acceptance, rather
+than when an internal module or partial implementation first existed. The
+broader crate-level audit inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
 ✅ Implemented means the named capability has a documented, consumer-usable
@@ -585,7 +596,7 @@ independent cryptographic or protocol verification.
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| _No accepted hash implementation yet_ | — | — |
+| SHA-256 | ✅ Implemented | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -619,7 +630,7 @@ security policy, or certificate-bound operational-environment claim.
 | `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and portable SHA-256 through v0.22; no TLS engine or provider effect |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
-| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 implements portable SHA-256; acceleration and chain acceptance remain v0.22.1-v0.22.3 |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 provides accepted portable SHA-256; later SHA-2 variants and admitted acceleration remain planned |
 | Future `brynja-hash-sha3` | Complete FIPS 202 SHA-3 and SHAKE family ownership | Planned from v0.24.0 through v0.24.2 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports portable SHA-256; other planned cryptography and provider effects remain absent |
@@ -769,7 +780,7 @@ python3 scripts/test-sha256.py
 scripts/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.22.2
+scripts/tag_gate.sh v0.22.3
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

@@ -21,7 +21,7 @@ certificate-bound operational-environment claim.
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
-| `brynja-hash-sha2` | Complete portable SHA-256; later SHA-2 algorithms and accelerated backends remain planned | ❌ Not verified |
+| `brynja-hash-sha2` | Accepted public portable SHA-256; later SHA-2 algorithms and accelerated backends remain planned | ❌ Not verified |
 | Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Implemented but unadmitted x86_64 SHA, AArch64 SHA2, and RV64 Zknh compression candidates, static selection, direct KAT, health and quarantine | ❌ Not independently verified; native admission evidence incomplete |
@@ -41,7 +41,7 @@ certificate-bound operational-environment claim.
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
-The implemented portion currently consists of portable SHA-256; the shared alert/failure,
+The implemented portion currently consists of publicly accepted portable SHA-256; the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
 provider, entropy/secure-random, typed-clock, and pending-operation foundations;

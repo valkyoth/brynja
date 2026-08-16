@@ -1,19 +1,19 @@
 [release]
-version = "0.22.2"
-milestone = "0.22.2"
+version = "0.22.3"
+milestone = "0.22.3"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "The first RISC-V cryptographic inline-assembly kernel is a new unsafe ISA boundary requiring an exceptional pentest before this internal tag."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.22.1"
-version = "0.22.2"
+previous_version = "0.22.2"
+version = "0.22.3"
 change = "code"
 publish = false
-reason = "Advance the internal facade milestone while keeping the optional unadmitted RISC-V SHA-256 candidate outside the facade and crates.io publication."
+reason = "Advance the internal facade milestone after complete downstream SHA-256 public API acceptance without crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -41,7 +41,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add opt-in backend-aware one-shot and streaming APIs without changing the portable default, retaining all changes for the v0.25.0 checkpoint."
+reason = "Add an exact public message-length preflight and complete packaged downstream SHA-256 acceptance while retaining all changes for the v0.25.0 checkpoint."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

@@ -56,6 +56,7 @@ def main() -> int:
     reject("algorithm alias", lambda root: replace(root, policy.ERROR, "pub enum", "struct Sha512;\npub enum"))
     reject("length overflow", lambda root: replace(root, policy.SHA256, ".checked_add(additional)", ".checked_add(additional.saturating_add(1))"))
     reject("length ceiling", lambda root: replace(root, policy.SHA256, "*length <= Sha256::MAX_MESSAGE_BYTES", "*length < Sha256::MAX_MESSAGE_BYTES"))
+    reject("public length preflight", lambda root: replace(root, policy.SHA256, "pub fn check_additional_bytes", "fn check_additional_bytes"))
     reject("padding boundary", lambda root: replace(root, policy.SHA256, "buffer_len < FINAL_BLOCK_PREFIX_BYTES", "buffer_len <= FINAL_BLOCK_PREFIX_BYTES"))
     reject("round count", lambda root: replace(root, policy.COMPRESS, "0xc671_78f2,", ""))
     reject("round arithmetic", lambda root: replace(root, policy.COMPRESS, ".wrapping_add(second)", ".saturating_add(second)"))
@@ -68,7 +69,7 @@ def main() -> int:
     reject("consumer test", lambda root: replace(root, policy.TEST, "fn downstream_style_real_content_uses_only_public_api", "fn removed_consumer"))
     reject("oversized", lambda root: (root / policy.SHA256).write_text((root / policy.SHA256).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("SHA-256 policy rejects twenty-two unsafe, native, allocation, arithmetic, padding, package, test, size, and hash regressions")
+    print("SHA-256 policy rejects twenty-three unsafe, native, allocation, arithmetic, padding, package, test, size, and hash regressions")
     return 0
 
 

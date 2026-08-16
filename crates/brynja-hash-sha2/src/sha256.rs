@@ -52,6 +52,17 @@ impl Sha256 {
         self.message_bytes
     }
 
+    /// Checks whether an update of `additional_bytes` would fit the SHA-256
+    /// message-length domain without changing this state.
+    ///
+    /// This accepts a `u64` count so callers can preflight file or stream
+    /// metadata even when that size cannot be represented by one in-memory
+    /// slice. A later [`Self::update`] still performs the same check against
+    /// the actual slice length before changing observable state.
+    pub fn check_additional_bytes(&self, additional_bytes: u64) -> Result<(), Sha256Error> {
+        checked_message_length(self.message_bytes, additional_bytes).map(|_| ())
+    }
+
     /// Absorbs all input or rejects it before changing the state.
     pub fn update(&mut self, input: &[u8]) -> Result<(), Sha256Error> {
         self.update_portable(input)

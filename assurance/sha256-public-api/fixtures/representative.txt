@@ -1,0 +1,9 @@
+Brynja SHA-256 public API acceptance fixture
+
+This file represents ordinary caller-owned content read in irregular chunks.
+It contains text, punctuation, multiple lines, and enough bytes to cross more
+than one compression boundary without being supplied by Brynja's production
+implementation.
+
+The expected digest is owned by this downstream fixture and checked against
+both the reusable SHA-2 package and the brynja-crypto composition boundary.

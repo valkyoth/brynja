@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the reviewed v0.22.2 portable and optional CPU SHA-256 boundary."""
+"""Validate the reviewed v0.22.3 portable and optional CPU SHA-256 boundary."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ EXPECTED_SHA256 = {
     COMPRESS: "d4229f08e40392976f354eaf81f5d5cd03069d5f3c497e2cf481f65a9848e4b1",
     DIGEST: "352b84138acf77180889aa9ea0bfaea5fe8c4e198ff4449c4f0133923853ff0c",
     ERROR: "bbfbf26c2be4363f76365f5bc149d8c086c790d18d445c3809532aa035214f9b",
-    SHA256: "8fba67dc87dc70a9b67a68a5eb52b5bd1936eabdb2366c4ade59b9a248e2d1c6",
+    SHA256: "efbe3a588947e127dd0b0cecbe2b3e3b0a876a354d8d1f798052060d35ddb68d",
 }
 
 
@@ -130,6 +130,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "const INITIAL_STATE: [u32; 8]",
         "pub struct Sha256",
         "pub const MAX_MESSAGE_BYTES: u64 = u64::MAX / 8;",
+        "pub fn check_additional_bytes(&self, additional_bytes: u64)",
+        "checked_message_length(self.message_bytes, additional_bytes).map(|_| ())",
         "u64::try_from(input.len())",
         "checked_message_length(self.message_bytes, additional)",
         ".checked_add(additional)",
@@ -176,6 +178,7 @@ def validate_tests(root: Path) -> None:
         "fn padding_boundaries_have_exact_digests",
         "fn every_streaming_partition_matches_one_shot",
         "fn downstream_style_real_content_uses_only_public_api",
+        "fn public_length_preflight_is_exact_and_non_mutating",
         "let repeated = [b'a'; 1_000];",
         "for _ in 0..1_000",
         "for chunk_size in 1..=80",

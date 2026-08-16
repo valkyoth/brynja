@@ -30,9 +30,9 @@ v0.22.0 implementation candidate provides complete portable SHA-256 one-shot
 and streaming APIs. The optional `cpu` feature added at v0.22.1 and extended
 with the unadmitted RV64 Zknh candidate at v0.22.2 accepts an
 already tested `brynja-crypto-cpu` session without changing scalar ownership.
-Its x86_64 and AArch64 candidates remain unadmitted pending native evidence;
-final chain usability acceptance remains assigned to v0.22.3. SHA-224,
-SHA-384, and SHA-512 are absent.
+Its x86_64, AArch64, and RISC-V candidates remain unadmitted pending native
+evidence. The v0.22.3 packaged downstream acceptance closes the complete
+public SHA-256 chain. SHA-224, SHA-384, and SHA-512 are absent.
 
 ## Example
 
@@ -45,6 +45,17 @@ let mut streaming = Sha256::new();
 streaming.update(b"a")?;
 streaming.update(b"bc")?;
 assert_eq!(streaming.finalize(), one_shot);
+# Ok::<(), brynja_hash_sha2::Sha256Error>(())
+```
+
+Callers with external file or stream metadata can preflight the checked FIPS
+message-length domain without allocating or mutating the state:
+
+```rust
+use brynja_hash_sha2::Sha256;
+
+let state = Sha256::new();
+state.check_additional_bytes(4_294_967_296)?;
 # Ok::<(), brynja_hash_sha2::Sha256Error>(())
 ```
 
@@ -66,11 +77,20 @@ if let Some(backend) = Sha256BackendSession::for_compiled_target() {
 Until native admission evidence is accepted, the constructor returns `None`.
 The default feature set always remains portable scalar SHA-256.
 
+Run the repository-owned downstream acceptance from a clean checkout with:
+
+```bash
+python3 scripts/check-sha256-public-api.py
+```
+
+It uses only ordinary public package APIs and repeats the run from assembled
+Cargo package contents. It needs no network or private test hook.
+
 ## Cryptography Verification Status
 
-The portable SHA-256 implementation is complete at v0.22.0, but the public
-project capability table remains pending until the v0.22.3 chain acceptance.
-No code in this crate has been independently reviewed. A component only moves
+The portable SHA-256 implementation and its public usability acceptance are
+complete through v0.22.3. No code in this crate has been independently
+reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
 fuzzing, and pentesting do not by themselves constitute independent
@@ -78,7 +98,7 @@ verification.
 
 | Algorithm | Implementation chain | Independently verified |
 | --- | --- | --- |
-| SHA-256 | 🟡 Portable implementation complete; acceptance pending v0.22.3 | ❌ Not verified |
+| SHA-256 | ✅ Implemented | ❌ Not verified |
 
 This is an unkeyed hash. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS

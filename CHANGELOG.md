@@ -7,6 +7,22 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Complete the v0.22.3 SHA-256 implementation-chain acceptance with a
+  standalone public-only `no_std` downstream consumer covering six
+  authoritative real inputs, one-shot and irregular streaming, both public
+  crate entry points, scalar execution, and explicit skips for every
+  unadmitted accelerated backend.
+- Add a public non-mutating SHA-256 message-length preflight so downstream
+  consumers can deterministically test the exact maximum and exhaustion edge
+  without private hooks or impossible allocations.
+- Install and execute the same consumer against safely extracted package
+  artifacts with version-only dependencies, and enforce it across Rust
+  1.90.0 through 1.97.1, hosted systems, and the promised bare-metal matrix.
+- Add executable negative fixtures for digest corruption, missing exports,
+  backend misreporting, exhaustion bypass, unadmitted features, and altered
+  package contents. Mark portable SHA-256 implemented while retaining explicit
+  no-independent-review, no-FIPS-validation, zero-accelerated-admission, and
+  no-v0.22.3-publication statements.
 - Add an isolated first-party RV64 `Zknh` SHA-256 candidate using exactly
   `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1` in one
   source-hash-bound Rust inline-assembly module, with static exact-feature

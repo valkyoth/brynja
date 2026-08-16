@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the v0.22.0 portable SHA-256 boundary."""
+"""Check the v0.22.3 portable SHA-256 boundary."""
 
 from pathlib import Path
 

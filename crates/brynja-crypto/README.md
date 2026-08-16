@@ -33,9 +33,10 @@ for protocol callers. The
 dependency direction is always from `brynja-crypto` to the leaf families, never
 back toward TLS or the full cryptographic graph.
 
-In `0.1.2` this package establishes a compile-time boundary only; it does not
-provide a working TLS, cryptographic, PKI, platform, or legacy-protocol
-implementation.
+In `0.1.2` this package reexports the exact accepted portable SHA-256
+implementation from `brynja-hash-sha2`. Its broader provider effects, AEADs,
+KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
+remain unimplemented.
 
 ## Cryptography Verification Status
 
@@ -49,7 +50,14 @@ verification.
 | --- | --- | --- |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
-The component is not implemented yet.
+Portable SHA-256 is usable through this component; the remaining planned
+composition layer is not implemented yet.
+
+```rust
+let digest = brynja_crypto::sha256(b"abc")?;
+assert_eq!(digest.as_bytes().len(), 32);
+# Ok::<(), brynja_crypto::Sha256Error>(())
+```
 
 Most application users will eventually depend on the modern facade:
 

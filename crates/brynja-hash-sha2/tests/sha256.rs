@@ -108,6 +108,31 @@ fn downstream_style_real_content_uses_only_public_api() {
     assert_eq!(Ok(streamed.finalize()), digest);
 }
 
+#[test]
+fn public_length_preflight_is_exact_and_non_mutating() {
+    let mut state = Sha256::new();
+    assert_eq!(
+        state.check_additional_bytes(Sha256::MAX_MESSAGE_BYTES),
+        Ok(())
+    );
+    assert_eq!(
+        state.check_additional_bytes(Sha256::MAX_MESSAGE_BYTES + 1),
+        Err(brynja_hash_sha2::Sha256Error::MessageTooLong)
+    );
+    assert_eq!(state.message_bytes(), 0);
+
+    assert_eq!(state.update(b"abc"), Ok(()));
+    assert_eq!(
+        state.check_additional_bytes(Sha256::MAX_MESSAGE_BYTES - 3),
+        Ok(())
+    );
+    assert_eq!(
+        state.check_additional_bytes(Sha256::MAX_MESSAGE_BYTES - 2),
+        Err(brynja_hash_sha2::Sha256Error::MessageTooLong)
+    );
+    assert_eq!(state.message_bytes(), 3);
+}
+
 fn check(input: &[u8], digest: &str) {
     assert_eq!(sha256(input), Ok(expected(digest)));
 }

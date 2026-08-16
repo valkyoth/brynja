@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 exceptional pentest PASS/PASS and awaiting final hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.2 signed; v0.22.3 public SHA-256 acceptance implemented and awaiting verification
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.22.2`. `brynja-hash-core 0.1.0` and
+advances to internal `0.22.3`. `brynja-hash-core 0.1.0` and
 `brynja-hash-sha2 0.1.0` retain the reusable interface and complete portable
 SHA-256 while gaining an optional CPU session edge. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
@@ -128,7 +128,7 @@ exceptional assessment and final retest of signed commit
 `7d6dc573d8aaf049085d4bc4007642ee3b9ed82f` passed with zero open
 findings. The stage selects no package publication and makes no independent-
 review, register-erasure, FIPS-validation, or complete hardware-support claim.
-The v0.22.2 stage adds the RV64 `Zknh` scalar-crypto candidate through four
+The v0.22.2 stage added the RV64 `Zknh` scalar-crypto candidate through four
 hash-bound first-party Rust inline-assembly instructions. Both endpoint
 compilers emit the exact instruction set and QEMU differentials pass, but no
 qualifying native RISC-V evidence exists. The registered native lane has Rust
@@ -136,15 +136,20 @@ qualifying native RISC-V evidence exists. The registered native lane has Rust
 preflight stopped before candidate execution. Automatic RISC-V detection
 remains disabled, the backend remains unadmitted, and the new unsafe boundary
 received an exceptional assessment with zero Critical, High, or Medium
-findings, no remediation, and `PASS`/`PASS`. The stage awaits green hosted
-checks on its committed report before the signed tag.
+findings, no remediation, and `PASS`/`PASS`. Signed tag v0.22.2 contains that
+green report candidate. The v0.22.3 stage adds a standalone public-only
+`no_std` downstream SHA-256 consumer, version-only packaged-crate installation,
+authoritative real inputs, irregular streaming, scalar and admitted-backend
+accounting, public exhaustion preflight, and executable negative fixtures. It
+closes the SHA-256 implementation chain without changing a support-package
+version or selecting a crates.io publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.22.2` | no | Internal facade milestone; v0.20.0 is published |
+| `brynja` | `0.22.3` | no | Internal facade milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | New unpublished allocation-free fixed-output hash interfaces |
-| `brynja-hash-sha2` | `0.1.0` | no | New unpublished complete portable SHA-256; acceleration and acceptance continue through v0.22.3 |
+| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable SHA-256 with accepted public API; CPU candidates remain unadmitted |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports the exact SHA-256 leaf implementation |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; unpublished x86_64 SHA, AArch64 SHA2, and RV64 Zknh candidates remain unadmitted |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished opt-in x86/AArch64 detector falls back or fails closed; RISC-V auto-detection is disabled |

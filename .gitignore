@@ -2,6 +2,7 @@
 /target/
 /assurance/sanitization-admission/target/
 /assurance/cpu-admission-fixture/target/
+/assurance/sha256-public-api/target/
 /fuzz/target/
 /fuzz/artifacts/
 /fuzz/corpus/

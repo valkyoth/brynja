@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.1 signed; v0.22.2 exceptional pentest PASS/PASS and awaiting final hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.2 signed; v0.22.3 public SHA-256 acceptance implemented and awaiting verification
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -59,7 +59,7 @@ kernel, public API, dependency, or admission state. Both kernels remain
 unadmitted because candidate observations are not authenticated performance,
 side-channel, CPU-migration, independent-review, or FIPS evidence.
 
-The facade now advances to internal `0.22.2`. A third isolated candidate uses
+Signed v0.22.2 added a third isolated candidate using
 the exact ratified RV64 `Zknh` scalar-cryptography bundle through four
 source-hash-bound first-party Rust inline-assembly statements. Rust 1.90.0 and
 1.97.1 emit `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1`; the
@@ -71,11 +71,24 @@ has Rust 1.97.1 and generic vector/bit-manipulation support but lacks `Zknh`,
 `Zvknha`, and `Zvknhb` on every hart, so it cannot execute this candidate. No
 qualifying native RISC-V correctness, performance, side-channel, or migration
 evidence exists, so the candidate is unadmitted and ordinary execution remains
-scalar. The new inline-assembly boundary triggers
+scalar. The new inline-assembly boundary triggered
 an exceptional v0.22.2 pentest; it reported zero Critical, High, or Medium
 findings, required no source remediation, and records `PASS`/`PASS` with zero
-open findings. No crate is selected for publication. The exact committed
-report candidate must receive green GitHub and CodeQL before tagging.
+open findings. No crate was selected for publication, and signed tag v0.22.2
+contains the green committed report candidate.
+
+The facade now advances to internal `0.22.3`. A standalone downstream
+`no_std` consumer exercises only the documented public `brynja-hash-sha2` and
+`brynja-crypto` APIs against empty, text, binary, file-like, multi-block, and
+million-byte authoritative inputs through one-shot and irregular streaming
+paths. It validates the scalar path, explicitly skips all three unadmitted CPU
+backends, checks deterministic public message-length exhaustion, and repeats
+the same run against safely extracted packaged crate contents with version-only
+dependencies. Executable negative fixtures reject digest corruption, missing
+exports, backend misreporting, exhaustion bypass, an unadmitted feature, and
+altered package contents. This acceptance makes portable SHA-256 publicly
+usable; it does not admit an accelerated backend, add an algorithm, establish
+independent verification or FIPS validation, or select a crate for publication.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

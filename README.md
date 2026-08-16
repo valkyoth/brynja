@@ -537,6 +537,13 @@ findings. This remains an internal tag with zero crates.io publication; its
 complete delta is still covered again by the scheduled v0.20.0-to-v0.25.0
 cumulative assessment.
 
+The exceptional v0.23.0 repository-owner assessment and retest of exact signed
+SHA-224 implementation candidate
+`8877bda1e697db98e77637d82bdc0d0d6ecad237` found no vulnerability, required
+no remediation, and records `PASS`/`PASS` with zero open findings. It remains
+an internal tag with zero crates.io publication and remains covered again by
+the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
@@ -797,7 +804,7 @@ python3 scripts/test-sha256.py
 scripts/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.22.3
+scripts/tag_gate.sh v0.23.0
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

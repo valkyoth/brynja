@@ -7,6 +7,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Record the exceptional v0.23.0 repository-owner SHA-224 assessment and
+  retest of exact signed implementation candidate
+  `8877bda1e697db98e77637d82bdc0d0d6ecad237` as `PASS`/`PASS` with zero open
+  findings and no remediation; retain ordinary-state erasure, acceleration,
+  independent-review, FIPS, zero-publication, and scheduled v0.25.0
+  cumulative-review restrictions.
 - Split the oversized complete-SHA-2 milestone into five reviewable tagged
   stops: complete SHA-224, complete SHA-384/SHA-512, complete SHA-512/224 and
   SHA-512/256, whole-family acceleration, and package-external acceptance.

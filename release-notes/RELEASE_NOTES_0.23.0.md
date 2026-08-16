@@ -1,6 +1,6 @@
 # Brynja 0.23.0 Release Notes
 
-Status: implementation candidate; exceptional pentest required; internal development tag; no crates.io publication
+Status: exceptional pentest and retest PASS/PASS; awaiting hosted checks; internal development tag; no crates.io publication
 
 Brynja 0.23.0 adds a complete portable SHA-224 implementation beside the
 accepted SHA-256 implementation. It is directly usable through
@@ -62,8 +62,7 @@ partial algorithm is presented as implemented.
 ## Release Process
 
 Version 0.23.0 is an internal milestone in the cumulative
-v0.20.0-to-v0.25.0 range and selects zero crates.io packages. Adding a new
-first-party cryptographic algorithm triggers an exceptional pentest before the
-tag. After the committed report and remediation retest pass, the exact report
-commit must pass the complete local gate plus hosted GitHub and CodeQL checks
-before explicit tag authorization.
+v0.20.0-to-v0.25.0 range and selects zero crates.io packages. Its exceptional
+pentest and retest passed with zero open findings and no remediation. The exact
+committed report candidate must pass the complete local gate plus hosted GitHub
+and CodeQL checks before explicit tag authorization.

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.22.2 signed; v0.22.3 pentest/retest PASS/PASS and awaiting final hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.22.3 signed; v0.23.0 pentest/retest PASS/PASS and awaiting hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -30,10 +30,10 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It now has complete portable SHA-256 plus bounded DER tag-length-value framing
+It now has complete portable SHA-224 and SHA-256 plus bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond SHA-224/SHA-256, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -77,7 +77,7 @@ findings, required no source remediation, and records `PASS`/`PASS` with zero
 open findings. No crate was selected for publication, and signed tag v0.22.2
 contains the green committed report candidate.
 
-The facade now advances to internal `0.22.3`. A standalone downstream
+Signed v0.22.3 added a standalone downstream
 `no_std` consumer exercises only the documented public `brynja-hash-sha2` and
 `brynja-crypto` APIs against empty, text, binary, file-like, multi-block, and
 million-byte authoritative inputs through one-shot and irregular streaming
@@ -94,8 +94,24 @@ independent verification or FIPS validation, or select a crate for publication.
 The voluntary repository-owner assessment and retest through exact signed
 candidate `399c9e7c5092d755dfbc22a3adf5500f85a8877e` passed with zero open
 findings and required no cryptographic source remediation. The permanent report
-is committed with the release candidate; the tag still waits for green GitHub
-and CodeQL, and the complete delta remains in the scheduled v0.25.0 assessment.
+is committed with the signed tag, and the complete delta remains in the
+scheduled v0.25.0 assessment.
+
+The facade now advances to internal `0.23.0`. `brynja-hash-sha2` adds complete
+portable SHA-224 with its distinct FIPS 180-4 initial value, exact 28-byte
+output, allocation-free `no_std` one-shot and streaming APIs, checked
+message-length domain, transactional updates, and consuming finalization. NIST
+CAVP short and Monte Carlo cases, FIPS long and million-byte examples, every
+critical padding boundary, exhaustive two-part splits, fixed chunk widths,
+four shared SHA-224/SHA-256 Kani bounds, Miri, and AddressSanitizer cover the
+implementation. Its exceptional repository-owner assessment and retest of
+exact signed candidate `8877bda1e697db98e77637d82bdc0d0d6ecad237` passed
+with `PASS`/`PASS`, zero open findings, and no remediation. Ordinary SHA-224
+state makes no secret-remanence cleanup claim; SHA-224 acceleration,
+independent cryptographic review, and FIPS 140-3 validation remain absent. The
+milestone selects zero crates.io packages, awaits green GitHub and CodeQL
+before tagging, and remains in the scheduled v0.20.0-to-v0.25.0 cumulative
+assessment.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

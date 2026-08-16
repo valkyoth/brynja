@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
 source_ledger_sha256 = "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6"
-surface_register_sha256 = "536735cb2217d23c40de7fc1876141be075ca247d67ef16ae944fc344d03ed66"
+surface_register_sha256 = "3feca260a46321723d9912670576eba7ad55f568f8f0bc09aac18b3db1c796cc"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -1079,7 +1079,7 @@ domain = "operations"
 owner = "0.10.0"
 disposition = "intentionally-rejected"
 verified = true
-revision = 3
+revision = 4
 sources = ["rfc:9850"]
 surface_ids = [
   "facility.sslkeylogfile.production",

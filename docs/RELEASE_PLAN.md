@@ -264,7 +264,7 @@ version, change class, publication decision, and reason.
 - legacy packages require their independent legacy admission line and remain
   unreachable from the modern facade.
 
-`scripts/release_crates.py --check` enforces the complete inventory, exact
+`scripts/release/release_crates.py --check` enforces the complete inventory, exact
 internal pins, manifest publishability, independent SemVer transitions,
 dependency availability and ordering, repository-only exclusions, cumulative
 package-tree changes since the previous public tag, and the mandatory facade

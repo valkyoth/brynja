@@ -8,7 +8,7 @@
       ],
       "deviation_rationale": null,
       "evidence": [
-        "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+        "scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
       ],
       "id": "BRY-REQ-STD-0001",
       "lifecycle": "evidenced",
@@ -16,7 +16,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Normative prose without BCP 14 keywords still requires later manual extraction and review.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "The words have the meanings specified herein only when they are in all capitals.",
@@ -29,13 +29,13 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/check-requirements.py#validate_strength"
+          "target": "scripts/standards/check-requirements.py#validate_strength"
         }
       ],
       "tests": [
         {
           "status": "actual",
-          "target": "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+          "target": "scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
         }
       ]
     },
@@ -53,7 +53,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Later domain records must provide their own concrete security consequence and cannot inherit this pilot text.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "The effects on security of not implementing a MUST or SHOULD",
@@ -66,13 +66,13 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/check-requirements.py#validate_requirement"
+          "target": "scripts/standards/check-requirements.py#validate_requirement"
         }
       ],
       "tests": [
         {
           "status": "actual",
-          "target": "scripts/test-requirements.py#test_missing_residual_fails"
+          "target": "scripts/standards/test-requirements.py#test_missing_residual_fails"
         }
       ]
     },
@@ -90,7 +90,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Identifier allocation remains a review responsibility and this milestone does not populate every future domain.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "must provide clear instructions on details of the namespace",
@@ -103,7 +103,7 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/requirements_lib.py#ID_PATTERN"
+          "target": "scripts/standards/requirements_lib.py#ID_PATTERN"
         }
       ],
       "tests": [
@@ -127,7 +127,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.5",
       "residual": "Complete semantic extraction beyond the BCP 14 pilot remains owned by the v0.3.3 through v0.3.5 population passes.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "they MUST only be used where it is actually required for interoperation",
@@ -140,7 +140,7 @@
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "scripts/check-requirements.py#validate_normative_usage"
+          "target": "scripts/standards/check-requirements.py#validate_normative_usage"
         }
       ],
       "tests": [
@@ -166,7 +166,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Registry identity does not itself admit an algorithm; the owning cryptographic and protocol milestones remain mandatory.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "Use the exact registry name as listed on the IANA web page",
@@ -179,13 +179,13 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/check-requirements.py#resolve_source"
+          "target": "scripts/standards/check-requirements.py#resolve_source"
         }
       ],
       "tests": [
         {
           "status": "actual",
-          "target": "scripts/test-requirements.py#test_iana_source_drift_changes_matrix"
+          "target": "scripts/standards/test-requirements.py#test_iana_source_drift_changes_matrix"
         }
       ]
     },
@@ -445,5 +445,5 @@
   ],
   "schema": 1,
   "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
-  "surface_register_sha256": "536735cb2217d23c40de7fc1876141be075ca247d67ef16ae944fc344d03ed66"
+  "surface_register_sha256": "3feca260a46321723d9912670576eba7ad55f568f8f0bc09aac18b3db1c796cc"
 }

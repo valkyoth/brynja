@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "135ef2da283e2c62c7974fbfae4c04c0b6030509036cd0d5ebc672f29c3f60e4",
+  "policy_sha256": "65789bc7798278760adbf97af6d492eb3ac078c08d4be1c14d8fe7db0a833b1a",
   "schema": 2,
   "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
   "surfaces": [
@@ -192,7 +192,7 @@
       ],
       "owner": "0.22.0",
       "rationale": "All six FIPS 180-4 SHA-2 identities are complete first-party implementations with public leaf and facade APIs, authoritative vectors, boundary evidence, optional unadmitted CPU candidates, and separately packaged downstream acceptance.",
-      "test_target": "scripts/check-sha2-public-api.py#main"
+      "test_target": "scripts/sha2/check-sha2-public-api.py#main"
     },
     {
       "code_target": "crates/brynja-crypto/src/sha3.rs",
@@ -444,7 +444,7 @@
       ],
       "owner": "0.10.0",
       "rationale": "Production SSLKEYLOGFILE export is forbidden because it defeats the secret-lifetime contract.",
-      "test_target": "scripts/test-workspace-metadata.py#test_keylog_isolation"
+      "test_target": "scripts/repository/test-workspace-metadata.py#test_keylog_isolation"
     },
     {
       "code_target": "crates/brynja-test-support/src/keylog.rs",

@@ -31,19 +31,19 @@ jobs:
       - name: Install SHA-256 MSRV codegen toolchain
         run: rustup toolchain install 1.90.0 --profile minimal --target riscv64gc-unknown-linux-gnu
       - name: Install security and SBOM tools
-        run: scripts/install-ci-tools.sh
+        run: scripts/ci/install-ci-tools.sh
       - name: Run repository gate
         run: scripts/checks.sh
       - name: Validate protected release controls
         env:
           GH_TOKEN: ${{ github.token }}
-        run: scripts/check-github-release-controls.py --public
+        run: scripts/release/check-github-release-controls.py --public
       - name: Check dependency policy
         run: cargo deny check
       - name: Check RustSec advisories
         run: cargo audit --deny warnings
       - name: Verify committed SBOM
-        run: scripts/generate-sbom.sh --check
+        run: scripts/release/generate-sbom.sh --check
 
   host:
     name: Host tests (${{ matrix.os }})
@@ -66,7 +66,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install Rust toolchain
         shell: bash
-        run: scripts/ci_install_rust.sh
+        run: scripts/ci/ci_install_rust.sh
       - name: Test workspace
         run: cargo test --workspace --all-features
       - name: Exercise detected SHA-256 candidate without granting admission
@@ -75,13 +75,13 @@ jobs:
           RUSTFLAGS: --cfg brynja_cpu_evidence
         run: cargo test -p brynja-crypto-cpu-std
       - name: Run SHA-256 public API acceptance
-        run: python scripts/check-sha256-public-api.py
+        run: python scripts/sha2/check-sha256-public-api.py
       - name: Run complete SHA-2 public API acceptance
-        run: python scripts/check-sha2-public-api.py
+        run: python scripts/sha2/check-sha2-public-api.py
       - name: Test assurance platform boundary
-        run: python scripts/test-assurance.py
+        run: python scripts/assurance/test-assurance.py
       - name: Test CPU evidence admission boundary
-        run: python scripts/test-cpu-evidence.py
+        run: python scripts/cpu/test-cpu-evidence.py
 
   rust-version:
     name: Rust ${{ matrix.rust }}
@@ -105,9 +105,9 @@ jobs:
       - name: Run complete SHA-2 public API acceptance
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sha2-public-api/Cargo.toml
       - name: Verify zeroization emitted code
-        run: scripts/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
+        run: scripts/zeroization/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
       - name: Verify constant-time emitted code
-        run: scripts/check-constant-time-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
+        run: scripts/constant-time/check-constant-time-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
 
   target:
     name: no_std target (${{ matrix.target }})
@@ -140,9 +140,9 @@ jobs:
       - name: Check complete SHA-2 public API fixture
         run: cargo check --locked --manifest-path assurance/sha2-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Verify zeroization emitted code
-        run: scripts/check-zeroization-codegen.sh 1.97.1 "${{ matrix.target }}"
+        run: scripts/zeroization/check-zeroization-codegen.sh 1.97.1 "${{ matrix.target }}"
       - name: Verify constant-time emitted code
-        run: scripts/check-constant-time-codegen.sh 1.97.1 "${{ matrix.target }}"
+        run: scripts/constant-time/check-constant-time-codegen.sh 1.97.1 "${{ matrix.target }}"
 
   zeroization-unsafe:
     name: Miri and sanitizer evidence
@@ -154,6 +154,6 @@ jobs:
       - name: Install pinned nightly assurance toolchain
         run: rustup toolchain install nightly-2026-08-16 --profile minimal --component miri,rust-src
       - name: Run zeroization and SHA-2 under Miri
-        run: scripts/check-zeroization-miri.sh
+        run: scripts/zeroization/check-zeroization-miri.sh
       - name: Run zeroization and SHA-2 under AddressSanitizer
-        run: scripts/check-zeroization-sanitizer.sh
+        run: scripts/zeroization/check-zeroization-sanitizer.sh

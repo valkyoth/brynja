@@ -22,7 +22,7 @@ process_tree_termination = "hostile-posix-external-containment-windows-job"
 corpus_input = "descriptor-bound-no-follow-limit-plus-one-streaming"
 
 [mutation]
-runner = "scripts/assurance_mutation.py"
+runner = "scripts/assurance/assurance_mutation.py"
 algorithm = "brynja-deterministic-mutation-v1"
 operators = [
   "empty",
@@ -35,7 +35,7 @@ operators = [
 ]
 
 [differential]
-runner = "scripts/assurance_differential.py"
+runner = "scripts/assurance/assurance_differential.py"
 minimum_independent_implementations = 2
 result_fields = ["class", "output"]
 result_classes = ["accept", "reject", "unsupported"]

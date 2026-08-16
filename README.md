@@ -780,63 +780,63 @@ project promises to support. The authoritative matrix is
 
 ```bash
 scripts/checks.sh
-scripts/check-rust-version-matrix.sh
-scripts/release_crates.py --check
-scripts/release_crates.py --package-check
-python3 scripts/check-verification-status.py
-python3 scripts/test-verification-status.py
-python3 scripts/check-assurance.py
-python3 scripts/test-assurance.py
-scripts/check-bare-metal.sh
-scripts/check-kani.sh
-python3 scripts/check-unsafe-policy.py
-python3 scripts/check-first-party-rust-crypto.py
-python3 scripts/test-first-party-rust-crypto.py
-python3 scripts/check-constant-time.py
-python3 scripts/test-constant-time.py
-scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
-python3 scripts/test-constant-time-codegen.py
-python3 scripts/check-constant-time-evidence.py
-python3 scripts/test-constant-time-evidence.py
-python3 scripts/check-provider-contract.py
-python3 scripts/test-provider-contract.py
-python3 scripts/check-entropy-contract.py
-python3 scripts/test-entropy-contract.py
-python3 scripts/check-clock-contract.py
-python3 scripts/test-clock-contract.py
-python3 scripts/check-pending-contract.py
-python3 scripts/test-pending-contract.py
-python3 scripts/check-fips-architecture.py
-python3 scripts/test-fips-architecture.py
-python3 scripts/check-security-outcome.py
-python3 scripts/test-security-outcome.py
-python3 scripts/check-security-event.py
-python3 scripts/test-security-event.py
-python3 scripts/check-backend-contract.py
-python3 scripts/test-backend-contract.py
-python3 scripts/check-cpu-evidence.py
-python3 scripts/test-cpu-evidence.py
-scripts/check-cpu-admission-fixture.sh
-python3 scripts/check-zeroization-evidence.py
-scripts/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
-scripts/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
-scripts/check-zeroization-miri.sh
-scripts/check-zeroization-sanitizer.sh
-scripts/check-github-release-controls.py
-python3 scripts/check-standards-ledger.py
-python3 scripts/check-protocol-surfaces.py
-python3 scripts/check-requirements.py
-python3 scripts/check-asn1-values.py
-python3 scripts/test-asn1-values.py
-python3 scripts/check-sha256.py
-python3 scripts/test-sha256.py
-scripts/check-sha256-cpu-codegen.sh
+scripts/ci/check-rust-version-matrix.sh
+scripts/release/release_crates.py --check
+scripts/release/release_crates.py --package-check
+python3 scripts/repository/check-verification-status.py
+python3 scripts/repository/test-verification-status.py
+python3 scripts/assurance/check-assurance.py
+python3 scripts/assurance/test-assurance.py
+scripts/assurance/check-bare-metal.sh
+scripts/assurance/check-kani.sh
+python3 scripts/repository/check-unsafe-policy.py
+python3 scripts/repository/check-first-party-rust-crypto.py
+python3 scripts/repository/test-first-party-rust-crypto.py
+python3 scripts/constant-time/check-constant-time.py
+python3 scripts/constant-time/test-constant-time.py
+scripts/constant-time/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+python3 scripts/constant-time/test-constant-time-codegen.py
+python3 scripts/constant-time/check-constant-time-evidence.py
+python3 scripts/constant-time/test-constant-time-evidence.py
+python3 scripts/foundations/check-provider-contract.py
+python3 scripts/foundations/test-provider-contract.py
+python3 scripts/foundations/check-entropy-contract.py
+python3 scripts/foundations/test-entropy-contract.py
+python3 scripts/foundations/check-clock-contract.py
+python3 scripts/foundations/test-clock-contract.py
+python3 scripts/foundations/check-pending-contract.py
+python3 scripts/foundations/test-pending-contract.py
+python3 scripts/foundations/check-fips-architecture.py
+python3 scripts/foundations/test-fips-architecture.py
+python3 scripts/foundations/check-security-outcome.py
+python3 scripts/foundations/test-security-outcome.py
+python3 scripts/foundations/check-security-event.py
+python3 scripts/foundations/test-security-event.py
+python3 scripts/cpu/check-backend-contract.py
+python3 scripts/cpu/test-backend-contract.py
+python3 scripts/cpu/check-cpu-evidence.py
+python3 scripts/cpu/test-cpu-evidence.py
+scripts/cpu/check-cpu-admission-fixture.sh
+python3 scripts/zeroization/check-zeroization-evidence.py
+scripts/zeroization/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+scripts/sanitization/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+scripts/zeroization/check-zeroization-miri.sh
+scripts/zeroization/check-zeroization-sanitizer.sh
+scripts/release/check-github-release-controls.py
+python3 scripts/standards/check-standards-ledger.py
+python3 scripts/standards/check-protocol-surfaces.py
+python3 scripts/standards/check-requirements.py
+python3 scripts/pki/check-asn1-values.py
+python3 scripts/pki/test-asn1-values.py
+python3 scripts/sha2/check-sha256.py
+python3 scripts/sha2/test-sha256.py
+scripts/sha2/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
 scripts/tag_gate.sh v0.23.4
 ```
 
-The networked `scripts/check_latest_tools.sh` check is mandatory before a
+The networked `scripts/ci/check_latest_tools.sh` check is mandatory before a
 signed tag. `scripts/tag_gate.sh vX.Y.Z` runs the complete automated tag gate
 and applies the stage-specific final check: ordinary development milestones
 require no scheduled pentest, exceptional development milestones require their
@@ -848,7 +848,7 @@ After an exact green public-checkpoint candidate is pentested and tagged, the
 interactive crates.io publisher is, for example:
 
 ```bash
-scripts/release_crates.py --version 0.20.0
+scripts/release/release_crates.py --version 0.20.0
 ```
 
 It reruns the complete release gate, publishes changed dependencies in order,

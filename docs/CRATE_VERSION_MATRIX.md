@@ -224,7 +224,7 @@ selection or replace the scheduled cumulative v0.25.0 assessment.
 ## Enforced crates.io Release Policy
 
 `release-crates.toml` is the release-specific source of truth.
-`scripts/release_crates.py --check` compares it with Cargo metadata and rejects
+`scripts/release/release_crates.py --check` compares it with Cargo metadata and rejects
 inventory drift, manifest-version drift, non-exact internal dependency pins,
 invalid version bumps, a package tree changed since the previous public tag but
 marked unchanged, unavailable dependencies, publication-order errors, or an

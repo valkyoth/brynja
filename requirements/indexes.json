@@ -2556,10 +2556,10 @@
         "rfc:8126#3.1"
       ],
       "targets": [
-        "actual-symbol:scripts/check-requirements.py#resolve_source"
+        "actual-symbol:scripts/standards/check-requirements.py#resolve_source"
       ],
       "tests": [
-        "actual:scripts/test-requirements.py#test_iana_source_drift_changes_matrix"
+        "actual:scripts/standards/test-requirements.py#test_iana_source_drift_changes_matrix"
       ]
     },
     "BRY-REQ-IANA-0002": {
@@ -3223,8 +3223,8 @@
         "boundary:boundary:operations.0.10.0"
       ],
       "tests": [
-        "actual:positive:scripts/test-workspace-metadata.py#test_keylog_isolation",
-        "actual:negative:scripts/test-workspace-metadata.py#reject_invalid_and_exhausted"
+        "actual:positive:scripts/repository/test-workspace-metadata.py#test_keylog_isolation",
+        "actual:negative:scripts/repository/test-workspace-metadata.py#reject_invalid_and_exhausted"
       ]
     },
     "BRY-REQ-OPTIONAL-0136": {
@@ -4333,7 +4333,7 @@
       ],
       "domains": [],
       "evidence": [
-        "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+        "scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
       ],
       "invariants": [],
       "owners": [
@@ -4343,10 +4343,10 @@
         "rfc:8174#2"
       ],
       "targets": [
-        "actual-symbol:scripts/check-requirements.py#validate_strength"
+        "actual-symbol:scripts/standards/check-requirements.py#validate_strength"
       ],
       "tests": [
-        "actual:scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+        "actual:scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
       ]
     },
     "BRY-REQ-STD-0002": {
@@ -4364,10 +4364,10 @@
         "rfc:2119#7"
       ],
       "targets": [
-        "actual-symbol:scripts/check-requirements.py#validate_requirement"
+        "actual-symbol:scripts/standards/check-requirements.py#validate_requirement"
       ],
       "tests": [
-        "actual:scripts/test-requirements.py#test_missing_residual_fails"
+        "actual:scripts/standards/test-requirements.py#test_missing_residual_fails"
       ]
     },
     "BRY-REQ-STD-0003": {
@@ -4385,7 +4385,7 @@
         "rfc:8126#2.2"
       ],
       "targets": [
-        "actual-symbol:scripts/requirements_lib.py#ID_PATTERN"
+        "actual-symbol:scripts/standards/requirements_lib.py#ID_PATTERN"
       ],
       "tests": [
         "planned:tests/requirements/stable_ids.rs#rendering_independence"
@@ -4406,7 +4406,7 @@
         "rfc:2119#6"
       ],
       "targets": [
-        "planned-symbol:scripts/check-requirements.py#validate_normative_usage"
+        "planned-symbol:scripts/standards/check-requirements.py#validate_normative_usage"
       ],
       "tests": [
         "planned:tests/requirements/normative_usage.rs#unsupported_imperative"
@@ -9091,7 +9091,7 @@
       "requirements/indexes.json#requirements_by": [
         "BRY-REQ-IANA-0001"
       ],
-      "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength": [
+      "scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength": [
         "BRY-REQ-STD-0001"
       ],
       "security/pentest/v0.5.0.md#Findings": [
@@ -10807,16 +10807,16 @@
       "actual-symbol:crates/brynja-test-support/src/keylog.rs": [
         "BRY-REQ-TESTING-0010"
       ],
-      "actual-symbol:scripts/check-requirements.py#resolve_source": [
+      "actual-symbol:scripts/standards/check-requirements.py#resolve_source": [
         "BRY-REQ-IANA-0001"
       ],
-      "actual-symbol:scripts/check-requirements.py#validate_requirement": [
+      "actual-symbol:scripts/standards/check-requirements.py#validate_requirement": [
         "BRY-REQ-STD-0002"
       ],
-      "actual-symbol:scripts/check-requirements.py#validate_strength": [
+      "actual-symbol:scripts/standards/check-requirements.py#validate_strength": [
         "BRY-REQ-STD-0001"
       ],
-      "actual-symbol:scripts/requirements_lib.py#ID_PATTERN": [
+      "actual-symbol:scripts/standards/requirements_lib.py#ID_PATTERN": [
         "BRY-REQ-STD-0003"
       ],
       "blocker:requirements/authority-claims.toml#legacy-non-rfc-sources": [
@@ -11224,7 +11224,7 @@
       "planned-symbol:crates/brynja-tls13/src/suite.rs#SuiteProfile": [
         "BRY-REQ-TLS13-0080"
       ],
-      "planned-symbol:scripts/check-requirements.py#validate_normative_usage": [
+      "planned-symbol:scripts/standards/check-requirements.py#validate_normative_usage": [
         "BRY-REQ-STD-0004"
       ],
       "planned-symbol:tests/conformance/dtls.rs#DtlsAuditGate": [
@@ -11257,7 +11257,7 @@
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-TESTING-0010"
       ],
-      "actual:negative:scripts/test-workspace-metadata.py#reject_invalid_and_exhausted": [
+      "actual:negative:scripts/repository/test-workspace-metadata.py#reject_invalid_and_exhausted": [
         "BRY-REQ-OPERATIONS-0010"
       ],
       "actual:positive:crates/brynja-core/tests/secret_lifecycle.rs#all_initialization_boundaries_are_affine_and_exact": [
@@ -11272,16 +11272,16 @@
       "actual:positive:crates/brynja-test-support/tests/keylog.rs#every_pinned_label_encodes_one_exact_line": [
         "BRY-REQ-KEYLOGREG-0010"
       ],
-      "actual:positive:scripts/test-workspace-metadata.py#test_keylog_isolation": [
+      "actual:positive:scripts/repository/test-workspace-metadata.py#test_keylog_isolation": [
         "BRY-REQ-OPERATIONS-0010"
       ],
-      "actual:scripts/test-requirements.py#test_iana_source_drift_changes_matrix": [
+      "actual:scripts/standards/test-requirements.py#test_iana_source_drift_changes_matrix": [
         "BRY-REQ-IANA-0001"
       ],
-      "actual:scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength": [
+      "actual:scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength": [
         "BRY-REQ-STD-0001"
       ],
-      "actual:scripts/test-requirements.py#test_missing_residual_fails": [
+      "actual:scripts/standards/test-requirements.py#test_missing_residual_fails": [
         "BRY-REQ-STD-0002"
       ],
       "planned:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [

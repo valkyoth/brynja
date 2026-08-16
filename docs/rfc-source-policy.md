@@ -27,8 +27,8 @@ Requirements:
 - non-RFC PDFs/specifications default to local-only until redistribution rights
   are explicitly reviewed.
 
-Use scripts/fetch-rfcs.sh to obtain missing allowlisted files, then inspect them
-and use scripts/lock-rfcs.sh to create or refresh the reviewed checksum file.
+Use scripts/standards/fetch-rfcs.sh to obtain missing allowlisted files, then inspect them
+and use scripts/standards/lock-rfcs.sh to create or refresh the reviewed checksum file.
 Any source-list change and checksum change must be reviewed together.
 
 Official NIST and ITU documents use the separate local-only allowlist and hash
@@ -42,9 +42,9 @@ independently reviewed hashes for the canonical RFC-index projection, canonical
 official errata fields, and exact IANA bytes;
 `ERRATA.json`, the compact RFC-index projection, and exact IANA XML snapshots
 preserve the reviewed upstream state; and `source-ledger.json` is reproduced
-byte-for-byte by `scripts/check-standards-ledger.py`. Normal verification is
+byte-for-byte by `scripts/standards/check-standards-ledger.py`. Normal verification is
 offline. The networked release gate runs
-`scripts/update-standards-snapshots.py --check` and fails on upstream drift so
+`scripts/standards/update-standards-snapshots.py --check` and fails on upstream drift so
 that no source, relationship, erratum, registry assignment, or date can change
 silently.
 

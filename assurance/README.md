@@ -29,8 +29,8 @@ independent cryptographic review, FIPS validation, accelerated admission, or
 secret-state erasure.
 
 The v0.13.0 provider contract adds a separate hash-locked source validator and
-thirteen broken fixtures through `scripts/check-provider-contract.py` and
-`scripts/test-provider-contract.py`. The additional remediation fixtures reject
+thirteen broken fixtures through `scripts/foundations/check-provider-contract.py` and
+`scripts/foundations/test-provider-contract.py`. The additional remediation fixtures reject
 request-side result construction, exact-provider detachment, caller-supplied
 work claims, and verification byte output. That policy enforces authority and
 dependency structure; it is not provider-effect, algorithm, interoperability,
@@ -38,8 +38,8 @@ or formal-verification evidence.
 
 The v0.13.1 CPU-backend contract adds a separate four-file hash-locked source
 validator and thirteen broken fixtures through
-`scripts/check-backend-contract.py` and
-`scripts/test-backend-contract.py`. It rejects ISA execution, public evidence
+`scripts/cpu/check-backend-contract.py` and
+`scripts/cpu/test-backend-contract.py`. It rejects ISA execution, public evidence
 forgery, thread-token drift, atomics/global state, stale generations,
 resettable quarantine, unsupported-operation dispatch, recursive fallback,
 validated-policy substitution, registries, and unreviewed source changes. It
@@ -152,24 +152,24 @@ speculation, power, electromagnetic leakage, or another microarchitecture.
 Run:
 
 ```bash
-python3 scripts/check-sha256-public-api.py
-python3 scripts/test-sha256-public-api.py
-python3 scripts/check-assurance.py
-python3 scripts/test-assurance.py
-scripts/check-bare-metal.sh
-scripts/check-zeroization-miri.sh
-scripts/check-zeroization-sanitizer.sh
-python3 scripts/check-constant-time.py
-python3 scripts/test-constant-time.py
-scripts/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
-python3 scripts/test-constant-time-codegen.py
-python3 scripts/check-constant-time-evidence.py
-python3 scripts/test-constant-time-evidence.py
-python3 scripts/check-provider-contract.py
-python3 scripts/test-provider-contract.py
-python3 scripts/check-backend-contract.py
-python3 scripts/test-backend-contract.py
-python3 scripts/check-cpu-evidence.py
-python3 scripts/test-cpu-evidence.py
-scripts/check-cpu-admission-fixture.sh
+python3 scripts/sha2/check-sha256-public-api.py
+python3 scripts/sha2/test-sha256-public-api.py
+python3 scripts/assurance/check-assurance.py
+python3 scripts/assurance/test-assurance.py
+scripts/assurance/check-bare-metal.sh
+scripts/zeroization/check-zeroization-miri.sh
+scripts/zeroization/check-zeroization-sanitizer.sh
+python3 scripts/constant-time/check-constant-time.py
+python3 scripts/constant-time/test-constant-time.py
+scripts/constant-time/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+python3 scripts/constant-time/test-constant-time-codegen.py
+python3 scripts/constant-time/check-constant-time-evidence.py
+python3 scripts/constant-time/test-constant-time-evidence.py
+python3 scripts/foundations/check-provider-contract.py
+python3 scripts/foundations/test-provider-contract.py
+python3 scripts/cpu/check-backend-contract.py
+python3 scripts/cpu/test-backend-contract.py
+python3 scripts/cpu/check-cpu-evidence.py
+python3 scripts/cpu/test-cpu-evidence.py
+scripts/cpu/check-cpu-admission-fixture.sh
 ```

@@ -56,13 +56,13 @@ hashes before any backend can become eligible.
 Validate a future run with:
 
 ```bash
-scripts/validate-cpu-evidence.py assurance/cpu-evidence/<run-id>/manifest.toml
-python3 scripts/check-cpu-evidence.py
+scripts/cpu/validate-cpu-evidence.py assurance/cpu-evidence/<run-id>/manifest.toml
+python3 scripts/cpu/check-cpu-evidence.py
 ```
 
-The separate detached candidate runner under `scripts/manage-cpu-evidence.py`
+The separate detached candidate runner under `scripts/cpu/manage-cpu-evidence.py`
 produces transferable clean-commit native observations before formal manifests
-exist. Its bundles are validated by `scripts/validate-cpu-evidence-run.py` and
+exist. Its bundles are validated by `scripts/cpu/validate-cpu-evidence-run.py` and
 always say `authority=non-authorizing-native-candidate-observation`. They are
 input for later review, not entries in this directory and not backend admission
 evidence by themselves.

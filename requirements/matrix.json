@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "602de44185fdc8a9b1fac44da713b33e96ffa9007be739932647d52702b16172",
-  "domain_policy_sha256": "5837f9a80fd79db451e0026f4d240bc350e47f26dcaf4ff43ab118429962f9ce",
-  "policy_sha256": "5ae40f02be309bb744da62231bda78f223eed8675ba6e9ccf1f256f89b587ab8",
+  "domain_policy_sha256": "5d94383983eac9cd6abb957571bbff9bd3da954396ab36692d49bb43848a6364",
+  "policy_sha256": "d201d8be55bdb722ab495b75fa1e1df69538277e9ea49efa15d8210d4ede2468",
   "requirements": [
     {
       "applicability": "delegate",
@@ -10480,7 +10480,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Registry identity does not itself admit an algorithm; the owning cryptographic and protocol milestones remain mandatory.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "Use the exact registry name as listed on the IANA web page",
@@ -10509,13 +10509,13 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/check-requirements.py#resolve_source"
+          "target": "scripts/standards/check-requirements.py#resolve_source"
         }
       ],
       "tests": [
         {
           "status": "actual",
-          "target": "scripts/test-requirements.py#test_iana_source_drift_changes_matrix"
+          "target": "scripts/standards/test-requirements.py#test_iana_source_drift_changes_matrix"
         }
       ]
     },
@@ -12689,7 +12689,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -12750,12 +12750,12 @@
         {
           "polarity": "positive",
           "status": "actual",
-          "target": "scripts/test-workspace-metadata.py#test_keylog_isolation"
+          "target": "scripts/repository/test-workspace-metadata.py#test_keylog_isolation"
         },
         {
           "polarity": "negative",
           "status": "actual",
-          "target": "scripts/test-workspace-metadata.py#reject_invalid_and_exhausted"
+          "target": "scripts/repository/test-workspace-metadata.py#reject_invalid_and_exhausted"
         }
       ],
       "work_bound": "Inputs, parsing, retained bytes, retries, provider operations, state transitions, and outputs require explicit caller-owned ceilings."
@@ -19876,7 +19876,7 @@
       ],
       "deviation_rationale": null,
       "evidence": [
-        "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+        "scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
       ],
       "id": "BRY-REQ-STD-0001",
       "lifecycle": "evidenced",
@@ -19884,7 +19884,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Normative prose without BCP 14 keywords still requires later manual extraction and review.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "The words have the meanings specified herein only when they are in all capitals.",
@@ -19913,13 +19913,13 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/check-requirements.py#validate_strength"
+          "target": "scripts/standards/check-requirements.py#validate_strength"
         }
       ],
       "tests": [
         {
           "status": "actual",
-          "target": "scripts/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
+          "target": "scripts/standards/test-requirements.py#test_lowercase_normative_word_does_not_satisfy_strength"
         }
       ]
     },
@@ -19937,7 +19937,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Later domain records must provide their own concrete security consequence and cannot inherit this pilot text.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "The effects on security of not implementing a MUST or SHOULD",
@@ -20031,13 +20031,13 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/check-requirements.py#validate_requirement"
+          "target": "scripts/standards/check-requirements.py#validate_requirement"
         }
       ],
       "tests": [
         {
           "status": "actual",
-          "target": "scripts/test-requirements.py#test_missing_residual_fails"
+          "target": "scripts/standards/test-requirements.py#test_missing_residual_fails"
         }
       ]
     },
@@ -20055,7 +20055,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.2",
       "residual": "Identifier allocation remains a review responsibility and this milestone does not populate every future domain.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "must provide clear instructions on details of the namespace",
@@ -20084,7 +20084,7 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "scripts/requirements_lib.py#ID_PATTERN"
+          "target": "scripts/standards/requirements_lib.py#ID_PATTERN"
         }
       ],
       "tests": [
@@ -20108,7 +20108,7 @@
       "mapping_scope": "reviewed-global",
       "owner": "0.3.5",
       "residual": "Complete semantic extraction beyond the BCP 14 pilot remains owned by the v0.3.3 through v0.3.5 population passes.",
-      "revision": 2,
+      "revision": 3,
       "scope": "governance",
       "source": {
         "anchor": "they MUST only be used where it is actually required for interoperation",
@@ -20202,7 +20202,7 @@
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "scripts/check-requirements.py#validate_normative_usage"
+          "target": "scripts/standards/check-requirements.py#validate_normative_usage"
         }
       ],
       "tests": [
@@ -29772,9 +29772,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "a888a15b538466226882f97f74c911fa1477643f6ec11f23c26064de458b7bd9",
+  "residual_policy_sha256": "4f2c5509371b6ac515e49494e318665f714d8ef43acfdfff274126e6d992a125",
   "schema": 5,
   "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
-  "surface_register_sha256": "536735cb2217d23c40de7fc1876141be075ca247d67ef16ae944fc344d03ed66",
-  "transport_policy_sha256": "cb88b4d2590556fc0739f255429905a6f8b263b7271ee469d374c706a8f359b5"
+  "surface_register_sha256": "3feca260a46321723d9912670576eba7ad55f568f8f0bc09aac18b3db1c796cc",
+  "transport_policy_sha256": "d6d126ee6ec8101265d2f79fe257c9e83c3fabca2df9af03d67eee2c1c69a853"
 }

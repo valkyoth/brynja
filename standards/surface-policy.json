@@ -733,7 +733,7 @@
         "owner": "0.10.0",
         "rationale": "Production SSLKEYLOGFILE export is forbidden because it defeats the secret-lifetime contract.",
         "sources": ["rfc:9850"],
-        "test_target": "scripts/test-workspace-metadata.py#test_keylog_isolation"
+        "test_target": "scripts/repository/test-workspace-metadata.py#test_keylog_isolation"
       },
       "id": "facility.sslkeylogfile.production"
     },
@@ -901,7 +901,7 @@
         "owner": "0.22.0",
         "rationale": "All six FIPS 180-4 SHA-2 identities are complete first-party implementations with public leaf and facade APIs, authoritative vectors, boundary evidence, optional unadmitted CPU candidates, and separately packaged downstream acceptance.",
         "sources": ["nist:NIST.FIPS.180-4.pdf"],
-        "test_target": "scripts/check-sha2-public-api.py#main"
+        "test_target": "scripts/sha2/check-sha2-public-api.py#main"
       },
       "id": "algorithm.sha2"
     },

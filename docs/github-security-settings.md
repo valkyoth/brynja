@@ -4,7 +4,7 @@ Status: main-branch ruleset active and machine checked
 
 The repository has one active `Valkyoth Protect Main Branch` ruleset targeting
 the default branch. `github-release-controls.toml` is the local source of truth,
-and `scripts/check-github-release-controls.py` compares the live GitHub ruleset
+and `scripts/release/check-github-release-controls.py` compares the live GitHub ruleset
 before release and in CI. CI's read-only token checks every publicly visible
 rule; the privileged local release gate additionally checks the exact bypass
 identities and modes because GitHub hides those from read-only callers.

@@ -22,7 +22,7 @@ release supports that compiler. Kani evidence records its verifier/compiler
 pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
-`scripts/check-kani.sh` verifies this policy, the installed pairing, the exact
+`scripts/assurance/check-kani.sh` verifies this policy, the installed pairing, the exact
 two-harness inventory, and both proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
@@ -63,14 +63,14 @@ formally verified behavior from this v0.4.0 policy foundation.
 cargo install --locked kani-verifier --version 0.67.0
 cargo kani setup
 cargo kani --version
-scripts/check-kani.sh
+scripts/assurance/check-kani.sh
 ```
 
 Ordinary repository and GitHub CI runs execute only
-`scripts/check-kani.sh --policy-only`. That fast check proves that the admitted
+`scripts/assurance/check-kani.sh --policy-only`. That fast check proves that the admitted
 harness inventory and source confinement have not drifted; it does not claim
 the proofs ran. Before a tag is created, the local tag gate runs
-`scripts/check-kani.sh --required` and fails closed unless the pinned verifier
+`scripts/assurance/check-kani.sh --required` and fails closed unless the pinned verifier
 and both harnesses pass. The crates.io publish preflight consumes that already
 required pre-tag evidence instead of repeating the verifier run. This keeps
 hosted CI bounded while retaining Kani as mandatory tag evidence.

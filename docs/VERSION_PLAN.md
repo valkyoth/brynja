@@ -167,7 +167,7 @@ selected dependency closure to crates.io. Supporting crates retain independent
 SemVer lines and publish only when their cumulative package or exact internal
 dependency requirements change. Repository-only crates never publish, changed
 dependencies publish first, and the facade publishes last.
-`release-crates.toml` and `scripts/release_crates.py` enforce this policy.
+`release-crates.toml` and `scripts/release/release_crates.py` enforce this policy.
 
 ## TLS Package And Retirement Rule
 

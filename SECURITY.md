@@ -8,13 +8,13 @@ scaffolding evidence only and are not supported for securing traffic.
 
 ```bash
 scripts/checks.sh
-scripts/check-rust-version-matrix.sh
-scripts/check_latest_tools.sh
-python3 scripts/check-protocol-surfaces.py
-python3 scripts/check-requirements.py
+scripts/ci/check-rust-version-matrix.sh
+scripts/ci/check_latest_tools.sh
+python3 scripts/standards/check-protocol-surfaces.py
+python3 scripts/standards/check-requirements.py
 cargo deny check
 cargo audit
-scripts/generate-sbom.sh --check
+scripts/release/generate-sbom.sh --check
 ```
 
 GitHub CodeQL Default setup should be enabled. Do not add an advanced CodeQL

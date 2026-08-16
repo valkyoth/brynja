@@ -1,0 +1,55 @@
+[layout]
+root_files = ["README.md", "checks.sh", "inventory.toml", "tag_gate.sh"]
+entrypoints = ["checks.sh", "tag_gate.sh"]
+
+[category.assurance]
+extensions = [".py", ".sh"]
+purpose = "Shared bounded assurance runners, bare-metal gates, and proof orchestration"
+
+[category.ci]
+extensions = [".lock", ".sh"]
+purpose = "Pinned CI tools and Rust-version matrix checks"
+
+[category.constant-time]
+extensions = [".py", ".sh"]
+purpose = "Constant-time source and compiler-artifact assurance"
+
+[category.cpu]
+extensions = [".py", ".sh"]
+purpose = "Reusable CPU capability, dispatch, admission, and evidence infrastructure"
+
+[category.foundations]
+extensions = [".py"]
+purpose = "Provider and security-foundation contract policies and tests"
+
+[category.pki]
+extensions = [".py"]
+purpose = "DER and canonical ASN.1 policy and tests"
+
+[category.protocols]
+extensions = [".py"]
+purpose = "Protocol framing and state-machine policy and tests"
+
+[category.release]
+extensions = [".py", ".sh"]
+purpose = "Release, pentest, publication, SBOM, and GitHub-control tooling"
+
+[category.repository]
+extensions = [".py", ".sh"]
+purpose = "Repository source, metadata, documentation, status, and script-layout policy"
+
+[category.sanitization]
+extensions = [".py", ".sh"]
+purpose = "Sanitization dependency and compiler-artifact assurance"
+
+[category.sha2]
+extensions = [".py", ".sh"]
+purpose = "SHA-2 implementation, public acceptance, and architecture-specific evidence"
+
+[category.standards]
+extensions = [".py", ".sh"]
+purpose = "Standards authorities, protocol surfaces, and normative requirements"
+
+[category.zeroization]
+extensions = [".py", ".sh"]
+purpose = "Zeroization source and compiler-artifact assurance"

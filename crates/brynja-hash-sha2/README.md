@@ -116,7 +116,7 @@ SHA-512/224, and SHA-512/256 on exact qualifying targets.
 Run the repository-owned downstream acceptance from a clean checkout with:
 
 ```bash
-python3 scripts/check-sha2-public-api.py
+python3 scripts/sha2/check-sha2-public-api.py
 ```
 
 It uses only ordinary public package APIs and repeats the run from assembled

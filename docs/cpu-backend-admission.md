@@ -180,7 +180,7 @@ or the local SQLite database and are not evidence.
 Initialize one session after the final pentest remediation commit:
 
 ```bash
-python3 scripts/manage-cpu-evidence.py init
+python3 scripts/cpu/manage-cpu-evidence.py init
 ```
 
 If pentest remediation or another reviewed change creates a new exact commit,
@@ -191,8 +191,8 @@ relabeling them.
 Run the local AMD lane and inspect it later:
 
 ```bash
-python3 scripts/manage-cpu-evidence.py start-local local-amd-x86_64
-python3 scripts/manage-cpu-evidence.py check local-amd-x86_64
+python3 scripts/cpu/manage-cpu-evidence.py start-local local-amd-x86_64
+python3 scripts/cpu/manage-cpu-evidence.py check local-amd-x86_64
 ```
 
 An AWS worker uses the matching registered lane, observed host IP, SSH user,
@@ -200,9 +200,9 @@ and local private-key path. `--bootstrap-rustup` is optional and is the only
 remote bootstrap mutation the manager can request:
 
 ```bash
-python3 scripts/manage-cpu-evidence.py start-remote aws-intel-x86_64 \
+python3 scripts/cpu/manage-cpu-evidence.py start-remote aws-intel-x86_64 \
   --host HOST --user ubuntu --key /absolute/path/to/key --bootstrap-rustup
-python3 scripts/manage-cpu-evidence.py check aws-intel-x86_64
+python3 scripts/cpu/manage-cpu-evidence.py check aws-intel-x86_64
 ```
 
 The same command accepts `aws-aarch64` and `riscv64-cloud`; the latter exits
@@ -210,13 +210,13 @@ before compilation unless `/proc/cpuinfo` identifies exact `zknh`. On the non-re
 M2, the repository owner checks out the exact session commit and runs:
 
 ```bash
-scripts/capture-sha256-cpu-native.sh apple-m2-aarch64 target/apple-m2-aarch64
+scripts/sha2/capture-sha256-cpu-native.sh apple-m2-aarch64 target/apple-m2-aarch64
 ```
 
 After transferring that directory back without changing it, import it with:
 
 ```bash
-python3 scripts/manage-cpu-evidence.py import apple-m2-aarch64 /path/to/apple-m2-aarch64
+python3 scripts/cpu/manage-cpu-evidence.py import apple-m2-aarch64 /path/to/apple-m2-aarch64
 ```
 
 The resulting standard bundles prove clean-source SHA-256-family candidate
@@ -229,10 +229,10 @@ not satisfy the authenticated benchmark, side-channel, or admission schema.
 Run the current controls with:
 
 ```bash
-python3 scripts/check-cpu-evidence.py
-python3 scripts/test-cpu-evidence.py
-python3 scripts/test-cpu-evidence-runner.py
-scripts/check-cpu-admission-fixture.sh
-scripts/check-sha256-cpu-codegen.sh
-scripts/check-sha256-cpu-qemu.sh
+python3 scripts/cpu/check-cpu-evidence.py
+python3 scripts/cpu/test-cpu-evidence.py
+python3 scripts/cpu/test-cpu-evidence-runner.py
+scripts/cpu/check-cpu-admission-fixture.sh
+scripts/sha2/check-sha256-cpu-codegen.sh
+scripts/sha2/check-sha256-cpu-qemu.sh
 ```

@@ -72,15 +72,15 @@ The lifecycle `current` is implicit. Explicit classes are:
 Normal builds and tests never access the network:
 
 ```bash
-python3 scripts/check-standards-ledger.py
-python3 scripts/test-standards-ledger.py
-python3 scripts/check-protocol-surfaces.py
-python3 scripts/test-protocol-surfaces.py
-python3 scripts/check-requirements.py
-python3 scripts/test-requirements.py
-python3 scripts/test-requirement-domains.py
-python3 scripts/test-requirement-transports.py
-python3 scripts/test-requirement-lifecycles.py
+python3 scripts/standards/check-standards-ledger.py
+python3 scripts/standards/test-standards-ledger.py
+python3 scripts/standards/check-protocol-surfaces.py
+python3 scripts/standards/test-protocol-surfaces.py
+python3 scripts/standards/check-requirements.py
+python3 scripts/standards/test-requirements.py
+python3 scripts/standards/test-requirement-domains.py
+python3 scripts/standards/test-requirement-transports.py
+python3 scripts/standards/test-requirement-lifecycles.py
 ```
 
 The checker fails on non-HTTPS or unallowlisted URLs, redirects outside the
@@ -125,9 +125,9 @@ is explicitly caller-owned rather than inherited future work.
 Refreshing evidence is an explicit networked maintenance operation:
 
 ```bash
-scripts/update-standards-snapshots.py --check
-scripts/update-standards-snapshots.py --write
-python3 scripts/check-standards-ledger.py --write
+scripts/standards/update-standards-snapshots.py --check
+scripts/standards/update-standards-snapshots.py --write
+python3 scripts/standards/check-standards-ledger.py --write
 ```
 
 `--check` is part of the release gate and fails when an official RFC index,

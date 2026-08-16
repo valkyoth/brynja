@@ -113,20 +113,44 @@ acceptance before a dependent construction or protocol consumes it. Registry-
 driven umbrella rows are planning gates only: they must generate and insert all
 required review-sized tagged child rows before any listed implementation begins.
 
-Every multi-version implementation chain reserves a final patch-numbered
-**Public API Usability Acceptance** row before that chain starts. It provides a
+Every multi-version implementation chain reserves two ordered acceptance
+boundaries before that chain starts. First, a **Portable Public API Usability
+Acceptance** boundary must pass before any acceleration implementation,
+admission, native measurement, or final evidence sweep begins. It freezes a
 runnable downstream fixture and documented command using only ordinary public
-packages, features, and symbols; validates representative real data against
-authoritative or independent expected results; forces every available admitted
-backend; and checks package contents and portability. This executable evidence
-does not replace formal proof, independent review, or certification, and it
-cannot become the first point at which the implementation is actually usable.
-If a chain crosses a crates.io checkpoint, the checkpoint itself must already
-pass the same consumer acceptance even though the separately tagged closing
-patch remains in the roadmap.
+packages, features, and symbols; validates every completed family member on
+representative real data against authoritative or independent expected
+results; and checks package contents and portability without private hooks.
+This boundary may be the final deliverable of the last portable implementation
+row or its own review-sized patch, but it must be committed and green first.
+
+Second, after acceleration and its evidence are complete, a final
+**Cross-Backend Public API Usability Acceptance** boundary reruns the frozen
+fixture without weakening it against the portable path and every admitted
+backend, verifies unavailable candidate and required-backend failures, and
+closes the family. A failure that changes code invalidates and reruns every
+affected proof, native result, emitted-code artifact, performance result,
+side-channel result, KAT, package archive, and acceptance result. Evidence is
+bound to the exact implementation commit; earlier evidence cannot be carried
+across a code change merely because the public output later appears correct.
+Exploratory benchmarks may guide design before portable acceptance, but cannot
+support admission or a release claim.
+
+The public verification-status table marks a started family **In progress**
+until the final cross-backend boundary passes. Only that closing milestone may
+change it to **Fully implemented**. Independent verification and FIPS
+validation remain separate claims. When no acceleration is planned, an
+explicitly scalar-only closing row may satisfy both boundaries after recording
+that disposition. This executable evidence does not replace formal proof,
+independent review, or certification, and it cannot become the first point at
+which the implementation is actually usable. If a chain crosses a crates.io
+checkpoint, the checkpoint itself must already pass the applicable consumer
+acceptance even when a separately tagged closing patch follows later.
 
 Every CPU-accelerated implementation remains an optional first-party backend
 behind the same `no_std` provider contract as its portable scalar reference.
+An acceleration row cannot start until its release notes and evidence index
+identify the preceding tagged portable-acceptance boundary and frozen fixture.
 Candidate detection is separate from activation; safe code can activate only an
 exact compiler-proven or runtime-proven feature bundle that passed its own
 known-answer test. Unsupported, unmeasured, unhealthy, or quarantined paths
@@ -230,8 +254,8 @@ AEADs, import-only RSA signing, and explicit algorithm exclusions pass independe
 | `0.24.0` | Keccak Foundation And Complete SHA3-224/SHA3-256 | Freeze reusable no_std `brynja-hash-sha3` sponge ownership around one private Keccak-f[1600] permutation, then complete SHA3-224 and SHA3-256 with distinct rates, suffixes, fixed-output states, one-shot and streaming APIs, authoritative vectors, padding boundaries, checked lengths, proofs, and no raw public permutation. |
 | `0.24.1` | Complete SHA3-384 And SHA3-512 | Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration. |
 | `0.24.2` | Complete SHAKE128 And SHAKE256 | Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600]. |
-| `0.24.3` | Complete SHA-3 And SHAKE CPU Acceleration | Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve every rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, arbitrary tail, KAT, quarantine, and scalar-equivalence rule. |
-| `0.24.4` | Complete SHA-3 And SHAKE Public API Usability Acceptance | Close the FIPS 202 chain with a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental-squeeze, scalar, and every admitted accelerated path, including zero-length and multi-block output, authoritative vectors, no_std installation, and domain-separation negative tests. |
+| `0.24.3` | SHA-3 And SHAKE Portable Public API Usability Acceptance | Before acceleration or native evidence, freeze and pass a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental multi-squeeze, and forced portable paths, including representative real data, zero-length and multi-block output, authoritative vectors, no_std installation, package contents, checked failures, and domain-separation negative tests; keep the family status In progress. |
+| `0.24.4` | SHA-3 And SHAKE Acceleration Evidence And Final Acceptance | Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for all six SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, then rerun the unchanged packaged fixture through portable and every admitted backend; rerun affected evidence after any fix and mark the family Fully implemented only when this final cross-backend gate passes. |
 | `0.24.5` | Complete First-Party Legacy SHA-1 | Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation. |
 | `0.24.6` | Complete First-Party Legacy MD5 | Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use. |
 | `0.24.7` | Legacy SHA-1 And MD5 Usability And Isolation Acceptance | Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters. |
@@ -300,7 +324,7 @@ AEADs, import-only RSA signing, and explicit algorithm exclusions pass independe
 | `0.45.13` | P-521 CPU Acceleration | Benchmark and admit separately reviewable P-521 x86_64, AArch64, and qualifying RISC-V field, scalar, group, validation, and ECDH paths only where proofs, emitted-code, side-channel, native correctness, performance, KAT, quarantine, fault, lifecycle, and scalar-equivalence evidence pass. |
 | `0.45.14` | P-521 Public API Usability Acceptance | Close P-521 with packaged point, key-import, cross-party ECDH, malformed-input, invalid-secret, lifecycle, cleanup, authoritative-vector, scalar, and every admitted accelerated consumer path, preserving no_std installation and future HPKE integration boundaries. |
 | `0.46.0` | Version-One Algorithm And Transitive Completeness Register | Freeze the authenticated modern and historical algorithm, operation, parameter, format, protocol-consumer, and registry closure for every pre-1.0 Brynja capability; assign every standardized item to one modern or opt-in legacy owner, generate its transitive dependency graph, and reject partial families, missing directions, duplicate implementations, or unspecified compatibility edges. |
-| `0.46.1` | Review-Sized Cryptographic Substrate Schedule Freeze | Convert the v0.46.0 register into the exact review-sized tagged schedule below before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, separate portable code from acceleration, give every family a package-external acceptance row, and insert additional patch rows rather than enlarging a frozen row when authenticated sources disclose more work. |
+| `0.46.1` | Review-Sized Cryptographic Substrate Schedule Freeze | Convert the v0.46.0 register into an exact review-sized tagged schedule before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, place a frozen package-external portable acceptance boundary before every acceleration or admission row and a final unchanged-fixture cross-backend acceptance boundary after its evidence, and insert or reorder patch rows rather than enlarging a frozen row when authenticated sources disclose more work. |
 | `0.46.2` | Complete Legacy MD2 And PKIX Hash Boundary | Implement complete streaming and fixed-message MD2 in isolated `brynja-legacy-md2` with RFC 1319 vectors, padding, checksum, checked lengths, collision warnings, a public compatibility API, and only separately admitted historical certificate or container consumers. |
 | `0.46.3` | Complete Legacy RIPEMD-160 | Implement complete streaming and fixed-message RIPEMD-160 in isolated `brynja-legacy-ripemd160` with authoritative vectors, checked exhaustion, collision and strength warnings, public compatibility APIs, and typed later OpenPGP or certificate consumers. |
 | `0.46.4` | Finite-Field Group Arithmetic And Validation | Implement reusable finite-field arithmetic, validated safe-prime parameters, public-key validation, fixed-schedule exponentiation, unbiased private exponents, imported-key consistency, cleanup, vectors, and proof harnesses for finite-field DH consumers without yet claiming every FFDHE named group. |

@@ -90,24 +90,45 @@ tests must name the inserted patch. A patch may repair or complete the already
 named capability but cannot hide unrelated scope, and the earlier tag remains
 honestly documented rather than rewritten.
 
-Every multi-version implementation chain additionally ends with a dedicated
-patch-numbered **Public API Usability Acceptance** milestone. Before work on a
-new chain begins, both plans must reserve that exact closing patch. The
-acceptance patch builds a downstream-style fixture using only normal public
-packages and features, exposes one documented command any repository user can
-run, exercises representative real data and every scalar or admitted backend,
-and compares externally visible results with authoritative or independent
-evidence. It also packages the involved crates without private paths or test
-configuration. This is executable usability evidence, not mathematical proof,
-independent review, or certification. The original implementation milestone
-must already pass its own public consumer test; the closing patch repeats and
-composes the completed chain rather than deferring missing behavior. A chain
-that reaches a crates.io checkpoint must pass this acceptance contract in the
-checkpoint itself even when its separately tagged closing patch follows later.
+Every multi-version implementation chain reserves two ordered acceptance
+boundaries before implementation starts. A **Portable Public API Usability
+Acceptance** boundary must be committed and green before acceleration code,
+admission, native measurement, or the final evidence sweep. It freezes a
+downstream-style fixture using only normal public packages and features,
+exposes one documented command any repository user can run, exercises every
+completed family member on representative real data through forced portable
+paths, compares externally visible results with authoritative or independent
+evidence, and packages the involved crates without private paths or test
+configuration. It may close the last portable implementation row or occupy a
+dedicated review-sized patch.
+
+After acceleration and its evidence are complete, a final **Cross-Backend
+Public API Usability Acceptance** boundary reruns that frozen fixture without
+weakening it through the portable implementation and every admitted backend,
+including unavailable candidate and required-backend failures. Any discovered
+defect is fixed before exit, and every proof, native result, emitted-code
+artifact, performance or side-channel result, KAT, package archive, and
+acceptance result affected by changed code is rerun. Evidence is exact-commit
+evidence and never survives a relevant implementation change by assertion.
+Exploratory measurements may precede portable acceptance only as design input;
+they cannot authorize backend admission or a release claim.
+
+The public verification-status table records a started family as **In
+progress** until the final cross-backend boundary passes; only that closing
+milestone may record **Fully implemented**. Independent verification and FIPS
+validation remain separate. A reviewed scalar-only family may combine the two
+boundaries only when the closing milestone explicitly records that no
+acceleration is planned. This is executable usability evidence, not
+mathematical proof, independent review, or certification. Each implementation
+milestone still passes its own public consumer test, and a chain crossing a
+crates.io checkpoint must pass the applicable acceptance contract there even
+when a separately tagged closing patch follows later.
 
 Portable scalar cryptography precedes acceleration. CPU candidates live only
 in the optional first-party `no_std` backend package; standard-library runtime
-detection lives in a separate opt-in adapter. Exact feature evidence, direct
+detection lives in a separate opt-in adapter. An acceleration milestone cannot
+start until its release notes and evidence index point to the preceding tagged
+portable-acceptance boundary and frozen fixture. Exact feature evidence, direct
 KATs, health and quarantine, scalar differentials, native AMD, Intel, Apple
 and AWS Arm measurements, qualifying RISC-V evidence, per-compiler emitted
 code and side-channel results, and explicit FIPS disposition precede
@@ -2455,82 +2476,93 @@ Exit criteria:
   implementation work;
 - `v0.24.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.3 - Complete SHA-3 And SHAKE CPU Acceleration
+### v0.24.3 - SHA-3 And SHAKE Portable Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve every rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, arbitrary tail, KAT, quarantine, and scalar-equivalence rule.
+Plan scope: Before acceleration or native evidence, freeze and pass a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental multi-squeeze, and forced portable paths, including representative real data, zero-length and multi-block output, authoritative vectors, no_std installation, package contents, checked failures, and domain-separation negative tests; keep the family status In progress.
 
-Goal: close the **Complete SHA-3 And SHAKE CPU Acceleration** review unit as a complete named capability
-without silently admitting adjacent algorithms, acceleration, or consumer scope.
+Goal: prove that the complete portable FIPS 202 family is genuinely usable
+through its shipped public packages before any accelerated implementation or
+expensive native evidence is allowed to begin.
 
 Deliverables:
 
-- implement the exact Plan scope through the named first-party Rust and no_std
-  package boundaries, with explicit types, ownership, resource, failure, and
-  lifecycle rules;
-- keep portable semantics, accelerated authority, legacy isolation, secret
-  destruction, and downstream usability separate wherever the Plan scope
-  requires them;
-- update normative requirements, threat model, controls, claim register,
-  public documentation, release notes, and permanent evidence references.
+- add a package-external fixture that imports only documented
+  `brynja-hash-sha3` and facade APIs and exercises SHA3-224, SHA3-256,
+  SHA3-384, SHA3-512, SHAKE128, and SHAKE256 over representative real input;
+- cover one-shot, irregular streaming, incremental multi-squeeze, zero-length,
+  partial-rate, exact-rate, multi-rate, arbitrary-tail, checked-failure, and
+  domain-separation behavior against authoritative or independent expected
+  results;
+- package and install every public dependency closure under `no_std`, freeze
+  the fixture command and semantic corpus for later backend reuse, and record
+  SHA-3/SHAKE as **In progress** rather than **Fully implemented**.
 
 Verification:
 
-- run every applicable authoritative vector, boundary, streaming or partition,
-  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
-  differential campaign named by the Plan scope;
-- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
-  package-external, no_std, and forced-failure evidence without broadening the
-  claim beyond what was measured;
-- pass repository checks, supported Rust versions and targets, dependency and
-  advisory policy, SBOM, package installation, documentation, and modern versus
-  legacy graph isolation.
+- run the frozen fixture with forced portable selection and prove that it does
+  not reach private modules, test-only features, unshipped paths, or an
+  accelerated candidate;
+- run FIPS 202 vectors, padding and rate boundaries, multi-squeeze partitions,
+  exhaustion and state-transition failures, package-content checks, compiled
+  examples, and the applicable Kani and differential harnesses;
+- pass repository checks, Rust 1.90.0 through 1.97.1, supported no_std targets,
+  dependency and advisory policy, SBOM, documentation, and clean GitHub and
+  CodeQL before acceleration work starts.
 
 Exit criteria:
 
-- the named capability is complete and usable at its declared boundary, its
-  residual gaps are explicit, and the next row does not inherit hidden
-  implementation work;
+- the tagged portable implementation and frozen public fixture pass for all
+  six identities, no hidden implementation work remains, acceleration has not
+  supplied acceptance evidence, and the public family status remains **In
+  progress** pending the final cross-backend gate;
 - `v0.24.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.4 - Complete SHA-3 And SHAKE Public API Usability Acceptance
+### v0.24.4 - SHA-3 And SHAKE Acceleration Evidence And Final Acceptance
 
 Status: planned
 
-Plan scope: Close the FIPS 202 chain with a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental-squeeze, scalar, and every admitted accelerated path, including zero-length and multi-block output, authoritative vectors, no_std installation, and domain-separation negative tests.
+Plan scope: Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for all six SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, then rerun the unchanged packaged fixture through portable and every admitted backend; rerun affected evidence after any fix and mark the family Fully implemented only when this final cross-backend gate passes.
 
-Goal: close the **Complete SHA-3 And SHAKE Public API Usability Acceptance** review unit as a complete named capability
-without silently admitting adjacent algorithms, acceleration, or consumer scope.
+Goal: add only justified first-party acceleration and close the complete FIPS
+202 family on the exact candidate after the already-proven portable consumer
+contract succeeds unchanged across every admitted execution path.
 
 Deliverables:
 
-- implement the exact Plan scope through the named first-party Rust and no_std
-  package boundaries, with explicit types, ownership, resource, failure, and
-  lifecycle rules;
-- keep portable semantics, accelerated authority, legacy isolation, secret
-  destruction, and downstream usability separate wherever the Plan scope
-  requires them;
-- update normative requirements, threat model, controls, claim register,
-  public documentation, release notes, and permanent evidence references.
+- implement isolated Keccak-f[1600] candidates for exact x86_64, AArch64, and
+  qualifying RISC-V feature bundles without changing any SHA-3 rate, suffix,
+  output identity, SHAKE squeeze transition, length rule, or public API;
+- record per-symbol compiler, CPU, operating-environment, native correctness,
+  migration, performance, emitted-code, timing or side-channel, KAT,
+  quarantine, dispatch, candidate, rejection, scalar-only, and FIPS
+  dispositions before any backend is admitted;
+- rerun the frozen v0.24.3 fixture through portable selection, every admitted
+  backend, unavailable required paths, and unhealthy-path quarantine, then
+  update documentation and the public table to **Fully implemented** only at
+  final exit.
 
 Verification:
 
-- run every applicable authoritative vector, boundary, streaming or partition,
-  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
-  differential campaign named by the Plan scope;
-- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
-  package-external, no_std, and forced-failure evidence without broadening the
-  claim beyond what was measured;
-- pass repository checks, supported Rust versions and targets, dependency and
-  advisory policy, SBOM, package installation, documentation, and modern versus
-  legacy graph isolation.
+- force every candidate directly for KAT and scalar differential campaigns and
+  force every admitted public dispatch route across fixed-output and XOF
+  identities, rate boundaries, multi-squeeze partitions, and arbitrary tails;
+- reproduce qualifying native AMD or Intel x86_64, Apple and AWS AArch64, and
+  RISC-V evidence where hardware exists, retain QEMU only as supplemental
+  evidence, and reject admission where native or side-channel duties remain;
+- prove the v0.24.3 fixture and corpus were not weakened; if any correction
+  changes implementation or fixture semantics, invalidate and rerun all
+  affected proofs, native measurements, generated-code review, KATs, package
+  archives, acceptance results, repository checks, Rust matrix, GitHub, and
+  CodeQL on the corrected exact commit.
 
 Exit criteria:
 
-- the named capability is complete and usable at its declared boundary, its
-  residual gaps are explicit, and the next row does not inherit hidden
-  implementation work;
+- every backend has an explicit admitted, candidate, rejected, or scalar-only
+  disposition, the unchanged consumer fixture passes portable and every
+  admitted route, all evidence matches the final code, residual limits are
+  explicit, and only now is SHA-3/SHAKE recorded **Fully implemented**;
 - `v0.24.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.24.5 - Complete First-Party Legacy SHA-1
@@ -4836,7 +4868,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Convert the v0.46.0 register into the exact review-sized tagged schedule below before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, separate portable code from acceleration, give every family a package-external acceptance row, and insert additional patch rows rather than enlarging a frozen row when authenticated sources disclose more work.
+Plan scope: Convert the v0.46.0 register into an exact review-sized tagged schedule before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, place a frozen package-external portable acceptance boundary before every acceleration or admission row and a final unchanged-fixture cross-backend acceptance boundary after its evidence, and insert or reorder patch rows rather than enlarging a frozen row when authenticated sources disclose more work.
 
 Goal: close the **Review-Sized Cryptographic Substrate Schedule Freeze** review unit completely without absorbing another
 algorithm identity, construction family, acceleration gate, or usability gate.

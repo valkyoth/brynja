@@ -797,9 +797,9 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add architecture-specific Keccak-f[1600] backends for all six admitted SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V only where native evidence justifies them; preserve every rate, suffix, fixed-output or XOF identity, multi-squeeze behavior, arbitrary tail, KAT, quarantine, and scalar-equivalence rule.",
+      "scope": "Before acceleration or native evidence, freeze and pass a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental multi-squeeze, and forced portable paths, including representative real data, zero-length and multi-block output, authoritative vectors, no_std installation, package contents, checked failures, and domain-separation negative tests; keep the family status In progress.",
       "source_ids": [],
-      "title": "Complete SHA-3 And SHAKE CPU Acceleration",
+      "title": "SHA-3 And SHAKE Portable Public API Usability Acceptance",
       "version": "0.24.3"
     },
     {
@@ -808,9 +808,9 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Close the FIPS 202 chain with a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental-squeeze, scalar, and every admitted accelerated path, including zero-length and multi-block output, authoritative vectors, no_std installation, and domain-separation negative tests.",
+      "scope": "Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for all six SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, then rerun the unchanged packaged fixture through portable and every admitted backend; rerun affected evidence after any fix and mark the family Fully implemented only when this final cross-backend gate passes.",
       "source_ids": [],
-      "title": "Complete SHA-3 And SHAKE Public API Usability Acceptance",
+      "title": "SHA-3 And SHAKE Acceleration Evidence And Final Acceptance",
       "version": "0.24.4"
     },
     {
@@ -1824,7 +1824,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Convert the v0.46.0 register into the exact review-sized tagged schedule below before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, separate portable code from acceleration, give every family a package-external acceptance row, and insert additional patch rows rather than enlarging a frozen row when authenticated sources disclose more work.",
+      "scope": "Convert the v0.46.0 register into an exact review-sized tagged schedule before implementation begins; require one independently testable algorithm identity or tightly coupled construction per implementation row, place a frozen package-external portable acceptance boundary before every acceleration or admission row and a final unchanged-fixture cross-backend acceptance boundary after its evidence, and insert or reorder patch rows rather than enlarging a frozen row when authenticated sources disclose more work.",
       "source_ids": [],
       "title": "Review-Sized Cryptographic Substrate Schedule Freeze",
       "version": "0.46.1"

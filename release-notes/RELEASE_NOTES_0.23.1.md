@@ -1,6 +1,6 @@
 # Brynja 0.23.1 Release Notes
 
-Status: implementation candidate; exceptional pentest required; internal development tag; no crates.io publication
+Status: exceptional pentest PASS; awaiting hosted GitHub and CodeQL; internal development tag; no crates.io publication
 
 Brynja 0.23.1 adds complete portable SHA-384 and SHA-512 implementations beside
 SHA-224 and SHA-256. Both are directly usable through `brynja-hash-sha2`,
@@ -62,4 +62,10 @@ first-party cryptographic algorithms and their compression foundation triggers
 an exceptional pentest before the tag. After the committed report and any
 required remediation retest pass, the exact report commit must pass the full
 local gate plus hosted GitHub and CodeQL checks before explicit tag
+authorization.
+
+The repository-owner assessment of exact implementation candidate
+`22c1dcdc7594a34bc14b53b42d1d56f7aa66047b` reported no finding and required
+no remediation. The permanent report records `PASS`/`PASS` with zero open
+findings. v0.23.1 now awaits green hosted GitHub and CodeQL before explicit tag
 authorization.

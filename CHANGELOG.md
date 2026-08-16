@@ -7,6 +7,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Record the exceptional v0.23.1 repository-owner SHA-384/SHA-512 assessment
+  of exact signed implementation candidate
+  `22c1dcdc7594a34bc14b53b42d1d56f7aa66047b` as `PASS`/`PASS` with zero open
+  findings and no remediation; retain ordinary-state erasure, acceleration,
+  independent-review, FIPS, zero-publication, and scheduled v0.25.0
+  cumulative-review restrictions.
 - Add complete allocation-free `no_std` SHA-384 and SHA-512 over one private
   80-round `u64` compression owner and one private 128-byte buffered state,
   with exact distinct FIPS 180-4 IVs, 48-byte/64-byte digests, checked `u128`

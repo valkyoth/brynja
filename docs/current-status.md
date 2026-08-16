@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.0 signed; v0.23.1 implementation candidate awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.0 signed; v0.23.1 pentest PASS and awaiting hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -124,7 +124,12 @@ covered. SHA-384 is explicitly distinguished from truncated SHA-512. Ordinary
 unkeyed state makes no secret-remanence cleanup claim. Acceleration,
 SHA-512/224, SHA-512/256, independent review, and FIPS 140-3 validation remain
 absent. This new-algorithm boundary requires an exceptional pentest and selects
-zero crates.io packages before its internal tag.
+zero crates.io packages before its internal tag. The repository-owner
+assessment of exact candidate
+`22c1dcdc7594a34bc14b53b42d1d56f7aa66047b` found no vulnerability, required
+no remediation, and records `PASS`/`PASS` with zero open findings. The
+committed report candidate must now pass hosted GitHub and CodeQL before the
+tag is authorized.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

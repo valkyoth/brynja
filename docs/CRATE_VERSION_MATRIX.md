@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.0 signed; v0.23.1 implementation candidate awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.0 signed; v0.23.1 pentest PASS and awaiting hosted checks
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.23.1`. `brynja-hash-core 0.1.0` and
@@ -163,7 +163,10 @@ and streaming APIs, official vectors, Monte Carlo, padding, partition,
 exhaustion, proof, Miri, sanitizer, compiler, target, and package evidence.
 It requires an exceptional new-algorithm pentest, selects no crates.io
 publication, and makes no independent-review, state-erasure, acceleration, or
-FIPS-validation claim.
+FIPS-validation claim. Its repository-owner assessment of exact candidate
+`22c1dcdc7594a34bc14b53b42d1d56f7aa66047b` reported no finding and required
+no remediation. The permanent report records `PASS`/`PASS` with zero open
+findings; the milestone now awaits hosted GitHub and CodeQL.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |

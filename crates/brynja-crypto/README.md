@@ -33,8 +33,8 @@ for protocol callers. The
 dependency direction is always from `brynja-crypto` to the leaf families, never
 back toward TLS or the full cryptographic graph.
 
-The current internal workspace reexports complete portable SHA-224, SHA-256,
-SHA-384, and SHA-512 implementations from `brynja-hash-sha2`. Its broader provider effects, AEADs,
+The current internal workspace reexports all six complete portable FIPS 180-4
+SHA-2 implementations from `brynja-hash-sha2`. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 
@@ -50,7 +50,7 @@ verification.
 | --- | --- | --- |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
-Portable SHA-224, SHA-256, SHA-384, and SHA-512 are usable through this component;
+All six portable FIPS 180-4 SHA-2 algorithms are usable through this component;
 the remaining planned composition layer is not implemented yet. Ordinary SHA-2 states do not
 guarantee erasure of secret-input remnants or private internal state; keyed
 constructions must use the later hardened secret-owning path.
@@ -60,10 +60,14 @@ let shorter = brynja_crypto::sha224(b"abc").unwrap();
 let digest = brynja_crypto::sha256(b"abc").unwrap();
 let wider = brynja_crypto::sha384(b"abc").unwrap();
 let widest = brynja_crypto::sha512(b"abc").unwrap();
+let truncated_224 = brynja_crypto::sha512_224(b"abc").unwrap();
+let truncated_256 = brynja_crypto::sha512_256(b"abc").unwrap();
 assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(digest.as_bytes().len(), 32);
 assert_eq!(wider.as_bytes().len(), 48);
 assert_eq!(widest.as_bytes().len(), 64);
+assert_eq!(truncated_224.as_bytes().len(), 28);
+assert_eq!(truncated_256.as_bytes().len(), 32);
 ```
 
 Most application users will eventually depend on the modern facade:

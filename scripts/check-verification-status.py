@@ -11,10 +11,7 @@ from pathlib import Path
 HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
-    "| SHA-224 | ✅ Implemented | ❌ Not independently verified |",
-    "| SHA-256 | ✅ Implemented | ❌ Not independently verified |",
-    "| SHA-384 | ✅ Implemented | ❌ Not independently verified |",
-    "| SHA-512 | ✅ Implemented | ❌ Not independently verified |",
+    "| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |",
     "| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |",
     "| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |",
     "| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |",
@@ -24,7 +21,7 @@ ROOT_ROWS = (
 COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
 COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
-    "| `brynja-hash-sha2` | Complete portable SHA-224, SHA-256, SHA-384, and SHA-512; truncated variants and whole-family acceleration remain planned | ❌ Not verified |",
+    "| `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms; whole-family acceleration remains planned | ❌ Not verified |",
     "| Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-crypto-cpu` | Implemented but unadmitted x86_64 SHA, AArch64 SHA2, and RV64 Zknh compression candidates, static selection, direct KAT, health and quarantine | ❌ Not independently verified; native admission evidence incomplete |",
@@ -49,7 +46,7 @@ SCOPED_ROWS = {
     Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     Path("crates/brynja-crypto-cpu/README.md"): "| x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |",
     Path("crates/brynja-crypto-cpu-std/README.md"): "| SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection, explicit scalar fallback, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |",
-    Path("crates/brynja-hash-sha2/README.md"): "| SHA-224 | ✅ Implemented | ❌ Not verified |",
+    Path("crates/brynja-hash-sha2/README.md"): "| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not verified |",
     Path("crates/brynja-pki/README.md"): "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
     Path("crates/brynja-tls/README.md"): "| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |",
     Path("crates/brynja-tls12/README.md"): "| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |",
@@ -99,9 +96,12 @@ def validate_checkmarks(section: str) -> None:
             raise VerificationStatusError("status tables must have three columns")
         if "✅" in cells[0]:
             raise VerificationStatusError("✅ is forbidden in the capability name")
-        if "✅" in cells[1] and cells[1] != "✅ Implemented":
+        if "✅" in cells[1] and cells[1] not in (
+            "✅ Implemented",
+            "✅ Fully implemented",
+        ):
             raise VerificationStatusError(
-                "implemented ✅ must be exactly: ✅ Implemented"
+                "implemented ✅ must be exactly: ✅ Implemented or ✅ Fully implemented"
             )
         if "✅" in cells[2] and not VERIFIED.fullmatch(cells[2]):
             raise VerificationStatusError(

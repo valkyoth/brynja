@@ -29,10 +29,8 @@
 secure-protocol workspace. It is allocation-independent `no_std` Rust and does
 not depend on a C cryptographic library.
 
-> **Development status:** Brynja is pre-1.0, incomplete, and must not yet be
-> used to secure application traffic. The current facade provides completed
-> security foundations, portable SHA-224, SHA-256, SHA-384, and SHA-512,
-> bounded record and DER/ASN.1 framing. It does
+> **Development status:** Brynja is pre-1.0, incomplete, and must not yet be used to secure application traffic. The current facade provides completed
+> security foundations, all six portable FIPS 180-4 SHA-2 algorithms, and bounded record and DER/ASN.1 framing. It does
 > not yet provide a TLS connection, certificate validator, or working protocol
 > engine.
 
@@ -96,9 +94,13 @@ let shorter = brynja::crypto::sha224(b"abc").unwrap();
 let digest = brynja::crypto::sha256(b"abc").unwrap();
 let wider = brynja::crypto::sha384(b"abc").unwrap();
 let widest = brynja::crypto::sha512(b"abc").unwrap();
+let truncated_224 = brynja::crypto::sha512_224(b"abc").unwrap();
+let truncated_256 = brynja::crypto::sha512_256(b"abc").unwrap();
 assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(wider.as_bytes().len(), 48);
 assert_eq!(widest.as_bytes().len(), 64);
+assert_eq!(truncated_224.as_bytes().len(), 28);
+assert_eq!(truncated_256.as_bytes().len(), 32);
 assert_eq!(
     digest.as_bytes(),
     &[
@@ -123,9 +125,9 @@ complete public API and required downstream usability acceptance pass. The
 broader crate-level audit inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
-✅ Implemented means the named capability has a documented, consumer-usable
-public API and passed the repository's required acceptance evidence. It does
-not mean independently verified. Independent status moves from ❌ to ✅ only
+✅ Implemented means a named capability is ready; ✅ Fully implemented means
+every named member of that exact family is ready. Both require documented,
+consumer-usable public APIs and the repository's required evidence. A green implementation status does not mean independently verified. Independent status moves from ❌ to ✅ only
 when a named independent reviewer signs off and linked evidence identifies the
 reviewed implementation. The project's own tests, CI, Kani, Miri, sanitizers,
 fuzzing, differential testing, and pentests do not by themselves constitute
@@ -135,10 +137,7 @@ independent cryptographic or protocol verification.
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-224 | ✅ Implemented | ❌ Not independently verified |
-| SHA-256 | ✅ Implemented | ❌ Not independently verified |
-| SHA-384 | ✅ Implemented | ❌ Not independently verified |
-| SHA-512 | ✅ Implemented | ❌ Not independently verified |
+| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -174,7 +173,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-core` | Small allocation-free fixed-output hash interfaces |
-| `brynja-hash-sha2` | Portable SHA-224/SHA-256/SHA-384/SHA-512 implementations and complete SHA-2 family ownership |
+| `brynja-hash-sha2` | All six portable FIPS 180-4 SHA-2 algorithms and complete family ownership |
 | `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | Optional first-party ISA kernels and separate host runtime detection; absent from this facade |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |

@@ -7,6 +7,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add complete allocation-free `no_std` SHA-512/224 and SHA-512/256 as
+  separately typed one-shot, streaming, digest, error, and facade APIs over the
+  reviewed SHA-512-family state.
+- Implement the exact FIPS 180-4 SHA-512/t IV-generation procedure for the two
+  approved identities and verify that its results equal the normative IVs used
+  by public constructors; explicitly reject ordinary SHA-512 truncation.
+- Cover both algorithms with NIST CAVP short, long, and Monte Carlo vectors,
+  million-byte cases, every critical padding boundary, every two-part split,
+  every fixed chunk width, exhaustion and common-trait use, reviewed source
+  hashes, and adversarial negative fixtures.
+- Mark all six named FIPS 180-4 SHA-2 algorithms implemented but not
+  independently verified or FIPS 140-3 validated; retain ordinary-state
+  remanence and absent complete-family acceleration restrictions and select
+  zero crates.io packages for internal v0.23.2.
 - Record the exceptional v0.23.1 repository-owner SHA-384/SHA-512 assessment
   of exact signed implementation candidate
   `22c1dcdc7594a34bc14b53b42d1d56f7aa66047b` as `PASS`/`PASS` with zero open

@@ -1,6 +1,6 @@
 //! Security-first, first-party Rust `no_std` cryptography and protocol facade.
 //!
-//! This release exposes complete portable SHA-224, SHA-256, SHA-384, and SHA-512 through
+//! This release exposes all six complete portable FIPS 180-4 SHA-2 algorithms through
 //! [`crypto::sha224`], [`crypto::Sha224`], [`crypto::sha256`], and
 //! [`crypto::Sha256`]. It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
@@ -18,7 +18,7 @@
 //! selection. A bounded borrowed DER reader exposes canonical framing and
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
-//! algorithm outside these four SHA-2 identities.
+//! algorithm outside these six SHA-2 identities.
 
 #![no_std]
 
@@ -95,6 +95,12 @@ mod tests {
         assert!(::core::hint::black_box(super::crypto::SHA256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::crypto::SHA384_IMPLEMENTED));
         assert!(::core::hint::black_box(super::crypto::SHA512_IMPLEMENTED));
+        assert!(::core::hint::black_box(
+            super::crypto::SHA512_224_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::crypto::SHA512_256_IMPLEMENTED
+        ));
         assert_eq!(
             super::crypto::sha224(b"abc"),
             Ok(super::crypto::Sha224Digest::from_bytes([

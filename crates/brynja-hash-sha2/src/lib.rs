@@ -1,8 +1,10 @@
-//! Complete portable SHA-224, SHA-256, SHA-384, and SHA-512 for Brynja.
+//! Complete portable SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and
+//! SHA-512/256 for Brynja.
 //!
 //! The byte-oriented one-shot and streaming APIs implement FIPS 180-4
 //! SHA-2 without allocation, low-level code, I/O, global mutable state, or a
-//! hardware requirement. SHA-512/224 and SHA-512/256 remain planned.
+//! hardware requirement. Each of the six FIPS 180-4 identities has a distinct
+//! public type and exact initialization and output rules.
 
 #![no_std]
 
@@ -14,15 +16,24 @@ mod sha224;
 mod sha256;
 mod sha384;
 mod sha512;
+mod sha512_224;
+mod sha512_256;
 mod sha512_state;
+mod sha512_t;
 
 pub use brynja_hash_core::{FixedOutput, Update};
-pub use digest::{Sha224Digest, Sha256Digest, Sha384Digest, Sha512Digest};
-pub use error::{Sha224Error, Sha256Error, Sha384Error, Sha512Error};
+pub use digest::{
+    Sha224Digest, Sha256Digest, Sha384Digest, Sha512_224Digest, Sha512_256Digest, Sha512Digest,
+};
+pub use error::{
+    Sha224Error, Sha256Error, Sha384Error, Sha512_224Error, Sha512_256Error, Sha512Error,
+};
 pub use sha224::Sha224;
 pub use sha256::Sha256;
 pub use sha384::Sha384;
 pub use sha512::Sha512;
+pub use sha512_224::Sha512_224;
+pub use sha512_256::Sha512_256;
 
 #[cfg(feature = "cpu")]
 pub use brynja_crypto_cpu::{
@@ -43,6 +54,12 @@ pub const SHA384_IMPLEMENTED: bool = true;
 
 /// Whether the complete portable SHA-512 API is implemented.
 pub const SHA512_IMPLEMENTED: bool = true;
+
+/// Whether the complete portable SHA-512/224 API is implemented.
+pub const SHA512_224_IMPLEMENTED: bool = true;
+
+/// Whether the complete portable SHA-512/256 API is implemented.
+pub const SHA512_256_IMPLEMENTED: bool = true;
 
 /// Computes SHA-224 over one complete byte slice.
 ///
@@ -112,6 +129,32 @@ pub fn sha512(input: &[u8]) -> Result<Sha512Digest, Sha512Error> {
     Ok(state.finalize())
 }
 
+/// Computes SHA-512/224 over one complete byte slice.
+///
+/// ```
+/// let digest = brynja_hash_sha2::sha512_224(b"abc")?;
+/// assert_eq!(digest.as_bytes().len(), 28);
+/// # Ok::<(), brynja_hash_sha2::Sha512_224Error>(())
+/// ```
+pub fn sha512_224(input: &[u8]) -> Result<Sha512_224Digest, Sha512_224Error> {
+    let mut state = Sha512_224::new();
+    state.update(input)?;
+    Ok(state.finalize())
+}
+
+/// Computes SHA-512/256 over one complete byte slice.
+///
+/// ```
+/// let digest = brynja_hash_sha2::sha512_256(b"abc")?;
+/// assert_eq!(digest.as_bytes().len(), 32);
+/// # Ok::<(), brynja_hash_sha2::Sha512_256Error>(())
+/// ```
+pub fn sha512_256(input: &[u8]) -> Result<Sha512_256Digest, Sha512_256Error> {
+    let mut state = Sha512_256::new();
+    state.update(input)?;
+    Ok(state.finalize())
+}
+
 /// Computes SHA-256 with one already-tested accelerated backend.
 ///
 /// The ordinary [`sha256`] API and default feature set remain portable scalar.
@@ -128,14 +171,15 @@ pub fn sha256_with_backend(
 #[cfg(test)]
 mod tests {
     use super::{
-        Sha224, Sha224Error, Sha256, Sha256Error, Sha384, Sha384Error, Sha512, Sha512Error, sha224,
+        Sha224, Sha224Error, Sha256, Sha256Error, Sha384, Sha384Error, Sha512, Sha512_224,
+        Sha512_224Error, Sha512_256, Sha512_256Error, Sha512Error, sha224,
         sha224::{
             checked_message_length as checked_sha224_length,
             padding_block_count as sha224_padding_block_count,
         },
         sha256,
         sha256::{checked_message_length, padding_block_count},
-        sha384, sha512,
+        sha384, sha512, sha512_224, sha512_256,
     };
 
     #[test]
@@ -174,6 +218,8 @@ mod tests {
         assert!(sha256(&[]).is_ok());
         assert!(sha384(&[]).is_ok());
         assert!(sha512(&[]).is_ok());
+        assert!(sha512_224(&[]).is_ok());
+        assert!(sha512_256(&[]).is_ok());
     }
 
     #[test]
@@ -209,6 +255,22 @@ mod tests {
         assert_eq!(
             Sha512::new().check_additional_bytes(Sha512::MAX_MESSAGE_BYTES + 1),
             Err(Sha512Error::MessageTooLong)
+        );
+        assert_eq!(
+            Sha512_224::new().check_additional_bytes(Sha512_224::MAX_MESSAGE_BYTES),
+            Ok(())
+        );
+        assert_eq!(
+            Sha512_224::new().check_additional_bytes(Sha512_224::MAX_MESSAGE_BYTES + 1),
+            Err(Sha512_224Error::MessageTooLong)
+        );
+        assert_eq!(
+            Sha512_256::new().check_additional_bytes(Sha512_256::MAX_MESSAGE_BYTES),
+            Ok(())
+        );
+        assert_eq!(
+            Sha512_256::new().check_additional_bytes(Sha512_256::MAX_MESSAGE_BYTES + 1),
+            Err(Sha512_256Error::MessageTooLong)
         );
     }
 }

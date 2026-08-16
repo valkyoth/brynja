@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.0 signed; v0.23.1 pentest PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.1 signed; v0.23.2 implementation complete and awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -30,10 +30,10 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It now has complete portable SHA-224, SHA-256, SHA-384, and SHA-512 plus bounded DER tag-length-value framing
+It now has all six complete portable FIPS 180-4 SHA-2 algorithms plus bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm beyond those four SHA-2 identities, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond those six SHA-2 identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -112,7 +112,7 @@ independent cryptographic review, and FIPS 140-3 validation remain absent. The
 milestone selected zero crates.io packages, passed GitHub and CodeQL, and is
 signed. It remains in the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 
-The facade now advances to internal `0.23.1`. One private allocation-free
+Signed internal v0.23.1 added one private allocation-free
 `no_std` 80-round `u64` compression owner and one private 128-byte buffered
 state implement complete portable SHA-384 and SHA-512 through separately typed
 one-shot, streaming, error, and 48-byte/64-byte digest APIs. Distinct exact
@@ -122,14 +122,25 @@ long and million-byte cases, independent padding oracles, every two-part split,
 fixed chunk widths, six cumulative Kani bounds, Miri, and AddressSanitizer are
 covered. SHA-384 is explicitly distinguished from truncated SHA-512. Ordinary
 unkeyed state makes no secret-remanence cleanup claim. Acceleration,
-SHA-512/224, SHA-512/256, independent review, and FIPS 140-3 validation remain
-absent. This new-algorithm boundary requires an exceptional pentest and selects
-zero crates.io packages before its internal tag. The repository-owner
+independent review, and FIPS 140-3 validation remain absent. The repository-owner
 assessment of exact candidate
 `22c1dcdc7594a34bc14b53b42d1d56f7aa66047b` found no vulnerability, required
-no remediation, and records `PASS`/`PASS` with zero open findings. The
-committed report candidate must now pass hosted GitHub and CodeQL before the
-tag is authorized.
+no remediation, and records `PASS`/`PASS` with zero open findings. Hosted
+GitHub and CodeQL passed, and the signed tag selects zero crates.io packages.
+
+The facade now advances to internal `0.23.2`. Distinct `Sha512_224` and
+`Sha512_256` types complete the portable FIPS 180-4 SHA-2 family with exact
+28-byte and 32-byte outputs, checked 128-bit length domains, transactional
+streaming, consuming finalization, one-shot functions, common traits, and
+facade reexports. A private exact SHA-512/t derivation implements the mandated
+XOR mask and ASCII identities and proves that both outputs equal the normative
+IV constants used by public constructors. NIST CAVP short, 1,816-bit long, and
+Monte Carlo vectors, million-byte cases, every critical padding boundary,
+every two-part split and fixed chunk width, exhaustion checks, and negative
+ordinary-SHA-512 truncation tests pass. The new algorithm identities require an
+exceptional pentest and select zero crates.io packages. Ordinary-state erasure,
+complete-family acceleration, independent review, and FIPS 140-3 validation
+remain absent.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

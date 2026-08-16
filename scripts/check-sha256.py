@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the portable SHA-2 boundary through SHA-384 and SHA-512."""
+"""Check the complete portable FIPS 180-4 SHA-2 boundary."""
 
 from pathlib import Path
 
@@ -8,7 +8,7 @@ import sha256_policy
 
 def main() -> int:
     sha256_policy.validate(Path(__file__).resolve().parents[1])
-    print("portable SHA-224/SHA-256/SHA-384/SHA-512 source policy: PASS")
+    print("complete portable six-algorithm SHA-2 source policy: PASS")
     return 0
 
 

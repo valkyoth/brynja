@@ -1,19 +1,19 @@
 [release]
-version = "0.23.1"
-milestone = "0.23.1"
+version = "0.23.2"
+milestone = "0.23.2"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "Two new first-party cryptographic algorithms and their shared 64-bit compression owner require exceptional assessment before the internal tag."
+exception_reason = "Two new first-party SHA-512/t algorithm identities and their IV-derivation boundary require exceptional assessment before the internal tag."
 
 [crates."brynja"]
-previous_version = "0.23.0"
-version = "0.23.1"
+previous_version = "0.23.1"
+version = "0.23.2"
 change = "code"
 publish = false
-reason = "Advance the internal facade milestone with complete portable SHA-384 and SHA-512 without crates.io publication."
+reason = "Advance the internal facade milestone with complete portable SHA-512/224 and SHA-512/256 without crates.io publication."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Expose complete portable SHA-384 and SHA-512 beside SHA-224 and SHA-256 while retaining the cumulative package for v0.25.0 publication."
+reason = "Expose complete portable SHA-512/224 and SHA-512/256 and the full six-algorithm SHA-2 family while retaining the cumulative package for v0.25.0 publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -41,7 +41,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add complete portable SHA-384 and SHA-512 over one reviewed 64-bit compression owner while retaining all SHA-2 changes for the v0.25.0 checkpoint."
+reason = "Add complete portable SHA-512/224 and SHA-512/256 with verified FIPS SHA-512/t IV derivation while retaining all SHA-2 changes for the v0.25.0 checkpoint."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

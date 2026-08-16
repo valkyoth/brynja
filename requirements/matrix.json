@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "20dbd631f3288bde84b91b0e99480d43e289b9828447aca4db5647c090262582",
-  "domain_policy_sha256": "f98ad0031e9c43446e2433cd4acc4b8ecb4d8d243e6ea7a091a274e5c81f0f03",
+  "domain_policy_sha256": "65a4f9de6b26068dd2d50b961762417e2f926ad042f6970c4a08483bbf53a088",
   "policy_sha256": "7c46ff57ccf600fdfcb77bb3d6e687f13911e6eb7f4961c017be4df080659670",
   "requirements": [
     {
@@ -763,7 +763,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Portable SHA-224, SHA-256, SHA-384, and SHA-512 are implemented with vectors and proof bounds; SHA-512/224 and SHA-512/256 remain unresolved until v0.23.2, whole-family acceleration and packaged acceptance remain v0.23.3-v0.23.4, and the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
+      "evidence_gap": "All six portable FIPS 180-4 SHA-2 algorithms are implemented with normative IVs, official vectors, streaming and exhaustion evidence; whole-family acceleration and packaged acceptance remain v0.23.3-v0.23.4, and the v0.22.2 RV64 Zknh candidate lacks qualifying native performance, migration, and side-channel evidence.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -777,7 +777,7 @@
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -856,19 +856,19 @@
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "crates/brynja-hash-sha2/src/lib.rs#SHA224_IMPLEMENTED"
+          "target": "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "crates/brynja-hash-sha2/tests/sha224.rs#official_short_and_long_vectors_match_fips_and_nist_cavp"
+          "target": "crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "crates/brynja-hash-sha2/tests/sha224.rs#sha224_is_not_truncated_sha256"
+          "target": "crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact"
         }
       ],
       "work_bound": "Processing work is linear in complete input blocks with checked bit-length accumulation and deterministic exhaustion."

@@ -1,8 +1,8 @@
 //! First-party cryptographic composition for Brynja.
 //!
-//! Complete portable SHA-224, SHA-256, SHA-384, and SHA-512 implementations are
-//! exposed from their small family crate. Provider effects, AEADs, KDFs, public-key
-//! algorithms, and the complete planned composition layer remain unimplemented.
+//! All six complete portable FIPS 180-4 SHA-2 implementations are exposed from
+//! their small family crate. Provider effects, AEADs, KDFs, public-key algorithms,
+//! and the complete planned composition layer remain unimplemented.
 
 #![no_std]
 
@@ -23,10 +23,17 @@ pub const SHA384_IMPLEMENTED: bool = true;
 /// Whether portable SHA-512 is implemented and available through this layer.
 pub const SHA512_IMPLEMENTED: bool = true;
 
+/// Whether portable SHA-512/224 is implemented and available through this layer.
+pub const SHA512_224_IMPLEMENTED: bool = true;
+
+/// Whether portable SHA-512/256 is implemented and available through this layer.
+pub const SHA512_256_IMPLEMENTED: bool = true;
+
 pub use brynja_hash_sha2::{
     FixedOutput, Sha224, Sha224Digest, Sha224Error, Sha256, Sha256Digest, Sha256Error, Sha384,
-    Sha384Digest, Sha384Error, Sha512, Sha512Digest, Sha512Error, Update, sha224, sha256, sha384,
-    sha512,
+    Sha384Digest, Sha384Error, Sha512, Sha512_224, Sha512_224Digest, Sha512_224Error, Sha512_256,
+    Sha512_256Digest, Sha512_256Error, Sha512Digest, Sha512Error, Update, sha224, sha256, sha384,
+    sha512, sha512_224, sha512_256,
 };
 
 #[cfg(test)]
@@ -38,6 +45,8 @@ mod tests {
         assert!(::core::hint::black_box(super::SHA256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA384_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA512_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::SHA512_224_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::SHA512_256_IMPLEMENTED));
         assert_eq!(
             super::sha224(b"abc"),
             Ok(super::Sha224Digest::from_bytes([

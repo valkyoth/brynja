@@ -46,6 +46,9 @@ ROOT = (
 IMPLEMENTED = (
     "| Example capability | ✅ Implemented | ❌ Not independently verified |"
 )
+FULLY_IMPLEMENTED = (
+    "| Example family | ✅ Fully implemented | ❌ Not independently verified |"
+)
 
 
 def must_fail(text: str, expected: str) -> None:
@@ -86,6 +89,7 @@ def main() -> int:
         "[review report](security/reviews/example.md) |"
     )
     MODULE.validate_checkmarks(IMPLEMENTED)
+    MODULE.validate_checkmarks(FULLY_IMPLEMENTED)
     try:
         MODULE.validate_checkmarks(
             "| Example capability | ✅ Probably implemented | ❌ Not verified |"

@@ -2229,6 +2229,9 @@ Verification:
   exhaustion, consuming finalization and no_std use;
 - pass repository checks, supported Rust and target matrices, dependency and
   advisory policy, SBOM, package, documentation and protocol isolation gates.
+- because this milestone completes two additional named first-party
+  cryptographic algorithms and adds their IV-derivation boundary, complete an
+  exceptional pentest before tagging.
 
 Exit criteria:
 

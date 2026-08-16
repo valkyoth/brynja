@@ -471,6 +471,16 @@ execution guard wrong rounds, padding, truncation, exhaustion, and memory
 safety. SHA-384 is not represented as truncated SHA-512. Both APIs remain
 ordinary unkeyed hashes with no internal-state erasure, authentication,
 independent-review, accelerated-execution, or FIPS-validation claim.
+v0.23.2 extends that hostile-input boundary to SHA-512/224 and SHA-512/256 as
+separate named algorithms. A private SHA-512/t derivation fixes the mandated
+`a5a5a5a5a5a5a5a5` XOR mask and exact eleven-byte ASCII identities, and
+executable checks bind its outputs to the normative IV constants used by both
+public constructors. Distinct state, digest, and error types plus negative
+ordinary-SHA-512 truncation tests prevent accidental algorithm substitution.
+The shared buffer retains transactional length, padding, allocation, and
+consuming-finalization properties. Both remain ordinary unkeyed hashes with no
+secret-state erasure, complete-family acceleration, independent-review, or
+FIPS-validation claim.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the reviewed portable SHA-224/SHA-256/SHA-384/SHA-512 boundary."""
+"""Validate the reviewed complete portable FIPS 180-4 SHA-2 boundary."""
 
 from __future__ import annotations
 
@@ -7,7 +7,6 @@ import hashlib
 import re
 import tomllib
 from pathlib import Path
-
 
 CORE_LIB = Path("crates/brynja-hash-core/src/lib.rs")
 LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
@@ -20,10 +19,15 @@ COMPRESS64 = Path("crates/brynja-hash-sha2/src/compress64.rs")
 SHA512_STATE = Path("crates/brynja-hash-sha2/src/sha512_state.rs")
 SHA384 = Path("crates/brynja-hash-sha2/src/sha384.rs")
 SHA512 = Path("crates/brynja-hash-sha2/src/sha512.rs")
+SHA512_T = Path("crates/brynja-hash-sha2/src/sha512_t.rs")
+SHA512_224 = Path("crates/brynja-hash-sha2/src/sha512_224.rs")
+SHA512_256 = Path("crates/brynja-hash-sha2/src/sha512_256.rs")
 TEST = Path("crates/brynja-hash-sha2/tests/sha256.rs")
 SHA224_TEST = Path("crates/brynja-hash-sha2/tests/sha224.rs")
 SHA384_TEST = Path("crates/brynja-hash-sha2/tests/sha384.rs")
 SHA512_TEST = Path("crates/brynja-hash-sha2/tests/sha512.rs")
+SHA512_224_TEST = Path("crates/brynja-hash-sha2/tests/sha512_224.rs")
+SHA512_256_TEST = Path("crates/brynja-hash-sha2/tests/sha512_256.rs")
 ACCEL_TEST = Path("crates/brynja-hash-sha2/tests/sha256_accelerated.rs")
 CORE_MANIFEST = Path("crates/brynja-hash-core/Cargo.toml")
 MANIFEST = Path("crates/brynja-hash-sha2/Cargo.toml")
@@ -41,19 +45,25 @@ SOURCES = (
     SHA512_STATE,
     SHA384,
     SHA512,
+    SHA512_T,
+    SHA512_224,
+    SHA512_256,
 )
 EXPECTED_SHA256 = {
     CORE_LIB: "4655d8df05873a89689af1250dfeab76b82ac05d165a92c99ff65565624c7827",
-    LIB: "24ab43b388d18ea27536fca6cd377f06dce0465893382f1a438ab72bd4ac7275",
+    LIB: "c325647c9b2941b4c7920ab798d0dfb15e204561bcf6dba41a7f7fa4549793c1",
     COMPRESS: "d4229f08e40392976f354eaf81f5d5cd03069d5f3c497e2cf481f65a9848e4b1",
-    DIGEST: "3b155ce93d7d48127372ffd1907fc9cbee86015be8fd8a433ffa835ddbaea5dd",
-    ERROR: "fb50bc7e1aba37abb46993e79fd9fc5c59d17c90f9ff8ed3bf0a698ec8b8aaf9",
+    DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
+    ERROR: "9657f1223bd80a8c16f93585f690a7b17dd2fe51486ccf161a962810f79cfa7e",
     SHA224: "69cebc10d3e94cc0fd57f5b45e9de406e04e1c6f2029ce668be520dbf40d7659",
     SHA256: "efbe3a588947e127dd0b0cecbe2b3e3b0a876a354d8d1f798052060d35ddb68d",
     COMPRESS64: "40edca2d80e9f60db4a9ea793fe5c61f79232012fb439025539e6b50c93f812b",
     SHA512_STATE: "658157733984dab954fd093184ed82cb435df6f44f74889835ccb9021afeaf53",
     SHA384: "2c1f20a07f8bb45350f0a875e9f4980178c8f940b1c1264c33709f0e28e637cb",
     SHA512: "bbf2af472f7cf8fcbad8ad78aafcf1cd94b1d764efba1172d5e6f3773c5c9991",
+    SHA512_T: "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
+    SHA512_224: "39d7b2391a03fcef727d75fc4441506140d97486bd6d92ff8bc883e4361d46d3",
+    SHA512_256: "150bf16750b0bca37ac6e7a03a7b18ae1742e3c49e50735c2dcff4cf81ecd51f",
 }
 EXPECTED_TEST_SHA256 = {
     SHA224_TEST: "4a154a5293aa7fca5862fe1b383807998baa69b5eb5dd1ae2393b11d2c4fecb5",
@@ -61,6 +71,8 @@ EXPECTED_TEST_SHA256 = {
     ACCEL_TEST: "576c89cbbca4f0f45ce88efe750bd2976c5fa547becaae9fdbff103a38f66ae1",
     SHA384_TEST: "37bfa6cf7d73e4b4b15c6211f11bcdfeefcf8bd0ff44f5ddcd501ecf4ce0bf0e",
     SHA512_TEST: "2f7ed01daeac2e92d53a06fda04603e8e50a5a059c13c8212d2584c0f3a168eb",
+    SHA512_224_TEST: "31e8eea07d54224200a1c6d40cf96fbb59a7d75e8f1acfb5c810977470497af9",
+    SHA512_256_TEST: "55532453913f4b507684fc19fae1ca6aaf274de5f6b52ab18d5cb736b9f41b80",
 }
 
 
@@ -134,10 +146,14 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "pub const SHA256_IMPLEMENTED: bool = true;",
         "pub const SHA384_IMPLEMENTED: bool = true;",
         "pub const SHA512_IMPLEMENTED: bool = true;",
+        "pub const SHA512_224_IMPLEMENTED: bool = true;",
+        "pub const SHA512_256_IMPLEMENTED: bool = true;",
         "pub fn sha224(input: &[u8]) -> Result<Sha224Digest, Sha224Error>",
         "pub fn sha256(input: &[u8]) -> Result<Sha256Digest, Sha256Error>",
         "pub fn sha384(input: &[u8]) -> Result<Sha384Digest, Sha384Error>",
         "pub fn sha512(input: &[u8]) -> Result<Sha512Digest, Sha512Error>",
+        "pub fn sha512_224(input: &[u8]) -> Result<Sha512_224Digest, Sha512_224Error>",
+        "pub fn sha512_256(input: &[u8]) -> Result<Sha512_256Digest, Sha512_256Error>",
         "state.update(input)?;",
         "Ok(state.finalize())",
         "#[kani::proof]",
@@ -260,6 +276,46 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
             if forbidden in algorithm:
                 fail(f"consuming {name} state became duplicable: {forbidden}")
 
+    sha512_t = sources[SHA512_T][1]
+    for token in (
+        "const IV_XOR_MASK: u64 = 0xa5a5_a5a5_a5a5_a5a5;",
+        "pub(crate) const SHA512_224_INITIAL_STATE: [u64; 8]",
+        "0x8c3d_37c8_1954_4da2",
+        "pub(crate) const SHA512_256_INITIAL_STATE: [u64; 8]",
+        "0x2231_2194_fc2b_f72c",
+        'derive_initial_state(b"SHA-512/224")',
+        'derive_initial_state(b"SHA-512/256")',
+        "*word ^= IV_XOR_MASK;",
+        "compress(&mut state, &block);",
+        "fn fips_sha512_t_derivation_matches_both_normative_initial_states",
+        "assert_eq!(derive_sha512_224_initial_state(), SHA512_224_INITIAL_STATE);",
+        "assert_eq!(derive_sha512_256_initial_state(), SHA512_256_INITIAL_STATE);",
+    ):
+        require(sha512_t, token, "SHA-512/t IV derivation")
+
+    for relative, name, digest, error, initial in (
+        (SHA512_224, "Sha512_224", "Sha512_224Digest", "Sha512_224Error", "SHA512_224_INITIAL_STATE"),
+        (SHA512_256, "Sha512_256", "Sha512_256Digest", "Sha512_256Error", "SHA512_256_INITIAL_STATE"),
+    ):
+        algorithm = sources[relative][1]
+        for token in (
+            f"pub struct {name}",
+            initial,
+            "pub const MAX_MESSAGE_BYTES: u128 = sha512_state::MAX_MESSAGE_BYTES;",
+            "pub fn check_additional_bytes(&self, additional_bytes: u128)",
+            ".update(input)",
+            "sha512_t::leftmost_bytes(self.inner.finalize())",
+            f"Sha512_224Digest::from_bytes" if name == "Sha512_224" else f"Sha512_256Digest::from_bytes",
+            f"impl Update for {name}",
+            f"impl FixedOutput for {name}",
+            f"type Output = {digest};",
+            f"type Error = {error};",
+        ):
+            require(algorithm, token, f"{name} streaming state")
+        for forbidden in (f"impl Clone for {name}", f"impl Copy for {name}"):
+            if forbidden in algorithm:
+                fail(f"consuming {name} state became duplicable: {forbidden}")
+
     digest = sources[DIGEST][1]
     for token in (
         "pub struct $name([u8; Self::LENGTH]);",
@@ -269,6 +325,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         'digest_type!(Sha256Digest, 32, "SHA-256", "256");',
         'digest_type!(Sha384Digest, 48, "SHA-384", "384");',
         'digest_type!(Sha512Digest, 64, "SHA-512", "512");',
+        'digest_type!(Sha512_224Digest, 28, "SHA-512/224", "224");',
+        'digest_type!(Sha512_256Digest, 32, "SHA-512/256", "256");',
     ):
         require(digest, token, "digest")
 
@@ -278,6 +336,8 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     require(error, 'error_type!(Sha256Error, "SHA-256", "64");', "closed error")
     require(error, 'error_type!(Sha384Error, "SHA-384", "128");', "closed error")
     require(error, 'error_type!(Sha512Error, "SHA-512", "128");', "closed error")
+    require(error, 'error_type!(Sha512_224Error, "SHA-512/224", "128");', "closed error")
+    require(error, 'error_type!(Sha512_256Error, "SHA-512/256", "128");', "closed error")
     require(error, "MessageTooLong", "closed error")
     if re.search(r"^\s+[A-Z][A-Za-z0-9_]*\s*\{", error, re.MULTILINE):
         fail("SHA-256 errors gained payload fields")
@@ -344,6 +404,29 @@ def validate_tests(root: Path) -> None:
             require(algorithm_text, token, f"{name} tests")
         if distinction is not None:
             require(algorithm_text, distinction, f"{name} tests")
+    for relative, name in (
+        (SHA512_224_TEST, "SHA-512/224"),
+        (SHA512_256_TEST, "SHA-512/256"),
+    ):
+        algorithm_path = root / relative
+        if not algorithm_path.is_file() or algorithm_path.is_symlink():
+            fail(f"{name} tests must be a regular file")
+        algorithm_text = algorithm_path.read_text(encoding="utf-8")
+        if len(algorithm_text.splitlines()) > 500:
+            fail(f"{name} tests exceed 500 lines")
+        for token in (
+            "fn official_short_and_long_nist_cavp_vectors_match",
+            "fn official_nist_cavp_monte_carlo_count_zero_matches",
+            "fn official_million_a_vector_matches",
+            "fn every_padding_boundary_matches_independent_expected_results",
+            "fn every_split_and_chunk_width_matches_one_shot",
+            "fn trait_api_length_domain_and_algorithm_identity_are_exact",
+            "for _ in 0..1_000",
+            "for split in 0..=message.len()",
+            "for width in 1..=message.len()",
+            "assert_ne!",
+        ):
+            require(algorithm_text, token, f"{name} tests")
     accelerated = root / ACCEL_TEST
     if not accelerated.is_file() or accelerated.is_symlink():
         fail("accelerated SHA-256 tests must be a regular file")

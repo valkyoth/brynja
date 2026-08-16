@@ -43,3 +43,5 @@ digest_type!(Sha224Digest, 28, "SHA-224", "224");
 digest_type!(Sha256Digest, 32, "SHA-256", "256");
 digest_type!(Sha384Digest, 48, "SHA-384", "384");
 digest_type!(Sha512Digest, 64, "SHA-512", "512");
+digest_type!(Sha512_224Digest, 28, "SHA-512/224", "224");
+digest_type!(Sha512_256Digest, 32, "SHA-512/256", "256");

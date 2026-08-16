@@ -367,11 +367,11 @@
         "riscv:RISCV.Crypto.Vector-1.0.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA224_IMPLEMENTED"
+        "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED"
       ],
       "tests": [
-        "planned:positive:crates/brynja-hash-sha2/tests/sha224.rs#official_short_and_long_vectors_match_fips_and_nist_cavp",
-        "planned:negative:crates/brynja-hash-sha2/tests/sha224.rs#sha224_is_not_truncated_sha256"
+        "planned:positive:crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match",
+        "planned:negative:crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact"
       ]
     },
     "BRY-REQ-CRYPTO-0002": {
@@ -10969,7 +10969,7 @@
       "planned-symbol:crates/brynja-fips-module/src/rbg.rs": [
         "BRY-REQ-ENTROPY-1242"
       ],
-      "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA224_IMPLEMENTED": [
+      "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0001"
       ],
       "planned-symbol:crates/brynja-pki/src/algorithm.rs": [
@@ -11290,7 +11290,7 @@
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
-      "planned:negative:crates/brynja-hash-sha2/tests/sha224.rs#sha224_is_not_truncated_sha256": [
+      "planned:negative:crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact": [
         "BRY-REQ-CRYPTO-0001"
       ],
       "planned:negative:crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora": [
@@ -11695,7 +11695,7 @@
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
       ],
-      "planned:positive:crates/brynja-hash-sha2/tests/sha224.rs#official_short_and_long_vectors_match_fips_and_nist_cavp": [
+      "planned:positive:crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match": [
         "BRY-REQ-CRYPTO-0001"
       ],
       "planned:positive:crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries": [

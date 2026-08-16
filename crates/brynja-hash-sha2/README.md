@@ -26,25 +26,30 @@
 # brynja-hash-sha2
 
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
-crate provides complete portable SHA-224, SHA-256, SHA-384, and SHA-512 one-shot and streaming
-APIs. The optional `cpu` feature added at v0.22.1 and extended
+crate provides all six complete portable FIPS 180-4 SHA-2 algorithms through
+one-shot and streaming APIs. The optional `cpu` feature added at v0.22.1 and extended
 with the unadmitted RV64 Zknh candidate at v0.22.2 accepts an
 already tested `brynja-crypto-cpu` session without changing scalar ownership.
 Its x86_64, AArch64, and RISC-V candidates remain unadmitted pending native
 evidence. The v0.22.3 packaged downstream acceptance closes the complete
-public SHA-256 chain. v0.23.0 adds complete portable SHA-224, and v0.23.1 adds
-complete portable SHA-384 and SHA-512. SHA-512/224 and SHA-512/256 remain the
-next planned portable identities.
+public SHA-256 chain. v0.23.0 adds complete portable SHA-224, v0.23.1 adds
+complete portable SHA-384 and SHA-512, and v0.23.2 completes SHA-512/224 and
+SHA-512/256 with exact FIPS SHA-512/t IV derivation.
 
 ## Example
 
 ```rust
-use brynja_hash_sha2::{Sha224, Sha256, Sha384, Sha512, sha224, sha256, sha384, sha512};
+use brynja_hash_sha2::{
+    Sha224, Sha256, Sha384, Sha512, Sha512_224, Sha512_256,
+    sha224, sha256, sha384, sha512, sha512_224, sha512_256,
+};
 
 let sha224_one_shot = sha224(b"abc").unwrap();
 let one_shot = sha256(b"abc").unwrap();
 let sha384_one_shot = sha384(b"abc").unwrap();
 let sha512_one_shot = sha512(b"abc").unwrap();
+let sha512_224_one_shot = sha512_224(b"abc").unwrap();
+let sha512_256_one_shot = sha512_256(b"abc").unwrap();
 
 let mut sha224_streaming = Sha224::new();
 sha224_streaming.update(b"a").unwrap();
@@ -63,6 +68,14 @@ assert_eq!(sha384_streaming.finalize(), sha384_one_shot);
 let mut sha512_streaming = Sha512::new();
 sha512_streaming.update(b"abc").unwrap();
 assert_eq!(sha512_streaming.finalize(), sha512_one_shot);
+
+let mut sha512_224_streaming = Sha512_224::new();
+sha512_224_streaming.update(b"abc").unwrap();
+assert_eq!(sha512_224_streaming.finalize(), sha512_224_one_shot);
+
+let mut sha512_256_streaming = Sha512_256::new();
+sha512_256_streaming.update(b"abc").unwrap();
+assert_eq!(sha512_256_streaming.finalize(), sha512_256_one_shot);
 ```
 
 Callers with external file or stream metadata can preflight the checked FIPS
@@ -104,9 +117,9 @@ Cargo package contents. It needs no network or private test hook.
 
 ## Cryptography Verification Status
 
-The portable SHA-256 implementation and its public usability acceptance are
-complete through v0.22.3. No code in this crate has been independently
-reviewed. A component only moves
+The complete portable FIPS 180-4 SHA-2 family is implemented through v0.23.2;
+whole-family acceleration and packaged downstream family acceptance remain
+separate later milestones. No code in this crate has been independently reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
 fuzzing, and pentesting do not by themselves constitute independent
@@ -114,10 +127,7 @@ verification.
 
 | Algorithm | Implementation chain | Independently verified |
 | --- | --- | --- |
-| SHA-224 | ✅ Implemented | ❌ Not verified |
-| SHA-256 | ✅ Implemented | ❌ Not verified |
-| SHA-384 | ✅ Implemented | ❌ Not verified |
-| SHA-512 | ✅ Implemented | ❌ Not verified |
+| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not verified |
 
 These are unkeyed hashes. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS

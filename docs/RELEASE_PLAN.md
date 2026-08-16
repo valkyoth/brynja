@@ -2292,6 +2292,23 @@ Implementation notes:
 
 Status: planned
 
+Implementation notes:
+
+- a standalone allocation-free `no_std` consumer now uses only public
+  `brynja-hash-sha2` and `brynja::crypto` APIs for all six SHA-2 identities;
+- 30 one-shot and 36 irregular-streaming results cover empty, text, binary,
+  multi-block, million-byte, and file-like inputs against independent expected
+  digests, with exact identity, width, exhaustion, and five-candidate
+  accounting;
+- the same consumer runs from a safely extracted 15-package offline archive
+  closure with version-only dependencies and an empty Cargo home;
+- adversarial fixtures reject corruption of every algorithm expectation,
+  incomplete family APIs or documentation, wrong widths, missing backend
+  accounting, evidence-feature activation, and removed package source;
+- Rust 1.90.0 through 1.97.1 execute the fixture, and every promised OS-less
+  target checks its `no_std` library. No CPU backend is admitted and no
+  independent-review, FIPS-validation, or secret-remanence claim is added.
+
 Plan scope: Close the SHA-2 chain with a packaged downstream fixture that uses only public APIs to hash representative real content through SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 in one-shot and irregular streaming modes, forces every admitted backend, and detects wrong IVs, wrong truncation, packaging gaps, or incomplete family documentation.
 
 Goal: prove an ordinary consumer can use the complete SHA-2 family exactly as

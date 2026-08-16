@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 final candidate with exceptional pentest PASS and native disposition complete, awaiting hosted verification
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 implementation candidate
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.23.3`. `brynja-hash-core 0.1.0` and
+advances to internal `0.23.4`. `brynja-hash-core 0.1.0` and
 `brynja-hash-sha2 0.1.0` retain the reusable interface and complete portable
 six-algorithm FIPS 180-4 SHA-2 implementation while retaining an optional CPU session edge. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
@@ -190,12 +190,21 @@ decision, and all five candidates remain unadmitted pending authenticated,
 performance, migration and side-channel evidence. The exceptional pentest
 records `PASS`/`PASS`, and the internal tag selects no crates.io packages.
 
+The v0.23.4 stage closes complete-family usability through a standalone
+downstream `no_std` consumer of only public leaf and facade APIs. It runs all
+six identities over independent one-shot and irregular-streaming expectations
+and repeats them from a safely extracted exact 15-package offline archive
+closure. Negative fixtures reject digest, API, documentation, width, backend,
+feature, and package regressions. It changes no support-package version,
+admits no CPU backend, requires no scheduled pentest, and selects no crates.io
+packages.
+
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.23.3` | no | Internal facade milestone; v0.20.0 is published |
+| `brynja` | `0.23.4` | no | Internal complete SHA-2 public-usability milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | New unpublished allocation-free fixed-output hash interfaces |
-| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable six-algorithm FIPS 180-4 SHA-2 APIs plus forced candidate routes; CPU candidates remain unadmitted |
+| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable six-algorithm FIPS 180-4 SHA-2 APIs, forced candidate routes, and package-external family acceptance; CPU candidates remain unadmitted |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports all six exact SHA-2 leaf implementations |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five unpublished SHA-2 candidates remain unadmitted and x86 SHA-512 remains scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |

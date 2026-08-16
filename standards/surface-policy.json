@@ -895,13 +895,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/hash.rs",
-        "disposition": "future-work",
+        "code_target": "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED",
+        "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.22.0",
-        "rationale": "SHA-256, SHA-384, and SHA-512 remain staged first-party implementations with known-answer, boundary, and differential evidence.",
+        "rationale": "All six FIPS 180-4 SHA-2 identities are complete first-party implementations with public leaf and facade APIs, authoritative vectors, boundary evidence, optional unadmitted CPU candidates, and separately packaged downstream acceptance.",
         "sources": ["nist:NIST.FIPS.180-4.pdf"],
-        "test_target": "tests/surface/primitives.rs#sha2"
+        "test_target": "scripts/check-sha2-public-api.py#main"
       },
       "id": "algorithm.sha2"
     },

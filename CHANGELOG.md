@@ -7,6 +7,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Close the complete SHA-2 implementation chain at v0.23.4 with a standalone
+  `no_std` downstream consumer that exercises all six algorithms through both
+  leaf and facade public APIs over one-shot, irregular streaming, empty, text,
+  binary, multi-block, million-byte, and file-like inputs.
+- Repeat the public acceptance from a safely extracted 15-package offline
+  Cargo archive closure with version-only dependencies and an empty Cargo
+  home; reject corrupted digests, missing APIs or documentation, wrong output
+  widths, incomplete backend accounting, evidence-only features, and altered
+  package contents.
+- Run the complete-family fixture on Rust 1.90.0 through 1.97.1 and check its
+  `no_std` library across every promised OS-less target. Preserve zero admitted
+  CPU backends and every independent-review, FIPS-validation, and ordinary-
+  state-remanence restriction; select zero crates.io packages for internal
+  v0.23.4.
 - Record the exceptional v0.23.3 assessment as `PASS`/`PASS` with zero open
   findings and bind the final unadmitted disposition to exact-commit native
   AMD, Intel, Apple M2 and AWS Arm observations; retain RISC-V as a

@@ -38,6 +38,8 @@ python3 scripts/check-sha256.py
 python3 scripts/test-sha256.py
 python3 scripts/check-sha256-public-api.py
 python3 scripts/test-sha256-public-api.py
+python3 scripts/check-sha2-public-api.py
+python3 scripts/test-sha2-public-api.py
 scripts/check-sha256-cpu-codegen.sh
 python3 scripts/check-backend-contract.py
 python3 scripts/test-backend-contract.py

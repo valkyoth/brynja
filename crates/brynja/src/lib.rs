@@ -1,8 +1,10 @@
 //! Security-first, first-party Rust `no_std` cryptography and protocol facade.
 //!
 //! This release exposes all six complete portable FIPS 180-4 SHA-2 algorithms through
-//! [`crypto::sha224`], [`crypto::Sha224`], [`crypto::sha256`], and
-//! [`crypto::Sha256`]. It exposes checked
+//! distinct one-shot and streaming APIs: [`crypto::sha224`],
+//! [`crypto::sha256`], [`crypto::sha384`], [`crypto::sha512`],
+//! [`crypto::sha512_224`], and [`crypto::sha512_256`] plus their matching
+//! state and digest types. It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
 //! workspaces, secret-lifetime and owned-memory
 //! foundations, fixed-width constant-time operations, provider capability

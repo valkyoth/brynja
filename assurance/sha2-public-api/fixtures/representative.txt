@@ -1,0 +1,8 @@
+Brynja complete SHA-2 public API acceptance fixture
+
+This is ordinary caller-owned file-like content supplied in irregular chunks.
+It includes text, punctuation, multiple lines, and enough bytes to cross more
+than one SHA-2 compression boundary without using a private implementation API.
+
+Independent expected digests cover every FIPS 180-4 SHA-2 identity through
+both the reusable family package and the main Brynja cryptography facade.

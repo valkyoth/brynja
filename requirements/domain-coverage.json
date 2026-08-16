@@ -5557,7 +5557,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "84f6b69612f285ef6e49828f5629a0cd8f3f07ad717ee011747c872a670f51c9",
+  "policy_sha256": "5837f9a80fd79db451e0026f4d240bc350e47f26dcaf4ff43ab118429962f9ce",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3325,
@@ -5653,7 +5653,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.sha2",
       "owner": "0.22.0",

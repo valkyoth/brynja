@@ -39,7 +39,8 @@ def validation_fixture() -> tuple[dict, dict, set[str], dict, dict, set[str]]:
         if item["domain"] in domain.SURFACE_DOMAINS
         or set(item["normative_sources"]).intersection(authorities)
     }
-    return requirements[0], authorities, versions, surface_map, register, allowed
+    planned = next(item for item in requirements if item["lifecycle"] == "planned")
+    return planned, authorities, versions, surface_map, register, allowed
 
 
 def test_current_repository() -> None:

@@ -497,6 +497,15 @@ unadmitted: emulator results, target-feature compilation, performance on a
 different CPU, or a healthy KAT cannot authorize ordinary execution. Native
 performance, CPU migration, side-channel, register/spill erasure, independent
 review, and FIPS validation remain explicit residuals.
+v0.23.4 treats public usability and package completeness as hostile boundaries.
+One standalone `no_std` consumer can reach all six algorithms only through
+documented leaf and facade APIs, compares independent expectations over varied
+real inputs, and repeats the run from an exact isolated offline package
+closure. Corrupted expectations, identity or width drift, omitted exports or
+documentation, incomplete backend accounting, evidence-feature activation,
+and missing archive source must fail. This acceptance cannot authorize a CPU
+backend or establish secret-state erasure, independent review, or FIPS
+validation.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

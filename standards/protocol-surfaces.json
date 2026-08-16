@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "81abd2df44179bd2476bcf83b172fe3931450efb178518dc86ece7b34b72d212",
+  "policy_sha256": "135ef2da283e2c62c7974fbfae4c04c0b6030509036cd0d5ebc672f29c3f60e4",
   "schema": 2,
   "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
   "surfaces": [
@@ -182,8 +182,8 @@
       "test_target": "tests/surface/primitives.rs#rsa"
     },
     {
-      "code_target": "crates/brynja-crypto/src/hash.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.sha2",
       "kind": "semantic",
@@ -191,8 +191,8 @@
         "nist:NIST.FIPS.180-4.pdf"
       ],
       "owner": "0.22.0",
-      "rationale": "SHA-256, SHA-384, and SHA-512 remain staged first-party implementations with known-answer, boundary, and differential evidence.",
-      "test_target": "tests/surface/primitives.rs#sha2"
+      "rationale": "All six FIPS 180-4 SHA-2 identities are complete first-party implementations with public leaf and facade APIs, authoritative vectors, boundary evidence, optional unadmitted CPU candidates, and separately packaged downstream acceptance.",
+      "test_target": "scripts/check-sha2-public-api.py#main"
     },
     {
       "code_target": "crates/brynja-crypto/src/sha3.rs",

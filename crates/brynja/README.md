@@ -29,10 +29,11 @@
 secure-protocol workspace. It is allocation-independent `no_std` Rust and does
 not depend on a C cryptographic library.
 
-> **Development status:** Brynja is pre-1.0, incomplete, and must not yet be used to secure application traffic. The current facade provides completed
-> security foundations, all six portable FIPS 180-4 SHA-2 algorithms, and bounded record and DER/ASN.1 framing. It does
-> not yet provide a TLS connection, certificate validator, or working protocol
-> engine.
+> **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable
+> FIPS 180-4 SHA-2 algorithms, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
+
+All six SHA-2 APIs pass separately packaged downstream `no_std` acceptance
+through the leaf and facade; that is not independent review or FIPS validation.
 
 ## Design Boundaries
 

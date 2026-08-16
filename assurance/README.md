@@ -17,6 +17,17 @@ that the gate rejects corrupted digests, missing exports, backend misreporting,
 exhaustion bypass, an unadmitted feature, and altered package contents. This is
 usability acceptance, not independent cryptographic review or FIPS validation.
 
+The v0.23.4 `sha2-public-api` fixture extends that package-external acceptance
+to all six SHA-2 algorithms through both the leaf and main facade. It checks 30
+one-shot and 36 irregular-streaming results, exact identities and output
+widths, deterministic exhaustion, and all five optional candidate
+dispositions. Its isolated empty-home packaging closure contains exactly the
+15 required first-party archives. Negative fixtures independently corrupt
+each algorithm expectation and reject API, documentation, width, backend,
+feature, and package-content gaps. It establishes public usability, not
+independent cryptographic review, FIPS validation, accelerated admission, or
+secret-state erasure.
+
 The v0.13.0 provider contract adds a separate hash-locked source validator and
 thirteen broken fixtures through `scripts/check-provider-contract.py` and
 `scripts/test-provider-contract.py`. The additional remediation fixtures reject

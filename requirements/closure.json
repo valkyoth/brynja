@@ -7545,7 +7545,7 @@
         "algorithm.sha2"
       ],
       "id": "BRY-REQ-CRYPTO-0001",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.22.0",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",

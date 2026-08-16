@@ -64,6 +64,7 @@ def main() -> int:
     reject("padding boundary", lambda root: replace(root, policy.SHA256, "buffer_len < FINAL_BLOCK_PREFIX_BYTES", "buffer_len <= FINAL_BLOCK_PREFIX_BYTES"))
     reject("round count", lambda root: replace(root, policy.COMPRESS, "0xc671_78f2,", ""))
     reject("round arithmetic", lambda root: replace(root, policy.COMPRESS, ".wrapping_add(second)", ".saturating_add(second)"))
+    reject("SHA-256 IV", lambda root: replace(root, policy.SHA256, "0x6a09_e667", "0x6a09_e668"))
     reject("SHA-256 digest width", lambda root: replace(root, policy.DIGEST, 'digest_type!(Sha256Digest, 32, "SHA-256", "256");', 'digest_type!(Sha256Digest, 31, "SHA-256", "256");'))
     reject("SHA-224 IV", lambda root: replace(root, policy.SHA224, "0xc105_9ed8", "0x6a09_e667"))
     reject("SHA-224 length ceiling", lambda root: replace(root, policy.SHA224, "*length <= Sha224::MAX_MESSAGE_BYTES", "*length < Sha224::MAX_MESSAGE_BYTES"))
@@ -93,6 +94,7 @@ def main() -> int:
     reject("SHA-512/224 claim", lambda root: replace(root, policy.LIB, "SHA512_224_IMPLEMENTED: bool = true", "SHA512_224_IMPLEMENTED: bool = false"))
     reject("SHA-512/256 claim", lambda root: replace(root, policy.LIB, "SHA512_256_IMPLEMENTED: bool = true", "SHA512_256_IMPLEMENTED: bool = false"))
     reject("SHA-512/224 CAVP test", lambda root: replace(root, policy.SHA512_224_TEST, "fn official_nist_cavp_monte_carlo_count_zero_matches", "fn removed_monte_carlo"))
+    reject("SHA-512/224 identity test", lambda root: replace(root, policy.SHA512_224_TEST, "fn trait_api_length_domain_and_algorithm_identity_are_exact", "fn removed_identity_test"))
     reject("SHA-512/256 identity test", lambda root: replace(root, policy.SHA512_256_TEST, "fn trait_api_length_domain_and_algorithm_identity_are_exact", "fn removed_identity_test"))
     reject("claim", lambda root: replace(root, policy.LIB, "SHA256_IMPLEMENTED: bool = true", "SHA256_IMPLEMENTED: bool = false"))
     reject("core dependency", lambda root: replace(root, policy.CORE_MANIFEST, "[lints]", "[dependencies]\nbrynja-core = { workspace = true }\n\n[lints]"))
@@ -102,7 +104,7 @@ def main() -> int:
     reject("consumer test", lambda root: replace(root, policy.TEST, "fn downstream_style_real_content_uses_only_public_api", "fn removed_consumer"))
     reject("oversized", lambda root: (root / policy.SHA256).write_text((root / policy.SHA256).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-2 policy rejects fifty-two unsafe, native, allocation, identity, arithmetic, padding, package, test, size, and hash regressions")
+    print("portable SHA-2 policy rejects fifty-four unsafe, native, allocation, identity, arithmetic, padding, package, test, size, and hash regressions")
     return 0
 
 

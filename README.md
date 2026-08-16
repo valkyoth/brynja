@@ -159,7 +159,7 @@ one-block kernels. The separate opt-in `std` `brynja-crypto-cpu-std` crate owns
 runtime feature detection and explicit opportunistic or required selection.
 
 The signed `0.23.2` milestone completed the portable FIPS 180-4 SHA-2 family.
-The current `0.23.3` milestone extends the optional CPU boundary across all six
+The signed `0.23.3` milestone extends the optional CPU boundary across all six
 algorithm identities. SHA-224 reuses each exact SHA-256-family compression
 kernel without changing its IV or output identity. New AArch64 SHA-512 and
 RV64 Zknh SHA-512 kernels serve SHA-384, SHA-512, SHA-512/224, and SHA-512/256
@@ -187,6 +187,17 @@ do not qualify it for admission. The candidates use no external C module,
 external assembly source, build script, detector dependency, allocation, I/O, or global
 registry, and make no register-erasure, independent-review, or FIPS 140-3
 validation claim.
+
+The current `0.23.4` milestone closes the complete SHA-2 chain with a
+standalone downstream `no_std` consumer. It exercises all six algorithms
+through both leaf and facade public APIs over independent empty, text, binary,
+multi-block, million-byte, and file-like expectations in one-shot and
+irregular streaming modes. The same consumer runs from safely extracted
+offline Cargo archives with version-only dependencies. Adversarial fixtures
+reject expectation, identity, output-width, export, documentation, backend-
+accounting, feature, and package-content regressions. This establishes
+consumer usability; it does not admit a CPU backend or add independent review,
+FIPS validation, or secret-state erasure.
 
 RISC-V testing follows an exact-feature policy. The registered native host is
 used for scalar portability and only those generic-vector or bit-manipulation
@@ -558,8 +569,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.23.3`
-complete SHA-2 CPU milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.23.4`
+complete SHA-2 public-usability milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -662,10 +673,10 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and all six portable FIPS 180-4 SHA-2 algorithms through v0.23.3; no TLS engine or provider effect |
+| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, and all six packaged-consumer-accepted portable FIPS 180-4 SHA-2 algorithms through v0.23.4; no TLS engine or provider effect |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
-| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six complete portable FIPS 180-4 algorithms and opt-in forced APIs for every CPU candidate; final packaged family acceptance follows in v0.23.4 |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six complete portable FIPS 180-4 algorithms, opt-in forced APIs for every CPU candidate, and complete packaged downstream family acceptance at v0.23.4 |
 | Future `brynja-hash-sha3` | Complete FIPS 202 SHA-3 and SHAKE family ownership | Planned from v0.24.0 through v0.24.2 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six portable FIPS 180-4 SHA-2 algorithms; other planned cryptography and provider effects remain absent |
@@ -815,7 +826,7 @@ python3 scripts/test-sha256.py
 scripts/check-sha256-cpu-codegen.sh
 cargo deny check
 cargo audit
-scripts/tag_gate.sh v0.23.3
+scripts/tag_gate.sh v0.23.4
 ```
 
 The networked `scripts/check_latest_tools.sh` check is mandatory before a

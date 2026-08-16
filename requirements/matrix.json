@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "602de44185fdc8a9b1fac44da713b33e96ffa9007be739932647d52702b16172",
-  "domain_policy_sha256": "84f6b69612f285ef6e49828f5629a0cd8f3f07ad717ee011747c872a670f51c9",
-  "policy_sha256": "b5e0681b6487df173ef8b9dc6d54ebf48b8b734320922427b5e25f611e0ed121",
+  "domain_policy_sha256": "5837f9a80fd79db451e0026f4d240bc350e47f26dcaf4ff43ab118429962f9ce",
+  "policy_sha256": "5ae40f02be309bb744da62231bda78f223eed8675ba6e9ccf1f256f89b587ab8",
   "requirements": [
     {
       "applicability": "delegate",
@@ -763,7 +763,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 180-4 SHA-2 algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; packaged acceptance remains v0.23.4, all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, and side-channel evidence remains incomplete.",
+      "evidence_gap": "All six portable FIPS 180-4 SHA-2 algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; a separately packaged downstream consumer accepts every family API, while all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, side-channel, independent-review, secret-state-erasure, and FIPS-validation evidence remains incomplete.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -771,13 +771,13 @@
         "side-channel",
         "work-bound"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The SHA-2 semantic surface is governed by the pinned NIST hash authorities; the ratified RISC-V publications govern only optional acceleration of that same implementation.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -855,7 +855,7 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED"
         }
       ],
@@ -29772,9 +29772,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "63dab1eef4cad9d9c9e98c86d7085eaaeb97d4ef5a5aaf99c8e2b4993aa5d8ed",
+  "residual_policy_sha256": "a888a15b538466226882f97f74c911fa1477643f6ec11f23c26064de458b7bd9",
   "schema": 5,
   "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
-  "surface_register_sha256": "5fdf5d436062c8bba2c8f6d6a99c37fc84164e1d685d2ac21afe446f99032dba",
-  "transport_policy_sha256": "27debc8a16c01829f7597148cdbbb52bef17ef581db9d063cb1026464e36a48c"
+  "surface_register_sha256": "536735cb2217d23c40de7fc1876141be075ca247d67ef16ae944fc344d03ed66",
+  "transport_policy_sha256": "cb88b4d2590556fc0739f255429905a6f8b263b7271ee469d374c706a8f359b5"
 }

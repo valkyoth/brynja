@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.2 signed; v0.23.3 final candidate with exceptional pentest PASS and native disposition complete, awaiting hosted verification
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 implementation candidate
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -145,7 +145,7 @@ hosted GitHub and CodeQL passed, and the signed tag selected zero crates.io
 packages. Ordinary-state erasure, independent review, and FIPS 140-3
 validation remain absent.
 
-The facade now advances to internal `0.23.3`. SHA-224 reuses all three exact
+Signed internal `0.23.3` extends the optional CPU boundary. SHA-224 reuses all three exact
 SHA-256-family candidate kernels through its separate IV, output, and public
 state identity. New static, caller-owned, KAT-gated AArch64 SHA-512 and RV64
 Zknh SHA-512 sessions serve SHA-384, SHA-512, SHA-512/224, and SHA-512/256.
@@ -161,6 +161,19 @@ QEMU-only. Authenticated provenance, performance, migration and side-channel
 evidence remains pending. The exceptional assessment records `PASS`/`PASS`
 with zero open findings. The milestone selects zero crates.io packages and
 makes no independent-review, register-erasure, or FIPS-validation claim.
+
+The facade now advances to internal `0.23.4`. A standalone downstream
+`no_std` consumer uses only public leaf and facade APIs to exercise all six
+SHA-2 identities. Thirty one-shot and thirty-six irregular-streaming results
+cover empty, text, binary, multi-block, million-byte, and file-like inputs
+against independent expected digests. The same consumer runs from a safely
+extracted exact 15-package offline archive closure with version-only
+dependencies and an empty Cargo home. Negative fixtures reject per-algorithm
+digest corruption, missing APIs or documentation, wrong identity or output
+width, incomplete candidate accounting, forbidden evidence features, and
+missing package source. This closes public usability without changing
+cryptographic code, admitting a CPU backend, or adding independent-review,
+FIPS-validation, or secret-remanence claims.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

@@ -21,7 +21,7 @@ ROOT_ROWS = (
 COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
 COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
-    "| `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms with forced optional CPU candidate APIs | ❌ Not verified |",
+    "| `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream public-API acceptance | ❌ Not verified |",
     "| Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-crypto-cpu` | Five implemented but unadmitted SHA-2 candidates across x86_64 SHA, AArch64 SHA2/SHA-512, and RV64 Zknh plus explicit x86 SHA-512 scalar-only policy | ❌ Not independently verified; native admission evidence incomplete |",

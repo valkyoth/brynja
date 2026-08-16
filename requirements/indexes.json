@@ -367,7 +367,7 @@
         "riscv:RISCV.Crypto.Vector-1.0.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED"
+        "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED"
       ],
       "tests": [
         "planned:positive:crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match",
@@ -10792,6 +10792,9 @@
       "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
       ],
+      "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED": [
+        "BRY-REQ-CRYPTO-0001"
+      ],
       "actual-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue": [
         "BRY-REQ-ENC-0002"
       ],
@@ -10968,9 +10971,6 @@
       ],
       "planned-symbol:crates/brynja-fips-module/src/rbg.rs": [
         "BRY-REQ-ENTROPY-1242"
-      ],
-      "planned-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED": [
-        "BRY-REQ-CRYPTO-0001"
       ],
       "planned-symbol:crates/brynja-pki/src/algorithm.rs": [
         "BRY-REQ-PQPKIX-0046"

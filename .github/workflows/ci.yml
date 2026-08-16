@@ -76,6 +76,8 @@ jobs:
         run: cargo test -p brynja-crypto-cpu-std
       - name: Run SHA-256 public API acceptance
         run: python scripts/check-sha256-public-api.py
+      - name: Run complete SHA-2 public API acceptance
+        run: python scripts/check-sha2-public-api.py
       - name: Test assurance platform boundary
         run: python scripts/test-assurance.py
       - name: Test CPU evidence admission boundary
@@ -100,6 +102,8 @@ jobs:
         run: cargo +${{ matrix.rust }} check --manifest-path assurance/cpu-admission-fixture/Cargo.toml
       - name: Run SHA-256 public API acceptance
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sha256-public-api/Cargo.toml
+      - name: Run complete SHA-2 public API acceptance
+        run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sha2-public-api/Cargo.toml
       - name: Verify zeroization emitted code
         run: scripts/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
       - name: Verify constant-time emitted code
@@ -133,6 +137,8 @@ jobs:
         run: cargo check --manifest-path assurance/cpu-admission-fixture/Cargo.toml --target ${{ matrix.target }}
       - name: Check SHA-256 public API fixture
         run: cargo check --locked --manifest-path assurance/sha256-public-api/Cargo.toml --lib --target ${{ matrix.target }}
+      - name: Check complete SHA-2 public API fixture
+        run: cargo check --locked --manifest-path assurance/sha2-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Verify zeroization emitted code
         run: scripts/check-zeroization-codegen.sh 1.97.1 "${{ matrix.target }}"
       - name: Verify constant-time emitted code

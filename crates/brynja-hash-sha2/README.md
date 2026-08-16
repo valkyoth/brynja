@@ -37,7 +37,9 @@ complete portable SHA-384 and SHA-512, and v0.23.2 completes SHA-512/224 and
 SHA-512/256 with exact FIPS SHA-512/t IV derivation.
 v0.23.3 extends the forced backend API to SHA-224 and all four SHA-512-family
 identities. AArch64 SHA-512 and RV64 Zknh SHA-512 candidates remain
-unadmitted; x86_64 SHA-512 remains an explicit scalar-only decision.
+unadmitted; x86_64 SHA-512 remains an explicit scalar-only decision. v0.23.4
+closes the complete family with source and separately packaged downstream
+acceptance through only documented public APIs.
 
 ## Example
 
@@ -114,7 +116,7 @@ SHA-512/224, and SHA-512/256 on exact qualifying targets.
 Run the repository-owned downstream acceptance from a clean checkout with:
 
 ```bash
-python3 scripts/check-sha256-public-api.py
+python3 scripts/check-sha2-public-api.py
 ```
 
 It uses only ordinary public package APIs and repeats the run from assembled
@@ -124,8 +126,8 @@ Cargo package contents. It needs no network or private test hook.
 
 The complete portable FIPS 180-4 SHA-2 family is implemented through v0.23.2,
 and v0.23.3 adds complete forced candidate APIs while keeping every backend
-unadmitted pending native evidence. Packaged downstream family acceptance
-remains v0.23.4. No code in this crate has been independently reviewed. A component only moves
+unadmitted pending native evidence. v0.23.4 completes packaged downstream
+family acceptance. No code in this crate has been independently reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
 fuzzing, and pentesting do not by themselves constitute independent

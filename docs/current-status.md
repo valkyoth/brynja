@@ -84,7 +84,9 @@ million-byte authoritative inputs through one-shot and irregular streaming
 paths. It validates the scalar path, explicitly skips all three unadmitted CPU
 backends, checks deterministic public message-length exhaustion, and repeats
 the same run against safely extracted packaged crate contents with version-only
-dependencies. Executable negative fixtures reject digest corruption, missing
+dependencies. The exact four-crate packaging workspace uses an empty Cargo home
+and offline mode, excluding unrelated packages and cached registry state.
+Executable negative fixtures reject digest corruption, missing
 exports, backend misreporting, exhaustion bypass, an unadmitted feature, and
 altered package contents. This acceptance makes portable SHA-256 publicly
 usable; it does not admit an accelerated backend, add an algorithm, establish

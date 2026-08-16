@@ -265,9 +265,57 @@ def safe_extract(archive: Path, destination: Path) -> Path:
     return destination / next(iter(roots))
 
 
+def isolated_package_workspace(destination: Path) -> Path:
+    workspace = destination / "package-workspace"
+    crates = workspace / "crates"
+    crates.mkdir(parents=True)
+    for name, _version, _required in PACKAGES:
+        shutil.copytree(ROOT / "crates" / name, crates / name)
+
+    manifest = """[workspace]
+members = ["crates/*"]
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.90"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/valkyoth/brynja"
+repository = "https://github.com/valkyoth/brynja"
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+unsafe_op_in_unsafe_fn = "forbid"
+unused_must_use = "deny"
+missing_docs = "deny"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)'] }
+
+[workspace.lints.clippy]
+panic = "forbid"
+unwrap_used = "forbid"
+expect_used = "forbid"
+undocumented_unsafe_blocks = "forbid"
+indexing_slicing = "forbid"
+arithmetic_side_effects = "forbid"
+cast_possible_truncation = "forbid"
+cast_sign_loss = "forbid"
+too_many_arguments = "forbid"
+
+[workspace.dependencies]
+brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.2" }
+brynja-hash-core = { path = "crates/brynja-hash-core", version = "=0.1.0" }
+brynja-hash-sha2 = { path = "crates/brynja-hash-sha2", version = "=0.1.0" }
+brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }
+"""
+    (workspace / "Cargo.toml").write_text(manifest, encoding="utf-8")
+    return workspace
+
+
 def package_roots(destination: Path) -> dict[str, Path]:
+    workspace = isolated_package_workspace(destination)
     target = destination / "target"
     environment = os.environ.copy()
+    environment["CARGO_HOME"] = str(destination / "empty-cargo-home")
     environment["CARGO_TARGET_DIR"] = str(target)
     command = ["cargo", "package"]
     for name, _version, _required in PACKAGES:
@@ -275,7 +323,7 @@ def package_roots(destination: Path) -> dict[str, Path]:
     command.extend(("--allow-dirty", "--no-verify", "--offline"))
     result = subprocess.run(
         command,
-        cwd=ROOT,
+        cwd=workspace,
         env=environment,
         check=False,
         text=True,

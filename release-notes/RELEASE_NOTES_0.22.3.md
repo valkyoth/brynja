@@ -42,6 +42,14 @@ No cryptographic or protocol code has been independently reviewed. No CPU
 backend is admitted, no register-erasure guarantee is made, and Brynja is not
 FIPS 140-3 validated. The new length preflight does not mutate hashing state;
 ordinary `update` calls retain the same checked length-before-mutation rule.
+Ordinary `Sha256` does not guarantee erasure of secret-input remnants, including
+private internal state a caller cannot clear. Keyed constructions must use the
+later hardened secret-owning path before admission.
+
+The package acceptance builds the four-crate SHA-256 closure in an isolated
+temporary workspace with an empty Cargo home. It therefore proves clean offline
+packaging without resolving unrelated workspace packages or relying on a warm
+crates.io index.
 
 This milestone adds no new algorithm, protocol, dependency, unsafe block, FFI,
 C implementation, runtime detector, or provider authority.

@@ -10,10 +10,12 @@ The v0.22.3 `sha256-public-api` fixture is a standalone downstream `no_std`
 consumer of only documented public APIs. It checks authoritative real inputs,
 one-shot and irregular streaming, explicit backend reporting and skips,
 message-length exhaustion, and the same behavior after installation from
-safely extracted package artifacts. Its negative harness proves that the gate
-rejects corrupted digests, missing exports, backend misreporting, exhaustion
-bypass, an unadmitted feature, and altered package contents. This is usability
-acceptance, not independent cryptographic review or FIPS validation.
+safely extracted package artifacts. Packaging runs offline in an isolated
+four-crate workspace with an empty Cargo home, so unrelated workspace packages
+and a warm registry index cannot satisfy the gate. Its negative harness proves
+that the gate rejects corrupted digests, missing exports, backend misreporting,
+exhaustion bypass, an unadmitted feature, and altered package contents. This is
+usability acceptance, not independent cryptographic review or FIPS validation.
 
 The v0.13.0 provider contract adds a separate hash-locked source validator and
 thirteen broken fixtures through `scripts/check-provider-contract.py` and

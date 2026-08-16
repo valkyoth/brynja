@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Isolate SHA-256 package acceptance to its exact four-crate closure and an
+  empty Cargo home so clean CI proves offline packaging without resolving the
+  unrelated optional sanitization dependency or relying on a warm registry
+  index.
+- Clarify that ordinary `Sha256` does not guarantee erasure of secret-input
+  remnants and that callers cannot clear its private internal state; retain
+  hardened secret ownership as a mandatory gate before keyed admission.
 - Complete the v0.22.3 SHA-256 implementation-chain acceptance with a
   standalone public-only `no_std` downstream consumer covering six
   authoritative real inputs, one-shot and irregular streaming, both public

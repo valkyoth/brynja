@@ -112,15 +112,16 @@ assert_eq!(
 ```
 
 SHA-256 is an unkeyed digest, not authentication, a MAC, or password hashing.
+Ordinary `Sha256` does not guarantee erasure of secret-input remnants, including
+private working state that callers cannot clear; keyed use requires the later
+hardened construction.
 
 ## Cryptography Verification Status
 
 These tables track concrete public capabilities, not internal crate names or
 reserved architecture. A capability is listed as implemented only after its
-complete public API and required downstream usability acceptance pass. SHA-256
-appears below only after its complete v0.22.3 public acceptance, rather than
-when an internal module or partial implementation first existed. The broader
-crate-level audit inventory remains available in the
+complete public API and required downstream usability acceptance pass. The
+broader crate-level audit inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
 ✅ Implemented means the named capability has a documented, consumer-usable

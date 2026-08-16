@@ -51,7 +51,9 @@ verification.
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
 Portable SHA-256 is usable through this component; the remaining planned
-composition layer is not implemented yet.
+composition layer is not implemented yet. Ordinary `Sha256` does not guarantee
+erasure of secret-input remnants or private internal state; keyed constructions
+must use the later hardened secret-owning path.
 
 ```rust
 let digest = brynja_crypto::sha256(b"abc")?;

@@ -204,10 +204,12 @@ acceptance remain explicitly numbered later scope before 1.0.
 The exceptional assessment found no vulnerability and required no source
 remediation. It retained one correctly disclosed future constraint: portable
 SHA-256 working state, schedule, and buffered input are not explicitly
-zeroized because v0.22.0 exposes only unkeyed hashing. Before HMAC or other
-key-derived processing uses this path, the owning construction must add
-secret-owned cleanup through Brynja's hardened volatile boundary and verify
-the emitted stores across the supported compiler and target matrix. The
+zeroized because v0.22.0 exposes only unkeyed hashing. Ordinary `Sha256` does
+not guarantee erasure of remnants when its input contains secrets, and callers
+cannot erase private working state themselves. Before HMAC or other key-derived
+processing uses this path, the owning construction must add secret-owned
+cleanup through Brynja's hardened volatile boundary and verify the emitted
+stores across the supported compiler and target matrix. The
 permanent report records `PASS`/`PASS` and zero open findings.
 
 The signed and published `0.20.0` checkpoint introduced the underlying

@@ -11,9 +11,10 @@ Keep a Changelog and Semantic Versioning.
   including two executable binaries; ignore Cargo targets at every workspace
   depth, reject tracked `target/` components in the complete repository gate,
   and run the differential fixture from a fresh locked non-incremental target.
-- Record the v0.24.0 pentest's High build-artifact trust-bypass finding and its
-  completed remediation with zero open findings; independent retest remains
-  mandatory before the exceptional development tag.
+- Record the v0.24.0 pentest's High build-artifact trust-bypass finding, its
+  completed remediation, and the green independent retest of exact candidate
+  `208cde2b24e9aef314e2a59e530a5fd0f659151d` with `PASS`/`PASS` and zero open
+  findings.
 
 ### Added
 

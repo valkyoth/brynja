@@ -45,6 +45,12 @@ These APIs are unkeyed hashes, not authentication, MACs, password hashing, or
 raw Keccak. Ordinary states do not promise erasure of input remnants or
 private working state; later keyed constructions require hardened ownership.
 
+The exceptional v0.24.0 assessment found one High tracked-build-artifact issue
+in the repository differential harness, not an algorithm error. All generated
+artifacts were removed, the harness now builds in a fresh isolated target, and
+independent remediation retest passed with zero open findings. This remains
+pentest evidence rather than independent cryptographic verification.
+
 ## Cryptography Verification Status
 
 | Hash | Implemented | Independently verified |

@@ -209,6 +209,15 @@ exhaustion, two bounded Kani harnesses, and 328-message differential tests
 pass. Raw Keccak, SHA3-384, SHA3-512, SHAKE, and acceleration remain absent;
 the family therefore stays visibly In progress.
 
+The exceptional v0.24.0 assessment found one High assurance supply-chain
+issue: generated Cargo artifacts, including executables, were tracked beneath
+the SHA-3 differential fixture. All 241 artifacts were removed, nested Cargo
+targets are ignored and rejected by policy, and differential execution now
+uses a fresh locked non-incremental target. Independent retest of exact
+remediation candidate `208cde2b24e9aef314e2a59e530a5fd0f659151d`
+passed with zero open findings. This is pentest evidence, not independent
+cryptographic verification or FIPS validation.
+
 The voluntary repository-owner assessment of exact signed v0.23.4
 implementation candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842`
 reported no finding and required no remediation. Its permanent report records

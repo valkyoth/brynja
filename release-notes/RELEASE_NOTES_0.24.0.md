@@ -1,7 +1,7 @@
 # Brynja 0.24.0 Release Notes
 
-Status: remediation candidate; exceptional pentest retest, hosted
-verification, and internal tag pending; no crates.io publication
+Status: release candidate; exceptional pentest and retest passed; hosted
+verification and internal tag pending; no crates.io publication
 
 Brynja 0.24.0 introduces first-party portable FIPS 202 SHA-3 ownership and
 completes the named SHA3-224 and SHA3-256 algorithms. The complete SHA-3/SHAKE
@@ -75,13 +75,15 @@ tracked path containing a `target/` component, and the differential runner
 uses a fresh temporary target with locked dependency resolution and
 incremental compilation disabled. Three negative fixtures cover root, nested,
 and crate-local target paths. No production Rust or cryptographic algorithm
-code changed during remediation. The finding is closed locally with zero open
-findings, but the tag remains blocked pending independent retest.
+code changed during remediation. Independent retest of exact remediation
+candidate `208cde2b24e9aef314e2a59e530a5fd0f659151d` passed with zero open
+findings.
 
 ## Release Process
 
 Version 0.24.0 is an internal milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. The new
-first-party permutation and algorithms trigger an exceptional pentest. The
-remediated candidate, independent retest, complete local gate, hosted GitHub,
-and CodeQL must be green before explicit tag authorization.
+first-party permutation and algorithms triggered an exceptional pentest. The
+assessment and remediation retest passed. The final committed candidate must
+pass the complete local gate, hosted GitHub, and CodeQL before explicit tag
+authorization.

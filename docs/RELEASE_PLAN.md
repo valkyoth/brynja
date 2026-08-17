@@ -2425,7 +2425,7 @@ Exit criteria:
 
 ### v0.24.1 - Complete SHA3-384 And SHA3-512
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes:
 
@@ -2453,8 +2453,9 @@ Implementation notes:
   CI scripts did not enforce the claimed SHA3-384/SHA3-512 Miri and
   AddressSanitizer coverage. The scripts now execute those targets, the SHA-3
   policy rejects four removal/narrowing regressions, and both local analysis
-  paths pass. The report records zero open findings but remains
-  `RETEST REQUIRED`/`PENDING` until independent retest.
+  paths pass. Independent retest of exact remediation candidate
+  `31ce5c95fdf4ea5eb6f1bb942de9f06c3f11f6d2` was reported green, and the
+  permanent report records `PASS`/`PASS` with zero open findings.
 - the 2026-08-17 standards refresh records verified editorial RFC 9954 erratum
   9136, which corrects two TLS 1.3 section references without changing
   normative behavior or admitting runtime code before planned v0.117.0.

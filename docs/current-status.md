@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 remediated and awaiting pentest retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 pentest and retest passed, awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -207,8 +207,9 @@ with exact 104-byte and 72-byte rates and 48-byte and 64-byte outputs. Their
 official zero-bit and 1,600-bit examples, text and million-byte cases, exact
 padding boundaries, irregular streaming partitions, raw-Keccak negatives, and
 typed public APIs pass. The isolated 328-message differential corpus now checks
-all four fixed-output algorithms, and 25 mutation fixtures bind the expanded
-source, output-width, rate, vector and package boundary. SHAKE, complete-family
+all four fixed-output algorithms, and 29 mutation fixtures bind the expanded
+source, output-width, rate, vector, package, Miri and AddressSanitizer boundary.
+SHAKE, complete-family
 package acceptance, acceleration, secret-state erasure, independent review and
 FIPS validation remain absent, so the family stays **In progress** and v0.24.1
 selects zero crates.io packages.

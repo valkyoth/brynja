@@ -24,8 +24,10 @@ Keep a Changelog and Semantic Versioning.
 
 - Remediate the v0.24.1 Medium incorrect-assurance-claim finding by executing
   SHA3-384/SHA3-512 under the CI-invoked Miri and AddressSanitizer scripts and
-  adding four SHA-3 policy regressions that reject removal or narrowing; local
-  verification passes with zero open findings and independent retest pending.
+  adding four SHA-3 policy regressions that reject removal or narrowing;
+  independent retest of exact remediation candidate
+  `31ce5c95fdf4ea5eb6f1bb942de9f06c3f11f6d2` passed, and the permanent report
+  records `PASS`/`PASS` with zero open findings.
 - Refresh the reviewed standards evidence for verified editorial RFC 9954
   erratum 9136, which corrects two TLS 1.3 section references and changes no
   normative hybrid-key-exchange behavior or current runtime code.
@@ -38,7 +40,7 @@ Keep a Changelog and Semantic Versioning.
   public identity checks, and the existing shared Kani bounds.
 - Expand the isolated independent-library differential corpus to all four
   fixed-output SHA-3 algorithms over 328 deterministic messages (1,312
-  results), and expand reviewed-source enforcement to 25 mutation fixtures.
+  results), and expand reviewed-source enforcement to 29 mutation fixtures.
 - Advance the internal facade to `brynja 0.24.1` without publishing a package,
   exposing SHAKE, admitting acceleration, or making secret-erasure,
   independent-review, or FIPS-validation claims; the family remains

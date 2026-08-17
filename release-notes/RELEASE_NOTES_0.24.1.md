@@ -1,7 +1,7 @@
 # Brynja 0.24.1 Release Notes
 
-Status: pentest remediation complete; independent retest, hosted verification,
-and signed tag pending; no crates.io publication
+Status: pentest and retest passed; hosted verification and signed tag pending;
+no crates.io publication
 
 Brynja 0.24.1 completes the portable fixed-output FIPS 202 SHA-3 algorithms by
 adding SHA3-384 and SHA3-512 over the private Keccak-f[1600] sponge introduced
@@ -63,8 +63,9 @@ AddressSanitizer coverage for SHA3-384/SHA3-512 that the committed CI scripts
 did not enforce. Direct analysis had passed, so no memory defect was shown.
 The scripts and SHA-3 policy now enforce the claimed coverage, four broken
 fixtures reject its removal, and both remediated analysis scripts pass
-locally. The permanent report records zero open findings and remains
-`RETEST REQUIRED`/`PENDING` until independent retest.
+locally. Independent retest of exact remediation candidate
+`31ce5c95fdf4ea5eb6f1bb942de9f06c3f11f6d2` was reported green. The permanent
+report records `PASS`/`PASS` with zero open findings.
 
 ## Release Process
 
@@ -72,5 +73,6 @@ Version 0.24.1 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. It adds two
 fixed-output parameterizations over the already assessed private sponge, with
 no new primitive owner, unsafe boundary, backend, or dependency. The final
-committed candidate must pass independent retest, the complete local gate, and
-hosted GitHub and CodeQL before explicit signed-tag authorization.
+committed candidate must retain the green retest, pass the complete local
+gate, and pass hosted GitHub and CodeQL before explicit signed-tag
+authorization.

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 implementation complete and awaiting pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 pentest passed and awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional

@@ -1,7 +1,7 @@
 # Brynja 0.24.1 Release Notes
 
-Status: implementation complete; pentest and hosted verification pending; no
-crates.io publication
+Status: release candidate; pentest passed; hosted verification and signed tag
+pending; no crates.io publication
 
 Brynja 0.24.1 completes the portable fixed-output FIPS 202 SHA-3 algorithms by
 adding SHA3-384 and SHA3-512 over the private Keccak-f[1600] sponge introduced
@@ -51,11 +51,20 @@ No SHA-3 code is independently reviewed or FIPS 140-3 validated. FIPS 202 is
 the pinned current algorithm authority; the announced future NIST revision
 remains subject to explicit lifecycle review when normative text is available.
 
+## Pentest
+
+The repository owner reported a green pentest of exact implementation
+candidate `634fbc5e3d36a99eb4b71245bdbca1e16a0af7ea`. No finding was reported and
+no remediation was requested. The permanent report records `PASS`/`PASS` with
+zero open findings. This assessment is security-review evidence; it is not an
+independent cryptographic verification or FIPS-validation claim.
+
 ## Release Process
 
 Version 0.24.1 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. It adds two
 fixed-output parameterizations over the already assessed private sponge, with
 no new primitive owner, unsafe boundary, backend, or dependency. The final
-committed candidate must pass the complete local gate, the requested pentest,
-hosted GitHub, and CodeQL before explicit signed-tag authorization.
+committed candidate must pass the complete local gate, retain the green
+pentest report, and pass hosted GitHub and CodeQL before explicit signed-tag
+authorization.

@@ -2425,7 +2425,7 @@ Exit criteria:
 
 ### v0.24.1 - Complete SHA3-384 And SHA3-512
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes:
 
@@ -2448,6 +2448,10 @@ Implementation notes:
   dependency, secret-state erasure, independent-review, FIPS-validation or
   publication claim is introduced. The SHA-3/SHAKE family remains documented
   **In progress** through its later acceptance gates.
+- the repository-owner-supplied pentest result for exact implementation
+  candidate `634fbc5e3d36a99eb4b71245bdbca1e16a0af7ea` is green with no reported
+  finding or requested remediation; the committed report records
+  `PASS`/`PASS` and zero open findings while retaining every residual limit.
 
 Plan scope: Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration.
 

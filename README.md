@@ -227,6 +227,12 @@ pass. SHAKE, portable-family package acceptance, acceleration, secret-state
 erasure, independent review, and FIPS validation remain later gates, so the
 SHA-3/SHAKE family remains **In progress**.
 
+The repository-owner-supplied v0.24.1 pentest result for exact implementation
+candidate `634fbc5e3d36a99eb4b71245bdbca1e16a0af7ea` is green. No finding or
+remediation was reported, and the permanent report records `PASS`/`PASS` with
+zero open findings. This does not create an independent cryptographic review,
+FIPS validation, accelerated-backend admission, or crates.io publication.
+
 The voluntary repository-owner assessment of exact signed v0.23.4
 implementation candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842`
 reported no finding and required no remediation. Its permanent report records

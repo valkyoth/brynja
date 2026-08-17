@@ -64,8 +64,8 @@
     "scripts/repository/unsafe_policy.py": "bca19448d1214f50496699d77456bb61ba417aabc04d4e2986c17b39e068a78d",
     "scripts/zeroization/check-zeroization-codegen.sh": "71c83e5a0f59fd10bb5f4667e7aaf76c28acf33bffb4aacd433adfa6fba38cc5",
     "scripts/zeroization/check-zeroization-evidence.py": "2f0665216572981434394d559dda6207933b81506dd1af6e16c877981616ad2c",
-    "scripts/zeroization/check-zeroization-miri.sh": "8b7a19c61626d5e0ff82284d6036b070ca8be77a0a9733517abb36e8c28511d8",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "7ab874da588bf04e7aad53c3b1932d2ec8ebfe90f3bac9f23fa7864219aba3b2",
+    "scripts/zeroization/check-zeroization-miri.sh": "1ce01b47bd79756c648d0efcaa9704f7942b0aeda22ad231728c0563f63399be",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "a59e15218c41cd1ff18b1d97e1616a9fc00fea0884243262bb27980c1cccb50c",
     "scripts/zeroization/test-zeroization-evidence.py": "c0d0a6281e6bf45ec3eb19b52f11f14f41dcdb73a04b825ebe2a76f379ad411c",
     "scripts/zeroization/zeroization_evidence.py": "3e818e02e4d23aac9b3d7e4b681c42cfa01d15ae766e2a6fdb2d61678a862d9d"
   },

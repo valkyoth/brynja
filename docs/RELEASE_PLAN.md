@@ -1903,7 +1903,7 @@ Exit criteria:
 
 ### v0.21.0 - Canonical ASN.1 Primitives
 
-Status: pentest remediation complete; awaiting independent retest
+Status: awaiting green CI
 
 Plan scope: Add canonical ASN.1 integer, bit and octet string, OID, Boolean, string, sequence and set, and time primitives with malformed and non-canonical corpora.
 
@@ -2425,7 +2425,7 @@ Exit criteria:
 
 ### v0.24.1 - Complete SHA3-384 And SHA3-512
 
-Status: awaiting green CI
+Status: awaiting pentest
 
 Implementation notes:
 
@@ -2441,9 +2441,10 @@ Implementation notes:
   algorithms with Python's independently maintained `hashlib` path over the
   same 328 messages, producing 1,312 checked results;
 - the reviewed boundary now includes all four state and integration-test files
-  and 25 adversarial mutations covering the two new rates, claims, output
-  widths and authoritative-vector gates; the existing shared Kani length and
-  byte-to-lane proofs apply unchanged to every fixed-output state;
+  and 29 adversarial mutations covering the two new rates, claims, output
+  widths, authoritative-vector gates, and dynamic-analysis coverage; the
+  existing shared Kani length and byte-to-lane proofs apply unchanged to every
+  fixed-output state;
 - no raw permutation, SHAKE, acceleration, unsafe code, allocation, third-party
   dependency, secret-state erasure, independent-review, FIPS-validation or
   publication claim is introduced. The SHA-3/SHAKE family remains documented

@@ -5557,7 +5557,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "5d94383983eac9cd6abb957571bbff9bd3da954396ab36692d49bb43848a6364",
+  "policy_sha256": "5b3fa1c02baa48153ad5d30cd8ab3484137e2e718c8b680cf1fa0502e590807a",
   "requirement_count": 34,
   "schema": 1,
   "surface_count": 3325,
@@ -5661,7 +5661,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.sha3-shake",
       "owner": "0.24.0",

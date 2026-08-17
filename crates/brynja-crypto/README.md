@@ -34,7 +34,8 @@ dependency direction is always from `brynja-crypto` to the leaf families, never
 back toward TLS or the full cryptographic graph.
 
 The current internal workspace reexports all six complete portable FIPS 180-4
-SHA-2 implementations from `brynja-hash-sha2`. Its broader provider effects, AEADs,
+SHA-2 implementations from `brynja-hash-sha2` plus complete portable FIPS 202
+SHA3-224 and SHA3-256 from `brynja-hash-sha3`. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 
@@ -50,8 +51,9 @@ verification.
 | --- | --- | --- |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
-All six portable FIPS 180-4 SHA-2 algorithms are usable through this component;
-the remaining planned composition layer is not implemented yet. Ordinary SHA-2 states do not
+All six SHA-2 algorithms plus SHA3-224 and SHA3-256 are usable through this
+component; the remaining planned composition layer and SHA-3/SHAKE family are
+not implemented yet. Ordinary unkeyed hash states do not
 guarantee erasure of secret-input remnants or private internal state; keyed
 constructions must use the later hardened secret-owning path.
 
@@ -62,12 +64,16 @@ let wider = brynja_crypto::sha384(b"abc").unwrap();
 let widest = brynja_crypto::sha512(b"abc").unwrap();
 let truncated_224 = brynja_crypto::sha512_224(b"abc").unwrap();
 let truncated_256 = brynja_crypto::sha512_256(b"abc").unwrap();
+let sha3_224 = brynja_crypto::sha3_224(b"abc").unwrap();
+let sha3_256 = brynja_crypto::sha3_256(b"abc").unwrap();
 assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(digest.as_bytes().len(), 32);
 assert_eq!(wider.as_bytes().len(), 48);
 assert_eq!(widest.as_bytes().len(), 64);
 assert_eq!(truncated_224.as_bytes().len(), 28);
 assert_eq!(truncated_256.as_bytes().len(), 32);
+assert_eq!(sha3_224.as_bytes().len(), 28);
+assert_eq!(sha3_256.as_bytes().len(), 32);
 ```
 
 Most application users will eventually depend on the modern facade:

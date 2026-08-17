@@ -2311,7 +2311,7 @@ Implementation notes:
 
 ### v0.23.4 - Complete SHA-2 Public API Usability Acceptance
 
-Status: planned
+Status: released
 
 Implementation notes:
 
@@ -2361,7 +2361,32 @@ Exit criteria:
 
 ### v0.24.0 - Keccak Foundation And Complete SHA3-224/SHA3-256
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes:
+
+- new unpublished `brynja-hash-sha3 0.1.0` owns one private, safe-Rust,
+  allocation-free Keccak-f[1600] permutation and a fixed-output sponge without
+  exposing raw permutation or raw Keccak APIs;
+- distinct `Sha3_224` and `Sha3_256` streaming states, digest and error types,
+  one-shot functions, 144-byte and 136-byte rates, FIPS 202 `0x06` suffix,
+  final `0x80` padding bit, checked `u128` byte domains, transactional updates,
+  and consuming finalization are public through the leaf, crypto, and facade
+  boundaries;
+- official zero-bit and 1,600-bit FIPS examples, standard text and million-byte
+  values, exact rate-minus-one/rate/rate-plus-one boundaries, every bounded
+  two-part partition, and raw-Keccak domain-separation negatives pass;
+- an isolated repository-only adapter matches Python's independently
+  maintained `hashlib` implementation for both algorithms over 328
+  deterministic messages, while 17 mutation fixtures bind exact sources,
+  constants, package edges, tests, and adjacent-algorithm exclusions;
+- two Kani harnesses cover checked length admission and all 200 byte-to-lane
+  mappings; focused library invariants pass Miri and the complete unit and
+  integration suite passes AddressSanitizer. SHA3-384, SHA3-512, SHAKE,
+  package-external family acceptance,
+  acceleration, secret-state erasure, independent review, and FIPS validation
+  remain absent, so the family is documented **In progress** and zero packages
+  are selected for publication.
 
 Plan scope: Freeze reusable no_std `brynja-hash-sha3` sponge ownership around one private Keccak-f[1600] permutation, then complete SHA3-224 and SHA3-256 with distinct rates, suffixes, fixed-output states, one-shot and streaming APIs, authoritative vectors, padding boundaries, checked lengths, proofs, and no raw public permutation.
 

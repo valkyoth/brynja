@@ -1,9 +1,11 @@
 //! Security-first, first-party Rust `no_std` cryptography and protocol facade.
 //!
-//! This release exposes all six complete portable FIPS 180-4 SHA-2 algorithms through
-//! distinct one-shot and streaming APIs: [`crypto::sha224`],
+//! This release exposes all six complete portable FIPS 180-4 SHA-2 algorithms
+//! and complete portable FIPS 202 SHA3-224 and SHA3-256 through distinct
+//! one-shot and streaming APIs: [`crypto::sha224`],
 //! [`crypto::sha256`], [`crypto::sha384`], [`crypto::sha512`],
-//! [`crypto::sha512_224`], and [`crypto::sha512_256`] plus their matching
+//! [`crypto::sha512_224`], [`crypto::sha512_256`], [`crypto::sha3_224`], and
+//! [`crypto::sha3_256`] plus their matching
 //! state and digest types. It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
 //! workspaces, secret-lifetime and owned-memory
@@ -20,7 +22,7 @@
 //! selection. A bounded borrowed DER reader exposes canonical framing and
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
-//! algorithm outside these six SHA-2 identities.
+//! algorithm outside these six SHA-2 and two SHA-3 identities.
 
 #![no_std]
 
@@ -103,6 +105,8 @@ mod tests {
         assert!(::core::hint::black_box(
             super::crypto::SHA512_256_IMPLEMENTED
         ));
+        assert!(::core::hint::black_box(super::crypto::SHA3_224_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::crypto::SHA3_256_IMPLEMENTED));
         assert_eq!(
             super::crypto::sha224(b"abc"),
             Ok(super::crypto::Sha224Digest::from_bytes([

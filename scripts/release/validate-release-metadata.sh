@@ -28,6 +28,14 @@ test -s scripts/README.md
 test -s scripts/inventory.toml
 test -x scripts/repository/check-script-layout.py
 test -x scripts/repository/test-script-layout.py
+test -x scripts/sha3/check-sha3.py
+test -x scripts/sha3/test-sha3.py
+test -x scripts/sha3/check-sha3-differential.py
+test -f scripts/sha3/sha3_policy.py
+test -f scripts/sha3/sha3_reviewed_hashes.py
+test -s assurance/sha3-differential/Cargo.toml
+test -s assurance/sha3-differential/Cargo.lock
+test -s assurance/sha3-differential/src/main.rs
 test -x scripts/release/release_crates.py
 test -x scripts/standards/check-standards-ledger.py
 test -x scripts/standards/test-standards-ledger.py
@@ -216,6 +224,9 @@ if cmp -s README.md crates/brynja/README.md; then
 fi
 grep -q 'run: scripts/ci/install-ci-tools.sh' .github/workflows/ci.yml
 grep -q 'python3 scripts/assurance/check-assurance.py' scripts/checks.sh
+grep -q 'python3 scripts/sha3/check-sha3.py' scripts/checks.sh
+grep -q 'python3 scripts/sha3/test-sha3.py' scripts/checks.sh
+grep -q 'python3 scripts/sha3/check-sha3-differential.py' scripts/checks.sh
 grep -q 'python3 scripts/repository/check-script-layout.py' scripts/checks.sh
 grep -q 'python3 scripts/repository/test-script-layout.py' scripts/checks.sh
 grep -q 'scripts/assurance/check-kani.sh --policy-only' scripts/checks.sh

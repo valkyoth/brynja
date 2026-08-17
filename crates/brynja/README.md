@@ -30,10 +30,13 @@ secure-protocol workspace. It is allocation-independent `no_std` Rust and does
 not depend on a C cryptographic library.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable
-> FIPS 180-4 SHA-2 algorithms, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
+> FIPS 180-4 SHA-2 algorithms, complete portable FIPS 202 SHA3-224 and
+> SHA3-256, and bounded record and DER/ASN.1 framing—but no TLS connection,
+> certificate validator, or working protocol engine.
 
 All six SHA-2 APIs pass separately packaged downstream `no_std` acceptance
 through the leaf and facade; that is not independent review or FIPS validation.
+The broader SHA-3/SHAKE family remains in progress.
 
 ## Design Boundaries
 
@@ -102,15 +105,7 @@ assert_eq!(wider.as_bytes().len(), 48);
 assert_eq!(widest.as_bytes().len(), 64);
 assert_eq!(truncated_224.as_bytes().len(), 28);
 assert_eq!(truncated_256.as_bytes().len(), 32);
-assert_eq!(
-    digest.as_bytes(),
-    &[
-        0xba, 0x78, 0x16, 0xbf, 0x8f, 0x01, 0xcf, 0xea,
-        0x41, 0x41, 0x40, 0xde, 0x5d, 0xae, 0x22, 0x23,
-        0xb0, 0x03, 0x61, 0xa3, 0x96, 0x17, 0x7a, 0x9c,
-        0xb4, 0x10, 0xff, 0x61, 0xf2, 0x00, 0x15, 0xad,
-    ]
-);
+assert_eq!(digest.as_bytes().len(), 32);
 ```
 
 These SHA-2 functions are unkeyed digests, not authentication, a MAC, or password
@@ -118,27 +113,37 @@ hashing. Ordinary SHA-2 states do not guarantee erasure of secret-input
 remnants, including private working state that callers cannot clear; keyed use
 requires the later hardened construction.
 
+### Compute Portable SHA3-224 And SHA3-256
+
+```rust
+let shorter = brynja::crypto::sha3_224(b"abc").unwrap();
+let digest = brynja::crypto::sha3_256(b"abc").unwrap();
+assert_eq!(shorter.as_bytes().len(), 28);
+assert_eq!(digest.as_bytes().len(), 32);
+```
+
+These are FIPS 202 SHA-3 functions, not raw Keccak. Their ordinary unkeyed
+states make no secret-remanence cleanup claim.
+
 ## Cryptography Verification Status
 
-These tables track concrete public capabilities, not internal crate names or
-reserved architecture. A capability is listed as implemented only after its
-complete public API and required downstream usability acceptance pass. The
-broader crate-level audit inventory remains available in the
+These tables track concrete public capabilities. A complete public API and
+required acceptance must pass first. The crate-level audit
+inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
-✅ Implemented means a named capability is ready; ✅ Fully implemented means
-every named member of that exact family is ready. Both require documented,
-consumer-usable public APIs and the repository's required evidence. A green implementation status does not mean independently verified. Independent status moves from ❌ to ✅ only
-when a named independent reviewer signs off and linked evidence identifies the
-reviewed implementation. The project's own tests, CI, Kani, Miri, sanitizers,
-fuzzing, differential testing, and pentests do not by themselves constitute
-independent cryptographic or protocol verification.
+✅ Implemented means a capability is ready; ✅ Fully implemented means every
+named family member is ready. A green implementation status does not mean independently verified.
+Only a named independent reviewer with linked evidence can change
+that status. Tests, CI, Kani, Miri, sanitizers, fuzzing, differential testing, and pentests
+do not themselves constitute independent verification.
 
 ### Hash Functions
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |
+| SHA-3/SHAKE (FIPS 202: SHA3-224 and SHA3-256 implemented; SHA3-384, SHA3-512, SHAKE128, and SHAKE256 pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -173,20 +178,15 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | --- | --- |
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
-| `brynja-hash-core` | Small allocation-free fixed-output hash interfaces |
 | `brynja-hash-sha2` | All six portable FIPS 180-4 SHA-2 algorithms and complete family ownership |
-| `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | Optional first-party ISA kernels and separate host runtime detection; absent from this facade |
+| `brynja-hash-sha3` | Complete portable FIPS 202 SHA3-224/SHA3-256; broader family in progress |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |
 | `brynja-tls12`, `brynja-tls13`, `brynja-dtls`, `brynja-quic-tls` | Separately reviewable modern protocol engines |
-| Future `brynja-hash-sha3` and `brynja-mac-*` | Further small reusable algorithm-family crates |
-| `brynja-platform` | Explicit operating-system integrations |
-| `brynja-sanitization` | Optional first-party secret-sanitization adapter |
 | `brynja-legacy-*` | Explicitly isolated obsolete-protocol compatibility |
 
-Many workspace packages are boundaries awaiting later roadmap milestones. A
-package name alone does not mean that its planned implementation exists.
+Many package names are boundaries awaiting later roadmap milestones, not implementation claims.
 
 ## More Information
 

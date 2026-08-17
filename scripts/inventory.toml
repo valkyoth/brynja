@@ -46,6 +46,10 @@ purpose = "Sanitization dependency and compiler-artifact assurance"
 extensions = [".py", ".sh"]
 purpose = "SHA-2 implementation, public acceptance, and architecture-specific evidence"
 
+[category.sha3]
+extensions = [".py"]
+purpose = "SHA-3 and SHAKE implementation, public acceptance, and differential evidence"
+
 [category.standards]
 extensions = [".py", ".sh"]
 purpose = "Standards authorities, protocol surfaces, and normative requirements"

@@ -21,16 +21,17 @@ mapping_rationale = "The SHA-2 semantic surface is governed by the pinned NIST h
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0002"
 owner = "0.24.0"
-lifecycle = "planned"
+lifecycle = "implemented"
+revision = 2
 decision_ids = ["algorithm.sha3-shake"]
 sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }]
-statement = "Keccak-f[1600], SHA3-256, SHA3-512, SHAKE128, and SHAKE256 remain exact FIPS 202 constructions with domain separation."
+statement = "Keccak-f[1600], SHA3-224, and SHA3-256 implement the exact FIPS 202 permutation, rates, suffix, padding, outputs, and domain separation; later SHA3-384, SHA3-512, SHAKE128, and SHAKE256 reuse that private owner without broadening this requirement's current implementation claim."
 invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
-target = "crates/brynja-crypto/src/sha3.rs#KeccakF1600"
-positive_test = "tests/requirements/crypto_sha3.rs#fips202_vectors"
-negative_test = "tests/requirements/crypto_sha3.rs#domain_and_output_bounds"
-work_bound = "Absorb and squeeze work is bounded by input and requested output blocks, with checked counters and no unbounded output request."
-evidence_gap = "Permutation proofs, official vectors, differential campaigns, and per-target side-channel evidence remain unresolved until v0.24.0."
+target = "crates/brynja-hash-sha3/src/lib.rs#SHA3_256_IMPLEMENTED"
+positive_test = "crates/brynja-hash-sha3/tests/sha3_256.rs#official_fips202_zero_and_1600_bit_vectors_match"
+negative_test = "crates/brynja-hash-sha3/tests/sha3_256.rs#raw_keccak_empty_digest_is_not_sha3_256"
+work_bound = "Absorb work is linear in complete input blocks, with checked byte accumulation; these fixed-output SHA-3 APIs perform one bounded final permutation and expose no caller-selected output length."
+evidence_gap = "Portable SHA3-224 and SHA3-256 pass official examples, million-byte and exact padding-boundary tests, exhaustive bounded partitioning, a 328-message independent-library differential corpus, source-policy mutations, and two Kani bounds; SHA3-384, SHA3-512, SHAKE, public family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete."
 residual = "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears."
 mapping_rationale = "The SHA-3 and SHAKE semantic surface directly records the complete algorithm family admitted from the pinned current FIPS 202 authority."
 

@@ -450,7 +450,10 @@ def validate_packages(root: Path) -> None:
     if set(manifest.get("dependencies", {})) != {"brynja-hash-core", "brynja-crypto-cpu"}:
         fail("brynja-hash-sha2 dependency boundary changed")
     crypto = tomllib.loads((root / CRYPTO_MANIFEST).read_text(encoding="utf-8"))
-    if set(crypto.get("dependencies", {})) != {"brynja-hash-sha2"}:
+    if set(crypto.get("dependencies", {})) != {
+        "brynja-hash-sha2",
+        "brynja-hash-sha3",
+    }:
         fail("brynja-crypto SHA-256 ownership changed")
     if core.get("features") != {"default": []}:
         fail("hash core feature boundary changed")

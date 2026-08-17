@@ -7,6 +7,23 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add unpublished allocation-free `no_std` `brynja-hash-sha3 0.1.0` with one
+  private safe-Rust Keccak-f[1600] owner and complete portable SHA3-224 and
+  SHA3-256 one-shot, streaming, digest, checked-length, and consuming-finalize
+  APIs, reexported through `brynja-crypto` and the `brynja 0.24.0` facade.
+- Verify the two algorithms with official FIPS 202 zero-bit and 1,600-bit
+  examples, text and million-byte values, exact sponge padding boundaries,
+  every bounded two-part partition, a raw-Keccak domain-separation negative,
+  and an isolated 328-message differential corpus against Python `hashlib`.
+- Bind the v0.24.0 scope with 17 source-policy mutation fixtures, exact
+  reviewed hashes, two Kani bounds, first-party-Rust/no-unsafe/no-allocation
+  enforcement, normative requirement evidence, and explicit rejection of
+  premature SHA3-384, SHA3-512, SHAKE, or raw-permutation exposure.
+- Keep the SHA-3/SHAKE family visibly **In progress** until the later complete-
+  family public and accelerated acceptance gates. v0.24.0 selects zero crates
+  for publication and requires an exceptional new-primitive pentest before
+  its internal signed tag; no independent-review, secret-erasure, CPU-
+  admission, or FIPS-validation claim is made.
 - Record the voluntary v0.23.4 assessment of exact signed implementation
   candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842` as `PASS`/`PASS`
   with zero open findings and no remediation. Preserve all CPU-admission,

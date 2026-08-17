@@ -44,7 +44,7 @@ FILES = (
 )
 EXPECTED_SHA256 = {
     MANIFEST: "e5324f6ad25053620f470217e0332aa6dc2955384cd5e5d157599efe5658e247",
-    LOCK: "a5967f247416a1104f007bee03148d39edab89cd12676a7352e74b67466c84e4",
+    LOCK: "c686f1cf8035ab2a27770894566d6bc9f753c88c7adfeb5ed7a1a0354ddbc018",
     LIB: "096ef101b31b38ededc2aeda9e3b0546757f57fc2875419f920876ce883f64ff",
     MAIN: "5147536fd2bdc395ceed7fb023c9a06971347a8d531c66c0cfde7b78fc878522",
     CONTENT: "a8f34a54459e9655229bb554c15ebb87f89a0bfbc600da8eb56999422fc0487f",
@@ -52,7 +52,7 @@ EXPECTED_SHA256 = {
     SHA256_TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
     CHECK_SCRIPT: "d424a02dcfc778f83ccf8004fc23c9456bd71a759ece3235bdb56f1f0f02ad9d",
     TEST_SCRIPT: "10155923e8769cd405c2e9eaa813c02b50f665daacadfc2da3a90f9dc7f9ab7f",
-    CHECKS: "1933ff1e7edc930397e4122eeb944300bd07dd6263f623e0c1d2adb64a103b66",
+    CHECKS: "020876d3b804799f52b664c54a2d6f103ae35ca172cc1fe171aa6cbec13769f1",
     RUST_MATRIX: "9adb2aa14e7f5db1e2f9ef847e69d427ef2d784aa027880206189547b3e327e5",
     BARE_METAL: "e003090026e32dc45ef4ce63bd15a0bc43661aae9e4e6d16d6303e7edb0c1d76",
     WORKFLOW: "338bacfa3188996aca94aefff79cc82e45bd68e14fd8a0dda95cb3144488299e",
@@ -81,6 +81,19 @@ PACKAGES = (
             "src/error.rs",
             "src/sha224.rs",
             "src/sha256.rs",
+        ),
+    ),
+    (
+        "brynja-hash-sha3",
+        "0.1.0",
+        (
+            "src/lib.rs",
+            "src/digest.rs",
+            "src/error.rs",
+            "src/keccak.rs",
+            "src/sha3_224.rs",
+            "src/sha3_256.rs",
+            "src/sponge.rs",
         ),
     ),
     ("brynja-crypto", "0.1.2", ("src/lib.rs",)),
@@ -306,6 +319,7 @@ too_many_arguments = "forbid"
 brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.2" }
 brynja-hash-core = { path = "crates/brynja-hash-core", version = "=0.1.0" }
 brynja-hash-sha2 = { path = "crates/brynja-hash-sha2", version = "=0.1.0" }
+brynja-hash-sha3 = { path = "crates/brynja-hash-sha3", version = "=0.1.0" }
 brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }
 """
     (workspace / "Cargo.toml").write_text(manifest, encoding="utf-8")

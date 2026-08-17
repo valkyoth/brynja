@@ -16,7 +16,7 @@ optional = {}
 [packages.brynja-crypto]
 class = "modern-shared"
 publish = "crates-io"
-required = ["brynja-hash-sha2"]
+required = ["brynja-hash-sha2", "brynja-hash-sha3"]
 optional = {}
 
 [packages.brynja-hash-core]
@@ -30,6 +30,12 @@ class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-hash-core"]
 optional = { cpu = "brynja-crypto-cpu" }
+
+[packages.brynja-hash-sha3]
+class = "modern-shared"
+publish = "crates-io"
+required = ["brynja-hash-core"]
+optional = {}
 
 [packages.brynja-crypto-cpu]
 class = "cpu-backend"

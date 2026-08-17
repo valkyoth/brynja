@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja"
-version = "0.23.4"
+version = "0.24.0"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -22,6 +22,7 @@ name = "brynja-crypto"
 version = "0.1.2"
 dependencies = [
  "brynja-hash-sha2",
+ "brynja-hash-sha3",
 ]
 
 [[package]]
@@ -37,6 +38,13 @@ name = "brynja-hash-sha2"
 version = "0.1.0"
 dependencies = [
  "brynja-crypto-cpu",
+ "brynja-hash-core",
+]
+
+[[package]]
+name = "brynja-hash-sha3"
+version = "0.1.0"
+dependencies = [
  "brynja-hash-core",
 ]
 

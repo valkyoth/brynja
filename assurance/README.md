@@ -28,6 +28,15 @@ feature, and package-content gaps. It establishes public usability, not
 independent cryptographic review, FIPS validation, accelerated admission, or
 secret-state erasure.
 
+The v0.24.0 `sha3-differential` fixture is an isolated repository-only host
+adapter. It feeds 328 deterministic public messages through the public
+SHA3-224 and SHA3-256 APIs and compares every digest with Python's independently
+maintained `hashlib` implementation. The corpus spans every length from zero
+through 320 bytes plus larger block and file-like boundaries. This is
+differential correctness evidence, not package-external acceptance,
+independent cryptographic review, side-channel evidence, or FIPS validation.
+Run it with `python3 scripts/sha3/check-sha3-differential.py`.
+
 The v0.13.0 provider contract adds a separate hash-locked source validator and
 thirteen broken fixtures through `scripts/foundations/check-provider-contract.py` and
 `scripts/foundations/test-provider-contract.py`. The additional remediation fixtures reject

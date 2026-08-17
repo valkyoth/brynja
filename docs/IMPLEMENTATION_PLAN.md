@@ -74,9 +74,9 @@ claim.
 ```text
 brynja
 ├── brynja-core
-├── brynja-hash-core (future reusable no_std hash interfaces)
-├── brynja-hash-sha2 (future SHA-2 scalar ownership shared with TLS)
-├── brynja-hash-sha3 (future SHA-3/SHAKE scalar ownership shared with ML-KEM)
+├── brynja-hash-core (reusable no_std hash interfaces)
+├── brynja-hash-sha2 (complete SHA-2 ownership shared with TLS)
+├── brynja-hash-sha3 (SHA3-224/SHA3-256 implemented; SHA-3/SHAKE family in progress)
 ├── brynja-mac-hmac (future reusable HMAC ownership)
 ├── brynja-crypto (provider contracts, compositions, and non-hash primitives)
 ├── optional brynja-crypto-cpu (reserved zero-dependency no_std ISA boundary)
@@ -97,7 +97,7 @@ brynja
 ├── future brynja-openpgp (modern RFC 9580 Sans-I/O facade and engines)
 ├── optional brynja-openpgp-legacy (complete warned historical OpenPGP operations)
 │   └── future brynja-legacy-sha1 (complete legacy hash; OpenPGP is first admitted consumer)
-└── future brynja-sanitization (explicit downstream adapter only)
+└── brynja-sanitization (explicit downstream adapter only)
 
 future downstream companion integration workspaces (never brynja dependencies)
 ├── brynja-rustls (Brynja cryptography as a rustls custom provider)

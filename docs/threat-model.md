@@ -506,6 +506,17 @@ documentation, incomplete backend accounting, evidence-feature activation,
 and missing archive source must fail. This acceptance cannot authorize a CPU
 backend or establish secret-state erasure, independent review, or FIPS
 validation.
+v0.24.0 treats every SHA3-224/SHA3-256 byte, partition, rate boundary,
+counter transition, suffix, padding bit, permutation round and output identity
+as hostile to correctness. One private safe-Rust Keccak-f[1600] owner is
+unreachable as a raw public primitive; fixed-size arrays, checked `u128`
+lengths, transactional updates, consuming finalization, official examples,
+exact padding boundaries, exhaustive bounded partitions, raw-Keccak negative
+tests, Kani bounds, and a 328-message independent-library differential corpus
+constrain the portable surface. The algorithms are unkeyed: their ordinary
+states do not promise erasure of buffers, lanes, schedules, stack copies,
+registers, or spills. SHA3-384, SHA3-512, SHAKE, acceleration, complete-family
+acceptance, independent review, and FIPS validation remain outside this claim.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.3 signed; v0.23.4 final candidate with voluntary pentest PASS and local verification green, awaiting hosted verification
+Status: v0.20.0 signed and published; v0.21.0 through v0.23.4 signed; v0.24.0 implementation complete and awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -30,10 +30,11 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It now has all six complete portable FIPS 180-4 SHA-2 algorithms plus bounded DER tag-length-value framing
+It now has all six complete portable FIPS 180-4 SHA-2 algorithms, complete
+portable FIPS 202 SHA3-224 and SHA3-256, plus bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm beyond those six SHA-2 identities, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond those eight named hash identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -162,7 +163,7 @@ evidence remains pending. The exceptional assessment records `PASS`/`PASS`
 with zero open findings. The milestone selects zero crates.io packages and
 makes no independent-review, register-erasure, or FIPS-validation claim.
 
-The facade now advances to internal `0.23.4`. A standalone downstream
+Signed internal `0.23.4` added a standalone downstream
 `no_std` consumer uses only public leaf and facade APIs to exercise all six
 SHA-2 identities. Thirty one-shot and thirty-six irregular-streaming results
 cover empty, text, binary, multi-block, million-byte, and file-like inputs
@@ -181,8 +182,24 @@ reported no finding and required no remediation. The permanent report records
 `PASS`/`PASS` with zero open findings. This does not admit an accelerated
 backend, establish independent cryptographic review or FIPS validation, or
 replace the scheduled cumulative v0.20.0-to-v0.25.0 assessment. The complete
-local release check is green and the internal tag still awaits hosted GitHub
-and CodeQL plus explicit repository-owner authorization.
+local release check and hosted GitHub/CodeQL passed before the signed tag.
+
+The facade now advances to internal `0.24.0`. New unpublished
+`brynja-hash-sha3 0.1.0` owns one private safe-Rust Keccak-f[1600]
+permutation and fixed-output sponge. Distinct `Sha3_224` and `Sha3_256`
+states expose allocation-free `no_std` one-shot and streaming APIs with exact
+144-byte and 136-byte rates, the FIPS 202 SHA-3 suffix and padding, checked
+`u128` message lengths, transactional updates, and consuming finalization.
+Official zero-bit and 1,600-bit examples, standard text and million-byte
+values, exact padding boundaries, every bounded two-part partition, and raw-
+Keccak domain-separation negatives pass. An isolated repository-only adapter
+matches Python `hashlib` over 328 deterministic messages, 17 mutation fixtures
+bind the source and package boundary, and two Kani harnesses cover length
+admission and every byte-to-lane mapping. SHA3-384, SHA3-512, SHAKE, complete-
+family public acceptance, acceleration, secret-state erasure, independent
+review, and FIPS validation remain absent. The family is therefore **In
+progress**, v0.24.0 selects zero crates.io packages, and the new primitive
+requires an exceptional pentest before the signed tag.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

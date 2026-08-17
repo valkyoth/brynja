@@ -7559,7 +7559,7 @@
         "algorithm.sha3-shake"
       ],
       "id": "BRY-REQ-CRYPTO-0002",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.24.0",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf"

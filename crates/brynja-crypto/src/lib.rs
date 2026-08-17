@@ -1,8 +1,9 @@
 //! First-party cryptographic composition for Brynja.
 //!
-//! All six complete portable FIPS 180-4 SHA-2 implementations are exposed from
-//! their small family crate. Provider effects, AEADs, KDFs, public-key algorithms,
-//! and the complete planned composition layer remain unimplemented.
+//! All six complete portable FIPS 180-4 SHA-2 implementations and the complete
+//! portable FIPS 202 SHA3-224 and SHA3-256 implementations are exposed from
+//! their small family crates. Provider effects, AEADs, KDFs, public-key
+//! algorithms, and the complete planned composition layer remain unimplemented.
 
 #![no_std]
 
@@ -29,11 +30,21 @@ pub const SHA512_224_IMPLEMENTED: bool = true;
 /// Whether portable SHA-512/256 is implemented and available through this layer.
 pub const SHA512_256_IMPLEMENTED: bool = true;
 
+/// Whether portable SHA3-224 is implemented and available through this layer.
+pub const SHA3_224_IMPLEMENTED: bool = true;
+
+/// Whether portable SHA3-256 is implemented and available through this layer.
+pub const SHA3_256_IMPLEMENTED: bool = true;
+
 pub use brynja_hash_sha2::{
     FixedOutput, Sha224, Sha224Digest, Sha224Error, Sha256, Sha256Digest, Sha256Error, Sha384,
     Sha384Digest, Sha384Error, Sha512, Sha512_224, Sha512_224Digest, Sha512_224Error, Sha512_256,
     Sha512_256Digest, Sha512_256Error, Sha512Digest, Sha512Error, Update, sha224, sha256, sha384,
     sha512, sha512_224, sha512_256,
+};
+pub use brynja_hash_sha3::{
+    Sha3_224, Sha3_224Digest, Sha3_224Error, Sha3_256, Sha3_256Digest, Sha3_256Error, sha3_224,
+    sha3_256,
 };
 
 #[cfg(test)]
@@ -47,11 +58,21 @@ mod tests {
         assert!(::core::hint::black_box(super::SHA512_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA512_224_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA512_256_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::SHA3_224_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::SHA3_256_IMPLEMENTED));
         assert_eq!(
             super::sha224(b"abc"),
             Ok(super::Sha224Digest::from_bytes([
                 0x23, 0x09, 0x7d, 0x22, 0x34, 0x05, 0xd8, 0x22, 0x86, 0x42, 0xa4, 0x77, 0xbd, 0xa2,
                 0x55, 0xb3, 0x2a, 0xad, 0xbc, 0xe4, 0xbd, 0xa0, 0xb3, 0xf7, 0xe3, 0x6c, 0x9d, 0xa7,
+            ]))
+        );
+        assert_eq!(
+            super::sha3_256(b"abc"),
+            Ok(super::Sha3_256Digest::from_bytes([
+                0x3a, 0x98, 0x5d, 0xa7, 0x4f, 0xe2, 0x25, 0xb2, 0x04, 0x5c, 0x17, 0x2d, 0x6b, 0xd3,
+                0x90, 0xbd, 0x85, 0x5f, 0x08, 0x6e, 0x3e, 0x9d, 0x52, 0x5b, 0x46, 0xbf, 0xe2, 0x45,
+                0x11, 0x43, 0x15, 0x32,
             ]))
         );
     }

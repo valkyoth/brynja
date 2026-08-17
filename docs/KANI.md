@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.22.0 SHA-256 arithmetic and padding harnesses admitted
+Status: v0.24.0 SHA-2 and SHA3-224/SHA3-256 bounded harnesses admitted
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented
@@ -14,23 +14,26 @@ compatible pairing, following the same model as `base64-ng`.
   `1.90.0-x86_64-unknown-linux-gnu`.
 - Pinned verifier: `cargo-kani 0.67.0`, upstream tag `kani-0.67.0`, commit
   `4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d`.
-- Current proof result: two bounded SHA-256 harnesses cover checked message
-  length and the exact one-block/two-block padding decision.
+- Current proof result: six SHA-2 harnesses cover the shared 64-bit and 128-bit
+  message domains and padding decisions; two SHA-3 harnesses cover exact
+  `u128` byte-counter exhaustion and every byte-to-lane mapping in the
+  Keccak-f[1600] state.
 
 Updating Brynja's active stable compiler does not imply that the installed Kani
 release supports that compiler. Kani evidence records its verifier/compiler
 pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
-`scripts/assurance/check-kani.sh` verifies this policy, the installed pairing, the exact
-two-harness inventory, and both proof results when the verifier is available.
+`scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
+the exact eight-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
-The v0.22.0 harnesses prove only that checked byte-length admission exactly
-matches the less-than-2^64-bit FIPS domain and that every valid buffered length
-selects the correct one- or two-block padding form. They do not prove SHA-256
-functional equivalence, collision resistance, constant-time machine code,
-backend equivalence, or independent cryptographic verification.
+The SHA-2 harnesses prove only their stated checked byte-length and padding
+properties. The v0.24.0 SHA-3 harnesses prove only that byte-counter admission
+matches `u128::checked_add` and that each of the 200 Keccak state bytes maps to
+one in-bounds lane and byte shift. They do not prove permutation equivalence,
+digest correctness, collision resistance, constant-time machine code, backend
+equivalence, or independent cryptographic verification.
 
 ## Admission And Claims
 
@@ -71,7 +74,7 @@ Ordinary repository and GitHub CI runs execute only
 harness inventory and source confinement have not drifted; it does not claim
 the proofs ran. Before a tag is created, the local tag gate runs
 `scripts/assurance/check-kani.sh --required` and fails closed unless the pinned verifier
-and both harnesses pass. The crates.io publish preflight consumes that already
+and all harnesses pass. The crates.io publish preflight consumes that already
 required pre-tag evidence instead of repeating the verifier run. This keeps
 hosted CI bounded while retaining Kani as mandatory tag evidence.
 

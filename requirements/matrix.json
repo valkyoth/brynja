@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "602de44185fdc8a9b1fac44da713b33e96ffa9007be739932647d52702b16172",
-  "domain_policy_sha256": "5d94383983eac9cd6abb957571bbff9bd3da954396ab36692d49bb43848a6364",
-  "policy_sha256": "d201d8be55bdb722ab495b75fa1e1df69538277e9ea49efa15d8210d4ede2468",
+  "domain_policy_sha256": "5b3fa1c02baa48153ad5d30cd8ab3484137e2e718c8b680cf1fa0502e590807a",
+  "policy_sha256": "717f6365f0690a2c621d56a25a917d1b09a1a6b0845b30b8c0d7e26054f67bae",
   "requirements": [
     {
       "applicability": "delegate",
@@ -882,7 +882,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Permutation proofs, official vectors, differential campaigns, and per-target side-channel evidence remain unresolved until v0.24.0.",
+      "evidence_gap": "Portable SHA3-224 and SHA3-256 pass official examples, million-byte and exact padding-boundary tests, exhaustive bounded partitioning, a 328-message independent-library differential corpus, source-policy mutations, and two Kani bounds; SHA3-384, SHA3-512, SHAKE, public family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete.",
       "id": "BRY-REQ-CRYPTO-0002",
       "invariants": [
         "constant-time",
@@ -890,13 +890,13 @@
         "side-channel",
         "work-bound"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The SHA-3 and SHAKE semantic surface directly records the complete algorithm family admitted from the pinned current FIPS 202 authority.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.24.0",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -922,27 +922,27 @@
           "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
         }
       ],
-      "statement": "Keccak-f[1600], SHA3-256, SHA3-512, SHAKE128, and SHAKE256 remain exact FIPS 202 constructions with domain separation.",
+      "statement": "Keccak-f[1600], SHA3-224, and SHA3-256 implement the exact FIPS 202 permutation, rates, suffix, padding, outputs, and domain separation; later SHA3-384, SHA3-512, SHAKE128, and SHAKE256 reuse that private owner without broadening this requirement's current implementation claim.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
-          "target": "crates/brynja-crypto/src/sha3.rs#KeccakF1600"
+          "kind": "actual-symbol",
+          "target": "crates/brynja-hash-sha3/src/lib.rs#SHA3_256_IMPLEMENTED"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/crypto_sha3.rs#fips202_vectors"
+          "target": "crates/brynja-hash-sha3/tests/sha3_256.rs#official_fips202_zero_and_1600_bit_vectors_match"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/crypto_sha3.rs#domain_and_output_bounds"
+          "target": "crates/brynja-hash-sha3/tests/sha3_256.rs#raw_keccak_empty_digest_is_not_sha3_256"
         }
       ],
-      "work_bound": "Absorb and squeeze work is bounded by input and requested output blocks, with checked counters and no unbounded output request."
+      "work_bound": "Absorb work is linear in complete input blocks, with checked byte accumulation; these fixed-output SHA-3 APIs perform one bounded final permutation and expose no caller-selected output length."
     },
     {
       "applicability": "apply",
@@ -29772,9 +29772,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "4f2c5509371b6ac515e49494e318665f714d8ef43acfdfff274126e6d992a125",
+  "residual_policy_sha256": "81028256123a63cbece68cf7ddeaf958249976f4c08c0341e497f07a1113e7b9",
   "schema": 5,
   "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
-  "surface_register_sha256": "3feca260a46321723d9912670576eba7ad55f568f8f0bc09aac18b3db1c796cc",
-  "transport_policy_sha256": "d6d126ee6ec8101265d2f79fe257c9e83c3fabca2df9af03d67eee2c1c69a853"
+  "surface_register_sha256": "3ddf68d0b7d8b1d03a0c05e65cfed2eee95a0e4f1999c9bbdcba4eb5c1f28ac5",
+  "transport_policy_sha256": "7288187767bc646a47bf24c88501badfea82fa9992a5d05290a84955f17f4905"
 }

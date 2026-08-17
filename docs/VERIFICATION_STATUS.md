@@ -22,7 +22,8 @@ certificate-bound operational-environment claim.
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
 | `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream public-API acceptance | ❌ Not verified |
-| Future `brynja-hash-sha3` / `brynja-mac-*` | Reusable SHA-3, XOFs, and MACs | ❌ Not implemented or verified |
+| `brynja-hash-sha3` | Complete portable FIPS 202 SHA3-224 and SHA3-256 over one private Keccak-f[1600] owner; remaining SHA-3/SHAKE family pending | ❌ Not verified |
+| Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Five implemented but unadmitted SHA-2 candidates across x86_64 SHA, AArch64 SHA2/SHA-512, and RV64 Zknh plus explicit x86 SHA-512 scalar-only policy | ❌ Not independently verified; native admission evidence incomplete |
 | `brynja-crypto-cpu-std` | Implemented opt-in SHA-2 host detection/reporting, opportunistic scalar fallback and fail-closed required modes; RISC-V auto-detection disabled | ❌ Not independently verified; accelerated candidates remain unadmitted |
@@ -43,14 +44,16 @@ certificate-bound operational-environment claim.
 
 The implemented portion currently consists of all six complete portable FIPS
 180-4 SHA-2 algorithms with separately packaged downstream public-API
-acceptance; the shared alert/failure,
+acceptance; complete portable FIPS 202 SHA3-224 and SHA3-256 over one private
+Keccak-f[1600] owner; the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
 provider, entropy/secure-random, typed-clock, and pending-operation foundations;
 the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
-No cryptographic primitive outside those six portable SHA-2 algorithms, schema-driven ASN.1
+No cryptographic primitive outside those six portable SHA-2 algorithms and
+the two named portable SHA-3 algorithms, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release

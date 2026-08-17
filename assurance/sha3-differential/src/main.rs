@@ -4,7 +4,7 @@ use std::{
     io::{self, Read as _},
 };
 
-use brynja_hash_sha3::{sha3_224, sha3_256};
+use brynja_hash_sha3::{sha3_224, sha3_256, sha3_384, sha3_512};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut input = String::new();
@@ -28,6 +28,18 @@ fn main() -> Result<(), Box<dyn Error>> {
                 &mut output,
                 sha3_256(&message)
                     .map_err(|_| io::Error::other("SHA3-256 length rejected"))?
+                    .as_bytes(),
+            )?,
+            "sha3-384" => append_hex(
+                &mut output,
+                sha3_384(&message)
+                    .map_err(|_| io::Error::other("SHA3-384 length rejected"))?
+                    .as_bytes(),
+            )?,
+            "sha3-512" => append_hex(
+                &mut output,
+                sha3_512(&message)
+                    .map_err(|_| io::Error::other("SHA3-512 length rejected"))?
                     .as_bytes(),
             )?,
             _ => return Err(invalid(line_number, "unknown algorithm").into()),

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the reviewed portable FIPS 202 SHA3-224/SHA3-256 boundary."""
+"""Validate the reviewed portable FIPS 202 fixed-output SHA-3 boundary."""
 
 from __future__ import annotations
 
@@ -23,13 +23,17 @@ DIGEST = CRATE / "src/digest.rs"
 ERROR = CRATE / "src/error.rs"
 SHA3_224 = CRATE / "src/sha3_224.rs"
 SHA3_256 = CRATE / "src/sha3_256.rs"
+SHA3_384 = CRATE / "src/sha3_384.rs"
+SHA3_512 = CRATE / "src/sha3_512.rs"
 SHA3_224_TEST = CRATE / "tests/sha3_224.rs"
 SHA3_256_TEST = CRATE / "tests/sha3_256.rs"
+SHA3_384_TEST = CRATE / "tests/sha3_384.rs"
+SHA3_512_TEST = CRATE / "tests/sha3_512.rs"
 TEST_SUPPORT = CRATE / "tests/support/mod.rs"
 DIFFERENTIAL = Path("scripts/sha3/check-sha3-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/sha3-differential/src/main.rs")
-SOURCES = (LIB, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256)
-TESTS = (SHA3_224_TEST, SHA3_256_TEST, TEST_SUPPORT)
+SOURCES = (LIB, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256, SHA3_384, SHA3_512)
+TESTS = (SHA3_224_TEST, SHA3_256_TEST, SHA3_384_TEST, SHA3_512_TEST, TEST_SUPPORT)
 HASHES = {
     Path(path): digest for path, digest in sha3_reviewed_hashes.REVIEWED_HASHES.items()
 }
@@ -96,12 +100,16 @@ def validate(root: Path) -> None:
         "mod sponge;",
         "pub const SHA3_224_IMPLEMENTED: bool = true;",
         "pub const SHA3_256_IMPLEMENTED: bool = true;",
+        "pub const SHA3_384_IMPLEMENTED: bool = true;",
+        "pub const SHA3_512_IMPLEMENTED: bool = true;",
         "pub fn sha3_224(input: &[u8]) -> Result<Sha3_224Digest, Sha3_224Error>",
         "pub fn sha3_256(input: &[u8]) -> Result<Sha3_256Digest, Sha3_256Error>",
+        "pub fn sha3_384(input: &[u8]) -> Result<Sha3_384Digest, Sha3_384Error>",
+        "pub fn sha3_512(input: &[u8]) -> Result<Sha3_512Digest, Sha3_512Error>",
         "#[kani::proof]",
     ):
         require(library, token, "SHA-3 package")
-    for adjacent in ("Sha3_384", "Sha3_512", "Shake128", "Shake256"):
+    for adjacent in ("Shake128", "Shake256"):
         if adjacent in library:
             fail(f"adjacent v0.24 algorithm admitted early: {adjacent}")
 
@@ -137,6 +145,8 @@ def validate(root: Path) -> None:
     for path, algorithm, rate in (
         (SHA3_224, "Sha3_224", "144"),
         (SHA3_256, "Sha3_256", "136"),
+        (SHA3_384, "Sha3_384", "104"),
+        (SHA3_512, "Sha3_512", "72"),
     ):
         state = without_comments(loaded[path])
         for token in (
@@ -151,6 +161,25 @@ def validate(root: Path) -> None:
         for forbidden in (f"impl Clone for {algorithm}", f"impl Copy for {algorithm}"):
             if forbidden in state:
                 fail(f"consuming SHA-3 state became duplicable: {forbidden}")
+
+    digest = without_comments(loaded[DIGEST])
+    error = without_comments(loaded[ERROR])
+    for algorithm, width, bits in (
+        ("Sha3_224", "28", "224"),
+        ("Sha3_256", "32", "256"),
+        ("Sha3_384", "48", "384"),
+        ("Sha3_512", "64", "512"),
+    ):
+        require(
+            digest,
+            f'digest_type!({algorithm}Digest, {width}, "SHA3-{bits}", "{bits}");',
+            f"{algorithm} digest",
+        )
+        require(
+            error,
+            f'error_type!({algorithm}Error, "SHA3-{bits}");',
+            f"{algorithm} error",
+        )
 
     tests = "\n".join(loaded[path] for path in TESTS)
     for token in (
@@ -183,4 +212,3 @@ def validate(root: Path) -> None:
         actual = hashlib.sha256((root / path).read_bytes()).hexdigest()
         if actual != expected:
             fail(f"reviewed SHA-3 hash changed: {path}")
-

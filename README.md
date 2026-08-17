@@ -62,7 +62,7 @@ independent cryptographic or protocol verification.
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |
-| SHA-3/SHAKE (FIPS 202: SHA3-224 and SHA3-256 implemented; SHA3-384, SHA3-512, SHAKE128, and SHAKE256 pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-3/SHAKE (FIPS 202: SHA3-224, SHA3-256, SHA3-384, and SHA3-512 implemented; SHAKE128 and SHAKE256 pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -200,7 +200,7 @@ accounting, feature, and package-content regressions. This establishes
 consumer usability; it does not admit a CPU backend or add independent review,
 FIPS validation, or secret-state erasure.
 
-The current `0.24.0` implementation candidate starts the FIPS 202 family in
+The signed `0.24.0` milestone starts the FIPS 202 family in
 the new `brynja-hash-sha3` leaf crate. Complete portable SHA3-224 and
 SHA3-256 use one private safe-Rust Keccak-f[1600] permutation and distinct
 144-byte and 136-byte rates. Official examples, million-byte inputs, exact
@@ -217,6 +217,15 @@ uses a fresh locked non-incremental target. Independent retest of exact
 remediation candidate `208cde2b24e9aef314e2a59e530a5fd0f659151d`
 passed with zero open findings. This is pentest evidence, not independent
 cryptographic verification or FIPS validation.
+
+The current `0.24.1` implementation candidate completes portable SHA3-384 and
+SHA3-512 over that same private permutation and sponge owner. Their distinct
+104-byte and 72-byte rates, 48-byte and 64-byte outputs, official examples,
+million-byte cases, exact padding boundaries, irregular streaming partitions,
+raw-Keccak negatives, and all-four-algorithm 328-message differential corpus
+pass. SHAKE, portable-family package acceptance, acceleration, secret-state
+erasure, independent review, and FIPS validation remain later gates, so the
+SHA-3/SHAKE family remains **In progress**.
 
 The voluntary repository-owner assessment of exact signed v0.23.4
 implementation candidate `7864a8f3a8766d16fc9bb2ea89893351f29aa842`
@@ -595,8 +604,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.0`
-SHA3-224/SHA3-256 milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.1`
+fixed-output SHA-3 milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -699,14 +708,14 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and complete portable SHA3-224/SHA3-256 through v0.24.0; no TLS engine or provider effect |
+| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all four portable fixed-output SHA-3 algorithms through v0.24.1; no TLS engine or provider effect |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six complete portable FIPS 180-4 algorithms, opt-in forced APIs for every CPU candidate, and complete packaged downstream family acceptance at v0.23.4 |
-| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, TupleHash and ParallelHash ownership | v0.1.0 contains complete portable SHA3-224 and SHA3-256; complete FIPS 202 remains planned through v0.24.4 and complete SP 800-185 through v0.24.11 |
+| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, TupleHash and ParallelHash ownership | v0.1.0 contains all four complete portable fixed-output SHA-3 algorithms; complete FIPS 202 remains planned through v0.24.4 and complete SP 800-185 through v0.24.11 |
 | Future `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | Planned at v0.24.7 and accepted with the complete SP 800-185 family through v0.24.11 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
-| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six SHA-2 algorithms plus SHA3-224/SHA3-256; other planned cryptography and provider effects remain absent |
+| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six SHA-2 algorithms plus all four fixed-output SHA-3 algorithms; other planned cryptography and provider effects remain absent |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; three SHA-256-family and two SHA-512-family candidates implemented; x86 SHA-512 is scalar-only; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected host detector adapter | Published metadata v0.1.1; complete-family reporting with scalar fallback, RISC-V auto-detection disabled; absent from facade and FIPS graphs |
 | `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |

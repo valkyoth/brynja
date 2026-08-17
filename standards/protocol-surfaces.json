@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "2550086d4e77749ddce16ba477f9cf22316ff340f14f6d542f64cf1b2ae624d2",
+  "policy_sha256": "d0d3665914dd585ae41322aa1735fd30406c35a68b2b0949660a707edc471e6e",
   "schema": 2,
   "source_ledger_sha256": "0a551bd23d67b120dddee31487cdbf9132b03646517b014fc1b511dbb8e93c5e",
   "surfaces": [
@@ -203,9 +203,9 @@
       "normative_sources": [
         "nist:NIST.FIPS.202.pdf"
       ],
-      "owner": "0.24.0",
-      "rationale": "The private Keccak-f[1600] owner and complete SHA3-224/SHA3-256 APIs are implemented under pinned FIPS 202; SHA3-384, SHA3-512, SHAKE128, SHAKE256, family acceptance, and acceleration remain staged.",
-      "test_target": "crates/brynja-hash-sha3/tests/sha3_256.rs#official_fips202_zero_and_1600_bit_vectors_match"
+      "owner": "0.24.1",
+      "rationale": "The private Keccak-f[1600] owner and all four complete fixed-output SHA-3 APIs are implemented under pinned FIPS 202; SHAKE128, SHAKE256, family acceptance, and acceleration remain staged.",
+      "test_target": "crates/brynja-hash-sha3/tests/sha3_512.rs#official_fips202_zero_and_1600_bit_vectors_match"
     },
     {
       "code_target": "crates/brynja-hash-sha3/src/sp800_185.rs",

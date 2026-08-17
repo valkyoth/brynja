@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.3"
 source_ledger_sha256 = "0a551bd23d67b120dddee31487cdbf9132b03646517b014fc1b511dbb8e93c5e"
-surface_register_sha256 = "7d886b86b6f909225b4825c3dcd083f4f7e656c64ae23c7bf150b95fd1bf6f6e"
+surface_register_sha256 = "93829534480bbe95cce3f44ea4c2ebdeed69cf63a49d6a4719d9bd1f10d1aea5"
 source_domains = ["ct", "key-containers", "ocsp", "pkix", "public-key", "riscv-acceleration", "sha3-derived", "symmetric"]
 surface_domains = ["cryptography", "ct", "ocsp", "pki", "pkix"]
 
@@ -99,7 +99,7 @@ requirement_id = "BRY-REQ-CRYPTO-0001"
 
 [[surface_group]]
 domain = "cryptography"
-owner = "0.24.0"
+owner = "0.24.1"
 requirement_id = "BRY-REQ-CRYPTO-0002"
 
 [[surface_group]]

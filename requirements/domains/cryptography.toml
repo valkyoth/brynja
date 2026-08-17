@@ -20,18 +20,18 @@ mapping_rationale = "The SHA-2 semantic surface is governed by the pinned NIST h
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0002"
-owner = "0.24.0"
+owner = "0.24.1"
 lifecycle = "implemented"
-revision = 3
+revision = 4
 decision_ids = ["algorithm.sha3-shake"]
 sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }]
-statement = "Keccak-f[1600], SHA3-224, and SHA3-256 implement the exact FIPS 202 permutation, rates, suffix, padding, outputs, and domain separation; later SHA3-384, SHA3-512, SHAKE128, and SHAKE256 reuse that private owner without broadening this requirement's current implementation claim."
+statement = "Keccak-f[1600], SHA3-224, SHA3-256, SHA3-384, and SHA3-512 implement the exact FIPS 202 permutation, distinct rates and outputs, suffix, padding, and domain separation; later SHAKE128 and SHAKE256 reuse that private owner without broadening this requirement's current implementation claim."
 invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
-target = "crates/brynja-hash-sha3/src/lib.rs#SHA3_256_IMPLEMENTED"
-positive_test = "crates/brynja-hash-sha3/tests/sha3_256.rs#official_fips202_zero_and_1600_bit_vectors_match"
-negative_test = "crates/brynja-hash-sha3/tests/sha3_256.rs#raw_keccak_empty_digest_is_not_sha3_256"
+target = "crates/brynja-hash-sha3/src/lib.rs#SHA3_512_IMPLEMENTED"
+positive_test = "crates/brynja-hash-sha3/tests/sha3_512.rs#official_fips202_zero_and_1600_bit_vectors_match"
+negative_test = "crates/brynja-hash-sha3/tests/sha3_512.rs#sha3_domain_is_not_raw_keccak"
 work_bound = "Absorb work is linear in complete input blocks, with checked byte accumulation; these fixed-output SHA-3 APIs perform one bounded final permutation and expose no caller-selected output length."
-evidence_gap = "Portable SHA3-224 and SHA3-256 pass official examples, million-byte and exact padding-boundary tests, exhaustive bounded partitioning, a 328-message independent-library differential corpus, source-policy mutations, and two Kani bounds; SHA3-384, SHA3-512, SHAKE, public family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete."
+evidence_gap = "All four portable fixed-output SHA-3 algorithms pass official examples, million-byte and exact padding-boundary tests, exhaustive bounded partitioning, raw-Keccak negatives, a 328-message four-algorithm independent-library differential corpus, source-policy mutations, and the shared Kani bounds; SHAKE, public family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete."
 residual = "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears."
 mapping_rationale = "The SHA-3 and SHAKE semantic surface directly records the complete algorithm family admitted from the pinned current FIPS 202 authority."
 

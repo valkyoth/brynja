@@ -2361,7 +2361,7 @@ Exit criteria:
 
 ### v0.24.0 - Keccak Foundation And Complete SHA3-224/SHA3-256
 
-Status: awaiting pentest
+Status: released
 
 Implementation notes:
 
@@ -2425,7 +2425,29 @@ Exit criteria:
 
 ### v0.24.1 - Complete SHA3-384 And SHA3-512
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes:
+
+- distinct `Sha3_384` and `Sha3_512` states, digest and error types, one-shot
+  functions, 104-byte and 72-byte rates, 48-byte and 64-byte outputs, checked
+  `u128` byte domains, transactional updates, consuming finalization, common
+  fixed-output traits, and leaf/crypto/facade exports are complete;
+- exact FIPS 202 zero-bit and 1,600-bit examples, standard text and million-
+  byte values, rate-minus-one/rate/rate-plus-one boundaries, bounded irregular
+  partitions, raw-Keccak negatives, and public trait/identity checks pass for
+  both new algorithms;
+- the isolated differential corpus now compares all four fixed-output SHA-3
+  algorithms with Python's independently maintained `hashlib` path over the
+  same 328 messages, producing 1,312 checked results;
+- the reviewed boundary now includes all four state and integration-test files
+  and 25 adversarial mutations covering the two new rates, claims, output
+  widths and authoritative-vector gates; the existing shared Kani length and
+  byte-to-lane proofs apply unchanged to every fixed-output state;
+- no raw permutation, SHAKE, acceleration, unsafe code, allocation, third-party
+  dependency, secret-state erasure, independent-review, FIPS-validation or
+  publication claim is introduced. The SHA-3/SHAKE family remains documented
+  **In progress** through its later acceptance gates.
 
 Plan scope: Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration.
 

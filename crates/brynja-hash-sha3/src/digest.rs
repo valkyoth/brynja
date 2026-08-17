@@ -41,3 +41,5 @@ macro_rules! digest_type {
 
 digest_type!(Sha3_224Digest, 28, "SHA3-224", "224");
 digest_type!(Sha3_256Digest, 32, "SHA3-256", "256");
+digest_type!(Sha3_384Digest, 48, "SHA3-384", "384");
+digest_type!(Sha3_512Digest, 64, "SHA3-512", "512");

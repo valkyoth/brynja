@@ -517,6 +517,13 @@ constrain the portable surface. The algorithms are unkeyed: their ordinary
 states do not promise erasure of buffers, lanes, schedules, stack copies,
 registers, or spills. SHA3-384, SHA3-512, SHAKE, acceleration, complete-family
 acceptance, independent review, and FIPS validation remain outside this claim.
+v0.24.1 extends that same hostile-input and domain-separation model to
+SHA3-384 and SHA3-512. Their distinct 104-byte and 72-byte rates, 48-byte and
+64-byte outputs, official examples, every adjacent padding boundary, bounded
+stream partitions and raw-Keccak negative identities are checked separately;
+the four-algorithm differential corpus prevents a shared permutation mistake
+from being hidden by one output identity. The milestone adds no SHAKE state,
+raw permutation access, acceleration, secret cleanup or validation claim.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

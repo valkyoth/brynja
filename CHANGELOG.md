@@ -22,6 +22,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add complete allocation-free `no_std` SHA3-384 and SHA3-512 one-shot,
+  streaming, exact-digest, checked-length, consuming-finalization, common-
+  trait, and facade APIs over the unchanged private Keccak-f[1600] sponge.
+- Verify the two new algorithms with official FIPS 202 zero-bit and 1,600-bit
+  examples, standard text and million-byte inputs, exact padding boundaries,
+  irregular streaming partitions, raw-Keccak domain-separation negatives,
+  public identity checks, and the existing shared Kani bounds.
+- Expand the isolated independent-library differential corpus to all four
+  fixed-output SHA-3 algorithms over 328 deterministic messages (1,312
+  results), and expand reviewed-source enforcement to 25 mutation fixtures.
+- Advance the internal facade to `brynja 0.24.1` without publishing a package,
+  exposing SHAKE, admitting acceleration, or making secret-erasure,
+  independent-review, or FIPS-validation claims; the family remains
+  **In progress** until its later acceptance gates.
 - Move the complete NIST SP 800-185 family into the pre-1.0 roadmap: cSHAKE128
   and cSHAKE256; KMAC128/256 and KMACXOF128/256; TupleHash128/256 and their XOF
   forms; and ParallelHash128/256 and their XOF forms. Separate milestones now

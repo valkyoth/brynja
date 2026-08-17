@@ -1,19 +1,19 @@
 [release]
-version = "0.24.0"
-milestone = "0.24.0"
+version = "0.24.1"
+milestone = "0.24.1"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "A new first-party Keccak-f[1600] permutation and two complete SHA-3 algorithms require exceptional cryptographic review before tagging."
+exceptional = false
+exception_reason = "The milestone adds two fixed-output parameterizations over the already assessed private Keccak-f[1600] sponge without new unsafe code, dependencies, backends, or primitive ownership."
 
 [crates."brynja"]
-previous_version = "0.23.4"
-version = "0.24.0"
+previous_version = "0.24.0"
+version = "0.24.1"
 change = "code"
 publish = false
-reason = "Advance the internal facade with complete portable SHA3-224 and SHA3-256 while the broader SHA-3/SHAKE family remains in progress."
+reason = "Advance the internal facade with complete portable SHA3-384 and SHA3-512 while SHAKE and final family acceptance remain in progress."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Retain the published version while its internal source adds exact SHA3-224 and SHA3-256 leaf reexports without publication."
+reason = "Retain the published version while its internal source adds exact SHA3-384 and SHA3-512 leaf reexports without publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -48,7 +48,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add complete portable SHA3-224 and SHA3-256 over one private Keccak-f[1600] owner; the family remains unpublished and in progress through v0.24.4."
+reason = "Add complete portable SHA3-384 and SHA3-512 over the private Keccak-f[1600] owner; the family remains unpublished and in progress through v0.24.4."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

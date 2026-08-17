@@ -76,7 +76,7 @@ brynja
 ├── brynja-core
 ├── brynja-hash-core (reusable no_std hash interfaces)
 ├── brynja-hash-sha2 (complete SHA-2 ownership shared with TLS)
-├── brynja-hash-sha3 (SHA3-224/SHA3-256 implemented; SHA-3/SHAKE family in progress)
+├── brynja-hash-sha3 (all four fixed-output SHA-3 algorithms implemented; SHAKE/family acceptance in progress)
 ├── brynja-mac-hmac (future reusable HMAC ownership)
 ├── brynja-crypto (provider contracts, compositions, and non-hash primitives)
 ├── optional brynja-crypto-cpu (reserved zero-dependency no_std ISA boundary)

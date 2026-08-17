@@ -769,9 +769,7 @@
     },
     {
       "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-CRYPTO-0002"
-      ],
+      "requirement_ids": [],
       "scope": "Freeze reusable no_std `brynja-hash-sha3` sponge ownership around one private Keccak-f[1600] permutation, then complete SHA3-224 and SHA3-256 with distinct rates, suffixes, fixed-output states, one-shot and streaming APIs, authoritative vectors, padding boundaries, checked lengths, proofs, and no raw public permutation.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
@@ -789,11 +787,10 @@
       "version": "0.24.0"
     },
     {
-      "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
-      },
-      "requirement_ids": [],
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0002"
+      ],
       "scope": "Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration.",
       "source_ids": [],
       "title": "Complete SHA3-384 And SHA3-512",
@@ -7661,7 +7658,7 @@
       ],
       "id": "BRY-REQ-CRYPTO-0002",
       "lifecycle": "implemented",
-      "owner": "0.24.0",
+      "owner": "0.24.1",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf"
       ]

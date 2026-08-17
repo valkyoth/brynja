@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare Brynja SHA3-224/SHA3-256 with Python's independent OpenSSL/hashlib path."""
+"""Compare all four Brynja SHA-3 digests with independent OpenSSL/hashlib."""
 
 from __future__ import annotations
 
@@ -35,8 +35,22 @@ def main() -> int:
     expected: list[str] = []
     for data in messages:
         encoded = data.hex() or "-"
-        requests.extend((f"sha3-224 {encoded}", f"sha3-256 {encoded}"))
-        expected.extend((hashlib.sha3_224(data).hexdigest(), hashlib.sha3_256(data).hexdigest()))
+        requests.extend(
+            (
+                f"sha3-224 {encoded}",
+                f"sha3-256 {encoded}",
+                f"sha3-384 {encoded}",
+                f"sha3-512 {encoded}",
+            )
+        )
+        expected.extend(
+            (
+                hashlib.sha3_224(data).hexdigest(),
+                hashlib.sha3_256(data).hexdigest(),
+                hashlib.sha3_384(data).hexdigest(),
+                hashlib.sha3_512(data).hexdigest(),
+            )
+        )
 
     with tempfile.TemporaryDirectory(prefix="brynja-sha3-target-") as target:
         environment = os.environ.copy()
@@ -67,7 +81,7 @@ def main() -> int:
             if wanted != observed:
                 raise RuntimeError(f"SHA-3 differential mismatch at result {index}")
         raise RuntimeError("SHA-3 differential result count mismatch")
-    print(f"SHA3-224 and SHA3-256 match hashlib across {len(messages)} messages")
+    print(f"all four SHA-3 digests match hashlib across {len(messages)} messages")
     return 0
 
 

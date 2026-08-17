@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.23.4 signed; v0.24.0 implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 implementation complete and awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -31,10 +31,10 @@ destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
 It now has all six complete portable FIPS 180-4 SHA-2 algorithms, complete
-portable FIPS 202 SHA3-224 and SHA3-256, plus bounded DER tag-length-value framing
+portable FIPS 202 SHA3-224, SHA3-256, SHA3-384, and SHA3-512, plus bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm beyond those eight named hash identities, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond those ten named hash identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -200,6 +200,18 @@ family public acceptance, acceleration, secret-state erasure, independent
 review, and FIPS validation remain absent. The family is therefore **In
 progress**, v0.24.0 selects zero crates.io packages, and the new primitive
 requires an exceptional pentest before the signed tag.
+
+The facade now advances to internal `0.24.1`. Complete portable `Sha3_384` and
+`Sha3_512` states reuse the same private safe-Rust Keccak-f[1600] sponge owner
+with exact 104-byte and 72-byte rates and 48-byte and 64-byte outputs. Their
+official zero-bit and 1,600-bit examples, text and million-byte cases, exact
+padding boundaries, irregular streaming partitions, raw-Keccak negatives, and
+typed public APIs pass. The isolated 328-message differential corpus now checks
+all four fixed-output algorithms, and 25 mutation fixtures bind the expanded
+source, output-width, rate, vector and package boundary. SHAKE, complete-family
+package acceptance, acceleration, secret-state erasure, independent review and
+FIPS validation remain absent, so the family stays **In progress** and v0.24.1
+selects zero crates.io packages.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

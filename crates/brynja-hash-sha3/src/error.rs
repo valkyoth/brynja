@@ -12,3 +12,5 @@ macro_rules! error_type {
 
 error_type!(Sha3_224Error, "SHA3-224");
 error_type!(Sha3_256Error, "SHA3-256");
+error_type!(Sha3_384Error, "SHA3-384");
+error_type!(Sha3_512Error, "SHA3-512");

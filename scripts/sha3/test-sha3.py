@@ -55,14 +55,22 @@ def main() -> int:
     reject("length overflow", lambda root: replace(root, policy.SPONGE, "current.checked_add(additional)", "current.saturating_add(additional).checked_add(0)"))
     reject("SHA3-224 rate", lambda root: replace(root, policy.SHA3_224, "RATE_BYTES: usize = 144", "RATE_BYTES: usize = 136"))
     reject("SHA3-256 rate", lambda root: replace(root, policy.SHA3_256, "RATE_BYTES: usize = 136", "RATE_BYTES: usize = 144"))
+    reject("SHA3-384 rate", lambda root: replace(root, policy.SHA3_384, "RATE_BYTES: usize = 104", "RATE_BYTES: usize = 136"))
+    reject("SHA3-512 rate", lambda root: replace(root, policy.SHA3_512, "RATE_BYTES: usize = 72", "RATE_BYTES: usize = 104"))
     reject("SHA3-224 claim", lambda root: replace(root, policy.LIB, "SHA3_224_IMPLEMENTED: bool = true", "SHA3_224_IMPLEMENTED: bool = false"))
     reject("SHA3-256 claim", lambda root: replace(root, policy.LIB, "SHA3_256_IMPLEMENTED: bool = true", "SHA3_256_IMPLEMENTED: bool = false"))
+    reject("SHA3-384 claim", lambda root: replace(root, policy.LIB, "SHA3_384_IMPLEMENTED: bool = true", "SHA3_384_IMPLEMENTED: bool = false"))
+    reject("SHA3-512 claim", lambda root: replace(root, policy.LIB, "SHA3_512_IMPLEMENTED: bool = true", "SHA3_512_IMPLEMENTED: bool = false"))
+    reject("SHA3-384 digest width", lambda root: replace(root, policy.DIGEST, 'Sha3_384Digest, 48, "SHA3-384"', 'Sha3_384Digest, 47, "SHA3-384"'))
+    reject("SHA3-512 digest width", lambda root: replace(root, policy.DIGEST, 'Sha3_512Digest, 64, "SHA3-512"', 'Sha3_512Digest, 63, "SHA3-512"'))
     reject("adjacent algorithm", lambda root: replace(root, policy.LIB, "mod sponge;", "mod sponge;\npub struct Shake128;"))
     reject("vector", lambda root: replace(root, policy.SHA3_256_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
+    reject("SHA3-384 vector", lambda root: replace(root, policy.SHA3_384_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
+    reject("SHA3-512 vector", lambda root: replace(root, policy.SHA3_512_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects seventeen boundary, permutation, padding, identity, test, size, and hash regressions")
+    print("portable SHA-3 policy rejects twenty-five boundary, permutation, padding, identity, test, size, and hash regressions")
     return 0
 
 

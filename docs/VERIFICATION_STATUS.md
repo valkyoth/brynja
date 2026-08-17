@@ -22,7 +22,7 @@ certificate-bound operational-environment claim.
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
 | `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream public-API acceptance | ❌ Not verified |
-| `brynja-hash-sha3` | Complete portable FIPS 202 SHA3-224 and SHA3-256 over one private Keccak-f[1600] owner; remaining SHA-3/SHAKE family pending | ❌ Not verified |
+| `brynja-hash-sha3` | All four complete portable FIPS 202 fixed-output SHA-3 algorithms over one private Keccak-f[1600] owner; SHAKE and final family acceptance pending | ❌ Not verified |
 | Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Five implemented but unadmitted SHA-2 candidates across x86_64 SHA, AArch64 SHA2/SHA-512, and RV64 Zknh plus explicit x86 SHA-512 scalar-only policy | ❌ Not independently verified; native admission evidence incomplete |
@@ -44,7 +44,7 @@ certificate-bound operational-environment claim.
 
 The implemented portion currently consists of all six complete portable FIPS
 180-4 SHA-2 algorithms with separately packaged downstream public-API
-acceptance; complete portable FIPS 202 SHA3-224 and SHA3-256 over one private
+acceptance; all four complete portable FIPS 202 fixed-output SHA-3 algorithms over one private
 Keccak-f[1600] owner; the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
@@ -53,7 +53,7 @@ the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
 No cryptographic primitive outside those six portable SHA-2 algorithms and
-the two named portable SHA-3 algorithms, schema-driven ASN.1
+the four named portable SHA-3 algorithms, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release

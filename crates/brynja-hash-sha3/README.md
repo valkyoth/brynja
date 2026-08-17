@@ -26,9 +26,9 @@
 # brynja-hash-sha3
 
 First-party, allocation-free `no_std` SHA-3 and SHAKE family ownership for
-Brynja. Version 0.1.0 provides complete portable FIPS 202 SHA3-224 and
-SHA3-256 through distinct one-shot and streaming APIs over one private
-Keccak-f[1600] permutation. SHA3-384, SHA3-512, SHAKE128, SHAKE256, hardware
+Brynja. Version 0.1.0 now provides all four complete portable FIPS 202
+fixed-output SHA-3 algorithms through distinct one-shot and streaming APIs over
+one private Keccak-f[1600] permutation. SHAKE128, SHAKE256, hardware
 acceleration, independent review, and FIPS 140-3 validation remain later work.
 
 ```rust
@@ -57,6 +57,8 @@ pentest evidence rather than independent cryptographic verification.
 | --- | --- | --- |
 | SHA3-224 | ✅ Implemented | ❌ Not independently verified |
 | SHA3-256 | ✅ Implemented | ❌ Not independently verified |
+| SHA3-384 | ✅ Implemented | ❌ Not independently verified |
+| SHA3-512 | ✅ Implemented | ❌ Not independently verified |
 | Complete SHA-3/SHAKE family | 🚧 In progress | ❌ Not independently verified |
 
 Only a named independent reviewer and linked review evidence can change the

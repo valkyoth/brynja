@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.24.0 SHA-2 and SHA3-224/SHA3-256 bounded harnesses admitted
+Status: v0.24.1 SHA-2 and fixed-output SHA-3 bounded harnesses admitted
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented
@@ -29,7 +29,7 @@ the exact eight-harness inventory, and all proof results when the verifier is av
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
 The SHA-2 harnesses prove only their stated checked byte-length and padding
-properties. The v0.24.0 SHA-3 harnesses prove only that byte-counter admission
+properties. The shared fixed-output SHA-3 harnesses prove only that byte-counter admission
 matches `u128::checked_add` and that each of the 200 Keccak state bytes maps to
 one in-bounds lane and byte shift. They do not prove permutation equivalence,
 digest correctness, collision resistance, constant-time machine code, backend

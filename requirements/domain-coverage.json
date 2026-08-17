@@ -5585,7 +5585,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "efb65982e05e21ed7004cc5e483162d83071e9bd97dd9d685cc80fecc4ff5a16",
+  "policy_sha256": "703a333493c46414d95b040c78a8eeea7f849649d8bb44825bec6f2735c3c1a8",
   "requirement_count": 35,
   "schema": 1,
   "surface_count": 3326,
@@ -5692,7 +5692,7 @@
       "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.sha3-shake",
-      "owner": "0.24.0",
+      "owner": "0.24.1",
       "requirement_id": "BRY-REQ-CRYPTO-0002"
     },
     {

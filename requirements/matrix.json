@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "4b1e0d93b3106c4837d85d5c0f0c04aa791ff29214020690611ca17184131da3",
-  "domain_policy_sha256": "703a333493c46414d95b040c78a8eeea7f849649d8bb44825bec6f2735c3c1a8",
-  "policy_sha256": "57992f8f1d73128dca25c2a276794dcc4f18a431bb9d53f96a38e53ee344b25e",
+  "domain_policy_sha256": "64c4c7b98feee818b830d7838588ed83d9b1f7bc4095448243b1e13f6fbc1b2a",
+  "policy_sha256": "95d83c3aad1efeb0561bd2d4d37c4aa5108f59031f4bd68e98aaae390694eb0b",
   "requirements": [
     {
       "applicability": "delegate",
@@ -16774,7 +16774,7 @@
       "owner": "0.117.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -16818,7 +16818,13 @@
           "domains": [
             "hybrid"
           ],
-          "errata": [],
+          "errata": [
+            {
+              "disposition": "apply",
+              "id": 9136,
+              "status": "Verified"
+            }
+          ],
           "id": "rfc:9954",
           "kind": "rfc",
           "milestones": [
@@ -29883,9 +29889,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "70b1cd6bbc9be18168f588d5667bbe9b01a78faf852b32fae9955772738c694f",
+  "residual_policy_sha256": "6492755a95f36457309f4e98a57b850ce389b284589e77b73cf0e617f120062c",
   "schema": 5,
-  "source_ledger_sha256": "0a551bd23d67b120dddee31487cdbf9132b03646517b014fc1b511dbb8e93c5e",
-  "surface_register_sha256": "93829534480bbe95cce3f44ea4c2ebdeed69cf63a49d6a4719d9bd1f10d1aea5",
-  "transport_policy_sha256": "33b4a101460273660f409a75477bbbe3b1037678bd7d18d892cd597b0f356e3e"
+  "source_ledger_sha256": "65caf5a9f356c92eb6fb6443af595869e0181e19e88378c678dfd001ea25d9b1",
+  "surface_register_sha256": "c97cf2489cec83564a4f795124a804e9a95ebfd4255a2e2ac485880c1392a0c7",
+  "transport_policy_sha256": "5f5f7e7b931ba5e4dbfcd3aff2ca0ba6b59512236c35acf37d783092d17c57a7"
 }

@@ -2552,7 +2552,13 @@
       "domains": [
         "hybrid"
       ],
-      "errata": [],
+      "errata": [
+        {
+          "disposition": "apply",
+          "id": 9136,
+          "status": "Verified"
+        }
+      ],
       "id": "rfc:9954",
       "kind": "rfc",
       "milestones": [
@@ -2614,7 +2620,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "70b1cd6bbc9be18168f588d5667bbe9b01a78faf852b32fae9955772738c694f",
+  "policy_sha256": "6492755a95f36457309f4e98a57b850ce389b284589e77b73cf0e617f120062c",
   "requirement_count": 51,
   "schema": 1,
   "surface_count": 787,

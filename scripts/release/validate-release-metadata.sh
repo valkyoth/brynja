@@ -229,6 +229,8 @@ grep -q 'python3 scripts/sha3/test-sha3.py' scripts/checks.sh
 grep -q 'python3 scripts/sha3/check-sha3-differential.py' scripts/checks.sh
 grep -q 'python3 scripts/repository/check-script-layout.py' scripts/checks.sh
 grep -q 'python3 scripts/repository/test-script-layout.py' scripts/checks.sh
+grep -q 'python3 scripts/repository/check-tracked-build-artifacts.py' scripts/checks.sh
+grep -q 'python3 scripts/repository/test-tracked-build-artifacts.py' scripts/checks.sh
 grep -q 'scripts/assurance/check-kani.sh --policy-only' scripts/checks.sh
 grep -q 'python3 scripts/repository/check-commit-classification.py' scripts/checks.sh
 grep -q 'python3 scripts/repository/test-commit-classification.py' scripts/checks.sh

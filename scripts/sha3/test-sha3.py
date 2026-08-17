@@ -31,6 +31,8 @@ def reject(label: str, mutation) -> None:
             policy.MANIFEST,
             policy.CRYPTO_MANIFEST,
             policy.PACKAGE_POLICY,
+            policy.MIRI_SCRIPT,
+            policy.SANITIZER_SCRIPT,
         )
         for relative in copied:
             destination = root / relative
@@ -67,10 +69,14 @@ def main() -> int:
     reject("vector", lambda root: replace(root, policy.SHA3_256_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
     reject("SHA3-384 vector", lambda root: replace(root, policy.SHA3_384_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
     reject("SHA3-512 vector", lambda root: replace(root, policy.SHA3_512_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
+    reject("SHA-3 Miri package", lambda root: replace(root, policy.MIRI_SCRIPT, "-p brynja-hash-sha3", "-p brynja-hash-sha2"))
+    reject("SHA-3 Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "sha3_384 sha3_512", "sha3_384"))
+    reject("SHA-3 sanitizer package", lambda root: replace(root, policy.SANITIZER_SCRIPT, "-p brynja-hash-sha3", "-p brynja-hash-sha2"))
+    reject("SHA-3 sanitizer test targets", lambda root: replace(root, policy.SANITIZER_SCRIPT, "--tests", "--lib"))
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects twenty-five boundary, permutation, padding, identity, test, size, and hash regressions")
+    print("portable SHA-3 policy rejects twenty-nine boundary, permutation, padding, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

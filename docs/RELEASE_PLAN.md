@@ -1903,7 +1903,7 @@ Exit criteria:
 
 ### v0.21.0 - Canonical ASN.1 Primitives
 
-Status: awaiting green CI
+Status: pentest remediation complete; awaiting independent retest
 
 Plan scope: Add canonical ASN.1 integer, bit and octet string, OID, Boolean, string, sequence and set, and time primitives with malformed and non-canonical corpora.
 
@@ -2448,10 +2448,15 @@ Implementation notes:
   dependency, secret-state erasure, independent-review, FIPS-validation or
   publication claim is introduced. The SHA-3/SHAKE family remains documented
   **In progress** through its later acceptance gates.
-- the repository-owner-supplied pentest result for exact implementation
-  candidate `634fbc5e3d36a99eb4b71245bdbca1e16a0af7ea` is green with no reported
-  finding or requested remediation; the committed report records
-  `PASS`/`PASS` and zero open findings while retaining every residual limit.
+- subsequent pentest review found one Medium assurance-control gap: committed
+  CI scripts did not enforce the claimed SHA3-384/SHA3-512 Miri and
+  AddressSanitizer coverage. The scripts now execute those targets, the SHA-3
+  policy rejects four removal/narrowing regressions, and both local analysis
+  paths pass. The report records zero open findings but remains
+  `RETEST REQUIRED`/`PENDING` until independent retest.
+- the 2026-08-17 standards refresh records verified editorial RFC 9954 erratum
+  9136, which corrects two TLS 1.3 section references without changing
+  normative behavior or admitting runtime code before planned v0.117.0.
 
 Plan scope: Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration.
 

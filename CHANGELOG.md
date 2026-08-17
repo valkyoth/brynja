@@ -22,10 +22,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
-- Record the green v0.24.1 pentest of exact SHA3-384/SHA3-512 implementation
-  candidate `634fbc5e3d36a99eb4b71245bdbca1e16a0af7ea` as `PASS`/`PASS` with zero
-  open findings and no remediation, while retaining the independent-review,
-  FIPS, secret-erasure, SHAKE, acceleration, and zero-publication limits.
+- Remediate the v0.24.1 Medium incorrect-assurance-claim finding by executing
+  SHA3-384/SHA3-512 under the CI-invoked Miri and AddressSanitizer scripts and
+  adding four SHA-3 policy regressions that reject removal or narrowing; local
+  verification passes with zero open findings and independent retest pending.
+- Refresh the reviewed standards evidence for verified editorial RFC 9954
+  erratum 9136, which corrects two TLS 1.3 section references and changes no
+  normative hybrid-key-exchange behavior or current runtime code.
 - Add complete allocation-free `no_std` SHA3-384 and SHA3-512 one-shot,
   streaming, exact-digest, checked-length, consuming-finalization, common-
   trait, and facade APIs over the unchanged private Keccak-f[1600] sponge.

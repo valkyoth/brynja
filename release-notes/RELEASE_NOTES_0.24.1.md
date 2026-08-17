@@ -1,7 +1,7 @@
 # Brynja 0.24.1 Release Notes
 
-Status: release candidate; pentest passed; hosted verification and signed tag
-pending; no crates.io publication
+Status: pentest remediation complete; independent retest, hosted verification,
+and signed tag pending; no crates.io publication
 
 Brynja 0.24.1 completes the portable fixed-output FIPS 202 SHA-3 algorithms by
 adding SHA3-384 and SHA3-512 over the private Keccak-f[1600] sponge introduced
@@ -27,13 +27,17 @@ in v0.24.0. SHAKE and final SHA-3/SHAKE family acceptance remain later work.
 - A deterministic 328-message corpus checked for all four fixed-output SHA-3
   algorithms against Python's independently maintained `hashlib` path,
   producing 1,312 matching results.
-- Twenty-five source-policy mutation fixtures covering unsafe/native code,
+- Twenty-nine source-policy mutation fixtures covering unsafe/native code,
   allocation, visibility, permutation constants and transformations, suffixes,
   padding, all four rates and output widths, claims, authoritative vector
-  gates, package boundaries, file size, and reviewed-source drift.
+  gates, package boundaries, Miri and AddressSanitizer command removal, file
+  size, and reviewed-source drift.
 - The existing shared Kani harnesses continue to prove exact checked `u128`
   byte admission and all 200 Keccak byte-to-lane mappings for every fixed-
-  output state. Focused Miri and AddressSanitizer runs cover the added APIs.
+  output state. The CI-invoked Miri script now executes the SHA3-384 and
+  SHA3-512 boundary tests, and the CI-invoked AddressSanitizer script executes
+  every SHA-3 test target; the SHA-3 policy rejects removal or narrowing of
+  either path.
 
 ## Security Boundaries
 
@@ -53,11 +57,14 @@ remains subject to explicit lifecycle review when normative text is available.
 
 ## Pentest
 
-The repository owner reported a green pentest of exact implementation
-candidate `634fbc5e3d36a99eb4b71245bdbca1e16a0af7ea`. No finding was reported and
-no remediation was requested. The permanent report records `PASS`/`PASS` with
-zero open findings. This assessment is security-review evidence; it is not an
-independent cryptographic verification or FIPS-validation claim.
+After an initial green result, subsequent review identified one Medium
+verification-control finding: the release notes claimed Miri and
+AddressSanitizer coverage for SHA3-384/SHA3-512 that the committed CI scripts
+did not enforce. Direct analysis had passed, so no memory defect was shown.
+The scripts and SHA-3 policy now enforce the claimed coverage, four broken
+fixtures reject its removal, and both remediated analysis scripts pass
+locally. The permanent report records zero open findings and remains
+`RETEST REQUIRED`/`PENDING` until independent retest.
 
 ## Release Process
 
@@ -65,6 +72,5 @@ Version 0.24.1 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. It adds two
 fixed-output parameterizations over the already assessed private sponge, with
 no new primitive owner, unsafe boundary, backend, or dependency. The final
-committed candidate must pass the complete local gate, retain the green
-pentest report, and pass hosted GitHub and CodeQL before explicit signed-tag
-authorization.
+committed candidate must pass independent retest, the complete local gate, and
+hosted GitHub and CodeQL before explicit signed-tag authorization.

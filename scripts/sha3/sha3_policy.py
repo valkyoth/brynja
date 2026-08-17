@@ -32,6 +32,8 @@ SHA3_512_TEST = CRATE / "tests/sha3_512.rs"
 TEST_SUPPORT = CRATE / "tests/support/mod.rs"
 DIFFERENTIAL = Path("scripts/sha3/check-sha3-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/sha3-differential/src/main.rs")
+MIRI_SCRIPT = Path("scripts/zeroization/check-zeroization-miri.sh")
+SANITIZER_SCRIPT = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 SOURCES = (LIB, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256, SHA3_384, SHA3_512)
 TESTS = (SHA3_224_TEST, SHA3_256_TEST, SHA3_384_TEST, SHA3_512_TEST, TEST_SUPPORT)
 HASHES = {
@@ -191,6 +193,22 @@ def validate(root: Path) -> None:
         "trait_api_and_algorithm_identity_are_exact",
     ):
         require(tests, token, "SHA-3 tests")
+
+    miri = read(root, MIRI_SCRIPT)
+    for token in (
+        "for sha3_test in sha3_384 sha3_512; do",
+        "-p brynja-hash-sha3",
+        '--test "$sha3_test"',
+        "suffix_and_rate_boundaries_have_exact_digests",
+    ):
+        require(miri, token, "SHA-3 Miri coverage")
+    sanitizer = read(root, SANITIZER_SCRIPT)
+    for token in (
+        "-p brynja-hash-sha3",
+        "--tests",
+        "--target x86_64-unknown-linux-gnu",
+    ):
+        require(sanitizer, token, "SHA-3 AddressSanitizer coverage")
 
     manifest = tomllib.loads(read(root, MANIFEST))
     if manifest.get("dependencies") != {"brynja-hash-core": {"workspace": True}}:

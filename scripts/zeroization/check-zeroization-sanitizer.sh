@@ -40,3 +40,8 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-08-17 test \
     -p brynja-hash-sha2 \
     --test sha512_256 \
     --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-08-17 test \
+    -p brynja-hash-sha3 \
+    --tests \
+    --target x86_64-unknown-linux-gnu

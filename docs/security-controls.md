@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 pentest passed and awaiting green CI
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 remediated and awaiting pentest retest
 
 | Control | Foundation enforcement |
 | --- | --- |

@@ -164,6 +164,12 @@ The registry's provisional `draft-ietf-cose-cbor-encoded-cert-20` reference is
 not admitted as normative authority; the surface remains future work behind
 the existing certificate-type decision boundary and admits no runtime code.
 
+The 2026-08-17 reviewed RFC errata refresh adds verified editorial RFC 9954
+erratum 9136. It corrects two references to the TLS 1.3 `KeyShare` section from
+4.2.8 to 4.3.8, changes no normative hybrid-key-exchange behavior, remains an
+explicit input for planned v0.117.0, and admits no runtime code at this
+refresh.
+
 Final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are checksum-pinned
 local-only authorities. Their publication pages, planning notes, errata, and
 CMVP applicability remain mutable and must be refreshed at their dependent

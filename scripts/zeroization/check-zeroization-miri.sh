@@ -30,6 +30,15 @@ CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     every_padding_boundary_matches_independent_expected_results \
     --target x86_64-unknown-linux-gnu
 
+for sha3_test in sha3_384 sha3_512; do
+    CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+        cargo +nightly-2026-08-17 miri test \
+        -p brynja-hash-sha3 \
+        --test "$sha3_test" \
+        suffix_and_rate_boundaries_have_exact_digests \
+        --target x86_64-unknown-linux-gnu
+done
+
 CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     cargo +nightly-2026-08-17 miri test \
     -p brynja-hash-sha2 \

@@ -7,6 +7,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Refresh the release-gate Miri and Rust sanitizer pin to the latest available
+  `nightly-2026-08-17` at exact Rust revision
+  `34baba5394fcbda4cba7b7c1964a6db421c77c91`, update CI and the dynamic-
+  analysis evidence contract together, and rerun both workloads successfully.
 - Remove 241 accidentally tracked SHA-3 differential Cargo artifacts,
   including two executable binaries; ignore Cargo targets at every workspace
   depth, reject tracked `target/` components in the complete repository gate,

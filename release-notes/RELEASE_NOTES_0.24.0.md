@@ -36,6 +36,10 @@ family remains in progress through later v0.24.x milestones.
   byte-to-lane mappings, separately paired with the pinned verifier toolchain.
 - Miri over the focused library invariants and AddressSanitizer over all unit
   and integration cases, including the million-byte vectors.
+- The release gate's Miri and Rust sanitizer evidence was refreshed to current
+  `nightly-2026-08-17` at exact Rust revision
+  `34baba5394fcbda4cba7b7c1964a6db421c77c91`; manifest validation, policy
+  regression tests, Miri, and AddressSanitizer all pass with the new pin.
 - Hash-bound source and test inventories plus adversarial fixtures covering
   unsafe/native code, permutation visibility, round constants, theta, chi,
   suffixes, final padding, rates, claims, adjacent algorithms, package class,

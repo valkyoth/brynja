@@ -1,7 +1,7 @@
 # Brynja 0.24.0 Release Notes
 
-Status: implementation candidate; exceptional pentest, hosted verification,
-and internal tag pending; no crates.io publication
+Status: remediation candidate; exceptional pentest retest, hosted
+verification, and internal tag pending; no crates.io publication
 
 Brynja 0.24.0 introduces first-party portable FIPS 202 SHA-3 ownership and
 completes the named SHA3-224 and SHA3-256 algorithms. The complete SHA-3/SHAKE
@@ -61,10 +61,27 @@ checksum-pinned as local-only authority. NIST's announced revision is recorded
 as mutable status, not treated as unpublished normative text. The added roadmap
 does not claim that any SP 800-185 function is implemented in v0.24.0.
 
+## Pentest Remediation
+
+The exceptional assessment found one High supply-chain trust-bypass issue:
+241 generated files under the SHA-3 differential fixture's Cargo `target/`
+directory had been committed, including two executable binaries. Cargo could
+consider those fingerprints fresh and execute a tracked artifact instead of
+rebuilding the reviewed fixture source.
+
+All generated files have been removed. Cargo `target/` directories are now
+ignored at every repository depth, the complete repository gate rejects any
+tracked path containing a `target/` component, and the differential runner
+uses a fresh temporary target with locked dependency resolution and
+incremental compilation disabled. Three negative fixtures cover root, nested,
+and crate-local target paths. No production Rust or cryptographic algorithm
+code changed during remediation. The finding is closed locally with zero open
+findings, but the tag remains blocked pending independent retest.
+
 ## Release Process
 
 Version 0.24.0 is an internal milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. The new
 first-party permutation and algorithms trigger an exceptional pentest. The
-exact implementation candidate, remediation if any, complete local gate,
-hosted GitHub, and CodeQL must be green before explicit tag authorization.
+remediated candidate, independent retest, complete local gate, hosted GitHub,
+and CodeQL must be green before explicit tag authorization.

@@ -14,7 +14,8 @@ Only two executable entry points live directly in this directory:
 `inventory.toml` is the machine-readable directory register.
 `repository/check-script-layout.py` rejects unknown root files, unknown or
 nested categories, duplicate basenames, missing categories, and unsupported
-file types.
+file types. `repository/check-tracked-build-artifacts.py` rejects every tracked
+file beneath a Cargo `target/` directory, regardless of workspace depth.
 
 ## Directories
 

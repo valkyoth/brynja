@@ -1,10 +1,5 @@
-# Rust build output
-/target/
-/assurance/sanitization-admission/target/
-/assurance/cpu-admission-fixture/target/
-/assurance/sha256-public-api/target/
-/assurance/sha2-public-api/target/
-/fuzz/target/
+# Rust build output at every workspace depth
+**/target/
 /fuzz/artifacts/
 /fuzz/corpus/
 

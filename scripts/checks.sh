@@ -4,6 +4,8 @@ set -eu
 cargo fmt --all --check
 python3 scripts/repository/check-script-layout.py
 python3 scripts/repository/test-script-layout.py
+python3 scripts/repository/check-tracked-build-artifacts.py
+python3 scripts/repository/test-tracked-build-artifacts.py
 scripts/repository/check_shell_syntax.sh
 scripts/repository/test-shell-syntax.sh
 python3 scripts/repository/check-unsafe-policy.py

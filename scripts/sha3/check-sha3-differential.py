@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import hashlib
+import os
 import subprocess
+import tempfile
 from pathlib import Path
 
 
@@ -36,15 +38,27 @@ def main() -> int:
         requests.extend((f"sha3-224 {encoded}", f"sha3-256 {encoded}"))
         expected.extend((hashlib.sha3_224(data).hexdigest(), hashlib.sha3_256(data).hexdigest()))
 
-    result = subprocess.run(
-        ["cargo", "run", "--quiet", "--manifest-path", str(MANIFEST)],
-        cwd=ROOT,
-        input="\n".join(requests) + "\n",
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
+    with tempfile.TemporaryDirectory(prefix="brynja-sha3-target-") as target:
+        environment = os.environ.copy()
+        environment["CARGO_TARGET_DIR"] = target
+        environment["CARGO_INCREMENTAL"] = "0"
+        result = subprocess.run(
+            [
+                "cargo",
+                "run",
+                "--locked",
+                "--quiet",
+                "--manifest-path",
+                str(MANIFEST),
+            ],
+            cwd=ROOT,
+            env=environment,
+            input="\n".join(requests) + "\n",
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
     if result.returncode != 0:
         raise RuntimeError(f"SHA-3 differential fixture failed:\n{result.stderr}")
     actual = result.stdout.splitlines()

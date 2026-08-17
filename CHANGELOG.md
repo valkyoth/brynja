@@ -5,6 +5,16 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove 241 accidentally tracked SHA-3 differential Cargo artifacts,
+  including two executable binaries; ignore Cargo targets at every workspace
+  depth, reject tracked `target/` components in the complete repository gate,
+  and run the differential fixture from a fresh locked non-incremental target.
+- Record the v0.24.0 pentest's High build-artifact trust-bypass finding and its
+  completed remediation with zero open findings; independent retest remains
+  mandatory before the exceptional development tag.
+
 ### Added
 
 - Move the complete NIST SP 800-185 family into the pre-1.0 roadmap: cSHAKE128

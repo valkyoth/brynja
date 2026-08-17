@@ -318,7 +318,7 @@ tags remain inside that cumulative change range.
 
 Version 0.3.0 provides the exact source foundation:
 
-- 104 locked RFCs and seventeen local NIST/ITU/RISC-V authorities map to lifecycle, domain,
+- 104 locked RFCs and eighteen local NIST/ITU/RISC-V authorities map to lifecycle, domain,
   and roadmap ownership;
 - RFC status and update/obsolescence relationships are closed or explicitly
   excluded;
@@ -329,12 +329,12 @@ Version 0.3.0 provides the exact source foundation:
 
 Version 0.3.1 adds explicit protocol-surface decisions:
 
-- 126 semantic decisions cover current and compatibility TLS, DTLS, QUIC-TLS,
+- 129 semantic decisions cover current and compatibility TLS, DTLS, QUIC-TLS,
   PKIX, OCSP, CT, HPKE, ECH, cryptographic algorithms, certificate and key
   formats, legacy protocols, and operational facilities;
 - all 192 nested registries and all 4,106 individual records across the eight
   pinned IANA collections receive a deterministic disposition;
-- every one of the 4,449 current generated surfaces records normative sources, owning
+- every one of the 4,450 current generated surfaces records normative sources, owning
   milestone, planned code target, planned test target, and rationale;
 - required exclusions explicitly cover Heartbeat, status_request_v2,
   production SSLKEYLOGFILE, TLS 1.3 post-handshake authentication,
@@ -372,8 +372,8 @@ Version 0.3.2 added the normative-requirement foundation:
 
 Version 0.3.3 completes the cryptography, encoding, and PKIX population pass:
 
-- 34 new domain requirements bring the matrix to 46 stable records;
-- all 55 exact authorities in the symmetric, RISC-V acceleration, public-key, key-container, PKIX,
+- 35 new domain requirements bring the matrix to 47 stable records;
+- all 56 exact authorities in the symmetric, SHA-3-derived, RISC-V acceleration, public-key, key-container, PKIX,
   OCSP, and CT domains are cited with current, compatibility, evidence, or
   exclusion roles;
 - all 3,325 current cryptography, PKIX, PKI, OCSP, and CT surfaces map to a requirement
@@ -414,15 +414,15 @@ Version 0.3.4 completes the TLS, DTLS, and QUIC-TLS population pass:
 
 Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 
-- 51 residual requirements bring the matrix to 168 stable records;
+- 51 residual requirements bring the matrix to 169 stable records;
 - final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are added as
   local-only checksum-pinned authorities;
 - 33 residual authorities and 182 normative RFC sections are reviewed through
   165 exact mappings and 17 explicit dispositions;
 - all 787 surfaces left by the foundation, domain, and transport bundles are
-  assigned, producing complete coverage of all 4,449 surfaces;
-- the generated closure maps all 129 locked sources, all 391 ordered pre-1.0
-  roadmap rows, all 4,449 surfaces, and all 168 requirements in both directions;
+  assigned, producing complete coverage of all 4,450 surfaces;
+- the generated closure maps all 130 locked sources, all 510 ordered pre-1.0
+  roadmap rows, all 4,450 surfaces, and all 169 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
@@ -515,7 +515,7 @@ Version 0.6.0 adds bounded numeric and resource foundations:
   surfaces without admitting draft authority or runtime code;
 - the later reviewed 2026-08-11 TLS ExtensionType refresh adds C509 Certificate
   type value 4 and moves the unassigned range start to 5, bringing the current
-  register to 4,449 surfaces while retaining the provisional C509 draft as
+  register to 4,450 surfaces while retaining the provisional C509 draft as
   non-authoritative future work and admitting no runtime code; and
 - no protocol surface or normative protocol requirement advances because
   these types are source-free shared foundations; later wire widths,

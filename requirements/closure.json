@@ -77,6 +77,11 @@
       "review": "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
     },
     {
+      "authority": "nist:NIST.SP.800-185.pdf",
+      "distribution": "local-only",
+      "review": "Official final SP 800-185 bytes are checksum pinned locally and never redistributed in Git or crates.io packages; the mutable publication page and announced revision remain separate review inputs."
+    },
+    {
       "authority": "nist:NIST.SP.800-186.pdf",
       "distribution": "local-only",
       "review": "Official NIST bytes are checksum pinned locally and never redistributed in Git or crates.io packages."
@@ -180,11 +185,25 @@
       "url": "https://www.iana.org/assignments/trans/trans.xml"
     },
     {
+      "authority": "nist:NIST.FIPS.202.pdf",
+      "owner": "0.24.5",
+      "rationale": "The 2015 final remains current, but NIST announced an editorial update in 2025; the lifecycle monitor must detect a draft, replacement, withdrawal, changed planning note or changed final bytes without silently altering the admitted Keccak and SHA-3 semantics.",
+      "status": "refresh-required",
+      "url": "https://csrc.nist.gov/pubs/fips/202/final"
+    },
+    {
       "authority": "nist:NIST.FIPS.203.pdf",
       "owner": "0.117.0",
       "rationale": "The publication page carries a planning note and mutable errata spreadsheet; every ML-KEM implementation freeze must review both without silently changing the pinned PDF baseline.",
       "status": "refresh-required",
       "url": "https://csrc.nist.gov/pubs/fips/203/final"
+    },
+    {
+      "authority": "nist:NIST.SP.800-185.pdf",
+      "owner": "0.24.5",
+      "rationale": "The 2016 final remains current, but NIST announced a revision in 2025; the lifecycle monitor must detect a draft, replacement, withdrawal, changed planning note or changed final bytes before any SP 800-185 implementation freeze, without treating unpublished text as authority.",
+      "status": "refresh-required",
+      "url": "https://csrc.nist.gov/pubs/sp/800/185/final"
     },
     {
       "authority": "nist:NIST.SP.800-227.pdf",
@@ -814,6 +833,88 @@
       "version": "0.24.4"
     },
     {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Extend the standards ledger with bounded allowlisted monitoring for every official publication landing page, immutable document, RFC status and errata feed, IANA registry, and admitted architecture specification; record upstream edition, revision, draft, update-planned, superseded and withdrawn state separately from Brynja's current, compatibility, legacy-only, disabled and rejected dispositions; run scheduled and manual drift checks that require human impact review and exact requirement, code, evidence and release decisions without automatically downloading, reclassifying, weakening, or moving any implementation.",
+      "source_ids": [
+        "rfc:2119",
+        "rfc:8126",
+        "rfc:8174",
+        "rfc:8447",
+        "rfc:9847"
+      ],
+      "title": "Cross-Authority Standards Lifecycle Monitor",
+      "version": "0.24.5"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0014"
+      ],
+      "scope": "Bind the current final SP 800-185 authority and its announced revision state, implement exact left_encode, right_encode, encode_string and bytepad with checked bit-length arithmetic and canonical arbitrary-bit-string inputs, then complete cSHAKE128 and cSHAKE256 with N and S customization, empty-N-and-S SHAKE equivalence, fixed and XOF output, one-shot, streaming and incremental squeeze APIs, exact domain separation, official examples, proofs, and no raw permutation exposure.",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "title": "SP 800-185 Encoding Foundation And Complete cSHAKE",
+      "version": "0.24.6"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Implement KMAC128, KMAC256, KMACXOF128 and KMACXOF256 once in `brynja-mac-kmac` over the exact cSHAKE owner, covering the complete standards-valid key, message, customization and output domains through clearly separated conformance and strength-enforcing constructors, secret-owned sponge and encoding state, hardened cleanup, affine finalization, constant-time tag verification, official examples, misuse tests, proofs, and non-approved indicators without confusing a MAC, PRF, XOF, or unkeyed digest.",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "title": "Complete KMAC And KMACXOF",
+      "version": "0.24.7"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, official examples, partition and collision-separation negatives, proofs, and public types that cannot silently flatten a tuple into one byte string.",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "title": "Complete TupleHash And TupleHashXOF",
+      "version": "0.24.8"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, a deterministic bounded sequential no_std path, caller-scheduled ordered leaf jobs for real parallel no_std use, and a separate optional zero-dependency std executor; cover partial and empty leaves, worker failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs, and no hidden allocation in the core crate.",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "title": "Complete ParallelHash And ParallelHashXOF",
+      "version": "0.24.9"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, secret cleanup and misuse failures while keeping the derived family In progress.",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "title": "SP 800-185 Portable Public API Usability Acceptance",
+      "version": "0.24.10"
+    },
+    {
+      "boundary": null,
+      "requirement_ids": [],
+      "scope": "Rerun the unchanged v0.24.10 fixture through portable and every admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs and bounded failure, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and cleanup evidence affected by the derived constructions, and mark SP 800-185 Fully implemented only when every named instance and backend has an explicit passing or unadmitted disposition on the final code.",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "title": "SP 800-185 Cross-Backend And Parallel Final Acceptance",
+      "version": "0.24.11"
+    },
+    {
       "boundary": {
         "class": "planned-authority-admission",
         "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
@@ -822,7 +923,7 @@
       "scope": "Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation.",
       "source_ids": [],
       "title": "Complete First-Party Legacy SHA-1",
-      "version": "0.24.5"
+      "version": "0.24.12"
     },
     {
       "boundary": {
@@ -833,7 +934,7 @@
       "scope": "Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use.",
       "source_ids": [],
       "title": "Complete First-Party Legacy MD5",
-      "version": "0.24.6"
+      "version": "0.24.13"
     },
     {
       "boundary": {
@@ -844,7 +945,7 @@
       "scope": "Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters.",
       "source_ids": [],
       "title": "Legacy SHA-1 And MD5 Usability And Isolation Acceptance",
-      "version": "0.24.7"
+      "version": "0.24.14"
     },
     {
       "boundary": null,
@@ -6325,7 +6426,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.5 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.",
+      "scope": "Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.12 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.",
       "source_ids": [],
       "title": "OpenPGP Legacy SHA-1 Consumer Admission Review",
       "version": "0.169.2"
@@ -7698,6 +7799,18 @@
       "owner": "0.46.0",
       "source_ids": [
         "rfc:3279"
+      ]
+    },
+    {
+      "decision_ids": [
+        "algorithm.sp800-185"
+      ],
+      "id": "BRY-REQ-CRYPTO-0014",
+      "lifecycle": "planned",
+      "owner": "0.24.6",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
       ]
     },
     {
@@ -10256,6 +10369,12 @@
         "0.22.0",
         "0.23.0",
         "0.24.0",
+        "0.24.6",
+        "0.24.7",
+        "0.24.8",
+        "0.24.9",
+        "0.24.10",
+        "0.24.11",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -10265,7 +10384,8 @@
         "0.31.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0002"
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0014"
       ],
       "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
     },
@@ -10302,6 +10422,21 @@
         "BRY-REQ-CRYPTO-0001"
       ],
       "sha256": "2b691bd8895cbc6793e442b1e5a45398f5ca777edc2a79072469ad05405b093b"
+    },
+    {
+      "id": "nist:NIST.SP.800-185.pdf",
+      "milestones": [
+        "0.24.6",
+        "0.24.7",
+        "0.24.8",
+        "0.24.9",
+        "0.24.10",
+        "0.24.11"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0014"
+      ],
+      "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
     },
     {
       "id": "nist:NIST.SP.800-186.pdf",
@@ -10529,7 +10664,8 @@
       "milestones": [
         "0.3.0",
         "0.3.1",
-        "0.3.2"
+        "0.3.2",
+        "0.24.5"
       ],
       "requirement_ids": [
         "BRY-REQ-STD-0002",
@@ -11719,7 +11855,8 @@
       "milestones": [
         "0.3.0",
         "0.3.1",
-        "0.3.2"
+        "0.3.2",
+        "0.24.5"
       ],
       "requirement_ids": [
         "BRY-REQ-IANA-0001",
@@ -11732,7 +11869,8 @@
       "milestones": [
         "0.3.0",
         "0.3.1",
-        "0.3.2"
+        "0.3.2",
+        "0.24.5"
       ],
       "requirement_ids": [
         "BRY-REQ-STD-0001"
@@ -11810,7 +11948,8 @@
       "milestones": [
         "0.3.0",
         "0.3.1",
-        "0.3.2"
+        "0.3.2",
+        "0.24.5"
       ],
       "requirement_ids": [
         "BRY-REQ-COMPOSE-0148",
@@ -12586,7 +12725,8 @@
       "milestones": [
         "0.3.0",
         "0.3.1",
-        "0.3.2"
+        "0.3.2",
+        "0.24.5"
       ],
       "requirement_ids": [
         "BRY-REQ-COMPOSE-0148",
@@ -12971,6 +13111,12 @@
       "id": "algorithm.sha3-shake",
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002"
+      ]
+    },
+    {
+      "id": "algorithm.sp800-185",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0014"
       ]
     },
     {

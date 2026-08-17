@@ -21,7 +21,7 @@ requirement = support.requirement
 
 def test_current_repository() -> None:
     matrix, indexes = checker.build_matrix()
-    assert len(matrix["requirements"]) == 168
+    assert len(matrix["requirements"]) == 169
     assert {item["lifecycle"] for item in matrix["requirements"]} == lib.LIFECYCLES
     assert standards.json_bytes(matrix) == lib.MATRIX.read_bytes()
     assert standards.json_bytes(indexes) == lib.INDEXES.read_bytes()

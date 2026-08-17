@@ -23,6 +23,7 @@ SOURCE_DOMAINS = {
     "pkix",
     "public-key",
     "riscv-acceleration",
+    "sha3-derived",
     "symmetric",
 }
 SURFACE_DOMAINS = {"cryptography", "ct", "ocsp", "pki", "pkix"}

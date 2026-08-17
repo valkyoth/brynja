@@ -135,7 +135,9 @@ def validate_claims(
     expected_mutable = {
         identifier for identifier in authorities if identifier.startswith("iana:")
     } | {
+        "nist:NIST.FIPS.202.pdf",
         "nist:NIST.FIPS.203.pdf",
+        "nist:NIST.SP.800-185.pdf",
         "nist:NIST.SP.800-227.pdf",
         "nist:NIST.SP.800-90Ar1.pdf",
         "nist:NIST.SP.800-90B.pdf",

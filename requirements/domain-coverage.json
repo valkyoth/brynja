@@ -119,6 +119,7 @@
     {
       "authority_role": "current",
       "domains": [
+        "sha3-derived",
         "symmetric"
       ],
       "id": "nist:NIST.FIPS.202.pdf",
@@ -126,6 +127,12 @@
         "0.22.0",
         "0.23.0",
         "0.24.0",
+        "0.24.6",
+        "0.24.7",
+        "0.24.8",
+        "0.24.9",
+        "0.24.10",
+        "0.24.11",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -135,7 +142,8 @@
         "0.31.0"
       ],
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0002"
+        "BRY-REQ-CRYPTO-0002",
+        "BRY-REQ-CRYPTO-0014"
       ],
       "role": "sha3-shake",
       "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
@@ -163,6 +171,26 @@
       ],
       "role": "hash-usage",
       "sha256": "2b691bd8895cbc6793e442b1e5a45398f5ca777edc2a79072469ad05405b093b"
+    },
+    {
+      "authority_role": "current",
+      "domains": [
+        "sha3-derived"
+      ],
+      "id": "nist:NIST.SP.800-185.pdf",
+      "milestones": [
+        "0.24.6",
+        "0.24.7",
+        "0.24.8",
+        "0.24.9",
+        "0.24.10",
+        "0.24.11"
+      ],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0014"
+      ],
+      "role": "sha3-derived",
+      "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
     },
     {
       "authority_role": "current",
@@ -5553,14 +5581,14 @@
       "sha256": "442a3ac8b63ad1ce34f9563d4ea85ee6d1115d129e0b458890937a1175a72973"
     }
   ],
-  "authority_count": 55,
+  "authority_count": 56,
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "5b3fa1c02baa48153ad5d30cd8ab3484137e2e718c8b680cf1fa0502e590807a",
-  "requirement_count": 34,
+  "policy_sha256": "efb65982e05e21ed7004cc5e483162d83071e9bd97dd9d685cc80fecc4ff5a16",
+  "requirement_count": 35,
   "schema": 1,
-  "surface_count": 3325,
+  "surface_count": 3326,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5666,6 +5694,14 @@
       "id": "algorithm.sha3-shake",
       "owner": "0.24.0",
       "requirement_id": "BRY-REQ-CRYPTO-0002"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "cryptography",
+      "id": "algorithm.sp800-185",
+      "owner": "0.24.6",
+      "requirement_id": "BRY-REQ-CRYPTO-0014"
     },
     {
       "coverage": "requirement",

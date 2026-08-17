@@ -31,7 +31,7 @@ Use scripts/standards/fetch-rfcs.sh to obtain missing allowlisted files, then in
 and use scripts/standards/lock-rfcs.sh to create or refresh the reviewed checksum file.
 Any source-list change and checksum change must be reviewed together.
 
-Official NIST and ITU documents use the separate local-only allowlist and hash
+Official NIST, ITU, and RISC-V documents use the separate local-only allowlist and hash
 manifest under references/. Release maintenance rechecks current RFC
 replacements, errata, IANA registries, NIST planning notes, NIST errata, and
 the in-force ITU edition before work on a dependent milestone.
@@ -91,8 +91,8 @@ immutable. Exact-source mappings require the cited surface and consistent
 normative authority, disposition, and owner. Broader reviewed-global mappings
 are governance-only, RFC-backed, and require explicit reviewed rationale.
 The v0.3.3 domain policy completes classical cryptography, encoding,
-key-container, PKIX, OCSP, and CT coverage. It binds 34 new requirements to all
-55 assigned exact authorities, records current, compatibility, evidence, and
+key-container, PKIX, OCSP, and CT coverage. It binds 35 new requirements to all
+56 assigned exact authorities, records current, compatibility, evidence, and
 exclusion roles, hashes every applicable normative RFC section, and assigns
 all 3,325 current selected surfaces or explicitly defers the two ML-KEM surfaces to
 v0.3.5. FIPS 202 and the in-force ITU-T X.690 (2021) plus Erratum 1 are
@@ -112,14 +112,24 @@ FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C join the local-only checksum
 manifest. Fifty-one residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
 explicit exclusions while assigning every one of the 787 surfaces left by the
-earlier bundles. The generated closure proves that all 129 locked authorities,
-all 391 ordered pre-1.0 roadmap rows, all 4,449 current surfaces, and all 168 requirements have
+earlier bundles. The generated closure proves that all 130 locked authorities,
+all 510 ordered pre-1.0 roadmap rows, all 4,450 current surfaces, and all 169 requirements have
 bidirectional ownership. The new OpenPGP rows are fenced from implementation
 until v0.163.0 authenticates their RFC, errata, registry, algorithm, and
 compression authority closure and generates the corresponding requirements
 and surfaces. Local rights, mutable NIST and IANA refresh rules,
 the resolved hybrid-source gate plus unavailable legacy and FIPS-validation
 authorities remain machine-readable records rather than capability claims.
+
+The v0.24.5 roadmap milestone completes cross-authority lifecycle monitoring.
+It adds scheduled and manual bounded checks for official publication pages,
+document bytes, editions, planning notes, drafts, replacements, withdrawals,
+and supersessions while keeping ordinary verification offline. Automation may
+only create a review-required observation. A human-reviewed disposition must
+map the change to exact requirements, code, tests, evidence, documentation and
+release action; it cannot automatically call an algorithm legacy, disable it,
+or preserve it as current. Security-relevant changes require a corrective
+milestone and exceptional pentest before an affected release can proceed.
 
 Section decisions are reconciled across the domain, transport, and residual
 policies before matrix generation. A normative section cannot be mapped in one

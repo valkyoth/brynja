@@ -7,6 +7,17 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Move the complete NIST SP 800-185 family into the pre-1.0 roadmap: cSHAKE128
+  and cSHAKE256; KMAC128/256 and KMACXOF128/256; TupleHash128/256 and their XOF
+  forms; and ParallelHash128/256 and their XOF forms. Separate milestones now
+  own arbitrary-bit encoding, secret cleanup, tuple identity, bounded parallel
+  execution, package-external portable acceptance, and final cross-backend
+  acceptance before the family can be marked fully implemented.
+- Pin the exact current final SP 800-185 PDF as local-only authority, add its
+  requirement and surface ownership, record the announced revision as mutable,
+  and plan a cross-authority lifecycle monitor that detects official updates,
+  replacements and withdrawals while requiring human security disposition
+  instead of automatically changing modern or legacy status.
 - Add unpublished allocation-free `no_std` `brynja-hash-sha3 0.1.0` with one
   private safe-Rust Keccak-f[1600] owner and complete portable SHA3-224 and
   SHA3-256 one-shot, streaming, digest, checked-length, and consuming-finalize

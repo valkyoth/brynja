@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "602de44185fdc8a9b1fac44da713b33e96ffa9007be739932647d52702b16172",
-  "domain_policy_sha256": "5b3fa1c02baa48153ad5d30cd8ab3484137e2e718c8b680cf1fa0502e590807a",
-  "policy_sha256": "717f6365f0690a2c621d56a25a917d1b09a1a6b0845b30b8c0d7e26054f67bae",
+  "closure_policy_sha256": "fbf92547a94b097a2a59e7dc90a62a9e20917166faaeef144740d41745f4ad36",
+  "domain_policy_sha256": "efb65982e05e21ed7004cc5e483162d83071e9bd97dd9d685cc80fecc4ff5a16",
+  "policy_sha256": "4cfb45b3e654441cb4548a9f120c0cca84f1bfa51a372e572cf3c1dbac2f7a5b",
   "requirements": [
     {
       "applicability": "delegate",
@@ -559,7 +559,7 @@
       "owner": "0.148.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -598,7 +598,8 @@
           "milestones": [
             "0.3.0",
             "0.3.1",
-            "0.3.2"
+            "0.3.2",
+            "0.24.5"
           ],
           "sections": [
             {
@@ -626,7 +627,8 @@
           "milestones": [
             "0.3.0",
             "0.3.1",
-            "0.3.2"
+            "0.3.2",
+            "0.24.5"
           ],
           "sections": [
             {
@@ -896,12 +898,13 @@
       "owner": "0.24.0",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
           "authority_role": "current",
           "domains": [
+            "sha3-derived",
             "symmetric"
           ],
           "id": "nist:NIST.FIPS.202.pdf",
@@ -910,6 +913,12 @@
             "0.22.0",
             "0.23.0",
             "0.24.0",
+            "0.24.6",
+            "0.24.7",
+            "0.24.8",
+            "0.24.9",
+            "0.24.10",
+            "0.24.11",
             "0.25.0",
             "0.26.0",
             "0.27.0",
@@ -3044,6 +3053,106 @@
         }
       ],
       "work_bound": "Identifier dispatch uses bounded exact comparison against a frozen allowlist and never performs attacker-selected discovery or dynamic loading."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.sp800-185"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "Exact encoding, arbitrary-bit, official-example, differential, secret-cleanup, public-package, parallel-execution, cross-backend, proof, timing, independent-review and FIPS-validation evidence remains unresolved through v0.24.6-v0.24.11.",
+      "id": "BRY-REQ-CRYPTO-0014",
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "constant-time",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "lifecycle": "planned",
+      "mapping_rationale": "The dedicated SP 800-185 surface is jointly governed by the pinned current FIPS 202 permutation and the pinned derived-function recommendation, without broadening either source to unrelated Keccak constructions.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.24.6",
+      "profile": "crypto-encoding-pkix",
+      "residual": "The 2016 final remains current while NIST's announced revision is pending; the lifecycle monitor must review any draft or final change before it can alter this requirement, and no automated status observation can admit or reclassify code.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "sha3-derived",
+            "symmetric"
+          ],
+          "id": "nist:NIST.FIPS.202.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.0",
+            "0.23.0",
+            "0.24.0",
+            "0.24.6",
+            "0.24.7",
+            "0.24.8",
+            "0.24.9",
+            "0.24.10",
+            "0.24.11",
+            "0.25.0",
+            "0.26.0",
+            "0.27.0",
+            "0.28.0",
+            "0.29.0",
+            "0.30.0",
+            "0.31.0"
+          ],
+          "role": "sha3-shake",
+          "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
+        },
+        {
+          "authority_role": "current",
+          "domains": [
+            "sha3-derived"
+          ],
+          "id": "nist:NIST.SP.800-185.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.24.6",
+            "0.24.7",
+            "0.24.8",
+            "0.24.9",
+            "0.24.10",
+            "0.24.11"
+          ],
+          "role": "sha3-derived",
+          "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
+        }
+      ],
+      "statement": "cSHAKE128/256, KMAC/KMACXOF128/256, TupleHash/TupleHashXOF128/256, and ParallelHash/ParallelHashXOF128/256 implement every SP 800-185 encoding, bit-string, customization, key, tuple, parallel-block, fixed-output and XOF rule over the exact admitted FIPS 202 permutation.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "planned-symbol",
+          "target": "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "tests/requirements/crypto_sp800_185.rs#all_fourteen_official_instances"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "tests/requirements/crypto_sp800_185.rs#domain_encoding_key_tuple_parallel_and_xof_misuse"
+        }
+      ],
+      "work_bound": "Encoding and sponge work is linear in checked representable input and output bits; TupleHash preserves explicit item bounds, ParallelHash preserves explicit B and leaf-count bounds, and bounded sequential or caller-scheduled execution rejects resource exhaustion before observable output."
     },
     {
       "applicability": "apply",
@@ -11487,7 +11596,7 @@
       "owner": "0.180.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -11565,7 +11674,8 @@
           "milestones": [
             "0.3.0",
             "0.3.1",
-            "0.3.2"
+            "0.3.2",
+            "0.24.5"
           ],
           "sections": [
             {
@@ -11588,7 +11698,8 @@
           "milestones": [
             "0.3.0",
             "0.3.1",
-            "0.3.2"
+            "0.3.2",
+            "0.24.5"
           ],
           "sections": [
             {
@@ -29772,9 +29883,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "81028256123a63cbece68cf7ddeaf958249976f4c08c0341e497f07a1113e7b9",
+  "residual_policy_sha256": "1bedabb36402e883cf8f2eae90abf920524bdf133f94b0c3c95fd42f7201934c",
   "schema": 5,
-  "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
-  "surface_register_sha256": "3ddf68d0b7d8b1d03a0c05e65cfed2eee95a0e4f1999c9bbdcba4eb5c1f28ac5",
-  "transport_policy_sha256": "7288187767bc646a47bf24c88501badfea82fa9992a5d05290a84955f17f4905"
+  "source_ledger_sha256": "0a551bd23d67b120dddee31487cdbf9132b03646517b014fc1b511dbb8e93c5e",
+  "surface_register_sha256": "7d886b86b6f909225b4825c3dcd083f4f7e656c64ae23c7bf150b95fd1bf6f6e",
+  "transport_policy_sha256": "eea3cd230b112212cd78e068bcf309f9db74a3d1b96c7ae974c2dd42f601556f"
 }

@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "e9e0a16666005d23c8a791f3e782d5b71b50d3878744bee4e426cb7a47f0b4a7",
+  "policy_sha256": "2550086d4e77749ddce16ba477f9cf22316ff340f14f6d542f64cf1b2ae624d2",
   "schema": 2,
-  "source_ledger_sha256": "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6",
+  "source_ledger_sha256": "0a551bd23d67b120dddee31487cdbf9132b03646517b014fc1b511dbb8e93c5e",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -206,6 +206,20 @@
       "owner": "0.24.0",
       "rationale": "The private Keccak-f[1600] owner and complete SHA3-224/SHA3-256 APIs are implemented under pinned FIPS 202; SHA3-384, SHA3-512, SHAKE128, SHAKE256, family acceptance, and acceleration remain staged.",
       "test_target": "crates/brynja-hash-sha3/tests/sha3_256.rs#official_fips202_zero_and_1600_bit_vectors_match"
+    },
+    {
+      "code_target": "crates/brynja-hash-sha3/src/sp800_185.rs",
+      "disposition": "future-work",
+      "domain": "cryptography",
+      "id": "algorithm.sp800-185",
+      "kind": "semantic",
+      "normative_sources": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "owner": "0.24.6",
+      "rationale": "The complete SP 800-185 cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF family is planned before 1.0 with exact bit-string encoding, keyed cleanup, portable usability, parallel execution, and cross-backend acceptance.",
+      "test_target": "tests/surface/primitives.rs#sp800_185"
     },
     {
       "code_target": "crates/brynja-dtls-core/src/path.rs#PathToken",

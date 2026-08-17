@@ -206,7 +206,7 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | Keyed BLAKE2 | `brynja-hash-blake2`; typed keyed mode, never confused with HMAC |
 | Keyed BLAKE3 | `brynja-hash-blake3`; keyed and derive-key modes separated |
 | HMAC | Reuse the complete pre-1.0 `brynja-mac-hmac`; post-1.0 work may add only independently admitted hash adapters or convenience facades |
-| KMAC | `brynja-mac-kmac`; KMAC128/KMAC256 and customization explicit |
+| KMAC | Reuse the complete pre-1.0 `brynja-mac-kmac` KMAC128/KMAC256 and KMACXOF128/KMACXOF256 owner; post-1.0 catalogue crates may only re-export it |
 | Keyed MD6 | `brynja-legacy-hash-md6` or research depending security review |
 | OMAC/CMAC | `brynja-mac-cmac`; exact block-cipher and tag parameters |
 | PMAC | `brynja-mac-pmac`; separately reviewed construction |
@@ -237,7 +237,7 @@ check value, byte/bit order, augmentation rule, and canonical name.
 | RIPEMD, RIPEMD-128/160/256/320 | Reuse the complete pre-1.0 RIPEMD-160 owner; add the otherwise standalone RIPEMD, RIPEMD-128/256/320 variants post-1.0 without aliasing them |
 | SHA-1 | Reuse the complete pre-1.0 `brynja-legacy-sha1` implementation; a post-1.0 legacy hash facade may re-export it only after a numbered consumer-specific admission and fresh audit, never by reimplementation |
 | SHA-224/256/384/512 and SHA-512/224/256 | Reuse the complete six-member pre-1.0 `brynja-hash-sha2`; post-1.0 may add only a convenience facade or a separately standardized future SHA-2 extension |
-| SHA-3 and SHAKE | Reuse the complete pre-1.0 FIPS 202 SHA3-224/256/384/512 and SHAKE128/256 family; post-1.0 may add only derived standards such as SP 800-185, not missing FIPS 202 members |
+| SHA-3, SHAKE and SP 800-185 | Reuse the complete pre-1.0 FIPS 202 SHA3-224/256/384/512 and SHAKE128/256 family plus cSHAKE128/256, KMAC/KMACXOF128/256, TupleHash/TupleHashXOF128/256 and ParallelHash/ParallelHashXOF128/256; post-1.0 may add only newly standardized extensions or convenience facades, never reimplement them |
 | Skein | Standalone family with state/output/tree parameters explicit |
 | Snefru | Legacy/research family with security status documented |
 | Spectral Hash | Research until stable authority, rights, and vectors are admitted |
@@ -257,7 +257,7 @@ gap list, not a claim that no other hash exists.
 | SHA-0 | Legacy/research compatibility, isolated from SHA-1 |
 | Future standardized SHA-2 extensions | Only algorithms published after the pre-1.0 FIPS 180-4 closure; SHA-512/224, SHA-512/256, and the required SHA-512/t derivation rules are already pre-1.0 |
 | Future standardized FIPS 202 extensions | Only algorithms outside the complete pre-1.0 SHA3-224/256/384/512 and SHAKE128/256 family |
-| cSHAKE128/256, TupleHash128/256, ParallelHash128/256 | NIST SP 800-185 derived-function family |
+| Future revisions or extensions of cSHAKE, KMAC, TupleHash and ParallelHash | Only functions published outside the complete pre-1.0 SP 800-185 family; the lifecycle monitor must distinguish an editorial revision from changed requirements before any new milestone or reclassification |
 | TurboSHAKE128/256 and KT128/KT256 | RFC 9861 family; separate domain and tree modes |
 | Ascon-Hash256, Ascon-XOF128, Ascon-CXOF128 | NIST SP 800-232 lightweight family |
 | BLAKE-224 and BLAKE-384 | Complete original BLAKE family |
@@ -367,8 +367,8 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
 
 - Re-export or adapt the already complete pre-1.0 SHA-2 and FIPS 202 families;
   do not create a second implementation or defer a named standardized member.
-- Add cSHAKE/TupleHash/ParallelHash, TurboSHAKE/KangarooTwelve, Ascon,
-  BLAKE2, BLAKE3, and other admitted modern families one family at a time.
+- Reuse the complete pre-1.0 SP 800-185 family; add TurboSHAKE/KangarooTwelve,
+  Ascon, BLAKE2, BLAKE3, and other admitted modern families one at a time.
 - Separate fixed digest, XOF, keyed, derive-key, personalization,
   customization, salt, tree, and parallel modes with typed parameters.
 - Require official KATs, independent differentials, every padding/rate/tree
@@ -377,7 +377,7 @@ parameter decisions rather than treating this 2026 snapshot as permanent.
 
 ### 6. MAC Families
 
-- Reuse the complete pre-1.0 HMAC, Poly1305, and GMAC owners; keep future KMAC,
+- Reuse the complete pre-1.0 HMAC, KMAC, Poly1305, and GMAC owners; keep future
   CMAC, PMAC, SipHash, HighwayHash, UMAC, and VMAC in MAC packages even when
   the catalogue calls them keyed hashes.
 - Type keys, nonces, one-time-key consumption, tag sizes, verification, and

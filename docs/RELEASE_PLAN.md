@@ -2590,7 +2590,279 @@ Exit criteria:
   explicit, and only now is SHA-3/SHAKE recorded **Fully implemented**;
 - `v0.24.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.5 - Complete First-Party Legacy SHA-1
+### v0.24.5 - Cross-Authority Standards Lifecycle Monitor
+
+Status: planned
+
+Plan scope: Extend the standards ledger with bounded allowlisted monitoring for every official publication landing page, immutable document, RFC status and errata feed, IANA registry, and admitted architecture specification; record upstream edition, revision, draft, update-planned, superseded and withdrawn state separately from Brynja's current, compatibility, legacy-only, disabled and rejected dispositions; run scheduled and manual drift checks that require human impact review and exact requirement, code, evidence and release decisions without automatically downloading, reclassifying, weakening, or moving any implementation.
+
+Goal: make mutable standards status visible before implementation and release
+without allowing network output or an upstream label to change security policy.
+
+Deliverables:
+
+- add one machine-readable authority-lifecycle register with canonical official
+  landing page, content URL and hash, publisher, edition, publication state,
+  replacement relations, planning notices, last successful observation,
+  reviewed impact and affected requirements, symbols, evidence and milestones;
+- extend the dependency-free bounded fetcher for allowlisted NIST, RFC Editor,
+  IANA, ITU and admitted architecture sources, projecting only reviewed stable
+  fields and treating redirects, parser drift, rollback and unavailable sources
+  as non-authorizing review states rather than silently accepting new bytes;
+- add weekly scheduled and manual GitHub monitoring plus a local command and a
+  release-freshness receipt; observed drift emits a bounded artifact and blocks
+  affected release readiness until a committed human disposition decides no
+  effect, implementation update, compatibility, legacy-only, disabled or
+  rejected, with an exceptional pentest when security behavior can change.
+
+Verification:
+
+- inject document-byte changes, landing-page status changes, draft-to-final,
+  update-planned, superseded, withdrawn, replaced, metadata-only, rollback,
+  replay, redirect, oversized response, malformed content, timeout and outage;
+- prove ordinary offline builds remain deterministic, scheduled checks cannot
+  modify the repository, a fresh observation cannot erase an older unresolved
+  drift, and no automatic result can move code into a legacy facade or keep a
+  withdrawn capability modern;
+- exercise a complete simulated transition from observation through reviewed
+  requirement impact, corrective milestone, documentation and release gate,
+  then pass repository, plan, standards-ledger and broken-fixture checks.
+
+Exit criteria:
+
+- every locked mutable authority has a monitored official identity and explicit
+  upstream and Brynja states, and detected drift cannot be ignored or directly
+  authorize implementation, reclassification, publication or a security claim;
+- `v0.24.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.6 - SP 800-185 Encoding Foundation And Complete cSHAKE
+
+Status: planned
+
+Plan scope: Bind the current final SP 800-185 authority and its announced revision state, implement exact left_encode, right_encode, encode_string and bytepad with checked bit-length arithmetic and canonical arbitrary-bit-string inputs, then complete cSHAKE128 and cSHAKE256 with N and S customization, empty-N-and-S SHAKE equivalence, fixed and XOF output, one-shot, streaming and incremental squeeze APIs, exact domain separation, official examples, proofs, and no raw permutation exposure.
+
+Goal: implement the complete reusable SP 800-185 encoding and customizable-XOF
+foundation without weakening the already accepted FIPS 202 sponge boundary.
+
+Deliverables:
+
+- add canonical borrowed bit-string and checked encoded-length types supporting
+  every representable non-byte tail while preventing unused-bit ambiguity,
+  overflow, partial output or a caller-crafted encoding bypass;
+- implement all four SP 800-185 encoding functions once and complete distinct
+  cSHAKE128/cSHAKE256 absorb, finalize and squeeze state machines with N and S,
+  including the exact empty-N-and-S identity with SHAKE and fixed-length output;
+- bind the current final PDF and NIST's announced revision status in the new
+  lifecycle monitor, keep raw Keccak private, and expose allocation-free no_std
+  one-shot, streaming and multi-squeeze APIs through leaf and facade packages.
+
+Verification:
+
+- run every official cSHAKE example, empty and nonempty N/S combinations,
+  arbitrary bit tails, bytepad boundaries, all encode length edges, zero and
+  multi-rate messages, fixed and partitioned XOF outputs, and SHAKE equivalence;
+- differential-test against two independently obtained implementations or one
+  implementation plus a separately coded oracle, prove encoding and state
+  bounds with Kani, and run Miri, sanitizer, no_std and mutation fixtures;
+- reject suffix substitution, ambiguous tail bits, length overflow, squeeze
+  before finalization, absorb after squeeze, output aliasing and public raw
+  permutation access while preserving every v0.24.4 SHA-3/SHAKE result.
+
+Exit criteria:
+
+- both cSHAKE strengths and all encoding operations are complete through public
+  APIs, exact authority and revision status are visible, and later SP 800-185
+  constructions need no private reimplementation or deferred input behavior;
+- `v0.24.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.7 - Complete KMAC And KMACXOF
+
+Status: planned
+
+Plan scope: Implement KMAC128, KMAC256, KMACXOF128 and KMACXOF256 once in `brynja-mac-kmac` over the exact cSHAKE owner, covering the complete standards-valid key, message, customization and output domains through clearly separated conformance and strength-enforcing constructors, secret-owned sponge and encoding state, hardened cleanup, affine finalization, constant-time tag verification, official examples, misuse tests, proofs, and non-approved indicators without confusing a MAC, PRF, XOF, or unkeyed digest.
+
+Goal: complete every SP 800-185 keyed instance with an API that preserves exact
+conformance while making strong production key policy and service status clear.
+
+Deliverables:
+
+- implement typed KMAC128/KMAC256 and KMACXOF128/KMACXOF256 states with exact
+  `KMAC` function-name separation, key bytepad, customization and fixed-versus-
+  XOF right encoding, including every standards-valid representable bit length;
+- separate exact conformance constructors from strength-enforcing production
+  constructors, report empty or undersized keys as non-approved without calling
+  them ordinary hashes, and expose opaque MAC/PRF tags with constant-time verify;
+- own and compiler-resistantly destroy key bytes, encoded key blocks, sponge
+  state, buffers, temporary tags and failure paths through the admitted
+  sanitization boundary, with affine finalization and no digest/tag conversion.
+
+Verification:
+
+- run every official KMAC and KMACXOF example plus empty, short, boundary and
+  long keys, messages and S values, bit tails, fixed and multi-squeeze outputs,
+  invalid tags, truncation policy, reuse and cross-instance substitution;
+- inspect cleanup in MIR, LLVM IR and supported target assembly, measure tag
+  comparison timing, run Kani, Miri, sanitizers, no_std and forced-drop/failure
+  tests, and differentially verify exact encodings and outputs;
+- prove no conformance-only weak-key result gains approved/default authority,
+  no public ordinary digest interface accepts KMAC, and no secret-owned state
+  uses the ordinary non-erasing SHA-3/SHAKE state.
+
+Exit criteria:
+
+- all four keyed instances are complete and usable with exact conformance,
+  strong production policy, cleanup and typed verification, while independent
+  review and FIPS validation remain explicitly separate;
+- `v0.24.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.8 - Complete TupleHash And TupleHashXOF
+
+Status: planned
+
+Plan scope: Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, official examples, partition and collision-separation negatives, proofs, and public types that cannot silently flatten a tuple into one byte string.
+
+Goal: complete the four tuple-hash instances while making item identity and
+ordering structural API properties rather than caller-maintained conventions.
+
+Deliverables:
+
+- implement exact `TupleHash` function-name separation, encode_string per item,
+  S customization and fixed-versus-XOF terminal encoding for both strengths;
+- expose whole-item APIs and an affine begin/update/finish item state whose
+  declared bit length must be consumed exactly before another item or final
+  output can begin, with caller-owned storage and bounded tuple accounting;
+- provide distinct fixed-output and incremental-XOF result types and preserve
+  tuple ordering, empty items, non-byte tails and transactional failure without
+  flattening, allocating, or exposing the cSHAKE or permutation internals.
+
+Verification:
+
+- run every official TupleHash/TupleHashXOF example, empty tuple and empty item,
+  item permutation, split-versus-concatenated tuples, non-byte tails, S values,
+  output partitions, declared-length underflow/overflow and state misuse;
+- differential-test whole and streamed items, prove item-boundary and work
+  bounds, and run mutation, Miri, sanitizer, no_std and package tests;
+- demonstrate that `("ab", "c")`, `("a", "bc")`, one `"abc"` item and reordered
+  items remain distinct and that no incomplete item can yield output.
+
+Exit criteria:
+
+- all four tuple instances accept the complete documented input model through
+  public APIs with unambiguous ordering and no deferred XOF or streaming work;
+- `v0.24.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.9 - Complete ParallelHash And ParallelHashXOF
+
+Status: planned
+
+Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, a deterministic bounded sequential no_std path, caller-scheduled ordered leaf jobs for real parallel no_std use, and a separate optional zero-dependency std executor; cover partial and empty leaves, worker failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs, and no hidden allocation in the core crate.
+
+Goal: complete the four parallel-hash instances as both exact mathematical
+functions and practically usable bounded parallel operations across platforms.
+
+Deliverables:
+
+- implement exact `ParallelHash` separation, B and n encodings, 8B output leaf
+  cSHAKE calls, final-node customization and fixed-versus-XOF terminal encoding
+  for both strengths, with deterministic checked limits for representable work;
+- expose allocation-free sequential streaming plus affine ordered leaf jobs and
+  caller-supplied result storage so no_std schedulers can execute leaves in
+  parallel without duplicating construction logic or accepting reordered data;
+- add an optional separate first-party zero-dependency std executor with bounded
+  worker count, cancellation, panic/error containment and deterministic merge;
+  keep it outside the core, defaults, bare-metal and FIPS module boundary.
+
+Verification:
+
+- run every official fixed and XOF example across B=1, partial last blocks,
+  empty and multi-leaf inputs, customization, arbitrary output partitions,
+  maximum representable bounds and deterministic resource failures;
+- compare sequential, deliberately reordered completion, caller-scheduled and
+  std-executor outputs across worker counts and fault injection, and prove no
+  error releases a partial result or merges the wrong leaf index;
+- run Kani bounds, race and cancellation tests, sanitizers, no_std packaging,
+  cross-architecture performance and independent differential campaigns.
+
+Exit criteria:
+
+- all four ParallelHash instances are exact and usable sequentially and through
+  bounded parallel scheduling, with theoretical-versus-machine limits explicit
+  and no hidden allocation, thread or availability claim in the no_std core;
+- `v0.24.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.10 - SP 800-185 Portable Public API Usability Acceptance
+
+Status: planned
+
+Plan scope: Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, secret cleanup and misuse failures while keeping the derived family In progress.
+
+Goal: prove the complete portable SP 800-185 family works through only the
+documented packages before any final cross-backend evidence is accepted.
+
+Deliverables:
+
+- freeze one package-external no_std-capable fixture covering two cSHAKE, four
+  KMAC, four TupleHash and four ParallelHash identities without private hooks;
+- exercise fixed output, XOF, one-shot, streamed input, multi-squeeze, bit-tail,
+  conformance-key and production-key, sequential and caller-scheduled APIs on
+  representative real data and exact official examples;
+- publish one reproducible command, package-content assertions, status-table
+  In-progress wording, residual limits and cleanup evidence tied to exact code.
+
+Verification:
+
+- run all fourteen instances against official examples and independent outputs,
+  plus zero, rate, encode, tuple, leaf, B, L and output-partition boundaries;
+- force every documented misuse and exhaustion result, package each selected
+  crate offline, compile no_std consumers, and inspect keyed cleanup artifacts;
+- hash and freeze the fixture/corpus so later acceleration acceptance cannot
+  weaken, omit or silently rewrite its portable expectations.
+
+Exit criteria:
+
+- the portable public family has no hidden implementation or usability gap and
+  remains **In progress** until the same frozen contract passes every admitted
+  backend and parallel execution route;
+- `v0.24.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.11 - SP 800-185 Cross-Backend And Parallel Final Acceptance
+
+Status: planned
+
+Plan scope: Rerun the unchanged v0.24.10 fixture through portable and every admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs and bounded failure, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and cleanup evidence affected by the derived constructions, and mark SP 800-185 Fully implemented only when every named instance and backend has an explicit passing or unadmitted disposition on the final code.
+
+Goal: close the complete derived family only after portable, accelerated, keyed
+and parallel paths satisfy the same already-frozen consumer contract.
+
+Deliverables:
+
+- route all fourteen public identities through portable and every admitted
+  Keccak backend without changing encoding, suffix, output or service identity;
+- collect exact-commit AMD/Intel where supported, Apple/AWS AArch64 and
+  qualifying RISC-V or documented emulator-only evidence, plus std and caller-
+  scheduled ParallelHash performance, timing, KAT, quarantine and fault data;
+- rerun compiler-resistant KMAC cleanup across affected compilers and targets,
+  bind every candidate/admitted/unavailable disposition, and update the public
+  SP 800-185 table only after final evidence agrees with final source.
+
+Verification:
+
+- rerun the byte-identical v0.24.10 fixture, every corpus and official example
+  through portable, admitted, unavailable-required, quarantined and parallel
+  routes, including migration and worker-failure tests;
+- invalidate and repeat every affected native, proof, emitted-code, timing,
+  cleanup, package and acceptance artifact after any implementation change;
+- pass the full Rust/target matrix, no_std and optional std graphs, dependency,
+  SBOM, source-line, unsafe, documentation, GitHub and CodeQL gates.
+
+Exit criteria:
+
+- every named SP 800-185 instance and execution route has an explicit passing
+  or unadmitted disposition, all exact-commit evidence is current, and only now
+  is the derived family recorded **Fully implemented**;
+- `v0.24.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.12 - Complete First-Party Legacy SHA-1
 
 Status: planned
 
@@ -2627,9 +2899,9 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.24.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.6 - Complete First-Party Legacy MD5
+### v0.24.13 - Complete First-Party Legacy MD5
 
 Status: planned
 
@@ -2666,9 +2938,9 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.24.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.7 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
+### v0.24.14 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
 
 Status: planned
 
@@ -2705,7 +2977,7 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.24.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - Complete Generic HMAC Construction
 
@@ -15109,14 +15381,14 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.5 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.
+Plan scope: Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.12 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.
 
 Goal: review the already complete SHA-1 owner once for three narrowly bounded
 OpenPGP compatibility consumers without changing its implementation identity.
 
 Deliverables:
 
-- verify the v0.24.5 implementation, package, vectors, warning and evidence
+- verify the v0.24.12 implementation, package, vectors, warning and evidence
   hashes remain exact and suitable for only the named input domains;
 - assign separate non-interchangeable fingerprint, protected-key and MDC
   consumer identities with their own data, output and cleanup rules;
@@ -15125,7 +15397,7 @@ Deliverables:
 
 Verification:
 
-- rerun the complete v0.24.5-v0.24.7 SHA-1 and legacy-isolation evidence on the exact candidate;
+- rerun the complete v0.24.12-v0.24.14 SHA-1 and legacy-isolation evidence on the exact candidate;
 - test consumer-domain and preimage separation plus collision-risk policy and
   complete cleanup for each proposed use;
 - graph-test every permitted and forbidden edge and complete independent risk review.

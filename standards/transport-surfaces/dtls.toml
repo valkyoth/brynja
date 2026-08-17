@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "db630c0a1232710a2fce08f4f4a928874d188a86eecaa2a5cfcb53eca55bccf6"
+source_ledger_sha256 = "0a551bd23d67b120dddee31487cdbf9132b03646517b014fc1b511dbb8e93c5e"
 
 [[surface]]
 id = "boundary.dtls.path-identity"

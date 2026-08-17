@@ -17,6 +17,13 @@ family remains in progress through later v0.24.x milestones.
 - Exact FIPS 202 SHA-3 domain separation (`0x06`) and multi-rate final bit,
   while raw Keccak, SHA3-384, SHA3-512, SHAKE, and acceleration remain absent.
 - Exact reexports through `brynja-crypto` and the modern `brynja` facade.
+- Exact official SP 800-185 authority and a complete pre-1.0 roadmap for all
+  fourteen cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and
+  ParallelHash/ParallelHashXOF instances, with separate encoding, keyed,
+  tuple, parallel, portable-usability, and cross-backend review units.
+- A planned v0.24.5 cross-authority lifecycle monitor that will detect official
+  document and publication-status drift without automatically admitting,
+  disabling, or moving an implementation between modern and legacy policy.
 
 ## Verification
 
@@ -48,6 +55,11 @@ state, registers, caches, crash snapshots, or compiler-created copies.
 No SHA-3 code is independently reviewed or FIPS 140-3 validated. FIPS 202
 remains the current NIST standard, but NIST's announced future update must be
 reviewed when a draft or replacement final appears.
+
+SP 800-185 remains the current final recommendation and its exact PDF is now
+checksum-pinned as local-only authority. NIST's announced revision is recorded
+as mutable status, not treated as unpublished normative text. The added roadmap
+does not claim that any SP 800-185 function is implemented in v0.24.0.
 
 ## Release Process
 

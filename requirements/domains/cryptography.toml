@@ -22,7 +22,7 @@ mapping_rationale = "The SHA-2 semantic surface is governed by the pinned NIST h
 id = "BRY-REQ-CRYPTO-0002"
 owner = "0.24.0"
 lifecycle = "implemented"
-revision = 2
+revision = 3
 decision_ids = ["algorithm.sha3-shake"]
 sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }]
 statement = "Keccak-f[1600], SHA3-224, and SHA3-256 implement the exact FIPS 202 permutation, rates, suffix, padding, outputs, and domain separation; later SHA3-384, SHA3-512, SHAKE128, and SHAKE256 reuse that private owner without broadening this requirement's current implementation claim."
@@ -212,3 +212,19 @@ work_bound = "Identifier dispatch uses bounded exact comparison against a frozen
 evidence_gap = "The complete v1 allowlist and per-algorithm functional, lifecycle, resource, and side-channel evidence remain unresolved until v0.46.0 and v0.47.0."
 residual = "Registry presence is not admission, and hybrid or post-quantum algorithms remain owned by their later explicit coverage and implementation gates."
 mapping_rationale = "This reviewed cross-domain rule binds the complete cryptography registry surface to the v0.46.0 deny-by-default decision gate rather than treating any one RFC registry as automatic admission."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0014"
+owner = "0.24.6"
+lifecycle = "planned"
+decision_ids = ["algorithm.sp800-185"]
+sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-185.pdf", authority_role = "current" }]
+statement = "cSHAKE128/256, KMAC/KMACXOF128/256, TupleHash/TupleHashXOF128/256, and ParallelHash/ParallelHashXOF128/256 implement every SP 800-185 encoding, bit-string, customization, key, tuple, parallel-block, fixed-output and XOF rule over the exact admitted FIPS 202 permutation."
+invariants = ["algorithm-admission", "canonical-encoding", "constant-time", "key-lifecycle", "resource-bound", "side-channel", "validation", "work-bound"]
+target = "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185"
+positive_test = "tests/requirements/crypto_sp800_185.rs#all_fourteen_official_instances"
+negative_test = "tests/requirements/crypto_sp800_185.rs#domain_encoding_key_tuple_parallel_and_xof_misuse"
+work_bound = "Encoding and sponge work is linear in checked representable input and output bits; TupleHash preserves explicit item bounds, ParallelHash preserves explicit B and leaf-count bounds, and bounded sequential or caller-scheduled execution rejects resource exhaustion before observable output."
+evidence_gap = "Exact encoding, arbitrary-bit, official-example, differential, secret-cleanup, public-package, parallel-execution, cross-backend, proof, timing, independent-review and FIPS-validation evidence remains unresolved through v0.24.6-v0.24.11."
+residual = "The 2016 final remains current while NIST's announced revision is pending; the lifecycle monitor must review any draft or final change before it can alter this requirement, and no automated status observation can admit or reclassify code."
+mapping_rationale = "The dedicated SP 800-185 surface is jointly governed by the pinned current FIPS 202 permutation and the pinned derived-function recommendation, without broadening either source to unrelated Keccak constructions."

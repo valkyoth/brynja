@@ -127,12 +127,12 @@ def test_current_residual_repository() -> None:
 
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
-    assert len(artifact["sources"]) == 129
-    assert len(artifact["plans"]) == 503
-    assert len(artifact["surfaces"]) == 4449
-    assert len(artifact["requirements"]) == 168
-    assert len(artifact["local_rights"]) == 17
-    assert len(artifact["mutable_authorities"]) == 13
+    assert len(artifact["sources"]) == 130
+    assert len(artifact["plans"]) == 510
+    assert len(artifact["surfaces"]) == 4450
+    assert len(artifact["requirements"]) == 169
+    assert len(artifact["local_rights"]) == 18
+    assert len(artifact["mutable_authorities"]) == 15
     assert len(artifact["blockers"]) == 3
     assert standards.json_bytes(artifact) == lib.CLOSURE.read_bytes()
 

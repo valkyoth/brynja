@@ -51,7 +51,7 @@ commit `00b1180a9014b7e69986e8ddd29d46e85a20aa2f` and were independently
 reverified over TLS using addresses obtained from Google DNS-over-HTTPS,
 independently of every later `--write`.
 
-NIST and ITU PDFs remain local-only and are not required in a clean clone. The ledger
+NIST, ITU, and RISC-V PDFs remain local-only and are not required in a clean clone. The ledger
 always validates their complete allowlist and hash manifest. When any expected
 PDF is present, the entire cache must be present and every byte is checked.
 Set `VERIFY_LOCAL_REFERENCE_FILES=1` to require the cache explicitly.
@@ -96,7 +96,7 @@ missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
 or stale generated JSON or Markdown. All 4,126 individual IANA records, 195
-nested registries, and 126 semantic decisions are represented; `future-work`
+nested registries, and 129 semantic decisions are represented; `future-work`
 does not claim implementation. An `implemented` disposition is admitted only
 when current code, tests, and requirement evidence support that exact surface.
 
@@ -108,14 +108,14 @@ bidirectional mappings, repository-escaping targets, released-ID removal,
 incorrect revisions, unrelated decision links, lifecycle/disposition or owner
 conflicts, protocol use of global mappings, released-scope changes, or stale
 generated artifacts. Its 12 foundation requirements exercise all eight
-lifecycle states; 34 domain requirements cover all 53 assigned cryptography,
+lifecycle states; 35 domain requirements cover all 56 assigned cryptography,
 encoding, PKIX, OCSP, and CT authorities plus 3,325 current selected surfaces; 71
 transport requirements cover 40 authorities, 550 normative sections, 64
 implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty-one
 residual requirements cover 33 authorities, 182 reviewed normative sections,
 and all 787 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 127 sources and 4,449 surfaces.
+closure across all 130 sources and 4,450 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -168,3 +168,13 @@ Final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are checksum-pinned
 local-only authorities. Their publication pages, planning notes, errata, and
 CMVP applicability remain mutable and must be refreshed at their dependent
 milestones without silently replacing the reviewed baseline.
+
+Final SP 800-185 is likewise checksum-pinned locally for the complete pre-1.0
+cSHAKE, KMAC, TupleHash, and ParallelHash chain. Its 2025 revision announcement
+is recorded as mutable authority, not as normative replacement text. The
+planned v0.24.5 lifecycle monitor extends the present RFC/errata/IANA drift
+check to official publication landing pages and documents. It will report
+upstream status independently from Brynja disposition: withdrawal or
+supersession triggers human impact review and a corrective milestone, but can
+never automatically move an implementation to legacy, keep it modern, or
+authorize changed code.

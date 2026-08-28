@@ -17,7 +17,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192"
+      "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1"
     },
     {
       "authority_role": "current",
@@ -79,7 +79,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7"
+      "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55"
     },
     {
       "authority_role": "current",
@@ -2620,10 +2620,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "166d5dda058e7dec4f10d4ea33e753eee46afaecdc09d56504e0da04a81b721c",
+  "policy_sha256": "0e68f24be0b4d7a8a0d4e986e7d51dff9b3a38cc1c0701ef705257fa7ce6927f",
   "requirement_count": 51,
   "schema": 1,
-  "surface_count": 787,
+  "surface_count": 791,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -3693,7 +3693,7 @@
       "coverage": "requirement",
       "disposition": "caller-owned",
       "domain": "dns",
-      "id": "iana.dns-parameters.dns-parameters-4.69-98.1",
+      "id": "iana.dns-parameters.dns-parameters-4.71-98.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },
@@ -4405,6 +4405,22 @@
       "coverage": "requirement",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-4.value-coded-per-a-unece-recommendation.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-4.value-coded-per-an-iso-standard.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.dns-parameters-4.x-400-mail-mapping-information.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
@@ -4894,6 +4910,14 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.dns-resolver-information-keys.provides-a-url-that-points-to-unstructured-resolver-information-that-is-used-for-troubleshooting.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-indicates-that-the-deleg-protocol-is-supported-temporary-registered-2026-08-24-expires-2027-08-24.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },
@@ -5862,6 +5886,14 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },

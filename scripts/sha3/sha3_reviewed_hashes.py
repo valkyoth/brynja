@@ -19,6 +19,6 @@ REVIEWED_HASHES = {
     "crates/brynja-hash-sha3/tests/shake128.rs": "dba8064589092b881b1efbbdde81cae660395f117257b23da9c5d47fcaa520fc",
     "crates/brynja-hash-sha3/tests/shake256.rs": "1fa331294282ede0f12a2494872def9c97dbb9ab1578f727249588ac7a6d486d",
     "crates/brynja-hash-sha3/tests/support/mod.rs": "c8bd14613e410e69540be014224afcabfc0ec4b47831be3fcb1f80526d434f33",
-    "assurance/sha3-differential/src/main.rs": "5c8644d751557c6bf4835a76db58924e4d474b50af18057c35c437c94ad5c14f",
-    "scripts/sha3/check-sha3-differential.py": "692cf5b4206fcd6428b80fa87a3f20d1d2d7940cc1835130736d6ccaf1c85f99",
+    "assurance/sha3-differential/src/main.rs": "4f5f52851c2b93b86cd7f536d71137e6bbe9096d33c321fd397f54aabc67eb17",
+    "scripts/sha3/check-sha3-differential.py": "7dea9369172f071e48c7710e4cc051605af7d54ca3b5b58bb84a2c647882a661",
 }

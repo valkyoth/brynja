@@ -69,7 +69,7 @@ RFC, NIST, FIPS, or independent-verification evidence.
   normative RFC sections, 64 owner milestones, and 485 transport surfaces,
   including requirement IDs or reviewed dispositions for every section.
 - `residual-coverage.json` proves exact coverage of 33 residual authorities,
-  182 normative RFC sections, and 787 previously uncovered surfaces, including
+  182 normative RFC sections, and 791 previously uncovered surfaces, including
   165 mapped sections, 17 explicit exclusions, and 266 exact section links.
 - Domain, transport, and residual section policies are reconciled globally so
   no section can be both mapped and excluded or carry conflicting exclusions.

@@ -6,6 +6,8 @@ use std::{
 
 use brynja_hash_sha3::{sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256};
 
+const MAX_XOF_OUTPUT_BYTES: usize = 343;
+
 fn main() -> Result<(), Box<dyn Error>> {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input)?;
@@ -57,9 +59,16 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn parse_length(value: &str, line_number: usize) -> Result<usize, io::Error> {
-    value
+    let length = value
         .parse()
-        .map_err(|_| invalid(line_number, "invalid output length"))
+        .map_err(|_| invalid(line_number, "invalid output length"))?;
+    if length > MAX_XOF_OUTPUT_BYTES {
+        return Err(invalid(
+            line_number,
+            "output length exceeds campaign limit",
+        ));
+    }
+    Ok(length)
 }
 
 fn append_xof<E>(
@@ -70,7 +79,11 @@ fn append_xof<E>(
     line_number: usize,
 ) -> Result<(), Box<dyn Error>> {
     let length = output_length.ok_or_else(|| invalid(line_number, "missing output length"))?;
-    let mut output = vec![0_u8; length];
+    let mut output = Vec::new();
+    output
+        .try_reserve_exact(length)
+        .map_err(|_| invalid(line_number, "output allocation failed"))?;
+    output.resize(length, 0);
     xof(message, &mut output).map_err(|_| invalid(line_number, "XOF length rejected"))?;
     append_hex(rendered, &output)?;
     Ok(())
@@ -115,9 +128,16 @@ fn nibble(value: u8) -> Result<u8, io::Error> {
     }
 }
 
-fn append_hex(output: &mut String, bytes: &[u8]) -> Result<(), std::fmt::Error> {
+fn append_hex(output: &mut String, bytes: &[u8]) -> Result<(), io::Error> {
+    let additional = bytes
+        .len()
+        .checked_mul(2)
+        .ok_or_else(|| io::Error::other("hex output length overflow"))?;
+    output
+        .try_reserve_exact(additional)
+        .map_err(|_| io::Error::other("hex output allocation failed"))?;
     for byte in bytes {
-        write!(output, "{byte:02x}")?;
+        write!(output, "{byte:02x}").map_err(io::Error::other)?;
     }
     Ok(())
 }

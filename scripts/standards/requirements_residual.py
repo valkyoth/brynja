@@ -268,7 +268,8 @@ def validate_policy(
             )
         ):
             lib.fail("residual policy has a malformed surface group")
-    if any(set(item) != REGISTRY_FIELDS for item in policy["registry_requirement"]):
+    if any(not REGISTRY_FIELDS <= set(item) or set(item) - REGISTRY_FIELDS - {"revision"}
+           or not isinstance(item.get("revision", 1), int) or item.get("revision", 1) < 1 for item in policy["registry_requirement"]):
         lib.fail("residual policy has a malformed registry requirement")
     ids = [item["id"] for key in ("surface_group", "registry_requirement") for item in policy[key]]
     if len(ids) != len(set(ids)) or any(lib.ID_PATTERN.fullmatch(item) is None for item in ids):

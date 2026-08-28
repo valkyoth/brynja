@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-17",
+  "checked_at": "2026-08-28",
   "records": [
     {
       "date_reported": "2005-06-23",
@@ -624,6 +624,19 @@
       "status": "Rejected",
       "type": "Technical",
       "url": "https://errata.rfc-editor.org/eid8442/"
+    },
+    {
+      "date_reported": "2026-08-27",
+      "disposition": "track-not-applied",
+      "id": 9147,
+      "implementation": "planned:v0.50.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 3986,
+      "section": "2.3",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.50.0 and recheck official status before dependent implementation and release.",
+      "status": "Reported",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9147/"
     },
     {
       "date_reported": "2008-07-09",

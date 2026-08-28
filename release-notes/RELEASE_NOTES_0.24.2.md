@@ -1,7 +1,7 @@
 # Brynja 0.24.2 Release Notes
 
-Status: exceptional pentest PASS; awaiting hosted GitHub and CodeQL; internal
-development tag; no crates.io publication
+Status: Medium assurance-tooling finding remediated; independent retest
+pending; internal development tag; no crates.io publication
 
 Brynja 0.24.2 completes portable SHAKE128 and SHAKE256 over the private
 Keccak-f[1600] sponge introduced in v0.24.0. All six FIPS 202 functions now
@@ -34,7 +34,7 @@ accelerated final acceptance remain v0.24.3 and v0.24.4 work.
 - A deterministic 328-message corpus checks all four SHA-3 digests and both
   SHAKE XOFs against Python's independently maintained `hashlib` path with
   caller-selected outputs from zero through 343 bytes.
-- Forty-three source-policy mutation fixtures cover unsafe/native code,
+- Forty-six source-policy mutation fixtures cover unsafe/native code,
   allocation, visibility, permutation operations, SHA-3/SHAKE suffixes,
   padding, all six rates and identities, XOF transitions, input/output counter
   ownership, authoritative-vector gates, dynamic-analysis commands, package
@@ -74,7 +74,19 @@ v0.20.0-to-v0.25.0 range and selects zero crates.io packages. The two newly
 admitted XOF algorithms and their absorbing-to-squeezing state machine trigger
 an exceptional cryptographic pentest. The repository-owner assessment of exact
 implementation candidate `208c0b07d152d3a5c8316093e98b29c89f332c07`
-reported no finding and required no remediation. Its permanent report records
-`PASS`/`PASS` with zero open findings. The exact report commit must pass the
-complete local gate plus hosted GitHub and CodeQL checks before explicit
-signed-tag authorization.
+was initially reported green, after which one overlooked Medium denial-of-
+service finding was supplied for the repository-only differential adapter.
+The adapter now enforces its 343-byte XOF campaign ceiling before allocation,
+uses fallible output and hex reservations, and rejects 344, `usize::MAX`, and
+numeric overflow without panic. Production SHAKE code is unchanged. Local
+remediation verification passes; independent retest is pending. After retest,
+the exact report commit must pass the complete local gate plus hosted GitHub
+and CodeQL checks before explicit signed-tag authorization.
+
+The release-time live standards gate also detected official IANA SMI Numbers
+and DNS Parameters updates dated 2026-08-18 and 2026-08-24, plus RFC 3986
+erratum 9147 reported on 2026-08-27. Independent review confirmed the exact
+registry and metadata deltas, including two draft-to-RFC 10031 SMI reference
+changes and provisional C509, DNS type, and DELEG allocations. The refreshed
+evidence retains the existing future milestone owners and admits no new
+authority, SHAKE change, or runtime behavior.

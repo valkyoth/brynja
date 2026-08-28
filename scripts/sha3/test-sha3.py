@@ -89,10 +89,13 @@ def main() -> int:
     reject("SHAKE Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "shake128 shake256", "shake128"))
     reject("SHA-3 sanitizer package", lambda root: replace(root, policy.SANITIZER_SCRIPT, "-p brynja-hash-sha3", "-p brynja-hash-sha2"))
     reject("SHA-3 sanitizer test targets", lambda root: replace(root, policy.SANITIZER_SCRIPT, "--tests", "--lib"))
+    reject("XOF campaign maximum", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "MAX_XOF_OUTPUT_BYTES: usize = 343", "MAX_XOF_OUTPUT_BYTES: usize = usize::MAX"))
+    reject("XOF campaign comparison", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "length > MAX_XOF_OUTPUT_BYTES", "length == MAX_XOF_OUTPUT_BYTES"))
+    reject("XOF fallible allocation", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, ".try_reserve_exact(length)", ".reserve_exact(length)"))
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects forty-three boundary, permutation, padding, XOF, identity, dynamic-analysis, size, and hash regressions")
+    print("portable SHA-3 policy rejects forty-six boundary, permutation, padding, XOF, allocation, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

@@ -269,6 +269,23 @@ def validate(root: Path) -> None:
     if sanitizer.count("-p brynja-hash-sha3") != 1:
         fail("SHA-3 AddressSanitizer package coverage changed")
 
+    differential_fixture = read(root, DIFFERENTIAL_FIXTURE)
+    for token in (
+        "const MAX_XOF_OUTPUT_BYTES: usize = 343;",
+        "if length > MAX_XOF_OUTPUT_BYTES",
+        ".try_reserve_exact(length)",
+        ".try_reserve_exact(additional)",
+    ):
+        require(differential_fixture, token, "SHA-3 differential allocation bound")
+    differential = read(root, DIFFERENTIAL)
+    for token in (
+        '"shake128 - 344\\n"',
+        'f"shake128 - {usize_max}\\n"',
+        'f"shake128 - {usize_max + 1}\\n"',
+        '"capacity overflow"',
+    ):
+        require(differential, token, "SHA-3 differential rejection tests")
+
     manifest = tomllib.loads(read(root, MANIFEST))
     if manifest.get("dependencies") != {"brynja-hash-core": {"workspace": True}}:
         fail("SHA-3 dependency boundary changed")

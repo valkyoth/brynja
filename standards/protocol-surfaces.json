@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "db28fc21a6e4576a659183c0ee61905f9201d7bc8e6620c4b535e1d9f8cd0df5",
+  "policy_sha256": "0e5acea6c7f76845fb5a629c777476164138c69a797a46dcc565296a6fa69ed6",
   "schema": 2,
-  "source_ledger_sha256": "65caf5a9f356c92eb6fb6443af595869e0181e19e88378c678dfd001ea25d9b1",
+  "source_ledger_sha256": "3f1f34885eb5dbd6a91ad1ba172a2b016f13f54a0af3d3a480b43c59213cd735",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -648,7 +648,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "contact-uri-schemes",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "Contact URI Schemes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -734,7 +734,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "csync-flags",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "Child Synchronization (CSYNC) Flags"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -849,7 +849,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dhcid-rr-digest-type-codes",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DHCID RR Digest Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -957,7 +957,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-catalog-zones",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS Catalog Zones Properties"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1147,7 +1147,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-dso-type-codes",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DSO Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1572,7 +1572,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-10",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS Label Types"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1790,7 +1790,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-11",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS EDNS0 Option Codes (OPT)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -2939,7 +2939,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-12",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS Header Flags"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3193,7 +3193,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-13",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "EDNS Header Flags (16 bits)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3351,7 +3351,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-14",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "EDNS version Number (8 bits)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3428,7 +3428,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-2",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS CLASSes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3783,7 +3783,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-4",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "Resource Record (RR) TYPEs"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -4291,7 +4291,7 @@
       "code_target": "crates/brynja-platform/src/dns.rs",
       "disposition": "caller-owned",
       "domain": "dns",
-      "id": "iana.dns-parameters.dns-parameters-4.69-98.1",
+      "id": "iana.dns-parameters.dns-parameters-4.71-98.1",
       "kind": "iana-entry",
       "normative_sources": [
         "iana:dns-parameters",
@@ -4304,7 +4304,7 @@
         "fields": {
           "description": "",
           "type": "Unassigned",
-          "value": "69-98"
+          "value": "71-98"
         },
         "references": []
       },
@@ -7457,6 +7457,86 @@
       "code_target": "crates/brynja-platform/src/dns.rs",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-4.value-coded-per-a-unece-recommendation.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-08-20"
+        },
+        "fields": {
+          "description": "Value coded per a UNECE Recommendation",
+          "file": {
+            "attributes": {
+              "type": "template"
+            },
+            "text": "UNECE/unece-completed-template"
+          },
+          "type": "UNECE",
+          "value": "69"
+        },
+        "references": [
+          {
+            "data": "draft-woodcock-faltstrom-external-registry-rrtypes-00",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "dns-parameters-4"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-4.value-coded-per-an-iso-standard.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-08-20"
+        },
+        "fields": {
+          "description": "Value coded per an ISO standard",
+          "file": {
+            "attributes": {
+              "type": "template"
+            },
+            "text": "ISO/iso-completed-template"
+          },
+          "type": "ISO",
+          "value": "70"
+        },
+        "references": [
+          {
+            "data": "draft-woodcock-faltstrom-external-registry-rrtypes-00",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "dns-parameters-4"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.dns-parameters-4.x-400-mail-mapping-information.1",
       "kind": "iana-entry",
       "normative_sources": [
@@ -7500,7 +7580,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-5",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS OpCodes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -7760,7 +7840,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-6",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS RCODEs"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -8633,7 +8713,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-8",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "AFSDB RR Subtype"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -8840,7 +8920,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-9",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DHCID RR Identifier Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9015,7 +9095,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-quic-error-codes",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS-over-QUIC Error Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9294,7 +9374,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-resolver-information-keys",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS Resolver Information Keys"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9369,6 +9449,39 @@
       "code_target": "crates/brynja-platform/src/dns.rs",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-indicates-that-the-deleg-protocol-is-supported-temporary-registered-2026-08-24-expires-2027-08-24.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-08-24"
+        },
+        "fields": {
+          "description": "The presence of the key indicates that the DELEG protocol is supported. (TEMPORARY - registered 2026-08-24, expires 2027-08-24)",
+          "value": "deleg"
+        },
+        "references": [
+          {
+            "data": "draft-ietf-deleg-11",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "dns-resolver-information-keys"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-name-indicates-that-qname-minimisation-is-enabled.1",
       "kind": "iana-entry",
       "normative_sources": [
@@ -9413,7 +9526,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dsync-location-of-synchronization-endpoints",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DSYNC: Location of Synchronization Endpoints"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9436,8 +9549,9 @@
           "updated": "2025-09-16"
         },
         "fields": {
+          "mnemonic": "NOTIFY",
           "purpose": "Delegation management",
-          "scheme": "1 (NOTIFY)",
+          "scheme": "1",
           "value": "CDS"
         },
         "references": [
@@ -9471,8 +9585,9 @@
           "updated": "2025-09-16"
         },
         "fields": {
+          "mnemonic": "NOTIFY",
           "purpose": "Delegation management",
-          "scheme": "1 (NOTIFY)",
+          "scheme": "1",
           "value": "CSYNC"
         },
         "references": [
@@ -9600,7 +9715,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "extended-dns-error-codes",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "Extended DNS Error Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -10880,7 +10995,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "extended-dns-sub-error-codes",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "Extended DNS Sub-Error Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -11165,7 +11280,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "extra-text-json-names",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "EXTRA-TEXT JSON Names"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -11355,7 +11470,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "server-cookie-methods",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "DNS Server Cookie Methods"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -11594,7 +11709,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "underscored-globally-scoped-dns-node-names",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "Underscored and Globally Scoped DNS Node Names"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -13309,6 +13424,39 @@
       "code_target": "crates/brynja-platform/src/dns.rs",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-08-20"
+        },
+        "fields": {
+          "description": "_tls",
+          "value": "TXT"
+        },
+        "references": [
+          {
+            "data": "rfc8460",
+            "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "underscored-globally-scoped-dns-node-names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
       "kind": "iana-entry",
       "normative_sources": [
@@ -13951,7 +14099,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zonemd-hash-algorithms",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "ZONEMD Hash Algorithms"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -14168,7 +14316,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zonemd-schemes",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "ZONEMD Schemes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -14351,7 +14499,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zoneversion-type-values",
-        "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
         "title": "ZONEVERSION TYPE Values"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -19804,7 +19952,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "ltans",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for LTANS"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -19824,7 +19972,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "ltans-cms-content-types",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for LTANS CMS Content Type"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -20039,7 +20187,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "ltans-ers-encryption-methods",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for LTANS ERS Encryption Method"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -20091,7 +20239,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "ltans-module-identifiers",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for LTANS Module Identifier"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -20798,7 +20946,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Mail Security (1.2.840.113549.1.9.16)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -20818,7 +20966,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-0",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Module Identifier (1.2.840.113549.1.9.16.0)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -23683,7 +23831,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-1",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME CMS Content Type (1.2.840.113549.1.9.16.1)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -25618,7 +25766,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-10",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for X.400 Encoded Information Types (EIT) for S/MIME objects (1.2.840.113549.1.9.16.10)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -25855,7 +26003,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-11",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Capabilities (other than cryptographic algorithms) (1.2.840.113549.1.9.16.11)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -25906,7 +26054,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-12",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Portable Symmetric Key Container (PSKC) Attributes (1.2.840.113549.1.9.16.12)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -26763,7 +26911,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-13",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Other Recipient Info Identifiers (1.2.840.113549.1.9.16.13)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -26883,7 +27031,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-2",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Attributes (1.2.840.113549.1.9.16.2)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -28845,7 +28993,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-3",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Algorithms (1.2.840.113549.1.9.16.3)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -29987,7 +30135,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-4",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Certificate Distribution Mechanisms (1.2.840.113549.1.9.16.4)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -30037,7 +30185,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-5",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Signature Policy Qualifier (1.2.840.113549.1.9.16.5)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -30119,7 +30267,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-6",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Commitment Type Identifier (1.2.840.113549.1.9.16.6)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -30325,7 +30473,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-7",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Test Security Policies (1.2.840.113549.1.9.16.7)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -30469,7 +30617,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-8",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Control Attributes for Symmetric Key Distribution (1.2.840.113549.1.9.16.8)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -30953,7 +31101,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "security-smime-9",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for S/MIME Signature Type Identifiers (1.2.840.113549.1.9.16.9)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -31566,7 +31714,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Network Management Directory Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -31586,7 +31734,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.101",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Cryptographic Algorithms"
       },
       "test_target": "tests/surface/pkix_oids.rs#registry"
@@ -31959,7 +32107,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.2.1.198.4",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SNMP-TLSTM HashAlgorithms"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -32349,7 +32497,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -32369,7 +32517,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.0",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Module Identifier"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -34286,8 +34434,8 @@
         },
         "references": [
           {
-            "data": "RFC-ietf-lamps-macaddress-on-07",
-            "type": "draft"
+            "data": "rfc10031",
+            "type": "rfc"
           }
         ]
       },
@@ -36484,7 +36632,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.1",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Certificate Extension"
       },
       "test_target": "tests/surface/pkix_oids.rs#registry"
@@ -37680,7 +37828,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.10",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Attribute Certificate Attributes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -37916,7 +38064,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.11",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Qualified Certificate Statements"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -37998,7 +38146,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.12",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CMC Content Types"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -38114,7 +38262,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.13",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX OIDs Used Only for Testing"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -38382,7 +38530,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.14",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Certificate Policies"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -38494,7 +38642,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.15",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CMC Error Types"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -38545,7 +38693,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.16",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Revocation Information Types"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -38689,7 +38837,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.17",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX SCVP Check Types"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -38926,7 +39074,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.18",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX SCVP Want Back Types"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -39564,7 +39712,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.19",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX SCVP Validation Policies and Algorithms"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -39584,7 +39732,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.19.2",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX SCVP Name Validation Policy Errors"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -39790,7 +39938,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.19.3",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX SCVP Basic Validation Policy Errors"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40148,7 +40296,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.19.4",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX SCVP Distinguished Name Validation Policy Errors"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40296,7 +40444,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.2",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Policy Qualifier"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40470,7 +40618,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.20",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Other Logotype Identifiers"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40589,7 +40737,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.21",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Proxy Certificate Policy Languages"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40702,7 +40850,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.22",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Proxy Matching Rules"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40752,7 +40900,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.23",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Subject Key Identifier Semantics"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40862,7 +41010,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.24",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for SCEP Attribute Identifiers"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -40915,8 +41063,41 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.25",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Relative Distinguished Name Attribute"
+      },
+      "test_target": "tests/surface/smi_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-pki/src/oid.rs",
+      "disposition": "caller-owned",
+      "domain": "pkix",
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25.id-rdna-c509name.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:smi-numbers",
+        "rfc:5280"
+      ],
+      "owner": "0.53.0",
+      "rationale": "Unselected SMI namespaces are preserved as caller-owned identifiers and do not gain implicit PKIX semantics.",
+      "record": {
+        "attributes": {
+          "date": "2026-08-18"
+        },
+        "fields": {
+          "description": "id-rdna-c509Name",
+          "value": "2"
+        },
+        "references": [
+          {
+            "data": "RFC-ietf-cose-cbor-encoded-cert-20",
+            "type": "draft"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "smi-numbers",
+        "id": "smi-numbers-1.3.6.1.5.5.7.25"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
     },
@@ -40969,7 +41150,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.3",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Extended Key Purpose"
       },
       "test_target": "tests/surface/pkix_oids.rs#registry"
@@ -42420,7 +42601,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.4",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CMP Information Types"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -43233,7 +43414,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.48",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Access Descriptor"
       },
       "test_target": "tests/surface/pkix_oids.rs#registry"
@@ -43253,7 +43434,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.48.1",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Online Certificate Status Protocol (OCSP)"
       },
       "test_target": "tests/surface/pkix_oids.rs#registry"
@@ -44057,7 +44238,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.5",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CRMF Registration"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -44077,7 +44258,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.5.1",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CRMF Registration Controls"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -44097,7 +44278,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.5.1.7",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CRMF Registration Controls for Alternate Certificate Formats"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -44560,7 +44741,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.5.2",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CRMF Registration Information"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -44735,7 +44916,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.6",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Algorithms"
       },
       "test_target": "tests/surface/pkix_oids.rs#registry"
@@ -46507,7 +46688,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.7",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CMC Controls"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -46527,7 +46708,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.7.99",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX CMC GLA Requests and Responses"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -47729,7 +47910,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.8",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Other Name Forms"
       },
       "test_target": "tests/surface/pkix_oids.rs#registry"
@@ -47885,8 +48066,8 @@
         },
         "references": [
           {
-            "data": "RFC-ietf-lamps-macaddress-on-07",
-            "type": "draft"
+            "data": "rfc10031",
+            "type": "rfc"
           }
         ]
       },
@@ -48132,7 +48313,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-1.3.6.1.5.5.7.9",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for PKIX Personal Data Attributes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -49149,7 +49330,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-10",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "MIB - Remote Network Monitoring"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50214,7 +50395,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-11",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "rmonConformance (Value 20)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50554,7 +50735,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-12",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "Internet-standard MIB - Network Services Monitoring"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50574,7 +50755,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-13",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "mib-2.application.assocTable.assocEntry.assocApplicationProtocol"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50620,7 +50801,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-14",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "mib-2.application.applTCPProtoID (1.3.6.1.2.1.27.4)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50640,7 +50821,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-15",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "mib-2.application.applUDPProtoID (1.3.6.1.2.1.27.5)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50660,7 +50841,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-16",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "Internet-standard MIB - Mail Monitoring"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50680,7 +50861,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-17",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "mib-2.mta.mtaGroupTable.MailGroupEntry.mtaGroupMailProtocol"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -50726,7 +50907,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-18",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mib-2 snanauMIB Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -51034,7 +51215,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-19",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "spdActions"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -51054,7 +51235,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-2",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Network Management MGMT Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -51174,7 +51355,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-20",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "IPFIX-SELECTOR-MIB Functions"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -51450,7 +51631,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-21",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI pib PIB Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -51663,7 +51844,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-22",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Experimental Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -55938,7 +56119,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-23",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI experimental PIB codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -55991,7 +56172,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-24",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Private Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -56078,7 +56259,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-25",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "Private Enterprise Numbers (PENs)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -56098,7 +56279,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-26",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Codes (including S/MIME, PKIX and LTANS)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -56402,7 +56583,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-27",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Integrity Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -56555,7 +56736,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-28",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Confidentiality Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -56608,7 +56789,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-29",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -57291,7 +57472,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-3",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Network Management MGMT Codes Internet-standard MIB"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -65305,7 +65486,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-30",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism SPKM Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -65486,7 +65667,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-31",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism MSP-Based IDUP (MIM) Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -65641,7 +65822,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-32",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism IPsec Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -65786,7 +65967,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-33",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism isakmpOakley Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -65975,7 +66156,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-34",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism IPSec Certificate Usage Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66096,7 +66277,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-35",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism ASN.1 Modules"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66181,7 +66362,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-36",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for IAKERB GSS-API Mechanism Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66300,7 +66481,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-37",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66568,7 +66749,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-38",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec module-identifers"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66743,7 +66924,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-39",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec content-types"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66794,7 +66975,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-40",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec security-suites"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66845,7 +67026,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-41",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec protocol-identifiers"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -66958,7 +67139,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-42",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec rekey-methods"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -67040,7 +67221,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-43",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec rekey-reliability-methods"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -67153,7 +67334,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-44",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec distributed-operations-methods"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -67235,7 +67416,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-45",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism msec data-policies"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -67286,7 +67467,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-46",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Mechanism gsscma Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -68226,7 +68407,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-47",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "Object Identifiers for Application Bridging for Federated Access"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -68342,7 +68523,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-48",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "iso.org.dod.internet.security.mechanisms.abfab.mechanisms"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -68426,7 +68607,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-49",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "iso.org.dod.internet.security.mechanisms.abfab.nametypes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -68509,7 +68690,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-5",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "Interface Types (ifType)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -78901,7 +79082,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-50",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security for Name System Designators Codes (nametypes)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -79142,7 +79323,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-51",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -79433,7 +79614,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-52",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes (conf)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -79618,7 +79799,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-53",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes (integrity)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -79739,7 +79920,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-54",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes (doa)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -79924,7 +80105,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-55",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes (non-rep)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -80113,7 +80294,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-56",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes (acc)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -80234,7 +80415,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-57",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes (dflow)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -80355,7 +80536,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-58",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Security Services Codes (time)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -80476,7 +80657,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-59",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI SNMPv2 Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -80589,7 +80770,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-6",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "Tunnel Types (tunnelType)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -81249,7 +81430,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-60",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SNMPv2 snmpDomains Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -81557,7 +81738,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-61",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI SNMPv2 snmpModules Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -82462,7 +82643,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-62",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SNMP Management Architecture - Security Subsystem (SnmpSecurityModel)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -82482,7 +82663,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-63",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SNMP Management Architecture - Message Processing Subsystem (SnmpMessageProcessingModel)"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -82502,7 +82683,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-64",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mail Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -82554,7 +82735,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-65",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mail MIME MHS Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -82668,7 +82849,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-66",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mail MIME MHS headings Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -82781,7 +82962,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-67",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mail MIME MHS bodies Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -82863,7 +83044,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-68",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mail MIME MHS bodies data Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -83038,7 +83219,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-69",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mail MIME MHS bodies parameter Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -83182,7 +83363,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-7",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "Transmission Number Values"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -86168,7 +86349,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-70",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI mail MIME-MHS core Codes"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -86312,7 +86493,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-71",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "SMI Features"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -86332,7 +86513,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-8",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "MIB Transmission Group - Point-to-Point Protocol"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"
@@ -86480,7 +86661,7 @@
       "registry": {
         "collection": "smi-numbers",
         "id": "smi-numbers-9",
-        "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+        "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
         "title": "MIB Transmission Group - MPLS STD MIB"
       },
       "test_target": "tests/surface/smi_boundary.rs#caller_owned"

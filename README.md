@@ -228,12 +228,12 @@ and all-six-function differential coverage. Portable-family package acceptance,
 acceleration, secret-state erasure, independent review, and FIPS validation
 remain later gates, so the SHA-3/SHAKE family remains **In progress**.
 
-The exceptional v0.24.2 assessment of exact implementation candidate
-`208c0b07d152d3a5c8316093e98b29c89f332c07` reported no finding, required no
-remediation, and records `PASS`/`PASS` with zero open findings. This is pentest
-evidence, not independent cryptographic review or FIPS validation. The
-milestone selects zero crates.io packages and now awaits hosted GitHub and
-CodeQL before its signed tag.
+The exceptional v0.24.2 assessment subsequently supplied one Medium denial-of-
+service finding in the repository-only differential adapter. The adapter now
+enforces its declared 343-byte output ceiling before allocation, uses fallible
+output and hexadecimal reservations, and cleanly rejects oversized and
+overflowing lengths. Production SHAKE code is unchanged. Independent retest is
+pending; the milestone remains untagged and selects zero crates.io packages.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri

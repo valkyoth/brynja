@@ -3,7 +3,7 @@
 <?xml-model href="dns-parameters.rng" schematypens="http://relaxng.org/ns/structure/1.0" ?>
 <registry xmlns="http://www.iana.org/assignments" id="dns-parameters">
   <title>Domain Name System (DNS) Parameters</title>
-  <updated>2026-08-11</updated>
+  <updated>2026-08-24</updated>
 
 
   <registry id="dns-parameters-2">
@@ -628,10 +628,24 @@ be allocated for ordinary use.</registration_rule>
       <xref type="rfc" data="rfc9886"/>
       <file type="template">BRID/brid-completed-template</file>
     </record>
+    <record date="2026-08-20">
+      <type>UNECE</type>
+      <value>69</value>
+      <description>Value coded per a UNECE Recommendation</description>
+      <xref type="draft" data="draft-woodcock-faltstrom-external-registry-rrtypes-00"/>
+      <file type="template">UNECE/unece-completed-template</file>
+    </record>
+    <record date="2026-08-20">
+      <type>ISO</type>
+      <value>70</value>
+      <description>Value coded per an ISO standard</description>
+      <xref type="draft" data="draft-woodcock-faltstrom-external-registry-rrtypes-00"/>
+      <file type="template">ISO/iso-completed-template</file>
+    </record>
     
     <record>
       <type>Unassigned</type>
-      <value>69-98</value>
+      <value>71-98</value>
       <description/>
     </record>
     <record>
@@ -1810,6 +1824,11 @@ query from bit 5 through bit 11 (<xref type="rfc" data="rfc1035"/> section 4.1.1
       <description>_tcp</description>
       <xref type="rfc" data="rfc6763"/>
     </record>
+    <record date="2026-08-20">
+      <value>TXT</value>
+      <description>_tls</description>
+      <xref type="rfc" data="rfc8460"/>
+    </record>
     <record date="2018-11-29">
       <value>TXT</value>
       <description>_udp</description>
@@ -2704,6 +2723,11 @@ in <xref type="rfc" data="rfc9432"/>.
         <description>Provides a URL that points to unstructured resolver information that is used for troubleshooting.</description>
         <xref type="rfc" data="rfc9606"/>
       </record>
+      <record date="2026-08-24">
+        <value>deleg</value>
+        <description>The presence of the key indicates that the DELEG protocol is supported. (TEMPORARY - registered 2026-08-24, expires 2027-08-24)</description>
+        <xref type="draft" data="draft-ietf-deleg-11"/>
+      </record>
     </registry>
 
 
@@ -2757,13 +2781,15 @@ in <xref type="rfc" data="rfc9432"/>.
     </record>
     <record date="2025-03-20" updated="2025-09-16">
       <value>CDS</value>
-      <scheme>1 (NOTIFY)</scheme>
+      <scheme>1</scheme>
+      <mnemonic>NOTIFY</mnemonic>
       <purpose>Delegation management</purpose>
       <xref type="rfc" data="rfc9859"/>
     </record>
     <record date="2025-03-20" updated="2025-09-16">
       <value>CSYNC</value>
-      <scheme>1 (NOTIFY)</scheme>
+      <scheme>1</scheme>
+      <mnemonic>NOTIFY</mnemonic>
       <purpose>Delegation management</purpose>
       <xref type="rfc" data="rfc9859"/>
     </record>

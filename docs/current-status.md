@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 remediation complete and awaiting pentest retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -223,18 +223,21 @@ arbitrary bounded output, checked `u128` input/output domains, and one-shot,
 streaming, trait, and repeated-squeeze APIs. Official zero-bit and 1,600-bit
 examples, exact rate boundaries, 343-byte multi-permutation partitioning, domain
 negatives, Miri/AddressSanitizer, and a 328-message all-six-function `hashlib`
-differential pass. A ninth Kani harness proves output-counter admission, and 43
+differential pass. A ninth Kani harness proves output-counter admission, and 46
 mutations bind the full source and evidence boundary. Package-external family
 acceptance, acceleration, secret-state erasure, independent review and FIPS
 validation remain absent, so the family stays **In progress** and v0.24.2
 selects zero crates.io packages.
 
-The exceptional v0.24.2 repository-owner assessment of exact implementation
-candidate `208c0b07d152d3a5c8316093e98b29c89f332c07` reported no finding and
-required no remediation. Its permanent report records `PASS`/`PASS` with zero
-open findings. This does not establish independent cryptographic review or
-FIPS validation, complete the later family-acceptance gates, select a crate for
-publication, or replace the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
+The exceptional v0.24.2 assessment subsequently supplied one Medium denial-of-
+service finding in the repository-only differential adapter. The adapter now
+enforces its declared 343-byte XOF ceiling before allocation, uses fallible
+output and hexadecimal reservations, and rejects 344, `usize::MAX`, and parse
+overflow without panic. Production SHAKE code is unchanged. Local remediation
+passes and independent retest remains pending. This does not establish
+independent cryptographic review or FIPS validation, complete later family-
+acceptance gates, select a crate for publication, or replace the scheduled
+v0.20.0-to-v0.25.0 cumulative assessment.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
@@ -369,7 +372,7 @@ Version 0.3.1 adds explicit protocol-surface decisions:
   formats, legacy protocols, and operational facilities;
 - all 192 nested registries and all 4,106 individual records across the eight
   pinned IANA collections receive a deterministic disposition;
-- every one of the 4,450 current generated surfaces records normative sources, owning
+- every one of the 4,455 current generated surfaces records normative sources, owning
   milestone, planned code target, planned test target, and rationale;
 - required exclusions explicitly cover Heartbeat, status_request_v2,
   production SSLKEYLOGFILE, TLS 1.3 post-handshake authentication,
@@ -454,10 +457,10 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   local-only checksum-pinned authorities;
 - 33 residual authorities and 182 normative RFC sections are reviewed through
   165 exact mappings and 17 explicit dispositions;
-- all 787 surfaces left by the foundation, domain, and transport bundles are
-  assigned, producing complete coverage of all 4,450 surfaces;
+- all 791 surfaces left by the foundation, domain, and transport bundles are
+  assigned, producing complete coverage of all 4,455 surfaces;
 - the generated closure maps all 130 locked sources, all 510 ordered pre-1.0
-  roadmap rows, all 4,450 surfaces, and all 169 requirements in both directions;
+  roadmap rows, all 4,455 surfaces, and all 169 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
@@ -550,7 +553,7 @@ Version 0.6.0 adds bounded numeric and resource foundations:
   surfaces without admitting draft authority or runtime code;
 - the later reviewed 2026-08-11 TLS ExtensionType refresh adds C509 Certificate
   type value 4 and moves the unassigned range start to 5, bringing the current
-  register to 4,450 surfaces while retaining the provisional C509 draft as
+  register to 4,455 surfaces while retaining the provisional C509 draft as
   non-authoritative future work and admitting no runtime code; and
 - no protocol surface or normative protocol requirement advances because
   these types are source-free shared foundations; later wire widths,

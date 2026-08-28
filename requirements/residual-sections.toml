@@ -1,13 +1,13 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "65caf5a9f356c92eb6fb6443af595869e0181e19e88378c678dfd001ea25d9b1"
+source_ledger_sha256 = "3f1f34885eb5dbd6a91ad1ba172a2b016f13f54a0af3d3a480b43c59213cd735"
 
 [revisions]
 "BRY-REQ-APPLICATION-0130" = 4
 "BRY-REQ-CERTEXT-0146" = 3
 "BRY-REQ-CERTREG-0146" = 3
 "BRY-REQ-COMPOSE-0148" = 7
-"BRY-REQ-DNS-0140" = 5
+"BRY-REQ-DNS-0140" = 6
 "BRY-REQ-ECH-0140" = 2
 "BRY-REQ-ECH-0141" = 2
 "BRY-REQ-ECH-0142" = 2

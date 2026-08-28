@@ -7303,7 +7303,7 @@
       "version": "1.0.0"
     }
   ],
-  "provisional_surface_count": 100,
+  "provisional_surface_count": 99,
   "provisional_surfaces": [
     "algorithm.ecdhe-ml-kem",
     "iana.hpke.hpke-kdf-ids.0x0010.1",
@@ -7363,7 +7363,6 @@
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-mlkem768-rsa3072-sha3-256.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-mlkem768-rsa4096-sha3-256.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-mlkem768-x25519-sha3-256.1",
-    "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.8.id-on-macaddress.1",
     "iana.tls-extensiontype-values.tls-extensiontype-values-1.sequence-number-encryption-algorithms.1",
     "iana.tls-extensiontype-values.tls-extensiontype-values-1.tlmsp-delegate.1",
     "iana.tls-extensiontype-values.tls-extensiontype-values-1.tlmsp-proxying.1",
@@ -7952,7 +7951,7 @@
         "iana.dns-parameters.dns-parameters-4.54.1",
         "iana.dns-parameters.dns-parameters-4.65280-65534.1",
         "iana.dns-parameters.dns-parameters-4.65535.1",
-        "iana.dns-parameters.dns-parameters-4.69-98.1",
+        "iana.dns-parameters.dns-parameters-4.71-98.1",
         "iana.dns-parameters.dns-parameters-4.99.1",
         "iana.dns-parameters.dns-parameters-4.a-domain-name-pointer.1",
         "iana.dns-parameters.dns-parameters-4.a-host-address.1",
@@ -8041,6 +8040,8 @@
         "iana.dns-parameters.dns-parameters-4.trust-anchor-link.1",
         "iana.dns-parameters.dns-parameters-4.uas-broadcast-remote-identification.1",
         "iana.dns-parameters.dns-parameters-4.uri.1",
+        "iana.dns-parameters.dns-parameters-4.value-coded-per-a-unece-recommendation.1",
+        "iana.dns-parameters.dns-parameters-4.value-coded-per-an-iso-standard.1",
         "iana.dns-parameters.dns-parameters-4.x-400-mail-mapping-information.1",
         "iana.dns-parameters.dns-parameters-5",
         "iana.dns-parameters.dns-parameters-5.dns-stateful-operations-dso.1",
@@ -8103,6 +8104,7 @@
         "iana.dns-parameters.dns-resolver-information-keys",
         "iana.dns-parameters.dns-resolver-information-keys.lists-the-set-of-enabled-extended-dns-errors-it-must-be-an-info-code-decimal-value-in-the-extended-dns-error-codes-registry.1",
         "iana.dns-parameters.dns-resolver-information-keys.provides-a-url-that-points-to-unstructured-resolver-information-that-is-used-for-troubleshooting.1",
+        "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-indicates-that-the-deleg-protocol-is-supported-temporary-registered-2026-08-24-expires-2027-08-24.1",
         "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-name-indicates-that-qname-minimisation-is-enabled.1",
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints",
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints.cds.1",
@@ -8224,6 +8226,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.2",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.3",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turns.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.1",
@@ -10151,7 +10154,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192"
+      "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1"
     },
     {
       "id": "iana:hpke",
@@ -10193,7 +10196,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7"
+      "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55"
     },
     {
       "id": "iana:tls-ech-configuration-extensions",
@@ -13999,7 +14002,7 @@
       ]
     },
     {
-      "id": "iana.dns-parameters.dns-parameters-4.69-98.1",
+      "id": "iana.dns-parameters.dns-parameters-4.71-98.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]
@@ -14533,6 +14536,18 @@
       ]
     },
     {
+      "id": "iana.dns-parameters.dns-parameters-4.value-coded-per-a-unece-recommendation.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.dns-parameters-4.value-coded-per-an-iso-standard.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
       "id": "iana.dns-parameters.dns-parameters-4.x-400-mail-mapping-information.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
@@ -14900,6 +14915,12 @@
     },
     {
       "id": "iana.dns-parameters.dns-resolver-information-keys.provides-a-url-that-points-to-unstructured-resolver-information-that-is-used-for-troubleshooting.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-indicates-that-the-deleg-protocol-is-supported-temporary-registered-2026-08-24-expires-2027-08-24.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]
@@ -15626,6 +15647,12 @@
     },
     {
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]
@@ -20822,6 +20849,12 @@
     },
     {
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25",
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0004"
+      ]
+    },
+    {
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25.id-rdna-c509name.1",
       "requirement_ids": [
         "BRY-REQ-PKIX-0004"
       ]

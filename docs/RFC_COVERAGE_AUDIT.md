@@ -30,10 +30,10 @@ and CT rule across 55 authorities and 3,325 current surfaces. v0.3.4 populates 7
 DTLS, and QUIC-TLS rules across 40 authorities, 550 normative sections, 64
 owner milestones, and 485 surfaces. v0.3.5 contains 51 optional, HPKE, ECH,
 ML-KEM, entropy, operational, legacy, and residual requirements across 33
-authorities, 182 reviewed normative sections, and 787 formerly uncovered
+authorities, 182 reviewed normative sections, and 791 formerly uncovered
 surfaces.
 The complete closure covers 130 currently locked authorities, 510 ordered
-pre-1.0 roadmap rows, 4,450 currently registered surfaces, and 169 stable
+pre-1.0 roadmap rows, 4,455 currently registered surfaces, and 169 stable
 requirements. The OpenPGP-phase rows are
 explicitly fenced as planned-authority admission: v0.163.0 must authenticate
 RFC 9580, its obsoleted lineage, referenced algorithm and compression sources,

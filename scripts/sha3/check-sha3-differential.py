@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import struct
 import subprocess
 import tempfile
 from pathlib import Path
@@ -61,15 +62,16 @@ def main() -> int:
         environment = os.environ.copy()
         environment["CARGO_TARGET_DIR"] = target
         environment["CARGO_INCREMENTAL"] = "0"
+        command = [
+            "cargo",
+            "run",
+            "--locked",
+            "--quiet",
+            "--manifest-path",
+            str(MANIFEST),
+        ]
         result = subprocess.run(
-            [
-                "cargo",
-                "run",
-                "--locked",
-                "--quiet",
-                "--manifest-path",
-                str(MANIFEST),
-            ],
+            command,
             cwd=ROOT,
             env=environment,
             input="\n".join(requests) + "\n",
@@ -78,6 +80,32 @@ def main() -> int:
             stderr=subprocess.PIPE,
             check=False,
         )
+        usize_max = (1 << (struct.calcsize("P") * 8)) - 1
+        invalid_requests = (
+            ("shake128 - 344\n", "output length exceeds campaign limit"),
+            (
+                f"shake128 - {usize_max}\n",
+                "output length exceeds campaign limit",
+            ),
+            (f"shake128 - {usize_max + 1}\n", "invalid output length"),
+        )
+        for request, expected_error in invalid_requests:
+            rejected = subprocess.run(
+                command,
+                cwd=ROOT,
+                env=environment,
+                input=request,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if rejected.returncode == 0 or rejected.stdout:
+                raise RuntimeError("SHA-3 differential fixture accepted invalid output length")
+            if expected_error not in rejected.stderr:
+                raise RuntimeError("SHA-3 differential fixture returned wrong length error")
+            if "panicked" in rejected.stderr or "capacity overflow" in rejected.stderr:
+                raise RuntimeError("SHA-3 differential fixture panicked on invalid length")
     if result.returncode != 0:
         raise RuntimeError(f"SHA-3 differential fixture failed:\n{result.stderr}")
     actual = result.stdout.splitlines()
@@ -86,7 +114,10 @@ def main() -> int:
             if wanted != observed:
                 raise RuntimeError(f"SHA-3 differential mismatch at result {index}")
         raise RuntimeError("SHA-3 differential result count mismatch")
-    print(f"all six FIPS 202 functions match hashlib across {len(messages)} messages")
+    print(
+        f"all six FIPS 202 functions match hashlib across {len(messages)} messages; "
+        "three oversized XOF requests fail cleanly"
+    )
     return 0
 
 

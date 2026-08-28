@@ -113,9 +113,9 @@ encoding, PKIX, OCSP, and CT authorities plus 3,325 current selected surfaces; 7
 transport requirements cover 40 authorities, 550 normative sections, 64
 implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty-one
 residual requirements cover 33 authorities, 182 reviewed normative sections,
-and all 787 formerly uncovered surfaces. The residual section policy
+and all 791 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 130 sources and 4,450 surfaces.
+closure across all 130 sources and 4,455 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -169,6 +169,22 @@ erratum 9136. It corrects two references to the TLS 1.3 `KeyShare` section from
 4.2.8 to 4.3.8, changes no normative hybrid-key-exchange behavior, remains an
 explicit input for planned v0.117.0, and admits no runtime code at this
 refresh.
+
+The 2026-08-28 reviewed SMI Numbers refresh advances two existing MAC-address
+object references from a draft to final RFC 10031 and adds
+`id-rdna-c509Name` value 2 under the existing PKIX relative-distinguished-name
+registry with a provisional `draft-ietf-cose-cbor-encoded-cert-20` reference.
+The matching DNS Parameters refresh adds provisional UNECE and ISO RR types,
+the RFC 8460 `_tls` underscored TXT name, a temporary provisional DELEG
+parameter, and schema-only NOTIFY mnemonic normalization. Existing v0.48.0
+PKIX/OCSP ownership and caller-owned v0.140.0 DNS disposition remain
+unchanged. This evidence refresh admits neither new normative authority nor
+runtime code.
+
+The same 2026-08-28 refresh records reported technical RFC 3986 erratum 9147.
+Because it is not verified, it remains `track-not-applied` and cannot change
+requirements or implementation behavior unless its official status and
+security impact are reviewed again at an owning milestone.
 
 Final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are checksum-pinned
 local-only authorities. Their publication pages, planning notes, errata, and

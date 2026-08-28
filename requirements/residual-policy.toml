@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "65caf5a9f356c92eb6fb6443af595869e0181e19e88378c678dfd001ea25d9b1"
-surface_register_sha256 = "88beac0f5f0098c27bb6a7f35843f0f612e28e2f4b2ae031b4c086282eceaf7b"
+source_ledger_sha256 = "3f1f34885eb5dbd6a91ad1ba172a2b016f13f54a0af3d3a480b43c59213cd735"
+surface_register_sha256 = "bbea84afb8bab436759a67bd7c2a60cb6d9be37e4435018eda34b1b27e06f008"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -244,7 +244,7 @@ id = "BRY-REQ-DNS-0140"
 domain = "dns"
 owner = "0.140.0"
 disposition = "caller-owned"
-revision = 5
+revision = 6
 sources = ["iana:dns-parameters", "rfc:9460"]
 surface_ids = [
   "iana.dns-parameters.contact-uri-schemes",
@@ -364,7 +364,7 @@ surface_ids = [
   "iana.dns-parameters.dns-parameters-4.54.1",
   "iana.dns-parameters.dns-parameters-4.65280-65534.1",
   "iana.dns-parameters.dns-parameters-4.65535.1",
-  "iana.dns-parameters.dns-parameters-4.69-98.1",
+  "iana.dns-parameters.dns-parameters-4.71-98.1",
   "iana.dns-parameters.dns-parameters-4.99.1",
   "iana.dns-parameters.dns-parameters-4.a-domain-name-pointer.1",
   "iana.dns-parameters.dns-parameters-4.a-host-address.1",
@@ -453,6 +453,8 @@ surface_ids = [
   "iana.dns-parameters.dns-parameters-4.trust-anchor-link.1",
   "iana.dns-parameters.dns-parameters-4.uas-broadcast-remote-identification.1",
   "iana.dns-parameters.dns-parameters-4.uri.1",
+  "iana.dns-parameters.dns-parameters-4.value-coded-per-a-unece-recommendation.1",
+  "iana.dns-parameters.dns-parameters-4.value-coded-per-an-iso-standard.1",
   "iana.dns-parameters.dns-parameters-4.x-400-mail-mapping-information.1",
   "iana.dns-parameters.dns-parameters-5",
   "iana.dns-parameters.dns-parameters-5.dns-stateful-operations-dso.1",
@@ -515,6 +517,7 @@ surface_ids = [
   "iana.dns-parameters.dns-resolver-information-keys",
   "iana.dns-parameters.dns-resolver-information-keys.lists-the-set-of-enabled-extended-dns-errors-it-must-be-an-info-code-decimal-value-in-the-extended-dns-error-codes-registry.1",
   "iana.dns-parameters.dns-resolver-information-keys.provides-a-url-that-points-to-unstructured-resolver-information-that-is-used-for-troubleshooting.1",
+  "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-indicates-that-the-deleg-protocol-is-supported-temporary-registered-2026-08-24-expires-2027-08-24.1",
   "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-name-indicates-that-qname-minimisation-is-enabled.1",
   "iana.dns-parameters.dsync-location-of-synchronization-endpoints",
   "iana.dns-parameters.dsync-location-of-synchronization-endpoints.cds.1",
@@ -636,6 +639,7 @@ surface_ids = [
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.2",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.3",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turns.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.1",
@@ -1273,3 +1277,4 @@ surface = "iana.trans.trans-error-types"
 id = "BRY-REQ-PKIXREG-0053"
 source = "iana:smi-numbers"
 surface = "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7"
+revision = 2

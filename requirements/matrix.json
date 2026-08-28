@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "f746579f85b5b59e84aebad4d65c63ce23028e80fc31ce28d360e17e988b8563",
-  "domain_policy_sha256": "99f7b5e06c0a3b3601d2ee0655e31d8372cffdcd6410a574923fcb7dc886255c",
-  "policy_sha256": "7d1cace77ae5edfabc9e7cfce87523927236d9a77aba43f38bea10d977bbc207",
+  "domain_policy_sha256": "5867f51f4e701c31375e647240f740139b0288af13b0ba3c81c7f359852aa728",
+  "policy_sha256": "34f3ad2dd8b64b25b58aa1463c49473a21e8ca3808ca6b242124ab22e63f8675",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3686,7 +3686,7 @@
         "iana.dns-parameters.dns-parameters-4.54.1",
         "iana.dns-parameters.dns-parameters-4.65280-65534.1",
         "iana.dns-parameters.dns-parameters-4.65535.1",
-        "iana.dns-parameters.dns-parameters-4.69-98.1",
+        "iana.dns-parameters.dns-parameters-4.71-98.1",
         "iana.dns-parameters.dns-parameters-4.99.1",
         "iana.dns-parameters.dns-parameters-4.a-domain-name-pointer.1",
         "iana.dns-parameters.dns-parameters-4.a-host-address.1",
@@ -3775,6 +3775,8 @@
         "iana.dns-parameters.dns-parameters-4.trust-anchor-link.1",
         "iana.dns-parameters.dns-parameters-4.uas-broadcast-remote-identification.1",
         "iana.dns-parameters.dns-parameters-4.uri.1",
+        "iana.dns-parameters.dns-parameters-4.value-coded-per-a-unece-recommendation.1",
+        "iana.dns-parameters.dns-parameters-4.value-coded-per-an-iso-standard.1",
         "iana.dns-parameters.dns-parameters-4.x-400-mail-mapping-information.1",
         "iana.dns-parameters.dns-parameters-5",
         "iana.dns-parameters.dns-parameters-5.dns-stateful-operations-dso.1",
@@ -3837,6 +3839,7 @@
         "iana.dns-parameters.dns-resolver-information-keys",
         "iana.dns-parameters.dns-resolver-information-keys.lists-the-set-of-enabled-extended-dns-errors-it-must-be-an-info-code-decimal-value-in-the-extended-dns-error-codes-registry.1",
         "iana.dns-parameters.dns-resolver-information-keys.provides-a-url-that-points-to-unstructured-resolver-information-that-is-used-for-troubleshooting.1",
+        "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-indicates-that-the-deleg-protocol-is-supported-temporary-registered-2026-08-24-expires-2027-08-24.1",
         "iana.dns-parameters.dns-resolver-information-keys.the-presence-of-the-key-name-indicates-that-qname-minimisation-is-enabled.1",
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints",
         "iana.dns-parameters.dsync-location-of-synchronization-endpoints.cds.1",
@@ -3958,6 +3961,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.2",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.3",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turns.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.1",
@@ -4012,7 +4016,7 @@
       "owner": "0.140.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -4029,7 +4033,7 @@
             "0.3.5",
             "0.140.0"
           ],
-          "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192"
+          "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1"
         },
         {
           "authority_role": "caller-owned",
@@ -13939,7 +13943,7 @@
       "owner": "0.51.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Unicode mapping and presentation remain caller-owned; Brynja accepts only policy-bounded input forms and never falls back across identifier types.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -14032,6 +14036,11 @@
               "disposition": "not-applicable",
               "id": 8442,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9147,
+              "status": "Reported"
             }
           ],
           "id": "rfc:3986",
@@ -16708,7 +16717,7 @@
       "owner": "0.53.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -16726,7 +16735,7 @@
             "0.3.3",
             "0.48.0"
           ],
-          "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7"
+          "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55"
         }
       ],
       "statement": "Unselected SMI namespaces are preserved as caller-owned identifiers and do not gain implicit PKIX semantics.",
@@ -29890,9 +29899,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "166d5dda058e7dec4f10d4ea33e753eee46afaecdc09d56504e0da04a81b721c",
+  "residual_policy_sha256": "0e68f24be0b4d7a8a0d4e986e7d51dff9b3a38cc1c0701ef705257fa7ce6927f",
   "schema": 5,
-  "source_ledger_sha256": "65caf5a9f356c92eb6fb6443af595869e0181e19e88378c678dfd001ea25d9b1",
-  "surface_register_sha256": "88beac0f5f0098c27bb6a7f35843f0f612e28e2f4b2ae031b4c086282eceaf7b",
-  "transport_policy_sha256": "05460cf147f7f5d919971c19bb1f03ee0f7cf9a7d41ebafc0aa4db48898189ae"
+  "source_ledger_sha256": "3f1f34885eb5dbd6a91ad1ba172a2b016f13f54a0af3d3a480b43c59213cd735",
+  "surface_register_sha256": "bbea84afb8bab436759a67bd7c2a60cb6d9be37e4435018eda34b1b27e06f008",
+  "transport_policy_sha256": "9c7bfeab0334a43a5ba65e4cdb6611a95d44d9ba0514de327d0ceea1f8071176"
 }

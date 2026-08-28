@@ -134,7 +134,7 @@
     }
   ],
   "integrity": {
-    "errata_sha256": "b28cc2655c45d391018bf977529149f043f3400b00a1fad2fb8d80733646b646",
+    "errata_sha256": "4687efd9ad1a7bdb9ff77d79c349be89cf0436a21cc567f4d78abb308a5bbc0a",
     "local_source_manifest_sha256": "f190d5e517abd86880b0ce9cf8dd2377f54892502ead8c882e861099d1122ab1",
     "pin_provenance": "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.140.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh. On 2026-08-09 the official IANA XML and its SHA-256 were independently retrieved and reviewed: the TLS ExtensionType registry update dated 2026-08-07 adds only the `snifq/1` SNIF over QUIC ALPN entry referencing provisional draft-zubov-snif-05; it remains caller-owned at v0.130.0 and does not admit draft authority or runtime code. The DNS Parameters update dated 2026-08-04 changes only three existing references from drafts to RFC 10029 and RFC 10023, adds no allocation, remains caller-owned at v0.140.0, and does not admit either RFC into Brynja protocol scope. On 2026-08-11 final Standards Track RFC 10024 and the official TLS Parameters XML were independently retrieved and reviewed: the registry changes only the three final ECDHE-ML-KEM group and two obsoleted Kyber draft references from draft metadata to RFC 10024. RFC 10024 has no reported errata and adding it changes no existing errata record. The former admission blocker is resolved for planned v0.120.0 implementation; no protocol code is admitted at this refresh. Later on 2026-08-11 the official DNS Parameters XML added only the `_x402` TXT underscored service name referencing provisional draft-hawkins-x402-dns-discovery-01; it remains caller-owned at v0.140.0, does not admit draft authority or runtime code, and is included only to preserve complete registry coverage. The later 2026-08-11 TLS ExtensionType update allocates certificate type value 4 to C509 Certificate under provisional draft-ietf-cose-cbor-encoded-cert-20 and moves the unassigned range start to 5; the allocation remains future work, the draft is not admitted as normative authority, and no runtime code is admitted by this refresh. On 2026-08-17 the official final SP 800-185 publication page and PDF were reviewed and the exact PDF was pinned for pre-1.0 cSHAKE, KMAC, TupleHash and ParallelHash planning; NIST's 2025 decision to revise the document remains an explicit lifecycle-monitor input and admits no unpublished revision text. Later on 2026-08-17 verified editorial RFC 9954 erratum 9136 was retrieved and reviewed: it corrects two TLS 1.3 section references from 4.2.8 to 4.3.8, changes no normative hybrid-key-exchange behavior, remains an explicit implementation input for planned v0.117.0, and admits no runtime code in this refresh.",
     "rfc_index_projection_sha256": "de78e7827eb0e96f9a0c0437ab0194d5b524fc93d5bede66d16c778e98c02a13",
@@ -611,9 +611,9 @@
         "0.3.3",
         "0.48.0"
       ],
-      "sha256": "4865e5a422f65692cf7995240a7dc10750a127d9a521cab1464b485c7cb228f7",
+      "sha256": "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55",
       "title": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
-      "updated": "2026-07-20",
+      "updated": "2026-08-18",
       "url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
     },
     {
@@ -628,9 +628,9 @@
         "0.3.5",
         "0.140.0"
       ],
-      "sha256": "a0e3638985f8603c99a5e6ee8b8fbffecd57775fb1d0221037eda1ab0c917192",
+      "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
       "title": "Domain Name System (DNS) Parameters",
-      "updated": "2026-08-11",
+      "updated": "2026-08-24",
       "url": "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
     }
   ],
@@ -1038,6 +1038,11 @@
           "disposition": "not-applicable",
           "id": 8442,
           "status": "Rejected"
+        },
+        {
+          "disposition": "track-not-applied",
+          "id": 9147,
+          "status": "Reported"
         }
       ],
       "lifecycle": "current",

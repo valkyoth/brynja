@@ -2497,7 +2497,7 @@ Exit criteria:
 
 ### v0.24.2 - Complete SHAKE128 And SHAKE256
 
-Status: awaiting green CI
+Status: awaiting pentest
 
 Implementation notes:
 
@@ -2515,7 +2515,7 @@ Implementation notes:
 - fixed-output SHA-3 domain negatives and a 328-message differential corpus
   against Python's independent `hashlib` path cover all six FIPS 202 functions;
   Miri and AddressSanitizer commands include both XOFs, a ninth Kani harness
-  proves output-counter admission, and 43 mutation fixtures plus reviewed hashes
+  proves output-counter admission, and 46 mutation fixtures plus reviewed hashes
   bind the complete source and evidence boundary;
 - no raw permutation, acceleration, unsafe code, allocation, third-party
   dependency, secret-state erasure, package-external final acceptance,
@@ -2523,10 +2523,11 @@ Implementation notes:
   SHA-3/SHAKE family remains documented **In progress** through v0.24.4;
 - the newly admitted XOF algorithms and absorbing-to-squeezing state machine
   trigger an exceptional cryptographic pentest before the signed tag.
-- the repository-owner assessment of exact implementation candidate
-  `208c0b07d152d3a5c8316093e98b29c89f332c07` reported no finding and required
-  no remediation; the permanent report records `PASS`/`PASS` with zero open
-  findings, leaving hosted GitHub and CodeQL as the remaining tag gate.
+- subsequent review supplied one Medium repository-assurance denial-of-service
+  finding: arbitrary XOF output lengths could panic or exhaust the differential
+  adapter. A 343-byte pre-allocation ceiling, fallible output/hex reservations,
+  three negative subprocess cases, and three policy mutations remediate it
+  without changing production SHAKE code; independent retest remains pending.
 
 Plan scope: Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].
 

@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest PASS and awaiting hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 remediation complete and awaiting pentest retest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.2`. `brynja-hash-core 0.1.0`,
@@ -230,7 +230,7 @@ exact 168-byte/136-byte rates, the `0x1f` suffix, caller-owned zero-length and
 multi-squeeze output, and checked input/output domains pass official examples,
 rate boundaries, 343-byte partition campaigns, fixed-output domain negatives,
 dynamic analysis, a 328-message six-function differential corpus, a ninth Kani
-bound, and 43 source-policy mutations. Final package-external and cross-backend
+bound, and 46 source-policy mutations. Final package-external and cross-backend
 family acceptance, acceleration, secret-state erasure, independent review and
 FIPS validation remain later work. Zero crates are selected for publication.
 

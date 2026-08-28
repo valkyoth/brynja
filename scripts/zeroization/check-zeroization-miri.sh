@@ -39,6 +39,15 @@ for sha3_test in sha3_384 sha3_512; do
         --target x86_64-unknown-linux-gnu
 done
 
+for shake_test in shake128 shake256; do
+    CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+        cargo +nightly-2026-08-17 miri test \
+        -p brynja-hash-sha3 \
+        --test "$shake_test" \
+        suffix_and_rate_boundaries_have_exact_output \
+        --target x86_64-unknown-linux-gnu
+done
+
 CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     cargo +nightly-2026-08-17 miri test \
     -p brynja-hash-sha2 \

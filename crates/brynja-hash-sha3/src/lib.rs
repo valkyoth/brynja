@@ -1,4 +1,4 @@
-//! Complete portable SHA3-224, SHA3-256, SHA3-384, and SHA3-512 for Brynja.
+//! Complete portable FIPS 202 SHA-3 and SHAKE functions for Brynja.
 //!
 //! The byte-oriented one-shot and streaming APIs implement the FIPS 202
 //! SHA-3 functions without allocation, low-level code, I/O, global mutable
@@ -14,15 +14,21 @@ mod sha3_224;
 mod sha3_256;
 mod sha3_384;
 mod sha3_512;
+mod shake128;
+mod shake256;
 mod sponge;
 
-pub use brynja_hash_core::{FixedOutput, Update};
+pub use brynja_hash_core::{ExtendableOutput, FixedOutput, Update, XofReader};
 pub use digest::{Sha3_224Digest, Sha3_256Digest, Sha3_384Digest, Sha3_512Digest};
-pub use error::{Sha3_224Error, Sha3_256Error, Sha3_384Error, Sha3_512Error};
+pub use error::{
+    Sha3_224Error, Sha3_256Error, Sha3_384Error, Sha3_512Error, Shake128Error, Shake256Error,
+};
 pub use sha3_224::Sha3_224;
 pub use sha3_256::Sha3_256;
 pub use sha3_384::Sha3_384;
 pub use sha3_512::Sha3_512;
+pub use shake128::{Shake128, Shake128Reader};
+pub use shake256::{Shake256, Shake256Reader};
 
 /// Whether the complete portable SHA3-224 API is implemented.
 pub const SHA3_224_IMPLEMENTED: bool = true;
@@ -35,6 +41,12 @@ pub const SHA3_384_IMPLEMENTED: bool = true;
 
 /// Whether the complete portable SHA3-512 API is implemented.
 pub const SHA3_512_IMPLEMENTED: bool = true;
+
+/// Whether the complete portable SHAKE128 API is implemented.
+pub const SHAKE128_IMPLEMENTED: bool = true;
+
+/// Whether the complete portable SHAKE256 API is implemented.
+pub const SHAKE256_IMPLEMENTED: bool = true;
 
 /// Computes SHA3-224 over one complete byte slice.
 ///
@@ -96,12 +108,49 @@ pub fn sha3_512(input: &[u8]) -> Result<Sha3_512Digest, Sha3_512Error> {
     Ok(state.finalize())
 }
 
+/// Computes exactly `output.len()` bytes of SHAKE128 output.
+///
+/// The empty output slice is valid. Use [`Shake128`] for streamed input or
+/// [`Shake128Reader`] for incremental output.
+///
+/// ```
+/// let mut output = [0_u8; 32];
+/// brynja_hash_sha3::shake128(b"", &mut output)?;
+/// assert_eq!(&output[..4], &[0x7f, 0x9c, 0x2b, 0xa4]);
+/// # Ok::<(), brynja_hash_sha3::Shake128Error>(())
+/// ```
+pub fn shake128(input: &[u8], output: &mut [u8]) -> Result<(), Shake128Error> {
+    let mut state = Shake128::new();
+    state.update(input)?;
+    state.finalize_xof().squeeze(output)
+}
+
+/// Computes exactly `output.len()` bytes of SHAKE256 output.
+///
+/// The empty output slice is valid. Use [`Shake256`] for streamed input or
+/// [`Shake256Reader`] for incremental output.
+///
+/// ```
+/// let mut output = [0_u8; 64];
+/// brynja_hash_sha3::shake256(b"", &mut output)?;
+/// assert_eq!(&output[..4], &[0x46, 0xb9, 0xdd, 0x2b]);
+/// # Ok::<(), brynja_hash_sha3::Shake256Error>(())
+/// ```
+pub fn shake256(input: &[u8], output: &mut [u8]) -> Result<(), Shake256Error> {
+    let mut state = Shake256::new();
+    state.update(input)?;
+    state.finalize_xof().squeeze(output)
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
         SHA3_224_IMPLEMENTED, SHA3_256_IMPLEMENTED, SHA3_384_IMPLEMENTED, SHA3_512_IMPLEMENTED,
-        Sha3_224, Sha3_224Error, Sha3_256, Sha3_256Error, Sha3_384, Sha3_384Error, Sha3_512,
-        Sha3_512Error, keccak::byte_location, sponge::checked_message_length,
+        SHAKE128_IMPLEMENTED, SHAKE256_IMPLEMENTED, Sha3_224, Sha3_224Error, Sha3_256,
+        Sha3_256Error, Sha3_384, Sha3_384Error, Sha3_512, Sha3_512Error, Shake128, Shake128Error,
+        Shake256, Shake256Error,
+        keccak::byte_location,
+        sponge::{checked_message_length, checked_output_length},
     };
 
     #[test]
@@ -110,12 +159,16 @@ mod tests {
         assert!(::core::hint::black_box(SHA3_256_IMPLEMENTED));
         assert!(::core::hint::black_box(SHA3_384_IMPLEMENTED));
         assert!(::core::hint::black_box(SHA3_512_IMPLEMENTED));
+        assert!(::core::hint::black_box(SHAKE128_IMPLEMENTED));
+        assert!(::core::hint::black_box(SHAKE256_IMPLEMENTED));
     }
 
     #[test]
     fn checked_length_is_exact() {
         assert_eq!(checked_message_length(0, u128::MAX), Ok(u128::MAX));
         assert_eq!(checked_message_length(u128::MAX, 1), Err(()));
+        assert_eq!(checked_output_length(0, u128::MAX), Ok(u128::MAX));
+        assert_eq!(checked_output_length(u128::MAX, 1), Err(()));
     }
 
     #[test]
@@ -146,6 +199,20 @@ mod tests {
             checked_message_length(u128::MAX, 1).map_err(|()| Sha3_512Error::MessageTooLong),
             Err(Sha3_512Error::MessageTooLong)
         );
+        let shake128 = Shake128::new();
+        let shake256 = Shake256::new();
+        assert_eq!(shake128.check_additional_bytes(u128::MAX), Ok(()));
+        assert_eq!(shake256.check_additional_bytes(u128::MAX), Ok(()));
+        assert_eq!(shake128.message_bytes(), 0);
+        assert_eq!(shake256.message_bytes(), 0);
+        assert_eq!(
+            checked_message_length(u128::MAX, 1).map_err(|()| Shake128Error::MessageTooLong),
+            Err(Shake128Error::MessageTooLong)
+        );
+        assert_eq!(
+            checked_output_length(u128::MAX, 1).map_err(|()| Shake256Error::OutputTooLong),
+            Err(Shake256Error::OutputTooLong)
+        );
     }
 
     #[test]
@@ -161,7 +228,10 @@ mod tests {
 
 #[cfg(kani)]
 mod proofs {
-    use super::{keccak::byte_location, sponge::checked_message_length};
+    use super::{
+        keccak::byte_location,
+        sponge::{checked_message_length, checked_output_length},
+    };
 
     #[kani::proof]
     fn checked_message_length_matches_u128_addition() {
@@ -181,5 +251,15 @@ mod proofs {
         assert!(lane < 25);
         assert!(shift <= 56);
         assert_eq!(shift % 8, 0);
+    }
+
+    #[kani::proof]
+    fn checked_output_length_matches_u128_addition() {
+        let current: u128 = kani::any();
+        let additional: u128 = kani::any();
+        assert_eq!(
+            checked_output_length(current, additional),
+            current.checked_add(additional).ok_or(())
+        );
     }
 }

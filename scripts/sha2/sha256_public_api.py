@@ -95,6 +95,8 @@ PACKAGES = (
             "src/sha3_256.rs",
             "src/sha3_384.rs",
             "src/sha3_512.rs",
+            "src/shake128.rs",
+            "src/shake256.rs",
             "src/sponge.rs",
         ),
     ),

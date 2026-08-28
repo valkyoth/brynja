@@ -387,22 +387,23 @@
       "evidence": [],
       "invariants": [
         "constant-time",
+        "failure-atomicity",
         "resource-bound",
         "side-channel",
         "work-bound"
       ],
       "owners": [
-        "0.24.1"
+        "0.24.2"
       ],
       "sources": [
         "nist:NIST.FIPS.202.pdf"
       ],
       "targets": [
-        "actual-symbol:crates/brynja-hash-sha3/src/lib.rs#SHA3_512_IMPLEMENTED"
+        "actual-symbol:crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED"
       ],
       "tests": [
-        "planned:positive:crates/brynja-hash-sha3/tests/sha3_512.rs#official_fips202_zero_and_1600_bit_vectors_match",
-        "planned:negative:crates/brynja-hash-sha3/tests/sha3_512.rs#sha3_domain_is_not_raw_keccak"
+        "planned:positive:crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match",
+        "planned:negative:crates/brynja-hash-sha3/tests/shake256.rs#shake_domain_is_distinct_from_fixed_output_sha3"
       ]
     },
     "BRY-REQ-CRYPTO-0003": {
@@ -9192,6 +9193,7 @@
         "BRY-REQ-CRYPTO-0014"
       ],
       "failure-atomicity": [
+        "BRY-REQ-CRYPTO-0002",
         "BRY-REQ-CRYPTO-0007",
         "BRY-REQ-CRYPTO-0009",
         "BRY-REQ-TLS-0005"
@@ -10005,7 +10007,7 @@
       "0.22.0": [
         "BRY-REQ-CRYPTO-0001"
       ],
-      "0.24.1": [
+      "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
       ],
       "0.24.6": [
@@ -10851,7 +10853,7 @@
       "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0001"
       ],
-      "actual-symbol:crates/brynja-hash-sha3/src/lib.rs#SHA3_512_IMPLEMENTED": [
+      "actual-symbol:crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0002"
       ],
       "actual-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue": [
@@ -11352,7 +11354,7 @@
       "planned:negative:crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact": [
         "BRY-REQ-CRYPTO-0001"
       ],
-      "planned:negative:crates/brynja-hash-sha3/tests/sha3_512.rs#sha3_domain_is_not_raw_keccak": [
+      "planned:negative:crates/brynja-hash-sha3/tests/shake256.rs#shake_domain_is_distinct_from_fixed_output_sha3": [
         "BRY-REQ-CRYPTO-0002"
       ],
       "planned:negative:crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora": [
@@ -11760,7 +11762,7 @@
       "planned:positive:crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match": [
         "BRY-REQ-CRYPTO-0001"
       ],
-      "planned:positive:crates/brynja-hash-sha3/tests/sha3_512.rs#official_fips202_zero_and_1600_bit_vectors_match": [
+      "planned:positive:crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match": [
         "BRY-REQ-CRYPTO-0002"
       ],
       "planned:positive:crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries": [

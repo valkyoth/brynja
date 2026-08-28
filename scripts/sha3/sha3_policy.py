@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the reviewed portable FIPS 202 fixed-output SHA-3 boundary."""
+"""Validate the reviewed portable FIPS 202 SHA-3 and SHAKE boundary."""
 
 from __future__ import annotations
 
@@ -25,17 +25,27 @@ SHA3_224 = CRATE / "src/sha3_224.rs"
 SHA3_256 = CRATE / "src/sha3_256.rs"
 SHA3_384 = CRATE / "src/sha3_384.rs"
 SHA3_512 = CRATE / "src/sha3_512.rs"
+SHAKE128 = CRATE / "src/shake128.rs"
+SHAKE256 = CRATE / "src/shake256.rs"
 SHA3_224_TEST = CRATE / "tests/sha3_224.rs"
 SHA3_256_TEST = CRATE / "tests/sha3_256.rs"
 SHA3_384_TEST = CRATE / "tests/sha3_384.rs"
 SHA3_512_TEST = CRATE / "tests/sha3_512.rs"
+SHAKE128_TEST = CRATE / "tests/shake128.rs"
+SHAKE256_TEST = CRATE / "tests/shake256.rs"
 TEST_SUPPORT = CRATE / "tests/support/mod.rs"
 DIFFERENTIAL = Path("scripts/sha3/check-sha3-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/sha3-differential/src/main.rs")
 MIRI_SCRIPT = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER_SCRIPT = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
-SOURCES = (LIB, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256, SHA3_384, SHA3_512)
-TESTS = (SHA3_224_TEST, SHA3_256_TEST, SHA3_384_TEST, SHA3_512_TEST, TEST_SUPPORT)
+SOURCES = (
+    LIB, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256, SHA3_384,
+    SHA3_512, SHAKE128, SHAKE256,
+)
+TESTS = (
+    SHA3_224_TEST, SHA3_256_TEST, SHA3_384_TEST, SHA3_512_TEST,
+    SHAKE128_TEST, SHAKE256_TEST, TEST_SUPPORT,
+)
 HASHES = {
     Path(path): digest for path, digest in sha3_reviewed_hashes.REVIEWED_HASHES.items()
 }
@@ -104,14 +114,18 @@ def validate(root: Path) -> None:
         "pub const SHA3_256_IMPLEMENTED: bool = true;",
         "pub const SHA3_384_IMPLEMENTED: bool = true;",
         "pub const SHA3_512_IMPLEMENTED: bool = true;",
+        "pub const SHAKE128_IMPLEMENTED: bool = true;",
+        "pub const SHAKE256_IMPLEMENTED: bool = true;",
         "pub fn sha3_224(input: &[u8]) -> Result<Sha3_224Digest, Sha3_224Error>",
         "pub fn sha3_256(input: &[u8]) -> Result<Sha3_256Digest, Sha3_256Error>",
         "pub fn sha3_384(input: &[u8]) -> Result<Sha3_384Digest, Sha3_384Error>",
         "pub fn sha3_512(input: &[u8]) -> Result<Sha3_512Digest, Sha3_512Error>",
+        "pub fn shake128(input: &[u8], output: &mut [u8]) -> Result<(), Shake128Error>",
+        "pub fn shake256(input: &[u8], output: &mut [u8]) -> Result<(), Shake256Error>",
         "#[kani::proof]",
     ):
         require(library, token, "SHA-3 package")
-    for adjacent in ("Shake128", "Shake256"):
+    for adjacent in ("Cshake128", "Cshake256", "Kmac128"):
         if adjacent in library:
             fail(f"adjacent v0.24 algorithm admitted early: {adjacent}")
 
@@ -133,16 +147,20 @@ def validate(root: Path) -> None:
 
     sponge = without_comments(loaded[SPONGE])
     for token in (
-        "pub(super) const MAX_RATE_BYTES: usize = 144;",
+        "pub(super) const MAX_RATE_BYTES: usize = 168;",
         "pub(super) const SHA3_SUFFIX: u8 = 0x06;",
+        "pub(super) const SHAKE_SUFFIX: u8 = 0x1f;",
         "state: [u64; 25]",
         "message_bytes: u128",
         "checked_message_length(self.message_bytes, additional)?;",
         "current.checked_add(additional)",
+        "checked_output_length(self.output_bytes, additional)",
         "*last ^= 0x80;",
         "permute(state);",
     ):
         require(sponge, token, "sponge")
+    if sponge.count("current.checked_add(additional)") != 2:
+        fail("sponge input/output checked-length ownership changed")
 
     for path, algorithm, rate in (
         (SHA3_224, "Sha3_224", "144"),
@@ -164,6 +182,29 @@ def validate(root: Path) -> None:
             if forbidden in state:
                 fail(f"consuming SHA-3 state became duplicable: {forbidden}")
 
+    for path, algorithm, reader, rate in (
+        (SHAKE128, "Shake128", "Shake128Reader", "168"),
+        (SHAKE256, "Shake256", "Shake256Reader", "136"),
+    ):
+        state = without_comments(loaded[path])
+        for token in (
+            f"const RATE_BYTES: usize = {rate};",
+            f"pub struct {algorithm}(Sponge<RATE_BYTES>);",
+            f"pub struct {reader}(Squeezer<RATE_BYTES>);",
+            "pub fn check_additional_bytes",
+            "pub fn update(&mut self, input: &[u8])",
+            f"impl ExtendableOutput for {algorithm}",
+            f"impl XofReader for {reader}",
+            "pub fn squeeze(&mut self, output: &mut [u8])",
+        ):
+            require(state, token, algorithm)
+        for forbidden in (
+            f"impl Clone for {algorithm}", f"impl Copy for {algorithm}",
+            f"impl Clone for {reader}", f"impl Copy for {reader}",
+        ):
+            if forbidden in state:
+                fail(f"consuming SHAKE state became duplicable: {forbidden}")
+
     digest = without_comments(loaded[DIGEST])
     error = without_comments(loaded[ERROR])
     for algorithm, width, bits in (
@@ -182,26 +223,42 @@ def validate(root: Path) -> None:
             f'error_type!({algorithm}Error, "SHA3-{bits}");',
             f"{algorithm} error",
         )
+    for algorithm in ("Shake128", "Shake256"):
+        require(
+            error,
+            f'xof_error_type!({algorithm}Error, "{algorithm.upper()}");',
+            f"{algorithm} error",
+        )
 
     tests = "\n".join(loaded[path] for path in TESTS)
     for token in (
         "official_fips202_zero_and_1600_bit_vectors_match",
         "standard_text_and_million_byte_vectors_match",
+        "standard_text_and_million_byte_outputs_match",
         "suffix_and_rate_boundaries_have_exact_digests",
         "every_streaming_partition_matches_one_shot",
         "sha3_domain_is_not_raw_keccak",
         "trait_api_and_algorithm_identity_are_exact",
+        "every_output_partition_matches_one_shot_across_permutations",
+        "zero_length_and_checked_state_transitions_are_exact",
+        "shake_domain_is_distinct_from_fixed_output_sha3",
+        "shake_strength_identities_are_distinct",
     ):
         require(tests, token, "SHA-3 tests")
 
     miri = read(root, MIRI_SCRIPT)
     for token in (
         "for sha3_test in sha3_384 sha3_512; do",
+        "for shake_test in shake128 shake256; do",
         "-p brynja-hash-sha3",
         '--test "$sha3_test"',
+        '--test "$shake_test"',
         "suffix_and_rate_boundaries_have_exact_digests",
+        "suffix_and_rate_boundaries_have_exact_output",
     ):
         require(miri, token, "SHA-3 Miri coverage")
+    if miri.count("-p brynja-hash-sha3") != 2:
+        fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     for token in (
         "-p brynja-hash-sha3",
@@ -209,6 +266,8 @@ def validate(root: Path) -> None:
         "--target x86_64-unknown-linux-gnu",
     ):
         require(sanitizer, token, "SHA-3 AddressSanitizer coverage")
+    if sanitizer.count("-p brynja-hash-sha3") != 1:
+        fail("SHA-3 AddressSanitizer package coverage changed")
 
     manifest = tomllib.loads(read(root, MANIFEST))
     if manifest.get("dependencies") != {"brynja-hash-core": {"workspace": True}}:

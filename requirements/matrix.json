@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "4b1e0d93b3106c4837d85d5c0f0c04aa791ff29214020690611ca17184131da3",
-  "domain_policy_sha256": "64c4c7b98feee818b830d7838588ed83d9b1f7bc4095448243b1e13f6fbc1b2a",
-  "policy_sha256": "95d83c3aad1efeb0561bd2d4d37c4aa5108f59031f4bd68e98aaae390694eb0b",
+  "closure_policy_sha256": "f746579f85b5b59e84aebad4d65c63ce23028e80fc31ce28d360e17e988b8563",
+  "domain_policy_sha256": "99f7b5e06c0a3b3601d2ee0655e31d8372cffdcd6410a574923fcb7dc886255c",
+  "policy_sha256": "7d1cace77ae5edfabc9e7cfce87523927236d9a77aba43f38bea10d977bbc207",
   "requirements": [
     {
       "applicability": "delegate",
@@ -884,10 +884,11 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All four portable fixed-output SHA-3 algorithms pass official examples, million-byte and exact padding-boundary tests, exhaustive bounded partitioning, raw-Keccak negatives, a 328-message four-algorithm independent-library differential corpus, source-policy mutations, and the shared Kani bounds; SHAKE, public family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete.",
+      "evidence_gap": "All six portable FIPS 202 functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, and shared Kani bounds; package-external family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete.",
       "id": "BRY-REQ-CRYPTO-0002",
       "invariants": [
         "constant-time",
+        "failure-atomicity",
         "resource-bound",
         "side-channel",
         "work-bound"
@@ -895,10 +896,10 @@
       "lifecycle": "implemented",
       "mapping_rationale": "The SHA-3 and SHAKE semantic surface directly records the complete algorithm family admitted from the pinned current FIPS 202 authority.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.24.1",
+      "owner": "0.24.2",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -931,27 +932,27 @@
           "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
         }
       ],
-      "statement": "Keccak-f[1600], SHA3-224, SHA3-256, SHA3-384, and SHA3-512 implement the exact FIPS 202 permutation, distinct rates and outputs, suffix, padding, and domain separation; later SHAKE128 and SHAKE256 reuse that private owner without broadening this requirement's current implementation claim.",
+      "statement": "Keccak-f[1600], SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256 implement the exact FIPS 202 permutation, distinct rates and outputs, suffixes, padding, domain separation, absorbing-to-squeezing transition, and incremental output rules.",
       "strength": "INVARIANT",
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "crates/brynja-hash-sha3/src/lib.rs#SHA3_512_IMPLEMENTED"
+          "target": "crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "crates/brynja-hash-sha3/tests/sha3_512.rs#official_fips202_zero_and_1600_bit_vectors_match"
+          "target": "crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "crates/brynja-hash-sha3/tests/sha3_512.rs#sha3_domain_is_not_raw_keccak"
+          "target": "crates/brynja-hash-sha3/tests/shake256.rs#shake_domain_is_distinct_from_fixed_output_sha3"
         }
       ],
-      "work_bound": "Absorb work is linear in complete input blocks, with checked byte accumulation; these fixed-output SHA-3 APIs perform one bounded final permutation and expose no caller-selected output length."
+      "work_bound": "Absorb work is linear in complete input blocks and squeeze work is linear in caller-requested output blocks; both byte domains use checked u128 accumulation, and output is written only after length admission."
     },
     {
       "applicability": "apply",
@@ -29889,9 +29890,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "6492755a95f36457309f4e98a57b850ce389b284589e77b73cf0e617f120062c",
+  "residual_policy_sha256": "166d5dda058e7dec4f10d4ea33e753eee46afaecdc09d56504e0da04a81b721c",
   "schema": 5,
   "source_ledger_sha256": "65caf5a9f356c92eb6fb6443af595869e0181e19e88378c678dfd001ea25d9b1",
-  "surface_register_sha256": "c97cf2489cec83564a4f795124a804e9a95ebfd4255a2e2ac485880c1392a0c7",
-  "transport_policy_sha256": "5f5f7e7b931ba5e4dbfcd3aff2ca0ba6b59512236c35acf37d783092d17c57a7"
+  "surface_register_sha256": "88beac0f5f0098c27bb6a7f35843f0f612e28e2f4b2ae031b4c086282eceaf7b",
+  "transport_policy_sha256": "05460cf147f7f5d919971c19bb1f03ee0f7cf9a7d41ebafc0aa4db48898189ae"
 }

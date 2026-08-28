@@ -1,7 +1,7 @@
 //! First-party cryptographic composition for Brynja.
 //!
 //! All six complete portable FIPS 180-4 SHA-2 implementations and the complete
-//! four complete portable FIPS 202 SHA-3 digest implementations are exposed from
+//! six complete portable FIPS 202 SHA-3 and SHAKE implementations are exposed from
 //! their small family crates. Provider effects, AEADs, KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 
@@ -42,6 +42,12 @@ pub const SHA3_384_IMPLEMENTED: bool = true;
 /// Whether portable SHA3-512 is implemented and available through this layer.
 pub const SHA3_512_IMPLEMENTED: bool = true;
 
+/// Whether portable SHAKE128 is implemented and available through this layer.
+pub const SHAKE128_IMPLEMENTED: bool = true;
+
+/// Whether portable SHAKE256 is implemented and available through this layer.
+pub const SHAKE256_IMPLEMENTED: bool = true;
+
 pub use brynja_hash_sha2::{
     FixedOutput, Sha224, Sha224Digest, Sha224Error, Sha256, Sha256Digest, Sha256Error, Sha384,
     Sha384Digest, Sha384Error, Sha512, Sha512_224, Sha512_224Digest, Sha512_224Error, Sha512_256,
@@ -49,9 +55,10 @@ pub use brynja_hash_sha2::{
     sha512, sha512_224, sha512_256,
 };
 pub use brynja_hash_sha3::{
-    Sha3_224, Sha3_224Digest, Sha3_224Error, Sha3_256, Sha3_256Digest, Sha3_256Error, Sha3_384,
-    Sha3_384Digest, Sha3_384Error, Sha3_512, Sha3_512Digest, Sha3_512Error, sha3_224, sha3_256,
-    sha3_384, sha3_512,
+    ExtendableOutput, Sha3_224, Sha3_224Digest, Sha3_224Error, Sha3_256, Sha3_256Digest,
+    Sha3_256Error, Sha3_384, Sha3_384Digest, Sha3_384Error, Sha3_512, Sha3_512Digest,
+    Sha3_512Error, Shake128, Shake128Error, Shake128Reader, Shake256, Shake256Error,
+    Shake256Reader, XofReader, sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256,
 };
 
 #[cfg(test)]
@@ -69,6 +76,8 @@ mod tests {
         assert!(::core::hint::black_box(super::SHA3_256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA3_384_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA3_512_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::SHAKE128_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::SHAKE256_IMPLEMENTED));
         assert_eq!(
             super::sha224(b"abc"),
             Ok(super::Sha224Digest::from_bytes([
@@ -92,5 +101,11 @@ mod tests {
             super::sha3_512(b"abc").map(|digest| digest.as_bytes().len()),
             Ok(64)
         );
+        let mut shake128 = [0_u8; 32];
+        let mut shake256 = [0_u8; 64];
+        assert_eq!(super::shake128(b"", &mut shake128), Ok(()));
+        assert_eq!(super::shake256(b"", &mut shake256), Ok(()));
+        assert_eq!(&shake128[..4], &[0x7f, 0x9c, 0x2b, 0xa4]);
+        assert_eq!(&shake256[..4], &[0x46, 0xb9, 0xdd, 0x2b]);
     }
 }

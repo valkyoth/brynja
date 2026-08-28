@@ -22,6 +22,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add complete allocation-free `no_std` SHAKE128 and SHAKE256 one-shot,
+  streaming-input, consuming-finalization, and incremental multi-squeeze APIs
+  with separate absorb/output types, exact FIPS 202 rates and suffix, checked
+  `u128` input/output domains, zero-length output, and caller-owned buffers.
+- Verify both XOFs with official zero-bit and 1,600-bit examples, exact
+  rate-minus-one/rate/rate-plus-one inputs, every bounded input and output
+  partition across multiple permutations, fixed-output domain negatives,
+  Miri, AddressSanitizer, a ninth Kani bound, and independent-library
+  differential results for all six FIPS 202 functions over 328 messages.
+- Expand the reviewed SHA-3/SHAKE boundary to 43 mutation fixtures and exact
+  hashes, reexport both XOFs through `brynja-crypto` and `brynja 0.24.2`, and
+  retain the family as **In progress** pending portable and accelerated final
+  acceptance; no package, backend, independent-review, secret-erasure, or FIPS
+  claim is added.
 - Remediate the v0.24.1 Medium incorrect-assurance-claim finding by executing
   SHA3-384/SHA3-512 under the CI-invoked Miri and AddressSanitizer scripts and
   adding four SHA-3 policy regressions that reject removal or narrowing;

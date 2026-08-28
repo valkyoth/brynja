@@ -907,13 +907,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-hash-sha3/src/lib.rs#SHA3_256_IMPLEMENTED",
+        "code_target": "crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED",
         "disposition": "implemented",
         "domain": "cryptography",
-        "owner": "0.24.1",
-        "rationale": "The private Keccak-f[1600] owner and all four complete fixed-output SHA-3 APIs are implemented under pinned FIPS 202; SHAKE128, SHAKE256, family acceptance, and acceleration remain staged.",
+        "owner": "0.24.2",
+        "rationale": "The private Keccak-f[1600] owner and all six complete SHA-3 and SHAKE APIs are implemented under pinned FIPS 202; portable family acceptance and acceleration remain staged.",
         "sources": ["nist:NIST.FIPS.202.pdf"],
-        "test_target": "crates/brynja-hash-sha3/tests/sha3_512.rs#official_fips202_zero_and_1600_bit_vectors_match"
+        "test_target": "crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match"
       },
       "id": "algorithm.sha3-shake"
     },

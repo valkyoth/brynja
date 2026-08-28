@@ -26,8 +26,8 @@
 # brynja-hash-core
 
 Small allocation-free `no_std` interfaces shared by Brynja fixed-output hash
-implementations. This crate contains no algorithm, runtime dispatch, I/O, or
-protocol code.
+and extendable-output implementations. This crate contains no algorithm,
+runtime dispatch, I/O, or protocol code.
 
 ## Cryptography Verification Status
 
@@ -41,6 +41,9 @@ component's status. Interface tests are not independent verification.
   closed error without partial acceptance.
 - `FixedOutput` consumes an incremental state and returns its
   algorithm-specific digest value.
+- `ExtendableOutput` consumes an absorbing state and returns a distinct XOF
+  reader, so callers cannot absorb after squeezing starts.
+- `XofReader` incrementally fills complete caller-owned output slices.
 
 See the [full project documentation](https://github.com/valkyoth/brynja) and
 [verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).

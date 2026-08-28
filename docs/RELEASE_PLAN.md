@@ -1903,7 +1903,7 @@ Exit criteria:
 
 ### v0.21.0 - Canonical ASN.1 Primitives
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Add canonical ASN.1 integer, bit and octet string, OID, Boolean, string, sequence and set, and time primitives with malformed and non-canonical corpora.
 
@@ -1973,7 +1973,7 @@ Import-only RSA and exact AEAD caller-buffer behavior precede audit gates.
 
 ### v0.22.0 - SHA-256
 
-Status: planned
+Status: released
 
 Plan scope: Freeze the reusable no_std `brynja-hash-core` interface and `brynja-hash-sha2` family boundary, then implement streaming and fixed-message SHA-256 with official vectors, boundary lengths, and exhaustion handling; make `brynja-crypto`, TLS, PKI, and later FIPS consumers use that exact implementation without exposing the post-1.0 standalone facade or admitting unrelated hash families.
 
@@ -2050,7 +2050,7 @@ Exit criteria:
 
 ### v0.22.1 - SHA-256 x86_64 And AArch64 Acceleration
 
-Status: planned
+Status: released
 
 Plan scope: Add separately forced and reported SHA-256 backends using exact x86_64 SHA-extension bundles on AMD and Intel and exact AArch64 SHA2 bundles on Apple M2 and AWS Arm; preserve the scalar state and digest API, streaming and fixed-message equivalence, checked length and exhaustion behavior, safe std and static no_std dispatch, startup KAT quarantine, and per-compiler constant-time and emitted-code evidence without claiming register erasure.
 
@@ -2075,7 +2075,7 @@ Exit criteria:
 
 ### v0.22.2 - SHA-256 RISC-V Acceleration Candidate
 
-Status: planned
+Status: released
 
 Plan scope: Implement a first-party RISC-V SHA-256 backend only for an exact ratified scalar-crypto or vector-crypto feature bundle expressible across the supported Rust line; run it on the available RISC-V host when its observed ISA qualifies, otherwise retain it as a non-dispatchable candidate with emulator and generated-code evidence, keep scalar fallback authoritative, and prohibit an accelerated support claim until matching native correctness, performance, and side-channel evidence exists.
 
@@ -2100,7 +2100,7 @@ Exit criteria:
 
 ### v0.22.3 - SHA-256 Public API Usability Acceptance
 
-Status: planned
+Status: released
 
 Plan scope: Close the SHA-256 implementation chain with a runnable downstream-style fixture that uses only the documented public `brynja-hash-sha2` and `brynja-crypto` APIs to hash representative real byte content through one-shot, irregular streaming, scalar, and every admitted accelerated route; verify authoritative digests, package installability, no_std portability, honest backend reporting, and deterministic misuse and exhaustion behavior without private hooks, test-only features, or adding algorithm scope.
 
@@ -2153,7 +2153,7 @@ Exit criteria:
 
 ### v0.23.0 - Complete Portable SHA-224
 
-Status: planned
+Status: released
 
 Plan scope: Complete portable SHA-224 in `brynja-hash-sha2` beside SHA-256, reusing the reviewed 32-bit compression owner while preserving SHA-224's distinct FIPS 180-4 initial value, 224-bit output, checked length domain, streaming state, one-shot function, digest type, and public identity.
 
@@ -2189,7 +2189,7 @@ Exit criteria:
 
 ### v0.23.1 - Complete Portable SHA-384 And SHA-512
 
-Status: planned
+Status: released
 
 Plan scope: Implement the complete portable SHA-384 and SHA-512 algorithms in `brynja-hash-sha2` over one private reviewed 64-bit compression owner, with distinct FIPS 180-4 IVs, outputs, 128-byte buffering, 128-bit length encoding, checked byte domains, streaming states, one-shot functions, digest types, and public identities.
 
@@ -2226,7 +2226,7 @@ Exit criteria:
 
 ### v0.23.2 - Complete SHA-512/224 And SHA-512/256
 
-Status: planned
+Status: released
 
 Plan scope: Complete SHA-512/224 and SHA-512/256 in `brynja-hash-sha2` as distinct named FIPS 180-4 algorithms over the reviewed 64-bit foundation, implement and verify the SHA-512/t IV-generation procedure for exactly the approved 224- and 256-bit identities, and reject the false model that either algorithm is ordinary SHA-512 truncation.
 
@@ -2262,7 +2262,7 @@ Exit criteria:
 
 ### v0.23.3 - Complete SHA-2 CPU Acceleration
 
-Status: planned
+Status: released
 
 Plan scope: Extend every admitted SHA-256-family and SHA-512-family backend to the complete six-algorithm SHA-2 surface on x86_64, AArch64, and qualifying RISC-V; reuse compression kernels without merging algorithm identities, and require per-variant KAT, chunking, exhaustion, forced-path, quarantine, native performance, emitted-code, and scalar-equivalence evidence.
 
@@ -2425,7 +2425,7 @@ Exit criteria:
 
 ### v0.24.1 - Complete SHA3-384 And SHA3-512
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes:
 
@@ -2497,7 +2497,32 @@ Exit criteria:
 
 ### v0.24.2 - Complete SHAKE128 And SHAKE256
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes:
+
+- distinct `Shake128` and `Shake256` absorbing states consume into separate
+  `Shake128Reader` and `Shake256Reader` types, making absorb-after-squeeze and
+  squeeze-before-finalization structurally impossible;
+- allocation-free `no_std` one-shot, streaming input, incremental multi-
+  squeeze, zero-length output, caller-owned arbitrary byte output, common XOF
+  trait, checked `u128` input/output counter, and failure-before-mutation APIs
+  are public through the leaf, crypto, and facade boundaries;
+- exact 168-byte and 136-byte rates, the FIPS 202 `0x1f` suffix, final `0x80`
+  padding bit, official zero-bit and 1,600-bit examples, exact adjacent rate
+  boundaries, every bounded input partition, and 343-byte repeated-squeeze
+  partitions across multiple permutations pass for both identities;
+- fixed-output SHA-3 domain negatives and a 328-message differential corpus
+  against Python's independent `hashlib` path cover all six FIPS 202 functions;
+  Miri and AddressSanitizer commands include both XOFs, a ninth Kani harness
+  proves output-counter admission, and 43 mutation fixtures plus reviewed hashes
+  bind the complete source and evidence boundary;
+- no raw permutation, acceleration, unsafe code, allocation, third-party
+  dependency, secret-state erasure, package-external final acceptance,
+  independent-review, FIPS-validation or publication claim is introduced. The
+  SHA-3/SHAKE family remains documented **In progress** through v0.24.4;
+- the newly admitted XOF algorithms and absorbing-to-squeezing state machine
+  trigger an exceptional cryptographic pentest before the signed tag.
 
 Plan scope: Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].
 

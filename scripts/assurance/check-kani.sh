@@ -30,8 +30,8 @@ harnesses="$(
         wc -l |
         tr -d ' '
 )"
-test "$harnesses" = "8" || {
-    echo "Kani policy: expected exactly eight admitted SHA-2/SHA-3 harnesses, found ${harnesses}" >&2
+test "$harnesses" = "9" || {
+    echo "Kani policy: expected exactly nine admitted SHA-2/SHA-3 harnesses, found ${harnesses}" >&2
     exit 1
 }
 
@@ -48,7 +48,7 @@ test "$confined_harnesses" = "$expected_harness_files" || {
 }
 
 if [ "$mode" = "--policy-only" ]; then
-    echo "Kani policy: eight portable SHA-2/SHA-3 bounds are inventoried; full proofs are local tag-gate evidence"
+    echo "Kani policy: nine portable SHA-2/SHA-3 bounds are inventoried; full proofs are local tag-gate evidence"
     exit 0
 fi
 
@@ -83,4 +83,4 @@ test "$installed" = "cargo-kani ${kani_version}" || {
 
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha3
-echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; eight SHA-2/SHA-3 bounds passed"
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; nine SHA-2/SHA-3 bounds passed"

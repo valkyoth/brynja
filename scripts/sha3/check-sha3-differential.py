@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare all four Brynja SHA-3 digests with independent OpenSSL/hashlib."""
+"""Compare all six Brynja FIPS 202 functions with independent hashlib."""
 
 from __future__ import annotations
 
@@ -35,12 +35,15 @@ def main() -> int:
     expected: list[str] = []
     for data in messages:
         encoded = data.hex() or "-"
+        output_length = (len(data) * 37 + 19) % 344
         requests.extend(
             (
                 f"sha3-224 {encoded}",
                 f"sha3-256 {encoded}",
                 f"sha3-384 {encoded}",
                 f"sha3-512 {encoded}",
+                f"shake128 {encoded} {output_length}",
+                f"shake256 {encoded} {output_length}",
             )
         )
         expected.extend(
@@ -49,6 +52,8 @@ def main() -> int:
                 hashlib.sha3_256(data).hexdigest(),
                 hashlib.sha3_384(data).hexdigest(),
                 hashlib.sha3_512(data).hexdigest(),
+                hashlib.shake_128(data).hexdigest(output_length),
+                hashlib.shake_256(data).hexdigest(output_length),
             )
         )
 
@@ -81,7 +86,7 @@ def main() -> int:
             if wanted != observed:
                 raise RuntimeError(f"SHA-3 differential mismatch at result {index}")
         raise RuntimeError("SHA-3 differential result count mismatch")
-    print(f"all four SHA-3 digests match hashlib across {len(messages)} messages")
+    print(f"all six FIPS 202 functions match hashlib across {len(messages)} messages")
     return 0
 
 

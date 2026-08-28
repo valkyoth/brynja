@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.24.1 SHA-2 and fixed-output SHA-3 bounded harnesses admitted
+Status: v0.24.2 SHA-2 and FIPS 202 bounded harnesses admitted
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented
@@ -15,9 +15,9 @@ compatible pairing, following the same model as `base64-ng`.
 - Pinned verifier: `cargo-kani 0.67.0`, upstream tag `kani-0.67.0`, commit
   `4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d`.
 - Current proof result: six SHA-2 harnesses cover the shared 64-bit and 128-bit
-  message domains and padding decisions; two SHA-3 harnesses cover exact
-  `u128` byte-counter exhaustion and every byte-to-lane mapping in the
-  Keccak-f[1600] state.
+  message domains and padding decisions; three SHA-3/SHAKE harnesses cover
+  exact `u128` input/output byte-counter exhaustion and every byte-to-lane
+  mapping in the Keccak-f[1600] state.
 
 Updating Brynja's active stable compiler does not imply that the installed Kani
 release supports that compiler. Kani evidence records its verifier/compiler
@@ -25,13 +25,13 @@ pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
 `scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
-the exact eight-harness inventory, and all proof results when the verifier is available.
+the exact nine-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
 The SHA-2 harnesses prove only their stated checked byte-length and padding
-properties. The shared fixed-output SHA-3 harnesses prove only that byte-counter admission
-matches `u128::checked_add` and that each of the 200 Keccak state bytes maps to
-one in-bounds lane and byte shift. They do not prove permutation equivalence,
+properties. The shared FIPS 202 harnesses prove only that input/output
+byte-counter admission matches `u128::checked_add` and that each of the 200
+Keccak state bytes maps to one in-bounds lane and byte shift. They do not prove permutation equivalence,
 digest correctness, collision resistance, constant-time machine code, backend
 equivalence, or independent cryptographic verification.
 

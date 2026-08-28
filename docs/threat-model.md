@@ -524,6 +524,15 @@ stream partitions and raw-Keccak negative identities are checked separately;
 the four-algorithm differential corpus prevents a shared permutation mistake
 from being hidden by one output identity. The milestone adds no SHAKE state,
 raw permutation access, acceleration, secret cleanup or validation claim.
+v0.24.2 extends the boundary to SHAKE128 and SHAKE256. Absorbing states are
+consumed into separate non-cloneable output readers, so squeezing before
+finalization or absorbing after output begins is unrepresentable. Exact
+168-byte and 136-byte rates and the `0x1f` suffix remain distinct from fixed-
+output SHA-3; input and output counters reject overflow before mutation, and
+zero-length or repeated caller-owned output cannot expose the raw permutation.
+Caller-selected output length still controls linear public work and must be
+bounded by the calling protocol. Ordinary XOF state makes no secret-erasure,
+independent-review, acceleration, or FIPS-validation claim.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

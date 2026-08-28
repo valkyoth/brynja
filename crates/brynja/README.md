@@ -29,10 +29,10 @@
 workspace. It is allocation-independent `no_std` Rust without a C cryptographic library.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable FIPS 180-4 SHA-2 algorithms,
-> all four portable FIPS 202 fixed-output SHA-3 algorithms, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
+> all six portable FIPS 202 SHA-3 and SHAKE functions, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
 
 All six SHA-2 APIs pass separately packaged downstream `no_std` acceptance through the leaf and facade; that is not independent review or FIPS validation.
-SHAKE and the broader SHA-3/SHAKE acceptance chain remain in progress.
+The broader SHA-3/SHAKE acceptance chain remains in progress.
 
 ## Design Boundaries
 
@@ -109,7 +109,7 @@ hashing. Ordinary SHA-2 states do not guarantee erasure of secret-input
 remnants, including private working state that callers cannot clear; keyed use
 requires the later hardened construction.
 
-### Compute Portable SHA-3
+### Compute Portable SHA-3 And SHAKE
 
 ```rust
 let shorter = brynja::crypto::sha3_224(b"abc").unwrap();
@@ -120,6 +120,11 @@ assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(digest.as_bytes().len(), 32);
 assert_eq!(wider.as_bytes().len(), 48);
 assert_eq!(widest.as_bytes().len(), 64);
+
+let mut shake128 = [0_u8; 32];
+let mut shake256 = [0_u8; 64];
+brynja::crypto::shake128(b"abc", &mut shake128).unwrap();
+brynja::crypto::shake256(b"abc", &mut shake256).unwrap();
 ```
 
 These are FIPS 202 SHA-3 functions, not raw Keccak. Their ordinary unkeyed
@@ -127,23 +132,19 @@ states make no secret-remanence cleanup claim.
 
 ## Cryptography Verification Status
 
-These tables track concrete public capabilities. A complete public API and
-required acceptance must pass first. The crate-level audit
-inventory remains available in the
+These tables track concrete public capabilities after a complete public API and required acceptance. The
+crate-level audit inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
-✅ Implemented means a capability is ready; ✅ Fully implemented means every
-named family member is ready. A green implementation status does not mean independently verified.
-Only a named independent reviewer with linked evidence can change
-that status. Tests, CI, Kani, Miri, sanitizers, fuzzing, differential testing, and pentests
-do not themselves constitute independent verification.
+✅ Implemented means a capability is ready; ✅ Fully implemented covers every named family member. A green implementation status does not mean independently verified.
+Only linked sign-off from a named independent reviewer can change independent status. CI, Kani, Miri, sanitizers, fuzzing, differential testing, and pentests do not constitute independent verification.
 
 ### Hash Functions
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |
-| SHA-3/SHAKE (FIPS 202: SHA3-224, SHA3-256, SHA3-384, and SHA3-512 implemented; SHAKE128 and SHAKE256 pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-3/SHAKE (FIPS 202: all four SHA-3 digests and both SHAKE XOFs implemented; final acceptance pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -161,10 +162,7 @@ do not themselves constitute independent verification.
 
 ### Official Validation
 
-FIPS validation is a separate official claim from implementation and
-independent source review. Brynja has no FIPS 140-3 validation, certificate,
-validated module, approved security policy, or certificate-bound
-operational-environment claim.
+FIPS validation is a separate official claim from implementation and independent review. Brynja has no FIPS 140-3 validation, certificate, validated module, approved security policy, or certificate-bound operational-environment claim.
 
 | Validation scope | Implemented | Officially validated |
 | --- | --- | --- |
@@ -179,7 +177,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-sha2` | All six portable FIPS 180-4 SHA-2 algorithms and complete family ownership |
-| `brynja-hash-sha3` | All four portable FIPS 202 fixed-output SHA-3 algorithms; SHAKE and final family acceptance in progress |
+| `brynja-hash-sha3` | All six portable FIPS 202 SHA-3 and SHAKE functions; final family acceptance in progress |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

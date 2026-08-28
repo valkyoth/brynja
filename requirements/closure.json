@@ -787,21 +787,21 @@
       "version": "0.24.0"
     },
     {
-      "boundary": null,
-      "requirement_ids": [
-        "BRY-REQ-CRYPTO-0002"
-      ],
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
       "scope": "Complete SHA3-384 and SHA3-512 over the reviewed sponge owner with distinct rates and outputs, one-shot and streaming APIs, authoritative vectors, padding and length boundaries, domain-separation negatives, proofs, and direct public usability without depending on SHAKE or acceleration.",
       "source_ids": [],
       "title": "Complete SHA3-384 And SHA3-512",
       "version": "0.24.1"
     },
     {
-      "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
-      },
-      "requirement_ids": [],
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0002"
+      ],
       "scope": "Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].",
       "source_ids": [],
       "title": "Complete SHAKE128 And SHAKE256",
@@ -7658,7 +7658,7 @@
       ],
       "id": "BRY-REQ-CRYPTO-0002",
       "lifecycle": "implemented",
-      "owner": "0.24.1",
+      "owner": "0.24.2",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf"
       ]

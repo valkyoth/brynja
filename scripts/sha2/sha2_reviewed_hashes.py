@@ -1,7 +1,7 @@
 """Hash-bound portable SHA-2 source and test inventory."""
 
 SOURCE_HASHES = {
-    "crates/brynja-hash-core/src/lib.rs": "4655d8df05873a89689af1250dfeab76b82ac05d165a92c99ff65565624c7827",
+    "crates/brynja-hash-core/src/lib.rs": "d6c8b4046978d74e077079701c3c17c06a8fd9fbfc15ef10368a41cf9a63d64d",
     "crates/brynja-hash-sha2/src/lib.rs": "aa1a4f0ce77768b180daae6ead51a739452d7bd057bbfa8f348df5a7ee3732d2",
     "crates/brynja-hash-sha2/src/compress.rs": "d4229f08e40392976f354eaf81f5d5cd03069d5f3c497e2cf481f65a9848e4b1",
     "crates/brynja-hash-sha2/src/digest.rs": "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",

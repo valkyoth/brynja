@@ -4,7 +4,7 @@ use std::{
     io::{self, Read as _},
 };
 
-use brynja_hash_sha3::{sha3_224, sha3_256, sha3_384, sha3_512};
+use brynja_hash_sha3::{sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut input = String::new();
@@ -14,39 +14,65 @@ fn main() -> Result<(), Box<dyn Error>> {
         let mut fields = line.split_whitespace();
         let algorithm = required(fields.next(), line_number, "algorithm")?;
         let message = decode(required(fields.next(), line_number, "message")?)?;
+        let output_length = fields
+            .next()
+            .map(|value| parse_length(value, line_number))
+            .transpose()?;
         if fields.next().is_some() {
             return Err(invalid(line_number, "too many fields").into());
         }
         match algorithm {
-            "sha3-224" => append_hex(
+            "sha3-224" if output_length.is_none() => append_hex(
                 &mut output,
                 sha3_224(&message)
                     .map_err(|_| io::Error::other("SHA3-224 length rejected"))?
                     .as_bytes(),
             )?,
-            "sha3-256" => append_hex(
+            "sha3-256" if output_length.is_none() => append_hex(
                 &mut output,
                 sha3_256(&message)
                     .map_err(|_| io::Error::other("SHA3-256 length rejected"))?
                     .as_bytes(),
             )?,
-            "sha3-384" => append_hex(
+            "sha3-384" if output_length.is_none() => append_hex(
                 &mut output,
                 sha3_384(&message)
                     .map_err(|_| io::Error::other("SHA3-384 length rejected"))?
                     .as_bytes(),
             )?,
-            "sha3-512" => append_hex(
+            "sha3-512" if output_length.is_none() => append_hex(
                 &mut output,
                 sha3_512(&message)
                     .map_err(|_| io::Error::other("SHA3-512 length rejected"))?
                     .as_bytes(),
             )?,
-            _ => return Err(invalid(line_number, "unknown algorithm").into()),
+            "shake128" => append_xof(&mut output, &message, output_length, shake128, line_number)?,
+            "shake256" => append_xof(&mut output, &message, output_length, shake256, line_number)?,
+            _ => return Err(invalid(line_number, "algorithm or output length").into()),
         }
         output.push('\n');
     }
     print!("{output}");
+    Ok(())
+}
+
+fn parse_length(value: &str, line_number: usize) -> Result<usize, io::Error> {
+    value
+        .parse()
+        .map_err(|_| invalid(line_number, "invalid output length"))
+}
+
+fn append_xof<E>(
+    rendered: &mut String,
+    message: &[u8],
+    output_length: Option<usize>,
+    xof: fn(&[u8], &mut [u8]) -> Result<(), E>,
+    line_number: usize,
+) -> Result<(), Box<dyn Error>> {
+    let length = output_length.ok_or_else(|| invalid(line_number, "missing output length"))?;
+    let mut output = vec![0_u8; length];
+    xof(message, &mut output).map_err(|_| invalid(line_number, "XOF length rejected"))?;
+    append_hex(rendered, &output)?;
     Ok(())
 }
 

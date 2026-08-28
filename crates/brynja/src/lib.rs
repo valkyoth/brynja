@@ -1,12 +1,13 @@
 //! Security-first, first-party Rust `no_std` cryptography and protocol facade.
 //!
 //! This release exposes all six complete portable FIPS 180-4 SHA-2 algorithms
-//! and all four complete portable FIPS 202 SHA-3 digests through distinct
-//! one-shot and streaming APIs: [`crypto::sha224`],
+//! and all six complete portable FIPS 202 SHA-3 and SHAKE functions through
+//! distinct one-shot, streaming, and incremental-output APIs: [`crypto::sha224`],
 //! [`crypto::sha256`], [`crypto::sha384`], [`crypto::sha512`],
 //! [`crypto::sha512_224`], [`crypto::sha512_256`], [`crypto::sha3_224`], and
-//! [`crypto::sha3_256`], [`crypto::sha3_384`], and [`crypto::sha3_512`] plus their matching
-//! state and digest types. It exposes checked
+//! [`crypto::sha3_256`], [`crypto::sha3_384`], [`crypto::sha3_512`],
+//! [`crypto::shake128`], and [`crypto::shake256`] plus their matching state,
+//! digest, and XOF-reader types. It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
 //! workspaces, secret-lifetime and owned-memory
 //! foundations, fixed-width constant-time operations, provider capability
@@ -22,7 +23,7 @@
 //! selection. A bounded borrowed DER reader exposes canonical framing and
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
-//! algorithm outside these six SHA-2 and four SHA-3 identities.
+//! algorithm outside these six SHA-2 and six FIPS 202 identities.
 
 #![no_std]
 

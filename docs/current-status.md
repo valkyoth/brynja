@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.0 signed; v0.24.1 pentest and retest passed, awaiting green CI
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 implementation complete and awaiting pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -31,10 +31,11 @@ destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
 It now has all six complete portable FIPS 180-4 SHA-2 algorithms, complete
-portable FIPS 202 SHA3-224, SHA3-256, SHA3-384, and SHA3-512, plus bounded DER tag-length-value framing
+portable FIPS 202 SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and
+SHAKE256, plus bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm beyond those ten named hash identities, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond those twelve named hash and XOF identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
@@ -212,6 +213,20 @@ source, output-width, rate, vector, package, Miri and AddressSanitizer boundary.
 SHAKE, complete-family
 package acceptance, acceleration, secret-state erasure, independent review and
 FIPS validation remain absent, so the family stays **In progress** and v0.24.1
+selects zero crates.io packages.
+
+The facade now advances to internal `0.24.2`. Complete portable `Shake128` and
+`Shake256` absorbing states consume into distinct incremental readers, making
+absorb-after-squeeze structurally impossible. They use exact 168-byte and
+136-byte rates, the FIPS 202 `0x1f` domain suffix, caller-owned zero-length or
+arbitrary bounded output, checked `u128` input/output domains, and one-shot,
+streaming, trait, and repeated-squeeze APIs. Official zero-bit and 1,600-bit
+examples, exact rate boundaries, 343-byte multi-permutation partitioning, domain
+negatives, Miri/AddressSanitizer, and a 328-message all-six-function `hashlib`
+differential pass. A ninth Kani harness proves output-counter admission, and 43
+mutations bind the full source and evidence boundary. Package-external family
+acceptance, acceleration, secret-state erasure, independent review and FIPS
+validation remain absent, so the family stays **In progress** and v0.24.2
 selects zero crates.io packages.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened

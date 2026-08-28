@@ -64,7 +64,7 @@ side-channel, CPU-migration, independent-review, or FIPS evidence.
 Signed v0.22.2 added a third isolated candidate using
 the exact ratified RV64 `Zknh` scalar-cryptography bundle through four
 source-hash-bound first-party Rust inline-assembly statements. Rust 1.90.0 and
-1.97.1 emit `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1`; the
+1.98.0 emit `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1`; the
 complete accelerated differential corpus passes under explicit QEMU RISC-V
 execution. Generic RV64 and base-vector support do not qualify, the reserved
 `Zvknha`/`Zvknhb` route remains absent, and the std adapter does not detect or
@@ -502,7 +502,7 @@ Version 0.4.0 establishes assurance infrastructure without protocol code:
   `x86_64-unknown-none`;
 - exact source pins cover Kani 0.67.0, AFL++ 5.02c, honggfuzz 2.6, and the
   separately pinned Miri/sanitizer nightly without adding a Cargo dependency;
-- stable Rust 1.97.1 remains the release compiler while Kani 0.67.0 uses the
+- stable Rust 1.98.0 remains the release compiler while Kani 0.67.0 uses the
   documented compatible Rust 1.90.0 verifier pairing; no Kani proof harness is
   admitted or claimed at this milestone; and
 - deterministic assurance evidence binds policy, runners, CI, and every Cargo
@@ -666,8 +666,8 @@ Version 0.11.0 adds the owned-memory zeroization primitive:
   store, retains no pointer, and ends with a compiler barrier;
 - policy fixtures reject any second unsafe allowance, block, item, assembly, or
   FFI site, and source files remain below the review-size limit;
-- MIR, LLVM IR, and assembly checks pass for Rust 1.90.0 through 1.97.1 on the
-  host and Rust 1.97.1 across all nine promised OS and bare-metal targets;
+- MIR, LLVM IR, and assembly checks pass for Rust 1.90.0 through 1.98.0 on the
+  host and Rust 1.98.0 across all nine promised OS and bare-metal targets;
 - pinned Miri and AddressSanitizer pass all owned-memory tests; and
 - the guarantee is explicitly limited to the exclusively borrowed Rust
   allocation, excluding registers, copies, caches, DMA-visible copies, dumps,
@@ -719,7 +719,7 @@ Version 0.11.2 implements the admitted optional adapter:
   reviewed external package and reject pin, source, default-feature, feature,
   transitive-package, `zeroize`, owner, and reachability drift; and
 - behavior, failure-position, replacement, capacity, cancellation/unwind,
-  differential, compile-fail, Rust 1.90.0-1.97.1, promised-target, Miri, and
+  differential, compile-fail, Rust 1.90.0-1.98.0, promised-target, Miri, and
   MIR/LLVM/assembly evidence cover the adapter boundary.
 
 Version 0.12.0 implements the constant-time foundation:
@@ -735,7 +735,7 @@ Version 0.12.0 implements the constant-time foundation:
 - hash-locked source policy rejects branch, dynamic-slice, fallible-surface,
   representation, inventory, barrier, and source-byte drift with fourteen broken
   fixtures; and
-- optimized LLVM and assembly witnesses cover Rust 1.90.0 through 1.97.1 and
+- optimized LLVM and assembly witnesses cover Rust 1.90.0 through 1.98.0 and
   nine promised targets through a machine-checked matrix and five broken
   evidence fixtures. These bounded witnesses are not formal proof, timing
   measurement, independent review, or a microarchitectural guarantee.

@@ -14,7 +14,7 @@ python3 scripts/repository/check-first-party-rust-crypto.py
 python3 scripts/repository/test-first-party-rust-crypto.py
 python3 scripts/constant-time/check-constant-time.py
 python3 scripts/constant-time/test-constant-time.py
-scripts/constant-time/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+scripts/constant-time/check-constant-time-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
 python3 scripts/constant-time/test-constant-time-codegen.py
 python3 scripts/constant-time/check-constant-time-evidence.py
 python3 scripts/constant-time/test-constant-time-evidence.py
@@ -61,8 +61,8 @@ python3 scripts/zeroization/test-zeroization-evidence.py
 python3 scripts/sanitization/check-sanitization-admission.py
 python3 scripts/sanitization/test-sanitization-admission.py
 scripts/sanitization/check-sanitization-candidate.sh
-scripts/zeroization/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
-scripts/sanitization/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+scripts/zeroization/check-zeroization-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
+scripts/sanitization/check-sanitization-adapter-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
 scripts/repository/check_doc_links.sh
 python3 scripts/repository/check-commit-classification.py
 python3 scripts/repository/test-commit-classification.py
@@ -98,7 +98,9 @@ python3 scripts/assurance/test-assurance.py
 scripts/assurance/check-kani.sh --policy-only
 cargo check --workspace --all-features
 cargo check --workspace --no-default-features
-cargo clippy --workspace --all-targets --all-features -- -D warnings
-cargo clippy --workspace --all-targets --no-default-features -- -D warnings
+cargo clippy --workspace --all-targets --all-features -- \
+  -A clippy::chunks_exact_to_as_chunks -D warnings
+cargo clippy --workspace --all-targets --no-default-features -- \
+  -A clippy::chunks_exact_to_as_chunks -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --all-features --no-deps

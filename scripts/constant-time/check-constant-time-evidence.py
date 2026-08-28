@@ -8,7 +8,7 @@ import constant_time_evidence
 
 def main() -> int:
     constant_time_evidence.validate(Path(__file__).resolve().parents[2])
-    print("constant-time evidence binds 10 compilers, 9 targets, and 3 artifact levels")
+    print("constant-time evidence binds 11 compilers, 9 targets, and 3 artifact levels")
     return 0
 
 

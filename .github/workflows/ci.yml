@@ -90,7 +90,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rust: [1.90.0, 1.91.0, 1.92.0, 1.93.0, 1.94.0, 1.95.0, 1.96.0, 1.96.1, 1.97.0, 1.97.1]
+        rust: [1.90.0, 1.91.0, 1.92.0, 1.93.0, 1.94.0, 1.95.0, 1.96.0, 1.96.1, 1.97.0, 1.97.1, 1.98.0]
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -140,9 +140,9 @@ jobs:
       - name: Check complete SHA-2 public API fixture
         run: cargo check --locked --manifest-path assurance/sha2-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Verify zeroization emitted code
-        run: scripts/zeroization/check-zeroization-codegen.sh 1.97.1 "${{ matrix.target }}"
+        run: scripts/zeroization/check-zeroization-codegen.sh 1.98.0 "${{ matrix.target }}"
       - name: Verify constant-time emitted code
-        run: scripts/constant-time/check-constant-time-codegen.sh 1.97.1 "${{ matrix.target }}"
+        run: scripts/constant-time/check-constant-time-codegen.sh 1.98.0 "${{ matrix.target }}"
 
   zeroization-unsafe:
     name: Miri and sanitizer evidence
@@ -152,7 +152,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install pinned nightly assurance toolchain
-        run: rustup toolchain install nightly-2026-08-17 --profile minimal --component miri,rust-src
+        run: rustup toolchain install nightly-2026-08-28 --profile minimal --component miri,rust-src
       - name: Run zeroization and SHA-2 under Miri
         run: scripts/zeroization/check-zeroization-miri.sh
       - name: Run zeroization and SHA-2 under AddressSanitizer

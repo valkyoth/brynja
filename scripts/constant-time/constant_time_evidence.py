@@ -19,6 +19,7 @@ COMPILERS = (
     "1.96.1",
     "1.97.0",
     "1.97.1",
+    "1.98.0",
 )
 TARGETS = (
     "x86_64-unknown-linux-gnu",
@@ -73,7 +74,7 @@ def validate(root: Path) -> None:
     if (
         tuple(coverage.get("compilers", ())) != COMPILERS
         or coverage.get("compiler_target") != "x86_64-unknown-linux-gnu"
-        or coverage.get("target_compiler") != "1.97.1"
+        or coverage.get("target_compiler") != "1.98.0"
         or tuple(coverage.get("targets", ())) != TARGETS
     ):
         fail("constant-time compiler or target coverage drifted")
@@ -86,7 +87,7 @@ def validate(root: Path) -> None:
         "x86_64-unknown-linux-gnu"
     )
     target_step = (
-        'run: scripts/constant-time/check-constant-time-codegen.sh 1.97.1 "${{ matrix.target }}"'
+        'run: scripts/constant-time/check-constant-time-codegen.sh 1.98.0 "${{ matrix.target }}"'
     )
     if compiler_step not in workflow or target_step not in workflow:
         fail("CI does not execute both constant-time evidence dimensions")
@@ -102,7 +103,7 @@ def validate(root: Path) -> None:
 
     checks = (root / "scripts/checks.sh").read_text(encoding="utf-8")
     command = (
-        "scripts/constant-time/check-constant-time-codegen.sh 1.97.1 "
+        "scripts/constant-time/check-constant-time-codegen.sh 1.98.0 "
         "x86_64-unknown-linux-gnu"
     )
     if command not in checks:

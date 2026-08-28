@@ -22,7 +22,7 @@ when hidden behind build tooling.
 
 ## v0.22.2 RISC-V Zknh Inline-Assembly Exception
 
-Rust 1.90.0 through 1.97.1 recognizes the ratified RISC-V `zknh` target
+Rust 1.90.0 through 1.98.0 recognizes the ratified RISC-V `zknh` target
 feature but does not expose stable SHA-256 intrinsic functions for it. The
 smallest stable first-party implementation therefore owns exactly four inline
 `asm!` statements in `riscv64_zknh.rs`: `sha256sig0`, `sha256sig1`,
@@ -37,7 +37,7 @@ exclusive state, runs the existing direct startup KAT, and keeps failed state
 permanently quarantined. Ordinary activation remains forbidden because the
 candidate has no qualifying native RISC-V correctness, migration, performance,
 side-channel, or independent-review evidence. Generated code under Rust 1.90.0
-and 1.97.1 must retain all four mnemonics; QEMU differential execution is
+and 1.98.0 must retain all four mnemonics; QEMU differential execution is
 supplemental only.
 
 The exception authorizes neither vector crypto nor generic RISC-V. `Zvknha`
@@ -92,7 +92,7 @@ region on every explicit and Drop exit that Rust executes.
 
 MIR must retain the volatile call, LLVM IR must contain a volatile zero store,
 and target assembly must contain a byte store. The matrix covers Rust 1.90.0
-through 1.97.1 on x86_64 Linux and Rust 1.97.1 across Linux, Windows, FreeBSD,
+through 1.98.0 on x86_64 Linux and Rust 1.98.0 across Linux, Windows, FreeBSD,
 macOS, Android, iOS, ARMv7E-M, RV32IMAC, and x86_64 bare metal. Pinned Miri and
 AddressSanitizer execute every secret-memory integration test. Any compiler,
 target, code, invariant, lint, or evidence change reopens this exception.

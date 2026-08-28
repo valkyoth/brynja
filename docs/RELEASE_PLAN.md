@@ -2598,7 +2598,7 @@ Verification:
 - run FIPS 202 vectors, padding and rate boundaries, multi-squeeze partitions,
   exhaustion and state-transition failures, package-content checks, compiled
   examples, and the applicable Kani and differential harnesses;
-- pass repository checks, Rust 1.90.0 through 1.97.1, supported no_std targets,
+- pass repository checks, Rust 1.90.0 through 1.98.0, supported no_std targets,
   dependency and advisory policy, SBOM, documentation, and clean GitHub and
   CodeQL before acceleration work starts.
 
@@ -16960,7 +16960,7 @@ the final external audit.
 Deliverables:
 
 - build every selected archive from pinned source and toolchain inputs and compare source, metadata, lock, SBOM and binary artifacts;
-- install supported package combinations into clean downstream fixtures across Rust 1.90.0 through 1.97.1 and representative targets;
+- install supported package combinations into clean downstream fixtures across Rust 1.90.0 through 1.98.0 and representative targets;
 - execute release rollback, signing-key compromise, crate ownership, advisory, incident, recovery and documentation drills.
 
 Verification:

@@ -8,9 +8,12 @@ Keep a Changelog and Semantic Versioning.
 ### Fixed
 
 - Refresh the release-gate Miri and Rust sanitizer pin to the latest available
-  `nightly-2026-08-17` at exact Rust revision
-  `34baba5394fcbda4cba7b7c1964a6db421c77c91`, update CI and the dynamic-
+  `nightly-2026-08-28` at exact Rust revision
+  `e457a7b0d326d67b4322ef0d11bd715cfaeda48f`, update CI and the dynamic-
   analysis evidence contract together, and rerun both workloads successfully.
+- Move the default and complete release gate to official stable Rust 1.98.0,
+  retain the uninterrupted Rust 1.90.0-through-1.98.0 compatibility matrix,
+  and confirm every admitted crate and GitHub/assurance tool remains current.
 - Remove 241 accidentally tracked SHA-3 differential Cargo artifacts,
   including two executable binaries; ignore Cargo targets at every workspace
   depth, reject tracked `target/` components in the complete repository gate,

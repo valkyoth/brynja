@@ -332,6 +332,6 @@ two CPU boundary packages at `0.1.1`, `brynja-pki 0.2.0`, initial
 
 | Rust | Evidence |
 | --- | --- |
-| `1.90.0` through `1.97.0` | Workspace all-feature compatibility plus host zeroization and constant-time MIR/LLVM/assembly evidence on each listed stable release |
-| `1.97.1` | Full release gate, every promised target, and zeroization plus constant-time emitted-code checks across all nine targets |
+| `1.90.0` through `1.97.1` | Workspace all-feature compatibility plus host zeroization and constant-time MIR/LLVM/assembly evidence on each listed stable release |
+| `1.98.0` | Full release gate, every promised target, and zeroization plus constant-time emitted-code checks across all nine targets |
 | Kani Rust `1.90.0` | Separate verifier pairing for `cargo-kani 0.67.0`; not a release compiler or proof result at v0.10.0 |

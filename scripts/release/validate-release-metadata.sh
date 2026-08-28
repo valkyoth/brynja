@@ -138,7 +138,7 @@ test -s assurance/constant-time-codegen/Cargo.lock
 test -s assurance/constant-time-codegen/src/lib.rs
 grep -q 'python3 scripts/constant-time/check-constant-time.py' scripts/checks.sh
 grep -q 'python3 scripts/constant-time/test-constant-time.py' scripts/checks.sh
-grep -q 'scripts/constant-time/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
+grep -q 'scripts/constant-time/check-constant-time-codegen.sh 1.98.0 x86_64-unknown-linux-gnu' scripts/checks.sh
 grep -q 'python3 scripts/constant-time/test-constant-time-codegen.py' scripts/checks.sh
 grep -q 'python3 scripts/constant-time/check-constant-time-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/constant-time/test-constant-time-evidence.py' scripts/checks.sh
@@ -246,8 +246,8 @@ grep -q 'python3 scripts/zeroization/test-zeroization-evidence.py' scripts/check
 grep -q 'python3 scripts/sanitization/check-sanitization-admission.py' scripts/checks.sh
 grep -q 'python3 scripts/sanitization/test-sanitization-admission.py' scripts/checks.sh
 grep -q 'scripts/sanitization/check-sanitization-candidate.sh' scripts/checks.sh
-grep -q 'scripts/zeroization/check-zeroization-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
-grep -q 'scripts/sanitization/check-sanitization-adapter-codegen.sh 1.97.1 x86_64-unknown-linux-gnu' scripts/checks.sh
+grep -q 'scripts/zeroization/check-zeroization-codegen.sh 1.98.0 x86_64-unknown-linux-gnu' scripts/checks.sh
+grep -q 'scripts/sanitization/check-sanitization-adapter-codegen.sh 1.98.0 x86_64-unknown-linux-gnu' scripts/checks.sh
 grep -q 'scripts/sanitization/check-sanitization-admission.py --online' scripts/tag_gate.sh
 grep -q 'scripts/sanitization/check-sanitization-candidate.sh --matrix' scripts/tag_gate.sh
 grep -q 'scripts/assurance/check-kani.sh --required' scripts/tag_gate.sh

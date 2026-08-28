@@ -176,7 +176,7 @@ scripts/zeroization/check-zeroization-miri.sh
 scripts/zeroization/check-zeroization-sanitizer.sh
 python3 scripts/constant-time/check-constant-time.py
 python3 scripts/constant-time/test-constant-time.py
-scripts/constant-time/check-constant-time-codegen.sh 1.97.1 x86_64-unknown-linux-gnu
+scripts/constant-time/check-constant-time-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
 python3 scripts/constant-time/test-constant-time-codegen.py
 python3 scripts/constant-time/check-constant-time-evidence.py
 python3 scripts/constant-time/test-constant-time-evidence.py

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-toolchain="${1:-1.97.1}"
+toolchain="${1:-1.98.0}"
 target="${2:-x86_64-unknown-linux-gnu}"
 if [[ "$toolchain" != +* ]]; then
     toolchain="+$toolchain"

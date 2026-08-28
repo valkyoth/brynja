@@ -86,7 +86,7 @@ CPUs.
 
 The implemented RISC-V identity is exactly RV64 `Zknh`. Its isolated kernel
 uses `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1`; generic RV64,
-`Zkn`, RVV, and processor naming are not substitutes. Rust 1.90.0 and 1.97.1
+`Zkn`, RVV, and processor naming are not substitutes. Rust 1.90.0 and 1.98.0
 both emit those four instructions, and the full accelerated SHA-256
 differential corpus passes under QEMU's explicit RISC-V model. The reserved
 vector identity now names exact `Zvknha`; a future `Zvknhb` route requires its

@@ -18,7 +18,7 @@ The ratified vector cryptography specification supplies SHA-256 through either
 SHA-256's 32-bit element rules. Brynja's one reserved vector identity selects
 exact `Zvknha`; `Zvknhb` would require its own later policy amendment rather
 than acting as an undocumented alternative. That path remains reserved. Rust 1.90.0 through
-1.97.1 exposes neither stable vector-crypto intrinsics nor stable vector-crypto
+1.98.0 exposes neither stable vector-crypto intrinsics nor stable vector-crypto
 runtime detection, and this milestone does not add vector-state or ABI
 authority merely because a compiler lists the target features.
 
@@ -40,7 +40,7 @@ present. The repository's unsafe policy separately pins the complete module,
 the exact instruction inventory, target-feature annotation, local safety
 arguments, and safe wrapper.
 
-Both Rust 1.90.0 and 1.97.1 recognize `zknh`, compile the module, and emit all
+Both Rust 1.90.0 and 1.98.0 recognize `zknh`, compile the module, and emit all
 four instructions. The module is RV64-only in this release. RV32 and every
 other target retain portable scalar SHA-256 without compiling this source.
 

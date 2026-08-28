@@ -2497,7 +2497,7 @@ Exit criteria:
 
 ### v0.24.2 - Complete SHAKE128 And SHAKE256
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes:
 
@@ -2523,6 +2523,10 @@ Implementation notes:
   SHA-3/SHAKE family remains documented **In progress** through v0.24.4;
 - the newly admitted XOF algorithms and absorbing-to-squeezing state machine
   trigger an exceptional cryptographic pentest before the signed tag.
+- the repository-owner assessment of exact implementation candidate
+  `208c0b07d152d3a5c8316093e98b29c89f332c07` reported no finding and required
+  no remediation; the permanent report records `PASS`/`PASS` with zero open
+  findings, leaving hosted GitHub and CodeQL as the remaining tag gate.
 
 Plan scope: Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].
 

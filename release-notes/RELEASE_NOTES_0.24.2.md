@@ -1,7 +1,7 @@
 # Brynja 0.24.2 Release Notes
 
-Status: implementation complete; exceptional pentest pending; no crates.io
-publication
+Status: exceptional pentest PASS; awaiting hosted GitHub and CodeQL; internal
+development tag; no crates.io publication
 
 Brynja 0.24.2 completes portable SHAKE128 and SHAKE256 over the private
 Keccak-f[1600] sponge introduced in v0.24.0. All six FIPS 202 functions now
@@ -72,6 +72,9 @@ remains subject to the explicit standards-lifecycle gate.
 Version 0.24.2 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. The two newly
 admitted XOF algorithms and their absorbing-to-squeezing state machine trigger
-an exceptional cryptographic pentest. After the report and any remediation are
-committed, the complete local gate and hosted GitHub/CodeQL must pass before
-explicit signed-tag authorization.
+an exceptional cryptographic pentest. The repository-owner assessment of exact
+implementation candidate `208c0b07d152d3a5c8316093e98b29c89f332c07`
+reported no finding and required no remediation. Its permanent report records
+`PASS`/`PASS` with zero open findings. The exact report commit must pass the
+complete local gate plus hosted GitHub and CodeQL checks before explicit
+signed-tag authorization.

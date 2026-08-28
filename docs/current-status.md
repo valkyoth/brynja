@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 implementation complete and awaiting pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest PASS and awaiting hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -228,6 +228,13 @@ mutations bind the full source and evidence boundary. Package-external family
 acceptance, acceleration, secret-state erasure, independent review and FIPS
 validation remain absent, so the family stays **In progress** and v0.24.2
 selects zero crates.io packages.
+
+The exceptional v0.24.2 repository-owner assessment of exact implementation
+candidate `208c0b07d152d3a5c8316093e98b29c89f332c07` reported no finding and
+required no remediation. Its permanent report records `PASS`/`PASS` with zero
+open findings. This does not establish independent cryptographic review or
+FIPS validation, complete the later family-acceptance gates, select a crate for
+publication, or replace the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

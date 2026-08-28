@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 implementation complete and awaiting pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest PASS and awaiting hosted checks
 
 | Control | Foundation enforcement |
 | --- | --- |

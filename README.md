@@ -228,12 +228,13 @@ and all-six-function differential coverage. Portable-family package acceptance,
 acceleration, secret-state erasure, independent review, and FIPS validation
 remain later gates, so the SHA-3/SHAKE family remains **In progress**.
 
-The exceptional v0.24.2 assessment subsequently supplied one Medium denial-of-
-service finding in the repository-only differential adapter. The adapter now
-enforces its declared 343-byte output ceiling before allocation, uses fallible
-output and hexadecimal reservations, and cleanly rejects oversized and
-overflowing lengths. Production SHAKE code is unchanged. Independent retest is
-pending; the milestone remains untagged and selects zero crates.io packages.
+The exceptional v0.24.2 assessment and first retest supplied two Medium denial-
+of-service findings in the repository-only differential adapter. The adapter
+now enforces its declared 343-byte output, 8 MiB stdin, and 1,968-case ceilings,
+uses fallible decode and rendering allocations, and gives every child run a
+240-second timeout. Production SHAKE code is unchanged. Independent second
+retest is pending; the milestone remains untagged and selects zero crates.io
+packages.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri

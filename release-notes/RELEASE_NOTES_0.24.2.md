@@ -34,11 +34,12 @@ accelerated final acceptance remain v0.24.3 and v0.24.4 work.
 - A deterministic 328-message corpus checks all four SHA-3 digests and both
   SHAKE XOFs against Python's independently maintained `hashlib` path with
   caller-selected outputs from zero through 343 bytes.
-- Forty-six source-policy mutation fixtures cover unsafe/native code,
+- Fifty-one source-policy mutation fixtures cover unsafe/native code,
   allocation, visibility, permutation operations, SHA-3/SHAKE suffixes,
   padding, all six rates and identities, XOF transitions, input/output counter
   ownership, authoritative-vector gates, dynamic-analysis commands, package
-  boundaries, file size, and reviewed-source drift.
+  campaign input/case/output allocation and child timeout boundaries, file
+  size, and reviewed-source drift.
 - The Kani inventory now contains nine bounds: six SHA-2 bounds and three
   shared FIPS 202 bounds covering checked input length, checked output length,
   and all 200 Keccak byte-to-lane mappings. Hosted CI remains policy-only;
@@ -78,8 +79,12 @@ was initially reported green, after which one overlooked Medium denial-of-
 service finding was supplied for the repository-only differential adapter.
 The adapter now enforces its 343-byte XOF campaign ceiling before allocation,
 uses fallible output and hex reservations, and rejects 344, `usize::MAX`, and
-numeric overflow without panic. Production SHAKE code is unchanged. Local
-remediation verification passes; independent retest is pending. After retest,
+numeric overflow without panic. The first retest confirmed that remediation
+and identified a second Medium aggregate-input/case and missing-timeout gap.
+The adapter now also caps stdin at 8 MiB and campaigns at 1,968 cases, uses
+fallible decode/render allocations, rejects both aggregate attacks, and gives
+every child run a 240-second timeout. Production SHAKE code is unchanged. Local
+second-remediation verification passes; independent second retest is pending. After retest,
 the exact report commit must pass the complete local gate plus hosted GitHub
 and CodeQL checks before explicit signed-tag authorization.
 

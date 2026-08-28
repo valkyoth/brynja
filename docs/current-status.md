@@ -223,18 +223,19 @@ arbitrary bounded output, checked `u128` input/output domains, and one-shot,
 streaming, trait, and repeated-squeeze APIs. Official zero-bit and 1,600-bit
 examples, exact rate boundaries, 343-byte multi-permutation partitioning, domain
 negatives, Miri/AddressSanitizer, and a 328-message all-six-function `hashlib`
-differential pass. A ninth Kani harness proves output-counter admission, and 46
+differential pass. A ninth Kani harness proves output-counter admission, and 51
 mutations bind the full source and evidence boundary. Package-external family
 acceptance, acceleration, secret-state erasure, independent review and FIPS
 validation remain absent, so the family stays **In progress** and v0.24.2
 selects zero crates.io packages.
 
-The exceptional v0.24.2 assessment subsequently supplied one Medium denial-of-
-service finding in the repository-only differential adapter. The adapter now
-enforces its declared 343-byte XOF ceiling before allocation, uses fallible
-output and hexadecimal reservations, and rejects 344, `usize::MAX`, and parse
-overflow without panic. Production SHAKE code is unchanged. Local remediation
-passes and independent retest remains pending. This does not establish
+The exceptional v0.24.2 assessment and first retest supplied two Medium denial-
+of-service findings in the repository-only differential adapter. The adapter
+now enforces 343-byte XOF, 8 MiB stdin, and 1,968-case ceilings before effects,
+uses fallible decode and rendering allocation, rejects oversized length/input/
+case campaigns without panic, and applies a 240-second child timeout.
+Production SHAKE code is unchanged. Local remediation passes and independent
+second retest remains pending. This does not establish
 independent cryptographic review or FIPS validation, complete later family-
 acceptance gates, select a crate for publication, or replace the scheduled
 v0.20.0-to-v0.25.0 cumulative assessment.

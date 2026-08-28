@@ -7,12 +7,26 @@ use std::{
 use brynja_hash_sha3::{sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256};
 
 const MAX_XOF_OUTPUT_BYTES: usize = 343;
+const MAX_INPUT_BYTES: u64 = 8 * 1024 * 1024;
+const MAX_CASES: usize = 1_968;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut input = String::new();
-    io::stdin().read_to_string(&mut input)?;
+    io::stdin()
+        .take(MAX_INPUT_BYTES + 1)
+        .read_to_string(&mut input)?;
+    if input.len() as u64 > MAX_INPUT_BYTES {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "campaign input exceeds limit",
+        )
+        .into());
+    }
     let mut output = String::new();
     for (line_number, line) in input.lines().enumerate() {
+        if line_number >= MAX_CASES {
+            return Err(invalid(line_number, "campaign case limit exceeded").into());
+        }
         let mut fields = line.split_whitespace();
         let algorithm = required(fields.next(), line_number, "algorithm")?;
         let message = decode(required(fields.next(), line_number, "message")?)?;
@@ -52,6 +66,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             "shake256" => append_xof(&mut output, &message, output_length, shake256, line_number)?,
             _ => return Err(invalid(line_number, "algorithm or output length").into()),
         }
+        output
+            .try_reserve(1)
+            .map_err(|_| io::Error::other("rendered output allocation failed"))?;
         output.push('\n');
     }
     print!("{output}");
@@ -111,7 +128,10 @@ fn decode(hex: &str) -> Result<Vec<u8>, io::Error> {
     if !hex.len().is_multiple_of(2) {
         return Err(io::Error::new(io::ErrorKind::InvalidData, "odd hex length"));
     }
-    let mut output = Vec::with_capacity(hex.len() / 2);
+    let mut output = Vec::new();
+    output
+        .try_reserve_exact(hex.len() / 2)
+        .map_err(|_| io::Error::other("decoded input allocation failed"))?;
     for pair in hex.as_bytes().chunks_exact(2) {
         if let [high, low] = pair {
             output.push((nibble(*high)? << 4) | nibble(*low)?);
@@ -134,7 +154,7 @@ fn append_hex(output: &mut String, bytes: &[u8]) -> Result<(), io::Error> {
         .checked_mul(2)
         .ok_or_else(|| io::Error::other("hex output length overflow"))?;
     output
-        .try_reserve_exact(additional)
+        .try_reserve(additional)
         .map_err(|_| io::Error::other("hex output allocation failed"))?;
     for byte in bytes {
         write!(output, "{byte:02x}").map_err(io::Error::other)?;

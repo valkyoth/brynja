@@ -2515,7 +2515,7 @@ Implementation notes:
 - fixed-output SHA-3 domain negatives and a 328-message differential corpus
   against Python's independent `hashlib` path cover all six FIPS 202 functions;
   Miri and AddressSanitizer commands include both XOFs, a ninth Kani harness
-  proves output-counter admission, and 46 mutation fixtures plus reviewed hashes
+  proves output-counter admission, and 51 mutation fixtures plus reviewed hashes
   bind the complete source and evidence boundary;
 - no raw permutation, acceleration, unsafe code, allocation, third-party
   dependency, secret-state erasure, package-external final acceptance,
@@ -2527,7 +2527,10 @@ Implementation notes:
   finding: arbitrary XOF output lengths could panic or exhaust the differential
   adapter. A 343-byte pre-allocation ceiling, fallible output/hex reservations,
   three negative subprocess cases, and three policy mutations remediate it
-  without changing production SHAKE code; independent retest remains pending.
+  without changing production SHAKE code. The first retest confirmed that fix
+  and identified a second Medium aggregate-input/case and missing-timeout gap;
+  8 MiB stdin, 1,968-case, fallible decode/render, and 240-second child bounds
+  now close it, with independent second retest pending.
 
 Plan scope: Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].
 

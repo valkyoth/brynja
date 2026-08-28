@@ -272,9 +272,14 @@ def validate(root: Path) -> None:
     differential_fixture = read(root, DIFFERENTIAL_FIXTURE)
     for token in (
         "const MAX_XOF_OUTPUT_BYTES: usize = 343;",
+        "const MAX_INPUT_BYTES: u64 = 8 * 1024 * 1024;",
+        "const MAX_CASES: usize = 1_968;",
+        ".take(MAX_INPUT_BYTES + 1)",
+        "if line_number >= MAX_CASES",
         "if length > MAX_XOF_OUTPUT_BYTES",
         ".try_reserve_exact(length)",
-        ".try_reserve_exact(additional)",
+        ".try_reserve_exact(hex.len() / 2)",
+        ".try_reserve(additional)",
     ):
         require(differential_fixture, token, "SHA-3 differential allocation bound")
     differential = read(root, DIFFERENTIAL)
@@ -282,6 +287,9 @@ def validate(root: Path) -> None:
         '"shake128 - 344\\n"',
         'f"shake128 - {usize_max}\\n"',
         'f"shake128 - {usize_max + 1}\\n"',
+        '" " * (8 * 1024 * 1024 + 1)',
+        '"sha3-224 -\\n" * 1_969',
+        "timeout=FIXTURE_TIMEOUT_SECONDS",
         '"capacity overflow"',
     ):
         require(differential, token, "SHA-3 differential rejection tests")

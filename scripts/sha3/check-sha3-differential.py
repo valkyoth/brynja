@@ -13,6 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "assurance/sha3-differential/Cargo.toml"
+FIXTURE_TIMEOUT_SECONDS = 240
 
 
 def message(length: int) -> bytes:
@@ -28,6 +29,23 @@ def corpus() -> list[bytes]:
     lengths = set(range(0, 321))
     lengths.update((511, 512, 513, 1023, 1024, 1025, 4096))
     return [message(length) for length in sorted(lengths)]
+
+
+def run_fixture(command: list[str], environment: dict[str, str], request: str) -> subprocess.CompletedProcess[str]:
+    try:
+        return subprocess.run(
+            command,
+            cwd=ROOT,
+            env=environment,
+            input=request,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=FIXTURE_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise RuntimeError("SHA-3 differential fixture timed out") from error
 
 
 def main() -> int:
@@ -70,16 +88,7 @@ def main() -> int:
             "--manifest-path",
             str(MANIFEST),
         ]
-        result = subprocess.run(
-            command,
-            cwd=ROOT,
-            env=environment,
-            input="\n".join(requests) + "\n",
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-        )
+        result = run_fixture(command, environment, "\n".join(requests) + "\n")
         usize_max = (1 << (struct.calcsize("P") * 8)) - 1
         invalid_requests = (
             ("shake128 - 344\n", "output length exceeds campaign limit"),
@@ -90,22 +99,25 @@ def main() -> int:
             (f"shake128 - {usize_max + 1}\n", "invalid output length"),
         )
         for request, expected_error in invalid_requests:
-            rejected = subprocess.run(
-                command,
-                cwd=ROOT,
-                env=environment,
-                input=request,
-                text=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                check=False,
-            )
+            rejected = run_fixture(command, environment, request)
             if rejected.returncode == 0 or rejected.stdout:
                 raise RuntimeError("SHA-3 differential fixture accepted invalid output length")
             if expected_error not in rejected.stderr:
                 raise RuntimeError("SHA-3 differential fixture returned wrong length error")
             if "panicked" in rejected.stderr or "capacity overflow" in rejected.stderr:
                 raise RuntimeError("SHA-3 differential fixture panicked on invalid length")
+        bounded_requests = (
+            (" " * (8 * 1024 * 1024 + 1), "campaign input exceeds limit"),
+            ("sha3-224 -\n" * 1_969, "campaign case limit exceeded"),
+        )
+        for request, expected_error in bounded_requests:
+            rejected = run_fixture(command, environment, request)
+            if rejected.returncode == 0 or rejected.stdout:
+                raise RuntimeError("SHA-3 differential fixture accepted oversized campaign")
+            if expected_error not in rejected.stderr:
+                raise RuntimeError("SHA-3 differential fixture returned wrong campaign error")
+            if "panicked" in rejected.stderr or "capacity overflow" in rejected.stderr:
+                raise RuntimeError("SHA-3 differential fixture panicked on oversized campaign")
     if result.returncode != 0:
         raise RuntimeError(f"SHA-3 differential fixture failed:\n{result.stderr}")
     actual = result.stdout.splitlines()
@@ -116,7 +128,7 @@ def main() -> int:
         raise RuntimeError("SHA-3 differential result count mismatch")
     print(
         f"all six FIPS 202 functions match hashlib across {len(messages)} messages; "
-        "three oversized XOF requests fail cleanly"
+        "three oversized XOF requests and two aggregate campaigns fail cleanly"
     )
     return 0
 

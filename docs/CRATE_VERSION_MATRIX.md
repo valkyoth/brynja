@@ -230,7 +230,7 @@ exact 168-byte/136-byte rates, the `0x1f` suffix, caller-owned zero-length and
 multi-squeeze output, and checked input/output domains pass official examples,
 rate boundaries, 343-byte partition campaigns, fixed-output domain negatives,
 dynamic analysis, a 328-message six-function differential corpus, a ninth Kani
-bound, and 46 source-policy mutations. Final package-external and cross-backend
+bound, bounded assurance stdin/cases/output with child timeouts, and 51 source-policy mutations. Final package-external and cross-backend
 family acceptance, acceleration, secret-state erasure, independent review and
 FIPS validation remain later work. Zero crates are selected for publication.
 

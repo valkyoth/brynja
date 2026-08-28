@@ -92,10 +92,15 @@ def main() -> int:
     reject("XOF campaign maximum", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "MAX_XOF_OUTPUT_BYTES: usize = 343", "MAX_XOF_OUTPUT_BYTES: usize = usize::MAX"))
     reject("XOF campaign comparison", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "length > MAX_XOF_OUTPUT_BYTES", "length == MAX_XOF_OUTPUT_BYTES"))
     reject("XOF fallible allocation", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, ".try_reserve_exact(length)", ".reserve_exact(length)"))
+    reject("campaign input maximum", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "MAX_INPUT_BYTES: u64 = 8 * 1024 * 1024", "MAX_INPUT_BYTES: u64 = u64::MAX"))
+    reject("campaign case maximum", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "line_number >= MAX_CASES", "line_number == MAX_CASES"))
+    reject("decoded input fallible allocation", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, ".try_reserve_exact(hex.len() / 2)", ".reserve_exact(hex.len() / 2)"))
+    reject("rendered output fallible allocation", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, ".try_reserve(additional)", ".reserve(additional)"))
+    reject("differential timeout", lambda root: replace(root, policy.DIFFERENTIAL, "timeout=FIXTURE_TIMEOUT_SECONDS", "timeout=None"))
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects forty-six boundary, permutation, padding, XOF, allocation, identity, dynamic-analysis, size, and hash regressions")
+    print("portable SHA-3 policy rejects fifty-one boundary, permutation, padding, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

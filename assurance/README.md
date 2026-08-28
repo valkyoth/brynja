@@ -34,8 +34,11 @@ public SHA-3 digest APIs and both public SHAKE XOF APIs, then compares every
 result with Python's independently maintained `hashlib` implementation. The
 corpus spans every length from zero through 320 bytes plus larger block and
 file-like boundaries and SHAKE outputs from zero through 343 bytes. The Rust
-stdin boundary independently enforces that 343-byte ceiling, uses fallible
-allocation, and cleanly rejects 344, `usize::MAX`, and numeric parse overflow.
+stdin boundary independently enforces that 343-byte ceiling, an 8 MiB input
+ceiling, and the exact 1,968-case campaign size; decode and render allocations
+are fallible, and clean rejection covers 344, `usize::MAX`, numeric parse
+overflow, oversized aggregate input, and excess valid cases. Every child run
+has a 240-second timeout.
 This is differential correctness evidence, not package-external acceptance,
 independent cryptographic review, side-channel evidence, or FIPS validation.
 Run it with `python3 scripts/sha3/check-sha3-differential.py`.

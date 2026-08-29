@@ -53,7 +53,8 @@ contents, and reruns offline with version-only dependencies. Negative fixtures
 reject six corrupt outputs plus API, rate, zero-output, failure, domain, path,
 feature, phase, private-module and package regressions. This freezes portable
 usability for v0.24.4; it is not acceleration, independent review, secret-
-state erasure, or FIPS validation.
+state erasure, or FIPS validation. Its standalone forbidden Clippy lints run
+with warnings denied in both the complete local gate and hosted CI.
 
 The v0.13.0 provider contract adds a separate hash-locked source validator and
 thirteen broken fixtures through `scripts/foundations/check-provider-contract.py` and

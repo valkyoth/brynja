@@ -80,6 +80,13 @@ jobs:
         run: python scripts/sha2/check-sha2-public-api.py
       - name: Run complete SHA-3/SHAKE portable public API acceptance
         run: python scripts/sha3/check-sha3-public-api.py
+      - name: Lint SHA-3/SHAKE public API fixture
+        run: >
+          cargo clippy --locked
+          --manifest-path assurance/sha3-public-api/Cargo.toml
+          --all-targets --
+          -A clippy::chunks_exact_to_as_chunks
+          -D warnings
       - name: Test assurance platform boundary
         run: python scripts/assurance/test-assurance.py
       - name: Test CPU evidence admission boundary

@@ -66,6 +66,18 @@ def main() -> int:
     reject_policy("false-path", acceptance.MAIN, "execution path: portable-only", "execution path: accelerated")
     reject_policy("leaf-feature", acceptance.LEAF_MANIFEST, "default = []", 'default = ["cpu"]')
     reject_policy("hidden-feature", acceptance.MANIFEST, "[dependencies]", "[features]\ncpu = []\n\n[dependencies]")
+    reject_policy(
+        "missing-local-clippy",
+        acceptance.CHECKS,
+        "cargo clippy --locked --manifest-path assurance/sha3-public-api/Cargo.toml",
+        "cargo check --locked --manifest-path assurance/sha3-public-api/Cargo.toml",
+    )
+    reject_policy(
+        "missing-host-clippy",
+        acceptance.WORKFLOW,
+        "Lint SHA-3/SHAKE public API fixture",
+        "Check SHA-3/SHAKE public API fixture",
+    )
     reject_compile(
         "absorb-after-squeeze",
         "let mut reader128 = state128.finalize_xof();",

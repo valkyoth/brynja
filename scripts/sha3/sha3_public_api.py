@@ -43,7 +43,7 @@ FILES = (
 EXPECTED_SHA256: dict[Path, str] = {
     MANIFEST: "d5dd72f169c12e65b03f5dce4b87809c77606e04d9dbc53e0144060dbba93e05",
     LOCK: "8c559998acf3da1aecfaff9e8dfb5acac51b1cc332c195d02a575e5ea6e2cd7b",
-    LIB: "59c4c4c5d789c6c1902f924f555e6ba0095daf2dcc51b7f71885b29f0eed61b1",
+    LIB: "07f19e18011ee25f4dbf86742c5a6d8d51e9ad7bf27709a46b662b4eace559f3",
     ALGORITHMS: "adb8985464a1c2a5656eeb927791f680098d72847a67164539d72f56ad69ffd7",
     VECTORS: "677ff52adaa6b88a2b19e93219238b0751e539afaa7c7d3934740a2c68588d6f",
     MAIN: "0c1b770359be0d6851eab6e2744ffc44050d48feb05d95c743e52934a02eacad",
@@ -56,11 +56,11 @@ EXPECTED_SHA256: dict[Path, str] = {
     FACADE_LIB: "90a5ed9ca877470c2f72b2cba9201fb741d9d2edf3a1180fb9c77497245d2f0f",
     FACADE_README: "04617ef2b140b76f6e5be4b2fe603d31d370ae0bb77b41f31135f64368c0a754",
     CHECK_SCRIPT: "9bc87be69a13d476a58e6bf7e63f5fd70697d7f57389b03de1a24dc78e679a4e",
-    TEST_SCRIPT: "3ea03e40c5f53942cb90e23ecd9b35822c816310e972995903ea9091f24af543",
-    CHECKS: "8d6fe8fb121c7d6d2f7570fb399b6cf984ec2236663964df4749074e34b99107",
+    TEST_SCRIPT: "9f0731100eae808a96f049f471bec1d394866828bab6d111bca90e3ac4d3e2eb",
+    CHECKS: "8454fdc17950bc01bb11940e420d6bb053e4d9d960fc63177e74c27a264f5cd9",
     RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
     BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
-    WORKFLOW: "e2c1f254d3fd8ae6b6a2709d3b29ca8edb68f31b720b274dfd3581d2193a2aec",
+    WORKFLOW: "73c491a1d2e41a8791cf55a6009cbb62083ba92f48410ecc235bc1560e7b9ee1",
 }
 PACKAGES = (
     ("brynja-core", "0.9.0", ("src/lib.rs",)),
@@ -178,9 +178,18 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     require(loaded[LEAF_README], family_label, "leaf family documentation")
     require(loaded[FACADE_README], family_label, "facade family documentation")
     require(loaded[CHECKS], "python3 scripts/sha3/check-sha3-public-api.py", "repository gate")
+    require(
+        loaded[CHECKS],
+        "cargo clippy --locked --manifest-path assurance/sha3-public-api/Cargo.toml",
+        "repository Clippy gate",
+    )
+    require(loaded[CHECKS], "-A clippy::chunks_exact_to_as_chunks -D warnings", "Clippy lint policy")
     require(loaded[RUST_MATRIX], "assurance/sha3-public-api/Cargo.toml", "Rust matrix")
     require(loaded[BARE_METAL], "assurance/sha3-public-api/Cargo.toml", "bare-metal matrix")
     require(loaded[WORKFLOW], "Run complete SHA-3/SHAKE portable public API acceptance", "host CI")
+    require(loaded[WORKFLOW], "Lint SHA-3/SHAKE public API fixture", "host Clippy CI")
+    require(loaded[WORKFLOW], "-A clippy::chunks_exact_to_as_chunks", "host Clippy compatibility")
+    require(loaded[WORKFLOW], "-D warnings", "host Clippy denial")
     if check_hashes:
         if set(EXPECTED_SHA256) != set(FILES):
             fail("acceptance reviewed hash inventory is incomplete")

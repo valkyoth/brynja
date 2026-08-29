@@ -331,7 +331,7 @@ fn check_domain_separation() -> Result<(), AcceptanceError> {
     leaf::shake128(b"", &mut shake128).map_err(|_| AcceptanceError::DomainSeparationMismatch)?;
     leaf::shake256(b"", &mut shake256).map_err(|_| AcceptanceError::DomainSeparationMismatch)?;
     let prefix = shake128.get(..32).ok_or(AcceptanceError::FixtureBounds)?;
-    if sha3_256.as_ref() == prefix || sha3_512.as_ref() == &shake256 || shake128 == shake256 {
+    if sha3_256.as_ref() == prefix || sha3_512.as_ref() == shake256 || shake128 == shake256 {
         return Err(AcceptanceError::DomainSeparationMismatch);
     }
     Ok(())

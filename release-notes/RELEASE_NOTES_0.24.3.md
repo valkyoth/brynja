@@ -1,8 +1,8 @@
 # Brynja 0.24.3 Release Notes
 
-Status: implementation and local verification complete; pentest, hosted GitHub
-and CodeQL, and signed tag pending; no scheduled pentest or crates.io
-publication is required by policy
+Status: pentest Low assurance-control finding remediated; independent retest,
+hosted GitHub and CodeQL, and signed tag pending; no scheduled pentest or
+crates.io publication is required by policy
 
 Brynja 0.24.3 freezes package-external portable acceptance for all four SHA-3
 digests and both SHAKE XOFs before any acceleration or native evidence work.
@@ -26,6 +26,8 @@ unchanged consumer through every admitted backend.
 - Negative fixtures for six output corruptions, missing public behavior,
   hidden features, false execution-path claims, invalid phase transitions,
   private permutation access, and incomplete package contents.
+- Standalone Clippy enforcement with warnings denied in the local repository
+  gate and hosted CI; policy fixtures reject removal of either binding.
 
 ## Verification
 
@@ -36,6 +38,9 @@ unchanged consumer through every admitted backend.
 - Existing FIPS 202 vectors, differential campaigns, Kani bounds, Miri,
   AddressSanitizer, documentation examples, package checks, dependency policy,
   advisory policy, and SBOM remain mandatory repository gates.
+- The pentest-reported Low assurance-control gap is closed: the fixture's
+  declared forbidden Clippy lints are now executed, and its existing warning
+  is corrected. Independent retest remains pending.
 
 ## Security Boundaries
 

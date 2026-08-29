@@ -49,6 +49,8 @@ python3 scripts/sha3/test-sha3.py
 python3 scripts/sha3/check-sha3-differential.py
 python3 scripts/sha3/check-sha3-public-api.py
 python3 scripts/sha3/test-sha3-public-api.py
+cargo clippy --locked --manifest-path assurance/sha3-public-api/Cargo.toml \
+  --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
 scripts/sha2/check-sha256-cpu-codegen.sh
 python3 scripts/cpu/check-backend-contract.py
 python3 scripts/cpu/test-backend-contract.py

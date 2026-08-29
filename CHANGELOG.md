@@ -7,6 +7,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Refresh the official DNS Parameters evidence after the local v0.24.2 tag
+  gate detected IANA's 2026-08-28 update; classify the new
+  `_nnu-verification` TXT entry as caller-owned v0.140.0 state, regenerate the
+  complete standards, surface, and requirement closure, and admit no new
+  authority, production code, API, dependency, or runtime behavior.
 - Record both v0.24.2 Medium repository-assurance resource-bound findings,
   their production-code-neutral remediations, and the green independent
   second retest of exact candidate

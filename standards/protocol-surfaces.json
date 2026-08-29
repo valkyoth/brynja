@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "0e5acea6c7f76845fb5a629c777476164138c69a797a46dcc565296a6fa69ed6",
+  "policy_sha256": "cc5c0b745e1e516a8a4f6fa0e3e461ac1fc1bbb4381866889c40ba396594c25e",
   "schema": 2,
-  "source_ledger_sha256": "3f1f34885eb5dbd6a91ad1ba172a2b016f13f54a0af3d3a480b43c59213cd735",
+  "source_ledger_sha256": "86a234f6e9215904a8e047d5d8060bf2a0e83f311ac5d9363597ae08d8a1e932",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -648,7 +648,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "contact-uri-schemes",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "Contact URI Schemes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -734,7 +734,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "csync-flags",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "Child Synchronization (CSYNC) Flags"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -849,7 +849,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dhcid-rr-digest-type-codes",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DHCID RR Digest Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -957,7 +957,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-catalog-zones",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS Catalog Zones Properties"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1147,7 +1147,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-dso-type-codes",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DSO Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1572,7 +1572,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-10",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS Label Types"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -1790,7 +1790,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-11",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS EDNS0 Option Codes (OPT)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -2939,7 +2939,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-12",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS Header Flags"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3193,7 +3193,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-13",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "EDNS Header Flags (16 bits)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3351,7 +3351,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-14",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "EDNS version Number (8 bits)"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3428,7 +3428,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-2",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS CLASSes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -3783,7 +3783,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-4",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "Resource Record (RR) TYPEs"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -7580,7 +7580,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-5",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS OpCodes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -7840,7 +7840,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-6",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS RCODEs"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -8713,7 +8713,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-8",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "AFSDB RR Subtype"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -8920,7 +8920,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-parameters-9",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DHCID RR Identifier Type Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9095,7 +9095,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-quic-error-codes",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS-over-QUIC Error Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9374,7 +9374,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dns-resolver-information-keys",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS Resolver Information Keys"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9526,7 +9526,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "dsync-location-of-synchronization-endpoints",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DSYNC: Location of Synchronization Endpoints"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -9715,7 +9715,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "extended-dns-error-codes",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "Extended DNS Error Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -10995,7 +10995,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "extended-dns-sub-error-codes",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "Extended DNS Sub-Error Codes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -11280,7 +11280,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "extra-text-json-names",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "EXTRA-TEXT JSON Names"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -11470,7 +11470,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "server-cookie-methods",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "DNS Server Cookie Methods"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -11709,7 +11709,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "underscored-globally-scoped-dns-node-names",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "Underscored and Globally Scoped DNS Node Names"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -12644,6 +12644,39 @@
           {
             "data": "rfc8461",
             "type": "rfc"
+          }
+        ]
+      },
+      "registry": {
+        "collection": "dns-parameters",
+        "id": "underscored-globally-scoped-dns-node-names"
+      },
+      "test_target": "tests/surface/dns_boundary.rs#caller_owned"
+    },
+    {
+      "code_target": "crates/brynja-platform/src/dns.rs",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.nnu-verification.1",
+      "kind": "iana-entry",
+      "normative_sources": [
+        "iana:dns-parameters",
+        "rfc:9460"
+      ],
+      "owner": "0.140.0",
+      "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
+      "record": {
+        "attributes": {
+          "date": "2026-08-28"
+        },
+        "fields": {
+          "description": "_nnu-verification",
+          "value": "TXT"
+        },
+        "references": [
+          {
+            "data": "https://nnu.us/specifications/nnu-domain-verification-1.0.txt",
+            "type": "uri"
           }
         ]
       },
@@ -14099,7 +14132,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zonemd-hash-algorithms",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "ZONEMD Hash Algorithms"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -14316,7 +14349,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zonemd-schemes",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "ZONEMD Schemes"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"
@@ -14499,7 +14532,7 @@
       "registry": {
         "collection": "dns-parameters",
         "id": "zoneversion-type-values",
-        "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1",
+        "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
         "title": "ZONEVERSION TYPE Values"
       },
       "test_target": "tests/surface/dns_boundary.rs#caller_owned"

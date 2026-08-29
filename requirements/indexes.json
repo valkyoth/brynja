@@ -1246,6 +1246,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ldap.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mms.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mta-sts.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.nnu-verification.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ocsp.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.openpgpkey.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.pres.1",
@@ -7491,6 +7492,9 @@
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mta-sts.1": [
+        "BRY-REQ-DNS-0140"
+      ],
+      "iana.dns-parameters.underscored-globally-scoped-dns-node-names.nnu-verification.1": [
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ocsp.1": [

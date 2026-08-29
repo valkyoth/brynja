@@ -113,7 +113,7 @@ manifest. Fifty-one residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
 explicit exclusions while assigning every one of the 791 surfaces left by the
 earlier bundles. The generated closure proves that all 130 locked authorities,
-all 510 ordered pre-1.0 roadmap rows, all 4,455 current surfaces, and all 169 requirements have
+all 510 ordered pre-1.0 roadmap rows, all 4,456 current surfaces, and all 169 requirements have
 bidirectional ownership. The new OpenPGP rows are fenced from implementation
 until v0.163.0 authenticates their RFC, errata, registry, algorithm, and
 compression authority closure and generates the corresponding requirements

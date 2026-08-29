@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest and both retests passed, awaiting green CI
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest and both retests passed, with a post-assessment standards-only reconciliation awaiting renewed green CI
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain
@@ -17,7 +17,7 @@ consistent in the same commit.
 | `standards/source-ledger.json` | Deterministic joined inventory of every admitted authority and owner | Byte-for-byte regeneration and 28 positive/broken-fixture tests |
 | `standards/surface-policy.json` | Reviewed dispositions and ownership for semantic surfaces, complete IANA collections, nested registries, and exact entry overrides | Schema, source, owner, target, uniqueness, completeness, and override validation |
 | `standards/transport-surfaces/*.toml` | Sixty-four reviewed TLS, DTLS, and QUIC-TLS implementation-milestone surfaces | Exact ledger binding, stable requirement identity, owner, source, target, and uniqueness validation |
-| `standards/protocol-surfaces.json` | Deterministic classification of 4,455 semantic and registry surfaces | Byte-for-byte regeneration and 30 positive/broken-fixture tests |
+| `standards/protocol-surfaces.json` | Deterministic classification of 4,456 semantic and registry surfaces | Byte-for-byte regeneration and 30 positive/broken-fixture tests |
 | `standards/protocol-surface-coverage.md` | Human-readable disposition, kind, and domain counts | Generated and byte-compared with the machine register |
 | `crates/brynja-core/src/{alert,close,error,exhaustion,provider,version}.rs` | v0.5.0 allocation-free alert, outcome, and failure domains | Rust type privacy, no formatting traits, fixed-work constructors, Clippy, `no_std`, integration tests, and compile-fail doctests |
 | `crates/brynja-core/src/{numeric,quantity,sequence,budget}.rs`, `crates/brynja-core/tests/{bounded_domains,budgets}.rs` | v0.6.0 checked bounded integers, counts, lengths, sequences, epochs, and immutable resource/work budgets | Exhaustive small-domain operation matrices, zero/exact/overflow/underflow/exhaustion boundaries, pointer-width checks, every-domain duplicate and incomplete assignment rejection, positional-constructor rejection, safe valueless-error diagnostics, no-mutation and representation tests, Clippy, `no_std`, and compile-fail doctests |
@@ -98,8 +98,8 @@ consistent in the same commit.
 | `requirements/coverage.md` | Human-readable pilot lifecycle, strength, scope, and index coverage | Generated and byte-compared with the machine evidence |
 | `requirements/domain-coverage.json` | Exact coverage of 55 cryptography/encoding/PKIX authorities, 364 normative RFC sections, and 3,325 selected surfaces | Deterministic generation, byte comparison, 352 mapped sections, eleven cross-bundle delegations, one explicit exclusion, exact hashes, and domain fixtures |
 | `requirements/transport-coverage.json` | Exact coverage of 40 transport authorities, 550 normative RFC sections, 64 owner milestones, and 485 selected surfaces | Deterministic generation, byte comparison, 539 mapped sections, eleven explicit dispositions, exact DTLS RRC and RFC 6066 ownership, and transport fixtures |
-| `requirements/residual-coverage.json` | Exact coverage of 33 residual authorities, 182 normative RFC sections, and 791 formerly uncovered surfaces | Deterministic generation, byte comparison, explicit-surface complement proof, 165 exact section mappings, 17 reviewed exclusions, exact anchors and hashes, and 22 residual fixtures |
-| `requirements/closure.json` | Bidirectional closure across 130 currently locked sources, 510 ordered pre-1.0 roadmap rows, 4,455 current surfaces, and 169 requirements, with OpenPGP and newly expanded family-completeness rows fenced by explicit authority admission | Complete source-to-plan, plan-to-source, source-to-requirement, reciprocal surface-to-requirement, requirement-to-owner, rights, refresh, blocker, and resolution validation |
+| `requirements/residual-coverage.json` | Exact coverage of 33 residual authorities, 182 normative RFC sections, and 792 formerly uncovered surfaces | Deterministic generation, byte comparison, explicit-surface complement proof, 165 exact section mappings, 17 reviewed exclusions, exact anchors and hashes, and 22 residual fixtures |
+| `requirements/closure.json` | Bidirectional closure across 130 currently locked sources, 510 ordered pre-1.0 roadmap rows, 4,456 current surfaces, and 169 requirements, with OpenPGP and newly expanded family-completeness rows fenced by explicit authority admission | Complete source-to-plan, plan-to-source, source-to-requirement, reciprocal surface-to-requirement, requirement-to-owner, rights, refresh, blocker, and resolution validation |
 | `package-policy.toml` | Complete package and dependency boundary | Workspace metadata validators and fixtures |
 | `github-release-controls.toml` | Protected release branch requirements | Local fixtures and authenticated live release check |
 | `sbom/brynja.spdx.json` | Complete Cargo dependency graph | Deterministic SBOM comparison |

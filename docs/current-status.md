@@ -375,7 +375,7 @@ Version 0.3.1 adds explicit protocol-surface decisions:
   formats, legacy protocols, and operational facilities;
 - all 192 nested registries and all 4,106 individual records across the eight
   pinned IANA collections receive a deterministic disposition;
-- every one of the 4,455 current generated surfaces records normative sources, owning
+- every one of the 4,456 current generated surfaces records normative sources, owning
   milestone, planned code target, planned test target, and rationale;
 - required exclusions explicitly cover Heartbeat, status_request_v2,
   production SSLKEYLOGFILE, TLS 1.3 post-handshake authentication,
@@ -461,9 +461,9 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
 - 33 residual authorities and 182 normative RFC sections are reviewed through
   165 exact mappings and 17 explicit dispositions;
 - all 791 surfaces left by the foundation, domain, and transport bundles are
-  assigned, producing complete coverage of all 4,455 surfaces;
+  assigned, producing complete coverage of all 4,456 surfaces;
 - the generated closure maps all 130 locked sources, all 510 ordered pre-1.0
-  roadmap rows, all 4,455 surfaces, and all 169 requirements in both directions;
+  roadmap rows, all 4,456 surfaces, and all 169 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners
   are explicit; and
@@ -557,7 +557,11 @@ Version 0.6.0 adds bounded numeric and resource foundations:
 - the later reviewed 2026-08-11 TLS ExtensionType refresh adds C509 Certificate
   type value 4 and moves the unassigned range start to 5, bringing the current
   register to 4,455 surfaces while retaining the provisional C509 draft as
-  non-authoritative future work and admitting no runtime code; and
+  non-authoritative future work and admitting no runtime code;
+- the 2026-08-29 release reconciliation accepts the official 2026-08-28 DNS
+  Parameters snapshot adding the caller-owned `_nnu-verification` TXT entry,
+  bringing the current register to 4,456 surfaces without admitting its linked
+  specification as normative authority or adding runtime code; and
 - no protocol surface or normative protocol requirement advances because
   these types are source-free shared foundations; later wire widths,
   direction-specific state, parsers, and engines remain future work.

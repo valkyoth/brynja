@@ -70,7 +70,7 @@ milestones = ["0.3.0", "0.3.1", "0.3.3", "0.48.0"]
 [[registry]]
 id = "dns-parameters"
 url = "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
-expected_sha256 = "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1"
+expected_sha256 = "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c"
 domains = ["ech"]
 milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
 

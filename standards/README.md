@@ -95,7 +95,7 @@ The surface checker additionally fails on a changed source-ledger hash,
 missing or duplicate collection, registry, record, decision, or identifier,
 unknown disposition, source, milestone, or target, overlapping registry
 rules, unmatched or duplicated overrides, any premature `implemented` claim,
-or stale generated JSON or Markdown. All 4,126 individual IANA records, 195
+or stale generated JSON or Markdown. All 4,127 individual IANA records, 195
 nested registries, and 129 semantic decisions are represented; `future-work`
 does not claim implementation. An `implemented` disposition is admitted only
 when current code, tests, and requirement evidence support that exact surface.
@@ -113,9 +113,9 @@ encoding, PKIX, OCSP, and CT authorities plus 3,325 current selected surfaces; 7
 transport requirements cover 40 authorities, 550 normative sections, 64
 implementation milestones, and 485 TLS, DTLS, and QUIC surfaces. Fifty-one
 residual requirements cover 33 authorities, 182 reviewed normative sections,
-and all 791 formerly uncovered surfaces. The residual section policy
+and all 792 formerly uncovered surfaces. The residual section policy
 contains 165 exact mappings and 17 explicit exclusions, producing complete
-closure across all 130 sources and 4,455 surfaces.
+closure across all 130 sources and 4,456 surfaces.
 Governance-tool evidence is not protocol implementation evidence.
 Reviewed-global mappings are governance-only. The private-use extension pilot
 is explicitly caller-owned rather than inherited future work.
@@ -185,6 +185,13 @@ The same 2026-08-28 refresh records reported technical RFC 3986 erratum 9147.
 Because it is not verified, it remains `track-not-applied` and cannot change
 requirements or implementation behavior unless its official status and
 security impact are reviewed again at an owning milestone.
+
+The 2026-08-29 release reconciliation accepts the official DNS Parameters
+snapshot dated 2026-08-28. It adds the `_nnu-verification` TXT entry to the
+Underscored and Globally Scoped DNS Node Names registry with its exact
+specification URI. The entry remains caller-owned by v0.140.0, increases the
+surface register to 4,456 entries, and admits no normative authority, runtime
+code, or SHA-3 behavior.
 
 Final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C are checksum-pinned
 local-only authorities. Their publication pages, planning notes, errata, and

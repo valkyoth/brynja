@@ -114,3 +114,12 @@ registry and metadata deltas, including two draft-to-RFC 10031 SMI reference
 changes and provisional C509, DNS type, and DELEG allocations. The refreshed
 evidence retains the existing future milestone owners and admits no new
 authority, SHAKE change, or runtime behavior.
+
+After the first final candidate passed hosted GitHub and CodeQL, the mandatory
+local tag gate detected a further official DNS Parameters update dated
+2026-08-28. Release reconciliation reviewed and pins the exact delta: one
+`_nnu-verification` TXT entry with its specification URI. It remains
+caller-owned by v0.140.0, advances the generated register from 4,455 to 4,456
+surfaces, and changes no normative authority, production Rust, API,
+dependency, SHAKE behavior, or publication selection. This standards-only
+candidate must pass hosted GitHub and CodeQL again before the signed tag.

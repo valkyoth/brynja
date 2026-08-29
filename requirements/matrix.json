@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "f746579f85b5b59e84aebad4d65c63ce23028e80fc31ce28d360e17e988b8563",
-  "domain_policy_sha256": "5867f51f4e701c31375e647240f740139b0288af13b0ba3c81c7f359852aa728",
-  "policy_sha256": "34f3ad2dd8b64b25b58aa1463c49473a21e8ca3808ca6b242124ab22e63f8675",
+  "domain_policy_sha256": "41159c08570bf3c6bba8aee1c0808b3100ef77a7f03f31ab1de29120700ae714",
+  "policy_sha256": "65434c356f882c54fcbe2f2ec6b474f7df349753308323d18e51d845c2e50b3b",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3938,6 +3938,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ldap.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mms.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mta-sts.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.nnu-verification.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ocsp.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.openpgpkey.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.pres.1",
@@ -4016,7 +4017,7 @@
       "owner": "0.140.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -4033,7 +4034,7 @@
             "0.3.5",
             "0.140.0"
           ],
-          "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1"
+          "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c"
         },
         {
           "authority_role": "caller-owned",
@@ -29899,9 +29900,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "0e68f24be0b4d7a8a0d4e986e7d51dff9b3a38cc1c0701ef705257fa7ce6927f",
+  "residual_policy_sha256": "6e0988cf6778577b3c327af5df2d569727b5782615ea1d40e99e18715a9d8502",
   "schema": 5,
-  "source_ledger_sha256": "3f1f34885eb5dbd6a91ad1ba172a2b016f13f54a0af3d3a480b43c59213cd735",
-  "surface_register_sha256": "bbea84afb8bab436759a67bd7c2a60cb6d9be37e4435018eda34b1b27e06f008",
-  "transport_policy_sha256": "9c7bfeab0334a43a5ba65e4cdb6611a95d44d9ba0514de327d0ceea1f8071176"
+  "source_ledger_sha256": "86a234f6e9215904a8e047d5d8060bf2a0e83f311ac5d9363597ae08d8a1e932",
+  "surface_register_sha256": "afe5a4c0e4b9da4979dea9c5141f102b9259ad2e3a9a07832d97999ff632c168",
+  "transport_policy_sha256": "cd764466599512e7bde4ca72db4e517ac39e0a267c5398d678c22044a8641210"
 }

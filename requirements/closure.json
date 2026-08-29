@@ -8203,6 +8203,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ldap.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mms.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mta-sts.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.nnu-verification.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.ocsp.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.openpgpkey.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.pres.1",
@@ -10154,7 +10155,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1"
+      "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c"
     },
     {
       "id": "iana:hpke",
@@ -15509,6 +15510,12 @@
     },
     {
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mta-sts.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.nnu-verification.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]

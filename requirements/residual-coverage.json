@@ -17,7 +17,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "e62a1cb8c457b4930c1c627c994b8de12873b549738f7e24beeda9e70e8202b1"
+      "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c"
     },
     {
       "authority_role": "current",
@@ -2620,10 +2620,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "0e68f24be0b4d7a8a0d4e986e7d51dff9b3a38cc1c0701ef705257fa7ce6927f",
+  "policy_sha256": "6e0988cf6778577b3c327af5df2d569727b5782615ea1d40e99e18715a9d8502",
   "requirement_count": 51,
   "schema": 1,
-  "surface_count": 791,
+  "surface_count": 792,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5702,6 +5702,14 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.mta-sts.1",
+      "owner": "0.140.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.nnu-verification.1",
       "owner": "0.140.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },

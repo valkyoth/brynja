@@ -1,7 +1,7 @@
 # Brynja 0.24.2 Release Notes
 
-Status: Medium assurance-tooling finding remediated; independent retest
-pending; internal development tag; no crates.io publication
+Status: pentest and both retests passed; hosted verification and signed tag
+pending; no crates.io publication
 
 Brynja 0.24.2 completes portable SHAKE128 and SHAKE256 over the private
 Keccak-f[1600] sponge introduced in v0.24.0. All six FIPS 202 functions now
@@ -84,17 +84,18 @@ and identified a second Medium aggregate-input/case and missing-timeout gap.
 The adapter now also caps stdin at 8 MiB and campaigns at 1,968 cases, uses
 fallible decode/render allocations, rejects both aggregate attacks, and gives
 every child run a 240-second timeout. Production SHAKE code is unchanged.
-Local second-remediation verification passes; independent second retest is
-pending. After retest, the exact report commit must pass the complete local
-gate plus hosted GitHub and CodeQL checks before explicit signed-tag
-authorization.
+Local second-remediation verification passes, and the repository owner
+reported the independent second retest of exact candidate
+`c7af70e19def950f3a9004c18e5c869ef844c644` green. The exact final report
+commit must pass the complete local gate plus hosted GitHub and CodeQL checks
+before explicit signed-tag authorization.
 
 The mandatory freshness pass moves the default and complete release gate to
 official stable Rust 1.98.0 while preserving Rust 1.90.0 as the MSRV and every
 intervening stable in CI. The compiler-sensitive Kani 0.67.0 pairing remains
 separate on Rust 1.90.0. Miri and AddressSanitizer advance to the latest
-available Miri-capable `nightly-2026-08-28` at exact Rust revision
-`e457a7b0d326d67b4322ef0d11bd715cfaeda48f`.
+available Miri-capable `nightly-2026-08-29` at exact Rust revision
+`17fd5b8a37b6667b6cc137f3cc35f09759768a3b`.
 
 The same pass confirms `sanitization 2.0.3`, cargo-deny 0.20.2, cargo-audit
 0.22.2, cargo-sbom 0.10.0, Kani 0.67.0, AFL++ 5.02c, honggfuzz 2.6, and the

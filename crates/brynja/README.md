@@ -43,7 +43,7 @@ The broader SHA-3/SHAKE acceptance chain remains in progress.
 | Dependencies | No third-party dependency in the main facade graph; narrowly admitted adapters remain separate |
 | Unsafe Rust | Forbidden except for individually reviewed, hash-locked boundaries |
 | Legacy protocols | Isolated in explicit `brynja-legacy-*` packages and unreachable from this facade |
-| Portability | Rust 1.90.0 through 1.97.1; Linux, Windows, BSD, macOS, Android, iOS, and bare-metal-aware design |
+| Portability | Rust 1.90.0 through 1.98.0; Linux, Windows, BSD, macOS, Android, iOS, and bare-metal-aware design |
 | Production readiness | Not claimed before the independently reviewed `1.0.0` candidate |
 
 ## Add The Crate

@@ -189,7 +189,7 @@ external assembly source, build script, detector dependency, allocation, I/O, or
 registry, and make no register-erasure, independent-review, or FIPS 140-3
 validation claim.
 
-The current `0.23.4` milestone closes the complete SHA-2 chain with a
+The signed `0.23.4` milestone closes the complete SHA-2 chain with a
 standalone downstream `no_std` consumer. It exercises all six algorithms
 through both leaf and facade public APIs over independent empty, text, binary,
 multi-block, million-byte, and file-like expectations in one-shot and
@@ -233,8 +233,9 @@ of-service findings in the repository-only differential adapter. The adapter
 now enforces its declared 343-byte output, 8 MiB stdin, and 1,968-case ceilings,
 uses fallible decode and rendering allocations, and gives every child run a
 240-second timeout. Production SHAKE code is unchanged. Independent second
-retest is pending; the milestone remains untagged and selects zero crates.io
-packages.
+retest of exact candidate `c7af70e19def950f3a9004c18e5c869ef844c644`
+passed with zero open findings; the milestone remains untagged pending green
+GitHub and CodeQL and selects zero crates.io packages.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
@@ -793,7 +794,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.98.0`, the current stable release checked on 2026-08-28.
+to Rust `1.98.0`, the current stable release checked on 2026-08-29.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 

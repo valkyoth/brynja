@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 remediation complete and awaiting pentest retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest and both retests passed, awaiting green CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -234,8 +234,10 @@ of-service findings in the repository-only differential adapter. The adapter
 now enforces 343-byte XOF, 8 MiB stdin, and 1,968-case ceilings before effects,
 uses fallible decode and rendering allocation, rejects oversized length/input/
 case campaigns without panic, and applies a 240-second child timeout.
-Production SHAKE code is unchanged. Local remediation passes and independent
-second retest remains pending. This does not establish
+Production SHAKE code is unchanged. Local remediation and the independent
+second retest of exact candidate
+`c7af70e19def950f3a9004c18e5c869ef844c644` pass with zero open findings.
+The signed tag remains blocked pending green GitHub and CodeQL. This does not establish
 independent cryptographic review or FIPS validation, complete later family-
 acceptance gates, select a crate for publication, or replace the scheduled
 v0.20.0-to-v0.25.0 cumulative assessment.

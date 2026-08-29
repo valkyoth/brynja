@@ -102,8 +102,8 @@ targets = [
 ]
 additional_compile_only_targets = ["wasm32-unknown-unknown"]
 upstream_pentest = "security/pentest/v2.0.3.md: PASS on 2026-07-21"
-advisory_result = "cargo audit: zero advisories on 2026-08-28"
-policy_result = "cargo deny advisories/bans/licenses/sources: pass on 2026-08-28"
+advisory_result = "cargo audit: zero advisories on 2026-08-29"
+policy_result = "cargo deny advisories/bans/licenses/sources: pass on 2026-08-29"
 codegen_evidence = "upstream MIR/LLVM IR/assembly matrix plus Brynja v0.11.0 comparison"
 candidate_fixture = "assurance/sanitization-admission"
 

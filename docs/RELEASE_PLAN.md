@@ -2497,7 +2497,7 @@ Exit criteria:
 
 ### v0.24.2 - Complete SHAKE128 And SHAKE256
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes:
 
@@ -2530,7 +2530,9 @@ Implementation notes:
   without changing production SHAKE code. The first retest confirmed that fix
   and identified a second Medium aggregate-input/case and missing-timeout gap;
   8 MiB stdin, 1,968-case, fallible decode/render, and 240-second child bounds
-  now close it, with independent second retest pending.
+  now close it. Independent second retest of exact candidate
+  `c7af70e19def950f3a9004c18e5c869ef844c644` passed with zero open findings;
+  the signed tag remains blocked pending green GitHub and CodeQL.
 
 Plan scope: Complete SHAKE128 and SHAKE256 as distinct FIPS 202 XOFs with absorb, finalization, incremental multi-squeeze, zero-length and arbitrary caller-bounded output, exact domain separation, checked state transitions, authoritative vectors, proofs, and public APIs without exposing Keccak-f[1600].
 

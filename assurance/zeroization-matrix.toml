@@ -37,7 +37,7 @@ targets = [
 ]
 
 [dynamic]
-toolchain = "nightly-2026-08-28"
+toolchain = "nightly-2026-08-29"
 miri = true
 address_sanitizer = true
 test_target = "x86_64-unknown-linux-gnu"

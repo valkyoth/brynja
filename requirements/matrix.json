@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "8b46fd9be0823e9496f40fdc94d8e7e91ee81013e969a95e37583357d133f284",
-  "domain_policy_sha256": "1080275468837054ffbf0d3855a316aae9ec9872b8fa07a8780d4f5ef8ee7e8c",
+  "domain_policy_sha256": "f7ba7fcc7c9bd993610765a438908889abd33be3acf08a87600abcfa1e8407b8",
   "policy_sha256": "424fb4b1242337c71b9799441db13839e4ea7927f0815e731c8d14a135a56888",
   "requirements": [
     {
@@ -765,7 +765,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 180-4 SHA-2 byte-oriented algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; a separately packaged downstream consumer accepts every byte API. Canonical arbitrary-bit APIs, distinct hardened secret-bearing owners using the admitted sanitization boundary, complete internal-copy destruction evidence, and combined package acceptance remain planned through v0.24.7-v0.24.11; all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, side-channel, independent-review, and FIPS-validation evidence remains incomplete.",
+      "evidence_gap": "All six portable FIPS 180-4 SHA-2 byte-oriented algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; a separately packaged downstream consumer accepts every byte API. Canonical arbitrary-bit APIs, sealed downstream-unforgeable hardened secret-bearing owners using the admitted sanitization boundary, recoverable-unwind and adjacent-cleanup-failure evidence, explicit public-declassification versus typed secret-output handling, complete internal-copy and partial-output destruction evidence, and combined package acceptance remain planned through v0.24.7-v0.24.11; all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, side-channel, independent-review, and FIPS-validation evidence remains incomplete.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -779,7 +779,7 @@
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 8,
+      "revision": 9,
       "scope": "protocol",
       "sources": [
         {
@@ -884,7 +884,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 202 byte-oriented functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, shared Kani bounds, and a frozen package-external portable consumer over the safely extracted archive closure. Canonical arbitrary-bit APIs, distinct hardened secret-bearing sponge owners using the admitted sanitization boundary, complete internal-copy destruction evidence, acceleration and combined cross-backend acceptance remain planned through v0.24.4 and v0.24.9-v0.24.11; independent review, side-channel measurements, and FIPS validation remain incomplete.",
+      "evidence_gap": "All six portable FIPS 202 byte-oriented functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, shared Kani bounds, and a frozen package-external portable consumer over the safely extracted archive closure. Canonical arbitrary-bit APIs, sealed downstream-unforgeable hardened secret-bearing sponge owners using the admitted sanitization boundary, recoverable-unwind and adjacent-cleanup-failure evidence, explicit public-declassification versus typed secret-output and partial-output clearing, complete internal-copy destruction evidence, acceleration and combined cross-backend acceptance remain planned through v0.24.4 and v0.24.9-v0.24.11; independent review, side-channel measurements, and FIPS validation remain incomplete.",
       "id": "BRY-REQ-CRYPTO-0002",
       "invariants": [
         "constant-time",
@@ -899,7 +899,7 @@
       "owner": "0.24.2",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {

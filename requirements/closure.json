@@ -849,7 +849,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Implement a machine-readable, CI-enforced register that assigns every current and planned primitive, construction and protocol consumer its complete safe public API profiles and every secret-owning type, field, temporary, lifecycle edge, sanitization symbol, evidence artifact and residual gap; distinguish ordinary public-data state from hardened secret-bearing state, reject unsafe or nonstandard conveniences explicitly, and block implementation exit, composition and Fully implemented status when any promised operation, input domain, ownership mode or internal cleanup duty lacks an owner.",
+      "scope": "Implement a machine-readable, CI-enforced register that assigns every current and planned primitive, construction and protocol consumer its complete safe public API profiles and every secret-owning type, field, temporary, lifecycle edge, recoverable-unwind path, sanitization symbol, output classification, evidence artifact and residual gap; distinguish ordinary public-data state from sealed downstream-unforgeable hardened state, require non-panicking all-region cleanup despite adjacent failures, classify public declassification versus typed secret output and partial-output clearing, record `mem::forget`/abort/termination/power-loss residuals, reject unsafe or nonstandard conveniences explicitly, and block implementation exit, composition and Fully implemented status when any promised operation, ownership mode or cleanup duty lacks an owner.",
       "source_ids": [],
       "title": "Cryptographic API Profile And Secret-State Closure Register",
       "version": "0.24.6"
@@ -871,7 +871,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal path; prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.",
+      "scope": "Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal and recoverable-unwind path; seal hardened capabilities against downstream implementation or forgery, make cleanup non-panicking and all-region despite adjacent failures, classify digest output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.",
       "source_ids": [],
       "title": "Complete Hardened SHA-2 State APIs",
       "version": "0.24.8"
@@ -893,7 +893,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation and Drop; keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.",
+      "scope": "Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation, recoverable unwinding and Drop through non-panicking all-region cleanup; seal hardened capabilities against downstream implementation or forgery, classify fixed and incremental output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.",
       "source_ids": [],
       "title": "Complete Hardened SHA-3 And SHAKE State APIs",
       "version": "0.24.10"
@@ -904,7 +904,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation and Drop paths, inspect compiler-resistant cleanup across supported compilers and targets, verify caller-versus-Brynja ownership, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.",
+      "scope": "Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, compile-fail downstream hardened implementation and marker forgery, verify explicit public declassification versus typed secret output plus unchanged or cleared partial failure destinations, inspect compiler-resistant cleanup and residual-risk claims across supported compilers and targets, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.",
       "source_ids": [],
       "title": "Complete Hash API And Zeroization Usability Acceptance",
       "version": "0.24.11"

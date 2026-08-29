@@ -77,12 +77,24 @@ distinct non-Copy, non-Clone, non-formatting and non-serializing hardened owner.
 It compiler-resistantly destroys every Brynja-owned key, scalar, schedule,
 sponge or chaining state, partial buffer, temporary block, encoded secret,
 intermediate, pending value and failure-path copy on success, error,
-cancellation, replacement, rekey, failed construction and Drop. Storage
-transferred to callers becomes their duty; registers, caches, OS context, crash
-images and unavoidable compiler copies remain measured residuals. A machine-
+cancellation, replacement, rekey, failed construction, recoverable panic
+unwinding and Drop. Cleanup is non-panicking, attempts every independently
+owned region even after an adjacent cleanup failure, and preserves a secret-
+free failure outcome. `mem::forget`, process abort, forced termination, power
+loss, registers, caches, OS context, crash images and unavoidable compiler
+copies remain measured residuals. A machine-
 readable secret-state register binds every owner, field and temporary to its
 creation and destruction edges, sanitization symbol, emitted-code evidence and
 residual gaps, and CI blocks incomplete entries or consumers.
+
+Every hardened ownership capability and construction-owner trait is sealed;
+downstream crates cannot implement, forge, assert, or wrap an ordinary state
+into a hardened capability. Secret-derived output has an explicit terminal
+classification: deliberate public declassification, transfer into a typed
+secret-owned destination, or failure before destination mutation. If an API
+cannot remain failure-atomic, every partially written secret destination is
+cleared before returning. Raw caller buffers never silently erase this
+classification, including incremental XOF and KDF output.
 
 Internal cleanup closes with the secret-bearing implementation rather than as
 ordinary later hardening. Independently review-sized shared owners and evidence
@@ -2772,7 +2784,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement a machine-readable, CI-enforced register that assigns every current and planned primitive, construction and protocol consumer its complete safe public API profiles and every secret-owning type, field, temporary, lifecycle edge, sanitization symbol, evidence artifact and residual gap; distinguish ordinary public-data state from hardened secret-bearing state, reject unsafe or nonstandard conveniences explicitly, and block implementation exit, composition and Fully implemented status when any promised operation, input domain, ownership mode or internal cleanup duty lacks an owner.
+Plan scope: Implement a machine-readable, CI-enforced register that assigns every current and planned primitive, construction and protocol consumer its complete safe public API profiles and every secret-owning type, field, temporary, lifecycle edge, recoverable-unwind path, sanitization symbol, output classification, evidence artifact and residual gap; distinguish ordinary public-data state from sealed downstream-unforgeable hardened state, require non-panicking all-region cleanup despite adjacent failures, classify public declassification versus typed secret output and partial-output clearing, record `mem::forget`/abort/termination/power-loss residuals, reject unsafe or nonstandard conveniences explicitly, and block implementation exit, composition and Fully implemented status when any promised operation, ownership mode or cleanup duty lacks an owner.
 
 Goal: turn API completeness and private secret cleanup from prose expectations
 into a fail-closed design input for every later cryptographic implementation.
@@ -2786,14 +2798,19 @@ Deliverables:
   adapter, import, export, generation, reset, clone, snapshot and cancellation;
 - add a secret-state inventory naming every secret-owning type, exact fields and
   temporaries, creation and destruction edges, sanitization function, success,
-  error, cancellation, replacement, rekey, failed-construction and Drop paths,
-  emitted-code evidence, caller handoff and residual register/cache/OS risks;
+  error, cancellation, replacement, rekey, failed-construction, recoverable-
+  unwind and Drop paths, emitted-code evidence, adjacent-cleanup-failure policy,
+  caller handoff and residual `mem::forget`/abort/termination/power-loss/
+  register/cache/OS risks;
 - classify every cleanup duty as the mandatory core destruction primitive or
   an exact admitted `brynja-sanitization` fixed-region adapter use, without
   optional cleanup, reverse dependencies, facade leakage, or a FIPS graph edge;
 - enforce ordinary public-data versus hardened secret-bearing type separation,
-  explicit rejection of unsafe or nonstandard profiles, complete milestone and
-  symbol ownership, reviewed-source hashes and deterministic documentation.
+  sealed and downstream-unforgeable hardened capabilities, explicit public
+  declassification versus typed secret-output ownership, partial-output
+  failure atomicity or clearing, rejection of unsafe or nonstandard profiles,
+  complete milestone and symbol ownership, reviewed-source hashes and
+  deterministic documentation.
 
 Verification:
 
@@ -2807,6 +2824,10 @@ Verification:
   Copy, Clone, formatting, serialization, reset, snapshot or public raw-state
   access is rejected for every registered secret owner unless a later exact
   standard and separately reviewed secure profile explicitly permits it;
+- compile-fail downstream hardened-trait implementations, marker forgery and
+  ordinary wrappers; inject recoverable unwinding and adjacent clearing faults,
+  and distinguish explicit public output, typed secret output, unchanged
+  failure destinations and cleared partial secret destinations;
 - regenerate from a clean tree and pass schema, mutation, requirement, source-
   ledger, release-plan, documentation, Rust/target, dependency and repository
   gates without adding runtime cryptography or a third-party crate.
@@ -2862,7 +2883,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal path; prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.
+Plan scope: Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal and recoverable-unwind path; seal hardened capabilities against downstream implementation or forgery, make cleanup non-panicking and all-region despite adjacent failures, classify digest output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.
 
 Goal: let applications and later HMAC, KDF, password, private-prehash and
 protected-transcript constructions hash sensitive input without leaving Brynja-
@@ -2872,14 +2893,17 @@ Deliverables:
 
 - add distinct hardened byte and bit-input states for every SHA-2 identity with
   consuming finalization, no Copy/Clone/Debug/Display/serialization/snapshot,
-  no conversion to ordinary state and no public internal-state access;
+  no conversion to ordinary state, no public internal-state access, and sealed
+  capability traits that downstream code cannot implement or forge;
 - share the exact compression math while wrapping partial buffers, chaining
   words, schedules, block copies and temporary digests in the first-party
   compiler-resistant sanitization owner across success, failure, replacement,
-  failed construction and Drop;
+  failed construction, recoverable panic unwinding and Drop, with non-panicking
+  all-region cleanup despite an adjacent clearing failure;
 - make portable execution mandatory unless an accelerated symbol has exact
-  cleanup, stack-spill and backend-lifecycle evidence, and expose typed caller
-  ownership when digest bytes leave the hardened state.
+  cleanup, stack-spill and backend-lifecycle evidence, and require digest output
+  to consume either an explicit public-declassification token or a typed secret
+  destination whose partial writes are failure-atomic or cleared.
 
 Verification:
 
@@ -2888,7 +2912,12 @@ Verification:
   trait, conversion, reset, snapshot and ordinary-keyed composition;
 - inspect MIR, LLVM IR and supported-target assembly for every state, schedule,
   block, temporary and terminal path, fault-inject update/finalize/drop and
-  confirm complete-region clearing without claiming register or cache erasure;
+  recoverable unwind plus adjacent clearing failures, and confirm complete-
+  region clearing without claiming `mem::forget`, abort, forced termination,
+  power-loss, register or cache erasure;
+- compile-fail downstream hardened capability implementations and forged
+  markers; verify explicit public declassification, typed secret output,
+  unchanged failure destinations and cleared unavoidable partial output;
 - run Kani lifecycle bounds, Miri, sanitizers, no_std package tests, stack and
   allocation ceilings, supported Rust/target matrix and source-policy mutations.
 
@@ -2940,7 +2969,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation and Drop; keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.
+Plan scope: Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation, recoverable unwinding and Drop through non-panicking all-region cleanup; seal hardened capabilities against downstream implementation or forgery, classify fixed and incremental output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.
 
 Goal: provide the reusable hardened sponge boundary that callers and all later
 secret-bearing Keccak-derived constructions require but cannot implement from
@@ -2950,25 +2979,32 @@ Deliverables:
 
 - add distinct hardened byte and bit-input states for all four SHA-3 digests
   and hardened absorb/reader typestates for both SHAKE strengths with consuming
-  transitions and no Copy, Clone, formatting, serialization or state export;
+  transitions, sealed capability traits, and no downstream implementation,
+  forgery, Copy, Clone, formatting, serialization or state export;
 - sanitize all 25 lanes, partial absorb buffer, suffix/tail staging, squeeze
   cursor and block, output staging and temporary permutation copies on success,
-  error, cancellation, exhaustion, failed construction and Drop;
+  error, cancellation, exhaustion, failed construction, recoverable unwinding
+  and Drop through non-panicking all-region cleanup;
 - expose a reviewed construction-only ownership boundary for later cSHAKE,
   KMAC, HMAC and protected prehashes while preventing ordinary state from
-  satisfying it and keeping raw permutation access private.
+  satisfying it and keeping raw permutation access private; make each digest or
+  XOF read explicitly declassify public bytes or write a typed secret-owned
+  destination, clearing any partial secret output before error.
 
 Verification:
 
 - compare ordinary and hardened outputs for every frozen byte case and new bit
   case, including irregular absorb, multi-squeeze, zero output, exhaustion,
-  cancellation and early Drop;
+  cancellation, recoverable unwind and early Drop;
 - inspect MIR, LLVM IR and supported-target assembly for all sponge, buffer,
   suffix, squeeze and temporary clearing; fault-inject every phase and forbid
-  accelerated use without symbol-specific cleanup and spill evidence;
+  accelerated use without symbol-specific cleanup and spill evidence; inject
+  adjacent cleanup failure and retain non-panicking attempts for every region;
 - compile-fail forbidden traits, conversions, raw-state access and ordinary
-  keyed composition, then run Kani, Miri, sanitizers, no_std packages, stack,
-  allocation, Rust/target and mutation gates.
+  keyed composition plus downstream hardened implementations and marker
+  forgery; verify public declassification, typed secret multi-squeeze,
+  unchanged failed output and cleared partial output, then run Kani, Miri,
+  sanitizers, no_std packages, stack, allocation, Rust/target and mutation gates.
 
 Exit criteria:
 
@@ -2980,7 +3016,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation and Drop paths, inspect compiler-resistant cleanup across supported compilers and targets, verify caller-versus-Brynja ownership, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.
+Plan scope: Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, compile-fail downstream hardened implementation and marker forgery, verify explicit public declassification versus typed secret output plus unchanged or cleared partial failure destinations, inspect compiler-resistant cleanup and residual-risk claims across supported compilers and targets, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.
 
 Goal: close the expanded modern hash surface only after real downstream users
 can choose fast public-data or hardened secret-bearing operation without hidden
@@ -2993,7 +3029,12 @@ Deliverables:
   algorithm identities, backend dispositions and caller-owned output rules;
 - bind the complete secret-state register to exact source, MIR, LLVM IR and
   assembly evidence for every owned region and terminal path, with explicit
-  register/cache/OS/crash residuals and no stronger claim than measured;
+  `mem::forget`/abort/termination/power-loss/register/cache/OS/crash residuals
+  and no stronger claim than measured;
+- freeze sealed-capability and output-classification fixtures covering rejected
+  downstream implementations and forged markers, explicit public
+  declassification, typed secret destinations, failure-before-mutation and
+  clearing after any unavoidable partial output;
 - update public verification tables to distinguish mathematical output,
   ordinary versus hardened usability, admitted backends, independent review
   and FIPS validation, changing the family to **Fully implemented** only here.
@@ -3002,13 +3043,16 @@ Verification:
 
 - run ordinary and hardened one-shot, irregular streaming, arbitrary bit-tail,
   fixed digest, incremental XOF, zero output, exhaustion, error, cancellation,
-  early Drop and caller-buffer ownership cases against authoritative results;
+  recoverable unwind, adjacent cleanup failure, early Drop, public
+  declassification, typed secret output and caller-buffer ownership cases
+  against authoritative results;
 - package and run all fixtures across supported Rust and no_std targets, force
   scalar and every admitted backend, and rerun affected KAT, native, timing,
   emitted-code, proof and differential evidence after any code change;
 - mutate every API-profile and secret-state entry, cleanup path, trait
-  prohibition, package file, documentation claim and evidence binding and prove
-  the complete repository gate fails closed.
+  prohibition, capability seal, output classification, partial-output rule,
+  unwind/residual entry, package file, documentation claim and evidence binding
+  and prove the complete repository gate fails closed.
 
 Exit criteria:
 

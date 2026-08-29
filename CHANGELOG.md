@@ -47,6 +47,11 @@ Keep a Changelog and Semantic Versioning.
   locked RustCrypto, synchronous-I/O, and Tokio adapter gates. Both expanded
   hash families now remain **In progress** through v0.24.11 instead of claiming
   completeness from byte-oriented mathematical APIs alone.
+- Harden that roadmap closure with recoverable panic-unwind and adjacent-
+  cleanup-failure tests, non-panicking all-region destruction, explicit
+  `mem::forget`/abort/termination/power-loss residuals, sealed downstream-
+  unforgeable hardened capabilities, and typed public-declassification versus
+  secret-output destinations with failure-atomic or cleared partial writes.
 - Add a frozen standalone `no_std` consumer for all four SHA-3 digests and
   both SHAKE XOFs through leaf and facade APIs, covering 24 fixed-output, ten
   XOF, and twenty incremental-squeeze results over official, independent real-

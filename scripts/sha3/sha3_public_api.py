@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and execute the v0.23.4 complete SHA-2 public acceptance."""
+"""Freeze and validate v0.24.3 portable FIPS 202 public acceptance."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-FIXTURE = Path("assurance/sha2-public-api")
+FIXTURE = Path("assurance/sha3-public-api")
 MANIFEST = FIXTURE / "Cargo.toml"
 LOCK = FIXTURE / "Cargo.lock"
 LIB = FIXTURE / "src/lib.rs"
@@ -21,53 +21,52 @@ ALGORITHMS = FIXTURE / "src/algorithms.rs"
 VECTORS = FIXTURE / "src/vectors.rs"
 MAIN = FIXTURE / "src/main.rs"
 CONTENT = FIXTURE / "fixtures/representative.txt"
-LEAF_LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
-DIGEST = Path("crates/brynja-hash-sha2/src/digest.rs")
+LEAF_MANIFEST = Path("crates/brynja-hash-sha3/Cargo.toml")
+LEAF_LIB = Path("crates/brynja-hash-sha3/src/lib.rs")
+LEAF_README = Path("crates/brynja-hash-sha3/README.md")
+CRYPTO_LIB = Path("crates/brynja-crypto/src/lib.rs")
+FACADE_MANIFEST = Path("crates/brynja/Cargo.toml")
 FACADE_LIB = Path("crates/brynja/src/lib.rs")
-LEAF_README = Path("crates/brynja-hash-sha2/README.md")
 FACADE_README = Path("crates/brynja/README.md")
-CHECK_SCRIPT = Path("scripts/sha2/check-sha2-public-api.py")
-TEST_SCRIPT = Path("scripts/sha2/test-sha2-public-api.py")
+CHECK_SCRIPT = Path("scripts/sha3/check-sha3-public-api.py")
+TEST_SCRIPT = Path("scripts/sha3/test-sha3-public-api.py")
 CHECKS = Path("scripts/checks.sh")
 RUST_MATRIX = Path("scripts/ci/check-rust-version-matrix.sh")
 BARE_METAL = Path("scripts/assurance/check-bare-metal.sh")
 WORKFLOW = Path(".github/workflows/ci.yml")
 FILES = (
-    MANIFEST, LOCK, LIB, ALGORITHMS, VECTORS, MAIN, CONTENT, LEAF_LIB, DIGEST,
-    FACADE_LIB, LEAF_README, FACADE_README, CHECK_SCRIPT, TEST_SCRIPT, CHECKS,
-    RUST_MATRIX, BARE_METAL, WORKFLOW,
+    MANIFEST, LOCK, LIB, ALGORITHMS, VECTORS, MAIN, CONTENT, LEAF_MANIFEST,
+    LEAF_LIB, LEAF_README, CRYPTO_LIB, FACADE_MANIFEST, FACADE_LIB,
+    FACADE_README, CHECK_SCRIPT, TEST_SCRIPT, CHECKS, RUST_MATRIX,
+    BARE_METAL, WORKFLOW,
 )
-EXPECTED_SHA256 = {
-    MANIFEST: "8a995c048741ea716256b0481fc06cf63719d8f74d34e7f052618efb21d32747",
-    LOCK: "40eb5dfdfa638894abb623af3a3a093b35b20a201012e4c84945cb3b5583390f",
-    LIB: "2186c58ea09ffe3e9dcf7a03b70bf4031ec26cd23096569be8016f797b668bca",
-    ALGORITHMS: "f5c798334508de76015c92f2929dee7b51e7b76a61fe3bc353bf67e4677a1e63",
-    VECTORS: "cc4a0209cd9bbc322a0f2ad0dfaffc3e72337a28e189d9a311b94229e5d8b6d6",
-    MAIN: "c16794c16dfabdfc4fbb588c0752e2ef63625657e95df44c987b84103fcddd1c",
-    CONTENT: "fcb4220a9a063622c8c2f19d66c56e813a8add0814ece5cb6ec09ca5830d2a71",
-    LEAF_LIB: "aa1a4f0ce77768b180daae6ead51a739452d7bd057bbfa8f348df5a7ee3732d2",
-    DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
+EXPECTED_SHA256: dict[Path, str] = {
+    MANIFEST: "d5dd72f169c12e65b03f5dce4b87809c77606e04d9dbc53e0144060dbba93e05",
+    LOCK: "8c559998acf3da1aecfaff9e8dfb5acac51b1cc332c195d02a575e5ea6e2cd7b",
+    LIB: "59c4c4c5d789c6c1902f924f555e6ba0095daf2dcc51b7f71885b29f0eed61b1",
+    ALGORITHMS: "adb8985464a1c2a5656eeb927791f680098d72847a67164539d72f56ad69ffd7",
+    VECTORS: "677ff52adaa6b88a2b19e93219238b0751e539afaa7c7d3934740a2c68588d6f",
+    MAIN: "0c1b770359be0d6851eab6e2744ffc44050d48feb05d95c743e52934a02eacad",
+    CONTENT: "ab72282b43ccf28714e57ff9c4cedde2d3736a5e38eb1016c2d8956615c9cdd3",
+    LEAF_MANIFEST: "eada2e7e176152ce759291751a9f65b188d91bb7fd8fa434ac06f4b71097d5af",
+    LEAF_LIB: "921dfabcc57ca544af6d15ea5265b804f54a9964d30d7072c87b86f571656757",
+    LEAF_README: "7cec74bef8cf31c46b6bd7748240e1345bdc588176369b6f256d7549a9d5061c",
+    CRYPTO_LIB: "42b234ab670610d894dff6fce8a6c04ca7761071781a05c9ce6741e2786533de",
+    FACADE_MANIFEST: "5cb088463b61d7cb1e012ea9b82031554b9cbf9ef7d3fa11dd2d0403b40e89e9",
     FACADE_LIB: "90a5ed9ca877470c2f72b2cba9201fb741d9d2edf3a1180fb9c77497245d2f0f",
-    LEAF_README: "fa0e8ff3dd30fe3279f0d952811bcf739db63e2d298a3acaee6659385c23b7e3",
     FACADE_README: "04617ef2b140b76f6e5be4b2fe603d31d370ae0bb77b41f31135f64368c0a754",
-    CHECK_SCRIPT: "08a8b7baae515ba1bb945e14b1a2022a5023b2de02aab94c8d80e67775433b1c",
-    TEST_SCRIPT: "b2996b832e5e4c3da421e072968da71a29ec6f8f7f9b2a4208a3a4dc129a9821",
+    CHECK_SCRIPT: "9bc87be69a13d476a58e6bf7e63f5fd70697d7f57389b03de1a24dc78e679a4e",
+    TEST_SCRIPT: "3ea03e40c5f53942cb90e23ecd9b35822c816310e972995903ea9091f24af543",
     CHECKS: "8d6fe8fb121c7d6d2f7570fb399b6cf984ec2236663964df4749074e34b99107",
     RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
     BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
     WORKFLOW: "e2c1f254d3fd8ae6b6a2709d3b29ca8edb68f31b720b274dfd3581d2193a2aec",
 }
-ALGORITHMS_NAMES = ("SHA-224", "SHA-256", "SHA-384", "SHA-512", "SHA-512/224", "SHA-512/256")
 PACKAGES = (
     ("brynja-core", "0.9.0", ("src/lib.rs",)),
     ("brynja-crypto-cpu", "0.1.1", ("src/lib.rs", "src/sha256.rs", "src/sha512.rs")),
     ("brynja-hash-core", "0.1.0", ("src/lib.rs",)),
-    ("brynja-hash-sha2", "0.1.0", (
-        "src/lib.rs", "src/compress.rs", "src/compress64.rs", "src/digest.rs",
-        "src/error.rs", "src/sha224.rs", "src/sha256.rs", "src/sha384.rs",
-        "src/sha512.rs", "src/sha512_224.rs", "src/sha512_256.rs",
-        "src/sha512_state.rs", "src/sha512_t.rs",
-    )),
+    ("brynja-hash-sha2", "0.1.0", ("src/lib.rs", "src/sha256.rs")),
     ("brynja-hash-sha3", "0.1.0", (
         "src/lib.rs", "src/digest.rs", "src/error.rs", "src/keccak.rs",
         "src/sha3_224.rs", "src/sha3_256.rs", "src/sha3_384.rs",
@@ -88,7 +87,7 @@ PACKAGES = (
 
 
 class AcceptancePolicyError(RuntimeError):
-    """The complete SHA-2 acceptance boundary differs from policy."""
+    """The frozen portable FIPS 202 acceptance boundary differs from policy."""
 
 
 def fail(message: str) -> None:
@@ -114,68 +113,74 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
             fail(f"acceptance code exceeds 500 lines: {relative}")
     manifest = tomllib.loads(loaded[MANIFEST])
     if manifest.get("package") != {
-        "name": "brynja-sha2-public-api-fixture", "version": "0.0.0",
+        "name": "brynja-sha3-public-api-fixture", "version": "0.0.0",
         "edition": "2024", "rust-version": "1.90", "publish": False,
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
         "brynja": {"path": "../../crates/brynja", "version": "=0.24.3", "default-features": False},
-        "brynja-hash-sha2": {
-            "path": "../../crates/brynja-hash-sha2", "version": "=0.1.0",
-            "default-features": False, "features": ["cpu"],
+        "brynja-hash-sha3": {
+            "path": "../../crates/brynja-hash-sha3", "version": "=0.1.0",
+            "default-features": False,
         },
     }
     if manifest.get("dependencies") != expected_dependencies:
         fail("acceptance dependencies are not exact ordinary package edges")
     if manifest.get("features") or manifest.get("build-dependencies"):
         fail("acceptance fixture gained hidden features or build dependencies")
+    leaf_manifest = tomllib.loads(loaded[LEAF_MANIFEST])
+    if leaf_manifest.get("features") != {"default": []}:
+        fail("portable leaf gained a selectable execution feature")
+    if set(leaf_manifest.get("dependencies", {})) != {"brynja-hash-core"}:
+        fail("portable leaf dependency boundary changed")
     lock = tomllib.loads(loaded[LOCK])
     locked = {(item["name"], item["version"]) for item in lock.get("package", [])}
     expected_locked = {
-        ("brynja-sha2-public-api-fixture", "0.0.0"),
-        *((name, version) for name, version, _required in PACKAGES if name not in {"brynja-dtls", "brynja-platform", "brynja-quic-tls"}),
+        ("brynja-sha3-public-api-fixture", "0.0.0"),
+        *((name, version) for name, version, _required in PACKAGES
+          if name not in {"brynja-crypto-cpu", "brynja-dtls", "brynja-platform", "brynja-quic-tls"}),
     }
     if locked != expected_locked or any("source" in item for item in lock.get("package", [])):
         fail("acceptance lockfile package set changed or gained an external source")
-    library = loaded[LIB]
+    fixture = loaded[LIB] + loaded[ALGORITHMS] + loaded[VECTORS]
     for token in (
         "#![no_std]", "pub fn run() -> Result<AcceptanceReport, AcceptanceError>",
-        "one_shot_results: 30", "streaming_results: 36", "check_distinct_identities()?",
-        "skipped_unadmitted_backends: 5", "Sha256BackendSession::for_compiled_target().is_some()",
-        "Sha512BackendSession::for_compiled_target().is_some()", "sha512_256_with_backend",
+        "fixed_output_results: 24", "xof_results: 10", "incremental_squeeze_results: 20",
+        "check_exact_rates()?", "check_zero_output()?", "check_exhaustion()?",
+        "check_domain_separation()?", "SHAKE128_ABC_343", "SHAKE256_ABC_343",
+        "include_bytes!(\"../fixtures/representative.txt\")",
     ):
-        require(library, token, "complete-family fixture")
-    for forbidden in (
-        "cfg(brynja_cpu_evidence)", "for_candidate_evidence", "from_runtime_detection",
-        "std::", "alloc::", "env!", "option_env!", "Command::", "File::", "TcpStream", "UdpSocket",
-    ):
-        if forbidden in library + loaded[ALGORITHMS] + loaded[VECTORS]:
-            fail(f"acceptance fixture crossed forbidden boundary: {forbidden}")
-    for name in ALGORITHMS_NAMES:
-        require(loaded[MAIN], f"{name}: portable scalar; independently verified: NO; FIPS validated: NO", "runnable report")
-        require(loaded[LEAF_README], name, "leaf documentation")
-        require(loaded[FACADE_README], name, "facade documentation")
-    family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256)"
-    require(loaded[LEAF_README], family_label, "leaf family documentation")
-    require(loaded[FACADE_README], family_label, "facade family documentation")
+        require(fixture, token, "complete-family fixture")
     public_algorithms = (
-        ("sha224", "Sha224"),
-        ("sha256", "Sha256"),
-        ("sha384", "Sha384"),
-        ("sha512", "Sha512"),
-        ("sha512_224", "Sha512_224"),
-        ("sha512_256", "Sha512_256"),
+        ("sha3_224", "Sha3_224"), ("sha3_256", "Sha3_256"),
+        ("sha3_384", "Sha3_384"), ("sha3_512", "Sha3_512"),
     )
     for function, state in public_algorithms:
         for namespace in ("leaf", "facade"):
-            require(loaded[ALGORITHMS], f"{namespace}::{function}(input)", "public one-shot coverage")
-            require(loaded[ALGORITHMS], f"{namespace}::{state}::new()", "public streaming coverage")
-    for token in ("Sha224Digest, 28", "Sha256Digest, 32", "Sha384Digest, 48", "Sha512Digest, 64", "Sha512_224Digest, 28", "Sha512_256Digest, 32"):
-        require(loaded[DIGEST], token, "output identity")
-    require(loaded[CHECKS], "python3 scripts/sha2/check-sha2-public-api.py", "repository gate")
-    require(loaded[RUST_MATRIX], "assurance/sha2-public-api/Cargo.toml", "Rust matrix")
-    require(loaded[BARE_METAL], "assurance/sha2-public-api/Cargo.toml", "bare-metal matrix")
-    require(loaded[WORKFLOW], "Run complete SHA-2 public API acceptance", "host CI")
+            require(loaded[ALGORITHMS], f"{namespace}::{function}(input)", "public digest coverage")
+            require(loaded[ALGORITHMS], f"{namespace}::{state}::new()", "public stream coverage")
+    for namespace in ("leaf", "facade"):
+        require(loaded[LIB], f"{namespace}::shake128(input", "public SHAKE128 coverage")
+        require(loaded[LIB], f"{namespace}::shake256(input", "public SHAKE256 coverage")
+    for forbidden in (
+        "cfg(brynja_cpu_evidence)", "for_candidate_evidence", "std::", "alloc::",
+        "unsafe {", "extern \"C\"", "Command::", "File::", "TcpStream", "UdpSocket",
+        "crate::keccak", "leaf::keccak", "raw_keccak",
+    ):
+        if forbidden in fixture:
+            fail(f"acceptance fixture crossed forbidden boundary: {forbidden}")
+    for token in (
+        "execution path: portable-only", "independently verified: NO",
+        "FIPS 140-3 validated: NO", "family status: In progress pending v0.24.4",
+    ):
+        require(loaded[MAIN], token, "runnable acceptance report")
+    family_label = "SHA-3/SHAKE"
+    require(loaded[LEAF_README], family_label, "leaf family documentation")
+    require(loaded[FACADE_README], family_label, "facade family documentation")
+    require(loaded[CHECKS], "python3 scripts/sha3/check-sha3-public-api.py", "repository gate")
+    require(loaded[RUST_MATRIX], "assurance/sha3-public-api/Cargo.toml", "Rust matrix")
+    require(loaded[BARE_METAL], "assurance/sha3-public-api/Cargo.toml", "bare-metal matrix")
+    require(loaded[WORKFLOW], "Run complete SHA-3/SHAKE portable public API acceptance", "host CI")
     if check_hashes:
         if set(EXPECTED_SHA256) != set(FILES):
             fail("acceptance reviewed hash inventory is incomplete")
@@ -185,8 +190,10 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
 
 
 def run(command: list[str], cwd: Path = ROOT, success: bool = True) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(command, cwd=cwd, check=False, text=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, timeout=240)
+    result = subprocess.run(
+        command, cwd=cwd, check=False, text=True, stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT, timeout=240,
+    )
     if (result.returncode == 0) is not success:
         fail(f"unexpected command result ({result.returncode}): {' '.join(command)}\n{result.stdout}")
     return result
@@ -206,7 +213,9 @@ def copy_fixture(destination: Path) -> Path:
     shutil.copytree(ROOT / FIXTURE, fixture, ignore=shutil.ignore_patterns("target"))
     manifest = (fixture / "Cargo.toml").read_text(encoding="utf-8")
     manifest = manifest.replace("../../crates/brynja\"", f'{(ROOT / "crates/brynja").as_posix()}\"')
-    manifest = manifest.replace("../../crates/brynja-hash-sha2\"", f'{(ROOT / "crates/brynja-hash-sha2").as_posix()}\"')
+    manifest = manifest.replace(
+        "../../crates/brynja-hash-sha3\"", f'{(ROOT / "crates/brynja-hash-sha3").as_posix()}\"'
+    )
     (fixture / "Cargo.toml").write_text(manifest, encoding="utf-8")
     return fixture
 
@@ -283,11 +292,13 @@ def package_roots(destination: Path) -> dict[str, Path]:
     for name, _version, _required in PACKAGES:
         command.extend(("-p", name))
     command.extend(("--allow-dirty", "--no-verify", "--offline"))
-    result = subprocess.run(command, cwd=workspace, env=environment, check=False, text=True,
-                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=240)
+    result = subprocess.run(
+        command, cwd=workspace, env=environment, check=False, text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=240,
+    )
     if result.returncode != 0:
-        fail(f"could not package complete SHA-2 closure:\n{result.stdout}")
-    roots = {}
+        fail(f"could not package complete SHA-3 closure:\n{result.stdout}")
+    roots: dict[str, Path] = {}
     packages = destination / "packages"
     packages.mkdir()
     for name, version, required in PACKAGES:
@@ -295,7 +306,9 @@ def package_roots(destination: Path) -> dict[str, Path]:
         if not archive.is_file():
             fail(f"missing package archive: {archive}")
         root = safe_extract(archive, packages)
-        for relative in ("Cargo.toml", "Cargo.toml.orig", "README.md", "LICENSE-APACHE", "LICENSE-MIT", *required):
+        for relative in (
+            "Cargo.toml", "Cargo.toml.orig", "README.md", "LICENSE-APACHE", "LICENSE-MIT", *required,
+        ):
             if not (root / relative).is_file():
                 fail(f"{name} package is missing {relative}")
         roots[name] = root
@@ -307,7 +320,7 @@ def packaged_consumer(destination: Path, roots: dict[str, Path]) -> Path:
     shutil.copytree(ROOT / FIXTURE, fixture, ignore=shutil.ignore_patterns("target", "Cargo.lock"))
     manifest = (fixture / "Cargo.toml").read_text(encoding="utf-8")
     manifest = manifest.replace('path = "../../crates/brynja", ', "")
-    manifest = manifest.replace('path = "../../crates/brynja-hash-sha2", ', "")
+    manifest = manifest.replace('path = "../../crates/brynja-hash-sha3", ', "")
     (fixture / "Cargo.toml").write_text(manifest, encoding="utf-8")
     config = fixture / ".cargo"
     config.mkdir()

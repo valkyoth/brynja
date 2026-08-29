@@ -12,7 +12,7 @@ HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
     "| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |",
-    "| SHA-3/SHAKE (FIPS 202: all four SHA-3 digests and both SHAKE XOFs implemented; final acceptance pending) | 🚧 In progress | ❌ Not independently verified |",
+    "| SHA-3/SHAKE (FIPS 202: all four SHA-3 digests and both SHAKE XOFs pass portable packaged acceptance; cross-backend acceptance pending) | 🚧 In progress | ❌ Not independently verified |",
     "| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |",
     "| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |",
     "| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |",
@@ -23,7 +23,7 @@ COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
 COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
     "| `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream public-API acceptance | ❌ Not verified |",
-    "| `brynja-hash-sha3` | All six complete portable FIPS 202 SHA-3 and SHAKE functions over one private Keccak-f[1600] owner; final family acceptance pending | ❌ Not verified |",
+    "| `brynja-hash-sha3` | All six complete portable FIPS 202 SHA-3 and SHAKE functions over one private Keccak-f[1600] owner with separately packaged downstream portable acceptance; final cross-backend acceptance pending | ❌ Not verified |",
     "| Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-crypto-cpu` | Five implemented but unadmitted SHA-2 candidates across x86_64 SHA, AArch64 SHA2/SHA-512, and RV64 Zknh plus explicit x86 SHA-512 scalar-only policy | ❌ Not independently verified; native admission evidence incomplete |",

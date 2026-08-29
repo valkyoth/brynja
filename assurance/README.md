@@ -43,6 +43,18 @@ This is differential correctness evidence, not package-external acceptance,
 independent cryptographic review, side-channel evidence, or FIPS validation.
 Run it with `python3 scripts/sha3/check-sha3-differential.py`.
 
+The v0.24.3 `sha3-public-api` fixture is the frozen package-external portable
+consumer for all four SHA-3 digests and both SHAKE XOFs. It checks 24 fixed-
+output, ten XOF and twenty incremental-squeeze results through leaf and facade
+APIs over official examples, independent real content, exact and multiple
+rates, zero output, checked exhaustion and domain separation. It packages the
+exact sixteen-package closure in an empty Cargo home, validates safe archive
+contents, and reruns offline with version-only dependencies. Negative fixtures
+reject six corrupt outputs plus API, rate, zero-output, failure, domain, path,
+feature, phase, private-module and package regressions. This freezes portable
+usability for v0.24.4; it is not acceleration, independent review, secret-
+state erasure, or FIPS validation.
+
 The v0.13.0 provider contract adds a separate hash-locked source validator and
 thirteen broken fixtures through `scripts/foundations/check-provider-contract.py` and
 `scripts/foundations/test-provider-contract.py`. The additional remediation fixtures reject

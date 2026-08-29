@@ -35,6 +35,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add a frozen standalone `no_std` consumer for all four SHA-3 digests and
+  both SHAKE XOFs through leaf and facade APIs, covering 24 fixed-output, ten
+  XOF, and twenty incremental-squeeze results over official, independent real-
+  data, exact-rate, multi-rate, zero-output, checked-failure, and domain-
+  separation cases.
+- Package the exact sixteen-crate FIPS 202 closure with an empty Cargo home,
+  safely extract and validate every archive, and rerun the consumer offline
+  with version-only dependencies; negative fixtures reject corrupt outputs,
+  missing semantics, hidden features, invalid phase/private access, and
+  incomplete package contents.
+- Advance the internal facade to `brynja 0.24.3` without changing production
+  cryptography, dependencies, backend admission, independent-review, secret-
+  erasure, FIPS-validation, or publication status. The SHA-3/SHAKE family
+  remains **In progress** through final v0.24.4 cross-backend acceptance.
 - Add complete allocation-free `no_std` SHAKE128 and SHAKE256 one-shot,
   streaming-input, consuming-finalization, and incremental multi-squeeze APIs
   with separate absorb/output types, exact FIPS 202 rates and suffix, checked

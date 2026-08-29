@@ -47,6 +47,8 @@ python3 scripts/sha2/test-sha2-public-api.py
 python3 scripts/sha3/check-sha3.py
 python3 scripts/sha3/test-sha3.py
 python3 scripts/sha3/check-sha3-differential.py
+python3 scripts/sha3/check-sha3-public-api.py
+python3 scripts/sha3/test-sha3-public-api.py
 scripts/sha2/check-sha256-cpu-codegen.sh
 python3 scripts/cpu/check-backend-contract.py
 python3 scripts/cpu/test-backend-contract.py

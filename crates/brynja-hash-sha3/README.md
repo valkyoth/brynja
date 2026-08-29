@@ -28,8 +28,10 @@
 First-party, allocation-free `no_std` SHA-3 and SHAKE family ownership for
 Brynja. Version 0.1.0 now provides all six complete portable FIPS 202 functions
 through distinct fixed-output SHA-3 and extendable-output SHAKE APIs over one
-private Keccak-f[1600] permutation. Portable package acceptance, hardware
-acceleration, independent review, and FIPS 140-3 validation remain later work.
+private Keccak-f[1600] permutation. The complete leaf and facade API now pass
+frozen package-external portable acceptance. Hardware acceleration, final
+cross-backend acceptance, independent review, and FIPS 140-3 validation remain
+later work.
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};

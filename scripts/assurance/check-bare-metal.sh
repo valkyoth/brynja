@@ -14,4 +14,6 @@ while IFS= read -r target; do
         --lib --target "$target"
     cargo check --locked --manifest-path assurance/sha2-public-api/Cargo.toml \
         --lib --target "$target"
+    cargo check --locked --manifest-path assurance/sha3-public-api/Cargo.toml \
+        --lib --target "$target"
 done

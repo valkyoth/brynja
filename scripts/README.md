@@ -32,7 +32,7 @@ file beneath a Cargo `target/` directory, regardless of workspace depth.
 | `repository/` | Workspace, source, documentation, shell, cryptography-origin, status, and script-layout policy |
 | `sanitization/` | Sanitization dependency admission and optimized-code checks |
 | `sha2/` | SHA-2 source policy, public acceptance, CPU code generation, QEMU, and native capture scripts |
-| `sha3/` | SHA-3/SHAKE source policy, differential evidence, and future public acceptance scripts |
+| `sha3/` | SHA-3/SHAKE source policy, differential evidence, and frozen public acceptance scripts |
 | `standards/` | RFC and local authorities, protocol surfaces, and normative requirement generation and validation |
 | `zeroization/` | First-party zeroization source, compiler-artifact, Miri, and sanitizer evidence |
 

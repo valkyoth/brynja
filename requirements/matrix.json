@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "f746579f85b5b59e84aebad4d65c63ce23028e80fc31ce28d360e17e988b8563",
-  "domain_policy_sha256": "41159c08570bf3c6bba8aee1c0808b3100ef77a7f03f31ab1de29120700ae714",
+  "domain_policy_sha256": "fe39cdf182e9f14e110432386050a96200a587f30ce5b0760bc67ac3828e3fb1",
   "policy_sha256": "65434c356f882c54fcbe2f2ec6b474f7df349753308323d18e51d845c2e50b3b",
   "requirements": [
     {
@@ -884,7 +884,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 202 functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, and shared Kani bounds; package-external family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete.",
+      "evidence_gap": "All six portable FIPS 202 functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, shared Kani bounds, and a frozen package-external portable consumer over the complete safely extracted archive closure; acceleration and final cross-backend acceptance, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete.",
       "id": "BRY-REQ-CRYPTO-0002",
       "invariants": [
         "constant-time",
@@ -899,7 +899,7 @@
       "owner": "0.24.2",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {

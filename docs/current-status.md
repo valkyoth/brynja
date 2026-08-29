@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.1 signed; v0.24.2 pentest and both retests passed, awaiting green CI
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance implemented and locally verified, pentest and hosted checks pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -237,10 +237,23 @@ case campaigns without panic, and applies a 240-second child timeout.
 Production SHAKE code is unchanged. Local remediation and the independent
 second retest of exact candidate
 `c7af70e19def950f3a9004c18e5c869ef844c644` pass with zero open findings.
-The signed tag remains blocked pending green GitHub and CodeQL. This does not establish
+The signed tag passed green GitHub and CodeQL. This does not establish
 independent cryptographic review or FIPS validation, complete later family-
 acceptance gates, select a crate for publication, or replace the scheduled
 v0.20.0-to-v0.25.0 cumulative assessment.
+
+The facade now advances to internal `0.24.3`. A standalone downstream
+`no_std` consumer exercises every SHA-3 and SHAKE identity through only the
+leaf and facade public APIs. Twenty-four fixed-output, ten XOF, and twenty
+incremental-squeeze results cover official examples, independent real data,
+partial, exact and multiple rates, zero output, arbitrary tails, checked
+exhaustion and domain separation. The same fixture runs offline from a safely
+extracted exact sixteen-package closure with version-only dependencies, and
+negative fixtures reject output, API, rate, failure, domain, execution-path,
+feature, phase, private-module and package regressions. No production
+cryptography or backend changed; final v0.24.4 cross-backend acceptance,
+independent review, secret erasure and FIPS validation remain absent, so the
+family stays **In progress** and zero crates are selected for publication.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

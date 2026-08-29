@@ -533,6 +533,15 @@ zero-length or repeated caller-owned output cannot expose the raw permutation.
 Caller-selected output length still controls linear public work and must be
 bounded by the calling protocol. Ordinary XOF state makes no secret-erasure,
 independent-review, acceleration, or FIPS-validation claim.
+v0.24.3 freezes the portable consumer boundary before acceleration. The
+standalone `no_std` fixture reaches all six identities only through shipped
+leaf and facade APIs, checks official and independent real-data expectations,
+irregular absorption, multi-squeeze output, exact rates, zero output, checked
+failure and domain separation, and reruns offline from safely extracted exact
+package archives. Hidden features, invalid phase use, private permutation
+access and incomplete package contents fail. This proves portable public
+usability, not accelerated equivalence, secret erasure, independent review, or
+FIPS validation.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

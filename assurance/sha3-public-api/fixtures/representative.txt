@@ -1,0 +1,8 @@
+Brynja complete FIPS 202 public acceptance fixture
+This file represents ordinary application content consumed through shipped APIs.
+It contains punctuation, digits 0123456789, and mixed chunk boundaries.
+SHA-3 fixed-output functions must preserve their separate digest identities.
+SHAKE readers must continue one output stream across every squeeze call.
+The fixture is intentionally public and contains no key or secret material.
+Portable no_std behavior is the acceptance baseline before acceleration.
+End of frozen v0.24.3 corpus.

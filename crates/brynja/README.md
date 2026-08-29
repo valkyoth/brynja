@@ -31,8 +31,10 @@ workspace. It is allocation-independent `no_std` Rust without a C cryptographic 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable FIPS 180-4 SHA-2 algorithms,
 > all six portable FIPS 202 SHA-3 and SHAKE functions, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
 
-All six SHA-2 APIs pass separately packaged downstream `no_std` acceptance through the leaf and facade; that is not independent review or FIPS validation.
-The broader SHA-3/SHAKE acceptance chain remains in progress.
+All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged
+downstream `no_std` acceptance through the leaf and facade; that is not
+independent review or FIPS validation. The SHA-3/SHAKE cross-backend acceptance
+chain remains in progress.
 
 ## Design Boundaries
 
@@ -144,7 +146,7 @@ Only linked sign-off from a named independent reviewer can change independent st
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |
-| SHA-3/SHAKE (FIPS 202: all four SHA-3 digests and both SHAKE XOFs implemented; final acceptance pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-3/SHAKE (FIPS 202: all four SHA-3 digests and both SHAKE XOFs pass portable packaged acceptance; cross-backend acceptance pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -177,7 +179,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-sha2` | All six portable FIPS 180-4 SHA-2 algorithms and complete family ownership |
-| `brynja-hash-sha3` | All six portable FIPS 202 SHA-3 and SHAKE functions; final family acceptance in progress |
+| `brynja-hash-sha3` | All six portable FIPS 202 SHA-3 and SHAKE functions with packaged portable acceptance; final cross-backend acceptance in progress |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

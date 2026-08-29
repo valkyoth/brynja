@@ -2571,7 +2571,34 @@ Exit criteria:
 
 ### v0.24.3 - SHA-3 And SHAKE Portable Public API Usability Acceptance
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes:
+
+- a standalone allocation-free `no_std` consumer imports only the documented
+  `brynja-hash-sha3` leaf and `brynja::crypto` facade and exercises all four
+  SHA-3 digests plus both SHAKE XOFs without private-module, evidence-only, or
+  accelerated access;
+- twenty-four fixed-output checks and ten XOF checks cover official empty and
+  1,600-bit examples, independent text and real-file expectations, partial,
+  exact-rate and multi-rate input, zero output, and 343-byte arbitrary-tail
+  output across multiple squeeze permutations;
+- twenty leaf-and-facade incremental-output checks freeze irregular absorption and squeeze
+  partitions, checked input/output exhaustion remains transactional, and
+  explicit domain-separation negatives distinguish SHA-3, SHAKE128, and
+  SHAKE256 identities;
+- an isolated empty-Cargo-home process packages the exact sixteen-package
+  closure, checks required archive contents, rewrites the consumer to version-
+  only dependencies, and runs it offline from safely extracted archives;
+- executable negative fixtures reject all six corrupted algorithm outputs,
+  missing APIs, rate, zero-output, exhaustion, domain or path evidence, hidden
+  features, absorb-after-squeeze, private permutation access, and incomplete
+  package contents; exact reviewed hashes freeze the fixture and its CI,
+  version-matrix, no_std-target, package and documentation bindings;
+- this milestone changes acceptance code, documentation, and the facade
+  version only. It adds no production cryptography, unsafe code, dependency,
+  backend, admission, secret-erasure, independent-review, FIPS-validation, or
+  publication claim, so the family remains **In progress** through v0.24.4.
 
 Plan scope: Before acceleration or native evidence, freeze and pass a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental multi-squeeze, and forced portable paths, including representative real data, zero-length and multi-block output, authoritative vectors, no_std installation, package contents, checked failures, and domain-separation negative tests; keep the family status In progress.
 

@@ -22,7 +22,7 @@ mapping_rationale = "The SHA-2 semantic surface is governed by the pinned NIST h
 id = "BRY-REQ-CRYPTO-0002"
 owner = "0.24.2"
 lifecycle = "implemented"
-revision = 5
+revision = 6
 decision_ids = ["algorithm.sha3-shake"]
 sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }]
 statement = "Keccak-f[1600], SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256 implement the exact FIPS 202 permutation, distinct rates and outputs, suffixes, padding, domain separation, absorbing-to-squeezing transition, and incremental output rules."
@@ -31,7 +31,7 @@ target = "crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED"
 positive_test = "crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match"
 negative_test = "crates/brynja-hash-sha3/tests/shake256.rs#shake_domain_is_distinct_from_fixed_output_sha3"
 work_bound = "Absorb work is linear in complete input blocks and squeeze work is linear in caller-requested output blocks; both byte domains use checked u128 accumulation, and output is written only after length admission."
-evidence_gap = "All six portable FIPS 202 functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, and shared Kani bounds; package-external family acceptance, acceleration, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete."
+evidence_gap = "All six portable FIPS 202 functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, shared Kani bounds, and a frozen package-external portable consumer over the complete safely extracted archive closure; acceleration and final cross-backend acceptance, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete."
 residual = "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears."
 mapping_rationale = "The SHA-3 and SHAKE semantic surface directly records the complete algorithm family admitted from the pinned current FIPS 202 authority."
 

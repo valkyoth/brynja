@@ -10,7 +10,9 @@ Keep a Changelog and Semantic Versioning.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures
-  that reject removal of either lint binding; independent retest is pending.
+  that reject removal of either lint binding; independent retest of exact
+  candidate `c7bd354e5bcf9a816c366cf24d0d88347771afc5` passed with zero open
+  findings.
 - Refresh the official DNS Parameters evidence after the local v0.24.2 tag
   gate detected IANA's 2026-08-28 update; classify the new
   `_nnu-verification` TXT entry as caller-owned v0.140.0 state, regenerate the

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance implemented and locally verified, pentest and hosted checks pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance and voluntary pentest/retest complete, final local and hosted gates pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -257,6 +257,15 @@ plus v0.24.7-v0.24.11 arbitrary-bit, hardened-state and combined acceptance,
 independent review, complete secret-erasure evidence, and FIPS validation
 remain absent, so the
 family stays **In progress** and zero crates are selected for publication.
+
+The voluntary v0.24.3 assessment found one Low assurance-control gap: the
+standalone public fixture's declared forbidden Clippy lints were not executed.
+The warning is corrected, local and hosted warnings-denied Clippy runs are
+mandatory, and policy mutations reject removal of either binding. Independent
+retest of exact candidate `c7bd354e5bcf9a816c366cf24d0d88347771afc5`
+passed with zero open findings. The permanent report records `PASS`/`PASS` and
+does not add production-code, independent-review, FIPS-validation, backend-
+admission, or publication claims.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

@@ -1,8 +1,8 @@
 # Brynja 0.24.3 Release Notes
 
-Status: pentest Low assurance-control finding remediated; independent retest,
-hosted GitHub and CodeQL, and signed tag pending; no scheduled pentest or
-crates.io publication is required by policy
+Status: voluntary pentest and remediation retest passed; final local gate,
+hosted GitHub and CodeQL, and signed tag pending; no crates.io publication is
+selected
 
 Brynja 0.24.3 freezes package-external portable acceptance for all four SHA-3
 digests and both SHAKE XOFs before any acceleration or native evidence work.
@@ -60,7 +60,8 @@ combined downstream acceptance.
   advisory policy, and SBOM remain mandatory repository gates.
 - The pentest-reported Low assurance-control gap is closed: the fixture's
   declared forbidden Clippy lints are now executed, and its existing warning
-  is corrected. Independent retest remains pending.
+  is corrected. Independent retest of exact candidate
+  `c7bd354e5bcf9a816c366cf24d0d88347771afc5` passed with zero open findings.
 
 ## Security Boundaries
 
@@ -86,7 +87,8 @@ Version 0.24.3 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. Because it
 changes only acceptance tooling, documentation, and the facade version, it has
 no scheduled pentest and no exceptional security trigger. A voluntary review
-may still be recorded. The full cumulative delta remains subject to the
-scheduled backwards-looking v0.25.0 assessment. The exact committed candidate
-must pass the complete local gate plus hosted GitHub and CodeQL before the
-signed tag is authorized.
+was nevertheless completed; its Low assurance-control finding is remediated
+and the retest passed. The full cumulative delta remains subject to the
+scheduled backwards-looking v0.25.0 assessment. The exact report-bearing
+candidate must pass the complete local gate plus hosted GitHub and CodeQL
+before the signed tag is authorized.

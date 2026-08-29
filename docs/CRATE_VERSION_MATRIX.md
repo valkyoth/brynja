@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance implemented, local verification pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance and voluntary pentest/retest complete, final local and hosted gates pending
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.3`. `brynja-hash-core 0.1.0`,
@@ -233,7 +233,10 @@ separation, then repeats from the safely extracted exact sixteen-package
 offline archive closure. This changes no cryptographic implementation,
 dependency or backend admission. Byte-oriented v0.24.4 backend work and the
 v0.24.7-v0.24.11 arbitrary-bit, hardened-state, and combined acceptance remain;
-zero crates are selected for publication.
+zero crates are selected for publication. Its voluntary assessment's one Low
+missing fixture-Clippy enforcement control is remediated, and independent
+retest of exact candidate `c7bd354e5bcf9a816c366cf24d0d88347771afc5`
+passed with zero open findings.
 
 The v0.24.2 stage adds complete portable SHAKE128 and SHAKE256 over the same
 private sponge owner. Separate consuming absorb and incremental output types,

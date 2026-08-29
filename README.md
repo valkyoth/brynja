@@ -251,6 +251,16 @@ through v0.24.11 while the newly explicit arbitrary-bit and hardened secret-
 bearing API profiles, backend evidence, and combined package-external
 acceptance are completed.
 
+The voluntary v0.24.3 assessment found one Low assurance-control gap in that
+repository-only fixture: its declared forbidden Clippy lints were not executed.
+The warning is corrected, local and hosted warnings-denied runs are mandatory,
+and policy mutations reject removal of either binding. Independent retest of
+exact candidate `c7bd354e5bcf9a816c366cf24d0d88347771afc5` passed with zero
+open findings. The permanent
+[v0.24.3 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.3.md)
+records `PASS`/`PASS`; it does not add independent cryptographic review, FIPS
+validation, backend admission, or crates.io publication.
+
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
 and AddressSanitizer claim. Both paths are now enforced and fail closed under

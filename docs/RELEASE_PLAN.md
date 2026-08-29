@@ -2622,7 +2622,7 @@ Exit criteria:
 
 ### v0.24.3 - SHA-3 And SHAKE Portable Public API Usability Acceptance
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes:
 
@@ -2649,7 +2649,11 @@ Implementation notes:
 - this milestone changes acceptance code, documentation, and the facade
   version only. It adds no production cryptography, unsafe code, dependency,
   backend, admission, secret-erasure, independent-review, FIPS-validation, or
-  publication claim, so the family remains **In progress** through v0.24.11.
+  publication claim, so the family remains **In progress** through v0.24.11;
+- the voluntary assessment found one Low missing fixture-Clippy enforcement
+  control. Local and hosted warnings-denied runs, a corrected warning, and
+  removal mutations close it; independent retest of exact candidate
+  `c7bd354e5bcf9a816c366cf24d0d88347771afc5` passed with zero open findings.
 
 Plan scope: Before acceleration or native evidence, freeze and pass a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental multi-squeeze, and forced portable paths, including representative real data, zero-length and multi-block output, authoritative vectors, no_std installation, package contents, checked failures, and domain-separation negative tests; keep the family status In progress.
 

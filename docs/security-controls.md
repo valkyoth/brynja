@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance implemented, local verification pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance and voluntary pentest/retest complete, final local and hosted gates pending
 
 | Control | Foundation enforcement |
 | --- | --- |

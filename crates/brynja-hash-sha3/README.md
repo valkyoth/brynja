@@ -26,12 +26,14 @@
 # brynja-hash-sha3
 
 First-party, allocation-free `no_std` SHA-3 and SHAKE family ownership for
-Brynja. Version 0.1.0 now provides all six complete portable FIPS 202 functions
-through distinct fixed-output SHA-3 and extendable-output SHAKE APIs over one
-private Keccak-f[1600] permutation. The complete leaf and facade API now pass
-frozen package-external portable acceptance. Hardware acceleration, final
-cross-backend acceptance, independent review, and FIPS 140-3 validation remain
-later work.
+Brynja. Version 0.1.0 provides correct portable byte-oriented implementations
+of all six FIPS 202 functions through distinct fixed-output SHA-3 and
+extendable-output SHAKE APIs over one
+private Keccak-f[1600] permutation. The byte-oriented leaf and facade APIs pass
+frozen package-external portable acceptance. Arbitrary-bit and hardened
+secret-bearing profiles, complete internal sanitization, hardware acceleration,
+final cross-backend acceptance, independent review, and FIPS 140-3 validation
+remain later work through v0.24.11.
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};
@@ -49,7 +51,10 @@ assert_eq!(xof.len(), 64);
 
 These APIs are unkeyed hashes, not authentication, MACs, password hashing, or
 raw Keccak. Ordinary states do not promise erasure of input remnants or
-private working state; later keyed constructions require hardened ownership.
+private working state. Distinct hardened states planned at v0.24.10 use the
+admitted sanitization boundary for every private lane, buffer, suffix, squeeze
+cursor, staging value, temporary, failure path, and `Drop`; keyed constructions
+must use that owner rather than these ordinary states.
 
 The exceptional v0.24.0 assessment found one High tracked-build-artifact issue
 in the repository differential harness, not an algorithm error. All generated

@@ -52,8 +52,9 @@ exact sixteen-package closure in an empty Cargo home, validates safe archive
 contents, and reruns offline with version-only dependencies. Negative fixtures
 reject six corrupt outputs plus API, rate, zero-output, failure, domain, path,
 feature, phase, private-module and package regressions. This freezes portable
-usability for v0.24.4; it is not acceleration, independent review, secret-
-state erasure, or FIPS validation. Its standalone forbidden Clippy lints run
+byte-oriented usability for v0.24.4 and feeds the later complete v0.24.11 API
+gate; it is not acceleration, independent review, secret-state erasure, or
+FIPS validation. Its standalone forbidden Clippy lints run
 with warnings denied in both the complete local gate and hosted CI.
 
 The v0.13.0 provider contract adds a separate hash-locked source validator and

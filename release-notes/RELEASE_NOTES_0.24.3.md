@@ -6,8 +6,11 @@ crates.io publication is required by policy
 
 Brynja 0.24.3 freezes package-external portable acceptance for all four SHA-3
 digests and both SHAKE XOFs before any acceleration or native evidence work.
-The SHA-3/SHAKE family remains **In progress** until v0.24.4 reruns this
-unchanged consumer through every admitted backend.
+This remains the byte-oriented portable acceptance milestone. The SHA-3/SHAKE
+family remains **In progress** through v0.24.11: v0.24.4 adds byte-oriented
+backend evidence, while v0.24.6-v0.24.11 make API completeness machine-readable
+and close arbitrary-bit, hardened secret-bearing, internal sanitization, and
+combined downstream acceptance.
 
 ## Added
 
@@ -28,6 +31,16 @@ unchanged consumer through every admitted backend.
   private permutation access, and incomplete package contents.
 - Standalone Clippy enforcement with warnings denied in the local repository
   gate and hosted CI; policy fixtures reject removal of either binding.
+- A roadmap-wide API-profile and secret-state audit. New fail-closed milestones
+  require every primitive, construction, and protocol consumer to dispose of
+  all safe operation shapes explicitly and register every Brynja-owned secret
+  field, temporary, lifecycle edge, sanitization symbol, evidence artifact,
+  caller handoff, and residual gap.
+- Separate ordinary public-data and hardened secret-bearing SHA-2/SHA-3/SHAKE
+  profiles, canonical arbitrary-bit APIs, and final package-external acceptance
+  before either expanded family returns to **Fully implemented** status.
+- Separately locked RustCrypto-trait, synchronous I/O, and asynchronous I/O
+  companion-adapter milestones before the final public API freeze.
 
 ## Verification
 
@@ -49,10 +62,14 @@ code, assembly, dependency, runtime detection, accelerated candidate, or
 backend admission. The only execution path accepted here is the existing
 portable safe-Rust implementation. Raw Keccak-f[1600] remains private.
 
-SHA-3 and SHAKE remain ordinary unkeyed functions. They make no secret-state,
-register, spill, stack, cache, crash-snapshot, independent-review, or FIPS
-140-3 validation claim. Protocols must bound caller-selected XOF output for
-their own semantics.
+SHA-3 and SHAKE currently remain ordinary unkeyed public-data functions. A
+caller can clear its own buffers but cannot clear private sponge state. The
+planned hardened owner therefore uses Brynja's admitted sanitization boundary
+to destroy every Brynja-owned lane, partial buffer, suffix, squeeze state,
+temporary, failure path, and `Drop` copy before any keyed or secret-bearing use
+is admitted. Register, spill, cache, OS, compiler-copy, crash-snapshot,
+independent-review, and FIPS 140-3 validation claims remain absent. Protocols
+must also bound caller-selected XOF output for their own semantics.
 
 ## Release Process
 

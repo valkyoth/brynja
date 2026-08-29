@@ -1,7 +1,7 @@
 {
-  "policy_sha256": "cc5c0b745e1e516a8a4f6fa0e3e461ac1fc1bbb4381866889c40ba396594c25e",
+  "policy_sha256": "8fcc90672cc29f8b84c17f63a74a8ce091337563e10471f6727964094cc93dd8",
   "schema": 2,
-  "source_ledger_sha256": "86a234f6e9215904a8e047d5d8060bf2a0e83f311ac5d9363597ae08d8a1e932",
+  "source_ledger_sha256": "8fbd01155c6e5e2e0e793f53ac6e9ac1c98ba258e142fe82082c096593d90632",
   "surfaces": [
     {
       "code_target": "crates/brynja-crypto/src/aes.rs",
@@ -217,7 +217,7 @@
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
       ],
-      "owner": "0.24.6",
+      "owner": "0.24.12",
       "rationale": "The complete SP 800-185 cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF family is planned before 1.0 with exact bit-string encoding, keyed cleanup, portable usability, parallel execution, and cross-backend acceptance.",
       "test_target": "tests/surface/primitives.rs#sp800_185"
     },

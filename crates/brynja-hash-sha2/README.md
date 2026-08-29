@@ -26,8 +26,8 @@
 # brynja-hash-sha2
 
 First-party, allocation-free `no_std` SHA-2 implementations for Brynja. The
-crate provides all six complete portable FIPS 180-4 SHA-2 algorithms through
-one-shot and streaming APIs. The optional `cpu` feature added at v0.22.1 and extended
+crate provides correct portable byte-oriented one-shot and streaming APIs for
+all six FIPS 180-4 SHA-2 algorithms. The optional `cpu` feature added at v0.22.1 and extended
 with the unadmitted RV64 Zknh candidate at v0.22.2 accepts an
 already tested `brynja-crypto-cpu` session without changing scalar ownership.
 Its x86_64, AArch64, and RISC-V candidates remain unadmitted pending native
@@ -38,8 +38,11 @@ SHA-512/256 with exact FIPS SHA-512/t IV derivation.
 v0.23.3 extends the forced backend API to SHA-224 and all four SHA-512-family
 identities. AArch64 SHA-512 and RV64 Zknh SHA-512 candidates remain
 unadmitted; x86_64 SHA-512 remains an explicit scalar-only decision. v0.23.4
-closes the complete family with source and separately packaged downstream
-acceptance through only documented public APIs.
+closes byte-oriented family usability with source and separately packaged
+downstream acceptance through only documented public APIs. The wider family
+remains **In progress** until v0.24.7-v0.24.11 add arbitrary-bit inputs,
+distinct hardened secret-bearing states, complete internal sanitization, and
+combined downstream acceptance.
 
 ## Example
 
@@ -124,10 +127,12 @@ Cargo package contents. It needs no network or private test hook.
 
 ## Cryptography Verification Status
 
-The complete portable FIPS 180-4 SHA-2 family is implemented through v0.23.2,
+All six portable FIPS 180-4 SHA-2 byte-oriented algorithms are implemented through v0.23.2,
 and v0.23.3 adds complete forced candidate APIs while keeping every backend
 unadmitted pending native evidence. v0.23.4 completes packaged downstream
-family acceptance. No code in this crate has been independently reviewed. A component only moves
+byte-oriented family acceptance. Arbitrary-bit and hardened secret-bearing
+profiles remain planned through v0.24.11, so the expanded family is still in
+progress. No code in this crate has been independently reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
 fuzzing, and pentesting do not by themselves constitute independent
@@ -135,16 +140,17 @@ verification.
 
 | Algorithm | Implementation chain | Independently verified |
 | --- | --- | --- |
-| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not verified |
+| SHA-2 (all six identities have complete byte APIs; arbitrary-bit and hardened secret-bearing profiles pending) | 🚧 In progress | ❌ Not verified |
 
 These are unkeyed hashes. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS
-140-3 validation claim. Ordinary SHA-2 states are intended for
-unkeyed hashing and do not guarantee erasure of remnants when their input
-contains secrets. A
-caller cannot erase the private working state, message schedule, or buffered
-input itself. HMAC and every future secret-derived consumer must add hardened
-secret ownership and emitted-code-verified cleanup before admission.
+140-3 validation claim. Ordinary SHA-2 states are intended for unkeyed hashing
+and do not guarantee erasure of remnants when their input contains secrets. A
+caller cannot erase private working state, schedules, or buffered input. The
+distinct hardened profiles planned at v0.24.8 use Brynja's admitted
+sanitization mechanism for every owned chaining state, partial buffer,
+schedule, block copy, temporary, and terminal path; HMAC and every future
+secret-derived consumer must use those owners.
 
 See the [full project documentation](https://github.com/valkyoth/brynja),
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md),

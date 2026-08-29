@@ -21,8 +21,8 @@ certificate-bound operational-environment claim.
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
-| `brynja-hash-sha2` | All six complete portable FIPS 180-4 SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream public-API acceptance | ❌ Not verified |
-| `brynja-hash-sha3` | All six complete portable FIPS 202 SHA-3 and SHAKE functions over one private Keccak-f[1600] owner with separately packaged downstream portable acceptance; final cross-backend acceptance pending | ❌ Not verified |
+| `brynja-hash-sha2` | All six FIPS 180-4 byte-oriented SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream acceptance; arbitrary-bit and hardened secret-bearing profiles pending | ❌ Not verified |
+| `brynja-hash-sha3` | All six FIPS 202 byte-oriented SHA-3 and SHAKE functions over one private Keccak-f[1600] owner with separately packaged downstream acceptance; arbitrary-bit, hardened secret-bearing, and final cross-backend profiles pending | ❌ Not verified |
 | Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Five implemented but unadmitted SHA-2 candidates across x86_64 SHA, AArch64 SHA2/SHA-512, and RV64 Zknh plus explicit x86 SHA-512 scalar-only policy | ❌ Not independently verified; native admission evidence incomplete |
@@ -42,19 +42,22 @@ certificate-bound operational-environment claim.
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
-The implemented portion currently consists of all six complete portable FIPS
-180-4 SHA-2 algorithms with separately packaged downstream public-API
-acceptance; all six complete portable FIPS 202 SHA-3 and SHAKE functions over
-one private Keccak-f[1600] owner with separately packaged downstream portable
-acceptance; the shared alert/failure,
+The implemented portion currently consists of all six portable FIPS 180-4
+SHA-2 byte-oriented algorithms with separately packaged downstream acceptance;
+all six portable FIPS 202 SHA-3 and SHAKE byte-oriented functions over one
+private Keccak-f[1600] owner with separately packaged downstream acceptance;
+the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
 provider, entropy/secure-random, typed-clock, and pending-operation foundations;
 the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
-No cryptographic primitive outside those six portable SHA-2 algorithms and
-the six named portable FIPS 202 functions, schema-driven ASN.1
+The SHA-2 and FIPS 202 mathematical byte APIs are usable, but complete
+arbitrary-bit and hardened secret-bearing profiles remain planned through
+v0.24.11 and therefore both expanded families remain **In progress**. No
+cryptographic primitive outside those six portable SHA-2 algorithms and the
+six named portable FIPS 202 functions, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release

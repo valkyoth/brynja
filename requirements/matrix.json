@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "f746579f85b5b59e84aebad4d65c63ce23028e80fc31ce28d360e17e988b8563",
-  "domain_policy_sha256": "fe39cdf182e9f14e110432386050a96200a587f30ce5b0760bc67ac3828e3fb1",
-  "policy_sha256": "65434c356f882c54fcbe2f2ec6b474f7df349753308323d18e51d845c2e50b3b",
+  "closure_policy_sha256": "8b46fd9be0823e9496f40fdc94d8e7e91ee81013e969a95e37583357d133f284",
+  "domain_policy_sha256": "1080275468837054ffbf0d3855a316aae9ec9872b8fa07a8780d4f5ef8ee7e8c",
+  "policy_sha256": "424fb4b1242337c71b9799441db13839e4ea7927f0815e731c8d14a135a56888",
   "requirements": [
     {
       "applicability": "delegate",
@@ -765,7 +765,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 180-4 SHA-2 algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; a separately packaged downstream consumer accepts every family API, while all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, side-channel, independent-review, secret-state-erasure, and FIPS-validation evidence remains incomplete.",
+      "evidence_gap": "All six portable FIPS 180-4 SHA-2 byte-oriented algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; a separately packaged downstream consumer accepts every byte API. Canonical arbitrary-bit APIs, distinct hardened secret-bearing owners using the admitted sanitization boundary, complete internal-copy destruction evidence, and combined package acceptance remain planned through v0.24.7-v0.24.11; all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, side-channel, independent-review, and FIPS-validation evidence remains incomplete.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -779,7 +779,7 @@
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -884,7 +884,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 202 functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, shared Kani bounds, and a frozen package-external portable consumer over the complete safely extracted archive closure; acceleration and final cross-backend acceptance, independent review, side-channel measurements, secret-state erasure, and FIPS validation remain incomplete.",
+      "evidence_gap": "All six portable FIPS 202 byte-oriented functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, shared Kani bounds, and a frozen package-external portable consumer over the safely extracted archive closure. Canonical arbitrary-bit APIs, distinct hardened secret-bearing sponge owners using the admitted sanitization boundary, complete internal-copy destruction evidence, acceleration and combined cross-backend acceptance remain planned through v0.24.4 and v0.24.9-v0.24.11; independent review, side-channel measurements, and FIPS validation remain incomplete.",
       "id": "BRY-REQ-CRYPTO-0002",
       "invariants": [
         "constant-time",
@@ -899,7 +899,7 @@
       "owner": "0.24.2",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -914,12 +914,12 @@
             "0.22.0",
             "0.23.0",
             "0.24.0",
-            "0.24.6",
-            "0.24.7",
-            "0.24.8",
-            "0.24.9",
-            "0.24.10",
-            "0.24.11",
+            "0.24.12",
+            "0.24.13",
+            "0.24.14",
+            "0.24.15",
+            "0.24.16",
+            "0.24.17",
             "0.25.0",
             "0.26.0",
             "0.27.0",
@@ -3064,7 +3064,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Exact encoding, arbitrary-bit, official-example, differential, secret-cleanup, public-package, parallel-execution, cross-backend, proof, timing, independent-review and FIPS-validation evidence remains unresolved through v0.24.6-v0.24.11.",
+      "evidence_gap": "Exact encoding, arbitrary-bit, official-example, differential, secret-cleanup, public-package, parallel-execution, cross-backend, proof, timing, independent-review and FIPS-validation evidence remains unresolved through v0.24.12-v0.24.17.",
       "id": "BRY-REQ-CRYPTO-0014",
       "invariants": [
         "algorithm-admission",
@@ -3079,10 +3079,10 @@
       "lifecycle": "planned",
       "mapping_rationale": "The dedicated SP 800-185 surface is jointly governed by the pinned current FIPS 202 permutation and the pinned derived-function recommendation, without broadening either source to unrelated Keccak constructions.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.24.6",
+      "owner": "0.24.12",
       "profile": "crypto-encoding-pkix",
       "residual": "The 2016 final remains current while NIST's announced revision is pending; the lifecycle monitor must review any draft or final change before it can alter this requirement, and no automated status observation can admit or reclassify code.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -3097,12 +3097,12 @@
             "0.22.0",
             "0.23.0",
             "0.24.0",
-            "0.24.6",
-            "0.24.7",
-            "0.24.8",
-            "0.24.9",
-            "0.24.10",
-            "0.24.11",
+            "0.24.12",
+            "0.24.13",
+            "0.24.14",
+            "0.24.15",
+            "0.24.16",
+            "0.24.17",
             "0.25.0",
             "0.26.0",
             "0.27.0",
@@ -3122,12 +3122,12 @@
           "id": "nist:NIST.SP.800-185.pdf",
           "kind": "local",
           "milestones": [
-            "0.24.6",
-            "0.24.7",
-            "0.24.8",
-            "0.24.9",
-            "0.24.10",
-            "0.24.11"
+            "0.24.12",
+            "0.24.13",
+            "0.24.14",
+            "0.24.15",
+            "0.24.16",
+            "0.24.17"
           ],
           "role": "sha3-derived",
           "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
@@ -29900,9 +29900,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "6e0988cf6778577b3c327af5df2d569727b5782615ea1d40e99e18715a9d8502",
+  "residual_policy_sha256": "e0823cc3fda69f61d33010dfaa9c1f59736ed9031d7bfd779101578675718770",
   "schema": 5,
-  "source_ledger_sha256": "86a234f6e9215904a8e047d5d8060bf2a0e83f311ac5d9363597ae08d8a1e932",
-  "surface_register_sha256": "afe5a4c0e4b9da4979dea9c5141f102b9259ad2e3a9a07832d97999ff632c168",
-  "transport_policy_sha256": "cd764466599512e7bde4ca72db4e517ac39e0a267c5398d678c22044a8641210"
+  "source_ledger_sha256": "8fbd01155c6e5e2e0e793f53ac6e9ac1c98ba258e142fe82082c096593d90632",
+  "surface_register_sha256": "767ec981798594b7c0fa3bf840cf35d2ad56a2cd98d1940558aef9e71c3f0cb5",
+  "transport_policy_sha256": "92f0f673c1f1d97476b66429018ce83432a8fe34dbfbffa046bbaef998c932c0"
 }

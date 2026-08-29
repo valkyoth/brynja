@@ -50,8 +50,8 @@ def main() -> int:
     reject_policy(
         "missing-documentation",
         acceptance.LEAF_README,
-        "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256)",
-        "SHA-2 (incomplete family)",
+        "SHA-2 (all six identities have complete byte APIs; arbitrary-bit and hardened secret-bearing profiles pending)",
+        "incomplete hash family",
     )
     reject_policy(
         "backend-accounting",

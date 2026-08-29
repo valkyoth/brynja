@@ -88,7 +88,7 @@ local = ["NIST.FIPS.180-4.pdf", "NIST.FIPS.197-upd1.pdf", "NIST.FIPS.202.pdf", "
 
 [[domain]]
 id = "sha3-derived"
-milestones = ["0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11"]
+milestones = ["0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17"]
 rfcs = []
 local = ["NIST.FIPS.202.pdf", "NIST.SP.800-185.pdf"]
 

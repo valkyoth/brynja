@@ -824,9 +824,9 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for all six SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, then rerun the unchanged packaged fixture through portable and every admitted backend; rerun affected evidence after any fix and mark the family Fully implemented only when this final cross-backend gate passes.",
+      "scope": "Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for the six existing byte-oriented SHA-3/SHAKE APIs on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, rerun the unchanged v0.24.3 fixture through portable and every admitted backend, and keep the family In progress until later bit-string and hardened-state profiles pass final acceptance.",
       "source_ids": [],
-      "title": "SHA-3 And SHAKE Acceleration Evidence And Final Acceptance",
+      "title": "SHA-3 And SHAKE Byte-Oriented Acceleration Evidence",
       "version": "0.24.4"
     },
     {
@@ -844,17 +844,83 @@
       "version": "0.24.5"
     },
     {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement a machine-readable, CI-enforced register that assigns every current and planned primitive, construction and protocol consumer its complete safe public API profiles and every secret-owning type, field, temporary, lifecycle edge, sanitization symbol, evidence artifact and residual gap; distinguish ordinary public-data state from hardened secret-bearing state, reject unsafe or nonstandard conveniences explicitly, and block implementation exit, composition and Fully implemented status when any promised operation, input domain, ownership mode or internal cleanup duty lacks an owner.",
+      "source_ids": [],
+      "title": "Cryptographic API Profile And Secret-State Closure Register",
+      "version": "0.24.6"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Extend all six SHA-2 identities with canonical FIPS 180-4 arbitrary-bit-message one-shot and incremental APIs, including unambiguous final partial-byte representation, exact bit-length exhaustion, byte-aligned equivalence, padding at every tail position, public consumer examples, vectors and proofs, while preserving the existing byte APIs and every scalar or accelerated digest identity.",
+      "source_ids": [],
+      "title": "Complete SHA-2 Arbitrary-Bit Input APIs",
+      "version": "0.24.7"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal path; prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.",
+      "source_ids": [],
+      "title": "Complete Hardened SHA-2 State APIs",
+      "version": "0.24.8"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Extend all four SHA-3 digests and both SHAKE XOFs with canonical FIPS 202 arbitrary-bit-message one-shot, incremental absorb and incremental squeeze APIs, including exact delimited suffix composition, partial-byte validation, bit-length exhaustion, byte-aligned equivalence and every rate/tail boundary without exposing raw Keccak-f[1600].",
+      "source_ids": [],
+      "title": "Complete SHA-3 And SHAKE Arbitrary-Bit Input APIs",
+      "version": "0.24.9"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation and Drop; keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.",
+      "source_ids": [],
+      "title": "Complete Hardened SHA-3 And SHAKE State APIs",
+      "version": "0.24.10"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation and Drop paths, inspect compiler-resistant cleanup across supported compilers and targets, verify caller-versus-Brynja ownership, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.",
+      "source_ids": [],
+      "title": "Complete Hash API And Zeroization Usability Acceptance",
+      "version": "0.24.11"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0014"
       ],
-      "scope": "Bind the current final SP 800-185 authority and its announced revision state, implement exact left_encode, right_encode, encode_string and bytepad with checked bit-length arithmetic and canonical arbitrary-bit-string inputs, then complete cSHAKE128 and cSHAKE256 with N and S customization, empty-N-and-S SHAKE equivalence, fixed and XOF output, one-shot, streaming and incremental squeeze APIs, exact domain separation, official examples, proofs, and no raw permutation exposure.",
+      "scope": "Bind the current final SP 800-185 authority and its announced revision state, implement exact left_encode, right_encode, encode_string and bytepad with checked bit-length arithmetic and canonical arbitrary-bit-string inputs, then complete cSHAKE128 and cSHAKE256 with N and S customization, empty-N-and-S SHAKE equivalence, fixed and XOF output, ordinary and hardened secret-bearing one-shot, streaming and incremental squeeze APIs over the v0.24.10 owner, exact domain separation, complete internal sanitization, official examples, proofs and no raw permutation exposure.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
       ],
       "title": "SP 800-185 Encoding Foundation And Complete cSHAKE",
-      "version": "0.24.6"
+      "version": "0.24.12"
     },
     {
       "boundary": null,
@@ -865,51 +931,51 @@
         "nist:NIST.SP.800-185.pdf"
       ],
       "title": "Complete KMAC And KMACXOF",
-      "version": "0.24.7"
+      "version": "0.24.13"
     },
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, official examples, partition and collision-separation negatives, proofs, and public types that cannot silently flatten a tuple into one byte string.",
+      "scope": "Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, ordinary and hardened secret-bearing whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, complete internal sanitization, official examples, partition and collision-separation negatives, proofs and public types that cannot silently flatten a tuple into one byte string.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
       ],
       "title": "Complete TupleHash And TupleHashXOF",
-      "version": "0.24.8"
+      "version": "0.24.14"
     },
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, a deterministic bounded sequential no_std path, caller-scheduled ordered leaf jobs for real parallel no_std use, and a separate optional zero-dependency std executor; cover partial and empty leaves, worker failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs, and no hidden allocation in the core crate.",
+      "scope": "Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-dependency std executor; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
       ],
       "title": "Complete ParallelHash And ParallelHashXOF",
-      "version": "0.24.9"
+      "version": "0.24.15"
     },
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, secret cleanup and misuse failures while keeping the derived family In progress.",
+      "scope": "Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through ordinary and hardened secret-bearing one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, complete internal cleanup and misuse failures while keeping the derived family In progress.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
       ],
       "title": "SP 800-185 Portable Public API Usability Acceptance",
-      "version": "0.24.10"
+      "version": "0.24.16"
     },
     {
       "boundary": null,
       "requirement_ids": [],
-      "scope": "Rerun the unchanged v0.24.10 fixture through portable and every admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs and bounded failure, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and cleanup evidence affected by the derived constructions, and mark SP 800-185 Fully implemented only when every named instance and backend has an explicit passing or unadmitted disposition on the final code.",
+      "scope": "Rerun the unchanged v0.24.16 ordinary and hardened fixture through portable and every cleanup-qualified admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs, bounded failure and complete worker cleanup, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and sanitization evidence, and mark SP 800-185 Fully implemented only when every named instance, ownership profile and backend has an explicit passing or unadmitted disposition on the final code.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
       ],
       "title": "SP 800-185 Cross-Backend And Parallel Final Acceptance",
-      "version": "0.24.11"
+      "version": "0.24.17"
     },
     {
       "boundary": {
@@ -917,10 +983,10 @@
         "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
       },
       "requirement_ids": [],
-      "scope": "Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation.",
+      "scope": "Implement complete byte and canonical arbitrary-bit streaming and one-shot SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, ordinary and hardened secret-bearing states, official vectors, checked bit exhaustion, complete internal sanitization, public consumer APIs and conspicuous collision warnings; add no modern facade, default, TLS, PKIX, FIPS or general-hash edge, and require later HMAC, HKDF and OpenPGP consumers to use separately typed admission without reimplementation.",
       "source_ids": [],
       "title": "Complete First-Party Legacy SHA-1",
-      "version": "0.24.12"
+      "version": "0.24.18"
     },
     {
       "boundary": {
@@ -928,10 +994,10 @@
         "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
       },
       "requirement_ids": [],
-      "scope": "Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use.",
+      "scope": "Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including byte and canonical arbitrary-bit one-shot and streaming input, padding, little-endian bit length, ordinary and hardened secret-bearing states, complete internal sanitization, official and independent vectors, checked exhaustion and public compatibility APIs with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade or FIPS use.",
       "source_ids": [],
       "title": "Complete First-Party Legacy MD5",
-      "version": "0.24.13"
+      "version": "0.24.19"
     },
     {
       "boundary": {
@@ -939,10 +1005,10 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters.",
+      "scope": "Package and exercise every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile against real files and authoritative digests, inspect all internal cleanup paths and prove warning, dependency, feature and symbol isolation; no legacy result or ordinary non-erasing state can satisfy a modern or secret-bearing policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters over hardened owners.",
       "source_ids": [],
       "title": "Legacy SHA-1 And MD5 Usability And Isolation Acceptance",
-      "version": "0.24.14"
+      "version": "0.24.20"
     },
     {
       "boundary": null,
@@ -5994,7 +6060,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Freeze separately locked downstream companion workspaces for future brynja-rustls and brynja-tokio packages; keep both absent from the core workspace lockfile and every brynja facade, engine, crypto, default, all-features, legacy, bare-metal and FIPS-module edge; admit third-party Rust dependencies only inside the adapter that implements their API, with exact minimal features, freshness, advisory, license, MSRV, SBOM and native-code closure policy; and make the first-party Rust cryptography golden rule permanent and machine-enforced without implementing either adapter yet.",
+      "scope": "Freeze separately locked downstream companion workspaces for future brynja-rustls, brynja-tokio, brynja-rustcrypto and brynja-io packages; keep all companions absent from the core workspace lockfile and every brynja facade, engine, crypto, default, all-features, legacy, bare-metal and FIPS-module edge; admit third-party Rust dependencies only inside the adapter that implements their API, with exact minimal features, freshness, advisory, license, MSRV, SBOM and native-code closure policy; and make the first-party Rust cryptography golden rule permanent and machine-enforced without implementing an adapter yet.",
       "source_ids": [],
       "title": "Optional Ecosystem Adapter And Dependency Boundary",
       "version": "0.151.1"
@@ -6027,10 +6093,43 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Qualify brynja-rustls and brynja-tokio dependency direction, exact lockfiles, feature allowlists, native-code absence, package archives, SBOMs, MSRV/latest-stable compatibility, cancellation and hostile-I/O behavior, independent-peer interoperability and framework upgrades; prove the main Brynja graph remains byte-for-byte independent of both; keep both outside brynja-fips-module; and permit any later adapter-level approved-operation claim only through an exact certificate-bound module handle, numbered review and applicable operational-environment evidence without enabling rustls's fips feature or changing the validated artifact.",
+      "scope": "Qualify brynja-rustls and the TLS-stream portion of brynja-tokio for dependency direction, exact lockfiles, feature allowlists, native-code absence, package archives, SBOMs, MSRV/latest-stable compatibility, cancellation, hostile-I/O behavior, independent-peer interoperability and framework upgrades; prove the main Brynja graph remains byte-for-byte independent of both, keep both outside brynja-fips-module, and permit a later adapter-level approved-operation claim only through an exact certificate-bound module handle, numbered review and applicable operational-environment evidence without enabling rustls's fips feature or changing the validated artifact.",
       "source_ids": [],
-      "title": "Ecosystem Adapter Isolation And Interoperability Gate",
+      "title": "Rustls And Tokio Adapter Isolation And Interoperability Gate",
       "version": "0.151.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement and prepare for separate publication a separately locked `brynja-rustcrypto` adapter over the then-current stable RustCrypto digest, MAC, cipher, AEAD, signature, KEM and randomness trait packages using only exact Brynja implementations; map ordinary and hardened ownership honestly, never implement Clone, reset or serializable-state traits for hardened owners, retain caller-buffer and failure-atomic guarantees, disable alloc and default features where possible, and admit no RustCrypto algorithm implementation, native code, reverse dependency, implicit provider or FIPS claim.",
+      "source_ids": [],
+      "title": "Brynja RustCrypto Trait Compatibility Adapter",
+      "version": "0.151.5"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement first-party `brynja-io` std Read/Write and separately locked `brynja-tokio` AsyncRead/AsyncWrite utilities for ordinary and hardened hashing, XOF output, signing/prehash and verification workflows over bounded caller-owned buffers; preserve partial I/O, cancellation, backpressure, cleanup and exact output ownership, provide file and stream conveniences without allocation in underlying cryptography, and prohibit unauthenticated plaintext streaming, raw AEAD-over-stream framing or a second cryptographic implementation.",
+      "source_ids": [],
+      "title": "Standard And Async Cryptographic I/O Adapters",
+      "version": "0.151.6"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Package and qualify brynja-rustls, brynja-tokio, brynja-rustcrypto and brynja-io through public downstream applications across supported Rust, OS and no_std-applicable profiles; verify exact dependency isolation, latest-compatible framework surfaces, ordinary versus hardened state semantics, hostile I/O, cancellation, cleanup, interoperability, documentation and absence from the main, legacy, bare-metal and FIPS-module graphs before final API freeze.",
+      "source_ids": [],
+      "title": "Complete Ecosystem API Adapter Acceptance",
+      "version": "0.151.7"
     },
     {
       "boundary": {
@@ -6423,7 +6522,7 @@
         "rationale": "These newly planned OpenPGP implementation stops cannot inherit TLS or PKIX authority. v0.163.0 first authenticates RFC 9580, its obsoleted lineage, errata, referenced algorithm and compression authorities, and the mutable OpenPGP registry, then generates exact requirement and surface ownership before any later OpenPGP code is admitted."
       },
       "requirement_ids": [],
-      "scope": "Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.12 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.",
+      "scope": "Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.18 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.",
       "source_ids": [],
       "title": "OpenPGP Legacy SHA-1 Consumer Admission Review",
       "version": "0.169.2"
@@ -7803,7 +7902,7 @@
       ],
       "id": "BRY-REQ-CRYPTO-0014",
       "lifecycle": "planned",
-      "owner": "0.24.6",
+      "owner": "0.24.12",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
@@ -10370,12 +10469,12 @@
         "0.22.0",
         "0.23.0",
         "0.24.0",
-        "0.24.6",
-        "0.24.7",
-        "0.24.8",
-        "0.24.9",
-        "0.24.10",
-        "0.24.11",
+        "0.24.12",
+        "0.24.13",
+        "0.24.14",
+        "0.24.15",
+        "0.24.16",
+        "0.24.17",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -10427,12 +10526,12 @@
     {
       "id": "nist:NIST.SP.800-185.pdf",
       "milestones": [
-        "0.24.6",
-        "0.24.7",
-        "0.24.8",
-        "0.24.9",
-        "0.24.10",
-        "0.24.11"
+        "0.24.12",
+        "0.24.13",
+        "0.24.14",
+        "0.24.15",
+        "0.24.16",
+        "0.24.17"
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0014"

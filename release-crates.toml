@@ -41,14 +41,14 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Retain all six complete SHA-2 implementations and prove their one-shot, streaming, identity, output-width, exhaustion, and forced-route APIs through a separately packaged downstream consumer."
+reason = "Retain all six SHA-2 byte-oriented implementations and prove their one-shot, streaming, identity, output-width, exhaustion, and forced-route APIs through a separately packaged downstream consumer; arbitrary-bit and hardened profiles remain in progress through v0.24.11."
 
 [crates."brynja-hash-sha3"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add complete portable SHAKE128 and SHAKE256 over the private Keccak-f[1600] owner; the family remains unpublished and in progress through v0.24.4."
+reason = "Add complete byte-oriented portable SHAKE128 and SHAKE256 over the private Keccak-f[1600] owner; the family remains unpublished and in progress through v0.24.11 arbitrary-bit, hardened-state, and combined acceptance."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

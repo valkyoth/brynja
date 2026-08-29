@@ -46,15 +46,15 @@ EXPECTED_SHA256: dict[Path, str] = {
     LIB: "07f19e18011ee25f4dbf86742c5a6d8d51e9ad7bf27709a46b662b4eace559f3",
     ALGORITHMS: "adb8985464a1c2a5656eeb927791f680098d72847a67164539d72f56ad69ffd7",
     VECTORS: "677ff52adaa6b88a2b19e93219238b0751e539afaa7c7d3934740a2c68588d6f",
-    MAIN: "0c1b770359be0d6851eab6e2744ffc44050d48feb05d95c743e52934a02eacad",
+    MAIN: "5b197ea233e484084eb5a558ca7f39e5f5d031f0f79d15b07c423b36800b21a4",
     CONTENT: "ab72282b43ccf28714e57ff9c4cedde2d3736a5e38eb1016c2d8956615c9cdd3",
     LEAF_MANIFEST: "eada2e7e176152ce759291751a9f65b188d91bb7fd8fa434ac06f4b71097d5af",
     LEAF_LIB: "921dfabcc57ca544af6d15ea5265b804f54a9964d30d7072c87b86f571656757",
-    LEAF_README: "7cec74bef8cf31c46b6bd7748240e1345bdc588176369b6f256d7549a9d5061c",
+    LEAF_README: "3684cb62f1d6001917fb09b58ab00a791434b95e34c4e8982b868c2a4a2e81a5",
     CRYPTO_LIB: "42b234ab670610d894dff6fce8a6c04ca7761071781a05c9ce6741e2786533de",
     FACADE_MANIFEST: "5cb088463b61d7cb1e012ea9b82031554b9cbf9ef7d3fa11dd2d0403b40e89e9",
     FACADE_LIB: "90a5ed9ca877470c2f72b2cba9201fb741d9d2edf3a1180fb9c77497245d2f0f",
-    FACADE_README: "04617ef2b140b76f6e5be4b2fe603d31d370ae0bb77b41f31135f64368c0a754",
+    FACADE_README: "258801b26bdede1d4f63c405a89ff3895f4da500f3d79631b8a5c9e2d97d30ef",
     CHECK_SCRIPT: "9bc87be69a13d476a58e6bf7e63f5fd70697d7f57389b03de1a24dc78e679a4e",
     TEST_SCRIPT: "9f0731100eae808a96f049f471bec1d394866828bab6d111bca90e3ac4d3e2eb",
     CHECKS: "8454fdc17950bc01bb11940e420d6bb053e4d9d960fc63177e74c27a264f5cd9",
@@ -171,7 +171,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
             fail(f"acceptance fixture crossed forbidden boundary: {forbidden}")
     for token in (
         "execution path: portable-only", "independently verified: NO",
-        "FIPS 140-3 validated: NO", "family status: In progress pending v0.24.4",
+        "FIPS 140-3 validated: NO", "family status: In progress pending v0.24.11",
     ):
         require(loaded[MAIN], token, "runnable acceptance report")
     family_label = "SHA-3/SHAKE"

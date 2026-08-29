@@ -4,10 +4,11 @@ Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 po
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.3`. `brynja-hash-core 0.1.0`,
-`brynja-hash-sha2 0.1.0` retain the reusable interface and complete portable
-six-algorithm FIPS 180-4 SHA-2 implementation, and new unpublished
-`brynja-hash-sha3 0.1.0` owns all six complete portable FIPS 202 functions
-while final family acceptance remains in progress. Published
+`brynja-hash-sha2 0.1.0` retains reusable byte-oriented interfaces and correct
+portable implementations of all six FIPS 180-4 SHA-2 algorithms, and new
+unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented implementations
+of all six FIPS 202 functions. Arbitrary-bit and hardened secret-bearing
+profiles remain in progress through v0.24.11. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
 the separate opt-in x86/AArch64 host detector and runtime selection API while
@@ -230,8 +231,9 @@ official and independent fixed-output/XOF expectations, irregular input and
 multi-squeeze output, exact rates, zero output, checked failures and domain
 separation, then repeats from the safely extracted exact sixteen-package
 offline archive closure. This changes no cryptographic implementation,
-dependency or backend admission. Final cross-backend family acceptance remains
-v0.24.4 work and zero crates are selected for publication.
+dependency or backend admission. Byte-oriented v0.24.4 backend work and the
+v0.24.7-v0.24.11 arbitrary-bit, hardened-state, and combined acceptance remain;
+zero crates are selected for publication.
 
 The v0.24.2 stage adds complete portable SHAKE128 and SHAKE256 over the same
 private sponge owner. Separate consuming absorb and incremental output types,
@@ -248,8 +250,8 @@ FIPS validation remain later work. Zero crates are selected for publication.
 | `brynja` | `0.24.3` | no | Internal portable FIPS 202 packaged-acceptance milestone; v0.20.0 is published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output and XOF interfaces |
-| `brynja-hash-sha2` | `0.1.0` | no | Unpublished complete portable six-algorithm FIPS 180-4 SHA-2 APIs, forced candidate routes, and package-external family acceptance; CPU candidates remain unadmitted |
-| `brynja-hash-sha3` | `0.1.0` | no | Unpublished complete portable SHA3-224/SHA3-256/SHA3-384/SHA3-512/SHAKE128/SHAKE256 APIs with packaged portable acceptance; final cross-backend acceptance in progress |
+| `brynja-hash-sha2` | `0.1.0` | no | Unpublished six-algorithm FIPS 180-4 byte APIs, forced candidate routes, and package-external byte acceptance; arbitrary-bit and hardened secret-bearing profiles remain in progress |
+| `brynja-hash-sha3` | `0.1.0` | no | Unpublished SHA3-224/SHA3-256/SHA3-384/SHA3-512/SHAKE128/SHAKE256 byte APIs with packaged portable acceptance; arbitrary-bit, hardened secret-bearing, and final cross-backend profiles remain in progress |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports all six SHA-2 and six FIPS 202 leaf implementations |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five unpublished SHA-2 candidates remain unadmitted and x86 SHA-512 remains scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |

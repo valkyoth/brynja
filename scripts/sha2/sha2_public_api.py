@@ -48,10 +48,10 @@ EXPECTED_SHA256 = {
     LEAF_LIB: "aa1a4f0ce77768b180daae6ead51a739452d7bd057bbfa8f348df5a7ee3732d2",
     DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
     FACADE_LIB: "90a5ed9ca877470c2f72b2cba9201fb741d9d2edf3a1180fb9c77497245d2f0f",
-    LEAF_README: "fa0e8ff3dd30fe3279f0d952811bcf739db63e2d298a3acaee6659385c23b7e3",
-    FACADE_README: "04617ef2b140b76f6e5be4b2fe603d31d370ae0bb77b41f31135f64368c0a754",
+    LEAF_README: "fa805a3349b095aa6157351f0734cc9f0bdc5adadd939ccd98c55b267b3b409b",
+    FACADE_README: "258801b26bdede1d4f63c405a89ff3895f4da500f3d79631b8a5c9e2d97d30ef",
     CHECK_SCRIPT: "08a8b7baae515ba1bb945e14b1a2022a5023b2de02aab94c8d80e67775433b1c",
-    TEST_SCRIPT: "b2996b832e5e4c3da421e072968da71a29ec6f8f7f9b2a4208a3a4dc129a9821",
+    TEST_SCRIPT: "7439d5528706f619327d0531a06c11d20877052681f1cacae0a79b19cca6d7e2",
     CHECKS: "8454fdc17950bc01bb11940e420d6bb053e4d9d960fc63177e74c27a264f5cd9",
     RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
     BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
@@ -155,9 +155,10 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
         require(loaded[MAIN], f"{name}: portable scalar; independently verified: NO; FIPS validated: NO", "runnable report")
         require(loaded[LEAF_README], name, "leaf documentation")
         require(loaded[FACADE_README], name, "facade documentation")
-    family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256)"
-    require(loaded[LEAF_README], family_label, "leaf family documentation")
-    require(loaded[FACADE_README], family_label, "facade family documentation")
+    leaf_family_label = "SHA-2 (all six identities have complete byte APIs; arbitrary-bit and hardened secret-bearing profiles pending)"
+    facade_family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte APIs; arbitrary-bit and hardened profiles pending)"
+    require(loaded[LEAF_README], leaf_family_label, "leaf family documentation")
+    require(loaded[FACADE_README], facade_family_label, "facade family documentation")
     public_algorithms = (
         ("sha224", "Sha224"),
         ("sha256", "Sha256"),

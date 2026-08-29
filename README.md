@@ -61,8 +61,8 @@ independent cryptographic or protocol verification.
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |
-| SHA-3/SHAKE (FIPS 202: all four SHA-3 digests and both SHAKE XOFs pass portable packaged acceptance; cross-backend acceptance pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte APIs; arbitrary-bit and hardened profiles pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-3/SHAKE (all six FIPS 202 identities have complete byte APIs; arbitrary-bit, hardened secret-bearing, and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -246,7 +246,10 @@ extracted exact sixteen-package archive closure with version-only dependencies.
 Executable negative fixtures reject corrupted outputs, missing semantics,
 hidden features, invalid absorb/squeeze phases, private permutation access,
 and incomplete packages. No production algorithm or backend changes; the
-family remains **In progress** until v0.24.4 cross-backend acceptance.
+byte-oriented consumer is accepted, but the family remains **In progress**
+through v0.24.11 while the newly explicit arbitrary-bit and hardened secret-
+bearing API profiles, backend evidence, and combined package-external
+acceptance are completed.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
@@ -742,9 +745,9 @@ selected set in dependency order and publishes the facade last.
 | `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all six portable FIPS 202 functions with portable packaged acceptance through v0.24.3; no TLS engine or provider effect |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
-| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six complete portable FIPS 180-4 algorithms, opt-in forced APIs for every CPU candidate, and complete packaged downstream family acceptance at v0.23.4 |
-| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, TupleHash and ParallelHash ownership | v0.1.0 contains all six complete portable FIPS 202 functions and passes packaged portable acceptance; final family acceptance remains planned at v0.24.4 and complete SP 800-185 through v0.24.11 |
-| Future `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | Planned at v0.24.7 and accepted with the complete SP 800-185 family through v0.24.11 |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six FIPS 180-4 byte-oriented algorithms and forced CPU-candidate APIs; arbitrary-bit and hardened secret-bearing profiles close through v0.24.11 before full-family status returns |
+| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, TupleHash and ParallelHash ownership | v0.1.0 contains all six FIPS 202 byte-oriented functions and packaged portable acceptance; arbitrary-bit, hardened secret-bearing, backend, and final acceptance close through v0.24.11, then complete SP 800-185 through v0.24.17 |
+| Future `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | Planned at v0.24.13 and accepted with the complete SP 800-185 family through v0.24.17 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six SHA-2 algorithms plus all four SHA-3 digests and both SHAKE XOFs; other planned cryptography and provider effects remain absent |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; three SHA-256-family and two SHA-512-family candidates implemented; x86 SHA-512 is scalar-only; zero admitted backends |
@@ -761,8 +764,8 @@ selected set in dependency order and publishes the facade last.
 | Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.165.0 |
 | Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.180.0 |
 | Future `brynja-openpgp-legacy` | Complete deprecated-algorithm and historical-key compatibility with no modern facade edge | Required before 1.0 and separately isolated |
-| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.24.12 and accepted at v0.24.14; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
-| Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Planned at v0.24.13 and accepted at v0.24.14 solely before isolated HMAC-MD5 compatibility |
+| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.24.18 and accepted at v0.24.20; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
+| Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Planned at v0.24.19 and accepted at v0.24.20 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |

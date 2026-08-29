@@ -12,7 +12,7 @@ fn main() {
             println!("execution path: portable-only");
             println!("independently verified: NO");
             println!("FIPS 140-3 validated: NO");
-            println!("family status: In progress pending v0.24.4 cross-backend acceptance");
+            println!("family status: In progress pending v0.24.11 complete API acceptance");
             println!("unkeyed hashes and XOFs; not authentication, MACs, or password hashing");
         }
         Err(error) => {

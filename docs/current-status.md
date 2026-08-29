@@ -30,9 +30,10 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It now has all six complete portable FIPS 180-4 SHA-2 algorithms, complete
-portable FIPS 202 SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and
-SHAKE256, plus bounded DER tag-length-value framing
+It now has correct portable byte-oriented implementations of all six FIPS
+180-4 SHA-2 algorithms and all six FIPS 202 SHA-3/SHAKE identities, while
+their arbitrary-bit and hardened secret-bearing API profiles remain in
+progress through v0.24.11. It also has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
 cryptographic algorithm beyond those twelve named hash and XOF identities, X.509, QUIC-TLS, DTLS
@@ -251,8 +252,10 @@ exhaustion and domain separation. The same fixture runs offline from a safely
 extracted exact sixteen-package closure with version-only dependencies, and
 negative fixtures reject output, API, rate, failure, domain, execution-path,
 feature, phase, private-module and package regressions. No production
-cryptography or backend changed; final v0.24.4 cross-backend acceptance,
-independent review, secret erasure and FIPS validation remain absent, so the
+cryptography or backend changed. Byte-oriented v0.24.4 cross-backend evidence
+plus v0.24.7-v0.24.11 arbitrary-bit, hardened-state and combined acceptance,
+independent review, complete secret-erasure evidence, and FIPS validation
+remain absent, so the
 family stays **In progress** and zero crates are selected for publication.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened

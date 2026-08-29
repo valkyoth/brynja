@@ -793,7 +793,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.24.6"
+        "0.24.12"
       ],
       "sources": [
         "nist:NIST.FIPS.202.pdf",
@@ -10027,11 +10027,11 @@
       "0.22.0": [
         "BRY-REQ-CRYPTO-0001"
       ],
+      "0.24.12": [
+        "BRY-REQ-CRYPTO-0014"
+      ],
       "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
-      ],
-      "0.24.6": [
-        "BRY-REQ-CRYPTO-0014"
       ],
       "0.25.0": [
         "BRY-REQ-CRYPTO-0003"

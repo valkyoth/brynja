@@ -127,12 +127,12 @@
         "0.22.0",
         "0.23.0",
         "0.24.0",
-        "0.24.6",
-        "0.24.7",
-        "0.24.8",
-        "0.24.9",
-        "0.24.10",
-        "0.24.11",
+        "0.24.12",
+        "0.24.13",
+        "0.24.14",
+        "0.24.15",
+        "0.24.16",
+        "0.24.17",
         "0.25.0",
         "0.26.0",
         "0.27.0",
@@ -179,12 +179,12 @@
       ],
       "id": "nist:NIST.SP.800-185.pdf",
       "milestones": [
-        "0.24.6",
-        "0.24.7",
-        "0.24.8",
-        "0.24.9",
-        "0.24.10",
-        "0.24.11"
+        "0.24.12",
+        "0.24.13",
+        "0.24.14",
+        "0.24.15",
+        "0.24.16",
+        "0.24.17"
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0014"
@@ -5585,7 +5585,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "fe39cdf182e9f14e110432386050a96200a587f30ce5b0760bc67ac3828e3fb1",
+  "policy_sha256": "1080275468837054ffbf0d3855a316aae9ec9872b8fa07a8780d4f5ef8ee7e8c",
   "requirement_count": 35,
   "schema": 1,
   "surface_count": 3327,
@@ -5700,7 +5700,7 @@
       "disposition": "future-work",
       "domain": "cryptography",
       "id": "algorithm.sp800-185",
-      "owner": "0.24.6",
+      "owner": "0.24.12",
       "requirement_id": "BRY-REQ-CRYPTO-0014"
     },
     {

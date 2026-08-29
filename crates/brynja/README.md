@@ -106,10 +106,11 @@ assert_eq!(truncated_256.as_bytes().len(), 32);
 assert_eq!(digest.as_bytes().len(), 32);
 ```
 
-These SHA-2 functions are unkeyed digests, not authentication, a MAC, or password
-hashing. Ordinary SHA-2 states do not guarantee erasure of secret-input
-remnants, including private working state that callers cannot clear; keyed use
-requires the later hardened construction.
+These SHA-2 functions are unkeyed digests, not authentication, a MAC, or password hashing.
+Ordinary SHA-2 states do not guarantee erasure of secret-input remnants,
+including private working state that callers cannot clear; keyed use
+requires the distinct hardened profile planned through v0.24.11. That profile
+will use Brynja's admitted sanitization boundary to clear every Brynja-owned secret copy; callers remain responsible only for buffers and outputs they own.
 
 ### Compute Portable SHA-3 And SHAKE
 
@@ -130,7 +131,8 @@ brynja::crypto::shake256(b"abc", &mut shake256).unwrap();
 ```
 
 These are FIPS 202 SHA-3 functions, not raw Keccak. Their ordinary unkeyed
-states make no secret-remanence cleanup claim.
+states make no secret-remanence cleanup claim. Distinct hardened SHA-3/SHAKE
+states and complete arbitrary-bit APIs close through v0.24.11.
 
 ## Cryptography Verification Status
 
@@ -145,8 +147,8 @@ Only linked sign-off from a named independent reviewer can change independent st
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256) | ✅ Fully implemented | ❌ Not independently verified |
-| SHA-3/SHAKE (FIPS 202: all four SHA-3 digests and both SHAKE XOFs pass portable packaged acceptance; cross-backend acceptance pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte APIs; arbitrary-bit and hardened profiles pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-3/SHAKE (all six FIPS 202 identities have complete byte APIs; arbitrary-bit, hardened secret-bearing, and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -178,15 +180,13 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | --- | --- |
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
-| `brynja-hash-sha2` | All six portable FIPS 180-4 SHA-2 algorithms and complete family ownership |
-| `brynja-hash-sha3` | All six portable FIPS 202 SHA-3 and SHAKE functions with packaged portable acceptance; final cross-backend acceptance in progress |
+| `brynja-hash-sha2` | All six FIPS 180-4 byte APIs; arbitrary-bit and hardened profiles pending |
+| `brynja-hash-sha3` | All six FIPS 202 byte APIs; arbitrary-bit, hardened, and final acceptance pending |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |
 | `brynja-tls12`, `brynja-tls13`, `brynja-dtls`, `brynja-quic-tls` | Separately reviewable modern protocol engines |
 | `brynja-legacy-*` | Explicitly isolated obsolete-protocol compatibility |
-
-Many package names are boundaries awaiting later roadmap milestones, not implementation claims.
 
 ## More Information
 

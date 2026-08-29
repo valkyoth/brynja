@@ -59,6 +59,45 @@ API examples, official vectors, boundary cases, malformed or misuse cases,
 streaming or stateful use where applicable, and downstream composition tests
 are additive; private unit tests alone never establish usability.
 
+Every algorithm and construction must also close its complete safe API-profile
+set. The machine-readable profile register covers every standardized operation
+and promised reusable shape: byte and applicable bit-string input, one-shot and
+incremental state, fixed and extendable output, verification, caller-buffer and
+permitted overlap modes, ordinary versus secret-bearing ownership, portable and
+admitted backend selection, no_std and isolated hosted adapters, provider and
+external-key paths, plus every supported import, export, generation, reset,
+clone, snapshot, cancellation and destruction transition. Inherently unsafe or
+nonstandard conveniences receive an explicit rejection; mathematical algorithm
+completion cannot silently stand in for a missing safe API profile.
+
+Ordinary non-erasing hash and XOF states are public-data profiles and cannot
+satisfy secret-bearing, keyed, password, KDF, private-prehash or protected-
+transcript contracts. Every capability that can own secret-derived data uses a
+distinct non-Copy, non-Clone, non-formatting and non-serializing hardened owner.
+It compiler-resistantly destroys every Brynja-owned key, scalar, schedule,
+sponge or chaining state, partial buffer, temporary block, encoded secret,
+intermediate, pending value and failure-path copy on success, error,
+cancellation, replacement, rekey, failed construction and Drop. Storage
+transferred to callers becomes their duty; registers, caches, OS context, crash
+images and unavoidable compiler copies remain measured residuals. A machine-
+readable secret-state register binds every owner, field and temporary to its
+creation and destruction edges, sanitization symbol, emitted-code evidence and
+residual gaps, and CI blocks incomplete entries or consumers.
+
+Internal cleanup closes with the secret-bearing implementation rather than as
+ordinary later hardening. Independently review-sized shared owners and evidence
+receive dedicated patch milestones before dependent construction. A gap found
+after an immutable tag is assigned the next patch by the existing completeness-
+gap rule and blocks every dependent or adjacent capability until clean retest.
+
+Mandatory private-state cleanup always has a dependency-free `no_std` path
+through Brynja's own destruction primitive and cannot be disabled by a feature.
+Where the exact admitted fixed-region contract applies, the separately selected
+`brynja-sanitization` adapter over the pinned `sanitization` release is used and
+differentially checked against that core path. It never adds a reverse edge,
+enters a facade or FIPS graph implicitly, or makes cleanup conditional; the
+secret-state register names the exact mechanism and evidence for every region.
+
 `v1.0.0` is a completeness and production-readiness boundary, not a deadline.
 The pre-1.0 line may grow to any required version. Every authenticated
 standardized capability attached to a named modern or historical Brynja
@@ -2520,7 +2559,7 @@ Implementation notes:
 - no raw permutation, acceleration, unsafe code, allocation, third-party
   dependency, secret-state erasure, package-external final acceptance,
   independent-review, FIPS-validation or publication claim is introduced. The
-  SHA-3/SHAKE family remains documented **In progress** through v0.24.4;
+  SHA-3/SHAKE family remains documented **In progress** through v0.24.11;
 - the newly admitted XOF algorithms and absorbing-to-squeezing state machine
   trigger an exceptional cryptographic pentest before the signed tag.
 - subsequent review supplied one Medium repository-assurance denial-of-service
@@ -2598,7 +2637,7 @@ Implementation notes:
 - this milestone changes acceptance code, documentation, and the facade
   version only. It adds no production cryptography, unsafe code, dependency,
   backend, admission, secret-erasure, independent-review, FIPS-validation, or
-  publication claim, so the family remains **In progress** through v0.24.4.
+  publication claim, so the family remains **In progress** through v0.24.11.
 
 Plan scope: Before acceleration or native evidence, freeze and pass a packaged downstream fixture covering all four SHA-3 digests and both SHAKE XOFs through public one-shot, streaming, incremental multi-squeeze, and forced portable paths, including representative real data, zero-length and multi-block output, authoritative vectors, no_std installation, package contents, checked failures, and domain-separation negative tests; keep the family status In progress.
 
@@ -2639,15 +2678,15 @@ Exit criteria:
   progress** pending the final cross-backend gate;
 - `v0.24.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.4 - SHA-3 And SHAKE Acceleration Evidence And Final Acceptance
+### v0.24.4 - SHA-3 And SHAKE Byte-Oriented Acceleration Evidence
 
 Status: planned
 
-Plan scope: Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for all six SHA-3/SHAKE functions on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, then rerun the unchanged packaged fixture through portable and every admitted backend; rerun affected evidence after any fix and mark the family Fully implemented only when this final cross-backend gate passes.
+Plan scope: Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for the six existing byte-oriented SHA-3/SHAKE APIs on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, rerun the unchanged v0.24.3 fixture through portable and every admitted backend, and keep the family In progress until later bit-string and hardened-state profiles pass final acceptance.
 
-Goal: add only justified first-party acceleration and close the complete FIPS
-202 family on the exact candidate after the already-proven portable consumer
-contract succeeds unchanged across every admitted execution path.
+Goal: add only justified first-party acceleration to the frozen byte-oriented
+FIPS 202 APIs without prematurely closing the expanded bit-string and hardened-
+state family that follows.
 
 Deliverables:
 
@@ -2659,9 +2698,8 @@ Deliverables:
   quarantine, dispatch, candidate, rejection, scalar-only, and FIPS
   dispositions before any backend is admitted;
 - rerun the frozen v0.24.3 fixture through portable selection, every admitted
-  backend, unavailable required paths, and unhealthy-path quarantine, then
-  update documentation and the public table to **Fully implemented** only at
-  final exit.
+  backend, unavailable required paths, and unhealthy-path quarantine, while
+  retaining **In progress** status and exact evidence inputs for v0.24.11.
 
 Verification:
 
@@ -2679,10 +2717,10 @@ Verification:
 
 Exit criteria:
 
-- every backend has an explicit admitted, candidate, rejected, or scalar-only
-  disposition, the unchanged consumer fixture passes portable and every
-  admitted route, all evidence matches the final code, residual limits are
-  explicit, and only now is SHA-3/SHAKE recorded **Fully implemented**;
+- every byte-oriented backend has an explicit admitted, candidate, rejected,
+  or scalar-only disposition, the unchanged consumer fixture passes portable
+  and every admitted route, evidence matches the code, and the family remains
+  **In progress** pending v0.24.9-v0.24.11;
 - `v0.24.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.24.5 - Cross-Authority Standards Lifecycle Monitor
@@ -2730,11 +2768,260 @@ Exit criteria:
   authorize implementation, reclassification, publication or a security claim;
 - `v0.24.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.6 - SP 800-185 Encoding Foundation And Complete cSHAKE
+### v0.24.6 - Cryptographic API Profile And Secret-State Closure Register
 
 Status: planned
 
-Plan scope: Bind the current final SP 800-185 authority and its announced revision state, implement exact left_encode, right_encode, encode_string and bytepad with checked bit-length arithmetic and canonical arbitrary-bit-string inputs, then complete cSHAKE128 and cSHAKE256 with N and S customization, empty-N-and-S SHAKE equivalence, fixed and XOF output, one-shot, streaming and incremental squeeze APIs, exact domain separation, official examples, proofs, and no raw permutation exposure.
+Plan scope: Implement a machine-readable, CI-enforced register that assigns every current and planned primitive, construction and protocol consumer its complete safe public API profiles and every secret-owning type, field, temporary, lifecycle edge, sanitization symbol, evidence artifact and residual gap; distinguish ordinary public-data state from hardened secret-bearing state, reject unsafe or nonstandard conveniences explicitly, and block implementation exit, composition and Fully implemented status when any promised operation, input domain, ownership mode or internal cleanup duty lacks an owner.
+
+Goal: turn API completeness and private secret cleanup from prose expectations
+into a fail-closed design input for every later cryptographic implementation.
+
+Deliverables:
+
+- add a deterministic schema and generated register covering each algorithm,
+  construction and protocol consumer across operation direction, byte and bit
+  input, one-shot and incremental state, fixed and extendable output,
+  verification, buffers, overlap, ownership, provider, backend, no_std, hosted
+  adapter, import, export, generation, reset, clone, snapshot and cancellation;
+- add a secret-state inventory naming every secret-owning type, exact fields and
+  temporaries, creation and destruction edges, sanitization function, success,
+  error, cancellation, replacement, rekey, failed-construction and Drop paths,
+  emitted-code evidence, caller handoff and residual register/cache/OS risks;
+- classify every cleanup duty as the mandatory core destruction primitive or
+  an exact admitted `brynja-sanitization` fixed-region adapter use, without
+  optional cleanup, reverse dependencies, facade leakage, or a FIPS graph edge;
+- enforce ordinary public-data versus hardened secret-bearing type separation,
+  explicit rejection of unsafe or nonstandard profiles, complete milestone and
+  symbol ownership, reviewed-source hashes and deterministic documentation.
+
+Verification:
+
+- inject missing algorithms, operations, bit domains, ownership modes, state
+  fields, temporary blocks, destruction edges, sanitization symbols, evidence,
+  consumer links, explicit rejections and residual disclosures;
+- remove the optional adapter and prove all mandatory cleanup remains active;
+  where the adapter is admitted, differentially verify its clearing and
+  emitted-code evidence against the dependency-free core path;
+- prove ordinary states cannot satisfy hardened/keyed provider bounds and that
+  Copy, Clone, formatting, serialization, reset, snapshot or public raw-state
+  access is rejected for every registered secret owner unless a later exact
+  standard and separately reviewed secure profile explicitly permits it;
+- regenerate from a clean tree and pass schema, mutation, requirement, source-
+  ledger, release-plan, documentation, Rust/target, dependency and repository
+  gates without adding runtime cryptography or a third-party crate.
+
+Exit criteria:
+
+- every existing and planned cryptographic capability has a complete API-
+  profile disposition and every secret owner has an exact cleanup/evidence
+  owner, with CI blocking omissions before implementation can proceed;
+- `v0.24.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.7 - Complete SHA-2 Arbitrary-Bit Input APIs
+
+Status: planned
+
+Plan scope: Extend all six SHA-2 identities with canonical FIPS 180-4 arbitrary-bit-message one-shot and incremental APIs, including unambiguous final partial-byte representation, exact bit-length exhaustion, byte-aligned equivalence, padding at every tail position, public consumer examples, vectors and proofs, while preserving the existing byte APIs and every scalar or accelerated digest identity.
+
+Goal: close the standards-valid SHA-2 input domain without weakening the
+already accepted byte APIs or introducing ambiguous unused tail bits.
+
+Deliverables:
+
+- add one canonical borrowed bit-string type with explicit valid-bit count and
+  zero-unused-bit policy plus one-shot and incremental final-tail entry points
+  for SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256;
+- implement checked bit-length accounting through the exact 64-bit and 128-bit
+  FIPS limits, reject nonfinal partial bytes and ambiguous tails transactionally,
+  and preserve byte-aligned one-shot, streaming and backend results exactly;
+- add documented public examples and package-visible identities without
+  exposing compression state, adding allocation, or treating bit-tail support
+  as a secret-erasure claim.
+
+Verification:
+
+- run authoritative bit-oriented vectors and every tail width zero through
+  seven across empty, padding-boundary, exact-block, multiblock and exhaustion
+  cases for every SHA-2 identity;
+- prove all byte-aligned bit inputs equal the frozen v0.23.4 outputs, compare
+  scalar and every admitted backend, and reject unused-bit, repeated-tail,
+  absorb-after-final-tail and overflow mutations;
+- run Kani length/padding bounds, differential bit oracles, Miri, sanitizers,
+  no_std package consumers, supported Rust/target gates and the unchanged byte
+  acceptance fixture.
+
+Exit criteria:
+
+- all six SHA-2 identities accept every canonical FIPS bit string through real
+  public APIs while the family remains **In progress** pending hardened-state
+  and combined acceptance work;
+- `v0.24.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.8 - Complete Hardened SHA-2 State APIs
+
+Status: planned
+
+Plan scope: Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal path; prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.
+
+Goal: let applications and later HMAC, KDF, password, private-prehash and
+protected-transcript constructions hash sensitive input without leaving Brynja-
+owned state outside the admitted destruction boundary.
+
+Deliverables:
+
+- add distinct hardened byte and bit-input states for every SHA-2 identity with
+  consuming finalization, no Copy/Clone/Debug/Display/serialization/snapshot,
+  no conversion to ordinary state and no public internal-state access;
+- share the exact compression math while wrapping partial buffers, chaining
+  words, schedules, block copies and temporary digests in the first-party
+  compiler-resistant sanitization owner across success, failure, replacement,
+  failed construction and Drop;
+- make portable execution mandatory unless an accelerated symbol has exact
+  cleanup, stack-spill and backend-lifecycle evidence, and expose typed caller
+  ownership when digest bytes leave the hardened state.
+
+Verification:
+
+- compare hardened and ordinary outputs for every authoritative byte and bit
+  vector, boundary, partition and error while compile-failing every forbidden
+  trait, conversion, reset, snapshot and ordinary-keyed composition;
+- inspect MIR, LLVM IR and supported-target assembly for every state, schedule,
+  block, temporary and terminal path, fault-inject update/finalize/drop and
+  confirm complete-region clearing without claiming register or cache erasure;
+- run Kani lifecycle bounds, Miri, sanitizers, no_std package tests, stack and
+  allocation ceilings, supported Rust/target matrix and source-policy mutations.
+
+Exit criteria:
+
+- all six SHA-2 identities have usable hardened public states whose entire
+  Brynja-owned secret-bearing memory is registered, cleared and evidenced;
+- `v0.24.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.9 - Complete SHA-3 And SHAKE Arbitrary-Bit Input APIs
+
+Status: planned
+
+Plan scope: Extend all four SHA-3 digests and both SHAKE XOFs with canonical FIPS 202 arbitrary-bit-message one-shot, incremental absorb and incremental squeeze APIs, including exact delimited suffix composition, partial-byte validation, bit-length exhaustion, byte-aligned equivalence and every rate/tail boundary without exposing raw Keccak-f[1600].
+
+Goal: complete the FIPS 202 message domain for every fixed and extendable-output
+identity before the family can receive final implementation status.
+
+Deliverables:
+
+- reuse the canonical bit-string type for SHA3-224, SHA3-256, SHA3-384,
+  SHA3-512, SHAKE128 and SHAKE256 one-shot and incremental absorption, allowing
+  exactly one final partial byte before fixed finalization or XOF squeezing;
+- compose the final message bits, FIPS domain suffix and pad10*1 without
+  ambiguity at every rate boundary, with checked bit lengths, transactional
+  failure and byte-aligned API equivalence;
+- preserve private Keccak-f[1600], distinct fixed/XOF phases, zero and multi-
+  squeeze output, allocation-free no_std behavior and exact public identities.
+
+Verification:
+
+- run official bit-oriented FIPS 202 vectors for every function plus all tail
+  widths, suffix-boundary collisions, rate-minus/at/plus cases, multirate input
+  and partitioned SHAKE output;
+- compare every byte-aligned bit input with the frozen v0.24.3 fixture and every
+  admitted v0.24.4 backend, rejecting nonzero unused bits, repeated tails,
+  suffix substitution, absorb-after-tail and squeeze-before-finalization;
+- run padding/state Kani bounds, independent bit-oriented differential oracles,
+  Miri, sanitizers, no_std packages, Rust/target matrix and raw-permutation
+  visibility mutations.
+
+Exit criteria:
+
+- all six FIPS 202 identities accept every canonical standards-valid bit string
+  through public APIs and remain **In progress** pending hardened-state closure;
+- `v0.24.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.10 - Complete Hardened SHA-3 And SHAKE State APIs
+
+Status: planned
+
+Plan scope: Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation and Drop; keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.
+
+Goal: provide the reusable hardened sponge boundary that callers and all later
+secret-bearing Keccak-derived constructions require but cannot implement from
+outside Brynja's private state.
+
+Deliverables:
+
+- add distinct hardened byte and bit-input states for all four SHA-3 digests
+  and hardened absorb/reader typestates for both SHAKE strengths with consuming
+  transitions and no Copy, Clone, formatting, serialization or state export;
+- sanitize all 25 lanes, partial absorb buffer, suffix/tail staging, squeeze
+  cursor and block, output staging and temporary permutation copies on success,
+  error, cancellation, exhaustion, failed construction and Drop;
+- expose a reviewed construction-only ownership boundary for later cSHAKE,
+  KMAC, HMAC and protected prehashes while preventing ordinary state from
+  satisfying it and keeping raw permutation access private.
+
+Verification:
+
+- compare ordinary and hardened outputs for every frozen byte case and new bit
+  case, including irregular absorb, multi-squeeze, zero output, exhaustion,
+  cancellation and early Drop;
+- inspect MIR, LLVM IR and supported-target assembly for all sponge, buffer,
+  suffix, squeeze and temporary clearing; fault-inject every phase and forbid
+  accelerated use without symbol-specific cleanup and spill evidence;
+- compile-fail forbidden traits, conversions, raw-state access and ordinary
+  keyed composition, then run Kani, Miri, sanitizers, no_std packages, stack,
+  allocation, Rust/target and mutation gates.
+
+Exit criteria:
+
+- all six SHA-3/SHAKE identities have usable hardened public state and the
+  reusable construction boundary accounts for every Brynja-owned secret copy;
+- `v0.24.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.11 - Complete Hash API And Zeroization Usability Acceptance
+
+Status: planned
+
+Plan scope: Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation and Drop paths, inspect compiler-resistant cleanup across supported compilers and targets, verify caller-versus-Brynja ownership, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.
+
+Goal: close the expanded modern hash surface only after real downstream users
+can choose fast public-data or hardened secret-bearing operation without hidden
+input-domain, ownership, packaging or cleanup gaps.
+
+Deliverables:
+
+- freeze package-external no_std fixtures for every SHA-2, SHA-3 and SHAKE
+  ordinary/hardened byte/bit profile, documented commands, package contents,
+  algorithm identities, backend dispositions and caller-owned output rules;
+- bind the complete secret-state register to exact source, MIR, LLVM IR and
+  assembly evidence for every owned region and terminal path, with explicit
+  register/cache/OS/crash residuals and no stronger claim than measured;
+- update public verification tables to distinguish mathematical output,
+  ordinary versus hardened usability, admitted backends, independent review
+  and FIPS validation, changing the family to **Fully implemented** only here.
+
+Verification:
+
+- run ordinary and hardened one-shot, irregular streaming, arbitrary bit-tail,
+  fixed digest, incremental XOF, zero output, exhaustion, error, cancellation,
+  early Drop and caller-buffer ownership cases against authoritative results;
+- package and run all fixtures across supported Rust and no_std targets, force
+  scalar and every admitted backend, and rerun affected KAT, native, timing,
+  emitted-code, proof and differential evidence after any code change;
+- mutate every API-profile and secret-state entry, cleanup path, trait
+  prohibition, package file, documentation claim and evidence binding and prove
+  the complete repository gate fails closed.
+
+Exit criteria:
+
+- every modern SHA-2, SHA-3 and SHAKE safe public API profile is complete,
+  hardened owners clear all Brynja-controlled secret memory that the caller
+  cannot reach, and only now are both families again **Fully implemented**;
+- `v0.24.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.12 - SP 800-185 Encoding Foundation And Complete cSHAKE
+
+Status: planned
+
+Plan scope: Bind the current final SP 800-185 authority and its announced revision state, implement exact left_encode, right_encode, encode_string and bytepad with checked bit-length arithmetic and canonical arbitrary-bit-string inputs, then complete cSHAKE128 and cSHAKE256 with N and S customization, empty-N-and-S SHAKE equivalence, fixed and XOF output, ordinary and hardened secret-bearing one-shot, streaming and incremental squeeze APIs over the v0.24.10 owner, exact domain separation, complete internal sanitization, official examples, proofs and no raw permutation exposure.
 
 Goal: implement the complete reusable SP 800-185 encoding and customizable-XOF
 foundation without weakening the already accepted FIPS 202 sponge boundary.
@@ -2768,9 +3055,9 @@ Exit criteria:
 - both cSHAKE strengths and all encoding operations are complete through public
   APIs, exact authority and revision status are visible, and later SP 800-185
   constructions need no private reimplementation or deferred input behavior;
-- `v0.24.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.7 - Complete KMAC And KMACXOF
+### v0.24.13 - Complete KMAC And KMACXOF
 
 Status: planned
 
@@ -2808,13 +3095,13 @@ Exit criteria:
 - all four keyed instances are complete and usable with exact conformance,
   strong production policy, cleanup and typed verification, while independent
   review and FIPS validation remain explicitly separate;
-- `v0.24.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.8 - Complete TupleHash And TupleHashXOF
+### v0.24.14 - Complete TupleHash And TupleHashXOF
 
 Status: planned
 
-Plan scope: Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, official examples, partition and collision-separation negatives, proofs, and public types that cannot silently flatten a tuple into one byte string.
+Plan scope: Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, ordinary and hardened secret-bearing whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, complete internal sanitization, official examples, partition and collision-separation negatives, proofs and public types that cannot silently flatten a tuple into one byte string.
 
 Goal: complete the four tuple-hash instances while making item identity and
 ordering structural API properties rather than caller-maintained conventions.
@@ -2844,13 +3131,13 @@ Exit criteria:
 
 - all four tuple instances accept the complete documented input model through
   public APIs with unambiguous ordering and no deferred XOF or streaming work;
-- `v0.24.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.9 - Complete ParallelHash And ParallelHashXOF
+### v0.24.15 - Complete ParallelHash And ParallelHashXOF
 
 Status: planned
 
-Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, a deterministic bounded sequential no_std path, caller-scheduled ordered leaf jobs for real parallel no_std use, and a separate optional zero-dependency std executor; cover partial and empty leaves, worker failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs, and no hidden allocation in the core crate.
+Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-dependency std executor; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.
 
 Goal: complete the four parallel-hash instances as both exact mathematical
 functions and practically usable bounded parallel operations across platforms.
@@ -2883,13 +3170,13 @@ Exit criteria:
 - all four ParallelHash instances are exact and usable sequentially and through
   bounded parallel scheduling, with theoretical-versus-machine limits explicit
   and no hidden allocation, thread or availability claim in the no_std core;
-- `v0.24.9 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.15 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.10 - SP 800-185 Portable Public API Usability Acceptance
+### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance
 
 Status: planned
 
-Plan scope: Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, secret cleanup and misuse failures while keeping the derived family In progress.
+Plan scope: Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through ordinary and hardened secret-bearing one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, complete internal cleanup and misuse failures while keeping the derived family In progress.
 
 Goal: prove the complete portable SP 800-185 family works through only the
 documented packages before any final cross-backend evidence is accepted.
@@ -2918,13 +3205,13 @@ Exit criteria:
 - the portable public family has no hidden implementation or usability gap and
   remains **In progress** until the same frozen contract passes every admitted
   backend and parallel execution route;
-- `v0.24.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.16 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.11 - SP 800-185 Cross-Backend And Parallel Final Acceptance
+### v0.24.17 - SP 800-185 Cross-Backend And Parallel Final Acceptance
 
 Status: planned
 
-Plan scope: Rerun the unchanged v0.24.10 fixture through portable and every admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs and bounded failure, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and cleanup evidence affected by the derived constructions, and mark SP 800-185 Fully implemented only when every named instance and backend has an explicit passing or unadmitted disposition on the final code.
+Plan scope: Rerun the unchanged v0.24.16 ordinary and hardened fixture through portable and every cleanup-qualified admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs, bounded failure and complete worker cleanup, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and sanitization evidence, and mark SP 800-185 Fully implemented only when every named instance, ownership profile and backend has an explicit passing or unadmitted disposition on the final code.
 
 Goal: close the complete derived family only after portable, accelerated, keyed
 and parallel paths satisfy the same already-frozen consumer contract.
@@ -2942,7 +3229,7 @@ Deliverables:
 
 Verification:
 
-- rerun the byte-identical v0.24.10 fixture, every corpus and official example
+- rerun the byte-identical v0.24.16 fixture, every corpus and official example
   through portable, admitted, unavailable-required, quarantined and parallel
   routes, including migration and worker-failure tests;
 - invalidate and repeat every affected native, proof, emitted-code, timing,
@@ -2955,13 +3242,13 @@ Exit criteria:
 - every named SP 800-185 instance and execution route has an explicit passing
   or unadmitted disposition, all exact-commit evidence is current, and only now
   is the derived family recorded **Fully implemented**;
-- `v0.24.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.17 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.12 - Complete First-Party Legacy SHA-1
+### v0.24.18 - Complete First-Party Legacy SHA-1
 
 Status: planned
 
-Plan scope: Implement complete streaming and fixed-message SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, official vectors, checked exhaustion, public consumer API, conspicuous collision warnings, and no modern facade, default, TLS, PKIX, FIPS, or general-hash edge; later HMAC, HKDF, and OpenPGP legacy consumers require separate typed admission without reimplementation.
+Plan scope: Implement complete byte and canonical arbitrary-bit streaming and one-shot SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, ordinary and hardened secret-bearing states, official vectors, checked bit exhaustion, complete internal sanitization, public consumer APIs and conspicuous collision warnings; add no modern facade, default, TLS, PKIX, FIPS or general-hash edge, and require later HMAC, HKDF and OpenPGP consumers to use separately typed admission without reimplementation.
 
 Goal: close the **Complete First-Party Legacy SHA-1** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -2994,13 +3281,13 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.24.12 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.18 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.13 - Complete First-Party Legacy MD5
+### v0.24.19 - Complete First-Party Legacy MD5
 
 Status: planned
 
-Plan scope: Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including streaming, fixed-message, padding, little-endian length, official and independent vectors, checked exhaustion, and a public compatibility API with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade, or FIPS use.
+Plan scope: Implement the complete RFC 1321 MD5 algorithm once in isolated `brynja-legacy-md5`, including byte and canonical arbitrary-bit one-shot and streaming input, padding, little-endian bit length, ordinary and hardened secret-bearing states, complete internal sanitization, official and independent vectors, checked exhaustion and public compatibility APIs with conspicuous collision and chosen-prefix warnings; admit no signature, certificate, password, modern protocol, default, facade or FIPS use.
 
 Goal: close the **Complete First-Party Legacy MD5** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -3033,13 +3320,13 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.24.13 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.19 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.14 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
+### v0.24.20 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
 
 Status: planned
 
-Plan scope: Package and exercise the SHA-1 and MD5 public compatibility APIs against real files and authoritative digests while proving their warning, dependency, feature, and symbol isolation; no legacy result can satisfy a modern cryptographic-policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters.
+Plan scope: Package and exercise every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile against real files and authoritative digests, inspect all internal cleanup paths and prove warning, dependency, feature and symbol isolation; no legacy result or ordinary non-erasing state can satisfy a modern or secret-bearing policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters over hardened owners.
 
 Goal: close the **Legacy SHA-1 And MD5 Usability And Isolation Acceptance** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -3072,7 +3359,7 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.24.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.24.20 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - Complete Generic HMAC Construction
 
@@ -14287,7 +14574,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Freeze separately locked downstream companion workspaces for future brynja-rustls and brynja-tokio packages; keep both absent from the core workspace lockfile and every brynja facade, engine, crypto, default, all-features, legacy, bare-metal and FIPS-module edge; admit third-party Rust dependencies only inside the adapter that implements their API, with exact minimal features, freshness, advisory, license, MSRV, SBOM and native-code closure policy; and make the first-party Rust cryptography golden rule permanent and machine-enforced without implementing either adapter yet.
+Plan scope: Freeze separately locked downstream companion workspaces for future brynja-rustls, brynja-tokio, brynja-rustcrypto and brynja-io packages; keep all companions absent from the core workspace lockfile and every brynja facade, engine, crypto, default, all-features, legacy, bare-metal and FIPS-module edge; admit third-party Rust dependencies only inside the adapter that implements their API, with exact minimal features, freshness, advisory, license, MSRV, SBOM and native-code closure policy; and make the first-party Rust cryptography golden rule permanent and machine-enforced without implementing an adapter yet.
 
 Goal: establish ecosystem integration without weakening Brynja's dependency-free core or first-party Rust cryptographic implementation boundary.
 
@@ -14364,11 +14651,11 @@ Exit criteria:
 - Tokio applications can opt into a bounded correct Brynja TLS stream without a second TLS or cryptographic implementation and without altering the main Brynja graph;
 - `v0.151.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.151.4 - Ecosystem Adapter Isolation And Interoperability Gate
+### v0.151.4 - Rustls And Tokio Adapter Isolation And Interoperability Gate
 
 Status: planned
 
-Plan scope: Qualify brynja-rustls and brynja-tokio dependency direction, exact lockfiles, feature allowlists, native-code absence, package archives, SBOMs, MSRV/latest-stable compatibility, cancellation and hostile-I/O behavior, independent-peer interoperability and framework upgrades; prove the main Brynja graph remains byte-for-byte independent of both; keep both outside brynja-fips-module; and permit any later adapter-level approved-operation claim only through an exact certificate-bound module handle, numbered review and applicable operational-environment evidence without enabling rustls's fips feature or changing the validated artifact.
+Plan scope: Qualify brynja-rustls and the TLS-stream portion of brynja-tokio for dependency direction, exact lockfiles, feature allowlists, native-code absence, package archives, SBOMs, MSRV/latest-stable compatibility, cancellation, hostile-I/O behavior, independent-peer interoperability and framework upgrades; prove the main Brynja graph remains byte-for-byte independent of both, keep both outside brynja-fips-module, and permit a later adapter-level approved-operation claim only through an exact certificate-bound module handle, numbered review and applicable operational-environment evidence without enabling rustls's fips feature or changing the validated artifact.
 
 Goal: close the ecosystem-adapter assurance boundary before resource proofs and final systems qualification consume the public integration surface.
 
@@ -14390,6 +14677,126 @@ Exit criteria:
 
 - both optional adapters are independently usable and upgradable while the dependency-free core, first-party Rust cryptography rule, protocol evidence and exact FIPS artifact remain unchanged and unambiguous;
 - `v0.151.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.151.5 - Brynja RustCrypto Trait Compatibility Adapter
+
+Status: planned
+
+Plan scope: Implement and prepare for separate publication a separately locked `brynja-rustcrypto` adapter over the then-current stable RustCrypto digest, MAC, cipher, AEAD, signature, KEM and randomness trait packages using only exact Brynja implementations; map ordinary and hardened ownership honestly, never implement Clone, reset or serializable-state traits for hardened owners, retain caller-buffer and failure-atomic guarantees, disable alloc and default features where possible, and admit no RustCrypto algorithm implementation, native code, reverse dependency, implicit provider or FIPS claim.
+
+Goal: let existing Rust applications compose Brynja through familiar ecosystem
+traits without importing another algorithm implementation or weakening secret-
+state and failure semantics to satisfy convenience traits.
+
+Deliverables:
+
+- create a separately locked and published `brynja-rustcrypto` companion with
+  exact minimal-feature edges to the then-current stable digest, MAC, cipher,
+  AEAD, signature, KEM and randomness trait packages and no implementation
+  crates, alloc defaults, native code or reverse Brynja dependency;
+- map every compatible Brynja public operation and algorithm identity while
+  retaining exact key, nonce, tag, buffer, overlap, error, provider and output
+  ownership, and explicitly reject trait methods whose contract would weaken
+  failure atomicity, bounds, external-key authority or secret destruction;
+- expose ordinary digest/XOF interoperability separately from hardened owners;
+  hardened types never gain Clone, reset, serializable-state, raw-state export
+  or debug formatting merely because an ecosystem trait offers it.
+
+Verification:
+
+- compile and run downstream digest, XOF, MAC, cipher, AEAD, signature, KEM and
+  randomness examples against authoritative Brynja results and failure cases;
+- inject algorithm crates, default/alloc/native features, foreign providers,
+  fallback implementations, reverse edges, identity substitution, unsafe
+  trait mappings and forbidden hardened-state Clone/reset/serialization;
+- test the then-current and supported framework versions, MSRV/latest stable,
+  no_std-compatible adapter profiles, package archives, separate SBOM and
+  dependency/license/advisory/native-code isolation.
+
+Exit criteria:
+
+- supported RustCrypto consumers use exact Brynja implementations through
+  honest trait semantics, with every incompatible method explicitly rejected
+  and the core workspace and FIPS artifact unchanged;
+- `v0.151.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.151.6 - Standard And Async Cryptographic I/O Adapters
+
+Status: planned
+
+Plan scope: Implement first-party `brynja-io` std Read/Write and separately locked `brynja-tokio` AsyncRead/AsyncWrite utilities for ordinary and hardened hashing, XOF output, signing/prehash and verification workflows over bounded caller-owned buffers; preserve partial I/O, cancellation, backpressure, cleanup and exact output ownership, provide file and stream conveniences without allocation in underlying cryptography, and prohibit unauthenticated plaintext streaming, raw AEAD-over-stream framing or a second cryptographic implementation.
+
+Goal: make file, synchronous stream and asynchronous stream use ergonomic while
+keeping protocol framing, authentication and secret ownership explicit.
+
+Deliverables:
+
+- implement a first-party std-only `brynja-io` companion for bounded Read/Write
+  hashing, XOF output, prehash/sign and verification workflows plus file digest
+  conveniences, without changing or allocating inside the no_std algorithms;
+- extend the separately locked Tokio companion with equivalent bounded async
+  workflows that handle Pending, partial progress, wakeups, cancellation,
+  backpressure, flush, shutdown and task drop while sanitizing hardened state;
+- separate observation-only hashing adapters from authenticated protocol
+  streams, prohibit raw AEAD stream wrappers and unauthenticated plaintext
+  release, and document caller ownership of source, destination and outputs.
+
+Verification:
+
+- exercise empty, short, large, interrupted and adversarial files/streams,
+  every partial read/write boundary, repeated Pending, cancellation, error,
+  EOF, output exhaustion, early Drop and hardened cleanup path;
+- compare one-shot, manual-chunk, std and Tokio results for ordinary and
+  hardened byte/bit-compatible workflows and independently verify signatures,
+  prehashes and XOF output without hidden buffering or duplicate consumption;
+- reject raw AEAD-over-stream, early plaintext, unbounded allocation, second
+  algorithm/provider, reverse dependency and main/FIPS graph edges, then pass
+  package, MSRV/latest, OS, dependency, SBOM and hostile-I/O gates.
+
+Exit criteria:
+
+- callers can use Brynja safely with files and synchronous or asynchronous
+  streams without reimplementing chunk loops, weakening cleanup, or confusing
+  byte transport with authenticated record framing;
+- `v0.151.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.151.7 - Complete Ecosystem API Adapter Acceptance
+
+Status: planned
+
+Plan scope: Package and qualify brynja-rustls, brynja-tokio, brynja-rustcrypto and brynja-io through public downstream applications across supported Rust, OS and no_std-applicable profiles; verify exact dependency isolation, latest-compatible framework surfaces, ordinary versus hardened state semantics, hostile I/O, cancellation, cleanup, interoperability, documentation and absence from the main, legacy, bare-metal and FIPS-module graphs before final API freeze.
+
+Goal: close every promised ecosystem integration surface through real external
+applications before the v1 API and assurance freezes.
+
+Deliverables:
+
+- freeze package-external client/server, trait-consumer, sync-file and async-
+  stream applications using only published companion APIs and ordinary package
+  resolution with exact lockfiles and reproducible commands;
+- generate the final adapter capability, version, feature, dependency, API-
+  mapping, unsupported-method, ownership, cleanup and FIPS-separation register;
+- document framework upgrade policy, safe defaults, explicit selection,
+  limitations, migration and the difference between Brynja cryptography,
+  Brynja protocols and third-party framework state-machine evidence.
+
+Verification:
+
+- run every adapter on supported Rust and representative Linux, Windows,
+  macOS, BSD, Android and iOS build or execution lanes plus no_std-applicable
+  trait profiles, independent TLS peers and hostile sync/async I/O schedules;
+- mutate dependency and feature closures, framework versions, algorithm
+  mappings, ordinary/hardened types, cleanup events, cancellation, package
+  contents, documentation and FIPS claims and require fail-closed rejection;
+- compare the main workspace source, lockfile, package, SBOM, graph and FIPS
+  artifact byte-for-byte before and after every separately built adapter.
+
+Exit criteria:
+
+- every promised adapter is independently usable, current, bounded and honest,
+  all unsupported shapes are explicit, and no companion can change core
+  cryptography, protocol evidence, secret ownership or FIPS identity;
+- `v0.151.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.152.0 - Zero-Allocation And Resource Proof
 
@@ -15476,14 +15883,14 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.12 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.
+Plan scope: Re-audit the exact `brynja-legacy-sha1` implementation completed at v0.24.18 for RFC 9580 v4 fingerprint, protected-key, and v1 SEIPD/MDC use; freeze separate consumer identities, collision-risk policy, input domains, cleanup, dependency direction, package warnings, and proof that no modern OpenPGP, facade, default, TLS, PKIX, password, MAC, or FIPS edge is introduced.
 
 Goal: review the already complete SHA-1 owner once for three narrowly bounded
 OpenPGP compatibility consumers without changing its implementation identity.
 
 Deliverables:
 
-- verify the v0.24.12 implementation, package, vectors, warning and evidence
+- verify the v0.24.18 implementation, package, vectors, warning and evidence
   hashes remain exact and suitable for only the named input domains;
 - assign separate non-interchangeable fingerprint, protected-key and MDC
   consumer identities with their own data, output and cleanup rules;
@@ -15492,7 +15899,7 @@ Deliverables:
 
 Verification:
 
-- rerun the complete v0.24.12-v0.24.14 SHA-1 and legacy-isolation evidence on the exact candidate;
+- rerun the complete v0.24.18-v0.24.20 SHA-1 and legacy-isolation evidence on the exact candidate;
 - test consumer-domain and preimage separation plus collision-risk policy and
   complete cleanup for each proposed use;
 - graph-test every permitted and forbidden edge and complete independent risk review.

@@ -922,7 +922,7 @@
         "code_target": "crates/brynja-hash-sha3/src/sp800_185.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.24.6",
+        "owner": "0.24.12",
         "rationale": "The complete SP 800-185 cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF family is planned before 1.0 with exact bit-string encoding, keyed cleanup, portable usability, parallel execution, and cross-backend acceptance.",
         "sources": ["nist:NIST.FIPS.202.pdf", "nist:NIST.SP.800-185.pdf"],
         "test_target": "tests/surface/primitives.rs#sp800_185"
@@ -1600,5 +1600,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "86a234f6e9215904a8e047d5d8060bf2a0e83f311ac5d9363597ae08d8a1e932"
+  "source_ledger_sha256": "8fbd01155c6e5e2e0e793f53ac6e9ac1c98ba258e142fe82082c096593d90632"
 }

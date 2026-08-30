@@ -55,6 +55,11 @@ Keep a Changelog and Semantic Versioning.
 - Advance the internal facade to `brynja 0.24.4`, select zero crates.io
   packages, and require an exceptional pentest before its signed tag because
   this milestone adds new intrinsic and evidence-only unsafe boundaries.
+- Record the green exceptional v0.24.4 assessment of exact implementation
+  candidate `2f755e821e31da9a5524320986c3eb9400f3cfad` as `PASS`/`PASS` with
+  zero open findings while retaining zero backend admissions and every native,
+  migration, performance, side-channel, independent-review, erasure, and FIPS
+  restriction.
 - Audit the entire pre-1.0 roadmap for complete reusable API shapes and private
   secret cleanup. Add a machine-readable API-profile and secret-state register,
   canonical arbitrary-bit plus distinct hardened SHA-2/SHA-3/SHAKE milestones,

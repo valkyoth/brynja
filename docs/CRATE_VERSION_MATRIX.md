@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.3 signed; v0.24.4 Keccak acceleration candidates implemented, exceptional pentest and native evidence pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.3 signed; v0.24.4 Keccak acceleration candidates and exceptional pentest complete, native evidence incomplete, final GitHub and tag pending
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.4`. `brynja-hash-core 0.1.0`,
@@ -244,8 +244,9 @@ package. Direct KAT, quarantine, scalar differential, six-identity fixed/XOF,
 compiler-endpoint instruction, and supplemental AArch64 QEMU checks pass.
 RISC-V is scalar-only for Keccak under the pinned ratified ISA authorities.
 The facade advances without changing support-package versions; exceptional
-pentest and qualifying native observations remain pending, and zero crates are
-selected for publication.
+pentest passed with zero open findings, qualifying native observations remain
+incomplete, both candidates stay unadmitted, and zero crates are selected for
+publication.
 
 The v0.24.2 stage adds complete portable SHAKE128 and SHAKE256 over the same
 private sponge owner. Separate consuming absorb and incremental output types,

@@ -1,8 +1,8 @@
 # Brynja 0.24.4 Release Notes
 
-Status: implementation candidate complete; exceptional pentest, qualifying
-native observations, final repository gate, hosted GitHub and CodeQL, and
-signed tag pending; no crates.io publication is selected
+Status: implementation and exceptional pentest complete with zero open
+findings; final repository gate, hosted GitHub and CodeQL, and signed tag
+pending; no crates.io publication is selected
 
 Brynja 0.24.4 adds two isolated, first-party Rust Keccak-f[1600] acceleration
 candidates for the six frozen byte-oriented SHA-3/SHAKE functions. x86_64 uses
@@ -41,9 +41,21 @@ because the pinned ratified authorities contain no qualifying Keccak route.
   SHA3 instructions for the Arm candidate.
 - The unchanged v0.24.3 semantic corpus remains mandatory through the portable
   public fixture. Only its exact facade-version pin advances to 0.24.4.
-- Qualifying native Intel, Apple M2, and AWS Arm observations remain pending
-  until the assessed exact commit is available; every candidate therefore
-  stays unadmitted.
+- Qualifying native Intel, Apple M2, and AWS Arm observations remain pending;
+  every candidate therefore stays unadmitted.
+
+## Pentest
+
+The repository owner reported the exceptional assessment of exact
+implementation candidate `2f755e821e31da9a5524320986c3eb9400f3cfad`
+green. No qualifying finding was reported, no remediation was requested, and
+the permanent report records `PASS`/`PASS` with zero open findings.
+
+The assessment does not admit either accelerated backend, establish general
+hardware support, replace independent cryptographic review, or create a FIPS
+140-3 validation claim. Missing qualifying native, migration, performance,
+side-channel, and authenticated-runner evidence remains the explicit reason
+both candidates are unadmitted.
 
 ## Security Boundaries
 
@@ -65,10 +77,9 @@ family remains **In progress** through v0.24.11.
 ## Release Process
 
 Version 0.24.4 is an internal development milestone in the cumulative
-v0.20.0-to-v0.25.0 range and selects zero crates.io packages. New unsafe
-intrinsic paths trigger an exceptional pentest before tagging. After the
-implementation candidate and any remediation are assessed, commit-bound native
-observations are collected where qualifying hardware exists; all affected
-evidence must be rerun if production or fixture semantics change. The final
-report-bearing candidate must pass the complete local gate plus hosted GitHub
-and CodeQL before the signed tag is authorized.
+v0.20.0-to-v0.25.0 range and selects zero crates.io packages. The exceptional
+pentest required by the new unsafe intrinsic paths passed with zero open
+findings. Native observations remain non-authorizing and incomplete, so both
+candidates stay unadmitted. The final report-bearing candidate must pass the
+complete local gate plus hosted GitHub and CodeQL before the signed tag is
+authorized.

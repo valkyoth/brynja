@@ -268,10 +268,14 @@ differential, all-six-identity fixed-output/XOF comparisons, compiler-endpoint
 instruction checks, and supplemental AArch64 QEMU execution pass. Both paths
 remain unadmitted; ordinary consumers continue to use portable SHA-3/SHAKE.
 RISC-V is explicitly scalar-only because the pinned ratified authorities
-contain no qualifying Keccak instruction route. Native Intel, Apple M2, and
-AWS Arm observations, performance, migration, side-channel, exceptional
-pentest, independent-review, secret-erasure, and FIPS-validation claims remain
-pending or absent.
+contain no qualifying Keccak instruction route. The exceptional assessment of
+exact implementation candidate `2f755e821e31da9a5524320986c3eb9400f3cfad`
+passed with zero open findings; the permanent
+[v0.24.4 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.4.md)
+records `PASS`/`PASS`. Native Intel, Apple M2, and AWS Arm observations,
+performance, migration, side-channel, independent-review, secret-erasure, and
+FIPS-validation claims remain pending or absent, so both backends stay
+unadmitted.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri

@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.3 signed; v0.24.4 Keccak acceleration candidates implemented, exceptional pentest and native evidence pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.3 signed; v0.24.4 Keccak acceleration candidates and exceptional pentest complete, native evidence incomplete, final GitHub and tag pending
 
 | Control | Foundation enforcement |
 | --- | --- |

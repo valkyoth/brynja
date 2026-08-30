@@ -2696,7 +2696,7 @@ Exit criteria:
 
 ### v0.24.4 - SHA-3 And SHAKE Byte-Oriented Acceleration Evidence
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes:
 
@@ -2722,6 +2722,10 @@ Implementation notes:
 - the new intrinsic and evidence-only unsafe boundaries trigger an exceptional
   pentest. No dependency, protocol engine, secret-erasure, independent-review,
   FIPS-validation, public-dispatch or crates.io-publication claim is added.
+- the repository owner reported the exceptional assessment of exact
+  implementation candidate `2f755e821e31da9a5524320986c3eb9400f3cfad`
+  green with zero open findings. The permanent report records `PASS`/`PASS`;
+  it does not admit either backend or close any native-evidence duty.
 
 Plan scope: Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for the six existing byte-oriented SHA-3/SHAKE APIs on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, rerun the unchanged v0.24.3 fixture through portable and every admitted backend, and keep the family In progress until later bit-string and hardened-state profiles pass final acceptance.
 

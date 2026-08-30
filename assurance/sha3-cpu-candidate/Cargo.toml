@@ -1,20 +1,21 @@
 [workspace]
 
 [package]
-name = "brynja-sha2-public-api-fixture"
+name = "brynja-sha3-cpu-candidate-fixture"
 version = "0.0.0"
 edition = "2024"
 rust-version = "1.90"
 publish = false
 
 [dependencies]
-brynja = { path = "../../crates/brynja", version = "=0.24.4", default-features = false }
-brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", version = "=0.1.0", default-features = false, features = ["cpu"] }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", version = "=0.1.1" }
+brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", version = "=0.1.0" }
 
 [lints.rust]
 unsafe_code = "forbid"
 unsafe_op_in_unsafe_fn = "forbid"
 unused_must_use = "deny"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(brynja_cpu_evidence)'] }
 
 [lints.clippy]
 panic = "forbid"

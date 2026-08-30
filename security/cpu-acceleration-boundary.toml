@@ -1,13 +1,13 @@
 [schema]
-version = 3
-milestone = "0.23.3"
-status = "complete-sha2-family-candidates-and-scalar-decisions"
+version = 4
+milestone = "0.24.4"
+status = "sha2-and-keccak-candidates-with-scalar-decisions"
 
 [limits]
 maximum_source_lines = 500
-implemented_backend_count = 5
+implemented_backend_count = 7
 active_backend_count = 0
-approved_cpu_low_level_allowances = 5
+approved_cpu_low_level_allowances = 8
 
 [packages.kernel]
 name = "brynja-crypto-cpu"
@@ -28,7 +28,7 @@ publication = "deferred-crates-io"
 facade_feature = "none"
 
 [graph]
-scalar_owner = "brynja-hash-sha2"
+scalar_owners = ["brynja-hash-sha2", "brynja-hash-sha3"]
 facade = "brynja"
 forbidden_consumers = [
   "brynja-crypto",
@@ -60,6 +60,9 @@ current_cpu_allowances = [
   "brynja-crypto-cpu:src/x86_sha.rs:sha-intrinsics",
   "brynja-crypto-cpu:src/aarch64_sha2.rs:sha2-intrinsics",
   "brynja-crypto-cpu:src/riscv64_zknh.rs:zknh-inline-assembly",
+  "brynja-crypto-cpu:src/keccak.rs:runtime-attestation",
+  "brynja-crypto-cpu:src/x86_avx2_keccak.rs:avx2-intrinsics",
+  "brynja-crypto-cpu:src/aarch64_sha3_keccak.rs:sha3-intrinsics",
   "brynja-crypto-cpu-std:src/runtime_detection.rs:std-feature-attestation",
 ]
 approval_scope = "one-exact-symbol"
@@ -108,11 +111,41 @@ invariants = [
   "no-register-erasure-claim",
 ]
 
+[[evidence]]
+path = "assurance/sha3-cpu-candidate/Cargo.toml"
+status = "isolated-candidate-fixture-manifest"
+sha256 = "cd0d4854110a0cb70efd33f35f6553cda9a3ecf6e7fc6ddcd6b2451c71a00d00"
+
+[[evidence]]
+path = "assurance/sha3-cpu-candidate/Cargo.lock"
+status = "isolated-candidate-fixture-lock"
+sha256 = "d8831a70f3ef005929e54670224e7b98dfb42ea04f9d9ba9696741de04a1a8ab"
+
+[[evidence]]
+path = "assurance/sha3-cpu-candidate/src/lib.rs"
+status = "six-identity-scalar-differential"
+sha256 = "759685c1499438e0e0fb7b6df8b9a42db55837dabc749c359cdb5e29497b9882"
+
+[[evidence]]
+path = "assurance/sha3-cpu-candidate/src/main.rs"
+status = "candidate-fixture-entrypoint"
+sha256 = "c6bfa1bbbe3481c2030acb5e4b1ba779167c19609b6605a034e7ba0e82fd3e50"
+
+[[evidence]]
+path = "scripts/sha3/check-sha3-cpu-codegen.sh"
+status = "compiler-endpoint-instruction-evidence"
+sha256 = "f6c4f24c31053a60d5ee7dca2c719fcafe98c8e4b505f13070cdce1e4765a3af"
+
+[[evidence]]
+path = "scripts/sha3/check-sha3-cpu-qemu.sh"
+status = "supplemental-aarch64-execution-evidence"
+sha256 = "7fc48e128bbc57fff4f81c59818aa26c6b8ed54a94a84a18a2307958bcaf8046"
+
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "9a1c7bb4d0485831d35f4570c77c048f47da762a9f4bd6ff040bbb9e883927e2"
+sha256 = "64af7e750007ce92d687b171703242a29bfbf84e6775e87a35779548dadef264"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -140,6 +173,18 @@ sha256 = "3643e358f27bc5e9f4416525a9e9f43ab26063e700e80b3cb91da44bdddc5f6f"
 
 [[sources]]
 package = "brynja-crypto-cpu"
+path = "src/keccak.rs"
+status = "safe-session-and-attestation-boundary"
+sha256 = "faaa0fb943f8a518b4e45797da4fc01382450626e56f6c9a81eddfebcfdd9c31"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/keccak_constants.rs"
+status = "portable-keccak-constants"
+sha256 = "0dd7416c63230a9dc8c6722da36ece0ce481a3f719fef81c55b9d5095da05883"
+
+[[sources]]
+package = "brynja-crypto-cpu"
 path = "src/x86_sha.rs"
 status = "implemented-unadmitted-candidate-kernel"
 sha256 = "b6cbff47cc6b0d4304fd60d5001d5b21b94aa6c2659ea809422e947a351f2e28"
@@ -155,6 +200,18 @@ package = "brynja-crypto-cpu"
 path = "src/riscv64_zknh.rs"
 status = "implemented-unadmitted-candidate-kernel"
 sha256 = "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/x86_avx2_keccak.rs"
+status = "implemented-unadmitted-candidate-kernel"
+sha256 = "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3"
+
+[[sources]]
+package = "brynja-crypto-cpu"
+path = "src/aarch64_sha3_keccak.rs"
+status = "implemented-unadmitted-candidate-kernel"
+sha256 = "7fafd5d7d568bd13c7c77ffbedc2d053cd41f1e0ce0cefb7161fb5efc455089d"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -211,10 +268,10 @@ abi_preconditions = ["x86_64", "aes-and-pclmulqdq-usable-on-current-logical-cpu"
 id = "x86-avx2"
 identity = "X86Avx2"
 architecture = "x86_64"
-module = "src/x86_avx2.rs"
-status = "reserved"
-sha256 = "absent"
-low_level_allowed = false
+module = "src/x86_avx2_keccak.rs"
+status = "implemented-unadmitted-local-correctness-observed"
+sha256 = "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3"
+low_level_allowed = true
 instructions = ["avx2"]
 abi_preconditions = ["x86_64", "osxsave-and-xcr0-ymm-state", "avx2-usable-on-current-logical-cpu"]
 
@@ -263,6 +320,17 @@ instructions = ["neon", "aes", "pmull"]
 abi_preconditions = ["aarch64", "neon-aes-and-pmull-usable-on-current-logical-cpu"]
 
 [[backends]]
+id = "aarch64-sha3-keccak"
+identity = "Aarch64Sha3"
+architecture = "aarch64"
+module = "src/aarch64_sha3_keccak.rs"
+status = "implemented-unadmitted-qemu-correctness-observed"
+sha256 = "7fafd5d7d568bd13c7c77ffbedc2d053cd41f1e0ce0cefb7161fb5efc455089d"
+low_level_allowed = true
+instructions = ["neon", "sha3"]
+abi_preconditions = ["aarch64", "neon-and-sha3-usable-on-current-logical-cpu"]
+
+[[backends]]
 id = "riscv-vector"
 identity = "RiscVVector"
 architecture = "riscv"
@@ -294,3 +362,14 @@ sha256 = "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619"
 low_level_allowed = true
 instructions = ["zknh"]
 abi_preconditions = ["riscv64", "zknh-usable-on-current-hart"]
+
+[[backends]]
+id = "riscv-keccak-scalar"
+identity = "ScalarOnlyKeccak"
+architecture = "riscv"
+module = "absent"
+status = "scalar-only-reviewed"
+sha256 = "absent"
+low_level_allowed = false
+instructions = []
+abi_preconditions = ["riscv64", "no-ratified-keccak-instruction-in-pinned-authorities"]

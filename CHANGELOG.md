@@ -41,6 +41,20 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add isolated zero-dependency `no_std` Keccak-f[1600] candidates for x86_64
+  AVX2 and AArch64 SHA3 instructions, with thread-bound direct-KAT sessions,
+  permanent quarantine, zero ordinary admissions, and an explicit RISC-V
+  scalar-only disposition because the pinned ratified ISA has no qualifying
+  Keccak acceleration route.
+- Bind v0.24.4 acceleration evidence to a 1,024-state direct permutation
+  differential, 80 fixed-output and 28 XOF comparisons across all six frozen
+  byte-oriented identities, Rust 1.90.0/1.98.0 emitted instructions, and
+  supplemental AArch64 QEMU execution. Native Intel, Apple, and AWS Arm,
+  performance, migration, side-channel, independent-review, secret-erasure,
+  FIPS-validation, and public-dispatch claims remain absent.
+- Advance the internal facade to `brynja 0.24.4`, select zero crates.io
+  packages, and require an exceptional pentest before its signed tag because
+  this milestone adds new intrinsic and evidence-only unsafe boundaries.
 - Audit the entire pre-1.0 roadmap for complete reusable API shapes and private
   secret cleanup. Add a machine-readable API-profile and secret-state register,
   canonical arbitrary-bit plus distinct hardened SHA-2/SHA-3/SHAKE milestones,

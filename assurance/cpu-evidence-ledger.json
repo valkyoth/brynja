@@ -1,7 +1,7 @@
 {
   "admissions": {
     "path": "security/cpu-backend-admissions.toml",
-    "sha256": "5a558f7382eb44f6ed5b30e21e0800aaab8681a5ee3cca678367737a78179ec8"
+    "sha256": "c66e36ed948078336fd55c95a784084cde37230164bffc4595802fa8315cddb0"
   },
   "backends": [
     {
@@ -46,7 +46,7 @@
         "local-amd-x86_64",
         "aws-intel-x86_64"
       ],
-      "reason": "no-primitive-implementation-or-native-evidence",
+      "reason": "keccak-candidate-local-correctness-observed-admission-evidence-incomplete",
       "required_features": [
         "avx2"
       ],
@@ -127,6 +127,24 @@
       "required_operating_state": [
         "aarch64",
         "neon-aes-and-pmull-usable-on-current-logical-cpu"
+      ],
+      "status": "unadmitted"
+    },
+    {
+      "architecture": "aarch64",
+      "id": "aarch64-sha3-keccak",
+      "native_lanes": [
+        "apple-m2-aarch64",
+        "aws-aarch64"
+      ],
+      "reason": "keccak-candidate-qemu-correctness-observed-native-evidence-incomplete",
+      "required_features": [
+        "neon",
+        "sha3"
+      ],
+      "required_operating_state": [
+        "aarch64",
+        "neon-and-sha3-usable-on-current-logical-cpu"
       ],
       "status": "unadmitted"
     },
@@ -258,7 +276,7 @@
     "sha256": "609548b1a4d72908dd0ec57f5d15456aeb517223579410f60fa1fae07ccb5bf3"
   },
   "schema": {
-    "milestone": "0.23.3",
-    "version": 3
+    "milestone": "0.24.4",
+    "version": 4
   }
 }

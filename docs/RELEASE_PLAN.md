@@ -2696,7 +2696,32 @@ Exit criteria:
 
 ### v0.24.4 - SHA-3 And SHAKE Byte-Oriented Acceleration Evidence
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes:
+
+- `brynja-crypto-cpu` now contains isolated zero-dependency `no_std` x86_64
+  AVX2 and AArch64 SHA3 Keccak-f[1600] candidates; exact source hashes, feature
+  bundles, low-level allowances, direct startup KATs, caller-owned health
+  generations, permanent quarantine, and zero admission are machine-enforced;
+- one independent portable reference checks 1,024 arbitrary 25-lane states,
+  while a repository-only fixture reruns the frozen byte-oriented semantics as
+  80 fixed-output and 28 XOF comparisons across all six identities, every rate
+  boundary, multi-block inputs, zero output, and multi-permutation tails;
+- Rust 1.90.0 and 1.98.0 emitted code contains AVX2 operations on x86_64 and
+  `eor3`, `rax1`, and `bcax` on AArch64; supplemental AArch64 QEMU execution
+  passes but remains categorically non-native and non-authorizing;
+- the pinned ratified RISC-V scalar/vector cryptography authorities contain no
+  qualifying Keccak operation, so RISC-V receives an explicit scalar-only
+  disposition instead of a fabricated candidate;
+- both implemented candidates remain unadmitted pending exact assessed-commit
+  native Intel, Apple M2 and AWS Arm observations plus authenticated
+  provenance, migration, performance and side-channel evidence; ordinary
+  public SHA-3/SHAKE routes remain portable and the family remains **In
+  progress** through v0.24.11;
+- the new intrinsic and evidence-only unsafe boundaries trigger an exceptional
+  pentest. No dependency, protocol engine, secret-erasure, independent-review,
+  FIPS-validation, public-dispatch or crates.io-publication claim is added.
 
 Plan scope: Only after v0.24.3 is committed and green, add architecture-specific Keccak-f[1600] candidates for the six existing byte-oriented SHA-3/SHAKE APIs on x86_64, AArch64, and qualifying RISC-V, admit only paths justified by exact native, emitted-code, performance, side-channel, KAT, quarantine, and scalar-equivalence evidence, rerun the unchanged v0.24.3 fixture through portable and every admitted backend, and keep the family In progress until later bit-string and hardened-state profiles pass final acceptance.
 

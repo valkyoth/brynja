@@ -237,7 +237,7 @@ retest of exact candidate `c7af70e19def950f3a9004c18e5c869ef844c644`
 passed with zero open findings; the milestone is signed and selects zero
 crates.io packages.
 
-The current internal `0.24.3` candidate freezes a standalone downstream
+Signed `0.24.3` freezes a standalone downstream
 `no_std` consumer over all six FIPS 202 identities. It checks leaf and facade
 one-shot, irregular streaming, zero-output, exact-rate, multi-rate, 257-byte
 real-file and 343-byte multi-squeeze paths against official or independently
@@ -260,6 +260,18 @@ open findings. The permanent
 [v0.24.3 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.3.md)
 records `PASS`/`PASS`; it does not add independent cryptographic review, FIPS
 validation, backend admission, or crates.io publication.
+
+The current internal `0.24.4` candidate adds two isolated first-party
+Keccak-f[1600] acceleration paths: x86_64 AVX2 and AArch64 SHA3 instructions.
+Direct KATs, permanent session quarantine, a 1,024-state permutation
+differential, all-six-identity fixed-output/XOF comparisons, compiler-endpoint
+instruction checks, and supplemental AArch64 QEMU execution pass. Both paths
+remain unadmitted; ordinary consumers continue to use portable SHA-3/SHAKE.
+RISC-V is explicitly scalar-only because the pinned ratified authorities
+contain no qualifying Keccak instruction route. Native Intel, Apple M2, and
+AWS Arm observations, performance, migration, side-channel, exceptional
+pentest, independent-review, secret-erasure, and FIPS-validation claims remain
+pending or absent.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
@@ -648,8 +660,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.3`
-FIPS 202 SHA-3/SHAKE milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.4`
+FIPS 202 acceleration-evidence milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -752,7 +764,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all six portable FIPS 202 functions with portable packaged acceptance through v0.24.3; no TLS engine or provider effect |
+| `brynja` | Modern production facade | Internal v0.24.4 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all six portable FIPS 202 functions; optional Keccak candidates remain unadmitted and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six FIPS 180-4 byte-oriented algorithms and forced CPU-candidate APIs; arbitrary-bit and hardened secret-bearing profiles close through v0.24.11 before full-family status returns |
@@ -760,7 +772,7 @@ selected set in dependency order and publishes the facade last.
 | Future `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | Planned at v0.24.13 and accepted with the complete SP 800-185 family through v0.24.17 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six SHA-2 algorithms plus all four SHA-3 digests and both SHAKE XOFs; other planned cryptography and provider effects remain absent |
-| `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; three SHA-256-family and two SHA-512-family candidates implemented; x86 SHA-512 is scalar-only; zero admitted backends |
+| `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented; x86 SHA-512 and RISC-V Keccak are scalar-only; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected host detector adapter | Published metadata v0.1.1; complete-family reporting with scalar fallback, RISC-V auto-detection disabled; absent from facade and FIPS graphs |
 | `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |
 | `brynja-protocol` | Shared TLS 1.2/1.3 and DTLS 1.2/1.3 record envelopes | v0.1.0 implemented and published at v0.20.0; v0.19.0 exceptional pentest and retest passed |

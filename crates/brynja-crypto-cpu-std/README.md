@@ -44,6 +44,12 @@ SHA-512 candidate availability and retains scalar SHA-384, SHA-512,
 SHA-512/224, and SHA-512/256 until admission. x86_64 SHA-512 is intentionally
 scalar, and required SHA-512-family acceleration fails closed.
 
+Internal v0.24.4 adds x86_64 AVX2 and AArch64 SHA3 Keccak candidates only to
+the lower `no_std` package and repository evidence fixture. This adapter does
+not yet expose or detect them because neither candidate is admitted. Public
+SHA-3/SHAKE remains portable, and a later reviewed admission must add runtime
+detection and reporting without silently changing this crate's selection.
+
 The x86_64, AArch64, and RV64 Zknh SHA-2 kernels remain unadmitted in v0.23.3
 pending complete authenticated admission evidence. Non-authorizing native
 correctness observations exist for AMD, Intel, Apple M2, and AWS Arm; the

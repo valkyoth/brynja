@@ -25,7 +25,7 @@ certificate-bound operational-environment claim.
 | `brynja-hash-sha3` | All six FIPS 202 byte-oriented SHA-3 and SHAKE functions over one private Keccak-f[1600] owner with separately packaged downstream acceptance; arbitrary-bit, hardened secret-bearing, and final cross-backend profiles pending | ❌ Not verified |
 | Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
-| `brynja-crypto-cpu` | Five implemented but unadmitted SHA-2 candidates across x86_64 SHA, AArch64 SHA2/SHA-512, and RV64 Zknh plus explicit x86 SHA-512 scalar-only policy | ❌ Not independently verified; native admission evidence incomplete |
+| `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |
 | `brynja-crypto-cpu-std` | Implemented opt-in SHA-2 host detection/reporting, opportunistic scalar fallback and fail-closed required modes; RISC-V auto-detection disabled | ❌ Not independently verified; accelerated candidates remain unadmitted |
 | `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |
 | `brynja-protocol` | Shared TLS and DTLS record-envelope parsing and encoding | ❌ Not verified |

@@ -542,6 +542,20 @@ package archives. Hidden features, invalid phase use, private permutation
 access and incomplete package contents fail. This proves portable public
 usability, not accelerated equivalence, secret erasure, independent review, or
 FIPS validation.
+v0.24.4 treats ISA feature claims, compiler lowering, candidate selection,
+startup answers, lane contents, and cross-backend equivalence as hostile. The
+x86_64 AVX2 and AArch64 SHA3 kernels are isolated, hash-bound, fixed-round,
+and reachable only through a thread-bound evidence session after an exact
+architecture/feature proof and direct KAT. A bad KAT permanently quarantines
+that session. Independent 1,024-state permutation and all-six-identity
+fixed/XOF differentials prevent one shared candidate error from hiding behind
+a single digest; endpoint assembly checks and supplemental QEMU prove intended
+instruction lowering and execution. Neither compilation, emulation, a passing
+KAT, nor unauthenticated native output authorizes public dispatch. RISC-V stays
+scalar-only because pinned ratified authorities contain no qualifying Keccak
+operation. Native provenance, CPU migration, performance, side-channel,
+register/spill/secret-state erasure, independent review, and FIPS validation
+remain explicit residuals.
 Planned,
 future-work, blocked, legacy,
 governance-tool, and policy-only assurance states are not protocol

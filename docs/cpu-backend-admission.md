@@ -1,6 +1,6 @@
 # Native CPU Backend Evidence And Admission
 
-Status: v0.23.3 has five implemented SHA-2 candidates; zero backend admissions
+Status: v0.24.4 has five SHA-2 and two Keccak candidates; zero backend admissions
 
 ## Purpose
 
@@ -14,8 +14,10 @@ The machine-readable policy is
 `security/cpu-backend-admissions.toml`. Versions 0.22.1 through 0.23.3
 implement the `x86-sha`, `aarch64-sha2`, `aarch64-sha512`,
 `riscv-scalar-crypto`, and `riscv-sha512` SHA-2 candidates; all ten registered
-identities remain
-`unadmitted`. The generated
+identities were unadmitted. Version 0.24.4 adds `x86-avx2` and
+`aarch64-sha3-keccak` candidates, retains eleven admission-register identities
+as `unadmitted`, and records x86 SHA-512 plus RISC-V Keccak as scalar-only
+decisions. The generated
 `assurance/cpu-evidence-ledger.json` binds those decisions, registered lanes,
 harnesses, and future evidence manifests reproducibly.
 
@@ -102,6 +104,24 @@ lane has not supplied qualifying ISA, correctness, performance, migration,
 side-channel, or provenance evidence. QEMU cannot satisfy those duties.
 Therefore the admission register retains zero active backends and makes no
 RISC-V acceleration claim.
+
+## v0.24.4 Keccak Candidate Disposition
+
+The x86_64 implementation requires AVX2 plus usable YMM operating state. The
+AArch64 implementation requires NEON and SHA3 and emits `eor3`, `rax1`, and
+`bcax`. Both execute a direct zero-state KAT before exposing the repository-
+only evidence permutation, permanently quarantine a failed session, and match
+an independent 1,024-state permutation corpus plus 80 fixed-output and 28 XOF
+results across all six frozen byte-oriented identities. Rust 1.90.0 and 1.98.0
+emit the required instructions, and AArch64 QEMU supplies supplemental
+execution evidence.
+
+Neither candidate is admitted. Qualifying exact-commit native observations,
+authenticated provenance, migration exclusion, performance and side-channel
+evidence remain incomplete. The pinned RISC-V scalar and vector cryptography
+authorities define no qualifying Keccak operation, so RISC-V remains an
+explicit portable-scalar route rather than a fabricated acceleration
+candidate.
 
 ## Evidence Contract
 

@@ -1,19 +1,19 @@
 [release]
-version = "0.24.3"
-milestone = "0.24.3"
+version = "0.24.4"
+milestone = "0.24.4"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = "The milestone freezes public-only acceptance and packaging evidence without changing cryptographic implementation, unsafe code, dependencies, backend admission, or protocol behavior."
+exceptional = true
+exception_reason = "New architecture-specific Keccak-f[1600] intrinsic implementations and evidence-only unsafe candidate construction require an exceptional assessment; both candidates remain unadmitted."
 
 [crates."brynja"]
-previous_version = "0.24.2"
-version = "0.24.3"
+previous_version = "0.24.3"
+version = "0.24.4"
 change = "code"
 publish = false
-reason = "Advance the internal facade with frozen package-external portable FIPS 202 acceptance while final cross-backend family acceptance remains in progress."
+reason = "Advance the internal facade while adding unadmitted x86_64 AVX2 and AArch64 SHA3 Keccak candidates and retaining portable public behavior."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -55,7 +55,7 @@ previous_version = "0.1.1"
 version = "0.1.1"
 change = "code"
 publish = false
-reason = "Retain published 0.1.1 while adding SHA-224 reuse, AArch64 SHA-512 and RISC-V Zknh SHA-512 candidates and an explicit x86 SHA-512 scalar-only decision for v0.25.0."
+reason = "Retain published 0.1.1 while adding unadmitted x86_64 AVX2 and AArch64 SHA3 Keccak candidates, direct KAT/quarantine behavior, and explicit RISC-V Keccak scalar-only disposition for v0.25.0."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.1.1"

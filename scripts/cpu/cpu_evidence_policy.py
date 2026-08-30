@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repository binding and deterministic ledger for v0.23.3 CPU evidence."""
+"""Repository binding and deterministic ledger for v0.24.4 CPU evidence."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ LEDGER = ROOT / "assurance/cpu-evidence-ledger.json"
 EVIDENCE_ROOT = ROOT / "assurance/cpu-evidence"
 ATTRIBUTES = ROOT / ".gitattributes"
 EXPECTED_POLICY_SHA256 = "609548b1a4d72908dd0ec57f5d15456aeb517223579410f60fa1fae07ccb5bf3"
-EXPECTED_ADMISSIONS_SHA256 = "5a558f7382eb44f6ed5b30e21e0800aaab8681a5ee3cca678367737a78179ec8"
+EXPECTED_ADMISSIONS_SHA256 = "c66e36ed948078336fd55c95a784084cde37230164bffc4595802fa8315cddb0"
 BACKEND_FIELDS = {
     "id", "architecture", "required_features", "required_operating_state",
     "native_lanes", "status", "reason",
@@ -28,11 +28,12 @@ BACKEND_FIELDS = {
 EXPECTED_REASONS = {
     "x86-sha": "sha256-family-native-correctness-observed-admission-evidence-incomplete",
     "x86-aes-gcm": "no-primitive-implementation-or-native-evidence",
-    "x86-avx2": "no-primitive-implementation-or-native-evidence",
+    "x86-avx2": "keccak-candidate-local-correctness-observed-admission-evidence-incomplete",
     "x86-avx512": "no-primitive-implementation-or-native-evidence",
     "aarch64-sha2": "sha256-family-native-correctness-observed-admission-evidence-incomplete",
     "aarch64-sha512": "sha512-family-native-correctness-observed-admission-evidence-incomplete",
     "aarch64-aes-gcm": "no-primitive-implementation-or-native-evidence",
+    "aarch64-sha3-keccak": "keccak-candidate-qemu-correctness-observed-native-evidence-incomplete",
     "riscv-vector": "no-primitive-implementation-or-qualifying-native-isa-evidence",
     "riscv-scalar-crypto": "sha256-family-implementation-present-qualifying-native-isa-unavailable",
     "riscv-sha512": "sha512-family-implementation-present-qualifying-native-isa-unavailable",
@@ -58,9 +59,9 @@ def read(path: Path) -> dict:
 def validate_admissions(policy: dict, admissions: dict, boundary: dict) -> None:
     schema.exact_keys(admissions, {"schema", "backends"}, "CPU admission register")
     if admissions["schema"] != {
-        "version": 3,
-        "milestone": "0.23.3",
-        "status": "five-sha2-candidates-zero-backends-admitted",
+        "version": 4,
+        "milestone": "0.24.4",
+        "status": "seven-candidates-zero-backends-admitted",
     }:
         fail("CPU admission-register identity drifted")
     lanes = schema.lane_map(policy)
@@ -219,7 +220,7 @@ def build_ledger(policy: dict, admissions: dict) -> dict:
             "sha256": file_hash(path),
         })
     return {
-        "schema": {"version": 3, "milestone": "0.23.3"},
+        "schema": {"version": 4, "milestone": "0.24.4"},
         "claims": {
             "admitted_backend_count": sum(item["status"] == "admitted" for item in admissions["backends"]),
             "native_result_count": native_result_count,

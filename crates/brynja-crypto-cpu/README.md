@@ -29,12 +29,16 @@
 separately reviewed first-party ISA kernels and static selection. Version
 0.1.1 now contains isolated SHA-256-family candidates for x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh instructions plus SHA-512-family candidates for
-AArch64 SHA-512 and RV64 Zknh instructions. Portable `brynja-hash-sha2` continues to own
-streaming state, padding, length accounting, finalization, and scalar fallback.
+AArch64 SHA-512 and RV64 Zknh instructions. Internal v0.24.4 source also adds
+x86_64 AVX2 and AArch64 SHA3 Keccak-f[1600] candidates for later SHA-3/SHAKE
+dispatch. Portable hash crates continue to own public streaming state,
+padding, length accounting, finalization, and scalar fallback.
 
-All five candidates are deliberately unadmitted while commit-bound native
+All seven candidates are deliberately unadmitted while commit-bound native
 evidence is incomplete. x86_64 SHA-512 is a reviewed scalar-only decision;
-AVX2 or AVX-512 availability alone does not authorize a backend. Ordinary construction therefore cannot execute
+RISC-V Keccak is also scalar-only because the pinned ratified authorities have
+no qualifying Keccak instruction route. AVX2, SHA3, or AVX-512 availability
+alone does not authorize a backend. Ordinary construction therefore cannot execute
 any kernel: static selection returns `None`, runtime-attested construction
 returns `NotAdmitted`, opportunistic host use falls back to scalar, and
 required acceleration fails closed. Evidence builds can directly exercise a
@@ -74,6 +78,9 @@ pentesting do not by themselves constitute independent verification.
 | x86_64 SHA-512 family | Scalar-only decision; no admitted instruction kernel | ❌ No accelerated implementation claimed |
 | AArch64 SHA-512 candidate | NEON/SHA-512 compression | ❌ Implemented but unadmitted and not independently verified |
 | RV64 SHA-512 candidate | Zknh scalar-crypto compression | ❌ Implemented but unadmitted and not independently verified |
+| x86_64 Keccak candidate | AVX2 Keccak-f[1600] permutation | ❌ Implemented but unadmitted and not independently verified |
+| AArch64 Keccak candidate | NEON/SHA3 Keccak-f[1600] permutation | ❌ Implemented but unadmitted and not independently verified |
+| RISC-V Keccak | Scalar-only decision; no qualifying ratified instruction route in pinned authorities | ❌ No accelerated implementation claimed |
 
 Metadata version `0.1.1` was published at v0.20.0 after the committed
 cumulative pentest, remediation retest, and hosted gates recorded

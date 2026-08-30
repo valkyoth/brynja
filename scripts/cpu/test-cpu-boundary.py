@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Broken-fixture tests for the v0.22.2 CPU boundary."""
+"""Broken-fixture tests for the v0.24.4 CPU boundary."""
 
 from __future__ import annotations
 
@@ -21,8 +21,13 @@ def copy_file(root: Path, relative: Path) -> None:
 
 def fixture(root: Path) -> None:
     root.mkdir(parents=True, exist_ok=True)
-    for relative in (Path("Cargo.toml"), Path("package-policy.toml"), policy.POLICY):
+    for relative in (
+        Path("Cargo.toml"), Path("package-policy.toml"), policy.POLICY,
+        Path("scripts/checks.sh"), Path(".github/workflows/ci.yml"),
+    ):
         copy_file(root, relative)
+    for relative in policy.EVIDENCE_STATUS:
+        copy_file(root, Path(relative))
     for manifest in sorted((ROOT / "crates").glob("*/Cargo.toml")):
         copy_file(root, manifest.relative_to(ROOT))
     for package in (policy.CPU, policy.DETECTOR):
@@ -60,22 +65,22 @@ def test() -> None:
         document = root / policy.POLICY
 
         cases = (
-            ("implemented_backend_count = 5", "implemented_backend_count = 6", "limits"),
+            ("implemented_backend_count = 7", "implemented_backend_count = 8", "limits"),
             ("active_backend_count = 0", "active_backend_count = 1", "limits"),
             (
-                "approved_cpu_low_level_allowances = 5",
-                "approved_cpu_low_level_allowances = 6",
+                "approved_cpu_low_level_allowances = 8",
+                "approved_cpu_low_level_allowances = 9",
                 "limits",
             ),
-            ("milestone = \"0.23.3\"", "milestone = \"0.23.4\"", "schema"),
+            ("milestone = \"0.24.4\"", "milestone = \"0.24.5\"", "schema"),
             (
-                "status = \"complete-sha2-family-candidates-and-scalar-decisions\"",
+                "status = \"sha2-and-keccak-candidates-with-scalar-decisions\"",
                 "status = \"all-admitted\"",
                 "schema",
             ),
             (
-                "scalar_owner = \"brynja-hash-sha2\"",
-                "scalar_owner = \"brynja-crypto-cpu\"",
+                'scalar_owners = ["brynja-hash-sha2", "brynja-hash-sha3"]',
+                'scalar_owners = ["brynja-crypto-cpu"]',
                 "scalar owner",
             ),
             (

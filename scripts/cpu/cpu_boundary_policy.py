@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Brynja's v0.23.3 complete SHA-2 CPU boundary."""
+"""Validate Brynja's v0.24.4 SHA-2 and Keccak CPU boundary."""
 
 from __future__ import annotations
 
@@ -13,7 +13,8 @@ POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
-EXPECTED_POLICY_SHA256 = "3ac7f1c95f8fd479e8247177f423f41daf0ba67b414e472ef4ef146c0cf82de4"
+SHA3 = "brynja-hash-sha3"
+EXPECTED_POLICY_SHA256 = "3ee9eae4fe5f19699aac5c8220f8a0340591054c48e6852d393c9c105fde06fb"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -30,9 +31,13 @@ SOURCE_STATUS = {
     (CPU, "src/sha256_schedule.rs"): "portable-message-schedule",
     (CPU, "src/sha512.rs"): "static-session-and-kat-boundary",
     (CPU, "src/sha512_schedule.rs"): "portable-message-schedule",
+    (CPU, "src/keccak.rs"): "safe-session-and-attestation-boundary",
+    (CPU, "src/keccak_constants.rs"): "portable-keccak-constants",
     (CPU, "src/x86_sha.rs"): "implemented-unadmitted-candidate-kernel",
     (CPU, "src/aarch64_sha2.rs"): "implemented-unadmitted-candidate-kernel",
     (CPU, "src/riscv64_zknh.rs"): "implemented-unadmitted-candidate-kernel",
+    (CPU, "src/x86_avx2_keccak.rs"): "implemented-unadmitted-candidate-kernel",
+    (CPU, "src/aarch64_sha3_keccak.rs"): "implemented-unadmitted-candidate-kernel",
     (DETECTOR, "src/lib.rs"): "boundary-only",
     (DETECTOR, "src/runtime_detection.rs"): "runtime-feature-attestation-boundary",
     (DETECTOR, "src/sha512_runtime.rs"): "scalar-fallback-and-reporting-boundary",
@@ -53,9 +58,9 @@ BACKENDS = {
         ("x86_64", "aes-and-pclmulqdq-usable-on-current-logical-cpu"), "reserved",
     ),
     "x86-avx2": (
-        "X86Avx2", "x86_64", "src/x86_avx2.rs", ("avx2",),
+        "X86Avx2", "x86_64", "src/x86_avx2_keccak.rs", ("avx2",),
         ("x86_64", "osxsave-and-xcr0-ymm-state", "avx2-usable-on-current-logical-cpu"),
-        "reserved",
+        "implemented-unadmitted-local-correctness-observed",
     ),
     "x86-avx512": (
         "X86Avx512", "x86_64", "src/x86_avx512.rs", ("avx512f",),
@@ -77,6 +82,11 @@ BACKENDS = {
         ("neon", "aes", "pmull"),
         ("aarch64", "neon-aes-and-pmull-usable-on-current-logical-cpu"), "reserved",
     ),
+    "aarch64-sha3-keccak": (
+        "Aarch64Sha3", "aarch64", "src/aarch64_sha3_keccak.rs", ("neon", "sha3"),
+        ("aarch64", "neon-and-sha3-usable-on-current-logical-cpu"),
+        "implemented-unadmitted-qemu-correctness-observed",
+    ),
     "riscv-vector": (
         "RiscVVector", "riscv", "src/riscv_vector.rs", ("zvknha",),
         ("riscv64", "ratified-vector-crypto", "vector-state-enabled",
@@ -93,12 +103,26 @@ BACKENDS = {
         ("riscv64", "zknh-usable-on-current-hart"),
         "implemented-unadmitted-native-isa-unavailable",
     ),
+    "riscv-keccak-scalar": (
+        "ScalarOnlyKeccak", "riscv", "absent", (),
+        ("riscv64", "no-ratified-keccak-instruction-in-pinned-authorities"),
+        "scalar-only-reviewed",
+    ),
 }
 BACKEND_KEYS = {
     "id", "identity", "architecture", "module", "status", "sha256",
     "low_level_allowed", "instructions", "abi_preconditions",
 }
 SOURCE_KEYS = {"package", "path", "status", "sha256"}
+EVIDENCE_KEYS = {"path", "status", "sha256"}
+EVIDENCE_STATUS = {
+    "assurance/sha3-cpu-candidate/Cargo.toml": "isolated-candidate-fixture-manifest",
+    "assurance/sha3-cpu-candidate/Cargo.lock": "isolated-candidate-fixture-lock",
+    "assurance/sha3-cpu-candidate/src/lib.rs": "six-identity-scalar-differential",
+    "assurance/sha3-cpu-candidate/src/main.rs": "candidate-fixture-entrypoint",
+    "scripts/sha3/check-sha3-cpu-codegen.sh": "compiler-endpoint-instruction-evidence",
+    "scripts/sha3/check-sha3-cpu-qemu.sh": "supplemental-aarch64-execution-evidence",
+}
 
 
 class CpuBoundaryPolicyError(RuntimeError):
@@ -129,19 +153,19 @@ def manifest(root: Path, name: str) -> dict:
 def validate_policy_shape(policy: dict) -> None:
     exact_keys(policy, {
         "schema", "limits", "packages", "graph", "fips", "low_level_boundary",
-        "safe_wrapper", "sources", "backends",
+        "safe_wrapper", "evidence", "sources", "backends",
     }, "CPU boundary policy")
     if policy["schema"] != {
-        "version": 3,
-        "milestone": "0.23.3",
-        "status": "complete-sha2-family-candidates-and-scalar-decisions",
+        "version": 4,
+        "milestone": "0.24.4",
+        "status": "sha2-and-keccak-candidates-with-scalar-decisions",
     }:
         fail("CPU boundary schema drifted")
     if policy["limits"] != {
         "maximum_source_lines": 500,
-        "implemented_backend_count": 5,
+        "implemented_backend_count": 7,
         "active_backend_count": 0,
-        "approved_cpu_low_level_allowances": 5,
+        "approved_cpu_low_level_allowances": 8,
     }:
         fail("CPU boundary limits drifted")
     if policy["packages"] != {
@@ -157,8 +181,8 @@ def validate_policy_shape(policy: dict) -> None:
         },
     }:
         fail("CPU boundary package contract drifted")
-    if policy["graph"].get("scalar_owner") != SHA2:
-        fail("CPU scalar owner drifted")
+    if policy["graph"].get("scalar_owners") != [SHA2, SHA3]:
+        fail("CPU scalar owners drifted")
     if policy["graph"].get("forbidden_consumers") != list(FORBIDDEN_CONSUMERS):
         fail("CPU forbidden-consumer inventory drifted")
     for key in (
@@ -178,7 +202,7 @@ def validate_policy_shape(policy: dict) -> None:
     }:
         fail("FIPS CPU-package boundary drifted")
     allowances = policy["low_level_boundary"].get("current_cpu_allowances", [])
-    if len(allowances) != 5 or len(allowances) != len(set(allowances)):
+    if len(allowances) != 8 or len(allowances) != len(set(allowances)):
         fail("CPU low-level allowance inventory drifted")
     invariants = policy["safe_wrapper"].get("invariants", [])
     if len(invariants) != 15 or len(invariants) != len(set(invariants)):
@@ -276,6 +300,20 @@ def validate_sources(root: Path, policy: dict) -> None:
             fail(f"RISC-V Zknh kernel drifted: {token}")
     if re.search(r'extern\s+"C"|\bglobal_asm\s*!', riscv):
         fail("RISC-V Zknh kernel introduced external assembly or native linkage")
+    x86_keccak = text[(CPU, "src/x86_avx2_keccak.rs")]
+    for token in ('#[target_feature(enable = "avx2")]', "_mm256_andnot_si256", "// SAFETY:"):
+        if token not in x86_keccak:
+            fail(f"x86 AVX2 Keccak kernel drifted: {token}")
+    arm_keccak = text[(CPU, "src/aarch64_sha3_keccak.rs")]
+    for token in (
+        '#[target_feature(enable = "sha3")]', "veor3q_u64", "vrax1q_u64",
+        "vbcaxq_u64", "// SAFETY:",
+    ):
+        if token not in arm_keccak:
+            fail(f"AArch64 SHA3 Keccak kernel drifted: {token}")
+    for kernel in (x86_keccak, arm_keccak):
+        if re.search(r'extern\s+"C"|\basm\s*!|\bglobal_asm\s*!', kernel):
+            fail("Keccak kernel introduced native linkage or assembly")
     detector = text[(DETECTOR, "src/runtime_detection.rs")]
     for token in (
         'is_x86_feature_detected!("sha")', 'is_aarch64_feature_detected!("sha2")',
@@ -301,6 +339,44 @@ def validate_sources(root: Path, policy: dict) -> None:
     ):
         if token not in sha512:
             fail(f"SHA-512 session boundary drifted: {token}")
+    keccak = text[(CPU, "src/keccak.rs")]
+    for token in (
+        "pub enum KeccakBackend", "pub struct KeccakBackendSession",
+        'target_feature = "avx2"', 'target_feature = "sha3"',
+        "KeccakBackendHealth::Quarantined", "pub const fn is_admitted",
+    ):
+        if token not in keccak:
+            fail(f"Keccak session boundary drifted: {token}")
+
+
+def validate_evidence(root: Path, policy: dict) -> None:
+    records = policy["evidence"]
+    if len(records) != len(EVIDENCE_STATUS):
+        fail("CPU evidence-program inventory is incomplete")
+    seen = set()
+    for record in records:
+        exact_keys(record, EVIDENCE_KEYS, "CPU evidence program")
+        path = record["path"]
+        if path in seen or EVIDENCE_STATUS.get(path) != record["status"]:
+            fail("CPU evidence-program inventory or status drifted")
+        seen.add(path)
+        source = root / path
+        if not source.is_file() or source.is_symlink():
+            fail(f"CPU evidence input must be a regular file: {path}")
+        if len(source.read_text(encoding="utf-8").splitlines()) > 500:
+            fail(f"CPU evidence input exceeds 500 lines: {path}")
+        if hashlib.sha256(source.read_bytes()).hexdigest() != record["sha256"]:
+            fail(f"CPU evidence input changed; reopen review: {path}")
+    if seen != set(EVIDENCE_STATUS):
+        fail("CPU evidence-program inventory is incomplete")
+    checks = (root / "scripts/checks.sh").read_text(encoding="utf-8")
+    command = "scripts/sha3/check-sha3-cpu-codegen.sh"
+    if checks.count(command) != 1:
+        fail("ordinary checks lost SHA-3 CPU codegen evidence")
+    workflow = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    for target in ("aarch64-unknown-linux-gnu", "riscv64gc-unknown-linux-gnu"):
+        if workflow.count(target) < 2:
+            fail(f"CI lost CPU compiler-target installation: {target}")
 
 
 def validate_backends(root: Path, policy: dict) -> None:
@@ -343,6 +419,7 @@ def validate(root: Path) -> None:
     validate_policy_shape(policy)
     validate_packages(root)
     validate_sources(root, policy)
+    validate_evidence(root, policy)
     validate_backends(root, policy)
     if hashlib.sha256(policy_path.read_bytes()).hexdigest() != EXPECTED_POLICY_SHA256:
         fail("CPU security policy changed; reopen boundary review")

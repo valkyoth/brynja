@@ -1,14 +1,15 @@
 //! First-party `no_std` CPU acceleration for Brynja cryptography.
 //!
-//! This crate owns isolated SHA-256-family kernels for x86 SHA, AArch64 SHA2,
-//! and RISC-V Zknh plus SHA-512-family kernels for AArch64 SHA-512 and RISC-V
-//! Zknh. Execution requires complete static target-feature proof or, where
-//! separately admitted, reviewed runtime attestation followed by a direct
-//! startup known-answer test. It performs no runtime CPU probing, allocation,
-//! I/O, global registration, or protocol work.
+//! This crate owns isolated SHA-2 kernels plus Keccak-f\[1600\] candidates for
+//! x86_64 AVX2 and AArch64 SHA3. Execution requires complete static
+//! target-feature proof or, where separately admitted, reviewed runtime
+//! attestation followed by a direct startup known-answer test. It performs no
+//! runtime CPU probing, allocation, I/O, global registration, or protocol work.
 
 #![no_std]
 
+mod keccak;
+mod keccak_constants;
 mod sha256;
 mod sha256_schedule;
 mod sha512;
@@ -17,11 +18,19 @@ mod sha512_schedule;
 
 #[cfg(target_arch = "aarch64")]
 mod aarch64_sha2;
+#[cfg(target_arch = "aarch64")]
+mod aarch64_sha3_keccak;
 #[cfg(target_arch = "riscv64")]
 mod riscv64_zknh;
 #[cfg(target_arch = "x86_64")]
+mod x86_avx2_keccak;
+#[cfg(target_arch = "x86_64")]
 mod x86_sha;
 
+pub use keccak::{
+    KeccakBackend, KeccakBackendError, KeccakBackendHealth, KeccakBackendReport,
+    KeccakBackendSession,
+};
 pub use sha256::{
     Sha256Backend, Sha256BackendError, Sha256BackendHealth, Sha256BackendReport,
     Sha256BackendSession,
@@ -32,7 +41,7 @@ pub use sha512::{
 };
 
 /// The Brynja milestone that admitted the first CPU kernels.
-pub const BOUNDARY_MILESTONE: &str = "0.23.3";
+pub const BOUNDARY_MILESTONE: &str = "0.24.4";
 
 /// Whether an accelerated SHA-2 implementation is present for supported targets.
 pub const IMPLEMENTED: bool = cfg!(any(
@@ -42,7 +51,10 @@ pub const IMPLEMENTED: bool = cfg!(any(
 ));
 
 /// Number of complete source implementations in this release.
-pub const IMPLEMENTED_BACKEND_COUNT: usize = 5;
+pub const IMPLEMENTED_BACKEND_COUNT: usize = 7;
+
+/// Number of Keccak-f\[1600\] source implementations.
+pub const IMPLEMENTED_KECCAK_BACKEND_COUNT: usize = 2;
 
 /// Number of SHA-256-family source implementations.
 pub const IMPLEMENTED_SHA256_BACKEND_COUNT: usize = 3;
@@ -60,9 +72,10 @@ extern crate std;
 mod tests {
     use super::{
         ADMITTED_BACKEND_COUNT, BOUNDARY_MILESTONE, IMPLEMENTED, IMPLEMENTED_BACKEND_COUNT,
-        IMPLEMENTED_SHA256_BACKEND_COUNT, IMPLEMENTED_SHA512_BACKEND_COUNT, Sha256Backend,
-        Sha256BackendError, Sha256BackendHealth, Sha256BackendSession, Sha512Backend,
-        Sha512BackendError, Sha512BackendHealth, Sha512BackendSession,
+        IMPLEMENTED_KECCAK_BACKEND_COUNT, IMPLEMENTED_SHA256_BACKEND_COUNT,
+        IMPLEMENTED_SHA512_BACKEND_COUNT, KeccakBackend, Sha256Backend, Sha256BackendError,
+        Sha256BackendHealth, Sha256BackendSession, Sha512Backend, Sha512BackendError,
+        Sha512BackendHealth, Sha512BackendSession,
     };
 
     const ABC_BLOCK: [u8; 64] = {
@@ -78,11 +91,19 @@ mod tests {
     #[test]
     fn boundary_reports_exact_admitted_backends() {
         assert!(::core::hint::black_box(IMPLEMENTED));
-        assert_eq!(IMPLEMENTED_BACKEND_COUNT, 5);
+        assert_eq!(IMPLEMENTED_BACKEND_COUNT, 7);
+        assert_eq!(IMPLEMENTED_KECCAK_BACKEND_COUNT, 2);
         assert_eq!(IMPLEMENTED_SHA256_BACKEND_COUNT, 3);
         assert_eq!(IMPLEMENTED_SHA512_BACKEND_COUNT, 2);
         assert_eq!(ADMITTED_BACKEND_COUNT, 0);
-        assert_eq!(BOUNDARY_MILESTONE, "0.23.3");
+        assert_eq!(BOUNDARY_MILESTONE, "0.24.4");
+        assert_eq!(KeccakBackend::X86Avx2.required_features(), &["avx2"]);
+        assert_eq!(
+            KeccakBackend::Aarch64Sha3.required_features(),
+            &["neon", "sha3"]
+        );
+        assert!(!KeccakBackend::X86Avx2.is_admitted());
+        assert!(!KeccakBackend::Aarch64Sha3.is_admitted());
         assert_eq!(Sha256Backend::X86Sha.required_features(), &["sha"]);
         assert_eq!(
             Sha256Backend::Aarch64Sha2.required_features(),

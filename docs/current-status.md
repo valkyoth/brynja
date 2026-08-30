@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.2 signed; v0.24.3 portable public acceptance and voluntary pentest/retest complete, final local and hosted gates pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.3 signed; v0.24.4 Keccak acceleration candidates implemented, exceptional pentest and native evidence pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -266,6 +266,19 @@ retest of exact candidate `c7bd354e5bcf9a816c366cf24d0d88347771afc5`
 passed with zero open findings. The permanent report records `PASS`/`PASS` and
 does not add production-code, independent-review, FIPS-validation, backend-
 admission, or publication claims.
+
+The facade now advances to internal `0.24.4`. The zero-dependency `no_std`
+CPU boundary adds x86_64 AVX2 and AArch64 SHA3 Keccak-f[1600] candidates.
+Direct zero-state KATs, permanent session quarantine, a 1,024-state
+permutation differential, 80 fixed-output and 28 XOF comparisons across all
+six byte-oriented identities, Rust 1.90.0/1.98.0 emitted-instruction checks,
+and supplemental AArch64 QEMU execution pass. Both candidates remain
+unadmitted, so ordinary construction and every public hash API remain
+portable. RISC-V is explicitly scalar-only because no qualifying Keccak route
+exists in the pinned ratified authorities. Native Intel, M2, and AWS Arm
+observations plus performance, migration, side-channel, exceptional-pentest,
+independent-review, secret-erasure, and FIPS-validation evidence remain
+pending or absent; zero crates are selected for publication.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

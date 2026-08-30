@@ -24,8 +24,8 @@ Keep a Changelog and Semantic Versioning.
   `c7af70e19def950f3a9004c18e5c869ef844c644` with `PASS`/`PASS` and zero open
   findings.
 - Refresh the release-gate Miri and Rust sanitizer pin to the latest available
-  `nightly-2026-08-29` at exact Rust revision
-  `17fd5b8a37b6667b6cc137f3cc35f09759768a3b`, update CI and the dynamic-
+  `nightly-2026-08-30` at exact Rust revision
+  `fd7ed57dfd3bdebb745a1d8158638727b0e7047a`, update CI and the dynamic-
   analysis evidence contract together, and rerun both workloads successfully.
 - Move the default and complete release gate to official stable Rust 1.98.0,
   retain the uninterrupted Rust 1.90.0-through-1.98.0 compatibility matrix,

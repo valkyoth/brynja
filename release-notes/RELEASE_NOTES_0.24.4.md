@@ -57,6 +57,14 @@ hardware support, replace independent cryptographic review, or create a FIPS
 side-channel, and authenticated-runner evidence remains the explicit reason
 both candidates are unadmitted.
 
+The first post-green tag gate then detected that the official Miri-capable
+nightly had advanced. Release maintenance refreshes Miri and AddressSanitizer
+to `nightly-2026-08-30` at exact Rust revision
+`fd7ed57dfd3bdebb745a1d8158638727b0e7047a`, updates the hosted installation
+and dynamic-analysis evidence contract together, and reruns both workloads.
+This changes no production Rust, public API, dependency, backend admission, or
+publication selection and adds no new pentest claim.
+
 ## Security Boundaries
 
 The candidates are inaccessible to ordinary construction. Evidence-only

@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "8b46fd9be0823e9496f40fdc94d8e7e91ee81013e969a95e37583357d133f284",
-  "domain_policy_sha256": "f7ba7fcc7c9bd993610765a438908889abd33be3acf08a87600abcfa1e8407b8",
-  "policy_sha256": "424fb4b1242337c71b9799441db13839e4ea7927f0815e731c8d14a135a56888",
+  "domain_policy_sha256": "6be578cf68e5a17bd1371dd4cd88452b13d8443e9461b55e714bb28fdbcaa039",
+  "policy_sha256": "d56104e6aab09b040fb8fe5d2e17005a19d8d99230b08b92bd3de22de075c2e1",
   "requirements": [
     {
       "applicability": "delegate",
@@ -20552,7 +20552,7 @@
       "owner": "0.5.0",
       "profile": "tls-dtls-quic",
       "residual": "Wire emission and protocol state transitions remain owned by their version-specific engines and later verification milestones.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -20658,6 +20658,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -20769,7 +20774,7 @@
       "owner": "0.10.0",
       "profile": "tls-dtls-quic",
       "residual": "The abstract contract and executable verification are complete; byte-backed ownership, interoperability, and independent review remain outside this milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -20793,6 +20798,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -21028,7 +21038,7 @@
       "owner": "0.19.0",
       "profile": "tls-dtls-quic",
       "residual": "Individual algorithms and facilities remain unavailable until their owning milestone changes the corresponding future-work decision.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -21052,6 +21062,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -21157,7 +21172,7 @@
       "owner": "0.68.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -21358,6 +21373,11 @@
               "disposition": "track-not-applied",
               "id": 9043,
               "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9846",
@@ -21522,7 +21542,7 @@
       "owner": "0.79.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -21698,6 +21718,11 @@
               "disposition": "track-not-applied",
               "id": 9043,
               "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9846",
@@ -21797,7 +21822,7 @@
       "owner": "0.92.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -21896,6 +21921,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -22051,7 +22081,7 @@
       "owner": "0.93.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -22150,6 +22180,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -23390,7 +23425,7 @@
       "owner": "0.86.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -23447,6 +23482,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -23553,7 +23593,7 @@
       "owner": "0.87.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -23736,6 +23776,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -25283,7 +25328,7 @@
       "owner": "0.90.1",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -25409,6 +25454,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -25719,7 +25769,7 @@
       "owner": "0.61.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -25743,6 +25793,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -25849,7 +25904,7 @@
       "owner": "0.62.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -25873,6 +25928,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -25984,7 +26044,7 @@
       "owner": "0.63.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -26008,6 +26068,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -26134,7 +26199,7 @@
       "owner": "0.64.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -26240,6 +26305,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -26392,7 +26462,7 @@
       "owner": "0.65.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -26416,6 +26486,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -26537,7 +26612,7 @@
       "owner": "0.66.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -26830,6 +26905,11 @@
               "disposition": "track-not-applied",
               "id": 9043,
               "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9846",
@@ -27000,7 +27080,7 @@
       "owner": "0.67.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -27073,6 +27153,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -27179,7 +27264,7 @@
       "owner": "0.69.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -27342,6 +27427,11 @@
               "disposition": "track-not-applied",
               "id": 9043,
               "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9846",
@@ -27462,7 +27552,7 @@
       "owner": "0.70.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -27486,6 +27576,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -27622,7 +27717,7 @@
       "owner": "0.71.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -27734,6 +27829,11 @@
               "disposition": "track-not-applied",
               "id": 9043,
               "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9846",
@@ -27834,7 +27934,7 @@
       "owner": "0.72.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -27858,6 +27958,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -27964,7 +28069,7 @@
       "owner": "0.73.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -27988,6 +28093,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -28099,7 +28209,7 @@
       "owner": "0.74.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -28157,6 +28267,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -28278,7 +28393,7 @@
       "owner": "0.75.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -28336,6 +28451,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -28448,7 +28568,7 @@
       "owner": "0.76.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -28531,6 +28651,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -28642,7 +28767,7 @@
       "owner": "0.77.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -28666,6 +28791,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -28783,7 +28913,7 @@
       "owner": "0.78.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -28807,6 +28937,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -28913,7 +29048,7 @@
       "owner": "0.80.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -29012,6 +29147,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -29118,7 +29258,7 @@
       "owner": "0.81.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -29191,6 +29331,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -29302,7 +29447,7 @@
       "owner": "0.82.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -29401,6 +29546,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -29507,7 +29657,7 @@
       "owner": "0.82.2",
       "profile": "tls-dtls-quic",
       "residual": "The facility remains disabled by default and cannot silently grant renewed application authorization.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -29531,6 +29681,11 @@
             {
               "disposition": "track-not-applied",
               "id": 9043,
+              "status": "Reported"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9157,
               "status": "Reported"
             }
           ],
@@ -29900,9 +30055,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "e0823cc3fda69f61d33010dfaa9c1f59736ed9031d7bfd779101578675718770",
+  "residual_policy_sha256": "8ad63419649ada3289fac2ae55048de8159920ee83d63a1ebb5356c1ce8818ff",
   "schema": 5,
-  "source_ledger_sha256": "8fbd01155c6e5e2e0e793f53ac6e9ac1c98ba258e142fe82082c096593d90632",
-  "surface_register_sha256": "767ec981798594b7c0fa3bf840cf35d2ad56a2cd98d1940558aef9e71c3f0cb5",
-  "transport_policy_sha256": "92f0f673c1f1d97476b66429018ce83432a8fe34dbfbffa046bbaef998c932c0"
+  "source_ledger_sha256": "4f26355a3e52fcbbabf8a777bdc2e684880f56c028c112741ee3c9ac3bc21d6b",
+  "surface_register_sha256": "530d2df79bac8b55da47b37eac5a364366d4a910c22b82a02fd2edbfc4dce5dc",
+  "transport_policy_sha256": "c125e04a553a07ca67dd06a28811fee7f587c10dabf34569623cfd24abf23205"
 }

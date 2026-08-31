@@ -1,0 +1,91 @@
+{
+  "landings": {
+    "https://csrc.nist.gov/pubs/fips/180-4/upd1/final": {
+      "projection": "visible-text-v1",
+      "sha256": "af613d8ba43e072c473dc0926242ed76279a96aace474313024b06c9b63fdb05",
+      "size": 1277
+    },
+    "https://csrc.nist.gov/pubs/fips/186-5/final": {
+      "projection": "visible-text-v1",
+      "sha256": "e74f6e57b874770566cf701d68726a2982b2d7a23d60a6e163711f987077d81f",
+      "size": 2405
+    },
+    "https://csrc.nist.gov/pubs/fips/197/final": {
+      "projection": "visible-text-v1",
+      "sha256": "841a451154b486e3c0c181fcb05b300c859fb6b7dfe21c0e4f170ccb0a728dc0",
+      "size": 2747
+    },
+    "https://csrc.nist.gov/pubs/fips/202/final": {
+      "projection": "visible-text-v1",
+      "sha256": "9ef5e46bb61b640ecc69e8b8a60efa226fca8c7195f8b46e32229d0adea1bfb2",
+      "size": 4404
+    },
+    "https://csrc.nist.gov/pubs/fips/203/final": {
+      "projection": "visible-text-v1",
+      "sha256": "e0e747f6d83e32f0a917b553f79422b4f90de6a29be349f9fef9e0f769a3f8a6",
+      "size": 3140
+    },
+    "https://csrc.nist.gov/pubs/sp/800/107/r1/final": {
+      "projection": "visible-text-v1",
+      "sha256": "1d2cddc11207b745481260064be5794a0d78b09c1d7fd9aa391649f1a4f4f57b",
+      "size": 3045
+    },
+    "https://csrc.nist.gov/pubs/sp/800/185/final": {
+      "projection": "visible-text-v1",
+      "sha256": "b268d760c3e66a4376fbdad49a20552559def10b7d4c0d42e93feb12c39424a9",
+      "size": 2565
+    },
+    "https://csrc.nist.gov/pubs/sp/800/186/final": {
+      "projection": "visible-text-v1",
+      "sha256": "32ba0cedb15cdc73808eb88eec05f32b7f12f488cb0350280525d8a71d810ee2",
+      "size": 2740
+    },
+    "https://csrc.nist.gov/pubs/sp/800/227/final": {
+      "projection": "visible-text-v1",
+      "sha256": "6e37bda95f66d964bbb92c65da468f5e24400bfc645374281cc13a2b06841b9c",
+      "size": 2262
+    },
+    "https://csrc.nist.gov/pubs/sp/800/38/d/final": {
+      "projection": "visible-text-v1",
+      "sha256": "c9c8c71d43f4036116de6ee6f36c1ce69c20e73238bb6ef353ab3cf6e77dbc18",
+      "size": 1896
+    },
+    "https://csrc.nist.gov/pubs/sp/800/56/a/r3/final": {
+      "projection": "visible-text-v1",
+      "sha256": "08835c2c58550437a5be2a74cef57102478db8e17d0ddb2839f7343b51ee1df2",
+      "size": 1552
+    },
+    "https://csrc.nist.gov/pubs/sp/800/90/a/r1/final": {
+      "projection": "visible-text-v1",
+      "sha256": "a1a0faa9d204b3d759e2abaeaeaed0e650e1b76223b5fe3794d86382e125a7a6",
+      "size": 1197
+    },
+    "https://csrc.nist.gov/pubs/sp/800/90/b/final": {
+      "projection": "visible-text-v1",
+      "sha256": "740416a56df545b144bd1d42c219738291255972ee638ca1f434f46924cec657",
+      "size": 2303
+    },
+    "https://csrc.nist.gov/pubs/sp/800/90/c/final": {
+      "projection": "visible-text-v1",
+      "sha256": "e76afa3f5ff6661a83cb4648cb4a0983b36dbfb0c9e74aaa38e0e98d06436b87",
+      "size": 3024
+    },
+    "https://docs.riscv.org/reference/isa/unpriv/scalar-crypto.html": {
+      "projection": "visible-text-v1",
+      "sha256": "50b6d611bdfa3c673329332800cd48dafee590369809f0bdb102c80efef62bc6",
+      "size": 77
+    },
+    "https://docs.riscv.org/reference/isa/unpriv/vector-crypto.html": {
+      "projection": "visible-text-v1",
+      "sha256": "50b6d611bdfa3c673329332800cd48dafee590369809f0bdb102c80efef62bc6",
+      "size": 77
+    },
+    "https://www.itu.int/rec/T-REC-X.690": {
+      "projection": "visible-text-v1",
+      "sha256": "093a1ba7a6791bfb5f72ed45e95baf2ae39e6f9505c0a901926a547804e7ace3",
+      "size": 4322
+    }
+  },
+  "observed_at": "2026-08-31",
+  "schema": 1
+}

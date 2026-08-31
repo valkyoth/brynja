@@ -1,6 +1,6 @@
 # Standards Evidence
 
-Status: reviewed source closure carried through v0.13.1
+Status: reviewed source closure plus v0.24.5 cross-authority lifecycle monitor
 
 This directory is Brynja's machine-readable inventory of the authorities that
 govern planned implementation work. It does not claim that any protocol or
@@ -16,6 +16,12 @@ primitive is implemented.
 - `source-ledger.json` is generated deterministically from that policy, the
   locked RFC and local-source manifests, official metadata snapshots, and
   reviewed errata decisions.
+- `authority-lifecycle-policy.toml`, `authority-lifecycle.json`,
+  `authority-reviews.json`, `authority-freshness.json`, and
+  `snapshots/authority-landings.json` bind every locked authority to its
+  official publication identity, immutable content, separate upstream and
+  Brynja state, reviewed impact, exact dependent work, retained drift, and
+  latest successful live observation.
 - `ERRATA.json` records all errata returned for every locked RFC. Verified
   errata are implementation inputs, reported and held errata remain tracked
   without altering requirements, and rejected errata are non-applicable.
@@ -74,6 +80,8 @@ Normal builds and tests never access the network:
 ```bash
 python3 scripts/standards/check-standards-ledger.py
 python3 scripts/standards/test-standards-ledger.py
+python3 scripts/standards/check-authority-lifecycle.py
+python3 scripts/standards/test-authority-lifecycle.py
 python3 scripts/standards/check-protocol-surfaces.py
 python3 scripts/standards/test-protocol-surfaces.py
 python3 scripts/standards/check-requirements.py
@@ -128,6 +136,8 @@ Refreshing evidence is an explicit networked maintenance operation:
 scripts/standards/update-standards-snapshots.py --check
 scripts/standards/update-standards-snapshots.py --write
 python3 scripts/standards/check-standards-ledger.py --write
+python3 scripts/standards/observe-authority-lifecycle.py \
+  --artifact /tmp/brynja-authority-observation.json
 ```
 
 `--check` is part of the release gate and fails when an official RFC index,
@@ -201,9 +211,21 @@ milestones without silently replacing the reviewed baseline.
 Final SP 800-185 is likewise checksum-pinned locally for the complete pre-1.0
 cSHAKE, KMAC, TupleHash, and ParallelHash chain. Its 2025 revision announcement
 is recorded as mutable authority, not as normative replacement text. The
-planned v0.24.5 lifecycle monitor extends the present RFC/errata/IANA drift
-check to official publication landing pages and documents. It will report
+v0.24.5 lifecycle monitor extends the present RFC/errata/IANA drift check to
+official publication landing pages and documents. It reports
 upstream status independently from Brynja disposition: withdrawal or
 supersession triggers human impact review and a corrective milestone, but can
 never automatically move an implementation to legacy, keep it modern, or
 authorize changed code.
+
+The first strict 2026-08-31 lifecycle observation detected newly reported RFC
+9846 editorial erratum 9157. Human review retained its capitalization fix as
+unverified and track-not-applied, refreshed the exact evidence and all 31
+affected requirement revisions, and the final complete observation returned
+`PASS` with zero new or unresolved drift. The weekly/manual workflow and
+pre-tag gate preserve bounded JSON artifacts outside the repository. They
+never use `--write-freshness`, never replace trust pins, and cannot modify the
+checkout. A fresh successful run cannot erase an older committed unresolved
+observation. The release-only age gate requires a recent committed PASS
+receipt, while ordinary offline builds
+remain deterministic and independent of wall-clock time.

@@ -1,19 +1,19 @@
 [release]
-version = "0.24.4"
-milestone = "0.24.4"
+version = "0.24.5"
+milestone = "0.24.5"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "New architecture-specific Keccak-f[1600] intrinsic implementations and evidence-only unsafe candidate construction require an exceptional assessment; both candidates remain unadmitted."
+exceptional = false
+exception_reason = "Repository-only standards monitoring adds no production Rust, cryptographic behavior, unsafe code, dependency, backend admission, or public capability; security-relevant future drift still triggers a corrective milestone and exceptional pentest."
 
 [crates."brynja"]
-previous_version = "0.24.3"
-version = "0.24.4"
-change = "code"
+previous_version = "0.24.4"
+version = "0.24.5"
+change = "metadata"
 publish = false
-reason = "Advance the internal facade while adding unadmitted x86_64 AVX2 and AArch64 SHA3 Keccak candidates and retaining portable public behavior."
+reason = "Advance the internal facade while adding repository-only cross-authority lifecycle monitoring; production APIs and cryptographic behavior are unchanged."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"

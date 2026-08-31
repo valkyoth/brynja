@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.3 signed; v0.24.4 Keccak acceleration candidates and exceptional pentest complete, native evidence incomplete, final GitHub and tag pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 standards lifecycle monitoring implemented and locally verified, signed candidate commit pending
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.4`. `brynja-hash-core 0.1.0`,
+advances to internal `0.24.5`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte-oriented interfaces and correct
 portable implementations of all six FIPS 180-4 SHA-2 algorithms, and new
 unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented implementations
@@ -260,7 +260,7 @@ FIPS validation remain later work. Zero crates are selected for publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.24.4` | no | Internal unadmitted Keccak acceleration-evidence milestone; v0.20.0 is published |
+| `brynja` | `0.24.5` | no | Internal repository-only cross-authority lifecycle-monitor milestone; production cryptography is unchanged and v0.20.0 remains published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output and XOF interfaces |
 | `brynja-hash-sha2` | `0.1.0` | no | Unpublished six-algorithm FIPS 180-4 byte APIs, forced candidate routes, and package-external byte acceptance; arbitrary-bit and hardened secret-bearing profiles remain in progress |

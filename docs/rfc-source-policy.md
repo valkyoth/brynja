@@ -121,8 +121,8 @@ and surfaces. Local rights, mutable NIST and IANA refresh rules,
 the resolved hybrid-source gate plus unavailable legacy and FIPS-validation
 authorities remain machine-readable records rather than capability claims.
 
-The v0.24.5 roadmap milestone completes cross-authority lifecycle monitoring.
-It adds scheduled and manual bounded checks for official publication pages,
+The v0.24.5 milestone completes cross-authority lifecycle monitoring. It adds
+scheduled, manual, and pre-tag bounded checks for official publication pages,
 document bytes, editions, planning notes, drafts, replacements, withdrawals,
 and supersessions while keeping ordinary verification offline. Automation may
 only create a review-required observation. A human-reviewed disposition must
@@ -130,6 +130,12 @@ map the change to exact requirements, code, tests, evidence, documentation and
 release action; it cannot automatically call an algorithm legacy, disable it,
 or preserve it as current. Security-relevant changes require a corrective
 milestone and exceptional pentest before an affected release can proceed.
+The generated register covers all 130 locked authorities. Its first strict
+2026-08-31 observation detected newly reported RFC 9846 editorial erratum
+9157; human review retained the capitalization correction as unverified and
+track-not-applied, refreshed the exact evidence and all 31 affected
+requirement revisions, and the final full observation returned PASS with zero
+new or unresolved drift.
 
 Section decisions are reconciled across the domain, transport, and residual
 policies before matrix generation. A normative section cannot be mapped in one

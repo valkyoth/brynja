@@ -261,7 +261,7 @@ open findings. The permanent
 records `PASS`/`PASS`; it does not add independent cryptographic review, FIPS
 validation, backend admission, or crates.io publication.
 
-The current internal `0.24.4` candidate adds two isolated first-party
+Signed internal `0.24.4` adds two isolated first-party
 Keccak-f[1600] acceleration paths: x86_64 AVX2 and AArch64 SHA3 instructions.
 Direct KATs, permanent session quarantine, a 1,024-state permutation
 differential, all-six-identity fixed-output/XOF comparisons, compiler-endpoint
@@ -276,6 +276,19 @@ records `PASS`/`PASS`. Native Intel, Apple M2, and AWS Arm observations,
 performance, migration, side-channel, independent-review, secret-erasure, and
 FIPS-validation claims remain pending or absent, so both backends stay
 unadmitted.
+
+The current internal `0.24.5` candidate adds a fail-closed standards lifecycle
+monitor without changing production Rust or cryptographic behavior. Its
+machine-readable register separates official upstream state from Brynja's
+current, compatibility, legacy-only, disabled, and rejected decisions across
+all 130 locked RFC, NIST, ITU-T, RISC-V, and IANA authorities. Weekly, manual,
+and pre-tag observations are bounded and read-only: changed bytes, publication
+status, planning notices, replacements, errata, registry metadata, rollback,
+parser drift, redirect, timeout, or outage create a review-required artifact
+and cannot update code or policy. The first strict 2026-08-31 run detected RFC
+9846 editorial erratum 9157; human review retained it as unverified and
+track-not-applied, refreshed its exact evidence, and the final complete
+observation passed with zero new or unresolved drift.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
@@ -664,8 +677,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.4`
-FIPS 202 acceleration-evidence milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.5`
+standards-lifecycle milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -763,12 +776,17 @@ selected set in dependency order and publishes the facade last.
   proves complete lifecycle and bidirectional mapping across the foundation,
   cryptography, encoding, PKIX, TLS, DTLS, QUIC-TLS, optional, HPKE, ECH,
   entropy, legacy, operational, and residual domains before implementation.
+- The generated
+  [authority lifecycle register](https://github.com/valkyoth/brynja/blob/main/standards/authority-lifecycle.json)
+  binds official landing pages, immutable content, RFC status and errata,
+  registries, architecture specifications, reviewed impact, and affected
+  requirements without allowing observations to reclassify Brynja.
 
 ## Workspace
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.4 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all six portable FIPS 202 functions; optional Keccak candidates remain unadmitted and no TLS engine or provider effect exists |
+| `brynja` | Modern production facade | Internal v0.24.5 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all six portable FIPS 202 functions; repository-only lifecycle monitoring is active, optional Keccak candidates remain unadmitted, and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six FIPS 180-4 byte-oriented algorithms and forced CPU-candidate APIs; arbitrary-bit and hardened secret-bearing profiles close through v0.24.11 before full-family status returns |
@@ -914,6 +932,8 @@ scripts/zeroization/check-zeroization-miri.sh
 scripts/zeroization/check-zeroization-sanitizer.sh
 scripts/release/check-github-release-controls.py
 python3 scripts/standards/check-standards-ledger.py
+python3 scripts/standards/check-authority-lifecycle.py
+python3 scripts/standards/test-authority-lifecycle.py
 python3 scripts/standards/check-protocol-surfaces.py
 python3 scripts/standards/check-requirements.py
 python3 scripts/pki/check-asn1-values.py

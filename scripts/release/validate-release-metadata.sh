@@ -24,6 +24,12 @@ test -s standards/source-ledger.json
 test -s standards/ERRATA.json
 test -s standards/SHA256SUMS
 test -s standards/snapshots/rfc-index.json
+test -s standards/authority-lifecycle-policy.toml
+test -s standards/authority-lifecycle.json
+test -s standards/authority-reviews.json
+test -s standards/authority-freshness.json
+test -s standards/snapshots/authority-landings.json
+test -s .github/workflows/standards-lifecycle.yml
 test -s scripts/README.md
 test -s scripts/inventory.toml
 test -x scripts/repository/check-script-layout.py
@@ -60,6 +66,12 @@ test -f scripts/standards/requirements_transport.py
 test -f scripts/standards/requirements_validation.py
 test -f scripts/standards/requirements_test_support.py
 test -x scripts/standards/update-standards-snapshots.py
+test -x scripts/standards/check-authority-lifecycle.py
+test -x scripts/standards/observe-authority-lifecycle.py
+test -x scripts/standards/capture-authority-landings.py
+test -x scripts/standards/test-authority-lifecycle.py
+test -f scripts/standards/lifecycle_model.py
+test -f scripts/standards/lifecycle_network.py
 test -x scripts/assurance/check-assurance.py
 test -x scripts/assurance/test-assurance.py
 test -x scripts/assurance/assurance_mutation.py
@@ -250,6 +262,15 @@ grep -q 'scripts/zeroization/check-zeroization-codegen.sh 1.98.0 x86_64-unknown-
 grep -q 'scripts/sanitization/check-sanitization-adapter-codegen.sh 1.98.0 x86_64-unknown-linux-gnu' scripts/checks.sh
 grep -q 'scripts/sanitization/check-sanitization-admission.py --online' scripts/tag_gate.sh
 grep -q 'scripts/sanitization/check-sanitization-candidate.sh --matrix' scripts/tag_gate.sh
+grep -q 'python3 scripts/standards/check-authority-lifecycle.py --release' scripts/tag_gate.sh
+grep -q 'python3 scripts/standards/observe-authority-lifecycle.py' scripts/tag_gate.sh
+grep -q 'python3 scripts/standards/check-authority-lifecycle.py' scripts/checks.sh
+grep -q 'python3 scripts/standards/test-authority-lifecycle.py' scripts/checks.sh
+grep -q 'python3 scripts/standards/observe-authority-lifecycle.py' .github/workflows/standards-lifecycle.yml
+if grep -q -- '--write-freshness' .github/workflows/standards-lifecycle.yml; then
+    echo "scheduled lifecycle workflow must not write repository freshness state" >&2
+    exit 1
+fi
 grep -q 'scripts/assurance/check-kani.sh --required' scripts/tag_gate.sh
 if grep -q 'run: scripts/release/validate-current-pentest.sh' .github/workflows/ci.yml; then
     echo "ordinary CI must not enforce pentest freshness; tag and release gates own it" >&2

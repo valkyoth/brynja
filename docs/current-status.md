@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.3 signed; v0.24.4 Keccak acceleration candidates and exceptional pentest complete, native evidence incomplete, final GitHub and tag pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 cross-authority lifecycle monitor implemented and locally verified, signed candidate commit pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -283,6 +283,21 @@ repository owner reported the exceptional assessment of exact candidate
 `2f755e821e31da9a5524320986c3eb9400f3cfad` green with zero open findings,
 and the permanent report records `PASS`/`PASS`.
 
+The facade now advances to internal `0.24.5` without changing production Rust,
+public APIs, cryptographic behavior, dependencies, or backend admission. A
+generated register covers all 130 locked RFC, NIST, ITU-T, RISC-V, and IANA
+authorities with separate upstream and Brynja states, exact official content,
+publication identities, planning notices, replacement relations, reviewed
+impact, and exact requirement/evidence ownership. Offline policy and mutation
+tests reject automatic reclassification, stale generation, rollback, replay,
+redirect, parser, response-bound, timeout, outage, review, and release-gate
+regressions. Weekly/manual GitHub and pre-tag observations are read-only and
+preserve bounded review-required artifacts. The first strict 2026-08-31 run
+detected RFC 9846 editorial erratum 9157; human review retained it as
+unverified and track-not-applied, refreshed the exact evidence and 31 affected
+requirement revisions, and the final complete run matched every locked channel
+with zero new or unresolved drift. Zero crates are selected for publication.
+
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
 classified protocol surfaces and the normative matrix foundation, and added
@@ -405,7 +420,7 @@ Version 0.3.0 provides the exact source foundation:
 - RFC status and update/obsolescence relationships are closed or explicitly
   excluded;
 - eight exact IANA XML snapshots preserve registry state;
-- all 290 official errata have fail-closed reviewed dispositions; and
+- all 293 official errata have fail-closed reviewed dispositions; and
 - ordinary checks reproduce the ledger offline while the release gate rejects
   live official-source drift.
 

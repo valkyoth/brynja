@@ -1,0 +1,158 @@
+[schema]
+version = 1
+
+[monitor]
+owner = "Brynja standards review"
+baseline_observed_at = "2026-08-31"
+maximum_release_age_days = 8
+landing_max_bytes = 4194304
+document_max_bytes = 16777216
+allowed_upstream_states = [
+  "draft",
+  "final",
+  "update-planned",
+  "superseded",
+  "withdrawn",
+]
+allowed_brynja_states = [
+  "current",
+  "compatibility",
+  "legacy-only",
+  "disabled",
+  "rejected",
+]
+allowed_dispositions = [
+  "baseline",
+  "no-effect",
+  "implementation-update",
+  "compatibility",
+  "legacy-only",
+  "disabled",
+  "rejected",
+]
+
+[[local]]
+id = "nist:NIST.FIPS.180-4.pdf"
+publisher = "NIST"
+edition = "FIPS 180-4"
+upstream_state = "update-planned"
+landing_url = "https://csrc.nist.gov/pubs/fips/180-4/upd1/final"
+
+[[local]]
+id = "nist:NIST.FIPS.186-5.pdf"
+publisher = "NIST"
+edition = "FIPS 186-5"
+upstream_state = "final"
+landing_url = "https://csrc.nist.gov/pubs/fips/186-5/final"
+
+[[local]]
+id = "nist:NIST.FIPS.197-upd1.pdf"
+publisher = "NIST"
+edition = "FIPS 197 update 1"
+upstream_state = "final"
+landing_url = "https://csrc.nist.gov/pubs/fips/197/final"
+
+[[local]]
+id = "nist:NIST.FIPS.202.pdf"
+publisher = "NIST"
+edition = "FIPS 202"
+upstream_state = "update-planned"
+landing_url = "https://csrc.nist.gov/pubs/fips/202/final"
+
+[[local]]
+id = "nist:NIST.FIPS.203.pdf"
+publisher = "NIST"
+edition = "FIPS 203"
+upstream_state = "update-planned"
+landing_url = "https://csrc.nist.gov/pubs/fips/203/final"
+
+[[local]]
+id = "nist:NIST.SP.800-107r1.pdf"
+publisher = "NIST"
+edition = "SP 800-107 revision 1"
+upstream_state = "update-planned"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/107/r1/final"
+
+[[local]]
+id = "nist:NIST.SP.800-185.pdf"
+publisher = "NIST"
+edition = "SP 800-185"
+upstream_state = "update-planned"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/185/final"
+
+[[local]]
+id = "nist:NIST.SP.800-186.pdf"
+publisher = "NIST"
+edition = "SP 800-186"
+upstream_state = "final"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/186/final"
+
+[[local]]
+id = "nist:NIST.SP.800-227.pdf"
+publisher = "NIST"
+edition = "SP 800-227"
+upstream_state = "final"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/227/final"
+
+[[local]]
+id = "nist:NIST.SP.800-38D.pdf"
+publisher = "NIST"
+edition = "SP 800-38D"
+upstream_state = "update-planned"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/38/d/final"
+
+[[local]]
+id = "nist:NIST.SP.800-56Ar3.pdf"
+publisher = "NIST"
+edition = "SP 800-56A revision 3"
+upstream_state = "final"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/56/a/r3/final"
+
+[[local]]
+id = "nist:NIST.SP.800-90Ar1.pdf"
+publisher = "NIST"
+edition = "SP 800-90A revision 1"
+upstream_state = "update-planned"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/90/a/r1/final"
+
+[[local]]
+id = "nist:NIST.SP.800-90B.pdf"
+publisher = "NIST"
+edition = "SP 800-90B"
+upstream_state = "final"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/90/b/final"
+
+[[local]]
+id = "nist:NIST.SP.800-90C.pdf"
+publisher = "NIST"
+edition = "SP 800-90C"
+upstream_state = "final"
+landing_url = "https://csrc.nist.gov/pubs/sp/800/90/c/final"
+
+[[local]]
+id = "itu:ITU-T.X.690-202102.pdf"
+publisher = "ITU-T"
+edition = "X.690 (02/2021)"
+upstream_state = "final"
+landing_url = "https://www.itu.int/rec/T-REC-X.690"
+
+[[local]]
+id = "itu:ITU-T.X.690-202109-Err1.pdf"
+publisher = "ITU-T"
+edition = "X.690 (2021) Erratum 1"
+upstream_state = "final"
+landing_url = "https://www.itu.int/rec/T-REC-X.690"
+
+[[local]]
+id = "riscv:RISCV.Crypto.Scalar-1.0.1.pdf"
+publisher = "RISC-V International"
+edition = "Scalar cryptography 1.0.1"
+upstream_state = "final"
+landing_url = "https://docs.riscv.org/reference/isa/unpriv/scalar-crypto.html"
+
+[[local]]
+id = "riscv:RISCV.Crypto.Vector-1.0.pdf"
+publisher = "RISC-V International"
+edition = "Vector cryptography 1.0"
+upstream_state = "final"
+landing_url = "https://docs.riscv.org/reference/isa/unpriv/vector-crypto.html"

@@ -2770,7 +2770,36 @@ Exit criteria:
 
 ### v0.24.5 - Cross-Authority Standards Lifecycle Monitor
 
-Status: planned
+Status: awaiting green CI
+
+Implementation notes:
+
+- `standards/authority-lifecycle.json` now deterministically covers all 130
+  locked authorities: 104 RFCs, 14 NIST publications, two ITU-T documents,
+  two admitted RISC-V architecture specifications, and eight IANA registries;
+  upstream and Brynja states, official identities, exact bytes, planning
+  notices, replacement relations, requirements, symbols, evidence, milestones,
+  reviewed impact, and last successful observation remain separate fields;
+- the dependency-free observer fetches only register-owned HTTPS identities,
+  rejects every redirect, bounds response bytes and time, projects only stable
+  publication text or structured RFC/IANA fields, and emits a bounded
+  review-required artifact on changed bytes, status, errata, metadata,
+  rollback, malformed input, oversized input, timeout, or outage;
+- the first strict 2026-08-31 observation detected newly reported RFC 9846
+  editorial erratum 9157; human review kept its capitalization correction
+  unverified and track-not-applied, refreshed the exact evidence and all 31
+  affected requirement revisions, and a final complete observation matched
+  every reviewed document, page, RFC-index, errata, and registry baseline with
+  zero new or unresolved drift and a bound PASS freshness receipt; the
+  ordinary repository gate remains entirely offline;
+- a read-only weekly and manual GitHub workflow preserves every observation
+  artifact but cannot write policy, pins, receipts, repository files, Brynja
+  dispositions, implementation, publication selection, or security claims;
+- broken fixtures retain older unresolved observations across a later clean
+  run and require a corrective milestone plus exceptional pentest for every
+  behavior-changing implementation, compatibility, legacy-only, disabled, or
+  rejected disposition. This milestone changes no production Rust, public
+  cryptographic API, dependency, backend admission, or FIPS claim.
 
 Plan scope: Extend the standards ledger with bounded allowlisted monitoring for every official publication landing page, immutable document, RFC status and errata feed, IANA registry, and admitted architecture specification; record upstream edition, revision, draft, update-planned, superseded and withdrawn state separately from Brynja's current, compatibility, legacy-only, disabled and rejected dispositions; run scheduled and manual drift checks that require human impact review and exact requirement, code, evidence and release decisions without automatically downloading, reclassifying, weakening, or moving any implementation.
 

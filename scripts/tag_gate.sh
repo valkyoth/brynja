@@ -11,6 +11,9 @@ scripts/checks.sh
 scripts/assurance/check-bare-metal.sh
 scripts/sha2/check-sha256-cpu-qemu.sh
 scripts/standards/update-standards-snapshots.py --check
+python3 scripts/standards/check-authority-lifecycle.py --release
+python3 scripts/standards/observe-authority-lifecycle.py \
+    --artifact "${TMPDIR:-/tmp}/brynja-authority-lifecycle-observation.json"
 scripts/release/release_crates.py --check
 scripts/ci/check-rust-version-matrix.sh
 scripts/ci/check_latest_tools.sh

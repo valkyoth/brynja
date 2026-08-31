@@ -41,6 +41,23 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement the v0.24.5 cross-authority lifecycle monitor over all 130 locked
+  RFC, NIST, ITU-T, RISC-V, and IANA authorities, with distinct upstream and
+  Brynja states, exact content and stable publication-page identities,
+  planning/replacement metadata, reviewed impact, and exact requirement,
+  symbol, evidence, and milestone ownership.
+- Add bounded exact-URL live observation, unresolved-drift retention,
+  fail-closed human disposition rules, a weekly/manual read-only workflow,
+  committed release-freshness evidence, and pre-tag live enforcement. Its
+  first strict run detected RFC 9846 editorial erratum 9157; human review kept
+  it unverified and track-not-applied, refreshed the exact evidence and 31
+  affected requirement revisions, and the final complete observation passed
+  with zero new or unresolved drift. No network result can modify policy,
+  code, classification, publication, or a security claim.
+- Advance the internal facade to `brynja 0.24.5` with zero crates.io packages
+  selected and no production Rust, cryptographic behavior, dependency, unsafe
+  boundary, backend admission, independent-review, erasure, or FIPS claim.
+
 - Add isolated zero-dependency `no_std` Keccak-f[1600] candidates for x86_64
   AVX2 and AArch64 SHA3 instructions, with thread-bound direct-KAT sessions,
   permanent quarantine, zero ordinary admissions, and an explicit RISC-V

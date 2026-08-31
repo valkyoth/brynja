@@ -87,6 +87,8 @@ scripts/standards/verify-rfcs.sh
 scripts/standards/verify-local-references.sh
 python3 scripts/standards/check-standards-ledger.py
 python3 scripts/standards/test-standards-ledger.py
+python3 scripts/standards/check-authority-lifecycle.py
+python3 scripts/standards/test-authority-lifecycle.py
 python3 scripts/standards/check-protocol-surfaces.py
 python3 scripts/standards/test-protocol-surfaces.py
 python3 scripts/standards/test-surface-security.py

@@ -75,7 +75,38 @@ def history_fixture(root: Path) -> tuple[dict, dict]:
     return retained, empty
 
 
+def test_missing_historical_blob() -> None:
+    def missing_blob(arguments, **_kwargs):
+        if arguments[1] == "cat-file":
+            return subprocess.CompletedProcess(arguments, 1, b"", b"missing")
+        assert arguments[1] == "ls-tree"
+        return subprocess.CompletedProcess(
+            arguments,
+            0,
+            b"100644 blob deadbeef\tstandards/authority-reviews.json\0",
+            b"",
+        )
+
+    rejects(
+        lambda: reviews_policy.historical_review_blob(
+            "candidate", runner=missing_blob
+        ),
+        "historical authority review blob is unavailable",
+    )
+
+    def absent_path(arguments, **_kwargs):
+        if arguments[1] == "cat-file":
+            return subprocess.CompletedProcess(arguments, 1, b"", b"absent")
+        return subprocess.CompletedProcess(arguments, 0, b"", b"")
+
+    assert (
+        reviews_policy.historical_review_blob("candidate", runner=absent_path)
+        is None
+    )
+
+
 def test() -> None:
+    test_missing_historical_blob()
     policy = model.read_policy()
     register = model.build_register(policy)
     model.validate_register(register, policy)

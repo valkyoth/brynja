@@ -117,6 +117,33 @@ def report_field(text: str, label: str) -> str:
     return values[0]
 
 
+def historical_review_blob(
+    commit: str,
+    root: Path = model.ROOT,
+    runner: Callable[..., subprocess.CompletedProcess] = subprocess.run,
+) -> bytes | None:
+    path = "standards/authority-reviews.json"
+    prior = runner(
+        ["git", "cat-file", "blob", f"{commit}:{path}"],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    if prior.returncode == 0:
+        return prior.stdout
+    tree = runner(
+        ["git", "ls-tree", "-z", commit, "--", path],
+        cwd=root,
+        check=False,
+        capture_output=True,
+    )
+    if tree.returncode != 0:
+        raise model.LifecycleError("historical authority review tree is unavailable")
+    if tree.stdout:
+        raise model.LifecycleError("historical authority review blob is unavailable")
+    return None
+
+
 def historical_review_registers(root: Path = model.ROOT) -> list[dict]:
     shallow = subprocess.run(
         ["git", "rev-parse", "--is-shallow-repository"],
@@ -147,21 +174,11 @@ def historical_review_registers(root: Path = model.ROOT) -> list[dict]:
         raise model.LifecycleError("authority review history cannot be enumerated")
     registers = []
     for commit in history.stdout.splitlines():
-        prior = subprocess.run(
-            [
-                "git",
-                "cat-file",
-                "blob",
-                f"{commit}:standards/authority-reviews.json",
-            ],
-            cwd=root,
-            check=False,
-            capture_output=True,
-        )
-        if prior.returncode != 0:
+        blob = historical_review_blob(commit, root)
+        if blob is None:
             continue
         try:
-            value = json.loads(prior.stdout)
+            value = json.loads(blob)
         except (UnicodeDecodeError, json.JSONDecodeError) as error:
             raise model.LifecycleError(
                 "historical authority review register is malformed"

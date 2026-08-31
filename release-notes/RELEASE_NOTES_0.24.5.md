@@ -83,7 +83,10 @@ locally remediated; the residual finding awaits independent retest:
 - review-history validation requires a complete non-shallow repository and
   compares the current archive with every reachable schema-2 version, while
   real Git fixtures cover shallow history and a deletion hidden by a later
-  unrelated commit. The scheduled observer explicitly fetches full history.
+  unrelated commit. Historical blob failures are accepted only when tree
+  inspection proves the path was absent; present unavailable blobs and
+  unreadable trees fail closed. The scheduled observer explicitly fetches full
+  history.
 
 ## Security Boundaries
 

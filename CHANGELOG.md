@@ -68,6 +68,9 @@ Keep a Changelog and Semantic Versioning.
   archive, fetching complete history in the scheduled observer, and testing a
   shallow clone plus an add/delete/unrelated-commit sequence with real Git
   repositories.
+- Fail closed when a historical review path exists but its blob cannot be read,
+  distinguishing that partial-clone/corruption case from a genuine absent path
+  through commit-tree inspection and regression fixtures.
 
 - Add isolated zero-dependency `no_std` Keccak-f[1600] candidates for x86_64
   AVX2 and AArch64 SHA3 instructions, with thread-bound direct-KAT sessions,

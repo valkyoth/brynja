@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import copy
 import json
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -29,6 +30,49 @@ def one_row(register: dict, prefix: str = "nist:") -> dict:
 
 def fake_register(row: dict) -> dict:
     return {"authorities": [row], "schema": 1}
+
+
+def git(root: Path, *arguments: str) -> None:
+    subprocess.run(
+        ["git", "-c", "commit.gpgsign=false", *arguments],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+
+
+def write_review_register(root: Path, value: dict) -> None:
+    path = root / "standards/authority-reviews.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(standards.json_bytes(value))
+
+
+def history_fixture(root: Path) -> tuple[dict, dict]:
+    retained = {
+        "observations": [{"id": "retained"}],
+        "reviews": [],
+        "schema": 2,
+        "unresolved_observations": [],
+    }
+    empty = {
+        "observations": [],
+        "reviews": [],
+        "schema": 2,
+        "unresolved_observations": [],
+    }
+    git(root, "init", "--quiet")
+    git(root, "config", "user.name", "Brynja Test")
+    git(root, "config", "user.email", "test@example.invalid")
+    write_review_register(root, retained)
+    git(root, "add", "standards/authority-reviews.json")
+    git(root, "commit", "--quiet", "-m", "retain observation")
+    write_review_register(root, empty)
+    git(root, "add", "standards/authority-reviews.json")
+    git(root, "commit", "--quiet", "-m", "erase observation")
+    (root / "unrelated.txt").write_text("unrelated\n", encoding="utf-8")
+    git(root, "add", "unrelated.txt")
+    git(root, "commit", "--quiet", "-m", "unrelated change")
+    return retained, empty
 
 
 def test() -> None:
@@ -117,8 +161,10 @@ def test() -> None:
         "unresolved_observations": [],
     }
     reviews_policy.validate_reviews(reviewed, enforce_history=False)
-    original_prior = reviews_policy.prior_committed_reviews
-    reviews_policy.prior_committed_reviews = lambda: copy.deepcopy(reviewed)
+    original_history = reviews_policy.historical_review_registers
+    reviews_policy.historical_review_registers = lambda _root=model.ROOT: [
+        copy.deepcopy(reviewed)
+    ]
     try:
         rejects(
             lambda: reviews_policy.validate_append_only(
@@ -138,7 +184,35 @@ def test() -> None:
             "reviews history is not append-only",
         )
     finally:
-        reviews_policy.prior_committed_reviews = original_prior
+        reviews_policy.historical_review_registers = original_history
+
+    with tempfile.TemporaryDirectory() as directory:
+        history_root = Path(directory) / "history"
+        history_root.mkdir()
+        _retained_history, empty_history = history_fixture(history_root)
+        rejects(
+            lambda: reviews_policy.validate_append_only(empty_history, history_root),
+            "observations history is not append-only",
+        )
+        shallow_root = Path(directory) / "shallow"
+        subprocess.run(
+            [
+                "git",
+                "clone",
+                "--quiet",
+                "--no-local",
+                "--depth",
+                "1",
+                str(history_root),
+                str(shallow_root),
+            ],
+            check=True,
+            capture_output=True,
+        )
+        rejects(
+            lambda: reviews_policy.historical_review_registers(shallow_root),
+            "complete Git history is required",
+        )
     rejects(
         lambda: reviews_policy.review_observation(
             retained[0],
@@ -282,6 +356,7 @@ def test() -> None:
     assert "observe-authority-lifecycle.py" in workflow
     assert "--write-freshness" not in workflow
     assert "permissions:\n  contents: read" in workflow
+    assert "fetch-depth: 0" in workflow
     tag_gate = (model.ROOT / "scripts/tag_gate.sh").read_text()
     assert "check-authority-lifecycle.py --release" in tag_gate
     assert "observe-authority-lifecycle.py" in tag_gate

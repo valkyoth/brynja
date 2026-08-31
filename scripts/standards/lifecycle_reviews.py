@@ -117,41 +117,69 @@ def report_field(text: str, label: str) -> str:
     return values[0]
 
 
-def prior_committed_reviews() -> dict | None:
-    current = subprocess.run(
-        ["git", "cat-file", "blob", "HEAD:standards/authority-reviews.json"],
-        cwd=model.ROOT,
+def historical_review_registers(root: Path = model.ROOT) -> list[dict]:
+    shallow = subprocess.run(
+        ["git", "rev-parse", "--is-shallow-repository"],
+        cwd=root,
         check=False,
         capture_output=True,
+        text=True,
     )
-    if current.returncode != 0:
-        return None
-    working = model.REVIEWS.read_bytes()
-    reference = "HEAD" if current.stdout != working else "HEAD^"
-    prior = subprocess.run(
-        ["git", "cat-file", "blob", f"{reference}:standards/authority-reviews.json"],
-        cwd=model.ROOT,
+    if shallow.returncode != 0 or shallow.stdout.strip() != "false":
+        raise model.LifecycleError(
+            "complete Git history is required for append-only validation"
+        )
+    history = subprocess.run(
+        [
+            "git",
+            "rev-list",
+            "--full-history",
+            "HEAD",
+            "--",
+            "standards/authority-reviews.json",
+        ],
+        cwd=root,
         check=False,
         capture_output=True,
+        text=True,
     )
-    if prior.returncode != 0:
-        return None
-    try:
-        value = json.loads(prior.stdout)
-    except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise model.LifecycleError("prior authority review register is malformed") from error
-    return value if value.get("schema") == 2 else None
+    if history.returncode != 0:
+        raise model.LifecycleError("authority review history cannot be enumerated")
+    registers = []
+    for commit in history.stdout.splitlines():
+        prior = subprocess.run(
+            [
+                "git",
+                "cat-file",
+                "blob",
+                f"{commit}:standards/authority-reviews.json",
+            ],
+            cwd=root,
+            check=False,
+            capture_output=True,
+        )
+        if prior.returncode != 0:
+            continue
+        try:
+            value = json.loads(prior.stdout)
+        except (UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise model.LifecycleError(
+                "historical authority review register is malformed"
+            ) from error
+        if value.get("schema") == 2:
+            registers.append(value)
+    return registers
 
 
-def validate_append_only(reviews: dict) -> None:
-    prior = prior_committed_reviews()
-    if prior is None:
-        return
-    for field, identity in (("observations", "id"), ("reviews", "observation_id")):
-        current = {item[identity]: item for item in reviews[field]}
-        for item in prior[field]:
-            if current.get(item[identity]) != item:
-                raise model.LifecycleError(f"authority {field} history is not append-only")
+def validate_append_only(reviews: dict, root: Path = model.ROOT) -> None:
+    for prior in historical_review_registers(root):
+        for field, identity in (("observations", "id"), ("reviews", "observation_id")):
+            current = {item[identity]: item for item in reviews[field]}
+            for item in prior[field]:
+                if current.get(item[identity]) != item:
+                    raise model.LifecycleError(
+                        f"authority {field} history is not append-only"
+                    )
 
 
 def validate_pentest_report(path: str, milestone: str, root: Path = model.ROOT) -> None:

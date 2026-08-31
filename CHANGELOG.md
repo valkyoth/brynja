@@ -63,6 +63,11 @@ Keep a Changelog and Semantic Versioning.
   affected-object, evidence, and committed `PASS`/`PASS` exceptional-pentest
   validation for security changes; and replace the predictable tag artifact
   with exclusive no-follow creation inside a private `mktemp` directory.
+- Close the first retest's residual Medium history-integrity bypass by requiring
+  a non-shallow repository, comparing against every reachable schema-2 review
+  archive, fetching complete history in the scheduled observer, and testing a
+  shallow clone plus an add/delete/unrelated-commit sequence with real Git
+  repositories.
 
 - Add isolated zero-dependency `no_std` Keccak-f[1600] candidates for x86_64
   AVX2 and AArch64 SHA3 instructions, with thread-bound direct-KAT sessions,

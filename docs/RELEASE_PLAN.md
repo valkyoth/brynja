@@ -2808,7 +2808,12 @@ Implementation notes:
   observation-bound roadmap milestones, repository evidence, and committed
   matching `PASS`/`PASS` exceptional reports before security-changing closure;
   and writes tag artifacts exclusively in a private unpredictable directory
-  without following pre-existing paths. Independent retest remains pending.
+  without following pre-existing paths. The first retest closed the parser and
+  artifact findings but found one residual Medium archive-history bypass;
+  validation now requires complete Git history, compares every reachable
+  schema-2 register, and proves shallow plus multi-commit deletion rejection
+  with real Git fixtures. Independent retest of that residual fix remains
+  pending.
 
 Plan scope: Extend the standards ledger with bounded allowlisted monitoring for every official publication landing page, immutable document, RFC status and errata feed, IANA registry, and admitted architecture specification; record upstream edition, revision, draft, update-planned, superseded and withdrawn state separately from Brynja's current, compatibility, legacy-only, disabled and rejected dispositions; run scheduled and manual drift checks that require human impact review and exact requirement, code, evidence and release decisions without automatically downloading, reclassifying, weakening, or moving any implementation.
 

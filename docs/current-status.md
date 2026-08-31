@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 cross-authority lifecycle findings locally remediated, independent retest pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 residual lifecycle-history finding locally remediated, independent retest pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -302,8 +302,11 @@ malformed HTTP-200 errata handling, review-evidence authorization, and the
 predictable tag artifact path. Remediation now enforces an authoritative
 errata outcome, an append-only content-identified observation archive with
 real roadmap/evidence/passing-pentest bindings, and exclusive artifacts inside
-a private unpredictable directory. Local regression tests pass; independent
-retest remains pending.
+a private unpredictable directory. The first retest closed two findings but
+found one residual append-only-history bypass. Complete history is now
+mandatory and every reachable schema-2 archive is compared; shallow and
+multi-commit deletion fixtures pass locally. Independent retest remains
+pending.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

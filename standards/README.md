@@ -239,6 +239,10 @@ never use `--write-freshness`, never replace trust pins, and cannot modify the
 checkout. The tag gate creates its artifact exclusively inside a private
 unpredictable directory; pre-existing files and symlinks are rejected. A fresh
 successful run cannot erase an older committed unresolved observation. The
+append-only check requires complete Git history and compares the current
+archive with every reachable schema-2 version, so an intervening deletion
+cannot be hidden by a later unrelated commit. The scheduled checkout fetches
+full history explicitly. The
 release-only age gate requires a recent committed PASS receipt, while ordinary
 offline builds
 remain deterministic and independent of wall-clock time.

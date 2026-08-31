@@ -57,6 +57,12 @@ Keep a Changelog and Semantic Versioning.
 - Advance the internal facade to `brynja 0.24.5` with zero crates.io packages
   selected and no production Rust, cryptographic behavior, dependency, unsafe
   boundary, backend admission, independent-review, erasure, or FIPS claim.
+- Remediate three Medium v0.24.5 lifecycle-assurance findings: reject malformed
+  HTTP-200 errata pages without exactly one authoritative outcome; archive and
+  identity-bind observations before any review can close, with real roadmap,
+  affected-object, evidence, and committed `PASS`/`PASS` exceptional-pentest
+  validation for security changes; and replace the predictable tag artifact
+  with exclusive no-follow creation inside a private `mktemp` directory.
 
 - Add isolated zero-dependency `no_std` Keccak-f[1600] candidates for x86_64
   AVX2 and AArch64 SHA3 instructions, with thread-bound direct-KAT sessions,

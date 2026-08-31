@@ -316,8 +316,10 @@ def observation(row: dict, state: str, detail: str) -> dict:
     if state not in ALLOWED_OBSERVATION_STATES:
         raise LifecycleError(f"invalid observation state: {state}")
     return {
+        "affected_evidence": row["affected_evidence"],
         "affected_milestones": row["affected_milestones"],
         "affected_requirements": row["affected_requirements"],
+        "affected_symbols": row["affected_symbols"],
         "authority": row["id"],
         "detail": detail[:512],
         "effective_brynja_state": row["brynja_state"],
@@ -332,62 +334,3 @@ def retain_unresolved(prior: list[dict], observed: list[dict]) -> list[dict]:
         identifier = standards.sha256(standards.json_bytes(item))[:24]
         combined.setdefault(identifier, {"id": identifier, **item})
     return [combined[key] for key in sorted(combined)]
-
-
-def validate_reviews(reviews: dict) -> None:
-    if set(reviews) != {"reviews", "schema", "unresolved_observations"} or reviews["schema"] != 1:
-        raise LifecycleError("authority review register has invalid fields")
-    unresolved_ids = set()
-    for item in reviews["unresolved_observations"]:
-        required = {
-            "affected_milestones",
-            "affected_requirements",
-            "authority",
-            "detail",
-            "effective_brynja_state",
-            "id",
-            "requested_action",
-            "state",
-        }
-        if set(item) != required or item["state"] not in ALLOWED_OBSERVATION_STATES:
-            raise LifecycleError("unresolved authority observation has invalid fields")
-        if item["id"] in unresolved_ids or item["requested_action"] != "human-review":
-            raise LifecycleError("unresolved authority observation is duplicate or authorizing")
-        unresolved_ids.add(item["id"])
-    reviewed_ids = set()
-    for item in reviews["reviews"]:
-        required = {
-            "authority",
-            "corrective_milestone",
-            "disposition",
-            "observation_id",
-            "pentest",
-            "reviewed_impact",
-        }
-        if set(item) != required or item["disposition"] not in ALLOWED_REVIEW_DISPOSITIONS:
-            raise LifecycleError("authority disposition review has invalid fields")
-        if item["observation_id"] in reviewed_ids or not item["reviewed_impact"].strip():
-            raise LifecycleError("authority disposition review is duplicate or unexplained")
-        reviewed_ids.add(item["observation_id"])
-        if item["disposition"] != "no-effect" and (
-            not item["corrective_milestone"] or item["pentest"] != "exceptional-required"
-        ):
-            raise LifecycleError("security-behavior disposition lacks corrective milestone or pentest")
-    if unresolved_ids & reviewed_ids:
-        raise LifecycleError("reviewed observation remains unresolved")
-
-
-def review_observation(observation_item: dict, disposition: str, *, corrective_milestone: str | None, pentest: str) -> dict:
-    if disposition not in ALLOWED_REVIEW_DISPOSITIONS:
-        raise LifecycleError("invalid authority drift disposition")
-    if disposition in {"implementation-update", "compatibility", "legacy-only", "disabled", "rejected"}:
-        if not corrective_milestone or pentest != "exceptional-required":
-            raise LifecycleError("security-behavior disposition requires corrective milestone and exceptional pentest")
-    return {
-        "authority": observation_item["authority"],
-        "corrective_milestone": corrective_milestone,
-        "disposition": disposition,
-        "observation_id": observation_item["id"],
-        "pentest": pentest,
-        "reviewed_impact": observation_item["detail"],
-    }

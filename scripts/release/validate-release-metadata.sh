@@ -72,6 +72,7 @@ test -x scripts/standards/capture-authority-landings.py
 test -x scripts/standards/test-authority-lifecycle.py
 test -f scripts/standards/lifecycle_model.py
 test -f scripts/standards/lifecycle_network.py
+test -f scripts/standards/lifecycle_reviews.py
 test -x scripts/assurance/check-assurance.py
 test -x scripts/assurance/test-assurance.py
 test -x scripts/assurance/assurance_mutation.py
@@ -264,6 +265,11 @@ grep -q 'scripts/sanitization/check-sanitization-admission.py --online' scripts/
 grep -q 'scripts/sanitization/check-sanitization-candidate.sh --matrix' scripts/tag_gate.sh
 grep -q 'python3 scripts/standards/check-authority-lifecycle.py --release' scripts/tag_gate.sh
 grep -q 'python3 scripts/standards/observe-authority-lifecycle.py' scripts/tag_gate.sh
+grep -q 'mktemp -d "${TMPDIR:-/tmp}/brynja-authority.XXXXXX"' scripts/tag_gate.sh
+if grep -q 'brynja-authority-lifecycle-observation.json' scripts/tag_gate.sh; then
+    echo "tag gate must not use a predictable lifecycle artifact" >&2
+    exit 1
+fi
 grep -q 'python3 scripts/standards/check-authority-lifecycle.py' scripts/checks.sh
 grep -q 'python3 scripts/standards/test-authority-lifecycle.py' scripts/checks.sh
 grep -q 'python3 scripts/standards/observe-authority-lifecycle.py' .github/workflows/standards-lifecycle.yml

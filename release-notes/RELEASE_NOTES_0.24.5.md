@@ -1,8 +1,8 @@
 # Brynja 0.24.5 Release Notes
 
-Status: implementation, live authority observation, and complete local
-verification passed; candidate commit, hosted GitHub and CodeQL, and signed
-tag pending; no scheduled pentest or crates.io publication is selected
+Status: three Medium lifecycle-assurance findings remediated locally;
+independent retest, final report reconciliation, hosted GitHub and CodeQL, and
+signed tag pending; no crates.io publication is selected
 
 Brynja 0.24.5 implements the cross-authority standards lifecycle monitor. It
 extends the existing immutable standards ledger with explicit official
@@ -50,11 +50,32 @@ publication selection, or security claims.
   all local publication pages, the RFC index, and every locked RFC's errata
   feed. It returned `PASS` with zero new or unresolved observations.
 - A later clean observation cannot erase an older unresolved observation.
-  Behavior-changing dispositions require an exact corrective milestone and
-  `exceptional-required` pentest state.
+  Behavior-changing dispositions require an exact observation-bound corrective
+  milestone, complete affected-object mapping, concrete repository evidence,
+  and a committed passing exceptional pentest report.
 - Ordinary builds and the complete repository gate perform only deterministic
   offline reproduction; scheduled and pre-tag network observations cannot
   write repository policy or pins.
+
+## Pentest Remediation
+
+The voluntary assessment of exact implementation candidate
+`7934dd880ef1a08d1fb0c96089a725b9ec81d518` found three Medium assurance
+defects. All three are remediated and await independent retest:
+
+- an HTTP 200 errata page is accepted only when it contains recognized records
+  or exactly one official `No matching errata found.` marker; maintenance,
+  login, WAF, incomplete, duplicate-empty, and contradictory pages fail closed;
+- schema-2 review evidence archives every observation by content-derived ID,
+  carries requirement, symbol, and evidence ownership into review, rejects
+  unknown observations and fabricated milestones, binds every corrective
+  milestone to the exact authority and observation, and requires a committed
+  matching `PASS`/`PASS` exceptional pentest report plus concrete repository
+  evidence before a security-changing disposition can close; and
+- tag observation output is created exclusively inside a private unpredictable
+  `mktemp` directory. Artifact creation rejects every pre-existing path, and
+  repository receipt replacement rejects symlinks and uses an exclusive
+  same-directory temporary followed by atomic replacement.
 
 ## Security Boundaries
 
@@ -75,7 +96,8 @@ admission, independent-review state, secret-erasure state, or FIPS 140-3 claim.
 
 Version 0.24.5 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
-crates.io packages. No scheduled or exceptional pentest is required because
-the change is repository-only assurance tooling and adds no production or
-cryptographic behavior. The verified candidate must still pass the complete
-local gate plus hosted GitHub and CodeQL before its signed tag is authorized.
+crates.io packages. The original repository-only scope did not schedule a
+pentest, but the voluntary assessment found three Medium issues; its passing
+retest is now mandatory before this candidate can proceed. The remediated
+candidate must then pass the complete local gate plus hosted GitHub and CodeQL
+before its signed tag is authorized.

@@ -2800,6 +2800,15 @@ Implementation notes:
   behavior-changing implementation, compatibility, legacy-only, disabled, or
   rejected disposition. This milestone changes no production Rust, public
   cryptographic API, dependency, backend admission, or FIPS claim.
+- the voluntary assessment of candidate `7934dd880ef1a08d1fb0c96089a725b9ec81d518`
+  found three Medium assurance gaps. Remediation now requires exactly one
+  authoritative errata-page outcome even under HTTP 200; preserves every
+  reviewed or unresolved observation in a schema-2 content-identified archive
+  with exact requirement, symbol, and evidence mapping; validates real
+  observation-bound roadmap milestones, repository evidence, and committed
+  matching `PASS`/`PASS` exceptional reports before security-changing closure;
+  and writes tag artifacts exclusively in a private unpredictable directory
+  without following pre-existing paths. Independent retest remains pending.
 
 Plan scope: Extend the standards ledger with bounded allowlisted monitoring for every official publication landing page, immutable document, RFC status and errata feed, IANA registry, and admitted architecture specification; record upstream edition, revision, draft, update-planned, superseded and withdrawn state separately from Brynja's current, compatibility, legacy-only, disabled and rejected dispositions; run scheduled and manual drift checks that require human impact review and exact requirement, code, evidence and release decisions without automatically downloading, reclassifying, weakening, or moving any implementation.
 

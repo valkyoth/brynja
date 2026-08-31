@@ -451,6 +451,36 @@ def test_errata_parser_uses_authoritative_identity() -> None:
     ]
 
 
+def test_errata_parser_requires_one_authoritative_outcome() -> None:
+    empty = b'<p class="alert alert-info">No matching errata found.</p>'
+    assert lib.parse_errata(empty, 1234) == []
+    for fixture in (
+        b"<html><body>maintenance</body></html>",
+        b"<html><body>Please log in</body></html>",
+        b"<html><body>Request blocked by WAF</body></html>",
+        empty + empty,
+    ):
+        assert_fails(
+            "errata response",
+            lib.parse_errata,
+            fixture,
+            1234,
+        )
+    assert_fails(
+        "errata table row",
+        lib.parse_errata,
+        b"<h2>Reported (1)</h2><table><tr><td>incomplete</td></tr></table>",
+        1234,
+    )
+    record = b"""
+    <h2>Verified (1)</h2><table><tr>
+    <td>RFC1234 (42)</td><td>7</td><td>Technical</td><td>source</td>
+    <td>person</td><td>TXT</td><td>2026-01-02</td></tr></table>
+    """
+    assert_fails("contradictory", lib.parse_errata, record + empty, 1234)
+    assert_fails("duplicate records", lib.parse_errata, record + record, 1234)
+
+
 def main() -> int:
     tests = [
         value

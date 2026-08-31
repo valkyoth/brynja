@@ -15,7 +15,7 @@ def main() -> int:
     parser.add_argument("--artifact", type=Path, required=True)
     args = parser.parse_args()
     candidate = network.landing_candidate(model.read_policy())
-    network.write_json(args.artifact, candidate)
+    network.write_new_json(args.artifact, candidate)
     print(f"wrote untrusted candidate for {len(candidate['landings'])} official landing pages; review before commit")
     return 0
 

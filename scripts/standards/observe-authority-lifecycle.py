@@ -22,7 +22,7 @@ def main() -> int:
     policy = model.read_policy()
     observations = network.observe(register, policy)
     result = network.artifact(register, observations, args.observed_at)
-    network.write_json(args.artifact, result)
+    network.write_new_json(args.artifact, result)
     if args.write_freshness:
         if result["result"] != "PASS":
             raise model.LifecycleError("cannot write freshness from unresolved drift")
@@ -32,7 +32,7 @@ def main() -> int:
             "result": "PASS",
             "schema": 1,
         }
-        network.write_json(model.FRESHNESS, receipt)
+        network.write_existing_json(model.FRESHNESS, receipt)
     print(f"authority lifecycle observation: {result['result']} ({len(observations)} new observations)")
     return 0 if result["result"] == "PASS" else 1
 

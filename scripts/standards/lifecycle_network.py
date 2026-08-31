@@ -5,7 +5,10 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import os
 import re
+import stat
+import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -301,6 +304,46 @@ def current_date() -> str:
     return dt.datetime.now(dt.timezone.utc).date().isoformat()
 
 
-def write_json(path: Path, value: object) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(standards.json_bytes(value))
+def write_new_json(path: Path, value: object) -> None:
+    """Create one artifact exclusively without following a final symlink."""
+
+    path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags, 0o600)
+    except OSError as error:
+        raise model.LifecycleError(f"refusing existing artifact path: {path}") from error
+    with os.fdopen(descriptor, "wb") as handle:
+        if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
+            raise model.LifecycleError(f"artifact is not a regular file: {path}")
+        handle.write(standards.json_bytes(value))
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def write_existing_json(path: Path, value: object) -> None:
+    """Replace one repository-owned regular file without following a symlink."""
+
+    try:
+        original_mode = path.lstat().st_mode
+    except OSError as error:
+        raise model.LifecycleError(f"refusing unsafe repository path: {path}") from error
+    if not stat.S_ISREG(original_mode):
+        raise model.LifecycleError(f"repository evidence is not a regular file: {path}")
+    descriptor, temporary_name = tempfile.mkstemp(
+        dir=path.parent,
+        prefix=f".{path.name}.",
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(standards.json_bytes(value))
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.chmod(temporary, stat.S_IMODE(original_mode))
+        os.replace(temporary, path)
+    finally:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass

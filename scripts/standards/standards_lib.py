@@ -250,12 +250,19 @@ class ErrataTableParser(HTMLParser):
         self.in_cell = False
         self.cell_text: list[str] = []
         self.cells: list[str] = []
+        self.in_info_alert = False
+        self.info_text: list[str] = []
+        self.explicit_empty_count = 0
         self.records: list[dict] = []
 
-    def handle_starttag(self, tag: str, _attrs) -> None:
+    def handle_starttag(self, tag: str, attrs) -> None:
+        attributes = dict(attrs)
         if tag == "h2":
             self.heading = True
             self.heading_text = []
+        elif tag == "p" and "alert-info" in (attributes.get("class") or "").split():
+            self.in_info_alert = True
+            self.info_text = []
         elif tag == "tr":
             self.in_row = True
             self.cells = []
@@ -266,6 +273,8 @@ class ErrataTableParser(HTMLParser):
     def handle_data(self, data: str) -> None:
         if self.heading:
             self.heading_text.append(data)
+        if self.in_info_alert:
+            self.info_text.append(data)
         if self.in_cell:
             self.cell_text.append(data)
 
@@ -281,6 +290,11 @@ class ErrataTableParser(HTMLParser):
                 "",
             )
             self.heading = False
+        elif tag == "p" and self.in_info_alert:
+            text = " ".join("".join(self.info_text).split())
+            if text == "No matching errata found.":
+                self.explicit_empty_count += 1
+            self.in_info_alert = False
         elif tag == "td" and self.in_cell:
             self.cells.append(" ".join("".join(self.cell_text).split()))
             self.in_cell = False
@@ -318,7 +332,21 @@ def parse_errata(data: bytes, number: int) -> list[dict]:
             f"RFC {number} errata response exceeds {MAX_ERRATA_BYTES} bytes"
         )
     parser = ErrataTableParser(number)
-    parser.feed(data.decode("utf-8"))
+    try:
+        parser.feed(data.decode("utf-8"))
+        parser.close()
+    except (UnicodeDecodeError, ValueError) as error:
+        raise RuntimeError(f"RFC {number} errata response is malformed") from error
+    if parser.records and parser.explicit_empty_count:
+        raise RuntimeError(f"RFC {number} errata response is malformed and contradictory")
+    if not parser.records and parser.explicit_empty_count != 1:
+        raise RuntimeError(
+            f"RFC {number} errata response is malformed: it lacks records and the "
+            "authoritative empty-result marker"
+        )
+    identifiers = [record["id"] for record in parser.records]
+    if len(identifiers) != len(set(identifiers)):
+        raise RuntimeError(f"RFC {number} errata response has duplicate records")
     return sorted(parser.records, key=lambda item: item["id"])
 
 

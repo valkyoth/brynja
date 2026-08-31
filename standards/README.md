@@ -21,7 +21,12 @@ primitive is implemented.
   `snapshots/authority-landings.json` bind every locked authority to its
   official publication identity, immutable content, separate upstream and
   Brynja state, reviewed impact, exact dependent work, retained drift, and
-  latest successful live observation.
+  latest successful live observation. The schema-2 review file is also the
+  append-only content-identified observation archive: a review cannot refer to
+  an unknown observation or omit its affected requirements, symbols, or
+  evidence. Security-changing reviews require a real observation-bound roadmap
+  milestone, concrete committed evidence, and the matching committed
+  `PASS`/`PASS` exceptional pentest report.
 - `ERRATA.json` records all errata returned for every locked RFC. Verified
   errata are implementation inputs, reported and held errata remain tracked
   without altering requirements, and rejected errata are non-applicable.
@@ -149,6 +154,12 @@ upstream channel; manually update the policy pin and its provenance; then run
 tests, and commit the pin plus evidence together. The same pin-first process
 applies to new RFC, NIST, and ITU source bytes.
 
+An RFC errata HTTP 200 response is valid only when it contains recognized
+errata records or exactly one official `No matching errata found.` marker.
+Maintenance, login, WAF, incomplete, duplicate-empty, and contradictory pages
+are malformed evidence and block the observation instead of representing an
+empty result.
+
 The 2026-08-01 reviewed refresh accepted the official 2026-07-31 IANA DNS
 Parameters snapshot. Its three new registries and seventeen new entries are
 explicitly caller-owned by v0.140.0. Provisional Structured DNS Error draft
@@ -225,7 +236,9 @@ affected requirement revisions, and the final complete observation returned
 `PASS` with zero new or unresolved drift. The weekly/manual workflow and
 pre-tag gate preserve bounded JSON artifacts outside the repository. They
 never use `--write-freshness`, never replace trust pins, and cannot modify the
-checkout. A fresh successful run cannot erase an older committed unresolved
-observation. The release-only age gate requires a recent committed PASS
-receipt, while ordinary offline builds
+checkout. The tag gate creates its artifact exclusively inside a private
+unpredictable directory; pre-existing files and symlinks are rejected. A fresh
+successful run cannot erase an older committed unresolved observation. The
+release-only age gate requires a recent committed PASS receipt, while ordinary
+offline builds
 remain deterministic and independent of wall-clock time.

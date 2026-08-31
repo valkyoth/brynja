@@ -290,6 +290,16 @@ and cannot update code or policy. The first strict 2026-08-31 run detected RFC
 track-not-applied, refreshed its exact evidence, and the final complete
 observation passed with zero new or unresolved drift.
 
+The voluntary v0.24.5 assessment then found three Medium assurance defects.
+The remediated monitor rejects malformed HTTP-200 errata pages unless they
+contain records or exactly one official empty marker; archives every
+content-identified observation before review and requires exact authority,
+affected-object, real roadmap, repository-evidence, and committed passing
+exceptional-pentest bindings for security changes; and creates tag artifacts
+exclusively inside private unpredictable directories without following
+pre-existing paths. Local remediation tests pass; independent retest remains
+pending.
+
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
 and AddressSanitizer claim. Both paths are now enforced and fail closed under

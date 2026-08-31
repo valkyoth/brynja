@@ -7,6 +7,7 @@ import argparse
 import datetime as dt
 
 import lifecycle_model as model
+import lifecycle_reviews as reviews_policy
 import standards_lib as standards
 
 
@@ -22,7 +23,7 @@ def main() -> int:
     elif model.REGISTER.read_bytes() != standards.json_bytes(expected):
         raise model.LifecycleError("authority lifecycle register changed; run checker --write")
     reviews = model.load_json(model.REVIEWS)
-    model.validate_reviews(reviews)
+    reviews_policy.validate_reviews(reviews)
     if reviews["unresolved_observations"]:
         raise model.LifecycleError("unresolved authority drift blocks release readiness")
     freshness = model.load_json(model.FRESHNESS)

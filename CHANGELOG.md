@@ -71,6 +71,13 @@ Keep a Changelog and Semantic Versioning.
 - Fail closed when a historical review path exists but its blob cannot be read,
   distinguishing that partial-clone/corruption case from a genuine absent path
   through commit-tree inspection and regression fixtures.
+- Record the final independent v0.24.5 retest of exact signed remediation
+  candidate `116afe2390b61561c0d4414aa2a2dafbc3658a80` as green, closing all four
+  lifecycle-assurance findings with `PASS`/`PASS` and zero open findings.
+- Refresh Miri and Rust sanitizer evidence to latest available
+  `nightly-2026-08-31` at exact Rust revision
+  `90850177249efe0321573c569aec5d12b257f8d6` after the final release audit
+  detected the prior daily pin was stale.
 
 - Add isolated zero-dependency `no_std` Keccak-f[1600] candidates for x86_64
   AVX2 and AArch64 SHA3 instructions, with thread-bound direct-KAT sessions,

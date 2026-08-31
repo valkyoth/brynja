@@ -167,7 +167,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install pinned nightly assurance toolchain
-        run: rustup toolchain install nightly-2026-08-30 --profile minimal --component miri,rust-src
+        run: rustup toolchain install nightly-2026-08-31 --profile minimal --component miri,rust-src
       - name: Run zeroization and SHA-2 under Miri
         run: scripts/zeroization/check-zeroization-miri.sh
       - name: Run zeroization and SHA-2 under AddressSanitizer

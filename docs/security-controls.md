@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 residual lifecycle-history finding locally remediated, independent retest pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 pentest, retest, and full local release checks passed, hosted checks and signed tag pending
 
 | Control | Foundation enforcement |
 | --- | --- |

@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 residual lifecycle-history finding locally remediated, independent retest pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 pentest, retest, and full local release checks passed, hosted checks and signed tag pending
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.5`. `brynja-hash-core 0.1.0`,

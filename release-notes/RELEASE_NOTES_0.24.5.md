@@ -1,8 +1,8 @@
 # Brynja 0.24.5 Release Notes
 
-Status: one residual Medium lifecycle-assurance finding remediated locally;
-independent retest, final report reconciliation, hosted GitHub and CodeQL, and
-signed tag pending; no crates.io publication is selected
+Status: independent retest and complete local release verification passed with
+zero open findings; hosted GitHub and CodeQL plus the signed tag remain
+pending; no crates.io publication is selected
 
 Brynja 0.24.5 implements the cross-authority standards lifecycle monitor. It
 extends the existing immutable standards ledger with explicit official
@@ -58,14 +58,19 @@ publication selection, or security claims.
 - Ordinary builds and the complete repository gate perform only deterministic
   offline reproduction; scheduled and pre-tag network observations cannot
   write repository policy or pins.
+- Final release review refreshed Miri and Rust sanitizer evidence to latest
+  available `nightly-2026-08-31` at exact Rust revision
+  `90850177249efe0321573c569aec5d12b257f8d6`; these tools remain CI/local
+  assurance inputs and are not Cargo dependencies.
 
 ## Pentest Remediation
 
 The voluntary assessment of exact implementation candidate
 `7934dd880ef1a08d1fb0c96089a725b9ec81d518` found three Medium assurance
 defects. The first retest closed the malformed-response and symlink findings
-but found one residual Medium append-only-history bypass. All known issues are
-locally remediated; the residual finding awaits independent retest:
+but found one residual Medium append-only-history bypass. All known issues were
+remediated, and the final independent retest of exact signed candidate
+`116afe2390b61561c0d4414aa2a2dafbc3658a80` passed with zero open findings:
 
 - an HTTP 200 errata page is accepted only when it contains recognized records
   or exactly one official `No matching errata found.` marker; maintenance,
@@ -108,8 +113,8 @@ admission, independent-review state, secret-erasure state, or FIPS 140-3 claim.
 Version 0.24.5 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The original repository-only scope did not schedule a
-pentest. The voluntary assessment and first retest leave one remediated Medium
-history-integrity issue awaiting confirmation. A passing second retest is now
-mandatory before this candidate can proceed. The remediated candidate must
-then pass the complete local gate plus hosted GitHub and CodeQL before its
-signed tag is authorized.
+pentest. The voluntary assessment, remediation, and final independent retest
+are complete with `PASS`/`PASS` and zero open findings. The reconciled candidate
+passed the complete local release gate; hosted GitHub and CodeQL must now pass
+before its signed tag is authorized. No crate is selected for crates.io
+publication.

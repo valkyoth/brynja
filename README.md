@@ -300,9 +300,11 @@ exclusively inside private unpredictable directories without following
 pre-existing paths. Its first retest closed the malformed-response and symlink
 findings but identified one residual Medium append-only-history bypass. The
 monitor now requires complete Git history and compares every reachable
-schema-2 archive version; real Git fixtures cover shallow history and a
-deletion hidden by a later unrelated commit. Local remediation tests pass;
-independent retest of that residual fix remains pending.
+schema-2 archive version; real Git fixtures cover shallow history, a deletion
+hidden by a later unrelated commit, and unavailable historical blobs. The
+final independent retest of exact signed candidate
+`116afe2390b61561c0d4414aa2a2dafbc3658a80` passed; the permanent report records
+`PASS`/`PASS` with zero open findings.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 residual lifecycle-history finding locally remediated, independent retest pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.4 signed; v0.24.5 pentest, retest, and full local release checks passed, hosted checks and signed tag pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -305,8 +305,10 @@ real roadmap/evidence/passing-pentest bindings, and exclusive artifacts inside
 a private unpredictable directory. The first retest closed two findings but
 found one residual append-only-history bypass. Complete history is now
 mandatory and every reachable schema-2 archive is compared; shallow and
-multi-commit deletion fixtures pass locally. Independent retest remains
-pending.
+multi-commit deletion and unavailable-blob fixtures pass locally. The final
+independent retest of exact signed candidate
+`116afe2390b61561c0d4414aa2a2dafbc3658a80` passed with `PASS`/`PASS` and zero
+open findings.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

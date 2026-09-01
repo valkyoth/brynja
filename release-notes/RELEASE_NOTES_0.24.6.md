@@ -1,7 +1,7 @@
 # Brynja 0.24.6 Release Notes
 
-Status: eleven Medium assurance-control findings are locally remediated with zero
-open findings; independent eighth retest and the signed candidate commit remain
+Status: twelve Medium assurance-control findings are locally remediated with zero
+open findings; independent ninth retest and the signed candidate commit remain
 pending; no crates.io publication is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
@@ -80,9 +80,13 @@ production cryptographic implementation or runtime behavior.
   only explicit receiver reborrows/projections rooted in `_1`, and requires
   the sanitizer block to dominate every reachable normal and unwind exit.
   Complete callable identity is anchored at the assignment right-hand side,
-  while definite provenance is intersected across reaching paths. Decoy
-  receivers, prefixed callables, duplicate calls, call-result overwrites,
-  branch or loop reassignments, and skipped cleanup paths fail closed.
+  while definite provenance is intersected and possible provenance is unioned
+  across reaching paths. Bare and projected definitions, deinitialization,
+  alias escape, other calls, inline assembly, unmodeled effects, post-cleanup
+  mutation, prefixed callables, duplicate calls, branch or loop reassignments,
+  and skipped cleanup paths fail closed. The sanitizer itself must be compiler-
+  proven non-unwinding, and its result remains conservatively may-aliased until
+  overwritten.
 - Removing the optional `brynja-sanitization` adapter still leaves every
   mandatory cleanup duty bound to Brynja's dependency-free core volatile
   clearing primitive. The adapter cannot enter the FIPS graph or replace core
@@ -116,6 +120,8 @@ retest confirmed that remediation but found one Medium incomplete MIR receiver-
 data-flow and exit-dominance path. The seventh retest confirmed that remediation
 but found two Medium residuals: callable identity was not anchored at the MIR
 assignment boundary, and call-result redefinitions left stale owner provenance.
+The eighth retest confirmed those remediations but found one Medium projected-
+place residual: writes through `_1` fields or derived aliases were not modeled.
 Registration remains explicit with zero
 registered capability owners, while actual owner shape and cleanup evidence
 now comes from independently maintained Rust compiler contracts and exact
@@ -125,7 +131,7 @@ configuration, macro nesting, and same-named method substitution. Every one of
 the 13 profiles retains an exact per-operation information-flow contract.
 
 Focused contract, mutation, compile-fail, bare-metal, and deterministic
-register checks pass with zero open findings. Independent eighth retest remains
+register checks pass with zero open findings. Independent ninth retest remains
 required before this candidate can be tagged.
 
 ## Security Boundaries
@@ -148,7 +154,7 @@ Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
 unless an exceptional trigger or voluntary review is applied. A voluntary
-review and its first seven retests supplied eleven Medium assurance-control defects;
-all are locally remediated. The independent eighth retest, signed candidate
+review and its first eight retests supplied twelve Medium assurance-control defects;
+all are locally remediated. The independent ninth retest, signed candidate
 commit, complete release verification, green hosted GitHub and CodeQL, and
 then the signed immutable tag remain required.

@@ -83,12 +83,15 @@ def main() -> int:
     rejects(conditional, ("owner::drop", "&mut Owner"), "exact_sanitizer(")
     unwind_valid = """fn owner::drop(_1: &mut Owner) -> () {
     bb0: {
-        _2 = exact_sanitizer(move _1) -> [return: bb1, unwind: bb2];
+        _2 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable];
     }
     bb1: {
+        _3 = unrelated_call() -> [return: bb2, unwind: bb3];
+    }
+    bb2: {
         return;
     }
-    bb2 (cleanup): {
+    bb3 (cleanup): {
         resume;
     }
 }

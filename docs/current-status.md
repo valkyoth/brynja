@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 eleven Medium assurance findings locally remediated, independent eighth retest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 twelve Medium assurance findings locally remediated, independent ninth retest and signed candidate pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -321,13 +321,16 @@ sanitizers and cleanup callers; future registrations must exactly match a
 separate canonical compiler contract, while separate exact-coverage maps derive
 their unique test, nonempty caller headers, and nonempty matching sanitizer MIR
 target; registrations cannot provide expected cleanup text;
-planned records claim no implemented symbol. Twenty-five structural mutations and twenty-two exhaustive secret-
-output downgrade mutations reject missing coverage, fabricated or substituted
+planned records claim no implemented symbol. Strict MIR flow now binds exact,
+non-unwinding sanitizer calls, must/may place provenance, complete CFG identity,
+and pre/post-cleanup effect rejection. Twenty-five structural mutations and
+twenty-two exhaustive secret-output downgrade mutations reject missing
+coverage, fabricated or substituted
 owners, forged hardened capabilities, ordinary-state substitution, changed
 per-operation information flow, retained partial secret output, and missed
-Drop or recoverable-unwind cleanup. The voluntary pentest and seven retests
-found eleven Medium assurance-control defects; local remediation passes with
-zero open findings and independent eighth retest is pending. This is design and assurance
+Drop or recoverable-unwind cleanup. The voluntary pentest and eight retests
+found twelve Medium assurance-control defects; local remediation passes with
+zero open findings and independent ninth retest is pending. This is design and assurance
 closure only: current ordinary SHA state is not made secret-safe, no new
 algorithm is added, and SHA-2/SHA-3 remain In progress through their separately
 owned hardened and complete-family acceptance milestones. Zero crates are

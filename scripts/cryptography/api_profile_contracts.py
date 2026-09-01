@@ -158,5 +158,6 @@ REVIEWED_SOURCE_PATHS = {
     "scripts/cryptography/rust_source_contract.py",
     "scripts/cryptography/secret_owner_compiler.py",
     "scripts/cryptography/test-api-profiles.py",
+    "scripts/cryptography/test-mir-cleanup-flow.py",
     "scripts/cryptography/test-secret-owner-compiler.py",
 }

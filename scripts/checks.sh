@@ -20,6 +20,7 @@ python3 scripts/constant-time/check-constant-time-evidence.py
 python3 scripts/constant-time/test-constant-time-evidence.py
 python3 scripts/cryptography/check-api-profiles.py
 python3 scripts/cryptography/test-api-profiles.py
+python3 scripts/cryptography/test-mir-cleanup-flow.py
 python3 scripts/cryptography/test-secret-owner-compiler.py
 python3 scripts/cryptography/check-secret-owner-compiler.py
 scripts/cryptography/check-api-profile-contract.sh

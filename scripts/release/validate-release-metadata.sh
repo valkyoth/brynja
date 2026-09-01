@@ -40,6 +40,7 @@ test -s assurance/api-profile-contract/Cargo.lock
 test -s assurance/api-profile-contract/src/lib.rs
 test -x scripts/cryptography/check-api-profiles.py
 test -x scripts/cryptography/test-api-profiles.py
+test -x scripts/cryptography/test-mir-cleanup-flow.py
 test -x scripts/cryptography/check-secret-owner-compiler.py
 test -x scripts/cryptography/test-secret-owner-compiler.py
 test -x scripts/cryptography/check-api-profile-contract.sh
@@ -172,6 +173,7 @@ grep -q 'python3 scripts/constant-time/check-constant-time-evidence.py' scripts/
 grep -q 'python3 scripts/constant-time/test-constant-time-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/cryptography/check-api-profiles.py' scripts/checks.sh
 grep -q 'python3 scripts/cryptography/test-api-profiles.py' scripts/checks.sh
+grep -q 'python3 scripts/cryptography/test-mir-cleanup-flow.py' scripts/checks.sh
 grep -q 'python3 scripts/cryptography/test-secret-owner-compiler.py' scripts/checks.sh
 grep -q 'python3 scripts/cryptography/check-secret-owner-compiler.py' scripts/checks.sh
 grep -q 'scripts/cryptography/check-api-profile-contract.sh' scripts/checks.sh

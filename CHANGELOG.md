@@ -65,8 +65,18 @@ Keep a Changelog and Semantic Versioning.
   branch-specific, loop, and `_1` redefinitions invalidate prior derivations;
   outer-module, crate-prefix, identifier-prefix, and trait-prefix callable
   substitutions and arrow-bearing non-call redefinitions fail closed.
-  Nineteen focused MIR regressions pass and
-  independent eighth retest remains pending.
+  Nineteen focused MIR regressions pass; the eighth retest found the projected-
+  place gap below.
+- Close the Medium eighth-retest projected-place finding with a place-sensitive
+  must/may provenance analysis over plain and call-result definitions. Writes,
+  deinitialization, and call results rooted in `_1` or any possible alias fail
+  closed, including branch-only aliases and typed/nested projections. A wider
+  adjacent audit additionally rejects owner alias escape through casts,
+  aggregates, other calls, inline assembly, unmodeled statements, and post-
+  sanitizer mutation; requires the sanitizer to be compiler-proven non-
+  unwinding; and conservatively tracks its result as possibly aliased. Three
+  positive paths and twenty-two focused negative paths pass, while independent
+  ninth retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

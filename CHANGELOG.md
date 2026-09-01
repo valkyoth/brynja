@@ -49,8 +49,15 @@ Keep a Changelog and Semantic Versioning.
   binds the exact crate, module, implementation source, method, and receiver
   type from the MIR header. The reported same-named cross-module, cross-crate,
   trait-module, and nested-module substitutions fail closed; twenty-two
-  registered-identity regressions pass and independent sixth retest remains
-  pending.
+  registered-identity regressions pass; the sixth retest found the residual
+  MIR data-flow gap below.
+- Close the Medium sixth-retest finding with a dedicated optimized-MIR control-
+  flow and data-flow verifier for every future registered algorithm owner.
+  Exactly one resolved sanitizer call must consume `_1` or an explicit
+  reborrow/projection rooted in `_1`, and its call block must dominate every
+  reachable normal and unwind exit. Decoy receivers, duplicate call sites,
+  skipped normal cleanup, and skipped unwind cleanup fail closed; ten focused
+  MIR regressions pass and independent seventh retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

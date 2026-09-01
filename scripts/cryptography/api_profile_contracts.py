@@ -154,6 +154,7 @@ REVIEWED_SOURCE_PATHS = {
     "scripts/cryptography/api_profile_model.py",
     "scripts/cryptography/check-api-profile-contract.sh",
     "scripts/cryptography/check-secret-owner-compiler.py",
+    "scripts/cryptography/mir_cleanup_flow.py",
     "scripts/cryptography/rust_source_contract.py",
     "scripts/cryptography/secret_owner_compiler.py",
     "scripts/cryptography/test-api-profiles.py",

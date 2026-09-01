@@ -324,10 +324,10 @@ authentication timing. A standalone
 zero-dependency `no_std` contract rejects downstream hardened-marker forgery,
 ordinary-state substitution, output-classification drift, retained partial
 secret output, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and five retests found eight Medium assurance-control gaps in the
+pentest and six retests found nine Medium assurance-control gaps in the
 original, lexical-remediation, future-registration, empty-value, identifier-
-prefix, and namespace evidence paths; all remediations pass locally and await
-independent sixth retest. The generated
+prefix, namespace, and MIR data-flow evidence paths; all remediations pass
+locally and await independent seventh retest. The generated
 [API-profile and secret-state register](https://github.com/valkyoth/brynja/blob/main/docs/cryptographic-api-profile-register.md)
 is a closure gate, not a new cryptographic implementation or verification
 claim; SHA-2 and SHA-3/SHAKE remain **In progress** until their later bit-input,

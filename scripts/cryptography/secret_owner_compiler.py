@@ -10,6 +10,7 @@ import tempfile
 from pathlib import Path
 
 import api_profile_contracts as contracts
+import mir_cleanup_flow
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,19 +31,19 @@ CONTRACT_TESTS = {
 }
 MIR_CALLS = {
     "brynja-core": (
-        (("drop(_1: &mut SecretRegionInitialization",), "zeroize_region_volatile("),
-        (("clear(_1: OwnedSecretRegion",), "zeroize_region_volatile("),
-        (("drop(_1: &mut OwnedSecretRegion",), "zeroize_region_volatile("),
-        (("drop(_1: &mut SecretInitialization",), "run_destruction::<D>("),
-        (("drop(_1: &mut SecretState",), "run_destruction::<D>("),
-        (("drop(_1: &mut SecureRandom",), "<E as SecureRandomEngine>::uninstantiate("),
+        (("drop(_1: &mut SecretRegionInitialization",), "zeroize_region_volatile(", False),
+        (("clear(_1: OwnedSecretRegion",), "zeroize_region_volatile(", False),
+        (("drop(_1: &mut OwnedSecretRegion",), "zeroize_region_volatile(", False),
+        (("drop(_1: &mut SecretInitialization",), "run_destruction::<D>(", False),
+        (("drop(_1: &mut SecretState",), "run_destruction::<D>(", False),
+        (("drop(_1: &mut SecureRandom",), "<E as SecureRandomEngine>::uninstantiate(", False),
     ),
     "brynja-sanitization": (
-        (("clear(_1: SanitizedSecret",), "SecretBytes::<N>::secure_clear("),
+        (("clear(_1: SanitizedSecret",), "SecretBytes::<N>::secure_clear(", False),
     ),
     "brynja-test-support": (
-        (("clear_state(_1: &mut DeterministicRandom",), "clear_owned_region("),
-        (("drop(_1: &mut DeterministicRandom",), "clear_owned_region("),
+        (("clear_state(_1: &mut DeterministicRandom",), "clear_owned_region(", False),
+        (("drop(_1: &mut DeterministicRandom",), "clear_owned_region(", False),
     ),
 }
 
@@ -242,30 +243,24 @@ def compiler_inventory(
             ):
                 fail(f"registered compiler contract header is invalid: {owner_id}")
             require_exact_caller_header(header[0], caller_source, caller_tokens, owner_id)
-            package_calls.append((tuple(header), sanitizer))
+            package_calls.append((tuple(header), sanitizer, True))
     return tests, {package: tuple(edges) for package, edges in calls.items()}
 
 
-def function_sections(mir: str) -> list[str]:
-    starts = [match.start() for match in re.finditer(r"(?m)^fn ", mir)]
-    sections = []
-    for index, start in enumerate(starts):
-        stop = starts[index + 1] if index + 1 < len(starts) else len(mir)
-        sections.append(mir[start:stop])
-    return sections
-
-
 def require_mir_call(mir: str, header_parts: tuple[str, ...], call: str) -> None:
+    try:
+        mir_cleanup_flow.require_owner_cleanup(mir, header_parts, call)
+    except mir_cleanup_flow.MirCleanupFlowError as error:
+        fail(str(error))
+
+
+def require_resolved_mir_call(mir: str, header_parts: tuple[str, ...], call: str) -> None:
     require_nonempty(call, "MIR cleanup target")
-    if not header_parts or any(not isinstance(part, str) or not part.strip() for part in header_parts):
-        fail("MIR caller header must contain nonempty strings")
-    matches = [
-        section for section in function_sections(mir)
-        if all(part in section.splitlines()[0] for part in header_parts)
-    ]
-    if len(matches) != 1:
-        fail(f"MIR caller is absent or ambiguous: {header_parts}")
-    if call not in matches[0]:
+    try:
+        function = mir_cleanup_flow.exact_function(mir, header_parts)
+    except mir_cleanup_flow.MirCleanupFlowError as error:
+        fail(str(error))
+    if call not in function:
         fail(f"MIR caller does not resolve the exact cleanup target: {header_parts}")
 
 
@@ -317,8 +312,11 @@ def check_mir(
     if len(candidates) != 1:
         fail(f"MIR artifact is absent or ambiguous for {package} under {toolchain}")
     mir = candidates[0].read_text(encoding="utf-8")
-    for header, call in expected_calls:
-        require_mir_call(mir, header, call)
+    for header, call, strict_owner_flow in expected_calls:
+        if strict_owner_flow:
+            require_mir_call(mir, header, call)
+        else:
+            require_resolved_mir_call(mir, header, call)
 
 
 def main() -> int:

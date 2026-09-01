@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 eight Medium assurance findings locally remediated, independent sixth retest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 nine Medium assurance findings locally remediated, independent seventh retest and signed candidate pending
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.6`. `brynja-hash-core 0.1.0`,

@@ -1,7 +1,7 @@
 # Brynja 0.24.6 Release Notes
 
-Status: eight Medium assurance-control findings are locally remediated with zero
-open findings; independent sixth retest and the signed candidate commit remain
+Status: nine Medium assurance-control findings are locally remediated with zero
+open findings; independent seventh retest and the signed candidate commit remain
 pending; no crates.io publication is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
@@ -52,7 +52,7 @@ production cryptographic implementation or runtime behavior.
   to public output and are rejected individually.
 - Six adjacent Rust modules make all eight current owner shapes and sanitizer
   signatures compiler-checked. Nine exact cleanup calls are resolved in
-  optimized MIR under Rust 1.90.0 and 1.98.0; six MIR mutations and lexical
+  optimized MIR under Rust 1.90.0 and 1.98.0; ten focused MIR mutations and lexical
   raw-string, raw-byte-string, disabled-`cfg`, macro-body, nesting, and same-
   named-method fixtures fail closed.
 - Future registered owners cannot provide their own cleanup expression. Each
@@ -75,6 +75,11 @@ production cryptographic implementation or runtime behavior.
   headers must match the exact crate, module, implementation source, method,
   and receiver type. Same-named cross-module, cross-crate, trait-module, and
   nested-module substitutions fail closed.
+- A dedicated optimized-MIR data-flow and control-flow verifier gates every
+  future registered owner. It requires exactly one sanitizer call, follows
+  only explicit receiver reborrows/projections rooted in `_1`, and requires
+  the sanitizer block to dominate every reachable normal and unwind exit.
+  Decoy receivers, duplicate calls, and skipped cleanup paths fail closed.
 - Removing the optional `brynja-sanitization` adapter still leaves every
   mandatory cleanup duty bound to Brynja's dependency-free core volatile
   clearing primitive. The adapter cannot enter the FIPS graph or replace core
@@ -103,8 +108,9 @@ found one Medium circular future-registration evidence path. The third retest
 confirmed that fix but found one Medium empty-MIR-target and identity-binding
 path. The fourth retest confirmed that remediation but found one Medium
 sanitizer-owner prefix-confusion path. The fifth retest confirmed that
-remediation but found one Medium incomplete namespace-identity path. Registration
-remains explicit with zero
+remediation but found one Medium incomplete namespace-identity path. The sixth
+retest confirmed that remediation but found one Medium incomplete MIR receiver-
+data-flow and exit-dominance path. Registration remains explicit with zero
 registered capability owners, while actual owner shape and cleanup evidence
 now comes from independently maintained Rust compiler contracts and exact
 optimized-MIR call targets; policy records cannot supply expected call text.
@@ -113,7 +119,7 @@ configuration, macro nesting, and same-named method substitution. Every one of
 the 13 profiles retains an exact per-operation information-flow contract.
 
 Focused contract, mutation, compile-fail, bare-metal, and deterministic
-register checks pass with zero open findings. Independent sixth retest remains
+register checks pass with zero open findings. Independent seventh retest remains
 required before this candidate can be tagged.
 
 ## Security Boundaries
@@ -136,7 +142,7 @@ Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
 unless an exceptional trigger or voluntary review is applied. A voluntary
-review and its first five retests supplied eight Medium assurance-control defects;
-all are locally remediated. The independent sixth retest, signed candidate
+review and its first six retests supplied nine Medium assurance-control defects;
+all are locally remediated. The independent seventh retest, signed candidate
 commit, complete release verification, green hosted GitHub and CodeQL, and
 then the signed immutable tag remain required.

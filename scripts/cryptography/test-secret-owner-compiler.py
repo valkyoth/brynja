@@ -32,7 +32,13 @@ def main() -> int:
         ["fixture_package", "module", "Owner"], "wipe",
     )
     valid = """fn owner::drop(_1: &mut Owner) -> () {
-    bb0: { _2 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable]; }
+    bb0: {
+        _2 = &mut (*_1);
+        _3 = exact_sanitizer(move _2) -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        return;
+    }
 }
 """
     compiler.require_mir_call(valid, ("owner::drop", "&mut Owner"), "exact_sanitizer(")
@@ -42,6 +48,58 @@ def main() -> int:
     rejects("const DECOY: &str = \"fn owner::drop\";\n", ("owner::drop",), "exact_sanitizer(")
     rejects(valid, ("owner::drop",), "")
     rejects(valid, ("",), "exact_sanitizer(")
+    rejects(valid.replace("move _2", "move _4"), ("owner::drop",), "exact_sanitizer(")
+    duplicate_call = valid.replace(
+        "_3 = exact_sanitizer(move _2) -> [return: bb1, unwind unreachable];",
+        "_3 = exact_sanitizer(move _2) -> [return: bb2, unwind unreachable];\n"
+        "    }\n    bb2: {\n"
+        "        _4 = exact_sanitizer(move _2) -> [return: bb1, unwind unreachable];",
+    )
+    rejects(duplicate_call, ("owner::drop",), "exact_sanitizer(")
+    conditional = """fn owner::drop(_1: &mut Owner, _2: bool) -> () {
+    bb0: {
+        switchInt(copy _2) -> [0: bb2, otherwise: bb1];
+    }
+    bb1: {
+        _3 = exact_sanitizer(move _1) -> [return: bb2, unwind unreachable];
+    }
+    bb2: {
+        return;
+    }
+}
+"""
+    rejects(conditional, ("owner::drop", "&mut Owner"), "exact_sanitizer(")
+    unwind_valid = """fn owner::drop(_1: &mut Owner) -> () {
+    bb0: {
+        _2 = exact_sanitizer(move _1) -> [return: bb1, unwind: bb2];
+    }
+    bb1: {
+        return;
+    }
+    bb2 (cleanup): {
+        resume;
+    }
+}
+"""
+    compiler.require_mir_call(
+        unwind_valid, ("owner::drop", "&mut Owner"), "exact_sanitizer("
+    )
+    unwind_bypass = """fn owner::drop(_1: &mut Owner, _2: bool) -> () {
+    bb0: {
+        switchInt(copy _2) -> [0: bb2, otherwise: bb1];
+    }
+    bb1: {
+        _3 = exact_sanitizer(move _1) -> [return: bb3, unwind: bb2];
+    }
+    bb2 (cleanup): {
+        resume;
+    }
+    bb3: {
+        return;
+    }
+}
+"""
+    rejects(unwind_bypass, ("owner::drop", "&mut Owner"), "exact_sanitizer(")
     record = {
         "capability": "algorithm.fixture",
         "symbol": "crates/fixture-package/src/module.rs#fixture_package::module::Owner",
@@ -82,6 +140,7 @@ def main() -> int:
     assert calls["fixture-package"][-1] == (
         tuple(headers[record["cleanup_callers"][0]]),
         "fixture_package::module::Owner::wipe(",
+        True,
     )
     for replacement in ("", "   "):
         broken = copy.deepcopy(sanitizers)
@@ -181,7 +240,7 @@ def main() -> int:
         broken = {record["cleanup_callers"][0]: [wrong_header]}
         rejects_inventory(registry, tests, broken, sanitizers)
     print(
-        "secret-owner MIR evidence rejects six empty, target, and ambiguity "
+        "secret-owner MIR evidence rejects ten empty, target, data-flow, and dominance "
         "regressions plus twenty-two registered identity, namespace, and coverage bypasses"
     )
     return 0

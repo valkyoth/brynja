@@ -772,7 +772,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "59b72a718a6830b85f225a801e0e430293c6f240b43190a7b735949dac3d75b4"
+sha256 = "dd24369fd9ea29906f4764cc3458692ec47c1734bfa2ea114c87bc69e2425c4e"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
@@ -783,12 +783,16 @@ path = "scripts/cryptography/check-secret-owner-compiler.py"
 sha256 = "fc40e760ce5d352ca9c1d3567b17805d537d1d082da926925963829eef3bc2a5"
 
 [[reviewed-source]]
+path = "scripts/cryptography/mir_cleanup_flow.py"
+sha256 = "17548a42850d4f35211705b5b6b5d3ce04569aaf892a0b62350481e9d90f2317"
+
+[[reviewed-source]]
 path = "scripts/cryptography/rust_source_contract.py"
 sha256 = "cb0232fd04dd0644fc56c7f226346db0e5834dbd2d8540a15c893f0186606d32"
 
 [[reviewed-source]]
 path = "scripts/cryptography/secret_owner_compiler.py"
-sha256 = "564b071c047a19f3486db9f0c396d6f66b793cb56873b0a0adbb7573e5f4d4ab"
+sha256 = "604cb495e440001a3014ccf0e5be4f0639920c982367f258c970fe8a1d35ea30"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
@@ -796,4 +800,4 @@ sha256 = "c7b71de0c7f19e1ae84345d2d7444966f4248ac14865cc8e0513ba2b334989c1"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-secret-owner-compiler.py"
-sha256 = "fec0903b48d19857276d34c9d9a4b7e84add72e2e246c5db93ee889ae272caaa"
+sha256 = "c2fadf1a449b9e87190e2252e819010a31abe630f055c6e3ec76b3c164f89b07"

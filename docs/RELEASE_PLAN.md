@@ -2875,10 +2875,10 @@ fixture reject incomplete profiles, fabricated or substituted owners and
 sanitizers, field/type disagreement, downstream hardened-capability forgery,
 ordinary-state substitution, information-flow drift, partial secret-output
 retention, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and five retests found eight Medium assurance-control gaps in the
+pentest and six retests found nine Medium assurance-control gaps in the
 initial, lexical-remediation, future-registration, empty-value, identifier-
-prefix, and namespace evidence paths; all are locally remediated with zero
-open findings and await independent sixth retest. No
+prefix, namespace, and MIR data-flow evidence paths; all are locally remediated
+with zero open findings and await independent seventh retest. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 
@@ -2916,6 +2916,10 @@ Deliverables:
   and bind each caller to its exact crate, module, implementation source,
   method, and receiver type from the compiler MIR header rather than accepting
   same-named suffixes from another namespace;
+- parse the optimized MIR control-flow graph for every future registered owner;
+  require exactly one resolved sanitizer call whose first receiver is `_1` or
+  an explicit reborrow/projection transitively rooted in `_1`, and require that
+  call block to dominate every reachable normal and unwind lifecycle exit;
 - classify every cleanup duty as the mandatory core destruction primitive or
   an exact admitted `brynja-sanitization` fixed-region adapter use, without
   optional cleanup, reverse dependencies, facade leakage, or a FIPS graph edge;

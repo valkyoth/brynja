@@ -55,11 +55,13 @@ types, private fields and sanitizer signatures plus exact optimized-MIR cleanup
 targets under Rust 1.90.0 and 1.98.0; every future registration must match a
 separate canonical compiler contract; three exact-coverage identity maps
 derive its unique owner-specific adjacent test, nonempty caller headers, and
-nonempty declared-sanitizer MIR target; the registered capability-owner set is explicitly
+nonempty declared-sanitizer MIR target; strict future-owner MIR data-flow binds
+the cleanup receiver to `_1` and requires cleanup dominance over every exit;
+the registered capability-owner set is explicitly
 empty; and every secret-producing operation has its own fail-closed
 information-flow contract. Twenty-five structural mutations and twenty-two
 secret-output downgrade mutations, lexical raw/cfg/macro/same-name fixtures,
-six empty/target/ambiguity and twenty-two registered identity/namespace/coverage mutations
+ten empty/target/data-flow/dominance and twenty-two registered identity/namespace/coverage mutations
 exercise those boundaries. It is
 architectural assurance, not a hardened
 hash implementation, independent review, or FIPS validation.

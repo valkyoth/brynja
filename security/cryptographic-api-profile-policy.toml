@@ -1,3 +1,5 @@
+registered-secret-owner = []
+
 [schema]
 version = 1
 milestone = "0.24.6"
@@ -72,6 +74,11 @@ partial_failure_policies = [
   "clear-complete-secret-destination",
   "not-applicable",
 ]
+verification_policies = [
+  "before-output-release",
+  "after-authentication",
+  "not-applicable",
+]
 
 [residual]
 risks = [
@@ -117,9 +124,17 @@ caller_owned = ["buffers"]
 not_applicable = ["overlap", "cancellation"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+
+[profile.fixed-hash.operations.public-digest]
 output_classification = "explicit-public-declassification"
 partial_failure_policy = "unchanged-destination"
-consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+verification = "not-applicable"
+
+[profile.fixed-hash.operations.hardened-derived-output]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
 
 [profile.hash-xof-family]
 kind = "primitive"
@@ -130,9 +145,22 @@ caller_owned = ["buffers"]
 not_applicable = ["overlap", "cancellation"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
-output_classification = "explicit-public-declassification"
-partial_failure_policy = "clear-complete-secret-destination"
 consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+
+[profile.hash-xof-family.operations.public-fixed-output]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.hash-xof-family.operations.public-xof-output]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.hash-xof-family.operations.hardened-secret-output]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
 
 [profile.keyed-construction]
 kind = "construction"
@@ -143,9 +171,22 @@ caller_owned = ["buffers"]
 not_applicable = ["overlap", "generation"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:protocol", "consumer:provider"]
+
+[profile.keyed-construction.operations.generate-authenticator]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.keyed-construction.operations.verify-authenticator]
+output_classification = "no-output"
+partial_failure_policy = "not-applicable"
+verification = "before-output-release"
+
+[profile.keyed-construction.operations.derive-secret]
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
-consumers = ["consumer:protocol", "consumer:provider"]
+verification = "not-applicable"
 
 [profile.symmetric-cipher]
 kind = "primitive"
@@ -156,9 +197,27 @@ caller_owned = []
 not_applicable = []
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+
+[profile.symmetric-cipher.operations.encrypt]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.symmetric-cipher.operations.decrypt]
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
-consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+verification = "not-applicable"
+
+[profile.symmetric-cipher.operations.generate-key]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.symmetric-cipher.operations.import-key]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
 
 [profile.aead]
 kind = "construction"
@@ -169,9 +228,27 @@ caller_owned = []
 not_applicable = []
 optional_isolated = ["hosted-adapter"]
 internal_only = []
-output_classification = "typed-secret-owned"
-partial_failure_policy = "unchanged-destination"
 consumers = ["consumer:protocol", "consumer:provider"]
+
+[profile.aead.operations.seal]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.aead.operations.open]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "before-output-release"
+
+[profile.aead.operations.generate-key]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.aead.operations.import-key]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
 
 [profile.asymmetric]
 kind = "scheme"
@@ -182,9 +259,72 @@ caller_owned = []
 not_applicable = ["incremental-state", "fixed-output", "overlap"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:protocol", "consumer:pki", "consumer:provider"]
+
+[profile.asymmetric.operations.generate-private]
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
-consumers = ["consumer:protocol", "consumer:pki", "consumer:provider"]
+verification = "not-applicable"
+
+[profile.asymmetric.operations.generate-public]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.import-private]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.export-private]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.export-public]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.sign]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.verify]
+output_classification = "no-output"
+partial_failure_policy = "not-applicable"
+verification = "before-output-release"
+
+[profile.asymmetric.operations.derive-shared-secret]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "before-output-release"
+
+[profile.asymmetric.operations.encapsulate-ciphertext]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.encapsulate-shared-secret]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.decapsulate-shared-secret]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "before-output-release"
+
+[profile.asymmetric.operations.encrypt]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.asymmetric.operations.decrypt]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "before-output-release"
 
 [profile.public-format]
 kind = "format"
@@ -195,9 +335,17 @@ caller_owned = ["ownership"]
 not_applicable = ["fixed-output", "verification", "overlap", "provider", "backend", "cancellation"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:protocol", "consumer:application"]
+
+[profile.public-format.operations.encode-public]
 output_classification = "public-non-secret"
 partial_failure_policy = "unchanged-destination"
-consumers = ["consumer:protocol", "consumer:application"]
+verification = "not-applicable"
+
+[profile.public-format.operations.decode-public]
+output_classification = "public-non-secret"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
 
 [profile.secret-format]
 kind = "format"
@@ -208,9 +356,17 @@ caller_owned = []
 not_applicable = ["fixed-output", "verification", "overlap", "backend", "generation"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:protocol", "consumer:application"]
+
+[profile.secret-format.operations.encode-secret]
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
-consumers = ["consumer:protocol", "consumer:application"]
+verification = "not-applicable"
+
+[profile.secret-format.operations.decode-secret]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "before-output-release"
 
 [profile.protocol]
 kind = "protocol"
@@ -221,9 +377,22 @@ caller_owned = []
 not_applicable = ["overlap"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:application", "consumer:hosted-adapter"]
+
+[profile.protocol.operations.emit-public-wire]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "after-authentication"
+
+[profile.protocol.operations.receive-secret-plaintext]
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
-consumers = ["consumer:application", "consumer:hosted-adapter"]
+verification = "before-output-release"
+
+[profile.protocol.operations.export-secret]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "before-output-release"
 
 [profile.public-component]
 kind = "protocol-component"
@@ -234,9 +403,12 @@ caller_owned = ["ownership"]
 not_applicable = ["one-shot", "fixed-output", "verification", "overlap", "provider", "backend", "import", "export", "generation"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:protocol"]
+
+[profile.public-component.operations.public-component-output]
 output_classification = "public-non-secret"
 partial_failure_policy = "unchanged-destination"
-consumers = ["consumer:protocol"]
+verification = "not-applicable"
 
 [profile.secret-component]
 kind = "protocol-component"
@@ -247,9 +419,17 @@ caller_owned = []
 not_applicable = ["one-shot", "fixed-output", "overlap"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:protocol", "consumer:provider"]
+
+[profile.secret-component.operations.produce-secret]
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
-consumers = ["consumer:protocol", "consumer:provider"]
+verification = "before-output-release"
+
+[profile.secret-component.operations.consume-secret]
+output_classification = "no-output"
+partial_failure_policy = "not-applicable"
+verification = "before-output-release"
 
 [profile.test-secret-support]
 kind = "test-support"
@@ -260,9 +440,17 @@ caller_owned = []
 not_applicable = ["no-std"]
 optional_isolated = ["hosted-adapter"]
 internal_only = []
+consumers = ["consumer:test-only"]
+
+[profile.test-secret-support.operations.retain-test-secret]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.test-secret-support.operations.export-test-secret]
 output_classification = "explicit-public-declassification"
 partial_failure_policy = "unchanged-destination"
-consumers = ["consumer:test-only"]
+verification = "not-applicable"
 
 [profile.rejected]
 kind = "rejected"
@@ -273,49 +461,52 @@ caller_owned = []
 not_applicable = []
 optional_isolated = []
 internal_only = []
+consumers = ["consumer:none"]
+
+[profile.rejected.operations.rejected]
 output_classification = "no-output"
 partial_failure_policy = "not-applicable"
-consumers = ["consumer:none"]
+verification = "not-applicable"
 
 [secret-template.hardened-hash]
 fields = ["chaining-state", "partial-input", "message-length", "phase"]
 temporaries = ["message-schedule", "block-copy", "padding-block", "output-staging"]
-output_classification = "explicit-public-declassification"
+secret_output_classification = "typed-secret-owned"
 
 [secret-template.keyed-construction]
 fields = ["key", "inner-state", "outer-state", "partial-input", "phase"]
 temporaries = ["normalized-key", "derived-key", "message-schedule", "block-copy", "output-staging"]
-output_classification = "typed-secret-owned"
+secret_output_classification = "typed-secret-owned"
 
 [secret-template.symmetric-key]
 fields = ["key", "expanded-key", "counter-or-tweak", "phase"]
 temporaries = ["round-state", "keystream-block", "tail-block", "output-staging"]
-output_classification = "typed-secret-owned"
+secret_output_classification = "typed-secret-owned"
 
 [secret-template.aead-key]
 fields = ["key", "nonce-state", "authentication-state", "counter", "phase"]
 temporaries = ["derived-key", "keystream-block", "authentication-block", "plaintext-staging", "tag-staging"]
-output_classification = "typed-secret-owned"
+secret_output_classification = "typed-secret-owned"
 
 [secret-template.private-key]
 fields = ["private-key", "public-key-binding", "operation-state", "phase"]
 temporaries = ["nonce-or-blinding", "scalar-or-exponent", "shared-secret", "signature-staging", "output-staging"]
-output_classification = "typed-secret-owned"
+secret_output_classification = "typed-secret-owned"
 
 [secret-template.encoded-secret]
 fields = ["encoded-secret", "decode-state", "phase"]
 temporaries = ["decoded-key", "password-material", "decryption-staging", "output-staging"]
-output_classification = "typed-secret-owned"
+secret_output_classification = "typed-secret-owned"
 
 [secret-template.protocol-secret]
 fields = ["handshake-secret", "traffic-secret", "resumption-secret", "key-generation", "phase"]
 temporaries = ["transcript-secret-state", "derived-key", "nonce", "plaintext-staging", "exporter-staging"]
-output_classification = "typed-secret-owned"
+secret_output_classification = "typed-secret-owned"
 
 [secret-template.test-secret]
 fields = ["test-secret-input", "test-output", "phase"]
 temporaries = ["formatted-secret", "output-staging"]
-output_classification = "explicit-public-declassification"
+secret_output_classification = "typed-secret-owned"
 
 [[assignment]]
 profile = "fixed-hash"
@@ -425,6 +616,7 @@ symbol = "crates/brynja-core/src/secret_memory.rs#SecretRegionInitialization"
 fields = ["region:secret", "initialized:public"]
 temporaries = ["input-borrow:secret-copy-risk", "destination-fragment:secret"]
 sanitization_symbol = "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile"
+cleanup_callers = ["crates/brynja-core/src/secret_memory.rs#SecretRegionInitialization::drop"]
 evidence = ["crates/brynja-core/tests/secret_memory.rs", "scripts/zeroization/check-zeroization-codegen.sh"]
 storage = "caller-owned-borrowed"
 
@@ -434,6 +626,7 @@ symbol = "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion"
 fields = ["region:secret"]
 temporaries = ["exposed-borrow:caller-owned-copy-risk"]
 sanitization_symbol = "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile"
+cleanup_callers = ["crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::clear", "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::drop"]
 evidence = ["crates/brynja-core/tests/secret_memory.rs", "scripts/zeroization/check-zeroization-codegen.sh"]
 storage = "caller-owned-borrowed"
 
@@ -443,15 +636,17 @@ symbol = "crates/brynja-core/src/entropy.rs#RawEntropy"
 fields = ["request:public", "input:secret"]
 temporaries = ["exposed-borrow:caller-owned-copy-risk"]
 sanitization_symbol = "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::drop"
+cleanup_callers = ["crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::drop"]
 evidence = ["crates/brynja-core/tests/entropy.rs", "scripts/zeroization/check-zeroization-codegen.sh"]
 storage = "transitive-owned-borrow"
 
 [[current-secret-owner]]
 id = "core.secure-random"
 symbol = "crates/brynja-core/src/secure_random.rs#SecureRandom"
-fields = ["engine:secret-contract", "config:public", "runtime:public", "requests-since-reseed:public", "fork-reseed-required:public", "permanent-failure:public"]
+fields = ["engine:secret-contract", "config:public", "runtime:public", "requests_since_reseed:public", "fork_reseed_required:public", "permanent_failure:public"]
 temporaries = ["engine-operation-state:secret", "generated-output:typed-secret-owned"]
 sanitization_symbol = "crates/brynja-core/src/secure_random.rs#SecureRandomEngine::uninstantiate"
+cleanup_callers = ["crates/brynja-core/src/secure_random.rs#SecureRandom::drop"]
 evidence = ["crates/brynja-core/tests/entropy.rs", "crates/brynja-test-support/tests/deterministic_random.rs"]
 storage = "provider-engine-owned"
 
@@ -461,6 +656,7 @@ symbol = "crates/brynja-core/src/secret.rs#SecretInitialization"
 fields = ["expected:public", "initialized:public", "targets:public-policy", "destructor:secret-effect-authority"]
 temporaries = ["destruction-outcome:secret-free"]
 sanitization_symbol = "crates/brynja-core/src/secret_destruction.rs#run_destruction"
+cleanup_callers = ["crates/brynja-core/src/secret.rs#SecretInitialization::drop"]
 evidence = ["crates/brynja-core/tests/secret_lifecycle.rs"]
 storage = "contract-only-no-secret-bytes"
 
@@ -470,6 +666,7 @@ symbol = "crates/brynja-core/src/secret.rs#SecretState"
 fields = ["targets:public-policy", "destructor:secret-effect-authority"]
 temporaries = ["replacement-initialization:secret-contract", "destruction-outcome:secret-free"]
 sanitization_symbol = "crates/brynja-core/src/secret_destruction.rs#run_destruction"
+cleanup_callers = ["crates/brynja-core/src/secret.rs#SecretState::drop"]
 evidence = ["crates/brynja-core/tests/secret_lifecycle.rs"]
 storage = "contract-only-no-secret-bytes"
 
@@ -479,15 +676,17 @@ symbol = "crates/brynja-sanitization/src/lib.rs#SanitizedSecret"
 fields = ["inner:secret"]
 temporaries = ["replacement-candidate:secret", "inspection-borrow:caller-owned-copy-risk"]
 sanitization_symbol = "crates/brynja-sanitization/src/lib.rs#SanitizedSecret::clear"
+cleanup_callers = ["crates/brynja-sanitization/src/lib.rs#SanitizedSecret::clear"]
 evidence = ["crates/brynja-sanitization/tests/behavior.rs", "scripts/sanitization/check-sanitization-adapter-codegen.sh"]
 storage = "optional-adapter-owned"
 
 [[current-secret-owner]]
 id = "test.deterministic-random"
 symbol = "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom"
-fields = ["state:secret-test-only", "counter:secret-derived", "cursor:public", "fault:public", "initialized:public", "destruction-failure-observed:public"]
+fields = ["state:secret-test-only", "counter:secret-derived", "cursor:public", "fault:public", "initialized:public", "destruction_failure_observed:public"]
 temporaries = ["counter-bytes:secret-derived", "output-byte:secret-test-only"]
-sanitization_symbol = "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom::clear_state"
+sanitization_symbol = "crates/brynja-core/src/secret_memory.rs#clear_owned_region"
+cleanup_callers = ["crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom::clear_state", "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom::drop"]
 evidence = ["crates/brynja-test-support/tests/deterministic_random.rs"]
 storage = "unpublished-test-only"
 
@@ -546,3 +745,19 @@ sha256 = "b7c5fce7a94ea2440953649c67f0a30446f9259630888d5e8581bb44cd187e80"
 [[reviewed-source]]
 path = "scripts/cryptography/check-api-profile-contract.sh"
 sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
+
+[[reviewed-source]]
+path = "scripts/cryptography/api_profile_contracts.py"
+sha256 = "105e907e1b7eecb229a14c4a0e59840ccf2e36c72e60bba05265fe9b00e55ec1"
+
+[[reviewed-source]]
+path = "scripts/cryptography/api_profile_model.py"
+sha256 = "f424929fe308bc85762318482c643dbed00d49d3c119df41e377e009221d1379"
+
+[[reviewed-source]]
+path = "scripts/cryptography/rust_source_contract.py"
+sha256 = "07962c9fb65c6fbe36b4b57b7754f34a0ab1dc48ee1fbf03b586471d3ab3e157"
+
+[[reviewed-source]]
+path = "scripts/cryptography/test-api-profiles.py"
+sha256 = "39cd4b3fedc6a35f992296dd46b546758ea9b0b82377e41d5e9ca4ae83aaede8"

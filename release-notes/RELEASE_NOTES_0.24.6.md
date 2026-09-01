@@ -1,8 +1,8 @@
 # Brynja 0.24.6 Release Notes
 
-Status: implementation and complete local repository verification passed;
-pentest and the signed candidate commit remain pending; no crates.io
-publication is selected
+Status: two Medium assurance-control findings are locally remediated with zero
+open findings; independent retest and the signed candidate commit remain
+pending; no crates.io publication is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
 cleanup into a deterministic, fail-closed design contract. It changes no
@@ -20,14 +20,18 @@ production cryptographic implementation or runtime behavior.
 - A generated JSON register and concise human-readable projection containing
   seven implemented, 117 future, three legacy-only, one intentionally rejected,
   and one safely ignored capability disposition.
-- An exact inventory of eight current secret owners and 75 planned secret
-  owners. Every owner binds fields, temporaries, lifecycle exits, mandatory
-  cleanup symbols, output classification, evidence, consumers, and residual
-  risks.
+- An exact inventory of eight current secret owners, zero registered
+  capability owners, and 75 planned secret owners. Current owners bind actual
+  Rust declarations, fields, sanitizer call paths, evidence, lifecycle exits,
+  consumers, and residual risks. Planned entries make no executable-symbol or
+  completed-cleanup claim.
 - Explicit ordinary-versus-hardened ownership separation. Hardened capability
   markers are sealed and cannot be implemented, wrapped, or forged downstream.
-- Explicit public declassification and typed secret-output paths. Failed public
-  output remains unchanged; failed partial secret output is cleared.
+- Explicit per-operation public declassification, no-output, and typed
+  secret-output paths. Mixed-direction AEAD, KEM, signature, key-generation,
+  import/export, protocol and format operations cannot inherit one unsafe
+  family-wide classification. Failed public output remains unchanged; failed
+  partial secret output is cleared.
 - Non-panicking cleanup requirements for success, error, cancellation,
   replacement, rekey, failed construction, recoverable panic unwinding, and
   `Drop`, including adjacent cleanup failures.
@@ -40,10 +44,12 @@ production cryptographic implementation or runtime behavior.
 - Deterministic regeneration checks the reviewed policy against the exact
   129-capability protocol-surface authority and reproduces both generated
   projections byte-for-byte.
-- Fifteen mutation cases reject a missing capability, API dimension, bit
-  domain, hardened owner, field, temporary, lifecycle edge, cleanup symbol,
-  evidence artifact, consumer, rejection, residual, source hash, semantic
-  capability, or mandatory-core-cleanup guarantee.
+- Twenty-three structural mutation classes reject missing coverage, fabricated
+  or substituted owners and sanitizers, duplicate owner coverage, field/type
+  disagreement, parser fabrication through comments or strings, missing
+  operations, secret-template downgrade, and mandatory-core-cleanup drift.
+- Twenty-two additional mutations downgrade every secret-producing operation
+  to public output and are rejected individually.
 - Removing the optional `brynja-sanitization` adapter still leaves every
   mandatory cleanup duty bound to Brynja's dependency-free core volatile
   clearing primitive. The adapter cannot enter the FIPS graph or replace core
@@ -61,6 +67,23 @@ production cryptographic implementation or runtime behavior.
 - The release audit refreshed Miri and Rust sanitizer evidence to the latest
   available `nightly-2026-09-01` at exact Rust revision
   `0dfb098f3aeecbe38c2566ca090193280e7349e7`.
+
+## Pentest Remediation
+
+The voluntary assessment found two Medium assurance-control defects and no
+production cryptographic vulnerability. First, inferred registration and
+token-only symbol lookup allowed nonexistent secret owners and unrelated
+tokens to appear as implementation evidence. Registration is now explicit
+only, its current set is empty, current owner identities are canonical, and a
+dependency-free Rust declaration parser verifies exact types, fields,
+sanitizers, and cleanup callers. Second, one family-wide output classification
+allowed secret output to be downgraded to public. Every one of the 13 profiles
+now has an exact operation inventory with output classification, failure
+handling, and authentication timing for each direction.
+
+Focused contract, mutation, compile-fail, bare-metal, and deterministic
+register checks pass with zero open findings. Independent retest remains
+required before this candidate can be tagged.
 
 ## Security Boundaries
 
@@ -81,7 +104,8 @@ secret-bearing construction.
 Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
-unless an exceptional trigger or voluntary review is applied. Complete local
-repository verification has passed. The pentest, signed candidate commit,
-green hosted GitHub and CodeQL, and then the signed immutable tag remain
-required.
+unless an exceptional trigger or voluntary review is applied. A voluntary
+review was applied and found two Medium assurance-control defects; both are
+locally remediated. The independent retest, signed candidate commit, complete
+release verification, green hosted GitHub and CodeQL, and then the signed
+immutable tag remain required.

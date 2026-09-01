@@ -41,7 +41,9 @@ test -s assurance/api-profile-contract/src/lib.rs
 test -x scripts/cryptography/check-api-profiles.py
 test -x scripts/cryptography/test-api-profiles.py
 test -x scripts/cryptography/check-api-profile-contract.sh
+test -f scripts/cryptography/api_profile_contracts.py
 test -f scripts/cryptography/api_profile_model.py
+test -f scripts/cryptography/rust_source_contract.py
 test -x scripts/repository/check-script-layout.py
 test -x scripts/repository/test-script-layout.py
 test -x scripts/sha3/check-sha3.py

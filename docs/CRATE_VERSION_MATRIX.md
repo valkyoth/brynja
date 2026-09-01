@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 implementation and complete local repository verification passed, pentest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 two Medium assurance findings locally remediated, independent retest and signed candidate pending
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.6`. `brynja-hash-core 0.1.0`,
@@ -15,7 +15,8 @@ the separate opt-in x86/AArch64 host detector and runtime selection API while
 RISC-V automatic detection remains disabled. Supporting manifest
 versions remain unchanged until the v0.25.0 public checkpoint. The new
 repository-only API-profile register closes 129 semantic capabilities across
-22 dimensions and inventories eight current plus 75 planned secret owners; it
+22 dimensions and inventories eight current, zero registered capability, plus
+75 planned secret owners with exact per-operation information-flow contracts; it
 changes no supporting package or production behavior. This milestone selects
 zero crates.io packages. Package publication does not imply a TLS
 implementation or production readiness.

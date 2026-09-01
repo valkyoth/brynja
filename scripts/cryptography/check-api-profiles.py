@@ -27,6 +27,7 @@ def main() -> int:
     print(
         f"cryptographic API register covers {len(register['capabilities'])} capabilities, "
         f"{len(register['current_secret_owners'])} current and "
+        f"{len(register['registered_secret_owners'])} registered capability owners, and "
         f"{len(register['planned_secret_owners'])} planned secret owners"
     )
     return 0

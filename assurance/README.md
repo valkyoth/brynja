@@ -49,7 +49,13 @@ the hardened capability is sealed against downstream implementations,
 ordinary-state substitution and wrapper forgery; distinguishes explicit public
 declassification from typed secret output; preserves public destinations on
 failure; clears partial secret output; and clears successful owners on Drop and
-recoverable panic unwinding. It is architectural assurance, not a hardened
+recoverable panic unwinding. The surrounding policy admits no capability owner
+implicitly: current owners must match exact Rust declarations, fields,
+sanitizers and cleanup callers; the registered capability-owner set is
+explicitly empty; and every secret-producing operation has its own fail-closed
+information-flow contract. Twenty-three structural mutations and twenty-two
+secret-output downgrade mutations exercise those boundaries. It is
+architectural assurance, not a hardened
 hash implementation, independent review, or FIPS validation.
 
 The v0.24.3 `sha3-public-api` fixture is the frozen package-external portable

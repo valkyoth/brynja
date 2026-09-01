@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Remediate both Medium v0.24.6 assurance-control findings: secret-owner
+  registration is explicit rather than inferred, exact canonical owner types,
+  fields, sanitizers and cleanup call paths are checked against Rust
+  declarations, and all mixed-direction profiles now bind output secrecy,
+  failure handling and authentication timing per operation. Twenty-three
+  structural mutations and twenty-two exhaustive secret-output downgrade
+  mutations pass locally; independent retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures
@@ -43,10 +50,12 @@ Keep a Changelog and Semantic Versioning.
 
 - Implement the v0.24.6 cryptographic API-profile and secret-state closure
   register across all 129 semantic capabilities, with 22 exact API dimensions,
-  milestone ownership, eight current and 75 planned secret owners, mandatory
+  milestone ownership, eight current, zero registered capability, and 75
+  planned secret owners, mandatory
   core-versus-optional-adapter cleanup classification, typed public/secret
   outputs, reviewed source hashes, and deterministic JSON/document projections.
-- Add fifteen fail-closed profile mutation classes and a standalone
+- Add twenty-three fail-closed structural mutation classes, twenty-two
+  per-operation secret-output downgrade mutations, and a standalone
   zero-dependency `no_std` contract proving downstream code cannot forge the
   sealed hardened capability, ordinary states cannot satisfy hardened bounds,
   public failure destinations stay unchanged, and partial or panic-unwound

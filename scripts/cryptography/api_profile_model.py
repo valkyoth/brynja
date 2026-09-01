@@ -9,7 +9,8 @@ import re
 import tomllib
 from pathlib import Path
 
-
+import api_profile_contracts as contracts
+import rust_source_contract as rust_contract
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "security/cryptographic-api-profile-policy.toml"
 SURFACES = ROOT / "standards/protocol-surfaces.json"
@@ -25,9 +26,11 @@ PROFILE_KEYS = {
     "not_applicable",
     "optional_isolated",
     "internal_only",
-    "output_classification",
-    "partial_failure_policy",
+    "operations",
     "consumers",
+}
+OPERATION_KEYS = {
+    "output_classification", "partial_failure_policy", "verification",
 }
 BUCKETS = {
     "required": "required",
@@ -166,15 +169,33 @@ def validate_profile(name: str, profile: dict, dimensions: set[str], policy: dic
         or assigned["extendable-output"] != "required"
     ):
         fail("SHA-3/SHAKE profile must cover fixed and extendable output")
-    if profile["output_classification"] not in policy["output"]["classifications"]:
-        fail(f"profile {name} has unknown output classification")
-    if profile["partial_failure_policy"] not in policy["output"]["partial_failure_policies"]:
-        fail(f"profile {name} has unknown partial-output policy")
-    if (
-        profile["output_classification"] == "typed-secret-owned"
-        and profile["partial_failure_policy"] == "not-applicable"
-    ):
-        fail(f"profile {name} leaves partial secret output unclassified")
+    expected_operations = contracts.OPERATION_CONTRACTS.get(name)
+    operations = profile["operations"]
+    if expected_operations is None or set(operations) != set(expected_operations):
+        fail(f"profile {name} operation inventory drifted")
+    secret_outputs = 0
+    for operation, output in operations.items():
+        exact_keys(output, OPERATION_KEYS, f"profile {name} operation {operation}")
+        actual = (
+            output["output_classification"], output["partial_failure_policy"],
+            output["verification"],
+        )
+        if actual != expected_operations[operation]:
+            fail(f"profile {name} operation {operation} information flow drifted")
+        if output["output_classification"] not in policy["output"]["classifications"]:
+            fail(f"profile {name} operation {operation} has unknown output classification")
+        if output["partial_failure_policy"] not in policy["output"]["partial_failure_policies"]:
+            fail(f"profile {name} operation {operation} has unknown partial-output policy")
+        if output["verification"] not in policy["output"]["verification_policies"]:
+            fail(f"profile {name} operation {operation} has unknown verification policy")
+        if output["output_classification"] == "typed-secret-owned":
+            secret_outputs += 1
+            if output["partial_failure_policy"] != "clear-complete-secret-destination":
+                fail(f"profile {name} operation {operation} leaves secret output uncleared")
+    if secret_template != "none":
+        template = policy["secret-template"][secret_template]
+        if template["secret_output_classification"] != "typed-secret-owned" or not secret_outputs:
+            fail(f"profile {name} differs from secret template {secret_template}")
     consumers = profile["consumers"]
     if not consumers or len(consumers) != len(set(consumers)) or not all(
         isinstance(item, str) and item.startswith("consumer:") for item in consumers
@@ -246,7 +267,7 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
         "schema", "api", "cleanup", "lifecycle", "output", "residual",
         "rejection", "profile", "secret-template", "assignment",
         "completion-overrides", "secret-owner-overrides",
-        "current-secret-owner", "reviewed-source",
+        "current-secret-owner", "registered-secret-owner", "reviewed-source",
     }
     exact_keys(policy, expected_top, "API-profile policy")
     schema = policy["schema"]
@@ -284,32 +305,74 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
     for capability, owner in policy["secret-owner-overrides"].items():
         if capability not in semantic or owner not in versions:
             fail(f"secret owner override is invalid for {capability}")
-    validate_secret_policy(policy, root)
+    validate_secret_policy(policy, root, semantic, assignments)
     return assignments
 
 
-def validate_secret_policy(policy: dict, root: Path) -> None:
+def validate_secret_policy(
+    policy: dict, root: Path, semantic: dict | None = None,
+    assignments: dict | None = None,
+) -> None:
     for name, template in policy["secret-template"].items():
-        exact_keys(template, {"fields", "temporaries", "output_classification"}, f"secret template {name}")
+        exact_keys(template, {"fields", "temporaries", "secret_output_classification"}, f"secret template {name}")
         if not template["fields"] or not template["temporaries"]:
             fail(f"secret template {name} lacks fields or temporaries")
-        if template["output_classification"] not in policy["output"]["classifications"]:
+        if template["secret_output_classification"] != "typed-secret-owned":
             fail(f"secret template {name} has invalid output classification")
     owners = policy["current-secret-owner"]
     ids = [owner.get("id") for owner in owners]
-    if len(owners) != 8 or len(ids) != len(set(ids)):
+    if set(ids) != set(contracts.CURRENT_OWNER_SYMBOLS) or len(ids) != len(set(ids)):
         fail("current secret-owner inventory is incomplete or duplicated")
     for owner in owners:
-        exact_keys(owner, {"id", "symbol", "fields", "temporaries", "sanitization_symbol", "evidence", "storage"}, f"secret owner {owner.get('id')}")
+        exact_keys(owner, {"id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "evidence", "storage"}, f"secret owner {owner.get('id')}")
         if not owner["fields"] or not owner["temporaries"] or not owner["evidence"]:
             fail(f"secret owner {owner['id']} lacks fields, temporaries, or evidence")
-        validate_target(root, owner["symbol"], f"secret owner {owner['id']}")
-        validate_target(root, owner["sanitization_symbol"], f"secret owner {owner['id']} sanitization")
+        if owner["symbol"] != contracts.CURRENT_OWNER_SYMBOLS[owner["id"]]:
+            fail(f"secret owner {owner['id']} canonical symbol drifted")
+        field_names = {field.split(":", 1)[0] for field in owner["fields"]}
+        try:
+            rust_contract.validate_type(root, owner["symbol"], field_names)
+            rust_contract.validate_cleanup_binding(
+                root, owner["sanitization_symbol"], owner["cleanup_callers"],
+            )
+        except rust_contract.RustContractError as error:
+            fail(f"secret owner {owner['id']} Rust contract failed: {error}")
         for evidence in owner["evidence"]:
             validate_target(root, evidence, f"secret owner {owner['id']} evidence")
+    registered = policy["registered-secret-owner"]
+    capabilities = [owner.get("capability") for owner in registered]
+    if len(capabilities) != len(set(capabilities)):
+        fail("registered secret-owner capability coverage is duplicated")
+    for owner in registered:
+        exact_keys(owner, {"capability", "id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "evidence", "storage", "output_classification", "partial_failure_policy"}, f"registered secret owner {owner.get('id')}")
+        if not owner["fields"] or not owner["temporaries"] or not owner["evidence"]:
+            fail(f"registered secret owner {owner['id']} is incomplete")
+        capability = owner["capability"]
+        if semantic is not None and (
+            capability not in semantic
+            or semantic[capability]["disposition"] != "implemented"
+            or policy["profile"][assignments[capability]]["secret_template"] == "none"
+        ):
+            fail(f"registered secret owner {owner['id']} lacks an implemented secret capability")
+        if (
+            owner["id"] != f"registered.{capability}"
+            or owner["output_classification"] != "typed-secret-owned"
+            or owner["partial_failure_policy"] != "clear-complete-secret-destination"
+        ):
+            fail(f"registered secret owner {owner['id']} information flow drifted")
+        field_names = {field.split(":", 1)[0] for field in owner["fields"]}
+        try:
+            rust_contract.validate_type(root, owner["symbol"], field_names)
+            rust_contract.validate_cleanup_binding(
+                root, owner["sanitization_symbol"], owner["cleanup_callers"],
+            )
+        except rust_contract.RustContractError as error:
+            fail(f"registered secret owner {owner['id']} Rust contract failed: {error}")
+        for evidence in owner["evidence"]:
+            validate_target(root, evidence, f"registered secret owner {owner['id']} evidence")
     reviews = policy["reviewed-source"]
     paths = [review.get("path") for review in reviews]
-    if len(reviews) != 14 or len(paths) != len(set(paths)):
+    if set(paths) != contracts.REVIEWED_SOURCE_PATHS or len(paths) != len(set(paths)):
         fail("reviewed secret-state source inventory is incomplete or duplicated")
     for review in reviews:
         exact_keys(review, {"path", "sha256"}, "reviewed source")
@@ -330,20 +393,18 @@ def profile_dimensions(profile: dict, owner: str, overrides: dict) -> dict:
 def planned_secret_owner(capability: dict, template_name: str, policy: dict) -> dict:
     template = policy["secret-template"][template_name]
     owner = policy["secret-owner-overrides"].get(capability["id"], capability["owner"])
-    base = path_part(capability["code_target"])
     return {
         "capability": capability["id"],
         "evidence": [capability["test_target"], policy["cleanup"]["mandatory_core_evidence"]],
         "fields": template["fields"],
         "id": f"planned.{capability['id']}",
         "lifecycle_edges": list(LIFECYCLE_EDGES),
-        "output_classification": template["output_classification"],
+        "operations": capability["operations"],
         "owner": owner,
-        "partial_failure_policy": capability["partial_failure_policy"],
         "residual_risks": list(RESIDUALS),
-        "sanitization_symbol": policy["cleanup"]["mandatory_core_symbol"],
-        "state": "planned" if capability["disposition"] != "implemented" or owner != capability["owner"] else "registered",
-        "symbol": f"{base}#HardenedSecretOwner",
+        "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
+        "planned_implementation_target": capability["code_target"],
+        "state": "planned",
         "temporaries": template["temporaries"],
     }
 
@@ -368,10 +429,9 @@ def build_register(policy: dict, surfaces: dict, root: Path = ROOT) -> dict:
             "explicit_rejections": list(REJECTIONS),
             "id": row["id"],
             "normative_sources": row["normative_sources"],
-            "output_classification": profile["output_classification"],
+            "operations": profile["operations"],
             "owner": row["owner"],
             "ordinary_hardened_separation": "required" if profile["secret_template"] != "none" else "not-applicable",
-            "partial_failure_policy": profile["partial_failure_policy"],
             "profile": name,
             "test_target": row["test_target"],
         }
@@ -388,6 +448,14 @@ def build_register(policy: dict, surfaces: dict, root: Path = ROOT) -> dict:
             "residual_risks": list(RESIDUALS),
             "state": "current",
         })
+    registered_owners = []
+    for owner in policy["registered-secret-owner"]:
+        registered_owners.append({
+            **owner,
+            "lifecycle_edges": list(LIFECYCLE_EDGES),
+            "residual_risks": list(RESIDUALS),
+            "state": "registered",
+        })
     return {
         "api_dimensions": policy["api"]["dimensions"],
         "capabilities": capabilities,
@@ -395,6 +463,7 @@ def build_register(policy: dict, surfaces: dict, root: Path = ROOT) -> dict:
         "current_secret_owners": sorted(current_owners, key=lambda row: row["id"]),
         "explicit_rejections": list(REJECTIONS),
         "planned_secret_owners": sorted(planned_owners, key=lambda row: row["id"]),
+        "registered_secret_owners": sorted(registered_owners, key=lambda row: row["id"]),
         "policy_sha256": sha256(POLICY.read_bytes()) if root == ROOT else sha256(json_bytes(policy)),
         "residual_risks": list(RESIDUALS),
         "schema": 1,
@@ -414,6 +483,7 @@ def render_coverage(register: dict) -> bytes:
         f"- Capabilities: **{len(register['capabilities'])}**",
         f"- API dimensions per capability: **{len(register['api_dimensions'])}**",
         f"- Current secret owners: **{len(register['current_secret_owners'])}**",
+        f"- Registered capability owners: **{len(register['registered_secret_owners'])}**",
         f"- Planned secret owners: **{len(register['planned_secret_owners'])}**", "",
         "## Profile Coverage", "", "| Profile | Capabilities |", "| --- | ---: |",
     ]

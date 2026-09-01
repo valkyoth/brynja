@@ -2864,12 +2864,18 @@ Status: awaiting pentest
 Implementation notes: the reviewed policy assigns all 129 semantic
 cryptographic and protocol capabilities every one of 22 API dimensions, one
 exact profile and milestone owner, plus generated machine and human registers.
-Eight current and 75 planned secret owners bind fields, temporaries, lifecycle
-edges, core or admitted-adapter cleanup, output handling, evidence, consumers
-and residuals. Fifteen mutation classes and one standalone zero-dependency
-`no_std` fixture reject incomplete profiles, downstream hardened-capability
-forgery, ordinary-state substitution, output-classification drift, partial
-secret-output retention, and missed Drop or recoverable-unwind cleanup. No
+Eight current, zero registered capability, and 75 planned secret owners bind
+exact Rust declarations, fields, temporaries, lifecycle edges, core or
+admitted-adapter cleanup, operation-specific output handling, evidence,
+consumers and residuals. Planned entries never synthesize executable symbols.
+Twenty-three structural mutation classes, twenty-two per-operation secret-
+output downgrade mutations, and one standalone zero-dependency `no_std`
+fixture reject incomplete profiles, fabricated or substituted owners and
+sanitizers, field/type disagreement, downstream hardened-capability forgery,
+ordinary-state substitution, information-flow drift, partial secret-output
+retention, and missed Drop or recoverable-unwind cleanup. The voluntary
+pentest found two Medium assurance-control gaps in the initial register; both
+are locally remediated with zero open findings and await independent retest. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 

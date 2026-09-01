@@ -1,7 +1,7 @@
 # Brynja 0.24.6 Release Notes
 
-Status: six Medium assurance-control findings are locally remediated with zero
-open findings; independent fourth retest and the signed candidate commit remain
+Status: seven Medium assurance-control findings are locally remediated with zero
+open findings; independent fifth retest and the signed candidate commit remain
 pending; no crates.io publication is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
@@ -65,6 +65,11 @@ production cryptographic implementation or runtime behavior.
   unrelated contract-test reuse, caller/header disagreement, and declared-
   sanitizer/MIR mismatch all fail closed before an empty Python substring can
   be treated as cleanup evidence.
+- MIR sanitizer owners are parsed as complete identifier-token sequences rather
+  than substrings. Exact positive turbofish and trait-qualified cases remain
+  supported, while `Owner`/`NotOwner`, `Secret`/`SecretState`,
+  `RandomEngine`/`SecureRandomEngine`, and `State`/`HardenedState` substitutions
+  fail closed.
 - Removing the optional `brynja-sanitization` adapter still leaves every
   mandatory cleanup duty bound to Brynja's dependency-free core volatile
   clearing primitive. The adapter cannot enter the FIPS graph or replace core
@@ -91,7 +96,8 @@ classification remediation but found two Medium residual weaknesses in the
 lexical owner and cleanup checks. The second retest confirmed those fixes but
 found one Medium circular future-registration evidence path. The third retest
 confirmed that fix but found one Medium empty-MIR-target and identity-binding
-path. Registration
+path. The fourth retest confirmed that remediation but found one Medium
+sanitizer-owner prefix-confusion path. Registration
 remains explicit with zero
 registered capability owners, while actual owner shape and cleanup evidence
 now comes from independently maintained Rust compiler contracts and exact
@@ -101,7 +107,7 @@ configuration, macro nesting, and same-named method substitution. Every one of
 the 13 profiles retains an exact per-operation information-flow contract.
 
 Focused contract, mutation, compile-fail, bare-metal, and deterministic
-register checks pass with zero open findings. Independent fourth retest remains
+register checks pass with zero open findings. Independent fifth retest remains
 required before this candidate can be tagged.
 
 ## Security Boundaries
@@ -124,7 +130,7 @@ Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
 unless an exceptional trigger or voluntary review is applied. A voluntary
-review and its first three retests supplied six Medium assurance-control defects;
-all are locally remediated. The independent fourth retest, signed candidate
+review and its first four retests supplied seven Medium assurance-control defects;
+all are locally remediated. The independent fifth retest, signed candidate
 commit, complete release verification, green hosted GitHub and CodeQL, and
 then the signed immutable tag remain required.

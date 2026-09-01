@@ -35,8 +35,13 @@ Keep a Changelog and Semantic Versioning.
   maps; requiring every value and header component to be nonempty; and binding
   package, unique owner-specific test, caller method/type, and declared
   sanitizer function/type identities. Six low-level and seven registration
-  regressions cover the reported bypass; independent fourth retest remains
-  pending.
+  regressions cover the reported bypass; the fourth retest found the residual
+  owner-prefix gap below.
+- Close the Medium fourth-retest finding by parsing MIR callees into exact
+  function and owner identifier tokens rather than using substring membership.
+  Positive turbofish and trait-qualified paths remain supported, while all four
+  reported owner-name prefix/suffix collisions fail closed; eleven registered-
+  identity regressions now pass and independent fifth retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

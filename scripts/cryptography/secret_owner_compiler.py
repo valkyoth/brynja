@@ -68,6 +68,38 @@ def require_nonempty(value: object, label: str) -> str:
     return value
 
 
+def without_turbofish(value: str) -> str:
+    result = []
+    index = 0
+    while index < len(value):
+        if not value.startswith("::<", index):
+            result.append(value[index])
+            index += 1
+            continue
+        index += 3
+        depth = 1
+        while index < len(value) and depth:
+            if value[index] == "<":
+                depth += 1
+            elif value[index] == ">":
+                depth -= 1
+            index += 1
+        if depth:
+            fail("registered MIR sanitizer has an unterminated turbofish")
+    return "".join(result)
+
+
+def mir_callable_identity(value: str) -> tuple[list[str], str]:
+    if not value.endswith("("):
+        fail("registered MIR sanitizer must end at the call boundary")
+    callee = without_turbofish(value[:-1])
+    owner, separator, leaf = callee.rpartition("::")
+    if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", leaf):
+        fail("registered MIR sanitizer function is not one identifier")
+    owner_tokens = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", owner) if separator else []
+    return owner_tokens, leaf
+
+
 def compiler_inventory(
     registered: dict | None = None,
     owner_tests: dict | None = None,
@@ -121,10 +153,16 @@ def compiler_inventory(
             sanitizer_map[sanitizer_symbol], f"registered MIR sanitizer for {owner_id}",
         )
         declared_identity = sanitizer_symbol.rsplit("#", 1)[-1]
-        declared_leaf = declared_identity.rsplit("::", 1)[-1]
-        mir_leaf = sanitizer.rsplit("::", 1)[-1].split("::<", 1)[0].removesuffix("(")
-        declared_owner = declared_identity.rsplit("::", 1)[0] if "::" in declared_identity else None
-        if mir_leaf != declared_leaf or (declared_owner and declared_owner not in sanitizer):
+        declared_owner, separator, declared_leaf = declared_identity.rpartition("::")
+        declared_owner_tokens = (
+            re.findall(r"[A-Za-z_][A-Za-z0-9_]*", declared_owner) if separator else []
+        )
+        mir_owner_tokens, mir_leaf = mir_callable_identity(sanitizer)
+        if (
+            mir_leaf != declared_leaf
+            or declared_owner_tokens
+            and mir_owner_tokens[-len(declared_owner_tokens):] != declared_owner_tokens
+        ):
             fail(f"MIR target differs from registered sanitizer: {owner_id}")
         caller_prefix = f"{source}#{owner}::"
         for caller in record["cleanup_callers"]:

@@ -23,6 +23,12 @@ def rejects_inventory(registry: dict, tests: dict, headers: dict, sanitizers: di
 
 
 def main() -> int:
+    assert compiler.mir_callable_identity("fixture::Owner::<N>::wipe(") == (
+        ["fixture", "Owner"], "wipe",
+    )
+    assert compiler.mir_callable_identity("<E as Owner>::wipe(") == (
+        ["E", "as", "Owner"], "wipe",
+    )
     valid = """fn owner::drop(_1: &mut Owner) -> () {
     bb0: { _2 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable]; }
 }
@@ -39,7 +45,7 @@ def main() -> int:
         "symbol": "crates/fixture-package/src/lib.rs#Owner",
         "fields": ["secret:secret"],
         "temporaries": ["scratch:secret"],
-        "sanitization_symbol": "crates/fixture-package/src/lib.rs#exact_sanitizer",
+        "sanitization_symbol": "crates/fixture-package/src/lib.rs#Owner::wipe",
         "cleanup_callers": ["crates/fixture-package/src/lib.rs#Owner::drop"],
         "evidence": ["crates/fixture-package/src/lib.rs"],
         "storage": "crate-owned",
@@ -57,13 +63,13 @@ def main() -> int:
         },
     }
     headers = {record["cleanup_callers"][0]: ["drop(_1: &mut Owner", "Owner"]}
-    sanitizers = {record["sanitization_symbol"]: "fixture::exact_sanitizer("}
+    sanitizers = {record["sanitization_symbol"]: "fixture::Owner::wipe("}
     observed_tests, calls = compiler.compiler_inventory(
         registry, tests, headers, sanitizers,
     )
     assert tests[record["symbol"]]["contract_test"] in observed_tests["fixture-package"]
     assert calls["fixture-package"][-1] == (
-        ("drop(_1: &mut Owner", "Owner"), "fixture::exact_sanitizer(",
+        ("drop(_1: &mut Owner", "Owner"), "fixture::Owner::wipe(",
     )
     for replacement in ("", "   "):
         broken = copy.deepcopy(sanitizers)
@@ -81,11 +87,26 @@ def main() -> int:
     )
     rejects_inventory(registry, broken_tests, headers, sanitizers)
     broken_sanitizers = copy.deepcopy(sanitizers)
-    broken_sanitizers[record["sanitization_symbol"]] = "fixture::wrong_sanitizer("
+    broken_sanitizers[record["sanitization_symbol"]] = "fixture::Owner::wrong_sanitizer("
     rejects_inventory(registry, tests, headers, broken_sanitizers)
+    for wrong_owner in ("NotOwner", "SecretState", "SecureRandomEngine", "HardenedState"):
+        collision = copy.deepcopy(registry)
+        declared = copy.deepcopy(record)
+        expected_owner = {
+            "NotOwner": "Owner",
+            "SecretState": "Secret",
+            "SecureRandomEngine": "RandomEngine",
+            "HardenedState": "State",
+        }[wrong_owner]
+        declared["sanitization_symbol"] = (
+            f"crates/fixture-package/src/lib.rs#{expected_owner}::wipe"
+        )
+        collision["registered.algorithm.fixture"]["record"] = declared
+        collision_sanitizers = {declared["sanitization_symbol"]: f"fixture::{wrong_owner}::wipe("}
+        rejects_inventory(collision, tests, headers, collision_sanitizers)
     print(
         "secret-owner MIR evidence rejects six empty, target, and ambiguity "
-        "regressions plus seven registered identity and coverage bypasses"
+        "regressions plus eleven registered identity and coverage bypasses"
     )
     return 0
 

@@ -2875,9 +2875,10 @@ fixture reject incomplete profiles, fabricated or substituted owners and
 sanitizers, field/type disagreement, downstream hardened-capability forgery,
 ordinary-state substitution, information-flow drift, partial secret-output
 retention, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and three retests found six Medium assurance-control gaps in the
-initial, lexical-remediation, future-registration, and empty-value evidence
-paths; all are locally remediated with zero open findings and await independent fourth retest. No
+pentest and four retests found seven Medium assurance-control gaps in the
+initial, lexical-remediation, future-registration, empty-value, and identifier-
+prefix evidence paths; all are locally remediated with zero open findings
+and await independent fifth retest. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 
@@ -2907,6 +2908,9 @@ Deliverables:
   from separate exact-coverage maps; reject empty or whitespace identities,
   reused tests, caller/header disagreement, and any declared-sanitizer/MIR
   mismatch before compiler substring matching;
+- parse MIR sanitizer callees into complete owner and function identifier
+  tokens, retaining valid turbofish and trait qualification while rejecting
+  embedded owner-name prefixes and suffixes;
 - classify every cleanup duty as the mandatory core destruction primitive or
   an exact admitted `brynja-sanitization` fixed-region adapter use, without
   optional cleanup, reverse dependencies, facade leakage, or a FIPS graph edge;

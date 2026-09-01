@@ -29,7 +29,14 @@ Keep a Changelog and Semantic Versioning.
   adjacent test and complete optimized-MIR caller-to-sanitizer inventory from
   that contract. The reported read-only `OwnedSecretRegion::expose` record and
   incomplete registered MIR coverage now fail closed; independent third
-  retest remains pending.
+  retest found the residual empty-target gap below.
+- Close the Medium third-retest finding by deriving registered owner tests,
+  caller headers, and sanitizer MIR targets from three separate exact-coverage
+  maps; requiring every value and header component to be nonempty; and binding
+  package, unique owner-specific test, caller method/type, and declared
+  sanitizer function/type identities. Six low-level and seven registration
+  regressions cover the reported bypass; independent fourth retest remains
+  pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

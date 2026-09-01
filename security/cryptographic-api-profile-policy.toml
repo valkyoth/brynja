@@ -772,7 +772,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "b52be9440d4d00ebc2612ab424c63cb5a66ffc460000b4b0816b8fcf73b0f276"
+sha256 = "59b72a718a6830b85f225a801e0e430293c6f240b43190a7b735949dac3d75b4"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
@@ -788,12 +788,12 @@ sha256 = "cb0232fd04dd0644fc56c7f226346db0e5834dbd2d8540a15c893f0186606d32"
 
 [[reviewed-source]]
 path = "scripts/cryptography/secret_owner_compiler.py"
-sha256 = "6f7187a69f13381ad699c373384b90a98722bbf9e561939167bd481a2fdde9f9"
+sha256 = "2e7317912001d5b55cf203a29daf3d61b69401de9e29548afb2623acd1de355e"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "f6cbddb4328945fe1ccf347c95ebe26225781d3b012dc8d561fae509f83b829f"
+sha256 = "c7b71de0c7f19e1ae84345d2d7444966f4248ac14865cc8e0513ba2b334989c1"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-secret-owner-compiler.py"
-sha256 = "7ffaecaf8577db574de232e0cffb38646ff4e6330960ae80b2c4f2dfe96794d9"
+sha256 = "46dbaecd1020c89ff04b143e093239f526a0470a7a7366c8e4a78b07ecff7220"

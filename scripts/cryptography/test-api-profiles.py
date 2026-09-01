@@ -155,17 +155,7 @@ def rejects_registered_contract_mismatch() -> None:
     canonical["sanitization_symbol"] = (
         "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile"
     )
-    contract = {
-        "record": canonical,
-        "package": "brynja-core",
-        "contract_test": "fixture::registered_owner_contract_is_compiler_checked",
-        "mir_callers": {
-            canonical["cleanup_callers"][0]: {
-                "header": ["expose(_1: &OwnedSecretRegion"],
-                "sanitizer": "zeroize_region_volatile(",
-            },
-        },
-    }
+    contract = {"record": canonical}
     previous = model.contracts.REGISTERED_OWNER_CONTRACTS
     model.contracts.REGISTERED_OWNER_CONTRACTS = {owner["id"]: contract}
     try:

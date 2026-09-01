@@ -46,7 +46,7 @@ MIR_CALLS = {
     ),
 }
 
-REGISTERED_CONTRACT_KEYS = {"record", "package", "contract_test", "mir_callers"}
+REGISTERED_CONTRACT_KEYS = {"record"}
 REGISTERED_RECORD_KEYS = {
     "capability", "symbol", "fields", "temporaries", "sanitization_symbol",
     "cleanup_callers", "evidence", "storage", "output_classification",
@@ -62,27 +62,84 @@ def fail(message: str) -> None:
     raise CompilerContractError(message)
 
 
-def compiler_inventory(registered: dict | None = None) -> tuple[dict, dict]:
+def require_nonempty(value: object, label: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        fail(f"{label} must be a nonempty string")
+    return value
+
+
+def compiler_inventory(
+    registered: dict | None = None,
+    owner_tests: dict | None = None,
+    caller_headers: dict | None = None,
+    sanitizer_identities: dict | None = None,
+) -> tuple[dict, dict]:
     tests = {package: set(names) for package, names in CONTRACT_TESTS.items()}
     calls = {package: list(edges) for package, edges in MIR_CALLS.items()}
     registry = contracts.REGISTERED_OWNER_CONTRACTS if registered is None else registered
+    test_map = contracts.REGISTERED_OWNER_COMPILER_TESTS if owner_tests is None else owner_tests
+    header_map = contracts.REGISTERED_CALLER_MIR_HEADERS if caller_headers is None else caller_headers
+    sanitizer_map = (
+        contracts.REGISTERED_SANITIZER_MIR_IDENTITIES
+        if sanitizer_identities is None else sanitizer_identities
+    )
+    records = [contract.get("record", {}) for contract in registry.values()]
+    symbols = {record.get("symbol") for record in records}
+    callers = {caller for record in records for caller in record.get("cleanup_callers", [])}
+    sanitizers = {record.get("sanitization_symbol") for record in records}
+    if set(test_map) != symbols or set(header_map) != callers or set(sanitizer_map) != sanitizers:
+        fail("registered compiler identity coverage differs")
+    used_tests = {name for names in CONTRACT_TESTS.values() for name in names}
     for owner_id, contract in registry.items():
         if set(contract) != REGISTERED_CONTRACT_KEYS:
             fail(f"registered compiler contract has invalid keys: {owner_id}")
         record = contract["record"]
         if set(record) != REGISTERED_RECORD_KEYS:
             fail(f"registered compiler contract record has invalid keys: {owner_id}")
-        callers = record["cleanup_callers"]
-        if set(callers) != set(contract["mir_callers"]):
-            fail(f"registered compiler contract MIR coverage differs: {owner_id}")
-        package = contract["package"]
-        tests.setdefault(package, set()).add(contract["contract_test"])
+        symbol = require_nonempty(record["symbol"], f"registered owner symbol for {owner_id}")
+        source, separator, owner = symbol.partition("#")
+        if separator != "#" or not source.startswith("crates/") or "/src/" not in source:
+            fail(f"registered compiler contract owner symbol is invalid: {owner_id}")
+        package = source.split("/", 2)[1]
+        identity = test_map[symbol]
+        if set(identity) != {"package", "contract_test"} or identity["package"] != package:
+            fail(f"registered compiler test identity is invalid: {owner_id}")
+        contract_test = require_nonempty(
+            identity["contract_test"], f"registered compiler test for {owner_id}",
+        )
+        expected_suffix = owner_id.replace(".", "_").replace("-", "_")
+        expected_suffix += "_owner_contract_is_compiler_checked"
+        if not contract_test.endswith(expected_suffix) or contract_test in used_tests:
+            fail(f"registered compiler test is reused or misidentified: {owner_id}")
+        used_tests.add(contract_test)
+        tests.setdefault(package, set()).add(contract_test)
         package_calls = calls.setdefault(package, [])
-        for caller in callers:
-            edge = contract["mir_callers"][caller]
-            if set(edge) != {"header", "sanitizer"} or not edge["header"]:
-                fail(f"registered compiler contract MIR edge is invalid: {owner_id}")
-            package_calls.append((tuple(edge["header"]), edge["sanitizer"]))
+        sanitizer_symbol = require_nonempty(
+            record["sanitization_symbol"], f"registered sanitizer symbol for {owner_id}",
+        )
+        sanitizer = require_nonempty(
+            sanitizer_map[sanitizer_symbol], f"registered MIR sanitizer for {owner_id}",
+        )
+        declared_identity = sanitizer_symbol.rsplit("#", 1)[-1]
+        declared_leaf = declared_identity.rsplit("::", 1)[-1]
+        mir_leaf = sanitizer.rsplit("::", 1)[-1].split("::<", 1)[0].removesuffix("(")
+        declared_owner = declared_identity.rsplit("::", 1)[0] if "::" in declared_identity else None
+        if mir_leaf != declared_leaf or (declared_owner and declared_owner not in sanitizer):
+            fail(f"MIR target differs from registered sanitizer: {owner_id}")
+        caller_prefix = f"{source}#{owner}::"
+        for caller in record["cleanup_callers"]:
+            if not isinstance(caller, str) or not caller.startswith(caller_prefix):
+                fail(f"registered cleanup caller differs from owner: {owner_id}")
+            member = caller.rsplit("::", 1)[-1]
+            header = header_map[caller]
+            if (
+                not isinstance(header, list) or not header
+                or any(not isinstance(part, str) or not part.strip() for part in header)
+                or not re.search(rf"(?:^|::){re.escape(member)}\(_1:", header[0])
+                or not re.search(rf"\b{re.escape(owner)}\b", header[0])
+            ):
+                fail(f"registered compiler contract header is invalid: {owner_id}")
+            package_calls.append((tuple(header), sanitizer))
     return tests, {package: tuple(edges) for package, edges in calls.items()}
 
 
@@ -96,6 +153,9 @@ def function_sections(mir: str) -> list[str]:
 
 
 def require_mir_call(mir: str, header_parts: tuple[str, ...], call: str) -> None:
+    require_nonempty(call, "MIR cleanup target")
+    if not header_parts or any(not isinstance(part, str) or not part.strip() for part in header_parts):
+        fail("MIR caller header must contain nonempty strings")
     matches = [
         section for section in function_sections(mir)
         if all(part in section.splitlines()[0] for part in header_parts)

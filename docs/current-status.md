@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 five Medium assurance findings locally remediated, independent third retest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 six Medium assurance findings locally remediated, independent fourth retest and signed candidate pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -318,14 +318,16 @@ generated closure register records eight current, zero registered capability,
 and 75 planned secret owners. Adjacent Rust compiler contracts and exact
 optimized-MIR targets under Rust 1.90.0 and 1.98.0 back current owner shapes,
 sanitizers and cleanup callers; future registrations must exactly match a
-separate canonical compiler contract and cannot provide expected cleanup text;
+separate canonical compiler contract, while separate exact-coverage maps derive
+their unique test, nonempty caller headers, and nonempty matching sanitizer MIR
+target; registrations cannot provide expected cleanup text;
 planned records claim no implemented symbol. Twenty-five structural mutations and twenty-two exhaustive secret-
 output downgrade mutations reject missing coverage, fabricated or substituted
 owners, forged hardened capabilities, ordinary-state substitution, changed
 per-operation information flow, retained partial secret output, and missed
 Drop or recoverable-unwind cleanup. The voluntary pentest and first retest
-found five Medium assurance-control defects; local remediation passes with
-zero open findings and independent third retest is pending. This is design and assurance
+found six Medium assurance-control defects; local remediation passes with
+zero open findings and independent fourth retest is pending. This is design and assurance
 closure only: current ordinary SHA state is not made secret-safe, no new
 algorithm is added, and SHA-2/SHA-3 remain In progress through their separately
 owned hardened and complete-family acceptance milestones. Zero crates are

@@ -53,13 +53,14 @@ recoverable panic unwinding. The surrounding policy admits no capability owner
 implicitly: current owners must pass adjacent compiler contracts for exact
 types, private fields and sanitizer signatures plus exact optimized-MIR cleanup
 targets under Rust 1.90.0 and 1.98.0; every future registration must match a
-separate canonical compiler contract whose adjacent test and complete MIR
-edges are compiler-gated; the registered capability-owner set is explicitly
+separate canonical compiler contract; three exact-coverage identity maps
+derive its unique owner-specific adjacent test, nonempty caller headers, and
+nonempty declared-sanitizer MIR target; the registered capability-owner set is explicitly
 empty; and every secret-producing operation has its own fail-closed
 information-flow contract. Twenty-five structural mutations and twenty-two
 secret-output downgrade mutations, lexical raw/cfg/macro/same-name fixtures,
-four MIR mutations, and an incomplete registered-contract mutation exercise
-those boundaries. It is
+six empty/target/ambiguity and seven registered identity/coverage mutations
+exercise those boundaries. It is
 architectural assurance, not a hardened
 hash implementation, independent review, or FIPS validation.
 

@@ -1,7 +1,7 @@
 # Brynja 0.24.6 Release Notes
 
-Status: five Medium assurance-control findings are locally remediated with zero
-open findings; independent third retest and the signed candidate commit remain
+Status: six Medium assurance-control findings are locally remediated with zero
+open findings; independent fourth retest and the signed candidate commit remain
 pending; no crates.io publication is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
@@ -52,7 +52,7 @@ production cryptographic implementation or runtime behavior.
   to public output and are rejected individually.
 - Six adjacent Rust modules make all eight current owner shapes and sanitizer
   signatures compiler-checked. Nine exact cleanup calls are resolved in
-  optimized MIR under Rust 1.90.0 and 1.98.0; four MIR mutations and lexical
+  optimized MIR under Rust 1.90.0 and 1.98.0; six MIR mutations and lexical
   raw-string, raw-byte-string, disabled-`cfg`, macro-body, nesting, and same-
   named-method fixtures fail closed.
 - Future registered owners cannot provide their own cleanup expression. Each
@@ -60,6 +60,11 @@ production cryptographic implementation or runtime behavior.
   adjacent contract test and complete optimized-MIR caller-to-sanitizer edge
   inventory; the reported read-only `OwnedSecretRegion::expose` reproduction
   and incomplete registered MIR coverage both fail closed.
+- Registered compiler proof identities now come from three separate exact-
+  coverage maps. Empty or whitespace MIR targets and header components,
+  unrelated contract-test reuse, caller/header disagreement, and declared-
+  sanitizer/MIR mismatch all fail closed before an empty Python substring can
+  be treated as cleanup evidence.
 - Removing the optional `brynja-sanitization` adapter still leaves every
   mandatory cleanup duty bound to Brynja's dependency-free core volatile
   clearing primitive. The adapter cannot enter the FIPS graph or replace core
@@ -84,7 +89,9 @@ The voluntary assessment found two Medium assurance-control defects and no
 production cryptographic vulnerability. The first retest confirmed the output-
 classification remediation but found two Medium residual weaknesses in the
 lexical owner and cleanup checks. The second retest confirmed those fixes but
-found one Medium circular future-registration evidence path. Registration
+found one Medium circular future-registration evidence path. The third retest
+confirmed that fix but found one Medium empty-MIR-target and identity-binding
+path. Registration
 remains explicit with zero
 registered capability owners, while actual owner shape and cleanup evidence
 now comes from independently maintained Rust compiler contracts and exact
@@ -94,7 +101,7 @@ configuration, macro nesting, and same-named method substitution. Every one of
 the 13 profiles retains an exact per-operation information-flow contract.
 
 Focused contract, mutation, compile-fail, bare-metal, and deterministic
-register checks pass with zero open findings. Independent third retest remains
+register checks pass with zero open findings. Independent fourth retest remains
 required before this candidate can be tagged.
 
 ## Security Boundaries
@@ -117,7 +124,7 @@ Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
 unless an exceptional trigger or voluntary review is applied. A voluntary
-review and its first two retests supplied five Medium assurance-control defects;
-all are locally remediated. The independent third retest, signed candidate
+review and its first three retests supplied six Medium assurance-control defects;
+all are locally remediated. The independent fourth retest, signed candidate
 commit, complete release verification, green hosted GitHub and CodeQL, and
 then the signed immutable tag remain required.

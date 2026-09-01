@@ -51,9 +51,13 @@ CURRENT_CLEANUP_CALLS = {
 
 # Deliberately empty until a secret-bearing algorithm owner is implemented.
 # A registration record cannot define its own proof: every future entry here
-# must bind the complete policy projection plus an adjacent compiler contract
-# and exact optimized-MIR caller-to-sanitizer edges.
+# must bind the complete policy projection. Separate canonical maps bind its
+# adjacent compiler test, caller identity, and sanitizer MIR target so the
+# registration cannot provide any part of its own proof.
 REGISTERED_OWNER_CONTRACTS = {}
+REGISTERED_OWNER_COMPILER_TESTS = {}
+REGISTERED_CALLER_MIR_HEADERS = {}
+REGISTERED_SANITIZER_MIR_IDENTITIES = {}
 
 OPERATION_CONTRACTS = {
     "aead": {

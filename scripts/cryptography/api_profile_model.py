@@ -125,7 +125,6 @@ def exact_keys(value: dict, expected: set[str], label: str) -> None:
     if set(value) != expected:
         fail(f"{label} fields drifted")
 
-
 def roadmap_versions(root: Path) -> set[str]:
     text = (root / "docs/VERSION_PLAN.md").read_text(encoding="utf-8")
     return set(re.findall(r"`(H?[0-9]+\.[0-9]+(?:\.[0-9]+)?)`", text))
@@ -139,7 +138,6 @@ def validate_target(root: Path, target: str, label: str) -> None:
         symbol = target.split("#", 1)[1].rsplit("::", 1)[-1]
         if re.search(rf"\b{re.escape(symbol)}\b", path.read_text(encoding="utf-8")) is None:
             fail(f"{label} symbol is unavailable: {target}")
-
 
 def validate_profile(name: str, profile: dict, dimensions: set[str], policy: dict) -> None:
     exact_keys(profile, PROFILE_KEYS, f"profile {name}")
@@ -334,6 +332,7 @@ def validate_secret_policy(
             rust_contract.validate_type(root, owner["symbol"], field_names)
             rust_contract.validate_cleanup_binding(
                 root, owner["sanitization_symbol"], owner["cleanup_callers"],
+                contracts.CURRENT_CLEANUP_CALLS[owner["id"]],
             )
         except rust_contract.RustContractError as error:
             fail(f"secret owner {owner['id']} Rust contract failed: {error}")
@@ -344,7 +343,7 @@ def validate_secret_policy(
     if len(capabilities) != len(set(capabilities)):
         fail("registered secret-owner capability coverage is duplicated")
     for owner in registered:
-        exact_keys(owner, {"capability", "id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "evidence", "storage", "output_classification", "partial_failure_policy"}, f"registered secret owner {owner.get('id')}")
+        exact_keys(owner, {"capability", "id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "cleanup_expressions", "evidence", "storage", "output_classification", "partial_failure_policy"}, f"registered secret owner {owner.get('id')}")
         if not owner["fields"] or not owner["temporaries"] or not owner["evidence"]:
             fail(f"registered secret owner {owner['id']} is incomplete")
         capability = owner["capability"]
@@ -365,6 +364,7 @@ def validate_secret_policy(
             rust_contract.validate_type(root, owner["symbol"], field_names)
             rust_contract.validate_cleanup_binding(
                 root, owner["sanitization_symbol"], owner["cleanup_callers"],
+                owner["cleanup_expressions"],
             )
         except rust_contract.RustContractError as error:
             fail(f"registered secret owner {owner['id']} Rust contract failed: {error}")

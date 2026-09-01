@@ -13,7 +13,15 @@ Keep a Changelog and Semantic Versioning.
   declarations, and all mixed-direction profiles now bind output secrecy,
   failure handling and authentication timing per operation. Twenty-three
   structural mutations and twenty-two exhaustive secret-output downgrade
-  mutations pass locally; independent retest remains pending.
+  mutations pass locally; the first retest confirmed the information-flow fix
+  and identified the two residual owner-evidence findings below.
+- Close both Medium residual findings from the first v0.24.6 retest: six
+  adjacent compiler contracts bind all eight current owner shapes and
+  sanitizer signatures, cleanup calls use fully qualified Rust paths, and nine
+  exact optimized-MIR call targets are enforced under Rust 1.90.0 and 1.98.0.
+  Raw and raw-byte strings, disabled `cfg`, macro nesting, same-named methods,
+  missing/duplicate MIR callers, and wrong MIR targets fail closed;
+  independent second retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

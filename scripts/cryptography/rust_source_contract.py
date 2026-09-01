@@ -24,6 +24,19 @@ def scrub(source: str) -> str:
     while index < len(source):
         pair = source[index:index + 2]
         char = source[index]
+        raw = re.match(r"(?:br|cr|r)(#{0,255})\"", source[index:])
+        if state == "code" and raw is not None:
+            opening_length = raw.end()
+            terminator = '"' + raw.group(1)
+            end = source.find(terminator, index + opening_length)
+            if end < 0:
+                fail("unterminated Rust raw literal")
+            stop = end + len(terminator)
+            for position in range(index, stop):
+                if source[position] != "\n":
+                    output[position] = " "
+            index = stop
+            continue
         if state == "code" and pair == "//":
             state = "line"
             output[index:index + 2] = "  "
@@ -97,9 +110,36 @@ def closing_brace(text: str, opening: int) -> int:
     fail("unbalanced Rust declaration")
 
 
+def brace_depth(text: str, position: int) -> int:
+    depth = 0
+    for char in text[:position]:
+        if char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+    return depth
+
+
+def reject_cfg_prefix(text: str, position: int, label: str) -> None:
+    boundary = max(text.rfind(";", 0, position), text.rfind("}", 0, position))
+    prefix = text[boundary + 1:position]
+    if re.search(r"#\s*\[\s*cfg(?:_attr)?\b", prefix):
+        fail(f"{label} is conditionally disabled")
+
+
+def top_level_matches(text: str, pattern: re.Pattern[str], label: str) -> list[re.Match[str]]:
+    matches = [match for match in pattern.finditer(text) if brace_depth(text, match.start()) == 0]
+    for match in matches:
+        reject_cfg_prefix(text, match.start(), label)
+    return matches
+
+
 def declaration(text: str, name: str, kinds: set[str]) -> tuple[str, str]:
     pattern = re.compile(rf"\b(struct|enum|trait)\s+{re.escape(name)}\b[^;{{]*([;{{])")
-    matches = [match for match in pattern.finditer(text) if match.group(1) in kinds]
+    matches = [
+        match for match in top_level_matches(text, pattern, f"Rust declaration {name}")
+        if match.group(1) in kinds
+    ]
     if len(matches) != 1:
         fail(f"Rust declaration {name} is absent, duplicated, or has the wrong kind")
     match = matches[0]
@@ -138,7 +178,7 @@ def scope_bodies(text: str, owner: str) -> list[str]:
         re.compile(rf"\bimpl\b[^{{;]*\b{re.escape(owner)}\b[^{{;]*{{"),
     )
     for pattern in patterns:
-        for match in pattern.finditer(text):
+        for match in top_level_matches(text, pattern, f"Rust scope {owner}"):
             opening = match.end() - 1
             bodies.append(text[opening + 1:closing_brace(text, opening)])
     return bodies
@@ -146,7 +186,7 @@ def scope_bodies(text: str, owner: str) -> list[str]:
 
 def function_body(scope: str, name: str) -> str | None:
     pattern = re.compile(rf"\bfn\s+{re.escape(name)}\b[^;{{]*([;{{])")
-    matches = list(pattern.finditer(scope))
+    matches = top_level_matches(scope, pattern, f"Rust callable {name}")
     if len(matches) != 1:
         return None
     match = matches[0]
@@ -179,7 +219,7 @@ def validate_callable(root: Path, target: str) -> str:
     text = scrub((root / path).read_text(encoding="utf-8"))
     if member is None:
         pattern = re.compile(rf"(?m)^(?:pub(?:\([^)]*\))?\s+)?(?:const\s+)?(?:unsafe\s+)?fn\s+{re.escape(owner)}\b[^;{{]*([;{{])")
-        matches = list(pattern.finditer(text))
+        matches = top_level_matches(text, pattern, f"Rust function {owner}")
         if len(matches) != 1:
             fail(f"free Rust function is absent or duplicated: {target}")
         match = matches[0]
@@ -202,13 +242,23 @@ def validate_callable(root: Path, target: str) -> str:
     return matches[0]
 
 
-def validate_cleanup_binding(root: Path, sanitizer: str, callers: list[str]) -> None:
+def validate_cleanup_binding(
+    root: Path,
+    sanitizer: str,
+    callers: list[str],
+    expected_calls: dict[str, str | None],
+) -> None:
     validate_callable(root, sanitizer)
-    sanitizer_leaf = sanitizer.rsplit("::", 1)[-1].split("#")[-1]
+    if set(callers) != set(expected_calls):
+        fail("cleanup caller and exact-call inventory differ")
     for caller in callers:
         body = validate_callable(root, caller)
-        if caller == sanitizer:
+        expected = expected_calls[caller]
+        if expected is None:
+            if caller != sanitizer:
+                fail(f"cleanup call is absent without self-sanitization: {caller}")
             continue
-        call = re.compile(rf"(?:\.|\b){re.escape(sanitizer_leaf)}\s*\(")
-        if call.search(body) is None:
-            fail(f"cleanup caller does not invoke registered sanitizer: {caller}")
+        normalized_body = re.sub(r"\s+", "", body)
+        normalized_expected = re.sub(r"\s+", "", expected)
+        if normalized_expected not in normalized_body:
+            fail(f"cleanup caller lacks exact registered sanitizer call: {caller}")

@@ -1,7 +1,7 @@
 # Brynja 0.24.6 Release Notes
 
-Status: two Medium assurance-control findings are locally remediated with zero
-open findings; independent retest and the signed candidate commit remain
+Status: four Medium assurance-control findings are locally remediated with zero
+open findings; independent second retest and the signed candidate commit remain
 pending; no crates.io publication is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
@@ -50,6 +50,11 @@ production cryptographic implementation or runtime behavior.
   operations, secret-template downgrade, and mandatory-core-cleanup drift.
 - Twenty-two additional mutations downgrade every secret-producing operation
   to public output and are rejected individually.
+- Six adjacent Rust modules make all eight current owner shapes and sanitizer
+  signatures compiler-checked. Nine exact cleanup calls are resolved in
+  optimized MIR under Rust 1.90.0 and 1.98.0; four MIR mutations and lexical
+  raw-string, raw-byte-string, disabled-`cfg`, macro-body, nesting, and same-
+  named-method fixtures fail closed.
 - Removing the optional `brynja-sanitization` adapter still leaves every
   mandatory cleanup duty bound to Brynja's dependency-free core volatile
   clearing primitive. The adapter cannot enter the FIPS graph or replace core
@@ -71,15 +76,14 @@ production cryptographic implementation or runtime behavior.
 ## Pentest Remediation
 
 The voluntary assessment found two Medium assurance-control defects and no
-production cryptographic vulnerability. First, inferred registration and
-token-only symbol lookup allowed nonexistent secret owners and unrelated
-tokens to appear as implementation evidence. Registration is now explicit
-only, its current set is empty, current owner identities are canonical, and a
-dependency-free Rust declaration parser verifies exact types, fields,
-sanitizers, and cleanup callers. Second, one family-wide output classification
-allowed secret output to be downgraded to public. Every one of the 13 profiles
-now has an exact operation inventory with output classification, failure
-handling, and authentication timing for each direction.
+production cryptographic vulnerability. The first retest confirmed the output-
+classification remediation but found two Medium residual weaknesses in the
+lexical owner and cleanup checks. Registration remains explicit with zero
+registered capability owners, while actual owner shape and cleanup evidence
+now comes from Rust compiler contracts and exact optimized-MIR call targets.
+The source parser is defense-in-depth and rejects raw literals, disabled
+configuration, macro nesting, and same-named method substitution. Every one of
+the 13 profiles retains an exact per-operation information-flow contract.
 
 Focused contract, mutation, compile-fail, bare-metal, and deterministic
 register checks pass with zero open findings. Independent retest remains
@@ -105,7 +109,7 @@ Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
 unless an exceptional trigger or voluntary review is applied. A voluntary
-review was applied and found two Medium assurance-control defects; both are
-locally remediated. The independent retest, signed candidate commit, complete
-release verification, green hosted GitHub and CodeQL, and then the signed
-immutable tag remain required.
+review and its first retest supplied four Medium assurance-control defects;
+all are locally remediated. The independent second retest, signed candidate
+commit, complete release verification, green hosted GitHub and CodeQL, and
+then the signed immutable tag remain required.

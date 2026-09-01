@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 two Medium assurance findings locally remediated, independent retest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 four Medium assurance findings locally remediated, independent second retest and signed candidate pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -315,15 +315,16 @@ cryptographic behavior, dependencies, unsafe boundaries, or backend admission.
 A reviewed policy assigns every one of the 129 semantic cryptographic and
 protocol capabilities all 22 API dimensions and an exact milestone owner. The
 generated closure register records eight current, zero registered capability,
-and 75 planned secret owners. Exact Rust declarations, fields, sanitizers and
-cleanup callers back current ownership; planned records claim no implemented
+and 75 planned secret owners. Adjacent Rust compiler contracts and exact
+optimized-MIR targets under Rust 1.90.0 and 1.98.0 back current owner shapes,
+sanitizers and cleanup callers; planned records claim no implemented
 symbol. Twenty-three structural mutations and twenty-two exhaustive secret-
 output downgrade mutations reject missing coverage, fabricated or substituted
 owners, forged hardened capabilities, ordinary-state substitution, changed
 per-operation information flow, retained partial secret output, and missed
-Drop or recoverable-unwind cleanup. The voluntary pentest found two Medium
-assurance-control defects; local remediation passes with zero open findings
-and independent retest is pending. This is design and assurance
+Drop or recoverable-unwind cleanup. The voluntary pentest and first retest
+found four Medium assurance-control defects; local remediation passes with
+zero open findings and independent second retest is pending. This is design and assurance
 closure only: current ordinary SHA state is not made secret-safe, no new
 algorithm is added, and SHA-2/SHA-3 remain In progress through their separately
 owned hardened and complete-family acceptance milestones. Zero crates are

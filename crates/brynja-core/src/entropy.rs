@@ -144,6 +144,9 @@ pub struct RawEntropy<'entropy> {
     input: OwnedSecretRegion<'entropy>,
 }
 
+#[cfg(test)]
+mod assurance_contract;
+
 impl RawEntropy<'_> {
     /// Returns the exact request metadata.
     #[must_use]

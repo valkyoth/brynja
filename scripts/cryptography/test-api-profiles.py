@@ -125,6 +125,10 @@ def missing_registered_type(policy: dict, _surfaces: dict) -> None:
         "temporaries": ["schedule:secret"],
         "sanitization_symbol": "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile",
         "cleanup_callers": ["crates/brynja-hash-sha2/src/sha256.rs#HardenedSecretOwner::drop"],
+        "cleanup_expressions": {
+            "crates/brynja-hash-sha2/src/sha256.rs#HardenedSecretOwner::drop":
+                "crate::zeroize_region_volatile(",
+        },
         "evidence": ["crates/brynja-hash-sha2/tests/sha256.rs"],
         "storage": "crate-owned",
         "output_classification": "typed-secret-owned",
@@ -174,6 +178,53 @@ def parser_rejects_comment_and_string_fabrication() -> None:
             pass
         else:
             raise AssertionError("string fabricated a Rust sanitizer")
+
+        for name, candidate in (
+            (
+                "raw string",
+                'const DECOY: &str = r#"pub struct Ghost { secret: u8 }"#;\n',
+            ),
+            (
+                "raw byte string",
+                'const DECOY: &[u8] = br##"pub struct Ghost { secret: u8 }"##;\n',
+            ),
+            (
+                "disabled cfg",
+                '#[cfg(any())]\npub struct Ghost { secret: u8 }\n',
+            ),
+            (
+                "macro body",
+                'macro_rules! decoy { () => { pub struct Ghost { secret: u8 } } }\n',
+            ),
+        ):
+            source.write_text(candidate, encoding="utf-8")
+            try:
+                rust_contract.validate_type(root, "fixture.rs#Ghost", {"secret"})
+            except rust_contract.RustContractError:
+                pass
+            else:
+                raise AssertionError(f"{name} fabricated a Rust owner")
+
+        source.write_text(
+            'pub fn wipe() {}\n'
+            'pub struct Ghost { secret: u8 }\n'
+            'impl Ghost {\n'
+            '    fn drop(&mut self) { self.wipe(); }\n'
+            '    fn wipe(&mut self) {}\n'
+            '}\n',
+            encoding="utf-8",
+        )
+        try:
+            rust_contract.validate_cleanup_binding(
+                root,
+                "fixture.rs#wipe",
+                ["fixture.rs#Ghost::drop"],
+                {"fixture.rs#Ghost::drop": "crate::wipe("},
+            )
+        except rust_contract.RustContractError:
+            pass
+        else:
+            raise AssertionError("same-named method fabricated an exact sanitizer call")
 
 
 def main() -> int:

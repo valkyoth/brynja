@@ -12,6 +12,43 @@ CURRENT_OWNER_SYMBOLS = {
     "test.deterministic-random": "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom",
 }
 
+CURRENT_CLEANUP_CALLS = {
+    "adapter.sanitized-secret": {
+        "crates/brynja-sanitization/src/lib.rs#SanitizedSecret::clear": None,
+    },
+    "core.abstract-secret-initialization": {
+        "crates/brynja-core/src/secret.rs#SecretInitialization::drop":
+            "crate::secret_destruction::run_destruction(",
+    },
+    "core.abstract-secret-state": {
+        "crates/brynja-core/src/secret.rs#SecretState::drop":
+            "crate::secret_destruction::run_destruction(",
+    },
+    "core.owned-secret-region": {
+        "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::clear":
+            "crate::secret_memory_volatile::zeroize_region_volatile(",
+        "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::drop":
+            "crate::secret_memory_volatile::zeroize_region_volatile(",
+    },
+    "core.raw-entropy": {
+        "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::drop": None,
+    },
+    "core.secret-region-initialization": {
+        "crates/brynja-core/src/secret_memory.rs#SecretRegionInitialization::drop":
+            "crate::secret_memory_volatile::zeroize_region_volatile(",
+    },
+    "core.secure-random": {
+        "crates/brynja-core/src/secure_random.rs#SecureRandom::drop":
+            "<E as SecureRandomEngine>::uninstantiate(",
+    },
+    "test.deterministic-random": {
+        "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom::clear_state":
+            "brynja_core::clear_owned_region(",
+        "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom::drop":
+            "brynja_core::clear_owned_region(",
+    },
+}
+
 OPERATION_CONTRACTS = {
     "aead": {
         "generate-key": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),
@@ -85,21 +122,30 @@ OPERATION_CONTRACTS = {
 
 REVIEWED_SOURCE_PATHS = {
     "assurance/api-profile-contract/src/lib.rs",
+    "crates/brynja-core/src/entropy/assurance_contract.rs",
     "crates/brynja-core/src/entropy.rs",
     "crates/brynja-core/src/secret.rs",
+    "crates/brynja-core/src/secret/assurance_contract.rs",
     "crates/brynja-core/src/secret_destruction.rs",
     "crates/brynja-core/src/secret_memory.rs",
+    "crates/brynja-core/src/secret_memory/assurance_contract.rs",
     "crates/brynja-core/src/secret_memory_volatile.rs",
     "crates/brynja-core/src/secure_random.rs",
+    "crates/brynja-core/src/secure_random/assurance_contract.rs",
     "crates/brynja-hash-sha2/src/sha224.rs",
     "crates/brynja-hash-sha2/src/sha256.rs",
     "crates/brynja-hash-sha2/src/sha512_state.rs",
     "crates/brynja-hash-sha3/src/sponge.rs",
     "crates/brynja-sanitization/src/lib.rs",
+    "crates/brynja-sanitization/src/assurance_contract.rs",
     "crates/brynja-test-support/src/deterministic_random.rs",
+    "crates/brynja-test-support/src/deterministic_random/assurance_contract.rs",
     "scripts/cryptography/api_profile_contracts.py",
     "scripts/cryptography/api_profile_model.py",
     "scripts/cryptography/check-api-profile-contract.sh",
+    "scripts/cryptography/check-secret-owner-compiler.py",
     "scripts/cryptography/rust_source_contract.py",
+    "scripts/cryptography/secret_owner_compiler.py",
     "scripts/cryptography/test-api-profiles.py",
+    "scripts/cryptography/test-secret-owner-compiler.py",
 }

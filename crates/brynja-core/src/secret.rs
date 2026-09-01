@@ -8,7 +8,7 @@
 use crate::{
     DestructionCause, DestructionComplete, DestructionFailure, DestructionOutcome,
     DestructionTargets, ProviderFailure, SecretDestructor,
-    secret_destruction::{invariant_failure, invariant_failure_value, run_destruction},
+    secret_destruction::{invariant_failure, invariant_failure_value},
 };
 
 /// A closed, value-free lifecycle-contract error.
@@ -193,7 +193,9 @@ impl<'a, D: SecretDestructor> SecretInitialization<'a, D> {
 
     fn destroy(mut self, cause: DestructionCause) -> DestructionOutcome {
         match self.destructor.take() {
-            Some(destructor) => run_destruction(destructor, self.targets, cause),
+            Some(destructor) => {
+                crate::secret_destruction::run_destruction(destructor, self.targets, cause)
+            }
             None => invariant_failure(cause),
         }
     }
@@ -202,7 +204,7 @@ impl<'a, D: SecretDestructor> SecretInitialization<'a, D> {
 impl<D: SecretDestructor> Drop for SecretInitialization<'_, D> {
     fn drop(&mut self) {
         if let Some(destructor) = self.destructor.take()
-            && let DestructionOutcome::Failed(failure) = run_destruction(
+            && let DestructionOutcome::Failed(failure) = crate::secret_destruction::run_destruction(
                 destructor,
                 self.targets,
                 DestructionCause::InitializationFailure,
@@ -245,7 +247,11 @@ impl<'a, D: SecretDestructor> SecretState<'a, D> {
                 ));
             }
         };
-        match run_destruction(destructor, targets, DestructionCause::Replacement) {
+        match crate::secret_destruction::run_destruction(
+            destructor,
+            targets,
+            DestructionCause::Replacement,
+        ) {
             DestructionOutcome::Failed(failure) => ReplacementTransition::Failed(failure),
             DestructionOutcome::Complete(previous) if region_bytes == 0 => {
                 ReplacementTransition::Rejected {
@@ -267,7 +273,9 @@ impl<'a, D: SecretDestructor> SecretState<'a, D> {
 
     fn destroy(mut self, cause: DestructionCause) -> DestructionOutcome {
         match self.destructor.take() {
-            Some(destructor) => run_destruction(destructor, self.targets, cause),
+            Some(destructor) => {
+                crate::secret_destruction::run_destruction(destructor, self.targets, cause)
+            }
             None => invariant_failure(cause),
         }
     }
@@ -276,10 +284,16 @@ impl<'a, D: SecretDestructor> SecretState<'a, D> {
 impl<D: SecretDestructor> Drop for SecretState<'_, D> {
     fn drop(&mut self) {
         if let Some(destructor) = self.destructor.take()
-            && let DestructionOutcome::Failed(failure) =
-                run_destruction(destructor, self.targets, DestructionCause::Drop)
+            && let DestructionOutcome::Failed(failure) = crate::secret_destruction::run_destruction(
+                destructor,
+                self.targets,
+                DestructionCause::Drop,
+            )
         {
             destructor.handle_drop_failure(failure);
         }
     }
 }
+
+#[cfg(test)]
+mod assurance_contract;

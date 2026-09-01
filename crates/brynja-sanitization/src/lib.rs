@@ -67,6 +67,9 @@ pub struct SanitizedSecret<const N: usize> {
     inner: SecretBytes<N>,
 }
 
+#[cfg(test)]
+mod assurance_contract;
+
 impl<const N: usize> SanitizedSecret<N> {
     /// Constructs directly in owned storage and rejects `N == 0`.
     pub fn try_from_fn(make_byte: impl FnMut(usize) -> u8) -> Result<Self, SanitizationError> {

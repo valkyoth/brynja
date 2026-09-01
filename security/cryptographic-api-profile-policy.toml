@@ -692,7 +692,11 @@ storage = "unpublished-test-only"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory.rs"
-sha256 = "0b82ff4e7a535535aed48fcf25543435850a7d9239addb933cd94e951b19ac84"
+sha256 = "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory/assurance_contract.rs"
+sha256 = "0f29b772af69199cce88c52903bff3314222817bb6f4bd20ecec0f044b7984a7"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_memory_volatile.rs"
@@ -700,7 +704,11 @@ sha256 = "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret.rs"
-sha256 = "a675bb7bc9edd57f754004f4dbfea5943e0b0addaecf70d5450c9073db04ac83"
+sha256 = "3f3158e97cabfbdf8a7c9ffc8c62fe43c7a59944395ae5ae118aaff4b3ea5f58"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret/assurance_contract.rs"
+sha256 = "87338ef8d24741bd0f2005769cf21dab5c5845b236fec95c7a7d29ad509e30d4"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secret_destruction.rs"
@@ -708,19 +716,35 @@ sha256 = "8e2a993665376a1cafda3de284dff465f237e7ff9261a689f81ab9ad2918c2b7"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/entropy.rs"
-sha256 = "b1a0b0793da8517c34f0d0aed8694c4ca0d5e848672699fbcfcf33cd99d960f3"
+sha256 = "5b196571da4f85cb8c8b2c53dae64db87877e0fbddc1b7b29c4c04ab9dd2000e"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/entropy/assurance_contract.rs"
+sha256 = "b2c244c2bcb4d96e868157f1f5b858c9ac1265251be1600d567cfcab6abbf8d4"
 
 [[reviewed-source]]
 path = "crates/brynja-core/src/secure_random.rs"
-sha256 = "54a950a18b6bccad3a0c78a21667ab39ed00fb4fd1972d9b3ea79a47cbb7366a"
+sha256 = "a1a2a431a9ef1a6ef7753eaf788e689df1d9a45ab28ee57aa66e5b36393dc15c"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secure_random/assurance_contract.rs"
+sha256 = "348b4441f2122d3bb0b0106cb274cae8fe976619f4bc9f1f5cf59e87e753bde4"
 
 [[reviewed-source]]
 path = "crates/brynja-sanitization/src/lib.rs"
-sha256 = "1d93ad4e50bc01d672fba7739d4664532a56019f1d1e45bf7cd74e41d36c9600"
+sha256 = "5ab26ae99f5a0e20daa09aec30689c1974299607e0451e5a6ac17381af34b226"
+
+[[reviewed-source]]
+path = "crates/brynja-sanitization/src/assurance_contract.rs"
+sha256 = "c74b29ca044b70df2d7db1bdf72a2adb061e82f6be294fc9a39d0ef7afdc49e5"
 
 [[reviewed-source]]
 path = "crates/brynja-test-support/src/deterministic_random.rs"
-sha256 = "9a8568e92ac3c008b2572c763528d913f8a9146848724a87b6e34e8126c9c58f"
+sha256 = "75d0a740fa7e70966bc194effbbdea1618d67f9e5defa6a5bf1aabbf7f8fd83b"
+
+[[reviewed-source]]
+path = "crates/brynja-test-support/src/deterministic_random/assurance_contract.rs"
+sha256 = "703e9a71e001e8f49d14c641f88f9a84b94373ac7fbbc935284a920373c60584"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha2/src/sha224.rs"
@@ -748,16 +772,28 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "105e907e1b7eecb229a14c4a0e59840ccf2e36c72e60bba05265fe9b00e55ec1"
+sha256 = "926e85af56ba83beb57e4af4868ed3e89c0762f1c3c7a23992300da734964d29"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "f424929fe308bc85762318482c643dbed00d49d3c119df41e377e009221d1379"
+sha256 = "3e4f3b555b4281c642ce6e29b1e2d3bb275a1c12f0217deae4b4f1fcbacf6f34"
+
+[[reviewed-source]]
+path = "scripts/cryptography/check-secret-owner-compiler.py"
+sha256 = "fc40e760ce5d352ca9c1d3567b17805d537d1d082da926925963829eef3bc2a5"
 
 [[reviewed-source]]
 path = "scripts/cryptography/rust_source_contract.py"
-sha256 = "07962c9fb65c6fbe36b4b57b7754f34a0ab1dc48ee1fbf03b586471d3ab3e157"
+sha256 = "cb0232fd04dd0644fc56c7f226346db0e5834dbd2d8540a15c893f0186606d32"
+
+[[reviewed-source]]
+path = "scripts/cryptography/secret_owner_compiler.py"
+sha256 = "138ab468f4cfcebb4d8ca9c8c602e149a6f0042ea0db6dbd52394f48a52248f9"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "39cd4b3fedc6a35f992296dd46b546758ea9b0b82377e41d5e9ca4ae83aaede8"
+sha256 = "6374f7004893e9886cc2659ac7bf056ee8731be99afb28aa9dbe4d02050bca8b"
+
+[[reviewed-source]]
+path = "scripts/cryptography/test-secret-owner-compiler.py"
+sha256 = "bb35b7ebfdf3d5966078737606f8570cafc4b81fbcbdaf2a44c3fef99c14ed44"

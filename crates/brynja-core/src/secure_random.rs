@@ -390,7 +390,7 @@ impl<E: SecureRandomEngine> SecureRandom<E> {
                 EntropyFailureStage::Uninstantiate,
             ));
         };
-        match engine.uninstantiate() {
+        match <E as SecureRandomEngine>::uninstantiate(&mut engine) {
             RandomStateDestruction::Complete => Ok(()),
             RandomStateDestruction::Failed => {
                 engine.handle_destruction_failure();
@@ -438,7 +438,10 @@ impl<E: SecureRandomEngine> SecureRandom<E> {
             self.permanent_failure = Some(stage);
         }
         if let Some(mut engine) = self.engine.take()
-            && matches!(engine.uninstantiate(), RandomStateDestruction::Failed)
+            && matches!(
+                <E as SecureRandomEngine>::uninstantiate(&mut engine),
+                RandomStateDestruction::Failed
+            )
         {
             engine.handle_destruction_failure();
         }
@@ -448,7 +451,10 @@ impl<E: SecureRandomEngine> SecureRandom<E> {
 impl<E: SecureRandomEngine> Drop for SecureRandom<E> {
     fn drop(&mut self) {
         if let Some(engine) = self.engine.as_mut()
-            && matches!(engine.uninstantiate(), RandomStateDestruction::Failed)
+            && matches!(
+                <E as SecureRandomEngine>::uninstantiate(engine),
+                RandomStateDestruction::Failed
+            )
         {
             engine.handle_destruction_failure();
         }
@@ -481,7 +487,13 @@ const fn classify(kind: EntropyFailureKind, stage: EntropyFailureStage) -> Secur
 }
 
 fn destroy_failed_engine<E: SecureRandomEngine>(engine: &mut E) {
-    if matches!(engine.uninstantiate(), RandomStateDestruction::Failed) {
+    if matches!(
+        <E as SecureRandomEngine>::uninstantiate(engine),
+        RandomStateDestruction::Failed
+    ) {
         engine.handle_destruction_failure();
     }
 }
+
+#[cfg(test)]
+mod assurance_contract;

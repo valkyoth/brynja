@@ -6,7 +6,7 @@
 
 use brynja_core::{
     EntropyFailureKind, RandomStateDestruction, RawEntropy, SecretRegionInitialization,
-    SecureRandomEngine, SecureRandomRequest, SecurityStrength, clear_owned_region,
+    SecureRandomEngine, SecureRandomRequest, SecurityStrength,
 };
 
 /// One fault injected into the next matching operation.
@@ -101,7 +101,7 @@ impl DeterministicRandom {
     }
 
     fn clear_state(&mut self) -> RandomStateDestruction {
-        let result = clear_owned_region(&mut self.state);
+        let result = brynja_core::clear_owned_region(&mut self.state);
         self.counter = 0;
         self.cursor = 0;
         self.initialized = false;
@@ -191,9 +191,12 @@ impl SecureRandomEngine for DeterministicRandom {
 
 impl Drop for DeterministicRandom {
     fn drop(&mut self) {
-        let _completion = clear_owned_region(&mut self.state);
+        let _completion = brynja_core::clear_owned_region(&mut self.state);
         self.counter = 0;
         self.cursor = 0;
         self.initialized = false;
     }
 }
+
+#[cfg(test)]
+mod assurance_contract;

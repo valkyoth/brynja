@@ -15,9 +15,9 @@ SOURCES = (
     Path("crates/brynja-test-support/src/deterministic_random.rs"),
 )
 EXPECTED_SHA256 = {
-    Path("crates/brynja-core/src/entropy.rs"): "b1a0b0793da8517c34f0d0aed8694c4ca0d5e848672699fbcfcf33cd99d960f3",
-    Path("crates/brynja-core/src/secure_random.rs"): "54a950a18b6bccad3a0c78a21667ab39ed00fb4fd1972d9b3ea79a47cbb7366a",
-    Path("crates/brynja-test-support/src/deterministic_random.rs"): "9a8568e92ac3c008b2572c763528d913f8a9146848724a87b6e34e8126c9c58f",
+    Path("crates/brynja-core/src/entropy.rs"): "5b196571da4f85cb8c8b2c53dae64db87877e0fbddc1b7b29c4c04ab9dd2000e",
+    Path("crates/brynja-core/src/secure_random.rs"): "a1a2a431a9ef1a6ef7753eaf788e689df1d9a45ab28ee57aa66e5b36393dc15c",
+    Path("crates/brynja-test-support/src/deterministic_random.rs"): "75d0a740fa7e70966bc194effbbdea1618d67f9e5defa6a5bf1aabbf7f8fd83b",
 }
 
 

@@ -19,8 +19,6 @@
 //! println!("{initialization:?}");
 //! ```
 
-use crate::secret_memory_volatile::zeroize_region_volatile;
-
 /// A closed, value-free owned-secret-memory failure.
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[non_exhaustive]
@@ -57,7 +55,7 @@ pub fn clear_owned_region(
     if region.is_empty() {
         return Err(SecretMemoryError::EmptyRegion);
     }
-    zeroize_region_volatile(region);
+    crate::secret_memory_volatile::zeroize_region_volatile(region);
     Ok(OwnedRegionClearComplete { _private: () })
 }
 
@@ -131,7 +129,7 @@ impl<'region> SecretRegionInitialization<'region> {
 impl Drop for SecretRegionInitialization<'_> {
     fn drop(&mut self) {
         if let Some(region) = self.region.as_deref_mut() {
-            zeroize_region_volatile(region);
+            crate::secret_memory_volatile::zeroize_region_volatile(region);
         }
     }
 }
@@ -177,7 +175,7 @@ impl OwnedSecretRegion<'_> {
     /// Immediately clears the complete region and consumes readable ownership.
     pub fn clear(mut self) -> OwnedRegionClearComplete {
         if let Some(region) = self.region.take() {
-            zeroize_region_volatile(region);
+            crate::secret_memory_volatile::zeroize_region_volatile(region);
         }
         OwnedRegionClearComplete { _private: () }
     }
@@ -186,7 +184,7 @@ impl OwnedSecretRegion<'_> {
 impl Drop for OwnedSecretRegion<'_> {
     fn drop(&mut self) {
         if let Some(region) = self.region.as_deref_mut() {
-            zeroize_region_volatile(region);
+            crate::secret_memory_volatile::zeroize_region_volatile(region);
         }
     }
 }
@@ -207,6 +205,8 @@ fn checked_write_end(
     }
 }
 
+#[cfg(test)]
+mod assurance_contract;
 #[cfg(test)]
 mod tests {
     use super::{SecretMemoryError, checked_write_end};

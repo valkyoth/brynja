@@ -50,11 +50,13 @@ ordinary-state substitution and wrapper forgery; distinguishes explicit public
 declassification from typed secret output; preserves public destinations on
 failure; clears partial secret output; and clears successful owners on Drop and
 recoverable panic unwinding. The surrounding policy admits no capability owner
-implicitly: current owners must match exact Rust declarations, fields,
-sanitizers and cleanup callers; the registered capability-owner set is
+implicitly: current owners must pass adjacent compiler contracts for exact
+types, private fields and sanitizer signatures plus exact optimized-MIR cleanup
+targets under Rust 1.90.0 and 1.98.0; the registered capability-owner set is
 explicitly empty; and every secret-producing operation has its own fail-closed
 information-flow contract. Twenty-three structural mutations and twenty-two
-secret-output downgrade mutations exercise those boundaries. It is
+secret-output downgrade mutations, lexical raw/cfg/macro/same-name fixtures,
+and four MIR mutations exercise those boundaries. It is
 architectural assurance, not a hardened
 hash implementation, independent review, or FIPS validation.
 

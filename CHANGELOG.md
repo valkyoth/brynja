@@ -83,7 +83,8 @@ Keep a Changelog and Semantic Versioning.
   return, joined return, projected return, field, nested field, typed
   projection, and projected mutation paths now fail closed; four positive and
   twenty-nine negative strict-flow paths
-  pass, while independent tenth retest remains pending.
+  pass. The independent tenth retest confirmed all thirteen remediations and
+  reported zero open findings; the permanent report records `PASS`/`PASS`.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 thirteen Medium assurance findings locally remediated, independent tenth retest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 thirteen Medium assurance findings remediated, independent tenth retest PASS, green GitHub and signed tag pending
 
 | Control | Foundation enforcement |
 | --- | --- |

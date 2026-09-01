@@ -1,8 +1,9 @@
 # Brynja 0.24.6 Release Notes
 
-Status: thirteen Medium assurance-control findings are locally remediated with zero
-open findings; independent tenth retest and the signed candidate commit remain
-pending; no crates.io publication is selected
+Status: thirteen Medium assurance-control findings are remediated; independent
+tenth retest and complete local release checks pass with zero open findings;
+green hosted GitHub and the signed tag remain pending; no crates.io publication
+is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
 cleanup into a deterministic, fail-closed design contract. It changes no
@@ -126,6 +127,8 @@ place residual: writes through `_1` fields or derived aliases were not modeled.
 The ninth retest confirmed that remediation but found one Medium sanitizer-
 result escape: projected result destinations did not preserve possible owner
 provenance and an owner-derived `_0` could reach a normal return.
+The independent tenth retest confirmed that final remediation and reported
+zero Critical, High, Medium, or open findings.
 Registration remains explicit with zero
 registered capability owners, while actual owner shape and cleanup evidence
 now comes from independently maintained Rust compiler contracts and exact
@@ -135,8 +138,8 @@ configuration, macro nesting, and same-named method substitution. Every one of
 the 13 profiles retains an exact per-operation information-flow contract.
 
 Focused contract, mutation, compile-fail, bare-metal, and deterministic
-register checks pass with zero open findings. Independent tenth retest remains
-required before this candidate can be tagged.
+register checks pass with zero open findings. The committed report records
+`PASS`/`PASS`; green hosted GitHub and CodeQL remain required before tagging.
 
 ## Security Boundaries
 
@@ -158,7 +161,7 @@ Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
 unless an exceptional trigger or voluntary review is applied. A voluntary
-review and its first nine retests supplied thirteen Medium assurance-control defects;
-all are locally remediated. The independent tenth retest, signed candidate
-commit, complete release verification, green hosted GitHub and CodeQL, and
-then the signed immutable tag remain required.
+review and its first nine retests supplied thirteen Medium assurance-control
+defects; all are remediated, and the independent tenth retest plus complete
+local release verification pass. Green hosted GitHub and CodeQL, followed by
+the signed immutable tag, remain required.

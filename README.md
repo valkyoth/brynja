@@ -306,7 +306,7 @@ final independent retest of exact signed candidate
 `116afe2390b61561c0d4414aa2a2dafbc3658a80` passed; the permanent report records
 `PASS`/`PASS` with zero open findings.
 
-The current internal `0.24.6` candidate makes complete cryptographic API
+The current internal `0.24.6` release candidate makes complete cryptographic API
 profiles and private secret-state cleanup machine-checkable before later
 algorithms can claim completion. All 129 semantic capabilities receive 22 API
 dimensions and an exact milestone owner; eight current and 75 planned secret
@@ -324,10 +324,12 @@ authentication timing. A standalone
 zero-dependency `no_std` contract rejects downstream hardened-marker forgery,
 ordinary-state substitution, output-classification drift, retained partial
 secret output, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and eight retests found twelve Medium assurance-control gaps in the
+pentest and nine retests found thirteen Medium assurance-control gaps in the
 original, lexical-remediation, future-registration, empty-value, identifier-
 prefix, namespace, callable-identity, and MIR place/data-flow evidence paths;
-all remediations pass locally and await independent ninth retest. The generated
+all remediations pass locally, and the independent tenth retest reported zero
+open findings. The permanent report records `PASS`/`PASS`; green hosted GitHub
+and CodeQL remain required before the signed tag. The generated
 [API-profile and secret-state register](https://github.com/valkyoth/brynja/blob/main/docs/cryptographic-api-profile-register.md)
 is a closure gate, not a new cryptographic implementation or verification
 claim; SHA-2 and SHA-3/SHAKE remain **In progress** until their later bit-input,

@@ -2859,7 +2859,7 @@ Exit criteria:
 
 ### v0.24.6 - Cryptographic API Profile And Secret-State Closure Register
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes: the reviewed policy assigns all 129 semantic
 cryptographic and protocol capabilities every one of 22 API dimensions, one
@@ -2880,7 +2880,8 @@ retention, and missed Drop or recoverable-unwind cleanup. The voluntary
 pentest and nine retests found thirteen Medium assurance-control gaps in the
 initial, lexical-remediation, future-registration, empty-value, identifier-
 prefix, namespace, callable-identity, and MIR place/data-flow evidence paths;
-all are locally remediated with zero open findings and await independent tenth retest. No
+all are remediated, and the independent tenth retest passed with zero open
+findings. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 

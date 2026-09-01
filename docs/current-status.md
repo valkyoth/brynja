@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 seven Medium assurance findings locally remediated, independent fifth retest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 eight Medium assurance findings locally remediated, independent sixth retest and signed candidate pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -326,8 +326,8 @@ output downgrade mutations reject missing coverage, fabricated or substituted
 owners, forged hardened capabilities, ordinary-state substitution, changed
 per-operation information flow, retained partial secret output, and missed
 Drop or recoverable-unwind cleanup. The voluntary pentest and first retest
-found seven Medium assurance-control defects; local remediation passes with
-zero open findings and independent fifth retest is pending. This is design and assurance
+found eight Medium assurance-control defects; local remediation passes with
+zero open findings and independent sixth retest is pending. This is design and assurance
 closure only: current ordinary SHA state is not made secret-safe, no new
 algorithm is added, and SHA-2/SHA-3 remain In progress through their separately
 owned hardened and complete-family acceptance milestones. Zero crates are

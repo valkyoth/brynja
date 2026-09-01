@@ -2875,10 +2875,10 @@ fixture reject incomplete profiles, fabricated or substituted owners and
 sanitizers, field/type disagreement, downstream hardened-capability forgery,
 ordinary-state substitution, information-flow drift, partial secret-output
 retention, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and four retests found seven Medium assurance-control gaps in the
-initial, lexical-remediation, future-registration, empty-value, and identifier-
-prefix evidence paths; all are locally remediated with zero open findings
-and await independent fifth retest. No
+pentest and five retests found eight Medium assurance-control gaps in the
+initial, lexical-remediation, future-registration, empty-value, identifier-
+prefix, and namespace evidence paths; all are locally remediated with zero
+open findings and await independent sixth retest. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 
@@ -2911,6 +2911,11 @@ Deliverables:
 - parse MIR sanitizer callees into complete owner and function identifier
   tokens, retaining valid turbofish and trait qualification while rejecting
   embedded owner-name prefixes and suffixes;
+- require every registered Rust identity to be a complete crate-rooted module
+  path; compare the complete sanitizer crate/module/type or trait identity,
+  and bind each caller to its exact crate, module, implementation source,
+  method, and receiver type from the compiler MIR header rather than accepting
+  same-named suffixes from another namespace;
 - classify every cleanup duty as the mandatory core destruction primitive or
   an exact admitted `brynja-sanitization` fixed-region adapter use, without
   optional cleanup, reverse dependencies, facade leakage, or a FIPS graph edge;

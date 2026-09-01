@@ -59,7 +59,7 @@ nonempty declared-sanitizer MIR target; the registered capability-owner set is e
 empty; and every secret-producing operation has its own fail-closed
 information-flow contract. Twenty-five structural mutations and twenty-two
 secret-output downgrade mutations, lexical raw/cfg/macro/same-name fixtures,
-six empty/target/ambiguity and eleven registered identity/coverage mutations
+six empty/target/ambiguity and twenty-two registered identity/namespace/coverage mutations
 exercise those boundaries. It is
 architectural assurance, not a hardened
 hash implementation, independent review, or FIPS validation.

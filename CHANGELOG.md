@@ -41,7 +41,16 @@ Keep a Changelog and Semantic Versioning.
   function and owner identifier tokens rather than using substring membership.
   Positive turbofish and trait-qualified paths remain supported, while all four
   reported owner-name prefix/suffix collisions fail closed; eleven registered-
-  identity regressions now pass and independent fifth retest remains pending.
+  identity regressions now pass; the fifth retest found the residual namespace
+  gap below.
+- Close the Medium fifth-retest finding by requiring registered Rust symbols
+  to carry complete crate-rooted module paths and comparing sanitizer type or
+  trait identities without suffix matching. Registered caller evidence now
+  binds the exact crate, module, implementation source, method, and receiver
+  type from the MIR header. The reported same-named cross-module, cross-crate,
+  trait-module, and nested-module substitutions fail closed; twenty-two
+  registered-identity regressions pass and independent sixth retest remains
+  pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

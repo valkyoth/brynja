@@ -788,7 +788,7 @@ sha256 = "cb0232fd04dd0644fc56c7f226346db0e5834dbd2d8540a15c893f0186606d32"
 
 [[reviewed-source]]
 path = "scripts/cryptography/secret_owner_compiler.py"
-sha256 = "67f527ecaa4751b6ee206b2ecfc2effd12332b4d80b4afcb4d9cb53ca0293a4f"
+sha256 = "564b071c047a19f3486db9f0c396d6f66b793cb56873b0a0adbb7573e5f4d4ab"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
@@ -796,4 +796,4 @@ sha256 = "c7b71de0c7f19e1ae84345d2d7444966f4248ac14865cc8e0513ba2b334989c1"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-secret-owner-compiler.py"
-sha256 = "14e92c8453b2bb4530fa47d9b5768fc73f0d6b3d848dd875c22a72e421b265aa"
+sha256 = "fec0903b48d19857276d34c9d9a4b7e84add72e2e246c5db93ee889ae272caaa"

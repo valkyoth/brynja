@@ -68,6 +68,31 @@ def require_nonempty(value: object, label: str) -> str:
     return value
 
 
+IDENTIFIER = r"[A-Za-z_][A-Za-z0-9_]*"
+
+
+def rust_path_tokens(value: str, label: str) -> list[str]:
+    tokens = value.split("::")
+    if not tokens or any(not re.fullmatch(IDENTIFIER, token) for token in tokens):
+        fail(f"{label} must be a complete Rust identifier path")
+    return tokens
+
+
+def registered_symbol_identity(value: object, label: str) -> tuple[str, str, list[str]]:
+    symbol = require_nonempty(value, label)
+    source, separator, identity = symbol.partition("#")
+    if (
+        separator != "#" or "#" in identity or not source.startswith("crates/")
+        or "/src/" not in source or not source.endswith(".rs")
+    ):
+        fail(f"{label} is invalid")
+    package = source.split("/", 2)[1]
+    tokens = rust_path_tokens(identity, label)
+    if tokens[0] != package.replace("-", "_"):
+        fail(f"{label} must be rooted at its crate identity")
+    return source, package, tokens
+
+
 def without_turbofish(value: str) -> str:
     result = []
     index = 0
@@ -93,11 +118,50 @@ def mir_callable_identity(value: str) -> tuple[list[str], str]:
     if not value.endswith("("):
         fail("registered MIR sanitizer must end at the call boundary")
     callee = without_turbofish(value[:-1])
-    owner, separator, leaf = callee.rpartition("::")
-    if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", leaf):
+    if callee.startswith("<"):
+        trait_end = callee.rfind(">::")
+        if trait_end < 0:
+            fail("registered trait-qualified MIR sanitizer is malformed")
+        qualification = callee[1:trait_end]
+        _, separator, trait_path = qualification.rpartition(" as ")
+        if not separator:
+            fail("registered trait-qualified MIR sanitizer lacks an exact trait path")
+        owner_tokens = rust_path_tokens(trait_path, "registered MIR sanitizer trait")
+        leaf = callee[trait_end + 3:]
+    else:
+        owner, separator, leaf = callee.rpartition("::")
+        if not separator:
+            fail("registered MIR sanitizer lacks a complete owner path")
+        owner_tokens = rust_path_tokens(owner, "registered MIR sanitizer owner")
+    if not re.fullmatch(IDENTIFIER, leaf):
         fail("registered MIR sanitizer function is not one identifier")
-    owner_tokens = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", owner) if separator else []
     return owner_tokens, leaf
+
+
+def require_exact_caller_header(
+    header: str, source: str, caller_tokens: list[str], owner_id: str,
+) -> None:
+    match = re.fullmatch(
+        rf"fn (?:(?P<modules>{IDENTIFIER}(?:::{IDENTIFIER})*)::)?"
+        rf"<impl at (?P<source>.+):\d+:\d+: \d+:\d+>::"
+        rf"(?P<method>{IDENTIFIER})\(_1:\s*(?P<argument>[^,)]+).+",
+        header,
+    )
+    if match is None:
+        fail(f"registered compiler contract header is not an exact impl identity: {owner_id}")
+    modules = match.group("modules").split("::") if match.group("modules") else []
+    expected_modules = caller_tokens[1:-2]
+    argument = re.sub(r"^&(?:'[_A-Za-z0-9]+\s+)?(?:mut\s+)?", "", match.group("argument"))
+    argument = argument.split("<", 1)[0].strip()
+    argument_tokens = rust_path_tokens(argument, "registered MIR caller argument")
+    expected_type = caller_tokens[1:-1]
+    if (
+        match.group("source") != source
+        or modules != expected_modules
+        or match.group("method") != caller_tokens[-1]
+        or argument_tokens not in ([caller_tokens[-2]], expected_type)
+    ):
+        fail(f"registered compiler contract header differs from exact owner: {owner_id}")
 
 
 def compiler_inventory(
@@ -129,10 +193,9 @@ def compiler_inventory(
         if set(record) != REGISTERED_RECORD_KEYS:
             fail(f"registered compiler contract record has invalid keys: {owner_id}")
         symbol = require_nonempty(record["symbol"], f"registered owner symbol for {owner_id}")
-        source, separator, owner = symbol.partition("#")
-        if separator != "#" or not source.startswith("crates/") or "/src/" not in source:
-            fail(f"registered compiler contract owner symbol is invalid: {owner_id}")
-        package = source.split("/", 2)[1]
+        source, package, owner_tokens = registered_symbol_identity(
+            symbol, f"registered owner symbol for {owner_id}",
+        )
         identity = test_map[symbol]
         if set(identity) != {"package", "contract_test"} or identity["package"] != package:
             fail(f"registered compiler test identity is invalid: {owner_id}")
@@ -149,34 +212,36 @@ def compiler_inventory(
         sanitizer_symbol = require_nonempty(
             record["sanitization_symbol"], f"registered sanitizer symbol for {owner_id}",
         )
+        _, _, sanitizer_tokens = registered_symbol_identity(
+            sanitizer_symbol, f"registered sanitizer symbol for {owner_id}",
+        )
+        if len(sanitizer_tokens) < 2:
+            fail(f"registered sanitizer identity lacks an owner: {owner_id}")
         sanitizer = require_nonempty(
             sanitizer_map[sanitizer_symbol], f"registered MIR sanitizer for {owner_id}",
         )
-        declared_identity = sanitizer_symbol.rsplit("#", 1)[-1]
-        declared_owner, separator, declared_leaf = declared_identity.rpartition("::")
-        declared_owner_tokens = (
-            re.findall(r"[A-Za-z_][A-Za-z0-9_]*", declared_owner) if separator else []
-        )
         mir_owner_tokens, mir_leaf = mir_callable_identity(sanitizer)
         if (
-            mir_leaf != declared_leaf
-            or declared_owner_tokens
-            and mir_owner_tokens[-len(declared_owner_tokens):] != declared_owner_tokens
+            mir_leaf != sanitizer_tokens[-1]
+            or mir_owner_tokens != sanitizer_tokens[:-1]
         ):
             fail(f"MIR target differs from registered sanitizer: {owner_id}")
-        caller_prefix = f"{source}#{owner}::"
         for caller in record["cleanup_callers"]:
-            if not isinstance(caller, str) or not caller.startswith(caller_prefix):
+            caller_source, caller_package, caller_tokens = registered_symbol_identity(
+                caller, f"registered cleanup caller for {owner_id}",
+            )
+            if (
+                caller_source != source or caller_package != package
+                or caller_tokens[:-1] != owner_tokens
+            ):
                 fail(f"registered cleanup caller differs from owner: {owner_id}")
-            member = caller.rsplit("::", 1)[-1]
             header = header_map[caller]
             if (
                 not isinstance(header, list) or not header
                 or any(not isinstance(part, str) or not part.strip() for part in header)
-                or not re.search(rf"(?:^|::){re.escape(member)}\(_1:", header[0])
-                or not re.search(rf"\b{re.escape(owner)}\b", header[0])
             ):
                 fail(f"registered compiler contract header is invalid: {owner_id}")
+            require_exact_caller_header(header[0], caller_source, caller_tokens, owner_id)
             package_calls.append((tuple(header), sanitizer))
     return tests, {package: tuple(edges) for package, edges in calls.items()}
 

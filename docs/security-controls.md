@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 nine Medium assurance findings locally remediated, independent seventh retest and signed candidate pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 eleven Medium assurance findings locally remediated, independent eighth retest and signed candidate pending
 
 | Control | Foundation enforcement |
 | --- | --- |

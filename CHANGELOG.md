@@ -57,7 +57,16 @@ Keep a Changelog and Semantic Versioning.
   reborrow/projection rooted in `_1`, and its call block must dominate every
   reachable normal and unwind exit. Decoy receivers, duplicate call sites,
   skipped normal cleanup, and skipped unwind cleanup fail closed; ten focused
-  MIR regressions pass and independent seventh retest remains pending.
+  MIR regressions pass; the seventh retest found the two residual call-identity
+  and reaching-definition gaps below.
+- Close both Medium seventh-retest findings by anchoring the complete sanitizer
+  identity at the MIR assignment right-hand side and replacing global stale
+  provenance with control-flow-aware definite provenance. Call-result,
+  branch-specific, loop, and `_1` redefinitions invalidate prior derivations;
+  outer-module, crate-prefix, identifier-prefix, and trait-prefix callable
+  substitutions and arrow-bearing non-call redefinitions fail closed.
+  Nineteen focused MIR regressions pass and
+  independent eighth retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

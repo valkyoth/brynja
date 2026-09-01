@@ -2875,10 +2875,10 @@ fixture reject incomplete profiles, fabricated or substituted owners and
 sanitizers, field/type disagreement, downstream hardened-capability forgery,
 ordinary-state substitution, information-flow drift, partial secret-output
 retention, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and six retests found nine Medium assurance-control gaps in the
+pentest and seven retests found eleven Medium assurance-control gaps in the
 initial, lexical-remediation, future-registration, empty-value, identifier-
-prefix, namespace, and MIR data-flow evidence paths; all are locally remediated
-with zero open findings and await independent seventh retest. No
+prefix, namespace, callable-identity, and MIR data-flow evidence paths; all are
+locally remediated with zero open findings and await independent eighth retest. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 

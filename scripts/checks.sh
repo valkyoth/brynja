@@ -18,6 +18,9 @@ scripts/constant-time/check-constant-time-codegen.sh 1.98.0 x86_64-unknown-linux
 python3 scripts/constant-time/test-constant-time-codegen.py
 python3 scripts/constant-time/check-constant-time-evidence.py
 python3 scripts/constant-time/test-constant-time-evidence.py
+python3 scripts/cryptography/check-api-profiles.py
+python3 scripts/cryptography/test-api-profiles.py
+scripts/cryptography/check-api-profile-contract.sh
 python3 scripts/foundations/check-provider-contract.py
 python3 scripts/foundations/test-provider-contract.py
 python3 scripts/foundations/check-entropy-contract.py

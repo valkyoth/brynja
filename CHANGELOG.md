@@ -41,6 +41,22 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement the v0.24.6 cryptographic API-profile and secret-state closure
+  register across all 129 semantic capabilities, with 22 exact API dimensions,
+  milestone ownership, eight current and 75 planned secret owners, mandatory
+  core-versus-optional-adapter cleanup classification, typed public/secret
+  outputs, reviewed source hashes, and deterministic JSON/document projections.
+- Add fifteen fail-closed profile mutation classes and a standalone
+  zero-dependency `no_std` contract proving downstream code cannot forge the
+  sealed hardened capability, ordinary states cannot satisfy hardened bounds,
+  public failure destinations stay unchanged, and partial or panic-unwound
+  secret destinations are cleared through the real core lifecycle.
+- Advance the internal facade to `brynja 0.24.6` with zero crates.io packages
+  selected and no production cryptography, dependency, unsafe boundary,
+  backend admission, independent-review, erasure-completion, or FIPS claim.
+- Refresh Miri and Rust sanitizer evidence to latest available
+  `nightly-2026-09-01` at exact Rust revision
+  `0dfb098f3aeecbe38c2566ca090193280e7349e7`.
 - Implement the v0.24.5 cross-authority lifecycle monitor over all 130 locked
   RFC, NIST, ITU-T, RISC-V, and IANA authorities, with distinct upstream and
   Brynja states, exact content and stable publication-page identities,

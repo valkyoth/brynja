@@ -277,7 +277,7 @@ performance, migration, side-channel, independent-review, secret-erasure, and
 FIPS-validation claims remain pending or absent, so both backends stay
 unadmitted.
 
-The current internal `0.24.5` candidate adds a fail-closed standards lifecycle
+Signed internal `0.24.5` adds a fail-closed standards lifecycle
 monitor without changing production Rust or cryptographic behavior. Its
 machine-readable register separates official upstream state from Brynja's
 current, compatibility, legacy-only, disabled, and rejected decisions across
@@ -305,6 +305,20 @@ hidden by a later unrelated commit, and unavailable historical blobs. The
 final independent retest of exact signed candidate
 `116afe2390b61561c0d4414aa2a2dafbc3658a80` passed; the permanent report records
 `PASS`/`PASS` with zero open findings.
+
+The current internal `0.24.6` candidate makes complete cryptographic API
+profiles and private secret-state cleanup machine-checkable before later
+algorithms can claim completion. All 129 semantic capabilities receive 22 API
+dimensions and an exact milestone owner; eight current and 75 planned secret
+owners enumerate fields, temporaries, lifecycle exits, cleanup symbols, output
+classification, evidence, consumers, and residual risks. A standalone
+zero-dependency `no_std` contract rejects downstream hardened-marker forgery,
+ordinary-state substitution, output-classification drift, retained partial
+secret output, and missed Drop or recoverable-unwind cleanup. The generated
+[API-profile and secret-state register](https://github.com/valkyoth/brynja/blob/main/docs/cryptographic-api-profile-register.md)
+is a closure gate, not a new cryptographic implementation or verification
+claim; SHA-2 and SHA-3/SHAKE remain **In progress** until their later bit-input,
+hardened-state, backend, and combined acceptance milestones pass.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
@@ -693,8 +707,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.5`
-standards-lifecycle milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.6`
+API-profile closure milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -802,7 +816,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.5 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all six portable FIPS 202 functions; repository-only lifecycle monitoring is active, optional Keccak candidates remain unadmitted, and no TLS engine or provider effect exists |
+| `brynja` | Modern production facade | Internal v0.24.6 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six complete SHA-2 algorithms, and all six portable FIPS 202 functions; repository-only standards and API-profile closure gates are active, optional Keccak candidates remain unadmitted, and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six FIPS 180-4 byte-oriented algorithms and forced CPU-candidate APIs; arbitrary-bit and hardened secret-bearing profiles close through v0.24.11 before full-family status returns |

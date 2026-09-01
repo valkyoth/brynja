@@ -1,0 +1,548 @@
+[schema]
+version = 1
+milestone = "0.24.6"
+surface_register_sha256 = "530d2df79bac8b55da47b37eac5a364366d4a910c22b82a02fd2edbfc4dce5dc"
+
+[api]
+dimensions = [
+  "operation-direction",
+  "byte-input",
+  "bit-input",
+  "one-shot",
+  "incremental-state",
+  "fixed-output",
+  "extendable-output",
+  "verification",
+  "buffers",
+  "overlap",
+  "ownership",
+  "provider",
+  "backend",
+  "no-std",
+  "hosted-adapter",
+  "import",
+  "export",
+  "generation",
+  "reset",
+  "clone",
+  "snapshot",
+  "cancellation",
+]
+dispositions = [
+  "required",
+  "forbidden",
+  "not-applicable",
+  "caller-owned",
+  "internal-only",
+  "optional-isolated",
+]
+
+[cleanup]
+mandatory_core_symbol = "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile"
+mandatory_core_evidence = "scripts/zeroization/check-zeroization-codegen.sh"
+optional_adapter_symbol = "crates/brynja-sanitization/src/lib.rs#SanitizedSecret"
+optional_adapter_evidence = "scripts/sanitization/check-sanitization-adapter-codegen.sh"
+adapter_required_for_core = false
+adapter_in_fips_graph = false
+adjacent_failure_policy = "attempt-every-region-and-latch-terminal-failure"
+recoverable_unwind_policy = "non-panicking-drop-cleans-every-owned-region"
+
+[lifecycle]
+edges = [
+  "creation",
+  "success",
+  "error",
+  "cancellation",
+  "replacement",
+  "rekey",
+  "failed-construction",
+  "recoverable-unwind",
+  "drop",
+]
+
+[output]
+classifications = [
+  "explicit-public-declassification",
+  "public-non-secret",
+  "typed-secret-owned",
+  "no-output",
+]
+partial_failure_policies = [
+  "unchanged-destination",
+  "clear-complete-secret-destination",
+  "not-applicable",
+]
+
+[residual]
+risks = [
+  "mem-forget",
+  "process-abort",
+  "forced-termination",
+  "power-loss",
+  "register-copies",
+  "cpu-caches",
+  "compiler-created-copies",
+  "crash-dumps",
+  "suspend-images",
+  "os-swap-and-paging",
+  "dma-visible-copies",
+  "physical-memory-remanence",
+]
+
+[rejection]
+values = [
+  "copy-secret-state",
+  "clone-secret-state",
+  "format-secret-state",
+  "serialize-secret-state",
+  "raw-secret-state-access",
+  "snapshot-secret-state",
+  "reset-secret-into-ordinary-state",
+  "downstream-hardened-marker-implementation",
+  "downstream-hardened-marker-forgery",
+  "optional-only-core-cleanup",
+  "partial-secret-output-without-clearing",
+  "unreviewed-secret-accelerated-backend",
+  "implicit-secret-output-declassification",
+  "unsafe-convenience-api",
+  "nonstandard-convenience-api",
+]
+
+[profile.fixed-hash]
+kind = "primitive"
+secret_template = "hardened-hash"
+required = ["operation-direction", "byte-input", "bit-input", "one-shot", "incremental-state", "fixed-output", "ownership", "provider", "backend", "no-std"]
+forbidden = ["extendable-output", "verification", "import", "export", "generation", "reset", "clone", "snapshot"]
+caller_owned = ["buffers"]
+not_applicable = ["overlap", "cancellation"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+
+[profile.hash-xof-family]
+kind = "primitive"
+secret_template = "hardened-hash"
+required = ["operation-direction", "byte-input", "bit-input", "one-shot", "incremental-state", "fixed-output", "extendable-output", "ownership", "provider", "backend", "no-std"]
+forbidden = ["verification", "import", "export", "generation", "reset", "clone", "snapshot"]
+caller_owned = ["buffers"]
+not_applicable = ["overlap", "cancellation"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "clear-complete-secret-destination"
+consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+
+[profile.keyed-construction]
+kind = "construction"
+secret_template = "keyed-construction"
+required = ["operation-direction", "byte-input", "bit-input", "one-shot", "incremental-state", "fixed-output", "extendable-output", "verification", "ownership", "provider", "backend", "no-std", "import", "cancellation"]
+forbidden = ["export", "reset", "clone", "snapshot"]
+caller_owned = ["buffers"]
+not_applicable = ["overlap", "generation"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+consumers = ["consumer:protocol", "consumer:provider"]
+
+[profile.symmetric-cipher]
+kind = "primitive"
+secret_template = "symmetric-key"
+required = ["operation-direction", "byte-input", "one-shot", "incremental-state", "buffers", "overlap", "ownership", "provider", "backend", "no-std", "import", "generation", "cancellation"]
+forbidden = ["bit-input", "fixed-output", "extendable-output", "verification", "export", "reset", "clone", "snapshot"]
+caller_owned = []
+not_applicable = []
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+consumers = ["consumer:construction", "consumer:protocol", "consumer:provider"]
+
+[profile.aead]
+kind = "construction"
+secret_template = "aead-key"
+required = ["operation-direction", "byte-input", "one-shot", "incremental-state", "verification", "buffers", "overlap", "ownership", "provider", "backend", "no-std", "import", "generation", "cancellation"]
+forbidden = ["bit-input", "fixed-output", "extendable-output", "export", "reset", "clone", "snapshot"]
+caller_owned = []
+not_applicable = []
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "typed-secret-owned"
+partial_failure_policy = "unchanged-destination"
+consumers = ["consumer:protocol", "consumer:provider"]
+
+[profile.asymmetric]
+kind = "scheme"
+secret_template = "private-key"
+required = ["operation-direction", "byte-input", "one-shot", "verification", "buffers", "ownership", "provider", "backend", "no-std", "import", "export", "generation", "cancellation"]
+forbidden = ["bit-input", "extendable-output", "reset", "clone", "snapshot"]
+caller_owned = []
+not_applicable = ["incremental-state", "fixed-output", "overlap"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+consumers = ["consumer:protocol", "consumer:pki", "consumer:provider"]
+
+[profile.public-format]
+kind = "format"
+secret_template = "none"
+required = ["operation-direction", "byte-input", "one-shot", "incremental-state", "buffers", "no-std", "import", "export"]
+forbidden = ["bit-input", "extendable-output", "generation", "reset", "clone", "snapshot"]
+caller_owned = ["ownership"]
+not_applicable = ["fixed-output", "verification", "overlap", "provider", "backend", "cancellation"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "public-non-secret"
+partial_failure_policy = "unchanged-destination"
+consumers = ["consumer:protocol", "consumer:application"]
+
+[profile.secret-format]
+kind = "format"
+secret_template = "encoded-secret"
+required = ["operation-direction", "byte-input", "one-shot", "incremental-state", "buffers", "ownership", "provider", "no-std", "import", "export", "cancellation"]
+forbidden = ["bit-input", "extendable-output", "reset", "clone", "snapshot"]
+caller_owned = []
+not_applicable = ["fixed-output", "verification", "overlap", "backend", "generation"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+consumers = ["consumer:protocol", "consumer:application"]
+
+[profile.protocol]
+kind = "protocol"
+secret_template = "protocol-secret"
+required = ["operation-direction", "byte-input", "incremental-state", "verification", "buffers", "ownership", "provider", "backend", "no-std", "import", "export", "generation", "cancellation"]
+forbidden = ["bit-input", "one-shot", "fixed-output", "extendable-output", "reset", "clone", "snapshot"]
+caller_owned = []
+not_applicable = ["overlap"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+consumers = ["consumer:application", "consumer:hosted-adapter"]
+
+[profile.public-component]
+kind = "protocol-component"
+secret_template = "none"
+required = ["operation-direction", "byte-input", "incremental-state", "buffers", "no-std", "cancellation"]
+forbidden = ["bit-input", "extendable-output", "reset", "clone", "snapshot"]
+caller_owned = ["ownership"]
+not_applicable = ["one-shot", "fixed-output", "verification", "overlap", "provider", "backend", "import", "export", "generation"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "public-non-secret"
+partial_failure_policy = "unchanged-destination"
+consumers = ["consumer:protocol"]
+
+[profile.secret-component]
+kind = "protocol-component"
+secret_template = "protocol-secret"
+required = ["operation-direction", "byte-input", "incremental-state", "verification", "buffers", "ownership", "provider", "backend", "no-std", "import", "export", "generation", "cancellation"]
+forbidden = ["bit-input", "extendable-output", "reset", "clone", "snapshot"]
+caller_owned = []
+not_applicable = ["one-shot", "fixed-output", "overlap"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+consumers = ["consumer:protocol", "consumer:provider"]
+
+[profile.test-secret-support]
+kind = "test-support"
+secret_template = "test-secret"
+required = ["operation-direction", "byte-input", "one-shot", "buffers", "ownership", "import", "export"]
+forbidden = ["bit-input", "incremental-state", "fixed-output", "extendable-output", "verification", "overlap", "provider", "backend", "generation", "reset", "clone", "snapshot", "cancellation"]
+caller_owned = []
+not_applicable = ["no-std"]
+optional_isolated = ["hosted-adapter"]
+internal_only = []
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+consumers = ["consumer:test-only"]
+
+[profile.rejected]
+kind = "rejected"
+secret_template = "none"
+required = []
+forbidden = ["operation-direction", "byte-input", "bit-input", "one-shot", "incremental-state", "fixed-output", "extendable-output", "verification", "buffers", "overlap", "ownership", "provider", "backend", "no-std", "hosted-adapter", "import", "export", "generation", "reset", "clone", "snapshot", "cancellation"]
+caller_owned = []
+not_applicable = []
+optional_isolated = []
+internal_only = []
+output_classification = "no-output"
+partial_failure_policy = "not-applicable"
+consumers = ["consumer:none"]
+
+[secret-template.hardened-hash]
+fields = ["chaining-state", "partial-input", "message-length", "phase"]
+temporaries = ["message-schedule", "block-copy", "padding-block", "output-staging"]
+output_classification = "explicit-public-declassification"
+
+[secret-template.keyed-construction]
+fields = ["key", "inner-state", "outer-state", "partial-input", "phase"]
+temporaries = ["normalized-key", "derived-key", "message-schedule", "block-copy", "output-staging"]
+output_classification = "typed-secret-owned"
+
+[secret-template.symmetric-key]
+fields = ["key", "expanded-key", "counter-or-tweak", "phase"]
+temporaries = ["round-state", "keystream-block", "tail-block", "output-staging"]
+output_classification = "typed-secret-owned"
+
+[secret-template.aead-key]
+fields = ["key", "nonce-state", "authentication-state", "counter", "phase"]
+temporaries = ["derived-key", "keystream-block", "authentication-block", "plaintext-staging", "tag-staging"]
+output_classification = "typed-secret-owned"
+
+[secret-template.private-key]
+fields = ["private-key", "public-key-binding", "operation-state", "phase"]
+temporaries = ["nonce-or-blinding", "scalar-or-exponent", "shared-secret", "signature-staging", "output-staging"]
+output_classification = "typed-secret-owned"
+
+[secret-template.encoded-secret]
+fields = ["encoded-secret", "decode-state", "phase"]
+temporaries = ["decoded-key", "password-material", "decryption-staging", "output-staging"]
+output_classification = "typed-secret-owned"
+
+[secret-template.protocol-secret]
+fields = ["handshake-secret", "traffic-secret", "resumption-secret", "key-generation", "phase"]
+temporaries = ["transcript-secret-state", "derived-key", "nonce", "plaintext-staging", "exporter-staging"]
+output_classification = "typed-secret-owned"
+
+[secret-template.test-secret]
+fields = ["test-secret-input", "test-output", "phase"]
+temporaries = ["formatted-secret", "output-staging"]
+output_classification = "explicit-public-declassification"
+
+[[assignment]]
+profile = "fixed-hash"
+ids = ["algorithm.sha2"]
+
+[[assignment]]
+profile = "hash-xof-family"
+ids = ["algorithm.sha3-shake"]
+
+[[assignment]]
+profile = "keyed-construction"
+ids = ["algorithm.ghash", "algorithm.hkdf", "algorithm.hmac", "algorithm.sp800-185"]
+
+[[assignment]]
+profile = "symmetric-cipher"
+ids = ["algorithm.aes", "algorithm.chacha20"]
+
+[[assignment]]
+profile = "aead"
+ids = ["algorithm.aes-gcm", "algorithm.chacha20-poly1305"]
+
+[[assignment]]
+profile = "asymmetric"
+ids = ["algorithm.ecdhe-ml-kem", "algorithm.ed25519", "algorithm.elliptic-curve", "algorithm.legacy-pkcs1-client-signature", "algorithm.ml-kem", "algorithm.rsa"]
+
+[[assignment]]
+profile = "public-format"
+ids = ["format.asn1.values", "format.delegated-credential", "format.der.framing", "format.ml-kem-pkix-credentials", "format.pem", "format.raw-public-key", "format.x509.signed", "format.x509.unsigned"]
+
+[[assignment]]
+profile = "secret-format"
+ids = ["format.private-key-containers"]
+
+[[assignment]]
+profile = "protocol"
+prefixes = ["legacy.", "protocol."]
+
+[[assignment]]
+profile = "rejected"
+ids = ["legacy.ssl1-research", "facility.heartbeat", "facility.rfc6066-unsupported-configuration", "facility.sslkeylogfile.production"]
+
+[[assignment]]
+profile = "test-secret-support"
+ids = ["facility.sslkeylogfile.test-support"]
+
+[[assignment]]
+profile = "secret-component"
+ids = [
+  "boundary.quic.encryption-level-ownership",
+  "boundary.quic.key-derivation",
+  "facility.entropy.drbg",
+  "facility.entropy.rbg-construction",
+  "facility.entropy.secure-random-contract",
+  "facility.entropy.source-health",
+  "facility.external-psk.certificate-authentication",
+  "state.dtls.replay-epoch-lifetime",
+  "state.dtls12.hardened-profile",
+  "state.dtls13.connection-id-update",
+  "state.dtls13.handshake",
+  "state.dtls13.headers-epochs",
+  "state.dtls13.record-number-encryption",
+  "state.quic.resumption-lifecycle",
+  "state.quic.zero-rtt",
+  "state.tls.exporters",
+  "state.tls.secret-lifetime",
+  "state.tls12.ecdhe-handshake",
+  "state.tls12.extended-main-secret",
+  "state.tls12.prf-key-block",
+  "state.tls12.record-protection",
+  "state.tls12.resumption-interoperability",
+  "state.tls13.authenticated-server-flight",
+  "state.tls13.certificate-selection",
+  "state.tls13.client-authentication-finished",
+  "state.tls13.external-psk-importer",
+  "state.tls13.external-psk-policy",
+  "state.tls13.external-psk-provisioning",
+  "state.tls13.key-update",
+  "state.tls13.record-protection",
+  "state.tls13.stateful-resumption",
+  "state.tls13.stateless-resumption",
+  "state.tls13.transcript-key-schedule",
+  "state.tls13.zero-rtt",
+]
+
+[[assignment]]
+profile = "public-component"
+prefixes = ["boundary.", "facility.", "state."]
+
+[completion-overrides."algorithm.sha2"]
+bit-input = "0.24.7"
+ownership = "0.24.8"
+hosted-adapter = "0.24.8"
+
+[completion-overrides."algorithm.sha3-shake"]
+bit-input = "0.24.9"
+ownership = "0.24.10"
+hosted-adapter = "0.24.10"
+
+[secret-owner-overrides]
+"algorithm.sha2" = "0.24.8"
+"algorithm.sha3-shake" = "0.24.10"
+"algorithm.sp800-185" = "0.24.13"
+
+[[current-secret-owner]]
+id = "core.secret-region-initialization"
+symbol = "crates/brynja-core/src/secret_memory.rs#SecretRegionInitialization"
+fields = ["region:secret", "initialized:public"]
+temporaries = ["input-borrow:secret-copy-risk", "destination-fragment:secret"]
+sanitization_symbol = "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile"
+evidence = ["crates/brynja-core/tests/secret_memory.rs", "scripts/zeroization/check-zeroization-codegen.sh"]
+storage = "caller-owned-borrowed"
+
+[[current-secret-owner]]
+id = "core.owned-secret-region"
+symbol = "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion"
+fields = ["region:secret"]
+temporaries = ["exposed-borrow:caller-owned-copy-risk"]
+sanitization_symbol = "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile"
+evidence = ["crates/brynja-core/tests/secret_memory.rs", "scripts/zeroization/check-zeroization-codegen.sh"]
+storage = "caller-owned-borrowed"
+
+[[current-secret-owner]]
+id = "core.raw-entropy"
+symbol = "crates/brynja-core/src/entropy.rs#RawEntropy"
+fields = ["request:public", "input:secret"]
+temporaries = ["exposed-borrow:caller-owned-copy-risk"]
+sanitization_symbol = "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::drop"
+evidence = ["crates/brynja-core/tests/entropy.rs", "scripts/zeroization/check-zeroization-codegen.sh"]
+storage = "transitive-owned-borrow"
+
+[[current-secret-owner]]
+id = "core.secure-random"
+symbol = "crates/brynja-core/src/secure_random.rs#SecureRandom"
+fields = ["engine:secret-contract", "config:public", "runtime:public", "requests-since-reseed:public", "fork-reseed-required:public", "permanent-failure:public"]
+temporaries = ["engine-operation-state:secret", "generated-output:typed-secret-owned"]
+sanitization_symbol = "crates/brynja-core/src/secure_random.rs#SecureRandomEngine::uninstantiate"
+evidence = ["crates/brynja-core/tests/entropy.rs", "crates/brynja-test-support/tests/deterministic_random.rs"]
+storage = "provider-engine-owned"
+
+[[current-secret-owner]]
+id = "core.abstract-secret-initialization"
+symbol = "crates/brynja-core/src/secret.rs#SecretInitialization"
+fields = ["expected:public", "initialized:public", "targets:public-policy", "destructor:secret-effect-authority"]
+temporaries = ["destruction-outcome:secret-free"]
+sanitization_symbol = "crates/brynja-core/src/secret_destruction.rs#run_destruction"
+evidence = ["crates/brynja-core/tests/secret_lifecycle.rs"]
+storage = "contract-only-no-secret-bytes"
+
+[[current-secret-owner]]
+id = "core.abstract-secret-state"
+symbol = "crates/brynja-core/src/secret.rs#SecretState"
+fields = ["targets:public-policy", "destructor:secret-effect-authority"]
+temporaries = ["replacement-initialization:secret-contract", "destruction-outcome:secret-free"]
+sanitization_symbol = "crates/brynja-core/src/secret_destruction.rs#run_destruction"
+evidence = ["crates/brynja-core/tests/secret_lifecycle.rs"]
+storage = "contract-only-no-secret-bytes"
+
+[[current-secret-owner]]
+id = "adapter.sanitized-secret"
+symbol = "crates/brynja-sanitization/src/lib.rs#SanitizedSecret"
+fields = ["inner:secret"]
+temporaries = ["replacement-candidate:secret", "inspection-borrow:caller-owned-copy-risk"]
+sanitization_symbol = "crates/brynja-sanitization/src/lib.rs#SanitizedSecret::clear"
+evidence = ["crates/brynja-sanitization/tests/behavior.rs", "scripts/sanitization/check-sanitization-adapter-codegen.sh"]
+storage = "optional-adapter-owned"
+
+[[current-secret-owner]]
+id = "test.deterministic-random"
+symbol = "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom"
+fields = ["state:secret-test-only", "counter:secret-derived", "cursor:public", "fault:public", "initialized:public", "destruction-failure-observed:public"]
+temporaries = ["counter-bytes:secret-derived", "output-byte:secret-test-only"]
+sanitization_symbol = "crates/brynja-test-support/src/deterministic_random.rs#DeterministicRandom::clear_state"
+evidence = ["crates/brynja-test-support/tests/deterministic_random.rs"]
+storage = "unpublished-test-only"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory.rs"
+sha256 = "0b82ff4e7a535535aed48fcf25543435850a7d9239addb933cd94e951b19ac84"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_memory_volatile.rs"
+sha256 = "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret.rs"
+sha256 = "a675bb7bc9edd57f754004f4dbfea5943e0b0addaecf70d5450c9073db04ac83"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secret_destruction.rs"
+sha256 = "8e2a993665376a1cafda3de284dff465f237e7ff9261a689f81ab9ad2918c2b7"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/entropy.rs"
+sha256 = "b1a0b0793da8517c34f0d0aed8694c4ca0d5e848672699fbcfcf33cd99d960f3"
+
+[[reviewed-source]]
+path = "crates/brynja-core/src/secure_random.rs"
+sha256 = "54a950a18b6bccad3a0c78a21667ab39ed00fb4fd1972d9b3ea79a47cbb7366a"
+
+[[reviewed-source]]
+path = "crates/brynja-sanitization/src/lib.rs"
+sha256 = "1d93ad4e50bc01d672fba7739d4664532a56019f1d1e45bf7cd74e41d36c9600"
+
+[[reviewed-source]]
+path = "crates/brynja-test-support/src/deterministic_random.rs"
+sha256 = "9a8568e92ac3c008b2572c763528d913f8a9146848724a87b6e34e8126c9c58f"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-sha2/src/sha224.rs"
+sha256 = "fb2663369b896047fc3618bcaf6f3d78bae9d4b89e529e574a60040fb34375d1"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-sha2/src/sha256.rs"
+sha256 = "efbe3a588947e127dd0b0cecbe2b3e3b0a876a354d8d1f798052060d35ddb68d"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-sha2/src/sha512_state.rs"
+sha256 = "492aaceedc1c168bf0bb1bc07c876e735edb5da1a325fb7663123b1bb25a3622"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-sha3/src/sponge.rs"
+sha256 = "e307f41bc4fe13633cd6f36b6252225a9a38caac8447b02ffdf10bbdc63b73a5"
+
+[[reviewed-source]]
+path = "assurance/api-profile-contract/src/lib.rs"
+sha256 = "b7c5fce7a94ea2440953649c67f0a30446f9259630888d5e8581bb44cd187e80"
+
+[[reviewed-source]]
+path = "scripts/cryptography/check-api-profile-contract.sh"
+sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"

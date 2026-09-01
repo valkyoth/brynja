@@ -2859,7 +2859,19 @@ Exit criteria:
 
 ### v0.24.6 - Cryptographic API Profile And Secret-State Closure Register
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes: the reviewed policy assigns all 129 semantic
+cryptographic and protocol capabilities every one of 22 API dimensions, one
+exact profile and milestone owner, plus generated machine and human registers.
+Eight current and 75 planned secret owners bind fields, temporaries, lifecycle
+edges, core or admitted-adapter cleanup, output handling, evidence, consumers
+and residuals. Fifteen mutation classes and one standalone zero-dependency
+`no_std` fixture reject incomplete profiles, downstream hardened-capability
+forgery, ordinary-state substitution, output-classification drift, partial
+secret-output retention, and missed Drop or recoverable-unwind cleanup. No
+production cryptography, dependency, unsafe boundary, backend admission,
+independent-review state or FIPS claim changes.
 
 Plan scope: Implement a machine-readable, CI-enforced register that assigns every current and planned primitive, construction and protocol consumer its complete safe public API profiles and every secret-owning type, field, temporary, lifecycle edge, recoverable-unwind path, sanitization symbol, output classification, evidence artifact and residual gap; distinguish ordinary public-data state from sealed downstream-unforgeable hardened state, require non-panicking all-region cleanup despite adjacent failures, classify public declassification versus typed secret output and partial-output clearing, record `mem::forget`/abort/termination/power-loss residuals, reject unsafe or nonstandard conveniences explicitly, and block implementation exit, composition and Fully implemented status when any promised operation, ownership mode or cleanup duty lacks an owner.
 

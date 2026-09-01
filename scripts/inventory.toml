@@ -18,6 +18,10 @@ purpose = "Constant-time source and compiler-artifact assurance"
 extensions = [".py", ".sh"]
 purpose = "Reusable CPU capability, dispatch, admission, and evidence infrastructure"
 
+[category.cryptography]
+extensions = [".py", ".sh"]
+purpose = "Cross-algorithm API profiles, secret-state closure, and composition policy"
+
 [category.foundations]
 extensions = [".py", ".sh"]
 purpose = "Provider and security-foundation contract policies and tests"

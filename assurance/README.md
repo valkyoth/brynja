@@ -43,6 +43,15 @@ This is differential correctness evidence, not package-external acceptance,
 independent cryptographic review, side-channel evidence, or FIPS validation.
 Run it with `python3 scripts/sha3/check-sha3-differential.py`.
 
+The v0.24.6 `api-profile-contract` fixture is a standalone zero-dependency
+`no_std` consumer of the real `brynja-core` secret-region lifecycle. It proves
+the hardened capability is sealed against downstream implementations,
+ordinary-state substitution and wrapper forgery; distinguishes explicit public
+declassification from typed secret output; preserves public destinations on
+failure; clears partial secret output; and clears successful owners on Drop and
+recoverable panic unwinding. It is architectural assurance, not a hardened
+hash implementation, independent review, or FIPS validation.
+
 The v0.24.3 `sha3-public-api` fixture is the frozen package-external portable
 consumer for all four SHA-3 digests and both SHAKE XOFs. It checks 24 fixed-
 output, ten XOF and twenty incremental-squeeze results through leaf and facade

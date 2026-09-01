@@ -1,19 +1,19 @@
 [release]
-version = "0.24.5"
-milestone = "0.24.5"
+version = "0.24.6"
+milestone = "0.24.6"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6"]
 policy = "independent"
 stage = "internal"
 exceptional = false
-exception_reason = "Repository-only standards monitoring adds no production Rust, cryptographic behavior, unsafe code, dependency, backend admission, or public capability; security-relevant future drift still triggers a corrective milestone and exceptional pentest."
+exception_reason = "Repository-only API-profile policy, generated registers, mutation tests, and an unpublished type-system fixture add no production Rust, cryptographic behavior, unsafe code, dependency, backend admission, or public capability."
 
 [crates."brynja"]
-previous_version = "0.24.4"
-version = "0.24.5"
+previous_version = "0.24.5"
+version = "0.24.6"
 change = "metadata"
 publish = false
-reason = "Advance the internal facade while adding repository-only cross-authority lifecycle monitoring; production APIs and cryptographic behavior are unchanged."
+reason = "Advance the internal facade while adding repository-only cryptographic API-profile and secret-state closure enforcement; production APIs and cryptographic behavior are unchanged."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"

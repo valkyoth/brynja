@@ -25,6 +25,7 @@ file beneath a Cargo `target/` directory, regardless of workspace depth.
 | `ci/` | Rust-version and pinned CI-tool installation and freshness checks |
 | `constant-time/` | Constant-time source, emitted-code, evidence, and regression checks |
 | `cpu/` | Reusable CPU capability, admission, dispatch, evidence, and runner infrastructure |
+| `cryptography/` | Cross-algorithm API-profile, secret-state closure, and composition checks |
 | `foundations/` | Provider, entropy, clock, pending-operation, FIPS-state, security-outcome, and security-event contracts |
 | `pki/` | DER and canonical ASN.1 policy and regression checks |
 | `protocols/` | Protocol framing and state-machine assurance scripts |

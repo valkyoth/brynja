@@ -32,6 +32,16 @@ test -s standards/snapshots/authority-landings.json
 test -s .github/workflows/standards-lifecycle.yml
 test -s scripts/README.md
 test -s scripts/inventory.toml
+test -s security/cryptographic-api-profile-policy.toml
+test -s security/cryptographic-api-profile-register.json
+test -s docs/cryptographic-api-profile-register.md
+test -s assurance/api-profile-contract/Cargo.toml
+test -s assurance/api-profile-contract/Cargo.lock
+test -s assurance/api-profile-contract/src/lib.rs
+test -x scripts/cryptography/check-api-profiles.py
+test -x scripts/cryptography/test-api-profiles.py
+test -x scripts/cryptography/check-api-profile-contract.sh
+test -f scripts/cryptography/api_profile_model.py
 test -x scripts/repository/check-script-layout.py
 test -x scripts/repository/test-script-layout.py
 test -x scripts/sha3/check-sha3.py
@@ -155,6 +165,9 @@ grep -q 'scripts/constant-time/check-constant-time-codegen.sh 1.98.0 x86_64-unkn
 grep -q 'python3 scripts/constant-time/test-constant-time-codegen.py' scripts/checks.sh
 grep -q 'python3 scripts/constant-time/check-constant-time-evidence.py' scripts/checks.sh
 grep -q 'python3 scripts/constant-time/test-constant-time-evidence.py' scripts/checks.sh
+grep -q 'python3 scripts/cryptography/check-api-profiles.py' scripts/checks.sh
+grep -q 'python3 scripts/cryptography/test-api-profiles.py' scripts/checks.sh
+grep -q 'scripts/cryptography/check-api-profile-contract.sh' scripts/checks.sh
 grep -q 'python3 scripts/foundations/check-provider-contract.py' scripts/checks.sh
 grep -q 'python3 scripts/foundations/test-provider-contract.py' scripts/checks.sh
 grep -q 'python3 scripts/foundations/check-entropy-contract.py' scripts/checks.sh

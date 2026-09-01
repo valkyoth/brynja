@@ -6,10 +6,10 @@
   ],
   "harness_protocol": "brynja-stdin-json-v1",
   "inputs": {
-    ".github/workflows/ci.yml": "b94bc20c077768caefdca9e39dcaac40181f222ae46c32e964731adbaaef9aeb",
+    ".github/workflows/ci.yml": "9cc9ed0c9d324575faf1a79db342a812e66bb4283737e649d607e988b22fc6d9",
     "Cargo.toml": "174484a1df52dcc7e03b5e48ebae3d097274c056c6df9cc0f3b5d3d7f4ab5b22",
-    "assurance/policy.toml": "95171b5ab13f67f419810c2dfb40db97fb41fdfad691c1478f01a1cad1d8f1a2",
-    "assurance/zeroization-matrix.toml": "4e6343d47716008931af3a5279fbca61713ac163025308a838cfb7352e90a8a8",
+    "assurance/policy.toml": "2a382190e83a789825b515846b62aa07e224b04b4acbd127dd29911e507fa303",
+    "assurance/zeroization-matrix.toml": "380bdbae90069df33641f3b2d17725ddf8ae11cdfc0206d49939a98913705d69",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
     "crates/brynja-core/src/secret_memory.rs": "0b82ff4e7a535535aed48fcf25543435850a7d9239addb933cd94e951b19ac84",
     "crates/brynja-core/src/secret_memory_volatile.rs": "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",
@@ -43,7 +43,7 @@
     "crates/brynja-tls13-handshake/Cargo.toml": "dad35b0372b66ff6de7b8acde30936f4cddebdeee4ba11bfd863dd43f9f3c912",
     "crates/brynja-tls13/Cargo.toml": "834c18870265af6def85f905bd6da6f6ea60379f2e41899248174fa9d66bf4e8",
     "crates/brynja-xtask/Cargo.toml": "e178b328289b523b7dc0a9d994cf5409ae54a44ba4198092c520ee45f1247d50",
-    "crates/brynja/Cargo.toml": "90591495700cfe5c028abc7fb29c4692ad7438ca03f7455ac7a3fdcc5a43e372",
+    "crates/brynja/Cargo.toml": "9624986e5d381276711258b5f41b7c58e3addaf3c2b806855582d230750e2ac9",
     "docs/KANI.md": "fd141a207704b257530d94defd8aed31cd93131f7fc30c05a652699947dbaaaa",
     "docs/unsafe-policy.md": "f50d721d53b611642628948bab9c997dc2116f51e22294de8ca702d4f6efb2d7",
     "rust-toolchain.toml": "c7bdffe5b4c71aeafb84939751c9a1690bc39d0e305d4a534ddf7ce9ce64c675",
@@ -64,13 +64,13 @@
     "scripts/repository/unsafe_policy.py": "3668f2c554e6cbcb0ef4fcb844e2735243a3731b7fb3a7288a01ff660cccfc05",
     "scripts/zeroization/check-zeroization-codegen.sh": "19c649813862c6280ce70639ddcd7e4d1d0ca3b295a5320413ecf7b84ac38069",
     "scripts/zeroization/check-zeroization-evidence.py": "1adf4cf96dbee0b862aed727377f996c7cab88509d5670bac50174a35bceb2ee",
-    "scripts/zeroization/check-zeroization-miri.sh": "7aa7bc6160878d34eaca56d0667ddede2e22d705533ba74af19564fcceec9114",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "bec142caaa1970bf07fbb62379d1efd55e44332831a80d58cae2af4b148e5127",
+    "scripts/zeroization/check-zeroization-miri.sh": "51818461c9a42afa4f63b763d11bc1ad79d4a94c08b5bea83ffe0c333aec3b4f",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "da80b5b4f934dc3027f9b29cb0f14256506a2e176e7ae5f3c2ae0aae71808425",
     "scripts/zeroization/test-zeroization-evidence.py": "946f256caec03f38bb21e6e5c36ebcd5ad2f67f260b4f602469daedf794ce6cd",
-    "scripts/zeroization/zeroization_evidence.py": "eaf556f5571fa57c3e3e9e3e37eb889bf7c7396b81158d640e0cd0cb3bc8f4b6"
+    "scripts/zeroization/zeroization_evidence.py": "0874cbaf4975d15f736275c7137f3ff7261ad95090b8a14d675cc421ebd43153"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "95171b5ab13f67f419810c2dfb40db97fb41fdfad691c1478f01a1cad1d8f1a2",
+  "policy_sha256": "2a382190e83a789825b515846b62aa07e224b04b4acbd127dd29911e507fa303",
   "schema": 1,
   "tools": [
     {
@@ -97,16 +97,16 @@
     {
       "id": "miri",
       "owner": "0.11.0",
-      "revision": "90850177249efe0321573c569aec5d12b257f8d6",
+      "revision": "0dfb098f3aeecbe38c2566ca090193280e7349e7",
       "source_kind": "rustup-component",
-      "version": "nightly-2026-08-31"
+      "version": "nightly-2026-09-01"
     },
     {
       "id": "rust-sanitizers",
       "owner": "0.11.0",
-      "revision": "90850177249efe0321573c569aec5d12b257f8d6",
+      "revision": "0dfb098f3aeecbe38c2566ca090193280e7349e7",
       "source_kind": "rust-toolchain",
-      "version": "nightly-2026-08-31"
+      "version": "nightly-2026-09-01"
     }
   ]
 }

@@ -2877,10 +2877,10 @@ fixture reject incomplete profiles, fabricated or substituted owners and
 sanitizers, field/type disagreement, downstream hardened-capability forgery,
 ordinary-state substitution, information-flow drift, partial secret-output
 retention, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and eight retests found twelve Medium assurance-control gaps in the
+pentest and nine retests found thirteen Medium assurance-control gaps in the
 initial, lexical-remediation, future-registration, empty-value, identifier-
 prefix, namespace, callable-identity, and MIR place/data-flow evidence paths;
-all are locally remediated with zero open findings and await independent ninth retest. No
+all are locally remediated with zero open findings and await independent tenth retest. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 

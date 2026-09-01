@@ -75,8 +75,15 @@ Keep a Changelog and Semantic Versioning.
   aggregates, other calls, inline assembly, unmodeled statements, and post-
   sanitizer mutation; requires the sanitizer to be compiler-proven non-
   unwinding; and conservatively tracks its result as possibly aliased. Three
-  positive paths and twenty-two focused negative paths pass, while independent
-  ninth retest remains pending.
+  positive paths and twenty-two focused negative paths pass. The ninth retest
+  confirmed that remediation and found the sanitizer-result escape below.
+- Close the Medium ninth-retest sanitizer-result escape by retaining possible
+  owner provenance when the exact sanitizer writes through a projected place
+  and rejecting owner-derived `_0` at every reachable normal exit. Direct
+  return, joined return, projected return, field, nested field, typed
+  projection, and projected mutation paths now fail closed; four positive and
+  twenty-nine negative strict-flow paths
+  pass, while independent tenth retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures

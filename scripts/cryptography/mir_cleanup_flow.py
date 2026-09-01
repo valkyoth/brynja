@@ -200,6 +200,8 @@ def call_edge_state(
     if projected:
         if root in possible:
             fail("call result overwrites an owner-derived place")
+        if may_alias_owner:
+            possible.add(root)
         return definite, possible
     if root == "_1":
         fail("registered owner receiver is reassigned")
@@ -329,6 +331,13 @@ def require_owner_cleanup(mir: str, header_parts: tuple[str, ...], target: str) 
     reachable_exits = exits & nodes
     if not reachable_exits:
         fail("MIR caller has no reachable lifecycle exit")
+    for exit_name in reachable_exits:
+        kind, block = exit_name.split(":", 1)
+        if kind != "normal":
+            continue
+        exit_state = statement_state(blocks[block], incoming[block])
+        if "_0" in exit_state[1]:
+            fail("owner-derived alias escapes through MIR return place")
     dominance = dominators(graph, nodes)
     if any(cleanup_block not in dominance[exit_name] for exit_name in reachable_exits):
         fail("cleanup does not dominate every lifecycle exit")

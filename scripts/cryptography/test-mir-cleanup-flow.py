@@ -85,6 +85,16 @@ def main() -> int:
     }
 }
 """)
+    accepts("""fn owner::drop(_1: &mut Owner) -> OwnerAlias {
+    bb0: {
+        _0 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        _0 = unrelated_value;
+        return;
+    }
+}
+""")
 
     for statement in (
         "_1.0 = unrelated_value;",
@@ -108,6 +118,70 @@ def main() -> int:
         _4 = exact_sanitizer(move _1) -> [return: bb2, unwind unreachable];
     }
     bb2: {
+        return;
+    }
+}
+""")
+    rejects("""fn owner::drop(_1: &mut Owner) -> OwnerAlias {
+    bb0: {
+        _0 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        return;
+    }
+}
+""")
+    rejects("""fn owner::drop(_1: &mut Owner) -> OwnerAlias {
+    bb0: {
+        _0.0 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        return;
+    }
+}
+""")
+    rejects("""fn owner::drop(_1: &mut Owner, _2: bool) -> OwnerAlias {
+    bb0: {
+        _0 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        switchInt(copy _2) -> [0: bb2, otherwise: bb3];
+    }
+    bb2: {
+        _0 = unrelated_value;
+        goto -> bb4;
+    }
+    bb3: {
+        goto -> bb4;
+    }
+    bb4: {
+        return;
+    }
+}
+""")
+    for destination, argument in (
+        ("_5.0", "_5.0"),
+        ("_5.0.1", "_5.0.1"),
+        ("((_5.0: OwnerTuple).1: OwnerAlias)", "((_5.0: OwnerTuple).1: OwnerAlias)"),
+    ):
+        rejects(f"""fn owner::drop(_1: &mut Owner) -> () {{
+    bb0: {{
+        {destination} = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable];
+    }}
+    bb1: {{
+        _6 = mutate_owner(move {argument}) -> [return: bb2, unwind unreachable];
+    }}
+    bb2: {{
+        return;
+    }}
+}}
+""")
+    rejects("""fn owner::drop(_1: &mut Owner) -> () {
+    bb0: {
+        _5.0 = exact_sanitizer(move _1) -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        _5.1 = unrelated_value;
         return;
     }
 }
@@ -240,8 +314,8 @@ def main() -> int:
 }
 """)
     print(
-        "strict MIR cleanup flow accepts three valid place/provenance paths and "
-        "rejects twenty-two projected-write, alias-escape, may-flow, unwind, CFG, assembly, "
+        "strict MIR cleanup flow accepts four valid place/provenance paths and "
+        "rejects twenty-nine projected-write, alias-escape, return-escape, may-flow, unwind, CFG, assembly, "
         "and post-cleanup regressions"
     )
     return 0

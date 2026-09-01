@@ -343,7 +343,7 @@ def validate_secret_policy(
     if len(capabilities) != len(set(capabilities)):
         fail("registered secret-owner capability coverage is duplicated")
     for owner in registered:
-        exact_keys(owner, {"capability", "id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "cleanup_expressions", "evidence", "storage", "output_classification", "partial_failure_policy"}, f"registered secret owner {owner.get('id')}")
+        exact_keys(owner, {"capability", "id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "evidence", "storage", "output_classification", "partial_failure_policy"}, f"registered secret owner {owner.get('id')}")
         if not owner["fields"] or not owner["temporaries"] or not owner["evidence"]:
             fail(f"registered secret owner {owner['id']} is incomplete")
         capability = owner["capability"]
@@ -359,15 +359,11 @@ def validate_secret_policy(
             or owner["partial_failure_policy"] != "clear-complete-secret-destination"
         ):
             fail(f"registered secret owner {owner['id']} information flow drifted")
-        field_names = {field.split(":", 1)[0] for field in owner["fields"]}
-        try:
-            rust_contract.validate_type(root, owner["symbol"], field_names)
-            rust_contract.validate_cleanup_binding(
-                root, owner["sanitization_symbol"], owner["cleanup_callers"],
-                owner["cleanup_expressions"],
-            )
-        except rust_contract.RustContractError as error:
-            fail(f"registered secret owner {owner['id']} Rust contract failed: {error}")
+        contract = contracts.REGISTERED_OWNER_CONTRACTS.get(owner["id"])
+        if contract is None:
+            fail(f"registered owner lacks compiler contract: {owner['id']}")
+        if owner != {"id": owner["id"], **contract["record"]}:
+            fail(f"registered owner differs from compiler contract: {owner['id']}")
         for evidence in owner["evidence"]:
             validate_target(root, evidence, f"registered secret owner {owner['id']} evidence")
     reviews = policy["reviewed-source"]

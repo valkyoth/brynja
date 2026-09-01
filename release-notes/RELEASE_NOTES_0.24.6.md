@@ -1,7 +1,7 @@
 # Brynja 0.24.6 Release Notes
 
-Status: four Medium assurance-control findings are locally remediated with zero
-open findings; independent second retest and the signed candidate commit remain
+Status: five Medium assurance-control findings are locally remediated with zero
+open findings; independent third retest and the signed candidate commit remain
 pending; no crates.io publication is selected
 
 Brynja 0.24.6 turns cryptographic API completeness and private secret-state
@@ -44,7 +44,7 @@ production cryptographic implementation or runtime behavior.
 - Deterministic regeneration checks the reviewed policy against the exact
   129-capability protocol-surface authority and reproduces both generated
   projections byte-for-byte.
-- Twenty-three structural mutation classes reject missing coverage, fabricated
+- Twenty-five structural mutation classes reject missing coverage, fabricated
   or substituted owners and sanitizers, duplicate owner coverage, field/type
   disagreement, parser fabrication through comments or strings, missing
   operations, secret-template downgrade, and mandatory-core-cleanup drift.
@@ -55,6 +55,11 @@ production cryptographic implementation or runtime behavior.
   optimized MIR under Rust 1.90.0 and 1.98.0; four MIR mutations and lexical
   raw-string, raw-byte-string, disabled-`cfg`, macro-body, nesting, and same-
   named-method fixtures fail closed.
+- Future registered owners cannot provide their own cleanup expression. Each
+  must exactly match a separate reviewed compiler contract that supplies its
+  adjacent contract test and complete optimized-MIR caller-to-sanitizer edge
+  inventory; the reported read-only `OwnedSecretRegion::expose` reproduction
+  and incomplete registered MIR coverage both fail closed.
 - Removing the optional `brynja-sanitization` adapter still leaves every
   mandatory cleanup duty bound to Brynja's dependency-free core volatile
   clearing primitive. The adapter cannot enter the FIPS graph or replace core
@@ -78,15 +83,18 @@ production cryptographic implementation or runtime behavior.
 The voluntary assessment found two Medium assurance-control defects and no
 production cryptographic vulnerability. The first retest confirmed the output-
 classification remediation but found two Medium residual weaknesses in the
-lexical owner and cleanup checks. Registration remains explicit with zero
+lexical owner and cleanup checks. The second retest confirmed those fixes but
+found one Medium circular future-registration evidence path. Registration
+remains explicit with zero
 registered capability owners, while actual owner shape and cleanup evidence
-now comes from Rust compiler contracts and exact optimized-MIR call targets.
+now comes from independently maintained Rust compiler contracts and exact
+optimized-MIR call targets; policy records cannot supply expected call text.
 The source parser is defense-in-depth and rejects raw literals, disabled
 configuration, macro nesting, and same-named method substitution. Every one of
 the 13 profiles retains an exact per-operation information-flow contract.
 
 Focused contract, mutation, compile-fail, bare-metal, and deterministic
-register checks pass with zero open findings. Independent retest remains
+register checks pass with zero open findings. Independent third retest remains
 required before this candidate can be tagged.
 
 ## Security Boundaries
@@ -109,7 +117,7 @@ Version 0.24.6 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range. It advances only the facade version and selects zero
 crates.io packages. The repository-only scope does not schedule a pentest
 unless an exceptional trigger or voluntary review is applied. A voluntary
-review and its first retest supplied four Medium assurance-control defects;
-all are locally remediated. The independent second retest, signed candidate
+review and its first two retests supplied five Medium assurance-control defects;
+all are locally remediated. The independent third retest, signed candidate
 commit, complete release verification, green hosted GitHub and CodeQL, and
 then the signed immutable tag remain required.

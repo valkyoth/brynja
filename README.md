@@ -314,15 +314,17 @@ owners are present, while zero capability owners are registered. Current
 owners must pass adjacent compiler-checked type, private-field, and sanitizer
 contracts plus exact optimized-MIR cleanup-call checks under both supported
 compiler endpoints;
-planned owners cannot masquerade as executable symbols. Every operation has
+future registered owners must match a separate canonical compiler contract and
+cannot supply their own expected cleanup expression; planned owners cannot
+masquerade as executable symbols. Every operation has
 its own public, secret, or no-output classification, failure behavior, and
 authentication timing. A standalone
 zero-dependency `no_std` contract rejects downstream hardened-marker forgery,
 ordinary-state substitution, output-classification drift, retained partial
 secret output, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and first retest found four Medium assurance-control gaps in the
-original and lexical-remediation registers; all remediations pass locally and
-await independent second retest. The generated
+pentest and two retests found five Medium assurance-control gaps in the
+original, lexical-remediation, and future-registration evidence paths; all
+remediations pass locally and await independent third retest. The generated
 [API-profile and secret-state register](https://github.com/valkyoth/brynja/blob/main/docs/cryptographic-api-profile-register.md)
 is a closure gate, not a new cryptographic implementation or verification
 claim; SHA-2 and SHA-3/SHAKE remain **In progress** until their later bit-input,

@@ -21,7 +21,15 @@ Keep a Changelog and Semantic Versioning.
   exact optimized-MIR call targets are enforced under Rust 1.90.0 and 1.98.0.
   Raw and raw-byte strings, disabled `cfg`, macro nesting, same-named methods,
   missing/duplicate MIR callers, and wrong MIR targets fail closed;
-  independent second retest remains pending.
+  the second retest confirmed those fixes and found one residual circular
+  future-registration path.
+- Close the Medium second-retest finding by rejecting registration-provided
+  cleanup expressions, requiring every future registered owner to exactly
+  match an independently maintained compiler contract, and deriving its exact
+  adjacent test and complete optimized-MIR caller-to-sanitizer inventory from
+  that contract. The reported read-only `OwnedSecretRegion::expose` record and
+  incomplete registered MIR coverage now fail closed; independent third
+  retest remains pending.
 - Enforce the standalone v0.24.3 SHA-3/SHAKE public fixture's declared Clippy
   policy with warnings denied in both the complete local gate and hosted CI,
   correct the reported comparison warning, and add negative policy fixtures
@@ -62,7 +70,7 @@ Keep a Changelog and Semantic Versioning.
   planned secret owners, mandatory
   core-versus-optional-adapter cleanup classification, typed public/secret
   outputs, reviewed source hashes, and deterministic JSON/document projections.
-- Add twenty-three fail-closed structural mutation classes, twenty-two
+- Add twenty-five fail-closed structural mutation classes, twenty-two
   per-operation secret-output downgrade mutations, and a standalone
   zero-dependency `no_std` contract proving downstream code cannot forge the
   sealed hardened capability, ordinary states cannot satisfy hardened bounds,

@@ -2869,15 +2869,15 @@ compiler-checked Rust declarations, private fields, sanitizer signatures,
 exact optimized-MIR cleanup calls, temporaries, lifecycle edges, core or
 admitted-adapter cleanup, operation-specific output handling, evidence,
 consumers and residuals. Planned entries never synthesize executable symbols.
-Twenty-three structural mutation classes, twenty-two per-operation secret-
+Twenty-five structural mutation classes, twenty-two per-operation secret-
 output downgrade mutations, and one standalone zero-dependency `no_std`
 fixture reject incomplete profiles, fabricated or substituted owners and
 sanitizers, field/type disagreement, downstream hardened-capability forgery,
 ordinary-state substitution, information-flow drift, partial secret-output
 retention, and missed Drop or recoverable-unwind cleanup. The voluntary
-pentest and first retest found four Medium assurance-control gaps in the
-initial and lexical-remediation registers; all are locally remediated with zero
-open findings and await independent second retest. No
+pentest and two retests found five Medium assurance-control gaps in the
+initial, lexical-remediation, and future-registration evidence paths; all are
+locally remediated with zero open findings and await independent third retest. No
 production cryptography, dependency, unsafe boundary, backend admission,
 independent-review state or FIPS claim changes.
 
@@ -2899,6 +2899,10 @@ Deliverables:
   unwind and Drop paths, emitted-code evidence, adjacent-cleanup-failure policy,
   caller handoff and residual `mem::forget`/abort/termination/power-loss/
   register/cache/OS risks;
+- require each future registered owner to exactly match an independently
+  maintained canonical compiler contract binding its package, adjacent shape
+  and sanitizer test, and complete optimized-MIR caller-to-sanitizer edges;
+  registration records cannot provide expected cleanup expressions;
 - classify every cleanup duty as the mandatory core destruction primitive or
   an exact admitted `brynja-sanitization` fixed-region adapter use, without
   optional cleanup, reverse dependencies, facade leakage, or a FIPS graph edge;

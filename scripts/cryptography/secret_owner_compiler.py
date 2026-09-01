@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compiler and MIR evidence for current secret-owner contracts."""
+"""Compiler and MIR evidence for current and registered secret-owner contracts."""
 
 from __future__ import annotations
 
@@ -8,6 +8,8 @@ import re
 import subprocess
 import tempfile
 from pathlib import Path
+
+import api_profile_contracts as contracts
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -44,6 +46,13 @@ MIR_CALLS = {
     ),
 }
 
+REGISTERED_CONTRACT_KEYS = {"record", "package", "contract_test", "mir_callers"}
+REGISTERED_RECORD_KEYS = {
+    "capability", "symbol", "fields", "temporaries", "sanitization_symbol",
+    "cleanup_callers", "evidence", "storage", "output_classification",
+    "partial_failure_policy",
+}
+
 
 class CompilerContractError(RuntimeError):
     """Compiler evidence is absent or ambiguous."""
@@ -51,6 +60,30 @@ class CompilerContractError(RuntimeError):
 
 def fail(message: str) -> None:
     raise CompilerContractError(message)
+
+
+def compiler_inventory(registered: dict | None = None) -> tuple[dict, dict]:
+    tests = {package: set(names) for package, names in CONTRACT_TESTS.items()}
+    calls = {package: list(edges) for package, edges in MIR_CALLS.items()}
+    registry = contracts.REGISTERED_OWNER_CONTRACTS if registered is None else registered
+    for owner_id, contract in registry.items():
+        if set(contract) != REGISTERED_CONTRACT_KEYS:
+            fail(f"registered compiler contract has invalid keys: {owner_id}")
+        record = contract["record"]
+        if set(record) != REGISTERED_RECORD_KEYS:
+            fail(f"registered compiler contract record has invalid keys: {owner_id}")
+        callers = record["cleanup_callers"]
+        if set(callers) != set(contract["mir_callers"]):
+            fail(f"registered compiler contract MIR coverage differs: {owner_id}")
+        package = contract["package"]
+        tests.setdefault(package, set()).add(contract["contract_test"])
+        package_calls = calls.setdefault(package, [])
+        for caller in callers:
+            edge = contract["mir_callers"][caller]
+            if set(edge) != {"header", "sanitizer"} or not edge["header"]:
+                fail(f"registered compiler contract MIR edge is invalid: {owner_id}")
+            package_calls.append((tuple(edge["header"]), edge["sanitizer"]))
+    return tests, {package: tuple(edges) for package, edges in calls.items()}
 
 
 def function_sections(mir: str) -> list[str]:
@@ -87,7 +120,9 @@ def command(toolchain: str, arguments: list[str], target: Path) -> subprocess.Co
     )
 
 
-def check_contract_tests(toolchain: str, package: str, target: Path) -> None:
+def check_contract_tests(
+    toolchain: str, package: str, expected_tests: set[str], target: Path,
+) -> None:
     result = command(
         toolchain,
         ["test", "--locked", "-p", package, "--lib", "--", "--list", "--format", "terse"],
@@ -99,12 +134,14 @@ def check_contract_tests(toolchain: str, package: str, target: Path) -> None:
         line.removesuffix(": test") for line in result.stdout.splitlines()
         if line.endswith(": test")
     }
-    missing = CONTRACT_TESTS[package] - observed
+    missing = expected_tests - observed
     if missing:
         fail(f"compiler contract tests are absent for {package}: {sorted(missing)}")
 
 
-def check_mir(toolchain: str, package: str, target: Path) -> None:
+def check_mir(
+    toolchain: str, package: str, expected_calls: tuple, target: Path,
+) -> None:
     result = command(
         toolchain,
         ["rustc", "--locked", "-p", package, "--lib", "--release", "--", "--emit=mir"],
@@ -117,18 +154,21 @@ def check_mir(toolchain: str, package: str, target: Path) -> None:
     if len(candidates) != 1:
         fail(f"MIR artifact is absent or ambiguous for {package} under {toolchain}")
     mir = candidates[0].read_text(encoding="utf-8")
-    for header, call in MIR_CALLS[package]:
+    for header, call in expected_calls:
         require_mir_call(mir, header, call)
 
 
 def main() -> int:
+    contract_tests, mir_calls = compiler_inventory()
+    if set(contract_tests) != set(mir_calls):
+        fail("compiler contract test and MIR package inventories differ")
     with tempfile.TemporaryDirectory(prefix="brynja-secret-owner-contract-") as directory:
         base = Path(directory)
         for toolchain in TOOLCHAINS:
-            for package in CONTRACT_TESTS:
+            for package, expected_tests in contract_tests.items():
                 target = base / toolchain / package
-                check_contract_tests(toolchain, package, target)
-                check_mir(toolchain, package, target)
+                check_contract_tests(toolchain, package, expected_tests, target)
+                check_mir(toolchain, package, mir_calls[package], target)
     print(
         "compiler-checked secret-owner shapes and exact MIR cleanup calls pass "
         "under Rust 1.90.0 and 1.98.0"

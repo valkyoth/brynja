@@ -49,6 +49,12 @@ CURRENT_CLEANUP_CALLS = {
     },
 }
 
+# Deliberately empty until a secret-bearing algorithm owner is implemented.
+# A registration record cannot define its own proof: every future entry here
+# must bind the complete policy projection plus an adjacent compiler contract
+# and exact optimized-MIR caller-to-sanitizer edges.
+REGISTERED_OWNER_CONTRACTS = {}
+
 OPERATION_CONTRACTS = {
     "aead": {
         "generate-key": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),

@@ -116,19 +116,15 @@ def inconsistent_owner_fields(policy: dict, _surfaces: dict) -> None:
     owner["fields"][0] = "invented:secret"
 
 
-def missing_registered_type(policy: dict, _surfaces: dict) -> None:
+def circular_registered_cleanup(policy: dict, _surfaces: dict) -> None:
     policy["registered-secret-owner"].append({
         "capability": "algorithm.sha2",
         "id": "registered.algorithm.sha2",
-        "symbol": "crates/brynja-hash-sha2/src/sha256.rs#HardenedSecretOwner",
-        "fields": ["state:secret"],
-        "temporaries": ["schedule:secret"],
-        "sanitization_symbol": "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile",
-        "cleanup_callers": ["crates/brynja-hash-sha2/src/sha256.rs#HardenedSecretOwner::drop"],
-        "cleanup_expressions": {
-            "crates/brynja-hash-sha2/src/sha256.rs#HardenedSecretOwner::drop":
-                "crate::zeroize_region_volatile(",
-        },
+        "symbol": "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion",
+        "fields": ["region:secret", "state:public"],
+        "temporaries": ["borrowed-view:secret"],
+        "sanitization_symbol": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret::clear",
+        "cleanup_callers": ["crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::expose"],
         "evidence": ["crates/brynja-hash-sha2/tests/sha256.rs"],
         "storage": "crate-owned",
         "output_classification": "typed-secret-owned",
@@ -136,10 +132,50 @@ def missing_registered_type(policy: dict, _surfaces: dict) -> None:
     })
 
 
+def registration_supplies_cleanup_expression(policy: dict, surfaces: dict) -> None:
+    circular_registered_cleanup(policy, surfaces)
+    policy["registered-secret-owner"][0]["cleanup_expressions"] = {
+        "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion::expose":
+            "unwrap_or_default(",
+    }
+
+
 def duplicate_registered_coverage(policy: dict, _surfaces: dict) -> None:
     policy["registered-secret-owner"] = [
         {"capability": "algorithm.sha2"}, {"capability": "algorithm.sha2"},
     ]
+
+
+def rejects_registered_contract_mismatch() -> None:
+    policy = copy.deepcopy(model.read_policy())
+    surfaces = copy.deepcopy(model.read_surfaces())
+    circular_registered_cleanup(policy, surfaces)
+    owner = policy["registered-secret-owner"][0]
+    canonical = copy.deepcopy(owner)
+    canonical["sanitization_symbol"] = (
+        "crates/brynja-core/src/secret_memory_volatile.rs#zeroize_region_volatile"
+    )
+    contract = {
+        "record": canonical,
+        "package": "brynja-core",
+        "contract_test": "fixture::registered_owner_contract_is_compiler_checked",
+        "mir_callers": {
+            canonical["cleanup_callers"][0]: {
+                "header": ["expose(_1: &OwnedSecretRegion"],
+                "sanitizer": "zeroize_region_volatile(",
+            },
+        },
+    }
+    previous = model.contracts.REGISTERED_OWNER_CONTRACTS
+    model.contracts.REGISTERED_OWNER_CONTRACTS = {owner["id"]: contract}
+    try:
+        model.build_register(policy, surfaces)
+    except model.ProfileError as error:
+        assert "registered owner differs from compiler contract" in str(error)
+    else:
+        raise AssertionError("registration differed from its canonical compiler contract")
+    finally:
+        model.contracts.REGISTERED_OWNER_CONTRACTS = previous
 
 
 def downgrade_template(policy: dict, _surfaces: dict) -> None:
@@ -253,6 +289,7 @@ def main() -> int:
     assert hashes["algorithm.sha3-shake"]["api"]["ownership"]["owner"] == "0.24.10"
     model.validate_cleanup(policy, model.ROOT, adapter_available=False)
     parser_rejects_comment_and_string_fabrication()
+    rejects_registered_contract_mismatch()
 
     for mutator, expected in (
         (remove_assignment, "no API profile"),
@@ -273,7 +310,8 @@ def main() -> int:
         (fabricated_current_owner, "inventory is incomplete or duplicated"),
         (fabricated_sanitizer, "free Rust function is absent or duplicated"),
         (inconsistent_owner_fields, "owner fields differ from Rust struct"),
-        (missing_registered_type, "Rust declaration HardenedSecretOwner"),
+        (circular_registered_cleanup, "registered owner lacks compiler contract"),
+        (registration_supplies_cleanup_expression, "fields drifted"),
         (duplicate_registered_coverage, "capability coverage is duplicated"),
         (downgrade_template, "differs from secret template"),
         (remove_operation, "operation inventory drifted"),
@@ -290,7 +328,7 @@ def main() -> int:
                 downgraded += 1
     assert downgraded == 22
     print(
-        "cryptographic API-profile policy rejects twenty-three structural "
+        "cryptographic API-profile policy rejects twenty-five structural "
         "regressions and twenty-two secret-output downgrades"
     )
     return 0

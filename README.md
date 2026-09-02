@@ -768,13 +768,14 @@ no remediation, and records `PASS`/`PASS` with zero open findings. It remains
 an internal tag with zero crates.io publication and remains covered again by
 the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 
-The internal `0.24.10` candidate adds distinct sealed hardened states for all
-four SHA-3 digests and both SHAKE XOFs. A byte-backed private owner accounts for
-eleven sponge, input/output, lifecycle, staging and permutation-scratch regions
-and clears them through the compiler-resistant core boundary on completion,
-failure, cancellation, recoverable unwind and Drop. Public output requires an
-explicit declassification token; secret output transfers affine ownership of
-the complete caller destination and clears it on Drop.
+The internal `0.24.10` release candidate adds distinct sealed hardened states
+for all four SHA-3 digests and both SHAKE XOFs. A byte-backed private owner
+accounts for eleven sponge, input/output, lifecycle, staging and
+permutation-scratch regions and clears them through the compiler-resistant core
+boundary on completion, failure, cancellation, recoverable unwind and Drop.
+Public output requires an explicit declassification token; secret output
+transfers affine ownership of the complete caller destination and clears it on
+Drop.
 
 Hardened-versus-ordinary differential tests cover all identities, rates, bit
 tails and multi-squeeze boundaries. Package-external `no_std`, strict source
@@ -784,11 +785,22 @@ hardened execution remains prohibited. SHA-3/SHAKE remains **In progress**
 until v0.24.11 combined acceptance, and this candidate does not claim
 independent review, FIPS validation, backend admission, or publication.
 
+Its initial exceptional assessment reported one High secret-derived
+byte-array remanence finding. Exact remediation candidate
+`b3232116a66f908524d859aa40d1b1ab8e31f913` replaces those arrays with bounded
+scalar conversion and registered owner staging, adds every-width cleanup and
+compiler-artifact regression gates, and passed repository-owner retest with
+zero open findings. The
+[permanent exceptional report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.10.md)
+records `PASS`/`PASS`; independent cryptographic review and FIPS validation
+remain absent.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
 signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.10`
-hardened FIPS 202 milestone selects no crates.io publication. The published
+hardened FIPS 202 release candidate passed its exceptional pentest and retest
+and selects no crates.io publication. The published
 dependency is:
 
 ```toml

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.9 signed; v0.24.10 hardened FIPS 202 implementation complete, exceptional pentest pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.9 signed; v0.24.10 hardened FIPS 202 implementation and exceptional pentest/retest complete, hosted checks and signed tag pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -390,6 +390,16 @@ cancellation, failure, early Drop and recoverable unwind are covered. Hardened
 acceleration remains prohibited. The family remains In progress until
 v0.24.11 combined acceptance, and independent review, FIPS validation and
 crates.io publication remain absent.
+
+The initial exceptional v0.24.10 assessment reported one High finding: lane
+and counter conversions plus final partial secret SHAKE output created local
+secret-derived byte arrays outside the registered cleanup owner. Exact
+remediation candidate `b3232116a66f908524d859aa40d1b1ab8e31f913` uses bounded
+scalar conversions and registered staging, covers every partial secret output
+width, and adds development/release MIR and LLVM regression gates. The
+repository-owner retest passed with `PASS`/`PASS` and zero open findings. This
+does not replace the scheduled cumulative v0.20.0-to-v0.25.0 assessment,
+independent cryptographic review, or FIPS validation.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

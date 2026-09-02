@@ -7,6 +7,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Record the completed exceptional v0.24.10 assessment and green retest of
+  exact remediation candidate `b3232116a66f908524d859aa40d1b1ab8e31f913`.
+  The permanent report closes its one High finding with `PASS`/`PASS` and zero
+  open findings while retaining the scheduled cumulative v0.25.0 assessment.
 - Close the High v0.24.10 hardened-state remanence finding by replacing
   source-created SHA-3 lane/counter conversion arrays with scalar fixed-count
   byte operations and staging partial secret SHAKE output only inside the

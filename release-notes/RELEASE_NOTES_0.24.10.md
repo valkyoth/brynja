@@ -1,7 +1,7 @@
 # Brynja 0.24.10 Release Notes
 
-Status: implementation complete; exceptional pentest, hosted GitHub and
-CodeQL, and signed tag pending; no crates.io publication is selected
+Status: implementation and exceptional pentest/retest complete; hosted GitHub
+and CodeQL plus signed tag pending; no crates.io publication is selected
 
 Brynja 0.24.10 adds the distinct hardened secret-bearing state family for all
 four SHA-3 digests and both SHAKE XOFs. Ordinary public-data states remain
@@ -71,13 +71,23 @@ FIPS 140-3 validation, accelerated-backend admission, collision or security
 strength by testing, final v0.24.11 family acceptance, publication, or
 suitability for classified deployment.
 
+The initial exceptional assessment reported one High secret-derived
+byte-array remanence finding in the hardened permutation and partial secret
+SHAKE output paths. Remediation replaced those arrays with bounded scalar
+conversion and registered owner staging, added direct all-width cleanup
+coverage, and strengthened development/release compiler-artifact gates. The
+repository-owner retest of exact candidate
+`b3232116a66f908524d859aa40d1b1ab8e31f913` passed with zero open findings.
+The permanent report is
+[`security/pentest/v0.24.10.md`](../security/pentest/v0.24.10.md).
+
 ## Release Process
 
-The new secret-state and destruction boundary triggers an exceptional pentest.
+The new secret-state and destruction boundary triggered an exceptional pentest.
 Version 0.24.10 remains an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. After the exact
-candidate passes the independent assessment, its permanent report is committed
-with any remediation, the complete local and hosted gates must be green, and
+candidate passed assessment and retest, its permanent report was committed
+with the remediation. The complete local and hosted gates must be green, and
 explicit tag authorization is required before creating the signed tag.
 
 Run the focused acceptance from a clean checkout with:

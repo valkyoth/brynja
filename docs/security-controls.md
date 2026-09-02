@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.9 signed; v0.24.10 hardened FIPS 202 implementation complete, exceptional pentest pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.9 signed; v0.24.10 hardened FIPS 202 implementation and exceptional pentest/retest complete, hosted checks and signed tag pending
 
 | Control | Foundation enforcement |
 | --- | --- |

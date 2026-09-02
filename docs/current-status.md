@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 thirteen Medium assurance findings remediated, independent tenth retest PASS, green GitHub and signed tag pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 complete SHA-2 arbitrary-bit implementation and local verification ready for exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -30,9 +30,9 @@ outcomes, one caller-owned authority state machine, and token-gated external-key
 destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
-It now has correct portable byte-oriented implementations of all six FIPS
+It now has correct portable byte-oriented and canonical arbitrary-bit implementations of all six FIPS
 180-4 SHA-2 algorithms and all six FIPS 202 SHA-3/SHAKE identities, while
-their arbitrary-bit and hardened secret-bearing API profiles remain in
+their hardened secret-bearing and final combined API profiles remain in
 progress through v0.24.11. It also has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
@@ -310,7 +310,7 @@ independent retest of exact signed candidate
 `116afe2390b61561c0d4414aa2a2dafbc3658a80` passed with `PASS`/`PASS` and zero
 open findings.
 
-The facade now advances to internal `0.24.6` without changing production Rust,
+Signed internal `0.24.6` did not change production Rust,
 cryptographic behavior, dependencies, unsafe boundaries, or backend admission.
 A reviewed policy assigns every one of the 129 semantic cryptographic and
 protocol capabilities all 22 API dimensions and an exact milestone owner. The
@@ -335,6 +335,19 @@ closure only: current ordinary SHA state is not made secret-safe, no new
 algorithm is added, and SHA-2/SHA-3 remain In progress through their separately
 owned hardened and complete-family acceptance milestones. Zero crates are
 selected for publication.
+
+The facade now advances to internal `0.24.7`. Every SHA-2 identity accepts a
+canonical borrowed arbitrary-bit message through portable and forced-backend
+one-shot APIs or a consuming incremental final tail. The representation uses
+most-significant-bit-first tails and rejects invalid widths or nonzero unused
+low bits before hashing. Checked 64-bit and 128-bit FIPS length accounting,
+240 exact selected NIST CAVP bit records, every tail width across padding and
+block boundaries, 1,008 bounded independent differential results, Kani length
+proofs, Miri, AddressSanitizer, and an 18-result downstream `no_std` fixture
+bind the new surface. Existing byte APIs remain identical and all optional CPU
+candidates remain unadmitted. This is unkeyed ordinary hashing, not secret-
+state erasure, independent review, FIPS 140-3 validation, or crates.io
+publication; SHA-2 remains In progress through v0.24.8-v0.24.11.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

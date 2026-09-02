@@ -1,6 +1,6 @@
 use brynja_hash_core::{FixedOutput, Update};
 
-use crate::{Sha224Digest, Sha224Error, compress::compress};
+use crate::{BitString, Sha224Digest, Sha224Error, bit_input, compress::compress};
 
 #[cfg(feature = "cpu")]
 use brynja_crypto_cpu::{Sha256BackendError, Sha256BackendSession};
@@ -32,6 +32,9 @@ pub struct Sha224 {
 }
 
 impl Sha224 {
+    /// Maximum arbitrary-bit message length admitted by FIPS 180-4.
+    pub const MAX_MESSAGE_BITS: u64 = u64::MAX;
+
     /// Maximum byte-oriented message length admitted by FIPS 180-4.
     pub const MAX_MESSAGE_BYTES: u64 = u64::MAX / 8;
 
@@ -52,9 +55,22 @@ impl Sha224 {
         self.message_bytes
     }
 
+    /// Returns the byte-aligned number of message bits accepted so far.
+    #[must_use]
+    pub const fn message_bits(&self) -> u64 {
+        self.message_bytes.wrapping_mul(8)
+    }
+
     /// Checks an update length without changing this state.
     pub fn check_additional_bytes(&self, additional_bytes: u64) -> Result<(), Sha224Error> {
         checked_message_length(self.message_bytes, additional_bytes).map(|_| ())
+    }
+
+    /// Checks an exact bit count without changing this state.
+    pub fn check_additional_bits(&self, additional_bits: u64) -> Result<(), Sha224Error> {
+        bit_input::checked_bit_length_u64(self.message_bytes, additional_bits)
+            .map(|_| ())
+            .map_err(|_| Sha224Error::MessageTooLong)
     }
 
     /// Absorbs all input or rejects it before changing observable state.
@@ -149,11 +165,29 @@ impl Sha224 {
     /// Consumes the state and returns the exact SHA-224 digest.
     #[must_use]
     pub fn finalize(self) -> Sha224Digest {
-        match self.finalize_inner(|state, block| {
+        let message_bits = self.message_bits();
+        match self.finalize_inner(None, message_bits, |state, block| {
             compress(state, block);
             Ok::<(), core::convert::Infallible>(())
         }) {
             Ok(digest) => digest,
+            Err(never) => match never {},
+        }
+    }
+
+    /// Consumes the state after absorbing one final canonical bit string.
+    pub fn finalize_bits(mut self, input: BitString<'_>) -> Result<Sha224Digest, Sha224Error> {
+        let additional_bits =
+            u64::try_from(input.bit_len()).map_err(|_| Sha224Error::MessageTooLong)?;
+        let message_bits = bit_input::checked_bit_length_u64(self.message_bytes, additional_bits)
+            .map_err(|_| Sha224Error::MessageTooLong)?;
+        let (complete, partial) = input.split();
+        self.update(complete)?;
+        match self.finalize_inner(partial, message_bits, |state, block| {
+            compress(state, block);
+            Ok::<(), core::convert::Infallible>(())
+        }) {
+            Ok(digest) => Ok(digest),
             Err(never) => match never {},
         }
     }
@@ -167,29 +201,51 @@ impl Sha224 {
         backend
             .ensure_healthy()
             .map_err(Sha224AcceleratedError::from_backend)?;
-        self.finalize_inner(|state, block| {
+        let message_bits = self.message_bits();
+        self.finalize_inner(None, message_bits, |state, block| {
             backend
                 .compress(state, block)
                 .map_err(Sha224AcceleratedError::from_backend)
         })
     }
 
-    fn finalize_inner<E, F>(mut self, mut compress_block: F) -> Result<Sha224Digest, E>
+    #[cfg(feature = "cpu")]
+    /// Consumes the state after a final bit string through one tested backend.
+    pub fn finalize_bits_with_backend(
+        mut self,
+        input: BitString<'_>,
+        backend: &Sha256BackendSession,
+    ) -> Result<Sha224Digest, Sha224AcceleratedError> {
+        let additional_bits =
+            u64::try_from(input.bit_len()).map_err(|_| Sha224AcceleratedError::MessageTooLong)?;
+        let message_bits = bit_input::checked_bit_length_u64(self.message_bytes, additional_bits)
+            .map_err(|_| Sha224AcceleratedError::MessageTooLong)?;
+        let (complete, partial) = input.split();
+        self.update_with_backend(complete, backend)?;
+        backend
+            .ensure_healthy()
+            .map_err(Sha224AcceleratedError::from_backend)?;
+        self.finalize_inner(partial, message_bits, |state, block| {
+            backend
+                .compress(state, block)
+                .map_err(Sha224AcceleratedError::from_backend)
+        })
+    }
+
+    fn finalize_inner<E, F>(
+        mut self,
+        partial: Option<(u8, u8)>,
+        message_bits: u64,
+        mut compress_block: F,
+    ) -> Result<Sha224Digest, E>
     where
         F: FnMut(&mut [u32; 8], &[u8; BLOCK_BYTES]) -> Result<(), E>,
     {
-        if let Some(marker) = self.buffer.get_mut(self.buffer_len) {
-            *marker = 0x80;
-        }
-        let after_marker = self.buffer_len.saturating_add(1);
-        for byte in self.buffer.iter_mut().skip(after_marker) {
-            *byte = 0;
-        }
+        bit_input::begin_padding(&mut self.buffer, self.buffer_len, partial);
         if padding_block_count(self.buffer_len) == 2 {
             compress_block(&mut self.state, &self.buffer)?;
             self.buffer.fill(0);
         }
-        let message_bits = self.message_bytes.saturating_mul(8);
         for (target, byte) in self
             .buffer
             .iter_mut()

@@ -14,8 +14,8 @@ compatible pairing, following the same model as `base64-ng`.
   `1.90.0-x86_64-unknown-linux-gnu`.
 - Pinned verifier: `cargo-kani 0.67.0`, upstream tag `kani-0.67.0`, commit
   `4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d`.
-- Current proof result: six SHA-2 harnesses cover the shared 64-bit and 128-bit
-  message domains and padding decisions; three SHA-3/SHAKE harnesses cover
+- Current proof result: eight SHA-2 harnesses cover the shared byte and exact-
+  bit 64-bit and 128-bit message domains and byte-padding decisions; three SHA-3/SHAKE harnesses cover
   exact `u128` input/output byte-counter exhaustion and every byte-to-lane
   mapping in the Keccak-f[1600] state.
 
@@ -25,10 +25,10 @@ pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
 `scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
-the exact nine-harness inventory, and all proof results when the verifier is available.
+the exact eleven-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
-The SHA-2 harnesses prove only their stated checked byte-length and padding
+The SHA-2 harnesses prove only their stated checked byte/bit-length and byte-padding
 properties. The shared FIPS 202 harnesses prove only that input/output
 byte-counter admission matches `u128::checked_add` and that each of the 200
 Keccak state bytes maps to one in-bounds lane and byte shift. They do not prove permutation equivalence,

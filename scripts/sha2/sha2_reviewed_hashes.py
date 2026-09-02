@@ -1,20 +1,23 @@
 """Hash-bound portable SHA-2 source and test inventory."""
 
 SOURCE_HASHES = {
-    "crates/brynja-hash-core/src/lib.rs": "d6c8b4046978d74e077079701c3c17c06a8fd9fbfc15ef10368a41cf9a63d64d",
-    "crates/brynja-hash-sha2/src/lib.rs": "aa1a4f0ce77768b180daae6ead51a739452d7bd057bbfa8f348df5a7ee3732d2",
+    "crates/brynja-hash-core/src/lib.rs": "3704c2c069e65d9e3b0bb0f83cae484fc36ff41e7ddccc8075e787bb46980814",
+    "crates/brynja-hash-core/src/bit_string.rs": "0b5c23c4a789cef43a3bf913c5d75c0beb1fb16bcc89036b7f1431e7b1af0fd8",
+    "crates/brynja-hash-sha2/src/lib.rs": "fe304b0bc9041454eea8f96aa7dcdaf6441dbdde3439ead97d98bbfcb0289774",
+    "crates/brynja-hash-sha2/src/bit_api.rs": "007b960b0d869dcd6abb5bcb7f13397dfd9a41e45fdb38f13ab684782f6f662d",
+    "crates/brynja-hash-sha2/src/bit_input.rs": "eccb31f3ebc8056bc7f51319483002c27feddf76203cc7bb7a3d0d073fc9e16a",
     "crates/brynja-hash-sha2/src/compress.rs": "d4229f08e40392976f354eaf81f5d5cd03069d5f3c497e2cf481f65a9848e4b1",
     "crates/brynja-hash-sha2/src/digest.rs": "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
     "crates/brynja-hash-sha2/src/error.rs": "9657f1223bd80a8c16f93585f690a7b17dd2fe51486ccf161a962810f79cfa7e",
-    "crates/brynja-hash-sha2/src/sha224.rs": "fb2663369b896047fc3618bcaf6f3d78bae9d4b89e529e574a60040fb34375d1",
-    "crates/brynja-hash-sha2/src/sha256.rs": "efbe3a588947e127dd0b0cecbe2b3e3b0a876a354d8d1f798052060d35ddb68d",
+    "crates/brynja-hash-sha2/src/sha224.rs": "0af59a26aff51614b467edbfa587e6193996fa57eec13d4331b71d06310c8d9d",
+    "crates/brynja-hash-sha2/src/sha256.rs": "d4b76a1966e9b7ca57610dd09dde2504892a130ebe200e98edc02b89081b5441",
     "crates/brynja-hash-sha2/src/compress64.rs": "40edca2d80e9f60db4a9ea793fe5c61f79232012fb439025539e6b50c93f812b",
-    "crates/brynja-hash-sha2/src/sha512_state.rs": "492aaceedc1c168bf0bb1bc07c876e735edb5da1a325fb7663123b1bb25a3622",
-    "crates/brynja-hash-sha2/src/sha384.rs": "f4039d389c33de004d4a5f14eebc453fec3ce7fd60560f0897fbc37e48e5c9b7",
-    "crates/brynja-hash-sha2/src/sha512.rs": "66ece003b16b1256acf35ff2b4b4beffa495b77b820ac0ead03719847ff2d236",
+    "crates/brynja-hash-sha2/src/sha512_state.rs": "fcc2acb2cd57592af6ed5f2f5c265cb871a783fee55dc568af9c6ad4524d9211",
+    "crates/brynja-hash-sha2/src/sha384.rs": "09353c9117ba4db7040c312b2b57d5c218589fe2cf2be894ef432876eb8221b3",
+    "crates/brynja-hash-sha2/src/sha512.rs": "de24b1f734c0d4c3db16769a85253746aded290e10f40c93939a946ea9c1d986",
     "crates/brynja-hash-sha2/src/sha512_t.rs": "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916",
-    "crates/brynja-hash-sha2/src/sha512_224.rs": "4a691a855a6362c873da53c13a43227f06fd328a21d24e44ea4bcba2bf99b704",
-    "crates/brynja-hash-sha2/src/sha512_256.rs": "8fe18e207fbdb55c3d55a0a54dbc427c334ac7359b6cbc1dda4752d05393a1f6",
+    "crates/brynja-hash-sha2/src/sha512_224.rs": "fb494d597fab3781dbae5e634a36b30a4e5ba3c5ba3af8356752dbf617f9e1de",
+    "crates/brynja-hash-sha2/src/sha512_256.rs": "d824f3bb67940e9c461da359bca2d0d64641b315d4410e006da8d831a00ae04f",
 }
 
 TEST_HASHES = {
@@ -25,5 +28,14 @@ TEST_HASHES = {
     "crates/brynja-hash-sha2/tests/sha512.rs": "2f7ed01daeac2e92d53a06fda04603e8e50a5a059c13c8212d2584c0f3a168eb",
     "crates/brynja-hash-sha2/tests/sha512_224.rs": "31e8eea07d54224200a1c6d40cf96fbb59a7d75e8f1acfb5c810977470497af9",
     "crates/brynja-hash-sha2/tests/sha512_256.rs": "55532453913f4b507684fc19fae1ca6aaf274de5f6b52ab18d5cb736b9f41b80",
-    "crates/brynja-hash-sha2/tests/sha2_accelerated.rs": "2f11089d150ac83d8dbe73416e571364e7d1b23f6e3ea1dd387beb7314add8e5",
+    "crates/brynja-hash-sha2/tests/sha2_accelerated.rs": "6c4f8a9731c4773f5112651ff25212faa71875a640829163f51d6a59266e6e43",
+    "crates/brynja-hash-sha2/tests/bit_inputs.rs": "df9d40cd6e19f71b989f95cc82877919ed5f144bf790b3adb2b72c5dd3b78927",
+    "crates/brynja-hash-sha2/tests/vectors/nist-bit-selected.txt": "a23d9c097b3f2218441b72707ba3b6094e0e85bf63ed0eb24fc70b635f846b8f",
+    "assurance/sha2-bit-differential/Cargo.toml": "6b1f8929ace8039b132af488cb2b0e2746d00684c2ed5dcfd32baff92bc763c3",
+    "assurance/sha2-bit-differential/Cargo.lock": "371f5870df7d0763b522ba7f722e0531ffc8ffd639995cdd2f48a6615f935985",
+    "assurance/sha2-bit-differential/src/main.rs": "72a6459c642c353fc64687e5fd29ba3e25f427c756e87ab79d3b940848b99752",
+    "scripts/sha2/check-sha2-bit-differential.py": "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
+    "scripts/zeroization/check-zeroization-miri.sh": "c21340f1be7d6c1b36e851df759fcf6ec3945d63fc3d6744c438df693a712a3a",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "69b4b92e36fd3b19b015096e7c0d520f26392a1ab19f81bd4c9c19574373aa87",
+    "scripts/sha2/sha2_test_policy.py": "df2cbbc5f4eeb588859b14447918f0f85cbd3cb2c97f10a39b267271903f1968",
 }

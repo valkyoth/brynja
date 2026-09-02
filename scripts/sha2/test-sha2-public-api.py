@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Adversarial fixtures for complete v0.23.4 SHA-2 public acceptance."""
+"""Adversarial fixtures for complete v0.24.7 SHA-2 public acceptance."""
 
 from __future__ import annotations
 
@@ -20,6 +20,13 @@ def reject_runtime(label: str, old: str, new: str) -> None:
     with tempfile.TemporaryDirectory(prefix=f"brynja-sha2-{label}-") as temporary:
         fixture = acceptance.copy_fixture(Path(temporary))
         replace(fixture / "src/vectors.rs", old, new)
+        acceptance.run(["cargo", "run", "--quiet", "--manifest-path", str(fixture / "Cargo.toml")], success=False)
+
+
+def reject_bit_runtime(label: str, old: str, new: str) -> None:
+    with tempfile.TemporaryDirectory(prefix=f"brynja-sha2-bit-{label}-") as temporary:
+        fixture = acceptance.copy_fixture(Path(temporary))
+        replace(fixture / "src/bit_inputs.rs", old, new)
         acceptance.run(["cargo", "run", "--quiet", "--manifest-path", str(fixture / "Cargo.toml")], success=False)
 
 
@@ -46,11 +53,14 @@ def main() -> int:
     )
     for label, old, new in expected_mutations:
         reject_runtime(label, old, new)
+    reject_bit_runtime("sha256", "b0f025fe6e4ac8fd", "a0f025fe6e4ac8fd")
     reject_policy("missing-family-API", acceptance.ALGORITHMS, "facade::sha512_256", "facade::missing_sha512_256")
+    reject_policy("missing-bit-API", acceptance.BIT_INPUTS, "    sha512_256_bits,", "    missing_sha512_256_bits,")
+    reject_policy("missing-bit-claim", acceptance.LIB, "facade::SHA2_BIT_INPUT_IMPLEMENTED", "facade::SHA2_BIT_INPUT_MISSING")
     reject_policy(
         "missing-documentation",
         acceptance.LEAF_README,
-        "SHA-2 (all six identities have complete byte APIs; arbitrary-bit and hardened secret-bearing profiles pending)",
+        "SHA-2 (all six identities have complete byte and arbitrary-bit APIs; hardened secret-bearing profiles pending)",
         "incomplete hash family",
     )
     reject_policy(
@@ -68,14 +78,14 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="brynja-sha2-package-") as temporary:
         destination = Path(temporary)
         roots = acceptance.package_roots(destination)
-        (roots["brynja-hash-sha2"] / "src/sha512_256.rs").unlink()
+        (roots["brynja-hash-sha2"] / "src/bit_api.rs").unlink()
         consumer = acceptance.packaged_consumer(destination, roots)
         acceptance.run(
             ["cargo", "check", "--quiet", "--offline", "--manifest-path", str(consumer / "Cargo.toml")],
             cwd=consumer,
             success=False,
         )
-    print("complete SHA-2 acceptance rejects six corrupted results plus API, documentation, backend, identity, width, feature, and package regressions")
+    print("complete SHA-2 acceptance rejects seven corrupted byte/bit results plus byte/bit API, claim, documentation, backend, identity, width, feature, and package regressions")
     return 0
 
 

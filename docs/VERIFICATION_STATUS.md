@@ -21,7 +21,7 @@ certificate-bound operational-environment claim.
 | Component | Cryptographic or protocol scope | Independent review or official validation status |
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
-| `brynja-hash-sha2` | All six FIPS 180-4 byte-oriented SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream acceptance; arbitrary-bit and hardened secret-bearing profiles pending | ❌ Not verified |
+| `brynja-hash-sha2` | All six FIPS 180-4 byte-oriented and canonical arbitrary-bit SHA-2 algorithms with forced optional CPU candidate APIs and separately packaged downstream acceptance; hardened secret-bearing and final combined profiles pending | ❌ Not verified |
 | `brynja-hash-sha3` | All six FIPS 202 byte-oriented SHA-3 and SHAKE functions over one private Keccak-f[1600] owner with separately packaged downstream acceptance; arbitrary-bit, hardened secret-bearing, and final cross-backend profiles pending | ❌ Not verified |
 | Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
@@ -43,7 +43,7 @@ certificate-bound operational-environment claim.
 | Future `brynja-fips-module` / `brynja-fips` | FIPS 140-3 cryptographic module and policy boundary | ❌ Not FIPS validated |
 
 The implemented portion currently consists of all six portable FIPS 180-4
-SHA-2 byte-oriented algorithms with separately packaged downstream acceptance;
+SHA-2 byte-oriented and canonical arbitrary-bit algorithms with separately packaged downstream acceptance;
 all six portable FIPS 202 SHA-3 and SHAKE byte-oriented functions over one
 private Keccak-f[1600] owner with separately packaged downstream acceptance;
 the shared alert/failure,
@@ -53,9 +53,10 @@ provider, entropy/secure-random, typed-clock, and pending-operation foundations;
 the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
-The SHA-2 and FIPS 202 mathematical byte APIs are usable, but complete
-arbitrary-bit and hardened secret-bearing profiles remain planned through
-v0.24.11 and therefore both expanded families remain **In progress**. No
+The SHA-2 mathematical byte and arbitrary-bit APIs and FIPS 202 byte APIs are
+usable, but complete hardened SHA-2 plus arbitrary-bit and hardened FIPS 202
+profiles remain planned through v0.24.11 and therefore both expanded families
+remain **In progress**. No
 cryptographic primitive outside those six portable SHA-2 algorithms and the
 six named portable FIPS 202 functions, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in

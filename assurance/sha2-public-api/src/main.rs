@@ -5,6 +5,7 @@ fn main() {
             println!("algorithm identities: {}", report.algorithms);
             println!("one-shot results: {}", report.one_shot_results);
             println!("streaming results: {}", report.streaming_results);
+            println!("arbitrary-bit results: {}", report.bit_input_results);
             println!("admitted accelerated backends executed: {}", report.admitted_backends);
             println!(
                 "unadmitted accelerated backends skipped: {}",

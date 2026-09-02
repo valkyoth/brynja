@@ -80,6 +80,8 @@ jobs:
         run: python scripts/sha2/check-sha256-public-api.py
       - name: Run complete SHA-2 public API acceptance
         run: python scripts/sha2/check-sha2-public-api.py
+      - name: Run SHA-2 arbitrary-bit differential oracle
+        run: python scripts/sha2/check-sha2-bit-differential.py
       - name: Run complete SHA-3/SHAKE portable public API acceptance
         run: python scripts/sha3/check-sha3-public-api.py
       - name: Lint SHA-3/SHAKE public API fixture

@@ -51,6 +51,13 @@ done
 CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     cargo +nightly-2026-09-01 miri test \
     -p brynja-hash-sha2 \
+    --test bit_inputs \
+    selected_official_nist_bit_vectors_match_every_identity \
+    --target x86_64-unknown-linux-gnu
+
+CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+    cargo +nightly-2026-09-01 miri test \
+    -p brynja-hash-sha2 \
     --test sha256 \
     downstream_style_real_content_uses_only_public_api \
     --target x86_64-unknown-linux-gnu

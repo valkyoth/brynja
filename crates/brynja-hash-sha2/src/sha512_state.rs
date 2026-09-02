@@ -1,4 +1,4 @@
-use crate::compress64::compress;
+use crate::{BitString, bit_input, compress64::compress};
 
 #[cfg(feature = "cpu")]
 use brynja_crypto_cpu::{Sha512BackendError, Sha512BackendSession};
@@ -8,6 +8,7 @@ const LENGTH_FIELD_BYTES: usize = 16;
 const FINAL_BLOCK_PREFIX_BYTES: usize = BLOCK_BYTES - LENGTH_FIELD_BYTES;
 
 pub(crate) const MAX_MESSAGE_BYTES: u128 = u128::MAX / 8;
+pub(crate) const MAX_MESSAGE_BITS: u128 = u128::MAX;
 
 pub(crate) struct Sha512State {
     state: [u64; 8],
@@ -30,11 +31,24 @@ impl Sha512State {
         self.message_bytes
     }
 
+    pub(crate) const fn message_bits(&self) -> u128 {
+        self.message_bytes.wrapping_mul(8)
+    }
+
     pub(crate) fn check_additional_bytes(
         &self,
         additional_bytes: u128,
     ) -> Result<(), MessageTooLong> {
         checked_message_length(self.message_bytes, additional_bytes).map(|_| ())
+    }
+
+    pub(crate) fn check_additional_bits(
+        &self,
+        additional_bits: u128,
+    ) -> Result<(), MessageTooLong> {
+        bit_input::checked_bit_length_u128(self.message_bytes, additional_bits)
+            .map(|_| ())
+            .map_err(|_| MessageTooLong)
     }
 
     pub(crate) fn update(&mut self, input: &[u8]) -> Result<(), MessageTooLong> {
@@ -124,11 +138,30 @@ impl Sha512State {
     }
 
     pub(crate) fn finalize(self) -> [u64; 8] {
-        match self.finalize_inner(|state, block| {
+        let message_bits = self.message_bits();
+        match self.finalize_inner(None, message_bits, |state, block| {
             compress(state, block);
             Ok::<(), core::convert::Infallible>(())
         }) {
             Ok(state) => state,
+            Err(never) => match never {},
+        }
+    }
+
+    pub(crate) fn finalize_bits(
+        mut self,
+        input: BitString<'_>,
+    ) -> Result<[u64; 8], MessageTooLong> {
+        let additional_bits = u128::try_from(input.bit_len()).map_err(|_| MessageTooLong)?;
+        let message_bits = bit_input::checked_bit_length_u128(self.message_bytes, additional_bits)
+            .map_err(|_| MessageTooLong)?;
+        let (complete, partial) = input.split();
+        self.update(complete)?;
+        match self.finalize_inner(partial, message_bits, |state, block| {
+            compress(state, block);
+            Ok::<(), core::convert::Infallible>(())
+        }) {
+            Ok(state) => Ok(state),
             Err(never) => match never {},
         }
     }
@@ -141,29 +174,50 @@ impl Sha512State {
         backend
             .ensure_healthy()
             .map_err(Sha512AcceleratedError::from_backend)?;
-        self.finalize_inner(|state, block| {
+        let message_bits = self.message_bits();
+        self.finalize_inner(None, message_bits, |state, block| {
             backend
                 .compress(state, block)
                 .map_err(Sha512AcceleratedError::from_backend)
         })
     }
 
-    fn finalize_inner<E, F>(mut self, mut compress_block: F) -> Result<[u64; 8], E>
+    #[cfg(feature = "cpu")]
+    pub(crate) fn finalize_bits_with_backend(
+        mut self,
+        input: BitString<'_>,
+        backend: &Sha512BackendSession,
+    ) -> Result<[u64; 8], Sha512AcceleratedError> {
+        let additional_bits =
+            u128::try_from(input.bit_len()).map_err(|_| Sha512AcceleratedError::MessageTooLong)?;
+        let message_bits = bit_input::checked_bit_length_u128(self.message_bytes, additional_bits)
+            .map_err(|_| Sha512AcceleratedError::MessageTooLong)?;
+        let (complete, partial) = input.split();
+        self.update_with_backend(complete, backend)?;
+        backend
+            .ensure_healthy()
+            .map_err(Sha512AcceleratedError::from_backend)?;
+        self.finalize_inner(partial, message_bits, |state, block| {
+            backend
+                .compress(state, block)
+                .map_err(Sha512AcceleratedError::from_backend)
+        })
+    }
+
+    fn finalize_inner<E, F>(
+        mut self,
+        partial: Option<(u8, u8)>,
+        message_bits: u128,
+        mut compress_block: F,
+    ) -> Result<[u64; 8], E>
     where
         F: FnMut(&mut [u64; 8], &[u8; BLOCK_BYTES]) -> Result<(), E>,
     {
-        if let Some(marker) = self.buffer.get_mut(self.buffer_len) {
-            *marker = 0x80;
-        }
-        let after_marker = self.buffer_len.saturating_add(1);
-        for byte in self.buffer.iter_mut().skip(after_marker) {
-            *byte = 0;
-        }
+        bit_input::begin_padding(&mut self.buffer, self.buffer_len, partial);
         if padding_block_count(self.buffer_len) == 2 {
             compress_block(&mut self.state, &self.buffer)?;
             self.buffer.fill(0);
         }
-        let message_bits = self.message_bytes.saturating_mul(8);
         for (target, byte) in self
             .buffer
             .iter_mut()

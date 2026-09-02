@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and execute the v0.23.4 complete SHA-2 public acceptance."""
+"""Validate and execute the v0.24.7 SHA-2 byte and bit public acceptance."""
 
 from __future__ import annotations
 
@@ -18,10 +18,20 @@ MANIFEST = FIXTURE / "Cargo.toml"
 LOCK = FIXTURE / "Cargo.lock"
 LIB = FIXTURE / "src/lib.rs"
 ALGORITHMS = FIXTURE / "src/algorithms.rs"
+BIT_INPUTS = FIXTURE / "src/bit_inputs.rs"
 VECTORS = FIXTURE / "src/vectors.rs"
 MAIN = FIXTURE / "src/main.rs"
 CONTENT = FIXTURE / "fixtures/representative.txt"
+CORE_BITS = Path("crates/brynja-hash-core/src/bit_string.rs")
 LEAF_LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
+LEAF_BIT_API = Path("crates/brynja-hash-sha2/src/bit_api.rs")
+LEAF_BIT_INPUT = Path("crates/brynja-hash-sha2/src/bit_input.rs")
+LEAF_BIT_TEST = Path("crates/brynja-hash-sha2/tests/bit_inputs.rs")
+NIST_BIT_VECTORS = Path("crates/brynja-hash-sha2/tests/vectors/nist-bit-selected.txt")
+DIFFERENTIAL_MANIFEST = Path("assurance/sha2-bit-differential/Cargo.toml")
+DIFFERENTIAL_LOCK = Path("assurance/sha2-bit-differential/Cargo.lock")
+DIFFERENTIAL_MAIN = Path("assurance/sha2-bit-differential/src/main.rs")
+DIFFERENTIAL_CHECK = Path("scripts/sha2/check-sha2-bit-differential.py")
 DIGEST = Path("crates/brynja-hash-sha2/src/digest.rs")
 FACADE_LIB = Path("crates/brynja/src/lib.rs")
 LEAF_README = Path("crates/brynja-hash-sha2/README.md")
@@ -33,38 +43,51 @@ RUST_MATRIX = Path("scripts/ci/check-rust-version-matrix.sh")
 BARE_METAL = Path("scripts/assurance/check-bare-metal.sh")
 WORKFLOW = Path(".github/workflows/ci.yml")
 FILES = (
-    MANIFEST, LOCK, LIB, ALGORITHMS, VECTORS, MAIN, CONTENT, LEAF_LIB, DIGEST,
-    FACADE_LIB, LEAF_README, FACADE_README, CHECK_SCRIPT, TEST_SCRIPT, CHECKS,
-    RUST_MATRIX, BARE_METAL, WORKFLOW,
+    MANIFEST, LOCK, LIB, ALGORITHMS, BIT_INPUTS, VECTORS, MAIN, CONTENT,
+    CORE_BITS, LEAF_LIB, LEAF_BIT_API, LEAF_BIT_INPUT, LEAF_BIT_TEST,
+    NIST_BIT_VECTORS, DIFFERENTIAL_MANIFEST, DIFFERENTIAL_LOCK,
+    DIFFERENTIAL_MAIN, DIFFERENTIAL_CHECK, DIGEST, FACADE_LIB, LEAF_README,
+    FACADE_README, CHECK_SCRIPT, TEST_SCRIPT, CHECKS, RUST_MATRIX, BARE_METAL,
+    WORKFLOW,
 )
 EXPECTED_SHA256 = {
-    MANIFEST: "dd2d04918f98bf35c9815fa98df51d8e0476c90b2b15bb9dc1725c80ec0282d3",
-    LOCK: "e46cb4d41801cceac1de21df25258bbff7a3a276566cbeda2952d5111de374d1",
-    LIB: "2186c58ea09ffe3e9dcf7a03b70bf4031ec26cd23096569be8016f797b668bca",
+    MANIFEST: "6b520fb039c0d5f0627be7d20db03bf6b925c5a594febbf749f0229f6115398a",
+    LOCK: "bcf9f826d9599f1ab243b747c9b2f3ee06ef2faf59d589110217ea1fef04c63a",
+    LIB: "4c05d97d96038ce6dfd29c4ff118454d11d1b5aa0e4b0b7d682de3f3d7df2e2d",
     ALGORITHMS: "f5c798334508de76015c92f2929dee7b51e7b76a61fe3bc353bf67e4677a1e63",
+    BIT_INPUTS: "8f882911914e82ce7dfef7713296a696f5d3966ea9f55ee9d0cdda8dfb65812d",
     VECTORS: "cc4a0209cd9bbc322a0f2ad0dfaffc3e72337a28e189d9a311b94229e5d8b6d6",
-    MAIN: "c16794c16dfabdfc4fbb588c0752e2ef63625657e95df44c987b84103fcddd1c",
+    MAIN: "fb18cc6863a908905e5f2dc3f7a99946f247d18bac2e6b05b3bf57ee30f56da4",
     CONTENT: "fcb4220a9a063622c8c2f19d66c56e813a8add0814ece5cb6ec09ca5830d2a71",
-    LEAF_LIB: "aa1a4f0ce77768b180daae6ead51a739452d7bd057bbfa8f348df5a7ee3732d2",
+    CORE_BITS: "0b5c23c4a789cef43a3bf913c5d75c0beb1fb16bcc89036b7f1431e7b1af0fd8",
+    LEAF_LIB: "fe304b0bc9041454eea8f96aa7dcdaf6441dbdde3439ead97d98bbfcb0289774",
+    LEAF_BIT_API: "007b960b0d869dcd6abb5bcb7f13397dfd9a41e45fdb38f13ab684782f6f662d",
+    LEAF_BIT_INPUT: "eccb31f3ebc8056bc7f51319483002c27feddf76203cc7bb7a3d0d073fc9e16a",
+    LEAF_BIT_TEST: "df9d40cd6e19f71b989f95cc82877919ed5f144bf790b3adb2b72c5dd3b78927",
+    NIST_BIT_VECTORS: "a23d9c097b3f2218441b72707ba3b6094e0e85bf63ed0eb24fc70b635f846b8f",
+    DIFFERENTIAL_MANIFEST: "6b1f8929ace8039b132af488cb2b0e2746d00684c2ed5dcfd32baff92bc763c3",
+    DIFFERENTIAL_LOCK: "371f5870df7d0763b522ba7f722e0531ffc8ffd639995cdd2f48a6615f935985",
+    DIFFERENTIAL_MAIN: "72a6459c642c353fc64687e5fd29ba3e25f427c756e87ab79d3b940848b99752",
+    DIFFERENTIAL_CHECK: "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
     DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
-    FACADE_LIB: "90a5ed9ca877470c2f72b2cba9201fb741d9d2edf3a1180fb9c77497245d2f0f",
-    LEAF_README: "fa805a3349b095aa6157351f0734cc9f0bdc5adadd939ccd98c55b267b3b409b",
-    FACADE_README: "258801b26bdede1d4f63c405a89ff3895f4da500f3d79631b8a5c9e2d97d30ef",
+    FACADE_LIB: "4cf4dd2cd7717d13b1b9b96fb6a015ebe73221b8e44ecd8cb4eb67758435e837",
+    LEAF_README: "981e8ad888123c986b247dc5f6b019c7d4a1ac2a6071c205eeafd32249945da3",
+    FACADE_README: "4306c60a7e377e77a24d4e09c920128d53b767d28159afeec670080196cefb90",
     CHECK_SCRIPT: "08a8b7baae515ba1bb945e14b1a2022a5023b2de02aab94c8d80e67775433b1c",
-    TEST_SCRIPT: "7439d5528706f619327d0531a06c11d20877052681f1cacae0a79b19cca6d7e2",
-    CHECKS: "19ea5ecb9edf42c7cbaa0cbc6ffa9a0584d17085d9ce9c7e992883145e205773",
+    TEST_SCRIPT: "37e2390350ffccc0bd6356c5eab54ff8b479214fcabfe4ae09715c2a08890892",
+    CHECKS: "babc543411968bcdfe6103352a02fb8e5d98a01646fcb477ca6550fe168d7177",
     RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
     BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
-    WORKFLOW: "9cc9ed0c9d324575faf1a79db342a812e66bb4283737e649d607e988b22fc6d9",
+    WORKFLOW: "a3f753738c7afd5ec05326f9306d588159dfdd29f087b766d393965271a2741c",
 }
 ALGORITHMS_NAMES = ("SHA-224", "SHA-256", "SHA-384", "SHA-512", "SHA-512/224", "SHA-512/256")
 PACKAGES = (
     ("brynja-core", "0.9.0", ("src/lib.rs",)),
     ("brynja-crypto-cpu", "0.1.1", ("src/lib.rs", "src/sha256.rs", "src/sha512.rs")),
-    ("brynja-hash-core", "0.1.0", ("src/lib.rs",)),
+    ("brynja-hash-core", "0.1.0", ("src/lib.rs", "src/bit_string.rs")),
     ("brynja-hash-sha2", "0.1.0", (
-        "src/lib.rs", "src/compress.rs", "src/compress64.rs", "src/digest.rs",
-        "src/error.rs", "src/sha224.rs", "src/sha256.rs", "src/sha384.rs",
+        "src/lib.rs", "src/bit_api.rs", "src/bit_input.rs", "src/compress.rs",
+        "src/compress64.rs", "src/digest.rs", "src/error.rs", "src/sha224.rs", "src/sha256.rs", "src/sha384.rs",
         "src/sha512.rs", "src/sha512_224.rs", "src/sha512_256.rs",
         "src/sha512_state.rs", "src/sha512_t.rs",
     )),
@@ -83,7 +106,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.6", ("src/lib.rs",)),
+    ("brynja", "0.24.7", ("src/lib.rs",)),
 )
 
 
@@ -109,7 +132,9 @@ def read_regular(root: Path, relative: Path) -> str:
 
 def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     loaded = {relative: read_regular(root, relative) for relative in FILES}
-    for relative in (LIB, ALGORITHMS, VECTORS, MAIN, CHECK_SCRIPT, TEST_SCRIPT):
+    for relative in (LIB, ALGORITHMS, BIT_INPUTS, VECTORS, MAIN, LEAF_BIT_API,
+                     LEAF_BIT_INPUT, LEAF_BIT_TEST, DIFFERENTIAL_MAIN,
+                     DIFFERENTIAL_CHECK, CHECK_SCRIPT, TEST_SCRIPT):
         if len(loaded[relative].splitlines()) > 500:
             fail(f"acceptance code exceeds 500 lines: {relative}")
     manifest = tomllib.loads(loaded[MANIFEST])
@@ -119,7 +144,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.6", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.7", "default-features": False},
         "brynja-hash-sha2": {
             "path": "../../crates/brynja-hash-sha2", "version": "=0.1.0",
             "default-features": False, "features": ["cpu"],
@@ -140,7 +165,10 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     library = loaded[LIB]
     for token in (
         "#![no_std]", "pub fn run() -> Result<AcceptanceReport, AcceptanceError>",
-        "one_shot_results: 30", "streaming_results: 36", "check_distinct_identities()?",
+        "one_shot_results: 30", "streaming_results: 36", "bit_input_results",
+        "bit_inputs::check()?", "check_distinct_identities()?",
+        "leaf::SHA2_BIT_INPUT_IMPLEMENTED",
+        "facade::SHA2_BIT_INPUT_IMPLEMENTED",
         "skipped_unadmitted_backends: 5", "Sha256BackendSession::for_compiled_target().is_some()",
         "Sha512BackendSession::for_compiled_target().is_some()", "sha512_256_with_backend",
     ):
@@ -149,14 +177,14 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
         "cfg(brynja_cpu_evidence)", "for_candidate_evidence", "from_runtime_detection",
         "std::", "alloc::", "env!", "option_env!", "Command::", "File::", "TcpStream", "UdpSocket",
     ):
-        if forbidden in library + loaded[ALGORITHMS] + loaded[VECTORS]:
+        if forbidden in library + loaded[ALGORITHMS] + loaded[BIT_INPUTS] + loaded[VECTORS]:
             fail(f"acceptance fixture crossed forbidden boundary: {forbidden}")
     for name in ALGORITHMS_NAMES:
         require(loaded[MAIN], f"{name}: portable scalar; independently verified: NO; FIPS validated: NO", "runnable report")
         require(loaded[LEAF_README], name, "leaf documentation")
         require(loaded[FACADE_README], name, "facade documentation")
-    leaf_family_label = "SHA-2 (all six identities have complete byte APIs; arbitrary-bit and hardened secret-bearing profiles pending)"
-    facade_family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte APIs; arbitrary-bit and hardened profiles pending)"
+    leaf_family_label = "SHA-2 (all six identities have complete byte and arbitrary-bit APIs; hardened secret-bearing profiles pending)"
+    facade_family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte and arbitrary-bit APIs; hardened profiles pending)"
     require(loaded[LEAF_README], leaf_family_label, "leaf family documentation")
     require(loaded[FACADE_README], facade_family_label, "facade family documentation")
     public_algorithms = (
@@ -171,9 +199,15 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
         for namespace in ("leaf", "facade"):
             require(loaded[ALGORITHMS], f"{namespace}::{function}(input)", "public one-shot coverage")
             require(loaded[ALGORITHMS], f"{namespace}::{state}::new()", "public streaming coverage")
+        require(loaded[BIT_INPUTS], f"    {function}_bits,", "public bit one-shot coverage")
+        require(loaded[BIT_INPUTS], f"    {state},", "public bit state coverage")
+    for token in ("leaf::$function(complete)", "facade::$function(complete)", ".finalize_bits(tail)"):
+        require(loaded[BIT_INPUTS], token, "bit macro coverage")
     for token in ("Sha224Digest, 28", "Sha256Digest, 32", "Sha384Digest, 48", "Sha512Digest, 64", "Sha512_224Digest, 28", "Sha512_256Digest, 32"):
         require(loaded[DIGEST], token, "output identity")
     require(loaded[CHECKS], "python3 scripts/sha2/check-sha2-public-api.py", "repository gate")
+    require(loaded[CHECKS], "python3 scripts/sha2/check-sha2-bit-differential.py", "bit differential gate")
+    require(loaded[WORKFLOW], "Run SHA-2 arbitrary-bit differential oracle", "host bit differential CI")
     require(loaded[RUST_MATRIX], "assurance/sha2-public-api/Cargo.toml", "Rust matrix")
     require(loaded[BARE_METAL], "assurance/sha2-public-api/Cargo.toml", "bare-metal matrix")
     require(loaded[WORKFLOW], "Run complete SHA-2 public API acceptance", "host CI")

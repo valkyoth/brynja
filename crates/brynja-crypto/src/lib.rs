@@ -30,6 +30,9 @@ pub const SHA512_224_IMPLEMENTED: bool = true;
 /// Whether portable SHA-512/256 is implemented and available through this layer.
 pub const SHA512_256_IMPLEMENTED: bool = true;
 
+/// Whether every SHA-2 identity accepts canonical arbitrary-bit messages.
+pub const SHA2_BIT_INPUT_IMPLEMENTED: bool = true;
+
 /// Whether portable SHA3-224 is implemented and available through this layer.
 pub const SHA3_224_IMPLEMENTED: bool = true;
 
@@ -49,10 +52,11 @@ pub const SHAKE128_IMPLEMENTED: bool = true;
 pub const SHAKE256_IMPLEMENTED: bool = true;
 
 pub use brynja_hash_sha2::{
-    FixedOutput, Sha224, Sha224Digest, Sha224Error, Sha256, Sha256Digest, Sha256Error, Sha384,
-    Sha384Digest, Sha384Error, Sha512, Sha512_224, Sha512_224Digest, Sha512_224Error, Sha512_256,
-    Sha512_256Digest, Sha512_256Error, Sha512Digest, Sha512Error, Update, sha224, sha256, sha384,
-    sha512, sha512_224, sha512_256,
+    BitString, BitStringError, FixedOutput, Sha224, Sha224Digest, Sha224Error, Sha256,
+    Sha256Digest, Sha256Error, Sha384, Sha384Digest, Sha384Error, Sha512, Sha512_224,
+    Sha512_224Digest, Sha512_224Error, Sha512_256, Sha512_256Digest, Sha512_256Error, Sha512Digest,
+    Sha512Error, Update, sha224, sha224_bits, sha256, sha256_bits, sha384, sha384_bits, sha512,
+    sha512_224, sha512_224_bits, sha512_256, sha512_256_bits, sha512_bits,
 };
 pub use brynja_hash_sha3::{
     ExtendableOutput, Sha3_224, Sha3_224Digest, Sha3_224Error, Sha3_256, Sha3_256Digest,
@@ -72,6 +76,7 @@ mod tests {
         assert!(::core::hint::black_box(super::SHA512_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA512_224_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA512_256_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::SHA2_BIT_INPUT_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA3_224_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA3_256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA3_384_IMPLEMENTED));
@@ -84,6 +89,13 @@ mod tests {
                 0x23, 0x09, 0x7d, 0x22, 0x34, 0x05, 0xd8, 0x22, 0x86, 0x42, 0xa4, 0x77, 0xbd, 0xa2,
                 0x55, 0xb3, 0x2a, 0xad, 0xbc, 0xe4, 0xbd, 0xa0, 0xb3, 0xf7, 0xe3, 0x6c, 0x9d, 0xa7,
             ]))
+        );
+        let bit_digest = super::BitString::new(&[0x60], 3)
+            .ok()
+            .and_then(|input| super::sha256_bits(input).ok());
+        assert_eq!(
+            bit_digest.as_ref().map(|digest| &digest.as_bytes()[..4]),
+            Some(&[0x1f, 0x77, 0x94, 0xd4][..])
         );
         assert_eq!(
             super::sha3_256(b"abc"),

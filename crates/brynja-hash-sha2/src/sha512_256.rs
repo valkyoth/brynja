@@ -1,6 +1,6 @@
 use brynja_hash_core::{FixedOutput, Update};
 
-use crate::{Sha512_256Digest, Sha512_256Error, sha512_state, sha512_t};
+use crate::{BitString, Sha512_256Digest, Sha512_256Error, sha512_state, sha512_t};
 
 #[cfg(feature = "cpu")]
 use brynja_crypto_cpu::Sha512BackendSession;
@@ -16,6 +16,9 @@ pub struct Sha512_256 {
 }
 
 impl Sha512_256 {
+    /// Maximum arbitrary-bit message length admitted by FIPS 180-4.
+    pub const MAX_MESSAGE_BITS: u128 = sha512_state::MAX_MESSAGE_BITS;
+
     /// Maximum byte-oriented message length admitted by FIPS 180-4.
     pub const MAX_MESSAGE_BYTES: u128 = sha512_state::MAX_MESSAGE_BYTES;
 
@@ -33,10 +36,23 @@ impl Sha512_256 {
         self.inner.message_bytes()
     }
 
+    /// Returns the byte-aligned number of message bits accepted so far.
+    #[must_use]
+    pub const fn message_bits(&self) -> u128 {
+        self.inner.message_bits()
+    }
+
     /// Checks an update length without changing this state.
     pub fn check_additional_bytes(&self, additional_bytes: u128) -> Result<(), Sha512_256Error> {
         self.inner
             .check_additional_bytes(additional_bytes)
+            .map_err(|_| Sha512_256Error::MessageTooLong)
+    }
+
+    /// Checks an exact bit count without changing this state.
+    pub fn check_additional_bits(&self, additional_bits: u128) -> Result<(), Sha512_256Error> {
+        self.inner
+            .check_additional_bits(additional_bits)
             .map_err(|_| Sha512_256Error::MessageTooLong)
     }
 
@@ -63,6 +79,15 @@ impl Sha512_256 {
         Sha512_256Digest::from_bytes(sha512_t::leftmost_bytes(self.inner.finalize()))
     }
 
+    /// Consumes the state after absorbing one final canonical bit string.
+    pub fn finalize_bits(self, input: BitString<'_>) -> Result<Sha512_256Digest, Sha512_256Error> {
+        self.inner
+            .finalize_bits(input)
+            .map(sha512_t::leftmost_bytes)
+            .map(Sha512_256Digest::from_bytes)
+            .map_err(|_| Sha512_256Error::MessageTooLong)
+    }
+
     #[cfg(feature = "cpu")]
     /// Consumes the state and finalizes through one tested backend.
     pub fn finalize_with_backend(
@@ -71,6 +96,19 @@ impl Sha512_256 {
     ) -> Result<Sha512_256Digest, sha512_state::Sha512AcceleratedError> {
         self.inner
             .finalize_with_backend(backend)
+            .map(sha512_t::leftmost_bytes)
+            .map(Sha512_256Digest::from_bytes)
+    }
+
+    #[cfg(feature = "cpu")]
+    /// Consumes the state after a final bit string through one tested backend.
+    pub fn finalize_bits_with_backend(
+        self,
+        input: BitString<'_>,
+        backend: &Sha512BackendSession,
+    ) -> Result<Sha512_256Digest, sha512_state::Sha512AcceleratedError> {
+        self.inner
+            .finalize_bits_with_backend(input, backend)
             .map(sha512_t::leftmost_bytes)
             .map(Sha512_256Digest::from_bytes)
     }

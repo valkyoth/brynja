@@ -2548,7 +2548,7 @@ Exit criteria:
 
 ### v0.24.2 - Complete SHAKE128 And SHAKE256
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes:
 
@@ -2622,7 +2622,7 @@ Exit criteria:
 
 ### v0.24.3 - SHA-3 And SHAKE Portable Public API Usability Acceptance
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes:
 
@@ -2696,7 +2696,7 @@ Exit criteria:
 
 ### v0.24.4 - SHA-3 And SHAKE Byte-Oriented Acceleration Evidence
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes:
 
@@ -2770,7 +2770,7 @@ Exit criteria:
 
 ### v0.24.5 - Cross-Authority Standards Lifecycle Monitor
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes:
 
@@ -2859,7 +2859,7 @@ Exit criteria:
 
 ### v0.24.6 - Cryptographic API Profile And Secret-State Closure Register
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes: the reviewed policy assigns all 129 semantic
 cryptographic and protocol capabilities every one of 22 API dimensions, one
@@ -2962,7 +2962,21 @@ Exit criteria:
 
 ### v0.24.7 - Complete SHA-2 Arbitrary-Bit Input APIs
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes: one canonical allocation-free borrowed `BitString`
+represents message bits most-significant-bit first, requires an explicit final-
+byte width, and rejects every nonzero unused low bit. All six SHA-2 identities
+now expose portable and forced-backend one-shot bit APIs plus consuming
+incremental final-tail methods with checked 64-bit or 128-bit FIPS length
+accounting. Two hundred forty exact selected records from NIST's official
+bit-oriented CAVP archive cover every tail residue and the relevant empty,
+padding, exact-block and multiblock boundaries. A separately bounded Python
+implementation supplies 1,008 differential results, the downstream `no_std`
+fixture checks eighteen leaf/facade/incremental results, and byte equivalence,
+candidate-backend parity, Kani, Miri and AddressSanitizer are gate-bound. No
+backend is admitted, ordinary state is not hardened, SHA-2 remains In progress,
+and zero crates are selected for publication.
 
 Plan scope: Extend all six SHA-2 identities with canonical FIPS 180-4 arbitrary-bit-message one-shot and incremental APIs, including unambiguous final partial-byte representation, exact bit-length exhaustion, byte-aligned equivalence, padding at every tail position, public consumer examples, vectors and proofs, while preserving the existing byte APIs and every scalar or accelerated digest identity.
 

@@ -106,6 +106,9 @@ mod tests {
         assert!(::core::hint::black_box(
             super::crypto::SHA512_256_IMPLEMENTED
         ));
+        assert!(::core::hint::black_box(
+            super::crypto::SHA2_BIT_INPUT_IMPLEMENTED
+        ));
         assert!(::core::hint::black_box(super::crypto::SHA3_224_IMPLEMENTED));
         assert!(::core::hint::black_box(super::crypto::SHA3_256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::crypto::SHA3_384_IMPLEMENTED));

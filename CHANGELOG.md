@@ -119,6 +119,18 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement the v0.24.7 complete SHA-2 arbitrary-bit input domain for all six
+  FIPS 180-4 identities. One canonical borrowed `BitString` rejects ambiguous
+  unused tail bits; portable and forced-backend one-shot functions plus
+  consuming incremental final-tail methods use exact checked 64-bit or 128-bit
+  length accounting while preserving every byte API.
+- Bind 240 exact selected NIST CAVP bit records, every final-bit residue and
+  critical padding/block boundary, 1,008 results from a bounded independent
+  Python oracle, accelerated-candidate parity, eleven total SHA-2/SHA-3 Kani
+  bounds, Miri, AddressSanitizer, and an 18-result downstream `no_std` fixture
+  into CI and hash-locked source policy. All CPU candidates remain unadmitted,
+  SHA-2 remains In progress pending hardened profiles and final acceptance,
+  and zero crates are selected for publication.
 - Implement the v0.24.6 cryptographic API-profile and secret-state closure
   register across all 129 semantic capabilities, with 22 exact API dimensions,
   milestone ownership, eight current, zero registered capability, and 75

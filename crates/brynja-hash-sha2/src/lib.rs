@@ -1,13 +1,16 @@
 //! Complete portable SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and
 //! SHA-512/256 for Brynja.
 //!
-//! The byte-oriented one-shot and streaming APIs implement FIPS 180-4
-//! SHA-2 without allocation, low-level code, I/O, global mutable state, or a
-//! hardware requirement. Each of the six FIPS 180-4 identities has a distinct
-//! public type and exact initialization and output rules.
+//! Byte-oriented one-shot and streaming APIs plus canonical arbitrary-bit
+//! one-shot and consuming final-tail APIs implement FIPS 180-4 SHA-2 without
+//! allocation, low-level code, I/O, global mutable state, or a hardware
+//! requirement. Each identity has a distinct public type and exact
+//! initialization and output rules.
 
 #![no_std]
 
+mod bit_api;
+mod bit_input;
 mod compress;
 mod compress64;
 mod digest;
@@ -21,7 +24,15 @@ mod sha512_256;
 mod sha512_state;
 mod sha512_t;
 
-pub use brynja_hash_core::{FixedOutput, Update};
+pub use bit_api::{
+    sha224_bits, sha256_bits, sha384_bits, sha512_224_bits, sha512_256_bits, sha512_bits,
+};
+#[cfg(feature = "cpu")]
+pub use bit_api::{
+    sha224_bits_with_backend, sha256_bits_with_backend, sha384_bits_with_backend,
+    sha512_224_bits_with_backend, sha512_256_bits_with_backend, sha512_bits_with_backend,
+};
+pub use brynja_hash_core::{BitString, BitStringError, FixedOutput, Update};
 pub use digest::{
     Sha224Digest, Sha256Digest, Sha384Digest, Sha512_224Digest, Sha512_256Digest, Sha512Digest,
 };
@@ -65,6 +76,9 @@ pub const SHA512_224_IMPLEMENTED: bool = true;
 
 /// Whether the complete portable SHA-512/256 API is implemented.
 pub const SHA512_256_IMPLEMENTED: bool = true;
+
+/// Whether all six SHA-2 identities expose canonical arbitrary-bit inputs.
+pub const SHA2_BIT_INPUT_IMPLEMENTED: bool = true;
 
 /// Computes SHA-224 over one complete byte slice.
 ///

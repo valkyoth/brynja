@@ -3,7 +3,7 @@
 #![cfg(feature = "cpu")]
 
 use brynja_hash_sha2::{
-    Sha224, Sha256, Sha256BackendSession, Sha384, Sha512, Sha512_224, Sha512_256,
+    BitString, Sha224, Sha256, Sha256BackendSession, Sha384, Sha512, Sha512_224, Sha512_256,
     Sha512BackendSession, sha224, sha256, sha384, sha512, sha512_224, sha512_256,
 };
 
@@ -42,6 +42,40 @@ fn sha256_family_backend_matches_both_algorithm_identities() {
             assert_eq!(state224.finalize_with_backend(&backend), Ok(expected224));
             assert_eq!(state256.finalize_with_backend(&backend), Ok(expected256));
         }
+    }
+    for valid in 1_u8..8 {
+        let tail = [content[130] & !(u8::MAX >> valid)];
+        let bits = BitString::new(&tail, valid);
+        assert!(bits.is_ok());
+        let Ok(bits) = bits else {
+            continue;
+        };
+        let mut scalar224 = Sha224::new();
+        let mut scalar256 = Sha256::new();
+        let mut accelerated224 = Sha224::new();
+        let mut accelerated256 = Sha256::new();
+        assert_eq!(scalar224.update(&content[..130]), Ok(()));
+        assert_eq!(scalar256.update(&content[..130]), Ok(()));
+        assert_eq!(
+            accelerated224.update_with_backend(&content[..130], &backend),
+            Ok(())
+        );
+        assert_eq!(
+            accelerated256.update_with_backend(&content[..130], &backend),
+            Ok(())
+        );
+        assert_eq!(
+            accelerated224.finalize_bits_with_backend(bits, &backend),
+            scalar224
+                .finalize_bits(bits)
+                .map_err(|_| { brynja_hash_sha2::Sha224AcceleratedError::MessageTooLong })
+        );
+        assert_eq!(
+            accelerated256.finalize_bits_with_backend(bits, &backend),
+            scalar256
+                .finalize_bits(bits)
+                .map_err(|_| { brynja_hash_sha2::Sha256AcceleratedError::MessageTooLong })
+        );
     }
 }
 
@@ -94,5 +128,61 @@ fn sha512_family_backend_matches_all_four_algorithm_identities() {
                 Ok(expected512_256)
             );
         }
+    }
+    for valid in 1_u8..8 {
+        let tail = [content[258] & !(u8::MAX >> valid)];
+        let bits = BitString::new(&tail, valid);
+        assert!(bits.is_ok());
+        let Ok(bits) = bits else {
+            continue;
+        };
+        let mut scalar384 = Sha384::new();
+        let mut scalar512 = Sha512::new();
+        let mut scalar512_224 = Sha512_224::new();
+        let mut scalar512_256 = Sha512_256::new();
+        let mut accelerated384 = Sha384::new();
+        let mut accelerated512 = Sha512::new();
+        let mut accelerated512_224 = Sha512_224::new();
+        let mut accelerated512_256 = Sha512_256::new();
+        for chunk in content[..258].chunks(67) {
+            assert_eq!(scalar384.update(chunk), Ok(()));
+            assert_eq!(scalar512.update(chunk), Ok(()));
+            assert_eq!(scalar512_224.update(chunk), Ok(()));
+            assert_eq!(scalar512_256.update(chunk), Ok(()));
+            assert_eq!(accelerated384.update_with_backend(chunk, &backend), Ok(()));
+            assert_eq!(accelerated512.update_with_backend(chunk, &backend), Ok(()));
+            assert_eq!(
+                accelerated512_224.update_with_backend(chunk, &backend),
+                Ok(())
+            );
+            assert_eq!(
+                accelerated512_256.update_with_backend(chunk, &backend),
+                Ok(())
+            );
+        }
+        assert_eq!(
+            accelerated384.finalize_bits_with_backend(bits, &backend),
+            scalar384
+                .finalize_bits(bits)
+                .map_err(|_| { brynja_hash_sha2::Sha512AcceleratedError::MessageTooLong })
+        );
+        assert_eq!(
+            accelerated512.finalize_bits_with_backend(bits, &backend),
+            scalar512
+                .finalize_bits(bits)
+                .map_err(|_| { brynja_hash_sha2::Sha512AcceleratedError::MessageTooLong })
+        );
+        assert_eq!(
+            accelerated512_224.finalize_bits_with_backend(bits, &backend),
+            scalar512_224
+                .finalize_bits(bits)
+                .map_err(|_| { brynja_hash_sha2::Sha512AcceleratedError::MessageTooLong })
+        );
+        assert_eq!(
+            accelerated512_256.finalize_bits_with_backend(bits, &backend),
+            scalar512_256
+                .finalize_bits(bits)
+                .map_err(|_| { brynja_hash_sha2::Sha512AcceleratedError::MessageTooLong })
+        );
     }
 }

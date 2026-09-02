@@ -9,9 +9,32 @@ import tomllib
 from pathlib import Path
 
 import sha2_reviewed_hashes
+from sha2_test_policy import (
+    ACCEL_TEST,
+    BIT_DIFFERENTIAL_CHECK,
+    BIT_DIFFERENTIAL_LOCK,
+    BIT_DIFFERENTIAL_MAIN,
+    BIT_DIFFERENTIAL_MANIFEST,
+    BIT_TEST,
+    BIT_VECTORS,
+    MIRI_SCRIPT,
+    SANITIZER_SCRIPT,
+    SHA2_ACCEL_TEST,
+    SHA224_TEST,
+    SHA384_TEST,
+    SHA512_224_TEST,
+    SHA512_256_TEST,
+    SHA512_TEST,
+    TEST,
+    TEST_SOURCES,
+    validate_tests,
+)
 
 CORE_LIB = Path("crates/brynja-hash-core/src/lib.rs")
+CORE_BITS = Path("crates/brynja-hash-core/src/bit_string.rs")
 LIB = Path("crates/brynja-hash-sha2/src/lib.rs")
+BIT_API = Path("crates/brynja-hash-sha2/src/bit_api.rs")
+BIT_INPUT = Path("crates/brynja-hash-sha2/src/bit_input.rs")
 COMPRESS = Path("crates/brynja-hash-sha2/src/compress.rs")
 DIGEST = Path("crates/brynja-hash-sha2/src/digest.rs")
 ERROR = Path("crates/brynja-hash-sha2/src/error.rs")
@@ -24,21 +47,16 @@ SHA512 = Path("crates/brynja-hash-sha2/src/sha512.rs")
 SHA512_T = Path("crates/brynja-hash-sha2/src/sha512_t.rs")
 SHA512_224 = Path("crates/brynja-hash-sha2/src/sha512_224.rs")
 SHA512_256 = Path("crates/brynja-hash-sha2/src/sha512_256.rs")
-TEST = Path("crates/brynja-hash-sha2/tests/sha256.rs")
-SHA224_TEST = Path("crates/brynja-hash-sha2/tests/sha224.rs")
-SHA384_TEST = Path("crates/brynja-hash-sha2/tests/sha384.rs")
-SHA512_TEST = Path("crates/brynja-hash-sha2/tests/sha512.rs")
-SHA512_224_TEST = Path("crates/brynja-hash-sha2/tests/sha512_224.rs")
-SHA512_256_TEST = Path("crates/brynja-hash-sha2/tests/sha512_256.rs")
-ACCEL_TEST = Path("crates/brynja-hash-sha2/tests/sha256_accelerated.rs")
-SHA2_ACCEL_TEST = Path("crates/brynja-hash-sha2/tests/sha2_accelerated.rs")
 CORE_MANIFEST = Path("crates/brynja-hash-core/Cargo.toml")
 MANIFEST = Path("crates/brynja-hash-sha2/Cargo.toml")
 CRYPTO_MANIFEST = Path("crates/brynja-crypto/Cargo.toml")
 PACKAGE_POLICY = Path("package-policy.toml")
 SOURCES = (
     CORE_LIB,
+    CORE_BITS,
     LIB,
+    BIT_API,
+    BIT_INPUT,
     COMPRESS,
     COMPRESS64,
     DIGEST,
@@ -119,6 +137,20 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     ):
         require(core, token, "hash interface")
 
+    core_bits = sources[CORE_BITS][1]
+    for token in (
+        "pub struct BitString<'input>",
+        "valid_bits_in_last_byte: u8",
+        "pub fn new(bytes: &'input [u8], valid_bits_in_last_byte: u8)",
+        "LengthOverflow",
+        "NonZeroUnusedBits",
+        "pub fn split(self) -> (&'input [u8], Option<(u8, u8)>)",
+    ):
+        require(core_bits, token, "canonical bit string")
+    for forbidden in ("impl Debug for BitString", "pub bytes:", "pub bit_len:"):
+        if forbidden in core_bits:
+            fail(f"canonical bit string exposed storage detail: {forbidden}")
+
     library = sources[LIB][1]
     for token in (
         "#![no_std]",
@@ -128,6 +160,7 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "pub const SHA512_IMPLEMENTED: bool = true;",
         "pub const SHA512_224_IMPLEMENTED: bool = true;",
         "pub const SHA512_256_IMPLEMENTED: bool = true;",
+        "pub const SHA2_BIT_INPUT_IMPLEMENTED: bool = true;",
         "pub fn sha224(input: &[u8]) -> Result<Sha224Digest, Sha224Error>",
         "pub fn sha256(input: &[u8]) -> Result<Sha256Digest, Sha256Error>",
         "pub fn sha384(input: &[u8]) -> Result<Sha384Digest, Sha384Error>",
@@ -139,6 +172,24 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "#[kani::proof]",
     ):
         require(library, token, "SHA-256 package")
+
+    bit_api = sources[BIT_API][1]
+    for name in ("sha224", "sha256", "sha384", "sha512", "sha512_224", "sha512_256"):
+        require(bit_api, f"pub fn {name}_bits(", "bit one-shot API")
+        require(bit_api, f"pub fn {name}_bits_with_backend(", "bit backend API")
+    require(bit_api, "finalize_bits(input)", "bit one-shot API")
+
+    bit_input = sources[BIT_INPUT][1]
+    for token in (
+        "checked_bit_length_u64",
+        "checked_bit_length_u128",
+        ".checked_mul(8)",
+        ".checked_add(additional_bits)",
+        "byte | (0x80_u8 >> valid_bits)",
+        "fn narrow_length_matches_exact_bit_addition",
+        "fn wide_length_matches_exact_bit_addition",
+    ):
+        require(bit_input, token, "bit length and padding")
 
     compression = sources[COMPRESS][1]
     for token in (
@@ -177,6 +228,10 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "const INITIAL_STATE: [u32; 8]",
         "pub struct Sha256",
         "pub const MAX_MESSAGE_BYTES: u64 = u64::MAX / 8;",
+        "pub const MAX_MESSAGE_BITS: u64 = u64::MAX;",
+        "pub fn check_additional_bits(&self, additional_bits: u64)",
+        "pub fn finalize_bits",
+        "pub fn finalize_bits_with_backend",
         "pub fn check_additional_bytes(&self, additional_bytes: u64)",
         "checked_message_length(self.message_bytes, additional_bytes).map(|_| ())",
         "u64::try_from(input.len())",
@@ -203,6 +258,10 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "0xc105_9ed8",
         "pub struct Sha224",
         "pub const MAX_MESSAGE_BYTES: u64 = u64::MAX / 8;",
+        "pub const MAX_MESSAGE_BITS: u64 = u64::MAX;",
+        "pub fn check_additional_bits(&self, additional_bits: u64)",
+        "pub fn finalize_bits",
+        "pub fn finalize_bits_with_backend",
         "pub fn check_additional_bytes(&self, additional_bytes: u64)",
         "u64::try_from(input.len())",
         "checked_message_length(self.message_bytes, additional)",
@@ -224,6 +283,10 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
         "const BLOCK_BYTES: usize = 128;",
         "const LENGTH_FIELD_BYTES: usize = 16;",
         "pub(crate) const MAX_MESSAGE_BYTES: u128 = u128::MAX / 8;",
+        "pub(crate) const MAX_MESSAGE_BITS: u128 = u128::MAX;",
+        "pub(crate) fn check_additional_bits",
+        "pub(crate) fn finalize_bits",
+        "pub(crate) fn finalize_bits_with_backend",
         "pub(crate) struct Sha512State",
         "checked_message_length(self.message_bytes, additional_bytes).map(|_| ())",
         "let additional = input.len() as u128;",
@@ -245,6 +308,10 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
             f"pub struct {name}",
             iv,
             "pub const MAX_MESSAGE_BYTES: u128 = sha512_state::MAX_MESSAGE_BYTES;",
+            "pub const MAX_MESSAGE_BITS: u128 = sha512_state::MAX_MESSAGE_BITS;",
+            "pub fn check_additional_bits(&self, additional_bits: u128)",
+            "pub fn finalize_bits",
+            "pub fn finalize_bits_with_backend",
             "pub fn check_additional_bytes(&self, additional_bytes: u128)",
             ".update(input)",
             words,
@@ -282,6 +349,10 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
             f"pub struct {name}",
             initial,
             "pub const MAX_MESSAGE_BYTES: u128 = sha512_state::MAX_MESSAGE_BYTES;",
+            "pub const MAX_MESSAGE_BITS: u128 = sha512_state::MAX_MESSAGE_BITS;",
+            "pub fn check_additional_bits(&self, additional_bits: u128)",
+            "pub fn finalize_bits",
+            "pub fn finalize_bits_with_backend",
             "pub fn check_additional_bytes(&self, additional_bytes: u128)",
             ".update(input)",
             "sha512_t::leftmost_bytes(self.inner.finalize())",
@@ -322,124 +393,6 @@ def validate_structure(sources: dict[Path, tuple[str, str]]) -> None:
     if re.search(r"^\s+[A-Z][A-Za-z0-9_]*\s*\{", error, re.MULTILINE):
         fail("SHA-256 errors gained payload fields")
 
-
-def validate_tests(root: Path) -> None:
-    path = root / TEST
-    if not path.is_file() or path.is_symlink():
-        fail("SHA-256 tests must be a regular file")
-    text = path.read_text(encoding="utf-8")
-    if len(text.splitlines()) > 500:
-        fail("SHA-256 tests exceed 500 lines")
-    for token in (
-        "fn official_fips_vectors",
-        "fn padding_boundaries_have_exact_digests",
-        "fn every_streaming_partition_matches_one_shot",
-        "fn downstream_style_real_content_uses_only_public_api",
-        "fn public_length_preflight_is_exact_and_non_mutating",
-        "let repeated = [b'a'; 1_000];",
-        "for _ in 0..1_000",
-        "for chunk_size in 1..=80",
-    ):
-        require(text, token, "SHA-256 tests")
-    sha224_path = root / SHA224_TEST
-    if not sha224_path.is_file() or sha224_path.is_symlink():
-        fail("SHA-224 tests must be a regular file")
-    sha224_text = sha224_path.read_text(encoding="utf-8")
-    if len(sha224_text.splitlines()) > 500:
-        fail("SHA-224 tests exceed 500 lines")
-    for token in (
-        "fn official_short_and_long_vectors_match_fips_and_nist_cavp",
-        "fn official_million_a_vector_matches",
-        "fn official_nist_cavp_monte_carlo_count_zero_matches",
-        "fn every_padding_boundary_matches_independent_expected_results",
-        "fn every_two_part_split_and_fixed_chunk_width_matches_one_shot",
-        "fn trait_api_and_checked_length_are_directly_usable",
-        "fn sha224_is_not_truncated_sha256",
-        "for _ in 0..1_000",
-        "for split in 0..=message.len()",
-        "for width in 1..=message.len()",
-    ):
-        require(sha224_text, token, "SHA-224 tests")
-    for relative, name, distinction in (
-        (SHA384_TEST, "SHA-384", "fn sha384_is_not_truncated_sha512"),
-        (SHA512_TEST, "SHA-512", None),
-    ):
-        algorithm_path = root / relative
-        if not algorithm_path.is_file() or algorithm_path.is_symlink():
-            fail(f"{name} tests must be a regular file")
-        algorithm_text = algorithm_path.read_text(encoding="utf-8")
-        if len(algorithm_text.splitlines()) > 500:
-            fail(f"{name} tests exceed 500 lines")
-        for token in (
-            "fn official_short_and_long_vectors_match_fips_and_nist_cavp",
-            "fn official_million_a_vector_matches",
-            "fn official_nist_cavp_monte_carlo_count_zero_matches",
-            "fn every_padding_boundary_matches_independent_expected_results",
-            "fn every_two_part_split_and_fixed_chunk_width_matches_one_shot",
-            "fn trait_api_length_domain_and_real_content_are_usable",
-            "for _ in 0..1_000",
-            "for split in 0..=message.len()",
-            "for width in 1..=message.len()",
-        ):
-            require(algorithm_text, token, f"{name} tests")
-        if distinction is not None:
-            require(algorithm_text, distinction, f"{name} tests")
-    for relative, name in (
-        (SHA512_224_TEST, "SHA-512/224"),
-        (SHA512_256_TEST, "SHA-512/256"),
-    ):
-        algorithm_path = root / relative
-        if not algorithm_path.is_file() or algorithm_path.is_symlink():
-            fail(f"{name} tests must be a regular file")
-        algorithm_text = algorithm_path.read_text(encoding="utf-8")
-        if len(algorithm_text.splitlines()) > 500:
-            fail(f"{name} tests exceed 500 lines")
-        for token in (
-            "fn official_short_and_long_nist_cavp_vectors_match",
-            "fn official_nist_cavp_monte_carlo_count_zero_matches",
-            "fn official_million_a_vector_matches",
-            "fn every_padding_boundary_matches_independent_expected_results",
-            "fn every_split_and_chunk_width_matches_one_shot",
-            "fn trait_api_length_domain_and_algorithm_identity_are_exact",
-            "for _ in 0..1_000",
-            "for split in 0..=message.len()",
-            "for width in 1..=message.len()",
-            "assert_ne!",
-        ):
-            require(algorithm_text, token, f"{name} tests")
-    accelerated = root / ACCEL_TEST
-    if not accelerated.is_file() or accelerated.is_symlink():
-        fail("accelerated SHA-256 tests must be a regular file")
-    accelerated_text = accelerated.read_text(encoding="utf-8")
-    if len(accelerated_text.splitlines()) > 500:
-        fail("accelerated SHA-256 tests exceed 500 lines")
-    for token in (
-        "fn statically_proven_backend_matches_scalar_when_available",
-        "Sha256BackendSession::for_compiled_target()",
-        "for length in [0_usize, 1, 55, 56, 63, 64, 65, 127, 128, 192, 193]",
-        "for width in 1..=67",
-        "state.update_with_backend(chunk, &backend)",
-    ):
-        require(accelerated_text, token, "accelerated SHA-256 tests")
-    family_accelerated = root / SHA2_ACCEL_TEST
-    if not family_accelerated.is_file() or family_accelerated.is_symlink():
-        fail("accelerated SHA-2 family tests must be a regular file")
-    family_text = family_accelerated.read_text(encoding="utf-8")
-    if len(family_text.splitlines()) > 500:
-        fail("accelerated SHA-2 family tests exceed 500 lines")
-    for token in (
-        "fn sha256_family_backend_matches_both_algorithm_identities",
-        "fn sha512_family_backend_matches_all_four_algorithm_identities",
-        "Sha256BackendSession::for_compiled_target()",
-        "Sha512BackendSession::for_compiled_target()",
-        "state512_224.update_with_backend(chunk, &backend)",
-        "state512_256.finalize_with_backend(&backend)",
-    ):
-        require(family_text, token, "accelerated SHA-2 family tests")
-    for relative, expected_hash in EXPECTED_TEST_SHA256.items():
-        digest = hashlib.sha256((root / relative).read_bytes()).hexdigest()
-        if digest != expected_hash:
-            fail(f"SHA-2 reviewed test hash drift: {relative}")
 
 
 def validate_packages(root: Path) -> None:
@@ -493,6 +446,6 @@ def validate_hashes(sources: dict[Path, tuple[str, str]]) -> None:
 def validate(root: Path) -> None:
     sources = load_sources(root)
     validate_structure(sources)
-    validate_tests(root)
+    validate_tests(root, fail, require, EXPECTED_TEST_SHA256)
     validate_packages(root)
     validate_hashes(sources)

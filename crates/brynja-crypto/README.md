@@ -34,7 +34,8 @@ dependency direction is always from `brynja-crypto` to the leaf families, never
 back toward TLS or the full cryptographic graph.
 
 The current internal workspace reexports all six complete portable FIPS 180-4
-SHA-2 implementations from `brynja-hash-sha2` plus all six complete portable
+SHA-2 byte and canonical arbitrary-bit implementations from
+`brynja-hash-sha2` plus all six complete portable
 FIPS 202 SHA-3 and SHAKE functions from `brynja-hash-sha3`. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
@@ -58,6 +59,8 @@ guarantee erasure of secret-input remnants or private internal state; keyed
 constructions must use the later hardened secret-owning path.
 
 ```rust
+let bit_input = brynja_crypto::BitString::new(&[0b0110_0000], 3).unwrap();
+let bit_digest = brynja_crypto::sha256_bits(bit_input).unwrap();
 let shorter = brynja_crypto::sha224(b"abc").unwrap();
 let digest = brynja_crypto::sha256(b"abc").unwrap();
 let wider = brynja_crypto::sha384(b"abc").unwrap();
@@ -73,6 +76,7 @@ let mut shake256 = [0_u8; 64];
 brynja_crypto::shake128(b"abc", &mut shake128).unwrap();
 brynja_crypto::shake256(b"abc", &mut shake256).unwrap();
 assert_eq!(shorter.as_bytes().len(), 28);
+assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 assert_eq!(digest.as_bytes().len(), 32);
 assert_eq!(wider.as_bytes().len(), 48);
 assert_eq!(widest.as_bytes().len(), 64);

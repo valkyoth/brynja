@@ -26,13 +26,7 @@ def reject(label: str, mutation) -> None:
         root = Path(temporary)
         copied = (
             *policy.SOURCES,
-            policy.TEST,
-            policy.SHA224_TEST,
-            policy.SHA384_TEST,
-            policy.SHA512_TEST,
-            policy.SHA512_224_TEST,
-            policy.SHA512_256_TEST,
-            policy.ACCEL_TEST,
+            *policy.TEST_SOURCES,
             policy.CORE_MANIFEST,
             policy.MANIFEST,
             policy.CRYPTO_MANIFEST,
@@ -97,6 +91,23 @@ def main() -> int:
     reject("SHA-512/224 identity test", lambda root: replace(root, policy.SHA512_224_TEST, "fn trait_api_length_domain_and_algorithm_identity_are_exact", "fn removed_identity_test"))
     reject("SHA-512/256 identity test", lambda root: replace(root, policy.SHA512_256_TEST, "fn trait_api_length_domain_and_algorithm_identity_are_exact", "fn removed_identity_test"))
     reject("claim", lambda root: replace(root, policy.LIB, "SHA256_IMPLEMENTED: bool = true", "SHA256_IMPLEMENTED: bool = false"))
+    reject("bit-input claim", lambda root: replace(root, policy.LIB, "SHA2_BIT_INPUT_IMPLEMENTED: bool = true", "SHA2_BIT_INPUT_IMPLEMENTED: bool = false"))
+    reject("bit-input API", lambda root: replace(root, policy.BIT_API, "pub fn sha512_256_bits(", "fn sha512_256_bits("))
+    reject("bit backend API", lambda root: replace(root, policy.BIT_API, "pub fn sha256_bits_with_backend(", "fn sha256_bits_with_backend("))
+    reject("bit-length multiplication", lambda root: replace(root, policy.BIT_INPUT, ".checked_mul(8)", ".wrapping_mul(8)"))
+    reject("bit-length addition", lambda root: replace(root, policy.BIT_INPUT, ".checked_add(additional_bits)", ".wrapping_add(additional_bits)"))
+    reject("partial-bit padding", lambda root: replace(root, policy.BIT_INPUT, "0x80_u8 >> valid_bits", "0x80_u8 << valid_bits"))
+    reject("ambiguous tail", lambda root: replace(root, policy.CORE_BITS, "& unused_mask != 0", "& unused_mask == 0"))
+    reject("bit vector authority", lambda root: replace(root, policy.BIT_VECTORS, "cd7b9f11680c6e0ccdbe13b28403f2017b5ff48789152162461e0a24fb4c5d45", "dd7b9f11680c6e0ccdbe13b28403f2017b5ff48789152162461e0a24fb4c5d45"))
+    reject("bit vector coverage", lambda root: replace(root, policy.BIT_VECTORS, "SHA224|0|00|", "# SHA224|0|00|"))
+    reject("bit vector test", lambda root: replace(root, policy.BIT_TEST, "selected_official_nist_bit_vectors_match_every_identity", "removed_official_bit_vectors"))
+    reject("accelerated bit parity", lambda root: replace(root, policy.SHA2_ACCEL_TEST, "finalize_bits_with_backend(bits, &backend)", "finalize_bits(bits)"))
+    reject("differential input bound", lambda root: replace(root, policy.BIT_DIFFERENTIAL_MAIN, "MAX_MESSAGE_BITS: usize = 4_096", "MAX_MESSAGE_BITS: usize = usize::MAX"))
+    reject("differential line bound", lambda root: replace(root, policy.BIT_DIFFERENTIAL_MAIN, "read_bounded_line(&mut reader, &mut buffer, line_number)", "reader.lines().next()"))
+    reject("differential oracle", lambda root: replace(root, policy.BIT_DIFFERENTIAL_CHECK, "def digest64(", "def removed_digest64("))
+    reject("differential dependency", lambda root: replace(root, policy.BIT_DIFFERENTIAL_MANIFEST, "[dependencies]", "[dependencies]\nbrynja-core = { path = \"../../crates/brynja-core\" }"))
+    reject("bit Miri coverage", lambda root: replace(root, policy.MIRI_SCRIPT, "--test bit_inputs", "--test missing_bit_inputs"))
+    reject("bit sanitizer coverage", lambda root: replace(root, policy.SANITIZER_SCRIPT, "--test bit_inputs", "--test missing_bit_inputs"))
     reject("core dependency", lambda root: replace(root, policy.CORE_MANIFEST, "[lints]", "[dependencies]\nbrynja-core = { workspace = true }\n\n[lints]"))
     reject("SHA dependency", lambda root: replace(root, policy.MANIFEST, "brynja-hash-core = { workspace = true }", "brynja-hash-core = { workspace = true }\nbrynja-core = { workspace = true }"))
     reject("crypto ownership", lambda root: replace(root, policy.CRYPTO_MANIFEST, "brynja-hash-sha2 = { workspace = true }", "brynja-core = { workspace = true }"))
@@ -104,7 +115,7 @@ def main() -> int:
     reject("consumer test", lambda root: replace(root, policy.TEST, "fn downstream_style_real_content_uses_only_public_api", "fn removed_consumer"))
     reject("oversized", lambda root: (root / policy.SHA256).write_text((root / policy.SHA256).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-2 policy rejects fifty-four unsafe, native, allocation, identity, arithmetic, padding, package, test, size, and hash regressions")
+    print("portable SHA-2 policy rejects seventy-two unsafe, native, allocation, identity, bit-domain, arithmetic, padding, dynamic-analysis, package, test, size, and hash regressions")
     return 0
 
 

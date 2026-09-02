@@ -1,9 +1,13 @@
-//! Small algorithm-independent interfaces for fixed-output hashes and XOFs.
+//! Small algorithm-independent interfaces and canonical inputs for hashes.
 //!
 //! This crate defines interfaces only. It contains no hash implementation,
 //! algorithm identifier, allocation, I/O, runtime dispatch, or protocol code.
 
 #![no_std]
+
+mod bit_string;
+
+pub use bit_string::{BitString, BitStringError};
 
 /// Incremental byte input for a hash computation.
 ///

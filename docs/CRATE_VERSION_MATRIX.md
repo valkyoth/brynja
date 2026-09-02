@@ -1,14 +1,15 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.5 signed; v0.24.6 thirteen Medium assurance findings remediated, independent tenth retest PASS, green GitHub and signed tag pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 complete SHA-2 arbitrary-bit implementation and local verification ready for exceptional pentest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.6`. `brynja-hash-core 0.1.0`,
-`brynja-hash-sha2 0.1.0` retains reusable byte-oriented interfaces and correct
-portable implementations of all six FIPS 180-4 SHA-2 algorithms, and new
+advances to internal `0.24.7`. `brynja-hash-core 0.1.0`,
+`brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
+interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
+algorithms, and unpublished
 unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented implementations
-of all six FIPS 202 functions. Arbitrary-bit and hardened secret-bearing
-profiles remain in progress through v0.24.11. Published
+of all six FIPS 202 functions. SHA-2 hardened profiles plus SHA-3/SHAKE
+arbitrary-bit and hardened profiles remain in progress through v0.24.11. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
 the separate opt-in x86/AArch64 host detector and runtime selection API while
@@ -18,9 +19,9 @@ repository-only API-profile register closes 129 semantic capabilities across
 22 dimensions and inventories eight current, zero registered capability, plus
 75 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked current-owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.0. This milestone changes no package version or
-intended runtime behavior and selects
-zero crates.io packages. Package publication does not imply a TLS
+under Rust 1.90.0 and 1.98.0. The facade version advances and the SHA-2 leaf
+adds the exact bit-message behavior; all support-package versions remain
+unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 
 The optional adapter is a material production secret-storage boundary. Its
@@ -266,10 +267,10 @@ FIPS validation remain later work. Zero crates are selected for publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.24.6` | no | Internal repository-only cryptographic API-profile and secret-state closure milestone; production cryptography is unchanged and v0.20.0 remains published |
+| `brynja` | `0.24.7` | no | Internal canonical arbitrary-bit SHA-2 milestone; all six byte APIs remain stable, hardened profiles remain pending, and v0.20.0 remains published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
-| `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output and XOF interfaces |
-| `brynja-hash-sha2` | `0.1.0` | no | Unpublished six-algorithm FIPS 180-4 byte APIs, forced candidate routes, and package-external byte acceptance; arbitrary-bit and hardened secret-bearing profiles remain in progress |
+| `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output/XOF interfaces and canonical borrowed bit strings |
+| `brynja-hash-sha2` | `0.1.0` | no | Unpublished six-algorithm FIPS 180-4 byte and arbitrary-bit APIs, forced candidate routes, and package-external acceptance; hardened secret-bearing profiles remain in progress |
 | `brynja-hash-sha3` | `0.1.0` | no | Unpublished SHA3-224/SHA3-256/SHA3-384/SHA3-512/SHAKE128/SHAKE256 byte APIs with packaged portable acceptance; arbitrary-bit, hardened secret-bearing, and final cross-backend profiles remain in progress |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports all six SHA-2 and six FIPS 202 leaf implementations |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |

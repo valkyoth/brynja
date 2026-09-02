@@ -39,17 +39,19 @@ v0.23.3 extends the forced backend API to SHA-224 and all four SHA-512-family
 identities. AArch64 SHA-512 and RV64 Zknh SHA-512 candidates remain
 unadmitted; x86_64 SHA-512 remains an explicit scalar-only decision. v0.23.4
 closes byte-oriented family usability with source and separately packaged
-downstream acceptance through only documented public APIs. The wider family
-remains **In progress** until v0.24.7-v0.24.11 add arbitrary-bit inputs,
-distinct hardened secret-bearing states, complete internal sanitization, and
-combined downstream acceptance.
+downstream acceptance through only documented public APIs. v0.24.7 adds the
+complete FIPS 180-4 arbitrary-bit input domain to all six identities through
+canonical one-shot and consuming incremental final-tail APIs. The wider family
+remains **In progress** until v0.24.8-v0.24.11 add distinct hardened
+secret-bearing states, complete internal sanitization, and combined downstream
+acceptance.
 
 ## Example
 
 ```rust
 use brynja_hash_sha2::{
-    Sha224, Sha256, Sha384, Sha512, Sha512_224, Sha512_256,
-    sha224, sha256, sha384, sha512, sha512_224, sha512_256,
+    BitString, Sha224, Sha256, Sha384, Sha512, Sha512_224, Sha512_256,
+    sha224, sha256, sha256_bits, sha384, sha512, sha512_224, sha512_256,
 };
 
 let sha224_one_shot = sha224(b"abc").unwrap();
@@ -84,7 +86,17 @@ assert_eq!(sha512_224_streaming.finalize(), sha512_224_one_shot);
 let mut sha512_256_streaming = Sha512_256::new();
 sha512_256_streaming.update(b"abc").unwrap();
 assert_eq!(sha512_256_streaming.finalize(), sha512_256_one_shot);
+
+// Canonical arbitrary-bit inputs use the high bits of their final byte.
+let three_bits = BitString::new(&[0b0110_0000], 3).unwrap();
+let bit_digest = sha256_bits(three_bits).unwrap();
+assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 ```
+
+Incremental callers absorb any complete-byte prefix with `update`, then pass
+one canonical final byte or byte-aligned suffix to the consuming
+`finalize_bits` method. Consuming the state makes repeated tails and absorption
+after a partial tail unrepresentable in safe Rust.
 
 Callers with external file or stream metadata can preflight the checked FIPS
 message-length domain without allocating or mutating the state:
@@ -127,12 +139,13 @@ Cargo package contents. It needs no network or private test hook.
 
 ## Cryptography Verification Status
 
-All six portable FIPS 180-4 SHA-2 byte-oriented algorithms are implemented through v0.23.2,
+All six portable FIPS 180-4 SHA-2 algorithms are implemented through v0.23.2,
 and v0.23.3 adds complete forced candidate APIs while keeping every backend
 unadmitted pending native evidence. v0.23.4 completes packaged downstream
-byte-oriented family acceptance. Arbitrary-bit and hardened secret-bearing
-profiles remain planned through v0.24.11, so the expanded family is still in
-progress. No code in this crate has been independently reviewed. A component only moves
+byte-oriented family acceptance. v0.24.7 completes the canonical arbitrary-bit
+input APIs; hardened secret-bearing profiles and final combined acceptance
+remain planned through v0.24.11, so the expanded family is still in progress.
+No code in this crate has been independently reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
 fuzzing, and pentesting do not by themselves constitute independent
@@ -140,7 +153,7 @@ verification.
 
 | Algorithm | Implementation chain | Independently verified |
 | --- | --- | --- |
-| SHA-2 (all six identities have complete byte APIs; arbitrary-bit and hardened secret-bearing profiles pending) | 🚧 In progress | ❌ Not verified |
+| SHA-2 (all six identities have complete byte and arbitrary-bit APIs; hardened secret-bearing profiles pending) | 🚧 In progress | ❌ Not verified |
 
 These are unkeyed hashes. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS

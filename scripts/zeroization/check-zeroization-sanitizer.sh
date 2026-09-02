@@ -13,6 +13,11 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-01 test \
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-01 test \
     -p brynja-hash-sha2 \
+    --test bit_inputs \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-01 test \
+    -p brynja-hash-sha2 \
     --test sha224 \
     --target x86_64-unknown-linux-gnu
 

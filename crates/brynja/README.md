@@ -31,10 +31,10 @@ workspace. It is allocation-independent `no_std` Rust without a C cryptographic 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable FIPS 180-4 SHA-2 algorithms,
 > all six portable FIPS 202 SHA-3 and SHAKE functions, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
 
-All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged
-downstream `no_std` acceptance through the leaf and facade; that is not
-independent review or FIPS validation. The SHA-3/SHAKE cross-backend acceptance
-chain remains in progress.
+All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged downstream
+`no_std` acceptance through the leaf and facade; SHA-2 additionally accepts canonical FIPS
+arbitrary-bit messages. That is not independent review or FIPS validation. The SHA-3/SHAKE
+cross-backend acceptance chain remains in progress.
 
 ## Design Boundaries
 
@@ -104,13 +104,15 @@ assert_eq!(widest.as_bytes().len(), 64);
 assert_eq!(truncated_224.as_bytes().len(), 28);
 assert_eq!(truncated_256.as_bytes().len(), 32);
 assert_eq!(digest.as_bytes().len(), 32);
+
+let bits = brynja::crypto::BitString::new(&[0b0110_0000], 3).unwrap();
+let bit_digest = brynja::crypto::sha256_bits(bits).unwrap();
+assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 ```
 
 These SHA-2 functions are unkeyed digests, not authentication, a MAC, or password hashing.
-Ordinary SHA-2 states do not guarantee erasure of secret-input remnants,
-including private working state that callers cannot clear; keyed use
-requires the distinct hardened profile planned through v0.24.11. That profile
-will use Brynja's admitted sanitization boundary to clear every Brynja-owned secret copy; callers remain responsible only for buffers and outputs they own.
+Ordinary states do not erase private secret-input remnants; keyed use requires the hardened
+profile planned through v0.24.11. It will clear Brynja-owned copies; callers clear their own.
 
 ### Compute Portable SHA-3 And SHAKE
 
@@ -147,7 +149,7 @@ Only linked sign-off from a named independent reviewer can change independent st
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte APIs; arbitrary-bit and hardened profiles pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte and arbitrary-bit APIs; hardened profiles pending) | 🚧 In progress | ❌ Not independently verified |
 | SHA-3/SHAKE (all six FIPS 202 identities have complete byte APIs; arbitrary-bit, hardened secret-bearing, and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
@@ -180,7 +182,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | --- | --- |
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
-| `brynja-hash-sha2` | All six FIPS 180-4 byte APIs; arbitrary-bit and hardened profiles pending |
+| `brynja-hash-sha2` | All six FIPS 180-4 byte and arbitrary-bit APIs; hardened profiles and final combined acceptance pending |
 | `brynja-hash-sha3` | All six FIPS 202 byte APIs; arbitrary-bit, hardened, and final acceptance pending |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
@@ -190,8 +192,6 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 
 ## More Information
 
-- [Full project README](https://github.com/valkyoth/brynja#readme)
-- [API documentation](https://docs.rs/brynja)
 - [Release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md)
 - [Threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md)
 - [Verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md)

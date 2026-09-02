@@ -29,6 +29,11 @@ Small allocation-free `no_std` interfaces shared by Brynja fixed-output hash
 and extendable-output implementations. This crate contains no algorithm,
 runtime dispatch, I/O, or protocol code.
 
+It also owns the canonical borrowed `BitString` representation shared by
+bit-oriented hash APIs. Message bits are most-significant-bit first, the valid
+width of the final byte is explicit, and unused low bits must be zero, so one
+mathematical bit string has one accepted representation.
+
 ## Cryptography Verification Status
 
 This crate does not implement cryptographic or protocol code. Only a named
@@ -44,6 +49,8 @@ component's status. Interface tests are not independent verification.
 - `ExtendableOutput` consumes an absorbing state and returns a distinct XOF
   reader, so callers cannot absorb after squeezing starts.
 - `XofReader` incrementally fills complete caller-owned output slices.
+- `BitString` validates an allocation-free exact-length bit string and can
+  separate its complete-byte prefix from an optional final partial byte.
 
 See the [full project documentation](https://github.com/valkyoth/brynja) and
 [verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).

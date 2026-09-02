@@ -18,6 +18,7 @@ def copy_fixture(destination: Path) -> None:
         Path("assurance/zeroization-matrix.toml"),
         Path(".github/workflows/ci.yml"),
         Path("scripts/checks.sh"),
+        Path("scripts/tag_gate.sh"),
     ):
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -50,6 +51,7 @@ def test() -> None:
         matrix = root / "assurance/zeroization-matrix.toml"
         workflow = root / ".github/workflows/ci.yml"
         checks = root / "scripts/checks.sh"
+        tag_gate = root / "scripts/tag_gate.sh"
 
         replace(matrix, '  "registers",\n', "")
         require_rejection(root, "exclusions")
@@ -63,8 +65,16 @@ def test() -> None:
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
-        replace(workflow, "run: scripts/zeroization/check-zeroization-miri.sh", "run: true")
-        require_rejection(root, "dynamic analysis")
+        replace(tag_gate, "scripts/zeroization/check-zeroization-miri.sh", "true")
+        require_rejection(root, "local tag gate")
+        copy_fixture(root)
+
+        workflow.write_text(
+            workflow.read_text(encoding="utf-8")
+            + "\n      - run: scripts/zeroization/check-zeroization-miri.sh\n",
+            encoding="utf-8",
+        )
+        require_rejection(root, "ordinary CI")
         copy_fixture(root)
 
         replace(
@@ -77,4 +87,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("zeroization evidence rejects five claim and coverage regressions")
+    print("zeroization evidence rejects six claim, coverage, and execution-boundary regressions")

@@ -100,3 +100,10 @@ scripts/sha3/check-sha3-hardened-codegen.sh
 
 The full local release gate additionally runs the separately pinned Kani,
 Miri, and Rust sanitizer evidence.
+
+The report-bearing assurance-only follow-up moves full Miri and sanitizer
+execution from the bounded 20-minute GitHub job into that local pre-tag gate.
+GitHub continues to validate exact tool pins, script presence, coverage
+bindings, mutation fixtures, and compiler-artifact evidence. No Rust source,
+Cargo manifest, public API, digest result, dependency, or cryptographic claim
+changes in that follow-up.

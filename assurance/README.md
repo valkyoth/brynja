@@ -179,9 +179,12 @@ claim.
 
 The tool entries are exact source-policy pins, and no tool may enter a
 repository Cargo manifest. Kani and the process fuzzers remain policy-only
-until their owning later milestones. Version 0.11.0 executes the pinned Miri
-and AddressSanitizer toolchain only against the owned-region zeroization tests;
-that narrow evidence does not establish constant-time behavior, physical
+until their owning later milestones. The local pre-tag gate executes the pinned
+Miri and AddressSanitizer toolchain against the registered zeroization and hash
+coverage. Ordinary GitHub CI validates the exact scripts, tool pins, coverage
+bindings, mutations, and emitted-code matrices but does not execute the full
+dynamic-analysis suites, whose runtime exceeds the bounded hosted-CI window.
+That local evidence does not establish constant-time behavior, physical
 erasure, protocol security, or independent verification. The latest-tools gate
 compares both nightly tools to the current official Rust nightly manifest and
 requires Miri to be available for the evidence host.

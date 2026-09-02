@@ -47,7 +47,7 @@ EXCLUSIONS = (
 
 
 class EvidenceError(RuntimeError):
-    """The zeroization evidence matrix or its CI binding drifted."""
+    """The zeroization evidence matrix or its execution binding drifted."""
 
 
 def fail(message: str) -> None:
@@ -81,6 +81,7 @@ def validate(root: Path) -> None:
         fail("zeroization claim exclusions drifted")
     if matrix["dynamic"] != {
         "toolchain": "nightly-2026-09-02",
+        "execution": "local-pre-tag",
         "miri": True,
         "address_sanitizer": True,
         "test_target": "x86_64-unknown-linux-gnu",
@@ -98,11 +99,11 @@ def validate(root: Path) -> None:
     if compiler_step not in workflow or target_step not in workflow:
         fail("CI does not execute both zeroization evidence dimensions")
     for command in (
-        "run: scripts/zeroization/check-zeroization-miri.sh",
-        "run: scripts/zeroization/check-zeroization-sanitizer.sh",
+        "scripts/zeroization/check-zeroization-miri.sh",
+        "scripts/zeroization/check-zeroization-sanitizer.sh",
     ):
-        if command not in workflow:
-            fail("CI omits pinned zeroization dynamic analysis")
+        if command in workflow:
+            fail("ordinary CI must not execute full zeroization dynamic analysis")
     rust_matrix = re.search(r"^        rust: \[([^]]+)]$", workflow, re.MULTILINE)
     if rust_matrix is None:
         fail("CI compiler matrix is missing")
@@ -121,3 +122,10 @@ def validate(root: Path) -> None:
         "x86_64-unknown-linux-gnu" not in checks
     ):
         fail("ordinary repository checks omit latest-host codegen evidence")
+    tag_gate = (root / "scripts/tag_gate.sh").read_text(encoding="utf-8")
+    for command in (
+        "scripts/zeroization/check-zeroization-miri.sh",
+        "scripts/zeroization/check-zeroization-sanitizer.sh",
+    ):
+        if tag_gate.count(command) != 1:
+            fail("local tag gate omits pinned zeroization dynamic analysis")

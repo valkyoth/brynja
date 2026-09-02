@@ -8,8 +8,8 @@ one growing flat directory.
 Only two executable entry points live directly in this directory:
 
 - `scripts/checks.sh` runs the ordinary complete repository gate.
-- `scripts/tag_gate.sh vX.Y.Z` adds tag-only, online, matrix, SBOM, release, and
-  required local proof gates.
+- `scripts/tag_gate.sh vX.Y.Z` adds tag-only, online, matrix, SBOM, release,
+  full local Miri/AddressSanitizer, and required local proof gates.
 
 `inventory.toml` is the machine-readable directory register.
 `repository/check-script-layout.py` rejects unknown root files, unknown or
@@ -35,7 +35,7 @@ file beneath a Cargo `target/` directory, regardless of workspace depth.
 | `sha2/` | SHA-2 source policy, public acceptance, CPU code generation, QEMU, and native capture scripts |
 | `sha3/` | SHA-3/SHAKE source policy, differential evidence, and frozen public acceptance scripts |
 | `standards/` | RFC/local authority lifecycle observation, protocol surfaces, and normative requirement generation and validation |
-| `zeroization/` | First-party zeroization source, compiler-artifact, Miri, and sanitizer evidence |
+| `zeroization/` | First-party zeroization source, compiler-artifact, and local pre-tag Miri/sanitizer evidence |
 
 Algorithm-specific scripts stay with their algorithm. Reusable machinery does
 not: for example, SHA-2 instruction checks belong in `sha2/`, while CPU feature

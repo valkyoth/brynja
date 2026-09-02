@@ -310,17 +310,17 @@ def validate_repository(policy: dict) -> None:
         msrv += ".0"
     if release != policy["toolchains"]["release"] or msrv != policy["toolchains"]["msrv"]:
         fail("assurance toolchains disagree with Cargo or rust-toolchain.toml")
-    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(
-        encoding="utf-8"
-    )
+    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     validate_workflow(workflow)
     nightly = next(tool for tool in policy["tools"] if tool["id"] == "miri")
-    install = (
-        f"run: rustup toolchain install {nightly['version']} --profile minimal "
-        "--component miri,rust-src"
-    )
-    if workflow.count(install) != 1:
-        fail("CI zeroization nightly installation drifted")
+    install = f"rustup toolchain install {nightly['version']} --profile minimal --component miri,rust-src"
+    if install in workflow:
+        fail("ordinary CI must not install the full Miri evidence toolchain")
+    tag_gate = (ROOT / "scripts" / "tag_gate.sh").read_text(encoding="utf-8")
+    for tool in ("miri", "sanitizer"):
+        command = f"scripts/zeroization/check-zeroization-{tool}.sh"
+        if tag_gate.count(command) != 1:
+            fail("local tag gate dynamic-analysis binding drifted")
     rust_targets = set(
         subprocess.check_output(
             ["rustc", "--print", "target-list"],
@@ -388,6 +388,7 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "scripts" / "assurance" / "check-assurance.py",
         ROOT / "scripts" / "assurance" / "check-bare-metal.sh",
         ROOT / "scripts" / "assurance" / "check-kani.sh",
+        ROOT / "scripts" / "tag_gate.sh",
         ROOT / "scripts" / "repository" / "unsafe_policy.py",
         ROOT / "scripts" / "repository" / "check-unsafe-policy.py",
         ROOT / "scripts" / "repository" / "test-unsafe-policy.py",

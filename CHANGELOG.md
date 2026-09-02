@@ -7,6 +7,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Move full Miri and AddressSanitizer execution from an inevitably timing-out
+  20-minute GitHub job to the required local pre-tag gate. CI retains
+  fail-closed validation of tool pins, script and coverage bindings, mutation
+  tests, and emitted-code evidence; no cryptographic source or API changes.
 - Record the completed exceptional v0.24.10 assessment and green retest of
   exact remediation candidate `b3232116a66f908524d859aa40d1b1ab8e31f913`.
   The permanent report closes its one High finding with `PASS`/`PASS` and zero

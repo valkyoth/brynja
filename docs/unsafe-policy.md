@@ -1,18 +1,19 @@
 # Unsafe Rust Policy
 
-Status: six exact source-hash-bound modules approved; every other unsafe site forbidden
+Status: nine exact source-hash-bound modules approved; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only six exact modules: the private core volatile clearer, the
-SHA-256 session attestation boundary, the x86_64 SHA kernel, the AArch64 SHA2
-kernel, the RISC-V RV64 Zknh kernel, and the opt-in standard-library runtime detector. Each complete source
-is pinned by SHA-256 with exact unsafe-block, unsafe-item, local safety-proof,
-target-feature, intrinsic, and detector invariants. Any byte change reopens
-review before semantic checks run. Every other Rust source rejects unsafe,
-local unsafe allowances, assembly, FFI, and code inclusion. Foreign source,
-native objects, build scripts, native links, and external C cryptographic
-modules remain forbidden repository-wide. Rust sources must be regular files
-beneath non-symlink package directories.
+Rust in only nine exact modules: the private core volatile clearer; the
+SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
+Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
+RV64 Zknh kernel; and the opt-in standard-library runtime detector. Each
+complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
+local safety-proof, target-feature, intrinsic, assembly, and detector
+invariants. Any byte change reopens review before semantic checks run. Every
+other Rust source rejects unsafe, local unsafe allowances, assembly, FFI, and
+code inclusion. Foreign source, native objects, build scripts, native links,
+and external C cryptographic modules remain forbidden repository-wide. Rust
+sources must be regular files beneath non-symlink package directories.
 
 A future exception requires a versioned milestone, written necessity analysis,
 safe alternative analysis, isolated module or crate, documented invariants,
@@ -20,15 +21,36 @@ Miri/sanitizer and adversarial tests, platform review, an external audit, and
 explicit amendment of this policy. Assembly and FFI are treated as unsafe even
 when hidden behind build tooling.
 
+## v0.24.4 Keccak CPU-Intrinsic Exceptions
+
+Version 0.24.4 adds exact first-party x86_64 AVX2 and AArch64 SHA3
+Keccak-f[1600] candidates. The x86 module owns fixed-width AVX2 intrinsics; the
+AArch64 module owns the architecture's `eor3`, `rax1`, and `bcax` intrinsic
+path. `keccak.rs` owns the associated attestation constructor but no unsafe
+block. Both kernels accept fixed arrays, execute fixed 24-round work, and are
+reachable only through architecture-checked, thread-bound, direct-KAT-gated
+evidence sessions. They contain no FFI, external assembly, native object,
+build script, allocation, I/O, or pointer-length public API.
+
+Both candidates remain unadmitted. Supplemental QEMU and emitted-instruction
+evidence cannot establish native correctness, CPU-migration safety,
+performance, side-channel behavior, secret-state erasure, independent
+cryptographic verification, or FIPS validation. RISC-V remains scalar-only
+for Keccak because the pinned ratified authorities contain no qualifying
+route. Any admission is a separately reviewed architectural change, never a
+source-hash-only edit.
+
 ## v0.22.2 RISC-V Zknh Inline-Assembly Exception
 
 Rust 1.90.0 through 1.98.0 recognizes the ratified RISC-V `zknh` target
-feature but does not expose stable SHA-256 intrinsic functions for it. The
-smallest stable first-party implementation therefore owns exactly four inline
-`asm!` statements in `riscv64_zknh.rs`: `sha256sig0`, `sha256sig1`,
-`sha256sum0`, and `sha256sum1`. The complete module is source-hash-bound with
-five unsafe blocks, one target-feature unsafe function, and five local safety
-arguments. It has no memory operand, stack use, foreign ABI, external assembly,
+feature but does not expose stable SHA-2 intrinsic functions for it. Version
+0.22.2 introduced four SHA-256 inline operations; v0.23.3 extended the same
+module with the two qualifying SHA-512 sum operations. The current first-party
+implementation therefore owns exactly six inline `asm!` statements in
+`riscv64_zknh.rs`: `sha256sig0`, `sha256sig1`, `sha256sum0`, `sha256sum1`,
+`sha512sum0`, and `sha512sum1`. The complete module is source-hash-bound with
+eight unsafe blocks, two target-feature unsafe functions, and eight local
+safety arguments. It has no memory operand, foreign ABI, external assembly,
 native object, or build script.
 
 The safe wrapper is reachable only on RV64 after compiler-proven `zknh` or an

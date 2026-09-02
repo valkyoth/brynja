@@ -1,8 +1,8 @@
 # Brynja 0.24.7 Release Notes
 
-Status: implementation and local verification complete; exceptional pentest,
-final repository gate, hosted GitHub and CodeQL, and signed tag pending; no
-crates.io publication is selected
+Status: exceptional pentest PASS/PASS with zero open findings; final repository
+gate complete; hosted GitHub and CodeQL plus signed tag pending; no crates.io
+publication is selected
 
 Brynja 0.24.7 completes the FIPS 180-4 arbitrary-bit input domain for SHA-224,
 SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256. Existing byte APIs and
@@ -57,6 +57,10 @@ v0.24.8-v0.24.11 passes.
 - Focused Miri and AddressSanitizer runs include the arbitrary-bit suite. The
   complete supported Rust, target, bare-metal, Clippy, documentation, package,
   dependency, source-policy, and repository gates remain mandatory.
+- The pre-tag freshness gate advanced Miri and Rust sanitizer evidence to
+  latest available `nightly-2026-09-02` at exact Rust revision
+  `5db7f4be8a36c1b8ae19299469e2be2b0f052c21`; CI, the evidence matrix, and
+  both dynamic-analysis scripts use the same pin.
 
 ## Security Boundaries
 
@@ -79,6 +83,10 @@ validation, or an approved operational environment.
 ## Release Process
 
 The new public bit-input and padding behavior is an exceptional pentest trigger.
+Two supplied assessments of exact implementation candidate
+`68d0e88450c25355f3a3aa0a8b1947d484fe6b90` each reported no Critical, High,
+or Medium finding. No remediation was required, and the
+permanent report records `PASS`/`PASS` with zero open findings.
 Version 0.24.7 is otherwise an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates.io packages. After the
 exceptional assessment and any required retest are permanently recorded, the

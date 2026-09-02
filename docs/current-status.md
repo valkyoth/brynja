@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 complete SHA-2 arbitrary-bit implementation and local verification ready for exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 exceptional pentest PASS/PASS with zero open findings and awaiting green hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -348,6 +348,13 @@ bind the new surface. Existing byte APIs remain identical and all optional CPU
 candidates remain unadmitted. This is unkeyed ordinary hashing, not secret-
 state erasure, independent review, FIPS 140-3 validation, or crates.io
 publication; SHA-2 remains In progress through v0.24.8-v0.24.11.
+
+Two supplied security assessments of exact implementation candidate
+`68d0e88450c25355f3a3aa0a8b1947d484fe6b90` each reported no Critical, High,
+or Medium finding. The permanent exceptional report records
+`PASS`/`PASS` with zero open findings and no required remediation. The exact
+report-bearing candidate still requires green hosted GitHub and CodeQL before
+the signed v0.24.7 tag is authorized.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

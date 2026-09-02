@@ -6,10 +6,10 @@
   ],
   "harness_protocol": "brynja-stdin-json-v1",
   "inputs": {
-    ".github/workflows/ci.yml": "a3f753738c7afd5ec05326f9306d588159dfdd29f087b766d393965271a2741c",
+    ".github/workflows/ci.yml": "fff30b35d1c059b4b7ded0ebc799c1bcdf6a723a73760bb8e8aad2ed026606b6",
     "Cargo.toml": "174484a1df52dcc7e03b5e48ebae3d097274c056c6df9cc0f3b5d3d7f4ab5b22",
-    "assurance/policy.toml": "2a382190e83a789825b515846b62aa07e224b04b4acbd127dd29911e507fa303",
-    "assurance/zeroization-matrix.toml": "380bdbae90069df33641f3b2d17725ddf8ae11cdfc0206d49939a98913705d69",
+    "assurance/policy.toml": "c2caf124075c32262e7d74ab2b5115dd52930471dd14109a2ad4b7d2547301c2",
+    "assurance/zeroization-matrix.toml": "1e59321be0b498310d74689613b6d5959c858226863af19a423c556ff1857ef9",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
     "crates/brynja-core/src/secret_memory.rs": "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7",
     "crates/brynja-core/src/secret_memory_volatile.rs": "b056f1b562b4d1507305c8b79d1c53d63dfc842cf59992dbc9df30e65f051217",
@@ -45,7 +45,7 @@
     "crates/brynja-xtask/Cargo.toml": "e178b328289b523b7dc0a9d994cf5409ae54a44ba4198092c520ee45f1247d50",
     "crates/brynja/Cargo.toml": "613815f42c78916c983aed14b275e85fd11c24a45ce543b62e9dbd4da5def56d",
     "docs/KANI.md": "c336406e218f2408bccf18f3d04fed65864536ab8ac9f2f571c9ae56fc8eeeff",
-    "docs/unsafe-policy.md": "f50d721d53b611642628948bab9c997dc2116f51e22294de8ca702d4f6efb2d7",
+    "docs/unsafe-policy.md": "898071046efb39a5fa7dee1951bc78738bcf3e6f73a366ca37f4f23cceaeab6f",
     "rust-toolchain.toml": "c7bdffe5b4c71aeafb84939751c9a1690bc39d0e305d4a534ddf7ce9ce64c675",
     "scripts/assurance/assurance-fixture-adapter.py": "84c6fd76d5d4be111696a314f792c4ee2c4898a97f5cc4125b16e8eb9f8a0dda",
     "scripts/assurance/assurance_differential.py": "11ad4265f99eab4f7ca7d575b310e30e82592a07406cb21010b6254bad623031",
@@ -64,13 +64,13 @@
     "scripts/repository/unsafe_policy.py": "3668f2c554e6cbcb0ef4fcb844e2735243a3731b7fb3a7288a01ff660cccfc05",
     "scripts/zeroization/check-zeroization-codegen.sh": "19c649813862c6280ce70639ddcd7e4d1d0ca3b295a5320413ecf7b84ac38069",
     "scripts/zeroization/check-zeroization-evidence.py": "1adf4cf96dbee0b862aed727377f996c7cab88509d5670bac50174a35bceb2ee",
-    "scripts/zeroization/check-zeroization-miri.sh": "c21340f1be7d6c1b36e851df759fcf6ec3945d63fc3d6744c438df693a712a3a",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "69b4b92e36fd3b19b015096e7c0d520f26392a1ab19f81bd4c9c19574373aa87",
+    "scripts/zeroization/check-zeroization-miri.sh": "9335c0f5ca76a858d0298865339a7344bc6ef39552de34f346937962295f965e",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "ae1c58658793638445ffc6f8280d6c709c629262510cc25f101e2d9558801929",
     "scripts/zeroization/test-zeroization-evidence.py": "946f256caec03f38bb21e6e5c36ebcd5ad2f67f260b4f602469daedf794ce6cd",
-    "scripts/zeroization/zeroization_evidence.py": "0874cbaf4975d15f736275c7137f3ff7261ad95090b8a14d675cc421ebd43153"
+    "scripts/zeroization/zeroization_evidence.py": "2f093da209c9d8b749a9504ddf674042ae074226c4c00fbb11e30fb393ef84c4"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "2a382190e83a789825b515846b62aa07e224b04b4acbd127dd29911e507fa303",
+  "policy_sha256": "c2caf124075c32262e7d74ab2b5115dd52930471dd14109a2ad4b7d2547301c2",
   "schema": 1,
   "tools": [
     {
@@ -97,16 +97,16 @@
     {
       "id": "miri",
       "owner": "0.11.0",
-      "revision": "0dfb098f3aeecbe38c2566ca090193280e7349e7",
+      "revision": "5db7f4be8a36c1b8ae19299469e2be2b0f052c21",
       "source_kind": "rustup-component",
-      "version": "nightly-2026-09-01"
+      "version": "nightly-2026-09-02"
     },
     {
       "id": "rust-sanitizers",
       "owner": "0.11.0",
-      "revision": "0dfb098f3aeecbe38c2566ca090193280e7349e7",
+      "revision": "5db7f4be8a36c1b8ae19299469e2be2b0f052c21",
       "source_kind": "rust-toolchain",
-      "version": "nightly-2026-09-01"
+      "version": "nightly-2026-09-02"
     }
   ]
 }

@@ -2962,7 +2962,7 @@ Exit criteria:
 
 ### v0.24.7 - Complete SHA-2 Arbitrary-Bit Input APIs
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes: one canonical allocation-free borrowed `BitString`
 represents message bits most-significant-bit first, requires an explicit final-
@@ -2977,6 +2977,16 @@ fixture checks eighteen leaf/facade/incremental results, and byte equivalence,
 candidate-backend parity, Kani, Miri and AddressSanitizer are gate-bound. No
 backend is admitted, ordinary state is not hardened, SHA-2 remains In progress,
 and zero crates are selected for publication.
+
+The two supplied security assessments of exact implementation candidate
+`68d0e88450c25355f3a3aa0a8b1947d484fe6b90` both reported no Critical, High,
+or Medium finding. The permanent exceptional report records `PASS`/`PASS` with
+zero open findings; no remediation was required. Pre-tag release maintenance
+advanced Miri and Rust sanitizer evidence to `nightly-2026-09-02` at exact
+Rust revision `5db7f4be8a36c1b8ae19299469e2be2b0f052c21` without changing
+production code or publication selection. The report-bearing candidate must
+pass the complete local release gate plus green hosted GitHub and CodeQL before
+tag authorization.
 
 Plan scope: Extend all six SHA-2 identities with canonical FIPS 180-4 arbitrary-bit-message one-shot and incremental APIs, including unambiguous final partial-byte representation, exact bit-length exhaustion, byte-aligned equivalence, padding at every tail position, public consumer examples, vectors and proofs, while preserving the existing byte APIs and every scalar or accelerated digest identity.
 

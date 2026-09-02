@@ -1,13 +1,12 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 complete SHA-2 arbitrary-bit implementation and local verification ready for exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 exceptional pentest PASS/PASS with zero open findings and awaiting green hosted checks
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.7`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
 interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
-algorithms, and unpublished
-unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented implementations
+algorithms, and unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented implementations
 of all six FIPS 202 functions. SHA-2 hardened profiles plus SHA-3/SHAKE
 arbitrary-bit and hardened profiles remain in progress through v0.24.11. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,

@@ -131,6 +131,14 @@ Keep a Changelog and Semantic Versioning.
   into CI and hash-locked source policy. All CPU candidates remain unadmitted,
   SHA-2 remains In progress pending hardened profiles and final acceptance,
   and zero crates are selected for publication.
+- Record two clean security assessments of exact v0.24.7 implementation
+  candidate `68d0e88450c25355f3a3aa0a8b1947d484fe6b90`; neither reported a
+  Critical, High, or Medium finding, and the permanent exceptional report
+  records `PASS`/`PASS`, zero open findings, and no required remediation.
+- Refresh Miri and Rust sanitizer evidence to latest available
+  `nightly-2026-09-02` at exact Rust revision
+  `5db7f4be8a36c1b8ae19299469e2be2b0f052c21` after the pre-tag freshness gate
+  detected the upstream nightly advance.
 - Implement the v0.24.6 cryptographic API-profile and secret-state closure
   register across all 129 semantic capabilities, with 22 exact API dimensions,
   milestone ownership, eight current, zero registered capability, and 75

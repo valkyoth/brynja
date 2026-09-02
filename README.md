@@ -348,6 +348,13 @@ APIs. All optional CPU candidates remain unadmitted, ordinary states remain
 unkeyed and non-erasing, and the family remains **In progress** until the
 v0.24.8-v0.24.11 hardened and combined-acceptance work passes.
 
+Two supplied security assessments of exact implementation candidate
+`68d0e88450c25355f3a3aa0a8b1947d484fe6b90` each reported no Critical, High,
+or Medium finding. The permanent exceptional report records
+`PASS`/`PASS` with zero open findings and no required remediation. This does
+not establish named independent cryptographic verification, FIPS validation,
+backend admission, hardened secret-bearing use, or crates.io publication.
+
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
 and AddressSanitizer claim. Both paths are now enforced and fail closed under
@@ -901,7 +908,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
 | External crates | Rejected unless a numbered admission freezes an exact minimal graph; planned `base64-ng` use is encoding-only and future rustls/Tokio API dependencies remain isolated |
 | First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
-| Unsafe Rust | Six exact source-hash-bound modules admit the v0.11 volatile clearer plus SHA-256 attestation, x86 SHA, AArch64 SHA2, RV64 Zknh inline assembly, and std detector boundaries; every other site is mechanically forbidden |
+| Unsafe Rust | Nine exact source-hash-bound modules admit the v0.11 volatile clearer plus SHA-256/Keccak attestations, x86 SHA/AVX2 Keccak, AArch64 SHA2/SHA-512/SHA3 Keccak, RV64 Zknh inline assembly, and std detector boundaries; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |
 | FIPS 140-3 status | Planned Level 1 software-module path; not validated |

@@ -382,12 +382,14 @@ XOF output without exposing raw sponge state. Eleven registered byte-backed
 regions own the lanes, partial input, message/output counters, phase/cursors,
 suffix, padding and squeeze staging, and permutation scratch. Exact Drop-to-
 wipe resolution passes optimized MIR under Rust 1.90.0 and 1.98.0, and release
-MIR, LLVM IR and assembly retain every clearing call. Output is either
-explicitly public or affine typed secret memory; cancellation, failure, early
-Drop and recoverable unwind are covered. Hardened acceleration remains
-prohibited. The family remains In progress until v0.24.11 combined acceptance,
-and independent review, FIPS validation and crates.io publication remain
-absent.
+plus development MIR, LLVM IR and assembly retain every clearing call and
+reject source-created secret byte arrays. Lane/counter conversion is scalar,
+and final partial secret SHAKE bytes remain in registered staging until
+cleared. Output is either explicitly public or affine typed secret memory;
+cancellation, failure, early Drop and recoverable unwind are covered. Hardened
+acceleration remains prohibited. The family remains In progress until
+v0.24.11 combined acceptance, and independent review, FIPS validation and
+crates.io publication remain absent.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

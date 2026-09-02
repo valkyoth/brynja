@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import subprocess
 from pathlib import Path
 
@@ -99,6 +100,14 @@ def validate(root: Path = ROOT) -> None:
     ):
         if any(forbidden in loaded[path] for path in (OWNER, API, FIXED, XOF, OUTPUT, SPONGE, PERMUTATION)):
             fail(f"hardened FIPS 202 crossed a forbidden boundary: {forbidden}")
+    operational = (API, FIXED, XOF, OUTPUT, SPONGE, PERMUTATION)
+    for path in operational:
+        source = loaded[path]
+        for forbidden in ("to_le_bytes()", "from_le_bytes(", "<[u8;"):
+            if forbidden in source:
+                fail(f"hardened FIPS 202 created a byte-array temporary: {path}: {forbidden}")
+        if re.search(r"=\s*\[", source):
+            fail(f"hardened FIPS 202 created an array expression outside its owner: {path}")
 
     output = loaded[OUTPUT]
     require(output, "SecretRegionInitialization::begin(destination)", "typed secret output")
@@ -112,6 +121,7 @@ def validate(root: Path = ROOT) -> None:
         "xof_secret_fragments_transfer_and_clear_independently",
         "every_partial_bit_width_matches_every_fixed_identity",
         "bit_input_and_bit_output_match_both_ordinary_xofs",
+        "every_partial_secret_xof_width_matches_and_clears",
         "fixed_output_failure_is_atomic_by_classification",
         "recoverable_unwind_clears_typed_secret_destination",
         "cancel_and_early_drop_cover_absorber_and_reader_lifecycles",

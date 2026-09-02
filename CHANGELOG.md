@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Close the High v0.24.10 hardened-state remanence finding by replacing
+  source-created SHA-3 lane/counter conversion arrays with scalar fixed-count
+  byte operations and staging partial secret SHAKE output only inside the
+  registered owner buffer before clearing it. All seven partial output widths
+  now have direct secret-output differential and clearing coverage; source
+  mutations plus development and release MIR/LLVM checks reject reintroduced
+  one-byte or eight-byte secret temporaries.
 - Remediate both Medium v0.24.6 assurance-control findings: secret-owner
   registration is explicit rather than inferred, exact canonical owner types,
   fields, sanitizers and cleanup call paths are checked against Rust

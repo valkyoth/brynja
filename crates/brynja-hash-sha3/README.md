@@ -67,8 +67,10 @@ private working state. Secret-derived uses must select the distinct
 `HardenedSha3_*` or `HardenedShake*` states, explicitly declassify public
 output or retain typed secret output, and let the owner clear Brynja-owned
 lanes, buffers, counters, suffix/padding/squeeze staging, and permutation
-scratch on every terminal path. Callers remain responsible for buffers and
-copies they own.
+scratch on every terminal path. Scalar fixed-count lane/counter conversion and
+registered partial-output staging avoid source-created secret byte arrays
+outside that owner. Callers remain responsible for buffers and copies they
+own.
 
 ```rust
 use brynja_hash_sha3::{HardenedSha3_256, Sha3PublicDeclassification};

@@ -206,6 +206,45 @@ fn bit_input_and_bit_output_match_both_ordinary_xofs() -> Result<(), HardenedSha
     Ok(())
 }
 
+#[test]
+fn every_partial_secret_xof_width_matches_and_clears() -> Result<(), HardenedSha3Error> {
+    let input_bytes = [0x13];
+    let input =
+        Fips202BitString::new(&input_bytes, 5).map_err(|_| HardenedSha3Error::MessageTooLong)?;
+    for valid in 1_u8..=7 {
+        let mut expected128 = [0_u8; 13];
+        let expected_output = Fips202Output::new(&mut expected128, valid)
+            .map_err(|_| HardenedSha3Error::OutputLength)?;
+        shake128_bits(input, expected_output).map_err(|_| HardenedSha3Error::OutputTooLong)?;
+        let mut actual128 = [0xa5_u8; 13];
+        {
+            let destination = Fips202Output::new(&mut actual128, valid)
+                .map_err(|_| HardenedSha3Error::OutputLength)?;
+            let output = HardenedShake128::new()
+                .finalize_bits_xof(input)?
+                .squeeze_final_bits_secret(destination)?;
+            assert_eq!(output.expose(), expected128);
+        }
+        assert_eq!(actual128, [0; 13]);
+
+        let mut expected256 = [0_u8; 17];
+        let expected_output = Fips202Output::new(&mut expected256, valid)
+            .map_err(|_| HardenedSha3Error::OutputLength)?;
+        shake256_bits(input, expected_output).map_err(|_| HardenedSha3Error::OutputTooLong)?;
+        let mut actual256 = [0xa5_u8; 17];
+        {
+            let destination = Fips202Output::new(&mut actual256, valid)
+                .map_err(|_| HardenedSha3Error::OutputLength)?;
+            let output = HardenedShake256::new()
+                .finalize_bits_xof(input)?
+                .squeeze_final_bits_secret(destination)?;
+            assert_eq!(output.expose(), expected256);
+        }
+        assert_eq!(actual256, [0; 17]);
+    }
+    Ok(())
+}
+
 fn compare_bit_xof_128(input: Fips202BitString<'_>) -> Result<(), HardenedSha3Error> {
     let mut expected = [0_u8; 170];
     let destination =

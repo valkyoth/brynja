@@ -23419,7 +23419,7 @@
       ]
     }
   ],
-  "policy_sha256": "9d9037fb891082844a223a7043a9bcd9abf540688f4be1b8093e86d16e341300",
+  "policy_sha256": "104e9ae644d5d020b005f9a13b4dc9e595d660b1bcc76206dbc0b66203b4f8dc",
   "registered_secret_owners": [
     {
       "capability": "algorithm.sha2",

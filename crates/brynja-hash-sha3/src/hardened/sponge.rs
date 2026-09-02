@@ -87,12 +87,10 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
     }
 
     pub(crate) fn finalize(&mut self, partial: Option<(u8, u8)>, suffix: u8, suffix_bits: u8) {
-        self.suffix_staging = [
-            partial.map_or(0, |tail| tail.0),
-            partial.map_or(0, |tail| tail.1),
-            suffix,
-            suffix_bits,
-        ];
+        self.suffix_staging[0] = partial.map_or(0, |tail| tail.0);
+        self.suffix_staging[1] = partial.map_or(0, |tail| tail.1);
+        self.suffix_staging[2] = suffix;
+        self.suffix_staging[3] = suffix_bits;
         let buffered = self.buffer_len();
         if let (Some(destination), Some(source)) = (
             self.padding_block.get_mut(..buffered),
@@ -231,10 +229,16 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
             .map_err(|()| HardenedSha3Error::OutputTooLong)?;
         self.squeeze_secret(initialization, complete)?;
         if complete != output_bytes {
-            let byte = [self.next_byte() & low_mask(valid)];
-            initialization
-                .write(&byte)
-                .map_err(HardenedSha3Error::from)?;
+            self.fill_staging(1);
+            let Some(tail) = self.squeeze_staging.first_mut() else {
+                return Err(HardenedSha3Error::OutputLength);
+            };
+            *tail &= low_mask(valid);
+            let result = initialization
+                .write(&self.squeeze_staging[..1])
+                .map_err(HardenedSha3Error::from);
+            let _ = clear_owned_region(&mut self.squeeze_staging);
+            result?;
         }
         Ok(())
     }
@@ -315,11 +319,26 @@ fn low_mask(valid_bits: u8) -> u8 {
 }
 
 fn read_counter(bytes: &[u8; 16]) -> u128 {
-    u128::from_le_bytes(*bytes)
+    let mut value = 0_u128;
+    for (offset, byte) in bytes.iter().enumerate() {
+        let shift = byte_shift(offset);
+        value |= u128::from(*byte) << shift;
+    }
+    value
 }
 
 fn write_counter(bytes: &mut [u8; 16], value: u128) {
-    *bytes = value.to_le_bytes();
+    for (offset, byte) in bytes.iter_mut().enumerate() {
+        let shift = byte_shift(offset);
+        *byte = u8::try_from((value >> shift) & u128::from(u8::MAX)).unwrap_or_default();
+    }
+}
+
+fn byte_shift(offset: usize) -> u32 {
+    u32::try_from(offset)
+        .unwrap_or_default()
+        .checked_mul(8)
+        .unwrap_or_default()
 }
 
 #[cfg(kani)]

@@ -65,20 +65,42 @@ fn write_lane<const RATE: usize>(owner: &mut HardenedFips202Owner<RATE>, index: 
 }
 
 fn read_word(bytes: &[u8], index: usize) -> u64 {
-    let start = index.saturating_mul(8);
-    let Some(window) = bytes.get(start..start.saturating_add(8)) else {
+    let Some(start) = index.checked_mul(8) else {
         return 0;
     };
-    let Ok(array) = <[u8; 8]>::try_from(window) else {
+    let Some(end) = start.checked_add(8) else {
         return 0;
     };
-    u64::from_le_bytes(array)
+    let Some(window) = bytes.get(start..end) else {
+        return 0;
+    };
+    let mut value = 0_u64;
+    for (offset, byte) in window.iter().enumerate() {
+        let shift = byte_shift(offset);
+        value |= u64::from(*byte) << shift;
+    }
+    value
 }
 
 fn write_word(bytes: &mut [u8], index: usize, value: u64) {
-    let start = index.saturating_mul(8);
-    let Some(window) = bytes.get_mut(start..start.saturating_add(8)) else {
+    let Some(start) = index.checked_mul(8) else {
         return;
     };
-    window.copy_from_slice(&value.to_le_bytes());
+    let Some(end) = start.checked_add(8) else {
+        return;
+    };
+    let Some(window) = bytes.get_mut(start..end) else {
+        return;
+    };
+    for (offset, byte) in window.iter_mut().enumerate() {
+        let shift = byte_shift(offset);
+        *byte = u8::try_from((value >> shift) & u64::from(u8::MAX)).unwrap_or_default();
+    }
+}
+
+fn byte_shift(offset: usize) -> u32 {
+    u32::try_from(offset)
+        .unwrap_or_default()
+        .checked_mul(8)
+        .unwrap_or_default()
 }

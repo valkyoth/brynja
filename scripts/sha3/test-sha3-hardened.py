@@ -34,10 +34,12 @@ def main() -> int:
     reject(policy.FIXED, "pub fn finalize_secret<'output>(", "fn missing_secret_output(")
     reject(policy.XOF, "pub fn squeeze_secret<'output>(", "fn missing_secret_squeeze(")
     reject(policy.PERMUTATION, "use super::owner::HardenedFips202Owner;", "unsafe fn injected() {}")
+    reject(policy.PERMUTATION, "let mut value = 0_u64;", "let value = [0_u8; 8];")
+    reject(policy.SPONGE, "self.fill_staging(1);", "let byte = [self.next_byte()];")
     reject(policy.TEST, "recoverable_unwind_clears_typed_secret_destination", "missing_unwind_test")
     reject(policy.TEST, "fixed_output_failure_is_atomic_by_classification", "missing_failure_test")
     reject(policy.CHECKS, "scripts/sha3/check-sha3-hardened-codegen.sh", "true # removed codegen")
-    print("hardened FIPS 202 policy rejects eight cleanup, capability, API, unsafe, failure, unwind, and codegen regressions")
+    print("hardened FIPS 202 policy rejects ten cleanup, capability, API, temporary, unsafe, failure, unwind, and codegen regressions")
     return 0
 
 

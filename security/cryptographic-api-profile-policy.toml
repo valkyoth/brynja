@@ -920,11 +920,11 @@ sha256 = "18999f616b4c08cdd80d87ffa383ad92f8cbf9026ce625b12f9ea6b92a6d2536"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/permutation.rs"
-sha256 = "6b7b2576eac6e98bf921a403ca65485b5edc0655922b8df657720cd1ebc281c2"
+sha256 = "0e6342f0e791a1a2db492c8b1fd34f80558a4ef88c2abc3d175efa4a44c6cb08"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/sponge.rs"
-sha256 = "c6caf728d6571e129dc4a2538fb859d381340dcb655a0b095edd8ccd837b7213"
+sha256 = "943740448e1b0f8aa6167be12c443d6705657c319a5b51da13944808852cebc0"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/xof.rs"
@@ -932,11 +932,11 @@ sha256 = "e2aed6a452f7c80a859af36ebbd7991f962d79a3e387120eace8ce33975817a7"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/tests/hardened.rs"
-sha256 = "bf34296ece83228f01b59c745eb9f87e6c0c74ac5e9deee65eebce720a0820b1"
+sha256 = "c0f18be6c64ef7f8e9b875d12e3ff1ef6492e39752fbf0c829b63d52112ced0a"
 
 [[reviewed-source]]
 path = "scripts/sha3/check-sha3-hardened-codegen.sh"
-sha256 = "4977b8f538dc5a530feea6c8916be8de9dc8414ca5a02b11b9c592ad59ecba64"
+sha256 = "8a95ad72c18c27cd80183bde9a00322a2c27471ddf34b952700f973076e3df8f"
 
 [[reviewed-source]]
 path = "scripts/sha3/check-sha3-hardened.py"
@@ -944,8 +944,8 @@ sha256 = "74c8692370d915dbbb7778f3f723e051f581f1cfff8089dbfaf865107b36c35f"
 
 [[reviewed-source]]
 path = "scripts/sha3/sha3_hardened.py"
-sha256 = "a1539ce1780c888ce297ddfe813ea42c7fa7bfd552c26973493a60c59a57a2a8"
+sha256 = "fa991c5326eea4cb9294ebece6fdf5afbbbdd6f596d9b04f539c67a13429dfbd"
 
 [[reviewed-source]]
 path = "scripts/sha3/test-sha3-hardened.py"
-sha256 = "46ce7814f51e0f930260e0c35895a25d49a161117f6c72e0a5c8387ec10ccfdf"
+sha256 = "c3461e138e5bea6562401028d0f857e5af442f2095d3e733963d83e90296e6b9"

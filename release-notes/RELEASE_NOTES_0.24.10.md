@@ -34,13 +34,15 @@ combined package-external acceptance at v0.24.11.
   SHAKE output.
 - Exercise typed secret transfer and clearing, independent multi-squeeze
   destinations, zero output, wrong-length failure, cancellation, early Drop,
-  and recoverable panic unwinding.
+  recoverable panic unwinding, and every partial secret SHAKE output width.
 - Register the exact secret owner and resolve its `Drop` call to its reviewed
   cleanup symbol in optimized MIR under Rust 1.90.0 and 1.98.0.
-- Inspect release MIR, LLVM IR, and x86_64 assembly for the eleven cleanup
-  calls; source policy forbids unsafe Rust, FFI, allocation, accelerated
-  dispatch, raw state export, unsealed capabilities, and missing output or
-  lifecycle coverage.
+- Inspect development and release MIR, LLVM IR, and x86_64 assembly for the
+  eleven cleanup calls and absence of source-created one-byte/eight-byte
+  secret temporaries; source policy forbids byte-array lane/counter
+  conversions, out-of-owner array expressions, unsafe Rust, FFI, allocation,
+  accelerated dispatch, raw state export, unsealed capabilities, and missing
+  output or lifecycle coverage.
 - Add two bounded hardened final-output Kani properties, for eighteen
   cumulative SHA-2/SHA-3 harnesses, and include the full hardened suite in
   Miri and AddressSanitizer.
@@ -56,6 +58,9 @@ unadmitted accelerated candidates cannot process hardened state.
 
 Cleanup covers all Brynja-owned source-declared byte regions and runs on
 normal completion, failure, cancellation, Drop, and recoverable unwinding.
+Lane and counter conversion uses scalar fixed-count operations, while partial
+secret SHAKE output is staged and cleared inside the registered owner rather
+than a local byte array.
 Callers remain responsible for source buffers and copies they own. The crate
 cannot guarantee removal of compiler-created copies, CPU registers, stack
 spills, caches, swap, crash or suspend images, DMA copies, forgotten owners,

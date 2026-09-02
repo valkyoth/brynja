@@ -5,8 +5,8 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 - Capabilities: **129**
 - API dimensions per capability: **22**
 - Current secret owners: **8**
-- Registered capability owners: **0**
-- Planned secret owners: **75**
+- Registered capability owners: **1**
+- Planned secret owners: **74**
 
 ## Profile Coverage
 

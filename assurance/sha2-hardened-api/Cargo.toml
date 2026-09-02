@@ -1,0 +1,22 @@
+[workspace]
+
+[package]
+name = "brynja-sha2-hardened-api-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", version = "=0.1.0", default-features = false }
+
+[lints.rust]
+unsafe_code = "forbid"
+unsafe_op_in_unsafe_fn = "forbid"
+unused_must_use = "deny"
+
+[lints.clippy]
+panic = "forbid"
+unwrap_used = "forbid"
+expect_used = "forbid"
+undocumented_unsafe_blocks = "forbid"

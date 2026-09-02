@@ -19,11 +19,14 @@ def fail(message: str) -> None:
 
 
 def function_sections(mir: str) -> list[str]:
-    starts = [match.start() for match in re.finditer(r"(?m)^fn ", mir)]
-    return [
-        mir[start:starts[index + 1] if index + 1 < len(starts) else len(mir)]
-        for index, start in enumerate(starts)
-    ]
+    items = list(re.finditer(r"(?m)^(?:fn |const |static )", mir))
+    sections = []
+    for index, item in enumerate(items):
+        if not mir.startswith("fn ", item.start()):
+            continue
+        stop = items[index + 1].start() if index + 1 < len(items) else len(mir)
+        sections.append(mir[item.start():stop])
+    return sections
 
 
 def exact_function(mir: str, header_parts: tuple[str, ...]) -> str:

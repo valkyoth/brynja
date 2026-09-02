@@ -2962,7 +2962,7 @@ Exit criteria:
 
 ### v0.24.7 - Complete SHA-2 Arbitrary-Bit Input APIs
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes: one canonical allocation-free borrowed `BitString`
 represents message bits most-significant-bit first, requires an explicit final-
@@ -2984,9 +2984,9 @@ or Medium finding. The permanent exceptional report records `PASS`/`PASS` with
 zero open findings; no remediation was required. Pre-tag release maintenance
 advanced Miri and Rust sanitizer evidence to `nightly-2026-09-02` at exact
 Rust revision `5db7f4be8a36c1b8ae19299469e2be2b0f052c21` without changing
-production code or publication selection. The report-bearing candidate must
-pass the complete local release gate plus green hosted GitHub and CodeQL before
-tag authorization.
+production code or publication selection. The report-bearing candidate passed
+the complete local release gate plus hosted GitHub and CodeQL checks before the
+signed `v0.24.7` tag was created.
 
 Plan scope: Extend all six SHA-2 identities with canonical FIPS 180-4 arbitrary-bit-message one-shot and incremental APIs, including unambiguous final partial-byte representation, exact bit-length exhaustion, byte-aligned equivalence, padding at every tail position, public consumer examples, vectors and proofs, while preserving the existing byte APIs and every scalar or accelerated digest identity.
 
@@ -3026,7 +3026,18 @@ Exit criteria:
 
 ### v0.24.8 - Complete Hardened SHA-2 State APIs
 
-Status: planned
+Status: awaiting pentest
+
+Implementation notes: six distinct portable hardened states now share the
+existing FIPS 180-4 compression math while owning eight byte-backed secret
+regions. A sealed capability, explicit public-declassification token, typed
+secret output, failure-atomic public writes, complete secret failure clearing,
+and consuming byte/bit finalization define the public boundary. Exact source
+contracts, downstream `no_std` and assembled-package acceptance, behavior and
+compile-fail tests, thirteen cumulative Kani bounds, Miri, AddressSanitizer,
+and Rust 1.90.0/1.98.0 MIR/LLVM/assembly cleanup evidence are gate-bound. No
+accelerated hardened path, independent verification, FIPS validation, or
+crates.io publication is claimed.
 
 Plan scope: Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal and recoverable-unwind path; seal hardened capabilities against downstream implementation or forgery, make cleanup non-panicking and all-region despite adjacent failures, classify digest output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.
 

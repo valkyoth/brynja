@@ -56,21 +56,6 @@ cargo add brynja --no-default-features
 
 ## Examples
 
-### Constant-Time Equality
-
-```rust
-use brynja::core::ConstantTimeEq;
-
-let expected = [0x42_u8; 32];
-let received = [0x42_u8; 32];
-
-let matches = expected.ct_eq(&received);
-assert!(matches.expose_public());
-```
-
-Exposing the resulting choice is an explicit public branch decision. The
-comparison itself examines every byte in the fixed-size array.
-
 ### Parse A Bounded TLS 1.3 Record Envelope
 
 ```rust
@@ -94,14 +79,8 @@ authenticate data, decrypt a record, or perform network I/O.
 ```rust
 let shorter = brynja::crypto::sha224(b"abc").unwrap();
 let digest = brynja::crypto::sha256(b"abc").unwrap();
-let wider = brynja::crypto::sha384(b"abc").unwrap();
-let widest = brynja::crypto::sha512(b"abc").unwrap();
-let truncated_224 = brynja::crypto::sha512_224(b"abc").unwrap();
 let truncated_256 = brynja::crypto::sha512_256(b"abc").unwrap();
 assert_eq!(shorter.as_bytes().len(), 28);
-assert_eq!(wider.as_bytes().len(), 48);
-assert_eq!(widest.as_bytes().len(), 64);
-assert_eq!(truncated_224.as_bytes().len(), 28);
 assert_eq!(truncated_256.as_bytes().len(), 32);
 assert_eq!(digest.as_bytes().len(), 32);
 
@@ -111,8 +90,27 @@ assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 ```
 
 These SHA-2 functions are unkeyed digests, not authentication, a MAC, or password hashing.
-Ordinary states do not erase private secret-input remnants; keyed use requires the hardened
-profile planned through v0.24.11. It will clear Brynja-owned copies; callers clear their own.
+Ordinary states do not erase private secret-input remnants. Secret-bearing callers must use
+the distinct hardened states added at v0.24.8; they clear Brynja-owned regions, while callers
+remain responsible for the original secret buffers they own.
+
+### Hash Secret-Bearing Input With Hardened SHA-2
+
+```rust
+use brynja::crypto::{HardenedSha256, PublicDeclassification};
+
+let mut state = HardenedSha256::new();
+state.update(b"secret-derived input").unwrap();
+let mut public_digest = [0_u8; 32];
+state
+    .finalize_public(&mut public_digest, PublicDeclassification::acknowledge())
+    .unwrap();
+```
+
+Use `finalize_secret` instead when the digest remains secret. It returns a typed
+secret-region owner and clears the complete destination when that owner drops.
+Hardened cleanup covers Brynja-owned source-declared memory, not registers,
+caches, compiler-created copies, dumps, forgotten owners, abort, or power loss.
 
 ### Compute Portable SHA-3 And SHAKE
 
@@ -149,7 +147,7 @@ Only linked sign-off from a named independent reviewer can change independent st
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte and arbitrary-bit APIs; hardened profiles pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |
 | SHA-3/SHAKE (all six FIPS 202 identities have complete byte APIs; arbitrary-bit, hardened secret-bearing, and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
@@ -182,7 +180,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | --- | --- |
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
-| `brynja-hash-sha2` | All six FIPS 180-4 byte and arbitrary-bit APIs; hardened profiles and final combined acceptance pending |
+| `brynja-hash-sha2` | All six FIPS 180-4 ordinary and hardened byte and arbitrary-bit APIs; final combined acceptance pending |
 | `brynja-hash-sha3` | All six FIPS 202 byte APIs; arbitrary-bit, hardened, and final acceptance pending |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |

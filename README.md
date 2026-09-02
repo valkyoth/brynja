@@ -61,7 +61,7 @@ independent cryptographic or protocol verification.
 
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
-| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte and arbitrary-bit APIs; hardened profiles pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |
 | SHA-3/SHAKE (all six FIPS 202 identities have complete byte APIs; arbitrary-bit, hardened secret-bearing, and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
@@ -335,25 +335,24 @@ is a closure gate, not a new cryptographic implementation or verification
 claim; SHA-2 and SHA-3/SHAKE remain **In progress** until their later bit-input,
 hardened-state, backend, and combined acceptance milestones pass.
 
-The internal `0.24.7` candidate extends every SHA-2 identity to the complete
-FIPS 180-4 bit-string domain. One allocation-free borrowed `BitString`
-requires an explicit final-byte width, most-significant-bit-first ordering,
-and zero unused low bits. Portable and forced-backend one-shot APIs plus
-consuming incremental final-tail methods preserve every byte-aligned digest.
-Two hundred forty exact records selected from NIST's bit-oriented CAVP corpus
-cover all final widths and critical narrow and wide padding boundaries; a
-separate bounded Python oracle supplies 1,008 differential results, and a
-standalone `no_std` consumer checks all six identities through leaf and facade
-APIs. All optional CPU candidates remain unadmitted, ordinary states remain
-unkeyed and non-erasing, and the family remains **In progress** until the
-v0.24.8-v0.24.11 hardened and combined-acceptance work passes.
+The internal `0.24.8` candidate adds distinct hardened streaming states for
+all six SHA-2 identities over the same FIPS 180-4 compression algorithms and
+canonical byte/bit domains. Hardened owners keep every source-declared
+chaining state, partial input, schedule, block copy, padding block, length,
+phase, and staged output in registered byte regions that pass compiler-
+resistant destruction evidence. Public digest release consumes an explicit
+declassification token; secret digest release transfers a typed caller-owned
+region that clears on `Drop`, error, and recoverable unwind. Downstream code
+cannot forge the sealed hardened capability, clone or format a hardened state,
+reset it into an ordinary state, or select an unproved accelerated backend.
 
-Two supplied security assessments of exact implementation candidate
-`68d0e88450c25355f3a3aa0a8b1947d484fe6b90` each reported no Critical, High,
-or Medium finding. The permanent exceptional report records
-`PASS`/`PASS` with zero open findings and no required remediation. This does
-not establish named independent cryptographic verification, FIPS validation,
-backend admission, hardened secret-bearing use, or crates.io publication.
+Ordinary SHA-2 remains available for public/unkeyed data without an erasure
+claim. Hardened cleanup covers Brynja-owned, source-declared memory; it cannot
+promise erasure of compiler-created copies, registers, caches, dumps,
+`mem::forget`, abort, forced termination, suspend images, or physical memory.
+SHA-2 therefore remains **In progress** until the combined v0.24.11 acceptance
+pass, and this candidate does not claim independent review, FIPS validation,
+backend admission, or crates.io publication.
 
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
@@ -742,8 +741,8 @@ the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.7`
-arbitrary-bit SHA-2 milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.8`
+hardened SHA-2 milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -851,10 +850,10 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.7 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six SHA-2 byte and arbitrary-bit APIs, and all six portable FIPS 202 functions; repository-only standards and API-profile closure gates are active, optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
+| `brynja` | Modern production facade | Internal v0.24.8 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six ordinary and hardened SHA-2 byte and arbitrary-bit APIs, and all six portable FIPS 202 functions; repository-only standards and API-profile closure gates are active, optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
-| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six FIPS 180-4 byte and canonical arbitrary-bit algorithms plus forced CPU-candidate APIs; hardened secret-bearing profiles and combined acceptance close through v0.24.11 before full-family status returns |
+| `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; combined acceptance closes at v0.24.11 before full-family status returns |
 | `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, TupleHash and ParallelHash ownership | v0.1.0 contains all six FIPS 202 byte-oriented functions and packaged portable acceptance; arbitrary-bit, hardened secret-bearing, backend, and final acceptance close through v0.24.11, then complete SP 800-185 through v0.24.17 |
 | Future `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | Planned at v0.24.13 and accepted with the complete SP 800-185 family through v0.24.17 |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |

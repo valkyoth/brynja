@@ -33,6 +33,9 @@ pub const SHA512_256_IMPLEMENTED: bool = true;
 /// Whether every SHA-2 identity accepts canonical arbitrary-bit messages.
 pub const SHA2_BIT_INPUT_IMPLEMENTED: bool = true;
 
+/// Whether all SHA-2 identities expose sealed secret-bearing state owners.
+pub const SHA2_HARDENED_STATE_IMPLEMENTED: bool = true;
+
 /// Whether portable SHA3-224 is implemented and available through this layer.
 pub const SHA3_224_IMPLEMENTED: bool = true;
 
@@ -52,11 +55,13 @@ pub const SHAKE128_IMPLEMENTED: bool = true;
 pub const SHAKE256_IMPLEMENTED: bool = true;
 
 pub use brynja_hash_sha2::{
-    BitString, BitStringError, FixedOutput, Sha224, Sha224Digest, Sha224Error, Sha256,
-    Sha256Digest, Sha256Error, Sha384, Sha384Digest, Sha384Error, Sha512, Sha512_224,
-    Sha512_224Digest, Sha512_224Error, Sha512_256, Sha512_256Digest, Sha512_256Error, Sha512Digest,
-    Sha512Error, Update, sha224, sha224_bits, sha256, sha256_bits, sha384, sha384_bits, sha512,
-    sha512_224, sha512_224_bits, sha512_256, sha512_256_bits, sha512_bits,
+    BitString, BitStringError, FixedOutput, HardenedSha2Error, HardenedSha2State, HardenedSha224,
+    HardenedSha256, HardenedSha384, HardenedSha512, HardenedSha512_224, HardenedSha512_256,
+    PublicDeclassification, Sha224, Sha224Digest, Sha224Error, Sha256, Sha256Digest, Sha256Error,
+    Sha384, Sha384Digest, Sha384Error, Sha512, Sha512_224, Sha512_224Digest, Sha512_224Error,
+    Sha512_256, Sha512_256Digest, Sha512_256Error, Sha512Digest, Sha512Error, Update, sha224,
+    sha224_bits, sha256, sha256_bits, sha384, sha384_bits, sha512, sha512_224, sha512_224_bits,
+    sha512_256, sha512_256_bits, sha512_bits,
 };
 pub use brynja_hash_sha3::{
     ExtendableOutput, Sha3_224, Sha3_224Digest, Sha3_224Error, Sha3_256, Sha3_256Digest,
@@ -77,6 +82,9 @@ mod tests {
         assert!(::core::hint::black_box(super::SHA512_224_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA512_256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA2_BIT_INPUT_IMPLEMENTED));
+        assert!(::core::hint::black_box(
+            super::SHA2_HARDENED_STATE_IMPLEMENTED
+        ));
         assert!(::core::hint::black_box(super::SHA3_224_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA3_256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHA3_384_IMPLEMENTED));

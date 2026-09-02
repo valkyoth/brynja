@@ -15,6 +15,7 @@ mod compress;
 mod compress64;
 mod digest;
 mod error;
+mod hardened;
 mod sha224;
 mod sha256;
 mod sha384;
@@ -38,6 +39,10 @@ pub use digest::{
 };
 pub use error::{
     Sha224Error, Sha256Error, Sha384Error, Sha512_224Error, Sha512_256Error, Sha512Error,
+};
+pub use hardened::{
+    HardenedSha2Error, HardenedSha2State, HardenedSha224, HardenedSha256, HardenedSha384,
+    HardenedSha512, HardenedSha512_224, HardenedSha512_256, PublicDeclassification,
 };
 pub use sha224::Sha224;
 pub use sha256::Sha256;
@@ -79,6 +84,9 @@ pub const SHA512_256_IMPLEMENTED: bool = true;
 
 /// Whether all six SHA-2 identities expose canonical arbitrary-bit inputs.
 pub const SHA2_BIT_INPUT_IMPLEMENTED: bool = true;
+
+/// Whether all six SHA-2 identities expose sealed secret-bearing states.
+pub const SHA2_HARDENED_STATE_IMPLEMENTED: bool = true;
 
 /// Computes SHA-224 over one complete byte slice.
 ///

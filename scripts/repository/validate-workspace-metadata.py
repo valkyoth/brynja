@@ -349,6 +349,7 @@ def validate_resolved_mode(
         raise ValueError("no_std CPU backend package gained a dependency")
     detector = reachable_names("brynja-crypto-cpu-std", names, packages_by_id, edges)
     if detector != {
+        "brynja-core",
         "brynja-crypto-cpu",
         "brynja-crypto-cpu-std",
         "brynja-hash-core",

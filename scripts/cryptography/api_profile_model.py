@@ -16,7 +16,7 @@ POLICY = ROOT / "security/cryptographic-api-profile-policy.toml"
 SURFACES = ROOT / "standards/protocol-surfaces.json"
 REGISTER = ROOT / "security/cryptographic-api-profile-register.json"
 COVERAGE = ROOT / "docs/cryptographic-api-profile-register.md"
-MILESTONE = "0.24.6"
+MILESTONE = "0.24.8"
 PROFILE_KEYS = {
     "kind",
     "secret_template",
@@ -413,6 +413,7 @@ def build_register(policy: dict, surfaces: dict, root: Path = ROOT) -> dict:
     )
     capabilities = []
     planned_owners = []
+    registered_capabilities = {owner["capability"] for owner in policy["registered-secret-owner"]}
     for row in semantic:
         name = assignments[row["id"]]
         profile = policy["profile"][name]
@@ -432,7 +433,10 @@ def build_register(policy: dict, surfaces: dict, root: Path = ROOT) -> dict:
             "test_target": row["test_target"],
         }
         capabilities.append(capability)
-        if profile["secret_template"] != "none":
+        if (
+            profile["secret_template"] != "none"
+            and row["id"] not in registered_capabilities
+        ):
             planned_owners.append(planned_secret_owner(capability, profile["secret_template"], policy))
     current_owners = []
     for owner in policy["current-secret-owner"]:

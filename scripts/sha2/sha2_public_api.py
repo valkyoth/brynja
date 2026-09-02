@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and execute the v0.24.7 SHA-2 byte and bit public acceptance."""
+"""Validate and execute the v0.24.8 SHA-2 byte, bit, and hardened acceptance."""
 
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ LOCK = FIXTURE / "Cargo.lock"
 LIB = FIXTURE / "src/lib.rs"
 ALGORITHMS = FIXTURE / "src/algorithms.rs"
 BIT_INPUTS = FIXTURE / "src/bit_inputs.rs"
+HARDENED = FIXTURE / "src/hardened.rs"
 VECTORS = FIXTURE / "src/vectors.rs"
 MAIN = FIXTURE / "src/main.rs"
 CONTENT = FIXTURE / "fixtures/representative.txt"
@@ -43,7 +44,7 @@ RUST_MATRIX = Path("scripts/ci/check-rust-version-matrix.sh")
 BARE_METAL = Path("scripts/assurance/check-bare-metal.sh")
 WORKFLOW = Path(".github/workflows/ci.yml")
 FILES = (
-    MANIFEST, LOCK, LIB, ALGORITHMS, BIT_INPUTS, VECTORS, MAIN, CONTENT,
+    MANIFEST, LOCK, LIB, ALGORITHMS, BIT_INPUTS, HARDENED, VECTORS, MAIN, CONTENT,
     CORE_BITS, LEAF_LIB, LEAF_BIT_API, LEAF_BIT_INPUT, LEAF_BIT_TEST,
     NIST_BIT_VECTORS, DIFFERENTIAL_MANIFEST, DIFFERENTIAL_LOCK,
     DIFFERENTIAL_MAIN, DIFFERENTIAL_CHECK, DIGEST, FACADE_LIB, LEAF_README,
@@ -51,31 +52,32 @@ FILES = (
     WORKFLOW,
 )
 EXPECTED_SHA256 = {
-    MANIFEST: "6b520fb039c0d5f0627be7d20db03bf6b925c5a594febbf749f0229f6115398a",
-    LOCK: "bcf9f826d9599f1ab243b747c9b2f3ee06ef2faf59d589110217ea1fef04c63a",
-    LIB: "4c05d97d96038ce6dfd29c4ff118454d11d1b5aa0e4b0b7d682de3f3d7df2e2d",
+    MANIFEST: "4977f31f155094c631ece7828bbe68098f30d2232df4c4f67cf34e984d691f82",
+    LOCK: "0b7e6dee1de7514cab61648a63a79f708f41c8e8ad7f6164b27e14842423ac8d",
+    LIB: "516c0901f6dfd3b3979771368f11777ff34d40cd02979baa9a187b390f988913",
     ALGORITHMS: "f5c798334508de76015c92f2929dee7b51e7b76a61fe3bc353bf67e4677a1e63",
     BIT_INPUTS: "8f882911914e82ce7dfef7713296a696f5d3966ea9f55ee9d0cdda8dfb65812d",
+    HARDENED: "5a04f3402a55bf4035672c74361a29cac60f2f3216953818da4fa262ca2bfc51",
     VECTORS: "cc4a0209cd9bbc322a0f2ad0dfaffc3e72337a28e189d9a311b94229e5d8b6d6",
-    MAIN: "fb18cc6863a908905e5f2dc3f7a99946f247d18bac2e6b05b3bf57ee30f56da4",
+    MAIN: "f1a8952197f962ee0c8a27e1605e9c388fa9bea5eaf4d3f25478b21d6b9047dc",
     CONTENT: "fcb4220a9a063622c8c2f19d66c56e813a8add0814ece5cb6ec09ca5830d2a71",
     CORE_BITS: "0b5c23c4a789cef43a3bf913c5d75c0beb1fb16bcc89036b7f1431e7b1af0fd8",
-    LEAF_LIB: "fe304b0bc9041454eea8f96aa7dcdaf6441dbdde3439ead97d98bbfcb0289774",
+    LEAF_LIB: "eef622caf04f4db206ffd38104deeb8a67b0602f063a489059fc18461246796e",
     LEAF_BIT_API: "007b960b0d869dcd6abb5bcb7f13397dfd9a41e45fdb38f13ab684782f6f662d",
     LEAF_BIT_INPUT: "eccb31f3ebc8056bc7f51319483002c27feddf76203cc7bb7a3d0d073fc9e16a",
     LEAF_BIT_TEST: "df9d40cd6e19f71b989f95cc82877919ed5f144bf790b3adb2b72c5dd3b78927",
     NIST_BIT_VECTORS: "a23d9c097b3f2218441b72707ba3b6094e0e85bf63ed0eb24fc70b635f846b8f",
     DIFFERENTIAL_MANIFEST: "6b1f8929ace8039b132af488cb2b0e2746d00684c2ed5dcfd32baff92bc763c3",
-    DIFFERENTIAL_LOCK: "371f5870df7d0763b522ba7f722e0531ffc8ffd639995cdd2f48a6615f935985",
+    DIFFERENTIAL_LOCK: "81b71c99c04ce21079a5426446cb8ebf00e179329c30bfc5ea59c5406771fce4",
     DIFFERENTIAL_MAIN: "72a6459c642c353fc64687e5fd29ba3e25f427c756e87ab79d3b940848b99752",
     DIFFERENTIAL_CHECK: "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
     DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
-    FACADE_LIB: "4cf4dd2cd7717d13b1b9b96fb6a015ebe73221b8e44ecd8cb4eb67758435e837",
-    LEAF_README: "981e8ad888123c986b247dc5f6b019c7d4a1ac2a6071c205eeafd32249945da3",
-    FACADE_README: "4306c60a7e377e77a24d4e09c920128d53b767d28159afeec670080196cefb90",
+    FACADE_LIB: "3e92b18f0efc5eb2f15833f128c38ce30d3f6f91b96ccef7cba69bbafc21015f",
+    LEAF_README: "1ebed7863a3e9638e2bc639ef171d573e9c2ab9e72fcef1aa1c8d052a5f4a029",
+    FACADE_README: "78cd77a839879ccca8e52f4343d19252d46b400fc29b0d90ea9ec4d5f7fe42ff",
     CHECK_SCRIPT: "08a8b7baae515ba1bb945e14b1a2022a5023b2de02aab94c8d80e67775433b1c",
-    TEST_SCRIPT: "37e2390350ffccc0bd6356c5eab54ff8b479214fcabfe4ae09715c2a08890892",
-    CHECKS: "babc543411968bcdfe6103352a02fb8e5d98a01646fcb477ca6550fe168d7177",
+    TEST_SCRIPT: "152605f88d141968ae005fc6850abc25ecd2f6b8896bbfafc219bbd75cd4a7bd",
+    CHECKS: "94af69f04477b2b4680dd44b5185b0a539a07b5f6d22dea6b2d91e49dc411491",
     RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
     BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
     WORKFLOW: "fff30b35d1c059b4b7ded0ebc799c1bcdf6a723a73760bb8e8aad2ed026606b6",
@@ -89,7 +91,10 @@ PACKAGES = (
         "src/lib.rs", "src/bit_api.rs", "src/bit_input.rs", "src/compress.rs",
         "src/compress64.rs", "src/digest.rs", "src/error.rs", "src/sha224.rs", "src/sha256.rs", "src/sha384.rs",
         "src/sha512.rs", "src/sha512_224.rs", "src/sha512_256.rs",
-        "src/sha512_state.rs", "src/sha512_t.rs",
+        "src/sha512_state.rs", "src/sha512_t.rs", "src/hardened/mod.rs",
+        "src/hardened/compress32.rs", "src/hardened/compress64.rs",
+        "src/hardened/output.rs", "src/hardened/owner.rs",
+        "src/hardened/state32.rs", "src/hardened/state64.rs",
     )),
     ("brynja-hash-sha3", "0.1.0", (
         "src/lib.rs", "src/digest.rs", "src/error.rs", "src/keccak.rs",
@@ -106,7 +111,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.7", ("src/lib.rs",)),
+    ("brynja", "0.24.8", ("src/lib.rs",)),
 )
 
 
@@ -144,7 +149,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.7", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.8", "default-features": False},
         "brynja-hash-sha2": {
             "path": "../../crates/brynja-hash-sha2", "version": "=0.1.0",
             "default-features": False, "features": ["cpu"],
@@ -166,9 +171,11 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     for token in (
         "#![no_std]", "pub fn run() -> Result<AcceptanceReport, AcceptanceError>",
         "one_shot_results: 30", "streaming_results: 36", "bit_input_results",
+        "hardened_results", "hardened_results: 12",
         "bit_inputs::check()?", "check_distinct_identities()?",
         "leaf::SHA2_BIT_INPUT_IMPLEMENTED",
         "facade::SHA2_BIT_INPUT_IMPLEMENTED",
+        "facade::SHA2_HARDENED_STATE_IMPLEMENTED",
         "skipped_unadmitted_backends: 5", "Sha256BackendSession::for_compiled_target().is_some()",
         "Sha512BackendSession::for_compiled_target().is_some()", "sha512_256_with_backend",
     ):
@@ -177,14 +184,15 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
         "cfg(brynja_cpu_evidence)", "for_candidate_evidence", "from_runtime_detection",
         "std::", "alloc::", "env!", "option_env!", "Command::", "File::", "TcpStream", "UdpSocket",
     ):
-        if forbidden in library + loaded[ALGORITHMS] + loaded[BIT_INPUTS] + loaded[VECTORS]:
+        if forbidden in library + loaded[ALGORITHMS] + loaded[BIT_INPUTS] + loaded[HARDENED] + loaded[VECTORS]:
             fail(f"acceptance fixture crossed forbidden boundary: {forbidden}")
     for name in ALGORITHMS_NAMES:
         require(loaded[MAIN], f"{name}: portable scalar; independently verified: NO; FIPS validated: NO", "runnable report")
         require(loaded[LEAF_README], name, "leaf documentation")
         require(loaded[FACADE_README], name, "facade documentation")
-    leaf_family_label = "SHA-2 (all six identities have complete byte and arbitrary-bit APIs; hardened secret-bearing profiles pending)"
-    facade_family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete byte and arbitrary-bit APIs; hardened profiles pending)"
+    require(loaded[MAIN], "hardened public/secret results", "runnable hardened report")
+    leaf_family_label = "SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending)"
+    facade_family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending)"
     require(loaded[LEAF_README], leaf_family_label, "leaf family documentation")
     require(loaded[FACADE_README], facade_family_label, "facade family documentation")
     public_algorithms = (
@@ -201,6 +209,13 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
             require(loaded[ALGORITHMS], f"{namespace}::{state}::new()", "public streaming coverage")
         require(loaded[BIT_INPUTS], f"    {function}_bits,", "public bit one-shot coverage")
         require(loaded[BIT_INPUTS], f"    {state},", "public bit state coverage")
+    for state in (
+        "HardenedSha224", "HardenedSha256", "HardenedSha384",
+        "HardenedSha512", "HardenedSha512_224", "HardenedSha512_256",
+    ):
+        require(loaded[HARDENED], state, "packaged hardened-state coverage")
+    for token in ("finalize_public", "finalize_secret", "PublicDeclassification::acknowledge"):
+        require(loaded[HARDENED], token, "packaged hardened-output coverage")
     for token in ("leaf::$function(complete)", "facade::$function(complete)", ".finalize_bits(tail)"):
         require(loaded[BIT_INPUTS], token, "bit macro coverage")
     for token in ("Sha224Digest, 28", "Sha256Digest, 32", "Sha384Digest, 48", "Sha512Digest, 64", "Sha512_224Digest, 28", "Sha512_256Digest, 32"):

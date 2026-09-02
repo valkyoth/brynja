@@ -117,7 +117,7 @@ def inconsistent_owner_fields(policy: dict, _surfaces: dict) -> None:
 
 
 def circular_registered_cleanup(policy: dict, _surfaces: dict) -> None:
-    policy["registered-secret-owner"].append({
+    policy["registered-secret-owner"] = [{
         "capability": "algorithm.sha2",
         "id": "registered.algorithm.sha2",
         "symbol": "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion",
@@ -129,7 +129,7 @@ def circular_registered_cleanup(policy: dict, _surfaces: dict) -> None:
         "storage": "crate-owned",
         "output_classification": "typed-secret-owned",
         "partial_failure_policy": "clear-complete-secret-destination",
-    })
+    }]
 
 
 def registration_supplies_cleanup_expression(policy: dict, surfaces: dict) -> None:
@@ -262,8 +262,8 @@ def main() -> int:
     assert len(first["capabilities"]) == 129
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
-    assert len(first["registered_secret_owners"]) == 0
-    assert len(first["planned_secret_owners"]) == 75
+    assert len(first["registered_secret_owners"]) == 1
+    assert len(first["planned_secret_owners"]) == 74
     assert all(len(row["api"]) == 22 for row in first["capabilities"])
     assert all(row["consumer_links"] for row in first["capabilities"])
     assert all(row["explicit_rejections"] == list(model.REJECTIONS) for row in first["capabilities"])
@@ -271,6 +271,7 @@ def main() -> int:
     assert all(row["lifecycle_edges"] == list(model.LIFECYCLE_EDGES) for row in first["planned_secret_owners"])
     assert all(row["state"] == "planned" for row in first["planned_secret_owners"])
     assert all("symbol" not in row and "sanitization_symbol" not in row for row in first["planned_secret_owners"])
+    assert first["registered_secret_owners"][0]["id"] == "registered.algorithm.sha2"
     assert first["capabilities"][0]["operations"]
     hashes = {row["id"]: row for row in first["capabilities"]}
     assert hashes["algorithm.sha2"]["api"]["bit-input"]["owner"] == "0.24.7"
@@ -300,7 +301,7 @@ def main() -> int:
         (fabricated_current_owner, "inventory is incomplete or duplicated"),
         (fabricated_sanitizer, "free Rust function is absent or duplicated"),
         (inconsistent_owner_fields, "owner fields differ from Rust struct"),
-        (circular_registered_cleanup, "registered owner lacks compiler contract"),
+        (circular_registered_cleanup, "registered owner differs from compiler contract"),
         (registration_supplies_cleanup_expression, "fields drifted"),
         (duplicate_registered_coverage, "capability coverage is duplicated"),
         (downgrade_template, "differs from secret template"),

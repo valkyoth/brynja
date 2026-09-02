@@ -109,7 +109,7 @@ def main() -> int:
     reject("bit Miri coverage", lambda root: replace(root, policy.MIRI_SCRIPT, "--test bit_inputs", "--test missing_bit_inputs"))
     reject("bit sanitizer coverage", lambda root: replace(root, policy.SANITIZER_SCRIPT, "--test bit_inputs", "--test missing_bit_inputs"))
     reject("core dependency", lambda root: replace(root, policy.CORE_MANIFEST, "[lints]", "[dependencies]\nbrynja-core = { workspace = true }\n\n[lints]"))
-    reject("SHA dependency", lambda root: replace(root, policy.MANIFEST, "brynja-hash-core = { workspace = true }", "brynja-hash-core = { workspace = true }\nbrynja-core = { workspace = true }"))
+    reject("SHA dependency", lambda root: replace(root, policy.MANIFEST, "brynja-hash-core = { workspace = true }", "brynja-hash-core = { workspace = true }\nbrynja-unexpected = { workspace = true }"))
     reject("crypto ownership", lambda root: replace(root, policy.CRYPTO_MANIFEST, "brynja-hash-sha2 = { workspace = true }", "brynja-core = { workspace = true }"))
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha2]\nclass = "modern-shared"', '[packages.brynja-hash-sha2]\nclass = "modern-engine"'))
     reject("consumer test", lambda root: replace(root, policy.TEST, "fn downstream_style_real_content_uses_only_public_api", "fn removed_consumer"))

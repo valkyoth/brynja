@@ -8,7 +8,7 @@ use brynja_crypto_cpu::{Sha256BackendError, Sha256BackendSession};
 const BLOCK_BYTES: usize = 64;
 const LENGTH_FIELD_BYTES: usize = 8;
 const FINAL_BLOCK_PREFIX_BYTES: usize = BLOCK_BYTES - LENGTH_FIELD_BYTES;
-const INITIAL_STATE: [u32; 8] = [
+pub(crate) const INITIAL_STATE: [u32; 8] = [
     0x6a09_e667,
     0xbb67_ae85,
     0x3c6e_f372,

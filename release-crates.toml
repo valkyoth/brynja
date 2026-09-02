@@ -1,19 +1,19 @@
 [release]
-version = "0.24.7"
-milestone = "0.24.7"
+version = "0.24.8"
+milestone = "0.24.8"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "New public arbitrary-bit SHA-2 input and padding behavior changes production cryptography and requires an exceptional assessment before the signed development tag."
+exception_reason = "New secret-bearing SHA-2 ownership, declassification, typed-output, and compiler-resistant cleanup behavior changes a production security boundary and requires an exceptional assessment before the signed development tag."
 
 [crates."brynja"]
-previous_version = "0.24.6"
-version = "0.24.7"
+previous_version = "0.24.7"
+version = "0.24.8"
 change = "code"
 publish = false
-reason = "Advance the internal facade with canonical arbitrary-bit SHA-2 one-shot and consuming incremental-finalization APIs for all six identities."
+reason = "Advance the internal facade with distinct hardened byte and arbitrary-bit SHA-2 states, explicit public declassification, typed secret output, and compiler-resistant cleanup for all six identities."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Retain the published version while its internal source reexports canonical arbitrary-bit SHA-2 inputs and all-six one-shot APIs without publication."
+reason = "Retain the published version while its internal source reexports all six hardened SHA-2 states, declassification authority, typed errors, and sealed capability without publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -41,7 +41,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Extend all six SHA-2 identities with canonical arbitrary-bit one-shot and consuming incremental-finalization APIs, exact bit exhaustion, official vectors, backend entry points, and downstream acceptance; hardened profiles remain in progress through v0.24.11."
+reason = "Add distinct hardened byte and arbitrary-bit states for all six SHA-2 identities with sealed capability, typed public/secret output, compiler-resistant all-region cleanup, downstream no_std acceptance, and compiler evidence; combined family acceptance remains in progress through v0.24.11."
 
 [crates."brynja-hash-sha3"]
 previous_version = "unpublished"

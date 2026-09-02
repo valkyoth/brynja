@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 exceptional pentest PASS/PASS with zero open findings and awaiting green hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.7 signed; v0.24.8 hardened SHA-2 implementation complete and awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -336,25 +336,20 @@ algorithm is added, and SHA-2/SHA-3 remain In progress through their separately
 owned hardened and complete-family acceptance milestones. Zero crates are
 selected for publication.
 
-The facade now advances to internal `0.24.7`. Every SHA-2 identity accepts a
-canonical borrowed arbitrary-bit message through portable and forced-backend
-one-shot APIs or a consuming incremental final tail. The representation uses
-most-significant-bit-first tails and rejects invalid widths or nonzero unused
-low bits before hashing. Checked 64-bit and 128-bit FIPS length accounting,
-240 exact selected NIST CAVP bit records, every tail width across padding and
-block boundaries, 1,008 bounded independent differential results, Kani length
-proofs, Miri, AddressSanitizer, and an 18-result downstream `no_std` fixture
-bind the new surface. Existing byte APIs remain identical and all optional CPU
-candidates remain unadmitted. This is unkeyed ordinary hashing, not secret-
-state erasure, independent review, FIPS 140-3 validation, or crates.io
-publication; SHA-2 remains In progress through v0.24.8-v0.24.11.
-
-Two supplied security assessments of exact implementation candidate
-`68d0e88450c25355f3a3aa0a8b1947d484fe6b90` each reported no Critical, High,
-or Medium finding. The permanent exceptional report records
-`PASS`/`PASS` with zero open findings and no required remediation. The exact
-report-bearing candidate still requires green hosted GitHub and CodeQL before
-the signed v0.24.7 tag is authorized.
+The facade now advances to internal `0.24.8`. Every SHA-2 identity has a
+distinct portable hardened state over the same byte and canonical-bit domain.
+Eight registered byte-backed regions own the chaining state, partial input,
+message length, phase, schedule, block copy, padding block, and staged output.
+They clear through Brynja's first-party compiler-resistant boundary on normal
+completion, error, `Drop`, and recoverable unwind. Public release requires an
+explicit declassification token; secret release transfers typed ownership of
+the complete caller destination and clears failure paths. Downstream code
+cannot forge the sealed capability or clone, format, reset, snapshot, or
+convert the states. Hardened acceleration is absent, all ordinary candidates
+remain unadmitted, and the exact cleanup claim excludes registers, caches,
+compiler-created copies, dumps, forgotten owners, abort, termination, suspend,
+power loss, and physical memory. SHA-2 remains In progress until v0.24.11;
+independent review, FIPS validation, and crates.io publication remain absent.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

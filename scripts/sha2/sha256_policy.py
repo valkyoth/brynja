@@ -400,7 +400,11 @@ def validate_packages(root: Path) -> None:
     if core.get("dependencies"):
         fail("brynja-hash-core gained a dependency")
     manifest = tomllib.loads((root / MANIFEST).read_text(encoding="utf-8"))
-    if set(manifest.get("dependencies", {})) != {"brynja-hash-core", "brynja-crypto-cpu"}:
+    if set(manifest.get("dependencies", {})) != {
+        "brynja-core",
+        "brynja-hash-core",
+        "brynja-crypto-cpu",
+    }:
         fail("brynja-hash-sha2 dependency boundary changed")
     crypto = tomllib.loads((root / CRYPTO_MANIFEST).read_text(encoding="utf-8"))
     if set(crypto.get("dependencies", {})) != {
@@ -427,7 +431,7 @@ def validate_packages(root: Path) -> None:
         "brynja-hash-sha2": {
             "class": "modern-shared",
             "publish": "crates-io",
-            "required": ["brynja-hash-core"],
+            "required": ["brynja-core", "brynja-hash-core"],
             "optional": {"cpu": "brynja-crypto-cpu"},
         },
     }

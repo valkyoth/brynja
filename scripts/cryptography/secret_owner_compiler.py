@@ -213,7 +213,7 @@ def compiler_inventory(
         sanitizer_symbol = require_nonempty(
             record["sanitization_symbol"], f"registered sanitizer symbol for {owner_id}",
         )
-        _, _, sanitizer_tokens = registered_symbol_identity(
+        sanitizer_source, sanitizer_package, sanitizer_tokens = registered_symbol_identity(
             sanitizer_symbol, f"registered sanitizer symbol for {owner_id}",
         )
         if len(sanitizer_tokens) < 2:
@@ -222,9 +222,15 @@ def compiler_inventory(
             sanitizer_map[sanitizer_symbol], f"registered MIR sanitizer for {owner_id}",
         )
         mir_owner_tokens, mir_leaf = mir_callable_identity(sanitizer)
-        if (
-            mir_leaf != sanitizer_tokens[-1]
-            or mir_owner_tokens != sanitizer_tokens[:-1]
+        full_owner = sanitizer_tokens[:-1]
+        local_owner = sanitizer_tokens[-2:-1]
+        local_associated_call = (
+            sanitizer_source == source
+            and sanitizer_package == package
+            and mir_owner_tokens == local_owner
+        )
+        if mir_leaf != sanitizer_tokens[-1] or (
+            mir_owner_tokens != full_owner and not local_associated_call
         ):
             fail(f"MIR target differs from registered sanitizer: {owner_id}")
         for caller in record["cleanup_callers"]:

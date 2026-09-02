@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canonical v0.24.6 owner identities and operation-flow contracts."""
+"""Canonical v0.24.8 owner identities and operation-flow contracts."""
 
 CURRENT_OWNER_SYMBOLS = {
     "adapter.sanitized-secret": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret",
@@ -49,15 +49,69 @@ CURRENT_CLEANUP_CALLS = {
     },
 }
 
-# Deliberately empty until a secret-bearing algorithm owner is implemented.
-# A registration record cannot define its own proof: every future entry here
-# must bind the complete policy projection. Separate canonical maps bind its
-# adjacent compiler test, caller identity, and sanitizer MIR target so the
-# registration cannot provide any part of its own proof.
-REGISTERED_OWNER_CONTRACTS = {}
-REGISTERED_OWNER_COMPILER_TESTS = {}
-REGISTERED_CALLER_MIR_HEADERS = {}
-REGISTERED_SANITIZER_MIR_IDENTITIES = {}
+SHA2_OWNER = (
+    "crates/brynja-hash-sha2/src/hardened/owner.rs#"
+    "brynja_hash_sha2::owner::HardenedSha2Owner"
+)
+SHA2_DROP = f"{SHA2_OWNER}::drop"
+SHA2_WIPE = (
+    "crates/brynja-hash-sha2/src/hardened/owner.rs#"
+    "brynja_hash_sha2::HardenedSha2Owner::wipe"
+)
+SHA2_OWNER_RECORD = {
+    "capability": "algorithm.sha2",
+    "symbol": SHA2_OWNER,
+    "fields": [
+        "chaining_state:secret-derived",
+        "partial_input:secret",
+        "message_length:secret-derived",
+        "phase:secret-derived",
+        "message_schedule:secret-derived",
+        "block_copy:secret-copy",
+        "padding_block:secret-copy",
+        "output_staging:secret-derived",
+    ],
+    "temporaries": [
+        "round-scalars:register-copy-risk",
+        "borrowed-input:caller-owned-copy-risk",
+        "typed-output:caller-owned",
+    ],
+    "sanitization_symbol": SHA2_WIPE,
+    "cleanup_callers": [SHA2_DROP],
+    "evidence": [
+        "crates/brynja-hash-sha2/tests/hardened.rs",
+        "assurance/sha2-hardened-api/src/lib.rs",
+        "scripts/zeroization/check-zeroization-codegen.sh",
+        "scripts/sha2/check-sha2-hardened.py",
+    ],
+    "storage": "crate-owned-fixed",
+    "output_classification": "typed-secret-owned",
+    "partial_failure_policy": "clear-complete-secret-destination",
+}
+
+# Registration cannot define its own proof. Separate maps bind its compiler
+# test, exact caller identity, and resolved sanitizer target.
+REGISTERED_OWNER_CONTRACTS = {
+    "registered.algorithm.sha2": {"record": SHA2_OWNER_RECORD},
+}
+REGISTERED_OWNER_COMPILER_TESTS = {
+    SHA2_OWNER: {
+        "package": "brynja-hash-sha2",
+        "contract_test": (
+            "hardened::owner::assurance_contract::"
+            "registered_algorithm_sha2_owner_contract_is_compiler_checked"
+        ),
+    },
+}
+REGISTERED_CALLER_MIR_HEADERS = {
+    SHA2_DROP: [
+        "fn owner::<impl at crates/brynja-hash-sha2/src/hardened/owner.rs:78:1: 78:32>::"
+        "drop(_1: &mut HardenedSha2Owner) -> () {"
+    ],
+}
+REGISTERED_SANITIZER_MIR_IDENTITIES = {
+    SHA2_WIPE: "HardenedSha2Owner::wipe(",
+}
 
 OPERATION_CONTRACTS = {
     "aead": {
@@ -132,6 +186,9 @@ OPERATION_CONTRACTS = {
 
 REVIEWED_SOURCE_PATHS = {
     "assurance/api-profile-contract/src/lib.rs",
+    "assurance/sha2-hardened-api/Cargo.lock",
+    "assurance/sha2-hardened-api/Cargo.toml",
+    "assurance/sha2-hardened-api/src/lib.rs",
     "crates/brynja-core/src/entropy/assurance_contract.rs",
     "crates/brynja-core/src/entropy.rs",
     "crates/brynja-core/src/secret.rs",
@@ -145,6 +202,14 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-hash-sha2/src/sha224.rs",
     "crates/brynja-hash-sha2/src/sha256.rs",
     "crates/brynja-hash-sha2/src/sha512_state.rs",
+    "crates/brynja-hash-sha2/src/hardened/compress32.rs",
+    "crates/brynja-hash-sha2/src/hardened/compress64.rs",
+    "crates/brynja-hash-sha2/src/hardened/mod.rs",
+    "crates/brynja-hash-sha2/src/hardened/output.rs",
+    "crates/brynja-hash-sha2/src/hardened/owner.rs",
+    "crates/brynja-hash-sha2/src/hardened/state32.rs",
+    "crates/brynja-hash-sha2/src/hardened/state64.rs",
+    "crates/brynja-hash-sha2/tests/hardened.rs",
     "crates/brynja-hash-sha3/src/sponge.rs",
     "crates/brynja-sanitization/src/lib.rs",
     "crates/brynja-sanitization/src/assurance_contract.rs",
@@ -160,4 +225,8 @@ REVIEWED_SOURCE_PATHS = {
     "scripts/cryptography/test-api-profiles.py",
     "scripts/cryptography/test-mir-cleanup-flow.py",
     "scripts/cryptography/test-secret-owner-compiler.py",
+    "scripts/sha2/check-sha2-hardened-codegen.sh",
+    "scripts/sha2/check-sha2-hardened.py",
+    "scripts/sha2/sha2_hardened.py",
+    "scripts/sha2/test-sha2-hardened.py",
 }

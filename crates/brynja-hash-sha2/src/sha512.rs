@@ -5,7 +5,7 @@ use crate::{BitString, Sha512Digest, Sha512Error, sha512_state};
 #[cfg(feature = "cpu")]
 use brynja_crypto_cpu::Sha512BackendSession;
 
-const INITIAL_STATE: [u64; 8] = [
+pub(crate) const INITIAL_STATE: [u64; 8] = [
     0x6a09_e667_f3bc_c908,
     0xbb67_ae85_84ca_a73b,
     0x3c6e_f372_fe94_f82b,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Adversarial fixtures for complete v0.24.7 SHA-2 public acceptance."""
+"""Adversarial fixtures for complete v0.24.8 SHA-2 public acceptance."""
 
 from __future__ import annotations
 
@@ -58,9 +58,21 @@ def main() -> int:
     reject_policy("missing-bit-API", acceptance.BIT_INPUTS, "    sha512_256_bits,", "    missing_sha512_256_bits,")
     reject_policy("missing-bit-claim", acceptance.LIB, "facade::SHA2_BIT_INPUT_IMPLEMENTED", "facade::SHA2_BIT_INPUT_MISSING")
     reject_policy(
+        "missing-hardened-claim",
+        acceptance.LIB,
+        "facade::SHA2_HARDENED_STATE_IMPLEMENTED",
+        "facade::SHA2_HARDENED_STATE_MISSING",
+    )
+    reject_policy(
+        "missing-hardened-output",
+        acceptance.HARDENED,
+        "finalize_secret",
+        "missing_secret_output",
+    )
+    reject_policy(
         "missing-documentation",
         acceptance.LEAF_README,
-        "SHA-2 (all six identities have complete byte and arbitrary-bit APIs; hardened secret-bearing profiles pending)",
+        "SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending)",
         "incomplete hash family",
     )
     reject_policy(

@@ -4,6 +4,7 @@
 
 mod algorithms;
 mod bit_inputs;
+mod hardened;
 mod vectors;
 
 use brynja::crypto as facade;
@@ -35,6 +36,8 @@ pub enum AcceptanceError {
     ImplementationClaimMissing,
     /// A canonical bit input or resulting digest differed from NIST evidence.
     BitInputMismatch,
+    /// Hardened output, ownership, or cleanup differed from ordinary SHA-2.
+    HardenedMismatch,
 }
 
 /// Successful complete-family acceptance counts.
@@ -48,13 +51,15 @@ pub struct AcceptanceReport {
     pub streaming_results: usize,
     /// Number of leaf, facade, and incremental bit-oriented results checked.
     pub bit_input_results: usize,
+    /// Number of hardened public and typed-secret outputs checked.
+    pub hardened_results: usize,
     /// Number of admitted accelerated identities executed on this host.
     pub admitted_backends: usize,
     /// Number of implemented but unadmitted identities explicitly skipped.
     pub skipped_unadmitted_backends: usize,
 }
 
-/// Runs complete v0.24.7 SHA-2 downstream usability acceptance.
+/// Runs complete v0.24.8 SHA-2 downstream usability acceptance.
 pub fn run() -> Result<AcceptanceReport, AcceptanceError> {
     check_claims()?;
     let cases = [
@@ -69,6 +74,7 @@ pub fn run() -> Result<AcceptanceReport, AcceptanceError> {
     }
     check_million_a()?;
     let bit_input_results = bit_inputs::check()?;
+    let hardened_results = hardened::check()?;
     check_exhaustion()?;
     check_distinct_identities()?;
     let (admitted_backends, skipped_unadmitted_backends) = check_backends()?;
@@ -77,6 +83,7 @@ pub fn run() -> Result<AcceptanceReport, AcceptanceError> {
         one_shot_results: 30,
         streaming_results: 36,
         bit_input_results,
+        hardened_results,
         admitted_backends,
         skipped_unadmitted_backends,
     })
@@ -99,10 +106,12 @@ fn check_claims() -> Result<(), AcceptanceError> {
         facade::SHA512_224_IMPLEMENTED,
         facade::SHA512_256_IMPLEMENTED,
         facade::SHA2_BIT_INPUT_IMPLEMENTED,
+        facade::SHA2_HARDENED_STATE_IMPLEMENTED,
     ];
     if leaf_claims.iter().all(|claim| *claim)
         && facade_claims.iter().all(|claim| *claim)
         && leaf::SHA2_BIT_INPUT_IMPLEMENTED
+        && leaf::SHA2_HARDENED_STATE_IMPLEMENTED
     {
         Ok(())
     } else {
@@ -281,6 +290,7 @@ mod tests {
                 one_shot_results: 30,
                 streaming_results: 36,
                 bit_input_results: 18,
+                hardened_results: 12,
                 admitted_backends: 0,
                 skipped_unadmitted_backends: 5,
             })

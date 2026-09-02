@@ -15,6 +15,7 @@ default = []
 cpu = ["dep:brynja-crypto-cpu"]
 
 [dependencies]
+brynja-core = { workspace = true }
 brynja-hash-core = { workspace = true }
 brynja-crypto-cpu = { workspace = true, optional = true }
 

@@ -116,26 +116,30 @@ fn schedule_word(schedule: &[u32; 64], index: usize) -> u32 {
     }
 }
 
-const fn choose(x: u32, y: u32, z: u32) -> u32 {
+pub(crate) fn round_constant(index: usize) -> u32 {
+    ROUND_CONSTANTS.get(index).copied().unwrap_or(0)
+}
+
+pub(crate) const fn choose(x: u32, y: u32, z: u32) -> u32 {
     (x & y) ^ ((!x) & z)
 }
 
-const fn majority(x: u32, y: u32, z: u32) -> u32 {
+pub(crate) const fn majority(x: u32, y: u32, z: u32) -> u32 {
     (x & y) ^ (x & z) ^ (y & z)
 }
 
-const fn big_sigma0(value: u32) -> u32 {
+pub(crate) const fn big_sigma0(value: u32) -> u32 {
     value.rotate_right(2) ^ value.rotate_right(13) ^ value.rotate_right(22)
 }
 
-const fn big_sigma1(value: u32) -> u32 {
+pub(crate) const fn big_sigma1(value: u32) -> u32 {
     value.rotate_right(6) ^ value.rotate_right(11) ^ value.rotate_right(25)
 }
 
-const fn small_sigma0(value: u32) -> u32 {
+pub(crate) const fn small_sigma0(value: u32) -> u32 {
     value.rotate_right(7) ^ value.rotate_right(18) ^ (value >> 3)
 }
 
-const fn small_sigma1(value: u32) -> u32 {
+pub(crate) const fn small_sigma1(value: u32) -> u32 {
     value.rotate_right(17) ^ value.rotate_right(19) ^ (value >> 10)
 }

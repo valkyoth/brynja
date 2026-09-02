@@ -52,6 +52,15 @@ def call_before(destination: str) -> str:
 
 def main() -> int:
     accepts(plain_before("_5.0 = const 7_u8;"))
+    accepts(plain_before("_5.0 = const 7_u8;") + """
+const owner::drop::{constant#0}: usize = {
+    let mut _0: usize;
+    bb0: {
+        _0 = const 1_usize;
+        return;
+    }
+}
+""")
     accepts("""fn owner::drop(_1: &mut Owner) -> () {
     bb0: {
         _2 = unrelated_call() -> [return: bb1, unwind unreachable];
@@ -314,7 +323,7 @@ def main() -> int:
 }
 """)
     print(
-        "strict MIR cleanup flow accepts four valid place/provenance paths and "
+        "strict MIR cleanup flow accepts five valid place/provenance paths and "
         "rejects twenty-nine projected-write, alias-escape, return-escape, may-flow, unwind, CFG, assembly, "
         "and post-cleanup regressions"
     )

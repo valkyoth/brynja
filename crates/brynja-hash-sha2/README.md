@@ -42,9 +42,10 @@ closes byte-oriented family usability with source and separately packaged
 downstream acceptance through only documented public APIs. v0.24.7 adds the
 complete FIPS 180-4 arbitrary-bit input domain to all six identities through
 canonical one-shot and consuming incremental final-tail APIs. The wider family
-remains **In progress** until v0.24.8-v0.24.11 add distinct hardened
-secret-bearing states, complete internal sanitization, and combined downstream
-acceptance.
+remains **In progress** until the combined downstream acceptance at v0.24.11.
+v0.24.8 adds distinct hardened states for all six identities, complete
+source-declared internal sanitization, explicit public declassification, and
+typed secret output.
 
 ## Example
 
@@ -98,6 +99,28 @@ one canonical final byte or byte-aligned suffix to the consuming
 `finalize_bits` method. Consuming the state makes repeated tails and absorption
 after a partial tail unrepresentable in safe Rust.
 
+Secret-bearing callers use a distinct hardened state rather than an ordinary
+state:
+
+```rust
+use brynja_hash_sha2::{HardenedSha256, PublicDeclassification};
+
+let mut state = HardenedSha256::new();
+state.update(b"secret-derived input").unwrap();
+let mut digest = [0_u8; 32];
+state
+    .finalize_public(&mut digest, PublicDeclassification::acknowledge())
+    .unwrap();
+```
+
+`finalize_secret` instead returns a typed `OwnedSecretRegion` over the caller's
+destination, which is cleared when dropped. Hardened states are sealed,
+non-cloneable, non-formattable, non-resettable, and portable-only. They clear
+every Brynja-owned source-declared state and scratch region on normal exits,
+errors, `Drop`, and recoverable unwinding. The exact claim excludes registers,
+caches, compiler-created copies, dumps, `mem::forget`, abort, forced
+termination, suspend images, power loss, and physical-memory attacks.
+
 Callers with external file or stream metadata can preflight the checked FIPS
 message-length domain without allocating or mutating the state:
 
@@ -143,8 +166,9 @@ All six portable FIPS 180-4 SHA-2 algorithms are implemented through v0.23.2,
 and v0.23.3 adds complete forced candidate APIs while keeping every backend
 unadmitted pending native evidence. v0.23.4 completes packaged downstream
 byte-oriented family acceptance. v0.24.7 completes the canonical arbitrary-bit
-input APIs; hardened secret-bearing profiles and final combined acceptance
-remain planned through v0.24.11, so the expanded family is still in progress.
+input APIs, and v0.24.8 completes all six hardened secret-bearing state APIs.
+Final combined acceptance remains planned at v0.24.11, so the expanded family
+is still in progress.
 No code in this crate has been independently reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
@@ -153,17 +177,17 @@ verification.
 
 | Algorithm | Implementation chain | Independently verified |
 | --- | --- | --- |
-| SHA-2 (all six identities have complete byte and arbitrary-bit APIs; hardened secret-bearing profiles pending) | 🚧 In progress | ❌ Not verified |
+| SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not verified |
 
 These are unkeyed hashes. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS
 140-3 validation claim. Ordinary SHA-2 states are intended for unkeyed hashing
 and do not guarantee erasure of remnants when their input contains secrets. A
 caller cannot erase private working state, schedules, or buffered input. The
-distinct hardened profiles planned at v0.24.8 use Brynja's admitted
-sanitization mechanism for every owned chaining state, partial buffer,
-schedule, block copy, temporary, and terminal path; HMAC and every future
-secret-derived consumer must use those owners.
+distinct hardened profiles use Brynja's admitted sanitization mechanism for
+every owned chaining state, partial buffer, schedule, block copy, temporary,
+and terminal path; HMAC and every future secret-derived consumer must use
+those owners.
 
 See the [full project documentation](https://github.com/valkyoth/brynja),
 [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md),

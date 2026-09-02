@@ -226,7 +226,7 @@ def validate_packages(root: Path) -> None:
         fail("host detector dependency boundary drifted")
     if sha2.get("features") != {"default": [], "cpu": ["dep:brynja-crypto-cpu"]}:
         fail("SHA-2 optional CPU feature drifted")
-    if set(sha2.get("dependencies", {})) != {"brynja-hash-core", CPU}:
+    if set(sha2.get("dependencies", {})) != {"brynja-core", "brynja-hash-core", CPU}:
         fail("SHA-2 CPU dependency boundary drifted")
     packages = read_toml(root / "package-policy.toml")["packages"]
     if packages[SHA2]["optional"] != {"cpu": CPU}:

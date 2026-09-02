@@ -44,20 +44,21 @@ FILES = (
 )
 EXPECTED_SHA256 = {
     MANIFEST: "e5324f6ad25053620f470217e0332aa6dc2955384cd5e5d157599efe5658e247",
-    LOCK: "c686f1cf8035ab2a27770894566d6bc9f753c88c7adfeb5ed7a1a0354ddbc018",
+    LOCK: "9dae7c1c35dbc58202c370d405dcace5f26af8424a76ac3f392a95856965929a",
     LIB: "096ef101b31b38ededc2aeda9e3b0546757f57fc2875419f920876ce883f64ff",
     MAIN: "5147536fd2bdc395ceed7fb023c9a06971347a8d531c66c0cfde7b78fc878522",
     CONTENT: "a8f34a54459e9655229bb554c15ebb87f89a0bfbc600da8eb56999422fc0487f",
-    SHA256_SOURCE: "d4b76a1966e9b7ca57610dd09dde2504892a130ebe200e98edc02b89081b5441",
+    SHA256_SOURCE: "7e0290354efef3e5a3a163afcf66de61e2fb3f55955489efb0540d179661ae49",
     SHA256_TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
     CHECK_SCRIPT: "d424a02dcfc778f83ccf8004fc23c9456bd71a759ece3235bdb56f1f0f02ad9d",
     TEST_SCRIPT: "10155923e8769cd405c2e9eaa813c02b50f665daacadfc2da3a90f9dc7f9ab7f",
-    CHECKS: "babc543411968bcdfe6103352a02fb8e5d98a01646fcb477ca6550fe168d7177",
+    CHECKS: "94af69f04477b2b4680dd44b5185b0a539a07b5f6d22dea6b2d91e49dc411491",
     RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
     BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
     WORKFLOW: "fff30b35d1c059b4b7ded0ebc799c1bcdf6a723a73760bb8e8aad2ed026606b6",
 }
 PACKAGES = (
+    ("brynja-core", "0.9.0", ("src/lib.rs",)),
     ("brynja-hash-core", "0.1.0", ("src/lib.rs",)),
     (
         "brynja-crypto-cpu",
@@ -320,6 +321,7 @@ cast_sign_loss = "forbid"
 too_many_arguments = "forbid"
 
 [workspace.dependencies]
+brynja-core = { path = "crates/brynja-core", version = "=0.9.0" }
 brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.2" }
 brynja-hash-core = { path = "crates/brynja-hash-core", version = "=0.1.0" }
 brynja-hash-sha2 = { path = "crates/brynja-hash-sha2", version = "=0.1.0" }

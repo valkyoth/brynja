@@ -119,6 +119,17 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement the v0.24.8 complete hardened SHA-2 state APIs for all six FIPS
+  180-4 identities. Distinct sealed portable states accept byte and canonical
+  arbitrary-bit input, require explicit public declassification or typed
+  secret output, and compiler-resistantly clear eight registered owner regions
+  on terminal, error, `Drop`, and recoverable-unwind paths.
+- Add package-external and bare-metal `no_std` hardened consumers, ordinary-
+  versus-hardened differential and lifecycle tests, compile-fail capability
+  and API tests, two Kani failure-output bounds, Miri, AddressSanitizer, and
+  exact Rust 1.90.0/1.98.0 MIR/LLVM/assembly destruction evidence. Hardened
+  acceleration remains prohibited; SHA-2 remains In progress until v0.24.11,
+  and zero crates are selected for publication.
 - Implement the v0.24.7 complete SHA-2 arbitrary-bit input domain for all six
   FIPS 180-4 identities. One canonical borrowed `BitString` rejects ambiguous
   unused tail bits; portable and forced-backend one-shot functions plus

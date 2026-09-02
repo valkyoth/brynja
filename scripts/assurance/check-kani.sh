@@ -30,8 +30,8 @@ harnesses="$(
         wc -l |
         tr -d ' '
 )"
-test "$harnesses" = "11" || {
-    echo "Kani policy: expected exactly eleven admitted SHA-2/SHA-3 harnesses, found ${harnesses}" >&2
+test "$harnesses" = "13" || {
+    echo "Kani policy: expected exactly thirteen admitted SHA-2/SHA-3 harnesses, found ${harnesses}" >&2
     exit 1
 }
 
@@ -41,6 +41,7 @@ confined_harnesses="$(
 )"
 expected_harness_files="$(printf '%s\n' \
     crates/brynja-hash-sha2/src/bit_input.rs \
+    crates/brynja-hash-sha2/src/hardened/output.rs \
     crates/brynja-hash-sha2/src/lib.rs \
     crates/brynja-hash-sha3/src/lib.rs)"
 test "$confined_harnesses" = "$expected_harness_files" || {
@@ -49,7 +50,7 @@ test "$confined_harnesses" = "$expected_harness_files" || {
 }
 
 if [ "$mode" = "--policy-only" ]; then
-    echo "Kani policy: eleven portable SHA-2/SHA-3 bounds are inventoried; full proofs are local tag-gate evidence"
+    echo "Kani policy: thirteen portable SHA-2/SHA-3 bounds are inventoried; full proofs are local tag-gate evidence"
     exit 0
 fi
 
@@ -84,4 +85,4 @@ test "$installed" = "cargo-kani ${kani_version}" || {
 
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha2
 rustup run "$kani_toolchain" cargo kani -p brynja-hash-sha3
-echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; eleven SHA-2/SHA-3 bounds passed"
+echo "Kani proof: cargo-kani ${kani_version} with Rust ${kani_toolchain}; thirteen SHA-2/SHA-3 bounds passed"

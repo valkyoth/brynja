@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.6 signed; v0.24.7 exceptional pentest PASS/PASS with zero open findings and awaiting green hosted checks
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.7 signed; v0.24.8 hardened SHA-2 implementation complete and awaiting exceptional pentest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.7`. `brynja-hash-core 0.1.0`,
+advances to internal `0.24.8`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
 interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
 algorithms, and unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented implementations
@@ -238,7 +238,7 @@ multi-squeeze output, exact rates, zero output, checked failures and domain
 separation, then repeats from the safely extracted exact sixteen-package
 offline archive closure. This changes no cryptographic implementation,
 dependency or backend admission. Byte-oriented v0.24.4 backend work and the
-v0.24.7-v0.24.11 arbitrary-bit, hardened-state, and combined acceptance remain;
+v0.24.9-v0.24.11 SHA-3 arbitrary-bit/hardened and combined acceptance remain;
 zero crates are selected for publication. Its voluntary assessment's one Low
 missing fixture-Clippy enforcement control is remediated, and independent
 retest of exact candidate `c7bd354e5bcf9a816c366cf24d0d88347771afc5`
@@ -266,12 +266,12 @@ FIPS validation remain later work. Zero crates are selected for publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.24.7` | no | Internal canonical arbitrary-bit SHA-2 milestone; all six byte APIs remain stable, hardened profiles remain pending, and v0.20.0 remains published |
+| `brynja` | `0.24.8` | no | Internal hardened SHA-2 milestone; all six ordinary and hardened byte/bit APIs are usable, combined acceptance remains pending, and v0.20.0 remains published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output/XOF interfaces and canonical borrowed bit strings |
-| `brynja-hash-sha2` | `0.1.0` | no | Unpublished six-algorithm FIPS 180-4 byte and arbitrary-bit APIs, forced candidate routes, and package-external acceptance; hardened secret-bearing profiles remain in progress |
+| `brynja-hash-sha2` | `0.1.0` | no | Unpublished six-algorithm FIPS 180-4 ordinary and hardened byte/arbitrary-bit APIs, forced ordinary candidate routes, compiler-resistant cleanup evidence, and package-external acceptance; combined acceptance remains in progress |
 | `brynja-hash-sha3` | `0.1.0` | no | Unpublished SHA3-224/SHA3-256/SHA3-384/SHA3-512/SHAKE128/SHAKE256 byte APIs with packaged portable acceptance; arbitrary-bit, hardened secret-bearing, and final cross-backend profiles remain in progress |
-| `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports all six SHA-2 and six FIPS 202 leaf implementations |
+| `brynja-crypto` | `0.1.2` | no | Published version retained while its unpublished source reexports ordinary and hardened SHA-2 plus all six FIPS 202 leaf implementations |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |

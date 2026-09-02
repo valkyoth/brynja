@@ -51,6 +51,9 @@ python3 scripts/sha2/test-sha256-public-api.py
 python3 scripts/sha2/check-sha2-public-api.py
 python3 scripts/sha2/test-sha2-public-api.py
 python3 scripts/sha2/check-sha2-bit-differential.py
+python3 scripts/sha2/check-sha2-hardened.py
+python3 scripts/sha2/test-sha2-hardened.py
+scripts/sha2/check-sha2-hardened-codegen.sh
 python3 scripts/sha3/check-sha3.py
 python3 scripts/sha3/test-sha3.py
 python3 scripts/sha3/check-sha3-differential.py

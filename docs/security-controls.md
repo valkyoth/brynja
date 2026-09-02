@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.7 signed; v0.24.8 hardened SHA-2 implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.7 signed; v0.24.8 hardened SHA-2 exceptional pentest PASS and awaiting green hosted GitHub and CodeQL
 
 | Control | Foundation enforcement |
 | --- | --- |

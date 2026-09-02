@@ -3026,7 +3026,7 @@ Exit criteria:
 
 ### v0.24.8 - Complete Hardened SHA-2 State APIs
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Implementation notes: six distinct portable hardened states now share the
 existing FIPS 180-4 compression math while owning eight byte-backed secret
@@ -3038,6 +3038,13 @@ compile-fail tests, thirteen cumulative Kani bounds, Miri, AddressSanitizer,
 and Rust 1.90.0/1.98.0 MIR/LLVM/assembly cleanup evidence are gate-bound. No
 accelerated hardened path, independent verification, FIPS validation, or
 crates.io publication is claimed.
+
+Two supplied security assessments of exact implementation candidate
+`9bb19a27d5ce957a2cf4474e88e445dce7950da3` each reported no Critical, High,
+or Medium finding. The permanent exceptional report records `PASS`/`PASS`
+with zero open findings; no remediation was required. The report-bearing
+candidate must pass the complete local release gate plus hosted GitHub and
+CodeQL checks before tag authorization.
 
 Plan scope: Add distinct public secret-bearing states for all six SHA-2 identities that share the exact reviewed compression algorithms but own and compiler-resistantly destroy partial input, chaining state, message schedules, block copies and all Brynja-owned intermediates on every terminal and recoverable-unwind path; seal hardened capabilities against downstream implementation or forgery, make cleanup non-panicking and all-region despite adjacent failures, classify digest output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, prohibit Copy, Clone, formatting, serialization, reset into ordinary state and use of any accelerated path without matching cleanup and spill evidence.
 

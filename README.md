@@ -354,6 +354,14 @@ SHA-2 therefore remains **In progress** until the combined v0.24.11 acceptance
 pass, and this candidate does not claim independent review, FIPS validation,
 backend admission, or crates.io publication.
 
+Two supplied security assessments of exact v0.24.8 implementation candidate
+`9bb19a27d5ce957a2cf4474e88e445dce7950da3` reported no Critical, High, or
+Medium finding. The
+[permanent exceptional report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.8.md)
+records `PASS`/`PASS`, zero open findings, and no remediation. This does not
+replace independent cryptographic review, FIPS validation, or the scheduled
+v0.20.0-to-v0.25.0 cumulative assessment.
+
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
 and AddressSanitizer claim. Both paths are now enforced and fail closed under

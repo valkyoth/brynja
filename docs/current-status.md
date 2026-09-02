@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.7 signed; v0.24.8 hardened SHA-2 implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.7 signed; v0.24.8 hardened SHA-2 exceptional pentest PASS and awaiting green hosted GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -31,9 +31,10 @@ destruction completion, plus opaque bounded observational security events,
 explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
 It now has correct portable byte-oriented and canonical arbitrary-bit implementations of all six FIPS
-180-4 SHA-2 algorithms and all six FIPS 202 SHA-3/SHAKE identities, while
-their hardened secret-bearing and final combined API profiles remain in
-progress through v0.24.11. It also has bounded DER tag-length-value framing
+180-4 SHA-2 algorithms, including distinct hardened secret-bearing states,
+and byte-oriented implementations of all six FIPS 202 SHA-3/SHAKE identities.
+SHA-2 final combined acceptance plus SHA-3/SHAKE arbitrary-bit, hardened, and
+combined API profiles remain in progress through v0.24.11. It also has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
 cryptographic algorithm beyond those twelve named hash and XOF identities, X.509, QUIC-TLS, DTLS

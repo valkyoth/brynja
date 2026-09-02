@@ -1,8 +1,8 @@
 # Brynja 0.24.8 Release Notes
 
-Status: implementation complete; exceptional pentest, final repository gate,
-hosted GitHub and CodeQL, and signed tag pending; no crates.io publication is
-selected
+Status: implementation complete; exceptional pentest PASS; final repository
+gate, hosted GitHub and CodeQL, and signed tag pending; no crates.io
+publication is selected
 
 Brynja 0.24.8 completes distinct hardened state APIs for SHA-224, SHA-256,
 SHA-384, SHA-512, SHA-512/224, and SHA-512/256. These states accept the same
@@ -78,12 +78,14 @@ operational environment, or suitability for classified deployment.
 ## Release Process
 
 New secret-state ownership and destruction behavior is an exceptional pentest
-trigger. Version 0.24.8 is otherwise an internal development milestone in the
-cumulative v0.20.0-to-v0.25.0 range and selects zero crates.io packages. The
-exact implementation candidate must receive a committed `PASS`/`PASS` report
-with zero open findings, pass the complete local gate plus hosted GitHub and
-CodeQL, and receive explicit tag authorization before the signed tag is
-created.
+trigger. Two supplied assessments of exact implementation candidate
+`9bb19a27d5ce957a2cf4474e88e445dce7950da3` reported no Critical, High, or
+Medium finding. The permanent report records `PASS`/`PASS`, zero open findings,
+and no remediation. Version 0.24.8 is otherwise an internal development
+milestone in the cumulative v0.20.0-to-v0.25.0 range and selects zero crates.io
+packages. The report-bearing candidate must pass the complete local gate plus
+hosted GitHub and CodeQL and receive explicit tag authorization before the
+signed tag is created.
 
 Run the focused acceptance from a clean checkout with:
 

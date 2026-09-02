@@ -130,6 +130,10 @@ Keep a Changelog and Semantic Versioning.
   exact Rust 1.90.0/1.98.0 MIR/LLVM/assembly destruction evidence. Hardened
   acceleration remains prohibited; SHA-2 remains In progress until v0.24.11,
   and zero crates are selected for publication.
+- Record two clean security assessments of exact v0.24.8 implementation
+  candidate `9bb19a27d5ce957a2cf4474e88e445dce7950da3`; neither reported a
+  Critical, High, or Medium finding, and the permanent exceptional report
+  records `PASS`/`PASS`, zero open findings, and no required remediation.
 - Implement the v0.24.7 complete SHA-2 arbitrary-bit input domain for all six
   FIPS 180-4 identities. One canonical borrowed `BitString` rejects ambiguous
   unused tail bits; portable and forced-backend one-shot functions plus

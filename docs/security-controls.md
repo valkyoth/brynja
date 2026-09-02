@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation and exceptional pentest complete, awaiting green hosted CI
 
 | Control | Foundation enforcement |
 | --- | --- |

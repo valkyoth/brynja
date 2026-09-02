@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation and exceptional pentest complete, awaiting green hosted CI
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.9`. `brynja-hash-core 0.1.0`,

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation complete and awaiting exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation and exceptional pentest complete, awaiting green hosted CI
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -364,6 +364,13 @@ package-external leaf/facade use, Kani, Miri and AddressSanitizer cover the
 boundary. Ordinary FIPS 202 state is still public/unkeyed and non-erasing;
 hardened secret-bearing state, final combined acceptance, independent review,
 FIPS validation and crates.io publication remain absent.
+
+The exceptional assessment of exact v0.24.9 implementation candidate
+`3f6669f670472cea4f2a162e545db456ee368530` reported no Critical, High, or
+Medium finding. The permanent report records `PASS`/`PASS`, zero open findings,
+and no remediation. This does not replace the scheduled cumulative
+v0.20.0-to-v0.25.0 assessment, independent cryptographic review, or FIPS
+validation.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

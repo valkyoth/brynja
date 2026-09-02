@@ -129,6 +129,10 @@ Keep a Changelog and Semantic Versioning.
   package-external `no_std` leaf/facade acceptance into CI. Hardened FIPS 202
   state, final combined acceptance, independent review, FIPS validation and
   crates.io publication remain pending.
+- Record the clean exceptional security assessment of exact v0.24.9
+  implementation candidate `3f6669f670472cea4f2a162e545db456ee368530`;
+  the permanent report records `PASS`/`PASS`, zero open findings, no Critical,
+  High, or Medium finding, and no remediation.
 - Implement the v0.24.8 complete hardened SHA-2 state APIs for all six FIPS
   180-4 identities. Distinct sealed portable states accept byte and canonical
   arbitrary-bit input, require explicit public declassification or typed

@@ -1,8 +1,8 @@
 # Brynja 0.24.9 Release Notes
 
-Status: implementation complete; exceptional pentest required; final
-repository gate, hosted GitHub and CodeQL, and signed tag pending; no crates.io
-publication is selected
+Status: implementation and exceptional pentest complete with `PASS`/`PASS`
+and zero open findings; hosted GitHub and CodeQL plus signed tag pending; no
+crates.io publication is selected
 
 Brynja 0.24.9 completes the ordinary arbitrary-bit FIPS 202 domain for
 SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256. SHAKE now also
@@ -66,10 +66,12 @@ CAVP vectors does not replace algorithm validation.
 ## Release Process
 
 The new standards-visible bit representation, padding and XOF output boundary
-is an exceptional pentest trigger. Version 0.24.9 remains an internal
-development milestone in the cumulative v0.20.0-to-v0.25.0 range and selects
-zero crates.io packages. After a `PASS`/`PASS` report with zero open findings
-is committed, the report-bearing candidate must pass the complete local gate,
+triggered an exceptional pentest. The assessment of exact implementation
+candidate `3f6669f670472cea4f2a162e545db456ee368530` reported no Critical,
+High, or Medium finding. The permanent report records `PASS`/`PASS`, zero open
+findings, and no remediation. Version 0.24.9 remains an internal development
+milestone in the cumulative v0.20.0-to-v0.25.0 range and selects zero crates.io
+packages. The report-bearing candidate must pass the complete local gate,
 hosted GitHub and CodeQL and receive explicit tag authorization before the
 signed tag is created.
 

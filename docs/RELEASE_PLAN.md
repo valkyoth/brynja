@@ -3092,7 +3092,14 @@ Exit criteria:
 
 ### v0.24.9 - Complete SHA-3 And SHAKE Arbitrary-Bit APIs
 
-Status: awaiting pentest
+Status: awaiting green CI
+
+Implementation notes: exact implementation candidate
+`3f6669f670472cea4f2a162e545db456ee368530` completed the ordinary FIPS 202
+arbitrary-bit input and SHAKE output boundary. Its exceptional assessment
+reported no Critical, High, or Medium finding; the permanent report records
+`PASS`/`PASS`, zero open findings, and no remediation. The report-bearing
+candidate must pass hosted GitHub and CodeQL before tag authorization.
 
 Plan scope: Extend all four SHA-3 digests and both SHAKE XOFs with a distinct low-bit-first canonical FIPS 202 message type for one-shot and incremental final-tail absorption, plus typed arbitrary-bit SHAKE output and consuming final-bit squeeze APIs; cover exact delimited-suffix composition, partial-byte validation, checked length exhaustion, byte-aligned equivalence, official NIST bit vectors, an independent oracle and every rate/tail boundary without exposing raw Keccak-f[1600].
 

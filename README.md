@@ -379,6 +379,14 @@ the hardened v0.24.10 owner and combined v0.24.11 acceptance pass. This
 candidate does not claim independent cryptographic review, FIPS validation,
 accelerated-backend admission, or crates.io publication.
 
+The
+[permanent exceptional report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.9.md)
+records `PASS`/`PASS`, zero open findings, and no Critical, High, or Medium
+finding for exact implementation candidate
+`3f6669f670472cea4f2a162e545db456ee368530`. No remediation was required. The
+assessment does not replace independent cryptographic review, FIPS validation,
+or the scheduled cumulative v0.20.0-to-v0.25.0 assessment.
+
 Subsequent v0.24.1 pentest review found one Medium assurance-control gap: the
 committed CI scripts did not enforce the release note's SHA3-384/SHA3-512 Miri
 and AddressSanitizer claim. Both paths are now enforced and fail closed under

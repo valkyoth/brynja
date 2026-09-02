@@ -280,9 +280,10 @@ def validate(root: Path) -> None:
         "suffix_and_rate_boundaries_have_exact_digests",
         "suffix_and_rate_boundaries_have_exact_output",
         "curated_nist_cavp_vectors_cover_every_function_and_bit_residue",
+        "--test hardened",
     ):
         require(miri, token, "SHA-3 Miri coverage")
-    if miri.count("-p brynja-hash-sha3") != 3:
+    if miri.count("-p brynja-hash-sha3") != 4:
         fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     for token in (
@@ -370,7 +371,10 @@ def validate(root: Path) -> None:
         require(importer, token, "NIST bit vector importer")
 
     manifest = tomllib.loads(read(root, MANIFEST))
-    if manifest.get("dependencies") != {"brynja-hash-core": {"workspace": True}}:
+    if manifest.get("dependencies") != {
+        "brynja-core": {"workspace": True},
+        "brynja-hash-core": {"workspace": True},
+    }:
         fail("SHA-3 dependency boundary changed")
     crypto = tomllib.loads(read(root, CRYPTO_MANIFEST))
     if crypto.get("dependencies", {}).get("brynja-hash-sha3") != {"workspace": True}:
@@ -380,7 +384,7 @@ def validate(root: Path) -> None:
     if entry != {
         "class": "modern-shared",
         "publish": "crates-io",
-        "required": ["brynja-hash-core"],
+        "required": ["brynja-core", "brynja-hash-core"],
         "optional": {},
     }:
         fail("SHA-3 package classification changed")

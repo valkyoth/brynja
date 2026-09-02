@@ -14,6 +14,7 @@ publish = ["crates-io"]
 default = []
 
 [dependencies]
+brynja-core = { workspace = true }
 brynja-hash-core = { workspace = true }
 
 [lints]

@@ -19,7 +19,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "brynja-sha3-differential-fixture"
+name = "brynja-sha3-hardened-api-fixture"
 version = "0.0.0"
 dependencies = [
  "brynja-hash-sha3",

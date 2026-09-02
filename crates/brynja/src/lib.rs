@@ -125,6 +125,9 @@ mod tests {
         assert!(::core::hint::black_box(
             super::crypto::FIPS202_BIT_OUTPUT_IMPLEMENTED
         ));
+        assert!(::core::hint::black_box(
+            super::crypto::FIPS202_HARDENED_STATE_IMPLEMENTED
+        ));
         assert_eq!(
             super::crypto::sha224(b"abc"),
             Ok(super::crypto::Sha224Digest::from_bytes([

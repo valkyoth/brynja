@@ -119,7 +119,7 @@ sha256 = "cd0d4854110a0cb70efd33f35f6553cda9a3ecf6e7fc6ddcd6b2451c71a00d00"
 [[evidence]]
 path = "assurance/sha3-cpu-candidate/Cargo.lock"
 status = "isolated-candidate-fixture-lock"
-sha256 = "d8831a70f3ef005929e54670224e7b98dfb42ea04f9d9ba9696741de04a1a8ab"
+sha256 = "0ea42f8355c8eaad81599eba6d578ad2efce5a952a9ee16a791c082a59919fcd"
 
 [[evidence]]
 path = "assurance/sha3-cpu-candidate/src/lib.rs"

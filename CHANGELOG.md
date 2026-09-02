@@ -119,6 +119,21 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement the v0.24.10 complete hardened SHA-3/SHAKE state boundary. Four
+  fixed-output states and two absorb/reader typestate pairs cover byte and
+  arbitrary-bit input, incremental and arbitrary-bit XOF output, explicit
+  public declassification, and affine typed-secret destinations.
+- Register and compiler-check eleven byte-backed sponge, input/output,
+  lifecycle, staging and permutation-scratch regions. All terminal paths use
+  mandatory core clearing; exact Rust 1.90/1.98 MIR call resolution plus
+  release MIR, LLVM IR and assembly checks reject destruction drift.
+- Add all-identity ordinary/hardened differential, rate, bit-tail,
+  multi-squeeze, failure, cancellation, early-Drop and unwind tests; a
+  standalone bare-metal `no_std` consumer; two hardened-output Kani properties
+  for eighteen cumulative harnesses; Miri, AddressSanitizer, and eight
+  adversarial source-policy mutations. Final v0.24.11 combined acceptance,
+  hardened acceleration, independent review, FIPS validation and publication
+  remain pending.
 - Implement the v0.24.9 complete ordinary FIPS 202 arbitrary-bit domain for
   SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128 and SHAKE256. A distinct
   low-bit-first canonical message type prevents confusion with SHA-2, and a

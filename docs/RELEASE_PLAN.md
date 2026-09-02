@@ -3147,7 +3147,7 @@ Exit criteria:
 
 ### v0.24.10 - Complete Hardened SHA-3 And SHAKE State APIs
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation, recoverable unwinding and Drop through non-panicking all-region cleanup; seal hardened capabilities against downstream implementation or forgery, classify fixed and incremental output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.
 

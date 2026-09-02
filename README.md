@@ -62,7 +62,7 @@ independent cryptographic or protocol verification.
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |
-| SHA-3/SHAKE (all six FIPS 202 identities have complete ordinary byte and arbitrary-bit message APIs plus arbitrary-bit SHAKE output; hardened secret-bearing and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-3/SHAKE (all six FIPS 202 identities have complete ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output; final combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -362,7 +362,7 @@ records `PASS`/`PASS`, zero open findings, and no remediation. This does not
 replace independent cryptographic review, FIPS validation, or the scheduled
 v0.20.0-to-v0.25.0 cumulative assessment.
 
-The internal `0.24.9` candidate completes the FIPS 202 arbitrary-bit domain
+The signed internal `0.24.9` milestone completes the FIPS 202 arbitrary-bit domain
 for all four SHA-3 digests and both SHAKE XOFs. A distinct
 `Fips202BitString` makes FIPS 202's least-significant-bit-first partial-byte
 representation explicit instead of reusing SHA-2's incompatible convention;
@@ -374,10 +374,7 @@ Seventy-six curated records imported from checksum-pinned official NIST CAVP
 archives, all six official five-bit examples, 440 independent bounded oracle
 cases, Kani bounds, Miri, AddressSanitizer, package-external `no_std`
 acceptance and malformed-input tests cover this boundary. Ordinary state still
-makes no secret-remanence claim, so SHA-3/SHAKE remains **In progress** until
-the hardened v0.24.10 owner and combined v0.24.11 acceptance pass. This
-candidate does not claim independent cryptographic review, FIPS validation,
-accelerated-backend admission, or crates.io publication.
+makes no secret-remanence claim.
 
 The
 [permanent exceptional report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.9.md)
@@ -771,11 +768,27 @@ no remediation, and records `PASS`/`PASS` with zero open findings. It remains
 an internal tag with zero crates.io publication and remains covered again by
 the scheduled v0.20.0-to-v0.25.0 cumulative assessment.
 
+The internal `0.24.10` candidate adds distinct sealed hardened states for all
+four SHA-3 digests and both SHAKE XOFs. A byte-backed private owner accounts for
+eleven sponge, input/output, lifecycle, staging and permutation-scratch regions
+and clears them through the compiler-resistant core boundary on completion,
+failure, cancellation, recoverable unwind and Drop. Public output requires an
+explicit declassification token; secret output transfers affine ownership of
+the complete caller destination and clears it on Drop.
+
+Hardened-versus-ordinary differential tests cover all identities, rates, bit
+tails and multi-squeeze boundaries. Package-external `no_std`, strict source
+policy, Miri, AddressSanitizer, 18 cumulative Kani properties, and Rust
+1.90.0/1.98.0 MIR/LLVM/assembly cleanup checks are mandatory. Accelerated
+hardened execution remains prohibited. SHA-3/SHAKE remains **In progress**
+until v0.24.11 combined acceptance, and this candidate does not claim
+independent review, FIPS validation, backend admission, or publication.
+
 ## Install
 
 Brynja is not ready for application use and does not implement TLS. The latest
-signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.9`
-FIPS 202 arbitrary-bit milestone selects no crates.io publication. The published
+signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.10`
+hardened FIPS 202 milestone selects no crates.io publication. The published
 dependency is:
 
 ```toml
@@ -883,7 +896,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.9 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six ordinary and hardened SHA-2 byte and arbitrary-bit APIs, and all six portable FIPS 202 functions with arbitrary-bit input and SHAKE output; repository-only standards and API-profile closure gates are active, optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
+| `brynja` | Modern production facade | Internal v0.24.10 exposes cumulative foundations, record/DER/ASN.1 building blocks, all six ordinary and hardened SHA-2 byte/arbitrary-bit APIs, and all six ordinary and hardened FIPS 202 functions with arbitrary-bit input/output support; final combined acceptance is pending, optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; combined acceptance closes at v0.24.11 before full-family status returns |

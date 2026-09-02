@@ -42,24 +42,24 @@ FILES = (
     BARE_METAL, WORKFLOW,
 )
 EXPECTED_SHA256: dict[Path, str] = {
-    MANIFEST: "c41975f26446c88b290a6a21f3561402e1ffb9a5292c0393ff01dcd754a2fa82",
-    LOCK: "4603cebda10bc65f6fade55c9eae8cc80400ba3999d2bccd8f54ed711ecb29d3",
+    MANIFEST: "75be9fc6b833b85564fb9e70c39f0aad350103c32275098755544eb81095ee95",
+    LOCK: "5f6293dfa16b54a3db4a9994fd0a207f68275518b2c1b6d4487a0ddda51b21d6",
     LIB: "079e68604036103c84bf0715b9c7a59bcde043bc85e84505d8f96db600b770f7",
     BIT_API: "f63d7862befc7ad6ce82c63d05919ac556ef64d5ecd4d28f2b1e849ac8d6174e",
     ALGORITHMS: "adb8985464a1c2a5656eeb927791f680098d72847a67164539d72f56ad69ffd7",
     VECTORS: "677ff52adaa6b88a2b19e93219238b0751e539afaa7c7d3934740a2c68588d6f",
     MAIN: "79508f892a81f267346ecf55cb49f20bd48d55f04bcdbdfe5cd2a1a686a5b9fb",
     CONTENT: "ab72282b43ccf28714e57ff9c4cedde2d3736a5e38eb1016c2d8956615c9cdd3",
-    LEAF_MANIFEST: "eada2e7e176152ce759291751a9f65b188d91bb7fd8fa434ac06f4b71097d5af",
-    LEAF_LIB: "2fcc82b8966616343af6bf3ac204337eeb102453100fb9fd3e2f67eae1306440",
-    LEAF_README: "d11a9b669b9ffcf827a7ea786128d6f4b43134c9e0a5bcc615ff1c0eee45f2c8",
-    CRYPTO_LIB: "bd8a85b9d46a793fb71be229b5996ed66b09e02b27942d26c8bbb37f5639c287",
-    FACADE_MANIFEST: "7c17a8bdc19445177474e3cdda46a11200e59db6f03d9f45848f64b406b9e128",
-    FACADE_LIB: "fdbd3d9f8117d5a11fc400b6515e6c8c10629b036b536ef46e0bd7a05c6632e2",
-    FACADE_README: "5c1de3247959cdfe79f42359486deead697ff6241781663106a4ac02b3c5236a",
+    LEAF_MANIFEST: "bf0467a994e4fa3a879e9e66dc2cda39e12738e7073f1bff96c008704bda3408",
+    LEAF_LIB: "b0586eb4323d152357836318ee5701f18031e9848d5dea351588c24d68db643e",
+    LEAF_README: "3a22f3a67c1e40b0f1e89d48b4f7b0d40ae712742ae8370b9c2dcf0a49150042",
+    CRYPTO_LIB: "aa6ecaf6b79aa3111e468142f3b226d846af082033711c16e033d84d9f938381",
+    FACADE_MANIFEST: "c4a7740dcee08209a6438694ab34149499fca181dc3899106d0eeaec69c4fd95",
+    FACADE_LIB: "a3bb376edca778b1afc72d0d4a58d3b2024d2c2d8fc1c9b34b95aa9cd95018a9",
+    FACADE_README: "38f8028da71db04c2807a92f35ccb3707f6d84313a7c643851063760fc7dd660",
     CHECK_SCRIPT: "9bc87be69a13d476a58e6bf7e63f5fd70697d7f57389b03de1a24dc78e679a4e",
     TEST_SCRIPT: "20010f7a853d382b1b7f12a0df2e0b65793d3be02bf9e6b16db70f4e9977ae40",
-    CHECKS: "79dfd3a61096f7c6e92ca6b210b296cf11184125c2f69d88b4e18c29ace6e7cb",
+    CHECKS: "31c096cda7708b0ddf91c7e7e0aa918811ebaeb5010afcfd363a624846d1b273",
     RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
     BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
     WORKFLOW: "37bd8c59bcca9cfeba126a467f80b234a590cf935360d2301eb655dc79f7ba90",
@@ -89,7 +89,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.9", ("src/lib.rs",)),
+    ("brynja", "0.24.10", ("src/lib.rs",)),
 )
 
 
@@ -125,7 +125,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.9", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.10", "default-features": False},
         "brynja-hash-sha3": {
             "path": "../../crates/brynja-hash-sha3", "version": "=0.1.0",
             "default-features": False,
@@ -138,7 +138,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     leaf_manifest = tomllib.loads(loaded[LEAF_MANIFEST])
     if leaf_manifest.get("features") != {"default": []}:
         fail("portable leaf gained a selectable execution feature")
-    if set(leaf_manifest.get("dependencies", {})) != {"brynja-hash-core"}:
+    if set(leaf_manifest.get("dependencies", {})) != {"brynja-core", "brynja-hash-core"}:
         fail("portable leaf dependency boundary changed")
     lock = tomllib.loads(loaded[LOCK])
     locked = {(item["name"], item["version"]) for item in lock.get("package", [])}

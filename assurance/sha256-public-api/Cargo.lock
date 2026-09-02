@@ -35,6 +35,7 @@ dependencies = [
 name = "brynja-hash-sha3"
 version = "0.1.0"
 dependencies = [
+ "brynja-core",
  "brynja-hash-core",
 ]
 

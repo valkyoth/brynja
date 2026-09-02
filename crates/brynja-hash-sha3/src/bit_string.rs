@@ -107,6 +107,10 @@ impl<'output> Fips202Output<'output> {
                 .map(|byte| (byte, self.valid_bits_in_last_byte)),
         )
     }
+
+    pub(crate) fn into_parts(self) -> (&'output mut [u8], u8) {
+        (self.bytes, self.valid_bits_in_last_byte)
+    }
 }
 
 /// A closed canonical FIPS 202 bit representation failure.

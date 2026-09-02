@@ -22,7 +22,7 @@ certificate-bound operational-environment claim.
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
 | `brynja-hash-sha2` | All six FIPS 180-4 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-2 algorithms with forced optional ordinary CPU candidate APIs, compiler-resistant cleanup evidence, and separately packaged downstream acceptance; final combined profile pending | ❌ Not verified |
-| `brynja-hash-sha3` | All six FIPS 202 ordinary byte-oriented and canonical arbitrary-bit SHA-3/SHAKE functions, including arbitrary-bit SHAKE output, over one private Keccak-f[1600] owner with separately packaged downstream acceptance; hardened secret-bearing and final combined profiles pending | ❌ Not verified |
+| `brynja-hash-sha3` | All six FIPS 202 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-3/SHAKE functions, including arbitrary-bit SHAKE output; hardened owners clear eleven source-declared regions and classify public versus typed-secret output, while final combined acceptance remains pending | ❌ Not verified |
 | Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |

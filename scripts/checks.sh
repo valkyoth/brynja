@@ -60,6 +60,9 @@ python3 scripts/sha3/check-sha3-differential.py
 python3 scripts/sha3/check-sha3-bit-differential.py
 python3 scripts/sha3/check-sha3-public-api.py
 python3 scripts/sha3/test-sha3-public-api.py
+python3 scripts/sha3/check-sha3-hardened.py
+python3 scripts/sha3/test-sha3-hardened.py
+scripts/sha3/check-sha3-hardened-codegen.sh
 scripts/sha3/check-sha3-cpu-codegen.sh
 cargo clippy --locked --manifest-path assurance/sha3-public-api/Cargo.toml \
   --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings

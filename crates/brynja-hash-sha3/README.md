@@ -30,10 +30,11 @@ Brynja. Version 0.1.0 provides correct portable byte-oriented and canonical
 arbitrary-bit implementations of all six FIPS 202 functions through distinct
 fixed-output SHA-3 and extendable-output SHAKE APIs over one private
 Keccak-f[1600] permutation. SHAKE also supports standards-valid output lengths
-that do not end on a byte boundary. The leaf and facade APIs pass frozen
-package-external portable acceptance. Hardened secret-bearing profiles,
-complete internal sanitization, final cross-backend acceptance, independent
-review, and FIPS 140-3 validation remain later work through v0.24.11.
+that do not end on a byte boundary. Version 0.24.10 of the repository also
+adds distinct hardened states for secret-derived inputs and outputs with
+compiler-resistant cleanup of all source-declared owned regions. Final combined
+package-external acceptance, independent review, and FIPS 140-3 validation
+remain later work through v0.24.11.
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};
@@ -62,10 +63,23 @@ assert_eq!(output[12] & 0xf0, 0);
 
 These APIs are unkeyed hashes, not authentication, MACs, password hashing, or
 raw Keccak. Ordinary states do not promise erasure of input remnants or
-private working state. Distinct hardened states planned at v0.24.10 use the
-admitted sanitization boundary for every private lane, buffer, suffix, squeeze
-cursor, staging value, temporary, failure path, and `Drop`; keyed constructions
-must use that owner rather than these ordinary states.
+private working state. Secret-derived uses must select the distinct
+`HardenedSha3_*` or `HardenedShake*` states, explicitly declassify public
+output or retain typed secret output, and let the owner clear Brynja-owned
+lanes, buffers, counters, suffix/padding/squeeze staging, and permutation
+scratch on every terminal path. Callers remain responsible for buffers and
+copies they own.
+
+```rust
+use brynja_hash_sha3::{HardenedSha3_256, Sha3PublicDeclassification};
+
+let mut state = HardenedSha3_256::new();
+state.update(b"secret-derived input").unwrap();
+let mut digest = [0_u8; 32];
+state
+    .finalize_public(&mut digest, Sha3PublicDeclassification::acknowledge())
+    .unwrap();
+```
 
 The exceptional v0.24.0 assessment found one High tracked-build-artifact issue
 in the repository differential harness, not an algorithm error. All generated
@@ -84,7 +98,8 @@ pentest evidence rather than independent cryptographic verification.
 | SHAKE128 | ✅ Implemented | ❌ Not independently verified |
 | SHAKE256 | ✅ Implemented | ❌ Not independently verified |
 | Arbitrary-bit FIPS 202 messages and SHAKE output | ✅ Implemented | ❌ Not independently verified |
-| Complete SHA-3/SHAKE family, including hardened state | 🚧 In progress | ❌ Not independently verified |
+| Hardened SHA-3/SHAKE secret-bearing states | ✅ Implemented | ❌ Not independently verified |
+| Complete SHA-3/SHAKE family, including final combined acceptance | 🚧 In progress | ❌ Not independently verified |
 
 Only a named independent reviewer and linked review evidence can change the
 independent status. Project tests, CI, Kani, Miri, fuzzing, and pentests do not

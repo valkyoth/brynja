@@ -16,7 +16,7 @@ POLICY = ROOT / "security/cryptographic-api-profile-policy.toml"
 SURFACES = ROOT / "standards/protocol-surfaces.json"
 REGISTER = ROOT / "security/cryptographic-api-profile-register.json"
 COVERAGE = ROOT / "docs/cryptographic-api-profile-register.md"
-MILESTONE = "0.24.8"
+MILESTONE = "0.24.10"
 PROFILE_KEYS = {
     "kind",
     "secret_template",

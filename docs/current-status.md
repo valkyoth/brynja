@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation and exceptional pentest complete, awaiting green hosted CI
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.9 signed; v0.24.10 hardened FIPS 202 implementation complete, exceptional pentest pending
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -32,10 +32,13 @@ explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
 It now has correct portable byte-oriented and canonical arbitrary-bit implementations of all six FIPS
 180-4 SHA-2 algorithms, including distinct hardened secret-bearing states,
-and ordinary byte-oriented and canonical arbitrary-bit implementations of all
-six FIPS 202 SHA-3/SHAKE identities, including arbitrary-bit SHAKE output.
-SHA-2 final combined acceptance plus SHA-3/SHAKE hardened and combined API
-profiles remain in progress through v0.24.11. It also has bounded DER tag-length-value framing
+and ordinary plus distinct hardened byte-oriented and canonical arbitrary-bit
+implementations of all six FIPS 202 SHA-3/SHAKE identities, including
+arbitrary-bit SHAKE output. The hardened family owns and clears all eleven
+source-declared sponge, buffer, counter, lifecycle and permutation-scratch
+regions, requires explicit public declassification or typed secret output, and
+is portable-only. SHA-2 and SHA-3/SHAKE final combined API acceptance remains
+in progress through v0.24.11. It also has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
 cryptographic algorithm beyond those twelve named hash and XOF identities, X.509, QUIC-TLS, DTLS
@@ -371,6 +374,20 @@ Medium finding. The permanent report records `PASS`/`PASS`, zero open findings,
 and no remediation. This does not replace the scheduled cumulative
 v0.20.0-to-v0.25.0 assessment, independent cryptographic review, or FIPS
 validation.
+
+The v0.24.10 implementation adds distinct sealed hardened states for all four
+SHA-3 digests and both SHAKE strengths. Fixed-output and absorb/reader
+typestates cover byte and arbitrary-bit messages plus byte and arbitrary-bit
+XOF output without exposing raw sponge state. Eleven registered byte-backed
+regions own the lanes, partial input, message/output counters, phase/cursors,
+suffix, padding and squeeze staging, and permutation scratch. Exact Drop-to-
+wipe resolution passes optimized MIR under Rust 1.90.0 and 1.98.0, and release
+MIR, LLVM IR and assembly retain every clearing call. Output is either
+explicitly public or affine typed secret memory; cancellation, failure, early
+Drop and recoverable unwind are covered. Hardened acceleration remains
+prohibited. The family remains In progress until v0.24.11 combined acceptance,
+and independent review, FIPS validation and crates.io publication remain
+absent.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

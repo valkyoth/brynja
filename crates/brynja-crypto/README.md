@@ -36,8 +36,9 @@ back toward TLS or the full cryptographic graph.
 The current internal workspace reexports all six complete portable FIPS 180-4
 SHA-2 byte and canonical arbitrary-bit implementations from
 `brynja-hash-sha2`, including distinct hardened secret-bearing states, plus all
-six complete portable FIPS 202 SHA-3 and SHAKE ordinary byte and arbitrary-bit
-message functions and arbitrary-bit SHAKE output from `brynja-hash-sha3`. Its broader provider effects, AEADs,
+six complete portable FIPS 202 SHA-3 and SHAKE ordinary and hardened byte and
+arbitrary-bit message functions and arbitrary-bit SHAKE output from
+`brynja-hash-sha3`. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 
@@ -56,8 +57,9 @@ verification.
 All six SHA-2 algorithms plus all six FIPS 202 functions are usable through
 this component; the remaining planned composition layer is not implemented
 yet. Ordinary unkeyed hash and XOF states do not guarantee erasure of secret-
-input remnants or private internal state. SHA-2 secret-bearing consumers must
-use the hardened state APIs; hardened SHA-3/SHAKE owners remain planned.
+input remnants or private internal state. SHA-2 and SHA-3/SHAKE secret-bearing
+consumers must use their distinct hardened state APIs with explicit public or
+typed-secret output classification.
 
 ```rust
 let bit_input = brynja_crypto::BitString::new(&[0b0110_0000], 3).unwrap();

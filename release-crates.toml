@@ -1,19 +1,19 @@
 [release]
-version = "0.24.9"
-milestone = "0.24.9"
+version = "0.24.10"
+milestone = "0.24.10"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "New arbitrary-bit FIPS 202 message, padding, and SHAKE output behavior changes a production cryptographic boundary and requires an exceptional assessment before the signed development tag."
+exception_reason = "New hardened SHA-3 and SHAKE secret-state ownership, output classification, and compiler-resistant cleanup change a production cryptographic boundary and require an exceptional assessment before the signed development tag."
 
 [crates."brynja"]
-previous_version = "0.24.8"
-version = "0.24.9"
+previous_version = "0.24.9"
+version = "0.24.10"
 change = "code"
 publish = false
-reason = "Advance the internal facade with canonical arbitrary-bit FIPS 202 messages for all six identities and arbitrary-bit SHAKE output; hardened FIPS 202 state remains pending."
+reason = "Advance the internal facade with distinct sealed hardened SHA-3 and SHAKE absorb/reader states, explicit public declassification, typed secret output, and compiler-resistant all-region cleanup; final combined family acceptance remains pending at v0.24.11."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Retain the published version while its internal source reexports the complete ordinary FIPS 202 arbitrary-bit message and SHAKE output boundary without publication."
+reason = "Retain the published version while its internal source reexports the complete hardened SHA-3 and SHAKE state and output boundary without publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -48,7 +48,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add canonical low-bit-first arbitrary-bit messages for all six FIPS 202 identities and arbitrary-bit SHAKE output over the private Keccak-f[1600] owner; the family remains unpublished and in progress through v0.24.11 hardened-state and combined acceptance."
+reason = "Add sealed hardened byte/bit SHA-3 states and SHAKE absorb/read typestates with typed public/secret output and compiler-resistant cleanup over a distinct byte-backed private owner; the family remains unpublished and in progress through v0.24.11 combined acceptance."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

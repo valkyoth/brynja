@@ -1,26 +1,26 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation and exceptional pentest complete, awaiting green hosted CI
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.9 signed; v0.24.10 hardened FIPS 202 implementation complete, exceptional pentest pending
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.9`. `brynja-hash-core 0.1.0`,
+advances to internal `0.24.10`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
 interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
 algorithms, and unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented
-and canonical arbitrary-bit implementations of all six FIPS 202 functions,
-including arbitrary-bit SHAKE output. SHA-2 combined acceptance plus SHA-3/SHAKE
-hardened and combined profiles remain in progress through v0.24.11. Published
+and canonical arbitrary-bit ordinary and hardened implementations of all six
+FIPS 202 functions, including arbitrary-bit SHAKE output. Final combined
+acceptance remains in progress through v0.24.11. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
 the separate opt-in x86/AArch64 host detector and runtime selection API while
 RISC-V automatic detection remains disabled. Supporting manifest
 versions remain unchanged until the v0.25.0 public checkpoint. The new
 repository-only API-profile register closes 129 semantic capabilities across
-22 dimensions and inventories eight current, zero registered capability, plus
-75 planned secret owners with exact per-operation information-flow contracts,
+22 dimensions and inventories eight current, two registered capability, plus
+73 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked current-owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.0. The facade version advances and the SHA-2 leaf
-adds the exact bit-message behavior; all support-package versions remain
+under Rust 1.90.0 and 1.98.0. The facade version advances and the SHA-3 leaf
+adds the hardened secret-state behavior; all support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 
@@ -267,7 +267,7 @@ FIPS validation remain later work. Zero crates are selected for publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.24.9` | no | Internal FIPS 202 arbitrary-bit milestone; all six ordinary SHA-3/SHAKE byte and bit-message APIs plus arbitrary-bit SHAKE output are usable, hardened and combined acceptance remain pending, and v0.20.0 remains published |
+| `brynja` | `0.24.10` | no | Internal hardened FIPS 202 milestone; all six ordinary and hardened SHA-3/SHAKE byte and arbitrary-bit APIs plus arbitrary-bit SHAKE output are usable, final combined acceptance remains pending, and v0.20.0 remains published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output/XOF interfaces and canonical borrowed bit strings |
 | `brynja-hash-sha2` | `0.1.0` | no | Unpublished six-algorithm FIPS 180-4 ordinary and hardened byte/arbitrary-bit APIs, forced ordinary candidate routes, compiler-resistant cleanup evidence, and package-external acceptance; combined acceptance remains in progress |

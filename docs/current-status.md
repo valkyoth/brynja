@@ -612,7 +612,7 @@ Version 0.4.0 establishes assurance infrastructure without protocol code:
 - CI and the local release gate compile the complete all-feature workspace for
   `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`, and
   `x86_64-unknown-none`;
-- exact source pins cover Kani 0.67.0, AFL++ 5.02c, honggfuzz 2.6, and the
+- exact source pins cover Kani 0.67.0, AFL++ 5.03c, honggfuzz 2.6, and the
   separately pinned Miri/sanitizer nightly without adding a Cargo dependency;
 - stable Rust 1.98.0 remains the release compiler while Kani 0.67.0 uses the
   documented compatible Rust 1.90.0 verifier pairing; no Kani proof harness is

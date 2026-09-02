@@ -134,6 +134,10 @@ Keep a Changelog and Semantic Versioning.
   candidate `9bb19a27d5ce957a2cf4474e88e445dce7950da3`; neither reported a
   Critical, High, or Medium finding, and the permanent exceptional report
   records `PASS`/`PASS`, zero open findings, and no required remediation.
+- Refresh the exact AFL++ assurance-tool pin from 5.02c to latest 5.03c at
+  upstream tag revision `dbaf11913c1b2702dee5b4d3dcfffd52f1defe50` after
+  the pre-tag network freshness gate detected the release. This changes no
+  production code, dependency, public API, or publication selection.
 - Implement the v0.24.7 complete SHA-2 arbitrary-bit input domain for all six
   FIPS 180-4 identities. One canonical borrowed `BitString` rejects ambiguous
   unused tail bits; portable and forced-backend one-shot functions plus

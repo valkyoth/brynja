@@ -54,6 +54,11 @@ remains **In progress** until the combined family acceptance at v0.24.11.
 - The normal workspace, all-feature, no-default-feature, documentation,
   Clippy, bare-metal, package, dependency, SBOM, source-policy, and supported
   Rust/target gates remain mandatory.
+- The pre-tag network freshness gate detected AFL++ 5.03c and advanced the
+  exact assurance-tool pin from 5.02c to tag revision
+  `dbaf11913c1b2702dee5b4d3dcfffd52f1defe50`. This release-maintenance change
+  affects no production code, dependency, API, cryptographic result, or
+  publication selection.
 
 ## Security Boundaries
 

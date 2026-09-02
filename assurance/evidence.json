@@ -8,7 +8,7 @@
   "inputs": {
     ".github/workflows/ci.yml": "fff30b35d1c059b4b7ded0ebc799c1bcdf6a723a73760bb8e8aad2ed026606b6",
     "Cargo.toml": "174484a1df52dcc7e03b5e48ebae3d097274c056c6df9cc0f3b5d3d7f4ab5b22",
-    "assurance/policy.toml": "c2caf124075c32262e7d74ab2b5115dd52930471dd14109a2ad4b7d2547301c2",
+    "assurance/policy.toml": "cf8ad3ff2f09e1a9f4cc698885c685e74b60ee40f170984d1c6e03cec28d9899",
     "assurance/zeroization-matrix.toml": "1e59321be0b498310d74689613b6d5959c858226863af19a423c556ff1857ef9",
     "crates/brynja-core/Cargo.toml": "096f0e0ac8caf49da8820894ecec821f18c56b6576be37bdb8f5f84a23e58253",
     "crates/brynja-core/src/secret_memory.rs": "f5f4743353c7fb5afb6a85f0f8481827f7dac3ae910fd17df9da46248583d2c7",
@@ -70,15 +70,15 @@
     "scripts/zeroization/zeroization_evidence.py": "2f093da209c9d8b749a9504ddf674042ae074226c4c00fbb11e30fb393ef84c4"
   },
   "milestone": "0.4.0",
-  "policy_sha256": "c2caf124075c32262e7d74ab2b5115dd52930471dd14109a2ad4b7d2547301c2",
+  "policy_sha256": "cf8ad3ff2f09e1a9f4cc698885c685e74b60ee40f170984d1c6e03cec28d9899",
   "schema": 1,
   "tools": [
     {
       "id": "aflplusplus",
       "owner": "0.156.0",
-      "revision": "011cd189801830253c66ecd3cd6919ec01b46c34",
+      "revision": "dbaf11913c1b2702dee5b4d3dcfffd52f1defe50",
       "source_kind": "git-tag",
-      "version": "5.02c"
+      "version": "5.03c"
     },
     {
       "id": "honggfuzz",

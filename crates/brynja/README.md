@@ -31,10 +31,11 @@ workspace. It is allocation-independent `no_std` Rust without a C cryptographic 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable FIPS 180-4 SHA-2 algorithms,
 > all six portable FIPS 202 SHA-3 and SHAKE functions, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
 
-All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged downstream
-`no_std` acceptance through the leaf and facade; SHA-2 additionally accepts canonical FIPS
-arbitrary-bit messages. That is not independent review or FIPS validation. The SHA-3/SHAKE
-cross-backend acceptance chain remains in progress.
+All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged
+downstream `no_std` acceptance through the leaf and facade. Both families
+accept canonical arbitrary-bit messages, and SHAKE supports arbitrary-bit
+output. That is not independent review or FIPS validation. The SHA-3/SHAKE
+hardened-state and final combined acceptance chain remains in progress.
 
 ## Design Boundaries
 
@@ -115,24 +116,25 @@ caches, compiler-created copies, dumps, forgotten owners, abort, or power loss.
 ### Compute Portable SHA-3 And SHAKE
 
 ```rust
-let shorter = brynja::crypto::sha3_224(b"abc").unwrap();
 let digest = brynja::crypto::sha3_256(b"abc").unwrap();
-let wider = brynja::crypto::sha3_384(b"abc").unwrap();
-let widest = brynja::crypto::sha3_512(b"abc").unwrap();
-assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(digest.as_bytes().len(), 32);
-assert_eq!(wider.as_bytes().len(), 48);
-assert_eq!(widest.as_bytes().len(), 64);
 
 let mut shake128 = [0_u8; 32];
-let mut shake256 = [0_u8; 64];
 brynja::crypto::shake128(b"abc", &mut shake128).unwrap();
-brynja::crypto::shake256(b"abc", &mut shake256).unwrap();
+
+let bits = brynja::crypto::Fips202BitString::new(&[0b0001_0011], 5).unwrap();
+let bit_digest = brynja::crypto::sha3_256_bits(bits).unwrap();
+assert_eq!(bit_digest.as_bytes().len(), 32);
+
+let mut partial_xof = [0xff_u8; 13];
+let destination = brynja::crypto::Fips202Output::new(&mut partial_xof, 4).unwrap();
+brynja::crypto::shake128_bits(bits, destination).unwrap();
+assert_eq!(partial_xof[12] & 0xf0, 0);
 ```
 
 These are FIPS 202 SHA-3 functions, not raw Keccak. Their ordinary unkeyed
 states make no secret-remanence cleanup claim. Distinct hardened SHA-3/SHAKE
-states and complete arbitrary-bit APIs close through v0.24.11.
+states and final combined acceptance close through v0.24.11.
 
 ## Cryptography Verification Status
 
@@ -148,7 +150,7 @@ Only linked sign-off from a named independent reviewer can change independent st
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |
-| SHA-3/SHAKE (all six FIPS 202 identities have complete byte APIs; arbitrary-bit, hardened secret-bearing, and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
+| SHA-3/SHAKE (all six FIPS 202 identities have complete ordinary byte and arbitrary-bit message APIs plus arbitrary-bit SHAKE output; hardened secret-bearing and final acceptance profiles pending) | 🚧 In progress | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -181,7 +183,7 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-sha2` | All six FIPS 180-4 ordinary and hardened byte and arbitrary-bit APIs; final combined acceptance pending |
-| `brynja-hash-sha3` | All six FIPS 202 byte APIs; arbitrary-bit, hardened, and final acceptance pending |
+| `brynja-hash-sha3` | All six FIPS 202 ordinary byte and arbitrary-bit message APIs plus arbitrary-bit SHAKE output; hardened and final acceptance pending |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

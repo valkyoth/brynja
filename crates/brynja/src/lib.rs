@@ -7,7 +7,8 @@
 //! [`crypto::sha512_224`], [`crypto::sha512_256`], [`crypto::sha3_224`], and
 //! [`crypto::sha3_256`], [`crypto::sha3_384`], [`crypto::sha3_512`],
 //! [`crypto::shake128`], and [`crypto::shake256`] plus their matching state,
-//! digest, and XOF-reader types. It exposes checked
+//! digest, XOF-reader, canonical FIPS 202 arbitrary-bit input, and
+//! arbitrary-bit SHAKE output types. It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
 //! workspaces, secret-lifetime and owned-memory
 //! foundations, fixed-width constant-time operations, provider capability
@@ -116,6 +117,14 @@ mod tests {
         assert!(::core::hint::black_box(super::crypto::SHA3_256_IMPLEMENTED));
         assert!(::core::hint::black_box(super::crypto::SHA3_384_IMPLEMENTED));
         assert!(::core::hint::black_box(super::crypto::SHA3_512_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::crypto::SHAKE128_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::crypto::SHAKE256_IMPLEMENTED));
+        assert!(::core::hint::black_box(
+            super::crypto::FIPS202_BIT_INPUT_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::crypto::FIPS202_BIT_OUTPUT_IMPLEMENTED
+        ));
         assert_eq!(
             super::crypto::sha224(b"abc"),
             Ok(super::crypto::Sha224Digest::from_bytes([

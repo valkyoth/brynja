@@ -119,6 +119,16 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement the v0.24.9 complete ordinary FIPS 202 arbitrary-bit domain for
+  SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128 and SHAKE256. A distinct
+  low-bit-first canonical message type prevents confusion with SHA-2, and a
+  typed consuming destination supports every SHAKE output bit length.
+- Bind 76 reproducibly selected official NIST CAVP records, six official
+  five-bit examples, 440 independent bounded oracle cases, sixteen cumulative
+  Kani harnesses, Miri, AddressSanitizer, malformed-input rejection and
+  package-external `no_std` leaf/facade acceptance into CI. Hardened FIPS 202
+  state, final combined acceptance, independent review, FIPS validation and
+  crates.io publication remain pending.
 - Implement the v0.24.8 complete hardened SHA-2 state APIs for all six FIPS
   180-4 identities. Distinct sealed portable states accept byte and canonical
   arbitrary-bit input, require explicit public declassification or typed

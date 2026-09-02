@@ -57,6 +57,7 @@ scripts/sha2/check-sha2-hardened-codegen.sh
 python3 scripts/sha3/check-sha3.py
 python3 scripts/sha3/test-sha3.py
 python3 scripts/sha3/check-sha3-differential.py
+python3 scripts/sha3/check-sha3-bit-differential.py
 python3 scripts/sha3/check-sha3-public-api.py
 python3 scripts/sha3/test-sha3-public-api.py
 scripts/sha3/check-sha3-cpu-codegen.sh

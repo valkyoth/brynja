@@ -3,6 +3,7 @@
 #![no_std]
 
 mod algorithms;
+mod bit_api;
 mod vectors;
 
 use brynja::crypto as facade;
@@ -31,6 +32,8 @@ pub enum AcceptanceError {
     DomainSeparationMismatch,
     /// One or more public implementation claims were absent.
     ImplementationClaimMissing,
+    /// FIPS 202 input/output bit semantics differed across public layers.
+    BitApiMismatch,
     /// The frozen fixture requested an impossible local buffer range.
     FixtureBounds,
 }
@@ -46,6 +49,8 @@ pub struct AcceptanceReport {
     pub xof_results: usize,
     /// Number of incremental SHAKE streams checked.
     pub incremental_squeeze_results: usize,
+    /// Number of package-external bit-domain paths checked.
+    pub bit_domain_results: usize,
 }
 
 /// Runs complete v0.24.3 portable FIPS 202 downstream usability acceptance.
@@ -72,11 +77,13 @@ pub fn run() -> Result<AcceptanceReport, AcceptanceError> {
     check_zero_output()?;
     check_exhaustion()?;
     check_domain_separation()?;
+    let bit_domain_results = bit_api::check()?;
     Ok(AcceptanceReport {
         algorithms: 6,
         fixed_output_results: 24,
         xof_results: 10,
         incremental_squeeze_results: 20,
+        bit_domain_results,
     })
 }
 
@@ -88,6 +95,8 @@ fn check_claims() -> Result<(), AcceptanceError> {
         leaf::SHA3_512_IMPLEMENTED,
         leaf::SHAKE128_IMPLEMENTED,
         leaf::SHAKE256_IMPLEMENTED,
+        leaf::FIPS202_BIT_INPUT_IMPLEMENTED,
+        leaf::FIPS202_BIT_OUTPUT_IMPLEMENTED,
     ];
     let facade_claims = [
         facade::SHA3_224_IMPLEMENTED,
@@ -96,6 +105,8 @@ fn check_claims() -> Result<(), AcceptanceError> {
         facade::SHA3_512_IMPLEMENTED,
         facade::SHAKE128_IMPLEMENTED,
         facade::SHAKE256_IMPLEMENTED,
+        facade::FIPS202_BIT_INPUT_IMPLEMENTED,
+        facade::FIPS202_BIT_OUTPUT_IMPLEMENTED,
     ];
     if leaf_claims.iter().all(|claim| *claim) && facade_claims.iter().all(|claim| *claim) {
         Ok(())

@@ -882,9 +882,9 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Extend all four SHA-3 digests and both SHAKE XOFs with canonical FIPS 202 arbitrary-bit-message one-shot, incremental absorb and incremental squeeze APIs, including exact delimited suffix composition, partial-byte validation, bit-length exhaustion, byte-aligned equivalence and every rate/tail boundary without exposing raw Keccak-f[1600].",
+      "scope": "Extend all four SHA-3 digests and both SHAKE XOFs with a distinct low-bit-first canonical FIPS 202 message type for one-shot and incremental final-tail absorption, plus typed arbitrary-bit SHAKE output and consuming final-bit squeeze APIs; cover exact delimited-suffix composition, partial-byte validation, checked length exhaustion, byte-aligned equivalence, official NIST bit vectors, an independent oracle and every rate/tail boundary without exposing raw Keccak-f[1600].",
       "source_ids": [],
-      "title": "Complete SHA-3 And SHAKE Arbitrary-Bit Input APIs",
+      "title": "Complete SHA-3 And SHAKE Arbitrary-Bit APIs",
       "version": "0.24.9"
     },
     {

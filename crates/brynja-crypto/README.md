@@ -35,8 +35,9 @@ back toward TLS or the full cryptographic graph.
 
 The current internal workspace reexports all six complete portable FIPS 180-4
 SHA-2 byte and canonical arbitrary-bit implementations from
-`brynja-hash-sha2`, including distinct hardened secret-bearing states, plus all six complete portable
-FIPS 202 SHA-3 and SHAKE functions from `brynja-hash-sha3`. Its broader provider effects, AEADs,
+`brynja-hash-sha2`, including distinct hardened secret-bearing states, plus all
+six complete portable FIPS 202 SHA-3 and SHAKE ordinary byte and arbitrary-bit
+message functions and arbitrary-bit SHAKE output from `brynja-hash-sha3`. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 

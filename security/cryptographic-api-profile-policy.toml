@@ -771,7 +771,7 @@ sha256 = "fcc2acb2cd57592af6ed5f2f5c265cb871a783fee55dc568af9c6ad4524d9211"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/sponge.rs"
-sha256 = "e307f41bc4fe13633cd6f36b6252225a9a38caac8447b02ffdf10bbdc63b73a5"
+sha256 = "b9e938d9f023b70c3ed28f320b2b83444e1397410d85a9913e41bbbf6185d69f"
 
 [[reviewed-source]]
 path = "assurance/api-profile-contract/src/lib.rs"

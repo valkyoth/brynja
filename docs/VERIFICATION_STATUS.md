@@ -22,7 +22,7 @@ certificate-bound operational-environment claim.
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
 | `brynja-hash-sha2` | All six FIPS 180-4 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-2 algorithms with forced optional ordinary CPU candidate APIs, compiler-resistant cleanup evidence, and separately packaged downstream acceptance; final combined profile pending | ❌ Not verified |
-| `brynja-hash-sha3` | All six FIPS 202 byte-oriented SHA-3 and SHAKE functions over one private Keccak-f[1600] owner with separately packaged downstream acceptance; arbitrary-bit, hardened secret-bearing, and final cross-backend profiles pending | ❌ Not verified |
+| `brynja-hash-sha3` | All six FIPS 202 ordinary byte-oriented and canonical arbitrary-bit SHA-3/SHAKE functions, including arbitrary-bit SHAKE output, over one private Keccak-f[1600] owner with separately packaged downstream acceptance; hardened secret-bearing and final combined profiles pending | ❌ Not verified |
 | Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |
@@ -44,7 +44,7 @@ certificate-bound operational-environment claim.
 
 The implemented portion currently consists of all six portable FIPS 180-4
 SHA-2 byte-oriented and canonical arbitrary-bit algorithms with separately packaged downstream acceptance;
-all six portable FIPS 202 SHA-3 and SHAKE byte-oriented functions over one
+all six portable FIPS 202 SHA-3 and SHAKE ordinary byte and arbitrary-bit functions over one
 private Keccak-f[1600] owner with separately packaged downstream acceptance;
 the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
@@ -53,8 +53,9 @@ provider, entropy/secure-random, typed-clock, and pending-operation foundations;
 the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
-The SHA-2 mathematical byte and arbitrary-bit APIs and FIPS 202 byte APIs are
-usable, but complete hardened SHA-2 plus arbitrary-bit and hardened FIPS 202
+The SHA-2 mathematical byte and arbitrary-bit APIs and FIPS 202 ordinary byte,
+arbitrary-bit message and arbitrary-bit SHAKE output APIs are usable, but
+complete hardened SHA-2 plus hardened FIPS 202
 profiles remain planned through v0.24.11 and therefore both expanded families
 remain **In progress**. No
 cryptographic primitive outside those six portable SHA-2 algorithms and the

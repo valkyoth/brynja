@@ -35,6 +35,9 @@ def reject(label: str, mutation) -> None:
             policy.SANITIZER_SCRIPT,
             policy.DIFFERENTIAL,
             policy.DIFFERENTIAL_FIXTURE,
+            policy.BIT_DIFFERENTIAL,
+            policy.BIT_DIFFERENTIAL_FIXTURE,
+            policy.BIT_IMPORTER,
         )
         for relative in copied:
             destination = root / relative
@@ -72,6 +75,13 @@ def main() -> int:
     reject("SHA3-512 claim", lambda root: replace(root, policy.LIB, "SHA3_512_IMPLEMENTED: bool = true", "SHA3_512_IMPLEMENTED: bool = false"))
     reject("SHAKE128 claim", lambda root: replace(root, policy.LIB, "SHAKE128_IMPLEMENTED: bool = true", "SHAKE128_IMPLEMENTED: bool = false"))
     reject("SHAKE256 claim", lambda root: replace(root, policy.LIB, "SHAKE256_IMPLEMENTED: bool = true", "SHAKE256_IMPLEMENTED: bool = false"))
+    reject("bit-input claim", lambda root: replace(root, policy.LIB, "FIPS202_BIT_INPUT_IMPLEMENTED: bool = true", "FIPS202_BIT_INPUT_IMPLEMENTED: bool = false"))
+    reject("bit-output claim", lambda root: replace(root, policy.LIB, "FIPS202_BIT_OUTPUT_IMPLEMENTED: bool = true", "FIPS202_BIT_OUTPUT_IMPLEMENTED: bool = false"))
+    reject("low-bit representation", lambda root: replace(root, policy.BIT_STRING, "u8::MAX << valid_bits_in_last_byte", "u8::MAX >> valid_bits_in_last_byte"))
+    reject("bit output consuming", lambda root: replace(root, policy.SHAKE128, "pub fn squeeze_final_bits", "fn squeeze_final_bits"))
+    reject("bit vectors", lambda root: replace(root, policy.BIT_VECTORS, "sha3-224 1 ", "sha3-224 removed "))
+    reject("bit differential bound", lambda root: replace(root, policy.BIT_DIFFERENTIAL_FIXTURE, "MAX_OUTPUT_BITS: usize = 4_095", "MAX_OUTPUT_BITS: usize = usize::MAX"))
+    reject("bit differential oracle", lambda root: replace(root, policy.BIT_DIFFERENTIAL, "def permute(state: list[int])", "def removed(state: list[int])"))
     reject("SHA3-384 digest width", lambda root: replace(root, policy.DIGEST, 'Sha3_384Digest, 48, "SHA3-384"', 'Sha3_384Digest, 47, "SHA3-384"'))
     reject("SHA3-512 digest width", lambda root: replace(root, policy.DIGEST, 'Sha3_512Digest, 64, "SHA3-512"', 'Sha3_512Digest, 63, "SHA3-512"'))
     reject("adjacent algorithm", lambda root: replace(root, policy.LIB, "mod sponge;", "mod sponge;\npub struct Cshake128;"))
@@ -100,7 +110,7 @@ def main() -> int:
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects fifty-one boundary, permutation, padding, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
+    print("portable SHA-3 policy rejects fifty-eight boundary, permutation, padding, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

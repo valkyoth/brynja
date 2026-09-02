@@ -9,6 +9,7 @@ fn main() {
                 "incremental squeeze results: {}",
                 report.incremental_squeeze_results
             );
+            println!("bit-domain results: {}", report.bit_domain_results);
             println!("execution path: portable-only");
             println!("independently verified: NO");
             println!("FIPS 140-3 validated: NO");

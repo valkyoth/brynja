@@ -1,0 +1,10 @@
+[package]
+name = "brynja-sha3-bit-differential-fixture"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3" }
+
+[workspace]

@@ -1,6 +1,6 @@
 use brynja_hash_core::{FixedOutput, Update};
 
-use crate::{Sha3_512Digest, Sha3_512Error, sponge::Sponge};
+use crate::{Fips202BitString, Sha3_512Digest, Sha3_512Error, sponge::Sponge};
 
 const RATE_BYTES: usize = 72;
 
@@ -35,6 +35,13 @@ impl Sha3_512 {
             .map_err(|()| Sha3_512Error::MessageTooLong)
     }
 
+    /// Checks an exact bit count without changing this state.
+    pub fn check_additional_bits(&self, additional: u128) -> Result<(), Sha3_512Error> {
+        self.0
+            .check_additional_bits(additional)
+            .map_err(|()| Sha3_512Error::MessageTooLong)
+    }
+
     /// Absorbs all input or rejects it before changing observable state.
     pub fn update(&mut self, input: &[u8]) -> Result<(), Sha3_512Error> {
         self.0
@@ -46,6 +53,20 @@ impl Sha3_512 {
     #[must_use]
     pub fn finalize(self) -> Sha3_512Digest {
         Sha3_512Digest::from_bytes(self.0.finalize())
+    }
+
+    /// Consumes the state after absorbing one final canonical bit string.
+    pub fn finalize_bits(
+        mut self,
+        input: Fips202BitString<'_>,
+    ) -> Result<Sha3_512Digest, Sha3_512Error> {
+        let bits = u128::try_from(input.bit_len()).map_err(|_| Sha3_512Error::MessageTooLong)?;
+        self.0
+            .check_additional_bits(bits)
+            .map_err(|()| Sha3_512Error::MessageTooLong)?;
+        let (complete, partial) = input.split();
+        self.update(complete)?;
+        Ok(Sha3_512Digest::from_bytes(self.0.finalize_bits(partial)))
     }
 }
 

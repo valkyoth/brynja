@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Adversarial fixtures for v0.24.3 portable FIPS 202 acceptance."""
+"""Adversarial fixtures for portable FIPS 202 acceptance."""
 
 from __future__ import annotations
 
@@ -63,6 +63,19 @@ def main() -> int:
     reject_policy("missing-zero-output", acceptance.LIB, "check_zero_output()?;", "")
     reject_policy("missing-exhaustion", acceptance.LIB, "check_exhaustion()?;", "")
     reject_policy("missing-domain", acceptance.LIB, "check_domain_separation()?;", "")
+    reject_policy("missing-bit-api", acceptance.LIB, "bit_api::check()?;", "")
+    reject_policy(
+        "missing-bit-output",
+        acceptance.BIT_API,
+        "facade::Fips202Output::new",
+        "facade::MissingOutput::new",
+    )
+    reject_policy(
+        "missing-bit-differential",
+        acceptance.CHECKS,
+        "python3 scripts/sha3/check-sha3-bit-differential.py",
+        "python3 scripts/sha3/missing-bit-differential.py",
+    )
     reject_policy("false-path", acceptance.MAIN, "execution path: portable-only", "execution path: accelerated")
     reject_policy("leaf-feature", acceptance.LEAF_MANIFEST, "default = []", 'default = ["cpu"]')
     reject_policy("hidden-feature", acceptance.MANIFEST, "[dependencies]", "[features]\ncpu = []\n\n[dependencies]")

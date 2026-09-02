@@ -1,7 +1,7 @@
 use brynja_hash_core::{ExtendableOutput, Update, XofReader};
 
 use crate::{
-    Shake128Error,
+    Fips202BitString, Fips202Output, Shake128Error,
     sponge::{Sponge, Squeezer},
 };
 
@@ -37,6 +37,13 @@ impl Shake128 {
             .map_err(|()| Shake128Error::MessageTooLong)
     }
 
+    /// Checks an exact bit count without changing this state.
+    pub fn check_additional_bits(&self, additional: u128) -> Result<(), Shake128Error> {
+        self.0
+            .check_additional_bits(additional)
+            .map_err(|()| Shake128Error::MessageTooLong)
+    }
+
     /// Absorbs all input or rejects it before changing observable state.
     pub fn update(&mut self, input: &[u8]) -> Result<(), Shake128Error> {
         self.0
@@ -48,6 +55,20 @@ impl Shake128 {
     #[must_use]
     pub fn finalize_xof(self) -> Shake128Reader {
         Shake128Reader(self.0.finalize_xof())
+    }
+
+    /// Consumes the state after absorbing one final canonical FIPS 202 bit string.
+    pub fn finalize_bits_xof(
+        mut self,
+        input: Fips202BitString<'_>,
+    ) -> Result<Shake128Reader, Shake128Error> {
+        let bits = u128::try_from(input.bit_len()).map_err(|_| Shake128Error::MessageTooLong)?;
+        self.0
+            .check_additional_bits(bits)
+            .map_err(|()| Shake128Error::MessageTooLong)?;
+        let (complete, partial) = input.split();
+        self.update(complete)?;
+        Ok(Shake128Reader(self.0.finalize_bits_xof(partial)))
     }
 }
 
@@ -82,7 +103,6 @@ pub struct Shake128Reader(Squeezer<RATE_BYTES>);
 impl Shake128Reader {
     /// Maximum output byte count representable by this implementation.
     pub const MAX_OUTPUT_BYTES: u128 = Squeezer::<RATE_BYTES>::MAX_OUTPUT_BYTES;
-
     /// Returns the number of bytes emitted so far.
     #[must_use]
     pub const fn output_bytes(&self) -> u128 {
@@ -96,10 +116,24 @@ impl Shake128Reader {
             .map_err(|()| Shake128Error::OutputTooLong)
     }
 
+    /// Checks an exact output bit count without changing this reader.
+    pub fn check_additional_bits(&self, additional: u128) -> Result<(), Shake128Error> {
+        self.0
+            .check_additional_bits(additional)
+            .map_err(|()| Shake128Error::OutputTooLong)
+    }
+
     /// Fills all caller-owned output or rejects before changing either side.
     pub fn squeeze(&mut self, output: &mut [u8]) -> Result<(), Shake128Error> {
         self.0
             .squeeze(output)
+            .map_err(|()| Shake128Error::OutputTooLong)
+    }
+
+    /// Consumes the reader after writing one final canonical bit destination.
+    pub fn squeeze_final_bits(self, output: Fips202Output<'_>) -> Result<(), Shake128Error> {
+        self.0
+            .squeeze_final_bits(output)
             .map_err(|()| Shake128Error::OutputTooLong)
     }
 }

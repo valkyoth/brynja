@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.7 signed; v0.24.8 hardened SHA-2 exceptional pentest PASS and awaiting green hosted GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.8 signed; v0.24.9 FIPS 202 arbitrary-bit implementation complete and awaiting exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -32,9 +32,10 @@ explicit caller timestamp enrichment, a caller-owned fixed FIFO, and visible
 saturating event-loss accounting. It currently admits zero backends and implements no FIPS module.
 It now has correct portable byte-oriented and canonical arbitrary-bit implementations of all six FIPS
 180-4 SHA-2 algorithms, including distinct hardened secret-bearing states,
-and byte-oriented implementations of all six FIPS 202 SHA-3/SHAKE identities.
-SHA-2 final combined acceptance plus SHA-3/SHAKE arbitrary-bit, hardened, and
-combined API profiles remain in progress through v0.24.11. It also has bounded DER tag-length-value framing
+and ordinary byte-oriented and canonical arbitrary-bit implementations of all
+six FIPS 202 SHA-3/SHAKE identities, including arbitrary-bit SHAKE output.
+SHA-2 final combined acceptance plus SHA-3/SHAKE hardened and combined API
+profiles remain in progress through v0.24.11. It also has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
 cryptographic algorithm beyond those twelve named hash and XOF identities, X.509, QUIC-TLS, DTLS
@@ -337,7 +338,7 @@ algorithm is added, and SHA-2/SHA-3 remain In progress through their separately
 owned hardened and complete-family acceptance milestones. Zero crates are
 selected for publication.
 
-The facade now advances to internal `0.24.8`. Every SHA-2 identity has a
+Signed internal v0.24.8 gave every SHA-2 identity a
 distinct portable hardened state over the same byte and canonical-bit domain.
 Eight registered byte-backed regions own the chaining state, partial input,
 message length, phase, schedule, block copy, padding block, and staged output.
@@ -351,6 +352,18 @@ remain unadmitted, and the exact cleanup claim excludes registers, caches,
 compiler-created copies, dumps, forgotten owners, abort, termination, suspend,
 power loss, and physical memory. SHA-2 remains In progress until v0.24.11;
 independent review, FIPS validation, and crates.io publication remain absent.
+
+The v0.24.9 implementation adds a distinct low-bit-first canonical FIPS 202
+message descriptor for all four SHA-3 and both SHAKE identities, because the
+existing SHA-2 descriptor's high-bit-first tail representation is not
+interchangeable. SHAKE additionally accepts a typed final arbitrary-bit output
+destination, clears unused high tail bits and consumes the reader so output
+cannot continue after a partial byte. Seventy-six selected official NIST CAVP
+records, the six official five-bit examples, 440 independent oracle cases,
+package-external leaf/facade use, Kani, Miri and AddressSanitizer cover the
+boundary. Ordinary FIPS 202 state is still public/unkeyed and non-erasing;
+hardened secret-bearing state, final combined acceptance, independent review,
+FIPS validation and crates.io publication remain absent.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and
@@ -572,7 +585,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   165 exact mappings and 17 explicit dispositions;
 - all 791 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,456 surfaces;
-- the generated closure maps all 130 locked sources, all 510 ordered pre-1.0
+- the generated closure maps all 130 locked sources, all 519 ordered pre-1.0
   roadmap rows, all 4,456 surfaces, and all 169 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners

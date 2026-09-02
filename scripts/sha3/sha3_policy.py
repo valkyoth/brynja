@@ -17,6 +17,8 @@ MANIFEST = CRATE / "Cargo.toml"
 CRYPTO_MANIFEST = Path("crates/brynja-crypto/Cargo.toml")
 PACKAGE_POLICY = Path("package-policy.toml")
 LIB = CRATE / "src/lib.rs"
+BIT_API = CRATE / "src/bit_api.rs"
+BIT_STRING = CRATE / "src/bit_string.rs"
 KECCAK = CRATE / "src/keccak.rs"
 SPONGE = CRATE / "src/sponge.rs"
 DIGEST = CRATE / "src/digest.rs"
@@ -34,17 +36,22 @@ SHA3_512_TEST = CRATE / "tests/sha3_512.rs"
 SHAKE128_TEST = CRATE / "tests/shake128.rs"
 SHAKE256_TEST = CRATE / "tests/shake256.rs"
 TEST_SUPPORT = CRATE / "tests/support/mod.rs"
+BIT_TEST = CRATE / "tests/bit_inputs.rs"
+BIT_VECTORS = CRATE / "tests/vectors/nist-bit-selected.txt"
 DIFFERENTIAL = Path("scripts/sha3/check-sha3-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/sha3-differential/src/main.rs")
+BIT_DIFFERENTIAL = Path("scripts/sha3/check-sha3-bit-differential.py")
+BIT_DIFFERENTIAL_FIXTURE = Path("assurance/sha3-bit-differential/src/main.rs")
+BIT_IMPORTER = Path("scripts/sha3/import-nist-bit-vectors.py")
 MIRI_SCRIPT = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER_SCRIPT = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 SOURCES = (
-    LIB, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256, SHA3_384,
+    LIB, BIT_API, BIT_STRING, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256, SHA3_384,
     SHA3_512, SHAKE128, SHAKE256,
 )
 TESTS = (
     SHA3_224_TEST, SHA3_256_TEST, SHA3_384_TEST, SHA3_512_TEST,
-    SHAKE128_TEST, SHAKE256_TEST, TEST_SUPPORT,
+    SHAKE128_TEST, SHAKE256_TEST, TEST_SUPPORT, BIT_TEST, BIT_VECTORS,
 )
 HASHES = {
     Path(path): digest for path, digest in sha3_reviewed_hashes.REVIEWED_HASHES.items()
@@ -116,12 +123,17 @@ def validate(root: Path) -> None:
         "pub const SHA3_512_IMPLEMENTED: bool = true;",
         "pub const SHAKE128_IMPLEMENTED: bool = true;",
         "pub const SHAKE256_IMPLEMENTED: bool = true;",
+        "pub const FIPS202_BIT_INPUT_IMPLEMENTED: bool = true;",
+        "pub const FIPS202_BIT_OUTPUT_IMPLEMENTED: bool = true;",
+        "mod bit_api;",
+        "mod bit_string;",
         "pub fn sha3_224(input: &[u8]) -> Result<Sha3_224Digest, Sha3_224Error>",
         "pub fn sha3_256(input: &[u8]) -> Result<Sha3_256Digest, Sha3_256Error>",
         "pub fn sha3_384(input: &[u8]) -> Result<Sha3_384Digest, Sha3_384Error>",
         "pub fn sha3_512(input: &[u8]) -> Result<Sha3_512Digest, Sha3_512Error>",
         "pub fn shake128(input: &[u8], output: &mut [u8]) -> Result<(), Shake128Error>",
         "pub fn shake256(input: &[u8], output: &mut [u8]) -> Result<(), Shake256Error>",
+        "sha3_224_bits, sha3_256_bits, sha3_384_bits, sha3_512_bits, shake128_bits, shake256_bits",
         "#[kani::proof]",
     ):
         require(library, token, "SHA-3 package")
@@ -155,6 +167,10 @@ def validate(root: Path) -> None:
         "checked_message_length(self.message_bytes, additional)?;",
         "current.checked_add(additional)",
         "checked_output_length(self.output_bytes, additional)",
+        "checked_bit_length(self.message_bytes, additional)",
+        "fn apply_padding(&mut self, partial: Option<(u8, u8)>, suffix: u8, suffix_bits: u8)",
+        "bit_position == RATE.saturating_mul(8)",
+        "squeeze_final_bits",
         "*last ^= 0x80;",
         "permute(state);",
     ):
@@ -174,6 +190,8 @@ def validate(root: Path) -> None:
             f"pub struct {algorithm}(Sponge<RATE_BYTES>);",
             "pub fn check_additional_bytes",
             "pub fn update(&mut self, input: &[u8])",
+            "pub fn check_additional_bits",
+            "pub fn finalize_bits",
             "impl Update for",
             "impl FixedOutput for",
         ):
@@ -193,6 +211,9 @@ def validate(root: Path) -> None:
             f"pub struct {reader}(Squeezer<RATE_BYTES>);",
             "pub fn check_additional_bytes",
             "pub fn update(&mut self, input: &[u8])",
+            "pub fn check_additional_bits",
+            "pub fn finalize_bits_xof",
+            "pub fn squeeze_final_bits",
             f"impl ExtendableOutput for {algorithm}",
             f"impl XofReader for {reader}",
             "pub fn squeeze(&mut self, output: &mut [u8])",
@@ -243,6 +264,9 @@ def validate(root: Path) -> None:
         "zero_length_and_checked_state_transitions_are_exact",
         "shake_domain_is_distinct_from_fixed_output_sha3",
         "shake_strength_identities_are_distinct",
+        "curated_nist_cavp_vectors_cover_every_function_and_bit_residue",
+        "every_tail_width_and_suffix_rate_collision_is_stable",
+        "final_partial_shake_output_is_canonical_and_partitionable",
     ):
         require(tests, token, "SHA-3 tests")
 
@@ -255,9 +279,10 @@ def validate(root: Path) -> None:
         '--test "$shake_test"',
         "suffix_and_rate_boundaries_have_exact_digests",
         "suffix_and_rate_boundaries_have_exact_output",
+        "curated_nist_cavp_vectors_cover_every_function_and_bit_residue",
     ):
         require(miri, token, "SHA-3 Miri coverage")
-    if miri.count("-p brynja-hash-sha3") != 2:
+    if miri.count("-p brynja-hash-sha3") != 3:
         fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     for token in (
@@ -293,6 +318,56 @@ def validate(root: Path) -> None:
         '"capacity overflow"',
     ):
         require(differential, token, "SHA-3 differential rejection tests")
+
+    bit_string = without_comments(loaded[BIT_STRING])
+    for token in (
+        "pub struct Fips202BitString<'input>",
+        "pub struct Fips202Output<'output>",
+        "pub enum Fips202BitsError",
+        "let unused_mask = u8::MAX << valid_bits_in_last_byte;",
+        "NonZeroUnusedBits",
+    ):
+        require(bit_string, token, "FIPS 202 low-bit representation")
+    bit_api = without_comments(loaded[BIT_API])
+    for function in (
+        "sha3_224_bits", "sha3_256_bits", "sha3_384_bits", "sha3_512_bits",
+        "shake128_bits", "shake256_bits",
+    ):
+        require(bit_api, f"pub fn {function}", "FIPS 202 bit API")
+    bit_vectors = loaded[BIT_VECTORS]
+    for token in (
+        "sha-3bittestvectors.zip sha256=339454bb4b96e299fefcad403797523f1952462a28d2418c108aea30263643ae",
+        "shakebittestvectors.zip sha256=69338cb9cfb1e39b91f54f34bbb82a5d3b0403eb5d77213a669fafed87efebb4",
+        "sha3-224 1 ", "sha3-256 2 ", "sha3-384 3 ", "sha3-512 4 ",
+        "shake128 5 ", "shake256 6 ",
+    ):
+        require(bit_vectors, token, "curated NIST bit vectors")
+    bit_differential = read(root, BIT_DIFFERENTIAL)
+    bit_fixture = read(root, BIT_DIFFERENTIAL_FIXTURE)
+    importer = read(root, BIT_IMPORTER)
+    for token in (
+        "def permute(state: list[int])",
+        "def keccak(algorithm: str, message: bytes, input_bits: int, output_bits: int)",
+        "official + generated_cases()",
+        "malformed inputs reject cleanly",
+        "timeout=240",
+    ):
+        require(bit_differential, token, "independent FIPS 202 bit oracle")
+    for token in (
+        "const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;",
+        "const MAX_CASES: usize = 1_024;",
+        "const MAX_MESSAGE_BYTES: usize = 4_096;",
+        "const MAX_OUTPUT_BITS: usize = 4_095;",
+        ".try_reserve_exact(bytes)",
+        "Fips202BitString::new",
+        "Fips202Output::new",
+    ):
+        require(bit_fixture, token, "bounded FIPS 202 bit adapter")
+    for token in (
+        "SHA3_ARCHIVE_SHA256", "SHAKE_ARCHIVE_SHA256", "MAX_ARCHIVE_BYTES",
+        "PurePosixPath", "missing selected input lengths", "missing output residues",
+    ):
+        require(importer, token, "NIST bit vector importer")
 
     manifest = tomllib.loads(read(root, MANIFEST))
     if manifest.get("dependencies") != {"brynja-hash-core": {"workspace": True}}:

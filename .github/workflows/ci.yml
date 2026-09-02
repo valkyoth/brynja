@@ -84,6 +84,8 @@ jobs:
         run: python scripts/sha2/check-sha2-bit-differential.py
       - name: Run complete SHA-3/SHAKE portable public API acceptance
         run: python scripts/sha3/check-sha3-public-api.py
+      - name: Run SHA-3/SHAKE arbitrary-bit differential acceptance
+        run: python scripts/sha3/check-sha3-bit-differential.py
       - name: Lint SHA-3/SHAKE public API fixture
         run: >
           cargo clippy --locked

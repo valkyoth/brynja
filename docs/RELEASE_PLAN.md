@@ -3090,20 +3090,27 @@ Exit criteria:
   Brynja-owned secret-bearing memory is registered, cleared and evidenced;
 - `v0.24.8 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.9 - Complete SHA-3 And SHAKE Arbitrary-Bit Input APIs
+### v0.24.9 - Complete SHA-3 And SHAKE Arbitrary-Bit APIs
 
-Status: planned
+Status: awaiting pentest
 
-Plan scope: Extend all four SHA-3 digests and both SHAKE XOFs with canonical FIPS 202 arbitrary-bit-message one-shot, incremental absorb and incremental squeeze APIs, including exact delimited suffix composition, partial-byte validation, bit-length exhaustion, byte-aligned equivalence and every rate/tail boundary without exposing raw Keccak-f[1600].
+Plan scope: Extend all four SHA-3 digests and both SHAKE XOFs with a distinct low-bit-first canonical FIPS 202 message type for one-shot and incremental final-tail absorption, plus typed arbitrary-bit SHAKE output and consuming final-bit squeeze APIs; cover exact delimited-suffix composition, partial-byte validation, checked length exhaustion, byte-aligned equivalence, official NIST bit vectors, an independent oracle and every rate/tail boundary without exposing raw Keccak-f[1600].
 
 Goal: complete the FIPS 202 message domain for every fixed and extendable-output
 identity before the family can receive final implementation status.
 
 Deliverables:
 
-- reuse the canonical bit-string type for SHA3-224, SHA3-256, SHA3-384,
-  SHA3-512, SHAKE128 and SHAKE256 one-shot and incremental absorption, allowing
-  exactly one final partial byte before fixed finalization or XOF squeezing;
+- expose a distinct `Fips202BitString` for SHA3-224, SHA3-256, SHA3-384,
+  SHA3-512, SHAKE128 and SHAKE256 one-shot and incremental absorption, because
+  FIPS 202 maps the valid tail least-significant-bit first while the existing
+  FIPS 180-4 `BitString` uses the opposite canonical byte representation;
+  allow exactly one final partial byte before fixed finalization or XOF
+  squeezing and reject nonzero unused high bits;
+- expose `Fips202Output` and consuming final-bit squeeze operations so SHAKE128
+  and SHAKE256 cover every standards-valid output length, clear unused high
+  bits, preflight exhaustion before output mutation and cannot continue after
+  emitting a partial output byte;
 - compose the final message bits, FIPS domain suffix and pad10*1 without
   ambiguity at every rate boundary, with checked bit lengths, transactional
   failure and byte-aligned API equivalence;
@@ -3112,15 +3119,18 @@ Deliverables:
 
 Verification:
 
-- run official bit-oriented FIPS 202 vectors for every function plus all tail
-  widths, suffix-boundary collisions, rate-minus/at/plus cases, multirate input
-  and partitioned SHAKE output;
+- run 76 curated records imported reproducibly from checksum-pinned official
+  NIST CAVP bit-oriented archives for every function, all input tail widths and
+  every SHAKE output residue, plus the six official five-bit examples, all
+  suffix-boundary collisions, rate-minus/at/plus cases, multirate input and
+  partitioned SHAKE output;
 - compare every byte-aligned bit input with the frozen v0.24.3 fixture and every
   admitted v0.24.4 backend, rejecting nonzero unused bits, repeated tails,
   suffix substitution, absorb-after-tail and squeeze-before-finalization;
-- run padding/state Kani bounds, independent bit-oriented differential oracles,
-  Miri, sanitizers, no_std packages, Rust/target matrix and raw-permutation
-  visibility mutations.
+- run 440 cases through an independent bounded Python Keccak oracle and the
+  public Rust APIs; reject malformed assurance input; run padding/state Kani
+  bounds, Miri, sanitizers, no_std package and packaged-facade acceptance,
+  Rust/target matrix and raw-permutation visibility mutations.
 
 Exit criteria:
 

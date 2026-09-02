@@ -26,14 +26,14 @@
 # brynja-hash-sha3
 
 First-party, allocation-free `no_std` SHA-3 and SHAKE family ownership for
-Brynja. Version 0.1.0 provides correct portable byte-oriented implementations
-of all six FIPS 202 functions through distinct fixed-output SHA-3 and
-extendable-output SHAKE APIs over one
-private Keccak-f[1600] permutation. The byte-oriented leaf and facade APIs pass
-frozen package-external portable acceptance. Arbitrary-bit and hardened
-secret-bearing profiles, complete internal sanitization, hardware acceleration,
-final cross-backend acceptance, independent review, and FIPS 140-3 validation
-remain later work through v0.24.11.
+Brynja. Version 0.1.0 provides correct portable byte-oriented and canonical
+arbitrary-bit implementations of all six FIPS 202 functions through distinct
+fixed-output SHA-3 and extendable-output SHAKE APIs over one private
+Keccak-f[1600] permutation. SHAKE also supports standards-valid output lengths
+that do not end on a byte boundary. The leaf and facade APIs pass frozen
+package-external portable acceptance. Hardened secret-bearing profiles,
+complete internal sanitization, final cross-backend acceptance, independent
+review, and FIPS 140-3 validation remain later work through v0.24.11.
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};
@@ -47,6 +47,17 @@ assert_eq!(streaming.finalize(), one_shot);
 let mut xof = [0_u8; 64];
 brynja_hash_sha3::shake256(b"abc", &mut xof).unwrap();
 assert_eq!(xof.len(), 64);
+
+// FIPS 202 bit strings store valid tail bits at the low end of the byte.
+let bits = brynja_hash_sha3::Fips202BitString::new(&[0b0001_0011], 5).unwrap();
+let bit_digest = brynja_hash_sha3::sha3_256_bits(bits).unwrap();
+assert_eq!(bit_digest.as_bytes().len(), 32);
+
+// Request exactly 100 bits of SHAKE output: 12 bytes plus 4 low bits.
+let mut output = [0xff_u8; 13];
+let destination = brynja_hash_sha3::Fips202Output::new(&mut output, 4).unwrap();
+brynja_hash_sha3::shake128_bits(bits, destination).unwrap();
+assert_eq!(output[12] & 0xf0, 0);
 ```
 
 These APIs are unkeyed hashes, not authentication, MACs, password hashing, or
@@ -72,7 +83,8 @@ pentest evidence rather than independent cryptographic verification.
 | SHA3-512 | ✅ Implemented | ❌ Not independently verified |
 | SHAKE128 | ✅ Implemented | ❌ Not independently verified |
 | SHAKE256 | ✅ Implemented | ❌ Not independently verified |
-| Complete SHA-3/SHAKE family | 🚧 In progress | ❌ Not independently verified |
+| Arbitrary-bit FIPS 202 messages and SHAKE output | ✅ Implemented | ❌ Not independently verified |
+| Complete SHA-3/SHAKE family, including hardened state | 🚧 In progress | ❌ Not independently verified |
 
 Only a named independent reviewer and linked review evidence can change the
 independent status. Project tests, CI, Kani, Miri, fuzzing, and pentests do not

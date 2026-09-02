@@ -54,6 +54,12 @@ pub const SHAKE128_IMPLEMENTED: bool = true;
 /// Whether portable SHAKE256 is implemented and available through this layer.
 pub const SHAKE256_IMPLEMENTED: bool = true;
 
+/// Whether canonical FIPS 202 arbitrary-bit input is exposed by this layer.
+pub const FIPS202_BIT_INPUT_IMPLEMENTED: bool = true;
+
+/// Whether canonical FIPS 202 arbitrary-bit SHAKE output is exposed here.
+pub const FIPS202_BIT_OUTPUT_IMPLEMENTED: bool = true;
+
 pub use brynja_hash_sha2::{
     BitString, BitStringError, FixedOutput, HardenedSha2Error, HardenedSha2State, HardenedSha224,
     HardenedSha256, HardenedSha384, HardenedSha512, HardenedSha512_224, HardenedSha512_256,
@@ -64,10 +70,12 @@ pub use brynja_hash_sha2::{
     sha512_256, sha512_256_bits, sha512_bits,
 };
 pub use brynja_hash_sha3::{
-    ExtendableOutput, Sha3_224, Sha3_224Digest, Sha3_224Error, Sha3_256, Sha3_256Digest,
-    Sha3_256Error, Sha3_384, Sha3_384Digest, Sha3_384Error, Sha3_512, Sha3_512Digest,
-    Sha3_512Error, Shake128, Shake128Error, Shake128Reader, Shake256, Shake256Error,
-    Shake256Reader, XofReader, sha3_224, sha3_256, sha3_384, sha3_512, shake128, shake256,
+    ExtendableOutput, Fips202BitString, Fips202BitsError, Fips202Output, Sha3_224, Sha3_224Digest,
+    Sha3_224Error, Sha3_256, Sha3_256Digest, Sha3_256Error, Sha3_384, Sha3_384Digest,
+    Sha3_384Error, Sha3_512, Sha3_512Digest, Sha3_512Error, Shake128, Shake128Error,
+    Shake128Reader, Shake256, Shake256Error, Shake256Reader, XofReader, sha3_224, sha3_224_bits,
+    sha3_256, sha3_256_bits, sha3_384, sha3_384_bits, sha3_512, sha3_512_bits, shake128,
+    shake128_bits, shake256, shake256_bits,
 };
 
 #[cfg(test)]
@@ -91,6 +99,12 @@ mod tests {
         assert!(::core::hint::black_box(super::SHA3_512_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHAKE128_IMPLEMENTED));
         assert!(::core::hint::black_box(super::SHAKE256_IMPLEMENTED));
+        assert!(::core::hint::black_box(
+            super::FIPS202_BIT_INPUT_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::FIPS202_BIT_OUTPUT_IMPLEMENTED
+        ));
         assert_eq!(
             super::sha224(b"abc"),
             Ok(super::Sha224Digest::from_bytes([

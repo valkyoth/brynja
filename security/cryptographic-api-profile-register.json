@@ -23485,7 +23485,7 @@
       ]
     }
   ],
-  "policy_sha256": "f00820e569c774a00c55f3159c95fa13d1a6ed75fcfe6d4f375de28ec9c15b9d",
+  "policy_sha256": "f885dbf18306bcd30c56939223c094c6abb9264d94320c63278c69460553ed39",
   "registered_secret_owners": [
     {
       "capability": "algorithm.sha2",

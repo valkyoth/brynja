@@ -50,6 +50,13 @@ done
 
 CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     cargo +nightly-2026-09-02 miri test \
+    -p brynja-hash-sha3 \
+    --test bit_inputs \
+    curated_nist_cavp_vectors_cover_every_function_and_bit_residue \
+    --target x86_64-unknown-linux-gnu
+
+CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+    cargo +nightly-2026-09-02 miri test \
     -p brynja-hash-sha2 \
     --test bit_inputs \
     selected_official_nist_bit_vectors_match_every_identity \

@@ -27,7 +27,7 @@ inspected local bytes are pinned by `LOCAL_SHA256SUMS`.
 | NIST SP 800-52 Rev. 2 and successors | approved TLS deployment profile | local-only; the 2026 revision process and final successor must be reviewed before profile freeze |
 | NIST SP 800-131A Rev. 2, SP 800-133 Rev. 2, and SP 800-56C Rev. 2 | transitions, key generation, and key derivation | local-only; current CMVP supplemental lists govern approval |
 | NIST FIPS 203 and SP 800-227 | ML-KEM and KEM use | downloaded and checksum-pinned local-only; errata, CMVP approval, and final TLS group standards remain separate gates |
-| NIST CAVP vector archives | algorithm known-answer tests | review each archive before tracking |
+| NIST CAVP FIPS 202 bit-oriented archives | SHA-3/SHAKE arbitrary-bit messages and SHAKE arbitrary-bit output | official `sha-3bittestvectors.zip` (`339454bb4b96e299fefcad403797523f1952462a28d2418c108aea30263643ae`) and `shakebittestvectors.zip` (`69338cb9cfb1e39b91f54f34bbb82a5d3b0403eb5d77213a669fafed87efebb4`) remain local-only; `scripts/sha3/import-nist-bit-vectors.py` safely imports 76 reviewable records into `crates/brynja-hash-sha3/tests/vectors/nist-bit-selected.txt`; vectors support correctness testing and do not replace CAVP or FIPS validation |
 | ITU-T X.690 (02/2021) and Erratum 1 (09/2021) | ASN.1 BER/CER/DER | downloaded local-only from the current in-force ITU publication; the erratum is mandatory |
 | RISC-V Scalar Cryptography 1.0.1 and Vector Cryptography 1.0 | SHA-256 and future ISA acceleration | official CC-BY-4.0 publications downloaded and checksum-pinned local-only; scalar Zknh is consumed at v0.22.2, while vector crypto remains unimplemented |
 | ITU-T X.509 | certificate model | local-only licensed standard; RFC 5280 drives Internet PKI |

@@ -1,12 +1,14 @@
 //! Complete portable FIPS 202 SHA-3 and SHAKE functions for Brynja.
 //!
-//! The byte-oriented one-shot and streaming APIs implement the FIPS 202
-//! SHA-3 functions without allocation, low-level code, I/O, global mutable
-//! state, or a hardware requirement. One private Keccak-f\[1600\] permutation
-//! owns the shared sponge foundation; the raw permutation is not public.
+//! Byte and canonical FIPS 202 arbitrary-bit one-shot, streaming, and SHAKE
+//! output APIs implement the six standardized functions without allocation,
+//! low-level code, I/O, global mutable state, or a hardware requirement. One
+//! private Keccak-f\[1600\] permutation owns the shared sponge foundation.
 
 #![no_std]
 
+mod bit_api;
+mod bit_string;
 mod digest;
 mod error;
 mod keccak;
@@ -18,6 +20,10 @@ mod shake128;
 mod shake256;
 mod sponge;
 
+pub use bit_api::{
+    sha3_224_bits, sha3_256_bits, sha3_384_bits, sha3_512_bits, shake128_bits, shake256_bits,
+};
+pub use bit_string::{Fips202BitString, Fips202BitsError, Fips202Output};
 pub use brynja_hash_core::{ExtendableOutput, FixedOutput, Update, XofReader};
 pub use digest::{Sha3_224Digest, Sha3_256Digest, Sha3_384Digest, Sha3_512Digest};
 pub use error::{
@@ -47,6 +53,12 @@ pub const SHAKE128_IMPLEMENTED: bool = true;
 
 /// Whether the complete portable SHAKE256 API is implemented.
 pub const SHAKE256_IMPLEMENTED: bool = true;
+
+/// Whether all six identities accept canonical arbitrary-bit messages.
+pub const FIPS202_BIT_INPUT_IMPLEMENTED: bool = true;
+
+/// Whether both SHAKE identities emit canonical arbitrary-bit output.
+pub const FIPS202_BIT_OUTPUT_IMPLEMENTED: bool = true;
 
 /// Computes SHA3-224 over one complete byte slice.
 ///
@@ -145,10 +157,10 @@ pub fn shake256(input: &[u8], output: &mut [u8]) -> Result<(), Shake256Error> {
 #[cfg(test)]
 mod tests {
     use super::{
-        SHA3_224_IMPLEMENTED, SHA3_256_IMPLEMENTED, SHA3_384_IMPLEMENTED, SHA3_512_IMPLEMENTED,
-        SHAKE128_IMPLEMENTED, SHAKE256_IMPLEMENTED, Sha3_224, Sha3_224Error, Sha3_256,
-        Sha3_256Error, Sha3_384, Sha3_384Error, Sha3_512, Sha3_512Error, Shake128, Shake128Error,
-        Shake256, Shake256Error,
+        FIPS202_BIT_INPUT_IMPLEMENTED, FIPS202_BIT_OUTPUT_IMPLEMENTED, SHA3_224_IMPLEMENTED,
+        SHA3_256_IMPLEMENTED, SHA3_384_IMPLEMENTED, SHA3_512_IMPLEMENTED, SHAKE128_IMPLEMENTED,
+        SHAKE256_IMPLEMENTED, Sha3_224, Sha3_224Error, Sha3_256, Sha3_256Error, Sha3_384,
+        Sha3_384Error, Sha3_512, Sha3_512Error, Shake128, Shake128Error, Shake256, Shake256Error,
         keccak::byte_location,
         sponge::{checked_message_length, checked_output_length},
     };
@@ -161,6 +173,8 @@ mod tests {
         assert!(::core::hint::black_box(SHA3_512_IMPLEMENTED));
         assert!(::core::hint::black_box(SHAKE128_IMPLEMENTED));
         assert!(::core::hint::black_box(SHAKE256_IMPLEMENTED));
+        assert!(::core::hint::black_box(FIPS202_BIT_INPUT_IMPLEMENTED));
+        assert!(::core::hint::black_box(FIPS202_BIT_OUTPUT_IMPLEMENTED));
     }
 
     #[test]

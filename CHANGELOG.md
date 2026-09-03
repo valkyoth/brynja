@@ -229,9 +229,10 @@ Keep a Changelog and Semantic Versioning.
   candidate `68d0e88450c25355f3a3aa0a8b1947d484fe6b90`; neither reported a
   Critical, High, or Medium finding, and the permanent exceptional report
   records `PASS`/`PASS`, zero open findings, and no required remediation.
-- Refresh Miri and Rust sanitizer evidence to latest available
-  `nightly-2026-09-02` at exact Rust revision
-  `5db7f4be8a36c1b8ae19299469e2be2b0f052c21` after the pre-tag freshness gate
+- Refresh Miri and Rust sanitizer evidence during the v0.24.11 release gate to
+  latest available
+  `nightly-2026-09-03` at exact Rust revision
+  `2e2b193f8ada105f27608b7be81c293e0d7292cb` after the pre-tag freshness gate
   detected the upstream nightly advance.
 - Implement the v0.24.6 cryptographic API-profile and secret-state closure
   register across all 129 semantic capabilities, with 22 exact API dimensions,

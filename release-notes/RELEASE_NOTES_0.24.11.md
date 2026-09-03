@@ -88,6 +88,12 @@ changes no wire rule or sender behavior. It remains unverified and
 authority register and September 3 freshness receipt admit no TLS code or
 requirement change.
 
+The release gate also advances Miri and Rust sanitizer execution to the latest
+available `nightly-2026-09-03` at exact Rust revision
+`2e2b193f8ada105f27608b7be81c293e0d7292cb`. This is an assurance-tooling
+refresh only; the complete affected Miri and AddressSanitizer suites are rerun
+locally before the tag.
+
 ## Release Process
 
 Version 0.24.11 is an internal development milestone in the cumulative

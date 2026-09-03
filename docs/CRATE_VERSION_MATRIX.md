@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.10 signed; v0.24.11 combined SHA-2 and SHA-3/SHAKE acceptance implementation complete, local verification in progress
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.10 signed; v0.24.11 combined SHA-2 and SHA-3/SHAKE acceptance has a committed PASS/PASS report and awaits green GitHub and CodeQL
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.11`. `brynja-hash-core 0.1.0`,

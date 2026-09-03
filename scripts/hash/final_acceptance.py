@@ -137,8 +137,12 @@ def validate(root: Path = ROOT, check_hashes: bool = True) -> None:
             require(loaded[relative], row, "public family status")
     require(loaded[Path("docs/current-status.md")], "SHA-2 and SHA-3/SHAKE are Fully implemented", "current status")
     plan = loaded[Path("docs/RELEASE_PLAN.md")]
-    require(plan, "### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance", "plan milestone")
-    require(plan, "Status: awaiting pentest", "plan status")
+    require(
+        plan,
+        "### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance\n\n"
+        "Status: awaiting green CI",
+        "plan milestone and release status",
+    )
     checks = loaded[Path("scripts/checks.sh")]
     for command in (
         "python3 scripts/hash/check-final-acceptance.py",

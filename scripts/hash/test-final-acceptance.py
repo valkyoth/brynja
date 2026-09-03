@@ -40,6 +40,13 @@ def main() -> int:
         (Path("README.md"), "| SHA-2 | ✅ Fully implemented", "| SHA-2 | 🚧 In progress"),
         (Path("README.md"), "❌ Not independently verified", "✅ Independently verified"),
         (Path("docs/current-status.md"), "SHA-2 and SHA-3/SHAKE are Fully implemented", "SHA families pending"),
+        (
+            Path("docs/RELEASE_PLAN.md"),
+            "### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance\n\n"
+            "Status: awaiting green CI",
+            "### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance\n\n"
+            "Status: awaiting pentest",
+        ),
         (Path("scripts/checks.sh"), "python3 scripts/hash/check-final-acceptance.py", "true # final check removed"),
         (Path(".github/workflows/ci.yml"), "assurance/hash-final-acceptance/Cargo.toml", "assurance/sha3-public-api/Cargo.toml"),
         (Path("standards/surface-policy.json"), "scripts/hash/check-final-acceptance.py#main", "tests/missing.rs#missing"),

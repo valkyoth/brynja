@@ -819,11 +819,19 @@ cancellation, unwind, and Drop evidence to the final source. Both exact
 families are now **Fully implemented**; neither is independently verified or
 FIPS 140-3 validated.
 
+The voluntary assessment found no Critical, High, or Medium security
+vulnerability. Its one non-security status inconsistency is corrected and the
+retest passed; the permanent
+[v0.24.11 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.11.md)
+records `PASS`/`PASS` with zero open findings.
+
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
-The latest signed and crates.io checkpoint is `0.20.0`. The current internal `0.24.11`
-combined modern-hash acceptance candidate selects no crates.io publication.
+The latest signed and crates.io checkpoint is `0.20.0`. The current internal
+`0.24.11` combined modern-hash acceptance candidate has a committed PASS/PASS
+pentest report, awaits green GitHub and CodeQL, and selects no crates.io
+publication.
 The published
 dependency is:
 

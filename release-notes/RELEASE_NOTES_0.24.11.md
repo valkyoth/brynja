@@ -1,7 +1,8 @@
 # Brynja 0.24.11 Release Notes
 
-Status: implementation complete; complete local gate, hosted GitHub checks,
-CodeQL, and signed development tag pending
+Status: implementation and local release verification complete; voluntary
+pentest and retest PASS; hosted GitHub checks, CodeQL, and signed development
+tag pending
 
 ## Summary
 
@@ -64,11 +65,26 @@ evidence downgrade.
   distinct hardened owners, and callers remain responsible for their input and
   any copied output storage.
 
+## Security Assessment
+
+The voluntary v0.24.11 assessment found no Critical, High, or Medium security
+vulnerability. It identified one non-security documentation inconsistency:
+the component table recorded both families as fully implemented while later
+present-tense prose still described combined acceptance as pending. Remediation
+commit `5074b35eb759ff69f83c8188588bf6da61a9e5ee` corrected the prose and added
+negative regression fixtures. The repository-owner retest is fully green, and
+the permanent [v0.24.11 report](../security/pentest/v0.24.11.md) records
+`PASS`/`PASS` with zero open findings.
+
+The same remediation reserves an optional high-assurance protected-memory
+layer for v0.126.1-v0.126.5. That is roadmap work, not an implemented v0.24.11
+capability or a stronger erasure claim.
+
 ## Release Process
 
 Version 0.24.11 is an internal development milestone in the cumulative
-v0.20.0-to-v0.25.0 range. It selects zero crates for crates.io publication and
-has no scheduled pentest. An exceptional assessment remains mandatory if the
-final delta activates a material security trigger. After the complete local
-gate passes, commit the exact candidate, wait for green GitHub and CodeQL, and
-create the signed immutable `v0.24.11` tag.
+v0.20.0-to-v0.25.0 range. It selects zero crates for crates.io publication.
+Although no scheduled assessment was required, its voluntary assessment and
+retest are complete. After this report-bearing candidate passes the complete
+local gate, wait for green GitHub and CodeQL, then create the signed immutable
+`v0.24.11` tag.

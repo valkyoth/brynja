@@ -3026,7 +3026,7 @@ Exit criteria:
 
 ### v0.24.8 - Complete Hardened SHA-2 State APIs
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes: six distinct portable hardened states now share the
 existing FIPS 180-4 compression math while owning eight byte-backed secret
@@ -3092,7 +3092,7 @@ Exit criteria:
 
 ### v0.24.9 - Complete SHA-3 And SHAKE Arbitrary-Bit APIs
 
-Status: awaiting green CI
+Status: released
 
 Implementation notes: exact implementation candidate
 `3f6669f670472cea4f2a162e545db456ee368530` completed the ordinary FIPS 202
@@ -3147,7 +3147,7 @@ Exit criteria:
 
 ### v0.24.10 - Complete Hardened SHA-3 And SHAKE State APIs
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Add distinct public secret-bearing SHA-3 and SHAKE absorb and reader states over the exact private permutation, destroying sponge lanes, partial buffers, suffix staging, squeeze state, output staging and every Brynja-owned temporary on finalization, exhaustion, error, cancellation, recoverable unwinding and Drop through non-panicking all-region cleanup; seal hardened capabilities against downstream implementation or forgery, classify fixed and incremental output as explicit public declassification or typed secret ownership with unchanged or cleared failure destinations, keep hardened dispatch portable unless each accelerated symbol has exact cleanup and spill evidence, and make the owner reusable by later cSHAKE, KMAC, HMAC and protected-prehash constructions without exposing raw state.
 
@@ -3194,7 +3194,7 @@ Exit criteria:
 
 ### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; run the exact final code through portable, every cleanup-qualified admitted backend, and every required-backend unavailable or quarantine path; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, verify explicit public declassification versus typed secret output, refresh every affected native, timing, emitted-code, proof, sanitization, package and differential artifact after any code change, and only then change the root, facade, leaf, current-status and claim-register family entries from In progress to Fully implemented while independent verification and FIPS validation remain separate.
 

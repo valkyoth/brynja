@@ -29,6 +29,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Reconcile the v0.24.11 component inventory with the completed SHA-2 and
+  SHA-3/SHAKE status, permanently reject both stale pending formulations, and
+  record the voluntary assessment and clean retest as `PASS`/`PASS` with zero
+  open findings.
 - Move full Miri and AddressSanitizer execution from an inevitably timing-out
   20-minute GitHub job to the required local pre-tag gate. CI retains
   fail-closed validation of tool pins, script and coverage bindings, mutation

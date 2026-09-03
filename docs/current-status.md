@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.10 signed; v0.24.11 combined SHA-2 and SHA-3/SHAKE acceptance implementation complete, local verification in progress
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.10 signed; v0.24.11 combined SHA-2 and SHA-3/SHAKE acceptance has a committed PASS/PASS report and awaits green GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -57,6 +57,13 @@ differential campaigns, proof inventory, secret-owner compiler evidence,
 sanitization, error, cancellation, unwind, Drop, unavailable and quarantine
 paths to the same final source. This completes both exact families without
 claiming independent cryptographic verification or FIPS 140-3 validation.
+
+The voluntary v0.24.11 assessment found no Critical, High, or Medium security
+vulnerability. One non-security status inconsistency was corrected in exact
+remediation commit `5074b35eb759ff69f83c8188588bf6da61a9e5ee`, permanent
+negative fixtures reject its return, and the repository-owner retest passed.
+The [permanent report](../security/pentest/v0.24.11.md) records `PASS`/`PASS`
+with zero open findings.
 
 The v0.22.1 candidate also provides a persistent detached native-run manager.
 It can launch the exact clean candidate locally or over SSH, records the source

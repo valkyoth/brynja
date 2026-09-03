@@ -23419,7 +23419,7 @@
       ]
     }
   ],
-  "policy_sha256": "bc8f0d71f6ebe183b21ea35639355e1828c5c281670bdacb9c5cd7a9d827c66a",
+  "policy_sha256": "1992708fcef0603b616e272da381d421e330d4035daf2abe0ed764ffcd911339",
   "registered_secret_owners": [
     {
       "capability": "algorithm.sha2",
@@ -23500,6 +23500,8 @@
         "partial_input:secret",
         "message_length:secret-derived",
         "output_length:secret-derived",
+        "cshake_setup_length:secret-derived",
+        "cshake_domain:secret-derived",
         "phase:secret-derived",
         "suffix_staging:secret-copy",
         "padding_block:secret-copy",

@@ -20,8 +20,6 @@ macro_rules! hardened_cshake {
         /// and output staging storage is compiler-resistantly cleared.
         pub struct $state {
             owner: HardenedFips202Owner<$rate>,
-            customized: bool,
-            setup_bytes: u128,
         }
 
         impl $state {
@@ -49,18 +47,14 @@ macro_rules! hardened_cshake {
                         owner.update(bytes)
                     })
                     .map_err(|()| HardenedSha3Error::MessageTooLong)?;
-                let setup_bytes = owner.message_bytes();
-                Ok(Self {
-                    owner,
-                    customized,
-                    setup_bytes,
-                })
+                owner.remember_cshake_setup(customized);
+                Ok(Self { owner })
             }
 
             /// Returns the complete message bytes accepted after setup.
             #[must_use]
             pub fn message_bytes(&self) -> u128 {
-                self.owner.message_bytes().saturating_sub(self.setup_bytes)
+                self.owner.cshake_message_bytes()
             }
 
             /// Checks an additional byte count without mutation.
@@ -129,13 +123,14 @@ macro_rules! hardened_cshake {
             pub fn cancel(self) {}
 
             fn finish(&mut self, partial: Option<(u8, u8)>) {
-                if self.customized {
+                if self.owner.cshake_is_customized() {
                     self.owner
                         .finalize(partial, CSHAKE_SUFFIX, CSHAKE_SUFFIX_BITS);
                 } else {
                     self.owner
                         .finalize(partial, SHAKE_SUFFIX, SHAKE_SUFFIX_BITS);
                 }
+                self.owner.wipe_cshake_metadata();
             }
         }
 

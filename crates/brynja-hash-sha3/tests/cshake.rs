@@ -130,7 +130,9 @@ fn hardened_state_matches_and_clears_secret_output() {
     assert!(state.is_ok());
     let mut secret_bytes = [0_u8; 32];
     if let Ok(mut state) = state {
+        assert_eq!(state.message_bytes(), 0);
         assert_eq!(state.update(&[0, 1, 2, 3]), Ok(()));
+        assert_eq!(state.message_bytes(), 4);
         let secret = state.finalize_secret(&mut secret_bytes);
         assert!(secret.is_ok());
         if let Ok(secret) = secret {

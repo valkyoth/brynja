@@ -64,6 +64,7 @@ def validate(root: Path = ROOT) -> None:
     owner = loaded[OWNER]
     fields = (
         "sponge_lanes", "partial_input", "message_length", "output_length",
+        "cshake_setup_length", "cshake_domain",
         "phase", "suffix_staging", "padding_block", "squeeze_staging",
         "permutation_columns", "permutation_theta", "permutation_rearranged",
     )
@@ -104,8 +105,15 @@ def validate(root: Path = ROOT) -> None:
         "pub fn squeeze_public(", "pub fn squeeze_secret<'output>(",
         "pub fn squeeze_final_bits_public(", "pub fn squeeze_final_bits_secret<'output>(",
         "pub fn cancel(self)", "CSHAKE_SUFFIX: u8 = 0x04",
+        "owner.remember_cshake_setup(",
+        "self.owner.cshake_message_bytes()",
+        "self.owner.cshake_is_customized()",
+        "self.owner.wipe_cshake_metadata()",
     ):
         require(loaded[CSHAKE], token, "hardened cSHAKE API")
+    for forbidden in ("customized: bool", "setup_bytes: u128"):
+        if forbidden in loaded[CSHAKE]:
+            fail(f"hardened cSHAKE metadata escaped its clearing owner: {forbidden}")
     for forbidden in (
         "unsafe {", "unsafe fn", "extern \"C\"", "Vec<", "Box<",
         "update_with_backend", "BackendSession",

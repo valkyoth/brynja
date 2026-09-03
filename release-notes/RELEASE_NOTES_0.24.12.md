@@ -1,7 +1,8 @@
 # Brynja 0.24.12 Release Notes
 
-Status: implementation complete; exceptional pentest, final local release
-verification, hosted GitHub checks, CodeQL, and signed development tag pending
+Status: implementation and first pentest remediation complete; exceptional
+retest, final local release verification, hosted GitHub checks, CodeQL, and
+signed development tag pending
 
 ## Summary
 
@@ -50,6 +51,17 @@ not FIPS 140-3 validated, and no accelerated backend is admitted.
 - The full repository gate covers supported Rust 1.90.0 through 1.98.0,
   supported hosted and bare-metal targets, warnings-denied Clippy, packaging,
   source mutations, Miri, AddressSanitizer and local tag-gate Kani evidence.
+
+## Pentest Remediation
+
+The initial exceptional assessment reported one Medium sensitive-metadata
+remanence finding. Hardened cSHAKE kept its customization discriminator and
+encoded setup length in wrapper fields outside the registered clearing owner.
+The remediation removes both wrapper fields, adds byte-backed domain and setup
+regions to `HardenedFips202Owner`, clears them on finalization and every owner
+Drop path, and expands owner-shape, mutation, unit, MIR, LLVM IR, assembly and
+Rust 1.90.0/1.98.0 evidence from eleven to thirteen registered regions. The
+exceptional retest of the exact remediation candidate remains pending.
 
 ## Security And Residual Limits
 

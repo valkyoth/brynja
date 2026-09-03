@@ -838,14 +838,18 @@ malformed-input rejection, package-external `no_std` consumers, sanitizer,
 focused Miri and twenty cumulative Kani bounds are bound into policy. The
 wider SP 800-185 family remains **In progress** pending KMAC, TupleHash,
 ParallelHash and final combined acceptance; cSHAKE is not independently
-verified or FIPS 140-3 validated.
+verified or FIPS 140-3 validated. Its initial exceptional assessment found one
+Medium hardened metadata-remanence gap; the remediation moves both metadata
+values into the registered clearing owner, covers all thirteen regions in
+compiler evidence, and awaits exact-candidate retest.
 
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.11`; the current internal `0.24.12` cSHAKE
-candidate awaits its exceptional pentest and selects no crates.io publication.
+remediation candidate awaits its exceptional retest and selects no crates.io
+publication.
 The published
 dependency is:
 

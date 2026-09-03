@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE implementation awaits exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE remediation awaits exceptional retest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.12`. `brynja-hash-core 0.1.0`,
@@ -25,6 +25,13 @@ under Rust 1.90.0 and 1.98.0. The facade version advances and the SHA-3 leaf
 adds cSHAKE over its existing hardened secret-state owner; all support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
+
+The initial exceptional v0.24.12 assessment found one Medium metadata-
+remanence gap in hardened cSHAKE. Its discriminator and setup-length fields now
+reside inside two new byte-backed regions of the registered FIPS 202 owner,
+are cleared at finalization and Drop, and are covered by thirteen-region source,
+mutation and compiler-artifact evidence. The remediation awaits exact-candidate
+retest; versions and publication selection remain unchanged.
 
 The optional adapter is a material production secret-storage boundary. Its
 exceptional v0.11.2 assessment passed with zero findings. The v0.12.0

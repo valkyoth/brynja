@@ -34,7 +34,7 @@ for mir in "${mir_files[@]}"; do
         active && /clear_owned_region/ { count += 1 }
         END { print count + 0 }
     ' "$mir")"
-    [[ "$wipe_calls" -eq 11 ]]
+    [[ "$wipe_calls" -eq 13 ]]
     temporary_sections="$(awk '
         /^fn read_word\(/ || /^fn write_word\(/ || /::squeeze_final_bits_secret\(/ { active = 1 }
         active { print }

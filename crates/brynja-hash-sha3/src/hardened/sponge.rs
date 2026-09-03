@@ -22,6 +22,11 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         read_counter(&self.output_length)
     }
 
+    pub(crate) fn cshake_message_bytes(&self) -> u128 {
+        self.message_bytes()
+            .saturating_sub(read_counter(&self.cshake_setup_length))
+    }
+
     pub(crate) fn check_message_bytes(&self, additional: u128) -> Result<(), ()> {
         self.message_bytes()
             .checked_add(additional)

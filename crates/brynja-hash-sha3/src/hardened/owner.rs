@@ -10,6 +10,8 @@ pub(crate) struct HardenedFips202Owner<const RATE: usize> {
     pub(crate) partial_input: [u8; MAX_RATE],
     pub(crate) message_length: [u8; 16],
     pub(crate) output_length: [u8; 16],
+    pub(crate) cshake_setup_length: [u8; 16],
+    pub(crate) cshake_domain: [u8; 1],
     pub(crate) phase: [u8; 3],
     pub(crate) suffix_staging: [u8; 4],
     pub(crate) padding_block: [u8; MAX_RATE],
@@ -26,6 +28,8 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
             partial_input: [0; MAX_RATE],
             message_length: [0; 16],
             output_length: [0; 16],
+            cshake_setup_length: [0; 16],
+            cshake_domain: [0; 1],
             phase: [ABSORBING, 0, 0],
             suffix_staging: [0; 4],
             padding_block: [0; MAX_RATE],
@@ -52,6 +56,21 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         self.phase[2] = u8::try_from(value).unwrap_or(0);
     }
 
+    pub(crate) fn remember_cshake_setup(&mut self, customized: bool) {
+        self.cshake_setup_length
+            .copy_from_slice(&self.message_length);
+        self.cshake_domain[0] = u8::from(customized);
+    }
+
+    pub(crate) fn cshake_is_customized(&self) -> bool {
+        self.cshake_domain[0] == 1
+    }
+
+    pub(crate) fn wipe_cshake_metadata(&mut self) {
+        let _ = clear_owned_region(&mut self.cshake_setup_length);
+        let _ = clear_owned_region(&mut self.cshake_domain);
+    }
+
     pub(crate) fn wipe_permutation_scratch(&mut self) {
         let _ = clear_owned_region(&mut self.permutation_columns);
         let _ = clear_owned_region(&mut self.permutation_theta);
@@ -70,6 +89,8 @@ impl<const RATE: usize> HardenedFips202Owner<RATE> {
         let _ = clear_owned_region(&mut self.partial_input);
         let _ = clear_owned_region(&mut self.message_length);
         let _ = clear_owned_region(&mut self.output_length);
+        let _ = clear_owned_region(&mut self.cshake_setup_length);
+        let _ = clear_owned_region(&mut self.cshake_domain);
         let _ = clear_owned_region(&mut self.phase);
         let _ = clear_owned_region(&mut self.suffix_staging);
         let _ = clear_owned_region(&mut self.padding_block);
@@ -97,6 +118,8 @@ pub(crate) mod assurance_contract {
         owner.partial_input.fill(0x5a);
         owner.message_length.fill(0x11);
         owner.output_length.fill(0x22);
+        owner.cshake_setup_length.fill(0x2a);
+        owner.cshake_domain.fill(0x2b);
         owner.phase.fill(0x33);
         owner.suffix_staging.fill(0x44);
         owner.padding_block.fill(0x55);
@@ -109,6 +132,8 @@ pub(crate) mod assurance_contract {
         assert!(owner.partial_input.iter().all(|byte| *byte == 0));
         assert!(owner.message_length.iter().all(|byte| *byte == 0));
         assert!(owner.output_length.iter().all(|byte| *byte == 0));
+        assert!(owner.cshake_setup_length.iter().all(|byte| *byte == 0));
+        assert!(owner.cshake_domain.iter().all(|byte| *byte == 0));
         assert!(owner.phase.iter().all(|byte| *byte == 0));
         assert!(owner.suffix_staging.iter().all(|byte| *byte == 0));
         assert!(owner.padding_block.iter().all(|byte| *byte == 0));
@@ -132,5 +157,19 @@ pub(crate) mod assurance_contract {
         assert_eq!(owner.check_output_bits(8), Err(()));
         assert_eq!(owner.message_length, message_before);
         assert_eq!(owner.output_length, output_before);
+    }
+
+    #[test]
+    fn cshake_metadata_is_owned_and_cleared_independently() {
+        let mut owner = HardenedFips202Owner::<136>::new();
+        owner.message_length[0] = 136;
+        owner.remember_cshake_setup(true);
+        assert!(owner.cshake_is_customized());
+        assert_eq!(owner.cshake_setup_length[0], 136);
+
+        owner.wipe_cshake_metadata();
+        assert!(!owner.cshake_is_customized());
+        assert!(owner.cshake_setup_length.iter().all(|byte| *byte == 0));
+        assert!(owner.cshake_domain.iter().all(|byte| *byte == 0));
     }
 }

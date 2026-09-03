@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE implementation awaits exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE remediation awaits exceptional retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -34,7 +34,7 @@ It now has correct portable byte-oriented and canonical arbitrary-bit implementa
 180-4 SHA-2 algorithms, including distinct hardened secret-bearing states,
 and ordinary plus distinct hardened byte-oriented and canonical arbitrary-bit
 implementations of all six FIPS 202 SHA-3/SHAKE identities, including
-arbitrary-bit SHAKE output. The hardened family owns and clears all eleven
+arbitrary-bit SHAKE output. The hardened family owns and clears all thirteen
 source-declared sponge, buffer, counter, lifecycle and permutation-scratch
 regions, requires explicit public declassification or typed secret output, and
 is portable-only. SHA-2 and SHA-3/SHAKE are Fully implemented after final
@@ -50,6 +50,14 @@ cryptographic algorithm beyond those fourteen named hash and XOF identities, X.5
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
+
+The initial v0.24.12 exceptional assessment reported one Medium remanence gap:
+the hardened cSHAKE wrapper retained its customization discriminator and setup
+length outside the registered clearing owner. The remediation removes those
+wrapper fields, stores both values in two new byte-backed owner regions, clears
+them at cSHAKE finalization and on every Drop path, and binds all thirteen
+regions into owner-shape, mutation and Rust 1.90.0/1.98.0 MIR/LLVM/assembly
+evidence. The exact remediation candidate awaits exceptional retest.
 
 The v0.24.11 closure runs the complete SHA-2 and SHA-3/SHAKE downstream
 fixtures together, covering all twelve named identities across ordinary byte,

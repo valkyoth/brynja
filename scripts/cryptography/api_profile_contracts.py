@@ -107,6 +107,8 @@ SHA3_OWNER_RECORD = {
         "partial_input:secret",
         "message_length:secret-derived",
         "output_length:secret-derived",
+        "cshake_setup_length:secret-derived",
+        "cshake_domain:secret-derived",
         "phase:secret-derived",
         "suffix_staging:secret-copy",
         "padding_block:secret-copy",
@@ -164,7 +166,7 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "drop(_1: &mut HardenedSha2Owner) -> () {"
     ],
     SHA3_DROP: [
-        "fn owner::<impl at crates/brynja-hash-sha3/src/hardened/owner.rs:83:1: 83:60>::"
+        "fn owner::<impl at crates/brynja-hash-sha3/src/hardened/owner.rs:104:1: 104:60>::"
         "drop(_1: &mut HardenedFips202Owner<RATE>) -> () {"
     ],
 }

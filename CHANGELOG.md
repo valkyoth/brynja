@@ -5,6 +5,13 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Fixed
+
+- Move hardened cSHAKE customization and setup-length metadata into two new
+  registered byte-backed owner regions, clear both at finalization and Drop,
+  and enforce the complete thirteen-region boundary through unit, mutation,
+  MIR, LLVM IR, assembly, Rust 1.90.0, and Rust 1.98.0 evidence.
+
 ### Added
 
 - Implement the complete v0.24.12 SP 800-185 encoding foundation and

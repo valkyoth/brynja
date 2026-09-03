@@ -1,6 +1,6 @@
 # Permanent Evidence Index
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.10 signed; v0.24.11 combined SHA-2 and SHA-3/SHAKE acceptance has a committed PASS/PASS report and awaits green GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE remediation awaits exceptional retest
 
 This index identifies durable review evidence. A generated artifact is valid
 only while its source, policy, checksum, generator, and verifier remain

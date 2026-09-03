@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "2e2f566d676d7b990606a99aa082f6f9dde6c0abf470acd559a26eecc6b3b328",
+  "policy_sha256": "645b3114378459eb4f20711dc20859369cfcc8ba7f179498c3db4552fac3cab3",
   "schema": 2,
   "source_ledger_sha256": "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df",
   "surfaces": [
@@ -139,6 +139,20 @@
       "owner": "0.25.0",
       "rationale": "HMAC-SHA-256 and HMAC-SHA-384 remain future first-party constant-time constructions.",
       "test_target": "tests/surface/primitives.rs#hmac"
+    },
+    {
+      "code_target": "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.kmac",
+      "kind": "semantic",
+      "normative_sources": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "owner": "0.24.13",
+      "rationale": "All four SP 800-185 KMAC and KMACXOF identities are implemented over the hardened cSHAKE owner with complete bit domains, strength-separated constructors, typed secret output, constant-time verification, and non-approved service status.",
+      "test_target": "scripts/kmac/check-kmac.py#main"
     },
     {
       "code_target": "crates/brynja-tls13-handshake/src/signature.rs",

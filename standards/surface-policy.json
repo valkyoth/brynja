@@ -931,6 +931,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED",
+        "disposition": "implemented",
+        "domain": "cryptography",
+        "owner": "0.24.13",
+        "rationale": "All four SP 800-185 KMAC and KMACXOF identities are implemented over the hardened cSHAKE owner with complete bit domains, strength-separated constructors, typed secret output, constant-time verification, and non-approved service status.",
+        "sources": ["nist:NIST.FIPS.202.pdf", "nist:NIST.SP.800-185.pdf"],
+        "test_target": "scripts/kmac/check-kmac.py#main"
+      },
+      "id": "algorithm.kmac"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-crypto/src/hmac.rs",
         "disposition": "future-work",
         "domain": "cryptography",

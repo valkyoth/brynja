@@ -529,11 +529,13 @@
       ],
       "affected_requirements": [
         "BRY-REQ-CRYPTO-0002",
-        "BRY-REQ-CRYPTO-0014"
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015"
       ],
       "affected_symbols": [
         "crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED",
-        "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185"
+        "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185",
+        "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED"
       ],
       "brynja_state": "current",
       "content_sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e",
@@ -648,10 +650,12 @@
         "0.24.17"
       ],
       "affected_requirements": [
-        "BRY-REQ-CRYPTO-0014"
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015"
       ],
       "affected_symbols": [
-        "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185"
+        "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185",
+        "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED"
       ],
       "brynja_state": "current",
       "content_sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5",

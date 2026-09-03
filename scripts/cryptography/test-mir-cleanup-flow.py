@@ -61,6 +61,15 @@ const owner::drop::{constant#0}: usize = {
     }
 }
 """)
+    accepts(plain_before("_5.0 = const 7_u8;") + """
+Owner::field::{constant#0}: usize = {
+    let mut _0: usize;
+    bb0: {
+        _0 = const 1_usize;
+        return;
+    }
+}
+""")
     accepts("""fn owner::drop(_1: &mut Owner) -> () {
     bb0: {
         _2 = unrelated_call() -> [return: bb1, unwind unreachable];

@@ -10,6 +10,7 @@ test "$#" -eq 1 || {
 scripts/checks.sh
 scripts/assurance/check-bare-metal.sh
 scripts/sha2/check-sha256-cpu-qemu.sh
+scripts/kmac/check-kmac-timing.sh
 scripts/standards/update-standards-snapshots.py --check
 python3 scripts/standards/check-authority-lifecycle.py --release
 authority_artifact_dir="$(

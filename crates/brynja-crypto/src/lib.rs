@@ -2,8 +2,8 @@
 //!
 //! All six complete portable FIPS 180-4 SHA-2 implementations and the complete
 //! six complete portable FIPS 202 SHA-3 and SHAKE implementations plus complete
-//! SP 800-185 encodings and cSHAKE128/cSHAKE256 are exposed from their small
-//! family crates. Provider effects, AEADs, KDFs, public-key
+//! SP 800-185 encodings, cSHAKE128/cSHAKE256, and all four KMAC/KMACXOF
+//! identities are exposed from their small family crates. Provider effects, AEADs, KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 
 #![no_std]
@@ -67,6 +67,9 @@ pub const FIPS202_HARDENED_STATE_IMPLEMENTED: bool = true;
 /// Whether SP 800-185 encodings and both cSHAKE strengths are implemented.
 pub const CSHAKE_IMPLEMENTED: bool = true;
 
+/// Whether all four SP 800-185 KMAC and KMACXOF identities are implemented.
+pub const KMAC_IMPLEMENTED: bool = true;
+
 pub use brynja_hash_sha2::{
     BitString, BitStringError, FixedOutput, HardenedSha2Error, HardenedSha2State, HardenedSha224,
     HardenedSha256, HardenedSha384, HardenedSha512, HardenedSha512_224, HardenedSha512_256,
@@ -91,6 +94,15 @@ pub use brynja_hash_sha3::{
     left_encode_u128, right_encode, right_encode_u128, sha3_224, sha3_224_bits, sha3_256,
     sha3_256_bits, sha3_384, sha3_384_bits, sha3_512, sha3_512_bits, shake128, shake128_bits,
     shake256, shake256_bits,
+};
+pub use brynja_mac_kmac::{
+    Kmac128, Kmac256, KmacError, KmacKeyPolicy, KmacPublicDeclassification, KmacSecretOutput,
+    KmacServiceStatus, KmacTag, KmacTagPolicy, KmacVerification, KmacXof128, KmacXof128Reader,
+    KmacXof256, KmacXof256Reader, kmac128, kmac128_bits, kmac128_bits_conformance,
+    kmac128_conformance, kmac256, kmac256_bits, kmac256_bits_conformance, kmac256_conformance,
+    kmacxof128_public, kmacxof128_public_conformance, kmacxof128_secret,
+    kmacxof128_secret_conformance, kmacxof256_public, kmacxof256_public_conformance,
+    kmacxof256_secret, kmacxof256_secret_conformance,
 };
 
 #[cfg(test)]
@@ -124,6 +136,7 @@ mod tests {
             super::FIPS202_HARDENED_STATE_IMPLEMENTED
         ));
         assert!(::core::hint::black_box(super::CSHAKE_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::KMAC_IMPLEMENTED));
         assert_eq!(
             super::sha224(b"abc"),
             Ok(super::Sha224Digest::from_bytes([

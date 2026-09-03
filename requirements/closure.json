@@ -924,7 +924,9 @@
     },
     {
       "boundary": null,
-      "requirement_ids": [],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0015"
+      ],
       "scope": "Implement KMAC128, KMAC256, KMACXOF128 and KMACXOF256 once in `brynja-mac-kmac` over the exact cSHAKE owner, covering the complete standards-valid key, message, customization and output domains through clearly separated conformance and strength-enforcing constructors, secret-owned sponge and encoding state, hardened cleanup, affine finalization, constant-time tag verification, official examples, misuse tests, proofs, and non-approved indicators without confusing a MAC, PRF, XOF, or unkeyed digest.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
@@ -7998,6 +8000,18 @@
     },
     {
       "decision_ids": [
+        "algorithm.kmac"
+      ],
+      "id": "BRY-REQ-CRYPTO-0015",
+      "lifecycle": "implemented",
+      "owner": "0.24.13",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ]
+    },
+    {
+      "decision_ids": [
         "protocol.certificate-transparency"
       ],
       "id": "BRY-REQ-CT-0001",
@@ -10573,7 +10587,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002",
-        "BRY-REQ-CRYPTO-0014"
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015"
       ],
       "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
     },
@@ -10622,7 +10637,8 @@
         "0.24.17"
       ],
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0014"
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015"
       ],
       "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
     },
@@ -13269,6 +13285,12 @@
       "id": "algorithm.hmac",
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0003"
+      ]
+    },
+    {
+      "id": "algorithm.kmac",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0015"
       ]
     },
     {

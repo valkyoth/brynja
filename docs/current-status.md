@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 cSHAKE has a committed PASS/PASS report and complete local verification, and awaits green GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.12 signed; v0.24.13 complete KMAC/KMACXOF implementation candidate awaits exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -38,15 +38,23 @@ arbitrary-bit SHAKE output. The hardened family owns and clears all thirteen
 source-declared sponge, buffer, counter, lifecycle and permutation-scratch
 regions, requires explicit public declassification or typed secret output, and
 is portable-only. SHA-2 and SHA-3/SHAKE are Fully implemented after final
-combined package-external acceptance at v0.24.11. The current v0.24.12 candidate additionally
+combined package-external acceptance at v0.24.11. Signed v0.24.12 additionally
 implements all four SP 800-185 encodings plus complete cSHAKE128 and cSHAKE256
 ordinary and hardened byte/arbitrary-bit, streaming, fixed-output and
-incremental-XOF APIs. The wider SP 800-185 family remains in progress until
-KMAC, TupleHash, ParallelHash and final combined acceptance complete. It also
+incremental-XOF APIs. The current v0.24.13 candidate adds complete KMAC128,
+KMAC256, KMACXOF128, and KMACXOF256 over the exact hardened cSHAKE owner.
+Strength-enforcing and conformance APIs, opaque tags, constant-time
+verification, arbitrary-bit domains, typed secret XOF output, complete
+internal cleanup, official examples, an independent oracle, package-external
+`no_std` use, and compiler evidence are implemented. All services remain
+non-approved; KMAC is not independently reviewed or FIPS 140-3 validated.
+The wider SP 800-185 family remains in progress until TupleHash, ParallelHash,
+and final combined acceptance complete. It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm beyond those fourteen named hash and XOF identities, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond those fourteen named hash and XOF identities
+and four KMAC identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.

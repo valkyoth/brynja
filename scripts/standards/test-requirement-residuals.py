@@ -129,8 +129,8 @@ def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 130
     assert len(artifact["plans"]) == 527
-    assert len(artifact["surfaces"]) == 4456
-    assert len(artifact["requirements"]) == 169
+    assert len(artifact["surfaces"]) == 4457
+    assert len(artifact["requirements"]) == 170
     assert len(artifact["local_rights"]) == 18
     assert len(artifact["mutable_authorities"]) == 15
     assert len(artifact["blockers"]) == 3

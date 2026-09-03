@@ -24,10 +24,23 @@ storage = "crate-owned-fixed"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 
+[[registered-secret-owner]]
+capability = "algorithm.kmac"
+id = "registered.algorithm.kmac"
+symbol = "crates/brynja-mac-kmac/src/core_state.rs#brynja_mac_kmac::core_state::KmacCore"
+fields = ["hardened-cshake-state:secret-derived", "message-length:secret-derived", "key-strength-class:secret-derived"]
+temporaries = ["encoded-key-pending-byte:secret-copy", "verification-block:secret-derived", "comparison-difference:secret-derived", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
+sanitization_symbol = "crates/brynja-mac-kmac/src/core_state.rs#brynja_mac_kmac::KmacCore::wipe"
+cleanup_callers = ["crates/brynja-mac-kmac/src/core_state.rs#brynja_mac_kmac::core_state::KmacCore::drop"]
+evidence = ["crates/brynja-mac-kmac/tests/api.rs", "crates/brynja-mac-kmac/tests/official_vectors.rs", "assurance/kmac-public-api/src/lib.rs", "scripts/kmac/check-kmac-codegen.sh", "scripts/kmac/check-kmac.py", "scripts/kmac/check-kmac-differential.py"]
+storage = "crate-owned-fixed"
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+
 [schema]
 version = 1
-milestone = "0.24.10"
-surface_register_sha256 = "87365f22e69583a7b28374869fa9aeaa4235d2d6043f092ab9c39954f3c8db7f"
+milestone = "0.24.13"
+surface_register_sha256 = "91bcbc33a62cc0b3e07e41f46219e8dcafbbcf53bde023c36f9219e8558155a0"
 
 [api]
 dimensions = [
@@ -542,7 +555,7 @@ ids = ["algorithm.sha3-shake"]
 
 [[assignment]]
 profile = "keyed-construction"
-ids = ["algorithm.ghash", "algorithm.hkdf", "algorithm.hmac", "algorithm.sp800-185"]
+ids = ["algorithm.ghash", "algorithm.hkdf", "algorithm.hmac", "algorithm.kmac", "algorithm.sp800-185"]
 
 [[assignment]]
 profile = "symmetric-cipher"
@@ -632,7 +645,7 @@ hosted-adapter = "0.24.10"
 [secret-owner-overrides]
 "algorithm.sha2" = "0.24.8"
 "algorithm.sha3-shake" = "0.24.10"
-"algorithm.sp800-185" = "0.24.13"
+"algorithm.kmac" = "0.24.13"
 
 [[current-secret-owner]]
 id = "core.secret-region-initialization"
@@ -795,6 +808,30 @@ path = "crates/brynja-hash-sha3/src/sp800185.rs"
 sha256 = "2d801bf0444967e62728846fcfa8180cd4cd6a683b348d0adba4f5a2e6f83074"
 
 [[reviewed-source]]
+path = "assurance/kmac-public-api/src/lib.rs"
+sha256 = "01c18b5dd45d3e90ed15450834adbadb9233a44b3f4a5b7696435bba5caff9b3"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/src/core_state.rs"
+sha256 = "b0940585ad90255e2e4b4b9908513b37767fbee159643063e56046e0caf947d1"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/src/output.rs"
+sha256 = "194598a94ca33aad9b0e885159268c70faf6412f9665ac7e2c9c5bbccad54b75"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/src/packer.rs"
+sha256 = "a6603bf967547957e2c6ed36f4e349187eaa6c7ce4e17f5682f43f3dab6fc4d2"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-kmac/tests/api.rs"
+sha256 = "fdb0f5e6eb5c2fe9ccc50a78d397051a935da39a7c458ca8ebf283c0452aef98"
+
+[[reviewed-source]]
+path = "scripts/kmac/check-kmac-codegen.sh"
+sha256 = "93af6bd118eb73f8c1a8542a02861cfeb64f21af79760dac5a83128676675058"
+
+[[reviewed-source]]
 path = "assurance/api-profile-contract/src/lib.rs"
 sha256 = "b7c5fce7a94ea2440953649c67f0a30446f9259630888d5e8581bb44cd187e80"
 
@@ -804,11 +841,11 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "96b9c38573a040ea28f60ee26dfd5c3287e3817648ff0600a81ae7836f6bcfac"
+sha256 = "50ff797fee5c8b5ee86e4d7b0196ff22d0263b24f68f3dc20ffa41b3b535fd6f"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "fd879d07258ccb1aea86c595f8b4d6a8b8792bc3a735c0a4cff923d749d89ebc"
+sha256 = "7c36a4809720bc0f4ea0ca3a1abd10215c0661252c68399eb9141882c9830755"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -816,7 +853,7 @@ sha256 = "fc40e760ce5d352ca9c1d3567b17805d537d1d082da926925963829eef3bc2a5"
 
 [[reviewed-source]]
 path = "scripts/cryptography/mir_cleanup_flow.py"
-sha256 = "4e6f823d5f0999d0c20781b3253229f2c32318d1ad9e8806d6913ed1de72214d"
+sha256 = "9b56316d6bf2a02c85cb4bcd75c2fab00a2442b49332bda1852f6d91012a2dc4"
 
 [[reviewed-source]]
 path = "scripts/cryptography/rust_source_contract.py"
@@ -828,11 +865,11 @@ sha256 = "da92c413a5447298456f4981d62049484c83a78794fa5921c2901806c64338f7"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "9b9dcc2a6380ba6592e9016303860ab05297276a13196afad8e95933119f7985"
+sha256 = "7f5c2922f4da306f52514691d306150bf274e40eb1ec4b9c2aafca83290cbefe"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"
-sha256 = "f0f3897a0582b32bf1fa84d477381df4ae5073a32a24bcbed04d67c1521ef5df"
+sha256 = "6de66954611072ac70b03542246a5de5a39587f994525a5000297fb7a06c290c"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-secret-owner-compiler.py"

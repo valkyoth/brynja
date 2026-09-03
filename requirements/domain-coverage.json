@@ -143,7 +143,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002",
-        "BRY-REQ-CRYPTO-0014"
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015"
       ],
       "role": "sha3-shake",
       "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
@@ -187,7 +188,8 @@
         "0.24.17"
       ],
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0014"
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015"
       ],
       "role": "sha3-derived",
       "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
@@ -5585,10 +5587,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "a5e18fe53645f5aed18ab4e6fa78ebef15969c99f0289e8a32affa3c1cce998f",
-  "requirement_count": 35,
+  "policy_sha256": "9f29ec1f24c4357201e8e2603e8772ca4dc29f6c93f3b93dcca72ad154a245d5",
+  "requirement_count": 36,
   "schema": 1,
-  "surface_count": 3327,
+  "surface_count": 3328,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5661,6 +5663,14 @@
       "id": "algorithm.hmac",
       "owner": "0.25.0",
       "requirement_id": "BRY-REQ-CRYPTO-0003"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.kmac",
+      "owner": "0.24.13",
+      "requirement_id": "BRY-REQ-CRYPTO-0015"
     },
     {
       "coverage": "deferred",

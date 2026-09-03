@@ -15,6 +15,19 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement complete KMAC128, KMAC256, KMACXOF128, and KMACXOF256 in the new
+  allocation-free `no_std` `brynja-mac-kmac` leaf. The public surface separates
+  exact standards conformance from strength-enforcing production policy,
+  exposes opaque fixed tags with constant-time verification, treats XOF output
+  as typed secret unless explicitly declassified, and supports canonical
+  arbitrary-bit inputs and output.
+- Bind all twelve official NIST KMAC/KMACXOF examples, a separately composed
+  256-case arbitrary-bit oracle, malformed assurance input, package-external
+  bare-metal use, source-policy mutations, twenty-two cumulative Kani bounds,
+  Miri, AddressSanitizer, timing checks, and Rust 1.90.0/1.98.0 cleanup
+  evidence to the exact keyed construction. KMAC is fully implemented but not
+  independently verified or FIPS 140-3 validated; the complete SP 800-185
+  family remains in progress.
 - Implement the complete v0.24.12 SP 800-185 encoding foundation and
   cSHAKE128/cSHAKE256 ordinary and hardened APIs. Byte and canonical
   arbitrary-bit N, S, message and output domains, exact empty-N/S SHAKE

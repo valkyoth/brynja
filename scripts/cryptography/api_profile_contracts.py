@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canonical v0.24.10 owner identities and operation-flow contracts."""
+"""Canonical v0.24.13 owner identities and operation-flow contracts."""
 
 CURRENT_OWNER_SYMBOLS = {
     "adapter.sanitized-secret": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret",
@@ -138,11 +138,51 @@ SHA3_OWNER_RECORD = {
     "partial_failure_policy": "clear-complete-secret-destination",
 }
 
+KMAC_OWNER = (
+    "crates/brynja-mac-kmac/src/core_state.rs#"
+    "brynja_mac_kmac::core_state::KmacCore"
+)
+KMAC_DROP = f"{KMAC_OWNER}::drop"
+KMAC_WIPE = (
+    "crates/brynja-mac-kmac/src/core_state.rs#"
+    "brynja_mac_kmac::KmacCore::wipe"
+)
+KMAC_OWNER_RECORD = {
+    "capability": "algorithm.kmac",
+    "symbol": KMAC_OWNER,
+    "fields": [
+        "hardened-cshake-state:secret-derived",
+        "message-length:secret-derived",
+        "key-strength-class:secret-derived",
+    ],
+    "temporaries": [
+        "encoded-key-pending-byte:secret-copy",
+        "verification-block:secret-derived",
+        "comparison-difference:secret-derived",
+        "borrowed-input:caller-owned-copy-risk",
+        "typed-output:caller-owned",
+    ],
+    "sanitization_symbol": KMAC_WIPE,
+    "cleanup_callers": [KMAC_DROP],
+    "evidence": [
+        "crates/brynja-mac-kmac/tests/api.rs",
+        "crates/brynja-mac-kmac/tests/official_vectors.rs",
+        "assurance/kmac-public-api/src/lib.rs",
+        "scripts/kmac/check-kmac-codegen.sh",
+        "scripts/kmac/check-kmac.py",
+        "scripts/kmac/check-kmac-differential.py",
+    ],
+    "storage": "crate-owned-fixed",
+    "output_classification": "typed-secret-owned",
+    "partial_failure_policy": "clear-complete-secret-destination",
+}
+
 # Registration cannot define its own proof. Separate maps bind its compiler
 # test, exact caller identity, and resolved sanitizer target.
 REGISTERED_OWNER_CONTRACTS = {
     "registered.algorithm.sha2": {"record": SHA2_OWNER_RECORD},
     "registered.algorithm.sha3-shake": {"record": SHA3_OWNER_RECORD},
+    "registered.algorithm.kmac": {"record": KMAC_OWNER_RECORD},
 }
 REGISTERED_OWNER_COMPILER_TESTS = {
     SHA2_OWNER: {
@@ -159,6 +199,13 @@ REGISTERED_OWNER_COMPILER_TESTS = {
             "registered_algorithm_sha3_shake_owner_contract_is_compiler_checked"
         ),
     },
+    KMAC_OWNER: {
+        "package": "brynja-mac-kmac",
+        "contract_test": (
+            "core_state::assurance_contract::"
+            "registered_algorithm_kmac_owner_contract_is_compiler_checked"
+        ),
+    },
 }
 REGISTERED_CALLER_MIR_HEADERS = {
     SHA2_DROP: [
@@ -169,10 +216,15 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "fn owner::<impl at crates/brynja-hash-sha3/src/hardened/owner.rs:104:1: 104:60>::"
         "drop(_1: &mut HardenedFips202Owner<RATE>) -> () {"
     ],
+    KMAC_DROP: [
+        "fn core_state::<impl at crates/brynja-mac-kmac/src/core_state.rs:117:1: 117:86>::"
+        "drop(_1: &mut KmacCore<S, RATE, STRENGTH>) -> () {"
+    ],
 }
 REGISTERED_SANITIZER_MIR_IDENTITIES = {
     SHA2_WIPE: "HardenedSha2Owner::wipe(",
     SHA3_WIPE: "HardenedFips202Owner::<RATE>::wipe(",
+    KMAC_WIPE: "KmacCore::<S, RATE, STRENGTH>::wipe(",
 }
 
 OPERATION_CONTRACTS = {
@@ -289,6 +341,12 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-hash-sha3/tests/hardened.rs",
     "crates/brynja-hash-sha3/tests/cshake.rs",
     "assurance/cshake-public-api/src/lib.rs",
+    "assurance/kmac-public-api/src/lib.rs",
+    "crates/brynja-mac-kmac/src/core_state.rs",
+    "crates/brynja-mac-kmac/src/output.rs",
+    "crates/brynja-mac-kmac/src/packer.rs",
+    "crates/brynja-mac-kmac/tests/api.rs",
+    "scripts/kmac/check-kmac-codegen.sh",
     "crates/brynja-sanitization/src/lib.rs",
     "crates/brynja-sanitization/src/assurance_contract.rs",
     "crates/brynja-test-support/src/deterministic_random.rs",

@@ -69,6 +69,12 @@ scripts/sha3/check-sha3-hardened-codegen.sh
 scripts/sha3/check-sha3-cpu-codegen.sh
 cargo clippy --locked --manifest-path assurance/sha3-public-api/Cargo.toml \
   --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
+python3 scripts/kmac/check-kmac.py
+python3 scripts/kmac/test-kmac.py
+python3 scripts/kmac/check-kmac-differential.py
+scripts/kmac/check-kmac-codegen.sh
+cargo test --locked --manifest-path assurance/kmac-public-api/Cargo.toml
+cargo clippy --locked --manifest-path assurance/kmac-public-api/Cargo.toml --all-targets -- -D warnings
 python3 scripts/hash/check-final-acceptance.py
 python3 scripts/hash/test-final-acceptance.py
 scripts/sha2/check-sha256-cpu-codegen.sh

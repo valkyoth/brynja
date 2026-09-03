@@ -19,7 +19,7 @@ def fail(message: str) -> None:
 
 
 def function_sections(mir: str) -> list[str]:
-    items = list(re.finditer(r"(?m)^(?:fn |const |static )", mir))
+    items = list(re.finditer(r"(?m)^(?:fn |const |static |\S.*::\{constant#\d+\}:)", mir))
     sections = []
     for index, item in enumerate(items):
         if not mir.startswith("fn ", item.start()):

@@ -109,7 +109,15 @@ def main() -> int:
     reject("SHA-3 Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "sha3_384 sha3_512", "sha3_384"))
     reject("SHAKE Miri test inventory", lambda root: replace(root, policy.MIRI_SCRIPT, "shake128 shake256", "shake128"))
     reject("SHA-3 sanitizer package", lambda root: replace(root, policy.SANITIZER_SCRIPT, "-p brynja-hash-sha3", "-p brynja-hash-sha2"))
-    reject("SHA-3 sanitizer test targets", lambda root: replace(root, policy.SANITIZER_SCRIPT, "--tests", "--lib"))
+    reject(
+        "SHA-3 sanitizer test targets",
+        lambda root: replace(
+            root,
+            policy.SANITIZER_SCRIPT,
+            "-p brynja-hash-sha3 \\\n    --tests",
+            "-p brynja-hash-sha3 \\\n    --lib",
+        ),
+    )
     reject("XOF campaign maximum", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "MAX_XOF_OUTPUT_BYTES: usize = 343", "MAX_XOF_OUTPUT_BYTES: usize = usize::MAX"))
     reject("XOF campaign comparison", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, "length > MAX_XOF_OUTPUT_BYTES", "length == MAX_XOF_OUTPUT_BYTES"))
     reject("XOF fallible allocation", lambda root: replace(root, policy.DIFFERENTIAL_FIXTURE, ".try_reserve_exact(length)", ".reserve_exact(length)"))

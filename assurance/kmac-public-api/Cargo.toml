@@ -1,0 +1,15 @@
+[package]
+name = "brynja-kmac-public-api-fixture"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+brynja = { path = "../../crates/brynja" }
+brynja-crypto = { path = "../../crates/brynja-crypto" }
+brynja-mac-kmac = { path = "../../crates/brynja-mac-kmac" }
+
+[workspace]
+
+[lints.rust]
+unsafe_code = "deny"

@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 cSHAKE has a committed PASS/PASS report and complete local verification, and awaits green GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.12 signed; v0.24.13 complete KMAC/KMACXOF implementation candidate awaits exceptional pentest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.12`. `brynja-hash-core 0.1.0`,
+advances to internal `0.24.13`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
 interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
 algorithms, and unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented
@@ -11,18 +11,20 @@ and canonical arbitrary-bit ordinary and hardened implementations of all six
 FIPS 202 functions, including arbitrary-bit SHAKE output. Final combined
 acceptance completed at v0.24.11. The same leaf now contains complete
 SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary and hardened byte and
-arbitrary-bit APIs; the wider derived family remains in progress. Published
+arbitrary-bit APIs. New unpublished `brynja-mac-kmac 0.1.0` contains complete
+KMAC128/KMAC256 and KMACXOF128/KMACXOF256 byte and arbitrary-bit APIs over the
+hardened cSHAKE owner; the wider derived family remains in progress. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
 the separate opt-in x86/AArch64 host detector and runtime selection API while
 RISC-V automatic detection remains disabled. Supporting manifest
 versions remain unchanged until the v0.25.0 public checkpoint. The new
-repository-only API-profile register closes 129 semantic capabilities across
-22 dimensions and inventories eight current, two registered capability, plus
+repository-only API-profile register closes 130 semantic capabilities across
+22 dimensions and inventories eight current, three registered capability, plus
 73 planned secret owners with exact per-operation information-flow contracts,
 compiler-checked current-owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.0. The facade version advances and the SHA-3 leaf
-adds cSHAKE over its existing hardened secret-state owner; all support-package versions remain
+under Rust 1.90.0 and 1.98.0. The facade version advances and the KMAC leaf
+builds over the existing hardened cSHAKE owner; all support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
 
@@ -277,12 +279,13 @@ FIPS validation remain later work. Zero crates are selected for publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.24.12` | no | Internal complete cSHAKE milestone; all four SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary, hardened and arbitrary-bit profiles are implemented, the wider family remains in progress, and v0.20.0 remains published |
+| `brynja` | `0.24.13` | no | Internal complete KMAC milestone; all four KMAC/KMACXOF byte, arbitrary-bit, hardened-output, and typed-verification profiles are implemented, the wider SP 800-185 family remains in progress, and v0.20.0 remains published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output/XOF interfaces and canonical borrowed bit strings |
 | `brynja-hash-sha2` | `0.1.0` | no | Unpublished fully implemented six-algorithm FIPS 180-4 ordinary and hardened byte/arbitrary-bit APIs, forced ordinary candidate routes, compiler-resistant cleanup evidence, and combined package-external acceptance |
 | `brynja-hash-sha3` | `0.1.0` | no | Unpublished fully implemented FIPS 202 family plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary/hardened byte/arbitrary-bit APIs; wider SP 800-185 acceptance remains pending |
-| `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE and SP 800-185 encodings |
+| `brynja-mac-kmac` | `0.1.0` | no | New unpublished complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 leaf with exact conformance and strength policy, secret-owned state, constant-time verification, and typed output |
+| `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE, SP 800-185 encodings, and all four KMAC/KMACXOF constructions |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |

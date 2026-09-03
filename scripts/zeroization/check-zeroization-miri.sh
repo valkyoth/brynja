@@ -122,3 +122,9 @@ CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
     --test sha512_256 \
     every_padding_boundary_matches_independent_expected_results \
     --target x86_64-unknown-linux-gnu
+
+CARGO_HOME="$miri_cache/cargo" XDG_CACHE_HOME="$miri_cache" \
+    cargo +nightly-2026-09-03 miri test \
+    -p brynja-mac-kmac \
+    --tests \
+    --target x86_64-unknown-linux-gnu

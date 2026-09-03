@@ -3291,7 +3291,7 @@ Exit criteria:
 
 ### v0.24.13 - Complete KMAC And KMACXOF
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement KMAC128, KMAC256, KMACXOF128 and KMACXOF256 once in `brynja-mac-kmac` over the exact cSHAKE owner, covering the complete standards-valid key, message, customization and output domains through clearly separated conformance and strength-enforcing constructors, secret-owned sponge and encoding state, hardened cleanup, affine finalization, constant-time tag verification, official examples, misuse tests, proofs, and non-approved indicators without confusing a MAC, PRF, XOF, or unkeyed digest.
 

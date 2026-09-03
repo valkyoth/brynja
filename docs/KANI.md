@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.24.10 SHA-2 and FIPS 202 bounded harnesses admitted
+Status: v0.24.13 SHA-2, FIPS 202, and KMAC policy harnesses admitted
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented
@@ -20,7 +20,9 @@ compatible pairing, following the same model as `base64-ng`.
   SHA-3/SHAKE harnesses plus two hardened-owner harnesses cover exact byte and quotient/remainder bit-counter
   exhaustion, canonical FIPS 202 bit shapes and low-bit masks, plus every
   byte-to-lane mapping in the Keccak-f[1600] state and the hardened final-bit
-  output partition and mask bounds.
+  output partition and mask bounds; two SP 800-185 harnesses cover complete
+  length-encoding bounds, and two KMAC harnesses cover exact strength
+  classification and fixed-tag bit-length acceptance.
 
 Updating Brynja's active stable compiler does not imply that the installed Kani
 release supports that compiler. Kani evidence records its verifier/compiler
@@ -28,7 +30,7 @@ pair separately from the crate build matrix. The crate MSRV is never lowered
 or the release compiler held back merely to accommodate Kani.
 
 `scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
-the exact eighteen-harness inventory, and all proof results when the verifier is available.
+the exact twenty-two-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
 
 The SHA-2 harnesses prove only their stated checked byte/bit-length,

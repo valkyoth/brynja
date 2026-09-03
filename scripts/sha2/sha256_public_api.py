@@ -44,7 +44,7 @@ FILES = (
 )
 EXPECTED_SHA256 = {
     MANIFEST: "e5324f6ad25053620f470217e0332aa6dc2955384cd5e5d157599efe5658e247",
-    LOCK: "f1b579a87a55eae8c46691a4c2baadd71542d94e47e88d6915fe3cfcbee35a1f",
+    LOCK: "ee4c7d1852b05fdd661f7c9acb82795c5458d33a5a6ed5d0ba3fdec162d6ef39",
     LIB: "096ef101b31b38ededc2aeda9e3b0546757f57fc2875419f920876ce883f64ff",
     MAIN: "5147536fd2bdc395ceed7fb023c9a06971347a8d531c66c0cfde7b78fc878522",
     CONTENT: "a8f34a54459e9655229bb554c15ebb87f89a0bfbc600da8eb56999422fc0487f",
@@ -52,7 +52,7 @@ EXPECTED_SHA256 = {
     SHA256_TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
     CHECK_SCRIPT: "d424a02dcfc778f83ccf8004fc23c9456bd71a759ece3235bdb56f1f0f02ad9d",
     TEST_SCRIPT: "10155923e8769cd405c2e9eaa813c02b50f665daacadfc2da3a90f9dc7f9ab7f",
-    CHECKS: "ac94a8c68f5f2ed575ed9c4a35e868c6732581f0721bd6d20a1ce97b09b1aec5",
+    CHECKS: "118265c102bffff3c135a98596b32c642141cd502cb7dfe6acff50b05d4e98df",
     RUST_MATRIX: "b4eec4d2cd7a8cfbe6aed74a1b1f6f9a5ec0770d30d41ea8a0bfebb8c8bbb447",
     BARE_METAL: "197604f0e6c98bd91fdcfed06263062f19a57af71a6bd974fdc1633d191c0074",
     WORKFLOW: "6b0384a9d7d48788a398c962789e550424dcc3b988690dfb63bef0224d378836",
@@ -99,6 +99,15 @@ PACKAGES = (
             "src/shake128.rs",
             "src/shake256.rs",
             "src/sponge.rs",
+        ),
+    ),
+    (
+        "brynja-mac-kmac",
+        "0.1.0",
+        (
+            "src/lib.rs", "src/backend.rs", "src/core_state.rs", "src/error.rs",
+            "src/fixed.rs", "src/output.rs", "src/packer.rs", "src/policy.rs",
+            "src/verify.rs", "src/xof.rs",
         ),
     ),
     ("brynja-crypto", "0.1.2", ("src/lib.rs",)),
@@ -326,6 +335,7 @@ brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.2" }
 brynja-hash-core = { path = "crates/brynja-hash-core", version = "=0.1.0" }
 brynja-hash-sha2 = { path = "crates/brynja-hash-sha2", version = "=0.1.0" }
 brynja-hash-sha3 = { path = "crates/brynja-hash-sha3", version = "=0.1.0" }
+brynja-mac-kmac = { path = "crates/brynja-mac-kmac", version = "=0.1.0" }
 brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }
 """
     (workspace / "Cargo.toml").write_text(manifest, encoding="utf-8")

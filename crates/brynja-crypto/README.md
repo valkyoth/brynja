@@ -39,7 +39,8 @@ SHA-2 byte and canonical arbitrary-bit implementations from
 six complete portable FIPS 202 SHA-3 and SHAKE ordinary and hardened byte and
 arbitrary-bit message functions and arbitrary-bit SHAKE output from
 `brynja-hash-sha3`. The same leaf now supplies complete SP 800-185 encodings
-and cSHAKE128/cSHAKE256 ordinary and hardened APIs. Its broader provider effects, AEADs,
+and cSHAKE128/cSHAKE256 ordinary and hardened APIs, plus complete KMAC128,
+KMAC256, KMACXOF128, and KMACXOF256 APIs from `brynja-mac-kmac`. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 
@@ -55,7 +56,8 @@ verification.
 | --- | --- | --- |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
-All six SHA-2 algorithms plus all six FIPS 202 functions are usable through
+All six SHA-2 algorithms, all six FIPS 202 functions, both cSHAKE strengths,
+and all four KMAC/KMACXOF constructions are usable through
 this component; the remaining planned composition layer is not implemented
 yet. Ordinary unkeyed hash and XOF states do not guarantee erasure of secret-
 input remnants or private internal state. SHA-2 and SHA-3/SHAKE secret-bearing
@@ -81,6 +83,10 @@ brynja_crypto::shake128(b"abc", &mut shake128).unwrap();
 brynja_crypto::shake256(b"abc", &mut shake256).unwrap();
 let mut cshake128 = [0_u8; 32];
 brynja_crypto::cshake128(&[0, 1, 2, 3], b"", b"Email Signature", &mut cshake128).unwrap();
+let key = [0x42_u8; 32];
+let mut tag_bytes = [0_u8; 32];
+let tag = brynja_crypto::kmac128(&key, b"message", b"application", &mut tag_bytes).unwrap();
+assert!(tag.verify_candidate(tag.as_bytes()).expose_public());
 assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 assert_eq!(digest.as_bytes().len(), 32);

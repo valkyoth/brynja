@@ -30,6 +30,10 @@ purpose = "Provider and security-foundation contract policies and tests"
 extensions = [".py", ".sh", ".toml"]
 purpose = "Cross-family hash final acceptance and closure policy"
 
+[category.kmac]
+extensions = [".py", ".sh"]
+purpose = "KMAC and KMACXOF implementation, package acceptance, and differential evidence"
+
 [category.pki]
 extensions = [".py"]
 purpose = "DER and canonical ASN.1 policy and tests"

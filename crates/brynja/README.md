@@ -30,22 +30,11 @@ workspace. It is allocation-independent `no_std` Rust without a C cryptographic 
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable FIPS 180-4 SHA-2 algorithms,
 > all six portable FIPS 202 SHA-3 and SHAKE functions, complete cSHAKE128 and
-> cSHAKE256, and bounded record and DER/ASN.1 framing—but no TLS connection,
+> cSHAKE256, complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256, and bounded
+> record and DER/ASN.1 framing—but no TLS connection,
 > certificate validator, or working protocol engine.
 
 All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged and combined downstream `no_std` acceptance through the leaf and facade. Both families accept canonical arbitrary-bit messages, and SHAKE supports arbitrary-bit output. Distinct hardened states clear all source-declared Brynja-owned regions and classify output explicitly as public or typed secret. Both exact families are fully implemented; that is not independent review or FIPS validation.
-
-## Design Boundaries
-
-| Boundary | Current rule |
-| --- | --- |
-| Runtime | `no_std`; no allocator, operating system, socket, filesystem, or runtime detector is assumed |
-| Cryptography | First-party Rust implementations; foreign C cryptographic modules and wrappers are forbidden |
-| Dependencies | No third-party dependency in the main facade graph; narrowly admitted adapters remain separate |
-| Unsafe Rust | Forbidden except for individually reviewed, hash-locked boundaries |
-| Legacy protocols | Isolated in explicit `brynja-legacy-*` packages and unreachable from this facade |
-| Portability | Rust 1.90.0 through 1.98.0; Linux, Windows, BSD, macOS, Android, iOS, and bare-metal-aware design |
-| Production readiness | Not claimed before the independently reviewed `1.0.0` candidate |
 
 ## Add The Crate
 
@@ -100,30 +89,11 @@ assert_eq!(digest.as_bytes().len(), 32);
 let mut shake128 = [0_u8; 32];
 brynja::crypto::shake128(b"abc", &mut shake128).unwrap();
 
-let bits = brynja::crypto::Fips202BitString::new(&[0b0001_0011], 5).unwrap();
-let bit_digest = brynja::crypto::sha3_256_bits(bits).unwrap();
-assert_eq!(bit_digest.as_bytes().len(), 32);
-
-let mut partial_xof = [0xff_u8; 13];
-let destination = brynja::crypto::Fips202Output::new(&mut partial_xof, 4).unwrap();
-brynja::crypto::shake128_bits(bits, destination).unwrap();
-assert_eq!(partial_xof[12] & 0xf0, 0);
 ```
 
-These are FIPS 202 SHA-3 functions, not raw Keccak. Their ordinary unkeyed states make no secret-remanence cleanup claim. Secret-derived uses select the distinct hardened states and explicit output classification:
-
-```rust
-use brynja::crypto::{HardenedSha3_256, Sha3PublicDeclassification};
-
-let mut state = HardenedSha3_256::new();
-state.update(b"secret-derived input").unwrap();
-let mut digest = [0_u8; 32];
-state
-    .finalize_public(&mut digest, Sha3PublicDeclassification::acknowledge())
-    .unwrap();
-```
-
-Use `finalize_secret` or `squeeze_secret` when output remains secret. Their typed owners clear the complete destination on Drop. Combined family acceptance passed at v0.24.11.
+These are FIPS 202 SHA-3 functions, not raw Keccak. Ordinary states are for
+public inputs. Secret-derived use selects hardened states and explicit public
+or typed-secret output; secret owners clear complete destinations on `Drop`.
 
 ### Compute Customized SHAKE
 
@@ -134,6 +104,29 @@ assert_eq!(&output[..4], &[0xc1, 0xc3, 0x69, 0x25]);
 ```
 
 Empty N/S is exactly SHAKE. Ordinary cSHAKE is public-data-only; hardened cSHAKE owners clear secret-bearing internal state.
+
+### Authenticate Or Derive With KMAC
+
+```rust
+use brynja::crypto::{Kmac128, KmacPublicDeclassification, KmacXof256};
+
+let key = [0x42_u8; 32];
+let mut mac = Kmac128::new(&key, b"example protocol").unwrap();
+mac.update(b"authenticated message").unwrap();
+let mut tag_bytes = [0_u8; 32];
+let tag = mac.finalize_tag(&mut tag_bytes).unwrap();
+assert!(tag.verify_candidate(tag.as_bytes()).expose_public());
+
+let mut reader = KmacXof256::new(&key, b"example PRF").unwrap().finalize_xof().unwrap();
+let mut derived = [0_u8; 64];
+reader
+    .squeeze_public(&mut derived, KmacPublicDeclassification::acknowledge())
+    .unwrap();
+```
+
+Production constructors require full-strength keys and fixed tags. Explicit
+conformance constructors retain all standards-valid inputs but report weak
+parameters as non-approved. Brynja has no FIPS validation.
 
 ## Cryptography Verification Status
 
@@ -149,7 +142,16 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
-| SP 800-185 family | 🚧 In progress — encodings and cSHAKE complete; KMAC, TupleHash, and ParallelHash pending | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |
+| SP 800-185 family | 🚧 In progress — encodings, cSHAKE, and KMAC complete; TupleHash and ParallelHash pending | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |
+
+### Modern Message Authentication
+
+The complete KMAC/KMACXOF family here comprises KMAC128, KMAC256,
+KMACXOF128, and KMACXOF256.
+
+| Construction family | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| KMAC/KMACXOF | ✅ Fully implemented | `brynja-mac-kmac` | ❌ Not independently verified |
 
 ### Legacy Hash Functions
 
@@ -182,14 +184,13 @@ FIPS validation is a separate official claim from implementation and independent
 
 ## Workspace
 
-Depend directly on a leaf crate when the complete facade is unnecessary.
-
 | Package | Purpose |
 | --- | --- |
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-sha2` | All six fully implemented FIPS 180-4 ordinary and hardened byte and arbitrary-bit APIs |
 | `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output |
+| `brynja-mac-kmac` | Complete hardened KMAC128/256 and KMACXOF128/256 APIs |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

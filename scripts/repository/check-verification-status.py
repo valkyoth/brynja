@@ -11,13 +11,16 @@ from pathlib import Path
 HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
-    "| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |",
-    "| SHA-3/SHAKE (all six FIPS 202 identities have complete ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output; final combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |",
-    "| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |",
-    "| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |",
-    "| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |",
-    "| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | ❌ Not independently verified |",
-    "| FIPS 140-3 cryptographic module | ❌ Not implemented | ❌ Not FIPS validated |",
+    "| SHA-2 | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha2` | ❌ Not independently verified |",
+    "| SHA-3/SHAKE | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha3` | ❌ Not independently verified |",
+    "| SP 800-185 family | 🗓 Planned — v0.24.12–v0.24.17 | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |",
+    "| SHA-1 | 🗓 Planned — v0.24.18–v0.24.23 | `brynja-legacy-sha1` | ❌ Not independently verified |",
+    "| MD5 | 🗓 Planned — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |",
+    "| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | `brynja-protocol` | ❌ Not independently verified |",
+    "| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | `brynja-pki` | ❌ Not independently verified |",
+    "| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | `brynja-core` | ❌ Not independently verified |",
+    "| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | `brynja-core`, `brynja-sanitization` | ❌ Not independently verified |",
+    "| FIPS 140-3 cryptographic module | ❌ Not implemented | Future `brynja-fips-module`, `brynja-fips` | ❌ Not FIPS validated |",
 )
 COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
 COMPONENT_ROWS = (
@@ -38,6 +41,7 @@ COMPONENT_ROWS = (
     "| Future `brynja-openpgp-core` / `brynja-openpgp-armor` / `brynja-openpgp` | RFC 9580 packet, armor, certificate, key, signature, encryption, compression, and message processing | ❌ Not implemented or verified |",
     "| Future `brynja-openpgp-legacy` | Explicitly isolated deprecated OpenPGP read, decrypt, or verify compatibility | ❌ Not implemented or verified |",
     "| Future `brynja-legacy-sha1` | Complete isolated SHA-1 implementation for explicit legacy compatibility | ❌ Not implemented or verified |",
+    "| Future `brynja-legacy-md5` | Complete isolated MD5 implementation for explicit legacy compatibility | ❌ Not implemented or verified |",
     "| `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |",
     "| `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |",
     "| `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |",
@@ -95,8 +99,8 @@ def validate_checkmarks(section: str) -> None:
         if not line.startswith("|") or "✅" not in line:
             continue
         cells = [cell.strip() for cell in line.strip("|").split("|")]
-        if len(cells) != 3:
-            raise VerificationStatusError("status tables must have three columns")
+        if len(cells) not in (3, 4):
+            raise VerificationStatusError("status tables must have three or four columns")
         if "✅" in cells[0]:
             raise VerificationStatusError("✅ is forbidden in the capability name")
         if "✅" in cells[1] and cells[1] not in (
@@ -106,7 +110,9 @@ def validate_checkmarks(section: str) -> None:
             raise VerificationStatusError(
                 "implemented ✅ must be exactly: ✅ Implemented or ✅ Fully implemented"
             )
-        if "✅" in cells[2] and not VERIFIED.fullmatch(cells[2]):
+        if len(cells) == 4 and "✅" in cells[2]:
+            raise VerificationStatusError("✅ is forbidden in the owning-crate column")
+        if "✅" in cells[-1] and not VERIFIED.fullmatch(cells[-1]):
             raise VerificationStatusError(
                 "✅ requires a named independent reviewer and linked evidence"
             )

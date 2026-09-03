@@ -74,7 +74,7 @@ EXPECTED_SHA256 = {
     DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
     FACADE_LIB: "a3bb376edca778b1afc72d0d4a58d3b2024d2c2d8fc1c9b34b95aa9cd95018a9",
     LEAF_README: "1ebed7863a3e9638e2bc639ef171d573e9c2ab9e72fcef1aa1c8d052a5f4a029",
-    FACADE_README: "38f8028da71db04c2807a92f35ccb3707f6d84313a7c643851063760fc7dd660",
+    FACADE_README: "83396b2c922f7bbd1b2a77f5f494245f674ccd2b841a8020d63bccae086cdd13",
     CHECK_SCRIPT: "08a8b7baae515ba1bb945e14b1a2022a5023b2de02aab94c8d80e67775433b1c",
     TEST_SCRIPT: "152605f88d141968ae005fc6850abc25ecd2f6b8896bbfafc219bbd75cd4a7bd",
     CHECKS: "31c096cda7708b0ddf91c7e7e0aa918811ebaeb5010afcfd363a624846d1b273",
@@ -192,7 +192,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
         require(loaded[FACADE_README], name, "facade documentation")
     require(loaded[MAIN], "hardened public/secret results", "runnable hardened report")
     leaf_family_label = "SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending)"
-    facade_family_label = "SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending)"
+    facade_family_label = "| SHA-2 | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha2` | ❌ Not independently verified |"
     require(loaded[LEAF_README], leaf_family_label, "leaf family documentation")
     require(loaded[FACADE_README], facade_family_label, "facade family documentation")
     public_algorithms = (

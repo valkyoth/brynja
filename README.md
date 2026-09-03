@@ -42,9 +42,10 @@ companion-adapter exceptions follow explicit admission and isolation policy.
 
 ## Cryptography Verification Status
 
-These tables track concrete public capabilities, not internal crate names or
-reserved architecture. A capability is listed as implemented only after its
-complete public API and required acceptance evidence for that named milestone pass.
+These tables track concrete public capabilities and the named implementation
+families in Brynja's active pre-1.0 roadmap. A capability is listed as
+implemented only after its complete public API and required acceptance evidence
+for that named milestone pass; a planned row is not yet usable.
 The broader crate-level audit inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
@@ -57,26 +58,40 @@ reviewed implementation. The project's own tests, CI, Kani, Miri, sanitizers,
 fuzzing, differential testing, and pentests do not by themselves constitute
 independent cryptographic or protocol verification.
 
-### Hash Functions
+### Modern Hash Functions
 
-| Hash | Implemented | Independently verified |
-| --- | --- | --- |
-| SHA-2 (FIPS 180-4: SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256 have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |
-| SHA-3/SHAKE (all six FIPS 202 identities have complete ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output; final combined acceptance pending) | 🚧 In progress | ❌ Not independently verified |
+SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256;
+SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE256.
+
+| Hash family | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| SHA-2 | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha2` | ❌ Not independently verified |
+| SHA-3/SHAKE | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha3` | ❌ Not independently verified |
+| SP 800-185 family | 🗓 Planned — v0.24.12–v0.24.17 | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |
+
+### Legacy Hash Functions
+
+Legacy hashes remain outside the modern `brynja` facade and require an explicit
+legacy crate dependency even after implementation.
+
+| Hash family | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| SHA-1 | 🗓 Planned — v0.24.18–v0.24.23 | `brynja-legacy-sha1` | ❌ Not independently verified |
+| MD5 | 🗓 Planned — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
-| Capability | Implemented | Independently verified |
-| --- | --- | --- |
-| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | ❌ Not independently verified |
-| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | ❌ Not independently verified |
+| Capability | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| TLS and DTLS record-envelope parsing and encoding | ✅ Implemented | `brynja-protocol` | ❌ Not independently verified |
+| Bounded DER framing and admitted canonical ASN.1 values | ✅ Implemented | `brynja-pki` | ❌ Not independently verified |
 
 ### Security Foundations
 
-| Capability | Implemented | Independently verified |
-| --- | --- | --- |
-| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | ❌ Not independently verified |
-| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | ❌ Not independently verified |
+| Capability | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| Fixed-width constant-time operations and secret-region lifecycle | ✅ Implemented | `brynja-core` | ❌ Not independently verified |
+| Fixed-size secret ownership and explicit sanitization adapter | ✅ Implemented | `brynja-core`, `brynja-sanitization` | ❌ Not independently verified |
 
 ### Official Validation
 
@@ -85,9 +100,9 @@ independent source review.
 Brynja has no FIPS 140-3 validation, certificate, validated module, approved
 security policy, or certificate-bound operational-environment claim.
 
-| Validation scope | Implemented | Officially validated |
-| --- | --- | --- |
-| FIPS 140-3 cryptographic module | ❌ Not implemented | ❌ Not FIPS validated |
+| Validation scope | Implementation status | Owning crate | Official validation |
+| --- | --- | --- | --- |
+| FIPS 140-3 cryptographic module | ❌ Not implemented | Future `brynja-fips-module`, `brynja-fips` | ❌ Not FIPS validated |
 
 ## Project Direction
 

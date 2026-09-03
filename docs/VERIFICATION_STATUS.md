@@ -37,6 +37,7 @@ certificate-bound operational-environment claim.
 | Future `brynja-openpgp-core` / `brynja-openpgp-armor` / `brynja-openpgp` | RFC 9580 packet, armor, certificate, key, signature, encryption, compression, and message processing | ❌ Not implemented or verified |
 | Future `brynja-openpgp-legacy` | Explicitly isolated deprecated OpenPGP read, decrypt, or verify compatibility | ❌ Not implemented or verified |
 | Future `brynja-legacy-sha1` | Complete isolated SHA-1 implementation for explicit legacy compatibility | ❌ Not implemented or verified |
+| Future `brynja-legacy-md5` | Complete isolated MD5 implementation for explicit legacy compatibility | ❌ Not implemented or verified |
 | `brynja-sanitization` | Fixed-size secret ownership and explicit Brynja-region copies | ❌ Not verified |
 | `brynja-legacy` / `brynja-legacy-*` | TLS 1.1/1.0, SSL, WTLS, PCT, and SNP obsolete-protocol boundaries | ❌ Not verified |
 | `brynja-research-ssl1` | Unpublished SSL 1.0 provenance reconstruction | ❌ Not verified |
@@ -53,11 +54,9 @@ provider, entropy/secure-random, typed-clock, and pending-operation foundations;
 the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
-The SHA-2 mathematical byte and arbitrary-bit APIs and FIPS 202 ordinary byte,
-arbitrary-bit message and arbitrary-bit SHAKE output APIs are usable, but
-complete hardened SHA-2 plus hardened FIPS 202
-profiles remain planned through v0.24.11 and therefore both expanded families
-remain **In progress**. No
+The SHA-2 and FIPS 202 ordinary and hardened byte/arbitrary-bit APIs are usable,
+but their combined cross-backend acceptance remains pending through v0.24.11;
+both expanded families therefore remain **In progress**. No
 cryptographic primitive outside those six portable SHA-2 algorithms and the
 six named portable FIPS 202 functions, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in

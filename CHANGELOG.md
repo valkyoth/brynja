@@ -787,6 +787,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Give every top-level verification-status row an explicit owning crate, split
+  modern and legacy hash families, and list the planned SP 800-185, SHA-1, and
+  MD5 closure milestones without prematurely claiming implementation. The
+  regression policy now accepts and validates the four-column ownership form,
+  including rejection of forged crate or independent-review checkmarks.
 - Expand the pre-1.0 legacy-hash chain with a frozen portable SHA-1/MD5
   acceptance boundary, dedicated x86/AArch64 SHA-1 acceleration, explicit
   multi-buffer MD5 SIMD across qualifying x86_64, AArch64 and RISC-V targets,

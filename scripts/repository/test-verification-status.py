@@ -49,6 +49,10 @@ IMPLEMENTED = (
 FULLY_IMPLEMENTED = (
     "| Example family | ✅ Fully implemented | ❌ Not independently verified |"
 )
+OWNED_IMPLEMENTED = (
+    "| Example capability | ✅ Implemented | `example-crate` | "
+    "❌ Not independently verified |"
+)
 
 
 def must_fail(text: str, expected: str) -> None:
@@ -90,6 +94,7 @@ def main() -> int:
     )
     MODULE.validate_checkmarks(IMPLEMENTED)
     MODULE.validate_checkmarks(FULLY_IMPLEMENTED)
+    MODULE.validate_checkmarks(OWNED_IMPLEMENTED)
     try:
         MODULE.validate_checkmarks(
             "| Example capability | ✅ Probably implemented | ❌ Not verified |"
@@ -99,6 +104,25 @@ def main() -> int:
             raise
     else:
         raise AssertionError("ambiguous implementation checkmark unexpectedly passed")
+    for invalid, expected in (
+        (
+            "| Example capability | ✅ Implemented | ✅ crate | "
+            "❌ Not independently verified |",
+            "owning-crate column",
+        ),
+        (
+            "| Example capability | ✅ Implemented | `example-crate` | "
+            "✅ Verified |",
+            "named independent reviewer",
+        ),
+    ):
+        try:
+            MODULE.validate_checkmarks(invalid)
+        except MODULE.VerificationStatusError as error:
+            if expected not in str(error):
+                raise
+        else:
+            raise AssertionError(f"four-column status regression passed: {expected}")
     MODULE.validate_readme_split(b"full GitHub README\n", b"compact crate README\n")
     for root_readme, crate_readme, expected in (
         (b"same\n", b"same\n", "purpose-specific"),

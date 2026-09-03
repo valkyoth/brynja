@@ -26,6 +26,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-cshake-public-api-fixture"
+version = "0.0.0"
+dependencies = [
+ "brynja",
+ "brynja-crypto",
+ "brynja-hash-sha3",
+]
+
+[[package]]
 name = "brynja-hash-core"
 version = "0.1.0"
 
@@ -57,14 +66,6 @@ name = "brynja-protocol"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
-]
-
-[[package]]
-name = "brynja-sha3-public-api-fixture"
-version = "0.0.0"
-dependencies = [
- "brynja",
- "brynja-hash-sha3",
 ]
 
 [[package]]

@@ -1,7 +1,7 @@
 [workspace]
 
 [package]
-name = "brynja-sha3-public-api-fixture"
+name = "brynja-cshake-public-api-fixture"
 version = "0.0.0"
 edition = "2024"
 rust-version = "1.90"
@@ -9,6 +9,7 @@ publish = false
 
 [dependencies]
 brynja = { path = "../../crates/brynja", version = "=0.24.12", default-features = false }
+brynja-crypto = { path = "../../crates/brynja-crypto", version = "=0.1.2", default-features = false }
 brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", version = "=0.1.0", default-features = false }
 
 [lints.rust]

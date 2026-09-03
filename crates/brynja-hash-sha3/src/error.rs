@@ -31,3 +31,5 @@ macro_rules! xof_error_type {
 
 xof_error_type!(Shake128Error, "SHAKE128");
 xof_error_type!(Shake256Error, "SHAKE256");
+xof_error_type!(Cshake128Error, "cSHAKE128");
+xof_error_type!(Cshake256Error, "cSHAKE256");

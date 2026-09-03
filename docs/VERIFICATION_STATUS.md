@@ -22,7 +22,7 @@ certificate-bound operational-environment claim.
 | --- | --- | --- |
 | `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |
 | `brynja-hash-sha2` | All six fully implemented FIPS 180-4 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-2 algorithms with forced optional ordinary CPU candidate APIs, compiler-resistant cleanup evidence, and combined package-external acceptance | ❌ Not verified |
-| `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-3/SHAKE functions, including arbitrary-bit SHAKE output; hardened owners clear eleven source-declared regions and classify public versus typed-secret output | ❌ Not verified |
+| `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary/hardened byte and arbitrary-bit functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary/hardened byte and arbitrary-bit APIs; hardened owners classify public versus typed-secret output | ❌ Not verified |
 | Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |
@@ -47,6 +47,8 @@ The implemented portion currently consists of all six portable FIPS 180-4
 SHA-2 byte-oriented and canonical arbitrary-bit algorithms with separately packaged downstream acceptance;
 all six portable FIPS 202 SHA-3 and SHAKE ordinary byte and arbitrary-bit functions over one
 private Keccak-f[1600] owner with separately packaged downstream acceptance;
+all four SP 800-185 encodings and complete ordinary/hardened cSHAKE128 and
+cSHAKE256 with package-external and independent-oracle acceptance;
 the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
@@ -59,7 +61,8 @@ and the combined v0.24.11 cross-family acceptance has passed. Both expanded
 families are therefore **Fully implemented**. Their accelerated candidates
 remain unadmitted, and neither family is independently reviewed or FIPS 140-3
 validated. No cryptographic primitive outside those six portable SHA-2
-algorithms and the six named portable FIPS 202 functions, schema-driven ASN.1
+algorithms, the six named portable FIPS 202 functions and both cSHAKE
+strengths, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release

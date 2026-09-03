@@ -140,7 +140,7 @@ def validate(root: Path = ROOT, check_hashes: bool = True) -> None:
     require(
         plan,
         "### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance\n\n"
-        "Status: awaiting green CI",
+        "Status: released",
         "plan milestone and release status",
     )
     checks = loaded[Path("scripts/checks.sh")]

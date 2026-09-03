@@ -38,7 +38,8 @@ SHA-2 byte and canonical arbitrary-bit implementations from
 `brynja-hash-sha2`, including distinct hardened secret-bearing states, plus all
 six complete portable FIPS 202 SHA-3 and SHAKE ordinary and hardened byte and
 arbitrary-bit message functions and arbitrary-bit SHAKE output from
-`brynja-hash-sha3`. Its broader provider effects, AEADs,
+`brynja-hash-sha3`. The same leaf now supplies complete SP 800-185 encodings
+and cSHAKE128/cSHAKE256 ordinary and hardened APIs. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 
@@ -78,6 +79,8 @@ let mut shake128 = [0_u8; 32];
 let mut shake256 = [0_u8; 64];
 brynja_crypto::shake128(b"abc", &mut shake128).unwrap();
 brynja_crypto::shake256(b"abc", &mut shake256).unwrap();
+let mut cshake128 = [0_u8; 32];
+brynja_crypto::cshake128(&[0, 1, 2, 3], b"", b"Email Signature", &mut cshake128).unwrap();
 assert_eq!(shorter.as_bytes().len(), 28);
 assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 assert_eq!(digest.as_bytes().len(), 32);
@@ -91,6 +94,7 @@ assert_eq!(sha3_384.as_bytes().len(), 48);
 assert_eq!(sha3_512.as_bytes().len(), 64);
 assert_eq!(shake128.len(), 32);
 assert_eq!(shake256.len(), 64);
+assert_eq!(&cshake128[..4], &[0xc1, 0xc3, 0x69, 0x25]);
 ```
 
 Most application users will eventually depend on the modern facade:

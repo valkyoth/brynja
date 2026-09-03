@@ -9,6 +9,7 @@
 
 mod bit_api;
 mod bit_string;
+mod cshake;
 mod digest;
 mod error;
 mod hardened;
@@ -19,6 +20,7 @@ mod sha3_384;
 mod sha3_512;
 mod shake128;
 mod shake256;
+mod sp800185;
 mod sponge;
 
 pub use bit_api::{
@@ -26,11 +28,17 @@ pub use bit_api::{
 };
 pub use bit_string::{Fips202BitString, Fips202BitsError, Fips202Output};
 pub use brynja_hash_core::{ExtendableOutput, FixedOutput, Update, XofReader};
+pub use cshake::{
+    Cshake128, Cshake128Reader, Cshake256, Cshake256Reader, cshake128, cshake128_bits, cshake256,
+    cshake256_bits,
+};
 pub use digest::{Sha3_224Digest, Sha3_256Digest, Sha3_384Digest, Sha3_512Digest};
 pub use error::{
-    Sha3_224Error, Sha3_256Error, Sha3_384Error, Sha3_512Error, Shake128Error, Shake256Error,
+    Cshake128Error, Cshake256Error, Sha3_224Error, Sha3_256Error, Sha3_384Error, Sha3_512Error,
+    Shake128Error, Shake256Error,
 };
 pub use hardened::{
+    HardenedCshake128, HardenedCshake128Reader, HardenedCshake256, HardenedCshake256Reader,
     HardenedFips202Construction, HardenedFips202State, HardenedSha3_224, HardenedSha3_256,
     HardenedSha3_384, HardenedSha3_512, HardenedSha3Error, HardenedSha3SecretOutput,
     HardenedShake128, HardenedShake128Reader, HardenedShake256, HardenedShake256Reader,
@@ -42,6 +50,10 @@ pub use sha3_384::Sha3_384;
 pub use sha3_512::Sha3_512;
 pub use shake128::{Shake128, Shake128Reader};
 pub use shake256::{Shake256, Shake256Reader};
+pub use sp800185::{
+    EncodedBitLength, EncodedInteger, Sp800185EncodingError, Sp800185Integer, bytepad,
+    encode_string, left_encode, left_encode_u128, right_encode, right_encode_u128,
+};
 
 /// Whether the complete portable SHA3-224 API is implemented.
 pub const SHA3_224_IMPLEMENTED: bool = true;
@@ -69,6 +81,9 @@ pub const FIPS202_BIT_OUTPUT_IMPLEMENTED: bool = true;
 
 /// Whether all six FIPS 202 identities expose hardened secret-bearing state.
 pub const FIPS202_HARDENED_STATE_IMPLEMENTED: bool = true;
+
+/// Whether all SP 800-185 encoding functions and both cSHAKE strengths are implemented.
+pub const CSHAKE_IMPLEMENTED: bool = true;
 
 /// Computes SHA3-224 over one complete byte slice.
 ///
@@ -167,7 +182,7 @@ pub fn shake256(input: &[u8], output: &mut [u8]) -> Result<(), Shake256Error> {
 #[cfg(test)]
 mod tests {
     use super::{
-        FIPS202_BIT_INPUT_IMPLEMENTED, FIPS202_BIT_OUTPUT_IMPLEMENTED,
+        CSHAKE_IMPLEMENTED, FIPS202_BIT_INPUT_IMPLEMENTED, FIPS202_BIT_OUTPUT_IMPLEMENTED,
         FIPS202_HARDENED_STATE_IMPLEMENTED, SHA3_224_IMPLEMENTED, SHA3_256_IMPLEMENTED,
         SHA3_384_IMPLEMENTED, SHA3_512_IMPLEMENTED, SHAKE128_IMPLEMENTED, SHAKE256_IMPLEMENTED,
         Sha3_224, Sha3_224Error, Sha3_256, Sha3_256Error, Sha3_384, Sha3_384Error, Sha3_512,
@@ -187,6 +202,7 @@ mod tests {
         assert!(::core::hint::black_box(FIPS202_BIT_INPUT_IMPLEMENTED));
         assert!(::core::hint::black_box(FIPS202_BIT_OUTPUT_IMPLEMENTED));
         assert!(::core::hint::black_box(FIPS202_HARDENED_STATE_IMPLEMENTED));
+        assert!(::core::hint::black_box(CSHAKE_IMPLEMENTED));
     }
 
     #[test]

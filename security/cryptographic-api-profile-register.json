@@ -23419,7 +23419,7 @@
       ]
     }
   ],
-  "policy_sha256": "5881f289cd2ad7762ed0635cd7fdea19e7bcfd45d4aecff07c5cbebd30c7a055",
+  "policy_sha256": "bc8f0d71f6ebe183b21ea35639355e1828c5c281670bdacb9c5cd7a9d827c66a",
   "registered_secret_owners": [
     {
       "capability": "algorithm.sha2",
@@ -23488,7 +23488,9 @@
       ],
       "evidence": [
         "crates/brynja-hash-sha3/tests/hardened.rs",
+        "crates/brynja-hash-sha3/tests/cshake.rs",
         "assurance/sha3-hardened-api/src/lib.rs",
+        "assurance/cshake-public-api/src/lib.rs",
         "scripts/sha3/check-sha3-hardened-codegen.sh",
         "scripts/sha3/check-sha3-hardened.py",
         "scripts/hash/check-final-acceptance.py"

@@ -43,7 +43,7 @@ def main() -> int:
         (
             Path("docs/RELEASE_PLAN.md"),
             "### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance\n\n"
-            "Status: awaiting green CI",
+            "Status: released",
             "### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance\n\n"
             "Status: awaiting pentest",
         ),

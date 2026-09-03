@@ -8,7 +8,9 @@
 //! [`crypto::sha3_256`], [`crypto::sha3_384`], [`crypto::sha3_512`],
 //! [`crypto::shake128`], and [`crypto::shake256`] plus their matching state,
 //! digest, XOF-reader, canonical FIPS 202 arbitrary-bit input, and
-//! arbitrary-bit SHAKE output types. It exposes checked
+//! arbitrary-bit SHAKE output types. Complete SP 800-185 encodings and
+//! cSHAKE128/cSHAKE256 ordinary and hardened byte/arbitrary-bit APIs are also
+//! exposed through [`crypto`]. It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
 //! workspaces, secret-lifetime and owned-memory
 //! foundations, fixed-width constant-time operations, provider capability
@@ -24,7 +26,7 @@
 //! selection. A bounded borrowed DER reader exposes canonical framing and
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
-//! algorithm outside these six SHA-2 and six FIPS 202 identities.
+//! algorithm outside these six SHA-2, six FIPS 202, and two cSHAKE identities.
 
 #![no_std]
 
@@ -128,6 +130,7 @@ mod tests {
         assert!(::core::hint::black_box(
             super::crypto::FIPS202_HARDENED_STATE_IMPLEMENTED
         ));
+        assert!(::core::hint::black_box(super::crypto::CSHAKE_IMPLEMENTED));
         assert_eq!(
             super::crypto::sha224(b"abc"),
             Ok(super::crypto::Sha224Digest::from_bytes([

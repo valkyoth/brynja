@@ -21,6 +21,8 @@ BIT_API = CRATE / "src/bit_api.rs"
 BIT_STRING = CRATE / "src/bit_string.rs"
 KECCAK = CRATE / "src/keccak.rs"
 SPONGE = CRATE / "src/sponge.rs"
+SP800185 = CRATE / "src/sp800185.rs"
+CSHAKE = CRATE / "src/cshake.rs"
 DIGEST = CRATE / "src/digest.rs"
 ERROR = CRATE / "src/error.rs"
 SHA3_224 = CRATE / "src/sha3_224.rs"
@@ -37,21 +39,26 @@ SHAKE128_TEST = CRATE / "tests/shake128.rs"
 SHAKE256_TEST = CRATE / "tests/shake256.rs"
 TEST_SUPPORT = CRATE / "tests/support/mod.rs"
 BIT_TEST = CRATE / "tests/bit_inputs.rs"
+SP800185_TEST = CRATE / "tests/sp800185.rs"
+CSHAKE_TEST = CRATE / "tests/cshake.rs"
 BIT_VECTORS = CRATE / "tests/vectors/nist-bit-selected.txt"
 DIFFERENTIAL = Path("scripts/sha3/check-sha3-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/sha3-differential/src/main.rs")
 BIT_DIFFERENTIAL = Path("scripts/sha3/check-sha3-bit-differential.py")
 BIT_DIFFERENTIAL_FIXTURE = Path("assurance/sha3-bit-differential/src/main.rs")
 BIT_IMPORTER = Path("scripts/sha3/import-nist-bit-vectors.py")
+CSHAKE_DIFFERENTIAL = Path("scripts/sha3/check-cshake-differential.py")
+CSHAKE_DIFFERENTIAL_FIXTURE = Path("assurance/cshake-differential/src/main.rs")
 MIRI_SCRIPT = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER_SCRIPT = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 SOURCES = (
-    LIB, BIT_API, BIT_STRING, KECCAK, SPONGE, DIGEST, ERROR, SHA3_224, SHA3_256, SHA3_384,
-    SHA3_512, SHAKE128, SHAKE256,
+    LIB, BIT_API, BIT_STRING, KECCAK, SPONGE, SP800185, CSHAKE, DIGEST, ERROR, SHA3_224,
+    SHA3_256, SHA3_384, SHA3_512, SHAKE128, SHAKE256,
 )
 TESTS = (
     SHA3_224_TEST, SHA3_256_TEST, SHA3_384_TEST, SHA3_512_TEST,
-    SHAKE128_TEST, SHAKE256_TEST, TEST_SUPPORT, BIT_TEST, BIT_VECTORS,
+    SHAKE128_TEST, SHAKE256_TEST, TEST_SUPPORT, BIT_TEST, SP800185_TEST, CSHAKE_TEST,
+    BIT_VECTORS,
 )
 HASHES = {
     Path(path): digest for path, digest in sha3_reviewed_hashes.REVIEWED_HASHES.items()
@@ -125,6 +132,7 @@ def validate(root: Path) -> None:
         "pub const SHAKE256_IMPLEMENTED: bool = true;",
         "pub const FIPS202_BIT_INPUT_IMPLEMENTED: bool = true;",
         "pub const FIPS202_BIT_OUTPUT_IMPLEMENTED: bool = true;",
+        "pub const CSHAKE_IMPLEMENTED: bool = true;",
         "mod bit_api;",
         "mod bit_string;",
         "pub fn sha3_224(input: &[u8]) -> Result<Sha3_224Digest, Sha3_224Error>",
@@ -134,10 +142,12 @@ def validate(root: Path) -> None:
         "pub fn shake128(input: &[u8], output: &mut [u8]) -> Result<(), Shake128Error>",
         "pub fn shake256(input: &[u8], output: &mut [u8]) -> Result<(), Shake256Error>",
         "sha3_224_bits, sha3_256_bits, sha3_384_bits, sha3_512_bits, shake128_bits, shake256_bits",
+        "Cshake128, Cshake128Reader, Cshake256, Cshake256Reader, cshake128, cshake128_bits",
+        "EncodedBitLength, EncodedInteger, Sp800185EncodingError, Sp800185Integer, bytepad",
         "#[kani::proof]",
     ):
         require(library, token, "SHA-3 package")
-    for adjacent in ("Cshake128", "Cshake256", "Kmac128"):
+    for adjacent in ("Kmac128", "TupleHash128", "ParallelHash128"):
         if adjacent in library:
             fail(f"adjacent v0.24 algorithm admitted early: {adjacent}")
 
@@ -177,6 +187,41 @@ def validate(root: Path) -> None:
         require(sponge, token, "sponge")
     if sponge.count("current.checked_add(additional)") != 2:
         fail("sponge input/output checked-length ownership changed")
+
+    sp800185 = without_comments(loaded[SP800185])
+    for token in (
+        "const MAX_INTEGER_BYTES: usize = 255;",
+        "pub struct Sp800185Integer<'value>",
+        "bytes.len() > MAX_INTEGER_BYTES",
+        "bytes.len() > 1 && bytes.first() == Some(&0)",
+        "pub fn left_encode(value: Sp800185Integer<'_>) -> EncodedInteger",
+        "pub fn right_encode(value: Sp800185Integer<'_>) -> EncodedInteger",
+        "pub fn encode_string(",
+        "pub fn bytepad(",
+        "if destination.len() != encoded_bytes",
+        "if destination.len() != padded_bytes",
+        "if !matches!(rate, 136 | 168)",
+        "let _ = clear_owned_region(&mut self.pending);",
+        "#[kani::proof]",
+    ):
+        require(sp800185, token, "SP 800-185 encoding")
+
+    cshake = without_comments(loaded[CSHAKE])
+    for token in (
+        "const CSHAKE_SUFFIX: u8 = 0x04;",
+        "const CSHAKE_SUFFIX_BITS: u8 = 3;",
+        "cshake!(Cshake128, Cshake128Reader, Cshake128Error, 168, \"cSHAKE128\");",
+        "cshake!(Cshake256, Cshake256Reader, Cshake256Error, 136, \"cSHAKE256\");",
+        "pub fn new_bits(",
+        "pub fn finalize_bits_xof(",
+        "pub fn squeeze_final_bits(",
+        "pub fn cshake128(",
+        "pub fn cshake256(",
+        "pub fn cshake128_bits(",
+        "pub fn cshake256_bits(",
+        "crate::sponge::SHAKE_SUFFIX",
+    ):
+        require(cshake, token, "cSHAKE")
 
     for path, algorithm, rate in (
         (SHA3_224, "Sha3_224", "144"),
@@ -244,10 +289,13 @@ def validate(root: Path) -> None:
             f'error_type!({algorithm}Error, "SHA3-{bits}");',
             f"{algorithm} error",
         )
-    for algorithm in ("Shake128", "Shake256"):
+    for algorithm, label in (
+        ("Shake128", "SHAKE128"), ("Shake256", "SHAKE256"),
+        ("Cshake128", "cSHAKE128"), ("Cshake256", "cSHAKE256"),
+    ):
         require(
             error,
-            f'xof_error_type!({algorithm}Error, "{algorithm.upper()}");',
+            f'xof_error_type!({algorithm}Error, "{label}");',
             f"{algorithm} error",
         )
 
@@ -267,6 +315,16 @@ def validate(root: Path) -> None:
         "curated_nist_cavp_vectors_cover_every_function_and_bit_residue",
         "every_tail_width_and_suffix_rate_collision_is_stable",
         "final_partial_shake_output_is_canonical_and_partitionable",
+        "integer_encodings_cover_boundaries_and_complete_domain",
+        "noncanonical_integers_are_rejected",
+        "encode_string_preserves_exact_arbitrary_bits",
+        "bytepad_is_exact_and_transactional",
+        "every_official_nist_cshake_example_matches",
+        "empty_name_and_customization_are_exactly_shake",
+        "streaming_and_partitioned_output_match_one_shot",
+        "arbitrary_bit_parameters_message_and_output_are_stable",
+        "hardened_state_matches_and_clears_secret_output",
+        "strengths_and_domains_are_distinct",
     ):
         require(tests, token, "SHA-3 tests")
 
@@ -281,9 +339,11 @@ def validate(root: Path) -> None:
         "suffix_and_rate_boundaries_have_exact_output",
         "curated_nist_cavp_vectors_cover_every_function_and_bit_residue",
         "--test hardened",
+        "--test cshake",
+        "every_official_nist_cshake_example_matches",
     ):
         require(miri, token, "SHA-3 Miri coverage")
-    if miri.count("-p brynja-hash-sha3") != 4:
+    if miri.count("-p brynja-hash-sha3") != 5:
         fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     for token in (
@@ -369,6 +429,31 @@ def validate(root: Path) -> None:
         "PurePosixPath", "missing selected input lengths", "missing output residues",
     ):
         require(importer, token, "NIST bit vector importer")
+
+    cshake_fixture = read(root, CSHAKE_DIFFERENTIAL_FIXTURE)
+    cshake_differential = read(root, CSHAKE_DIFFERENTIAL)
+    for token in (
+        "const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;",
+        "const MAX_CASES: usize = 512;",
+        "const MAX_FIELD_BYTES: usize = 4_096;",
+        "const MAX_OUTPUT_BITS: usize = 4_095;",
+        ".take(MAX_CAMPAIGN_BYTES.saturating_add(1))",
+        ".try_reserve_exact(bytes)",
+        ".try_reserve_exact(value.len() / 2)",
+        ".try_reserve(additional)",
+        "cshake128_bits",
+        "cshake256_bits",
+    ):
+        require(cshake_fixture, token, "bounded cSHAKE differential adapter")
+    for token in (
+        "def cshake(rate: int, x: list[int], n: list[int], s: list[int], output_bits: int)",
+        "official NIST sample",
+        "def cases()",
+        "timeout=240",
+        "cSHAKE differential oracle: PASS",
+        '"unknown 0 - 0 - 0 - 8\\n"',
+    ):
+        require(cshake_differential, token, "independent cSHAKE oracle")
 
     manifest = tomllib.loads(read(root, MANIFEST))
     if manifest.get("dependencies") != {

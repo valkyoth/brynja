@@ -38,6 +38,8 @@ def reject(label: str, mutation) -> None:
             policy.BIT_DIFFERENTIAL,
             policy.BIT_DIFFERENTIAL_FIXTURE,
             policy.BIT_IMPORTER,
+            policy.CSHAKE_DIFFERENTIAL,
+            policy.CSHAKE_DIFFERENTIAL_FIXTURE,
         )
         for relative in copied:
             destination = root / relative
@@ -84,7 +86,16 @@ def main() -> int:
     reject("bit differential oracle", lambda root: replace(root, policy.BIT_DIFFERENTIAL, "def permute(state: list[int])", "def removed(state: list[int])"))
     reject("SHA3-384 digest width", lambda root: replace(root, policy.DIGEST, 'Sha3_384Digest, 48, "SHA3-384"', 'Sha3_384Digest, 47, "SHA3-384"'))
     reject("SHA3-512 digest width", lambda root: replace(root, policy.DIGEST, 'Sha3_512Digest, 64, "SHA3-512"', 'Sha3_512Digest, 63, "SHA3-512"'))
-    reject("adjacent algorithm", lambda root: replace(root, policy.LIB, "mod sponge;", "mod sponge;\npub struct Cshake128;"))
+    reject("adjacent algorithm", lambda root: replace(root, policy.LIB, "mod sponge;", "mod sponge;\npub struct Kmac128;"))
+    reject("cSHAKE claim", lambda root: replace(root, policy.LIB, "CSHAKE_IMPLEMENTED: bool = true", "CSHAKE_IMPLEMENTED: bool = false"))
+    reject("cSHAKE suffix", lambda root: replace(root, policy.CSHAKE, "CSHAKE_SUFFIX: u8 = 0x04", "CSHAKE_SUFFIX: u8 = 0x05"))
+    reject("cSHAKE strength", lambda root: replace(root, policy.CSHAKE, "Cshake256Reader, Cshake256Error, 136", "Cshake256Reader, Cshake256Error, 168"))
+    reject("SP 800-185 integer bound", lambda root: replace(root, policy.SP800185, "MAX_INTEGER_BYTES: usize = 255", "MAX_INTEGER_BYTES: usize = 254"))
+    reject("SP 800-185 canonical integer", lambda root: replace(root, policy.SP800185, "bytes.len() > 1 && bytes.first() == Some(&0)", "bytes.len() > 2 && bytes.first() == Some(&0)"))
+    reject("cSHAKE official examples", lambda root: replace(root, policy.CSHAKE_TEST, "every_official_nist_cshake_example_matches", "removed_official_examples"))
+    reject("cSHAKE prefix erasure", lambda root: replace(root, policy.SP800185, "clear_owned_region(&mut self.pending)", "clear_owned_region(&mut [0])"))
+    reject("cSHAKE differential bound", lambda root: replace(root, policy.CSHAKE_DIFFERENTIAL_FIXTURE, "MAX_OUTPUT_BITS: usize = 4_095", "MAX_OUTPUT_BITS: usize = usize::MAX"))
+    reject("cSHAKE differential oracle", lambda root: replace(root, policy.CSHAKE_DIFFERENTIAL, "def cshake(rate: int, x: list[int], n: list[int], s: list[int], output_bits: int)", "def removed(rate: int, x: list[int], n: list[int], s: list[int], output_bits: int)"))
     reject("vector", lambda root: replace(root, policy.SHA3_256_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
     reject("SHA3-384 vector", lambda root: replace(root, policy.SHA3_384_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
     reject("SHA3-512 vector", lambda root: replace(root, policy.SHA3_512_TEST, "official_fips202_zero_and_1600_bit_vectors_match", "removed_vector"))
@@ -110,7 +121,7 @@ def main() -> int:
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha3]\nclass = "modern-shared"', '[packages.brynja-hash-sha3]\nclass = "modern-engine"'))
     reject("oversized", lambda root: (root / policy.KECCAK).write_text((root / policy.KECCAK).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-3 policy rejects fifty-eight boundary, permutation, padding, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
+    print("portable SHA-3 policy rejects sixty-seven boundary, permutation, padding, SP 800-185, cSHAKE, bit-domain, XOF, allocation, timeout, identity, dynamic-analysis, size, and hash regressions")
     return 0
 
 

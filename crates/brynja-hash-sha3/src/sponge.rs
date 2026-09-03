@@ -94,6 +94,16 @@ impl<const RATE: usize> Sponge<RATE> {
         Squeezer::new(self.state)
     }
 
+    pub(super) fn finalize_domain_xof(
+        mut self,
+        partial: Option<(u8, u8)>,
+        suffix: u8,
+        suffix_bits: u8,
+    ) -> Squeezer<RATE> {
+        self.apply_padding(partial, suffix, suffix_bits);
+        Squeezer::new(self.state)
+    }
+
     pub(super) fn finalize_bits<const OUTPUT: usize>(
         mut self,
         partial: Option<(u8, u8)>,

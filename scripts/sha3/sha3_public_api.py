@@ -42,8 +42,8 @@ FILES = (
     BARE_METAL, WORKFLOW,
 )
 EXPECTED_SHA256: dict[Path, str] = {
-    MANIFEST: "ae9419168dbfc688f1dd2b906c82810973bb776dc18ab9d0331ec14f6609d9ac",
-    LOCK: "a084fe19fa6fe94d22c8469e14cf7351f4cd1f6de141ce60a39dc0645b0f5814",
+    MANIFEST: "cefbf2b6d21c7248f63a235626b3153fea8305cc638fc59afff28990d0f30369",
+    LOCK: "f38ea6a60a88a6a7cce06f63db8e63712c3234aaa8177ecc3a6caed0169b5d7c",
     LIB: "06a093ae03acef95271d075c5582c51b5b83d63a62d30a3e1e547d1b72ce4395",
     BIT_API: "f63d7862befc7ad6ce82c63d05919ac556ef64d5ecd4d28f2b1e849ac8d6174e",
     ALGORITHMS: "adb8985464a1c2a5656eeb927791f680098d72847a67164539d72f56ad69ffd7",
@@ -51,18 +51,18 @@ EXPECTED_SHA256: dict[Path, str] = {
     MAIN: "676f7e6dfc44120ea26cc0a2cf69717ab21fb6bbd22c68039b20c8807e810161",
     CONTENT: "ab72282b43ccf28714e57ff9c4cedde2d3736a5e38eb1016c2d8956615c9cdd3",
     LEAF_MANIFEST: "bf0467a994e4fa3a879e9e66dc2cda39e12738e7073f1bff96c008704bda3408",
-    LEAF_LIB: "b0586eb4323d152357836318ee5701f18031e9848d5dea351588c24d68db643e",
-    LEAF_README: "092e4d4078cb5295a45c2394f2084bbd0dd62d8e118ebadcd6c27bbedaf37d5d",
-    CRYPTO_LIB: "aa6ecaf6b79aa3111e468142f3b226d846af082033711c16e033d84d9f938381",
-    FACADE_MANIFEST: "39b0daa5f8844dc0b7df395fa00b7b73dd878d10f0122948cbc0351383e862de",
-    FACADE_LIB: "a3bb376edca778b1afc72d0d4a58d3b2024d2c2d8fc1c9b34b95aa9cd95018a9",
-    FACADE_README: "5f0f9334435814be18a5c323cf7446a1cb8f6567d46560b3802fe6dee8d3c729",
+    LEAF_LIB: "dbfe8430883784c4efadd9392bb56daee860a9631db82287402d558614b54fc7",
+    LEAF_README: "2d52aa1288a8e9312bb3742939fcd032e7ba6bee94de188a065627e11d43d53a",
+    CRYPTO_LIB: "20d86e8e4d77cf1765e02c98e52da28ca98420147f69c1b1373e27192eb0acfd",
+    FACADE_MANIFEST: "035d822a47c36bd16f41c871d50fcb41d0b1c23b08bad50c8936cf582fa99a42",
+    FACADE_LIB: "fa3684ac6a5d19159795f9bed36df34a86a3f3b75b89ceffa09983e227696633",
+    FACADE_README: "9145bab405ecf0c5a0893f15643aff3912c9e380baeeb8d9a5eee88380315ff9",
     CHECK_SCRIPT: "37b6f0605770c8948fd8972640bf4ca978c3536ac832c1ffc733cea235f2b62b",
     TEST_SCRIPT: "20010f7a853d382b1b7f12a0df2e0b65793d3be02bf9e6b16db70f4e9977ae40",
-    CHECKS: "8d044f29ac1ae9ce9d8cdd46f28d71c1afcd14aef71254813e029acef6c592b8",
-    RUST_MATRIX: "ce7a970fc4cb4759ccf2defb256c19f02d09692a397b88fa0861637bba65877a",
-    BARE_METAL: "37772e76a47341d12d03a05abeedfb661e79b2f4e95edeef8e080a0727b00c6d",
-    WORKFLOW: "51d4c3961b866adea0069f945334ff9305f08521880d46c43475693fbbd6d9c9",
+    CHECKS: "ac94a8c68f5f2ed575ed9c4a35e868c6732581f0721bd6d20a1ce97b09b1aec5",
+    RUST_MATRIX: "b4eec4d2cd7a8cfbe6aed74a1b1f6f9a5ec0770d30d41ea8a0bfebb8c8bbb447",
+    BARE_METAL: "197604f0e6c98bd91fdcfed06263062f19a57af71a6bd974fdc1633d191c0074",
+    WORKFLOW: "6b0384a9d7d48788a398c962789e550424dcc3b988690dfb63bef0224d378836",
 }
 PACKAGES = (
     ("brynja-core", "0.9.0", ("src/lib.rs",)),
@@ -89,7 +89,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.11", ("src/lib.rs",)),
+    ("brynja", "0.24.12", ("src/lib.rs",)),
 )
 
 
@@ -125,7 +125,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.11", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.12", "default-features": False},
         "brynja-hash-sha3": {
             "path": "../../crates/brynja-hash-sha3", "version": "=0.1.0",
             "default-features": False,

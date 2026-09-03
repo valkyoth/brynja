@@ -34,7 +34,10 @@ that do not end on a byte boundary. Version 0.24.10 of the repository also
 adds distinct hardened states for secret-derived inputs and outputs with
 compiler-resistant cleanup of all source-declared owned regions. Final combined
 package-external acceptance, independent review, and FIPS 140-3 validation
-are closed by the combined v0.24.11 acceptance.
+are closed by the combined v0.24.11 acceptance. Repository milestone v0.24.12
+adds the complete SP 800-185 encoding foundation plus cSHAKE128 and cSHAKE256
+with byte and arbitrary-bit function names, customization, messages and output;
+the wider SP 800-185 family remains in progress through v0.24.17.
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};
@@ -59,12 +62,22 @@ let mut output = [0xff_u8; 13];
 let destination = brynja_hash_sha3::Fips202Output::new(&mut output, 4).unwrap();
 brynja_hash_sha3::shake128_bits(bits, destination).unwrap();
 assert_eq!(output[12] & 0xf0, 0);
+
+let mut customized = [0_u8; 32];
+brynja_hash_sha3::cshake128(
+    &[0, 1, 2, 3],
+    b"",
+    b"Email Signature",
+    &mut customized,
+).unwrap();
+assert_eq!(&customized[..4], &[0xc1, 0xc3, 0x69, 0x25]);
 ```
 
 These APIs are unkeyed hashes, not authentication, MACs, password hashing, or
 raw Keccak. Ordinary states do not promise erasure of input remnants or
-private working state. Secret-derived uses must select the distinct
-`HardenedSha3_*` or `HardenedShake*` states, explicitly declassify public
+private working state. This also applies to ordinary cSHAKE. Secret-derived
+uses must select the distinct `HardenedSha3_*`, `HardenedShake*`, or
+`HardenedCshake*` states, explicitly declassify public
 output or retain typed secret output, and let the owner clear Brynja-owned
 lanes, buffers, counters, suffix/padding/squeeze staging, and permutation
 scratch on every terminal path. Scalar fixed-count lane/counter conversion and
@@ -102,6 +115,9 @@ pentest evidence rather than independent cryptographic verification.
 | Arbitrary-bit FIPS 202 messages and SHAKE output | ✅ Implemented | ❌ Not independently verified |
 | Hardened SHA-3/SHAKE secret-bearing states | ✅ Implemented | ❌ Not independently verified |
 | Complete SHA-3/SHAKE family, including final combined acceptance | ✅ Fully implemented | ❌ Not independently verified |
+| SP 800-185 encodings (`left_encode`, `right_encode`, `encode_string`, `bytepad`) | ✅ Implemented | ❌ Not independently verified |
+| cSHAKE128 and cSHAKE256 | ✅ Implemented | ❌ Not independently verified |
+| Complete SP 800-185 family | 🚧 In progress — cSHAKE complete; KMAC, TupleHash, and ParallelHash pending | ❌ Not independently verified |
 
 Only a named independent reviewer and linked review evidence can change the
 independent status. Project tests, CI, Kani, Miri, fuzzing, and pentests do not

@@ -13,10 +13,12 @@ OWNER = Path("crates/brynja-hash-sha3/src/hardened/owner.rs")
 API = Path("crates/brynja-hash-sha3/src/hardened/mod.rs")
 FIXED = Path("crates/brynja-hash-sha3/src/hardened/fixed.rs")
 XOF = Path("crates/brynja-hash-sha3/src/hardened/xof.rs")
+CSHAKE = Path("crates/brynja-hash-sha3/src/hardened/cshake.rs")
 OUTPUT = Path("crates/brynja-hash-sha3/src/hardened/output.rs")
 SPONGE = Path("crates/brynja-hash-sha3/src/hardened/sponge.rs")
 PERMUTATION = Path("crates/brynja-hash-sha3/src/hardened/permutation.rs")
 TEST = Path("crates/brynja-hash-sha3/tests/hardened.rs")
+CSHAKE_TEST = Path("crates/brynja-hash-sha3/tests/cshake.rs")
 LIB = Path("crates/brynja-hash-sha3/src/lib.rs")
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
 FACADE = Path("crates/brynja/src/lib.rs")
@@ -28,7 +30,7 @@ FIXTURE_LIB = Path("assurance/sha3-hardened-api/src/lib.rs")
 MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 FILES = (
-    OWNER, API, FIXED, XOF, OUTPUT, SPONGE, PERMUTATION, TEST, LIB, CRYPTO,
+    OWNER, API, FIXED, XOF, CSHAKE, OUTPUT, SPONGE, PERMUTATION, TEST, CSHAKE_TEST, LIB, CRYPTO,
     FACADE, CHECKS, CODEGEN, FIXTURE_MANIFEST, FIXTURE_LOCK, FIXTURE_LIB,
     MIRI, SANITIZER,
 )
@@ -76,6 +78,8 @@ def validate(root: Path = ROOT) -> None:
         "HardenedSha3_224", "HardenedSha3_256", "HardenedSha3_384",
         "HardenedSha3_512", "HardenedShake128", "HardenedShake128Reader",
         "HardenedShake256", "HardenedShake256Reader",
+        "HardenedCshake128", "HardenedCshake128Reader",
+        "HardenedCshake256", "HardenedCshake256Reader",
     ):
         require(api, identity, "hardened public identity")
     require(api, "pub trait HardenedFips202State: sealed::Registered", "sealed state capability")
@@ -94,13 +98,21 @@ def validate(root: Path = ROOT) -> None:
         "pub fn squeeze_final_bits_public(", "pub fn squeeze_final_bits_secret<'output>(",
     ):
         require(xof, token, "hardened XOF API")
+    for token in (
+        "pub fn new_bits(", "pub fn finalize_bits_xof(",
+        "pub fn finalize_public(", "pub fn finalize_secret<'output>(",
+        "pub fn squeeze_public(", "pub fn squeeze_secret<'output>(",
+        "pub fn squeeze_final_bits_public(", "pub fn squeeze_final_bits_secret<'output>(",
+        "pub fn cancel(self)", "CSHAKE_SUFFIX: u8 = 0x04",
+    ):
+        require(loaded[CSHAKE], token, "hardened cSHAKE API")
     for forbidden in (
         "unsafe {", "unsafe fn", "extern \"C\"", "Vec<", "Box<",
         "update_with_backend", "BackendSession",
     ):
-        if any(forbidden in loaded[path] for path in (OWNER, API, FIXED, XOF, OUTPUT, SPONGE, PERMUTATION)):
+        if any(forbidden in loaded[path] for path in (OWNER, API, FIXED, XOF, CSHAKE, OUTPUT, SPONGE, PERMUTATION)):
             fail(f"hardened FIPS 202 crossed a forbidden boundary: {forbidden}")
-    operational = (API, FIXED, XOF, OUTPUT, SPONGE, PERMUTATION)
+    operational = (API, FIXED, XOF, CSHAKE, OUTPUT, SPONGE, PERMUTATION)
     for path in operational:
         source = loaded[path]
         for forbidden in ("to_le_bytes()", "from_le_bytes(", "<[u8;"):
@@ -127,6 +139,11 @@ def validate(root: Path = ROOT) -> None:
         "cancel_and_early_drop_cover_absorber_and_reader_lifecycles",
     ):
         require(test, token, "hardened acceptance")
+    for token in (
+        "hardened_state_matches_and_clears_secret_output",
+        "every_official_nist_cshake_example_matches",
+    ):
+        require(loaded[CSHAKE_TEST], token, "hardened cSHAKE acceptance")
     require(loaded[LIB], "FIPS202_HARDENED_STATE_IMPLEMENTED: bool = true", "leaf claim")
     require(loaded[CRYPTO], "FIPS202_HARDENED_STATE_IMPLEMENTED: bool = true", "crypto claim")
     require(loaded[FACADE], "super::crypto::FIPS202_HARDENED_STATE_IMPLEMENTED", "facade claim")
@@ -135,6 +152,7 @@ def validate(root: Path = ROOT) -> None:
     require(loaded[FIXTURE_LIB], "#![no_std]", "downstream no_std fixture")
     require(loaded[FIXTURE_LIB], "exercise_all", "downstream all-identity fixture")
     require(loaded[MIRI], "--test hardened", "Miri hardened-state coverage")
+    require(loaded[MIRI], "--test cshake", "Miri hardened cSHAKE coverage")
     require(loaded[SANITIZER], "-p brynja-hash-sha3", "sanitizer package coverage")
     require(loaded[SANITIZER], "--tests", "sanitizer test coverage")
 

@@ -58,6 +58,9 @@ python3 scripts/sha3/check-sha3.py
 python3 scripts/sha3/test-sha3.py
 python3 scripts/sha3/check-sha3-differential.py
 python3 scripts/sha3/check-sha3-bit-differential.py
+python3 scripts/sha3/check-cshake-differential.py
+cargo test --locked --manifest-path assurance/cshake-public-api/Cargo.toml
+cargo clippy --locked --manifest-path assurance/cshake-public-api/Cargo.toml --all-targets -- -D warnings
 python3 scripts/sha3/check-sha3-public-api.py
 python3 scripts/sha3/test-sha3-public-api.py
 python3 scripts/sha3/check-sha3-hardened.py

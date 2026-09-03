@@ -29,7 +29,9 @@
 workspace. It is allocation-independent `no_std` Rust without a C cryptographic library.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable FIPS 180-4 SHA-2 algorithms,
-> all six portable FIPS 202 SHA-3 and SHAKE functions, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
+> all six portable FIPS 202 SHA-3 and SHAKE functions, complete cSHAKE128 and
+> cSHAKE256, and bounded record and DER/ASN.1 framing—but no TLS connection,
+> certificate validator, or working protocol engine.
 
 All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged and combined downstream `no_std` acceptance through the leaf and facade. Both families accept canonical arbitrary-bit messages, and SHAKE supports arbitrary-bit output. Distinct hardened states clear all source-declared Brynja-owned regions and classify output explicitly as public or typed secret. Both exact families are fully implemented; that is not independent review or FIPS validation.
 
@@ -87,19 +89,6 @@ assert_eq!(&bit_digest.as_bytes()[..4], &[0x1f, 0x77, 0x94, 0xd4]);
 
 These SHA-2 functions are unkeyed digests, not authentication, a MAC, or password hashing. Ordinary states do not erase private secret-input remnants. Secret-bearing callers must use the distinct hardened states added at v0.24.8; they clear Brynja-owned regions, while callers remain responsible for the original secret buffers they own.
 
-### Hash Secret-Bearing Input With Hardened SHA-2
-
-```rust
-use brynja::crypto::{HardenedSha256, PublicDeclassification};
-
-let mut state = HardenedSha256::new();
-state.update(b"secret-derived input").unwrap();
-let mut public_digest = [0_u8; 32];
-state
-    .finalize_public(&mut public_digest, PublicDeclassification::acknowledge())
-    .unwrap();
-```
-
 Use `finalize_secret` instead when the digest remains secret. It returns a typed secret-region owner and clears the complete destination when that owner drops. Hardened cleanup covers Brynja-owned source-declared memory, not registers, caches, compiler-created copies, dumps, forgotten owners, abort, or power loss.
 
 ### Compute Portable SHA-3 And SHAKE
@@ -136,6 +125,16 @@ state
 
 Use `finalize_secret` or `squeeze_secret` when output remains secret. Their typed owners clear the complete destination on Drop. Combined family acceptance passed at v0.24.11.
 
+### Compute Customized SHAKE
+
+```rust
+let mut output = [0_u8; 32];
+brynja::crypto::cshake128(&[0, 1, 2, 3], b"", b"Email Signature", &mut output).unwrap();
+assert_eq!(&output[..4], &[0xc1, 0xc3, 0x69, 0x25]);
+```
+
+Empty N/S is exactly SHAKE. Ordinary cSHAKE is public-data-only; hardened cSHAKE owners clear secret-bearing internal state.
+
 ## Cryptography Verification Status
 
 These tables track concrete public capabilities and active pre-1.0 roadmap families. Implementation requires a complete public API and acceptance; a planned row is not yet usable. See the [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md) for the crate-level audit inventory.
@@ -150,7 +149,7 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
-| SP 800-185 family | 🗓 Planned — v0.24.12–v0.24.17 | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |
+| SP 800-185 family | 🚧 In progress — encodings and cSHAKE complete; KMAC, TupleHash, and ParallelHash pending | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |
 
 ### Legacy Hash Functions
 

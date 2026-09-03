@@ -1,19 +1,19 @@
 [release]
-version = "0.24.11"
-milestone = "0.24.11"
+version = "0.24.12"
+milestone = "0.24.12"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12"]
 policy = "independent"
 stage = "internal"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "The new cSHAKE128/cSHAKE256 algorithms, SP 800-185 encodings, arbitrary-bit behavior, and hardened secret-state APIs change a production cryptographic boundary and require an exceptional assessment before the signed development tag."
 
 [crates."brynja"]
-previous_version = "0.24.10"
-version = "0.24.11"
-change = "metadata"
+previous_version = "0.24.11"
+version = "0.24.12"
+change = "code"
 publish = false
-reason = "Advance the internal facade after combined package-external SHA-2 and SHA-3/SHAKE acceptance closes every advertised ordinary, arbitrary-bit and hardened profile; all seven CPU candidates remain unadmitted and no crate is published."
+reason = "Advance the internal facade with complete cSHAKE128/cSHAKE256 and SP 800-185 encoding APIs across ordinary and hardened leaf, composition and facade surfaces; no crate is published."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Retain the published version while its internal source reexports the complete hardened SHA-3 and SHAKE state and output boundary without publication."
+reason = "Retain the published version while its internal source reexports complete ordinary and hardened cSHAKE and SP 800-185 encodings without publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -48,7 +48,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Retain the unpublished fully implemented SHA-3/SHAKE family after combined ordinary, arbitrary-bit, hardened, package-external and explicit backend-disposition acceptance."
+reason = "Retain the unpublished SHA-3 leaf version while adding complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary, arbitrary-bit, streaming, incremental-output and hardened APIs without publication."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

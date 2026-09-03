@@ -7,6 +7,17 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement the complete v0.24.12 SP 800-185 encoding foundation and
+  cSHAKE128/cSHAKE256 ordinary and hardened APIs. Byte and canonical
+  arbitrary-bit N, S, message and output domains, exact empty-N/S SHAKE
+  equivalence, one-shot, streaming, fixed-output and incremental squeeze paths
+  are exposed through the SHA-3 leaf, crypto composition, and main facade.
+- Add all four official NIST cSHAKE examples, a 480-result independently coded
+  arbitrary-bit oracle, exact encoding/integer/bytepad boundaries, hardened
+  secret-output clearing, a package-external `no_std` three-layer consumer,
+  twenty cumulative Kani bounds, dynamic-analysis bindings, and adversarial
+  source-policy mutations. The wider SP 800-185 family remains in progress
+  through v0.24.17; no independent verification or FIPS validation is claimed.
 - Add five pre-1.0 roadmap milestones for an optional high-assurance
   protected-memory layer: a portable `no_std` contract, first-party hosted
   providers for Linux/Android, Windows, Apple/BSD, and a cross-platform

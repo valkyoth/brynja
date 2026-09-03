@@ -1,3 +1,4 @@
+mod cshake;
 mod fixed;
 mod output;
 mod owner;
@@ -56,3 +57,10 @@ register_construction!(HardenedShake128);
 register_state!(HardenedShake128Reader);
 register_construction!(HardenedShake256);
 register_state!(HardenedShake256Reader);
+register_construction!(HardenedCshake128);
+register_state!(HardenedCshake128Reader);
+register_construction!(HardenedCshake256);
+register_state!(HardenedCshake256Reader);
+pub use cshake::{
+    HardenedCshake128, HardenedCshake128Reader, HardenedCshake256, HardenedCshake256Reader,
+};

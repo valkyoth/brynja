@@ -1,8 +1,8 @@
 # Brynja 0.24.12 Release Notes
 
-Status: implementation and first pentest remediation complete; exceptional
-retest, final local release verification, hosted GitHub checks, CodeQL, and
-signed development tag pending
+Status: implementation, pentest remediation, exceptional retest, and complete
+local release verification passed; hosted GitHub checks, CodeQL, and signed
+development tag pending
 
 ## Summary
 
@@ -61,7 +61,9 @@ The remediation removes both wrapper fields, adds byte-backed domain and setup
 regions to `HardenedFips202Owner`, clears them on finalization and every owner
 Drop path, and expands owner-shape, mutation, unit, MIR, LLVM IR, assembly and
 Rust 1.90.0/1.98.0 evidence from eleven to thirteen registered regions. The
-exceptional retest of the exact remediation candidate remains pending.
+exceptional retest of exact remediation candidate
+`16539b17eff0b33282a0eeeb6708be21dc127973` passed with zero open findings. The
+[permanent report](../security/pentest/v0.24.12.md) records `PASS`/`PASS`.
 
 ## Security And Residual Limits
 

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE remediation awaits exceptional retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 cSHAKE has a committed PASS/PASS report and complete local verification, and awaits green GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -57,7 +57,9 @@ length outside the registered clearing owner. The remediation removes those
 wrapper fields, stores both values in two new byte-backed owner regions, clears
 them at cSHAKE finalization and on every Drop path, and binds all thirteen
 regions into owner-shape, mutation and Rust 1.90.0/1.98.0 MIR/LLVM/assembly
-evidence. The exact remediation candidate awaits exceptional retest.
+evidence. The exact remediation candidate passed exceptional retest. The
+[permanent report](../security/pentest/v0.24.12.md) records `PASS`/`PASS` with
+zero open findings.
 
 The v0.24.11 closure runs the complete SHA-2 and SHA-3/SHAKE downstream
 fixtures together, covering all twelve named identities across ordinary byte,

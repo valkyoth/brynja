@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE remediation awaits exceptional retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 cSHAKE has a committed PASS/PASS report and complete local verification, and awaits green GitHub and CodeQL
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.12`. `brynja-hash-core 0.1.0`,
@@ -30,8 +30,9 @@ The initial exceptional v0.24.12 assessment found one Medium metadata-
 remanence gap in hardened cSHAKE. Its discriminator and setup-length fields now
 reside inside two new byte-backed regions of the registered FIPS 202 owner,
 are cleared at finalization and Drop, and are covered by thirteen-region source,
-mutation and compiler-artifact evidence. The remediation awaits exact-candidate
-retest; versions and publication selection remain unchanged.
+mutation and compiler-artifact evidence. Exact-candidate retest passed, the
+permanent report records `PASS`/`PASS` with zero open findings, and versions and
+the zero-crate publication selection remain unchanged.
 
 The optional adapter is a material production secret-storage boundary. Its
 exceptional v0.11.2 assessment passed with zero findings. The v0.12.0

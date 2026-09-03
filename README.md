@@ -841,15 +841,17 @@ ParallelHash and final combined acceptance; cSHAKE is not independently
 verified or FIPS 140-3 validated. Its initial exceptional assessment found one
 Medium hardened metadata-remanence gap; the remediation moves both metadata
 values into the registered clearing owner, covers all thirteen regions in
-compiler evidence, and awaits exact-candidate retest.
+compiler evidence, and the exact-candidate retest passed. The permanent
+[v0.24.12 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.12.md)
+records `PASS`/`PASS` with zero open findings.
 
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.11`; the current internal `0.24.12` cSHAKE
-remediation candidate awaits its exceptional retest and selects no crates.io
-publication.
+release-readiness candidate passed its exceptional retest and complete local
+gate, selects no crates.io publication, and awaits green GitHub and CodeQL.
 The published
 dependency is:
 

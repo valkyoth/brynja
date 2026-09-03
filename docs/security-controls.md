@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 complete cSHAKE remediation awaits exceptional retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.11 signed; v0.24.12 cSHAKE has a committed PASS/PASS report and complete local verification, and awaits green GitHub and CodeQL
 
 | Control | Foundation enforcement |
 | --- | --- |

@@ -23419,7 +23419,7 @@
       ]
     }
   ],
-  "policy_sha256": "ac4b89e9cb2cfb2740dd20085352778b9a064b25d26d0539d0b31d7aa9ae58a0",
+  "policy_sha256": "5881f289cd2ad7762ed0635cd7fdea19e7bcfd45d4aecff07c5cbebd30c7a055",
   "registered_secret_owners": [
     {
       "capability": "algorithm.sha2",
@@ -23560,5 +23560,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "f7eb0b4b865f1cd06a2c6de3d54b16874d8845f806298459bd679e9644afd5ce"
+  "surface_register_sha256": "87365f22e69583a7b28374869fa9aeaa4235d2d6043f092ab9c39954f3c8db7f"
 }

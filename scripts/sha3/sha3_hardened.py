@@ -109,9 +109,18 @@ def validate(root: Path = ROOT) -> None:
         "self.owner.cshake_message_bytes()",
         "self.owner.cshake_is_customized()",
         "self.owner.wipe_cshake_metadata()",
+        "pub fn finalize_xof_erasing_source(&mut self)",
+        "pub fn finalize_bits_xof_erasing_source(",
+        "pub fn wipe_in_place(&mut self)",
+        "core::mem::replace(&mut self.owner",
+        "self.owner.wipe();",
+        "in_place_reader_transition_clears_exact_source_owner",
     ):
         require(loaded[CSHAKE], token, "hardened cSHAKE API")
-    for forbidden in ("customized: bool", "setup_bytes: u128"):
+    for forbidden in (
+        "customized: bool", "setup_bytes: u128",
+        "Option<HardenedFips202Owner", ".owner.take()",
+    ):
         if forbidden in loaded[CSHAKE]:
             fail(f"hardened cSHAKE metadata escaped its clearing owner: {forbidden}")
     for forbidden in (

@@ -72,6 +72,7 @@ cargo clippy --locked --manifest-path assurance/sha3-public-api/Cargo.toml \
 python3 scripts/kmac/check-kmac.py
 python3 scripts/kmac/test-kmac.py
 python3 scripts/kmac/check-kmac-differential.py
+scripts/kmac/check-kmac-conformance-gate.sh
 scripts/kmac/check-kmac-codegen.sh
 cargo test --locked --manifest-path assurance/kmac-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/kmac-public-api/Cargo.toml --all-targets -- -D warnings

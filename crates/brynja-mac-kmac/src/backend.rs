@@ -10,9 +10,10 @@ pub(crate) trait CshakeState: Sized {
     fn new_kmac(customization: Fips202BitString<'_>) -> Result<Self, HardenedSha3Error>;
     fn check_additional_bytes(&self, additional: u128) -> Result<(), HardenedSha3Error>;
     fn update(&mut self, input: &[u8]) -> Result<(), HardenedSha3Error>;
-    fn finalize_xof(self) -> Self::Reader;
-    fn finalize_bits_xof(
-        self,
+    fn wipe_in_place(&mut self);
+    fn finalize_xof_erasing_source(&mut self) -> Self::Reader;
+    fn finalize_bits_xof_erasing_source(
+        &mut self,
         input: Fips202BitString<'_>,
     ) -> Result<Self::Reader, HardenedSha3Error>;
 }
@@ -52,15 +53,19 @@ macro_rules! backend {
                 Self::update(self, input)
             }
 
-            fn finalize_xof(self) -> Self::Reader {
-                Self::finalize_xof(self)
+            fn wipe_in_place(&mut self) {
+                Self::wipe_in_place(self);
             }
 
-            fn finalize_bits_xof(
-                self,
+            fn finalize_xof_erasing_source(&mut self) -> Self::Reader {
+                Self::finalize_xof_erasing_source(self)
+            }
+
+            fn finalize_bits_xof_erasing_source(
+                &mut self,
                 input: Fips202BitString<'_>,
             ) -> Result<Self::Reader, HardenedSha3Error> {
-                Self::finalize_bits_xof(self, input)
+                Self::finalize_bits_xof_erasing_source(self, input)
             }
         }
 

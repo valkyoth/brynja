@@ -114,6 +114,7 @@ macro_rules! xof_state {
             }
 
             /// Creates an exact-conformance state, including empty and short keys.
+            #[cfg(feature = "conformance-testing")]
             pub fn new_conformance(key: &[u8], customization: &[u8]) -> Result<Self, KmacError> {
                 let key = byte_string(key)?;
                 let customization = byte_string(customization)?;
@@ -121,6 +122,7 @@ macro_rules! xof_state {
             }
 
             /// Creates an exact-conformance arbitrary-bit state.
+            #[cfg(feature = "conformance-testing")]
             pub fn new_bits_conformance(
                 key: Fips202BitString<'_>,
                 customization: Fips202BitString<'_>,
@@ -157,14 +159,15 @@ macro_rules! xof_state {
             }
 
             /// Finalizes a full-strength production state into an incremental reader.
-            pub fn finalize_xof(self) -> Result<$reader, KmacError> {
+            pub fn finalize_xof(mut self) -> Result<$reader, KmacError> {
                 self.core
                     .finish_xof(None, true)
                     .map(|inner| $reader { inner })
             }
 
             /// Finalizes an exact-conformance state into an incremental reader.
-            pub fn finalize_xof_conformance(self) -> Result<$reader, KmacError> {
+            #[cfg(feature = "conformance-testing")]
+            pub fn finalize_xof_conformance(mut self) -> Result<$reader, KmacError> {
                 self.core
                     .finish_xof(None, false)
                     .map(|inner| $reader { inner })
@@ -172,7 +175,7 @@ macro_rules! xof_state {
 
             /// Finalizes after one canonical arbitrary-bit message.
             pub fn finalize_bits_xof(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
             ) -> Result<$reader, KmacError> {
                 self.core
@@ -181,8 +184,9 @@ macro_rules! xof_state {
             }
 
             /// Finalizes exact conformance after an arbitrary-bit message.
+            #[cfg(feature = "conformance-testing")]
             pub fn finalize_bits_xof_conformance(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
             ) -> Result<$reader, KmacError> {
                 self.core

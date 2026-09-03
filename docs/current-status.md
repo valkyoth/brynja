@@ -43,9 +43,11 @@ implements all four SP 800-185 encodings plus complete cSHAKE128 and cSHAKE256
 ordinary and hardened byte/arbitrary-bit, streaming, fixed-output and
 incremental-XOF APIs. The current v0.24.13 candidate adds complete KMAC128,
 KMAC256, KMACXOF128, and KMACXOF256 over the exact hardened cSHAKE owner.
-Strength-enforcing and conformance APIs, opaque tags, constant-time
+Default strength-enforcing and explicitly feature-gated conformance APIs,
+opaque tags, constant-time
 verification, arbitrary-bit domains, typed secret XOF output, complete
-internal cleanup, official examples, an independent oracle, package-external
+internal cleanup including the exact vacated inline cSHAKE source allocation,
+official examples, an independent oracle, package-external
 `no_std` use, and compiler evidence are implemented. All services remain
 non-approved; KMAC is not independently reviewed or FIPS 140-3 validated.
 The wider SP 800-185 family remains in progress until TupleHash, ParallelHash,

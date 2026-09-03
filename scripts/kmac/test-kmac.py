@@ -43,7 +43,13 @@ def main() -> int:
     reject("domain-name", Path("crates/brynja-mac-kmac/src/backend.rs"), "b\"KMAC\"", "b\"RAW\"")
     reject("key-clear", Path("crates/brynja-mac-kmac/src/packer.rs"), "clear_owned_region(&mut self.pending)", "core::hint::black_box(&mut self.pending)")
     reject("key-length-clear", Path("crates/brynja-mac-kmac/src/packer.rs"), "clear_owned_region(&mut self.emitted)", "core::hint::black_box(&mut self.emitted)")
-    reject("nested-owner-clear", Path("crates/brynja-mac-kmac/src/core_state.rs"), "drop(self.state.take())", "core::hint::black_box(self.state.take())")
+    reject("inline-source-option", Path("crates/brynja-mac-kmac/src/core_state.rs"), "state: S,", "state: Option<S>,")
+    reject("in-place-transition", Path("crates/brynja-mac-kmac/src/core_state.rs"), "append_right_encode(&mut self.state", "append_right_encode(&mut temporary")
+    reject("in-place-core-wipe", Path("crates/brynja-mac-kmac/src/core_state.rs"), "self.state.wipe_in_place();", "core::hint::black_box(&mut self.state);")
+    reject("backend-source-erasure", Path("crates/brynja-mac-kmac/src/backend.rs"), "fn finalize_xof_erasing_source(&mut self)", "fn finalize_xof_erasing_source(self)")
+    reject("encoded-width-fail-closed", Path("crates/brynja-mac-kmac/src/packer.rs"), "self.bytes.get(..length).ok_or(KmacError::SecretMemory)", "Ok(self.bytes.get(..length).unwrap_or_default())")
+    reject("conformance-feature", Path("crates/brynja-mac-kmac/src/lib.rs"), '#[cfg(feature = "conformance-testing")]\npub fn kmac128_conformance', "pub fn kmac128_conformance")
+    reject("conformance-compile-gate", Path("scripts/checks.sh"), "scripts/kmac/check-kmac-conformance-gate.sh", "true # removed conformance gate")
     reject("constant-time", Path("crates/brynja-mac-kmac/src/output.rs"), "ct_eq", "ordinary_eq")
     reject("official-vector", Path("crates/brynja-mac-kmac/tests/official_vectors.rs"), "E5780B0D3EA6F7D3", "F5780B0D3EA6F7D3")
     reject("differential", Path("scripts/checks.sh"), "python3 scripts/kmac/check-kmac-differential.py", "true")
@@ -55,7 +61,7 @@ def main() -> int:
         "-p brynja-mac-kmac \\\n    --lib",
     )
     reject("dependency", Path("crates/brynja-mac-kmac/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", "foreign = \"1\"")
-    print("KMAC policy rejects twelve ownership, algorithm, test, and dependency regressions")
+    print("KMAC policy rejects eighteen ownership, feature, algorithm, test, and dependency regressions")
     return 0
 
 

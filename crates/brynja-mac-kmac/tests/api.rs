@@ -1,9 +1,10 @@
 //! Adversarial public-API acceptance for the complete KMAC family.
 
 use brynja_mac_kmac::{
-    Fips202BitString, Fips202Output, Kmac128, Kmac256, KmacError, KmacKeyPolicy,
-    KmacPublicDeclassification, KmacServiceStatus, KmacTagPolicy, KmacXof128,
+    Fips202BitString, Fips202Output, Kmac128, KmacPublicDeclassification, KmacTagPolicy, KmacXof128,
 };
+#[cfg(feature = "conformance-testing")]
+use brynja_mac_kmac::{Kmac256, KmacError, KmacKeyPolicy, KmacServiceStatus};
 
 const KEY128: [u8; 16] = [0xA5; 16];
 const KEY256: [u8; 32] = [0x5A; 32];
@@ -18,6 +19,7 @@ macro_rules! require_some {
 }
 
 #[test]
+#[cfg(feature = "conformance-testing")]
 fn production_and_conformance_parameter_domains_are_separate() {
     assert!(matches!(
         Kmac128::new(&[0; 15], b""),

@@ -168,6 +168,8 @@ KMAC_OWNER_RECORD = {
         "crates/brynja-mac-kmac/tests/api.rs",
         "crates/brynja-mac-kmac/tests/official_vectors.rs",
         "assurance/kmac-public-api/src/lib.rs",
+        "assurance/kmac-conformance-rejected/src/lib.rs",
+        "scripts/kmac/check-kmac-conformance-gate.sh",
         "scripts/kmac/check-kmac-codegen.sh",
         "scripts/kmac/check-kmac.py",
         "scripts/kmac/check-kmac-differential.py",
@@ -217,7 +219,7 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "drop(_1: &mut HardenedFips202Owner<RATE>) -> () {"
     ],
     KMAC_DROP: [
-        "fn core_state::<impl at crates/brynja-mac-kmac/src/core_state.rs:117:1: 117:86>::"
+        "fn core_state::<impl at crates/brynja-mac-kmac/src/core_state.rs:103:1: 103:99>::"
         "drop(_1: &mut KmacCore<S, RATE, STRENGTH>) -> () {"
     ],
 }
@@ -342,11 +344,13 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-hash-sha3/tests/cshake.rs",
     "assurance/cshake-public-api/src/lib.rs",
     "assurance/kmac-public-api/src/lib.rs",
+    "assurance/kmac-conformance-rejected/src/lib.rs",
     "crates/brynja-mac-kmac/src/core_state.rs",
     "crates/brynja-mac-kmac/src/output.rs",
     "crates/brynja-mac-kmac/src/packer.rs",
     "crates/brynja-mac-kmac/tests/api.rs",
     "scripts/kmac/check-kmac-codegen.sh",
+    "scripts/kmac/check-kmac-conformance-gate.sh",
     "crates/brynja-sanitization/src/lib.rs",
     "crates/brynja-sanitization/src/assurance_contract.rs",
     "crates/brynja-test-support/src/deterministic_random.rs",

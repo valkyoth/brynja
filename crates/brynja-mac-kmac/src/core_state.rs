@@ -10,8 +10,8 @@ use crate::{
 
 const FULL_STRENGTH: u8 = 1;
 
-pub(crate) struct KmacCore<S, const RATE: usize, const STRENGTH: u128> {
-    state: Option<S>,
+pub(crate) struct KmacCore<S: CshakeState, const RATE: usize, const STRENGTH: u128> {
+    state: S,
     metadata: KmacMetadata,
 }
 
@@ -29,7 +29,7 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
         let mut state = S::new_kmac(customization).map_err(KmacError::from)?;
         absorb_key(&mut state, key, RATE)?;
         Ok(Self {
-            state: Some(state),
+            state,
             metadata: KmacMetadata::new(policy),
         })
     }
@@ -46,7 +46,7 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
         self.message_bytes()
             .checked_add(additional)
             .ok_or(KmacError::MessageTooLong)?;
-        self.state_ref()?
+        self.state
             .check_additional_bytes(additional)
             .map_err(KmacError::from)
     }
@@ -57,16 +57,16 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
             .message_bytes()
             .checked_add(additional)
             .ok_or(KmacError::MessageTooLong)?;
-        self.state_ref()?
+        self.state
             .check_additional_bytes(additional)
             .map_err(KmacError::from)?;
-        self.state_mut()?.update(input).map_err(KmacError::from)?;
+        self.state.update(input).map_err(KmacError::from)?;
         self.metadata.set_message_bytes(updated);
         Ok(())
     }
 
     pub(crate) fn finish_fixed(
-        self,
+        &mut self,
         final_message: Option<Fips202BitString<'_>>,
         output_bits: u128,
         require_full_strength: bool,
@@ -77,44 +77,30 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
         if require_full_strength && output_bits < STRENGTH {
             return Err(KmacError::TagTooShort);
         }
-        let mut owner = self;
-        append_right_encode(owner.take_state()?, final_message, output_bits)
+        append_right_encode(&mut self.state, final_message, output_bits)
     }
 
     pub(crate) fn finish_xof(
-        self,
+        &mut self,
         final_message: Option<Fips202BitString<'_>>,
         require_full_strength: bool,
     ) -> Result<S::Reader, KmacError> {
         if require_full_strength && self.key_policy() != KmacKeyPolicy::FullStrength {
             return Err(KmacError::KeyTooShort);
         }
-        let mut owner = self;
-        append_right_encode(owner.take_state()?, final_message, 0)
-    }
-
-    fn state_ref(&self) -> Result<&S, KmacError> {
-        self.state.as_ref().ok_or(KmacError::SecretMemory)
-    }
-
-    fn state_mut(&mut self) -> Result<&mut S, KmacError> {
-        self.state.as_mut().ok_or(KmacError::SecretMemory)
-    }
-
-    fn take_state(&mut self) -> Result<S, KmacError> {
-        self.state.take().ok_or(KmacError::SecretMemory)
+        append_right_encode(&mut self.state, final_message, 0)
     }
 }
 
-impl<S, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, STRENGTH> {
+impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, STRENGTH> {
     #[inline(never)]
     fn wipe(&mut self) {
-        drop(self.state.take());
+        self.state.wipe_in_place();
         self.metadata.wipe();
     }
 }
 
-impl<S, const RATE: usize, const STRENGTH: u128> Drop for KmacCore<S, RATE, STRENGTH> {
+impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> Drop for KmacCore<S, RATE, STRENGTH> {
     fn drop(&mut self) {
         self.wipe();
     }
@@ -163,17 +149,25 @@ impl Drop for KmacMetadata {
 
 #[cfg(test)]
 pub(crate) mod assurance_contract {
-    use super::{KmacCore, KmacKeyPolicy, KmacMetadata};
+    use brynja_hash_sha3::{Fips202BitString, HardenedCshake128};
+
+    use super::KmacCore;
 
     #[test]
     fn registered_algorithm_kmac_owner_contract_is_compiler_checked() {
-        let mut owner = KmacCore::<(), 168, 128> {
-            state: Some(()),
-            metadata: KmacMetadata::new(KmacKeyPolicy::FullStrength),
+        let key_bytes = [0xa5; 16];
+        let key = Fips202BitString::new(&key_bytes, 8);
+        assert!(key.is_ok());
+        let Ok(key) = key else {
+            return;
+        };
+        let owner = KmacCore::<HardenedCshake128, 168, 128>::new_bits(key, key, true);
+        assert!(owner.is_ok());
+        let Ok(mut owner) = owner else {
+            return;
         };
         owner.metadata.message_length.fill(0xa5);
         owner.wipe();
-        assert!(owner.state.is_none());
         assert!(owner.metadata.message_length.iter().all(|byte| *byte == 0));
         assert!(owner.metadata.key_class.iter().all(|byte| *byte == 0));
     }

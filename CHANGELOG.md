@@ -7,6 +7,16 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Eliminate the v0.24.13 inline KMAC state-remanence path: KMAC no longer
+  stores hardened cSHAKE in `Option<S>` or extracts it with `take()`. Fixed and
+  XOF finalization now operate on the exact embedded source through `&mut`,
+  replace it with a cleared owner, and volatile-clear the vacated allocation.
+  Rust 1.90.0/1.98.0 development and optimized compiler evidence plus a
+  negative source-move fixture enforce the transition.
+- Hide weak-key and short-tag KMAC conformance entry points from default builds
+  behind `conformance-testing`, reject impossible encoded-key widths instead of
+  silently producing an empty prefix, and document the caller's required
+  protocol-level verification-length bound.
 - Move hardened cSHAKE customization and setup-length metadata into two new
   registered byte-backed owner regions, clear both at finalization and Drop,
   and enforce the complete thirteen-region boundary through unit, mutation,

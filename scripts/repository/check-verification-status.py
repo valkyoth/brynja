@@ -28,7 +28,7 @@ COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
     "| `brynja-hash-sha2` | All six fully implemented FIPS 180-4 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-2 algorithms with forced optional ordinary CPU candidate APIs, compiler-resistant cleanup evidence, and combined package-external acceptance | ❌ Not verified |",
     "| `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary/hardened byte and arbitrary-bit functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary/hardened byte and arbitrary-bit APIs; hardened owners classify public versus typed-secret output | ❌ Not verified |",
-    "| `brynja-mac-kmac` | Complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 with conformance/strength policy, hardened state, typed output, and constant-time tag verification | ❌ Not independently verified |",
+    "| `brynja-mac-kmac` | Complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 with strength-only default APIs, feature-gated exact conformance, hardened in-place source clearing, typed output, and constant-time tag verification | ❌ Not independently verified |",
     "| Future `brynja-mac-*` | Other reusable MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |",

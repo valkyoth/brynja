@@ -40,7 +40,9 @@ six complete portable FIPS 202 SHA-3 and SHAKE ordinary and hardened byte and
 arbitrary-bit message functions and arbitrary-bit SHAKE output from
 `brynja-hash-sha3`. The same leaf now supplies complete SP 800-185 encodings
 and cSHAKE128/cSHAKE256 ordinary and hardened APIs, plus complete KMAC128,
-KMAC256, KMACXOF128, and KMACXOF256 APIs from `brynja-mac-kmac`. Its broader provider effects, AEADs,
+KMAC256, KMACXOF128, and KMACXOF256 default strength-enforcing APIs from
+`brynja-mac-kmac`. Exact weak/short conformance entry points require the leaf's
+explicit assurance feature. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
 

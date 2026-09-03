@@ -1,0 +1,13 @@
+[package]
+name = "brynja-kmac-conformance-rejected-fixture"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+brynja-mac-kmac = { path = "../../crates/brynja-mac-kmac" }
+
+[workspace]
+
+[lints.rust]
+unsafe_code = "deny"

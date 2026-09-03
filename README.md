@@ -855,14 +855,17 @@ compiler evidence, and the exact-candidate retest passed. The permanent
 records `PASS`/`PASS` with zero open findings.
 
 The internal `0.24.13` candidate adds complete KMAC128, KMAC256, KMACXOF128,
-and KMACXOF256 over the exact hardened cSHAKE owner. Separate conformance and
-strength-enforcing constructors preserve the complete standards-valid domain
-without granting approved-service status to weak parameters. Fixed tags are
+and KMACXOF256 over the exact hardened cSHAKE owner. Strength-enforcing
+constructors form the default surface; exact conformance constructors require
+the explicit `conformance-testing` leaf-crate feature and cannot appear through
+ordinary default-build autocomplete. Fixed tags are
 opaque and use constant-time verification; XOF output is typed secret unless
 explicitly declassified. Official examples, a separately composed arbitrary-
 bit oracle, package-external `no_std` use, twenty-two cumulative Kani bounds,
 Miri, AddressSanitizer, timing checks, and Rust 1.90.0/1.98.0 cleanup evidence
-are bound to the implementation. KMAC is fully implemented but neither
+are bound to the implementation. The pentest remediation additionally removes
+inline `Option::take` state extraction and binds in-place source-allocation
+clearing into compiler evidence. KMAC is fully implemented but neither
 independently verified nor FIPS 140-3 validated; the wider SP 800-185 family
 remains in progress until TupleHash, ParallelHash, and final acceptance pass.
 

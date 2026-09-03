@@ -15,7 +15,7 @@ pub(crate) fn absorb_key<S: CshakeState>(
     let mut packer = SecretPacker::new(state);
     packer.push_bytes(left_encode_u128(rate_value).as_bytes())?;
     let key_length = SecretEncodedInteger::left_encode(key_bits)?;
-    packer.push_bytes(key_length.as_bytes())?;
+    packer.push_bytes(key_length.as_bytes()?)?;
     packer.push_bit_string(key)?;
     packer.finish_bytepad(rate)
 }
@@ -59,9 +59,9 @@ impl SecretEncodedInteger {
         Ok(encoded)
     }
 
-    fn as_bytes(&self) -> &[u8] {
+    fn as_bytes(&self) -> Result<&[u8], KmacError> {
         let length = usize::from(self.length.first().copied().unwrap_or_default());
-        self.bytes.get(..length).unwrap_or_default()
+        self.bytes.get(..length).ok_or(KmacError::SecretMemory)
     }
 }
 
@@ -73,11 +73,11 @@ impl Drop for SecretEncodedInteger {
 }
 
 pub(crate) fn append_right_encode<S: CshakeState>(
-    mut state: S,
+    state: &mut S,
     final_message: Option<Fips202BitString<'_>>,
     output_bits: u128,
 ) -> Result<S::Reader, KmacError> {
-    let mut packer = SecretPacker::new(&mut state);
+    let mut packer = SecretPacker::new(state);
     if let Some(message) = final_message {
         packer.push_bit_string(message)?;
     }
@@ -87,9 +87,11 @@ pub(crate) fn append_right_encode<S: CshakeState>(
         Some(tail) => {
             let input = Fips202BitString::new(tail.as_bytes(), tail.valid())
                 .map_err(|_| KmacError::InvalidBitString)?;
-            state.finalize_bits_xof(input).map_err(KmacError::from)
+            state
+                .finalize_bits_xof_erasing_source(input)
+                .map_err(KmacError::from)
         }
-        None => Ok(state.finalize_xof()),
+        None => Ok(state.finalize_xof_erasing_source()),
     }
 }
 
@@ -259,5 +261,20 @@ impl Drop for SecretTail {
     fn drop(&mut self) {
         let _ = clear_owned_region(&mut self.byte);
         let _ = clear_owned_region(&mut self.valid);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::SecretEncodedInteger;
+    use crate::KmacError;
+
+    #[test]
+    fn corrupt_encoded_width_fails_closed() {
+        let encoded = SecretEncodedInteger {
+            bytes: [0xa5; 17],
+            length: [18],
+        };
+        assert_eq!(encoded.as_bytes(), Err(KmacError::SecretMemory));
     }
 }

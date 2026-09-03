@@ -23561,7 +23561,7 @@
       ]
     }
   ],
-  "policy_sha256": "36dbdb12c6e8a17f383f6a1cda2656482e906f97cf05f272a3ab8c7bf89ebeff",
+  "policy_sha256": "7a6f6b1c1b6e35822d483c145fa31e007e8b9fb381dd5bbdeccb0cb409e5dfde",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",
@@ -23572,6 +23572,8 @@
         "crates/brynja-mac-kmac/tests/api.rs",
         "crates/brynja-mac-kmac/tests/official_vectors.rs",
         "assurance/kmac-public-api/src/lib.rs",
+        "assurance/kmac-conformance-rejected/src/lib.rs",
+        "scripts/kmac/check-kmac-conformance-gate.sh",
         "scripts/kmac/check-kmac-codegen.sh",
         "scripts/kmac/check-kmac.py",
         "scripts/kmac/check-kmac-differential.py"

@@ -84,13 +84,33 @@ macro_rules! hardened_cshake {
             /// Consumes absorption and returns a hardened incremental reader.
             #[must_use]
             pub fn finalize_xof(mut self) -> $reader {
-                self.finish(None);
-                $reader { owner: self.owner }
+                self.finalize_xof_erasing_source()
             }
 
             /// Consumes absorption after one final canonical message bit string.
             pub fn finalize_bits_xof(
                 mut self,
+                input: Fips202BitString<'_>,
+            ) -> Result<$reader, HardenedSha3Error> {
+                self.finalize_bits_xof_erasing_source(input)
+            }
+
+            /// Finalizes in place and compiler-resistantly clears the vacated
+            /// source owner before returning its incremental reader.
+            ///
+            /// This transition exists for hardened constructions that embed
+            /// cSHAKE inline and must erase that exact source allocation.
+            #[doc(hidden)]
+            pub fn finalize_xof_erasing_source(&mut self) -> $reader {
+                self.finish(None);
+                self.take_reader_erasing_source()
+            }
+
+            /// Finalizes a final bit string in place and clears the vacated
+            /// source owner before returning its incremental reader.
+            #[doc(hidden)]
+            pub fn finalize_bits_xof_erasing_source(
+                &mut self,
                 input: Fips202BitString<'_>,
             ) -> Result<$reader, HardenedSha3Error> {
                 let bits = u128::try_from(input.bit_len())
@@ -99,7 +119,14 @@ macro_rules! hardened_cshake {
                 let (complete, partial) = input.split();
                 self.update(complete)?;
                 self.finish(partial);
-                Ok($reader { owner: self.owner })
+                Ok(self.take_reader_erasing_source())
+            }
+
+            /// Compiler-resistantly clears this embedded construction owner
+            /// in place. This is reserved for hardened composition cleanup.
+            #[doc(hidden)]
+            pub fn wipe_in_place(&mut self) {
+                self.owner.wipe();
             }
 
             /// Produces one explicitly declassified fixed public output.
@@ -131,6 +158,14 @@ macro_rules! hardened_cshake {
                         .finalize(partial, SHAKE_SUFFIX, SHAKE_SUFFIX_BITS);
                 }
                 self.owner.wipe_cshake_metadata();
+            }
+
+            #[inline(never)]
+            fn take_reader_erasing_source(&mut self) -> $reader {
+                let live =
+                    core::mem::replace(&mut self.owner, HardenedFips202Owner::<$rate>::new());
+                self.owner.wipe();
+                $reader { owner: live }
             }
         }
 
@@ -235,4 +270,57 @@ hardened_cshake!(HardenedCshake256, HardenedCshake256Reader, 136, "cSHAKE256");
 fn byte_string(input: &[u8]) -> Result<Fips202BitString<'_>, HardenedSha3Error> {
     let valid = if input.is_empty() { 0 } else { 8 };
     Fips202BitString::new(input, valid).map_err(|_| HardenedSha3Error::MessageTooLong)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{HardenedCshake128, HardenedCshake256};
+    use crate::{Fips202BitString, hardened::owner::HardenedFips202Owner};
+
+    fn is_cleared<const RATE: usize>(owner: &HardenedFips202Owner<RATE>) -> bool {
+        owner.sponge_lanes.iter().all(|byte| *byte == 0)
+            && owner.partial_input.iter().all(|byte| *byte == 0)
+            && owner.message_length.iter().all(|byte| *byte == 0)
+            && owner.output_length.iter().all(|byte| *byte == 0)
+            && owner.cshake_setup_length.iter().all(|byte| *byte == 0)
+            && owner.cshake_domain.iter().all(|byte| *byte == 0)
+            && owner.phase.iter().all(|byte| *byte == 0)
+            && owner.suffix_staging.iter().all(|byte| *byte == 0)
+            && owner.padding_block.iter().all(|byte| *byte == 0)
+            && owner.squeeze_staging.iter().all(|byte| *byte == 0)
+            && owner.permutation_columns.iter().all(|byte| *byte == 0)
+            && owner.permutation_theta.iter().all(|byte| *byte == 0)
+            && owner.permutation_rearranged.iter().all(|byte| *byte == 0)
+    }
+
+    #[test]
+    fn in_place_reader_transition_clears_exact_source_owner() {
+        let cshake128 = HardenedCshake128::new(b"KMAC", b"source wipe");
+        assert!(cshake128.is_ok());
+        let Ok(mut cshake128) = cshake128 else {
+            return;
+        };
+        assert_eq!(cshake128.update(b"secret-derived state"), Ok(()));
+        let reader128 = cshake128.finalize_xof_erasing_source();
+        assert!(is_cleared(&cshake128.owner));
+        reader128.cancel();
+
+        let cshake256 = HardenedCshake256::new(b"KMAC", b"source wipe");
+        assert!(cshake256.is_ok());
+        let Ok(mut cshake256) = cshake256 else {
+            return;
+        };
+        let tail = Fips202BitString::new(&[0b0000_0101], 3);
+        assert!(tail.is_ok());
+        let Ok(tail) = tail else {
+            return;
+        };
+        let reader256 = cshake256.finalize_bits_xof_erasing_source(tail);
+        assert!(reader256.is_ok());
+        let Ok(reader256) = reader256 else {
+            return;
+        };
+        assert!(is_cleared(&cshake256.owner));
+        reader256.cancel();
+    }
 }

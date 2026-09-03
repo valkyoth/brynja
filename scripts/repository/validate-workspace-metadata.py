@@ -62,8 +62,17 @@ def load_policy() -> dict[str, dict]:
             raise ValueError(f"{name} has unknown publication class")
         required = entry.get("required")
         optional = entry.get("optional")
-        if not isinstance(required, list) or not isinstance(optional, dict):
+        features = entry.get("features", [])
+        if (
+            not isinstance(required, list)
+            or not isinstance(optional, dict)
+            or not isinstance(features, list)
+            or any(not isinstance(feature, str) or not feature for feature in features)
+            or len(features) != len(set(features))
+        ):
             raise ValueError(f"{name} has malformed dependency policy")
+        if "default" in features or set(features).intersection(optional):
+            raise ValueError(f"{name} has ambiguous standalone feature policy")
         dependencies = required + list(optional.values())
         if len(dependencies) != len(set(dependencies)):
             raise ValueError(f"{name} repeats a dependency")
@@ -206,6 +215,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
             for feature, dependency in entry["optional"].items()
         }
     )
+    expected.update({feature: [] for feature in entry.get("features", [])})
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")
 

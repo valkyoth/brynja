@@ -32,10 +32,11 @@ source-declared key-derived region on success, error, cancellation, recoverable
 unwind, and `Drop`.
 
 Production constructors require keys and fixed tags at least as long as the
-selected 128- or 256-bit security strength. Explicit `*_conformance` APIs retain
+selected 128- or 256-bit security strength. Exact `*_conformance` APIs retain
 the complete standards-valid key and output domains while reporting weak or
-short parameters as non-approved policy outcomes. All services report
-`NonApproved`: Brynja has no FIPS 140-3 validation.
+short parameters as non-approved policy outcomes, but are absent from default
+builds and require the explicit `conformance-testing` feature. All services
+report `NonApproved`: Brynja has no FIPS 140-3 validation.
 
 ```rust
 use brynja_mac_kmac::{Kmac128, KmacPublicDeclassification, KmacXof256};
@@ -58,6 +59,9 @@ reader.squeeze_public(
 
 KMAC fixed tags are opaque values without ordinary equality or formatting.
 Verification uses content-independent work for the public candidate length.
+Callers must reject candidate/tag lengths above the bound of their protocol
+before verification; KMAC intentionally supports standards-valid outputs of
+arbitrary representable length and cannot choose that protocol limit.
 KMACXOF output is secret by default: retain `KmacSecretOutput`, or provide an
 explicit public-declassification authority. Callers remain responsible for
 clearing key/message buffers and copies they own.

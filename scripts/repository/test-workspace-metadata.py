@@ -304,6 +304,16 @@ def test_feature_contracts(baseline: dict) -> None:
         "a non-empty default feature",
     )
 
+    missing_conformance_gate = copy.deepcopy(baseline)
+    features = package(missing_conformance_gate, "brynja-mac-kmac")["features"]
+    del features["conformance-testing"]
+    require_rejection(
+        missing_conformance_gate,
+        "all-features",
+        "feature policy differs",
+        "missing KMAC conformance feature gate",
+    )
+
 
 def test_resolved_isolation(all_features: dict, no_default: dict) -> None:
     modern_leak = copy.deepcopy(all_features)

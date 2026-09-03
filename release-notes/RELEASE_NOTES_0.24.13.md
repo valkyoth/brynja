@@ -1,7 +1,7 @@
 # Brynja 0.24.13 Release Notes
 
-Status: implementation complete; exceptional pentest, release reconciliation,
-hosted GitHub checks, CodeQL, and signed development tag pending
+Status: implementation remediated; exceptional pentest retest, release
+reconciliation, hosted GitHub checks, CodeQL, and signed development tag pending
 
 ## Summary
 
@@ -33,6 +33,14 @@ service indicator remains `NonApproved`.
 - Register all Brynja-owned key-encoding, metadata, pending-byte, verification
   and temporary output regions for compiler-resistant destruction while the
   underlying hardened cSHAKE owner clears its own sponge state.
+- Keep weak-key and short-tag conformance APIs absent from default builds behind
+  the explicit `conformance-testing` feature so production integrations cannot
+  select them by ordinary autocomplete.
+- Finalize the embedded cSHAKE owner by mutable reference, replace it with a
+  cleared placeholder, and volatile-clear the exact vacated source allocation;
+  no inline keyed state is extracted through `Option::take`.
+- Reject a corrupt secret encoded-integer width instead of silently substituting
+  an empty slice, and document the caller's protocol-level verification bound.
 
 ## Verification
 
@@ -56,8 +64,8 @@ service indicator remains `NonApproved`.
 ## Security And Residual Limits
 
 - Production constructors enforce full-strength keys and fixed tags;
-  conformance constructors intentionally accept weaker standards-valid cases
-  but identify them as non-approved.
+  feature-gated conformance constructors intentionally accept weaker
+  standards-valid cases but identify them as non-approved.
 - KMACXOF output remains secret unless returned in an affine typed owner or
   explicitly declassified. Failed secret output clears the whole destination.
 - Cleanup covers Brynja-owned source-declared memory during normal, error,
@@ -68,6 +76,19 @@ service indicator remains `NonApproved`.
   and copied outputs they own.
 - No accelerated KMAC route is admitted. No independent review or official
   FIPS validation certificate exists.
+
+## Pentest Remediation
+
+The initial assessment found one High source-owned state-remanence issue, one
+Medium conformance-API misuse risk, and two Low hardening observations. The
+remediation removes the inline `Option<S>` and every `take()` transition,
+finalizes the embedded cSHAKE state by mutable reference, and binds the exact
+source-derived volatile wipe into both compiler-endpoint evidence and a
+negative regression fixture. Conformance-only APIs now require the explicit
+`conformance-testing` feature and a compile-fail default-build gate. Corrupt
+encoded widths fail closed, and candidate-length ownership is documented at
+the protocol boundary. Independent retest of this exact remediation remains
+pending.
 
 ## Authority
 

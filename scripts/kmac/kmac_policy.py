@@ -20,19 +20,26 @@ MANIFEST = CRATE / "Cargo.toml"
 README = CRATE / "README.md"
 CRYPTO = Path("crates/brynja-crypto/src/lib.rs")
 MAIN = Path("crates/brynja/src/lib.rs")
+HARDENED_CSHAKE = Path("crates/brynja-hash-sha3/src/hardened/cshake.rs")
 PACKAGE_POLICY = Path("package-policy.toml")
 CHECKS = Path("scripts/checks.sh")
 DIFFERENTIAL = Path("scripts/kmac/check-kmac-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/kmac-differential/src/main.rs")
+DIFFERENTIAL_MANIFEST = Path("assurance/kmac-differential/Cargo.toml")
 PUBLIC_FIXTURE = Path("assurance/kmac-public-api/src/lib.rs")
+CONFORMANCE_GATE = Path("scripts/kmac/check-kmac-conformance-gate.sh")
+CONFORMANCE_FIXTURE = Path("assurance/kmac-conformance-rejected/src/lib.rs")
+CONFORMANCE_MANIFEST = Path("assurance/kmac-conformance-rejected/Cargo.toml")
 CODEGEN = Path("scripts/kmac/check-kmac-codegen.sh")
 TIMING = Path("scripts/kmac/check-kmac-timing.sh")
 TAG_GATE = Path("scripts/tag_gate.sh")
 MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 FILES = (*SOURCES, *TESTS, MANIFEST, README, CRYPTO, MAIN, PACKAGE_POLICY,
-         CHECKS, DIFFERENTIAL, DIFFERENTIAL_FIXTURE, PUBLIC_FIXTURE, CODEGEN,
-         TIMING, TAG_GATE, MIRI, SANITIZER)
+         CHECKS, DIFFERENTIAL, DIFFERENTIAL_FIXTURE, DIFFERENTIAL_MANIFEST,
+         PUBLIC_FIXTURE, CONFORMANCE_GATE, CONFORMANCE_FIXTURE,
+         CONFORMANCE_MANIFEST, HARDENED_CSHAKE, CODEGEN, TIMING, TAG_GATE,
+         MIRI, SANITIZER)
 HASHES = {Path(path): digest for path, digest in kmac_reviewed_hashes.REVIEWED_HASHES.items()}
 
 
@@ -69,7 +76,11 @@ def validate(root: Path) -> None:
     if actual != expected:
         fail("KMAC production source inventory changed")
     loaded = {path: read(root, path) for path in FILES}
-    if set(HASHES) != set((*SOURCES, *TESTS, PUBLIC_FIXTURE, DIFFERENTIAL_FIXTURE, CODEGEN, DIFFERENTIAL)):
+    if set(HASHES) != set((*SOURCES, *TESTS, PUBLIC_FIXTURE,
+                           DIFFERENTIAL_FIXTURE, DIFFERENTIAL_MANIFEST,
+                           CONFORMANCE_GATE, CONFORMANCE_FIXTURE,
+                           CONFORMANCE_MANIFEST, HARDENED_CSHAKE, CODEGEN,
+                           DIFFERENTIAL)):
         fail("KMAC reviewed hash inventory changed")
     production = "\n".join(without_comments(loaded[path]) for path in SOURCES)
     for forbidden in (
@@ -97,6 +108,9 @@ def validate(root: Path) -> None:
     for token in (
         "HardenedCshake128", "HardenedCshake256", "b\"KMAC\"",
         "Sha3PublicDeclassification::acknowledge()",
+        "fn finalize_xof_erasing_source(&mut self)",
+        "fn finalize_bits_xof_erasing_source(",
+        "fn wipe_in_place(&mut self)",
     ):
         require(backend, token, "hardened cSHAKE backend")
     packer = loaded[CRATE / "src/packer.rs"]
@@ -107,6 +121,9 @@ def validate(root: Path) -> None:
         "clear_owned_region(&mut self.emitted)",
         "impl Drop for SecretEncodedInteger",
         "impl<S: CshakeState> Drop for SecretPacker",
+        "fn as_bytes(&self) -> Result<&[u8], KmacError>",
+        "self.bytes.get(..length).ok_or(KmacError::SecretMemory)",
+        "corrupt_encoded_width_fails_closed",
     ):
         require(packer, token, "KMAC key and trailer packing")
     if packer.count("clear_owned_region(&mut self.") != 9:
@@ -120,7 +137,22 @@ def validate(root: Path) -> None:
         require(fixed, token, "fixed KMAC API")
     core_state = loaded[CRATE / "src/core_state.rs"]
     require(core_state, "KmacError::TagTooShort", "KMAC strength policy")
-    require(core_state, "drop(self.state.take())", "KMAC nested-owner cleanup")
+    require(core_state, "state: S,", "KMAC inline owner")
+    require(core_state, "append_right_encode(&mut self.state", "KMAC in-place transition")
+    require(core_state, "self.state.wipe_in_place();", "KMAC in-place Drop cleanup")
+    for forbidden in ("state: Option<S>", ".state.take()", "fn take_state"):
+        if forbidden in core_state:
+            fail(f"KMAC source owner can escape without in-place clearing: {forbidden}")
+    hardened_cshake = loaded[HARDENED_CSHAKE]
+    for token in (
+        "pub fn finalize_xof_erasing_source(&mut self)",
+        "pub fn finalize_bits_xof_erasing_source(",
+        "pub fn wipe_in_place(&mut self)",
+        "core::mem::replace(&mut self.owner",
+        "self.owner.wipe();",
+        "in_place_reader_transition_clears_exact_source_owner",
+    ):
+        require(hardened_cshake, token, "hardened cSHAKE source transition")
     output = loaded[CRATE / "src/output.rs"]
     for token in (
         "pub struct KmacTag", "pub struct KmacSecretOutput",
@@ -137,7 +169,9 @@ def validate(root: Path) -> None:
         require(policy, token, "KMAC parameter policy")
 
     manifest = tomllib.loads(loaded[MANIFEST])
-    if manifest.get("features") != {"default": []}:
+    if manifest.get("features") != {
+        "default": [], "conformance-testing": [],
+    }:
         fail("KMAC feature surface changed")
     if manifest.get("dependencies") != {
         "brynja-core": {"workspace": True},
@@ -148,6 +182,7 @@ def validate(root: Path) -> None:
     if package != {
         "class": "modern-shared", "publish": "crates-io",
         "required": ["brynja-core", "brynja-hash-sha3"], "optional": {},
+        "features": ["conformance-testing"],
     }:
         fail("KMAC package classification changed")
 
@@ -167,6 +202,16 @@ def validate(root: Path) -> None:
         "secret_output_is_cleared_when_ownership_ends",
     ):
         require(api, token, "KMAC adversarial tests")
+    if loaded[CRATE / "src/lib.rs"].count('#[cfg(feature = "conformance-testing")]') != 8:
+        fail("KMAC one-shot conformance feature gate changed")
+    if loaded[CRATE / "src/fixed.rs"].count('#[cfg(feature = "conformance-testing")]') != 7:
+        fail("fixed KMAC conformance feature gate changed")
+    if loaded[CRATE / "src/xof.rs"].count('#[cfg(feature = "conformance-testing")]') != 4:
+        fail("KMACXOF conformance feature gate changed")
+    differential_manifest = tomllib.loads(loaded[DIFFERENTIAL_MANIFEST])
+    differential_dependency = differential_manifest["dependencies"]["brynja-mac-kmac"]
+    if differential_dependency.get("features") != ["conformance-testing"]:
+        fail("KMAC differential oracle lost explicit conformance feature")
 
     for path, token in (
         (CRYPTO, "KMAC_IMPLEMENTED: bool = true"),
@@ -174,14 +219,21 @@ def validate(root: Path) -> None:
         (PUBLIC_FIXTURE, "all_three_package_layers_are_operational"),
         (DIFFERENTIAL, "for index in range(64)"),
         (DIFFERENTIAL_FIXTURE, "MAX_CAMPAIGN_BYTES"),
-        (CODEGEN, "KMAC nested owner, encoded-key metadata"),
+        (CODEGEN, "KMAC source-owned state transitions and cleanup survive"),
         (TIMING, "assurance/kmac-timing/Cargo.toml"),
         (TAG_GATE, "scripts/kmac/check-kmac-timing.sh"),
         (MIRI, "-p brynja-mac-kmac"),
         (SANITIZER, "-p brynja-mac-kmac"),
         (CHECKS, "python3 scripts/kmac/check-kmac-differential.py"),
+        (CHECKS, "scripts/kmac/check-kmac-conformance-gate.sh"),
         (CHECKS, "scripts/kmac/check-kmac-codegen.sh"),
+        (CONFORMANCE_GATE, "default KMAC build unexpectedly exposed conformance constructors"),
+        (CONFORMANCE_GATE, "assurance/kmac-differential/Cargo.toml"),
+        (CONFORMANCE_FIXTURE, "Kmac128::new_conformance"),
+        (CODEGEN, "Option<S>|state\\.take\\(\\)|take_state"),
+        (CODEGEN, "take_reader_erasing_source"),
         (README, "no FIPS 140-3 validation"),
+        (README, "Callers must reject candidate/tag lengths"),
     ):
         require(loaded[path], token, "KMAC evidence closure")
     require(

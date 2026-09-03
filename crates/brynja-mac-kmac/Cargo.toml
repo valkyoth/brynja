@@ -12,6 +12,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
+conformance-testing = []
 
 [dependencies]
 brynja-core = { workspace = true }

@@ -38,7 +38,8 @@ are closed by the combined v0.24.11 acceptance. Repository milestone v0.24.12
 adds the complete SP 800-185 encoding foundation plus cSHAKE128 and cSHAKE256
 with byte and arbitrary-bit function names, customization, messages and output;
 repository milestone v0.24.13 builds all four KMAC/KMACXOF constructions over
-the hardened cSHAKE owner in the separate `brynja-mac-kmac` leaf. The wider
+the hardened cSHAKE owner in the separate `brynja-mac-kmac` leaf, using an
+in-place reader transition that clears the exact vacated source owner. The wider
 SP 800-185 family remains in progress through v0.24.17.
 
 ```rust

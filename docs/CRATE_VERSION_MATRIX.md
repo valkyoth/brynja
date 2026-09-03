@@ -284,7 +284,7 @@ FIPS validation remain later work. Zero crates are selected for publication.
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output/XOF interfaces and canonical borrowed bit strings |
 | `brynja-hash-sha2` | `0.1.0` | no | Unpublished fully implemented six-algorithm FIPS 180-4 ordinary and hardened byte/arbitrary-bit APIs, forced ordinary candidate routes, compiler-resistant cleanup evidence, and combined package-external acceptance |
 | `brynja-hash-sha3` | `0.1.0` | no | Unpublished fully implemented FIPS 202 family plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary/hardened byte/arbitrary-bit APIs; wider SP 800-185 acceptance remains pending |
-| `brynja-mac-kmac` | `0.1.0` | no | New unpublished complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 leaf with exact conformance and strength policy, secret-owned state, constant-time verification, and typed output |
+| `brynja-mac-kmac` | `0.1.0` | no | New unpublished complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 leaf with strength-only default APIs, explicit-feature exact conformance, in-place source clearing, constant-time verification, and typed output |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE, SP 800-185 encodings, and all four KMAC/KMACXOF constructions |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |

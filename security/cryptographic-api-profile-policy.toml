@@ -32,7 +32,7 @@ fields = ["hardened-cshake-state:secret-derived", "message-length:secret-derived
 temporaries = ["encoded-key-pending-byte:secret-copy", "verification-block:secret-derived", "comparison-difference:secret-derived", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
 sanitization_symbol = "crates/brynja-mac-kmac/src/core_state.rs#brynja_mac_kmac::KmacCore::wipe"
 cleanup_callers = ["crates/brynja-mac-kmac/src/core_state.rs#brynja_mac_kmac::core_state::KmacCore::drop"]
-evidence = ["crates/brynja-mac-kmac/tests/api.rs", "crates/brynja-mac-kmac/tests/official_vectors.rs", "assurance/kmac-public-api/src/lib.rs", "scripts/kmac/check-kmac-codegen.sh", "scripts/kmac/check-kmac.py", "scripts/kmac/check-kmac-differential.py"]
+evidence = ["crates/brynja-mac-kmac/tests/api.rs", "crates/brynja-mac-kmac/tests/official_vectors.rs", "assurance/kmac-public-api/src/lib.rs", "assurance/kmac-conformance-rejected/src/lib.rs", "scripts/kmac/check-kmac-conformance-gate.sh", "scripts/kmac/check-kmac-codegen.sh", "scripts/kmac/check-kmac.py", "scripts/kmac/check-kmac-differential.py"]
 storage = "crate-owned-fixed"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
@@ -813,7 +813,7 @@ sha256 = "01c18b5dd45d3e90ed15450834adbadb9233a44b3f4a5b7696435bba5caff9b3"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/core_state.rs"
-sha256 = "b0940585ad90255e2e4b4b9908513b37767fbee159643063e56046e0caf947d1"
+sha256 = "846e8faf8aff60286f0903fc26420e397aa48883313df3bef9226ee4aa6b6f18"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/output.rs"
@@ -821,15 +821,23 @@ sha256 = "194598a94ca33aad9b0e885159268c70faf6412f9665ac7e2c9c5bbccad54b75"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/packer.rs"
-sha256 = "a6603bf967547957e2c6ed36f4e349187eaa6c7ce4e17f5682f43f3dab6fc4d2"
+sha256 = "f7b76a2dd7f67edbc49296bd0b25bcdcbecd23c736784aa077fd3f6092faa0c8"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/tests/api.rs"
-sha256 = "fdb0f5e6eb5c2fe9ccc50a78d397051a935da39a7c458ca8ebf283c0452aef98"
+sha256 = "9709fa94906a0e18e3a4cfa7e56ab84ae67504337f8b25e7930898f59189bfad"
 
 [[reviewed-source]]
 path = "scripts/kmac/check-kmac-codegen.sh"
-sha256 = "93af6bd118eb73f8c1a8542a02861cfeb64f21af79760dac5a83128676675058"
+sha256 = "779ea2b570391ef584865c322b98e516ae2297e44594cb13d6374c0a02c0c26f"
+
+[[reviewed-source]]
+path = "assurance/kmac-conformance-rejected/src/lib.rs"
+sha256 = "fe4a3db89edf219e343df7e5b55bff94fcef99fdc582c17c05230e20606b5a5a"
+
+[[reviewed-source]]
+path = "scripts/kmac/check-kmac-conformance-gate.sh"
+sha256 = "e54887e6fdc558b52e8327a01c8f401469dce94ebe495d8a33a61c1e15e1bffa"
 
 [[reviewed-source]]
 path = "assurance/api-profile-contract/src/lib.rs"
@@ -841,7 +849,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "50ff797fee5c8b5ee86e4d7b0196ff22d0263b24f68f3dc20ffa41b3b535fd6f"
+sha256 = "c5c696f30011f01bd269882a52ea9b928e4ec3921b38d87a64047b7836bd83ed"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
@@ -957,7 +965,7 @@ sha256 = "cc3342c62b0b2df60569dca6044c8e1f7446bb2a7a0a65d0d0fc436aeacc5b40"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake.rs"
-sha256 = "d3fe59c92209534b0be93960516b0f1bab276d9b9db5ddb68934a94662543264"
+sha256 = "145ff1e88f51f7359320248d41fa9074ac1ac4927c25939353c4466f02855d61"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/output.rs"
@@ -1001,8 +1009,8 @@ sha256 = "74c8692370d915dbbb7778f3f723e051f581f1cfff8089dbfaf865107b36c35f"
 
 [[reviewed-source]]
 path = "scripts/sha3/sha3_hardened.py"
-sha256 = "83036cacbddede9e2e6190361299fa54008c3f9bccd5f0024888665ebf9911cd"
+sha256 = "95f15edc4700c500d8b82ce29c463c3c58d660c8cbc30c40a58827b645f82fc5"
 
 [[reviewed-source]]
 path = "scripts/sha3/test-sha3-hardened.py"
-sha256 = "8d3d2a6e236bc62f128a52e8ef3d74439e7ef2e046b41fde9156f2dd22acf0f9"
+sha256 = "b7491ad612f7fd5c6b21470ed96d6a72bd377fdeed30fed18b1b806a7570871a"

@@ -3303,12 +3303,14 @@ Deliverables:
 - implement typed KMAC128/KMAC256 and KMACXOF128/KMACXOF256 states with exact
   `KMAC` function-name separation, key bytepad, customization and fixed-versus-
   XOF right encoding, including every standards-valid representable bit length;
-- separate exact conformance constructors from strength-enforcing production
-  constructors, report empty or undersized keys as non-approved without calling
-  them ordinary hashes, and expose opaque MAC/PRF tags with constant-time verify;
+- keep strength-enforcing constructors as the only default surface and place
+  exact conformance constructors behind an explicit test-only feature, report
+  empty or undersized keys as non-approved without calling them ordinary
+  hashes, and expose opaque MAC/PRF tags with constant-time verify;
 - own and compiler-resistantly destroy key bytes, encoded key blocks, sponge
   state, buffers, temporary tags and failure paths through the admitted
-  sanitization boundary, with affine finalization and no digest/tag conversion.
+  sanitization boundary, with affine finalization, exact vacated-source wiping,
+  no inline option extraction and no digest/tag conversion.
 
 Verification:
 
@@ -3320,7 +3322,8 @@ Verification:
   tests, and differentially verify exact encodings and outputs;
 - prove no conformance-only weak-key result gains approved/default authority,
   no public ordinary digest interface accepts KMAC, and no secret-owned state
-  uses the ordinary non-erasing SHA-3/SHAKE state.
+  uses the ordinary non-erasing SHA-3/SHAKE state; compile-fail the conformance
+  surface in a default build and reject source-move cleanup regressions.
 
 Exit criteria:
 

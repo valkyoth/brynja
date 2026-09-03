@@ -42,6 +42,7 @@ class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-sha3"]
 optional = {}
+features = ["conformance-testing"]
 
 [packages.brynja-crypto-cpu]
 class = "cpu-backend"

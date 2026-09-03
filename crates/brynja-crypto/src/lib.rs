@@ -98,11 +98,8 @@ pub use brynja_hash_sha3::{
 pub use brynja_mac_kmac::{
     Kmac128, Kmac256, KmacError, KmacKeyPolicy, KmacPublicDeclassification, KmacSecretOutput,
     KmacServiceStatus, KmacTag, KmacTagPolicy, KmacVerification, KmacXof128, KmacXof128Reader,
-    KmacXof256, KmacXof256Reader, kmac128, kmac128_bits, kmac128_bits_conformance,
-    kmac128_conformance, kmac256, kmac256_bits, kmac256_bits_conformance, kmac256_conformance,
-    kmacxof128_public, kmacxof128_public_conformance, kmacxof128_secret,
-    kmacxof128_secret_conformance, kmacxof256_public, kmacxof256_public_conformance,
-    kmacxof256_secret, kmacxof256_secret_conformance,
+    KmacXof256, KmacXof256Reader, kmac128, kmac128_bits, kmac256, kmac256_bits, kmacxof128_public,
+    kmacxof128_secret, kmacxof256_public, kmacxof256_secret,
 };
 
 #[cfg(test)]

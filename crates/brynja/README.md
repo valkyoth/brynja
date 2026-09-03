@@ -124,9 +124,9 @@ reader
     .unwrap();
 ```
 
-Production constructors require full-strength keys and fixed tags. Explicit
-conformance constructors retain all standards-valid inputs but report weak
-parameters as non-approved. Brynja has no FIPS validation.
+Production constructors require full-strength keys and fixed tags. Exact conformance constructors retain all standards-valid inputs but are absent from
+default builds, require the leaf crate's explicit `conformance-testing` feature, and report weak parameters as non-approved. Brynja has no FIPS validation.
+Callers must enforce their protocol's maximum candidate-tag length before KMAC verification.
 
 ## Cryptography Verification Status
 
@@ -190,7 +190,7 @@ FIPS validation is a separate official claim from implementation and independent
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-sha2` | All six fully implemented FIPS 180-4 ordinary and hardened byte and arbitrary-bit APIs |
 | `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output |
-| `brynja-mac-kmac` | Complete hardened KMAC128/256 and KMACXOF128/256 APIs |
+| `brynja-mac-kmac` | Complete hardened KMAC128/256 and KMACXOF128/256 APIs with in-place source clearing and feature-gated exact conformance |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

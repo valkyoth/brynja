@@ -36,6 +36,7 @@ macro_rules! fixed_kmac {
             }
 
             /// Creates an exact-conformance state, including empty and short keys.
+            #[cfg(feature = "conformance-testing")]
             pub fn new_conformance(key: &[u8], customization: &[u8]) -> Result<Self, KmacError> {
                 let key = byte_string(key)?;
                 let customization = byte_string(customization)?;
@@ -43,6 +44,7 @@ macro_rules! fixed_kmac {
             }
 
             /// Creates an exact-conformance arbitrary-bit state.
+            #[cfg(feature = "conformance-testing")]
             pub fn new_bits_conformance(
                 key: Fips202BitString<'_>,
                 customization: Fips202BitString<'_>,
@@ -80,15 +82,16 @@ macro_rules! fixed_kmac {
 
             /// Produces a full-strength public MAC tag.
             pub fn finalize_tag<'output>(
-                self,
+                mut self,
                 output: &'output mut [u8],
             ) -> Result<KmacTag<'output>, KmacError> {
                 self.finish_tag(None, output, true)
             }
 
             /// Produces a standards-valid public tag and reports its length policy.
+            #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_conformance<'output>(
-                self,
+                mut self,
                 output: &'output mut [u8],
             ) -> Result<KmacTag<'output>, KmacError> {
                 self.finish_tag(None, output, false)
@@ -96,7 +99,7 @@ macro_rules! fixed_kmac {
 
             /// Produces a full-strength tag after one final arbitrary-bit message.
             pub fn finalize_tag_bits<'output>(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
                 output: &'output mut [u8],
                 valid_output_bits: u8,
@@ -105,8 +108,9 @@ macro_rules! fixed_kmac {
             }
 
             /// Produces an exact-conformance arbitrary-bit tag.
+            #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_bits_conformance<'output>(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
                 output: &'output mut [u8],
                 valid_output_bits: u8,
@@ -116,7 +120,7 @@ macro_rules! fixed_kmac {
 
             /// Produces full-strength typed secret output.
             pub fn finalize_secret<'output>(
-                self,
+                mut self,
                 output: &'output mut [u8],
             ) -> Result<KmacSecretOutput<'output>, KmacError> {
                 let bits = byte_output_bits(output.len())?;
@@ -129,7 +133,7 @@ macro_rules! fixed_kmac {
 
             /// Produces typed secret output after one final arbitrary-bit message.
             pub fn finalize_secret_bits<'output>(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
                 output: Fips202Output<'output>,
             ) -> Result<KmacSecretOutput<'output>, KmacError> {
@@ -142,8 +146,9 @@ macro_rules! fixed_kmac {
             }
 
             /// Produces exact-conformance typed secret arbitrary-bit output.
+            #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_bits_conformance<'output>(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
                 output: Fips202Output<'output>,
             ) -> Result<KmacSecretOutput<'output>, KmacError> {
@@ -156,14 +161,15 @@ macro_rules! fixed_kmac {
             }
 
             /// Verifies one full-strength byte tag in constant work for its public length.
-            pub fn verify(self, candidate: &[u8]) -> Result<KmacVerification, KmacError> {
+            pub fn verify(mut self, candidate: &[u8]) -> Result<KmacVerification, KmacError> {
                 let candidate = byte_string(candidate)?;
                 self.verify_inner(None, candidate, true)
             }
 
             /// Verifies any standards-valid byte tag, including short conformance values.
+            #[cfg(feature = "conformance-testing")]
             pub fn verify_conformance(
-                self,
+                mut self,
                 candidate: &[u8],
             ) -> Result<KmacVerification, KmacError> {
                 let candidate = byte_string(candidate)?;
@@ -172,7 +178,7 @@ macro_rules! fixed_kmac {
 
             /// Verifies a full-strength arbitrary-bit tag after a final bit message.
             pub fn verify_bits(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, KmacError> {
@@ -180,8 +186,9 @@ macro_rules! fixed_kmac {
             }
 
             /// Verifies an exact-conformance arbitrary-bit tag.
+            #[cfg(feature = "conformance-testing")]
             pub fn verify_bits_conformance(
-                self,
+                mut self,
                 final_message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, KmacError> {
@@ -192,7 +199,7 @@ macro_rules! fixed_kmac {
             pub fn cancel(self) {}
 
             fn finish_tag<'output>(
-                self,
+                &mut self,
                 final_message: Option<Fips202BitString<'_>>,
                 output: &'output mut [u8],
                 production: bool,
@@ -205,7 +212,7 @@ macro_rules! fixed_kmac {
             }
 
             fn finish_tag_bits<'output>(
-                self,
+                &mut self,
                 final_message: Fips202BitString<'_>,
                 output: &'output mut [u8],
                 valid_output_bits: u8,
@@ -224,7 +231,7 @@ macro_rules! fixed_kmac {
             }
 
             fn verify_inner(
-                self,
+                &mut self,
                 final_message: Option<Fips202BitString<'_>>,
                 candidate: Fips202BitString<'_>,
                 production: bool,

@@ -30,7 +30,7 @@
     "crates/brynja-legacy-tls11/Cargo.toml": "85e7f8cdc636fb272fdbc5ce92b1bbec2e32efdf44a34ea95fd92995135b19bb",
     "crates/brynja-legacy-wtls/Cargo.toml": "a530b8c301d0fa6252f269064f318dbb7e5508168f522af9b3f2aaf3bd03c64e",
     "crates/brynja-legacy/Cargo.toml": "31c7d03b89d15498aa4f5e15e81f03e6276084678cf2d5cff847d50d94bfb3c0",
-    "crates/brynja-mac-kmac/Cargo.toml": "339107b658e798c293cf668ab49916d78c9ad5149d3f72a85722bc5791412e56",
+    "crates/brynja-mac-kmac/Cargo.toml": "d96f2ba5a49cf3e76c24cfccb383be5c47b18f856ee9de619a636f5941e51279",
     "crates/brynja-pki/Cargo.toml": "ac3f67b452ad49f00be666f20da074bb0b5dc45a8a3154a8fe9dfcb785270d33",
     "crates/brynja-platform/Cargo.toml": "9b7de75f2b5c053b4afc60f170173a764d5d51d173a1879b6cdbf4ea0e5b0b50",
     "crates/brynja-proofs/Cargo.toml": "703a8acc6a02caf32113c57a4a21b215d6c6c6aeff1e3acd577f023cfd03ef11",

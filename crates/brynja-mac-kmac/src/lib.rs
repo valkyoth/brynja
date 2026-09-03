@@ -2,9 +2,10 @@
 //!
 //! All keyed state is built directly over Brynja's hardened cSHAKE owner. The
 //! crate is allocation-free, `no_std`, first-party Rust, and exposes separate
-//! fixed-output MAC and extendable-output PRF types. Exact-conformance
-//! constructors cover every representable standards-valid key length, while
-//! production constructors enforce the selected 128- or 256-bit key strength.
+//! fixed-output MAC and extendable-output PRF types. The opt-in
+//! `conformance-testing` feature exposes constructors covering every
+//! representable standards-valid key length, while default production
+//! constructors enforce the selected 128- or 256-bit key strength.
 
 #![no_std]
 
@@ -41,6 +42,7 @@ pub fn kmac128<'output>(
 }
 
 /// Computes an exact-conformance KMAC128 tag, including weak parameter cases.
+#[cfg(feature = "conformance-testing")]
 pub fn kmac128_conformance<'output>(
     key: &[u8],
     message: &[u8],
@@ -65,6 +67,7 @@ pub fn kmac256<'output>(
 }
 
 /// Computes an exact-conformance KMAC256 tag, including weak parameter cases.
+#[cfg(feature = "conformance-testing")]
 pub fn kmac256_conformance<'output>(
     key: &[u8],
     message: &[u8],
@@ -88,6 +91,7 @@ pub fn kmac128_bits<'output>(
 }
 
 /// Computes an exact-conformance arbitrary-bit KMAC128 public tag.
+#[cfg(feature = "conformance-testing")]
 pub fn kmac128_bits_conformance<'output>(
     key: Fips202BitString<'_>,
     message: Fips202BitString<'_>,
@@ -114,6 +118,7 @@ pub fn kmac256_bits<'output>(
 }
 
 /// Computes an exact-conformance arbitrary-bit KMAC256 public tag.
+#[cfg(feature = "conformance-testing")]
 pub fn kmac256_bits_conformance<'output>(
     key: Fips202BitString<'_>,
     message: Fips202BitString<'_>,
@@ -153,6 +158,7 @@ pub fn kmacxof256_secret<'output>(
 }
 
 /// Computes exact-conformance KMACXOF128 output with typed secret ownership.
+#[cfg(feature = "conformance-testing")]
 pub fn kmacxof128_secret_conformance<'output>(
     key: &[u8],
     message: &[u8],
@@ -165,6 +171,7 @@ pub fn kmacxof128_secret_conformance<'output>(
 }
 
 /// Computes exact-conformance KMACXOF256 output with typed secret ownership.
+#[cfg(feature = "conformance-testing")]
 pub fn kmacxof256_secret_conformance<'output>(
     key: &[u8],
     message: &[u8],
@@ -203,6 +210,7 @@ pub fn kmacxof256_public(
 }
 
 /// Computes exact-conformance KMACXOF128 output classified as public.
+#[cfg(feature = "conformance-testing")]
 pub fn kmacxof128_public_conformance(
     key: &[u8],
     message: &[u8],
@@ -218,6 +226,7 @@ pub fn kmacxof128_public_conformance(
 }
 
 /// Computes exact-conformance KMACXOF256 output classified as public.
+#[cfg(feature = "conformance-testing")]
 pub fn kmacxof256_public_conformance(
     key: &[u8],
     message: &[u8],

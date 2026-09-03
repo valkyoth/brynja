@@ -74,6 +74,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Make pre-tag Miri proportional and fail closed: internal tags run smoke
+  coverage for every registered group plus full coverage of changed groups and
+  their downstream closure, while every crates.io checkpoint and every shared
+  toolchain, manifest, lockfile, or Miri-policy change requires the complete
+  suite. The grouped runner also exposes a future headless shard boundary;
+  distributed results cannot replace local evidence until an exact-commit,
+  exact-toolchain, complete-inventory aggregator is implemented.
 - Refresh the default release compiler from Rust 1.98.0 to 1.98.1 after the
   fail-closed live freshness check detected the stable patch release. Rust
   1.98.0 remains an explicitly tested compatibility lane; the full gate,

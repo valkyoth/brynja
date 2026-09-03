@@ -453,6 +453,11 @@ tests, run the complete automated tag gate, produce an SBOM, review all
 source-file lengths and unsafe/dependency surfaces, write release notes, commit
 all files, and wait for green GitHub and CodeQL before the user authorizes the
 signed tag. Development milestones stop there without crates.io publication.
+Their tag gate runs bounded Miri smoke coverage for every registered assurance
+group and complete Miri coverage for changed groups plus their downstream
+dependency closure. Shared toolchain, manifest, lockfile, or Miri-policy changes
+fail closed to complete coverage. Every public checkpoint that can publish to
+crates.io always runs the complete registered Miri suite.
 At each scheduled or exceptional public checkpoint, ask the user for a
 backwards-looking pentest of every change after the prior public tag through the
 current candidate. Keep that report current while findings are fixed and

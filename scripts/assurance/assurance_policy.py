@@ -2,7 +2,6 @@
 """Validate and render Brynja's v0.4.0 assurance policy."""
 
 from __future__ import annotations
-
 import hashlib
 import json
 import re
@@ -10,8 +9,6 @@ import subprocess
 import tomllib
 import urllib.request
 from pathlib import Path
-
-
 ROOT = Path(__file__).resolve().parent.parent.parent
 POLICY = ROOT / "assurance" / "policy.toml"
 EVIDENCE = ROOT / "assurance" / "evidence.json"
@@ -317,10 +314,9 @@ def validate_repository(policy: dict) -> None:
     if install in workflow:
         fail("ordinary CI must not install the full Miri evidence toolchain")
     tag_gate = (ROOT / "scripts" / "tag_gate.sh").read_text(encoding="utf-8")
-    for tool in ("miri", "sanitizer"):
-        command = f"scripts/zeroization/check-zeroization-{tool}.sh"
-        if tag_gate.count(command) != 1:
-            fail("local tag gate dynamic-analysis binding drifted")
+    dynamic = ("scripts/zeroization/check-tag-miri.sh", "scripts/zeroization/check-zeroization-sanitizer.sh")
+    if any(tag_gate.count(command) != 1 for command in dynamic):
+        fail("local tag gate dynamic-analysis binding drifted")
     rust_targets = set(
         subprocess.check_output(
             ["rustc", "--print", "target-list"],
@@ -354,6 +350,9 @@ def validate_repository(policy: dict) -> None:
         "scripts/zeroization/check-zeroization-codegen.sh",
         "scripts/zeroization/check-zeroization-evidence.py",
         "scripts/zeroization/test-zeroization-evidence.py",
+        "scripts/zeroization/miri_scope.py",
+        "scripts/zeroization/test-miri-scope.py",
+        "scripts/zeroization/check-tag-miri.sh",
         "scripts/zeroization/check-zeroization-miri.sh",
         "scripts/zeroization/check-zeroization-sanitizer.sh",
     ):
@@ -396,6 +395,7 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "scripts" / "zeroization" / "check-zeroization-codegen.sh",
         ROOT / "scripts" / "zeroization" / "check-zeroization-evidence.py",
         ROOT / "scripts" / "zeroization" / "test-zeroization-evidence.py",
+        *(ROOT / "scripts" / "zeroization" / name for name in ("miri_scope.py", "test-miri-scope.py", "check-tag-miri.sh")),
         ROOT / "scripts" / "zeroization" / "check-zeroization-miri.sh",
         ROOT / "scripts" / "zeroization" / "check-zeroization-sanitizer.sh",
         *cargo_manifests(),

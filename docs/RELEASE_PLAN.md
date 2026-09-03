@@ -15561,7 +15561,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Complete Miri and sanitizer evidence plus compiler, target and CPU-backend constant-time assembly, owned-region zeroization-store survival, cache and branch, statistical side-channel, spill and register-residual matrices; test every forced scalar and accelerated path without extending owned-memory destruction claims to registers or OS context state.
+Plan scope: Complete Miri and sanitizer evidence plus compiler, target and CPU-backend constant-time assembly, owned-region zeroization-store survival, cache and branch, statistical side-channel, spill and register-residual matrices; test every forced scalar and accelerated path without extending owned-memory destruction claims to registers or OS context state; complete a resumable exact-source local/SSH evidence manager, isolated parallel Miri shards, authenticated retrieval, fail-closed bundle validation and complete-inventory aggregation so long public-checkpoint runs may use headless workers without weakening the all-groups requirement.
 
 Goal: complete the **Memory And Side-Channel Evidence** implementation stop without admitting or
 claiming adjacent capability.
@@ -15570,6 +15570,13 @@ Deliverables:
 
 - implement the Plan scope exactly and preserve its input, state, resource,
   secret, effect, storage, failure, dependency, and package boundaries;
+- adapt the proven `base64-ng` distributed-evidence model: ignored SQLite state
+  may track resumable detached local or SSH jobs, but exact-source shard bundles
+  and their final aggregate remain the only release evidence;
+- bind every Miri shard to one clean commit and tree, pinned Miri/Rust identity,
+  exact group and runner hashes, configuration, environment, bounded logs,
+  start/finish status and successful result; isolate Cargo homes and target
+  directories so groups may execute concurrently without artifact races;
 - capture formal, external-process fuzz, differential, sanitizer, side-channel, platform, hostile-load, review, remediation, freeze, and operational evidence;
 - update requirements, threat model, controls, status, limitations, release
   notes, and permanent evidence index.
@@ -15577,13 +15584,20 @@ Deliverables:
 Verification:
 
 - run campaigns across compiler, target, provider, feature combination, package, harness, peer, path, selector, adapter, and clean environment;
+- prove local and remote capture, interruption, restart, retry, SSH host/key
+  binding, authenticated retrieval, archive traversal and symlink rejection,
+  log/resource limits, duplicate/missing group rejection, and mixed commit,
+  tree, toolchain, runner or configuration rejection;
+- require the public-checkpoint aggregator to cover every registered group and
+  refuse partial or stale collections; never treat manager state, worker exit
+  text, or an unvalidated archive as evidence;
 - retain regressions and prove replay, clean retest, traceability, artifact identity, rollback, compromise, and incident procedures;
 - pass repository checks, promised Rust versions and targets, dependency and
   advisory policy, SBOM, packages, documentation, and protocol isolation.
 
 Exit criteria:
 
-- the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
+- the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior; a complete public-checkpoint Miri campaign can run sequentially or concurrently across local and SSH workers with identical fail-closed acceptance;
 - `v0.157.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.158.0 - Sustained Platform And Hostile-Load Qualification

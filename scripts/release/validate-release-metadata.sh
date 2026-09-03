@@ -98,6 +98,10 @@ test -x scripts/assurance/assurance_process.py
 test -x scripts/assurance/assurance_process_tree.py
 test -x scripts/assurance/check-bare-metal.sh
 test -x scripts/assurance/check-kani.sh
+test -x scripts/zeroization/check-tag-miri.sh
+test -x scripts/zeroization/check-zeroization-miri.sh
+test -x scripts/zeroization/miri_scope.py
+test -x scripts/zeroization/test-miri-scope.py
 test -x scripts/repository/check-commit-classification.py
 test -x scripts/repository/test-commit-classification.py
 test -x scripts/repository/check-verification-status.py
@@ -300,6 +304,9 @@ if grep -q -- '--write-freshness' .github/workflows/standards-lifecycle.yml; the
     exit 1
 fi
 grep -q 'scripts/assurance/check-kani.sh --required' scripts/tag_gate.sh
+grep -q 'scripts/zeroization/check-tag-miri.sh "$stage"' scripts/tag_gate.sh
+grep -q '"$miri_runner" --full' scripts/zeroization/check-tag-miri.sh
+grep -q '"$miri_runner" --focused "${groups\[@\]}"' scripts/zeroization/check-tag-miri.sh
 if grep -q 'run: scripts/release/validate-current-pentest.sh' .github/workflows/ci.yml; then
     echo "ordinary CI must not enforce pentest freshness; tag and release gates own it" >&2
     exit 1

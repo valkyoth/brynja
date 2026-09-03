@@ -1163,12 +1163,15 @@ signed tag. `scripts/tag_gate.sh vX.Y.Z` runs the complete automated tag gate
 and applies the stage-specific final check: ordinary development milestones
 require no scheduled pentest, exceptional development milestones require their
 PASS report without publication, and public checkpoints require their
-cumulative PASS report. Full Miri, AddressSanitizer, and Kani execute locally
-in that pre-tag gate. Ordinary GitHub CI checks their pinned scripts, declared
-coverage, mutation resistance, and emitted-code evidence but does not rerun the
-full dynamic suites, whose runtime exceeds the bounded hosted-CI window. GitHub
-CodeQL uses Default setup; this repository intentionally does not add an
-advanced CodeQL workflow.
+cumulative PASS report. Every tag runs local Miri smoke coverage for all
+registered groups plus complete coverage for changed groups and their
+downstream closure; public crates.io checkpoints and shared assurance changes
+force every group. Full AddressSanitizer and Kani also execute locally in that
+pre-tag gate. Ordinary GitHub CI checks their pinned scripts, declared coverage,
+scope selection, mutation resistance, and emitted-code evidence but does not
+rerun the long dynamic suites, whose runtime exceeds the bounded hosted-CI
+window. GitHub CodeQL uses Default setup; this repository intentionally does
+not add an advanced CodeQL workflow.
 
 After an exact green public-checkpoint candidate is pentested and tagged, the
 interactive crates.io publisher is, for example:

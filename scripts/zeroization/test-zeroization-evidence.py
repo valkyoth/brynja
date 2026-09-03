@@ -19,6 +19,7 @@ def copy_fixture(destination: Path) -> None:
         Path(".github/workflows/ci.yml"),
         Path("scripts/checks.sh"),
         Path("scripts/tag_gate.sh"),
+        Path("scripts/zeroization/check-tag-miri.sh"),
     ):
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -65,8 +66,18 @@ def test() -> None:
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
-        replace(tag_gate, "scripts/zeroization/check-zeroization-miri.sh", "true")
+        replace(tag_gate, "scripts/zeroization/check-tag-miri.sh", "true")
         require_rejection(root, "local tag gate")
+        copy_fixture(root)
+
+        tag_miri = root / "scripts/zeroization/check-tag-miri.sh"
+        replace(tag_miri, '"$miri_runner" --full', "true")
+        require_rejection(root, "complete Miri evidence")
+        copy_fixture(root)
+
+        tag_miri = root / "scripts/zeroization/check-tag-miri.sh"
+        replace(tag_miri, '"$miri_runner" --focused "${groups[@]}"', "true")
+        require_rejection(root, "focused Miri evidence")
         copy_fixture(root)
 
         workflow.write_text(
@@ -87,4 +98,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("zeroization evidence rejects six claim, coverage, and execution-boundary regressions")
+    print("zeroization evidence rejects eight claim, coverage, and execution-boundary regressions")

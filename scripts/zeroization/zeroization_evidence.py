@@ -84,6 +84,7 @@ def validate(root: Path) -> None:
         "toolchain": "nightly-2026-09-03",
         "execution": "local-pre-tag",
         "miri": True,
+        "miri_policy": "focused-internal-complete-public",
         "address_sanitizer": True,
         "test_target": "x86_64-unknown-linux-gnu",
     }:
@@ -125,8 +126,15 @@ def validate(root: Path) -> None:
         fail("ordinary repository checks omit latest-host codegen evidence")
     tag_gate = (root / "scripts/tag_gate.sh").read_text(encoding="utf-8")
     for command in (
-        "scripts/zeroization/check-zeroization-miri.sh",
+        "scripts/zeroization/check-tag-miri.sh",
         "scripts/zeroization/check-zeroization-sanitizer.sh",
     ):
         if tag_gate.count(command) != 1:
             fail("local tag gate omits pinned zeroization dynamic analysis")
+    tag_miri = (root / "scripts/zeroization/check-tag-miri.sh").read_text(
+        encoding="utf-8"
+    )
+    if tag_miri.count('"$miri_runner" --full') != 4:
+        fail("public checkpoint no longer requires complete Miri evidence")
+    if tag_miri.count('"$miri_runner" --focused "${groups[@]}"') != 1:
+        fail("internal tag no longer requires focused Miri evidence")

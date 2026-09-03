@@ -43,8 +43,8 @@ fi
 if test -z "${BRYNJA_RELEASE_PUBLISH_TAG:-}"; then
     echo "tag gate: required local AddressSanitizer evidence"
     scripts/zeroization/check-zeroization-sanitizer.sh
-    echo "tag gate: required local Miri evidence"
-    scripts/zeroization/check-zeroization-miri.sh
+    echo "tag gate: required stage-aware local Miri evidence"
+    scripts/zeroization/check-tag-miri.sh "$stage"
     echo "tag gate: required local Kani proofs"
     scripts/assurance/check-kani.sh --required
 else

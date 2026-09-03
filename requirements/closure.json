@@ -6282,7 +6282,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Complete Miri and sanitizer evidence plus compiler, target and CPU-backend constant-time assembly, owned-region zeroization-store survival, cache and branch, statistical side-channel, spill and register-residual matrices; test every forced scalar and accelerated path without extending owned-memory destruction claims to registers or OS context state.",
+      "scope": "Complete Miri and sanitizer evidence plus compiler, target and CPU-backend constant-time assembly, owned-region zeroization-store survival, cache and branch, statistical side-channel, spill and register-residual matrices; test every forced scalar and accelerated path without extending owned-memory destruction claims to registers or OS context state; complete a resumable exact-source local/SSH evidence manager, isolated parallel Miri shards, authenticated retrieval, fail-closed bundle validation and complete-inventory aggregation so long public-checkpoint runs may use headless workers without weakening the all-groups requirement.",
       "source_ids": [],
       "title": "Memory And Side-Channel Evidence",
       "version": "0.157.0"

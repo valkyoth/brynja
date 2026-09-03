@@ -190,10 +190,13 @@ claim.
 The tool entries are exact source-policy pins, and no tool may enter a
 repository Cargo manifest. Kani and the process fuzzers remain policy-only
 until their owning later milestones. The local pre-tag gate executes the pinned
-Miri and AddressSanitizer toolchain against the registered zeroization and hash
-coverage. Ordinary GitHub CI validates the exact scripts, tool pins, coverage
-bindings, mutations, and emitted-code matrices but does not execute the full
-dynamic-analysis suites, whose runtime exceeds the bounded hosted-CI window.
+Miri toolchain with smoke coverage for every registered group and complete
+coverage for changed groups plus their downstream closure. Public crates.io
+checkpoints and shared assurance changes force all groups; AddressSanitizer
+remains complete at every tag. Ordinary GitHub CI validates exact scripts,
+tool pins, scope selection, coverage bindings, mutations, and emitted-code
+matrices but does not execute the long dynamic-analysis suites, whose runtime
+exceeds the bounded hosted-CI window.
 That local evidence does not establish constant-time behavior, physical
 erasure, protocol security, or independent verification. The latest-tools gate
 compares both nightly tools to the current official Rust nightly manifest and

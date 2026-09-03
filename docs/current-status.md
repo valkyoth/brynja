@@ -450,10 +450,15 @@ repository-owner retest passed with `PASS`/`PASS` and zero open findings. This
 does not replace the scheduled cumulative v0.20.0-to-v0.25.0 assessment,
 independent cryptographic review, or FIPS validation.
 
-Full Miri, AddressSanitizer, and Kani evidence executes in the mandatory local
-pre-tag gate. Bounded GitHub CI validates the exact pins, scripts, coverage
-bindings, mutations, and emitted-code evidence without rerunning the full
-dynamic suites, whose hardened coverage exceeds the hosted timeout.
+The mandatory local pre-tag gate runs bounded Miri smoke coverage for every
+registered group and complete Miri coverage for each changed group plus its
+downstream dependency closure. Shared toolchain, root manifest, lockfile,
+zeroization-matrix, or Miri-control changes force the complete suite, and every
+public crates.io checkpoint always runs every registered Miri group. Full
+AddressSanitizer and Kani evidence remains mandatory at every tag. Bounded
+GitHub CI validates exact pins, scripts, coverage bindings, mutations, and
+emitted-code evidence without rerunning the long dynamic suites, whose hardened
+coverage exceeds the hosted timeout.
 
 Signed releases v0.1.0 through v0.15.0 established the workspace, hardened
 release and isolation controls, made standards authority executable, and

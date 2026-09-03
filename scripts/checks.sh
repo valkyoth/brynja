@@ -8,6 +8,8 @@ python3 scripts/repository/check-tracked-build-artifacts.py
 python3 scripts/repository/test-tracked-build-artifacts.py
 scripts/repository/check_shell_syntax.sh
 scripts/repository/test-shell-syntax.sh
+python3 scripts/zeroization/miri_scope.py --check
+python3 scripts/zeroization/test-miri-scope.py
 python3 scripts/repository/check-unsafe-policy.py
 python3 scripts/repository/test-unsafe-policy.py
 python3 scripts/repository/check-first-party-rust-crypto.py

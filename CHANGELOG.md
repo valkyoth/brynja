@@ -787,6 +787,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Expand the pre-1.0 legacy-hash chain with a frozen portable SHA-1/MD5
+  acceptance boundary, dedicated x86/AArch64 SHA-1 acceleration, explicit
+  multi-buffer MD5 SIMD across qualifying x86_64, AArch64 and RISC-V targets,
+  and an unchanged-fixture cross-backend closure before either family becomes
+  Fully implemented. Strengthen v0.24.11 so SHA-2 and SHA-3/SHAKE status can
+  leave In progress only after exact-final-code cross-backend evidence and
+  synchronized human- and machine-readable status updates.
 - Add the v0.18.1 bounded observational security-event schema with opaque
   authority-derived events, explicit one-way caller timestamp enrichment,
   deterministic fixed-capacity FIFO buffering, and visible saturating loss

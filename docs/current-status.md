@@ -626,7 +626,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   165 exact mappings and 17 explicit dispositions;
 - all 791 surfaces left by the foundation, domain, and transport bundles are
   assigned, producing complete coverage of all 4,456 surfaces;
-- the generated closure maps all 130 locked sources, all 519 ordered pre-1.0
+- the generated closure maps all 130 locked sources, all 522 ordered pre-1.0
   roadmap rows, all 4,456 surfaces, and all 169 requirements in both directions;
 - local redistribution boundaries, all eight mutable registries, five mutable
   NIST publication pages, source-free plan rows, and dependent refresh owners

@@ -904,9 +904,9 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, compile-fail downstream hardened implementation and marker forgery, verify explicit public declassification versus typed secret output plus unchanged or cleared partial failure destinations, inspect compiler-resistant cleanup and residual-risk claims across supported compilers and targets, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.",
+      "scope": "Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; run the exact final code through portable, every cleanup-qualified admitted backend, and every required-backend unavailable or quarantine path; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, verify explicit public declassification versus typed secret output, refresh every affected native, timing, emitted-code, proof, sanitization, package and differential artifact after any code change, and only then change the root, facade, leaf, current-status and claim-register family entries from In progress to Fully implemented while independent verification and FIPS validation remain separate.",
       "source_ids": [],
-      "title": "Complete Hash API And Zeroization Usability Acceptance",
+      "title": "SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance",
       "version": "0.24.11"
     },
     {
@@ -1005,10 +1005,43 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Package and exercise every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile against real files and authoritative digests, inspect all internal cleanup paths and prove warning, dependency, feature and symbol isolation; no legacy result or ordinary non-erasing state can satisfy a modern or secret-bearing policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters over hardened owners.",
+      "scope": "Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass.",
       "source_ids": [],
-      "title": "Legacy SHA-1 And MD5 Usability And Isolation Acceptance",
+      "title": "Legacy SHA-1 And MD5 Portable Public API Acceptance",
       "version": "0.24.20"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "After the frozen v0.24.20 portable boundary is green, implement isolated first-party SHA-1 compression candidates for exact x86/x86_64 SHA-extension and AArch64 SHA1 feature bundles, with no_std static selection and opt-in std runtime detection; require forced-path KATs, scalar differentials, migration-safe feature revalidation, quarantine, emitted-code, AMD/Intel and Apple/AWS Arm native correctness, performance and timing evidence, cleanup-qualified hardened dispatch, and an explicit scalar-only disposition for RISC-V or any target without a ratified toolchain-expressible SHA-1 facility.",
+      "source_ids": [],
+      "title": "SHA-1 CPU Acceleration",
+      "version": "0.24.21"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "After v0.24.20, implement first-party allocation-free MD5 multi-buffer candidates that process independent messages through exact x86_64 AVX2 and, when separately justified, AVX-512 bundles plus AArch64 NEON and qualifying ratified RISC-V Vector bundles; expose bounded caller-owned batch lanes without pretending single-stream MD5 has dedicated hardware acceleration, preserve scalar semantics for uneven tails and unsupported targets, and require lane-permutation, mixed-length, inactive-lane, KAT, differential, quarantine, native performance, timing, emitted-code, failure-atomicity and hardened lane/register/spill cleanup evidence before admission.",
+      "source_ids": [],
+      "title": "MD5 Multi-Buffer SIMD Acceleration",
+      "version": "0.24.22"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Rerun the byte-identical v0.24.20 package-external fixtures on the exact final source through portable, every admitted SHA-1 backend, every admitted MD5 batch width, scalar tails, unavailable-required and quarantined routes; collect current AMD/Intel, Apple/AWS Arm and qualifying RISC-V or explicit unsupported evidence, repeat every affected proof, sanitizer, cleanup, timing, KAT, package and differential artifact after any code change, and only then mark the isolated legacy SHA-1 and MD5 families Fully implemented while retaining collision-insecure, non-default, independently-unverified and non-FIPS status.",
+      "source_ids": [],
+      "title": "Legacy SHA-1 And MD5 Cross-Backend Final Acceptance",
+      "version": "0.24.23"
     },
     {
       "boundary": null,

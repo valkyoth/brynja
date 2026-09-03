@@ -930,8 +930,8 @@ selected set in dependency order and publishes the facade last.
 | Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.165.0 |
 | Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.180.0 |
 | Future `brynja-openpgp-legacy` | Complete deprecated-algorithm and historical-key compatibility with no modern facade edge | Required before 1.0 and separately isolated |
-| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Planned at v0.24.18 and accepted at v0.24.20; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
-| Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Planned at v0.24.19 and accepted at v0.24.20 solely before isolated HMAC-MD5 compatibility |
+| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Portable implementation at v0.24.18, frozen acceptance at v0.24.20, SHA-instruction acceleration at v0.24.21, and final cross-backend closure at v0.24.23; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
+| Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Portable implementation at v0.24.19, frozen acceptance at v0.24.20, multi-buffer SIMD at v0.24.22, and final cross-backend closure at v0.24.23 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |

@@ -3192,11 +3192,11 @@ Exit criteria:
   reusable construction boundary accounts for every Brynja-owned secret copy;
 - `v0.24.10 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.11 - Complete Hash API And Zeroization Usability Acceptance
+### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance
 
 Status: planned
 
-Plan scope: Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, compile-fail downstream hardened implementation and marker forgery, verify explicit public declassification versus typed secret output plus unchanged or cleared partial failure destinations, inspect compiler-resistant cleanup and residual-risk claims across supported compilers and targets, prohibit ordinary-state use by secret-bearing consumers, rerun every affected scalar and accelerated artifact, and only then restore Fully implemented family status.
+Plan scope: Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; run the exact final code through portable, every cleanup-qualified admitted backend, and every required-backend unavailable or quarantine path; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, verify explicit public declassification versus typed secret output, refresh every affected native, timing, emitted-code, proof, sanitization, package and differential artifact after any code change, and only then change the root, facade, leaf, current-status and claim-register family entries from In progress to Fully implemented while independent verification and FIPS validation remain separate.
 
 Goal: close the expanded modern hash surface only after real downstream users
 can choose fast public-data or hardened secret-bearing operation without hidden
@@ -3207,6 +3207,9 @@ Deliverables:
 - freeze package-external no_std fixtures for every SHA-2, SHA-3 and SHAKE
   ordinary/hardened byte/bit profile, documented commands, package contents,
   algorithm identities, backend dispositions and caller-owned output rules;
+- bind the final source commit to the frozen v0.23.4 SHA-2 and v0.24.3 SHA-3/
+  SHAKE consumer expectations plus every later arbitrary-bit and hardened API;
+  record portable, admitted, unavailable and quarantined routes separately;
 - bind the complete secret-state register to exact source, MIR, LLVM IR and
   assembly evidence for every owned region and terminal path, with explicit
   `mem::forget`/abort/termination/power-loss/register/cache/OS/crash residuals
@@ -3215,9 +3218,11 @@ Deliverables:
   downstream implementations and forged markers, explicit public
   declassification, typed secret destinations, failure-before-mutation and
   clearing after any unavoidable partial output;
-- update public verification tables to distinguish mathematical output,
-  ordinary versus hardened usability, admitted backends, independent review
-  and FIPS validation, changing the family to **Fully implemented** only here.
+- update the root README, crates.io facade README, SHA-2 and SHA-3 leaf READMEs,
+  current status and machine-readable claim register together; distinguish
+  mathematical output, ordinary/hardened usability, admitted backends,
+  independent review and FIPS validation, changing both families to **Fully
+  implemented** only after this exact final evidence passes.
 
 Verification:
 
@@ -3226,9 +3231,10 @@ Verification:
   recoverable unwind, adjacent cleanup failure, early Drop, public
   declassification, typed secret output and caller-buffer ownership cases
   against authoritative results;
-- package and run all fixtures across supported Rust and no_std targets, force
-  scalar and every admitted backend, and rerun affected KAT, native, timing,
-  emitted-code, proof and differential evidence after any code change;
+- package and run all fixtures across supported Rust and no_std targets; force
+  scalar, every cleanup-qualified admitted backend, unavailable-required and
+  quarantined paths; rerun affected KAT, native, timing, emitted-code, proof,
+  sanitization, package and differential evidence after any code change;
 - mutate every API-profile and secret-state entry, cleanup path, trait
   prohibition, capability seal, output classification, partial-output rule,
   unwind/residual entry, package file, documentation claim and evidence binding
@@ -3237,8 +3243,10 @@ Verification:
 Exit criteria:
 
 - every modern SHA-2, SHA-3 and SHAKE safe public API profile is complete,
-  hardened owners clear all Brynja-controlled secret memory that the caller
-  cannot reach, and only now are both families again **Fully implemented**;
+  every backend has an explicit passing or unadmitted disposition, all evidence
+  is bound to the final source, hardened owners clear all Brynja-controlled
+  secret memory that the caller cannot reach, and only now are both families
+  recorded **Fully implemented** in every human- and machine-readable status;
 - `v0.24.11 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.24.12 - SP 800-185 Encoding Foundation And Complete cSHAKE
@@ -3546,44 +3554,187 @@ Exit criteria:
   implementation work;
 - `v0.24.19 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.20 - Legacy SHA-1 And MD5 Usability And Isolation Acceptance
+### v0.24.20 - Legacy SHA-1 And MD5 Portable Public API Acceptance
 
 Status: planned
 
-Plan scope: Package and exercise every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile against real files and authoritative digests, inspect all internal cleanup paths and prove warning, dependency, feature and symbol isolation; no legacy result or ordinary non-erasing state can satisfy a modern or secret-bearing policy type, and the only following consumers are separately reviewed legacy HMAC/HKDF or protocol adapters over hardened owners.
+Plan scope: Freeze package-external no_std fixtures and package archives for every SHA-1 and MD5 byte, bit-string, ordinary and hardened public compatibility profile; run representative real files, authoritative and independent digests, streaming partitions, exhaustion, cleanup and isolation failures through forced portable paths, prove collision warnings and modern-versus-legacy dependency, feature, type and symbol separation, and keep both legacy families In progress until acceleration and final cross-backend evidence pass.
 
-Goal: close the **Legacy SHA-1 And MD5 Usability And Isolation Acceptance** review unit as a complete named capability
-without silently admitting adjacent algorithms, acceleration, or consumer scope.
+Goal: freeze a complete consumer-visible portable reference before any legacy
+CPU backend is implemented or admitted.
 
 Deliverables:
 
-- implement the exact Plan scope through the named first-party Rust and no_std
-  package boundaries, with explicit types, ownership, resource, failure, and
-  lifecycle rules;
-- keep portable semantics, accelerated authority, legacy isolation, secret
-  destruction, and downstream usability separate wherever the Plan scope
-  requires them;
-- update normative requirements, threat model, controls, claim register,
-  public documentation, release notes, and permanent evidence references.
+- freeze package-external, no_std-capable fixtures that use only documented
+  `brynja-legacy-sha1` and `brynja-legacy-md5` byte, arbitrary-bit, streaming,
+  one-shot, ordinary and hardened APIs against representative real files;
+- bind package archives, authoritative and independent expected digests,
+  misuse outcomes, complete internal sanitization and explicit caller-owned
+  input/output duties to the exact portable source;
+- compile-fail modern-facade, modern-algorithm, FIPS-service, certificate,
+  signature, password and implicit-negotiation use; retain collision and
+  chosen-prefix warnings at every public selection boundary;
+- publish reproducible commands and hashes for the fixture and corpus, and
+  keep both verification-table rows **In progress** until v0.24.23.
 
 Verification:
 
-- run every applicable authoritative vector, boundary, streaming or partition,
-  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
-  differential campaign named by the Plan scope;
-- run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
-  package-external, no_std, and forced-failure evidence without broadening the
-  claim beyond what was measured;
-- pass repository checks, supported Rust versions and targets, dependency and
-  advisory policy, SBOM, package installation, documentation, and modern versus
-  legacy graph isolation.
+- run authoritative vectors, real-file digests, every padding/bit-tail boundary,
+  irregular partitions, exhaustion, cancellation, recoverable unwind, Drop,
+  typed secret output and public declassification through forced scalar paths;
+- inspect hardened owner cleanup in MIR, LLVM IR and supported-target assembly;
+  run Kani, Miri, sanitizers, differential oracles and mutation tests over the
+  frozen package-external boundary;
+- package offline, compile across supported Rust and no_std targets, and prove
+  no default, modern, PKIX, TLS, FIPS or generic negotiation edge enters either
+  legacy crate.
 
 Exit criteria:
 
-- the named capability is complete and usable at its declared boundary, its
-  residual gaps are explicit, and the next row does not inherit hidden
-  implementation work;
+- every promised portable SHA-1 and MD5 profile is directly usable and frozen,
+  all legacy isolation and warning checks pass, and later acceleration cannot
+  change or weaken the consumer fixture; both families remain **In progress**;
 - `v0.24.20 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.21 - SHA-1 CPU Acceleration
+
+Status: planned
+
+Plan scope: After the frozen v0.24.20 portable boundary is green, implement isolated first-party SHA-1 compression candidates for exact x86/x86_64 SHA-extension and AArch64 SHA1 feature bundles, with no_std static selection and opt-in std runtime detection; require forced-path KATs, scalar differentials, migration-safe feature revalidation, quarantine, emitted-code, AMD/Intel and Apple/AWS Arm native correctness, performance and timing evidence, cleanup-qualified hardened dispatch, and an explicit scalar-only disposition for RISC-V or any target without a ratified toolchain-expressible SHA-1 facility.
+
+Goal: accelerate legacy SHA-1 where standardized hardware support exists
+without weakening isolation, portability, cleanup, or backend authority.
+
+Deliverables:
+
+- add review-sized first-party x86/x86_64 SHA-extension kernels using the exact
+  SHA-1 message-schedule and round instructions, and AArch64 kernels using the
+  exact SHA1 feature bundle; keep architecture modules private and under the
+  repository source-size and unsafe-policy limits;
+- extend the existing capability/session/KAT/quarantine provider contract with
+  a distinct legacy SHA-1 backend identity, exact feature bundles, per-operation
+  revalidation, no_std static selection and separate opt-in std detection;
+- retain the portable implementation as authoritative fallback and fail closed
+  for required acceleration; record RISC-V and every unsupported architecture
+  as scalar-only unless an authenticated ratified facility and qualifying
+  compiler/native evidence are available;
+- keep hardened SHA-1 dispatch portable until each accelerated symbol has
+  compiler-resistant state, schedule, spill and terminal-path cleanup evidence.
+
+Verification:
+
+- force portable, x86/x86_64, AArch64, unavailable-required, corrupted-KAT,
+  migrated-feature and quarantined routes against the unchanged v0.24.20
+  vectors, real files, streaming partitions and bit-tail cases;
+- inspect emitted instructions and absence of accidental calls or unsupported
+  opcodes under Rust 1.90.0 and the current stable compiler; differentially test
+  every accelerated block/state transition against the portable reference;
+- collect exact-commit AMD and Intel where supported plus Apple M2 and AWS Arm
+  native correctness, performance, timing and operating-state evidence; use
+  QEMU only as supplemental correctness coverage and never native evidence;
+- rerun Kani, Miri, sanitizers, cleanup, package, no_std, dependency-isolation,
+  fault and mutation gates for every admitted route.
+
+Exit criteria:
+
+- every implemented SHA-1 hardware path has an explicit admitted or unadmitted
+  disposition with current evidence, unsupported targets fail or fall back as
+  configured, and the family remains **In progress** pending v0.24.23;
+- `v0.24.21 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.22 - MD5 Multi-Buffer SIMD Acceleration
+
+Status: planned
+
+Plan scope: After v0.24.20, implement first-party allocation-free MD5 multi-buffer candidates that process independent messages through exact x86_64 AVX2 and, when separately justified, AVX-512 bundles plus AArch64 NEON and qualifying ratified RISC-V Vector bundles; expose bounded caller-owned batch lanes without pretending single-stream MD5 has dedicated hardware acceleration, preserve scalar semantics for uneven tails and unsupported targets, and require lane-permutation, mixed-length, inactive-lane, KAT, differential, quarantine, native performance, timing, emitted-code, failure-atomicity and hardened lane/register/spill cleanup evidence before admission.
+
+Goal: provide honest throughput-oriented MD5 SIMD for explicit legacy batch
+workloads while preserving the exact portable single-message API and warnings.
+
+Deliverables:
+
+- add bounded caller-owned batch input/output types with explicit active-lane
+  counts, lengths, ordering and failure semantics; never allocate, silently
+  reorder, expose uninitialized lanes, or label multi-message throughput as
+  single-stream hardware acceleration;
+- implement isolated x86_64 AVX2 multi-buffer kernels and separately admit
+  AVX-512 only when its feature, downclock, performance and evidence profile is
+  justified; add AArch64 NEON and qualifying ratified RISC-V Vector candidates
+  only where the supported Rust line can express and test the exact bundle;
+- preserve scalar processing for single messages, uneven terminal work and all
+  unsupported targets, with required-mode failure, KAT, session identity,
+  migration revalidation, quarantine and secret-free backend reporting;
+- provide hardened batch ownership that destroys per-lane state, message words,
+  masks, staging, partial results and Brynja-owned temporaries; prohibit hardened
+  SIMD admission without exact register/spill and terminal cleanup evidence.
+
+Verification:
+
+- compare every SIMD width against the frozen v0.24.20 portable fixture across
+  zero, one, full, inactive and permuted lane sets, equal and mixed lengths,
+  empty inputs, padding boundaries, multi-block work and scalar tails;
+- fault KATs, capability tokens, feature migration, individual lanes, worker
+  cancellation and output commits; prove a failed lane or backend cannot expose
+  partial output, corrupt another lane, or silently substitute required mode;
+- inspect emitted AVX2, separately admitted AVX-512, NEON and qualifying RISC-V
+  Vector instructions; collect exact-commit AMD/Intel and Apple/AWS Arm native
+  correctness, throughput, latency, timing and cleanup evidence, with qualifying
+  RISC-V native evidence or an explicit unadmitted disposition;
+- run Kani bounds, Miri, sanitizers, differential and lane-permutation fuzzing,
+  no_std packages, opt-in std detection, modern/legacy isolation and mutations.
+
+Exit criteria:
+
+- every SIMD candidate and batch width has an honest admitted or unadmitted
+  disposition, portable behavior remains authoritative, and MD5 remains **In
+  progress** pending unchanged-fixture final acceptance at v0.24.23;
+- `v0.24.22 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.24.23 - Legacy SHA-1 And MD5 Cross-Backend Final Acceptance
+
+Status: planned
+
+Plan scope: Rerun the byte-identical v0.24.20 package-external fixtures on the exact final source through portable, every admitted SHA-1 backend, every admitted MD5 batch width, scalar tails, unavailable-required and quarantined routes; collect current AMD/Intel, Apple/AWS Arm and qualifying RISC-V or explicit unsupported evidence, repeat every affected proof, sanitizer, cleanup, timing, KAT, package and differential artifact after any code change, and only then mark the isolated legacy SHA-1 and MD5 families Fully implemented while retaining collision-insecure, non-default, independently-unverified and non-FIPS status.
+
+Goal: close both legacy hash families only after their unchanged portable
+consumer contract passes every supported execution route on the final code.
+
+Deliverables:
+
+- rerun the hashed v0.24.20 fixture and corpus without weakening, replacing or
+  omitting any SHA-1/MD5 byte, bit, streaming, hardened, warning or isolation
+  expectation; add only backend selection and batch execution observations;
+- bind exact final source to portable, SHA-1 instruction, MD5 SIMD width,
+  scalar-tail, unavailable-required and quarantine results plus AMD/Intel,
+  Apple/AWS Arm and qualifying RISC-V or explicit unsupported dispositions;
+- refresh every affected native, performance, timing, emitted-code, KAT,
+  cleanup, proof, sanitizer, differential, package and SBOM artifact after any
+  implementation change, then rerun the complete fixture from the beginning;
+- update root, facade where appropriate, both legacy leaf READMEs, current
+  status and the machine-readable claim register to **Fully implemented** only
+  here, while retaining collision warnings, legacy-only selection, no
+  independent verification and no FIPS validation.
+
+Verification:
+
+- exercise the unchanged fixture through every portable/admitted route, MD5
+  batch width and scalar tail, plus unsupported, required, unhealthy,
+  quarantined, wrong-feature, corrupted-KAT and partial-failure paths;
+- verify identical mathematical results, lane order and typed cleanup across
+  all supported Rust/no_std targets and optional std detection; recheck modern,
+  TLS, PKIX, password, signature, FIPS and default-feature exclusion;
+- pass native-evidence authentication, cross-architecture timing/performance,
+  Miri, sanitizers, Kani, emitted-code, fuzz/differential, package-external,
+  source-size, unsafe, dependency, advisory, SBOM, documentation and CodeQL
+  gates on the exact candidate.
+
+Exit criteria:
+
+- every SHA-1 and MD5 public profile and execution route has an explicit passing
+  or unadmitted disposition, all evidence matches final source, and only now are
+  both isolated legacy families recorded **Fully implemented** without implying
+  collision resistance, recommendation, independent review or FIPS validation;
+- `v0.24.23 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - Complete Generic HMAC Construction
 
@@ -16123,7 +16274,7 @@ Deliverables:
 
 Verification:
 
-- rerun the complete v0.24.18-v0.24.20 SHA-1 and legacy-isolation evidence on the exact candidate;
+- rerun the complete v0.24.18-v0.24.23 SHA-1 and legacy-isolation evidence on the exact candidate;
 - test consumer-domain and preimage separation plus collision-risk policy and
   complete cleanup for each proposed use;
 - graph-test every permitted and forbidden edge and complete independent risk review.

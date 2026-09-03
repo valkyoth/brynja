@@ -86,7 +86,11 @@ lanes, buffers, counters, suffix/padding/squeeze staging, and permutation
 scratch on every terminal path. Scalar fixed-count lane/counter conversion and
 registered partial-output staging avoid source-created secret byte arrays
 outside that owner. Callers remain responsible for buffers and copies they
-own.
+own. The public-but-hidden composition bridge used by other Brynja leaves is
+fail-closed: extracting a reader or explicitly wiping its source permanently
+vacates that wrapper, and every later preflight, update, or finalization call
+returns `StateConsumed`. It can never reinterpret the cleared replacement as
+a fresh SHAKE state or cross a domain-separation boundary.
 
 ```rust
 use brynja_hash_sha3::{HardenedSha3_256, Sha3PublicDeclassification};

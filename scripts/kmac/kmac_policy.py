@@ -109,6 +109,7 @@ def validate(root: Path) -> None:
         "HardenedCshake128", "HardenedCshake256", "b\"KMAC\"",
         "Sha3PublicDeclassification::acknowledge()",
         "fn finalize_xof_erasing_source(&mut self)",
+        "Result<Self::Reader, HardenedSha3Error>",
         "fn finalize_bits_xof_erasing_source(",
         "fn wipe_in_place(&mut self)",
     ):
@@ -124,6 +125,7 @@ def validate(root: Path) -> None:
         "fn as_bytes(&self) -> Result<&[u8], KmacError>",
         "self.bytes.get(..length).ok_or(KmacError::SecretMemory)",
         "corrupt_encoded_width_fails_closed",
+        ".finalize_xof_erasing_source().map_err(KmacError::from)",
     ):
         require(packer, token, "KMAC key and trailer packing")
     if packer.count("clear_owned_region(&mut self.") != 9:
@@ -167,6 +169,8 @@ def validate(root: Path) -> None:
         "NonApproved", "#[kani::proof]",
     ):
         require(policy, token, "KMAC parameter policy")
+    error = loaded[CRATE / "src/error.rs"]
+    require(error, "HardenedSha3Error::StateConsumed => Self::StateConsumed", "KMAC terminal-state error")
 
     manifest = tomllib.loads(loaded[MANIFEST])
     if manifest.get("features") != {

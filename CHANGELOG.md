@@ -7,6 +7,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Make the public-but-hidden hardened cSHAKE composition bridge irreversible.
+  Reader extraction and explicit wiping now enter a terminal lifecycle state
+  first; later preflight, update, and finalization calls return
+  `StateConsumed`. Internal and package-external regressions prevent reuse of
+  cleared replacement storage as a fresh SHAKE state, and Rust 1.90/1.98 MIR
+  evidence binds terminal transition ordering before finalization or wiping.
 - Eliminate the v0.24.13 inline KMAC state-remanence path: KMAC no longer
   stores hardened cSHAKE in `Option<S>` or extracts it with `take()`. Fixed and
   XOF finalization now operate on the exact embedded source through `&mut`,

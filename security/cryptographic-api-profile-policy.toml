@@ -821,7 +821,7 @@ sha256 = "194598a94ca33aad9b0e885159268c70faf6412f9665ac7e2c9c5bbccad54b75"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/packer.rs"
-sha256 = "f7b76a2dd7f67edbc49296bd0b25bcdcbecd23c736784aa077fd3f6092faa0c8"
+sha256 = "94e511dc66101f61bfecc9596a7551efc0f9a7a5ec489f2d260d74a7a3e7d5da"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/tests/api.rs"
@@ -829,7 +829,7 @@ sha256 = "9709fa94906a0e18e3a4cfa7e56ab84ae67504337f8b25e7930898f59189bfad"
 
 [[reviewed-source]]
 path = "scripts/kmac/check-kmac-codegen.sh"
-sha256 = "779ea2b570391ef584865c322b98e516ae2297e44594cb13d6374c0a02c0c26f"
+sha256 = "8e06d1f5085d6f17bb24a3a1155ce0ff09eb19fb4f2e35dbed66f85cfb39b749"
 
 [[reviewed-source]]
 path = "assurance/kmac-conformance-rejected/src/lib.rs"
@@ -965,11 +965,11 @@ sha256 = "cc3342c62b0b2df60569dca6044c8e1f7446bb2a7a0a65d0d0fc436aeacc5b40"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake.rs"
-sha256 = "145ff1e88f51f7359320248d41fa9074ac1ac4927c25939353c4466f02855d61"
+sha256 = "913edb6a2e7a11d0e703fbf4bd8be35af936e30386b975c9916be18386b7ff32"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/output.rs"
-sha256 = "f66ca8c76af3074df70e852051ac76a6f6309c4ec24ca18d95c451fa7d65f1d2"
+sha256 = "aae8853eb7bb00195e0c72221fc0103e09ede33ac61b638d4449f1e279f2623a"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/owner.rs"
@@ -997,7 +997,7 @@ sha256 = "e57c82843a01a3956b8835511cb0a2d0f850918cd2be143b981c3e1575175b6b"
 
 [[reviewed-source]]
 path = "assurance/cshake-public-api/src/lib.rs"
-sha256 = "40abd19e1e0f7a0b4bb311454b544fc1c0b6a1f0e1db7666c6b086cfc8faabdf"
+sha256 = "73d4bc98b48cb6556eb0ec96c3aa19b8e8e52a177ebc3ad907bc196cae562c25"
 
 [[reviewed-source]]
 path = "scripts/sha3/check-sha3-hardened-codegen.sh"
@@ -1009,8 +1009,8 @@ sha256 = "74c8692370d915dbbb7778f3f723e051f581f1cfff8089dbfaf865107b36c35f"
 
 [[reviewed-source]]
 path = "scripts/sha3/sha3_hardened.py"
-sha256 = "95f15edc4700c500d8b82ce29c463c3c58d660c8cbc30c40a58827b645f82fc5"
+sha256 = "d5d0d8a7d99b0fa10f635b897e42b1dfe0fdeb058d1d522477daa81db26d871c"
 
 [[reviewed-source]]
 path = "scripts/sha3/test-sha3-hardened.py"
-sha256 = "b7491ad612f7fd5c6b21470ed96d6a72bd377fdeed30fed18b1b806a7570871a"
+sha256 = "2f9073576737b92f99a94855d48bfa758e30b04b067d7de09a994ed7a5a6846c"

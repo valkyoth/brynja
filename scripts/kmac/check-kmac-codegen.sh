@@ -21,6 +21,16 @@ extract_function() {
     ' "$artifact"
 }
 
+require_order() {
+    local text="$1"
+    local first="$2"
+    local second="$3"
+    local first_line second_line
+    first_line="$(grep -nF "$first" <<<"$text" | head -n 1 | cut -d: -f1)"
+    second_line="$(grep -nF "$second" <<<"$text" | head -n 1 | cut -d: -f1)"
+    [[ -n "$first_line" && -n "$second_line" && "$first_line" -lt "$second_line" ]]
+}
+
 for raw_toolchain in "${toolchains[@]}"; do
     toolchain="$raw_toolchain"
     if [[ "$toolchain" != +* ]]; then
@@ -72,6 +82,13 @@ for raw_toolchain in "${toolchains[@]}"; do
     done
 
     for mir in "${sha3_mir[@]}"; do
+        for identity in HardenedCshake128 HardenedCshake256; do
+            finalizer="$(extract_function ">::finalize_xof_erasing_source(_1: &mut ${identity}" "$mir")"
+            wipe="$(extract_function ">::wipe_in_place(_1: &mut ${identity}" "$mir")"
+            require_order "$finalizer" "CshakeLifecycle::Vacated" "${identity}::finish(copy _1"
+            require_order "$wipe" "CshakeLifecycle::Vacated" "HardenedFips202Owner::<"
+            grep -q 'StateConsumed' "$mir"
+        done
         transition128="$(extract_function ">::take_reader_erasing_source(_1: &mut HardenedCshake128" "$mir")"
         transition256="$(extract_function ">::take_reader_erasing_source(_1: &mut HardenedCshake256" "$mir")"
         for transition_and_rate in "168:$transition128" "136:$transition256"; do

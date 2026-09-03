@@ -38,7 +38,9 @@ service indicator remains `NonApproved`.
   select them by ordinary autocomplete.
 - Finalize the embedded cSHAKE owner by mutable reference, replace it with a
   cleared placeholder, and volatile-clear the exact vacated source allocation;
-  no inline keyed state is extracted through `Option::take`.
+  no inline keyed state is extracted through `Option::take`. Extraction and
+  explicit wiping irreversibly vacate that wrapper: every later preflight,
+  update, or finalization attempt fails with `StateConsumed`.
 - Reject a corrupt secret encoded-integer width instead of silently substituting
   an empty slice, and document the caller's protocol-level verification bound.
 
@@ -59,7 +61,10 @@ service indicator remains `NonApproved`.
   proofs, differential evidence, and malformed-input rejection.
 - The local evidence suite includes twenty-two cumulative Kani bounds, Miri,
   AddressSanitizer, constant-time comparison timing, and exact Rust 1.90.0 and
-  1.98.0 MIR/LLVM/assembly cleanup inspection.
+  1.98.0 MIR/LLVM/assembly cleanup inspection. Package-external regression
+  coverage attempts to reuse both extracted and explicitly wiped cSHAKE
+  wrappers, while compiler evidence requires the terminal transition before
+  finalization or wiping.
 
 ## Security And Residual Limits
 
@@ -80,11 +85,17 @@ service indicator remains `NonApproved`.
 ## Pentest Remediation
 
 The initial assessment found one High source-owned state-remanence issue, one
-Medium conformance-API misuse risk, and two Low hardening observations. The
+Medium conformance-API misuse risk, and two Low hardening observations. A
+follow-up assessment found one Medium domain-separation/state-machine issue:
+the public composition bridge could reuse its cleared replacement state after
+in-place extraction or wiping. The
 remediation removes the inline `Option<S>` and every `take()` transition,
 finalizes the embedded cSHAKE state by mutable reference, and binds the exact
 source-derived volatile wipe into both compiler-endpoint evidence and a
-negative regression fixture. Conformance-only APIs now require the explicit
+negative regression fixture. The wrapper now enters an irreversible terminal
+state before either operation and returns `StateConsumed` from all subsequent
+preflight, update, and finalization calls; internal and package-external tests
+bind the failure. Conformance-only APIs now require the explicit
 `conformance-testing` feature and a compile-fail default-build gate. Corrupt
 encoded widths fail closed, and candidate-length ownership is documented at
 the protocol boundary. Independent retest of this exact remediation remains

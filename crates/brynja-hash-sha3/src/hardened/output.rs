@@ -47,6 +47,8 @@ impl<'output> HardenedSha3SecretOutput<'output> {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum HardenedSha3Error {
+    /// The construction owner was irreversibly finalized or explicitly wiped.
+    StateConsumed,
     /// The message counter would be exhausted.
     MessageTooLong,
     /// The output counter would be exhausted.

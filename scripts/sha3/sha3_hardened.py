@@ -27,11 +27,12 @@ CODEGEN = Path("scripts/sha3/check-sha3-hardened-codegen.sh")
 FIXTURE_MANIFEST = Path("assurance/sha3-hardened-api/Cargo.toml")
 FIXTURE_LOCK = Path("assurance/sha3-hardened-api/Cargo.lock")
 FIXTURE_LIB = Path("assurance/sha3-hardened-api/src/lib.rs")
+CSHAKE_FIXTURE = Path("assurance/cshake-public-api/src/lib.rs")
 MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 FILES = (
     OWNER, API, FIXED, XOF, CSHAKE, OUTPUT, SPONGE, PERMUTATION, TEST, CSHAKE_TEST, LIB, CRYPTO,
-    FACADE, CHECKS, CODEGEN, FIXTURE_MANIFEST, FIXTURE_LOCK, FIXTURE_LIB,
+    FACADE, CHECKS, CODEGEN, FIXTURE_MANIFEST, FIXTURE_LOCK, FIXTURE_LIB, CSHAKE_FIXTURE,
     MIRI, SANITIZER,
 )
 
@@ -112,11 +113,27 @@ def validate(root: Path = ROOT) -> None:
         "pub fn finalize_xof_erasing_source(&mut self)",
         "pub fn finalize_bits_xof_erasing_source(",
         "pub fn wipe_in_place(&mut self)",
+        "lifecycle: CshakeLifecycle",
+        "lifecycle: CshakeLifecycle::Live",
+        "Err(HardenedSha3Error::StateConsumed)",
         "core::mem::replace(&mut self.owner",
         "self.owner.wipe();",
         "in_place_reader_transition_clears_exact_source_owner",
+        "explicit_wipe_is_an_irreversible_terminal_transition",
     ):
         require(loaded[CSHAKE], token, "hardened cSHAKE API")
+    if loaded[CSHAKE].count("self.ensure_live()?;") != 5:
+        fail("hardened cSHAKE live-state guard inventory changed")
+    if loaded[CSHAKE].count("self.lifecycle = CshakeLifecycle::Vacated;") != 3:
+        fail("hardened cSHAKE terminal-transition inventory changed")
+    require(loaded[OUTPUT], "StateConsumed", "hardened cSHAKE terminal error")
+    for token in (
+        "fn hardened_terminal_transitions()",
+        "finalize_xof_erasing_source()",
+        "wipe_in_place();",
+        "Err(leaf::HardenedSha3Error::StateConsumed)",
+    ):
+        require(loaded[CSHAKE_FIXTURE], token, "downstream cSHAKE terminal-state acceptance")
     for forbidden in (
         "customized: bool", "setup_bytes: u128",
         "Option<HardenedFips202Owner", ".owner.take()",

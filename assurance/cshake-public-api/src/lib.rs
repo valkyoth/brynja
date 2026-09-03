@@ -44,7 +44,44 @@ pub fn exercise_all() -> Result<(), AcceptanceError> {
     hardened_leaf(&message, customization, &mut leaf_secret)?;
     hardened_crypto(&message, customization, &mut crypto_secret)?;
     hardened_facade(&message, customization, &mut facade_secret)?;
+    hardened_terminal_transitions()?;
     if leaf_secret != [0; 32] || crypto_secret != [0; 32] || facade_secret != [0; 32] {
+        return Err(AcceptanceError::Mismatch);
+    }
+    Ok(())
+}
+
+fn hardened_terminal_transitions() -> Result<(), AcceptanceError> {
+    let mut extracted = leaf::HardenedCshake128::new(b"KMAC", b"downstream extraction")
+        .map_err(|_| AcceptanceError::Rejected)?;
+    extracted
+        .update(b"secret-derived state")
+        .map_err(|_| AcceptanceError::Rejected)?;
+    let reader = extracted
+        .finalize_xof_erasing_source()
+        .map_err(|_| AcceptanceError::Rejected)?;
+    reader.cancel();
+    if extracted.update(b"reuse") != Err(leaf::HardenedSha3Error::StateConsumed)
+        || extracted.check_additional_bytes(0)
+            != Err(leaf::HardenedSha3Error::StateConsumed)
+        || !matches!(
+            extracted.finalize_xof_erasing_source(),
+            Err(leaf::HardenedSha3Error::StateConsumed)
+        )
+    {
+        return Err(AcceptanceError::Mismatch);
+    }
+
+    let mut wiped = leaf::HardenedCshake256::new(b"KMAC", b"downstream wipe")
+        .map_err(|_| AcceptanceError::Rejected)?;
+    wiped.wipe_in_place();
+    if wiped.check_additional_bits(0) != Err(leaf::HardenedSha3Error::StateConsumed)
+        || wiped.update(b"reuse") != Err(leaf::HardenedSha3Error::StateConsumed)
+        || !matches!(
+            wiped.finalize_xof_erasing_source(),
+            Err(leaf::HardenedSha3Error::StateConsumed)
+        )
+    {
         return Err(AcceptanceError::Mismatch);
     }
     Ok(())

@@ -47,6 +47,7 @@ Default strength-enforcing and explicitly feature-gated conformance APIs,
 opaque tags, constant-time
 verification, arbitrary-bit domains, typed secret XOF output, complete
 internal cleanup including the exact vacated inline cSHAKE source allocation,
+an irreversible wrapper lifecycle that rejects reuse after extraction or wipe,
 official examples, an independent oracle, package-external
 `no_std` use, and compiler evidence are implemented. All services remain
 non-approved; KMAC is not independently reviewed or FIPS 140-3 validated.

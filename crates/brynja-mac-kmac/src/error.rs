@@ -4,6 +4,8 @@ use brynja_hash_sha3::HardenedSha3Error;
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum KmacError {
+    /// The embedded hardened construction was irreversibly finalized or wiped.
+    StateConsumed,
     /// The production constructor requires a key at least as long as the
     /// selected KMAC security strength.
     KeyTooShort,
@@ -22,6 +24,7 @@ pub enum KmacError {
 impl From<HardenedSha3Error> for KmacError {
     fn from(error: HardenedSha3Error) -> Self {
         match error {
+            HardenedSha3Error::StateConsumed => Self::StateConsumed,
             HardenedSha3Error::MessageTooLong => Self::MessageTooLong,
             HardenedSha3Error::OutputTooLong | HardenedSha3Error::OutputLength => {
                 Self::OutputTooLong

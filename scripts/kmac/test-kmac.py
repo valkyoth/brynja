@@ -47,6 +47,9 @@ def main() -> int:
     reject("in-place-transition", Path("crates/brynja-mac-kmac/src/core_state.rs"), "append_right_encode(&mut self.state", "append_right_encode(&mut temporary")
     reject("in-place-core-wipe", Path("crates/brynja-mac-kmac/src/core_state.rs"), "self.state.wipe_in_place();", "core::hint::black_box(&mut self.state);")
     reject("backend-source-erasure", Path("crates/brynja-mac-kmac/src/backend.rs"), "fn finalize_xof_erasing_source(&mut self)", "fn finalize_xof_erasing_source(self)")
+    reject("backend-terminal-result", Path("crates/brynja-mac-kmac/src/backend.rs"), "Result<Self::Reader, HardenedSha3Error>", "Self::Reader")
+    reject("terminal-error-mapping", Path("crates/brynja-mac-kmac/src/error.rs"), "HardenedSha3Error::StateConsumed => Self::StateConsumed", "HardenedSha3Error::StateConsumed => Self::SecretMemory")
+    reject("terminal-error-propagation", Path("crates/brynja-mac-kmac/src/packer.rs"), ".finalize_xof_erasing_source().map_err(KmacError::from)", ".finalize_xof_erasing_source().map(|reader| reader)")
     reject("encoded-width-fail-closed", Path("crates/brynja-mac-kmac/src/packer.rs"), "self.bytes.get(..length).ok_or(KmacError::SecretMemory)", "Ok(self.bytes.get(..length).unwrap_or_default())")
     reject("conformance-feature", Path("crates/brynja-mac-kmac/src/lib.rs"), '#[cfg(feature = "conformance-testing")]\npub fn kmac128_conformance', "pub fn kmac128_conformance")
     reject("conformance-compile-gate", Path("scripts/checks.sh"), "scripts/kmac/check-kmac-conformance-gate.sh", "true # removed conformance gate")
@@ -61,7 +64,7 @@ def main() -> int:
         "-p brynja-mac-kmac \\\n    --lib",
     )
     reject("dependency", Path("crates/brynja-mac-kmac/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", "foreign = \"1\"")
-    print("KMAC policy rejects eighteen ownership, feature, algorithm, test, and dependency regressions")
+    print("KMAC policy rejects twenty-one ownership, lifecycle, feature, algorithm, test, and dependency regressions")
     return 0
 
 

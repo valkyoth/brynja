@@ -12,6 +12,12 @@ use super::{
 const CSHAKE_SUFFIX: u8 = 0x04;
 const CSHAKE_SUFFIX_BITS: u8 = 3;
 
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum CshakeLifecycle {
+    Live,
+    Vacated,
+}
+
 macro_rules! hardened_cshake {
     ($state:ident, $reader:ident, $rate:literal, $label:literal) => {
         #[doc = concat!("Portable secret-bearing ", $label, " absorbing state.")]
@@ -20,6 +26,7 @@ macro_rules! hardened_cshake {
         /// and output staging storage is compiler-resistantly cleared.
         pub struct $state {
             owner: HardenedFips202Owner<$rate>,
+            lifecycle: CshakeLifecycle,
         }
 
         impl $state {
@@ -48,7 +55,10 @@ macro_rules! hardened_cshake {
                     })
                     .map_err(|()| HardenedSha3Error::MessageTooLong)?;
                 owner.remember_cshake_setup(customized);
-                Ok(Self { owner })
+                Ok(Self {
+                    owner,
+                    lifecycle: CshakeLifecycle::Live,
+                })
             }
 
             /// Returns the complete message bytes accepted after setup.
@@ -62,6 +72,7 @@ macro_rules! hardened_cshake {
                 &self,
                 additional: u128,
             ) -> Result<(), HardenedSha3Error> {
+                self.ensure_live()?;
                 self.owner
                     .check_message_bytes(additional)
                     .map_err(|()| HardenedSha3Error::MessageTooLong)
@@ -69,6 +80,7 @@ macro_rules! hardened_cshake {
 
             /// Checks an additional exact bit count without mutation.
             pub fn check_additional_bits(&self, additional: u128) -> Result<(), HardenedSha3Error> {
+                self.ensure_live()?;
                 self.owner
                     .check_message_bits(additional)
                     .map_err(|()| HardenedSha3Error::MessageTooLong)
@@ -76,14 +88,14 @@ macro_rules! hardened_cshake {
 
             /// Absorbs every byte or rejects before observable mutation.
             pub fn update(&mut self, input: &[u8]) -> Result<(), HardenedSha3Error> {
+                self.ensure_live()?;
                 self.owner
                     .update(input)
                     .map_err(|()| HardenedSha3Error::MessageTooLong)
             }
 
             /// Consumes absorption and returns a hardened incremental reader.
-            #[must_use]
-            pub fn finalize_xof(mut self) -> $reader {
+            pub fn finalize_xof(mut self) -> Result<$reader, HardenedSha3Error> {
                 self.finalize_xof_erasing_source()
             }
 
@@ -101,9 +113,11 @@ macro_rules! hardened_cshake {
             /// This transition exists for hardened constructions that embed
             /// cSHAKE inline and must erase that exact source allocation.
             #[doc(hidden)]
-            pub fn finalize_xof_erasing_source(&mut self) -> $reader {
+            pub fn finalize_xof_erasing_source(&mut self) -> Result<$reader, HardenedSha3Error> {
+                self.ensure_live()?;
+                self.lifecycle = CshakeLifecycle::Vacated;
                 self.finish(None);
-                self.take_reader_erasing_source()
+                Ok(self.take_reader_erasing_source())
             }
 
             /// Finalizes a final bit string in place and clears the vacated
@@ -113,11 +127,13 @@ macro_rules! hardened_cshake {
                 &mut self,
                 input: Fips202BitString<'_>,
             ) -> Result<$reader, HardenedSha3Error> {
+                self.ensure_live()?;
                 let bits = u128::try_from(input.bit_len())
                     .map_err(|_| HardenedSha3Error::MessageTooLong)?;
                 self.check_additional_bits(bits)?;
                 let (complete, partial) = input.split();
                 self.update(complete)?;
+                self.lifecycle = CshakeLifecycle::Vacated;
                 self.finish(partial);
                 Ok(self.take_reader_erasing_source())
             }
@@ -126,6 +142,7 @@ macro_rules! hardened_cshake {
             /// in place. This is reserved for hardened composition cleanup.
             #[doc(hidden)]
             pub fn wipe_in_place(&mut self) {
+                self.lifecycle = CshakeLifecycle::Vacated;
                 self.owner.wipe();
             }
 
@@ -135,7 +152,7 @@ macro_rules! hardened_cshake {
                 output: &mut [u8],
                 authority: Sha3PublicDeclassification,
             ) -> Result<(), HardenedSha3Error> {
-                self.finalize_xof().squeeze_public(output, authority)
+                self.finalize_xof()?.squeeze_public(output, authority)
             }
 
             /// Produces one fixed output with typed secret ownership.
@@ -143,11 +160,19 @@ macro_rules! hardened_cshake {
                 self,
                 output: &'output mut [u8],
             ) -> Result<HardenedSha3SecretOutput<'output>, HardenedSha3Error> {
-                self.finalize_xof().squeeze_secret(output)
+                self.finalize_xof()?.squeeze_secret(output)
             }
 
             /// Consumes and clears this state without output.
             pub fn cancel(self) {}
+
+            fn ensure_live(&self) -> Result<(), HardenedSha3Error> {
+                if self.lifecycle == CshakeLifecycle::Live {
+                    Ok(())
+                } else {
+                    Err(HardenedSha3Error::StateConsumed)
+                }
+            }
 
             fn finish(&mut self, partial: Option<(u8, u8)>) {
                 if self.owner.cshake_is_customized() {
@@ -274,8 +299,11 @@ fn byte_string(input: &[u8]) -> Result<Fips202BitString<'_>, HardenedSha3Error> 
 
 #[cfg(test)]
 mod tests {
-    use super::{HardenedCshake128, HardenedCshake256};
-    use crate::{Fips202BitString, hardened::owner::HardenedFips202Owner};
+    use super::{CshakeLifecycle, HardenedCshake128, HardenedCshake256};
+    use crate::{
+        Fips202BitString,
+        hardened::{HardenedSha3Error, owner::HardenedFips202Owner},
+    };
 
     fn is_cleared<const RATE: usize>(owner: &HardenedFips202Owner<RATE>) -> bool {
         owner.sponge_lanes.iter().all(|byte| *byte == 0)
@@ -302,7 +330,28 @@ mod tests {
         };
         assert_eq!(cshake128.update(b"secret-derived state"), Ok(()));
         let reader128 = cshake128.finalize_xof_erasing_source();
+        assert!(reader128.is_ok());
+        let Ok(reader128) = reader128 else {
+            return;
+        };
         assert!(is_cleared(&cshake128.owner));
+        assert!(cshake128.lifecycle == CshakeLifecycle::Vacated);
+        assert_eq!(
+            cshake128.check_additional_bytes(0),
+            Err(HardenedSha3Error::StateConsumed)
+        );
+        assert_eq!(
+            cshake128.check_additional_bits(0),
+            Err(HardenedSha3Error::StateConsumed)
+        );
+        assert_eq!(
+            cshake128.update(b"second"),
+            Err(HardenedSha3Error::StateConsumed)
+        );
+        assert!(matches!(
+            cshake128.finalize_xof_erasing_source(),
+            Err(HardenedSha3Error::StateConsumed)
+        ));
         reader128.cancel();
 
         let cshake256 = HardenedCshake256::new(b"KMAC", b"source wipe");
@@ -321,6 +370,53 @@ mod tests {
             return;
         };
         assert!(is_cleared(&cshake256.owner));
+        assert!(cshake256.lifecycle == CshakeLifecycle::Vacated);
+        assert_eq!(
+            cshake256.update(b"second"),
+            Err(HardenedSha3Error::StateConsumed)
+        );
+        assert!(matches!(
+            cshake256.finalize_bits_xof_erasing_source(tail),
+            Err(HardenedSha3Error::StateConsumed)
+        ));
         reader256.cancel();
+    }
+
+    #[test]
+    fn explicit_wipe_is_an_irreversible_terminal_transition() {
+        let cshake128 = HardenedCshake128::new(b"KMAC", b"explicit wipe");
+        assert!(cshake128.is_ok());
+        let Ok(mut cshake128) = cshake128 else {
+            return;
+        };
+        assert_eq!(cshake128.update(b"secret-derived state"), Ok(()));
+        cshake128.wipe_in_place();
+        assert!(is_cleared(&cshake128.owner));
+        assert!(cshake128.lifecycle == CshakeLifecycle::Vacated);
+        assert_eq!(
+            cshake128.update(b"second"),
+            Err(HardenedSha3Error::StateConsumed)
+        );
+        assert!(matches!(
+            cshake128.finalize_xof_erasing_source(),
+            Err(HardenedSha3Error::StateConsumed)
+        ));
+
+        let cshake256 = HardenedCshake256::new(b"KMAC", b"explicit wipe");
+        assert!(cshake256.is_ok());
+        let Ok(mut cshake256) = cshake256 else {
+            return;
+        };
+        cshake256.wipe_in_place();
+        assert!(is_cleared(&cshake256.owner));
+        assert!(cshake256.lifecycle == CshakeLifecycle::Vacated);
+        assert_eq!(
+            cshake256.check_additional_bytes(1),
+            Err(HardenedSha3Error::StateConsumed)
+        );
+        assert!(matches!(
+            cshake256.finalize_xof_erasing_source(),
+            Err(HardenedSha3Error::StateConsumed)
+        ));
     }
 }

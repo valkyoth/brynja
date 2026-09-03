@@ -35,6 +35,11 @@ def main() -> int:
     reject(policy.CSHAKE, "core::mem::replace(&mut self.owner", "core::mem::take(&mut self.owner")
     reject(policy.CSHAKE, "self.owner.wipe();", "core::hint::black_box(&mut self.owner);")
     reject(policy.CSHAKE, "in_place_reader_transition_clears_exact_source_owner", "missing_source_owner_test")
+    reject(policy.CSHAKE, "self.ensure_live()?;", "core::hint::black_box(&self.lifecycle);")
+    reject(policy.CSHAKE, "self.lifecycle = CshakeLifecycle::Vacated;", "self.lifecycle = CshakeLifecycle::Live;")
+    reject(policy.CSHAKE, "explicit_wipe_is_an_irreversible_terminal_transition", "missing_terminal_wipe_test")
+    reject(policy.OUTPUT, "StateConsumed", "ReusableState")
+    reject(policy.CSHAKE_FIXTURE, "Err(leaf::HardenedSha3Error::StateConsumed)", "Err(leaf::HardenedSha3Error::MessageTooLong)")
     reject(policy.API, "pub trait HardenedFips202State: sealed::Registered", "pub trait HardenedFips202State")
     reject(policy.FIXED, "pub fn finalize_secret<'output>(", "fn missing_secret_output(")
     reject(policy.XOF, "pub fn squeeze_secret<'output>(", "fn missing_secret_squeeze(")
@@ -44,7 +49,7 @@ def main() -> int:
     reject(policy.TEST, "recoverable_unwind_clears_typed_secret_destination", "missing_unwind_test")
     reject(policy.TEST, "fixed_output_failure_is_atomic_by_classification", "missing_failure_test")
     reject(policy.CHECKS, "scripts/sha3/check-sha3-hardened-codegen.sh", "true # removed codegen")
-    print("hardened FIPS 202 policy rejects fifteen cleanup, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, and codegen regressions")
+    print("hardened FIPS 202 policy rejects twenty cleanup, lifecycle, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, and codegen regressions")
     return 0
 
 

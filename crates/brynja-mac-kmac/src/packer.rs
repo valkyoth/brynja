@@ -91,7 +91,7 @@ pub(crate) fn append_right_encode<S: CshakeState>(
                 .finalize_bits_xof_erasing_source(input)
                 .map_err(KmacError::from)
         }
-        None => Ok(state.finalize_xof_erasing_source()),
+        None => state.finalize_xof_erasing_source().map_err(KmacError::from),
     }
 }
 

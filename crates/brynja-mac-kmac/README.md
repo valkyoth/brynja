@@ -31,6 +31,11 @@ Brynja's hardened cSHAKE implementation and compiler-resistantly clears every
 source-declared key-derived region on success, error, cancellation, recoverable
 unwind, and `Drop`.
 
+The embedded cSHAKE owner has an irreversible lifecycle. Its in-place reader
+transition and explicit wipe enter a terminal state before touching the source;
+any attempted reuse fails closed with `StateConsumed`, preventing a cleared
+replacement from being interpreted as a fresh SHAKE construction.
+
 Production constructors require keys and fixed tags at least as long as the
 selected 128- or 256-bit security strength. Exact `*_conformance` APIs retain
 the complete standards-valid key and output domains while reporting weak or

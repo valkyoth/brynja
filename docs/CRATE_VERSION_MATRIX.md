@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.12 signed; v0.24.13 complete KMAC/KMACXOF implementation candidate awaits exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.12 signed; v0.24.13 KMAC/KMACXOF final candidate is pentest PASS/PASS and awaits green hosted checks and signed tag
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.13`. `brynja-hash-core 0.1.0`,

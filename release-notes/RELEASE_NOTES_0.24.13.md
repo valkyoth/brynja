@@ -1,7 +1,7 @@
 # Brynja 0.24.13 Release Notes
 
-Status: implementation remediated; exceptional pentest retest, release
-reconciliation, hosted GitHub checks, CodeQL, and signed development tag pending
+Status: final candidate; exceptional pentest PASS/PASS and local release
+verification complete; hosted GitHub checks, CodeQL, and signed tag pending
 
 ## Summary
 
@@ -98,8 +98,9 @@ preflight, update, and finalization calls; internal and package-external tests
 bind the failure. Conformance-only APIs now require the explicit
 `conformance-testing` feature and a compile-fail default-build gate. Corrupt
 encoded widths fail closed, and candidate-length ownership is documented at
-the protocol boundary. Independent retest of this exact remediation remains
-pending.
+the protocol boundary. Independent retest of exact final remediation candidate
+`c5a0ea904975f44ae9cb1a27f89b50f1f96e5923` passed with zero open findings;
+the permanent report records `PASS`/`PASS`.
 
 ## Authority
 
@@ -114,6 +115,8 @@ Official results are checked against NIST's KMAC and KMACXOF sample documents.
 
 Version 0.24.13 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates for crates.io publication.
-The new keyed cryptographic boundary requires an exceptional pentest. After a
-committed PASS/PASS report and complete local release verification, wait for
-green GitHub and CodeQL, then create the signed immutable `v0.24.13` tag.
+The new keyed cryptographic boundary required and passed its exceptional
+pentest and retest. The guarded selector confirms that all crates remain
+unpublished at this internal milestone. After this report-bearing candidate is
+green on GitHub and CodeQL, explicit repository-owner authorization may create
+the signed immutable `v0.24.13` tag.

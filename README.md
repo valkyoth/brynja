@@ -865,7 +865,11 @@ bit oracle, package-external `no_std` use, twenty-two cumulative Kani bounds,
 Miri, AddressSanitizer, timing checks, and Rust 1.90.0/1.98.0 cleanup evidence
 are bound to the implementation. The pentest remediation additionally removes
 inline `Option::take` state extraction and binds in-place source-allocation
-clearing into compiler evidence. KMAC is fully implemented but neither
+clearing into compiler evidence; a follow-up terminal lifecycle prevents
+reuse after extraction or explicit wiping. The exact final remediation retest
+passed, and the permanent
+[v0.24.13 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.13.md)
+records `PASS`/`PASS` with zero open findings. KMAC is fully implemented but neither
 independently verified nor FIPS 140-3 validated; the wider SP 800-185 family
 remains in progress until TupleHash, ParallelHash, and final acceptance pass.
 
@@ -874,8 +878,8 @@ remains in progress until TupleHash, ParallelHash, and final acceptance pass.
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.12`; the current internal `0.24.13` KMAC
-implementation candidate selects no crates.io publication and awaits its
-exceptional pentest before release reconciliation.
+final candidate passed its exceptional pentest and retest, selects no
+crates.io publication, and awaits green hosted checks and its signed tag.
 The published
 dependency is:
 

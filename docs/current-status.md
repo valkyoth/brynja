@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.12 signed; v0.24.13 complete KMAC/KMACXOF implementation candidate awaits exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.12 signed; v0.24.13 KMAC/KMACXOF final candidate is pentest PASS/PASS and awaits green hosted checks and signed tag
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional

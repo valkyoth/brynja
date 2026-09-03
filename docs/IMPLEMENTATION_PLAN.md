@@ -76,11 +76,13 @@ brynja
 ├── brynja-core
 ├── brynja-hash-core (reusable no_std fixed-output and XOF interfaces)
 ├── brynja-hash-sha2 (complete SHA-2 ownership shared with TLS)
-├── brynja-hash-sha3 (all six FIPS 202 functions implemented; family acceptance in progress)
+├── brynja-hash-sha3 (complete FIPS 202 SHA-3/SHAKE ownership and final acceptance)
 ├── brynja-mac-hmac (future reusable HMAC ownership)
 ├── brynja-crypto (provider contracts, compositions, and non-hash primitives)
 ├── optional brynja-crypto-cpu (reserved zero-dependency no_std ISA boundary)
 ├── optional brynja-crypto-cpu-std (reserved host-detection boundary)
+├── future brynja-platform-security (optional no_std protected-memory contract)
+├── future brynja-platform-security-std (optional hosted OS enforcement)
 ├── future brynja-fips-module (exact validated artifact; never a feature)
 ├── future brynja-fips (downstream approved-only selection facade)
 ├── brynja-pki

@@ -55,10 +55,11 @@ the shared TLS/DTLS record-envelope boundary; bounded DER framing and admitted
 canonical ASN.1 values; and the separately selected sanitization adapter.
 
 The SHA-2 and FIPS 202 ordinary and hardened byte/arbitrary-bit APIs are usable,
-but their combined cross-backend acceptance remains pending through v0.24.11;
-both expanded families therefore remain **In progress**. No
-cryptographic primitive outside those six portable SHA-2 algorithms and the
-six named portable FIPS 202 functions, schema-driven ASN.1
+and the combined v0.24.11 cross-family acceptance has passed. Both expanded
+families are therefore **Fully implemented**. Their accelerated candidates
+remain unadmitted, and neither family is independently reviewed or FIPS 140-3
+validated. No cryptographic primitive outside those six portable SHA-2
+algorithms and the six named portable FIPS 202 functions, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release

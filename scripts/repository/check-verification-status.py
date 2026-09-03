@@ -170,6 +170,22 @@ def validate_component_document(path: Path, text: str) -> None:
                 raise VerificationStatusError(
                     f"missing component-inventory phrase: {phrase}"
                 )
+        completion = (
+            "combined v0.24.11 cross-family acceptance has passed. Both "
+            "expanded families are therefore **Fully implemented**"
+        )
+        if completion not in prose:
+            raise VerificationStatusError(
+                "missing completed SHA-2/SHA-3 cross-family acceptance status"
+            )
+        for stale in (
+            "combined cross-backend acceptance remains pending through v0.24.11",
+            "both expanded families therefore remain **In progress**",
+        ):
+            if stale in prose:
+                raise VerificationStatusError(
+                    f"stale SHA-2/SHA-3 acceptance status: {stale}"
+                )
         for row in COMPONENT_ROWS:
             if row not in text:
                 raise VerificationStatusError(

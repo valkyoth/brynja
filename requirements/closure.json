@@ -5416,6 +5416,61 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
+      "scope": "Add a separate `no_std` `brynja-platform-security` contract for immovable protected regions, exact control requirements, typed enforced/unavailable/not-applicable results, non-forgeable evidence, clear-before-release ordering, and explicit residuals; keep it optional, allocation-free, free of OS calls, and unable to turn register, cache, caller-copy, abort, termination, power-loss, DMA, swap, hibernation, or dump limitations into unsupported guarantees.",
+      "source_ids": [],
+      "title": "Protected Memory Contract And Evidence Model",
+      "version": "0.126.1"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement an optional `brynja-platform-security-std` Linux/Android provider using only first-party Rust and documented operating-system ABIs for page-owned allocation, locking, non-dump advice, fork behavior, clear-before-unlock, and capability reporting; fail closed on quotas, permissions, unsupported kernels, containers, process-policy ambiguity, or partial effects, and introduce no native cryptographic code or third-party dependency.",
+      "source_ids": [],
+      "title": "Linux And Android Protected Memory Provider",
+      "version": "0.126.2"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement the optional Windows provider with first-party Rust bindings to documented Windows system memory and process-security APIs, exact page ownership, locking, non-dump/crash posture evidence where observable, clear-before-unlock/free, rollback-safe failure, and honest unsupported-control results; use no native cryptographic provider or third-party dependency.",
+      "source_ids": [],
+      "title": "Windows Protected Memory Provider",
+      "version": "0.126.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Implement optional macOS, iOS, and supported BSD providers through documented platform ABIs with exact availability and entitlement handling, page-owned immovable regions, locking, non-dump/fork posture where supported, clear-before-release, and fail-closed unsupported results; preserve mobile sandbox rules and use no native cryptographic provider or third-party dependency.",
+      "source_ids": [],
+      "title": "Apple And BSD Protected Memory Providers",
+      "version": "0.126.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
+      "scope": "Compose the portable contract and every applicable hosted provider into an explicit opt-in high-assurance profile that requires named controls, refuses partial or stale evidence, distinguishes process-verifiable enforcement from operator-owned dump, swap/hibernation, IOMMU/DMA and physical-security duties, exercises packaged deployments on Linux, Android, Windows, macOS, iOS and BSD, and never changes ordinary `no_std`, default, independent-review, FIPS-validation, or caller-owned-copy claims.",
+      "source_ids": [],
+      "title": "High-Assurance Deployment Profile Acceptance",
+      "version": "0.126.5"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+      },
+      "requirement_ids": [],
       "scope": "After the final DRBG, provider, SSP, and algorithm implementations are linked, implement module-owned module-integrity verification and every required algorithm, DRBG, and component pre-operational self-test over the complete final image; only that internal path may issue the opaque artifact-, environment-, generation-, and test-plan-bound attestation required by provider execution and approved status, no public or application-implementable runner can issue or substitute it, no cryptographic service or output is available before success, and deterministic fault injection covers every test and integrity path.",
       "source_ids": [],
       "title": "Module Integrity And Pre-Operational Self-Tests",

@@ -13194,6 +13194,219 @@ Exit criteria:
   receive a mandatory secret-free completion result independently of auditing;
 - `v0.126.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
+### v0.126.1 - Protected Memory Contract And Evidence Model
+
+Status: planned
+
+Plan scope: Add a separate `no_std` `brynja-platform-security` contract for immovable protected regions, exact control requirements, typed enforced/unavailable/not-applicable results, non-forgeable evidence, clear-before-release ordering, and explicit residuals; keep it optional, allocation-free, free of OS calls, and unable to turn register, cache, caller-copy, abort, termination, power-loss, DMA, swap, hibernation, or dump limitations into unsupported guarantees.
+
+Goal: create the portable trust contract needed by high-assurance deployments
+without weakening `no_std`, silently adding system effects, or overstating what
+a process-local library can erase.
+
+Deliverables:
+
+- add the optional zero-dependency `brynja-platform-security` package with
+  typed region identity, generation, lifetime, control requirement, evidence,
+  teardown result, and residual-risk records;
+- require page ownership, alignment, size and provenance to be established
+  before protection, prevent safe movement, cloning, formatting, serialization
+  or use after release, and require Brynja cleanup before unlock or reuse;
+- separate application-implementable effect requests from sealed evidence that
+  only a reviewed provider operation can issue; never accept a boolean or
+  caller assertion as enforcement evidence;
+- classify locking, non-dump, guard, fork, swap/hibernation, DMA/IOMMU and
+  process-termination controls individually as enforced, unavailable or not
+  applicable, with exact platform and generation binding;
+- preserve explicit residuals for registers, caches, compiler copies,
+  caller-owned copies, `mem::forget`, abort, forced termination, power loss and
+  physical access, none of which this contract may report as erased.
+
+Verification:
+
+- compile-fail forged evidence, movable protected owners, duplicated teardown,
+  stale generations, cross-region tokens and downstream capability claims;
+- model partial setup, rollback, cancellation, recoverable unwind, adjacent
+  cleanup failure, early Drop and clear-before-release ordering without OS
+  access, allocation, unsafe code or secret-bearing diagnostics;
+- run package-external `no_std` consumers on all bare-metal targets and every
+  supported Rust version, plus mutation tests for every control and residual.
+
+Exit criteria:
+
+- the portable layer can express and verify exact protected-memory duties but
+  performs no hidden system effect and makes no physical-erasure guarantee;
+- `v0.126.1 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.126.2 - Linux And Android Protected Memory Provider
+
+Status: planned
+
+Plan scope: Implement an optional `brynja-platform-security-std` Linux/Android provider using only first-party Rust and documented operating-system ABIs for page-owned allocation, locking, non-dump advice, fork behavior, clear-before-unlock, and capability reporting; fail closed on quotas, permissions, unsupported kernels, containers, process-policy ambiguity, or partial effects, and introduce no native cryptographic code or third-party dependency.
+
+Goal: provide an auditable Linux and Android realization of the portable
+contract while keeping every operating-system limitation visible to callers.
+
+Deliverables:
+
+- isolate all reviewed OS ABI and unsafe code in platform-named modules under
+  the 500-line limit; OS system calls are effects only and may never implement
+  or delegate a cryptographic primitive;
+- own complete page-aligned mappings, lock them before secret admission, apply
+  supported non-dump and fork protections, clear through Brynja's hardened
+  boundary before unlock/unmap, and retain exact errno and rollback state
+  without secret-bearing messages;
+- distinguish kernel capability, configured process policy and administrator-
+  owned host posture; never infer encrypted swap, disabled hibernation,
+  IOMMU/DMA isolation or physical security from successful memory locking;
+- fail closed under resource limits, denied capabilities, unsupported advice,
+  container/seccomp restrictions, fork races, partial ranges and teardown
+  failure, with no silent unlocked fallback.
+
+Verification:
+
+- run native Linux and available Android tests for mapping, alignment, lock
+  quotas, dump inspection, fork inheritance, concurrent teardown, cancellation
+  and injected failure at every OS effect;
+- inspect `/proc` or documented platform evidence only where authoritative,
+  test containers and restricted accounts, and prove reports cannot outlive
+  their mapping, process, boot or policy generation;
+- run Miri over the safe contract, sanitizers over ownership boundaries, exact
+  ABI/source policy, package isolation and adversarial syscall mocks.
+
+Exit criteria:
+
+- supported Linux/Android environments can opt into protected regions with
+  exact evidence, while unavailable controls reject rather than downgrade;
+- the new OS/unsafe boundary is an exceptional mandatory pentest trigger;
+- `v0.126.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.126.3 - Windows Protected Memory Provider
+
+Status: planned
+
+Plan scope: Implement the optional Windows provider with first-party Rust bindings to documented Windows system memory and process-security APIs, exact page ownership, locking, non-dump/crash posture evidence where observable, clear-before-unlock/free, rollback-safe failure, and honest unsupported-control results; use no native cryptographic provider or third-party dependency.
+
+Goal: give Windows deployments the same typed protection boundary without
+claiming controls that Windows or the current process cannot demonstrate.
+
+Deliverables:
+
+- isolate reviewed Windows ABI declarations and unsafe calls in bounded
+  modules, allocate and own exact pages, lock before secret admission, and
+  clear with the first-party Brynja boundary before unlock and release;
+- model working-set quotas, privilege and job-object restrictions, process and
+  dump policy, paging limitations, suspend state, handle lifetime and error
+  identity as explicit capability evidence or residuals;
+- make every partial allocation, lock, policy-query and teardown failure
+  rollback-safe and non-secret, with no automatic unlocked fallback and no use
+  of Windows cryptographic providers.
+
+Verification:
+
+- exercise native Windows success and denied/quota/partial-effect paths,
+  process dumps where safely testable, concurrency, cancellation, unwind,
+  handle reuse and clear-before-release ordering;
+- compile and test every supported Windows target and Rust version, inspect
+  linked imports for the exact allowlisted system APIs, and reject cryptographic
+  DLL/provider or third-party linkage;
+- run package-external consumers, source/ABI mutations and deterministic mock
+  failures for every effect boundary.
+
+Exit criteria:
+
+- Windows callers receive exact enforced or unavailable control results and
+  cannot mistake page locking for complete dump, swap or physical protection;
+- the new OS/unsafe boundary is an exceptional mandatory pentest trigger;
+- `v0.126.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.126.4 - Apple And BSD Protected Memory Providers
+
+Status: planned
+
+Plan scope: Implement optional macOS, iOS, and supported BSD providers through documented platform ABIs with exact availability and entitlement handling, page-owned immovable regions, locking, non-dump/fork posture where supported, clear-before-release, and fail-closed unsupported results; preserve mobile sandbox rules and use no native cryptographic provider or third-party dependency.
+
+Goal: complete the promised Apple and BSD hosted surface while treating each
+kernel, sandbox and entitlement combination as a distinct operational
+environment.
+
+Deliverables:
+
+- implement bounded target-specific modules for macOS, iOS and each supported
+  BSD rather than assuming Unix-equivalent constants or semantics;
+- own exact page mappings, lock before secret admission, apply only documented
+  non-dump/fork controls, clear before unlock/unmap, and bind evidence to OS,
+  architecture, sandbox, entitlement and process generation;
+- expose denied mobile operations and unavailable platform controls honestly;
+  never substitute cache flushing, successful locking or application claims
+  for swap, hibernation, DMA/IOMMU, dump or physical-security enforcement;
+- keep all cryptography first-party Rust and prohibit CommonCrypto,
+  CryptoKit, Security.framework cryptography, OpenSSL or other native crypto.
+
+Verification:
+
+- execute native macOS Intel where available, Apple M2, iOS simulator/device
+  as permitted, and representative BSD hosts for success, denial, partial
+  setup, fork, suspend, cancellation, unwind and teardown behavior;
+- cross-compile all other promised targets, inspect imports and emitted code,
+  use deterministic OS-effect mocks, and retain explicit unavailable evidence
+  where hardware or policy prevents a qualifying native run;
+- pass package-external, sandbox, entitlement, source-policy, linkage and
+  clear-before-release mutation suites.
+
+Exit criteria:
+
+- every Apple/BSD target has a tested provider or explicit unavailable
+  disposition without weakening the portable contract or default graph;
+- each new OS/unsafe boundary is an exceptional mandatory pentest trigger;
+- `v0.126.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.126.5 - High-Assurance Deployment Profile Acceptance
+
+Status: planned
+
+Plan scope: Compose the portable contract and every applicable hosted provider into an explicit opt-in high-assurance profile that requires named controls, refuses partial or stale evidence, distinguishes process-verifiable enforcement from operator-owned dump, swap/hibernation, IOMMU/DMA and physical-security duties, exercises packaged deployments on Linux, Android, Windows, macOS, iOS and BSD, and never changes ordinary `no_std`, default, independent-review, FIPS-validation, or caller-owned-copy claims.
+
+Goal: make stronger deployments easy to select and hard to misrepresent while
+preserving portable defaults and unavoidable system/caller responsibilities.
+
+Deliverables:
+
+- define named deployment profiles as exact sets of mandatory, optional and
+  externally attested controls; construction fails unless every mandatory
+  process-verifiable control has fresh provider evidence;
+- require explicit operator disposition for dump collection, encrypted or
+  disabled swap and hibernation, IOMMU/DMA, virtualization, suspend, incident,
+  physical access and caller-buffer lifecycle without turning those records
+  into library-issued guarantees;
+- bind protected regions, cryptographic owners and service lifecycles so secret
+  admission cannot precede protection and deprotection cannot precede cleanup;
+  prohibit ordinary hash owners from masquerading as protected secret state;
+- keep both packages opt-in and outside the default facade, and document that
+  this profile adds neither independent review nor FIPS 140-3 validation.
+
+Verification:
+
+- run packaged deployment fixtures on Linux, Android, Windows, macOS, iOS and
+  BSD, covering every supported and unavailable control combination, stale or
+  forged evidence, quota exhaustion, policy drift, suspend/fork, crash setup,
+  cancellation and teardown;
+- perform hostile integration tests with hardened SHA, KDF, MAC, AEAD, key and
+  protocol owners; prove no secret is admitted to an unprotected required
+  region and no region is released before compiler-resistant cleanup;
+- complete native evidence, external review of platform/unsafe boundaries,
+  full repository tests, documentation and a high-assurance deployment
+  checklist that leaves registers, caches, caller copies and forced
+  termination as explicit residual risks.
+
+Exit criteria:
+
+- downstream applications can deliberately select a tested fail-closed
+  profile, while portable/default users receive no hidden OS effect or claim;
+- the high-assurance trust boundary receives an exceptional independent review
+  and pentest even though v0.126.5 is not a scheduled publication checkpoint;
+- `v0.126.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
 ### v0.127.0 - Module Integrity And Pre-Operational Self-Tests
 
 Status: planned

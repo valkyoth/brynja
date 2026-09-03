@@ -7,6 +7,13 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Add five pre-1.0 roadmap milestones for an optional high-assurance
+  protected-memory layer: a portable `no_std` contract, first-party hosted
+  providers for Linux/Android, Windows, Apple/BSD, and a cross-platform
+  deployment-profile acceptance gate. The layer must fail closed without
+  changing portable defaults or claiming control of registers, caches,
+  caller-owned copies, forced termination, DMA, dumps, swap, hibernation, or
+  physical security that it cannot actually enforce.
 - Add the v0.24.11 combined downstream `no_std` acceptance fixture and
   fail-closed closure policy for every SHA-2 and SHA-3/SHAKE ordinary,
   arbitrary-bit, hardened public/secret, fixed-output, streaming, and XOF

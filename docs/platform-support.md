@@ -61,6 +61,25 @@ transport, and storage examples may be provided, but every future OS-specific
 unsafe adapter requires its own crate, versioned unsafe/FFI milestone, platform
 tests, and external audit. Missing capabilities always fail closed.
 
+## Optional High-Assurance Platform Security
+
+Versions 0.126.1 through 0.126.5 add a separately selected protected-memory
+layer. `brynja-platform-security` defines an allocation-free `no_std` contract
+for immovable protected regions, control requirements, sealed enforcement
+evidence, and clear-before-release ordering. `brynja-platform-security-std`
+owns the reviewed Linux/Android, Windows, macOS/iOS, and BSD system-ABI
+implementations. Neither package enters a default, protocol, ordinary hash, or
+facade dependency graph.
+
+The hosted package may call documented operating-system memory APIs, but it
+may not contain, link, or delegate cryptography to a native provider. Memory
+locking and non-dump advice are reported only for the exact region and process
+generation actually observed. They never imply protected registers, caches,
+compiler copies, caller buffers, swap or hibernation, DMA/IOMMU posture,
+forced termination, power loss, or physical security. A high-assurance profile
+fails closed when a mandatory process control is unavailable and keeps
+operator-owned controls and unavoidable residual risks explicit.
+
 Real Aesynx hardware qualification may follow `1.0.0` if hardware is not
 available during the release line, but the ABI/emulator, entropy, time,
 transport, storage, acceleration, boot-to-handshake, and lifecycle contract is

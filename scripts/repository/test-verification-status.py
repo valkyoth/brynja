@@ -53,6 +53,10 @@ OWNED_IMPLEMENTED = (
     "| Example capability | ✅ Implemented | `example-crate` | "
     "❌ Not independently verified |"
 )
+COMPONENT_COMPLETION = (
+    "The combined v0.24.11 cross-family acceptance has passed. Both expanded "
+    "families are therefore **Fully implemented**."
+)
 
 
 def must_fail(text: str, expected: str) -> None:
@@ -136,6 +140,29 @@ def main() -> int:
         else:
             raise AssertionError(f"README split regression passed: {expected}")
     MODULE.validate_support_document(Path("support.md"), SUPPORT)
+    component = (
+        "This crate-level assurance inventory does not claim a consumer-usable "
+        "cryptographic capability. A named independent reviewer is required. "
+        "There is no FIPS 140-3 validation. "
+        + COMPONENT_COMPLETION
+        + "\n"
+        + "\n".join(MODULE.COMPONENT_ROWS)
+    )
+    MODULE.validate_component_document(Path("component.md"), component)
+    for stale in (
+        "The combined cross-backend acceptance remains pending through v0.24.11. "
+        "Both expanded families therefore remain **In progress**.",
+        "Both expanded families are therefore **In progress**.",
+    ):
+        try:
+            MODULE.validate_component_document(
+                Path("component.md"), component.replace(COMPONENT_COMPLETION, stale)
+            )
+        except MODULE.VerificationStatusError as error:
+            if "acceptance status" not in str(error):
+                raise
+        else:
+            raise AssertionError("stale SHA-2/SHA-3 status unexpectedly passed")
     try:
         MODULE.validate_support_document(
             Path("support.md"), SUPPORT.replace("linked review evidence", "evidence")

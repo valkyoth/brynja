@@ -957,6 +957,8 @@ selected set in dependency order and publishes the facade last.
 | Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Portable implementation at v0.24.18, frozen acceptance at v0.24.20, SHA-instruction acceleration at v0.24.21, and final cross-backend closure at v0.24.23; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
 | Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Portable implementation at v0.24.19, frozen acceptance at v0.24.20, multi-buffer SIMD at v0.24.22, and final cross-backend closure at v0.24.23 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
+| Future `brynja-platform-security` | Optional `no_std` protected-region contract and typed enforcement evidence | Planned at v0.126.1; never performs hidden OS effects |
+| Future `brynja-platform-security-std` | Optional Linux, Android, Windows, macOS, iOS, and BSD protected-memory providers | Planned at v0.126.2-v0.126.5; outside every default graph |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | Complete TLS 1.2/1.1/1.0, DTLS 1.2/1.0, SSL, WTLS, PCT, and SNP compatibility with independent package policy | Boundaries exist; complete v0.180.1-v0.180.24 implementation chains are required before 1.0 |
@@ -974,6 +976,13 @@ Day-one CI is designed to compile the workspace for Linux, Windows, FreeBSD,
 macOS, Android, and iOS, and to run host tests on Linux, Windows, and macOS.
 Aesynx is a planned portability target: no API may assume a current operating
 system, allocator, socket type, filesystem, clock, or platform RNG.
+
+The future v0.126.1-v0.126.5 high-assurance layer is explicitly opt-in. It can
+require protected pages and verify supported process controls, but it cannot
+guarantee erasure of registers, caches, caller-owned copies, dumps, swap,
+hibernation, DMA-visible memory, forced termination, or physical media unless
+the responsible platform or operator supplies authoritative evidence. Missing
+mandatory controls fail closed rather than silently falling back.
 
 See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platform-support.md).
 

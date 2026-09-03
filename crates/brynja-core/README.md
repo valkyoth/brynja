@@ -84,7 +84,7 @@ becomes readable; and incomplete finish, initialization Drop, explicit owner
 clear, and owner Drop clear the entire allocation through a per-byte volatile
 zero store plus compiler barrier. One private 23-line module contains the only
 unsafe block. Repository policy rejects every other core unsafe site, while CI
-checks MIR, LLVM IR, and assembly for Rust 1.90.0 through 1.98.0 and all nine
+checks MIR, LLVM IR, and assembly for Rust 1.90.0 through 1.98.1 and all nine
 promised targets, then runs the secret-memory tests under pinned Miri and
 AddressSanitizer. The guarantee stops at that Rust allocation: registers,
 copies, caches, DMA-visible copies, dumps, suspend images, physical memory,
@@ -100,7 +100,7 @@ Private representations prevent mask forging, ordinary equality and formatting
 are unavailable, and `Choice::expose_public` is the single named
 declassification boundary. Exhaustive byte-pair tests, word-boundary tests,
 array mismatch-position tests, compile-fail examples, a hash-locked source
-policy, and optimized LLVM/assembly witnesses cover Rust 1.90.0 through 1.98.0
+policy, and optimized LLVM/assembly witnesses cover Rust 1.90.0 through 1.98.1
 and all nine promised targets. The emitted-code evidence is a bounded witness,
 not a formal proof, statistical timing test, or microarchitectural guarantee.
 Dynamic slices, secret-dependent lengths, signed values, and protocol-level

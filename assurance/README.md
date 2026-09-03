@@ -52,7 +52,7 @@ failure; clears partial secret output; and clears successful owners on Drop and
 recoverable panic unwinding. The surrounding policy admits no capability owner
 implicitly: current owners must pass adjacent compiler contracts for exact
 types, private fields and sanitizer signatures plus exact optimized-MIR cleanup
-targets under Rust 1.90.0 and 1.98.0; every future registration must match a
+targets under Rust 1.90.0 and 1.98.1; every future registration must match a
 separate canonical compiler contract; three exact-coverage identity maps
 derive its unique owner-specific adjacent test, nonempty caller headers, and
 nonempty declared-sanitizer MIR target; strict future-owner MIR data-flow binds
@@ -226,7 +226,7 @@ scripts/zeroization/check-zeroization-miri.sh
 scripts/zeroization/check-zeroization-sanitizer.sh
 python3 scripts/constant-time/check-constant-time.py
 python3 scripts/constant-time/test-constant-time.py
-scripts/constant-time/check-constant-time-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
+scripts/constant-time/check-constant-time-codegen.sh 1.98.1 x86_64-unknown-linux-gnu
 python3 scripts/constant-time/test-constant-time-codegen.py
 python3 scripts/constant-time/check-constant-time-evidence.py
 python3 scripts/constant-time/test-constant-time-evidence.py

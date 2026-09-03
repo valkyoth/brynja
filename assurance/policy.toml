@@ -3,7 +3,7 @@ version = 1
 milestone = "0.4.0"
 
 [toolchains]
-release = "1.98.0"
+release = "1.98.1"
 msrv = "1.90.0"
 kani = "1.90.0-x86_64-unknown-linux-gnu"
 

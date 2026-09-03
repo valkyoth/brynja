@@ -88,7 +88,7 @@ CPUs.
 
 The implemented RISC-V identity is exactly RV64 `Zknh`. Its isolated kernel
 uses `sha256sig0`, `sha256sig1`, `sha256sum0`, and `sha256sum1`; generic RV64,
-`Zkn`, RVV, and processor naming are not substitutes. Rust 1.90.0 and 1.98.0
+`Zkn`, RVV, and processor naming are not substitutes. Rust 1.90.0 and 1.98.1
 both emit those four instructions, and the full accelerated SHA-256
 differential corpus passes under QEMU's explicit RISC-V model. The reserved
 vector identity now names exact `Zvknha`; a future `Zvknhb` route requires its
@@ -112,7 +112,7 @@ AArch64 implementation requires NEON and SHA3 and emits `eor3`, `rax1`, and
 `bcax`. Both execute a direct zero-state KAT before exposing the repository-
 only evidence permutation, permanently quarantine a failed session, and match
 an independent 1,024-state permutation corpus plus 80 fixed-output and 28 XOF
-results across all six frozen byte-oriented identities. Rust 1.90.0 and 1.98.0
+results across all six frozen byte-oriented identities. Rust 1.90.0 and 1.98.1
 emit the required instructions, and AArch64 QEMU supplies supplemental
 execution evidence.
 

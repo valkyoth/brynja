@@ -14,7 +14,7 @@ import mir_cleanup_flow
 
 
 ROOT = Path(__file__).resolve().parents[2]
-TOOLCHAINS = ("1.90.0", "1.98.0")
+TOOLCHAINS = ("1.90.0", "1.98.1")
 CONTRACT_TESTS = {
     "brynja-core": {
         "entropy::assurance_contract::raw_entropy_owner_contract_is_compiler_checked",
@@ -338,7 +338,7 @@ def main() -> int:
                 check_mir(toolchain, package, mir_calls[package], target)
     print(
         "compiler-checked secret-owner shapes and exact MIR cleanup calls pass "
-        "under Rust 1.90.0 and 1.98.0"
+        "under Rust 1.90.0 and 1.98.1"
     )
     return 0
 

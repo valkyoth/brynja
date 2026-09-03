@@ -829,7 +829,7 @@ sha256 = "9709fa94906a0e18e3a4cfa7e56ab84ae67504337f8b25e7930898f59189bfad"
 
 [[reviewed-source]]
 path = "scripts/kmac/check-kmac-codegen.sh"
-sha256 = "8e06d1f5085d6f17bb24a3a1155ce0ff09eb19fb4f2e35dbed66f85cfb39b749"
+sha256 = "535106b1987aab0d3e376fb6e5ad6ad25e8d3fdc27ac941d73bb3037d3cdaa6c"
 
 [[reviewed-source]]
 path = "assurance/kmac-conformance-rejected/src/lib.rs"
@@ -869,7 +869,7 @@ sha256 = "cb0232fd04dd0644fc56c7f226346db0e5834dbd2d8540a15c893f0186606d32"
 
 [[reviewed-source]]
 path = "scripts/cryptography/secret_owner_compiler.py"
-sha256 = "da92c413a5447298456f4981d62049484c83a78794fa5921c2901806c64338f7"
+sha256 = "72de8365ab67239c24fb1a1271838fc6484a6acb3a9da43eb1b42e00a97262da"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
@@ -917,7 +917,7 @@ sha256 = "aeebc7eb2c7b085f75dfe29ce71973a7887e4755a7f5112716a6d3cbbe694633"
 
 [[reviewed-source]]
 path = "scripts/sha2/check-sha2-hardened-codegen.sh"
-sha256 = "d6fb96d283b40f42c68355100fc4acc1f16a2ea3abc94e01df9aa9a01aa295eb"
+sha256 = "ac67c581b2bb49323c85a0f5752511c30b55fa27891f24b486b6186d2b94e67e"
 
 [[reviewed-source]]
 path = "scripts/sha2/check-sha2-hardened.py"
@@ -1001,7 +1001,7 @@ sha256 = "73d4bc98b48cb6556eb0ec96c3aa19b8e8e52a177ebc3ad907bc196cae562c25"
 
 [[reviewed-source]]
 path = "scripts/sha3/check-sha3-hardened-codegen.sh"
-sha256 = "450c79737fce2347ea6c4c8247cb76c91e2ef29065f4f5c61d55aac169aad44c"
+sha256 = "ac7ba7f28a80f2fa05acc27aaf1bb252f84546eac895126d19d913706ba782df"
 
 [[reviewed-source]]
 path = "scripts/sha3/check-sha3-hardened.py"

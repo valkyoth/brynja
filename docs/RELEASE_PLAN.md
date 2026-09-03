@@ -2682,7 +2682,7 @@ Verification:
 - run FIPS 202 vectors, padding and rate boundaries, multi-squeeze partitions,
   exhaustion and state-transition failures, package-content checks, compiled
   examples, and the applicable Kani and differential harnesses;
-- pass repository checks, Rust 1.90.0 through 1.98.0, supported no_std targets,
+- pass repository checks, Rust 1.90.0 through 1.98.1, supported no_std targets,
   dependency and advisory policy, SBOM, documentation, and clean GitHub and
   CodeQL before acceleration work starts.
 
@@ -2708,7 +2708,7 @@ Implementation notes:
   while a repository-only fixture reruns the frozen byte-oriented semantics as
   80 fixed-output and 28 XOF comparisons across all six identities, every rate
   boundary, multi-block inputs, zero output, and multi-permutation tails;
-- Rust 1.90.0 and 1.98.0 emitted code contains AVX2 operations on x86_64 and
+- Rust 1.90.0 and 1.98.1 emitted code contains AVX2 operations on x86_64 and
   `eor3`, `rax1`, and `bcax` on AArch64; supplemental AArch64 QEMU execution
   passes but remains categorically non-native and non-authorizing;
 - the pinned ratified RISC-V scalar/vector cryptography authorities contain no
@@ -3035,7 +3035,7 @@ secret output, failure-atomic public writes, complete secret failure clearing,
 and consuming byte/bit finalization define the public boundary. Exact source
 contracts, downstream `no_std` and assembled-package acceptance, behavior and
 compile-fail tests, thirteen cumulative Kani bounds, Miri, AddressSanitizer,
-and Rust 1.90.0/1.98.0 MIR/LLVM/assembly cleanup evidence are gate-bound. No
+and Rust 1.90.0/1.98.1 MIR/LLVM/assembly cleanup evidence are gate-bound. No
 accelerated hardened path, independent verification, FIPS validation, or
 crates.io publication is claimed.
 
@@ -17987,7 +17987,7 @@ the final external audit.
 Deliverables:
 
 - build every selected archive from pinned source and toolchain inputs and compare source, metadata, lock, SBOM and binary artifacts;
-- install supported package combinations into clean downstream fixtures across Rust 1.90.0 through 1.98.0 and representative targets;
+- install supported package combinations into clean downstream fixtures across Rust 1.90.0 through 1.98.1 and representative targets;
 - execute release rollback, signing-key compromise, crate ownership, advisory, incident, recovery and documentation drills.
 
 Verification:

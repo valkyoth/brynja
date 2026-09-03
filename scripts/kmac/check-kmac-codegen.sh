@@ -3,7 +3,7 @@ set -euo pipefail
 
 target="${2:-x86_64-unknown-linux-gnu}"
 if [[ "$#" -eq 0 ]]; then
-    toolchains=(1.90.0 1.98.0)
+    toolchains=(1.90.0 1.98.1)
 else
     toolchains=("$1")
 fi

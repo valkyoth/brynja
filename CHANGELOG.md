@@ -21,7 +21,7 @@ Keep a Changelog and Semantic Versioning.
   stores hardened cSHAKE in `Option<S>` or extracts it with `take()`. Fixed and
   XOF finalization now operate on the exact embedded source through `&mut`,
   replace it with a cleared owner, and volatile-clear the vacated allocation.
-  Rust 1.90.0/1.98.0 development and optimized compiler evidence plus a
+  Rust 1.90.0/1.98.1 development and optimized compiler evidence plus a
   negative source-move fixture enforce the transition.
 - Hide weak-key and short-tag KMAC conformance entry points from default builds
   behind `conformance-testing`, reject impossible encoded-key widths instead of
@@ -44,7 +44,7 @@ Keep a Changelog and Semantic Versioning.
 - Bind all twelve official NIST KMAC/KMACXOF examples, a separately composed
   256-case arbitrary-bit oracle, malformed assurance input, package-external
   bare-metal use, source-policy mutations, twenty-two cumulative Kani bounds,
-  Miri, AddressSanitizer, timing checks, and Rust 1.90.0/1.98.0 cleanup
+  Miri, AddressSanitizer, timing checks, and Rust 1.90.0/1.98.1 cleanup
   evidence to the exact keyed construction. KMAC is fully implemented but not
   independently verified or FIPS 140-3 validated; the complete SP 800-185
   family remains in progress.
@@ -74,6 +74,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Refresh the default release compiler from Rust 1.98.0 to 1.98.1 after the
+  fail-closed live freshness check detected the stable patch release. Rust
+  1.98.0 remains an explicitly tested compatibility lane; the full gate,
+  promised-target evidence, and cleanup/code-generation endpoints now use
+  1.98.1 without changing the Rust 1.90.0 MSRV.
 - Mark the exact SHA-2 and SHA-3/SHAKE families **Fully implemented** only
   after combined package-external acceptance. Independent verification and
   FIPS 140-3 validation remain explicitly absent, and no accelerated backend

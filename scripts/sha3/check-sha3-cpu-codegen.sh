@@ -21,7 +21,7 @@ compile_and_find() {
     printf '%s\n' "${assembly[0]}"
 }
 
-for toolchain in 1.90.0 1.98.0; do
+for toolchain in 1.90.0 1.98.1; do
     x86_assembly="$(compile_and_find x86_64-unknown-linux-gnu "x86-$toolchain" "$toolchain")"
     for instruction in vpxor vpandn; do
         grep -Eq "(^|[[:space:]])${instruction}[[:alnum:]]*([[:space:]]|$)" "$x86_assembly" || {
@@ -39,4 +39,4 @@ for toolchain in 1.90.0 1.98.0; do
     done
 done
 
-echo "SHA-3 CPU codegen contains AVX2 and AArch64 SHA3 instructions under Rust 1.90.0 and 1.98.0"
+echo "SHA-3 CPU codegen contains AVX2 and AArch64 SHA3 instructions under Rust 1.90.0 and 1.98.1"

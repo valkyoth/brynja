@@ -61,7 +61,8 @@ service indicator remains `NonApproved`.
   proofs, differential evidence, and malformed-input rejection.
 - The local evidence suite includes twenty-two cumulative Kani bounds, Miri,
   AddressSanitizer, constant-time comparison timing, and exact Rust 1.90.0 and
-  1.98.0 MIR/LLVM/assembly cleanup inspection. Package-external regression
+  1.98.1 MIR/LLVM/assembly cleanup inspection. Rust 1.98.0 remains an explicit
+  compatibility lane. Package-external regression
   coverage attempts to reuse both extracted and explicitly wiped cSHAKE
   wrappers, while compiler evidence requires the terminal transition before
   finalization or wiping.
@@ -101,6 +102,13 @@ encoded widths fail closed, and candidate-length ownership is documented at
 the protocol boundary. Independent retest of exact final remediation candidate
 `c5a0ea904975f44ae9cb1a27f89b50f1f96e5923` passed with zero open findings;
 the permanent report records `PASS`/`PASS`.
+
+The report-bearing release reconciliation also advances the default stable
+compiler to Rust 1.98.1 after the live freshness gate detected that patch
+release. This tooling-only refresh changes no production Rust source,
+cryptographic result, public API, dependency graph, backend admission, or
+publication selection; the complete release gate is rerun at the new compiler
+endpoint while retaining Rust 1.98.0 as a compatibility lane.
 
 ## Authority
 

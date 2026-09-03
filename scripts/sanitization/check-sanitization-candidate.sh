@@ -3,12 +3,12 @@ set -euo pipefail
 
 manifest="assurance/sanitization-admission/Cargo.toml"
 
-cargo +1.98.0 fmt --manifest-path "$manifest" --check
-cargo +1.98.0 test --manifest-path "$manifest" --locked
-cargo +1.98.0 clippy --manifest-path "$manifest" --lib --locked -- -D warnings
+cargo +1.98.1 fmt --manifest-path "$manifest" --check
+cargo +1.98.1 test --manifest-path "$manifest" --locked
+cargo +1.98.1 clippy --manifest-path "$manifest" --lib --locked -- -D warnings
 
 if [[ "${1:-}" == "--matrix" ]]; then
-    compilers=(1.90.0 1.91.0 1.92.0 1.93.0 1.94.0 1.95.0 1.96.0 1.96.1 1.97.0 1.97.1 1.98.0)
+    compilers=(1.90.0 1.91.0 1.92.0 1.93.0 1.94.0 1.95.0 1.96.0 1.96.1 1.97.0 1.97.1 1.98.0 1.98.1)
     targets=(
         x86_64-unknown-linux-gnu
         x86_64-pc-windows-msvc
@@ -25,7 +25,7 @@ if [[ "${1:-}" == "--matrix" ]]; then
         cargo "+$compiler" check --manifest-path "$manifest" --locked
     done
     for target in "${targets[@]}"; do
-        cargo +1.98.0 check --manifest-path "$manifest" --locked --target "$target"
+        cargo +1.98.1 check --manifest-path "$manifest" --locked --target "$target"
     done
     cargo deny --manifest-path "$manifest" check advisories bans licenses sources
     cargo audit --file assurance/sanitization-admission/Cargo.lock --deny warnings --no-fetch

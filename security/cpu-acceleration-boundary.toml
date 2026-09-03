@@ -134,7 +134,7 @@ sha256 = "c6bfa1bbbe3481c2030acb5e4b1ba779167c19609b6605a034e7ba0e82fd3e50"
 [[evidence]]
 path = "scripts/sha3/check-sha3-cpu-codegen.sh"
 status = "compiler-endpoint-instruction-evidence"
-sha256 = "f6c4f24c31053a60d5ee7dca2c719fcafe98c8e4b505f13070cdce1e4765a3af"
+sha256 = "ec904433b22264a2a25313d4161cc70d513e77617f66a5d524e7756b8a4f5969"
 
 [[evidence]]
 path = "scripts/sha3/check-sha3-cpu-qemu.sh"

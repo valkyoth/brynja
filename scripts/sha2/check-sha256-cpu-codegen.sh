@@ -8,7 +8,7 @@ trap 'rm -rf "$temporary"' EXIT
 compile_and_find() {
     local target="$1"
     local output="$2"
-    local toolchain="${3:-1.98.0}"
+    local toolchain="${3:-1.98.1}"
     CARGO_TARGET_DIR="$temporary/$output" \
         cargo "+$toolchain" rustc --quiet --locked --release -p brynja-crypto-cpu \
         --target "$target" --lib -- --emit=asm
@@ -40,7 +40,7 @@ for instruction in 'sha512h' 'sha512h2'; do
     }
 done
 
-for toolchain in 1.90.0 1.98.0; do
+for toolchain in 1.90.0 1.98.1; do
     riscv_assembly="$(compile_and_find riscv64gc-unknown-linux-gnu "riscv-$toolchain" "$toolchain")"
     for instruction in sha256sig0 sha256sig1 sha256sum0 sha256sum1; do
         grep -Fq -- "$instruction" "$riscv_assembly" || {

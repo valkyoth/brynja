@@ -144,8 +144,8 @@ failure.
 ## Compatibility And Target Evidence
 
 An isolated no-default-features candidate compiled with Rust 1.90.0, 1.91.0,
-1.92.0, 1.93.0, 1.94.0, 1.95.0, 1.96.0, 1.96.1, 1.97.0, 1.97.1, and 1.98.0. Rust
-1.98.0 cross-checks passed for Linux, Windows MSVC, FreeBSD, macOS, Android,
+1.92.0, 1.93.0, 1.94.0, 1.95.0, 1.96.0, 1.96.1, 1.97.0, 1.97.1, 1.98.0, and 1.98.1. Rust
+1.98.1 cross-checks passed for Linux, Windows MSVC, FreeBSD, macOS, Android,
 iOS, embedded ARM, embedded RISC-V, and `x86_64-unknown-none`; WASM also
 compiled as an explicitly weaker compatibility target.
 

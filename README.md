@@ -755,7 +755,7 @@ independent-review, or FIPS evidence. The v0.22.1 delta remains included in
 the scheduled v0.20.0-to-v0.25.0 assessment.
 
 The v0.22.2 RV64 `Zknh` candidate is implemented but unadmitted. Rust 1.90.0
-and 1.98.0 emitted all four required scalar SHA-256 instructions and the QEMU
+and 1.98.1 emitted all four required scalar SHA-256 instructions and the QEMU
 differential corpus passed, but those results are supplemental and create no
 native RISC-V support claim. The registered native lane was also inventoried
 and rejected before execution because every hart lacks scalar and vector SHA
@@ -807,7 +807,7 @@ Drop.
 Hardened-versus-ordinary differential tests cover all identities, rates, bit
 tails and multi-squeeze boundaries. Package-external `no_std`, strict source
 policy, Miri, AddressSanitizer, 18 cumulative Kani properties, and Rust
-1.90.0/1.98.0 MIR/LLVM/assembly cleanup checks are mandatory. Accelerated
+1.90.0/1.98.1 MIR/LLVM/assembly cleanup checks are mandatory. Accelerated
 hardened execution remains prohibited. SHA-3/SHAKE remains **In progress**
 until v0.24.11 combined acceptance, and this candidate does not claim
 independent review, FIPS validation, backend admission, or publication.
@@ -862,7 +862,7 @@ ordinary default-build autocomplete. Fixed tags are
 opaque and use constant-time verification; XOF output is typed secret unless
 explicitly declassified. Official examples, a separately composed arbitrary-
 bit oracle, package-external `no_std` use, twenty-two cumulative Kani bounds,
-Miri, AddressSanitizer, timing checks, and Rust 1.90.0/1.98.0 cleanup evidence
+Miri, AddressSanitizer, timing checks, and Rust 1.90.0/1.98.1 cleanup evidence
 are bound to the implementation. The pentest remediation additionally removes
 inline `Option::take` state extraction and binds in-place source-allocation
 clearing into compiler evidence; a follow-up terminal lifecycle prevents
@@ -1048,7 +1048,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | --- | --- |
 | License | `MIT OR Apache-2.0` |
 | MSRV | Rust `1.90.0` |
-| Pinned stable toolchain | Rust `1.98.0` |
+| Pinned stable toolchain | Rust `1.98.1` |
 | Kani verifier pairing | `cargo-kani 0.67.0` on Rust `1.90.0`; separate evidence only |
 | Default target | `no_std` |
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
@@ -1063,7 +1063,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 ## Rust Version Support
 
 The MSRV is Rust `1.90.0`. Development and full release evidence are pinned
-to Rust `1.98.0`, the current stable release checked on 2026-08-29.
+to Rust `1.98.1`, the current stable release checked on 2026-09-03.
 The release preflight queries upstream again and fails closed if the pin or
 tooling is stale.
 
@@ -1084,11 +1084,12 @@ successful policy check is not formal-verification evidence.
 | `1.96.1` | Workspace all-feature compatibility check |
 | `1.97.0` | Workspace all-feature compatibility check |
 | `1.97.1` | Workspace all-feature compatibility check |
-| `1.98.0` | Full format, lint, test, platform, policy, docs, package, and security gate |
+| `1.98.0` | Workspace all-feature compatibility check |
+| `1.98.1` | Full format, lint, test, platform, policy, docs, package, and security gate |
 
 The v0.12 constant-time emitted-code witness additionally runs on every listed
 stable compiler for the x86_64 Linux host and on all nine promised targets with
-Rust 1.98.0. This matrix is compiler evidence for the bounded witness, not a
+Rust 1.98.1. This matrix is compiler evidence for the bounded witness, not a
 timing or independent-verification claim.
 
 Patch releases are listed separately when they are stable releases that the
@@ -1113,7 +1114,7 @@ python3 scripts/repository/check-first-party-rust-crypto.py
 python3 scripts/repository/test-first-party-rust-crypto.py
 python3 scripts/constant-time/check-constant-time.py
 python3 scripts/constant-time/test-constant-time.py
-scripts/constant-time/check-constant-time-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
+scripts/constant-time/check-constant-time-codegen.sh 1.98.1 x86_64-unknown-linux-gnu
 python3 scripts/constant-time/test-constant-time-codegen.py
 python3 scripts/constant-time/check-constant-time-evidence.py
 python3 scripts/constant-time/test-constant-time-evidence.py
@@ -1137,8 +1138,8 @@ python3 scripts/cpu/check-cpu-evidence.py
 python3 scripts/cpu/test-cpu-evidence.py
 scripts/cpu/check-cpu-admission-fixture.sh
 python3 scripts/zeroization/check-zeroization-evidence.py
-scripts/zeroization/check-zeroization-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
-scripts/sanitization/check-sanitization-adapter-codegen.sh 1.98.0 x86_64-unknown-linux-gnu
+scripts/zeroization/check-zeroization-codegen.sh 1.98.1 x86_64-unknown-linux-gnu
+scripts/sanitization/check-sanitization-adapter-codegen.sh 1.98.1 x86_64-unknown-linux-gnu
 scripts/zeroization/check-zeroization-miri.sh
 scripts/zeroization/check-zeroization-sanitizer.sh
 scripts/release/check-github-release-controls.py

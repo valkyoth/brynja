@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run complete v0.24.3 portable FIPS 202 public and package acceptance."""
+"""Run complete v0.24.11 portable FIPS 202 public and package acceptance."""
 
 from __future__ import annotations
 

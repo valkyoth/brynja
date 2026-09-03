@@ -53,7 +53,7 @@ pub struct AcceptanceReport {
     pub bit_domain_results: usize,
 }
 
-/// Runs complete v0.24.3 portable FIPS 202 downstream usability acceptance.
+/// Runs complete v0.24.11 portable FIPS 202 downstream usability acceptance.
 pub fn run() -> Result<AcceptanceReport, AcceptanceError> {
     check_claims()?;
     for (input, expected) in [

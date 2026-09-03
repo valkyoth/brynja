@@ -899,9 +899,9 @@
         "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.22.0",
-        "rationale": "All six FIPS 180-4 SHA-2 identities are complete first-party implementations with public leaf and facade APIs, authoritative vectors, boundary evidence, optional unadmitted CPU candidates, and separately packaged downstream acceptance.",
+        "rationale": "All six FIPS 180-4 SHA-2 identities are fully implemented across ordinary byte, canonical arbitrary-bit, and hardened public/secret profiles with authoritative vectors, compiler-resistant cleanup, separately packaged downstream acceptance, and five explicitly unadmitted CPU candidates.",
         "sources": ["nist:NIST.FIPS.180-4.pdf"],
-        "test_target": "scripts/sha2/check-sha2-public-api.py#main"
+        "test_target": "scripts/hash/check-final-acceptance.py#main"
       },
       "id": "algorithm.sha2"
     },
@@ -911,9 +911,9 @@
         "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.24.2",
-        "rationale": "The private Keccak-f[1600] owner and all six complete SHA-3 and SHAKE APIs are implemented under pinned FIPS 202; portable family acceptance and acceleration remain staged.",
+        "rationale": "The private Keccak-f[1600] owner and all six FIPS 202 SHA-3/SHAKE identities are fully implemented across ordinary byte, canonical arbitrary-bit, hardened public/secret, fixed-output and incremental-XOF profiles with two explicitly unadmitted CPU candidates.",
         "sources": ["nist:NIST.FIPS.202.pdf"],
-        "test_target": "crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match"
+        "test_target": "scripts/hash/check-final-acceptance.py#main"
       },
       "id": "algorithm.sha3-shake"
     },

@@ -59,7 +59,7 @@ pub struct AcceptanceReport {
     pub skipped_unadmitted_backends: usize,
 }
 
-/// Runs complete v0.24.8 SHA-2 downstream usability acceptance.
+/// Runs complete v0.24.11 SHA-2 downstream usability acceptance.
 pub fn run() -> Result<AcceptanceReport, AcceptanceError> {
     check_claims()?;
     let cases = [

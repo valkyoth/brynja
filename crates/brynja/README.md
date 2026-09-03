@@ -31,7 +31,7 @@ workspace. It is allocation-independent `no_std` Rust without a C cryptographic 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides security foundations, all six portable FIPS 180-4 SHA-2 algorithms,
 > all six portable FIPS 202 SHA-3 and SHAKE functions, and bounded record and DER/ASN.1 framing—but no TLS connection, certificate validator, or working protocol engine.
 
-All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged downstream `no_std` acceptance through the leaf and facade. Both families accept canonical arbitrary-bit messages, and SHAKE supports arbitrary-bit output. Distinct hardened SHA-3/SHAKE states clear all source-declared Brynja-owned regions and classify output explicitly as public or typed secret. That is not independent review or FIPS validation. Final combined acceptance remains in progress through v0.24.11.
+All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged and combined downstream `no_std` acceptance through the leaf and facade. Both families accept canonical arbitrary-bit messages, and SHAKE supports arbitrary-bit output. Distinct hardened states clear all source-declared Brynja-owned regions and classify output explicitly as public or typed secret. Both exact families are fully implemented; that is not independent review or FIPS validation.
 
 ## Design Boundaries
 
@@ -134,7 +134,7 @@ state
     .unwrap();
 ```
 
-Use `finalize_secret` or `squeeze_secret` when output remains secret. Their typed owners clear the complete destination on Drop. Final combined family acceptance closes at v0.24.11.
+Use `finalize_secret` or `squeeze_secret` when output remains secret. Their typed owners clear the complete destination on Drop. Combined family acceptance passed at v0.24.11.
 
 ## Cryptography Verification Status
 
@@ -148,8 +148,8 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 
 | Hash family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
-| SHA-2 | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha2` | ❌ Not independently verified |
-| SHA-3/SHAKE | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha3` | ❌ Not independently verified |
+| SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
+| SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | SP 800-185 family | 🗓 Planned — v0.24.12–v0.24.17 | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |
 
 ### Legacy Hash Functions
@@ -189,8 +189,8 @@ Depend directly on a leaf crate when the complete facade is unnecessary.
 | --- | --- |
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
-| `brynja-hash-sha2` | All six FIPS 180-4 ordinary and hardened byte and arbitrary-bit APIs; final combined acceptance pending |
-| `brynja-hash-sha3` | All six FIPS 202 ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output; final acceptance pending |
+| `brynja-hash-sha2` | All six fully implemented FIPS 180-4 ordinary and hardened byte and arbitrary-bit APIs |
+| `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

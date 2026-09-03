@@ -42,7 +42,7 @@ closes byte-oriented family usability with source and separately packaged
 downstream acceptance through only documented public APIs. v0.24.7 adds the
 complete FIPS 180-4 arbitrary-bit input domain to all six identities through
 canonical one-shot and consuming incremental final-tail APIs. The wider family
-remains **In progress** until the combined downstream acceptance at v0.24.11.
+is **Fully implemented** after the combined downstream acceptance at v0.24.11.
 v0.24.8 adds distinct hardened states for all six identities, complete
 source-declared internal sanitization, explicit public declassification, and
 typed secret output.
@@ -167,8 +167,8 @@ and v0.23.3 adds complete forced candidate APIs while keeping every backend
 unadmitted pending native evidence. v0.23.4 completes packaged downstream
 byte-oriented family acceptance. v0.24.7 completes the canonical arbitrary-bit
 input APIs, and v0.24.8 completes all six hardened secret-bearing state APIs.
-Final combined acceptance remains planned at v0.24.11, so the expanded family
-is still in progress.
+Final combined acceptance passes at v0.24.11, so the expanded family is fully
+implemented. Independent cryptographic review and FIPS validation remain absent.
 No code in this crate has been independently reviewed. A component only moves
 from ❌ to ✅ when a named independent reviewer signs off and linked evidence
 identifies the reviewed implementation. Project tests, CI, Kani, Miri,
@@ -177,7 +177,7 @@ verification.
 
 | Algorithm | Implementation chain | Independently verified |
 | --- | --- | --- |
-| SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not verified |
+| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
 
 These are unkeyed hashes. Digest equality is not MAC verification,
 authentication, password hashing, or a signature check. Brynja makes no FIPS

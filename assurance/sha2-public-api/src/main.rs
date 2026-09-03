@@ -19,6 +19,7 @@ fn main() {
             println!("SHA-512/224: portable scalar; independently verified: NO; FIPS validated: NO");
             println!("SHA-512/256: portable scalar; independently verified: NO; FIPS validated: NO");
             println!("ordinary states are unkeyed; hardened states own secret-bearing memory");
+            println!("family status: Fully implemented at v0.24.11");
         }
         Err(error) => {
             eprintln!("Complete SHA-2 public API acceptance: FAIL: {error:?}");

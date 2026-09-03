@@ -27,6 +27,7 @@ file beneath a Cargo `target/` directory, regardless of workspace depth.
 | `cpu/` | Reusable CPU capability, admission, dispatch, evidence, and runner infrastructure |
 | `cryptography/` | Cross-algorithm API-profile, secret-state closure, and composition checks |
 | `foundations/` | Provider, entropy, clock, pending-operation, FIPS-state, security-outcome, and security-event contracts |
+| `hash/` | Cross-family hash final acceptance and closure policy |
 | `pki/` | DER and canonical ASN.1 policy and regression checks |
 | `protocols/` | Protocol framing and state-machine assurance scripts |
 | `release/` | Release selection, pentest freshness, SBOM, GitHub controls, and historical release gates |

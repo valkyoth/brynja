@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and execute the v0.24.8 SHA-2 byte, bit, and hardened acceptance."""
+"""Validate and execute the v0.24.11 SHA-2 byte, bit, and hardened acceptance."""
 
 from __future__ import annotations
 
@@ -52,14 +52,14 @@ FILES = (
     WORKFLOW,
 )
 EXPECTED_SHA256 = {
-    MANIFEST: "9e25ef5d1ab746e26dd9babe8b65ff6748cd62672735baeab6bf7344b7a6e91a",
-    LOCK: "8c5f35665d803feaa3ef7e4dc5823cb7910bb3bc043dbb8e21a0e5fe494410a1",
-    LIB: "516c0901f6dfd3b3979771368f11777ff34d40cd02979baa9a187b390f988913",
+    MANIFEST: "86fcd35d884e52fa4a757c924d29d1bcd285d4fd99ef482f74fb460427a39dc1",
+    LOCK: "0173a4f32dba7087740fd206a46a35f1d6edeb1d84cd5f22103bbc453b20aba2",
+    LIB: "436b9262248d811103f88fd88004bbee101cef72e56130d1c24b207b437ebbe7",
     ALGORITHMS: "f5c798334508de76015c92f2929dee7b51e7b76a61fe3bc353bf67e4677a1e63",
     BIT_INPUTS: "8f882911914e82ce7dfef7713296a696f5d3966ea9f55ee9d0cdda8dfb65812d",
     HARDENED: "5a04f3402a55bf4035672c74361a29cac60f2f3216953818da4fa262ca2bfc51",
     VECTORS: "cc4a0209cd9bbc322a0f2ad0dfaffc3e72337a28e189d9a311b94229e5d8b6d6",
-    MAIN: "f1a8952197f962ee0c8a27e1605e9c388fa9bea5eaf4d3f25478b21d6b9047dc",
+    MAIN: "e4f91117588953731960dae2a31ca77e09c0d54017cd7fa65d113d916b6ed37c",
     CONTENT: "fcb4220a9a063622c8c2f19d66c56e813a8add0814ece5cb6ec09ca5830d2a71",
     CORE_BITS: "0b5c23c4a789cef43a3bf913c5d75c0beb1fb16bcc89036b7f1431e7b1af0fd8",
     LEAF_LIB: "eef622caf04f4db206ffd38104deeb8a67b0602f063a489059fc18461246796e",
@@ -73,14 +73,14 @@ EXPECTED_SHA256 = {
     DIFFERENTIAL_CHECK: "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
     DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
     FACADE_LIB: "a3bb376edca778b1afc72d0d4a58d3b2024d2c2d8fc1c9b34b95aa9cd95018a9",
-    LEAF_README: "1ebed7863a3e9638e2bc639ef171d573e9c2ab9e72fcef1aa1c8d052a5f4a029",
-    FACADE_README: "83396b2c922f7bbd1b2a77f5f494245f674ccd2b841a8020d63bccae086cdd13",
-    CHECK_SCRIPT: "08a8b7baae515ba1bb945e14b1a2022a5023b2de02aab94c8d80e67775433b1c",
-    TEST_SCRIPT: "152605f88d141968ae005fc6850abc25ecd2f6b8896bbfafc219bbd75cd4a7bd",
-    CHECKS: "31c096cda7708b0ddf91c7e7e0aa918811ebaeb5010afcfd363a624846d1b273",
-    RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
-    BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
-    WORKFLOW: "7f1148c59a8b079eb5b6629d829f3f998c8561edd9cb9562e7f0a1d1c3d559aa",
+    LEAF_README: "310094e9ac83c63be0dfc7e57cccf6897968fc6255ef9c852f6ec66f9bb50977",
+    FACADE_README: "5f0f9334435814be18a5c323cf7446a1cb8f6567d46560b3802fe6dee8d3c729",
+    CHECK_SCRIPT: "38306f0daa5d4b180b47bc6714bc66bc402afd2f29c820ca9f3db2cad9476778",
+    TEST_SCRIPT: "6588778e5237d28f14c8ba146b113142418e644010b39113657bba8b723ba7fa",
+    CHECKS: "8d044f29ac1ae9ce9d8cdd46f28d71c1afcd14aef71254813e029acef6c592b8",
+    RUST_MATRIX: "ce7a970fc4cb4759ccf2defb256c19f02d09692a397b88fa0861637bba65877a",
+    BARE_METAL: "37772e76a47341d12d03a05abeedfb661e79b2f4e95edeef8e080a0727b00c6d",
+    WORKFLOW: "51d4c3961b866adea0069f945334ff9305f08521880d46c43475693fbbd6d9c9",
 }
 ALGORITHMS_NAMES = ("SHA-224", "SHA-256", "SHA-384", "SHA-512", "SHA-512/224", "SHA-512/256")
 PACKAGES = (
@@ -111,7 +111,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.10", ("src/lib.rs",)),
+    ("brynja", "0.24.11", ("src/lib.rs",)),
 )
 
 
@@ -149,7 +149,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.10", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.11", "default-features": False},
         "brynja-hash-sha2": {
             "path": "../../crates/brynja-hash-sha2", "version": "=0.1.0",
             "default-features": False, "features": ["cpu"],
@@ -191,8 +191,9 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
         require(loaded[LEAF_README], name, "leaf documentation")
         require(loaded[FACADE_README], name, "facade documentation")
     require(loaded[MAIN], "hardened public/secret results", "runnable hardened report")
-    leaf_family_label = "SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending)"
-    facade_family_label = "| SHA-2 | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha2` | ❌ Not independently verified |"
+    require(loaded[MAIN], "family status: Fully implemented at v0.24.11", "final status report")
+    leaf_family_label = "SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented"
+    facade_family_label = "| SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |"
     require(loaded[LEAF_README], leaf_family_label, "leaf family documentation")
     require(loaded[FACADE_README], facade_family_label, "facade family documentation")
     public_algorithms = (

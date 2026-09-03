@@ -34,6 +34,18 @@ name = "brynja-hash-core"
 version = "0.1.0"
 
 [[package]]
+name = "brynja-hash-final-acceptance-fixture"
+version = "0.0.0"
+dependencies = [
+ "brynja-crypto-cpu",
+ "brynja-hash-sha2",
+ "brynja-hash-sha3",
+ "brynja-sha2-public-api-fixture",
+ "brynja-sha3-hardened-api-fixture",
+ "brynja-sha3-public-api-fixture",
+]
+
+[[package]]
 name = "brynja-hash-sha2"
 version = "0.1.0"
 dependencies = [
@@ -70,6 +82,21 @@ version = "0.0.0"
 dependencies = [
  "brynja",
  "brynja-hash-sha2",
+]
+
+[[package]]
+name = "brynja-sha3-hardened-api-fixture"
+version = "0.0.0"
+dependencies = [
+ "brynja-hash-sha3",
+]
+
+[[package]]
+name = "brynja-sha3-public-api-fixture"
+version = "0.0.0"
+dependencies = [
+ "brynja",
+ "brynja-hash-sha3",
 ]
 
 [[package]]

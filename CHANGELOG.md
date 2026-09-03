@@ -5,6 +5,21 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add the v0.24.11 combined downstream `no_std` acceptance fixture and
+  fail-closed closure policy for every SHA-2 and SHA-3/SHAKE ordinary,
+  arbitrary-bit, hardened public/secret, fixed-output, streaming, and XOF
+  profile. The same gate inventories all seven optional CPU candidates as
+  unadmitted and runs across the supported Rust and target matrices.
+
+### Changed
+
+- Mark the exact SHA-2 and SHA-3/SHAKE families **Fully implemented** only
+  after combined package-external acceptance. Independent verification and
+  FIPS 140-3 validation remain explicitly absent, and no accelerated backend
+  is admitted.
+
 ### Fixed
 
 - Move full Miri and AddressSanitizer execution from an inevitably timing-out

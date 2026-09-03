@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "cd3103fe70f6c69647e31a4a86940463dc7c92c56c78f7d0a8b2e2ac11798aa0",
-  "domain_policy_sha256": "6be578cf68e5a17bd1371dd4cd88452b13d8443e9461b55e714bb28fdbcaa039",
-  "policy_sha256": "d56104e6aab09b040fb8fe5d2e17005a19d8d99230b08b92bd3de22de075c2e1",
+  "domain_policy_sha256": "5e26a44df9b4eed9be5f46263e58a2bb25725520c27461380206ab9c35c37d51",
+  "policy_sha256": "0035743e5313ae6456d411ea6605be9e6ac0336b179a481f475feafe5db0a00c",
   "requirements": [
     {
       "applicability": "delegate",
@@ -765,7 +765,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 180-4 SHA-2 byte-oriented algorithms and their forced optional CPU candidate APIs are implemented with normative IVs, official vectors, streaming, exhaustion, QEMU differential, KAT, quarantine and emitted-code evidence; a separately packaged downstream consumer accepts every byte API. Canonical arbitrary-bit APIs, sealed downstream-unforgeable hardened secret-bearing owners using the admitted sanitization boundary, recoverable-unwind and adjacent-cleanup-failure evidence, explicit public-declassification versus typed secret-output handling, complete internal-copy and partial-output destruction evidence, and combined package acceptance remain planned through v0.24.7-v0.24.11; all five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, side-channel, independent-review, and FIPS-validation evidence remains incomplete.",
+      "evidence_gap": "All six FIPS 180-4 SHA-2 identities are fully implemented across ordinary byte, canonical arbitrary-bit, and sealed hardened public/secret profiles with normative IVs, official vectors, streaming, exhaustion, differential, proof, sanitization, compiler-artifact, package-external and combined acceptance evidence. All five CPU candidates remain unadmitted, x86 SHA-512 is scalar-only, and qualifying native performance, migration, side-channel, independent-review, and FIPS-validation evidence remains incomplete.",
       "id": "BRY-REQ-CRYPTO-0001",
       "invariants": [
         "constant-time",
@@ -779,7 +779,7 @@
       "owner": "0.22.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The announced future revisions of FIPS 180-4 and SP 800-107 must be reviewed before implementation freeze; vector Zvknha and Zvknhb remain unimplemented.",
-      "revision": 9,
+      "revision": 10,
       "scope": "protocol",
       "sources": [
         {
@@ -865,12 +865,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match"
+          "target": "scripts/hash/check-final-acceptance.py#main"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact"
+          "target": "scripts/hash/test-final-acceptance.py#main"
         }
       ],
       "work_bound": "Processing work is linear in complete input blocks with checked bit-length accumulation and deterministic exhaustion."
@@ -884,7 +884,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "All six portable FIPS 202 byte-oriented functions pass official examples, exact rate and padding boundaries, streaming and multi-squeeze partitions, domain-separation negatives, a 328-message six-function independent-library differential corpus, source-policy mutations, dynamic analysis, shared Kani bounds, and a frozen package-external portable consumer over the safely extracted archive closure. Canonical arbitrary-bit APIs, sealed downstream-unforgeable hardened secret-bearing sponge owners using the admitted sanitization boundary, recoverable-unwind and adjacent-cleanup-failure evidence, explicit public-declassification versus typed secret-output and partial-output clearing, complete internal-copy destruction evidence, acceleration and combined cross-backend acceptance remain planned through v0.24.4 and v0.24.9-v0.24.11; independent review, side-channel measurements, and FIPS validation remain incomplete.",
+      "evidence_gap": "All six FIPS 202 SHA-3/SHAKE identities are fully implemented across ordinary byte, canonical arbitrary-bit, sealed hardened public/secret, fixed-output and incremental-XOF profiles with official vectors, domain-separation, differential, proof, sanitization, compiler-artifact, package-external and combined acceptance evidence. Both CPU candidates remain unadmitted, RISC-V Keccak remains scalar-only, and qualifying native performance, migration, side-channel, independent-review, and FIPS-validation evidence remains incomplete.",
       "id": "BRY-REQ-CRYPTO-0002",
       "invariants": [
         "constant-time",
@@ -899,7 +899,7 @@
       "owner": "0.24.2",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST announced a future FIPS 202 update; the pinned 2015 final remains current but must be re-reviewed when a draft or final appears.",
-      "revision": 8,
+      "revision": 9,
       "scope": "protocol",
       "sources": [
         {
@@ -944,12 +944,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match"
+          "target": "scripts/hash/check-final-acceptance.py#main"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "crates/brynja-hash-sha3/tests/shake256.rs#shake_domain_is_distinct_from_fixed_output_sha3"
+          "target": "scripts/hash/test-final-acceptance.py#main"
         }
       ],
       "work_bound": "Absorb work is linear in complete input blocks and squeeze work is linear in caller-requested output blocks; both byte domains use checked u128 accumulation, and output is written only after length admission."
@@ -30055,9 +30055,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "8ad63419649ada3289fac2ae55048de8159920ee83d63a1ebb5356c1ce8818ff",
+  "residual_policy_sha256": "d2508d40d86ae41b22576be1d69b23e59baa3f3ce427e0b617e6a751e67f5c26",
   "schema": 5,
   "source_ledger_sha256": "4f26355a3e52fcbbabf8a777bdc2e684880f56c028c112741ee3c9ac3bc21d6b",
-  "surface_register_sha256": "530d2df79bac8b55da47b37eac5a364366d4a910c22b82a02fd2edbfc4dce5dc",
-  "transport_policy_sha256": "c125e04a553a07ca67dd06a28811fee7f587c10dabf34569623cfd24abf23205"
+  "surface_register_sha256": "f7eb0b4b865f1cd06a2c6de3d54b16874d8845f806298459bd679e9644afd5ce",
+  "transport_policy_sha256": "4927c6f126776a07a9be9a07ccabc044df798d3db8994f8400491548b027c4d9"
 }

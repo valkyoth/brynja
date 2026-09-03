@@ -80,6 +80,16 @@ gate; it is not acceleration, independent review, secret-state erasure, or
 FIPS validation. Its standalone forbidden Clippy lints run
 with warnings denied in both the complete local gate and hosted CI.
 
+The v0.24.11 `hash-final-acceptance` fixture links the complete SHA-2,
+SHA-3/SHAKE, and hardened FIPS 202 downstream consumers into one `no_std`
+program. It requires all twelve identities, both hardened-owner claims, and
+the exact seven-candidate/zero-admission backend disposition to pass together.
+The surrounding `scripts/hash` policy binds the separately packaged fixtures,
+supported Rust and target matrices, standards surfaces, normative
+requirements, secret-owner evidence, public status tables, and residual
+independent-review/FIPS statements before either family can remain marked
+Fully implemented.
+
 The v0.13.0 provider contract adds a separate hash-locked source validator and
 thirteen broken fixtures through `scripts/foundations/check-provider-contract.py` and
 `scripts/foundations/test-provider-contract.py`. The additional remediation fixtures reject

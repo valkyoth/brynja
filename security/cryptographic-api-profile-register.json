@@ -2329,7 +2329,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.22.0",
       "profile": "fixed-hash",
-      "test_target": "scripts/sha2/check-sha2-public-api.py#main"
+      "test_target": "scripts/hash/check-final-acceptance.py#main"
     },
     {
       "api": {
@@ -2471,7 +2471,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.24.2",
       "profile": "hash-xof-family",
-      "test_target": "crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match"
+      "test_target": "scripts/hash/check-final-acceptance.py#main"
     },
     {
       "api": {
@@ -23419,7 +23419,7 @@
       ]
     }
   ],
-  "policy_sha256": "104e9ae644d5d020b005f9a13b4dc9e595d660b1bcc76206dbc0b66203b4f8dc",
+  "policy_sha256": "ac4b89e9cb2cfb2740dd20085352778b9a064b25d26d0539d0b31d7aa9ae58a0",
   "registered_secret_owners": [
     {
       "capability": "algorithm.sha2",
@@ -23430,7 +23430,8 @@
         "crates/brynja-hash-sha2/tests/hardened.rs",
         "assurance/sha2-hardened-api/src/lib.rs",
         "scripts/zeroization/check-zeroization-codegen.sh",
-        "scripts/sha2/check-sha2-hardened.py"
+        "scripts/sha2/check-sha2-hardened.py",
+        "scripts/hash/check-final-acceptance.py"
       ],
       "fields": [
         "chaining_state:secret-derived",
@@ -23489,7 +23490,8 @@
         "crates/brynja-hash-sha3/tests/hardened.rs",
         "assurance/sha3-hardened-api/src/lib.rs",
         "scripts/sha3/check-sha3-hardened-codegen.sh",
-        "scripts/sha3/check-sha3-hardened.py"
+        "scripts/sha3/check-sha3-hardened.py",
+        "scripts/hash/check-final-acceptance.py"
       ],
       "fields": [
         "sponge_lanes:secret-derived",
@@ -23558,5 +23560,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "530d2df79bac8b55da47b37eac5a364366d4a910c22b82a02fd2edbfc4dce5dc"
+  "surface_register_sha256": "f7eb0b4b865f1cd06a2c6de3d54b16874d8845f806298459bd679e9644afd5ce"
 }

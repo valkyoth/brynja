@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Freeze and validate portable FIPS 202 public acceptance."""
+"""Freeze and validate final v0.24.11 portable FIPS 202 public acceptance."""
 
 from __future__ import annotations
 
@@ -42,27 +42,27 @@ FILES = (
     BARE_METAL, WORKFLOW,
 )
 EXPECTED_SHA256: dict[Path, str] = {
-    MANIFEST: "75be9fc6b833b85564fb9e70c39f0aad350103c32275098755544eb81095ee95",
-    LOCK: "5f6293dfa16b54a3db4a9994fd0a207f68275518b2c1b6d4487a0ddda51b21d6",
-    LIB: "079e68604036103c84bf0715b9c7a59bcde043bc85e84505d8f96db600b770f7",
+    MANIFEST: "ae9419168dbfc688f1dd2b906c82810973bb776dc18ab9d0331ec14f6609d9ac",
+    LOCK: "a084fe19fa6fe94d22c8469e14cf7351f4cd1f6de141ce60a39dc0645b0f5814",
+    LIB: "06a093ae03acef95271d075c5582c51b5b83d63a62d30a3e1e547d1b72ce4395",
     BIT_API: "f63d7862befc7ad6ce82c63d05919ac556ef64d5ecd4d28f2b1e849ac8d6174e",
     ALGORITHMS: "adb8985464a1c2a5656eeb927791f680098d72847a67164539d72f56ad69ffd7",
     VECTORS: "677ff52adaa6b88a2b19e93219238b0751e539afaa7c7d3934740a2c68588d6f",
-    MAIN: "79508f892a81f267346ecf55cb49f20bd48d55f04bcdbdfe5cd2a1a686a5b9fb",
+    MAIN: "676f7e6dfc44120ea26cc0a2cf69717ab21fb6bbd22c68039b20c8807e810161",
     CONTENT: "ab72282b43ccf28714e57ff9c4cedde2d3736a5e38eb1016c2d8956615c9cdd3",
     LEAF_MANIFEST: "bf0467a994e4fa3a879e9e66dc2cda39e12738e7073f1bff96c008704bda3408",
     LEAF_LIB: "b0586eb4323d152357836318ee5701f18031e9848d5dea351588c24d68db643e",
-    LEAF_README: "87f7b2aba9cad712e99db40f6ee49aa3c4497ecc78c01310a6dc11013521e860",
+    LEAF_README: "092e4d4078cb5295a45c2394f2084bbd0dd62d8e118ebadcd6c27bbedaf37d5d",
     CRYPTO_LIB: "aa6ecaf6b79aa3111e468142f3b226d846af082033711c16e033d84d9f938381",
-    FACADE_MANIFEST: "c4a7740dcee08209a6438694ab34149499fca181dc3899106d0eeaec69c4fd95",
+    FACADE_MANIFEST: "39b0daa5f8844dc0b7df395fa00b7b73dd878d10f0122948cbc0351383e862de",
     FACADE_LIB: "a3bb376edca778b1afc72d0d4a58d3b2024d2c2d8fc1c9b34b95aa9cd95018a9",
-    FACADE_README: "83396b2c922f7bbd1b2a77f5f494245f674ccd2b841a8020d63bccae086cdd13",
-    CHECK_SCRIPT: "9bc87be69a13d476a58e6bf7e63f5fd70697d7f57389b03de1a24dc78e679a4e",
+    FACADE_README: "5f0f9334435814be18a5c323cf7446a1cb8f6567d46560b3802fe6dee8d3c729",
+    CHECK_SCRIPT: "37b6f0605770c8948fd8972640bf4ca978c3536ac832c1ffc733cea235f2b62b",
     TEST_SCRIPT: "20010f7a853d382b1b7f12a0df2e0b65793d3be02bf9e6b16db70f4e9977ae40",
-    CHECKS: "31c096cda7708b0ddf91c7e7e0aa918811ebaeb5010afcfd363a624846d1b273",
-    RUST_MATRIX: "507516d61f7479220829908c3be21330047ff9b67099533811af8c842534f7bb",
-    BARE_METAL: "ffa91450aa0bd6e28d7e22443944221523e8ef4f264239d0fda26fa8387364fb",
-    WORKFLOW: "7f1148c59a8b079eb5b6629d829f3f998c8561edd9cb9562e7f0a1d1c3d559aa",
+    CHECKS: "8d044f29ac1ae9ce9d8cdd46f28d71c1afcd14aef71254813e029acef6c592b8",
+    RUST_MATRIX: "ce7a970fc4cb4759ccf2defb256c19f02d09692a397b88fa0861637bba65877a",
+    BARE_METAL: "37772e76a47341d12d03a05abeedfb661e79b2f4e95edeef8e080a0727b00c6d",
+    WORKFLOW: "51d4c3961b866adea0069f945334ff9305f08521880d46c43475693fbbd6d9c9",
 }
 PACKAGES = (
     ("brynja-core", "0.9.0", ("src/lib.rs",)),
@@ -89,7 +89,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.10", ("src/lib.rs",)),
+    ("brynja", "0.24.11", ("src/lib.rs",)),
 )
 
 
@@ -125,7 +125,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.10", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.11", "default-features": False},
         "brynja-hash-sha3": {
             "path": "../../crates/brynja-hash-sha3", "version": "=0.1.0",
             "default-features": False,
@@ -188,7 +188,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
             fail(f"acceptance fixture crossed forbidden boundary: {forbidden}")
     for token in (
         "execution path: portable-only", "independently verified: NO",
-        "FIPS 140-3 validated: NO", "family status: In progress pending v0.24.11",
+        "FIPS 140-3 validated: NO", "family status: Fully implemented at v0.24.11",
     ):
         require(loaded[MAIN], token, "runnable acceptance report")
     family_label = "SHA-3/SHAKE"

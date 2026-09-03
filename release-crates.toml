@@ -1,19 +1,19 @@
 [release]
-version = "0.24.10"
-milestone = "0.24.10"
+version = "0.24.11"
+milestone = "0.24.11"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11"]
 policy = "independent"
 stage = "internal"
-exceptional = true
-exception_reason = "New hardened SHA-3 and SHAKE secret-state ownership, output classification, and compiler-resistant cleanup change a production cryptographic boundary and require an exceptional assessment before the signed development tag."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.24.9"
-version = "0.24.10"
-change = "code"
+previous_version = "0.24.10"
+version = "0.24.11"
+change = "metadata"
 publish = false
-reason = "Advance the internal facade with distinct sealed hardened SHA-3 and SHAKE absorb/reader states, explicit public declassification, typed secret output, and compiler-resistant all-region cleanup; final combined family acceptance remains pending at v0.24.11."
+reason = "Advance the internal facade after combined package-external SHA-2 and SHA-3/SHAKE acceptance closes every advertised ordinary, arbitrary-bit and hardened profile; all seven CPU candidates remain unadmitted and no crate is published."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -41,14 +41,14 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add distinct hardened byte and arbitrary-bit states for all six SHA-2 identities with sealed capability, typed public/secret output, compiler-resistant all-region cleanup, downstream no_std acceptance, and compiler evidence; combined family acceptance remains in progress through v0.24.11."
+reason = "Retain the unpublished fully implemented SHA-2 family after combined ordinary, arbitrary-bit, hardened, package-external and explicit backend-disposition acceptance."
 
 [crates."brynja-hash-sha3"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add sealed hardened byte/bit SHA-3 states and SHAKE absorb/read typestates with typed public/secret output and compiler-resistant cleanup over a distinct byte-backed private owner; the family remains unpublished and in progress through v0.24.11 combined acceptance."
+reason = "Retain the unpublished fully implemented SHA-3/SHAKE family after combined ordinary, arbitrary-bit, hardened, package-external and explicit backend-disposition acceptance."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

@@ -6,7 +6,7 @@ fields = ["chaining_state:secret-derived", "partial_input:secret", "message_leng
 temporaries = ["round-scalars:register-copy-risk", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
 sanitization_symbol = "crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::HardenedSha2Owner::wipe"
 cleanup_callers = ["crates/brynja-hash-sha2/src/hardened/owner.rs#brynja_hash_sha2::owner::HardenedSha2Owner::drop"]
-evidence = ["crates/brynja-hash-sha2/tests/hardened.rs", "assurance/sha2-hardened-api/src/lib.rs", "scripts/zeroization/check-zeroization-codegen.sh", "scripts/sha2/check-sha2-hardened.py"]
+evidence = ["crates/brynja-hash-sha2/tests/hardened.rs", "assurance/sha2-hardened-api/src/lib.rs", "scripts/zeroization/check-zeroization-codegen.sh", "scripts/sha2/check-sha2-hardened.py", "scripts/hash/check-final-acceptance.py"]
 storage = "crate-owned-fixed"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
@@ -19,7 +19,7 @@ fields = ["sponge_lanes:secret-derived", "partial_input:secret", "message_length
 temporaries = ["round-scalars:register-copy-risk", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
 sanitization_symbol = "crates/brynja-hash-sha3/src/hardened/owner.rs#brynja_hash_sha3::HardenedFips202Owner::wipe"
 cleanup_callers = ["crates/brynja-hash-sha3/src/hardened/owner.rs#brynja_hash_sha3::owner::HardenedFips202Owner::drop"]
-evidence = ["crates/brynja-hash-sha3/tests/hardened.rs", "assurance/sha3-hardened-api/src/lib.rs", "scripts/sha3/check-sha3-hardened-codegen.sh", "scripts/sha3/check-sha3-hardened.py"]
+evidence = ["crates/brynja-hash-sha3/tests/hardened.rs", "assurance/sha3-hardened-api/src/lib.rs", "scripts/sha3/check-sha3-hardened-codegen.sh", "scripts/sha3/check-sha3-hardened.py", "scripts/hash/check-final-acceptance.py"]
 storage = "crate-owned-fixed"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
@@ -27,7 +27,7 @@ partial_failure_policy = "clear-complete-secret-destination"
 [schema]
 version = 1
 milestone = "0.24.10"
-surface_register_sha256 = "530d2df79bac8b55da47b37eac5a364366d4a910c22b82a02fd2edbfc4dce5dc"
+surface_register_sha256 = "f7eb0b4b865f1cd06a2c6de3d54b16874d8845f806298459bd679e9644afd5ce"
 
 [api]
 dimensions = [
@@ -796,7 +796,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "29ba3d9c9377485b2feac0121c5c1cfb985a90c5c2d9063f8a5e0815210ec4d2"
+sha256 = "c7f9bc20e73794ea5acceabf1fa0d7166874f1411d9d63808e017c694cb9c312"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

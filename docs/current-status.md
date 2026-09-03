@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.9 signed; v0.24.10 hardened FIPS 202 implementation and exceptional pentest/retest complete, hosted checks and signed tag pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.10 signed; v0.24.11 combined SHA-2 and SHA-3/SHAKE acceptance implementation complete, local verification in progress
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -37,14 +37,26 @@ implementations of all six FIPS 202 SHA-3/SHAKE identities, including
 arbitrary-bit SHAKE output. The hardened family owns and clears all eleven
 source-declared sponge, buffer, counter, lifecycle and permutation-scratch
 regions, requires explicit public declassification or typed secret output, and
-is portable-only. SHA-2 and SHA-3/SHAKE final combined API acceptance remains
-in progress through v0.24.11. It also has bounded DER tag-length-value framing
+is portable-only. SHA-2 and SHA-3/SHAKE are Fully implemented after final
+combined package-external acceptance at v0.24.11. It also has bounded DER
+tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
 cryptographic algorithm beyond those twelve named hash and XOF identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.
+
+The v0.24.11 closure runs the complete SHA-2 and SHA-3/SHAKE downstream
+fixtures together, covering all twelve named identities across ordinary byte,
+canonical arbitrary-bit, hardened public/secret, fixed-output, and incremental
+XOF profiles. Five SHA-2 and two Keccak CPU candidates remain explicitly
+unadmitted; portable behavior is authoritative and hardened execution cannot
+select acceleration. The final policy binds the separately packaged fixtures,
+differential campaigns, proof inventory, secret-owner compiler evidence,
+sanitization, error, cancellation, unwind, Drop, unavailable and quarantine
+paths to the same final source. This completes both exact families without
+claiming independent cryptographic verification or FIPS 140-3 validation.
 
 The v0.22.1 candidate also provides a persistent detached native-run manager.
 It can launch the exact clean candidate locally or over SSH, records the source

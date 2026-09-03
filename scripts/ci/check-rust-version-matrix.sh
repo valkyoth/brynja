@@ -14,4 +14,6 @@ for toolchain in "${toolchains[@]}"; do
         --manifest-path assurance/sha2-public-api/Cargo.toml
     cargo "+$toolchain" run --quiet --locked \
         --manifest-path assurance/sha3-public-api/Cargo.toml
+    cargo "+$toolchain" run --quiet --locked \
+        --manifest-path assurance/hash-final-acceptance/Cargo.toml
 done

@@ -72,7 +72,7 @@ def main() -> int:
     reject_policy(
         "missing-documentation",
         acceptance.LEAF_README,
-        "SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending)",
+        "SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented",
         "incomplete hash family",
     )
     reject_policy(

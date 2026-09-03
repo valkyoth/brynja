@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run complete v0.23.4 SHA-2 public API and package acceptance."""
+"""Run complete v0.24.11 SHA-2 public API and package acceptance."""
 
 from __future__ import annotations
 

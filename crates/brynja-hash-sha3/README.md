@@ -34,7 +34,7 @@ that do not end on a byte boundary. Version 0.24.10 of the repository also
 adds distinct hardened states for secret-derived inputs and outputs with
 compiler-resistant cleanup of all source-declared owned regions. Final combined
 package-external acceptance, independent review, and FIPS 140-3 validation
-remain later work through v0.24.11.
+are closed by the combined v0.24.11 acceptance.
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};
@@ -101,7 +101,7 @@ pentest evidence rather than independent cryptographic verification.
 | SHAKE256 | ✅ Implemented | ❌ Not independently verified |
 | Arbitrary-bit FIPS 202 messages and SHAKE output | ✅ Implemented | ❌ Not independently verified |
 | Hardened SHA-3/SHAKE secret-bearing states | ✅ Implemented | ❌ Not independently verified |
-| Complete SHA-3/SHAKE family, including final combined acceptance | 🚧 In progress | ❌ Not independently verified |
+| Complete SHA-3/SHAKE family, including final combined acceptance | ✅ Fully implemented | ❌ Not independently verified |
 
 Only a named independent reviewer and linked review evidence can change the
 independent status. Project tests, CI, Kani, Miri, fuzzing, and pentests do not

@@ -3194,7 +3194,7 @@ Exit criteria:
 
 ### v0.24.11 - SHA-2 And SHA-3/SHAKE Cross-Backend Final Acceptance
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Freeze package-external fixtures for every SHA-2, SHA-3 and SHAKE byte, arbitrary-bit, ordinary and hardened public profile; run the exact final code through portable, every cleanup-qualified admitted backend, and every required-backend unavailable or quarantine path; compare identical mathematical outputs, exercise one-shot, incremental, multi-squeeze, error, cancellation, recoverable-unwind, adjacent-cleanup-failure and Drop paths, verify explicit public declassification versus typed secret output, refresh every affected native, timing, emitted-code, proof, sanitization, package and differential artifact after any code change, and only then change the root, facade, leaf, current-status and claim-register family entries from In progress to Fully implemented while independent verification and FIPS validation remain separate.
 

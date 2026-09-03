@@ -26,6 +26,10 @@ purpose = "Cross-algorithm API profiles, secret-state closure, and composition p
 extensions = [".py", ".sh"]
 purpose = "Provider and security-foundation contract policies and tests"
 
+[category.hash]
+extensions = [".py", ".sh", ".toml"]
+purpose = "Cross-family hash final acceptance and closure policy"
+
 [category.pki]
 extensions = [".py"]
 purpose = "DER and canonical ASN.1 policy and tests"

@@ -1,0 +1,27 @@
+[workspace]
+
+[package]
+name = "brynja-hash-final-acceptance-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", version = "=0.1.1", default-features = false }
+brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", version = "=0.1.0", default-features = false }
+brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", version = "=0.1.0", default-features = false }
+brynja-sha2-public-api-fixture = { path = "../sha2-public-api" }
+brynja-sha3-hardened-api-fixture = { path = "../sha3-hardened-api" }
+brynja-sha3-public-api-fixture = { path = "../sha3-public-api" }
+
+[lints.rust]
+unsafe_code = "forbid"
+unsafe_op_in_unsafe_fn = "forbid"
+unused_must_use = "deny"
+
+[lints.clippy]
+panic = "forbid"
+unwrap_used = "forbid"
+expect_used = "forbid"
+undocumented_unsafe_blocks = "forbid"

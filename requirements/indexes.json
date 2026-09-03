@@ -370,8 +370,8 @@
         "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED"
       ],
       "tests": [
-        "planned:positive:crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match",
-        "planned:negative:crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact"
+        "planned:positive:scripts/hash/check-final-acceptance.py#main",
+        "planned:negative:scripts/hash/test-final-acceptance.py#main"
       ]
     },
     "BRY-REQ-CRYPTO-0002": {
@@ -402,8 +402,8 @@
         "actual-symbol:crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED"
       ],
       "tests": [
-        "planned:positive:crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match",
-        "planned:negative:crates/brynja-hash-sha3/tests/shake256.rs#shake_domain_is_distinct_from_fixed_output_sha3"
+        "planned:positive:scripts/hash/check-final-acceptance.py#main",
+        "planned:negative:scripts/hash/test-final-acceptance.py#main"
       ]
     },
     "BRY-REQ-CRYPTO-0003": {
@@ -11371,12 +11371,6 @@
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
-      "planned:negative:crates/brynja-hash-sha2/tests/sha512_256.rs#trait_api_length_domain_and_algorithm_identity_are_exact": [
-        "BRY-REQ-CRYPTO-0001"
-      ],
-      "planned:negative:crates/brynja-hash-sha3/tests/shake256.rs#shake_domain_is_distinct_from_fixed_output_sha3": [
-        "BRY-REQ-CRYPTO-0002"
-      ],
       "planned:negative:crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora": [
         "BRY-REQ-ENC-0002"
       ],
@@ -11385,6 +11379,10 @@
       ],
       "planned:negative:crates/brynja-protocol/tests/wire_policy.rs#inner_content_is_closed_and_heartbeat_is_never_admitted": [
         "BRY-REQ-TLS-0019"
+      ],
+      "planned:negative:scripts/hash/test-final-acceptance.py#main": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002"
       ],
       "planned:negative:tests/conformance/dtls.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0116"
@@ -11779,12 +11777,6 @@
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
       ],
-      "planned:positive:crates/brynja-hash-sha2/tests/sha512_256.rs#official_short_and_long_nist_cavp_vectors_match": [
-        "BRY-REQ-CRYPTO-0001"
-      ],
-      "planned:positive:crates/brynja-hash-sha3/tests/shake256.rs#official_fips202_zero_and_1600_bit_vectors_match": [
-        "BRY-REQ-CRYPTO-0002"
-      ],
       "planned:positive:crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries": [
         "BRY-REQ-ENC-0002"
       ],
@@ -11793,6 +11785,10 @@
       ],
       "planned:positive:crates/brynja-protocol/tests/wire_policy.rs#every_content_type_byte_is_preserved_without_coercion": [
         "BRY-REQ-TLS-0019"
+      ],
+      "planned:positive:scripts/hash/check-final-acceptance.py#main": [
+        "BRY-REQ-CRYPTO-0001",
+        "BRY-REQ-CRYPTO-0002"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"

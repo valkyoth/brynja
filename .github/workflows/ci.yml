@@ -84,6 +84,8 @@ jobs:
         run: python scripts/sha2/check-sha2-bit-differential.py
       - name: Run complete SHA-3/SHAKE portable public API acceptance
         run: python scripts/sha3/check-sha3-public-api.py
+      - name: Run combined hash final acceptance
+        run: python scripts/hash/check-final-acceptance.py
       - name: Run SHA-3/SHAKE arbitrary-bit differential acceptance
         run: python scripts/sha3/check-sha3-bit-differential.py
       - name: Lint SHA-3/SHAKE public API fixture
@@ -121,6 +123,8 @@ jobs:
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sha2-public-api/Cargo.toml
       - name: Run complete SHA-3/SHAKE portable public API acceptance
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sha3-public-api/Cargo.toml
+      - name: Run combined hash final acceptance
+        run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/hash-final-acceptance/Cargo.toml
       - name: Verify zeroization emitted code
         run: scripts/zeroization/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
       - name: Verify constant-time emitted code
@@ -158,6 +162,8 @@ jobs:
         run: cargo check --locked --manifest-path assurance/sha2-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Check complete SHA-3/SHAKE public API fixture
         run: cargo check --locked --manifest-path assurance/sha3-public-api/Cargo.toml --lib --target ${{ matrix.target }}
+      - name: Check combined hash final acceptance fixture
+        run: cargo check --locked --manifest-path assurance/hash-final-acceptance/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Verify zeroization emitted code
         run: scripts/zeroization/check-zeroization-codegen.sh 1.98.0 "${{ matrix.target }}"
       - name: Verify constant-time emitted code

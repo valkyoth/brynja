@@ -11,8 +11,8 @@ from pathlib import Path
 HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
-    "| SHA-2 | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha2` | ❌ Not independently verified |",
-    "| SHA-3/SHAKE | 🚧 In progress — final acceptance at v0.24.11 | `brynja-hash-sha3` | ❌ Not independently verified |",
+    "| SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |",
+    "| SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |",
     "| SP 800-185 family | 🗓 Planned — v0.24.12–v0.24.17 | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |",
     "| SHA-1 | 🗓 Planned — v0.24.18–v0.24.23 | `brynja-legacy-sha1` | ❌ Not independently verified |",
     "| MD5 | 🗓 Planned — v0.24.19–v0.24.23 | `brynja-legacy-md5` | ❌ Not independently verified |",
@@ -25,8 +25,8 @@ ROOT_ROWS = (
 COMPONENT_DOCUMENT = Path("docs/VERIFICATION_STATUS.md")
 COMPONENT_ROWS = (
     "| `brynja-core` | Constant-time operations plus provider, CPU-backend, entropy, secure-random, clock, pending-operation, FIPS-aware state, and mandatory security-outcome contracts | ❌ Not verified |",
-    "| `brynja-hash-sha2` | All six FIPS 180-4 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-2 algorithms with forced optional ordinary CPU candidate APIs, compiler-resistant cleanup evidence, and separately packaged downstream acceptance; final combined profile pending | ❌ Not verified |",
-    "| `brynja-hash-sha3` | All six FIPS 202 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-3/SHAKE functions, including arbitrary-bit SHAKE output; hardened owners clear eleven source-declared regions and classify public versus typed-secret output, while final combined acceptance remains pending | ❌ Not verified |",
+    "| `brynja-hash-sha2` | All six fully implemented FIPS 180-4 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-2 algorithms with forced optional ordinary CPU candidate APIs, compiler-resistant cleanup evidence, and combined package-external acceptance | ❌ Not verified |",
+    "| `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary and hardened byte-oriented and canonical arbitrary-bit SHA-3/SHAKE functions, including arbitrary-bit SHAKE output; hardened owners clear eleven source-declared regions and classify public versus typed-secret output | ❌ Not verified |",
     "| Future `brynja-mac-*` | Reusable MACs | ❌ Not implemented or verified |",
     "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     "| `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |",
@@ -52,8 +52,8 @@ SCOPED_ROWS = {
     Path("crates/brynja-crypto/README.md"): "| `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |",
     Path("crates/brynja-crypto-cpu/README.md"): "| x86_64 SHA-256 candidate | SHA-extension compression | ❌ Implemented but unadmitted and not independently verified |",
     Path("crates/brynja-crypto-cpu-std/README.md"): "| SHA-256 host detection and dispatch | x86_64 SHA and AArch64 NEON/SHA2 selection, explicit scalar fallback, and no automatic RISC-V activation | ❌ Implemented; accelerated candidates remain unadmitted and not independently verified |",
-    Path("crates/brynja-hash-sha2/README.md"): "| SHA-2 (all six identities have complete ordinary and hardened byte and arbitrary-bit APIs; combined acceptance pending) | 🚧 In progress | ❌ Not verified |",
-    Path("crates/brynja-hash-sha3/README.md"): "| Complete SHA-3/SHAKE family, including final combined acceptance | 🚧 In progress | ❌ Not independently verified |",
+    Path("crates/brynja-hash-sha2/README.md"): "| SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |",
+    Path("crates/brynja-hash-sha3/README.md"): "| Complete SHA-3/SHAKE family, including final combined acceptance | ✅ Fully implemented | ❌ Not independently verified |",
     Path("crates/brynja-pki/README.md"): "| `brynja-pki` | ASN.1, DER, X.509, path validation, and revocation | ❌ Not verified |",
     Path("crates/brynja-tls/README.md"): "| `brynja-tls` | Modern TLS version routing and policy | ❌ Not verified |",
     Path("crates/brynja-tls12/README.md"): "| `brynja-tls12` | TLS 1.2 record and handshake engine | ❌ Not verified |",

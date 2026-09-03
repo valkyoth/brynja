@@ -29,6 +29,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Review and pin newly reported RFC 9846 technical erratum 9161 after the
+  v0.24.11 live release gate detected it. The unverified report remains
+  `track-not-applied`: it clarifies presentation syntax versus the existing
+  conforming `signature_algorithms` sender requirement and admits no TLS code,
+  requirement change, or wire-behavior change.
 - Reconcile the v0.24.11 component inventory with the completed SHA-2 and
   SHA-3/SHAKE status, permanently reject both stale pending formulations, and
   record the voluntary assessment and clean retest as `PASS`/`PASS` with zero

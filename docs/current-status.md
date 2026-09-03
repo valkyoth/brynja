@@ -320,7 +320,12 @@ preserve bounded review-required artifacts. The first strict 2026-08-31 run
 detected RFC 9846 editorial erratum 9157; human review retained it as
 unverified and track-not-applied, refreshed the exact evidence and 31 affected
 requirement revisions, and the final complete run matched every locked channel
-with zero new or unresolved drift. Zero crates are selected for publication.
+with zero new or unresolved drift. The v0.24.11 live gate subsequently detected
+reported technical erratum 9161 for the same RFC; human review retained its
+presentation-syntax clarification as unverified and track-not-applied because
+it changes no wire rule or conforming sender requirement. The refreshed
+2026-09-03 observation again matched every locked channel with zero new or
+unresolved drift. Zero crates are selected for publication.
 The subsequent voluntary assessment found three Medium assurance issues in
 malformed HTTP-200 errata handling, review-evidence authorization, and the
 predictable tag artifact path. Remediation now enforces an authoritative

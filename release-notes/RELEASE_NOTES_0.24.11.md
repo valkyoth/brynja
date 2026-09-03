@@ -80,6 +80,14 @@ The same remediation reserves an optional high-assurance protected-memory
 layer for v0.126.1-v0.126.5. That is roadmap work, not an implemented v0.24.11
 capability or a stronger erasure claim.
 
+The post-retest live release gate detected newly reported technical RFC 9846
+erratum 9161. Human review confirms that it clarifies presentation syntax
+versus the existing conforming `signature_algorithms` sender requirement and
+changes no wire rule or sender behavior. It remains unverified and
+`track-not-applied`; the refreshed 294-record errata projection, source ledger,
+authority register and September 3 freshness receipt admit no TLS code or
+requirement change.
+
 ## Release Process
 
 Version 0.24.11 is an internal development milestone in the cumulative

@@ -233,7 +233,12 @@ The first strict 2026-08-31 lifecycle observation detected newly reported RFC
 9846 editorial erratum 9157. Human review retained its capitalization fix as
 unverified and track-not-applied, refreshed the exact evidence and all 31
 affected requirement revisions, and the final complete observation returned
-`PASS` with zero new or unresolved drift. The weekly/manual workflow and
+`PASS` with zero new or unresolved drift. The v0.24.11 live gate later detected
+reported technical RFC 9846 erratum 9161. Human review retained its distinction
+between presentation syntax and the existing conforming sender requirement as
+unverified and track-not-applied because it changes no wire rule or sender
+behavior. The refreshed 2026-09-03 observation returned `PASS` with zero new or
+unresolved drift. The weekly/manual workflow and
 pre-tag gate preserve bounded JSON artifacts outside the repository. They
 never use `--write-freshness`, never replace trust pins, and cannot modify the
 checkout. The tag gate creates its artifact exclusively inside a private

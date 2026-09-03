@@ -303,7 +303,10 @@ parser drift, redirect, timeout, or outage create a review-required artifact
 and cannot update code or policy. The first strict 2026-08-31 run detected RFC
 9846 editorial erratum 9157; human review retained it as unverified and
 track-not-applied, refreshed its exact evidence, and the final complete
-observation passed with zero new or unresolved drift.
+observation passed with zero new or unresolved drift. The v0.24.11 release gate
+later detected reported technical RFC 9846 erratum 9161; human review likewise
+kept its presentation-syntax clarification unverified and track-not-applied,
+and the refreshed September 3 observation passed with zero unresolved drift.
 
 The voluntary v0.24.5 assessment found three Medium assurance defects.
 The remediated monitor rejects malformed HTTP-200 errata pages unless they

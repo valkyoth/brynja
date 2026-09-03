@@ -135,7 +135,11 @@ The generated register covers all 130 locked authorities. Its first strict
 9157; human review retained the capitalization correction as unverified and
 track-not-applied, refreshed the exact evidence and all 31 affected
 requirement revisions, and the final full observation returned PASS with zero
-new or unresolved drift.
+new or unresolved drift. The v0.24.11 release gate subsequently detected
+reported technical RFC 9846 erratum 9161. Human review retained its
+presentation-syntax clarification as unverified and track-not-applied because
+it changes no wire rule or conforming sender requirement; the refreshed
+2026-09-03 observation returned PASS with zero new or unresolved drift.
 
 Section decisions are reconciled across the domain, transport, and residual
 policies before matrix generation. A normative section cannot be mapped in one

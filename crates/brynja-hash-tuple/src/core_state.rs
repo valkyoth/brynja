@@ -1,9 +1,10 @@
 use brynja_core::clear_owned_region;
-use brynja_hash_sha3::{Fips202BitString, left_encode_u128, right_encode_u128};
+use brynja_hash_sha3::Fips202BitString;
 
 use crate::{
-    backend::{Backend, BackendReader},
+    backend::{Backend, BackendReader, BackendStrength},
     error::TupleHashError,
+    secret_encoding::SecretEncodedInteger,
 };
 
 pub(crate) struct TupleCore {
@@ -11,12 +12,13 @@ pub(crate) struct TupleCore {
     pending: [u8; 1],
     used: [u8; 1],
     items: [u8; 16],
+    remaining: [u8; 16],
     failed: [u8; 1],
 }
 
 impl TupleCore {
     pub(crate) fn new(
-        strength: u16,
+        strength: BackendStrength,
         customization: Fips202BitString<'_>,
     ) -> Result<Self, TupleHashError> {
         Ok(Self {
@@ -24,25 +26,28 @@ impl TupleCore {
             pending: [0],
             used: [0],
             items: [0; 16],
+            remaining: [0; 16],
             failed: [0],
         })
     }
 
     pub(crate) fn item_count(&self) -> u128 {
-        u128::from_le_bytes(self.items)
+        read_u128(&self.items)
     }
 
     pub(crate) fn push_item(&mut self, item: Fips202BitString<'_>) -> Result<(), TupleHashError> {
         let bits = u128::try_from(item.bit_len()).map_err(|_| TupleHashError::MessageTooLong)?;
         self.begin_item(bits)?;
         self.push_bit_string(item)?;
-        Ok(())
+        self.consume_item(bits)?;
+        self.complete_item()
     }
 
     pub(crate) fn begin_item(&mut self, bits: u128) -> Result<(), TupleHashError> {
         self.ensure_live()?;
-        let prefix = left_encode_u128(bits);
-        let prefix_bits = u128::try_from(prefix.as_bytes().len())
+        let prefix = SecretEncodedInteger::left(bits)?;
+        let prefix_bytes = prefix.as_bytes()?;
+        let prefix_bits = u128::try_from(prefix_bytes.len())
             .ok()
             .and_then(|value| value.checked_mul(8))
             .ok_or(TupleHashError::MessageTooLong)?;
@@ -59,8 +64,33 @@ impl TupleCore {
             .item_count()
             .checked_add(1)
             .ok_or(TupleHashError::MessageTooLong)?;
-        self.push_bytes(prefix.as_bytes())?;
-        self.items.copy_from_slice(&count.to_le_bytes());
+        self.failed = [1];
+        write_u128(&mut self.remaining, bits)?;
+        self.push_bytes(prefix_bytes)?;
+        write_u128(&mut self.items, count)?;
+        Ok(())
+    }
+
+    pub(crate) fn item_remaining(&self) -> u128 {
+        read_u128(&self.remaining)
+    }
+
+    pub(crate) fn check_item_fragment(&self, bits: u128) -> Result<(), TupleHashError> {
+        checked_remaining_after(self.item_remaining(), bits).map(|_| ())
+    }
+
+    pub(crate) fn consume_item(&mut self, bits: u128) -> Result<(), TupleHashError> {
+        let remaining = checked_remaining_after(self.item_remaining(), bits)?;
+        write_u128(&mut self.remaining, remaining)?;
+        Ok(())
+    }
+
+    pub(crate) fn complete_item(&mut self) -> Result<(), TupleHashError> {
+        if self.item_remaining() != 0 {
+            return Err(TupleHashError::IncompleteItem);
+        }
+        let _ = clear_owned_region(&mut self.remaining);
+        let _ = clear_owned_region(&mut self.failed);
         Ok(())
     }
 
@@ -127,8 +157,9 @@ impl TupleCore {
 
     pub(crate) fn finish(&mut self, output_bits: u128) -> Result<BackendReader, TupleHashError> {
         self.ensure_live()?;
-        let suffix = right_encode_u128(output_bits);
-        let suffix_bits = u128::try_from(suffix.as_bytes().len())
+        let suffix = SecretEncodedInteger::right(output_bits)?;
+        let suffix_bytes = suffix.as_bytes()?;
+        let suffix_bits = u128::try_from(suffix_bytes.len())
             .ok()
             .and_then(|value| value.checked_mul(8))
             .ok_or(TupleHashError::OutputTooLong)?;
@@ -137,14 +168,12 @@ impl TupleCore {
                 .checked_add(suffix_bits)
                 .ok_or(TupleHashError::MessageTooLong)?,
         )?;
-        self.push_bytes(suffix.as_bytes())?;
-        let byte = self.pending.first().copied().unwrap_or_default();
+        self.push_bytes(suffix_bytes)?;
         let valid = self.used();
         let reader = if valid == 0 {
             self.backend.finalize(None)?
         } else {
-            let bytes = [byte];
-            let tail = Fips202BitString::new(&bytes, valid)
+            let tail = Fips202BitString::new(&self.pending, valid)
                 .map_err(|_| TupleHashError::InvalidBitString)?;
             self.backend.finalize(Some(tail))?
         };
@@ -155,6 +184,7 @@ impl TupleCore {
 
     pub(crate) fn abandon_item(&mut self) {
         self.failed = [1];
+        let _ = clear_owned_region(&mut self.remaining);
     }
 
     fn ensure_live(&self) -> Result<(), TupleHashError> {
@@ -181,6 +211,7 @@ impl TupleCore {
         let _ = clear_owned_region(&mut self.pending);
         let _ = clear_owned_region(&mut self.used);
         let _ = clear_owned_region(&mut self.items);
+        let _ = clear_owned_region(&mut self.remaining);
         let _ = clear_owned_region(&mut self.failed);
     }
 }
@@ -203,11 +234,35 @@ pub(crate) fn output_bits(length: usize) -> Result<u128, TupleHashError> {
         .ok_or(TupleHashError::OutputTooLong)
 }
 
+pub(crate) fn checked_remaining_after(remaining: u128, bits: u128) -> Result<u128, TupleHashError> {
+    remaining
+        .checked_sub(bits)
+        .ok_or(TupleHashError::MessageTooLong)
+}
+
+fn read_u128(bytes: &[u8; 16]) -> u128 {
+    let mut value = 0_u128;
+    for (index, byte) in bytes.iter().enumerate() {
+        let shift = index.saturating_mul(8);
+        value |= u128::from(*byte) << shift;
+    }
+    value
+}
+
+fn write_u128(bytes: &mut [u8; 16], value: u128) -> Result<(), TupleHashError> {
+    for (index, byte) in bytes.iter_mut().enumerate() {
+        let shift = index.saturating_mul(8);
+        *byte = u8::try_from((value >> shift) & u128::from(u8::MAX))
+            .map_err(|_| TupleHashError::MessageTooLong)?;
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 pub(crate) mod assurance_contract {
     use brynja_hash_sha3::Fips202BitString;
 
-    use super::TupleCore;
+    use super::{BackendStrength, TupleCore};
 
     #[test]
     fn registered_algorithm_tuplehash_owner_contract_is_compiler_checked() {
@@ -216,7 +271,7 @@ pub(crate) mod assurance_contract {
         let Ok(customization) = customization else {
             return;
         };
-        let owner = TupleCore::new(128, customization);
+        let owner = TupleCore::new(BackendStrength::Bits128, customization);
         assert!(owner.is_ok());
         let Ok(mut owner) = owner else {
             return;
@@ -224,11 +279,13 @@ pub(crate) mod assurance_contract {
         owner.pending.fill(0xa5);
         owner.used.fill(0x05);
         owner.items.fill(0x5a);
+        owner.remaining.fill(0x3c);
         owner.failed.fill(0x01);
         owner.wipe();
         assert!(owner.pending.iter().all(|byte| *byte == 0));
         assert!(owner.used.iter().all(|byte| *byte == 0));
         assert!(owner.items.iter().all(|byte| *byte == 0));
+        assert!(owner.remaining.iter().all(|byte| *byte == 0));
         assert!(owner.failed.iter().all(|byte| *byte == 0));
     }
 }

@@ -80,6 +80,44 @@ fn abandoned_or_incomplete_items_fail_closed() {
 }
 
 #[test]
+fn forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch() {
+    let state = TupleHash128::new(b"");
+    assert!(state.is_ok());
+    let Ok(mut state) = state else { return };
+    let mut writer = match state.begin_item(16) {
+        Ok(writer) => writer,
+        Err(error) => {
+            assert_eq!(Some(error), None);
+            return;
+        }
+    };
+    assert_eq!(writer.update(b"a"), Ok(()));
+    core::mem::forget(writer);
+    assert_eq!(
+        state.finalize(&mut [0_u8; 32]),
+        Err(TupleHashError::ItemAbandoned)
+    );
+
+    let state = TupleHash128::new(b"");
+    assert!(state.is_ok());
+    let Ok(mut state) = state else { return };
+    {
+        let writer = match state.begin_item(8) {
+            Ok(writer) => writer,
+            Err(error) => {
+                assert_eq!(Some(error), None);
+                return;
+            }
+        };
+        let _forgotten = core::mem::ManuallyDrop::new(writer);
+    }
+    assert_eq!(
+        state.finalize(&mut [0_u8; 32]),
+        Err(TupleHashError::ItemAbandoned)
+    );
+}
+
+#[test]
 fn arbitrary_bit_items_and_outputs_are_canonical() {
     let item = Fips202BitString::new(&[0b0001_0101], 5);
     let custom = Fips202BitString::new(&[], 0);

@@ -1,7 +1,7 @@
 # Brynja 0.24.14 Release Notes
 
-Status: implementation complete; exceptional pentest, final release
-reconciliation, hosted GitHub checks, CodeQL, and signed tag pending
+Status: implementation and pentest remediation complete; independent retest,
+final release reconciliation, hosted GitHub checks, CodeQL, and signed tag pending
 
 ## Summary
 
@@ -58,6 +58,35 @@ validated, and no accelerated backend is admitted.
   focused Miri and AddressSanitizer coverage, and exact Rust 1.90.0/1.98.1
   development and optimized MIR, LLVM IR, and assembly cleanup inspection.
 
+## Pentest Remediation
+
+The initial exceptional assessment found two High secret-state remanence
+issues, two Medium item-lifecycle and metadata-remanence issues, and two Low
+assurance/defensive-code observations. The remediation:
+
+- finalizes both cSHAKE reader variants through mutable references, clears the
+  exact embedded source owner before returning, makes that transition
+  irreversible, and gives the TupleHash reader an in-place clearing Drop path;
+- finalizes a partial tuple item directly from the registered pending byte,
+  without copying it into an uncleared local array;
+- arms the parent item-open failure latch before any writer is returned and
+  clears it only after exact completion, so `mem::forget` and `ManuallyDrop`
+  cannot authorize a malformed TupleHash output;
+- stores streamed remaining length in byte-backed clearing owner storage and
+  stages left/right encoded lengths in a dedicated owner whose Drop clears its
+  bytes and width; and
+- replaces the numeric backend fallback with a closed strength enum and makes
+  the Kani reservation proof execute the production checked-subtraction path
+  over the complete `u128` domain.
+
+Permanent regressions cover forgotten writers, exact source erasure,
+irreversible reader reuse rejection, clearing encoders, backend strength,
+partial-byte ownership, the production proof path, and every compiler-evidence
+edge. Development and optimized MIR, LLVM IR, and assembly checks bind the
+reader operation to its exact subsequent owner wipe. Independent retest of the
+exact remediation candidate is required before the release status can become
+PASS.
+
 ## Security And Residual Limits
 
 - The ordinary API is for public/unkeyed data. Secret-bearing tuple items or
@@ -91,7 +120,8 @@ these evidence inputs are not a claim of independent verification.
 
 Version 0.24.14 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates for crates.io publication.
-The new construction and hardened ownership boundary require an exceptional
-pentest before release reconciliation. After the report-bearing candidate is
+The new construction and hardened ownership boundary required an exceptional
+pentest. Its findings are remediated, but independent retest remains mandatory
+before release reconciliation. After the retested report-bearing candidate is
 green on GitHub and CodeQL, explicit repository-owner authorization may create
 the signed immutable `v0.24.14` tag.

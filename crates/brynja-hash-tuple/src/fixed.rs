@@ -2,12 +2,13 @@ use brynja_hash_sha3::{Fips202BitString, Fips202Output};
 
 use crate::{
     TupleHashError, TupleHashPublicDeclassification, TupleHashSecretOutput,
+    backend::BackendStrength,
     core_state::{TupleCore, byte_string, output_bits},
     item::TupleItemWriter,
 };
 
 macro_rules! tuple_state_common {
-    ($state:ident, $strength:literal) => {
+    ($state:ident, $strength:expr) => {
         impl $state {
             /// Creates a byte-oriented state with the supplied customization.
             pub fn new(customization: &[u8]) -> Result<Self, TupleHashError> {
@@ -44,7 +45,7 @@ macro_rules! tuple_state_common {
                 bit_length: u128,
             ) -> Result<TupleItemWriter<'_>, TupleHashError> {
                 self.core.begin_item(bit_length)?;
-                Ok(TupleItemWriter::new(&mut self.core, bit_length))
+                Ok(TupleItemWriter::new(&mut self.core))
             }
 
             /// Consumes and clears this state without producing output.
@@ -54,7 +55,7 @@ macro_rules! tuple_state_common {
 }
 
 macro_rules! ordinary_fixed {
-    ($state:ident, $strength:literal, $label:literal) => {
+    ($state:ident, $strength:expr, $label:literal) => {
         #[doc = concat!("Streaming ", $label, " state for public/unkeyed tuples.")]
         pub struct $state {
             core: TupleCore,
@@ -86,7 +87,7 @@ macro_rules! ordinary_fixed {
 }
 
 macro_rules! hardened_fixed {
-    ($state:ident, $strength:literal, $label:literal) => {
+    ($state:ident, $strength:expr, $label:literal) => {
         #[doc = concat!("Secret-bearing streaming ", $label, " state.")]
         pub struct $state {
             core: TupleCore,
@@ -149,7 +150,15 @@ macro_rules! hardened_fixed {
     };
 }
 
-ordinary_fixed!(TupleHash128, 128, "TupleHash128");
-ordinary_fixed!(TupleHash256, 256, "TupleHash256");
-hardened_fixed!(HardenedTupleHash128, 128, "TupleHash128");
-hardened_fixed!(HardenedTupleHash256, 256, "TupleHash256");
+ordinary_fixed!(TupleHash128, BackendStrength::Bits128, "TupleHash128");
+ordinary_fixed!(TupleHash256, BackendStrength::Bits256, "TupleHash256");
+hardened_fixed!(
+    HardenedTupleHash128,
+    BackendStrength::Bits128,
+    "TupleHash128"
+);
+hardened_fixed!(
+    HardenedTupleHash256,
+    BackendStrength::Bits256,
+    "TupleHash256"
+);

@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF implementation candidate awaits exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF pentest remediation candidate awaits independent retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -61,6 +61,13 @@ official examples, independent differential evidence, package-external use,
 proofs and compiler-resistant internal cleanup are present. TupleHash is not
 independently reviewed or FIPS 140-3 validated. The wider SP 800-185 family
 remains in progress until ParallelHash and final combined acceptance complete.
+The initial v0.24.14 assessment found two High, two Medium, and two Low
+ownership, lifecycle, metadata, and assurance gaps. The remediated candidate
+clears the exact embedded reader source, removes partial-byte local staging,
+arms the item-open latch before writer return, keeps remaining and encoded
+lengths in clearing storage, closes backend strength at the type level, and
+binds the production reservation path into Kani and compiler evidence.
+Independent retest remains required.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

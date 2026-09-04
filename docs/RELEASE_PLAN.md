@@ -3361,6 +3361,11 @@ Verification:
   bounds, and run mutation, Miri, sanitizer, no_std and package tests;
 - demonstrate that `("ab", "c")`, `("a", "bc")`, one `"abc"` item and reordered
   items remain distinct and that no incomplete item can yield output.
+- bind exact-source cSHAKE reader erasure, direct pending-byte finalization,
+  byte-backed remaining-length cleanup, clearing encoded-length ownership, and
+  the item-open latch against `mem::forget`/`ManuallyDrop` into source,
+  mutation, compiler, Miri, sanitizer, and Kani evidence; the initial pentest
+  findings are remediated and the exact candidate requires independent retest.
 
 Exit criteria:
 

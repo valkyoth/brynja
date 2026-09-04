@@ -2,13 +2,13 @@ use brynja_hash_sha3::{Fips202BitString, Fips202Output};
 
 use crate::{
     TupleHashError, TupleHashPublicDeclassification, TupleHashSecretOutput,
-    backend::BackendReader,
+    backend::{BackendReader, BackendStrength},
     core_state::{TupleCore, byte_string},
     item::TupleItemWriter,
 };
 
 macro_rules! xof_state_common {
-    ($state:ident, $reader:ident, $strength:literal) => {
+    ($state:ident, $reader:ident, $strength:expr) => {
         impl $state {
             /// Creates a byte-oriented state with the supplied customization.
             pub fn new(customization: &[u8]) -> Result<Self, TupleHashError> {
@@ -45,7 +45,7 @@ macro_rules! xof_state_common {
                 bit_length: u128,
             ) -> Result<TupleItemWriter<'_>, TupleHashError> {
                 self.core.begin_item(bit_length)?;
-                Ok(TupleItemWriter::new(&mut self.core, bit_length))
+                Ok(TupleItemWriter::new(&mut self.core))
             }
 
             /// Finalizes the tuple with `right_encode(0)`.
@@ -60,7 +60,7 @@ macro_rules! xof_state_common {
 }
 
 macro_rules! ordinary_xof {
-    ($state:ident, $reader:ident, $strength:literal, $label:literal) => {
+    ($state:ident, $reader:ident, $strength:expr, $label:literal) => {
         #[doc = concat!("Streaming ", $label, " state for public/unkeyed tuples.")]
         pub struct $state {
             core: TupleCore,
@@ -93,7 +93,7 @@ macro_rules! ordinary_xof {
 }
 
 macro_rules! hardened_xof {
-    ($state:ident, $reader:ident, $strength:literal, $label:literal) => {
+    ($state:ident, $reader:ident, $strength:expr, $label:literal) => {
         #[doc = concat!("Secret-bearing streaming ", $label, " state.")]
         pub struct $state {
             core: TupleCore,
@@ -155,24 +155,24 @@ macro_rules! hardened_xof {
 ordinary_xof!(
     TupleHashXof128,
     TupleHashXof128Reader,
-    128,
+    BackendStrength::Bits128,
     "TupleHashXOF128"
 );
 ordinary_xof!(
     TupleHashXof256,
     TupleHashXof256Reader,
-    256,
+    BackendStrength::Bits256,
     "TupleHashXOF256"
 );
 hardened_xof!(
     HardenedTupleHashXof128,
     HardenedTupleHashXof128Reader,
-    128,
+    BackendStrength::Bits128,
     "TupleHashXOF128"
 );
 hardened_xof!(
     HardenedTupleHashXof256,
     HardenedTupleHashXof256Reader,
-    256,
+    BackendStrength::Bits256,
     "TupleHashXOF256"
 );

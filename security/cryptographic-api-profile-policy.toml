@@ -41,8 +41,8 @@ partial_failure_policy = "clear-complete-secret-destination"
 capability = "algorithm.tuplehash"
 id = "registered.algorithm.tuplehash"
 symbol = "crates/brynja-hash-tuple/src/core_state.rs#brynja_hash_tuple::core_state::TupleCore"
-fields = ["hardened-cshake-state:secret-derived", "pending-item-byte:secret-copy", "pending-item-width:secret-derived", "tuple-item-count:secret-derived", "abandoned-item-state:secret-derived"]
-temporaries = ["encoded-item-length:secret-derived", "streamed-item-remaining:secret-derived", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
+fields = ["hardened-cshake-state:secret-derived", "pending-item-byte:secret-copy", "pending-item-width:secret-derived", "tuple-item-count:secret-derived", "streamed-item-remaining:secret-derived", "abandoned-item-state:secret-derived"]
+temporaries = ["encoded-item-length:secret-derived-clearing-owner", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
 sanitization_symbol = "crates/brynja-hash-tuple/src/core_state.rs#brynja_hash_tuple::TupleCore::wipe"
 cleanup_callers = ["crates/brynja-hash-tuple/src/core_state.rs#brynja_hash_tuple::core_state::TupleCore::drop"]
 evidence = ["crates/brynja-hash-tuple/tests/api.rs", "crates/brynja-hash-tuple/tests/official_vectors.rs", "assurance/tuplehash-public-api/src/lib.rs", "scripts/tuplehash/check-tuplehash-codegen.sh", "scripts/tuplehash/check-tuplehash.py", "scripts/tuplehash/check-tuplehash-differential.py"]
@@ -854,8 +854,20 @@ path = "scripts/kmac/check-kmac-conformance-gate.sh"
 sha256 = "e54887e6fdc558b52e8327a01c8f401469dce94ebe495d8a33a61c1e15e1bffa"
 
 [[reviewed-source]]
+path = "crates/brynja-hash-tuple/src/backend.rs"
+sha256 = "d6f845d3d6e9b8f5b5377a7001673e62890adabf8a3de0e5c52810989d1ad8bc"
+
+[[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/core_state.rs"
-sha256 = "342fc75b2d36d650af93fa82cf5ae7e7166ea153e577b0a733073f2d0d699cc9"
+sha256 = "6a67867728aa0b2f07dd547d37bff2c4b52682e309e3c6d96ed860a35197aef0"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-tuple/src/item.rs"
+sha256 = "b712ae3f2baaf30251ac00d4436dddf62e64fdd66fac22c7dcc170e0c9db5514"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-tuple/src/secret_encoding.rs"
+sha256 = "50ea02d2a325a31cf485010e832e39df022d465bf57d42f5dee6d591afba748b"
 
 [[reviewed-source]]
 path = "assurance/tuplehash-public-api/src/lib.rs"
@@ -863,7 +875,7 @@ sha256 = "c1dca297e1c4f26890d2559eae0a810ffcee0b9c783796f28a49f5bf4aae3bff"
 
 [[reviewed-source]]
 path = "scripts/tuplehash/check-tuplehash-codegen.sh"
-sha256 = "91e0dbe8ce2fca825e26a9af854bd226132c2d48a32f7c4630276c0e631dc9d9"
+sha256 = "236609826c5ca809443f2a6ecb3ecc7839f76ebedd5fd8a3280d882a970cdbce"
 
 [[reviewed-source]]
 path = "assurance/api-profile-contract/src/lib.rs"
@@ -875,7 +887,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "f83ffa749f4a7fb5174f505147487f5fef301a98f28cd386ee3fdf0b98933816"
+sha256 = "7497d4910a2129eecddc05104777f1903d51586e67720f78d4894a24bb576068"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
@@ -991,7 +1003,11 @@ sha256 = "cc3342c62b0b2df60569dca6044c8e1f7446bb2a7a0a65d0d0fc436aeacc5b40"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/cshake.rs"
-sha256 = "913edb6a2e7a11d0e703fbf4bd8be35af936e30386b975c9916be18386b7ff32"
+sha256 = "dbeb0b9a960b3c5fc7335e3f54ddca022bb4f5532bf8175170ef7ec22484171f"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-sha3/src/hardened/cshake/tests.rs"
+sha256 = "c59bb5beff6fd46b7610abd5f435d6008b659d9b176cab71121ada775b4a917c"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-sha3/src/hardened/output.rs"
@@ -1035,8 +1051,8 @@ sha256 = "74c8692370d915dbbb7778f3f723e051f581f1cfff8089dbfaf865107b36c35f"
 
 [[reviewed-source]]
 path = "scripts/sha3/sha3_hardened.py"
-sha256 = "d5d0d8a7d99b0fa10f635b897e42b1dfe0fdeb058d1d522477daa81db26d871c"
+sha256 = "004ae012f86560c444d1433bed5644a293df06088f27feb9e8df73ff7a730d41"
 
 [[reviewed-source]]
 path = "scripts/sha3/test-sha3-hardened.py"
-sha256 = "2f9073576737b92f99a94855d48bfa758e30b04b067d7de09a994ed7a5a6846c"
+sha256 = "bfe28bcf0dd0be787767a852ea3ba71b149350f8fc8d414da78ca2a8e382cb11"

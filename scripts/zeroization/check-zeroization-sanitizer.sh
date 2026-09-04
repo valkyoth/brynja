@@ -53,12 +53,24 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
     -p brynja-hash-sha3 \
+    --lib \
+    final_bit_output_clears_the_exact_reader_source \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
+    -p brynja-hash-sha3 \
     --tests \
     --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
     -p brynja-mac-kmac \
     --tests \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
+    -p brynja-hash-tuple \
+    --test api \
+    forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch \
     --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \

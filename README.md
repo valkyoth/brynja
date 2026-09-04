@@ -884,15 +884,19 @@ independent differential oracle, package-external use, proofs, Miri,
 AddressSanitizer, and Rust 1.90.0/1.98.1 cleanup evidence are bound to the
 implementation. TupleHash is fully implemented but is neither independently
 verified nor FIPS 140-3 validated. ParallelHash and combined SP 800-185 final
-acceptance remain pending.
+acceptance remain pending. Its initial exceptional assessment found two High,
+two Medium, and two Low ownership, lifecycle, metadata, and assurance gaps;
+the fixes now bind exact reader-source erasure, forgotten-writer failure,
+clearing length metadata, direct partial-byte ownership, closed backend
+strength, and the production Kani path. Independent retest is pending.
 
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.13`; the current internal `0.24.14`
-TupleHash candidate selects no crates.io publication and awaits its exceptional
-security assessment.
+TupleHash remediation candidate selects no crates.io publication and awaits
+independent retest.
 The published
 dependency is:
 

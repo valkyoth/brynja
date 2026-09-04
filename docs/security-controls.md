@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF implementation candidate awaits exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF pentest remediation candidate awaits independent retest
 
 | Control | Foundation enforcement |
 | --- | --- |

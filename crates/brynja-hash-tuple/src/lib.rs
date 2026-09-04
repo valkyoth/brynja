@@ -13,6 +13,7 @@ mod error;
 mod fixed;
 mod item;
 mod output;
+mod secret_encoding;
 mod xof;
 
 pub use brynja_hash_sha3::{Fips202BitString, Fips202BitsError, Fips202Output};
@@ -135,15 +136,17 @@ pub fn tuple_hash_xof256_bits(
 
 #[cfg(kani)]
 mod proofs {
-    use super::TupleHashError;
+    use super::{TupleHashError, core_state::checked_remaining_after};
 
     #[kani::proof]
-    fn declared_item_reservation_is_exact() {
-        let declared: u16 = kani::any();
-        let fragment: u16 = kani::any();
-        let accepted = fragment <= declared;
-        let result = declared.checked_sub(fragment);
-        assert_eq!(accepted, result.is_some());
+    fn production_item_reservation_is_exact() {
+        let remaining: u128 = kani::any();
+        let fragment: u128 = kani::any();
+        let result = checked_remaining_after(remaining, fragment);
+        assert_eq!(result.is_ok(), fragment <= remaining);
+        if let Ok(next) = result {
+            assert_eq!(next, remaining - fragment);
+        }
     }
 
     #[kani::proof]

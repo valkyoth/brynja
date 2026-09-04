@@ -13,7 +13,7 @@ import tuplehash_reviewed_hashes
 CRATE = Path("crates/brynja-hash-tuple")
 SOURCES = tuple(CRATE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "item.rs",
-    "lib.rs", "output.rs", "xof.rs",
+    "lib.rs", "output.rs", "secret_encoding.rs", "xof.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs")
 MANIFEST = CRATE / "Cargo.toml"
@@ -96,25 +96,52 @@ def validate(root: Path) -> None:
     for token in (
         "HardenedCshake128", "HardenedCshake256", 'b"TupleHash"',
         "finalize_bits_xof_erasing_source", "finalize_xof_erasing_source",
-        "wipe_in_place", "squeeze_final_bits_secret",
+        "BackendStrength::Bits128", "BackendStrength::Bits256",
+        "squeeze_final_bits_public_erasing_source",
+        "squeeze_final_bits_secret_erasing_source", "match &mut self",
+        "impl Drop for BackendReader", "wipe_in_place",
     ):
         require(backend, token, "hardened cSHAKE backend")
     core = loaded[CRATE / "src/core_state.rs"]
     for token in (
-        "left_encode_u128(bits)", "right_encode_u128(output_bits)",
+        "SecretEncodedInteger::left(bits)",
+        "SecretEncodedInteger::right(output_bits)",
         ".checked_add(added)", ".checked_add(1)",
         "self.backend.check_additional_bits", "self.backend.wipe();",
+        "self.failed = [1];", "write_u128(&mut self.remaining, bits)",
+        "write_u128(&mut self.items, count)",
+        "self.complete_item()", "checked_remaining_after(",
+        "Fips202BitString::new(&self.pending, valid)",
         "clear_owned_region(&mut self.pending)",
-        "clear_owned_region(&mut self.items)", "impl Drop for TupleCore",
+        "clear_owned_region(&mut self.items)",
+        "clear_owned_region(&mut self.remaining)", "impl Drop for TupleCore",
     ):
         require(core, token, "tuple encoding and cleanup")
+    for forbidden in ("left_encode_u128(bits)", "right_encode_u128(output_bits)",
+                      "let bytes = [", "let byte = self.pending", ".to_le_bytes()",
+                      "u128::from_le_bytes"):
+        if forbidden in core:
+            fail(f"TupleHash created uncleared local staging: {forbidden}")
     item = loaded[CRATE / "src/item.rs"]
     for token in (
         "pub struct TupleItemWriter", "remaining_bits", "pub fn finish",
-        "TupleHashError::IncompleteItem", "self.core.abandon_item()",
+        "self.core.check_item_fragment(bits)?", "self.core.consume_item(bits)?",
+        "self.core.complete_item()?", "self.core.abandon_item()",
         "impl Drop for TupleItemWriter",
     ):
         require(item, token, "affine tuple item")
+    if "remaining: u128" in item or "self.remaining = 0" in item:
+        fail("streamed item length escaped the clearing TupleCore owner")
+    encoding = loaded[CRATE / "src/secret_encoding.rs"]
+    for token in (
+        "struct SecretEncodedInteger", "bytes: [u8; 17]", "length: [u8; 1]",
+        "pub(crate) fn left", "pub(crate) fn right",
+        "impl Drop for SecretEncodedInteger",
+        "clear_owned_region(&mut self.bytes)",
+        "clear_owned_region(&mut self.length)",
+        "clearing_encoders_match_sp800185_for_boundary_values",
+    ):
+        require(encoding, token, "secret tuple-length encoding")
     fixed = loaded[CRATE / "src/fixed.rs"]
     xof = loaded[CRATE / "src/xof.rs"]
     for token in ("TupleHash128", "TupleHash256", "HardenedTupleHash128", "HardenedTupleHash256"):
@@ -148,6 +175,7 @@ def validate(root: Path) -> None:
         "tuple_boundaries_order_and_empty_items_are_distinct",
         "exact_length_streaming_matches_whole_items",
         "abandoned_or_incomplete_items_fail_closed",
+        "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch",
         "arbitrary_bit_items_and_outputs_are_canonical",
         "xof_partitions_and_hardened_output_match",
     ):
@@ -160,13 +188,19 @@ def validate(root: Path) -> None:
         (PUBLIC_FIXTURE, "brynja::crypto::tuple_hash_xof128_bits"),
         (DIFFERENTIAL, "for index in range(64)"),
         (DIFFERENTIAL_FIXTURE, "MAX_CAMPAIGN_BYTES"),
-        (CODEGEN, "TupleHash source-owned state transitions and cleanup survive"),
+        (CODEGEN, "TupleHash exact source and reader cleanup survives"),
         (MIRI, "-p brynja-hash-tuple"),
+        (MIRI, "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch"),
         (SANITIZER, "-p brynja-hash-tuple"),
+        (SANITIZER, "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch"),
         (CHECKS, "python3 scripts/tuplehash/check-tuplehash-differential.py"),
         (README, "no third-party dependency"),
     ):
         require(loaded[path], token, "TupleHash evidence closure")
+    if loaded[MIRI].count("-p brynja-hash-tuple") != 2:
+        fail("TupleHash Miri command inventory changed")
+    if loaded[SANITIZER].count("-p brynja-hash-tuple") != 2:
+        fail("TupleHash sanitizer command inventory changed")
     for path, expected_hash in HASHES.items():
         if hashlib.sha256((root / path).read_bytes()).hexdigest() != expected_hash:
             fail(f"TupleHash reviewed source changed: {path}")

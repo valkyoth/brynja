@@ -91,14 +91,15 @@ def main() -> int:
     status, commands = run_profile("--focused")
     assert status == 0 and len(commands) == 6
     status, commands = run_profile("--focused", "sha3", "kmac", "tuplehash")
-    assert status == 0 and len(commands) == 12
-    assert sum("-p brynja-hash-sha3" in command for command in commands) == 7
+    assert status == 0 and len(commands) == 14
+    assert sum("-p brynja-hash-sha3" in command for command in commands) == 8
     assert sum("-p brynja-mac-kmac" in command for command in commands) == 1
+    assert sum("-p brynja-hash-tuple" in command for command in commands) == 2
     status, commands = run_profile("--group", "sha2")
     assert status == 0 and len(commands) == 10
     assert all("brynja-hash-sha2" in command for command in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 21
+    assert status == 0 and len(commands) == 23
     status, commands = run_profile("--group", "unknown")
     assert status == 2 and not commands
     print(

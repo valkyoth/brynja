@@ -152,7 +152,6 @@ def validate(root: Path) -> None:
         "pub fn wipe_in_place(&mut self)",
         "core::mem::replace(&mut self.owner",
         "self.owner.wipe();",
-        "in_place_reader_transition_clears_exact_source_owner",
     ):
         require(hardened_cshake, token, "hardened cSHAKE source transition")
     output = loaded[CRATE / "src/output.rs"]

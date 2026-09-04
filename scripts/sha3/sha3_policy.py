@@ -343,7 +343,7 @@ def validate(root: Path) -> None:
         "every_official_nist_cshake_example_matches",
     ):
         require(miri, token, "SHA-3 Miri coverage")
-    if miri.count("-p brynja-hash-sha3") != 5:
+    if miri.count("-p brynja-hash-sha3") != 6:
         fail("SHA-3 Miri package coverage changed")
     sanitizer = read(root, SANITIZER_SCRIPT)
     require(
@@ -351,7 +351,7 @@ def validate(root: Path) -> None:
         "-p brynja-hash-sha3 \\\n    --tests \\\n    --target x86_64-unknown-linux-gnu",
         "SHA-3 AddressSanitizer command",
     )
-    if sanitizer.count("-p brynja-hash-sha3") != 1:
+    if sanitizer.count("-p brynja-hash-sha3") != 2:
         fail("SHA-3 AddressSanitizer package coverage changed")
 
     differential_fixture = read(root, DIFFERENTIAL_FIXTURE)

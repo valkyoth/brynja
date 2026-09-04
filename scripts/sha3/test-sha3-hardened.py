@@ -34,10 +34,12 @@ def main() -> int:
     reject(policy.CSHAKE, "owner: HardenedFips202Owner<$rate>,", "owner: HardenedFips202Owner<$rate>,\n            customized: bool,")
     reject(policy.CSHAKE, "core::mem::replace(&mut self.owner", "core::mem::take(&mut self.owner")
     reject(policy.CSHAKE, "self.owner.wipe();", "core::hint::black_box(&mut self.owner);")
-    reject(policy.CSHAKE, "in_place_reader_transition_clears_exact_source_owner", "missing_source_owner_test")
+    reject(policy.CSHAKE_INTERNAL_TEST, "in_place_reader_transition_clears_exact_source_owner", "missing_source_owner_test")
+    reject(policy.CSHAKE, "squeeze_final_bits_secret_erasing_source<'output>", "squeeze_final_bits_secret_unchecked<'output>")
+    reject(policy.CSHAKE_INTERNAL_TEST, "final_bit_output_clears_the_exact_reader_source", "missing_reader_source_test")
     reject(policy.CSHAKE, "self.ensure_live()?;", "core::hint::black_box(&self.lifecycle);")
     reject(policy.CSHAKE, "self.lifecycle = CshakeLifecycle::Vacated;", "self.lifecycle = CshakeLifecycle::Live;")
-    reject(policy.CSHAKE, "explicit_wipe_is_an_irreversible_terminal_transition", "missing_terminal_wipe_test")
+    reject(policy.CSHAKE_INTERNAL_TEST, "explicit_wipe_is_an_irreversible_terminal_transition", "missing_terminal_wipe_test")
     reject(policy.OUTPUT, "StateConsumed", "ReusableState")
     reject(policy.CSHAKE_FIXTURE, "Err(leaf::HardenedSha3Error::StateConsumed)", "Err(leaf::HardenedSha3Error::MessageTooLong)")
     reject(policy.API, "pub trait HardenedFips202State: sealed::Registered", "pub trait HardenedFips202State")
@@ -49,7 +51,9 @@ def main() -> int:
     reject(policy.TEST, "recoverable_unwind_clears_typed_secret_destination", "missing_unwind_test")
     reject(policy.TEST, "fixed_output_failure_is_atomic_by_classification", "missing_failure_test")
     reject(policy.CHECKS, "scripts/sha3/check-sha3-hardened-codegen.sh", "true # removed codegen")
-    print("hardened FIPS 202 policy rejects twenty cleanup, lifecycle, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, and codegen regressions")
+    reject(policy.MIRI, "final_bit_output_clears_the_exact_reader_source", "missing_exact_reader_source_miri")
+    reject(policy.SANITIZER, "final_bit_output_clears_the_exact_reader_source", "missing_exact_reader_source_sanitizer")
+    print("hardened FIPS 202 policy rejects twenty-four cleanup, lifecycle, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, dynamic-analysis, and codegen regressions")
     return 0
 
 

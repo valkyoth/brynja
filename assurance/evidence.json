@@ -68,10 +68,10 @@
     "scripts/zeroization/check-tag-miri.sh": "3daeaf71064d6b3f54bb28ee0c08a59c55f54f12ece4b158f0ca6394a1f813bc",
     "scripts/zeroization/check-zeroization-codegen.sh": "aa1310d6366c248b2fad069d674aef2ac8a9ed297a16e2c40ca332d4c6acc8d9",
     "scripts/zeroization/check-zeroization-evidence.py": "d11f63a46fcdeb3a48bb6606227b07223958f14033928c181fe55d4ab6112457",
-    "scripts/zeroization/check-zeroization-miri.sh": "b13024f0e444d39ef44227d2cd67d170cebb10607d497ad78015c8695fcbbe65",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "eda8f11c229bb9e89996862cc11af075dcf56ba07300fd788da05457941a3f21",
+    "scripts/zeroization/check-zeroization-miri.sh": "11bdf9cebcdb27f9bc8e68a4fbcf15033718005909b8c2d400146a02f58f6155",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "406f344ff087277c7c63ff8ba2c5326f22b3b97aca9c90c617804ac534577aaf",
     "scripts/zeroization/miri_scope.py": "34f04cca1310ea51e39a69eb76219ce36a7c96728b372cd990b01ec3e08f0112",
-    "scripts/zeroization/test-miri-scope.py": "d387df55fb26c928d1b0c0140bbd39fdd57682ec39d25a65a414b1f312e94421",
+    "scripts/zeroization/test-miri-scope.py": "d587f94c502e605b9bd05881df6d71155bef3827d4a49838b56d60b96d39313b",
     "scripts/zeroization/test-zeroization-evidence.py": "751ad86b17549d13b4ba3544caec04e4b1f6d8cad674c4a2b24b7593721a8a98",
     "scripts/zeroization/zeroization_evidence.py": "f6fa0ba1ad3c1a2a38d357dd12b112f6a926a4b8b462e1a70e7591473bb8d839"
   },

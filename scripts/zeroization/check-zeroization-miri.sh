@@ -63,6 +63,8 @@ quick_sha3() {
 }
 
 full_sha3() {
+    run_miri -p brynja-hash-sha3 --lib \
+        final_bit_output_clears_the_exact_reader_source
     for sha3_test in sha3_384 sha3_512; do
         run_miri -p brynja-hash-sha3 --test "$sha3_test" \
             suffix_and_rate_boundaries_have_exact_digests
@@ -93,6 +95,8 @@ quick_tuplehash() {
 }
 
 full_tuplehash() {
+    run_miri -p brynja-hash-tuple --test api \
+        forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch
     run_miri -p brynja-hash-tuple --tests
 }
 

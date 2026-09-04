@@ -23704,7 +23704,7 @@
       ]
     }
   ],
-  "policy_sha256": "5e97646b547cbdea4ef03cb1d6e8ee44f60d2f97e68c583d5b55b64c0e995d0b",
+  "policy_sha256": "15e7088de448a9c1396d6e127b9171a81d214c4f20a76d6a3ecab614272daf42",
   "registered_secret_owners": [
     {
       "capability": "algorithm.kmac",
@@ -23911,6 +23911,7 @@
         "pending-item-byte:secret-copy",
         "pending-item-width:secret-derived",
         "tuple-item-count:secret-derived",
+        "streamed-item-remaining:secret-derived",
         "abandoned-item-state:secret-derived"
       ],
       "id": "registered.algorithm.tuplehash",
@@ -23946,8 +23947,7 @@
       "storage": "crate-owned-fixed",
       "symbol": "crates/brynja-hash-tuple/src/core_state.rs#brynja_hash_tuple::core_state::TupleCore",
       "temporaries": [
-        "encoded-item-length:secret-derived",
-        "streamed-item-remaining:secret-derived",
+        "encoded-item-length:secret-derived-clearing-owner",
         "borrowed-input:caller-owned-copy-risk",
         "typed-output:caller-owned"
       ]

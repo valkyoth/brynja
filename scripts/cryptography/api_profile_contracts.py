@@ -196,11 +196,11 @@ TUPLEHASH_OWNER_RECORD = {
         "pending-item-byte:secret-copy",
         "pending-item-width:secret-derived",
         "tuple-item-count:secret-derived",
+        "streamed-item-remaining:secret-derived",
         "abandoned-item-state:secret-derived",
     ],
     "temporaries": [
-        "encoded-item-length:secret-derived",
-        "streamed-item-remaining:secret-derived",
+        "encoded-item-length:secret-derived-clearing-owner",
         "borrowed-input:caller-owned-copy-risk",
         "typed-output:caller-owned",
     ],
@@ -271,7 +271,7 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "drop(_1: &mut KmacCore<S, RATE, STRENGTH>) -> () {"
     ],
     TUPLEHASH_DROP: [
-        "fn core_state::<impl at crates/brynja-hash-tuple/src/core_state.rs:188:1: 188:24>::"
+        "fn core_state::<impl at crates/brynja-hash-tuple/src/core_state.rs:219:1: 219:24>::"
         "drop(_1: &mut TupleCore) -> () {"
     ],
 }
@@ -386,6 +386,7 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-hash-sha3/src/cshake.rs",
     "crates/brynja-hash-sha3/src/sp800185.rs",
     "crates/brynja-hash-sha3/src/hardened/cshake.rs",
+    "crates/brynja-hash-sha3/src/hardened/cshake/tests.rs",
     "crates/brynja-hash-sha3/src/hardened/fixed.rs",
     "crates/brynja-hash-sha3/src/hardened/mod.rs",
     "crates/brynja-hash-sha3/src/hardened/output.rs",
@@ -404,7 +405,10 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-mac-kmac/tests/api.rs",
     "scripts/kmac/check-kmac-codegen.sh",
     "scripts/kmac/check-kmac-conformance-gate.sh",
+    "crates/brynja-hash-tuple/src/backend.rs",
     "crates/brynja-hash-tuple/src/core_state.rs",
+    "crates/brynja-hash-tuple/src/item.rs",
+    "crates/brynja-hash-tuple/src/secret_encoding.rs",
     "assurance/tuplehash-public-api/src/lib.rs",
     "scripts/tuplehash/check-tuplehash-codegen.sh",
     "crates/brynja-sanitization/src/lib.rs",

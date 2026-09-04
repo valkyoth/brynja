@@ -41,15 +41,17 @@ tuple_hash128(items, b"application-v1", &mut digest)?;
 
 Tuple identity is structural: `("ab", "c")`, `("a", "bc")`, one `"abc"`
 item, and reordered items produce distinct inputs to the construction. Exact
-arbitrary-bit items and affine streamed items are also supported. Abandoning a
-streamed item before its declared length is consumed permanently closes the
-parent state.
+arbitrary-bit items and affine streamed items are also supported. The parent
+state arms its item-open latch before returning a writer, so abandoning,
+forgetting, or manually suppressing destruction of an incomplete item cannot
+yield output.
 
 The ordinary API classifies output as public. Use the distinct `Hardened*`
 states when tuple items or derived state are secret-bearing; all crate-owned
-sponge, staging, tuple metadata, and reader state are cleared through Brynja's
-compiler-resistant cleanup boundary. Caller-owned inputs and copied outputs
-remain the caller's responsibility.
+sponge, staging, byte-backed tuple metadata, encoded-length owners, and reader
+state are cleared through Brynja's compiler-resistant cleanup boundary. Final
+bit output clears the exact embedded reader allocation before return.
+Caller-owned inputs and copied outputs remain the caller's responsibility.
 
 ## Cryptography Verification Status
 

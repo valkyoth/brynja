@@ -14,6 +14,7 @@ API = Path("crates/brynja-hash-sha3/src/hardened/mod.rs")
 FIXED = Path("crates/brynja-hash-sha3/src/hardened/fixed.rs")
 XOF = Path("crates/brynja-hash-sha3/src/hardened/xof.rs")
 CSHAKE = Path("crates/brynja-hash-sha3/src/hardened/cshake.rs")
+CSHAKE_INTERNAL_TEST = Path("crates/brynja-hash-sha3/src/hardened/cshake/tests.rs")
 OUTPUT = Path("crates/brynja-hash-sha3/src/hardened/output.rs")
 SPONGE = Path("crates/brynja-hash-sha3/src/hardened/sponge.rs")
 PERMUTATION = Path("crates/brynja-hash-sha3/src/hardened/permutation.rs")
@@ -31,7 +32,7 @@ CSHAKE_FIXTURE = Path("assurance/cshake-public-api/src/lib.rs")
 MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
 FILES = (
-    OWNER, API, FIXED, XOF, CSHAKE, OUTPUT, SPONGE, PERMUTATION, TEST, CSHAKE_TEST, LIB, CRYPTO,
+    OWNER, API, FIXED, XOF, CSHAKE, CSHAKE_INTERNAL_TEST, OUTPUT, SPONGE, PERMUTATION, TEST, CSHAKE_TEST, LIB, CRYPTO,
     FACADE, CHECKS, CODEGEN, FIXTURE_MANIFEST, FIXTURE_LOCK, FIXTURE_LIB, CSHAKE_FIXTURE,
     MIRI, SANITIZER,
 )
@@ -113,18 +114,25 @@ def validate(root: Path = ROOT) -> None:
         "pub fn finalize_xof_erasing_source(&mut self)",
         "pub fn finalize_bits_xof_erasing_source(",
         "pub fn wipe_in_place(&mut self)",
+        "pub fn squeeze_final_bits_public_erasing_source(",
+        "pub fn squeeze_final_bits_secret_erasing_source<'output>(",
         "lifecycle: CshakeLifecycle",
         "lifecycle: CshakeLifecycle::Live",
         "Err(HardenedSha3Error::StateConsumed)",
         "core::mem::replace(&mut self.owner",
         "self.owner.wipe();",
-        "in_place_reader_transition_clears_exact_source_owner",
-        "explicit_wipe_is_an_irreversible_terminal_transition",
     ):
         require(loaded[CSHAKE], token, "hardened cSHAKE API")
-    if loaded[CSHAKE].count("self.ensure_live()?;") != 5:
+    for token in (
+        "in_place_reader_transition_clears_exact_source_owner",
+        "final_bit_output_clears_the_exact_reader_source",
+        "explicit_wipe_is_an_irreversible_terminal_transition",
+        "Err(HardenedSha3Error::StateConsumed)",
+    ):
+        require(loaded[CSHAKE_INTERNAL_TEST], token, "hardened cSHAKE internal acceptance")
+    if loaded[CSHAKE].count("self.ensure_live()?;") != 11:
         fail("hardened cSHAKE live-state guard inventory changed")
-    if loaded[CSHAKE].count("self.lifecycle = CshakeLifecycle::Vacated;") != 3:
+    if loaded[CSHAKE].count("self.lifecycle = CshakeLifecycle::Vacated;") != 6:
         fail("hardened cSHAKE terminal-transition inventory changed")
     require(loaded[OUTPUT], "StateConsumed", "hardened cSHAKE terminal error")
     for token in (
@@ -187,8 +195,18 @@ def validate(root: Path = ROOT) -> None:
     require(loaded[FIXTURE_LIB], "exercise_all", "downstream all-identity fixture")
     require(loaded[MIRI], "--test hardened", "Miri hardened-state coverage")
     require(loaded[MIRI], "--test cshake", "Miri hardened cSHAKE coverage")
+    require(
+        loaded[MIRI],
+        "final_bit_output_clears_the_exact_reader_source",
+        "Miri exact cSHAKE reader-source coverage",
+    )
     require(loaded[SANITIZER], "-p brynja-hash-sha3", "sanitizer package coverage")
     require(loaded[SANITIZER], "--tests", "sanitizer test coverage")
+    require(
+        loaded[SANITIZER],
+        "final_bit_output_clears_the_exact_reader_source",
+        "sanitizer exact cSHAKE reader-source coverage",
+    )
 
 
 def run_acceptance() -> str:

@@ -1,11 +1,11 @@
 [schema]
 version = 1
-milestone = "0.11.1"
-reviewed_on = "2026-08-09"
+milestone = "0.24.14"
+reviewed_on = "2026-09-04"
 
 [decision]
 status = "admitted-for-v0.11.2-adapter-only"
-production_graph_changed = false
+production_graph_changed = true
 adapter = "brynja-sanitization"
 adapter_milestone = "0.11.2"
 legacy_adapter = "rejected"
@@ -13,13 +13,13 @@ fips_boundary = "excluded"
 
 [package]
 name = "sanitization"
-version = "2.0.3"
+version = "2.0.4"
 registry = "https://crates.io"
 repository = "https://github.com/valkyoth/sanitization"
-release_tag = "v2.0.3"
-source_commit_sha1 = "ffcb211cd931c6966b2e767ce5edffa4b47c4f07"
-reviewed_code_commit_sha1 = "d9578b20a5e0ad9c9226648773409466f662e3b6"
-package_sha256 = "75e43f2762b31232062e8ba7bfbdfcbd33c80c43bf7a306a7e195c3c4f734e0f"
+release_tag = "v2.0.4"
+source_commit_sha1 = "0f95eec55aa16562be9dc3a08ee60a043d7a0da8"
+reviewed_code_commit_sha1 = "d5a7c9e46889e1b0a2e0ad7e7651219aa07bbc2e"
+package_sha256 = "f6c00771cb2e89cc08c486588aa5b462190634313f8885fbdc375de33ee84612"
 license = "MIT OR Apache-2.0"
 edition = "2021"
 rust_version = "1.90"
@@ -62,6 +62,15 @@ prohibited_features = [
 
 [unsafe_inventory]
 selected_feature_tcb_files = ["src/wipe_backend.rs", "src/owned.rs"]
+selected_feature_tcb_sha256 = [
+  "src/owned.rs:769a1386cf42ff5645fb7af70472ade67a737dceb97cdd897226deffaf1de76f",
+  "src/wipe_backend.rs:359691633b0b84d3b7f9a0f667a1391277831b399edeb969bdd6d40b49e7603b",
+]
+previous_selected_feature_tcb_version = "2.0.3"
+previous_selected_feature_tcb_sha256 = [
+  "src/owned.rs:769a1386cf42ff5645fb7af70472ade67a737dceb97cdd897226deffaf1de76f",
+  "src/wipe_backend.rs:359691633b0b84d3b7f9a0f667a1391277831b399edeb969bdd6d40b49e7603b",
+]
 selected_feature_boundaries = [
   "wipe_backend volatile erasure and zero-valid primitive marker",
   "owned::consume_once atomic exclusive-access implementation",
@@ -102,10 +111,10 @@ targets = [
   "x86_64-unknown-none",
 ]
 additional_compile_only_targets = ["wasm32-unknown-unknown"]
-upstream_pentest = "security/pentest/v2.0.3.md: PASS on 2026-07-21"
-advisory_result = "cargo audit: zero advisories on 2026-08-29"
-policy_result = "cargo deny advisories/bans/licenses/sources: pass on 2026-08-29"
-codegen_evidence = "upstream MIR/LLVM IR/assembly matrix plus Brynja v0.11.0 comparison"
+upstream_pentest = "security/pentest/v2.0.4.md: PASS on 2026-09-04"
+advisory_result = "cargo audit: zero advisories on 2026-09-04"
+policy_result = "cargo deny advisories/bans/licenses/sources: pass on 2026-09-04"
+codegen_evidence = "upstream MIR/LLVM IR/assembly matrix plus unchanged selected-feature TCB comparison from 2.0.3 to 2.0.4"
 candidate_fixture = "assurance/sanitization-admission"
 
 [adapter_boundary]

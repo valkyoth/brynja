@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the v0.11.1 sanitization admission evidence."""
+"""Check the current exact sanitization admission evidence."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ def main() -> int:
     root = Path(__file__).resolve().parents[2]
     sanitization_admission.validate(root, arguments.package, arguments.online)
     suffix = ", crates.io freshness and package bytes" if arguments.online else ""
-    print(f"sanitization 2.0.3 admission record, isolation{suffix}: PASS")
+    print(f"sanitization 2.0.4 admission record, isolation{suffix}: PASS")
     return 0
 
 

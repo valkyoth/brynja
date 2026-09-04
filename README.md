@@ -643,7 +643,7 @@ independent cryptographic review, or guarantee for an arbitrary downstream
 composition. Version `0.11.2` implemented the
 separately selected, protocol-neutral
 `brynja-sanitization 0.1.0` adapter admitted at v0.11.1. It exact-pins
-first-party `sanitization 2.0.3`, disables every upstream feature, activates no
+first-party `sanitization 2.0.4`, disables every upstream feature, activates no
 transitive package, owns opaque fixed-size wrappers, and provides only explicit
 copies to and from Brynja's caller-owned regions. It is absent from every
 facade, engine, default feature, and FIPS module closure. Brynja's v0.11.0
@@ -897,18 +897,21 @@ the LLVM/assembly copy matcher retained false-negative paths. The candidate now
 clears all source-owned metadata before returning output or a borrowing reader,
 tests fixed and XOF completion across ordinary and hardened owners, self-tests
 the corrected LLVM matcher, and rejects every memcpy in isolated external
-finalization functions. Independent retest of the exact candidate found no
-Critical, High, or Medium issue; the permanent
+finalization functions. Independent retest of the exact TupleHash candidate
+found no Critical, High, or Medium issue. The permanent
 [v0.24.14 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.14.md)
-records `PASS`/`PASS` with zero open findings.
+retains that clean result and is temporarily `PENDING_RETEST` only for the
+later exact `sanitization 2.0.4` dependency delta.
 
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.13`; the current internal `0.24.14`
-TupleHash report-bearing candidate selects no crates.io publication and awaits
-green hosted GitHub and CodeQL before tag authorization.
+TupleHash candidate selects no crates.io publication. Its implementation
+review is clean, but a release-time `sanitization 2.0.4` exact-pin refresh now
+requires one focused dependency-delta retest before hosted review and tag
+authorization.
 The published
 dependency is:
 
@@ -955,7 +958,7 @@ selected set in dependency order and publishes the facade last.
   depend only on the exact pure-Rust ecosystem API they implement, in separate
   lockfiles and graphs that can never enter or be enabled by `brynja`.
 - Version `0.11.2` implements one separately selected
-  `brynja-sanitization` adapter over admitted exact `sanitization 2.0.3`. It
+  `brynja-sanitization` adapter over admitted exact `sanitization 2.0.4`. It
   uses an exact pin with default features disabled,
   never activates `zeroize`, and is not a dependency or feature of a facade,
   protocol engine, legacy engine, or FIPS module.
@@ -1045,7 +1048,7 @@ selected set in dependency order and publishes the facade last.
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
 | Future `brynja-platform-security` | Optional `no_std` protected-region contract and typed enforcement evidence | Planned at v0.126.1; never performs hidden OS effects |
 | Future `brynja-platform-security-std` | Optional Linux, Android, Windows, macOS, iOS, and BSD protected-memory providers | Planned at v0.126.2-v0.126.5; outside every default graph |
-| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published over exact `sanitization 2.0.3`; absent from facade and FIPS graphs |
+| `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published; current source exact-pins `sanitization 2.0.4`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
 | `brynja-legacy-*` engines | Complete TLS 1.2/1.1/1.0, DTLS 1.2/1.0, SSL, WTLS, PCT, and SNP compatibility with independent package policy | Boundaries exist; complete v0.180.1-v0.180.24 implementation chains are required before 1.0 |
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
@@ -1083,7 +1086,7 @@ See [Platform Support](https://github.com/valkyoth/brynja/blob/main/docs/platfor
 | Default target | `no_std` |
 | Cryptographic implementation | First-party Rust only; foreign/native cryptographic modules and wrappers are forbidden |
 | External crates | Rejected unless a numbered admission freezes an exact minimal graph; planned `base64-ng` use is encoding-only and future rustls/Tokio API dependencies remain isolated |
-| First-party companion crates | Exact `sanitization 2.0.3` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
+| First-party companion crates | Exact `sanitization 2.0.4` is reachable only through the optional adapter; future `base64-ng` admission requires default features off, no allocation for protocol use, and no cryptographic or FIPS edge |
 | Unsafe Rust | Nine exact source-hash-bound modules admit the v0.11 volatile clearer plus SHA-256/Keccak attestations, x86 SHA/AVX2 Keccak, AArch64 SHA2/SHA-512/SHA3 Keccak, RV64 Zknh inline assembly, and std detector boundaries; every other site is mechanically forbidden |
 | Default networking | None |
 | Legacy protocols in `brynja` | Impossible by package boundary |

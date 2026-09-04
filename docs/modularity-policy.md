@@ -33,7 +33,8 @@ The `brynja-sanitization` package is a downstream integration
 boundary, never a feature or dependency of `brynja`, `brynja-core`,
 `brynja-crypto`, `brynja-pki`, a modern or legacy engine, or
 `brynja-fips-module`. v0.11.1 admits exact first-party
-`sanitization 2.0.3` only for this boundary; v0.11.2 exact-pins it
+`sanitization 2.0.4` only for this boundary; v0.11.2 introduced the adapter and
+v0.24.14 refreshes its exact pin
 with default features disabled and no activated `zeroize` or other third-party
 crate. Adapter-owned wrappers bridge the contracts without violating Rust's
 orphan rules. The same protocol-neutral package serves modern and legacy

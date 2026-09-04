@@ -8,7 +8,7 @@ rust-version = "1.90"
 publish = false
 
 [dependencies]
-sanitization = { version = "=2.0.3", default-features = false }
+sanitization = { version = "=2.0.4", default-features = false }
 
 [lints.rust]
 unsafe_code = "forbid"

@@ -102,7 +102,7 @@ Safe alternatives considered and rejected for the production claim are
 ordinary assignment, `slice::fill`, `ptr::write_bytes`, and `black_box`; none
 provides the admitted volatile-store guarantee. A third-party zeroization crate
 is forbidden. The v0.11.1 review admits exact first-party
-`sanitization 2.0.3` only for the separate v0.11.2 adapter; it does not become
+`sanitization 2.0.4` only for the separate v0.11.2 adapter; it does not become
 Brynja's core guarantee.
 
 The unsafe invariant is deliberately small: the raw pointer is derived from a
@@ -148,7 +148,7 @@ reported class and fixtures retain all four comment/nested-attribute variants.
 The repository-owner retest of signed follow-up remediation commit
 `88a6c73d3b2ad055702aede3858b1e7ecc8d24aa` passed with zero open findings.
 
-The v0.11.1 review records unsafe code inside exact `sanitization 2.0.3` as
+The current v0.24.14 re-review records unsafe code inside exact `sanitization 2.0.4` as
 part of the adapter's inherited trusted computing base. Its necessity,
 invariants, Miri, emitted-code, target, and external-review evidence are
 recorded in the admission artifact. Approval applies only to the separately

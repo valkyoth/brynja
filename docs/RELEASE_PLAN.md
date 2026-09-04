@@ -3334,7 +3334,7 @@ Exit criteria:
 
 ### v0.24.14 - Complete TupleHash And TupleHashXOF
 
-Status: awaiting green CI
+Status: awaiting pentest
 
 Plan scope: Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, ordinary and hardened secret-bearing whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, complete internal sanitization, official examples, partition and collision-separation negatives, proofs and public types that cannot silently flatten a tuple into one byte string.
 
@@ -3384,6 +3384,10 @@ Exit criteria:
 
 - all four tuple instances accept the complete documented input model through
   public APIs with unambiguous ordering and no deferred XOF or streaming work;
+- the release-time `sanitization 2.0.4` exact-pin refresh has a current focused
+  dependency-delta retest, the permanent report is restored to `PASS`/`PASS`,
+  and the adapter still resolves no feature or transitive dependency while
+  remaining outside every facade, engine, default, and FIPS boundary;
 - `v0.24.14 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.24.15 - Complete ParallelHash And ParallelHashXOF

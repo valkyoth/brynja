@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF report-bearing candidate awaits green GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF implementation review is clean and the exact `sanitization 2.0.4` dependency refresh awaits focused retest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -67,9 +67,12 @@ clears the exact embedded reader source, removes partial-byte local staging,
 arms the item-open latch before writer return, keeps remaining and encoded
 lengths in clearing storage, closes backend strength at the type level, and
 binds the production reservation path into Kani and compiler evidence.
-The final independent retest found no Critical, High, or Medium issue. The
-[permanent report](../security/pentest/v0.24.14.md) records `PASS`/`PASS` with
-zero open findings; hosted GitHub and CodeQL remain before tag authorization.
+The final independent TupleHash retest found no Critical, High, or Medium
+issue. The [permanent report](../security/pentest/v0.24.14.md) retains that
+clean result and is temporarily `PENDING_RETEST` only because the later live
+release gate required the exact `sanitization 2.0.4` dependency refresh. A
+focused dependency-delta retest remains before hosted review and tag
+authorization.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
@@ -918,7 +921,7 @@ Version 0.11.0 adds the owned-memory zeroization primitive:
 
 Version 0.11.1 completes the sanitization adapter admission review:
 
-- the latest stable first-party release is pinned as `sanitization 2.0.3`,
+- the latest stable first-party release is pinned as `sanitization 2.0.4`,
   source commit `ffcb211cd931c6966b2e767ce5edffa4b47c4f07`, package SHA-256
   `75e43f2762b31232062e8ba7bfbdfcbd33c80c43bf7a306a7e195c3c4f734e0f`,
   Rust 1.90, and MIT OR Apache-2.0;
@@ -948,7 +951,7 @@ Version 0.11.1 completes the sanitization adapter admission review:
 Version 0.11.2 implements the admitted optional adapter:
 
 - `brynja-sanitization 0.1.0` is a separately publishable `no_std` package
-  with exact `sanitization 2.0.3`, default features disabled, and no resolved
+  with exact `sanitization 2.0.4`, default features disabled, and no resolved
   transitive package;
 - `SanitizedSecret<N>` owns upstream fixed storage behind a non-copyable,
   non-converting wrapper with redacted `Debug`, closure-scoped inspection,
@@ -1304,7 +1307,7 @@ carry machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
-`brynja-sanitization` now uses exact `sanitization 2.0.3` only under the frozen
+`brynja-sanitization` now uses exact `sanitization 2.0.4` only under the frozen
 adapter boundary. Any source, package, feature, dependency, unsafe, advisory,
 target, guarantee, ownership, engine, facade, or FIPS-boundary drift forces
 re-review and fail-closed withholding or removal.

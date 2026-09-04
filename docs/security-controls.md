@@ -1,10 +1,10 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF report-bearing candidate awaits green GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF implementation review is clean and the exact `sanitization 2.0.4` dependency refresh awaits focused retest
 
 | Control | Foundation enforcement |
 | --- | --- |
-| Dependency surface | Exactly one external package is admitted: exact first-party `sanitization 2.0.3`, reachable only through separately selected `brynja-sanitization`, with package/source hashes, no default or selected feature, no transitive package, inherited unsafe inventory, online freshness, and broken-fixture enforcement; every other external package is rejected |
+| Dependency surface | Exactly one external package is admitted: exact first-party `sanitization 2.0.4`, reachable only through separately selected `brynja-sanitization`, with package/source hashes, no default or selected feature, no transitive package, inherited unsafe inventory, online freshness, and broken-fixture enforcement; every other external package is rejected |
 | First-party Rust cryptography | The permanent golden rule requires every Brynja primitive, construction, key operation, protocol cryptographic operation, CPU backend and FIPS service to be implemented from first-party Rust source; policy rejects foreign/native source and binary artifacts, build scripts, build dependencies, Cargo native-link metadata, foreign ABIs, native link attributes and included native binaries, with nine broken fixtures; separately gated Rust intrinsics or inline assembly remain Brynja-owned symbols, never external modules |
 | CI tool provenance | Exact versions and independently pinned `.crate` SHA-256 hashes are verified before installing security and SBOM tools |
 | Unsafe Rust | Workspace lint denies it by default; a machine inventory permits exactly nine source-hash-bound modules for the private volatile clearer, SHA-256 and Keccak attestations, x86_64 SHA and AVX2 Keccak, combined AArch64 SHA2/SHA-512 and SHA3 Keccak, RV64 Zknh, and opt-in std detector boundaries, with exact block/item/proof/intrinsic/assembly counts; every other allowance, unsafe block/item, assembly, or FFI site is rejected |

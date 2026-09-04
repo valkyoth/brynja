@@ -26,7 +26,7 @@
 # brynja-sanitization
 
 `brynja-sanitization 0.1.1` is a separately selected, `no_std`, downstream
-secret-storage adapter. It wraps exact `sanitization 2.0.3` with default
+secret-storage adapter. It wraps exact `sanitization 2.0.4` with default
 features disabled and no activated transitive package. It is not enabled by
 `brynja`, any TLS or DTLS engine, any default or all-features build, or the
 future FIPS validated-module closure.

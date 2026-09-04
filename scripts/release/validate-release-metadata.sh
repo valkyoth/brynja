@@ -214,7 +214,7 @@ test -x scripts/sanitization/check-sanitization-admission.py
 test -x scripts/sanitization/test-sanitization-admission.py
 test -x scripts/sanitization/check-sanitization-candidate.sh
 test -f scripts/sanitization/sanitization_admission.py
-test -s security/dependency-admissions/sanitization-2.0.3.toml
+test -s security/dependency-admissions/sanitization-2.0.4.toml
 test -s docs/sanitization-admission-review.md
 test -s assurance/sanitization-admission/Cargo.toml
 test -s assurance/sanitization-admission/Cargo.lock

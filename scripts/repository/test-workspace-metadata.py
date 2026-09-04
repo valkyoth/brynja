@@ -247,7 +247,7 @@ def test_dependency_contracts(baseline: dict) -> None:
     require_rejection(
         wrong_admitted_pin,
         "all-features",
-        "must pin sanitization to =2.0.3",
+        "must pin sanitization to =2.0.4",
         "a floating sanitization adapter pin",
     )
 
@@ -274,7 +274,7 @@ def test_dependency_contracts(baseline: dict) -> None:
     )
 
     version_drift = copy.deepcopy(baseline)
-    package(version_drift, "sanitization")["version"] = "2.0.4"
+    package(version_drift, "sanitization")["version"] = "2.0.3"
     require_rejection(
         version_drift,
         "all-features",

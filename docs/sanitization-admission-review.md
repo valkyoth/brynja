@@ -2,42 +2,45 @@
 
 Status: admitted only for conditional implementation of the separately selected
 `brynja-sanitization` package at v0.11.2; no Brynja production dependency graph
-changes at v0.11.1.
+edge outside that adapter is authorized. The exact dependency was re-reviewed
+and advanced at v0.24.14.
 
-Checked: 2026-08-09.
+Checked: 2026-09-04.
 
 ## Decision
 
-Brynja admits the crates.io release `sanitization 2.0.3` as the sole candidate
+Brynja admits the crates.io release `sanitization 2.0.4` as the sole candidate
 for a protocol-neutral downstream adapter. The future adapter must exact-pin
 that release, disable default features, select no features, and use
 adapter-owned wrapper types. One adapter will serve modern and legacy callers;
 `brynja-legacy-sanitization` is rejected because secret-memory destruction has
 no irreducible legacy-only semantics.
 
-This decision does not add `sanitization` to the current workspace, authorize
-another unsafe block in Brynja, or replace the mandatory v0.11.0
-`brynja-core` destruction primitive. It only permits v0.11.2 to implement an
-explicitly selected storage/lifecycle adapter if every frozen condition below
-can be enforced.
+The v0.24.14 re-review advances only the adapter's exact dependency from 2.0.3
+to 2.0.4. A source comparison confirms that the no-feature selected TCB files
+`src/owned.rs` and `src/wipe_backend.rs` are byte-identical between those
+archives. The upstream patch changes optional mapped-memory protection and
+assurance tooling which remain disabled by this admission. This decision does
+not authorize another unsafe block in Brynja or replace the mandatory
+`brynja-core` destruction primitive.
 
 | Property | Reviewed value |
 | --- | --- |
-| Package | `sanitization 2.0.3` from crates.io |
-| Latest stable check | `2.0.3` on 2026-08-09 |
-| Release source commit | `ffcb211cd931c6966b2e767ce5edffa4b47c4f07` |
-| Externally reviewed code commit | `d9578b20a5e0ad9c9226648773409466f662e3b6` |
-| Package SHA-256 | `75e43f2762b31232062e8ba7bfbdfcbd33c80c43bf7a306a7e195c3c4f734e0f` |
+| Package | `sanitization 2.0.4` from crates.io |
+| Latest stable check | `2.0.4` on 2026-09-04 |
+| Release source commit | `0f95eec55aa16562be9dc3a08ee60a043d7a0da8` |
+| Externally reviewed code commit | `d5a7c9e46889e1b0a2e0ad7e7651219aa07bbc2e` |
+| Package SHA-256 | `f6c00771cb2e89cc08c486588aa5b462190634313f8885fbdc375de33ee84612` |
 | License | MIT OR Apache-2.0 |
 | Rust / edition | Rust 1.90, edition 2021 |
 | Runtime model | `no_std`, no allocator, no build script, no native link |
 | Selected Cargo features | none; default features disabled |
-| Activated runtime graph | only `sanitization 2.0.3`; no transitive package |
-| Advisory result | no RustSec advisory found on 2026-08-09 |
-| Upstream independent pentest | PASS, 2026-07-21, zero open findings |
+| Activated runtime graph | only `sanitization 2.0.4`; no transitive package |
+| Advisory result | no RustSec advisory found on 2026-09-04 |
+| Upstream independent pentest | PASS, 2026-09-04, zero open findings |
 
 The machine-readable authority for these values is
-`security/dependency-admissions/sanitization-2.0.3.toml`. The package hash is
+`security/dependency-admissions/sanitization-2.0.4.toml`. The package hash is
 both the crates.io index checksum and the SHA-256 of the downloaded `.crate`
 archive. Its `.cargo_vcs_info.json` binds the archive to the release source
 commit above.
@@ -47,7 +50,7 @@ commit above.
 The admitted manifest form is exactly:
 
 ```toml
-sanitization = { version = "=2.0.3", default-features = false }
+sanitization = { version = "=2.0.4", default-features = false }
 ```
 
 Cargo metadata and the isolated lockfile resolve one runtime package and no
@@ -100,9 +103,10 @@ Brynja engine remain governed by `brynja-core`'s v0.11.0 owner and destruction
 contract.
 
 Upstream evidence includes MIR/LLVM IR/assembly inspection, Miri, bounded Kani
-harnesses, native tests, target-specific evidence, and the independent 2.0.3
-pentest. Those are useful inputs, not proof of all compilers, runtimes, targets,
-hardware behavior, or Brynja integration.
+harnesses, native tests, target-specific evidence, and the independent 2.0.4
+pentest. The 2.0.4 upstream review covers the full 2.0.3-to-2.0.4 delta and has
+no open finding. Those are useful inputs, not proof of all compilers, runtimes,
+targets, hardware behavior, or Brynja integration.
 
 ## Frozen Adapter Boundary
 

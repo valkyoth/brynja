@@ -1,7 +1,7 @@
 # Brynja 0.24.14 Release Notes
 
-Status: PASS/PASS pentest report committed and local release reconciliation
-complete; hosted GitHub checks, CodeQL, and signed tag pending
+Status: TupleHash PASS/PASS review retained; focused `sanitization 2.0.4`
+dependency-delta retest required before release reconciliation may resume
 
 ## Summary
 
@@ -73,6 +73,12 @@ validated, and no accelerated backend is admitted.
   `nightly-2026-09-04` at exact Rust revision
   `a69a63265cfd9e006d43137f98301b8d274ad4c9`; the refreshed tools rerun the
   required dynamic-analysis scope without changing production Rust.
+- The same fail-closed gate detected first-party `sanitization 2.0.4`. The
+  optional adapter now exact-pins 2.0.4 with all upstream features disabled;
+  its selected `owned.rs` and `wipe_backend.rs` TCB files are byte-identical to
+  2.0.3, and the exact archive, source commit, upstream PASS report, lock graph,
+  package boundary, and online freshness are re-admitted. Because this changes
+  a production dependency identity, a focused Brynja delta retest is mandatory.
 
 ## Pentest Remediation
 
@@ -150,8 +156,9 @@ these evidence inputs are not a claim of independent verification.
 Version 0.24.14 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates for crates.io publication.
 The new construction and hardened ownership boundary required an exceptional
-pentest. Its initial and retest findings are remediated, the final independent
-retest is green, and the permanent report records `PASS`/`PASS` with zero open
-findings. After the report-bearing candidate is
-green on GitHub and CodeQL, explicit repository-owner authorization may create
-the signed immutable `v0.24.14` tag.
+pentest. Its initial and retest findings are remediated, and the exact
+TupleHash candidate received a final clean review. The later release-time
+freshness check required an exact `sanitization 2.0.4` dependency update.
+Tagging remains blocked until a focused independent retest covers that delta,
+the permanent report returns to `PASS`/`PASS`, and the resulting report-bearing
+candidate is green on GitHub and CodeQL.

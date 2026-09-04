@@ -62,4 +62,4 @@ brynja-legacy-ssl3 = { path = "crates/brynja-legacy-ssl3", version = "=0.1.0" }
 brynja-legacy-tls10 = { path = "crates/brynja-legacy-tls10", version = "=0.1.0" }
 brynja-legacy-tls11 = { path = "crates/brynja-legacy-tls11", version = "=0.1.0" }
 brynja-legacy-wtls = { path = "crates/brynja-legacy-wtls", version = "=0.1.0" }
-sanitization = { version = "=2.0.3", default-features = false }
+sanitization = { version = "=2.0.4", default-features = false }

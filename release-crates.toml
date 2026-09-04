@@ -130,9 +130,9 @@ reason = "Retain published 0.1.8 unchanged; QUIC-TLS remains unimplemented."
 [crates."brynja-sanitization"]
 previous_version = "0.1.1"
 version = "0.1.1"
-change = "metadata"
+change = "dependency"
 publish = false
-reason = "Retain published 0.1.1 unchanged and isolated from facades, engines, defaults, and FIPS boundaries."
+reason = "Retain published 0.1.1 while source advances its exact first-party sanitization pin to reviewed 2.0.4; keep the adapter isolated from facades, engines, defaults, and FIPS boundaries."
 
 [crates."brynja-dtls"]
 previous_version = "0.1.8"

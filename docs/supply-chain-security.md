@@ -17,7 +17,7 @@ checks live in `first-party-rust-cryptography.md`.
 
 The only admitted external production dependency is first-party: the separate
 downstream `brynja-sanitization` adapter exact-pins reviewed
-`sanitization 2.0.3` with default features disabled. Its
+`sanitization 2.0.4` with default features disabled. Its
 activated graph must contain no `zeroize`, derive, serde, subtle, or other
 third-party crate, and no
 Brynja facade, engine, default feature, or FIPS module may depend on it. Version,

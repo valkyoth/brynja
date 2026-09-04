@@ -196,7 +196,8 @@ claim without changing the module.
 
 `brynja-sanitization` is a separately selected downstream adapter,
 not a feature or dependency of any Brynja facade or protocol engine. The
-v0.11.1 review admits exact first-party `sanitization 2.0.3` for this boundary
+v0.11.1 initially admitted exact first-party `sanitization 2.0.3` for this boundary;
+the v0.24.14 freshness re-review advances the current exact pin to 2.0.4
 only; implementation at v0.11.2 uses an exact pin, disables default
 features, and rejects any activated `zeroize` or other third-party dependency.
 Adapter-owned wrappers avoid orphan-rule workarounds. One protocol-neutral

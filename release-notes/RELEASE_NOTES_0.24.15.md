@@ -13,9 +13,12 @@ their typed results only in deterministic standard order.
 
 The separate zero-third-party-dependency `brynja-hash-parallel-std` package automates the
 same jobs with bounded native threads, an explicit maximum-leaf work budget,
-cooperative cancellation, recoverable OS thread-launch failure, worker-panic
-containment, and fail-closed output. It is absent from Brynja's default graph,
-main facade, bare-metal path, and FIPS boundary.
+one active operation per executor, cooperative cancellation, recoverable OS
+thread-launch failure, worker-panic containment, and fail-closed output. It is
+absent from Brynja's default graph, main facade, bare-metal path, and FIPS
+boundary. Applications must share one executor wherever one aggregate resource
+budget is required; independently constructed executors have independent
+budgets.
 
 This completes the four ParallelHash identities. The wider SP 800-185 family
 remains In progress until portable combined acceptance at v0.24.16 and final
@@ -38,10 +41,11 @@ verification or FIPS 140-3 validation is claimed.
   missing, repeated, reordered, cross-plan, differently sized, or differently
   parameterized results and then fail closed permanently.
 - Provide a separate native executor with positive worker and maximum-leaf
-  limits, worker-sized reusable storage, pre-allocation cancellation, fallible
-  scoped OS thread creation, deterministic join/merge, worker-panic
-  containment, byte and arbitrary-bit API parity, complete temporary leaf
-  clearing, and unchanged output on pre-output failure.
+  limits, an executor-wide single-operation permit, worker-sized reusable
+  storage, pre-allocation cancellation, fallible scoped OS thread creation,
+  deterministic join/merge, worker-panic containment, byte and arbitrary-bit
+  API parity, complete temporary leaf clearing, and unchanged output on
+  pre-output failure.
 - Reexport the portable family from `brynja-crypto` and `brynja`; do not
   reexport or otherwise activate the `std` executor.
 
@@ -61,6 +65,9 @@ verification or FIPS 140-3 validation is claimed.
   successfully started worker is joined; leaf-budget exhaustion is rejected
   before allocation or thread creation, and temporary digest storage never
   exceeds the configured concurrent worker count.
+- Holding the executor's operation permit makes a simultaneous call fail
+  immediately with `ResourceExhausted`; a poisoned permit fails closed, and
+  source policy requires all eight public executor methods to acquire it.
 - Any error after sequential or scheduled state mutation permanently
   quarantines and clears that state; callers cannot retry a partially advanced
   construction.

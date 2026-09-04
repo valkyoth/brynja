@@ -10,7 +10,7 @@ REVIEWED_HASHES = {
     "crates/brynja-hash-parallel/src/output.rs": "706cf40b23ba6484242f2a70dc1d14407b811963f089d18360e6634502d13d6a",
     "crates/brynja-hash-parallel/src/scheduled.rs": "2bcc6a55fe22fbdcb523bf7076ff99f56a53371b7b5366fca0f065e9bcf29fdc",
     "crates/brynja-hash-parallel/src/xof.rs": "1c5db80504b5138bc9e5ba4ca46116536eb4c479352ee0b280a2a3e08f861300",
-    "crates/brynja-hash-parallel-std/src/lib.rs": "1437818171357e4a40b1e2d3863ab1d505ac0da6d12144e5bd51250904f38ff3",
+    "crates/brynja-hash-parallel-std/src/lib.rs": "4aa4228c3928b4c7a92716baae6dd201e74f0acd6c66a89b40d10dd3c283cbc1",
     "crates/brynja-hash-parallel-std/src/worker.rs": "ed156fea423e69ca3aa2eea683bc205623d21b31f56fe4179ec211b78b82d30a",
     "crates/brynja-hash-parallel/tests/api.rs": "27ed2224cb7db157628141f22f35869d77aadfd212f9f54cf7c5454cbee36816",
     "crates/brynja-hash-parallel/tests/official_vectors.rs": "b55bf95cca6c5c669d8d6a656a9bb0847db7be7f9ac84736d81d26f695d74639",

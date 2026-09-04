@@ -31,7 +31,9 @@ contains no cryptographic primitive or third-party dependency. Temporary leaf
 storage is limited to the smaller of the admitted leaf count and worker count;
 OS thread-launch failures, worker panics, cancellation, allocation failure and
 work-budget exhaustion are typed failures that release no output. Completion
-order never controls merge order.
+order never controls merge order. One executor permits exactly one operation
+at a time, so simultaneous calls cannot multiply its configured thread budget;
+a competing call fails immediately with `ResourceExhausted`.
 
 ```rust
 let executor = brynja_hash_parallel_std::ParallelHashExecutor::new(
@@ -41,9 +43,11 @@ let executor = brynja_hash_parallel_std::ParallelHashExecutor::new(
 # Ok::<(), brynja_hash_parallel_std::ParallelHashExecutorError>(())
 ```
 
-Callers must choose both limits as trusted deployment policy. Cancellation is
-cooperative after workers start and is checked before work admission or
-allocation.
+Callers must choose both limits as trusted deployment policy and share that
+executor across the work governed by those limits. Constructing a separate
+executor per request creates separate resource budgets and is the caller's
+responsibility. Cancellation is cooperative after workers start and is checked
+before work admission or allocation.
 
 It is intentionally absent from `brynja`, default features, bare-metal builds,
 and any FIPS module boundary.

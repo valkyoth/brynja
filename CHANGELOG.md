@@ -7,6 +7,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Enforce one active operation per `brynja-hash-parallel-std` executor so
+  concurrent callers cannot multiply its configured native-thread budget.
+  Contention and poisoned operation permits fail closed, and regression policy
+  binds permit acquisition into all eight executor entry points.
 - Record the complete v0.24.14 exceptional assessment and final retest as
   `PASS`/`PASS` with zero open findings. The permanent report binds the signed
   v0.24.13 baseline, all three exact remediation candidates, and the unchanged
@@ -46,11 +50,12 @@ Keep a Changelog and Semantic Versioning.
   incremental XOF output, hardened ownership, and indexed ordered caller
   scheduling share one cSHAKE construction.
 - Add the separate zero-dependency `brynja-hash-parallel-std` bounded native
-  executor with explicit worker/leaf budgets, worker-sized reusable storage,
-  pre-allocation cancellation, fallible scoped thread creation, deterministic
-  joining, worker-panic containment, and no default, facade, bare-metal, or FIPS edge. Bind all
-  twelve official NIST fixed/XOF examples and portable/scheduled/threaded
-  equivalence without claiming independent review or FIPS validation.
+  executor with explicit worker/leaf budgets, one active operation per
+  executor, worker-sized reusable storage, pre-allocation cancellation,
+  fallible scoped thread creation, deterministic joining, worker-panic
+  containment, and no default, facade, bare-metal, or FIPS edge. Bind all twelve
+  official NIST fixed/XOF examples and portable/scheduled/threaded equivalence
+  without claiming independent review or FIPS validation.
 
 - Implement complete TupleHash128, TupleHash256, TupleHashXOF128, and
   TupleHashXOF256 in the new allocation-free `no_std` `brynja-hash-tuple`

@@ -142,12 +142,22 @@ def validate(root: Path) -> None:
         "thread::scope", "thread::Builder::new().spawn_scoped",
         "trait ThreadSpawner", "CancellationToken", "WorkerPanicked",
         "max_leaves", "WorkLimitExceeded", "let slots = leaves.min(workers)",
+        "operation_gate: Mutex<()>", "TryLockError::WouldBlock",
+        "TryLockError::Poisoned", "fn enter_operation",
         "struct LeafStorage", "clear_owned_region(leaf)", "join_worker(handle)",
         "failure.map_or(Ok(()), Err)",
         "pub fn parallel_hash128_bits", "pub fn parallel_hash256_bits",
         "pub fn parallel_hash_xof128_bits", "pub fn parallel_hash_xof256_bits",
     ):
         require(std_source, token, "native executor")
+    std_library = loaded[STD / "src/lib.rs"]
+    if std_library.count("let _operation = self.enter_operation()?;") != 8:
+        fail("every native executor operation must hold the shared operation permit")
+    for token in (
+        "all_public_operations_reject_concurrent_use_without_waiting",
+        "poisoned_operation_gate_fails_closed",
+    ):
+        require(std_library, token, "executor operation-permit tests")
     for forbidden in ("HardenedCshake", "Keccak", "core::arch", 'extern "C"'):
         if forbidden in std_source:
             fail(f"std adapter contains cryptographic or native backend code: {forbidden}")

@@ -897,15 +897,18 @@ the LLVM/assembly copy matcher retained false-negative paths. The candidate now
 clears all source-owned metadata before returning output or a borrowing reader,
 tests fixed and XOF completion across ordinary and hardened owners, self-tests
 the corrected LLVM matcher, and rejects every memcpy in isolated external
-finalization functions. Independent retest of the exact candidate is pending.
+finalization functions. Independent retest of the exact candidate found no
+Critical, High, or Medium issue; the permanent
+[v0.24.14 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.14.md)
+records `PASS`/`PASS` with zero open findings.
 
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.13`; the current internal `0.24.14`
-TupleHash remediation candidate selects no crates.io publication and awaits
-independent retest.
+TupleHash report-bearing candidate selects no crates.io publication and awaits
+green hosted GitHub and CodeQL before tag authorization.
 The published
 dependency is:
 

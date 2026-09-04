@@ -7,6 +7,10 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Record the complete v0.24.14 exceptional assessment and final retest as
+  `PASS`/`PASS` with zero open findings. The permanent report binds the signed
+  v0.24.13 baseline, all three exact remediation candidates, and the unchanged
+  scheduled v0.20.0-to-v0.25.0 cumulative assessment boundary.
 - Record the complete v0.24.13 exceptional assessment and exact final-candidate
   retest as `PASS`/`PASS` with zero open findings. The permanent report binds
   both remediation commits, all five findings or observations, and the

@@ -3251,7 +3251,7 @@ Exit criteria:
 
 ### v0.24.12 - SP 800-185 Encoding Foundation And Complete cSHAKE
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Bind the current final SP 800-185 authority and its announced revision state, implement exact left_encode, right_encode, encode_string and bytepad with checked bit-length arithmetic and canonical arbitrary-bit-string inputs, then complete cSHAKE128 and cSHAKE256 with N and S customization, empty-N-and-S SHAKE equivalence, fixed and XOF output, ordinary and hardened secret-bearing one-shot, streaming and incremental squeeze APIs over the v0.24.10 owner, exact domain separation, complete internal sanitization, official examples, proofs and no raw permutation exposure.
 
@@ -3291,7 +3291,7 @@ Exit criteria:
 
 ### v0.24.13 - Complete KMAC And KMACXOF
 
-Status: awaiting pentest
+Status: released
 
 Plan scope: Implement KMAC128, KMAC256, KMACXOF128 and KMACXOF256 once in `brynja-mac-kmac` over the exact cSHAKE owner, covering the complete standards-valid key, message, customization and output domains through clearly separated conformance and strength-enforcing constructors, secret-owned sponge and encoding state, hardened cleanup, affine finalization, constant-time tag verification, official examples, misuse tests, proofs, and non-approved indicators without confusing a MAC, PRF, XOF, or unkeyed digest.
 
@@ -3334,7 +3334,7 @@ Exit criteria:
 
 ### v0.24.14 - Complete TupleHash And TupleHashXOF
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, ordinary and hardened secret-bearing whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, complete internal sanitization, official examples, partition and collision-separation negatives, proofs and public types that cannot silently flatten a tuple into one byte string.
 
@@ -3365,20 +3365,20 @@ Verification:
   byte-backed remaining-length cleanup, clearing encoded-length ownership, and
   the item-open latch against `mem::forget`/`ManuallyDrop` into source,
   mutation, compiler, Miri, sanitizer, and Kani evidence; the initial pentest
-  findings are remediated and the exact candidate requires independent retest;
+  findings are remediated and the exact candidate passed independent retest;
 - retain the secret-bearing cSHAKE owner in its original TupleHash allocation,
   expose only lifetime-bound squeeze readers, finalize fixed output through a
   mutable borrow, and reject owner-sized allocas or copies in both internal and
   package-external development and optimized compiler artifacts; the later
   High owner-copy and Medium evidence-coverage retest findings are remediated
-  and require another exact-candidate retest.
+  and passed another exact-candidate retest.
 - clear the pending byte, bit width, tuple count, remaining-item length, and
   failure latch before successful fixed finalization returns or an XOF reader
   escapes; test ordinary and hardened fixed/XOF states through the public API;
   self-test the LLVM owner-copy matcher with positive and negative fixtures,
   and reject every LLVM or assembly memcpy in package-external functions that
   perform finalization only. The subsequent two Medium metadata-remanence and
-  assurance false-negative findings require exact-candidate retest.
+  assurance false-negative findings passed exact-candidate retest.
 
 Exit criteria:
 

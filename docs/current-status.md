@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF pentest remediation candidate awaits independent retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF report-bearing candidate awaits green GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -67,7 +67,9 @@ clears the exact embedded reader source, removes partial-byte local staging,
 arms the item-open latch before writer return, keeps remaining and encoded
 lengths in clearing storage, closes backend strength at the type level, and
 binds the production reservation path into Kani and compiler evidence.
-Independent retest remains required.
+The final independent retest found no Critical, High, or Medium issue. The
+[permanent report](../security/pentest/v0.24.14.md) records `PASS`/`PASS` with
+zero open findings; hosted GitHub and CodeQL remain before tag authorization.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

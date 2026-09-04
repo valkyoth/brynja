@@ -1,7 +1,7 @@
 # Brynja 0.24.14 Release Notes
 
-Status: implementation and pentest remediation complete; independent retest,
-final release reconciliation, hosted GitHub checks, CodeQL, and signed tag pending
+Status: PASS/PASS pentest report committed and local release reconciliation
+complete; hosted GitHub checks, CodeQL, and signed tag pending
 
 ## Summary
 
@@ -109,7 +109,7 @@ the production proof path, matcher self-tests, and every compiler-evidence
 edge. Development and optimized MIR, LLVM IR, and assembly checks bind the
 exact finalization functions and isolated external consumer boundary to the
 no-copy rule and subsequent owner wipe. Independent retest of the exact
-remediation candidate is required before the release status can become PASS.
+remediation candidate passed with no Critical, High, or Medium finding.
 
 ## Security And Residual Limits
 
@@ -146,7 +146,8 @@ these evidence inputs are not a claim of independent verification.
 Version 0.24.14 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates for crates.io publication.
 The new construction and hardened ownership boundary required an exceptional
-pentest. Its initial and retest findings are remediated, but independent retest remains mandatory
-before release reconciliation. After the retested report-bearing candidate is
+pentest. Its initial and retest findings are remediated, the final independent
+retest is green, and the permanent report records `PASS`/`PASS` with zero open
+findings. After the report-bearing candidate is
 green on GitHub and CodeQL, explicit repository-owner authorization may create
 the signed immutable `v0.24.14` tag.

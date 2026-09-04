@@ -900,17 +900,18 @@ the corrected LLVM matcher, and rejects every memcpy in isolated external
 finalization functions. Independent retest of the exact TupleHash candidate
 found no Critical, High, or Medium issue. The permanent
 [v0.24.14 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.14.md)
-retains that clean result and is temporarily `PENDING_RETEST` only for the
-later exact `sanitization 2.0.4` dependency delta.
+records `PASS`/`PASS` with zero open findings after the focused retest of the
+later exact `sanitization 2.0.4` dependency delta also found no Critical,
+High, or Medium issue.
 
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.13`; the current internal `0.24.14`
-TupleHash candidate selects no crates.io publication. Its implementation
-review is clean, but a release-time `sanitization 2.0.4` exact-pin refresh now
-requires one focused dependency-delta retest before hosted review and tag
+TupleHash candidate selects no crates.io publication. Its implementation and
+focused `sanitization 2.0.4` dependency-delta reviews are clean; the
+report-bearing candidate awaits hosted GitHub and CodeQL review before tag
 authorization.
 The published
 dependency is:

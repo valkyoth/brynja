@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF implementation review is clean and the exact `sanitization 2.0.4` dependency refresh awaits focused retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF and exact `sanitization 2.0.4` dependency-delta reviews are clean, with the report-bearing candidate awaiting hosted GitHub and CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -68,11 +68,11 @@ arms the item-open latch before writer return, keeps remaining and encoded
 lengths in clearing storage, closes backend strength at the type level, and
 binds the production reservation path into Kani and compiler evidence.
 The final independent TupleHash retest found no Critical, High, or Medium
-issue. The [permanent report](../security/pentest/v0.24.14.md) retains that
-clean result and is temporarily `PENDING_RETEST` only because the later live
-release gate required the exact `sanitization 2.0.4` dependency refresh. A
-focused dependency-delta retest remains before hosted review and tag
-authorization.
+issue. The later focused retest of the exact `sanitization 2.0.4` dependency
+delta reached the same conclusion. The
+[permanent report](../security/pentest/v0.24.14.md) records `PASS`/`PASS` with
+zero open findings; the resulting report-bearing candidate awaits hosted
+GitHub and CodeQL before tag authorization.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

@@ -1,6 +1,6 @@
 # Security Controls
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF implementation review is clean and the exact `sanitization 2.0.4` dependency refresh awaits focused retest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF and exact `sanitization 2.0.4` dependency-delta reviews are clean, with the report-bearing candidate awaiting hosted GitHub and CodeQL
 
 | Control | Foundation enforcement |
 | --- | --- |

@@ -98,7 +98,8 @@ Keep a Changelog and Semantic Versioning.
   remain disabled, the selected `owned.rs` and `wipe_backend.rs` TCB files are
   byte-identical to 2.0.3, the package still resolves no transitive dependency,
   and the adapter remains outside every facade, engine, default, and FIPS
-  boundary. A focused Brynja dependency-delta retest is required before tag.
+  boundary. The focused Brynja dependency-delta retest passed with no Critical,
+  High, or Medium finding, restoring the report to `PASS`/`PASS`.
 - Refresh the Miri and Rust sanitizer pin to the latest available
   `nightly-2026-09-04` at exact Rust revision
   `a69a63265cfd9e006d43137f98301b8d274ad4c9` after the v0.24.14 live pre-tag

@@ -1,7 +1,7 @@
 # Brynja 0.24.14 Release Notes
 
-Status: TupleHash PASS/PASS review retained; focused `sanitization 2.0.4`
-dependency-delta retest required before release reconciliation may resume
+Status: PASS/PASS with zero open findings; awaiting green hosted GitHub and
+CodeQL before tag authorization
 
 ## Summary
 
@@ -77,8 +77,9 @@ validated, and no accelerated backend is admitted.
   optional adapter now exact-pins 2.0.4 with all upstream features disabled;
   its selected `owned.rs` and `wipe_backend.rs` TCB files are byte-identical to
   2.0.3, and the exact archive, source commit, upstream PASS report, lock graph,
-  package boundary, and online freshness are re-admitted. Because this changes
-  a production dependency identity, a focused Brynja delta retest is mandatory.
+  package boundary, and online freshness are re-admitted. The required focused
+  Brynja dependency-delta retest passed with no Critical, High, or Medium
+  finding.
 
 ## Pentest Remediation
 
@@ -158,7 +159,8 @@ v0.20.0-to-v0.25.0 range and selects zero crates for crates.io publication.
 The new construction and hardened ownership boundary required an exceptional
 pentest. Its initial and retest findings are remediated, and the exact
 TupleHash candidate received a final clean review. The later release-time
-freshness check required an exact `sanitization 2.0.4` dependency update.
-Tagging remains blocked until a focused independent retest covers that delta,
-the permanent report returns to `PASS`/`PASS`, and the resulting report-bearing
-candidate is green on GitHub and CodeQL.
+freshness check required an exact `sanitization 2.0.4` dependency update; the
+focused independent retest of that delta also passed. The permanent report is
+`PASS`/`PASS` with zero open findings. Tagging remains blocked only until this
+report-bearing candidate is green on GitHub and CodeQL and the repository
+owner explicitly authorizes the tag.

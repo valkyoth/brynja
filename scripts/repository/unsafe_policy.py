@@ -28,7 +28,7 @@ ALLOWED = {
         "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619", 8, 2, 8,
     ),
     Path("crates/brynja-crypto-cpu/src/keccak.rs"): (
-        "faaa0fb943f8a518b4e45797da4fc01382450626e56f6c9a81eddfebcfdd9c31", 0, 1, 0,
+        "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a", 0, 1, 0,
     ),
     Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs"): (
         "8f917e7ff784bb75646c526914de27e3b4eb8b15cc82b8a471edc0af1221d5b3", 3, 1, 3,

@@ -288,6 +288,7 @@ mod tests {
         );
     }
 
+    #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
     #[test]
     fn supported_candidate_matches_portable_permutation_corpus() {
         let Some(backend) = supported_backend() else {
@@ -328,6 +329,7 @@ mod tests {
         None
     }
 
+    #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
     fn reference_permute(state: &mut [u64; 25]) {
         use crate::keccak_constants::{PI_DESTINATIONS, ROTATION_OFFSETS, ROUND_CONSTANTS};
 

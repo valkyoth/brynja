@@ -175,7 +175,7 @@ sha256 = "3643e358f27bc5e9f4416525a9e9f43ab26063e700e80b3cb91da44bdddc5f6f"
 package = "brynja-crypto-cpu"
 path = "src/keccak.rs"
 status = "safe-session-and-attestation-boundary"
-sha256 = "faaa0fb943f8a518b4e45797da4fc01382450626e56f6c9a81eddfebcfdd9c31"
+sha256 = "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a"
 
 [[sources]]
 package = "brynja-crypto-cpu"

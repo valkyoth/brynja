@@ -7,6 +7,9 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Keep the architecture-specific Keccak differential reference test out of
+  RISC-V test builds, where no Keccak backend exists, while preserving the
+  RISC-V Zknh SHA-2 QEMU suite and every x86_64/AArch64 Keccak test.
 - Record the complete v0.24.15 exceptional ParallelHash assessment and final
   exact-candidate retest as `PASS`/`PASS` with zero open findings. The
   permanent report retains both native-executor resource-control remediations,

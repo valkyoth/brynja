@@ -80,6 +80,9 @@ verification or FIPS 140-3 validation is claimed.
   archives, Rust 1.90.0/1.98.1 compilation, Clippy, documentation, Miri,
   sanitizer, proof, mutation, and independent differential evidence must pass
   before the report-bearing release commit.
+- Cross-target QEMU tests retain the complete RISC-V Zknh SHA-2 suite without
+  compiling the x86_64/AArch64-only Keccak reference corpus on an architecture
+  where no Keccak backend exists; host and AArch64 Keccak evidence is unchanged.
 
 ## Security And Residual Limits
 

@@ -39,6 +39,18 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement complete ParallelHash128, ParallelHash256, ParallelHashXOF128,
+  and ParallelHashXOF256 in the allocation-free `no_std`
+  `brynja-hash-parallel` leaf. Caller workspace length selects exact `B`;
+  streaming, empty/partial leaves, arbitrary-bit input/output, fixed and
+  incremental XOF output, hardened ownership, and indexed ordered caller
+  scheduling share one cSHAKE construction.
+- Add the separate zero-dependency `brynja-hash-parallel-std` bounded native
+  executor with cooperative cancellation, deterministic joining, worker-panic
+  containment, and no default, facade, bare-metal, or FIPS edge. Bind all
+  twelve official NIST fixed/XOF examples and portable/scheduled/threaded
+  equivalence without claiming independent review or FIPS validation.
+
 - Implement complete TupleHash128, TupleHash256, TupleHashXOF128, and
   TupleHashXOF256 in the new allocation-free `no_std` `brynja-hash-tuple`
   leaf. Whole and affine exact-length streamed tuple items preserve order,

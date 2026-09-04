@@ -263,3 +263,20 @@ work_bound = "Absorb work is linear in checked customization, item-prefix, and i
 evidence_gap = "All four TupleHash identities have official-example, arbitrary-bit differential, package-external, exact-length streaming, cleanup-codegen, proof, Miri, sanitizer, no_std, and mutation evidence; independent cryptographic review, FIPS 140-3 validation, and the wider ParallelHash family remain incomplete."
 residual = "Outputs remain non-approved; compiler-created copies, registers, caches, dumps, swap, aborts, forced termination, physical attacks, and caller-owned copies remain outside portable crate cleanup guarantees."
 mapping_rationale = "TupleHash is separately represented so its complete structural item API can be admitted without falsely completing the broader SP 800-185 family before ParallelHash and combined acceptance."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0017"
+owner = "0.24.15"
+lifecycle = "implemented"
+revision = 1
+decision_ids = ["algorithm.parallelhash"]
+sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-185.pdf", authority_role = "current" }]
+statement = "ParallelHash128, ParallelHash256, ParallelHashXOF128, and ParallelHashXOF256 implement exact function-name separation, left-encoded B, 8B-output inner cSHAKE leaves, right-encoded n, customization, fixed-versus-XOF terminal encoding, arbitrary-bit input/output, hardened ownership, and deterministic caller-scheduled collection over the admitted FIPS 202 permutation."
+invariants = ["algorithm-admission", "canonical-encoding", "failure-atomicity", "key-lifecycle", "resource-bound", "side-channel", "validation", "work-bound"]
+target = "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED"
+positive_test = "scripts/parallelhash/check-parallelhash.py#main"
+negative_test = "scripts/parallelhash/test-parallelhash.py#main"
+work_bound = "Sequential absorb work is linear in checked input and output bits with caller-selected positive B and fixed workspace; scheduled and optional std execution use an exact checked leaf count, bounded workers, fallible allocation, and ordered linear collection."
+evidence_gap = "All four ParallelHash identities have official-example, arbitrary-bit differential, package-external, sequential-versus-scheduled, bounded native-executor, cleanup, proof, Miri, sanitizer, no_std, and mutation evidence; combined SP 800-185 acceptance, independent cryptographic review, and FIPS 140-3 validation remain incomplete."
+residual = "Outputs remain non-approved; scheduler callers own plan-to-result association and resource policy; compiler-created copies, registers, caches, dumps, swap, aborts, forced termination, physical attacks, and caller-owned copies remain outside portable crate cleanup guarantees."
+mapping_rationale = "ParallelHash is separately represented so its complete sequential and scheduling APIs can be admitted without falsely completing the broader SP 800-185 family before combined portable and backend acceptance."

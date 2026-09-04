@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "d244115fbcb0f94ef71e9a8cf1a1bd459a0f931facdc5e872377b14f50824f40",
-  "domain_policy_sha256": "6a121d3a40eb0f3070cb3f5555f0ab88f72e1358fccc9075e5cb3227cc01068b",
-  "policy_sha256": "68e03beab4ef56ab35e264d34cbd839dd68f66ea3e7e2753a5f80266614bd361",
+  "domain_policy_sha256": "628d81c1f913717cb614fbb35be166dccbaed4142b57a0ffc214dbdbfce9c1d5",
+  "policy_sha256": "6726cb4b5bd9b72183b3e1c6124d8ab4d1d8defdfb9a984a85329216d3d7f583",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3355,6 +3355,106 @@
         }
       ],
       "work_bound": "Absorb work is linear in checked customization, item-prefix, and item bits; output work is linear in the caller-selected public length, with fixed storage and no content-dependent discovery or allocation."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.parallelhash"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "All four ParallelHash identities have official-example, arbitrary-bit differential, package-external, sequential-versus-scheduled, bounded native-executor, cleanup, proof, Miri, sanitizer, no_std, and mutation evidence; combined SP 800-185 acceptance, independent cryptographic review, and FIPS 140-3 validation remain incomplete.",
+      "id": "BRY-REQ-CRYPTO-0017",
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "lifecycle": "implemented",
+      "mapping_rationale": "ParallelHash is separately represented so its complete sequential and scheduling APIs can be admitted without falsely completing the broader SP 800-185 family before combined portable and backend acceptance.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.24.15",
+      "profile": "crypto-encoding-pkix",
+      "residual": "Outputs remain non-approved; scheduler callers own plan-to-result association and resource policy; compiler-created copies, registers, caches, dumps, swap, aborts, forced termination, physical attacks, and caller-owned copies remain outside portable crate cleanup guarantees.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "sha3-derived",
+            "symmetric"
+          ],
+          "id": "nist:NIST.FIPS.202.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.0",
+            "0.23.0",
+            "0.24.0",
+            "0.24.12",
+            "0.24.13",
+            "0.24.14",
+            "0.24.15",
+            "0.24.16",
+            "0.24.17",
+            "0.25.0",
+            "0.26.0",
+            "0.27.0",
+            "0.28.0",
+            "0.29.0",
+            "0.30.0",
+            "0.31.0"
+          ],
+          "role": "sha3-shake",
+          "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
+        },
+        {
+          "authority_role": "current",
+          "domains": [
+            "sha3-derived"
+          ],
+          "id": "nist:NIST.SP.800-185.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.24.12",
+            "0.24.13",
+            "0.24.14",
+            "0.24.15",
+            "0.24.16",
+            "0.24.17"
+          ],
+          "role": "sha3-derived",
+          "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
+        }
+      ],
+      "statement": "ParallelHash128, ParallelHash256, ParallelHashXOF128, and ParallelHashXOF256 implement exact function-name separation, left-encoded B, 8B-output inner cSHAKE leaves, right-encoded n, customization, fixed-versus-XOF terminal encoding, arbitrary-bit input/output, hardened ownership, and deterministic caller-scheduled collection over the admitted FIPS 202 permutation.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "scripts/parallelhash/check-parallelhash.py#main"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "scripts/parallelhash/test-parallelhash.py#main"
+        }
+      ],
+      "work_bound": "Sequential absorb work is linear in checked input and output bits with caller-selected positive B and fixed workspace; scheduled and optional std execution use an exact checked leaf count, bounded workers, fallible allocation, and ordered linear collection."
     },
     {
       "applicability": "apply",
@@ -30411,9 +30511,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "265b0a1296d37cda79a484e5c8aad9c1c28237be834bd6b926aa9c0990f4ec26",
+  "residual_policy_sha256": "a344248343c19e1a9c0c6793082971bd787847a8d861fd3161b4cb00bc218210",
   "schema": 5,
   "source_ledger_sha256": "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df",
-  "surface_register_sha256": "e7dd2def74c5292ea79ca8bd7e7bfc81c75d6c5e917dd2c9eb58e587aade5375",
-  "transport_policy_sha256": "7aadad54eab9f4993f8cfab54ac545d532729d19bd9b2d4a6a9a695a9046f721"
+  "surface_register_sha256": "935609432516713090407f79cd67d41070a8dd89ae07d59563db7968ff9fe8d4",
+  "transport_policy_sha256": "c94dc22231cd1dd72ab9941baa3349ef64095448f8b1c26d8f63147d9b258fdb"
 }

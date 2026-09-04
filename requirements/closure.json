@@ -950,8 +950,10 @@
     },
     {
       "boundary": null,
-      "requirement_ids": [],
-      "scope": "Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-dependency std executor; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0017"
+      ],
+      "scope": "Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-third-party-dependency std executor; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
         "nist:NIST.SP.800-185.pdf"
@@ -8026,6 +8028,18 @@
     },
     {
       "decision_ids": [
+        "algorithm.parallelhash"
+      ],
+      "id": "BRY-REQ-CRYPTO-0017",
+      "lifecycle": "implemented",
+      "owner": "0.24.15",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ]
+    },
+    {
+      "decision_ids": [
         "protocol.certificate-transparency"
       ],
       "id": "BRY-REQ-CT-0001",
@@ -10603,7 +10617,8 @@
         "BRY-REQ-CRYPTO-0002",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
     },
@@ -10654,7 +10669,8 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
     },
@@ -13319,6 +13335,12 @@
       "id": "algorithm.ml-kem",
       "requirement_ids": [
         "BRY-REQ-PQ-0117"
+      ]
+    },
+    {
+      "id": "algorithm.parallelhash",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0017"
       ]
     },
     {

@@ -3,8 +3,9 @@
 //! All six complete portable FIPS 180-4 SHA-2 implementations and the complete
 //! six complete portable FIPS 202 SHA-3 and SHAKE implementations plus complete
 //! SP 800-185 encodings, cSHAKE128/cSHAKE256, all four KMAC/KMACXOF
-//! identities, and all four TupleHash/TupleHashXOF identities are exposed from
-//! their small family crates. Provider effects, AEADs, KDFs, public-key
+//! identities, all four TupleHash/TupleHashXOF identities, and all four
+//! ParallelHash/ParallelHashXOF identities are exposed from their small family
+//! crates. Provider effects, AEADs, KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 
 #![no_std]
@@ -73,6 +74,21 @@ pub const KMAC_IMPLEMENTED: bool = true;
 
 /// Whether all four SP 800-185 TupleHash and TupleHashXOF identities are implemented.
 pub const TUPLE_HASH_IMPLEMENTED: bool = true;
+
+/// Whether all four SP 800-185 ParallelHash identities are implemented.
+pub const PARALLEL_HASH_IMPLEMENTED: bool = true;
+
+pub use brynja_hash_parallel::{
+    HardenedParallelHash128, HardenedParallelHash256, HardenedParallelHashXof128,
+    HardenedParallelHashXof128Reader, HardenedParallelHashXof256, HardenedParallelHashXof256Reader,
+    ParallelHash128, ParallelHash128Collector, ParallelHash128LeafJob, ParallelHash128LeafResult,
+    ParallelHash128Plan, ParallelHash128ScheduledXofReader, ParallelHash256,
+    ParallelHash256Collector, ParallelHash256LeafJob, ParallelHash256LeafResult,
+    ParallelHash256Plan, ParallelHash256ScheduledXofReader, ParallelHashError,
+    ParallelHashPublicDeclassification, ParallelHashSecretOutput, ParallelHashXof128,
+    ParallelHashXof128Reader, ParallelHashXof256, ParallelHashXof256Reader, parallel_hash_xof128,
+    parallel_hash_xof256, parallel_hash128, parallel_hash256,
+};
 
 pub use brynja_hash_sha2::{
     BitString, BitStringError, FixedOutput, HardenedSha2Error, HardenedSha2State, HardenedSha224,
@@ -147,6 +163,7 @@ mod tests {
         assert!(::core::hint::black_box(super::CSHAKE_IMPLEMENTED));
         assert!(::core::hint::black_box(super::KMAC_IMPLEMENTED));
         assert!(::core::hint::black_box(super::TUPLE_HASH_IMPLEMENTED));
+        assert!(::core::hint::black_box(super::PARALLEL_HASH_IMPLEMENTED));
         assert_eq!(
             super::sha224(b"abc"),
             Ok(super::Sha224Digest::from_bytes([

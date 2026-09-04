@@ -38,6 +38,10 @@ purpose = "KMAC and KMACXOF implementation, package acceptance, and differential
 extensions = [".py"]
 purpose = "DER and canonical ASN.1 policy and tests"
 
+[category.parallelhash]
+extensions = [".py", ".sh"]
+purpose = "ParallelHash and ParallelHashXOF implementation, scheduling, package, and differential evidence"
+
 [category.protocols]
 extensions = [".py"]
 purpose = "Protocol framing and state-machine policy and tests"

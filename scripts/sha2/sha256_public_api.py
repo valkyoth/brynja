@@ -44,7 +44,7 @@ FILES = (
 )
 EXPECTED_SHA256 = {
     MANIFEST: "e5324f6ad25053620f470217e0332aa6dc2955384cd5e5d157599efe5658e247",
-    LOCK: "6cfe66615bc498c1f6a9e7f6d4a5b24c86e365ccc1069925af1f4e8d869b3b11",
+    LOCK: "11d9d4f91f017fd1dabc73dce1c86a0dbf9821524035cb3ce4572be7fe54f98a",
     LIB: "096ef101b31b38ededc2aeda9e3b0546757f57fc2875419f920876ce883f64ff",
     MAIN: "5147536fd2bdc395ceed7fb023c9a06971347a8d531c66c0cfde7b78fc878522",
     CONTENT: "a8f34a54459e9655229bb554c15ebb87f89a0bfbc600da8eb56999422fc0487f",
@@ -52,7 +52,7 @@ EXPECTED_SHA256 = {
     SHA256_TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
     CHECK_SCRIPT: "d424a02dcfc778f83ccf8004fc23c9456bd71a759ece3235bdb56f1f0f02ad9d",
     TEST_SCRIPT: "10155923e8769cd405c2e9eaa813c02b50f665daacadfc2da3a90f9dc7f9ab7f",
-    CHECKS: "af39b4b46c629fd4a51ad1a1abb57ef442abe1815c62b1b7b8ba68a8dad2716f",
+    CHECKS: "09675eba30ddbeee087f41078117e2a3e6879ba7ed93a3069b18b66602b4ac75",
     RUST_MATRIX: "867a0a3e7f6fa5f3b0ab65305fb0dafa2d46bf82553acc2d09c887cfefa3fa7b",
     BARE_METAL: "197604f0e6c98bd91fdcfed06263062f19a57af71a6bd974fdc1633d191c0074",
     WORKFLOW: "d3dda04f30cdd7eaf6a0209a4a4752548e56c5dbd80d9b0491edb88bdaae28a9",
@@ -116,6 +116,14 @@ PACKAGES = (
         (
             "src/lib.rs", "src/backend.rs", "src/core_state.rs", "src/error.rs",
             "src/fixed.rs", "src/item.rs", "src/output.rs", "src/xof.rs",
+        ),
+    ),
+    (
+        "brynja-hash-parallel",
+        "0.1.0",
+        (
+            "src/lib.rs", "src/backend.rs", "src/core_state.rs", "src/error.rs",
+            "src/fixed.rs", "src/output.rs", "src/scheduled.rs", "src/xof.rs",
         ),
     ),
     ("brynja-crypto", "0.1.2", ("src/lib.rs",)),
@@ -343,6 +351,7 @@ brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.2" }
 brynja-hash-core = { path = "crates/brynja-hash-core", version = "=0.1.0" }
 brynja-hash-sha2 = { path = "crates/brynja-hash-sha2", version = "=0.1.0" }
 brynja-hash-sha3 = { path = "crates/brynja-hash-sha3", version = "=0.1.0" }
+brynja-hash-parallel = { path = "crates/brynja-hash-parallel", version = "=0.1.0" }
 brynja-hash-tuple = { path = "crates/brynja-hash-tuple", version = "=0.1.0" }
 brynja-mac-kmac = { path = "crates/brynja-mac-kmac", version = "=0.1.0" }
 brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }

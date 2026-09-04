@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "eba7ce33dbada9349ec05fa6bd0a3eea13b5719bb9a938f9d66c21a26937ebb2",
+  "policy_sha256": "c13d0743bc276987ebfe9bf0391225d2bac5d12a1c98b6c986f8683592377d06",
   "schema": 2,
   "source_ledger_sha256": "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df",
   "surfaces": [
@@ -181,6 +181,20 @@
       "owner": "0.117.0",
       "rationale": "ML-KEM remains future first-party key-establishment work subject to FIPS 203 and transition policy.",
       "test_target": "tests/surface/primitives.rs#ml_kem"
+    },
+    {
+      "code_target": "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.parallelhash",
+      "kind": "semantic",
+      "normative_sources": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "owner": "0.24.15",
+      "rationale": "All four SP 800-185 ParallelHash and ParallelHashXOF identities are implemented over the hardened cSHAKE owner with complete arbitrary-bit domains, deterministic allocation-free sequential execution, explicit caller-scheduled leaf ownership, ordered collection, and an isolated bounded std executor.",
+      "test_target": "scripts/parallelhash/check-parallelhash.py#main"
     },
     {
       "code_target": "crates/brynja-crypto/src/rsa.rs",

@@ -410,6 +410,7 @@ def validate_packages(root: Path) -> None:
     if set(crypto.get("dependencies", {})) != {
         "brynja-hash-sha2",
         "brynja-hash-sha3",
+        "brynja-hash-parallel",
         "brynja-hash-tuple",
         "brynja-mac-kmac",
     }:

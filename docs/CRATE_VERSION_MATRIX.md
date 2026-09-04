@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF and exact `sanitization 2.0.4` dependency-delta reviews are clean, with the report-bearing candidate awaiting hosted GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.14 signed; v0.24.15 ParallelHash/ParallelHashXOF implementation candidate awaits exceptional pentest
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.14`. `brynja-hash-core 0.1.0`,
+advances to internal `0.24.15`. `brynja-hash-core 0.1.0`,
 `brynja-hash-sha2 0.1.0` retains reusable byte and canonical arbitrary-bit
 interfaces and correct portable implementations of all six FIPS 180-4 SHA-2
 algorithms, and unpublished `brynja-hash-sha3 0.1.0` owns correct byte-oriented
@@ -17,17 +17,22 @@ hardened cSHAKE owner; the wider derived family remains in progress. New
 unpublished `brynja-hash-tuple 0.1.0` contains complete
 TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 whole-item,
 arbitrary-bit, exact-length streaming-item, hardened-output and incremental-XOF
-APIs; the wider derived family remains in progress. Published
+APIs. New unpublished `brynja-hash-parallel 0.1.0` contains complete
+ParallelHash128/ParallelHash256 and ParallelHashXOF128/ParallelHashXOF256
+sequential, hardened, arbitrary-bit, and caller-scheduled APIs. Its separate
+`brynja-hash-parallel-std 0.1.0` adapter provides bounded native execution and
+is excluded from defaults, facades, bare-metal, and FIPS graphs; the wider
+derived family remains in progress. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
 AArch64 SHA2, and RV64 Zknh candidates; `brynja-crypto-cpu-std 0.1.1` contains
 the separate opt-in x86/AArch64 host detector and runtime selection API while
 RISC-V automatic detection remains disabled. Supporting manifest
 versions remain unchanged until the v0.25.0 public checkpoint. The new
-repository-only API-profile register closes 131 semantic capabilities across
-22 dimensions and inventories eight current, four registered capability, plus
+repository-only API-profile register closes 132 semantic capabilities across
+22 dimensions and inventories eight current, five registered capability, plus
 73 planned secret owners with exact per-operation information-flow contracts,
-compiler-checked current-owner shapes, and optimized-MIR cleanup-call evidence
-under Rust 1.90.0 and 1.98.1. The facade version advances and the TupleHash leaf
+compiler-checked owner shapes, and optimized-MIR cleanup-call evidence
+under Rust 1.90.0 and 1.98.1. The facade version advances and the ParallelHash leaf
 builds over the existing hardened cSHAKE owner; all support-package versions remain
 unchanged and zero crates.io packages are selected. Package publication does not imply a TLS
 implementation or production readiness.
@@ -283,14 +288,16 @@ FIPS validation remain later work. Zero crates are selected for publication.
 
 | Package group | Version | Publish | Meaning |
 | --- | --- | --- | --- |
-| `brynja` | `0.24.14` | no | Internal complete TupleHash milestone; all four TupleHash/TupleHashXOF whole-item, arbitrary-bit, exact-length streamed-item, hardened-output, and incremental-XOF profiles are implemented, the wider SP 800-185 family remains in progress, and v0.20.0 remains published |
+| `brynja` | `0.24.15` | no | Internal complete ParallelHash milestone; all four ParallelHash/ParallelHashXOF sequential, arbitrary-bit, hardened, and scheduled profiles are implemented, the wider SP 800-185 family remains in progress, and v0.20.0 remains published |
 | `brynja-core` | `0.9.0` | no | Published at v0.20.0; README metadata only |
 | `brynja-hash-core` | `0.1.0` | no | Unpublished allocation-free fixed-output/XOF interfaces and canonical borrowed bit strings |
 | `brynja-hash-sha2` | `0.1.0` | no | Unpublished fully implemented six-algorithm FIPS 180-4 ordinary and hardened byte/arbitrary-bit APIs, forced ordinary candidate routes, compiler-resistant cleanup evidence, and combined package-external acceptance |
 | `brynja-hash-sha3` | `0.1.0` | no | Unpublished fully implemented FIPS 202 family plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary/hardened byte/arbitrary-bit APIs; wider SP 800-185 acceptance remains pending |
 | `brynja-mac-kmac` | `0.1.0` | no | New unpublished complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 leaf with strength-only default APIs, explicit-feature exact conformance, in-place source clearing, constant-time verification, and typed output |
 | `brynja-hash-tuple` | `0.1.0` | no | New unpublished complete TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 leaf with structural tuple items, canonical arbitrary-bit input/output, exact-length item streaming, hardened ownership, and incremental XOF output |
-| `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE, SP 800-185 encodings, all four KMAC/KMACXOF constructions, and all four TupleHash/TupleHashXOF constructions |
+| `brynja-hash-parallel` | `0.1.0` | no | New unpublished complete ParallelHash128/ParallelHash256 and ParallelHashXOF128/ParallelHashXOF256 leaf with sequential caller workspace, arbitrary-bit input/output, hardened ownership, and ordered caller scheduling |
+| `brynja-hash-parallel-std` | `0.1.0` | no | New unpublished optional bounded native-thread executor; excluded from defaults, facades, bare metal, and FIPS boundaries |
+| `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE, SP 800-185 encodings, and all KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF constructions |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |
 | `brynja-pki` | `0.2.0` | no | Published DER package now gains unpublished canonical ASN.1 value code for v0.25.0 |

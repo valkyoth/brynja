@@ -1,0 +1,14 @@
+[package]
+name = "brynja-parallelhash-std-public-api-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-hash-parallel-std = { path = "../../crates/brynja-hash-parallel-std", version = "=0.1.0", default-features = false }
+
+[workspace]
+
+[lints.rust]
+unsafe_code = "deny"

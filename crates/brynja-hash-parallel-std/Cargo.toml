@@ -1,0 +1,21 @@
+[package]
+name = "brynja-hash-parallel-std"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+description = "Optional bounded std executor for Brynja ParallelHash"
+publish = ["crates-io"]
+
+[features]
+default = []
+
+[dependencies]
+brynja-core = { workspace = true }
+brynja-hash-parallel = { workspace = true }
+
+[lints]
+workspace = true

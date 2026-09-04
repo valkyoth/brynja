@@ -3334,7 +3334,7 @@ Exit criteria:
 
 ### v0.24.14 - Complete TupleHash And TupleHashXOF
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, ordinary and hardened secret-bearing whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, complete internal sanitization, official examples, partition and collision-separation negatives, proofs and public types that cannot silently flatten a tuple into one byte string.
 
@@ -3392,9 +3392,9 @@ Exit criteria:
 
 ### v0.24.15 - Complete ParallelHash And ParallelHashXOF
 
-Status: planned
+Status: awaiting pentest
 
-Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-dependency std executor; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.
+Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-third-party-dependency std executor; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.
 
 Goal: complete the four parallel-hash instances as both exact mathematical
 functions and practically usable bounded parallel operations across platforms.
@@ -3407,7 +3407,7 @@ Deliverables:
 - expose allocation-free sequential streaming plus affine ordered leaf jobs and
   caller-supplied result storage so no_std schedulers can execute leaves in
   parallel without duplicating construction logic or accepting reordered data;
-- add an optional separate first-party zero-dependency std executor with bounded
+- add an optional separate first-party zero-third-party-dependency std executor with bounded
   worker count, cancellation, panic/error containment and deterministic merge;
   keep it outside the core, defaults, bare-metal and FIPS module boundary.
 

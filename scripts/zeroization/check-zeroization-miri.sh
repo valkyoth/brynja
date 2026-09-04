@@ -102,7 +102,16 @@ full_tuplehash() {
     run_miri -p brynja-hash-tuple --tests
 }
 
-all_groups=(core sanitization sha2 sha3 kmac tuplehash)
+quick_parallelhash() {
+    run_miri --manifest-path crates/brynja-hash-parallel/Cargo.toml \
+        --test api hardened_output_and_workspace_clear_on_drop
+}
+
+full_parallelhash() {
+    run_miri -p brynja-hash-parallel --tests
+}
+
+all_groups=(core sanitization sha2 sha3 kmac tuplehash parallelhash)
 mode="${1:---full}"
 shift || true
 

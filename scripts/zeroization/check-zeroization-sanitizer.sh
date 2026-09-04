@@ -83,3 +83,13 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-04 test \
     -p brynja-hash-tuple \
     --tests \
     --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-04 test \
+    -p brynja-hash-parallel \
+    --tests \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-04 test \
+    -p brynja-hash-parallel-std \
+    --tests \
+    --target x86_64-unknown-linux-gnu

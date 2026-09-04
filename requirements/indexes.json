@@ -880,6 +880,42 @@
         "planned:negative:scripts/tuplehash/test-tuplehash.py#main"
       ]
     },
+    "BRY-REQ-CRYPTO-0017": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.parallelhash"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.24.15"
+      ],
+      "sources": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "targets": [
+        "actual-symbol:crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED"
+      ],
+      "tests": [
+        "planned:positive:scripts/parallelhash/check-parallelhash.py#main",
+        "planned:negative:scripts/parallelhash/test-parallelhash.py#main"
+      ]
+    },
     "BRY-REQ-CT-0001": {
       "authority_roles": [
         "compatibility",
@@ -6175,6 +6211,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -6357,6 +6394,9 @@
       ],
       "algorithm.ml-kem": [
         "BRY-REQ-PQ-0117"
+      ],
+      "algorithm.parallelhash": [
+        "BRY-REQ-CRYPTO-0017"
       ],
       "algorithm.rsa": [
         "BRY-REQ-CRYPTO-0011"
@@ -9056,6 +9096,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-PQ-0117"
       ],
       "ct": [
@@ -9250,6 +9291,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-LEGACY-0100",
         "BRY-REQ-LEGACY-0300",
@@ -9272,6 +9314,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CT-0001",
         "BRY-REQ-ENC-0001",
         "BRY-REQ-ENC-0002",
@@ -9306,6 +9349,7 @@
         "BRY-REQ-CRYPTO-0009",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-TLS-0005"
       ],
       "key-lifecycle": [
@@ -9317,6 +9361,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
@@ -9362,6 +9407,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -9513,6 +9559,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
         "BRY-REQ-ENTROPY-1241",
@@ -9539,6 +9586,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -9798,6 +9846,7 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10136,6 +10185,9 @@
       "0.24.14": [
         "BRY-REQ-CRYPTO-0016"
       ],
+      "0.24.15": [
+        "BRY-REQ-CRYPTO-0017"
+      ],
       "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
       ],
@@ -10466,7 +10518,8 @@
         "BRY-REQ-CRYPTO-0002",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "nist:NIST.FIPS.203.pdf": [
         "BRY-REQ-PQ-0117"
@@ -10477,7 +10530,8 @@
       "nist:NIST.SP.800-185.pdf": [
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "nist:NIST.SP.800-186.pdf": [
         "BRY-REQ-CRYPTO-0010"
@@ -10979,6 +11033,9 @@
       ],
       "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
+      ],
+      "actual-symbol:crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED": [
+        "BRY-REQ-CRYPTO-0017"
       ],
       "actual-symbol:crates/brynja-hash-sha2/src/lib.rs#SHA512_256_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0001"
@@ -11503,6 +11560,9 @@
       "planned:negative:scripts/kmac/test-kmac.py#main": [
         "BRY-REQ-CRYPTO-0015"
       ],
+      "planned:negative:scripts/parallelhash/test-parallelhash.py#main": [
+        "BRY-REQ-CRYPTO-0017"
+      ],
       "planned:negative:scripts/tuplehash/test-tuplehash.py#main": [
         "BRY-REQ-CRYPTO-0016"
       ],
@@ -11914,6 +11974,9 @@
       ],
       "planned:positive:scripts/kmac/check-kmac.py#main": [
         "BRY-REQ-CRYPTO-0015"
+      ],
+      "planned:positive:scripts/parallelhash/check-parallelhash.py#main": [
+        "BRY-REQ-CRYPTO-0017"
       ],
       "planned:positive:scripts/tuplehash/check-tuplehash.py#main": [
         "BRY-REQ-CRYPTO-0016"

@@ -127,7 +127,7 @@ pentest evidence rather than independent cryptographic verification.
 | SP 800-185 encodings (`left_encode`, `right_encode`, `encode_string`, `bytepad`) | ✅ Implemented | ❌ Not independently verified |
 | cSHAKE128 and cSHAKE256 | ✅ Implemented | ❌ Not independently verified |
 | TupleHash128/256 and TupleHashXOF128/256 | ✅ Fully implemented | ❌ Not independently verified |
-| Complete SP 800-185 family | 🚧 In progress — cSHAKE, KMAC, and TupleHash complete; ParallelHash pending | ❌ Not independently verified |
+| Complete SP 800-185 family | 🚧 In progress — all named functions implemented; final acceptance pending | ❌ Not independently verified |
 
 Only a named independent reviewer and linked review evidence can change the
 independent status. Project tests, CI, Kani, Miri, fuzzing, and pentests do not

@@ -145,7 +145,8 @@
         "BRY-REQ-CRYPTO-0002",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "role": "sha3-shake",
       "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
@@ -191,7 +192,8 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "role": "sha3-derived",
       "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
@@ -5589,10 +5591,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "6a121d3a40eb0f3070cb3f5555f0ab88f72e1358fccc9075e5cb3227cc01068b",
-  "requirement_count": 37,
+  "policy_sha256": "628d81c1f913717cb614fbb35be166dccbaed4142b57a0ffc214dbdbfce9c1d5",
+  "requirement_count": 38,
   "schema": 1,
-  "surface_count": 3329,
+  "surface_count": 3330,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5682,6 +5684,14 @@
       "id": "algorithm.ml-kem",
       "owner": "0.117.0",
       "rationale": "ML-KEM and hybrid normative population is explicitly owned by v0.3.5 and remains blocked from this classical cryptography pass."
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.parallelhash",
+      "owner": "0.24.15",
+      "requirement_id": "BRY-REQ-CRYPTO-0017"
     },
     {
       "coverage": "requirement",

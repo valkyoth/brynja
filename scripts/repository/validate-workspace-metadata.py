@@ -366,8 +366,19 @@ def validate_resolved_mode(
         "brynja-hash-sha2",
     }:
         raise ValueError("host CPU detector package graph drifted")
-    if {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}.intersection(modern):
-        raise ValueError("modern facade must remain independent of CPU packages")
+    parallel_executor = reachable_names(
+        "brynja-hash-parallel-std", names, packages_by_id, edges
+    )
+    if parallel_executor != {
+        "brynja-core",
+        "brynja-hash-parallel",
+        "brynja-hash-parallel-std",
+        "brynja-hash-core",
+        "brynja-hash-sha3",
+    }:
+        raise ValueError("ParallelHash std executor package graph drifted")
+    if {"brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-parallel-std"}.intersection(modern):
+        raise ValueError("modern facade must remain independent of host adapter packages")
     for engine in (
         "brynja-tls",
         "brynja-tls12",

@@ -955,6 +955,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED",
+        "disposition": "implemented",
+        "domain": "cryptography",
+        "owner": "0.24.15",
+        "rationale": "All four SP 800-185 ParallelHash and ParallelHashXOF identities are implemented over the hardened cSHAKE owner with complete arbitrary-bit domains, deterministic allocation-free sequential execution, explicit caller-scheduled leaf ownership, ordered collection, and an isolated bounded std executor.",
+        "sources": ["nist:NIST.FIPS.202.pdf", "nist:NIST.SP.800-185.pdf"],
+        "test_target": "scripts/parallelhash/check-parallelhash.py#main"
+      },
+      "id": "algorithm.parallelhash"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-crypto/src/hmac.rs",
         "disposition": "future-work",
         "domain": "cryptography",

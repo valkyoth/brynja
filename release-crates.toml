@@ -1,19 +1,19 @@
 [release]
-version = "0.24.14"
-milestone = "0.24.14"
+version = "0.24.15"
+milestone = "0.24.15"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "The new TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 constructions, arbitrary-bit tuple boundaries, streamed-item lifecycle, and hardened secret-state ownership change a cryptographic boundary and require an exceptional assessment before the signed development tag."
+exception_reason = "The new ParallelHash128/256 and ParallelHashXOF128/256 constructions, caller-scheduled secret leaf ownership, and bounded native worker adapter change cryptographic and concurrency boundaries and require an exceptional assessment before the signed development tag."
 
 [crates."brynja"]
-previous_version = "0.24.13"
-version = "0.24.14"
+previous_version = "0.24.14"
+version = "0.24.15"
 change = "code"
 publish = false
-reason = "Advance the internal facade with all four complete TupleHash/TupleHashXOF constructions across the new leaf, composition and facade surfaces; no crate is published."
+reason = "Advance the internal facade with all four complete ParallelHash/ParallelHashXOF constructions across the new portable leaf and facade surfaces; no crate is published."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -27,7 +27,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Retain the published version while its internal source reexports all four complete KMAC/KMACXOF constructions without publication."
+reason = "Retain the published version while its internal source reexports all four complete ParallelHash/ParallelHashXOF constructions without publication."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
@@ -63,6 +63,20 @@ version = "0.1.0"
 change = "code"
 publish = false
 reason = "Add the unpublished no_std TupleHash leaf with complete TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 ordinary, arbitrary-bit, exact-length streaming-item, incremental-output and hardened APIs."
+
+[crates."brynja-hash-parallel"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Add the unpublished allocation-free no_std ParallelHash leaf with all four fixed/XOF identities, arbitrary-bit, hardened, and caller-scheduled APIs."
+
+[crates."brynja-hash-parallel-std"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Add the unpublished opt-in bounded native-thread executor with deterministic merge, cancellation, panic containment, and secret leaf-storage cleanup."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

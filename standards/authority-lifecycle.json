@@ -531,9 +531,11 @@
         "BRY-REQ-CRYPTO-0002",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "affected_symbols": [
+        "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED",
         "crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED",
         "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185",
         "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED",
@@ -654,9 +656,11 @@
       "affected_requirements": [
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
-        "BRY-REQ-CRYPTO-0016"
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
       ],
       "affected_symbols": [
+        "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED",
         "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185",
         "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED",
         "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED"

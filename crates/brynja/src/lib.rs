@@ -10,8 +10,10 @@
 //! digest, XOF-reader, canonical FIPS 202 arbitrary-bit input, and
 //! arbitrary-bit SHAKE output types. Complete SP 800-185 encodings and
 //! cSHAKE128/cSHAKE256, all four hardened KMAC/KMACXOF identities, and all four
-//! TupleHash/TupleHashXOF identities with structural tuple-item APIs are also
-//! exposed through [`crypto`]. It exposes checked
+//! TupleHash/TupleHashXOF identities with structural tuple-item APIs and all
+//! four ParallelHash/ParallelHashXOF identities with allocation-free
+//! sequential and caller-scheduled leaf APIs are also exposed through
+//! [`crypto`]. It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
 //! workspaces, secret-lifetime and owned-memory
 //! foundations, fixed-width constant-time operations, provider capability
@@ -28,7 +30,7 @@
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
 //! algorithm outside these six SHA-2, six FIPS 202, two cSHAKE, four KMAC, and
-//! four TupleHash identities.
+//! four TupleHash, and four ParallelHash identities.
 
 #![no_std]
 
@@ -136,6 +138,9 @@ mod tests {
         assert!(::core::hint::black_box(super::crypto::KMAC_IMPLEMENTED));
         assert!(::core::hint::black_box(
             super::crypto::TUPLE_HASH_IMPLEMENTED
+        ));
+        assert!(::core::hint::black_box(
+            super::crypto::PARALLEL_HASH_IMPLEMENTED
         ));
         assert_eq!(
             super::crypto::sha224(b"abc"),

@@ -16,7 +16,7 @@ POLICY = ROOT / "security/cryptographic-api-profile-policy.toml"
 SURFACES = ROOT / "standards/protocol-surfaces.json"
 REGISTER = ROOT / "security/cryptographic-api-profile-register.json"
 COVERAGE = ROOT / "docs/cryptographic-api-profile-register.md"
-MILESTONE = "0.24.14"
+MILESTONE = "0.24.15"
 PROFILE_KEYS = {
     "kind",
     "secret_template",
@@ -289,7 +289,7 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
         fail("explicit unsafe or nonstandard rejections are incomplete")
     validate_cleanup(policy, root)
     semantic = {row["id"]: row for row in surfaces["surfaces"] if row["kind"] == "semantic"}
-    if len(semantic) != 131:
+    if len(semantic) != 132:
         fail("semantic capability count drifted")
     for name, profile in policy["profile"].items():
         validate_profile(name, profile, set(dimensions), policy)

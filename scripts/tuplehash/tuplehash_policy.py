@@ -203,7 +203,7 @@ def validate(root: Path) -> None:
     for path, token in (
         (CRYPTO, "TUPLE_HASH_IMPLEMENTED: bool = true"),
         (CRYPTO, "tuple_hash_xof128_bits"),
-        (MAIN, "four TupleHash identities"),
+        (MAIN, "four TupleHash"),
         (PUBLIC_FIXTURE, "leaf_crypto_and_main_facades_are_operational"),
         (PUBLIC_FIXTURE, "brynja::crypto::tuple_hash_xof128_bits"),
         (PUBLIC_FIXTURE, "finalize_hardened_public_in_place"),

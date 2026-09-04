@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canonical v0.24.14 owner identities and operation-flow contracts."""
+"""Canonical v0.24.15 owner identities and operation-flow contracts."""
 
 CURRENT_OWNER_SYMBOLS = {
     "adapter.sanitized-secret": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret",
@@ -219,6 +219,42 @@ TUPLEHASH_OWNER_RECORD = {
     "partial_failure_policy": "clear-complete-secret-destination",
 }
 
+PARALLELHASH_OWNER = (
+    "crates/brynja-hash-parallel/src/core_state.rs#"
+    "brynja_hash_parallel::core_state::ParallelCore"
+)
+PARALLELHASH_DROP = f"{PARALLELHASH_OWNER}::drop"
+PARALLELHASH_WIPE = (
+    "crates/brynja-hash-parallel/src/core_state.rs#"
+    "brynja_hash_parallel::ParallelCore::wipe"
+)
+PARALLELHASH_OWNER_RECORD = {
+    "capability": "algorithm.parallelhash",
+    "symbol": PARALLELHASH_OWNER,
+    "fields": [
+        "hardened-cshake-state:secret-derived", "caller-workspace:secret",
+        "partial-input-width:secret-derived", "leaf-count:secret-derived",
+        "failure-latch:secret-derived",
+    ],
+    "temporaries": [
+        "leaf-digest:secret-derived-clearing-owner",
+        "encoded-length:secret-derived", "borrowed-input:caller-owned-copy-risk",
+        "typed-output:caller-owned",
+    ],
+    "sanitization_symbol": PARALLELHASH_WIPE,
+    "cleanup_callers": [PARALLELHASH_DROP],
+    "evidence": [
+        "crates/brynja-hash-parallel/tests/api.rs",
+        "crates/brynja-hash-parallel/tests/official_vectors.rs",
+        "assurance/parallelhash-public-api/src/lib.rs",
+        "scripts/parallelhash/check-parallelhash.py",
+        "scripts/parallelhash/check-parallelhash-differential.py",
+    ],
+    "storage": "caller-owned-borrowed-and-transitive-fixed",
+    "output_classification": "typed-secret-owned",
+    "partial_failure_policy": "clear-complete-secret-destination",
+}
+
 # Registration cannot define its own proof. Separate maps bind its compiler
 # test, exact caller identity, and resolved sanitizer target.
 REGISTERED_OWNER_CONTRACTS = {
@@ -226,6 +262,7 @@ REGISTERED_OWNER_CONTRACTS = {
     "registered.algorithm.sha3-shake": {"record": SHA3_OWNER_RECORD},
     "registered.algorithm.kmac": {"record": KMAC_OWNER_RECORD},
     "registered.algorithm.tuplehash": {"record": TUPLEHASH_OWNER_RECORD},
+    "registered.algorithm.parallelhash": {"record": PARALLELHASH_OWNER_RECORD},
 }
 REGISTERED_OWNER_COMPILER_TESTS = {
     SHA2_OWNER: {
@@ -256,6 +293,13 @@ REGISTERED_OWNER_COMPILER_TESTS = {
             "registered_algorithm_tuplehash_owner_contract_is_compiler_checked"
         ),
     },
+    PARALLELHASH_OWNER: {
+        "package": "brynja-hash-parallel",
+        "contract_test": (
+            "core_state::assurance_contract::"
+            "registered_algorithm_parallelhash_owner_contract_is_compiler_checked"
+        ),
+    },
 }
 REGISTERED_CALLER_MIR_HEADERS = {
     SHA2_DROP: [
@@ -274,12 +318,17 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "fn core_state::<impl at crates/brynja-hash-tuple/src/core_state.rs:229:1: 229:24>::"
         "drop(_1: &mut TupleCore) -> () {"
     ],
+    PARALLELHASH_DROP: [
+        "fn core_state::<impl at crates/brynja-hash-parallel/src/core_state.rs:253:1: 253:31>::"
+        "drop(_1: &mut ParallelCore<'_>) -> () {"
+    ],
 }
 REGISTERED_SANITIZER_MIR_IDENTITIES = {
     SHA2_WIPE: "HardenedSha2Owner::wipe(",
     SHA3_WIPE: "HardenedFips202Owner::<RATE>::wipe(",
     KMAC_WIPE: "KmacCore::<S, RATE, STRENGTH>::wipe(",
     TUPLEHASH_WIPE: "TupleCore::wipe(",
+    PARALLELHASH_WIPE: "ParallelCore::<'_>::wipe(",
 }
 
 OPERATION_CONTRACTS = {
@@ -399,6 +448,7 @@ REVIEWED_SOURCE_PATHS = {
     "assurance/cshake-public-api/src/lib.rs",
     "assurance/kmac-public-api/src/lib.rs",
     "assurance/kmac-conformance-rejected/src/lib.rs",
+    "assurance/parallelhash-public-api/src/lib.rs",
     "crates/brynja-mac-kmac/src/core_state.rs",
     "crates/brynja-mac-kmac/src/output.rs",
     "crates/brynja-mac-kmac/src/packer.rs",
@@ -411,6 +461,8 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-hash-tuple/src/secret_encoding.rs",
     "assurance/tuplehash-public-api/src/lib.rs",
     "scripts/tuplehash/check-tuplehash-codegen.sh",
+    "crates/brynja-hash-parallel/src/core_state.rs",
+    "crates/brynja-hash-parallel/tests/api.rs",
     "crates/brynja-sanitization/src/lib.rs",
     "crates/brynja-sanitization/src/assurance_contract.rs",
     "crates/brynja-test-support/src/deterministic_random.rs",

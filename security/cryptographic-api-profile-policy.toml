@@ -50,10 +50,23 @@ storage = "crate-owned-fixed"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 
+[[registered-secret-owner]]
+capability = "algorithm.parallelhash"
+id = "registered.algorithm.parallelhash"
+symbol = "crates/brynja-hash-parallel/src/core_state.rs#brynja_hash_parallel::core_state::ParallelCore"
+fields = ["hardened-cshake-state:secret-derived", "caller-workspace:secret", "partial-input-width:secret-derived", "leaf-count:secret-derived", "failure-latch:secret-derived"]
+temporaries = ["leaf-digest:secret-derived-clearing-owner", "encoded-length:secret-derived", "borrowed-input:caller-owned-copy-risk", "typed-output:caller-owned"]
+sanitization_symbol = "crates/brynja-hash-parallel/src/core_state.rs#brynja_hash_parallel::ParallelCore::wipe"
+cleanup_callers = ["crates/brynja-hash-parallel/src/core_state.rs#brynja_hash_parallel::core_state::ParallelCore::drop"]
+evidence = ["crates/brynja-hash-parallel/tests/api.rs", "crates/brynja-hash-parallel/tests/official_vectors.rs", "assurance/parallelhash-public-api/src/lib.rs", "scripts/parallelhash/check-parallelhash.py", "scripts/parallelhash/check-parallelhash-differential.py"]
+storage = "caller-owned-borrowed-and-transitive-fixed"
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+
 [schema]
 version = 1
-milestone = "0.24.14"
-surface_register_sha256 = "e7dd2def74c5292ea79ca8bd7e7bfc81c75d6c5e917dd2c9eb58e587aade5375"
+milestone = "0.24.15"
+surface_register_sha256 = "935609432516713090407f79cd67d41070a8dd89ae07d59563db7968ff9fe8d4"
 
 [api]
 dimensions = [
@@ -564,7 +577,7 @@ ids = ["algorithm.sha2"]
 
 [[assignment]]
 profile = "hash-xof-family"
-ids = ["algorithm.sha3-shake", "algorithm.tuplehash"]
+ids = ["algorithm.parallelhash", "algorithm.sha3-shake", "algorithm.tuplehash"]
 
 [[assignment]]
 profile = "keyed-construction"
@@ -659,6 +672,7 @@ hosted-adapter = "0.24.10"
 "algorithm.sha2" = "0.24.8"
 "algorithm.sha3-shake" = "0.24.10"
 "algorithm.kmac" = "0.24.13"
+"algorithm.parallelhash" = "0.24.15"
 "algorithm.tuplehash" = "0.24.14"
 
 [[current-secret-owner]]
@@ -878,6 +892,18 @@ path = "scripts/tuplehash/check-tuplehash-codegen.sh"
 sha256 = "1b11e5a0f98429920a85175bea7390e38c2c07f3cc178ea083d73bde78ca7a5c"
 
 [[reviewed-source]]
+path = "crates/brynja-hash-parallel/src/core_state.rs"
+sha256 = "b5c68efcfabc7d6eac0f78ff58ec6307e710d16cc914f972a47225e5bb3365dc"
+
+[[reviewed-source]]
+path = "crates/brynja-hash-parallel/tests/api.rs"
+sha256 = "27ed2224cb7db157628141f22f35869d77aadfd212f9f54cf7c5454cbee36816"
+
+[[reviewed-source]]
+path = "assurance/parallelhash-public-api/src/lib.rs"
+sha256 = "0c2dc0f856053d372474a11ac4991f78048419db9362e162afe2a1f67ec76b9a"
+
+[[reviewed-source]]
 path = "assurance/api-profile-contract/src/lib.rs"
 sha256 = "b7c5fce7a94ea2440953649c67f0a30446f9259630888d5e8581bb44cd187e80"
 
@@ -887,11 +913,11 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "fa73c8b06ed011e5194a18632ff4849aafef33bdf1cd7c35bc45e7741ab08a81"
+sha256 = "00f5d5cc8e5a000e0e831bedc358263828b03d4cfa134af196bd49e5d5049059"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "faf971dbc7a82cffe6506429e2fc668cd552575a02dae84c1252cd8eda21077e"
+sha256 = "17b12f8ed4a673f3efeb9f076a8b196894f2a722d3b452fc2bf9bc131af6ac31"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -911,7 +937,7 @@ sha256 = "72de8365ab67239c24fb1a1271838fc6484a6acb3a9da43eb1b42e00a97262da"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "4d1eb18c87245477ca686cd927b080b5c3b1ee8df4dcec60601176bb737a5719"
+sha256 = "28ad00d79b3b0ed242b38ed4fbae52313da9e0200e9586f16162fc34df3bd231"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"

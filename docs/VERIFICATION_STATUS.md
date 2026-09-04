@@ -25,6 +25,8 @@ certificate-bound operational-environment claim.
 | `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary/hardened byte and arbitrary-bit functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary/hardened byte and arbitrary-bit APIs; hardened owners classify public versus typed-secret output | ❌ Not verified |
 | `brynja-mac-kmac` | Complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 with strength-only default APIs, feature-gated exact conformance, hardened in-place source clearing, typed output, and constant-time tag verification | ❌ Not independently verified |
 | `brynja-hash-tuple` | Complete TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 with structural whole or exact-length streamed items, arbitrary-bit inputs and outputs, and ordinary or hardened ownership | ❌ Not independently verified |
+| `brynja-hash-parallel` | Complete ParallelHash128/ParallelHash256 and ParallelHashXOF128/ParallelHashXOF256 with allocation-free sequential streaming, arbitrary-bit input/output, hardened ownership, and ordered caller-scheduled leaves | ❌ Not independently verified |
+| `brynja-hash-parallel-std` | Optional zero-dependency bounded native-thread executor over the portable leaf-job and ordered-collector API | ❌ Not independently verified; excluded from FIPS boundaries |
 | Future `brynja-mac-*` | Other reusable MACs | ❌ Not implemented or verified |
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 | `brynja-crypto-cpu` | Five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented but unadmitted; x86 SHA-512 and RISC-V Keccak are explicit scalar-only decisions | ❌ Not independently verified; native admission evidence incomplete |
@@ -55,6 +57,10 @@ KMAC/KMACXOF identities with hardened ownership and typed verification;
 all four TupleHash/TupleHashXOF identities with structural whole or streamed
 items, arbitrary-bit input/output, hardened in-place ownership, and borrowing
 incremental readers;
+all four ParallelHash/ParallelHashXOF identities with exact `B` and leaf-count
+encoding, allocation-free sequential streaming, arbitrary-bit final leaves,
+hardened output, indexed caller scheduling, ordered collection, and a separate
+bounded `std` executor;
 the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
@@ -68,8 +74,8 @@ families are therefore **Fully implemented**. Their accelerated candidates
 remain unadmitted, and neither family is independently reviewed or FIPS 140-3
 validated. No cryptographic primitive outside those six portable SHA-2
 algorithms, the six named portable FIPS 202 functions, both cSHAKE strengths,
-the four KMAC/KMACXOF identities, and the four TupleHash/TupleHashXOF
-identities, schema-driven ASN.1
+the four KMAC/KMACXOF identities, four TupleHash/TupleHashXOF identities, and
+four ParallelHash/ParallelHashXOF identities, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release

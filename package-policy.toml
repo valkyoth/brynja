@@ -16,7 +16,7 @@ optional = {}
 [packages.brynja-crypto]
 class = "modern-shared"
 publish = "crates-io"
-required = ["brynja-hash-sha2", "brynja-hash-sha3", "brynja-hash-tuple", "brynja-mac-kmac"]
+required = ["brynja-hash-parallel", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-hash-tuple", "brynja-mac-kmac"]
 optional = {}
 
 [packages.brynja-hash-core]
@@ -41,6 +41,18 @@ optional = {}
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-sha3"]
+optional = {}
+
+[packages.brynja-hash-parallel]
+class = "modern-shared"
+publish = "crates-io"
+required = ["brynja-core", "brynja-hash-sha3"]
+optional = {}
+
+[packages.brynja-hash-parallel-std]
+class = "host-adapter"
+publish = "crates-io"
+required = ["brynja-core", "brynja-hash-parallel"]
 optional = {}
 
 [packages.brynja-mac-kmac]

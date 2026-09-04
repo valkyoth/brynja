@@ -58,19 +58,19 @@ def bind(policy: dict, ledger: dict) -> None:
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
-    assert len(register["surfaces"]) == 4458
+    assert len(register["surfaces"]) == 4459
     implemented = {
         surface["id"]
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 71
+    assert len(implemented) == 72
     assert all(
         surface_id.startswith("iana.tls-parameters.tls-parameters-5")
         or surface_id.startswith("iana.tls-parameters.tls-parameters-6")
         or surface_id
         in {
-            "algorithm.kmac", "algorithm.sha2", "algorithm.sha3-shake", "algorithm.tuplehash",
+            "algorithm.kmac", "algorithm.parallelhash", "algorithm.sha2", "algorithm.sha3-shake", "algorithm.tuplehash",
             "facility.sslkeylogfile.test-support",
             "facility.entropy.secure-random-contract",
             "format.asn1.values", "format.der.framing", "state.tls.secret-lifetime",

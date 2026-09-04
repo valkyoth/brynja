@@ -25,11 +25,10 @@
 
 # brynja
 
-`brynja` is the small modern facade for the Brynja cryptography and secure-protocol
-workspace. It is allocation-independent `no_std` Rust without a C cryptographic library.
+`brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides all six SHA-2 and FIPS 202 functions,
-> complete cSHAKE, KMAC/KMACXOF, and TupleHash/TupleHashXOF families, plus security and bounded framing foundations,
+> complete cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF families, plus security and bounded framing foundations,
 > but no TLS connection, certificate validator, or working protocol engine.
 
 All six SHA-2 APIs and all six portable FIPS 202 APIs pass separately packaged and combined downstream `no_std` acceptance through the leaf and facade. Both families accept canonical arbitrary-bit messages, and SHAKE supports arbitrary-bit output. Distinct hardened states clear all source-declared Brynja-owned regions and classify output explicitly as public or typed secret. Both exact families are fully implemented; that is not independent review or FIPS validation.
@@ -141,7 +140,8 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
-| SP 800-185 family | 🚧 In progress — encodings, cSHAKE, KMAC, and TupleHash complete; ParallelHash pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple` | ❌ Not independently verified |
+| ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
+| SP 800-185 family | 🚧 In progress — all named functions implemented; portable and cross-backend final acceptance pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
 
 ### Modern Message Authentication
 
@@ -182,7 +182,6 @@ FIPS validation is a separate official claim from implementation and independent
 | FIPS 140-3 cryptographic module | ❌ Not implemented | Future `brynja-fips-module`, `brynja-fips` | ❌ Not FIPS validated |
 
 ## Workspace
-
 | Package | Purpose |
 | --- | --- |
 | `brynja` | Modern curated facade |
@@ -191,6 +190,7 @@ FIPS validation is a separate official claim from implementation and independent
 | `brynja-hash-sha3` | All six fully implemented FIPS 202 ordinary and hardened byte/arbitrary-bit APIs plus arbitrary-bit SHAKE output |
 | `brynja-mac-kmac` | Complete hardened KMAC128/256 and KMACXOF128/256 APIs with in-place source clearing and feature-gated exact conformance |
 | `brynja-hash-tuple` | Complete TupleHash128/256 and TupleHashXOF128/256 APIs with structural tuple items and hardened ownership |
+| `brynja-hash-parallel` | Complete allocation-free ParallelHash128/256 and ParallelHashXOF128/256 APIs with hardened and caller-scheduled ownership |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | DER, ASN.1, X.509, path validation, and revocation ownership |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |

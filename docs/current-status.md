@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF and exact `sanitization 2.0.4` dependency-delta reviews are clean, with the report-bearing candidate awaiting hosted GitHub and CodeQL
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.14 signed; v0.24.15 ParallelHash/ParallelHashXOF implementation candidate awaits exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -51,7 +51,7 @@ an irreversible wrapper lifecycle that rejects reuse after extraction or wipe,
 official examples, an independent oracle, package-external
 `no_std` use, and compiler evidence are implemented. All services remain
 non-approved; KMAC is not independently reviewed or FIPS 140-3 validated.
-The v0.24.14 candidate additionally implements complete TupleHash128,
+Signed v0.24.14 additionally implements complete TupleHash128,
 TupleHash256, TupleHashXOF128, and TupleHashXOF256 in the separate
 allocation-free `no_std` `brynja-hash-tuple` leaf. Whole and exact-length
 streamed item APIs preserve ordered item identity, empty items and canonical
@@ -71,14 +71,28 @@ The final independent TupleHash retest found no Critical, High, or Medium
 issue. The later focused retest of the exact `sanitization 2.0.4` dependency
 delta reached the same conclusion. The
 [permanent report](../security/pentest/v0.24.14.md) records `PASS`/`PASS` with
-zero open findings; the resulting report-bearing candidate awaits hosted
-GitHub and CodeQL before tag authorization.
+zero open findings.
+
+The v0.24.15 candidate adds all four SP 800-185 ParallelHash and
+ParallelHashXOF identities in `brynja-hash-parallel`. Its portable path is
+allocation-free `no_std`; caller workspace length selects positive `B`, and
+the exact hardened cSHAKE owner performs every leaf and final-node operation.
+The API covers empty and partial leaves, canonical arbitrary-bit input and
+output, fixed and incremental XOF output, typed secret ownership, indexed
+caller-scheduled jobs, fail-closed ordered collection, and checked machine
+limits. A separate `brynja-hash-parallel-std` host adapter executes those same
+jobs with bounded workers, deterministic joins, cooperative cancellation,
+panic containment, and no edge into defaults, facades, bare-metal, or FIPS
+boundaries. All twelve official NIST fixed/XOF examples pass. ParallelHash is
+implemented but remains independently unverified and not FIPS validated; the
+whole SP 800-185 family remains In progress until v0.24.16-v0.24.17 acceptance.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
 cryptographic algorithm beyond those fourteen named hash and XOF identities,
-four KMAC identities, and four TupleHash identities, X.509, QUIC-TLS, DTLS
+four KMAC identities, four TupleHash identities, and four ParallelHash
+identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.

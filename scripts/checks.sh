@@ -85,6 +85,15 @@ scripts/tuplehash/check-tuplehash-codegen.sh
 cargo test --locked --manifest-path assurance/tuplehash-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/tuplehash-public-api/Cargo.toml \
   --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
+python3 scripts/parallelhash/check-parallelhash.py
+python3 scripts/parallelhash/test-parallelhash.py
+python3 scripts/parallelhash/check-parallelhash-differential.py
+cargo test --locked --manifest-path assurance/parallelhash-public-api/Cargo.toml
+cargo clippy --locked --manifest-path assurance/parallelhash-public-api/Cargo.toml \
+  --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
+cargo test --locked --manifest-path assurance/parallelhash-std-public-api/Cargo.toml
+cargo clippy --locked --manifest-path assurance/parallelhash-std-public-api/Cargo.toml \
+  --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
 python3 scripts/hash/check-final-acceptance.py
 python3 scripts/hash/test-final-acceptance.py
 scripts/sha2/check-sha256-cpu-codegen.sh

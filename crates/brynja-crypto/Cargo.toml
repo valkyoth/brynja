@@ -17,6 +17,7 @@ default = []
 brynja-hash-sha2 = { workspace = true }
 brynja-hash-sha3 = { workspace = true }
 brynja-hash-tuple = { workspace = true }
+brynja-hash-parallel = { workspace = true }
 brynja-mac-kmac = { workspace = true }
 
 [lints]

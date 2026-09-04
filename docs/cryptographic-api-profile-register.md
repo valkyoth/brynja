@@ -2,10 +2,10 @@
 
 Generated from the reviewed policy and semantic standards surfaces. Do not edit by hand.
 
-- Capabilities: **131**
+- Capabilities: **132**
 - API dimensions per capability: **22**
 - Current secret owners: **8**
-- Registered capability owners: **4**
+- Registered capability owners: **5**
 - Planned secret owners: **73**
 
 ## Profile Coverage
@@ -15,7 +15,7 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 | `aead` | 2 |
 | `asymmetric` | 6 |
 | `fixed-hash` | 1 |
-| `hash-xof-family` | 2 |
+| `hash-xof-family` | 3 |
 | `keyed-construction` | 5 |
 | `protocol` | 23 |
 | `public-component` | 42 |
@@ -31,7 +31,7 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 | Disposition | Capabilities |
 | --- | ---: |
 | `future-work` | 117 |
-| `implemented` | 9 |
+| `implemented` | 10 |
 | `intentionally-rejected` | 1 |
 | `legacy-only` | 3 |
 | `safely-ignored` | 1 |

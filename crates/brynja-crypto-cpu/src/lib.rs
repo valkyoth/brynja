@@ -11,6 +11,11 @@
 mod keccak;
 mod keccak_constants;
 mod sha256;
+#[cfg(any(
+    target_arch = "x86_64",
+    target_arch = "aarch64",
+    target_arch = "riscv64"
+))]
 mod sha256_schedule;
 mod sha512;
 #[cfg(any(target_arch = "aarch64", target_arch = "riscv64"))]

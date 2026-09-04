@@ -16,7 +16,7 @@ SOURCES = tuple(PORTABLE / "src" / name for name in (
     "backend.rs", "core_state.rs", "error.rs", "fixed.rs", "lib.rs",
     "output.rs", "scheduled.rs", "xof.rs",
 ))
-STD_SOURCES = (STD / "src/lib.rs",)
+STD_SOURCES = (STD / "src/lib.rs", STD / "src/worker.rs")
 TESTS = (
     PORTABLE / "tests/api.rs", PORTABLE / "tests/official_vectors.rs",
     STD / "tests/executor.rs",
@@ -72,6 +72,9 @@ def validate(root: Path) -> None:
     expected_sources = {root / path for path in SOURCES}
     if set((root / PORTABLE / "src").glob("*.rs")) != expected_sources:
         fail("portable ParallelHash source inventory changed")
+    expected_std_sources = {root / path for path in STD_SOURCES}
+    if set((root / STD / "src").glob("*.rs")) != expected_std_sources:
+        fail("std ParallelHash source inventory changed")
     loaded = {path: read(root, path) for path in FILES}
     if set(HASHES) != set(HASHED):
         fail("ParallelHash reviewed hash inventory changed")
@@ -133,10 +136,12 @@ def validate(root: Path) -> None:
         "brynja-hash-parallel": {"workspace": True},
     }:
         fail("std executor dependency boundary changed")
-    std_source = loaded[STD_SOURCES[0]]
+    std_source = "\n".join(loaded[path] for path in STD_SOURCES)
     for token in (
         "pub struct ParallelHashExecutor", "try_reserve_exact",
-        "std::thread::scope", "CancellationToken", "WorkerPanicked",
+        "thread::scope", "thread::Builder::new().spawn_scoped",
+        "trait ThreadSpawner", "CancellationToken", "WorkerPanicked",
+        "max_leaves", "WorkLimitExceeded", "let slots = leaves.min(workers)",
         "struct LeafStorage", "clear_owned_region(leaf)", "join_worker(handle)",
         "failure.map_or(Ok(()), Err)",
         "pub fn parallel_hash128_bits", "pub fn parallel_hash256_bits",
@@ -169,6 +174,7 @@ def validate(root: Path) -> None:
         "worker_counts_match_portable_fixed_and_xof",
         "arbitrary_bit_executor_matches_portable_fixed_and_xof",
         "cancellation_is_fail_closed_and_preserves_output",
+        "zero_and_exceeded_leaf_budgets_fail_before_output",
     ):
         require(executor_tests, token, "executor acceptance")
     for path, token in (

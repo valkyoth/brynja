@@ -46,8 +46,9 @@ Keep a Changelog and Semantic Versioning.
   incremental XOF output, hardened ownership, and indexed ordered caller
   scheduling share one cSHAKE construction.
 - Add the separate zero-dependency `brynja-hash-parallel-std` bounded native
-  executor with cooperative cancellation, deterministic joining, worker-panic
-  containment, and no default, facade, bare-metal, or FIPS edge. Bind all
+  executor with explicit worker/leaf budgets, worker-sized reusable storage,
+  pre-allocation cancellation, fallible scoped thread creation, deterministic
+  joining, worker-panic containment, and no default, facade, bare-metal, or FIPS edge. Bind all
   twelve official NIST fixed/XOF examples and portable/scheduled/threaded
   equivalence without claiming independent review or FIPS validation.
 

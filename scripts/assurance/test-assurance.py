@@ -157,9 +157,12 @@ def test_missing_ci_target_fails() -> None:
         assurance.validate_workflow(broken)
 
 
-def test_bare_metal_ci_cannot_compile_std_detector() -> None:
+def test_bare_metal_ci_cannot_compile_std_packages() -> None:
     workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     broken = workflow.replace("--exclude brynja-crypto-cpu-std ", "")
+    with fails_with("CI bare-metal target command drifted"):
+        assurance.validate_workflow(broken)
+    broken = workflow.replace("--exclude brynja-hash-parallel-std ", "")
     with fails_with("CI bare-metal target command drifted"):
         assurance.validate_workflow(broken)
 

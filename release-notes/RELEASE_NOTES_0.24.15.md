@@ -12,7 +12,8 @@ parameter; its scheduling API exposes exact indexed leaf jobs and accepts
 their typed results only in deterministic standard order.
 
 The separate zero-third-party-dependency `brynja-hash-parallel-std` package automates the
-same jobs with bounded native threads, cooperative cancellation, worker-panic
+same jobs with bounded native threads, an explicit maximum-leaf work budget,
+cooperative cancellation, recoverable OS thread-launch failure, worker-panic
 containment, and fail-closed output. It is absent from Brynja's default graph,
 main facade, bare-metal path, and FIPS boundary.
 
@@ -36,10 +37,11 @@ verification or FIPS 140-3 validation is claimed.
   storage, and collectors lifetime-bound to the exact issuing plan that reject
   missing, repeated, reordered, cross-plan, differently sized, or differently
   parameterized results and then fail closed permanently.
-- Provide a separate native executor with a positive bounded worker count,
-  fallible bounded allocation, deterministic join/merge, cooperative
-  cancellation, worker-panic containment, byte and arbitrary-bit API parity,
-  complete temporary leaf clearing, and unchanged output on pre-output failure.
+- Provide a separate native executor with positive worker and maximum-leaf
+  limits, worker-sized reusable storage, pre-allocation cancellation, fallible
+  scoped OS thread creation, deterministic join/merge, worker-panic
+  containment, byte and arbitrary-bit API parity, complete temporary leaf
+  clearing, and unchanged output on pre-output failure.
 - Reexport the portable family from `brynja-crypto` and `brynja`; do not
   reexport or otherwise activate the `std` executor.
 
@@ -55,6 +57,10 @@ verification or FIPS 140-3 validation is claimed.
 - Reordered results permanently quarantine the collector, cancellation leaves
   caller output unchanged, and typed leaf/output owners clear their complete
   caller storage when dropped.
+- Injected thread-launch failure returns `ResourceExhausted` after every
+  successfully started worker is joined; leaf-budget exhaustion is rejected
+  before allocation or thread creation, and temporary digest storage never
+  exceeds the configured concurrent worker count.
 - Any error after sequential or scheduled state mutation permanently
   quarantines and clears that state; callers cannot retry a partially advanced
   construction.

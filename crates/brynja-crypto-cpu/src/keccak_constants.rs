@@ -1,3 +1,4 @@
+#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 pub(crate) const ROUND_CONSTANTS: [u64; 24] = [
     0x0000_0000_0000_0001,
     0x0000_0000_0000_8082,
@@ -25,10 +26,12 @@ pub(crate) const ROUND_CONSTANTS: [u64; 24] = [
     0x8000_0000_8000_8008,
 ];
 
+#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 pub(crate) const ROTATION_OFFSETS: [u32; 25] = [
     0, 1, 62, 28, 27, 36, 44, 6, 55, 20, 3, 10, 43, 25, 39, 41, 45, 15, 21, 8, 18, 2, 61, 56, 14,
 ];
 
+#[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
 pub(crate) const PI_DESTINATIONS: [usize; 25] = [
     0, 10, 20, 5, 15, 16, 1, 11, 21, 6, 7, 17, 2, 12, 22, 23, 8, 18, 3, 13, 14, 24, 9, 19, 4,
 ];

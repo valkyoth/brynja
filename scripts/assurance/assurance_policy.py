@@ -261,7 +261,7 @@ def validate_workflow(workflow: str) -> None:
     if workflow.count(install) != 1:
         fail("CI bare-metal target installation drifted")
     command = (
-        "run: cargo check --workspace --exclude brynja-crypto-cpu-std "
+        "run: cargo check --workspace --exclude brynja-crypto-cpu-std --exclude brynja-hash-parallel-std "
         "--all-features --target ${{ matrix.target }}"
     )
     if workflow.count(command) != 1:

@@ -45,7 +45,8 @@ brynja_hash_parallel::parallel_hash128(
 
 Streaming, canonical arbitrary-bit, incremental XOF, hardened secret-bearing,
 and caller-scheduled ordered-leaf APIs are included. A distinct optional
-`brynja-hash-parallel-std` package supplies bounded native threads without
+`brynja-hash-parallel-std` package supplies separately selected native threads
+with explicit worker/leaf budgets and recoverable launch failures, without
 entering this portable package, Brynja defaults, or a FIPS module boundary.
 
 ## Cryptography Verification Status

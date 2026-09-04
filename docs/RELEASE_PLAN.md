@@ -3394,7 +3394,7 @@ Exit criteria:
 
 Status: awaiting pentest
 
-Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-third-party-dependency std executor; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.
+Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-third-party-dependency std executor with explicit worker and maximum-leaf budgets, reusable worker-sized clearing storage and recoverable scoped thread creation; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.
 
 Goal: complete the four parallel-hash instances as both exact mathematical
 functions and practically usable bounded parallel operations across platforms.
@@ -3407,8 +3407,9 @@ Deliverables:
 - expose allocation-free sequential streaming plus affine ordered leaf jobs and
   caller-supplied result storage so no_std schedulers can execute leaves in
   parallel without duplicating construction logic or accepting reordered data;
-- add an optional separate first-party zero-third-party-dependency std executor with bounded
-  worker count, cancellation, panic/error containment and deterministic merge;
+- add an optional separate first-party zero-third-party-dependency std executor with positive
+  worker and maximum-leaf limits, pre-allocation cancellation, fallible scoped
+  thread creation, worker-sized reusable storage, panic/error containment and deterministic merge;
   keep it outside the core, defaults, bare-metal and FIPS module boundary.
 
 Verification:

@@ -81,8 +81,9 @@ The API covers empty and partial leaves, canonical arbitrary-bit input and
 output, fixed and incremental XOF output, typed secret ownership, indexed
 caller-scheduled jobs, fail-closed ordered collection, and checked machine
 limits. A separate `brynja-hash-parallel-std` host adapter executes those same
-jobs with bounded workers, deterministic joins, cooperative cancellation,
-panic containment, and no edge into defaults, facades, bare-metal, or FIPS
+jobs with positive worker and maximum-leaf limits, worker-sized reusable
+storage, pre-allocation cancellation, fallible scoped thread creation,
+deterministic joins, panic containment, and no edge into defaults, facades, bare-metal, or FIPS
 boundaries. All twelve official NIST fixed/XOF examples pass. ParallelHash is
 implemented but remains independently unverified and not FIPS validated; the
 whole SP 800-185 family remains In progress until v0.24.16-v0.24.17 acceptance.

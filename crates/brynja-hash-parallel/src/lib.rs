@@ -96,8 +96,10 @@ mod proofs {
         kani::assume(bits <= 4_096);
         kani::assume(block <= 128);
         if block != 0 {
-            let block_bits = block * 8;
-            let expected = (bits + block_bits - 1) / block_bits;
+            let Some(block_bits) = block.checked_mul(8) else {
+                return;
+            };
+            let expected = bits.div_ceil(block_bits);
             assert_eq!(
                 leaf_count(bits, block),
                 u128::try_from(expected).map_err(|_| super::ParallelHashError::MessageTooLong)

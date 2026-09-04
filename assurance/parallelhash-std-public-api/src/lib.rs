@@ -2,7 +2,7 @@ use brynja_hash_parallel_std::{CancellationToken, ParallelHashExecutor, Parallel
 
 /// Executes ParallelHash through the opt-in native adapter.
 pub fn execute(input: &[u8], output: &mut [u8; 32]) -> Result<(), ParallelHashExecutorError> {
-    ParallelHashExecutor::new(2)?.parallel_hash128(
+    ParallelHashExecutor::new(2, 1_024)?.parallel_hash128(
         input,
         3,
         b"package-external",

@@ -145,13 +145,13 @@ sha256 = "7fc48e128bbc57fff4f81c59818aa26c6b8ed54a94a84a18a2307958bcaf8046"
 package = "brynja-crypto-cpu"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "64af7e750007ce92d687b171703242a29bfbf84e6775e87a35779548dadef264"
+sha256 = "695c9df5a48c416da4c6a2605157bccd0d0a6d0c41f6b8d66df1359400223d15"
 
 [[sources]]
 package = "brynja-crypto-cpu"
 path = "src/sha256.rs"
 status = "safe-session-and-attestation-boundary"
-sha256 = "ab654d3dc132c6401a19497c4893fa1b000de7c298ae864c5b849843f5ffb27b"
+sha256 = "f2a3232d2eb204192e181bd4f526730b744fef175b24892d1018211c4682e1cc"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -181,7 +181,7 @@ sha256 = "faaa0fb943f8a518b4e45797da4fc01382450626e56f6c9a81eddfebcfdd9c31"
 package = "brynja-crypto-cpu"
 path = "src/keccak_constants.rs"
 status = "portable-keccak-constants"
-sha256 = "0dd7416c63230a9dc8c6722da36ece0ce481a3f719fef81c55b9d5095da05883"
+sha256 = "a1c1eb54418629305e71fe458d70b6e0ebb3e4fded9d60f898bc0fd09db2fc14"
 
 [[sources]]
 package = "brynja-crypto-cpu"

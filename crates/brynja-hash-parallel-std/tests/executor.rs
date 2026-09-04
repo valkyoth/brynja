@@ -24,7 +24,7 @@ fn worker_counts_match_portable_fixed_and_xof() {
     );
 
     for workers in [1, 2, 4, 32] {
-        let executor = ParallelHashExecutor::new(workers);
+        let executor = ParallelHashExecutor::new(workers, 1_024);
         assert!(executor.is_ok());
         let Ok(executor) = executor else {
             return;
@@ -47,7 +47,7 @@ fn worker_counts_match_portable_fixed_and_xof() {
 
 #[test]
 fn cancellation_is_fail_closed_and_preserves_output() {
-    let executor = ParallelHashExecutor::new(2);
+    let executor = ParallelHashExecutor::new(2, 1_024);
     assert!(executor.is_ok());
     let Ok(executor) = executor else {
         return;
@@ -107,7 +107,7 @@ fn arbitrary_bit_executor_matches_portable_fixed_and_xof() {
     };
     assert_eq!(reader.squeeze_final_bits(xof_output), Ok(()));
 
-    let executor = ParallelHashExecutor::new(3);
+    let executor = ParallelHashExecutor::new(3, 1_024);
     assert!(executor.is_ok());
     let Ok(executor) = executor else {
         return;
@@ -164,7 +164,24 @@ fn arbitrary_bit_executor_matches_portable_fixed_and_xof() {
 #[test]
 fn zero_workers_are_rejected() {
     assert_eq!(
-        ParallelHashExecutor::new(0).err(),
+        ParallelHashExecutor::new(0, 1).err(),
         Some(ParallelHashExecutorError::InvalidWorkerCount)
     );
+}
+
+#[test]
+fn zero_and_exceeded_leaf_budgets_fail_before_output() {
+    assert_eq!(
+        ParallelHashExecutor::new(1, 0).err(),
+        Some(ParallelHashExecutorError::InvalidLeafLimit)
+    );
+    let executor = ParallelHashExecutor::new(2, 2);
+    assert!(executor.is_ok());
+    let Ok(executor) = executor else { return };
+    let mut output = [0xa5_u8; 32];
+    assert_eq!(
+        executor.parallel_hash256(b"three", 1, b"", &mut output, &CancellationToken::new()),
+        Err(ParallelHashExecutorError::WorkLimitExceeded)
+    );
+    assert_eq!(output, [0xa5; 32]);
 }

@@ -20,7 +20,7 @@ arbitrary-bit, exact-length streaming-item, hardened-output and incremental-XOF
 APIs. New unpublished `brynja-hash-parallel 0.1.0` contains complete
 ParallelHash128/ParallelHash256 and ParallelHashXOF128/ParallelHashXOF256
 sequential, hardened, arbitrary-bit, and caller-scheduled APIs. Its separate
-`brynja-hash-parallel-std 0.1.0` adapter provides bounded native execution and
+`brynja-hash-parallel-std 0.1.0` adapter provides explicit worker/leaf-budgeted native execution and
 is excluded from defaults, facades, bare-metal, and FIPS graphs; the wider
 derived family remains in progress. Published
 `brynja-crypto-cpu 0.1.1` now contains implemented but unadmitted x86_64 SHA,
@@ -296,7 +296,7 @@ FIPS validation remain later work. Zero crates are selected for publication.
 | `brynja-mac-kmac` | `0.1.0` | no | New unpublished complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 leaf with strength-only default APIs, explicit-feature exact conformance, in-place source clearing, constant-time verification, and typed output |
 | `brynja-hash-tuple` | `0.1.0` | no | New unpublished complete TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 leaf with structural tuple items, canonical arbitrary-bit input/output, exact-length item streaming, hardened ownership, and incremental XOF output |
 | `brynja-hash-parallel` | `0.1.0` | no | New unpublished complete ParallelHash128/ParallelHash256 and ParallelHashXOF128/ParallelHashXOF256 leaf with sequential caller workspace, arbitrary-bit input/output, hardened ownership, and ordered caller scheduling |
-| `brynja-hash-parallel-std` | `0.1.0` | no | New unpublished optional bounded native-thread executor; excluded from defaults, facades, bare metal, and FIPS boundaries |
+| `brynja-hash-parallel-std` | `0.1.0` | no | New unpublished optional worker/leaf-budgeted native-thread executor with reusable worker-sized storage and fallible thread creation; excluded from defaults, facades, bare metal, and FIPS boundaries |
 | `brynja-crypto` | `0.1.2` | no | Published version retained while unpublished source also reexports complete cSHAKE, SP 800-185 encodings, and all KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF constructions |
 | `brynja-crypto-cpu` | `0.1.1` | no | Published version retained; five SHA-2 plus two Keccak candidates remain unadmitted; x86 SHA-512 and RISC-V Keccak are scalar-only |
 | `brynja-crypto-cpu-std` | `0.1.1` | no | Published version retained; unpublished complete-family reporting falls back or fails closed; RISC-V auto-detection is disabled |

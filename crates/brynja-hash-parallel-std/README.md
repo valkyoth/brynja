@@ -26,10 +26,24 @@
 # brynja-hash-parallel-std
 
 This opt-in `std` package runs exact `brynja-hash-parallel` leaf jobs on a
-bounded number of native threads. It contains no cryptographic primitive or
-third-party dependency. Completion order never controls merge order, worker
-panics and resource failures release no output, and cancellation is
-cooperative and fail-closed.
+bounded number of native threads and an explicit maximum-leaf work budget. It
+contains no cryptographic primitive or third-party dependency. Temporary leaf
+storage is limited to the smaller of the admitted leaf count and worker count;
+OS thread-launch failures, worker panics, cancellation, allocation failure and
+work-budget exhaustion are typed failures that release no output. Completion
+order never controls merge order.
+
+```rust
+let executor = brynja_hash_parallel_std::ParallelHashExecutor::new(
+    4,     // maximum concurrent native workers
+    4096,  // maximum leaves admitted for one operation
+)?;
+# Ok::<(), brynja_hash_parallel_std::ParallelHashExecutorError>(())
+```
+
+Callers must choose both limits as trusted deployment policy. Cancellation is
+cooperative after workers start and is checked before work admission or
+allocation.
 
 It is intentionally absent from `brynja`, default features, bare-metal builds,
 and any FIPS module boundary.

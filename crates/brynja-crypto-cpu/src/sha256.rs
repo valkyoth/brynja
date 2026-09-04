@@ -270,6 +270,12 @@ fn compress_direct(
         crate::riscv64_zknh::compress(state, block);
         return Ok(());
     }
+    #[cfg(not(any(
+        target_arch = "x86_64",
+        target_arch = "aarch64",
+        target_arch = "riscv64"
+    )))]
+    let _ = (backend, state, block);
     Err(Sha256BackendError::WrongArchitecture)
 }
 

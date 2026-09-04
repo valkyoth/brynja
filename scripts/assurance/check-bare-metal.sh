@@ -8,7 +8,8 @@ while IFS= read -r target; do
         echo "missing bare-metal Rust target: ${target}" >&2
         exit 1
     }
-    cargo check --workspace --exclude brynja-crypto-cpu-std --all-features --target "$target"
+    cargo check --workspace --exclude brynja-crypto-cpu-std \
+        --exclude brynja-hash-parallel-std --all-features --target "$target"
     cargo check --manifest-path assurance/cpu-admission-fixture/Cargo.toml --target "$target"
     cargo check --locked --manifest-path assurance/sha256-public-api/Cargo.toml \
         --lib --target "$target"

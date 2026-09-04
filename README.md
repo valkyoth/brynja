@@ -913,9 +913,10 @@ customized, fixed, XOF, streaming, and canonical arbitrary-bit inputs use the
 same hardened cSHAKE owner. Indexed caller-scheduled leaf jobs retain typed
 secret result ownership and an ordered collector rejects missing, duplicated,
 reordered, or differently shaped results. The separate zero-third-party-dependency
-`brynja-hash-parallel-std` host adapter adds bounded native threads,
-cooperative cancellation, panic containment, deterministic joining, and no
-default, bare-metal, facade, or FIPS edge. All twelve official NIST examples
+`brynja-hash-parallel-std` host adapter adds explicit worker and leaf-work
+limits, worker-sized reusable storage, pre-allocation cancellation, fallible
+OS thread creation, panic containment, deterministic joining, and no default,
+bare-metal, facade, or FIPS edge. All twelve official NIST examples
 pass. ParallelHash is implemented but neither independently verified nor FIPS
 140-3 validated; combined family acceptance remains at v0.24.16-v0.24.17.
 
@@ -1042,7 +1043,7 @@ selected set in dependency order and publishes the facade last.
 | `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | v0.1.0 implemented internally at v0.24.13; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
 | `brynja-hash-tuple` | Complete TupleHash128/256 and TupleHashXOF128/256 with structural item boundaries and hardened ownership | v0.1.0 implemented internally at v0.24.14; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
 | `brynja-hash-parallel` | Complete allocation-free ParallelHash128/256 and ParallelHashXOF128/256 with hardened and ordered scheduling APIs | v0.1.0 implemented internally at v0.24.15; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
-| `brynja-hash-parallel-std` | Optional bounded native-thread ParallelHash executor | v0.1.0 implemented internally at v0.24.15; excluded from defaults, bare metal, facades, and FIPS boundaries |
+| `brynja-hash-parallel-std` | Optional worker/leaf-budgeted native-thread ParallelHash executor with fallible thread creation | v0.1.0 implemented internally at v0.24.15; excluded from defaults, bare metal, facades, and FIPS boundaries |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
 | `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six SHA-2 algorithms, all six FIPS 202 functions, complete cSHAKE, SP 800-185 encodings, all four KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF constructions; other planned cryptography and provider effects remain absent |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented; x86 SHA-512 and RISC-V Keccak are scalar-only; zero admitted backends |

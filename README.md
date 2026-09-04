@@ -891,7 +891,13 @@ fixed-output borrowing, exact source erasure, forgotten-writer failure,
 clearing length metadata, direct partial-byte ownership, closed backend
 strength, the production Kani path, and package-external no-copy compiler
 evidence. A later retest's remaining High owner-copy and Medium gate-coverage
-findings are remediated; independent retest of the exact candidate is pending.
+findings are remediated. The next retest confirmed the High fix and found two
+Medium issues: the tuple count survived successful borrowed finalization, and
+the LLVM/assembly copy matcher retained false-negative paths. The candidate now
+clears all source-owned metadata before returning output or a borrowing reader,
+tests fixed and XOF completion across ordinary and hardened owners, self-tests
+the corrected LLVM matcher, and rejects every memcpy in isolated external
+finalization functions. Independent retest of the exact candidate is pending.
 
 ## Install
 

@@ -3372,6 +3372,13 @@ Verification:
   package-external development and optimized compiler artifacts; the later
   High owner-copy and Medium evidence-coverage retest findings are remediated
   and require another exact-candidate retest.
+- clear the pending byte, bit width, tuple count, remaining-item length, and
+  failure latch before successful fixed finalization returns or an XOF reader
+  escapes; test ordinary and hardened fixed/XOF states through the public API;
+  self-test the LLVM owner-copy matcher with positive and negative fixtures,
+  and reject every LLVM or assembly memcpy in package-external functions that
+  perform finalization only. The subsequent two Medium metadata-remanence and
+  assurance false-negative findings require exact-candidate retest.
 
 Exit criteria:
 

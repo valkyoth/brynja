@@ -38,6 +38,10 @@ validated, and no accelerated backend is admitted.
 - Keep finalization in the caller-owned TupleHash allocation: fixed-output
   methods borrow the state, XOF finalization returns a lifetime-bound reader,
   and no secret-bearing cSHAKE owner is returned or transferred by value.
+- Clear every no-longer-needed byte-backed metadata field before successful
+  fixed finalization returns or an XOF borrowing reader escapes, including the
+  tuple count, pending byte, bit width, remaining-item length, and failure
+  latch.
 
 ## Verification
 
@@ -61,8 +65,10 @@ validated, and no accelerated backend is admitted.
   focused Miri and AddressSanitizer coverage, and exact Rust 1.90.0/1.98.1
   development and optimized MIR, LLVM IR, and assembly cleanup inspection.
 - Compiler evidence inspects `Backend::finalize_in_place`,
-  `TupleCore::finish_in_place`, and package-external fixed and streaming calls;
-  it rejects 1040–1042-byte owner allocas or copies at those transitions.
+  `TupleCore::finish_in_place`, and package-external finalization-only fixed and
+  streaming calls. A self-test proves the matcher rejects representative
+  1040–1042-byte owner allocas and LLVM copies, while the isolated external
+  functions reject every LLVM or assembly memcpy.
 
 ## Pentest Remediation
 
@@ -70,7 +76,9 @@ The initial exceptional assessment found two High secret-state remanence
 issues, two Medium item-lifecycle and metadata-remanence issues, and two Low
 assurance/defensive-code observations. A later retest found that one High
 owner-copy path remained and that the compiler gate did not observe it. The
-complete remediation:
+next retest confirmed the High path was fixed, but found one Medium
+post-finalization tuple-count remanence issue and one Medium false-negative in
+the LLVM/assembly matcher. The complete remediation:
 
 - transitions the exact embedded cSHAKE owner from absorption to squeezing in
   place, returns only lifetime-bound borrowing TupleHash readers, finalizes
@@ -84,17 +92,23 @@ complete remediation:
 - stores streamed remaining length in byte-backed clearing owner storage and
   stages left/right encoded lengths in a dedicated owner whose Drop clears its
   bytes and width; and
+- clears all five source-owned metadata regions at the successful transition
+  to squeezing and proves through ordinary and hardened fixed/XOF APIs that
+  the tuple count is no longer observable after the finalization borrow; and
 - replaces the numeric backend fallback with a closed strength enum, makes the
   Kani reservation proof execute the production checked-subtraction path over
   the complete `u128` domain, and compiles a package-external harness before
-  rejecting secret-owner-sized LLVM and assembly copies.
+  rejecting secret-owner-sized LLVM copies. The corrected matcher is exercised
+  by synthetic positive and negative fixtures, and finalization-only external
+  functions reject any LLVM or assembly memcpy.
 
 Permanent regressions cover forgotten writers, exact in-place phase changes,
-borrow-scoped readers, irreversible reuse rejection, clearing encoders,
-backend strength, partial-byte ownership, the production proof path, and every
-compiler-evidence edge. Development and optimized MIR, LLVM IR, and assembly
-checks bind the exact finalization functions and external consumer boundary to
-the no-copy rule and subsequent owner wipe. Independent retest of the exact
+borrow-scoped readers, irreversible reuse rejection, post-finalization
+metadata erasure, clearing encoders, backend strength, partial-byte ownership,
+the production proof path, matcher self-tests, and every compiler-evidence
+edge. Development and optimized MIR, LLVM IR, and assembly checks bind the
+exact finalization functions and isolated external consumer boundary to the
+no-copy rule and subsequent owner wipe. Independent retest of the exact
 remediation candidate is required before the release status can become PASS.
 
 ## Security And Residual Limits

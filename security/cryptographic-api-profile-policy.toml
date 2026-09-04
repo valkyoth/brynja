@@ -859,7 +859,7 @@ sha256 = "845400daa8451df50a08d98c7c45e7660a19d17a4e3216e87b2abe59af75eae9"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/core_state.rs"
-sha256 = "bbf73039d246d9ffc948cd1a82696f6f3600553d8c49ef8ae8b1572c77deb243"
+sha256 = "e97474a5bfa9aecd4df814f2c4bbb044f7f1c8b5a549fe4ca8e1be16ba93ba41"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/item.rs"
@@ -871,11 +871,11 @@ sha256 = "50ea02d2a325a31cf485010e832e39df022d465bf57d42f5dee6d591afba748b"
 
 [[reviewed-source]]
 path = "assurance/tuplehash-public-api/src/lib.rs"
-sha256 = "c1dca297e1c4f26890d2559eae0a810ffcee0b9c783796f28a49f5bf4aae3bff"
+sha256 = "49ce2027bcbda7941947c04d697c2d8efa7e50d5f5d23ed01b4f5aeb4be91484"
 
 [[reviewed-source]]
 path = "scripts/tuplehash/check-tuplehash-codegen.sh"
-sha256 = "04ed068e8d5f3e658b260a0f7a627aa06a0ae87e2c2cbc8f3db4f21f07c290f8"
+sha256 = "1b11e5a0f98429920a85175bea7390e38c2c07f3cc178ea083d73bde78ca7a5c"
 
 [[reviewed-source]]
 path = "assurance/api-profile-contract/src/lib.rs"
@@ -887,7 +887,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "ef837b3218b3da9e94fc64349323ab5e114246e5a4b4e1f2cf0842825cb98b32"
+sha256 = "fa73c8b06ed011e5194a18632ff4849aafef33bdf1cd7c35bc45e7741ab08a81"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"

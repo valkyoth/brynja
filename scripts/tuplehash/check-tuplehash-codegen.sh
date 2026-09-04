@@ -82,13 +82,56 @@ require_fragment() {
     fi
 }
 
+secret_copy_re='alloca \[104[0-2] x i8\]|llvm\.memcpy.*i64([[:space:]]+noundef)?[[:space:]]+104[0-2]'
+
+contains_secret_copy() {
+    grep -Eq "$secret_copy_re" <<<"$1"
+}
+
 reject_secret_copy() {
     local body="$1"
     local label="$2"
-    if grep -Eq 'alloca \[104[0-2] x i8\]|llvm\.memcpy[^\n]*i64 104[0-2]' <<<"$body"; then
+    if contains_secret_copy "$body"; then
         echo "TupleHash compiler evidence found a secret-owner copy in $label" >&2
         return 1
     fi
+}
+
+self_test_secret_copy_matcher() {
+    local fixture
+    for fixture in \
+        '%owner = alloca [1040 x i8], align 8' \
+        'call void @llvm.memcpy.p0.p0.i64(ptr align 8 %dst, ptr noundef align 8 %src, i64 noundef 1041, i1 false)' \
+        'call void @llvm.memcpy.p0.p0.i64(ptr %dst, ptr %src, i64 1042, i1 false)'
+    do
+        if ! contains_secret_copy "$fixture"; then
+            echo "TupleHash compiler evidence matcher accepted a synthetic secret-owner copy" >&2
+            return 1
+        fi
+    done
+    if contains_secret_copy 'call void @llvm.memcpy.p0.p0.i64(ptr %dst, ptr %src, i64 1039, i1 false)'; then
+        echo "TupleHash compiler evidence matcher rejected a non-owner copy" >&2
+        return 1
+    fi
+}
+
+contains_any_memcpy() {
+    grep -Eq 'llvm\.memcpy|(^|[^[:alnum:]_])_?memcpy([^[:alnum:]_]|$)' <<<"$1"
+}
+
+reject_any_memcpy() {
+    local body="$1"
+    local label="$2"
+    if contains_any_memcpy "$body"; then
+        echo "TupleHash compiler evidence found memcpy in finalization-only $label" >&2
+        return 1
+    fi
+}
+
+self_test_secret_copy_matcher
+contains_any_memcpy 'callq memcpy@PLT' || {
+    echo "TupleHash compiler evidence matcher accepted a synthetic assembly memcpy" >&2
+    exit 1
 }
 
 for raw_toolchain in "${toolchains[@]}"; do
@@ -147,6 +190,12 @@ for raw_toolchain in "${toolchains[@]}"; do
         grep -Fq '= &((*_1).1: [u8; 1]);' <<<"$tuple_finish"
         grep -q 'Fips202BitString::' <<<"$tuple_finish"
         grep -q 'Backend::finalize_in_place' <<<"$tuple_finish"
+        grep -Fq '= &mut ((*_1).1: [u8; 1]);' <<<"$tuple_finish"
+        grep -Fq '= &mut ((*_1).2: [u8; 1]);' <<<"$tuple_finish"
+        grep -Fq '= &mut ((*_1).3: [u8; 16]);' <<<"$tuple_finish"
+        grep -Fq '= &mut ((*_1).4: [u8; 16]);' <<<"$tuple_finish"
+        grep -Fq '= &mut ((*_1).5: [u8; 1]);' <<<"$tuple_finish"
+        test "$(grep -c 'clear_owned_region' <<<"$tuple_finish")" -ge 5
         tuple_cleanup="$(extract_function '>::wipe(_1: &mut TupleCore)' "$mir")"
         grep -Fq '= &mut ((*_1).3: [u8; 16]);' <<<"$tuple_cleanup"
         grep -q 'clear_owned_region' <<<"$tuple_cleanup"
@@ -214,20 +263,18 @@ for raw_toolchain in "${toolchains[@]}"; do
         done
     done
     for artifact in "${external_llvm[@]}"; do
-        for boundary in public_api_fixture8hardened public_api_fixture9streaming; do
+        for boundary in finalize_hardened_public_in_place finalize_streaming_in_place; do
             body="$(extract_llvm_any_function "$boundary" "$artifact")"
-            require_fragment "$body" "finalize" "package-external finalization $boundary"
+            require_fragment "$body" "define " "package-external finalization $boundary"
             reject_secret_copy "$body" "$boundary in $(basename "$artifact")"
+            reject_any_memcpy "$body" "$boundary in $(basename "$artifact")"
         done
     done
     for artifact in "${external_asm[@]}"; do
-        for boundary in public_api_fixture8hardened public_api_fixture9streaming; do
+        for boundary in finalize_hardened_public_in_place finalize_streaming_in_place; do
             body="$(extract_assembly_function "$boundary" "$artifact")"
-            require_fragment "$body" "finalize" "package-external assembly $boundary"
-            if grep -Eq 'memcpy.*104[0-2]' <<<"$body"; then
-                echo "TupleHash package-external assembly copied a secret owner in $boundary" >&2
-                exit 1
-            fi
+            require_fragment "$body" "$boundary" "package-external assembly $boundary"
+            reject_any_memcpy "$body" "$boundary in $(basename "$artifact")"
         done
     done
     for artifact in "${sha3_llvm[@]}"; do

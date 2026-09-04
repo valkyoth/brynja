@@ -51,6 +51,8 @@ def main() -> int:
     reject("fixed-borrow", Path("crates/brynja-hash-tuple/src/fixed.rs"), "pub fn finalize(&mut self", "pub fn finalize(mut self")
     reject("xof-borrow", Path("crates/brynja-hash-tuple/src/xof.rs"), "pub fn finalize_xof(&mut self)", "pub fn finalize_xof(mut self)")
     reject("codegen-owner-copy", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "reject_secret_copy", "accept_secret_copy")
+    reject("codegen-matcher-self-test", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "self_test_secret_copy_matcher", "skip_secret_copy_matcher_test")
+    reject("codegen-any-memcpy", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "reject_any_memcpy", "allow_any_memcpy")
     reject("codegen-external", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "assurance/tuplehash-public-api/Cargo.toml", "assurance/missing/Cargo.toml")
     reject("open-latch", Path("crates/brynja-hash-tuple/src/core_state.rs"), "self.failed = [1];", "self.failed = [0];")
     reject("complete-latch", Path("crates/brynja-hash-tuple/src/item.rs"), "self.core.complete_item()?;", "self.core.check_item_fragment(0)?;")
@@ -61,6 +63,7 @@ def main() -> int:
     reject("production-proof", Path("crates/brynja-hash-tuple/src/lib.rs"), "checked_remaining_after(remaining, fragment)", "remaining.checked_sub(fragment).ok_or(TupleHashError::MessageTooLong)")
     reject("abandon", Path("crates/brynja-hash-tuple/src/item.rs"), "self.core.abandon_item();", "core::hint::black_box(&mut self.core);")
     reject("cleanup", Path("crates/brynja-hash-tuple/src/core_state.rs"), "clear_owned_region(&mut self.pending)", "core::hint::black_box(&mut self.pending)")
+    reject("finalized-item-count", Path("crates/brynja-hash-tuple/tests/api.rs"), "assert_eq!(whole.item_count(), 0);", "assert_eq!(whole.item_count(), 1);")
     reject("official", Path("crates/brynja-hash-tuple/tests/official_vectors.rs"), "C5D8786C1AFB9B82", "D5D8786C1AFB9B82")
     reject("differential", Path("scripts/checks.sh"), "python3 scripts/tuplehash/check-tuplehash-differential.py", "true # removed")
     reject("miri", Path("scripts/zeroization/check-zeroization-miri.sh"), "-p brynja-hash-tuple", "-p missing-tuplehash")
@@ -69,7 +72,7 @@ def main() -> int:
     reject("sanitizer-latch", Path("scripts/zeroization/check-zeroization-sanitizer.sh"), "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch", "missing_latch_test")
     reject("facade-bit-xof", Path("crates/brynja-crypto/src/lib.rs"), "tuple_hash_xof128_bits", "removed_bit_xof")
     reject("dependency", Path("crates/brynja-hash-tuple/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", 'foreign = "1"')
-    print("TupleHash policy rejects thirty-one encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
+    print("TupleHash policy rejects thirty-four encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
     return 0
 
 

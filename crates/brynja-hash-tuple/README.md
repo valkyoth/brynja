@@ -53,7 +53,10 @@ state are cleared through Brynja's compiler-resistant cleanup boundary.
 Finalization changes the embedded cSHAKE state in place: fixed-output methods
 borrow their state and XOF methods return a lifetime-bound reader, avoiding a
 by-value transfer of the secret-bearing owner. Final bit output clears that
-exact embedded allocation before return.
+exact embedded allocation before return. Successful fixed or XOF finalization
+also clears the pending byte, bit width, tuple count, remaining-item length,
+and failure latch before output or a borrowing reader is returned; observable
+`item_count()` is consequently zero after the finalization borrow ends.
 Caller-owned inputs and copied outputs remain the caller's responsibility.
 
 ## Cryptography Verification Status

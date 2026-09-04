@@ -53,6 +53,8 @@ fn exact_length_streaming_matches_whole_items() {
     assert_eq!(whole.finalize(&mut first), Ok(()));
     assert_eq!(streamed.finalize(&mut second), Ok(()));
     assert_eq!(first, second);
+    assert_eq!(whole.item_count(), 0);
+    assert_eq!(streamed.item_count(), 0);
 }
 
 #[test]
@@ -167,6 +169,7 @@ fn xof_partitions_and_hardened_output_match() {
         assert_eq!(reader.squeeze(first), Ok(()));
         assert_eq!(reader.squeeze(second), Ok(()));
     }
+    assert_eq!(ordinary.item_count(), 0);
     assert_eq!(
         ordinary.push_item(b"after finalize"),
         Err(TupleHashError::StateConsumed)
@@ -182,6 +185,7 @@ fn xof_partitions_and_hardened_output_match() {
             .and_then(|mut value| value.squeeze(&mut direct)),
         Ok(())
     );
+    assert_eq!(one.item_count(), 0);
     assert_eq!(partitioned, direct);
 
     let mut hardened = HardenedTupleHash128::new(b"xof").ok();
@@ -195,6 +199,7 @@ fn xof_partitions_and_hardened_output_match() {
         hardened.finalize_public(&mut fixed, TupleHashPublicDeclassification::acknowledge()),
         Ok(())
     );
+    assert_eq!(hardened.item_count(), 0);
     assert_eq!(
         hardened.push_item(b"after finalize"),
         Err(TupleHashError::StateConsumed)
@@ -213,4 +218,5 @@ fn xof_partitions_and_hardened_output_match() {
     assert!(secret.is_ok());
     drop(secret);
     assert!(secret_bytes.iter().all(|byte| *byte == 0));
+    assert_eq!(hardened_xof.item_count(), 0);
 }

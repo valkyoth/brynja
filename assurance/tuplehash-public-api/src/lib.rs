@@ -1,6 +1,8 @@
 #![no_std]
 
-use brynja_hash_tuple::{HardenedTupleHash128, TupleHashError, TupleHashXof256};
+use brynja_hash_tuple::{
+    HardenedTupleHash128, TupleHashError, TupleHashPublicDeclassification, TupleHashXof256,
+};
 
 /// Hashes a tuple through the leaf package.
 pub fn leaf(items: &[&[u8]], output: &mut [u8; 32]) -> Result<(), TupleHashError> {
@@ -37,6 +39,15 @@ pub fn streaming(output: &mut [u8; 48]) -> Result<(), TupleHashError> {
         item.update(b"cdef")?;
         item.finish()?;
     }
+    finalize_streaming_in_place(&mut state, output)
+}
+
+/// Finalizes an already-constructed public XOF state without owner construction.
+#[inline(never)]
+pub fn finalize_streaming_in_place(
+    state: &mut TupleHashXof256,
+    output: &mut [u8; 48],
+) -> Result<(), TupleHashError> {
     let mut reader = state.finalize_xof()?;
     let (first, second) = output.split_at_mut(13);
     reader.squeeze(first)?;
@@ -55,6 +66,15 @@ pub fn hardened(output: &mut [u8; 32]) -> Result<(), TupleHashError> {
     Ok(())
 }
 
+/// Declassifies an already-constructed hardened state without owner construction.
+#[inline(never)]
+pub fn finalize_hardened_public_in_place(
+    state: &mut HardenedTupleHash128,
+    output: &mut [u8; 32],
+) -> Result<(), TupleHashError> {
+    state.finalize_public(output, TupleHashPublicDeclassification::acknowledge())
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -65,6 +85,7 @@ mod tests {
         let mut facade = [0; 32];
         let mut stream = [0; 48];
         let mut secret = [0xa5; 32];
+        let mut hardened_public = [0; 32];
         let mut bit_xof = [0xff; 3];
         assert_eq!(super::leaf(items, &mut leaf), Ok(()));
         assert_eq!(super::crypto(items, &mut crypto), Ok(()));
@@ -75,6 +96,21 @@ mod tests {
         assert!(stream.iter().any(|byte| *byte != 0));
         assert_eq!(super::hardened(&mut secret), Ok(()));
         assert!(secret.iter().all(|byte| *byte == 0));
+        let hardened_state = super::HardenedTupleHash128::new(b"package-external");
+        assert!(hardened_state.is_ok());
+        let Ok(mut hardened_state) = hardened_state else {
+            return;
+        };
+        assert_eq!(hardened_state.push_item(b"public transcript"), Ok(()));
+        assert_eq!(
+            super::finalize_hardened_public_in_place(
+                &mut hardened_state,
+                &mut hardened_public
+            ),
+            Ok(())
+        );
+        assert!(hardened_public.iter().any(|byte| *byte != 0));
+        assert_eq!(hardened_state.item_count(), 0);
         assert_eq!(super::bit_xof(&mut bit_xof), Ok(()));
         assert_eq!(bit_xof[2] & 0b1111_1000, 0);
     }

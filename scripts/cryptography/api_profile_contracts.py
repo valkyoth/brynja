@@ -271,7 +271,7 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "drop(_1: &mut KmacCore<S, RATE, STRENGTH>) -> () {"
     ],
     TUPLEHASH_DROP: [
-        "fn core_state::<impl at crates/brynja-hash-tuple/src/core_state.rs:226:1: 226:24>::"
+        "fn core_state::<impl at crates/brynja-hash-tuple/src/core_state.rs:229:1: 229:24>::"
         "drop(_1: &mut TupleCore) -> () {"
     ],
 }

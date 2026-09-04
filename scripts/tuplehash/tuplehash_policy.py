@@ -120,6 +120,15 @@ def validate(root: Path) -> None:
         "self.backend.finalize_in_place", "impl Drop for TupleCore",
     ):
         require(core, token, "tuple encoding and cleanup")
+    finish_body = core.split("pub(crate) fn finish_in_place(", 1)[1].split(
+        "pub(crate) fn abandon_item", 1
+    )[0]
+    for field in ("pending", "used", "items", "remaining", "failed"):
+        require(
+            finish_body,
+            f"clear_owned_region(&mut self.{field})",
+            "successful finalization metadata cleanup",
+        )
     for forbidden in ("left_encode_u128(bits)", "right_encode_u128(output_bits)",
                       "let bytes = [", "let byte = self.pending", ".to_le_bytes()",
                       "u128::from_le_bytes"):
@@ -185,6 +194,10 @@ def validate(root: Path) -> None:
         "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch",
         "arbitrary_bit_items_and_outputs_are_canonical",
         "xof_partitions_and_hardened_output_match",
+        "assert_eq!(whole.item_count(), 0)",
+        "assert_eq!(ordinary.item_count(), 0)",
+        "assert_eq!(hardened.item_count(), 0)",
+        "assert_eq!(hardened_xof.item_count(), 0)",
     ):
         require(api, token, "TupleHash adversarial tests")
     for path, token in (
@@ -193,11 +206,15 @@ def validate(root: Path) -> None:
         (MAIN, "four TupleHash identities"),
         (PUBLIC_FIXTURE, "leaf_crypto_and_main_facades_are_operational"),
         (PUBLIC_FIXTURE, "brynja::crypto::tuple_hash_xof128_bits"),
+        (PUBLIC_FIXTURE, "finalize_hardened_public_in_place"),
+        (PUBLIC_FIXTURE, "finalize_streaming_in_place"),
         (DIFFERENTIAL, "for index in range(64)"),
         (DIFFERENTIAL_FIXTURE, "MAX_CAMPAIGN_BYTES"),
         (CODEGEN, "TupleHash exact source and reader cleanup survives"),
         (CODEGEN, "assurance/tuplehash-public-api/Cargo.toml"),
         (CODEGEN, "reject_secret_copy"),
+        (CODEGEN, "self_test_secret_copy_matcher"),
+        (CODEGEN, "reject_any_memcpy"),
         (CODEGEN, "Backend17finalize_in_place"),
         (CODEGEN, "TupleCore15finish_in_place"),
         (MIRI, "-p brynja-hash-tuple"),

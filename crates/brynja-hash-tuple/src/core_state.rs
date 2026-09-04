@@ -182,6 +182,9 @@ impl TupleCore {
         };
         let _ = clear_owned_region(&mut self.pending);
         let _ = clear_owned_region(&mut self.used);
+        let _ = clear_owned_region(&mut self.items);
+        let _ = clear_owned_region(&mut self.remaining);
+        let _ = clear_owned_region(&mut self.failed);
         Ok(reader)
     }
 

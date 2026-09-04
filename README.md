@@ -927,8 +927,11 @@ pass. ParallelHash is implemented but neither independently verified nor FIPS
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.14`; the current internal `0.24.15`
-ParallelHash/ParallelHashXOF candidate selects no crates.io publication and
-awaits its exceptional pentest before release finalization.
+ParallelHash/ParallelHashXOF candidate selects no crates.io publication. Its
+[exceptional pentest report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.15.md)
+records `PASS`/`PASS` with zero open findings after both native-executor
+resource-control gaps were remediated; the report-bearing candidate now awaits
+green hosted checks before tag authorization.
 The published
 dependency is:
 

@@ -7,6 +7,11 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Record the complete v0.24.15 exceptional ParallelHash assessment and final
+  exact-candidate retest as `PASS`/`PASS` with zero open findings. The
+  permanent report retains both native-executor resource-control remediations,
+  confirms that this internal tag selects zero crates, and preserves the
+  scheduled v0.20.0-to-v0.25.0 cumulative assessment boundary.
 - Enforce one active operation per `brynja-hash-parallel-std` executor so
   concurrent callers cannot multiply its configured native-thread budget.
   Contention and poisoned operation permits fail closed, and regression policy

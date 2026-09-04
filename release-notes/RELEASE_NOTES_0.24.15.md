@@ -1,6 +1,7 @@
 # Brynja 0.24.15 Release Notes
 
-Status: implementation complete; exceptional pentest required before tagging
+Status: PASS/PASS with zero open findings; awaiting green hosted GitHub and
+CodeQL before tag authorization
 
 ## Summary
 
@@ -111,6 +112,10 @@ future upstream changes cannot silently alter this implementation.
 Version 0.24.15 is an internal development milestone in the cumulative
 v0.20.0-to-v0.25.0 range and selects zero crates for crates.io publication.
 The new cryptographic construction, secret-bearing scheduling boundary, and
-native worker adapter trigger an exceptional pentest. After a clean retest,
-the permanent report, complete local gate, and green hosted GitHub and CodeQL
-are required before the signed tag.
+native worker adapter triggered an exceptional pentest. Successive review
+rounds identified and closed per-operation allocation/thread-launch and
+executor-wide concurrent resource-amplification gaps. The exact final
+candidate passed retest, and the permanent report records `PASS`/`PASS` with
+zero open findings. Tagging remains blocked only until this report-bearing
+candidate is green on GitHub and CodeQL and the repository owner explicitly
+authorizes the signed tag.

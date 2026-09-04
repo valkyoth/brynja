@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.14 signed; v0.24.15 ParallelHash/ParallelHashXOF implementation candidate awaits exceptional pentest
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.14 signed; v0.24.15 ParallelHash/ParallelHashXOF report-bearing candidate awaits green hosted checks
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -88,6 +88,11 @@ containment, and no edge into defaults, facades, bare-metal, or FIPS
 boundaries. All twelve official NIST fixed/XOF examples pass. ParallelHash is
 implemented but remains independently unverified and not FIPS validated; the
 whole SP 800-185 family remains In progress until v0.24.16-v0.24.17 acceptance.
+The exceptional assessment identified per-operation allocation/thread-launch
+and executor-wide concurrency resource-control gaps. Both are remediated, and
+the exact final candidate passed retest. The
+[permanent report](../security/pentest/v0.24.15.md) records `PASS`/`PASS` with
+zero open findings while preserving the cumulative v0.25.0 assessment.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

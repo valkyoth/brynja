@@ -3392,7 +3392,7 @@ Exit criteria:
 
 ### v0.24.15 - Complete ParallelHash And ParallelHashXOF
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement ParallelHash128, ParallelHash256, ParallelHashXOF128 and ParallelHashXOF256 with every standards-defined B, n, customization and output encoding rule, ordinary and hardened secret-bearing deterministic bounded sequential no_std paths, caller-scheduled ordered leaf jobs with explicit secret ownership for real parallel no_std use, and a separate optional zero-third-party-dependency std executor with explicit worker and maximum-leaf budgets, one fail-closed operation at a time per executor, reusable worker-sized clearing storage and recoverable scoped thread creation; cover complete worker and temporary sanitization, partial and empty leaves, failure and cancellation, ordering, resource exhaustion, fixed and XOF output, official examples, scalar/parallel equivalence, proofs and no hidden allocation in the core crate.
 

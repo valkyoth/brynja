@@ -93,6 +93,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
+- Refresh the Miri and Rust sanitizer pin to the latest available
+  `nightly-2026-09-04` at exact Rust revision
+  `a69a63265cfd9e006d43137f98301b8d274ad4c9` after the v0.24.14 live pre-tag
+  freshness gate detected the upstream nightly advance. This changes only
+  assurance tooling and generated evidence, not production Rust or
+  cryptographic behavior.
 - Make pre-tag Miri proportional and fail closed: internal tags run smoke
   coverage for every registered group plus full coverage of changed groups and
   their downstream closure, while every crates.io checkpoint and every shared

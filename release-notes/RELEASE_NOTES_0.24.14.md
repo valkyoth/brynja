@@ -69,6 +69,10 @@ validated, and no accelerated backend is admitted.
   streaming calls. A self-test proves the matcher rejects representative
   1040–1042-byte owner allocas and LLVM copies, while the isolated external
   functions reject every LLVM or assembly memcpy.
+- The live pre-tag freshness gate advanced Miri and Rust sanitizers to
+  `nightly-2026-09-04` at exact Rust revision
+  `a69a63265cfd9e006d43137f98301b8d274ad4c9`; the refreshed tools rerun the
+  required dynamic-analysis scope without changing production Rust.
 
 ## Pentest Remediation
 

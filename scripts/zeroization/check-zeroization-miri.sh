@@ -8,7 +8,7 @@ run_miri() {
     CARGO_HOME="$miri_cache/cargo" \
         CARGO_TARGET_DIR="$miri_cache/target" \
         XDG_CACHE_HOME="$miri_cache" \
-        cargo +nightly-2026-09-03 miri test "$@" \
+        cargo +nightly-2026-09-04 miri test "$@" \
         --target x86_64-unknown-linux-gnu
 }
 

@@ -3,7 +3,7 @@
 Status: enforced policy
 
 The MSRV is Rust `1.90.0`; the pinned full-gate toolchain is Rust `1.98.1`.
-The pin was verified against the official stable Rust release on 2026-09-03.
+The pin was verified against the official stable Rust release on 2026-09-04.
 Before every signed tag, `scripts/ci/check_latest_tools.sh` must query the official
 stable manifest, crates.io tool versions, and action tags. A stale pin fails
 closed and is updated in a dedicated reviewed change without raising the MSRV.
@@ -30,7 +30,7 @@ crate MSRV, hold back stable Rust, or turn policy-only status into proof.
 
 `assurance/policy.toml` additionally pins Kani, AFL++, honggfuzz, Miri, and
 sanitizers by exact source revision. Miri and sanitizers use the latest
-available `nightly-2026-09-03` at Rust revision `2e2b193f8ada105f27608b7be81c293e0d7292cb`.
+available `nightly-2026-09-04` at Rust revision `a69a63265cfd9e006d43137f98301b8d274ad4c9`.
 These tools are external to Cargo
 manifests. Ordinary builds do not download or execute them; each owning
 milestone must recheck upstream state and record exact campaign evidence.

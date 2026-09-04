@@ -49,12 +49,16 @@ macro_rules! xof_state_common {
             }
 
             /// Finalizes the tuple with `right_encode(0)`.
-            pub fn finalize_xof(mut self) -> Result<$reader, TupleHashError> {
-                self.core.finish(0).map(|reader| $reader { reader })
+            pub fn finalize_xof(&mut self) -> Result<$reader<'_>, TupleHashError> {
+                self.core
+                    .finish_in_place(0)
+                    .map(|reader| $reader { reader })
             }
 
-            /// Consumes and clears this state without output.
-            pub fn cancel(self) {}
+            /// Irreversibly clears this state without output.
+            pub fn cancel(&mut self) {
+                self.core.cancel_in_place();
+            }
         }
     };
 }
@@ -66,12 +70,12 @@ macro_rules! ordinary_xof {
             core: TupleCore,
         }
         #[doc = concat!("Incremental public ", $label, " reader.")]
-        pub struct $reader {
-            reader: BackendReader,
+        pub struct $reader<'a> {
+            reader: BackendReader<'a>,
         }
         xof_state_common!($state, $reader, $strength);
 
-        impl $reader {
+        impl $reader<'_> {
             /// Fills one complete public output fragment transactionally.
             pub fn squeeze(&mut self, output: &mut [u8]) -> Result<(), TupleHashError> {
                 self.reader
@@ -99,12 +103,12 @@ macro_rules! hardened_xof {
             core: TupleCore,
         }
         #[doc = concat!("Secret-bearing incremental ", $label, " reader.")]
-        pub struct $reader {
-            reader: BackendReader,
+        pub struct $reader<'a> {
+            reader: BackendReader<'a>,
         }
         xof_state_common!($state, $reader, $strength);
 
-        impl $reader {
+        impl $reader<'_> {
             /// Writes one fragment with typed secret ownership.
             pub fn squeeze_secret<'a>(
                 &mut self,

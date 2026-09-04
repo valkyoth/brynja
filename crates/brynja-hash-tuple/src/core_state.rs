@@ -155,7 +155,10 @@ impl TupleCore {
         Ok(())
     }
 
-    pub(crate) fn finish(&mut self, output_bits: u128) -> Result<BackendReader, TupleHashError> {
+    pub(crate) fn finish_in_place(
+        &mut self,
+        output_bits: u128,
+    ) -> Result<BackendReader<'_>, TupleHashError> {
         self.ensure_live()?;
         let suffix = SecretEncodedInteger::right(output_bits)?;
         let suffix_bytes = suffix.as_bytes()?;
@@ -171,11 +174,11 @@ impl TupleCore {
         self.push_bytes(suffix_bytes)?;
         let valid = self.used();
         let reader = if valid == 0 {
-            self.backend.finalize(None)?
+            self.backend.finalize_in_place(None)?
         } else {
             let tail = Fips202BitString::new(&self.pending, valid)
                 .map_err(|_| TupleHashError::InvalidBitString)?;
-            self.backend.finalize(Some(tail))?
+            self.backend.finalize_in_place(Some(tail))?
         };
         let _ = clear_owned_region(&mut self.pending);
         let _ = clear_owned_region(&mut self.used);
@@ -185,6 +188,10 @@ impl TupleCore {
     pub(crate) fn abandon_item(&mut self) {
         self.failed = [1];
         let _ = clear_owned_region(&mut self.remaining);
+    }
+
+    pub(crate) fn cancel_in_place(&mut self) {
+        self.wipe();
     }
 
     fn ensure_live(&self) -> Result<(), TupleHashError> {

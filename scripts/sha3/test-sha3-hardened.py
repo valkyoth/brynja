@@ -34,11 +34,14 @@ def main() -> int:
     reject(policy.CSHAKE, "owner: HardenedFips202Owner<$rate>,", "owner: HardenedFips202Owner<$rate>,\n            customized: bool,")
     reject(policy.CSHAKE, "core::mem::replace(&mut self.owner", "core::mem::take(&mut self.owner")
     reject(policy.CSHAKE, "self.owner.wipe();", "core::hint::black_box(&mut self.owner);")
+    reject(policy.CSHAKE, "pub fn enter_squeezing_in_place(", "fn missing_in_place_transition(")
+    reject(policy.CSHAKE, "self.ensure_squeezing()?;", "self.ensure_live()?;")
+    reject(policy.CSHAKE_INTERNAL_TEST, "borrowing_reader_never_extracts_the_absorbing_owner", "missing_borrowing_reader_test")
     reject(policy.CSHAKE_INTERNAL_TEST, "in_place_reader_transition_clears_exact_source_owner", "missing_source_owner_test")
     reject(policy.CSHAKE, "squeeze_final_bits_secret_erasing_source<'output>", "squeeze_final_bits_secret_unchecked<'output>")
     reject(policy.CSHAKE_INTERNAL_TEST, "final_bit_output_clears_the_exact_reader_source", "missing_reader_source_test")
     reject(policy.CSHAKE, "self.ensure_live()?;", "core::hint::black_box(&self.lifecycle);")
-    reject(policy.CSHAKE, "self.lifecycle = CshakeLifecycle::Vacated;", "self.lifecycle = CshakeLifecycle::Live;")
+    reject(policy.CSHAKE, "self.lifecycle = CshakeLifecycle::Vacated;", "self.lifecycle = CshakeLifecycle::Absorbing;")
     reject(policy.CSHAKE_INTERNAL_TEST, "explicit_wipe_is_an_irreversible_terminal_transition", "missing_terminal_wipe_test")
     reject(policy.OUTPUT, "StateConsumed", "ReusableState")
     reject(policy.CSHAKE_FIXTURE, "Err(leaf::HardenedSha3Error::StateConsumed)", "Err(leaf::HardenedSha3Error::MessageTooLong)")
@@ -52,8 +55,10 @@ def main() -> int:
     reject(policy.TEST, "fixed_output_failure_is_atomic_by_classification", "missing_failure_test")
     reject(policy.CHECKS, "scripts/sha3/check-sha3-hardened-codegen.sh", "true # removed codegen")
     reject(policy.MIRI, "final_bit_output_clears_the_exact_reader_source", "missing_exact_reader_source_miri")
+    reject(policy.MIRI, "borrowing_reader_never_extracts_the_absorbing_owner", "missing_borrowed_owner_miri")
     reject(policy.SANITIZER, "final_bit_output_clears_the_exact_reader_source", "missing_exact_reader_source_sanitizer")
-    print("hardened FIPS 202 policy rejects twenty-four cleanup, lifecycle, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, dynamic-analysis, and codegen regressions")
+    reject(policy.SANITIZER, "borrowing_reader_never_extracts_the_absorbing_owner", "missing_borrowed_owner_sanitizer")
+    print("hardened FIPS 202 policy rejects twenty-nine cleanup, lifecycle, source-transition, metadata-ownership, capability, API, temporary, unsafe, failure, unwind, dynamic-analysis, and codegen regressions")
     return 0
 
 

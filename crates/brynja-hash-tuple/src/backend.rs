@@ -1,7 +1,6 @@
 use brynja_hash_sha3::{
-    Fips202BitString, Fips202Output, HardenedCshake128, HardenedCshake128Reader, HardenedCshake256,
-    HardenedCshake256Reader, HardenedSha3Error, HardenedSha3SecretOutput,
-    Sha3PublicDeclassification,
+    Fips202BitString, Fips202Output, HardenedCshake128, HardenedCshake256, HardenedSha3Error,
+    HardenedSha3SecretOutput, Sha3PublicDeclassification,
 };
 
 pub(crate) enum Backend {
@@ -9,9 +8,8 @@ pub(crate) enum Backend {
     Strength256(HardenedCshake256),
 }
 
-pub(crate) enum BackendReader {
-    Strength128(HardenedCshake128Reader),
-    Strength256(HardenedCshake256Reader),
+pub(crate) struct BackendReader<'a> {
+    backend: &'a mut Backend,
 }
 
 #[derive(Clone, Copy)]
@@ -51,24 +49,15 @@ impl Backend {
         }
     }
 
-    pub(crate) fn finalize(
+    pub(crate) fn finalize_in_place(
         &mut self,
         tail: Option<Fips202BitString<'_>>,
-    ) -> Result<BackendReader, HardenedSha3Error> {
-        match (self, tail) {
-            (Self::Strength128(state), Some(tail)) => state
-                .finalize_bits_xof_erasing_source(tail)
-                .map(BackendReader::Strength128),
-            (Self::Strength128(state), None) => state
-                .finalize_xof_erasing_source()
-                .map(BackendReader::Strength128),
-            (Self::Strength256(state), Some(tail)) => state
-                .finalize_bits_xof_erasing_source(tail)
-                .map(BackendReader::Strength256),
-            (Self::Strength256(state), None) => state
-                .finalize_xof_erasing_source()
-                .map(BackendReader::Strength256),
+    ) -> Result<BackendReader<'_>, HardenedSha3Error> {
+        match self {
+            Self::Strength128(state) => state.enter_squeezing_in_place(tail)?,
+            Self::Strength256(state) => state.enter_squeezing_in_place(tail)?,
         }
+        Ok(BackendReader { backend: self })
     }
 
     pub(crate) fn wipe(&mut self) {
@@ -79,14 +68,14 @@ impl Backend {
     }
 }
 
-impl BackendReader {
+impl BackendReader<'_> {
     pub(crate) fn squeeze_public(&mut self, output: &mut [u8]) -> Result<(), HardenedSha3Error> {
-        match self {
-            Self::Strength128(reader) => {
-                reader.squeeze_public(output, Sha3PublicDeclassification::acknowledge())
+        match self.backend {
+            Backend::Strength128(state) => {
+                state.squeeze_public_in_place(output, Sha3PublicDeclassification::acknowledge())
             }
-            Self::Strength256(reader) => {
-                reader.squeeze_public(output, Sha3PublicDeclassification::acknowledge())
+            Backend::Strength256(state) => {
+                state.squeeze_public_in_place(output, Sha3PublicDeclassification::acknowledge())
             }
         }
     }
@@ -95,22 +84,22 @@ impl BackendReader {
         &mut self,
         output: &'a mut [u8],
     ) -> Result<HardenedSha3SecretOutput<'a>, HardenedSha3Error> {
-        match self {
-            Self::Strength128(reader) => reader.squeeze_secret(output),
-            Self::Strength256(reader) => reader.squeeze_secret(output),
+        match self.backend {
+            Backend::Strength128(state) => state.squeeze_secret_in_place(output),
+            Backend::Strength256(state) => state.squeeze_secret_in_place(output),
         }
     }
 
     pub(crate) fn squeeze_final_public(
-        mut self,
+        self,
         output: Fips202Output<'_>,
     ) -> Result<(), HardenedSha3Error> {
-        match &mut self {
-            Self::Strength128(reader) => reader.squeeze_final_bits_public_erasing_source(
+        match self.backend {
+            Backend::Strength128(state) => state.squeeze_final_bits_public_in_place(
                 output,
                 Sha3PublicDeclassification::acknowledge(),
             ),
-            Self::Strength256(reader) => reader.squeeze_final_bits_public_erasing_source(
+            Backend::Strength256(state) => state.squeeze_final_bits_public_in_place(
                 output,
                 Sha3PublicDeclassification::acknowledge(),
             ),
@@ -118,21 +107,18 @@ impl BackendReader {
     }
 
     pub(crate) fn squeeze_final_secret<'a>(
-        mut self,
+        self,
         output: Fips202Output<'a>,
     ) -> Result<HardenedSha3SecretOutput<'a>, HardenedSha3Error> {
-        match &mut self {
-            Self::Strength128(reader) => reader.squeeze_final_bits_secret_erasing_source(output),
-            Self::Strength256(reader) => reader.squeeze_final_bits_secret_erasing_source(output),
+        match self.backend {
+            Backend::Strength128(state) => state.squeeze_final_bits_secret_in_place(output),
+            Backend::Strength256(state) => state.squeeze_final_bits_secret_in_place(output),
         }
     }
 }
 
-impl Drop for BackendReader {
+impl Drop for BackendReader<'_> {
     fn drop(&mut self) {
-        match self {
-            Self::Strength128(reader) => reader.wipe_in_place(),
-            Self::Strength256(reader) => reader.wipe_in_place(),
-        }
+        self.backend.wipe();
     }
 }

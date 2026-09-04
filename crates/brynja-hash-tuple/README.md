@@ -49,8 +49,11 @@ yield output.
 The ordinary API classifies output as public. Use the distinct `Hardened*`
 states when tuple items or derived state are secret-bearing; all crate-owned
 sponge, staging, byte-backed tuple metadata, encoded-length owners, and reader
-state are cleared through Brynja's compiler-resistant cleanup boundary. Final
-bit output clears the exact embedded reader allocation before return.
+state are cleared through Brynja's compiler-resistant cleanup boundary.
+Finalization changes the embedded cSHAKE state in place: fixed-output methods
+borrow their state and XOF methods return a lifetime-bound reader, avoiding a
+by-value transfer of the secret-bearing owner. Final bit output clears that
+exact embedded allocation before return.
 Caller-owned inputs and copied outputs remain the caller's responsibility.
 
 ## Cryptography Verification Status

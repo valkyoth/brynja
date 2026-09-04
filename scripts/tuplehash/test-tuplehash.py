@@ -43,8 +43,15 @@ def main() -> int:
     reject("domain", Path("crates/brynja-hash-tuple/src/backend.rs"), 'b"TupleHash"', 'b"RawHash"')
     reject("item-prefix", Path("crates/brynja-hash-tuple/src/core_state.rs"), "SecretEncodedInteger::left(bits)", "SecretEncodedInteger::right(bits)")
     reject("fixed-trailer", Path("crates/brynja-hash-tuple/src/core_state.rs"), "SecretEncodedInteger::right(output_bits)", "SecretEncodedInteger::left(output_bits)")
-    reject("reader-source", Path("crates/brynja-hash-tuple/src/backend.rs"), "match &mut self", "match self")
-    reject("reader-erasure", Path("crates/brynja-hash-tuple/src/backend.rs"), "squeeze_final_bits_secret_erasing_source", "squeeze_final_bits_secret")
+    reject("reader-borrow", Path("crates/brynja-hash-tuple/src/backend.rs"), "backend: &'a mut Backend", "backend: Backend")
+    reject("in-place-transition", Path("crates/brynja-hash-tuple/src/backend.rs"), "state.enter_squeezing_in_place(tail)?", "state.finalize_xof_erasing_source()?")
+    reject("reader-erasure", Path("crates/brynja-hash-tuple/src/backend.rs"), "squeeze_final_bits_secret_in_place", "squeeze_final_bits_secret")
+    reject("reader-drop", Path("crates/brynja-hash-tuple/src/backend.rs"), "self.backend.wipe();", "core::hint::black_box(&mut self.backend);")
+    reject("core-in-place", Path("crates/brynja-hash-tuple/src/core_state.rs"), "self.backend.finalize_in_place(None)?", "self.backend.finalize(None)?")
+    reject("fixed-borrow", Path("crates/brynja-hash-tuple/src/fixed.rs"), "pub fn finalize(&mut self", "pub fn finalize(mut self")
+    reject("xof-borrow", Path("crates/brynja-hash-tuple/src/xof.rs"), "pub fn finalize_xof(&mut self)", "pub fn finalize_xof(mut self)")
+    reject("codegen-owner-copy", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "reject_secret_copy", "accept_secret_copy")
+    reject("codegen-external", Path("scripts/tuplehash/check-tuplehash-codegen.sh"), "assurance/tuplehash-public-api/Cargo.toml", "assurance/missing/Cargo.toml")
     reject("open-latch", Path("crates/brynja-hash-tuple/src/core_state.rs"), "self.failed = [1];", "self.failed = [0];")
     reject("complete-latch", Path("crates/brynja-hash-tuple/src/item.rs"), "self.core.complete_item()?;", "self.core.check_item_fragment(0)?;")
     reject("remaining-owner", Path("crates/brynja-hash-tuple/src/core_state.rs"), "clear_owned_region(&mut self.remaining)", "core::hint::black_box(&mut self.remaining)")
@@ -62,7 +69,7 @@ def main() -> int:
     reject("sanitizer-latch", Path("scripts/zeroization/check-zeroization-sanitizer.sh"), "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch", "missing_latch_test")
     reject("facade-bit-xof", Path("crates/brynja-crypto/src/lib.rs"), "tuple_hash_xof128_bits", "removed_bit_xof")
     reject("dependency", Path("crates/brynja-hash-tuple/Cargo.toml"), "brynja-hash-sha3 = { workspace = true }", 'foreign = "1"')
-    print("TupleHash policy rejects twenty-four encoding, lifecycle, cleanup, API, proof, dynamic-analysis, test, and dependency regressions")
+    print("TupleHash policy rejects thirty-one encoding, lifecycle, cleanup, API, proof, dynamic-analysis, code-generation, test, and dependency regressions")
     return 0
 
 

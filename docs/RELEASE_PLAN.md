@@ -3365,7 +3365,13 @@ Verification:
   byte-backed remaining-length cleanup, clearing encoded-length ownership, and
   the item-open latch against `mem::forget`/`ManuallyDrop` into source,
   mutation, compiler, Miri, sanitizer, and Kani evidence; the initial pentest
-  findings are remediated and the exact candidate requires independent retest.
+  findings are remediated and the exact candidate requires independent retest;
+- retain the secret-bearing cSHAKE owner in its original TupleHash allocation,
+  expose only lifetime-bound squeeze readers, finalize fixed output through a
+  mutable borrow, and reject owner-sized allocas or copies in both internal and
+  package-external development and optimized compiler artifacts; the later
+  High owner-copy and Medium evidence-coverage retest findings are remediated
+  and require another exact-candidate retest.
 
 Exit criteria:
 

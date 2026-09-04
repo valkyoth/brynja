@@ -14,7 +14,8 @@ const CSHAKE_SUFFIX_BITS: u8 = 3;
 
 #[derive(Clone, Copy, Eq, PartialEq)]
 enum CshakeLifecycle {
-    Live,
+    Absorbing,
+    Squeezing,
     Vacated,
 }
 
@@ -57,7 +58,7 @@ macro_rules! hardened_cshake {
                 owner.remember_cshake_setup(customized);
                 Ok(Self {
                     owner,
-                    lifecycle: CshakeLifecycle::Live,
+                    lifecycle: CshakeLifecycle::Absorbing,
                 })
             }
 
@@ -114,9 +115,7 @@ macro_rules! hardened_cshake {
             /// cSHAKE inline and must erase that exact source allocation.
             #[doc(hidden)]
             pub fn finalize_xof_erasing_source(&mut self) -> Result<$reader, HardenedSha3Error> {
-                self.ensure_live()?;
-                self.lifecycle = CshakeLifecycle::Vacated;
-                self.finish(None);
+                self.enter_squeezing_in_place(None)?;
                 Ok(self.take_reader_erasing_source())
             }
 
@@ -127,15 +126,102 @@ macro_rules! hardened_cshake {
                 &mut self,
                 input: Fips202BitString<'_>,
             ) -> Result<$reader, HardenedSha3Error> {
-                self.ensure_live()?;
-                let bits = u128::try_from(input.bit_len())
-                    .map_err(|_| HardenedSha3Error::MessageTooLong)?;
-                self.check_additional_bits(bits)?;
-                let (complete, partial) = input.split();
-                self.update(complete)?;
-                self.lifecycle = CshakeLifecycle::Vacated;
-                self.finish(partial);
+                self.enter_squeezing_in_place(Some(input))?;
                 Ok(self.take_reader_erasing_source())
+            }
+
+            /// Transitions this exact owner allocation into squeezing phase.
+            #[doc(hidden)]
+            pub fn enter_squeezing_in_place(
+                &mut self,
+                input: Option<Fips202BitString<'_>>,
+            ) -> Result<(), HardenedSha3Error> {
+                self.ensure_live()?;
+                if let Some(input) = input {
+                    let bits = u128::try_from(input.bit_len())
+                        .map_err(|_| HardenedSha3Error::MessageTooLong)?;
+                    self.check_additional_bits(bits)?;
+                    let (complete, partial) = input.split();
+                    self.update(complete)?;
+                    self.finish(partial);
+                } else {
+                    self.finish(None);
+                }
+                self.lifecycle = CshakeLifecycle::Squeezing;
+                Ok(())
+            }
+
+            /// Writes public output from an in-place squeezing owner.
+            #[doc(hidden)]
+            pub fn squeeze_public_in_place(
+                &mut self,
+                output: &mut [u8],
+                authority: Sha3PublicDeclassification,
+            ) -> Result<(), HardenedSha3Error> {
+                self.ensure_squeezing()?;
+                self.owner.squeeze_public(output, authority)
+            }
+
+            /// Writes typed secret output from an in-place squeezing owner.
+            #[doc(hidden)]
+            pub fn squeeze_secret_in_place<'output>(
+                &mut self,
+                output: &'output mut [u8],
+            ) -> Result<HardenedSha3SecretOutput<'output>, HardenedSha3Error> {
+                self.ensure_squeezing()?;
+                let length = output.len();
+                let mut initialization = begin_secret(output)?;
+                match initialization.as_mut() {
+                    Some(initialization) => self.owner.squeeze_secret(initialization, length)?,
+                    None => self
+                        .owner
+                        .check_output_bytes(0)
+                        .map_err(|()| HardenedSha3Error::OutputTooLong)?,
+                }
+                finish_secret(initialization)
+            }
+
+            /// Writes one final public bit string and clears this exact owner.
+            #[doc(hidden)]
+            pub fn squeeze_final_bits_public_in_place(
+                &mut self,
+                output: Fips202Output<'_>,
+                authority: Sha3PublicDeclassification,
+            ) -> Result<(), HardenedSha3Error> {
+                self.ensure_squeezing()?;
+                self.lifecycle = CshakeLifecycle::Vacated;
+                let result = self.owner.squeeze_final_bits_public(output, authority);
+                self.owner.wipe();
+                result
+            }
+
+            /// Writes one final typed-secret bit string and clears this exact owner.
+            #[doc(hidden)]
+            pub fn squeeze_final_bits_secret_in_place<'output>(
+                &mut self,
+                output: Fips202Output<'output>,
+            ) -> Result<HardenedSha3SecretOutput<'output>, HardenedSha3Error> {
+                self.ensure_squeezing()?;
+                self.lifecycle = CshakeLifecycle::Vacated;
+                let result = (|| {
+                    let (destination, valid) = output.into_parts();
+                    let destination_length = destination.len();
+                    let mut initialization = begin_secret(destination)?;
+                    match initialization.as_mut() {
+                        Some(initialization) => self.owner.squeeze_final_bits_secret(
+                            destination_length,
+                            valid,
+                            initialization,
+                        )?,
+                        None => self
+                            .owner
+                            .check_output_bits(0)
+                            .map_err(|()| HardenedSha3Error::OutputTooLong)?,
+                    }
+                    finish_secret(initialization)
+                })();
+                self.owner.wipe();
+                result
             }
 
             /// Compiler-resistantly clears this embedded construction owner
@@ -167,7 +253,15 @@ macro_rules! hardened_cshake {
             pub fn cancel(self) {}
 
             fn ensure_live(&self) -> Result<(), HardenedSha3Error> {
-                if self.lifecycle == CshakeLifecycle::Live {
+                if self.lifecycle == CshakeLifecycle::Absorbing {
+                    Ok(())
+                } else {
+                    Err(HardenedSha3Error::StateConsumed)
+                }
+            }
+
+            fn ensure_squeezing(&self) -> Result<(), HardenedSha3Error> {
+                if self.lifecycle == CshakeLifecycle::Squeezing {
                     Ok(())
                 } else {
                     Err(HardenedSha3Error::StateConsumed)
@@ -187,12 +281,13 @@ macro_rules! hardened_cshake {
 
             #[inline(never)]
             fn take_reader_erasing_source(&mut self) -> $reader {
+                self.lifecycle = CshakeLifecycle::Vacated;
                 let live =
                     core::mem::replace(&mut self.owner, HardenedFips202Owner::<$rate>::new());
                 self.owner.wipe();
                 $reader {
                     owner: live,
-                    lifecycle: CshakeLifecycle::Live,
+                    lifecycle: CshakeLifecycle::Squeezing,
                 }
             }
         }
@@ -330,7 +425,7 @@ macro_rules! hardened_cshake {
             }
 
             fn ensure_live(&self) -> Result<(), HardenedSha3Error> {
-                if self.lifecycle == CshakeLifecycle::Live {
+                if self.lifecycle == CshakeLifecycle::Squeezing {
                     Ok(())
                 } else {
                     Err(HardenedSha3Error::StateConsumed)

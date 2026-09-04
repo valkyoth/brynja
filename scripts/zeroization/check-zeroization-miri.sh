@@ -65,6 +65,8 @@ quick_sha3() {
 full_sha3() {
     run_miri -p brynja-hash-sha3 --lib \
         final_bit_output_clears_the_exact_reader_source
+    run_miri -p brynja-hash-sha3 --lib \
+        borrowing_reader_never_extracts_the_absorbing_owner
     for sha3_test in sha3_384 sha3_512; do
         run_miri -p brynja-hash-sha3 --test "$sha3_test" \
             suffix_and_rate_boundaries_have_exact_digests

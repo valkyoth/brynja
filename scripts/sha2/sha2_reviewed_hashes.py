@@ -35,7 +35,7 @@ TEST_HASHES = {
     "assurance/sha2-bit-differential/Cargo.lock": "81b71c99c04ce21079a5426446cb8ebf00e179329c30bfc5ea59c5406771fce4",
     "assurance/sha2-bit-differential/src/main.rs": "72a6459c642c353fc64687e5fd29ba3e25f427c756e87ab79d3b940848b99752",
     "scripts/sha2/check-sha2-bit-differential.py": "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
-    "scripts/zeroization/check-zeroization-miri.sh": "11bdf9cebcdb27f9bc8e68a4fbcf15033718005909b8c2d400146a02f58f6155",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "406f344ff087277c7c63ff8ba2c5326f22b3b97aca9c90c617804ac534577aaf",
+    "scripts/zeroization/check-zeroization-miri.sh": "749d7b02bda8378caa59f93f159140e70d97b41c7e3132f640130994e36d5156",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "bd68b92ebb575a2c22c0ab317b3f33eb49462b3c74fc824cc80a69d3f1e05b7b",
     "scripts/sha2/sha2_test_policy.py": "df2cbbc5f4eeb588859b14447918f0f85cbd3cb2c97f10a39b267271903f1968",
 }

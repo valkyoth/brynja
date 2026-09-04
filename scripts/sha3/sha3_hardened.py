@@ -116,8 +116,14 @@ def validate(root: Path = ROOT) -> None:
         "pub fn wipe_in_place(&mut self)",
         "pub fn squeeze_final_bits_public_erasing_source(",
         "pub fn squeeze_final_bits_secret_erasing_source<'output>(",
+        "pub fn enter_squeezing_in_place(",
+        "pub fn squeeze_public_in_place(",
+        "pub fn squeeze_secret_in_place<'output>(",
+        "pub fn squeeze_final_bits_public_in_place(",
+        "pub fn squeeze_final_bits_secret_in_place<'output>(",
         "lifecycle: CshakeLifecycle",
-        "lifecycle: CshakeLifecycle::Live",
+        "lifecycle: CshakeLifecycle::Absorbing",
+        "lifecycle: CshakeLifecycle::Squeezing",
         "Err(HardenedSha3Error::StateConsumed)",
         "core::mem::replace(&mut self.owner",
         "self.owner.wipe();",
@@ -125,14 +131,17 @@ def validate(root: Path = ROOT) -> None:
         require(loaded[CSHAKE], token, "hardened cSHAKE API")
     for token in (
         "in_place_reader_transition_clears_exact_source_owner",
+        "borrowing_reader_never_extracts_the_absorbing_owner",
         "final_bit_output_clears_the_exact_reader_source",
         "explicit_wipe_is_an_irreversible_terminal_transition",
         "Err(HardenedSha3Error::StateConsumed)",
     ):
         require(loaded[CSHAKE_INTERNAL_TEST], token, "hardened cSHAKE internal acceptance")
-    if loaded[CSHAKE].count("self.ensure_live()?;") != 11:
+    if loaded[CSHAKE].count("self.ensure_live()?;") != 10:
         fail("hardened cSHAKE live-state guard inventory changed")
-    if loaded[CSHAKE].count("self.lifecycle = CshakeLifecycle::Vacated;") != 6:
+    if loaded[CSHAKE].count("self.ensure_squeezing()?;") != 4:
+        fail("hardened cSHAKE squeezing-state guard inventory changed")
+    if loaded[CSHAKE].count("self.lifecycle = CshakeLifecycle::Vacated;") != 7:
         fail("hardened cSHAKE terminal-transition inventory changed")
     require(loaded[OUTPUT], "StateConsumed", "hardened cSHAKE terminal error")
     for token in (
@@ -200,12 +209,22 @@ def validate(root: Path = ROOT) -> None:
         "final_bit_output_clears_the_exact_reader_source",
         "Miri exact cSHAKE reader-source coverage",
     )
+    require(
+        loaded[MIRI],
+        "borrowing_reader_never_extracts_the_absorbing_owner",
+        "Miri borrowed cSHAKE owner coverage",
+    )
     require(loaded[SANITIZER], "-p brynja-hash-sha3", "sanitizer package coverage")
     require(loaded[SANITIZER], "--tests", "sanitizer test coverage")
     require(
         loaded[SANITIZER],
         "final_bit_output_clears_the_exact_reader_source",
         "sanitizer exact cSHAKE reader-source coverage",
+    )
+    require(
+        loaded[SANITIZER],
+        "borrowing_reader_never_extracts_the_absorbing_owner",
+        "sanitizer borrowed cSHAKE owner coverage",
     )
 
 

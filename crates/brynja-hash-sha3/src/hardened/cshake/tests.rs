@@ -154,3 +154,27 @@ fn final_bit_output_clears_the_exact_reader_source() {
     drop(secret);
     assert!(secret_bytes.iter().all(|byte| *byte == 0));
 }
+
+#[test]
+fn borrowing_reader_never_extracts_the_absorbing_owner() {
+    let state = HardenedCshake128::new(b"TupleHash", b"borrowed reader");
+    assert!(state.is_ok());
+    let Ok(mut state) = state else { return };
+    assert_eq!(state.update(b"secret-derived state"), Ok(()));
+    assert_eq!(state.enter_squeezing_in_place(None), Ok(()));
+    assert!(state.lifecycle == CshakeLifecycle::Squeezing);
+
+    let mut output = [0_u8; 17];
+    assert_eq!(
+        state.squeeze_public_in_place(&mut output, Sha3PublicDeclassification::acknowledge(),),
+        Ok(())
+    );
+    assert!(output.iter().any(|byte| *byte != 0));
+    state.wipe_in_place();
+    assert!(is_cleared(&state.owner));
+    assert!(state.lifecycle == CshakeLifecycle::Vacated);
+    assert_eq!(
+        state.squeeze_public_in_place(&mut output, Sha3PublicDeclassification::acknowledge(),),
+        Err(HardenedSha3Error::StateConsumed)
+    );
+}

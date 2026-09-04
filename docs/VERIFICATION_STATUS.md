@@ -52,6 +52,9 @@ private Keccak-f[1600] owner with separately packaged downstream acceptance;
 all four SP 800-185 encodings and complete ordinary/hardened cSHAKE128 and
 cSHAKE256 with package-external and independent-oracle acceptance; all four
 KMAC/KMACXOF identities with hardened ownership and typed verification;
+all four TupleHash/TupleHashXOF identities with structural whole or streamed
+items, arbitrary-bit input/output, hardened in-place ownership, and borrowing
+incremental readers;
 the shared alert/failure,
 bounded numeric/resource, borrowed-read, transactional caller-buffer write,
 workspace/arena, secret-lifetime, zeroization, fixed-width constant-time,
@@ -65,7 +68,8 @@ families are therefore **Fully implemented**. Their accelerated candidates
 remain unadmitted, and neither family is independently reviewed or FIPS 140-3
 validated. No cryptographic primitive outside those six portable SHA-2
 algorithms, the six named portable FIPS 202 functions, both cSHAKE strengths,
-and the four KMAC/KMACXOF identities, schema-driven ASN.1
+the four KMAC/KMACXOF identities, and the four TupleHash/TupleHashXOF
+identities, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release

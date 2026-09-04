@@ -48,8 +48,10 @@ macro_rules! tuple_state_common {
                 Ok(TupleItemWriter::new(&mut self.core))
             }
 
-            /// Consumes and clears this state without producing output.
-            pub fn cancel(self) {}
+            /// Irreversibly clears this state without producing output.
+            pub fn cancel(&mut self) {
+                self.core.cancel_in_place();
+            }
         }
     };
 }
@@ -64,21 +66,21 @@ macro_rules! ordinary_fixed {
 
         impl $state {
             /// Produces a fixed byte-oriented public digest.
-            pub fn finalize(mut self, output: &mut [u8]) -> Result<(), TupleHashError> {
+            pub fn finalize(&mut self, output: &mut [u8]) -> Result<(), TupleHashError> {
                 let bits = output_bits(output.len())?;
-                let mut reader = self.core.finish(bits)?;
+                let mut reader = self.core.finish_in_place(bits)?;
                 reader.squeeze_public(output).map_err(TupleHashError::from)
             }
 
             /// Produces a fixed canonical arbitrary-bit public digest.
             pub fn finalize_bits(
-                mut self,
+                &mut self,
                 output: Fips202Output<'_>,
             ) -> Result<(), TupleHashError> {
                 let bits =
                     u128::try_from(output.bit_len()).map_err(|_| TupleHashError::OutputTooLong)?;
                 self.core
-                    .finish(bits)?
+                    .finish_in_place(bits)?
                     .squeeze_final_public(output)
                     .map_err(TupleHashError::from)
             }
@@ -97,11 +99,11 @@ macro_rules! hardened_fixed {
         impl $state {
             /// Produces output with typed secret ownership.
             pub fn finalize_secret<'a>(
-                mut self,
+                &mut self,
                 output: &'a mut [u8],
             ) -> Result<TupleHashSecretOutput<'a>, TupleHashError> {
                 let bits = output_bits(output.len())?;
-                let mut reader = self.core.finish(bits)?;
+                let mut reader = self.core.finish_in_place(bits)?;
                 reader
                     .squeeze_secret(output)
                     .map(TupleHashSecretOutput::new)
@@ -110,13 +112,13 @@ macro_rules! hardened_fixed {
 
             /// Produces arbitrary-bit output with typed secret ownership.
             pub fn finalize_secret_bits<'a>(
-                mut self,
+                &mut self,
                 output: Fips202Output<'a>,
             ) -> Result<TupleHashSecretOutput<'a>, TupleHashError> {
                 let bits =
                     u128::try_from(output.bit_len()).map_err(|_| TupleHashError::OutputTooLong)?;
                 self.core
-                    .finish(bits)?
+                    .finish_in_place(bits)?
                     .squeeze_final_secret(output)
                     .map(TupleHashSecretOutput::new)
                     .map_err(TupleHashError::from)
@@ -124,25 +126,25 @@ macro_rules! hardened_fixed {
 
             /// Explicitly declassifies one fixed byte-oriented output.
             pub fn finalize_public(
-                mut self,
+                &mut self,
                 output: &mut [u8],
                 _authority: TupleHashPublicDeclassification,
             ) -> Result<(), TupleHashError> {
                 let bits = output_bits(output.len())?;
-                let mut reader = self.core.finish(bits)?;
+                let mut reader = self.core.finish_in_place(bits)?;
                 reader.squeeze_public(output).map_err(TupleHashError::from)
             }
 
             /// Explicitly declassifies one fixed arbitrary-bit output.
             pub fn finalize_public_bits(
-                mut self,
+                &mut self,
                 output: Fips202Output<'_>,
                 _authority: TupleHashPublicDeclassification,
             ) -> Result<(), TupleHashError> {
                 let bits =
                     u128::try_from(output.bit_len()).map_err(|_| TupleHashError::OutputTooLong)?;
                 self.core
-                    .finish(bits)?
+                    .finish_in_place(bits)?
                     .squeeze_final_public(output)
                     .map_err(TupleHashError::from)
             }

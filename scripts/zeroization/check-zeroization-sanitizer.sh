@@ -59,6 +59,12 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
     -p brynja-hash-sha3 \
+    --lib \
+    borrowing_reader_never_extracts_the_absorbing_owner \
+    --target x86_64-unknown-linux-gnu
+
+RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-03 test \
+    -p brynja-hash-sha3 \
     --tests \
     --target x86_64-unknown-linux-gnu
 

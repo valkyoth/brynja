@@ -158,13 +158,19 @@ fn xof_partitions_and_hardened_output_match() {
         return;
     };
     assert_eq!(ordinary.push_item(b"one"), Ok(()));
-    let reader = ordinary.finalize_xof();
-    assert!(reader.is_ok());
-    let Ok(mut reader) = reader else { return };
     let mut partitioned = [0_u8; 48];
-    let (first, second) = partitioned.split_at_mut(7);
-    assert_eq!(reader.squeeze(first), Ok(()));
-    assert_eq!(reader.squeeze(second), Ok(()));
+    {
+        let reader = ordinary.finalize_xof();
+        assert!(reader.is_ok());
+        let Ok(mut reader) = reader else { return };
+        let (first, second) = partitioned.split_at_mut(7);
+        assert_eq!(reader.squeeze(first), Ok(()));
+        assert_eq!(reader.squeeze(second), Ok(()));
+    }
+    assert_eq!(
+        ordinary.push_item(b"after finalize"),
+        Err(TupleHashError::StateConsumed)
+    );
 
     let mut direct = [0_u8; 48];
     let mut one = TupleHashXof128::new(b"xof").ok();
@@ -188,6 +194,10 @@ fn xof_partitions_and_hardened_output_match() {
     assert_eq!(
         hardened.finalize_public(&mut fixed, TupleHashPublicDeclassification::acknowledge()),
         Ok(())
+    );
+    assert_eq!(
+        hardened.push_item(b"after finalize"),
+        Err(TupleHashError::StateConsumed)
     );
 
     let mut hardened_xof = HardenedTupleHashXof128::new(b"xof").ok();

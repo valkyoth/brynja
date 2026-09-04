@@ -886,9 +886,12 @@ implementation. TupleHash is fully implemented but is neither independently
 verified nor FIPS 140-3 validated. ParallelHash and combined SP 800-185 final
 acceptance remain pending. Its initial exceptional assessment found two High,
 two Medium, and two Low ownership, lifecycle, metadata, and assurance gaps;
-the fixes now bind exact reader-source erasure, forgotten-writer failure,
+the fixes now bind in-place cSHAKE phase changes, lifetime-bound readers,
+fixed-output borrowing, exact source erasure, forgotten-writer failure,
 clearing length metadata, direct partial-byte ownership, closed backend
-strength, and the production Kani path. Independent retest is pending.
+strength, the production Kani path, and package-external no-copy compiler
+evidence. A later retest's remaining High owner-copy and Medium gate-coverage
+findings are remediated; independent retest of the exact candidate is pending.
 
 ## Install
 

@@ -84,8 +84,10 @@ for raw_toolchain in "${toolchains[@]}"; do
     for mir in "${sha3_mir[@]}"; do
         for identity in HardenedCshake128 HardenedCshake256; do
             finalizer="$(extract_function ">::finalize_xof_erasing_source(_1: &mut ${identity}" "$mir")"
+            phase_change="$(extract_function ">::enter_squeezing_in_place(_1: &mut ${identity}" "$mir")"
             wipe="$(extract_function ">::wipe_in_place(_1: &mut ${identity}" "$mir")"
-            require_order "$finalizer" "CshakeLifecycle::Vacated" "${identity}::finish(copy _1"
+            require_order "$finalizer" "${identity}::enter_squeezing_in_place" "${identity}::take_reader_erasing_source"
+            require_order "$phase_change" "${identity}::finish(copy _1" "CshakeLifecycle::Squeezing"
             require_order "$wipe" "CshakeLifecycle::Vacated" "HardenedFips202Owner::<"
             grep -q 'StateConsumed' "$mir"
         done

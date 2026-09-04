@@ -95,11 +95,13 @@ def validate(root: Path) -> None:
     backend = loaded[CRATE / "src/backend.rs"]
     for token in (
         "HardenedCshake128", "HardenedCshake256", 'b"TupleHash"',
-        "finalize_bits_xof_erasing_source", "finalize_xof_erasing_source",
+        "pub(crate) struct BackendReader<'a>",
+        "backend: &'a mut Backend", "finalize_in_place(",
+        "enter_squeezing_in_place(tail)?",
         "BackendStrength::Bits128", "BackendStrength::Bits256",
-        "squeeze_final_bits_public_erasing_source",
-        "squeeze_final_bits_secret_erasing_source", "match &mut self",
-        "impl Drop for BackendReader", "wipe_in_place",
+        "squeeze_final_bits_public_in_place",
+        "squeeze_final_bits_secret_in_place", "match self.backend",
+        "impl Drop for BackendReader<'_>", "self.backend.wipe();",
     ):
         require(backend, token, "hardened cSHAKE backend")
     core = loaded[CRATE / "src/core_state.rs"]
@@ -114,7 +116,8 @@ def validate(root: Path) -> None:
         "Fips202BitString::new(&self.pending, valid)",
         "clear_owned_region(&mut self.pending)",
         "clear_owned_region(&mut self.items)",
-        "clear_owned_region(&mut self.remaining)", "impl Drop for TupleCore",
+        "clear_owned_region(&mut self.remaining)", "finish_in_place(",
+        "self.backend.finalize_in_place", "impl Drop for TupleCore",
     ):
         require(core, token, "tuple encoding and cleanup")
     for forbidden in ("left_encode_u128(bits)", "right_encode_u128(output_bits)",
@@ -146,8 +149,12 @@ def validate(root: Path) -> None:
     xof = loaded[CRATE / "src/xof.rs"]
     for token in ("TupleHash128", "TupleHash256", "HardenedTupleHash128", "HardenedTupleHash256"):
         require(fixed, token, "fixed TupleHash API")
+    for token in ("pub fn finalize(&mut self", "pub fn finalize_secret<'a>(\n                &mut self"):
+        require(fixed, token, "borrowing fixed TupleHash lifecycle")
     for token in ("TupleHashXof128", "TupleHashXof256", "HardenedTupleHashXof128", "HardenedTupleHashXof256"):
         require(xof, token, "TupleHashXOF API")
+    for token in ("pub fn finalize_xof(&mut self)", "pub struct $reader<'a>", "reader: BackendReader<'a>"):
+        require(xof, token, "borrowing TupleHashXOF lifecycle")
     output = loaded[CRATE / "src/output.rs"]
     require(output, "TupleHashPublicDeclassification", "output classification")
     require(output, "HardenedSha3SecretOutput", "typed secret output")
@@ -189,6 +196,10 @@ def validate(root: Path) -> None:
         (DIFFERENTIAL, "for index in range(64)"),
         (DIFFERENTIAL_FIXTURE, "MAX_CAMPAIGN_BYTES"),
         (CODEGEN, "TupleHash exact source and reader cleanup survives"),
+        (CODEGEN, "assurance/tuplehash-public-api/Cargo.toml"),
+        (CODEGEN, "reject_secret_copy"),
+        (CODEGEN, "Backend17finalize_in_place"),
+        (CODEGEN, "TupleCore15finish_in_place"),
         (MIRI, "-p brynja-hash-tuple"),
         (MIRI, "forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch"),
         (SANITIZER, "-p brynja-hash-tuple"),

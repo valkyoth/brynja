@@ -63,12 +63,12 @@ def main() -> int:
     expect(
         ["crates/brynja-hash-sha3/src/sponge.rs"],
         full=False,
-        groups=("sha3", "kmac"),
+        groups=("sha3", "kmac", "tuplehash"),
     )
     expect(
         ["crates/brynja-hash-core/src/lib.rs"],
         full=False,
-        groups=("sha2", "sha3", "kmac"),
+        groups=("sha2", "sha3", "kmac", "tuplehash"),
     )
     expect(
         ["crates/brynja-core/src/secret_memory.rs"],
@@ -89,16 +89,16 @@ def main() -> int:
     expect(["../escape"], full=True, groups=miri_scope.GROUPS)
 
     status, commands = run_profile("--focused")
-    assert status == 0 and len(commands) == 5
-    status, commands = run_profile("--focused", "sha3", "kmac")
-    assert status == 0 and len(commands) == 11
+    assert status == 0 and len(commands) == 6
+    status, commands = run_profile("--focused", "sha3", "kmac", "tuplehash")
+    assert status == 0 and len(commands) == 12
     assert sum("-p brynja-hash-sha3" in command for command in commands) == 7
     assert sum("-p brynja-mac-kmac" in command for command in commands) == 1
     status, commands = run_profile("--group", "sha2")
     assert status == 0 and len(commands) == 10
     assert all("brynja-hash-sha2" in command for command in commands)
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 20
+    assert status == 0 and len(commands) == 21
     status, commands = run_profile("--group", "unknown")
     assert status == 2 and not commands
     print(

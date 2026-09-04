@@ -937,7 +937,9 @@
     },
     {
       "boundary": null,
-      "requirement_ids": [],
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0016"
+      ],
       "scope": "Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, ordinary and hardened secret-bearing whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, complete internal sanitization, official examples, partition and collision-separation negatives, proofs and public types that cannot silently flatten a tuple into one byte string.",
       "source_ids": [
         "nist:NIST.FIPS.202.pdf",
@@ -8012,6 +8014,18 @@
     },
     {
       "decision_ids": [
+        "algorithm.tuplehash"
+      ],
+      "id": "BRY-REQ-CRYPTO-0016",
+      "lifecycle": "implemented",
+      "owner": "0.24.14",
+      "source_ids": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ]
+    },
+    {
+      "decision_ids": [
         "protocol.certificate-transparency"
       ],
       "id": "BRY-REQ-CT-0001",
@@ -10588,7 +10602,8 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0002",
         "BRY-REQ-CRYPTO-0014",
-        "BRY-REQ-CRYPTO-0015"
+        "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016"
       ],
       "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
     },
@@ -10638,7 +10653,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0014",
-        "BRY-REQ-CRYPTO-0015"
+        "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016"
       ],
       "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
     },
@@ -13327,6 +13343,12 @@
       "id": "algorithm.sp800-185",
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0014"
+      ]
+    },
+    {
+      "id": "algorithm.tuplehash",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0016"
       ]
     },
     {

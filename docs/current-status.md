@@ -1,6 +1,6 @@
 # Current Status
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.12 signed; v0.24.13 KMAC/KMACXOF final candidate is pentest PASS/PASS and awaits green hosted checks and signed tag
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.13 signed; v0.24.14 TupleHash/TupleHashXOF implementation candidate awaits exceptional pentest
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -41,7 +41,7 @@ is portable-only. SHA-2 and SHA-3/SHAKE are Fully implemented after final
 combined package-external acceptance at v0.24.11. Signed v0.24.12 additionally
 implements all four SP 800-185 encodings plus complete cSHAKE128 and cSHAKE256
 ordinary and hardened byte/arbitrary-bit, streaming, fixed-output and
-incremental-XOF APIs. The current v0.24.13 candidate adds complete KMAC128,
+incremental-XOF APIs. Signed v0.24.13 adds complete KMAC128,
 KMAC256, KMACXOF128, and KMACXOF256 over the exact hardened cSHAKE owner.
 Default strength-enforcing and explicitly feature-gated conformance APIs,
 opaque tags, constant-time
@@ -51,13 +51,22 @@ an irreversible wrapper lifecycle that rejects reuse after extraction or wipe,
 official examples, an independent oracle, package-external
 `no_std` use, and compiler evidence are implemented. All services remain
 non-approved; KMAC is not independently reviewed or FIPS 140-3 validated.
-The wider SP 800-185 family remains in progress until TupleHash, ParallelHash,
-and final combined acceptance complete. It also
+The v0.24.14 candidate additionally implements complete TupleHash128,
+TupleHash256, TupleHashXOF128, and TupleHashXOF256 in the separate
+allocation-free `no_std` `brynja-hash-tuple` leaf. Whole and exact-length
+streamed item APIs preserve ordered item identity, empty items and canonical
+arbitrary-bit tails; fixed and incremental XOF output, ordinary and hardened
+owners, typed secret output, checked accounting, abandoned-item failure,
+official examples, independent differential evidence, package-external use,
+proofs and compiler-resistant internal cleanup are present. TupleHash is not
+independently reviewed or FIPS 140-3 validated. The wider SP 800-185 family
+remains in progress until ParallelHash and final combined acceptance complete.
+It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no
 schema-driven ASN.1 decoder, TLS handshake parser, TLS state machine, other
-cryptographic algorithm beyond those fourteen named hash and XOF identities
-and four KMAC identities, X.509, QUIC-TLS, DTLS
+cryptographic algorithm beyond those fourteen named hash and XOF identities,
+four KMAC identities, and four TupleHash identities, X.509, QUIC-TLS, DTLS
 engine, platform provider, or legacy protocol implementation and must not be
 used to secure network traffic. Brynja is not FIPS 140-3 validated, and no
 package, feature, build, profile, or configuration may imply otherwise.

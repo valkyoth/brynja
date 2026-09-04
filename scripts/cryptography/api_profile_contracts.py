@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canonical v0.24.13 owner identities and operation-flow contracts."""
+"""Canonical v0.24.14 owner identities and operation-flow contracts."""
 
 CURRENT_OWNER_SYMBOLS = {
     "adapter.sanitized-secret": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret",
@@ -179,12 +179,53 @@ KMAC_OWNER_RECORD = {
     "partial_failure_policy": "clear-complete-secret-destination",
 }
 
+TUPLEHASH_OWNER = (
+    "crates/brynja-hash-tuple/src/core_state.rs#"
+    "brynja_hash_tuple::core_state::TupleCore"
+)
+TUPLEHASH_DROP = f"{TUPLEHASH_OWNER}::drop"
+TUPLEHASH_WIPE = (
+    "crates/brynja-hash-tuple/src/core_state.rs#"
+    "brynja_hash_tuple::TupleCore::wipe"
+)
+TUPLEHASH_OWNER_RECORD = {
+    "capability": "algorithm.tuplehash",
+    "symbol": TUPLEHASH_OWNER,
+    "fields": [
+        "hardened-cshake-state:secret-derived",
+        "pending-item-byte:secret-copy",
+        "pending-item-width:secret-derived",
+        "tuple-item-count:secret-derived",
+        "abandoned-item-state:secret-derived",
+    ],
+    "temporaries": [
+        "encoded-item-length:secret-derived",
+        "streamed-item-remaining:secret-derived",
+        "borrowed-input:caller-owned-copy-risk",
+        "typed-output:caller-owned",
+    ],
+    "sanitization_symbol": TUPLEHASH_WIPE,
+    "cleanup_callers": [TUPLEHASH_DROP],
+    "evidence": [
+        "crates/brynja-hash-tuple/tests/api.rs",
+        "crates/brynja-hash-tuple/tests/official_vectors.rs",
+        "assurance/tuplehash-public-api/src/lib.rs",
+        "scripts/tuplehash/check-tuplehash-codegen.sh",
+        "scripts/tuplehash/check-tuplehash.py",
+        "scripts/tuplehash/check-tuplehash-differential.py",
+    ],
+    "storage": "crate-owned-fixed",
+    "output_classification": "typed-secret-owned",
+    "partial_failure_policy": "clear-complete-secret-destination",
+}
+
 # Registration cannot define its own proof. Separate maps bind its compiler
 # test, exact caller identity, and resolved sanitizer target.
 REGISTERED_OWNER_CONTRACTS = {
     "registered.algorithm.sha2": {"record": SHA2_OWNER_RECORD},
     "registered.algorithm.sha3-shake": {"record": SHA3_OWNER_RECORD},
     "registered.algorithm.kmac": {"record": KMAC_OWNER_RECORD},
+    "registered.algorithm.tuplehash": {"record": TUPLEHASH_OWNER_RECORD},
 }
 REGISTERED_OWNER_COMPILER_TESTS = {
     SHA2_OWNER: {
@@ -208,6 +249,13 @@ REGISTERED_OWNER_COMPILER_TESTS = {
             "registered_algorithm_kmac_owner_contract_is_compiler_checked"
         ),
     },
+    TUPLEHASH_OWNER: {
+        "package": "brynja-hash-tuple",
+        "contract_test": (
+            "core_state::assurance_contract::"
+            "registered_algorithm_tuplehash_owner_contract_is_compiler_checked"
+        ),
+    },
 }
 REGISTERED_CALLER_MIR_HEADERS = {
     SHA2_DROP: [
@@ -222,11 +270,16 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "fn core_state::<impl at crates/brynja-mac-kmac/src/core_state.rs:103:1: 103:99>::"
         "drop(_1: &mut KmacCore<S, RATE, STRENGTH>) -> () {"
     ],
+    TUPLEHASH_DROP: [
+        "fn core_state::<impl at crates/brynja-hash-tuple/src/core_state.rs:188:1: 188:24>::"
+        "drop(_1: &mut TupleCore) -> () {"
+    ],
 }
 REGISTERED_SANITIZER_MIR_IDENTITIES = {
     SHA2_WIPE: "HardenedSha2Owner::wipe(",
     SHA3_WIPE: "HardenedFips202Owner::<RATE>::wipe(",
     KMAC_WIPE: "KmacCore::<S, RATE, STRENGTH>::wipe(",
+    TUPLEHASH_WIPE: "TupleCore::wipe(",
 }
 
 OPERATION_CONTRACTS = {
@@ -351,6 +404,9 @@ REVIEWED_SOURCE_PATHS = {
     "crates/brynja-mac-kmac/tests/api.rs",
     "scripts/kmac/check-kmac-codegen.sh",
     "scripts/kmac/check-kmac-conformance-gate.sh",
+    "crates/brynja-hash-tuple/src/core_state.rs",
+    "assurance/tuplehash-public-api/src/lib.rs",
+    "scripts/tuplehash/check-tuplehash-codegen.sh",
     "crates/brynja-sanitization/src/lib.rs",
     "crates/brynja-sanitization/src/assurance_contract.rs",
     "crates/brynja-test-support/src/deterministic_random.rs",

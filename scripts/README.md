@@ -35,6 +35,7 @@ file beneath a Cargo `target/` directory, regardless of workspace depth.
 | `sanitization/` | Sanitization dependency admission and optimized-code checks |
 | `sha2/` | SHA-2 source policy, public acceptance, CPU code generation, QEMU, and native capture scripts |
 | `sha3/` | SHA-3/SHAKE source policy, differential evidence, and frozen public acceptance scripts |
+| `tuplehash/` | TupleHash/TupleHashXOF source policy, mutation, package, and differential evidence |
 | `standards/` | RFC/local authority lifecycle observation, protocol surfaces, and normative requirement generation and validation |
 | `zeroization/` | First-party zeroization source, compiler-artifact, stage-aware local pre-tag Miri, and sanitizer evidence |
 
@@ -69,7 +70,8 @@ signed tag, including downstream groups. Root manifests, the lockfile, release
 Rust, the zeroization matrix, or Miri-control changes fail closed to the full
 suite. Every public stage that can publish to crates.io always runs all groups.
 
-The current groups are `core`, `sanitization`, `sha2`, `sha3`, and `kmac`.
+The current groups are `core`, `sanitization`, `sha2`, `sha3`, `kmac`, and
+`tuplehash`.
 `zeroization/check-zeroization-miri.sh --group GROUP` is a shard entry point so
 the groups can later run concurrently on isolated headless workers. Shard
 results are not yet accepted by the tag gate: a future aggregator must bind

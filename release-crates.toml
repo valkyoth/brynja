@@ -1,19 +1,19 @@
 [release]
-version = "0.24.13"
-milestone = "0.24.13"
+version = "0.24.14"
+milestone = "0.24.14"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14"]
 policy = "independent"
 stage = "internal"
 exceptional = true
-exception_reason = "The new KMAC128/KMAC256 and KMACXOF128/KMACXOF256 keyed constructions, constant-time verification, arbitrary-bit behavior, and hardened secret-state ownership change a production cryptographic boundary and require an exceptional assessment before the signed development tag."
+exception_reason = "The new TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 constructions, arbitrary-bit tuple boundaries, streamed-item lifecycle, and hardened secret-state ownership change a cryptographic boundary and require an exceptional assessment before the signed development tag."
 
 [crates."brynja"]
-previous_version = "0.24.12"
-version = "0.24.13"
+previous_version = "0.24.13"
+version = "0.24.14"
 change = "code"
 publish = false
-reason = "Advance the internal facade with all four complete KMAC/KMACXOF constructions across the new leaf, composition and facade surfaces; no crate is published."
+reason = "Advance the internal facade with all four complete TupleHash/TupleHashXOF constructions across the new leaf, composition and facade surfaces; no crate is published."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
@@ -56,6 +56,13 @@ version = "0.1.0"
 change = "code"
 publish = false
 reason = "Add the unpublished no_std KMAC leaf with complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 ordinary, arbitrary-bit, streaming, hardened-output and constant-time verification APIs."
+
+[crates."brynja-hash-tuple"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Add the unpublished no_std TupleHash leaf with complete TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 ordinary, arbitrary-bit, exact-length streaming-item, incremental-output and hardened APIs."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"

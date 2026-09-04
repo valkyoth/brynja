@@ -67,7 +67,8 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | --- | --- | --- | --- |
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
-| SP 800-185 family | 🚧 In progress — encodings, cSHAKE, and KMAC complete; TupleHash and ParallelHash pending | `brynja-hash-sha3`, `brynja-mac-kmac` | ❌ Not independently verified |
+| TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
+| SP 800-185 family | 🚧 In progress — encodings, cSHAKE, KMAC, and TupleHash complete; ParallelHash pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple` | ❌ Not independently verified |
 
 ### Modern Message Authentication
 
@@ -854,7 +855,7 @@ compiler evidence, and the exact-candidate retest passed. The permanent
 [v0.24.12 report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.12.md)
 records `PASS`/`PASS` with zero open findings.
 
-The internal `0.24.13` candidate adds complete KMAC128, KMAC256, KMACXOF128,
+Signed `0.24.13` adds complete KMAC128, KMAC256, KMACXOF128,
 and KMACXOF256 over the exact hardened cSHAKE owner. Strength-enforcing
 constructors form the default surface; exact conformance constructors require
 the explicit `conformance-testing` leaf-crate feature and cannot appear through
@@ -873,13 +874,25 @@ records `PASS`/`PASS` with zero open findings. KMAC is fully implemented but nei
 independently verified nor FIPS 140-3 validated; the wider SP 800-185 family
 remains in progress until TupleHash, ParallelHash, and final acceptance pass.
 
+The internal `0.24.14` candidate adds complete TupleHash128, TupleHash256,
+TupleHashXOF128, and TupleHashXOF256 in the allocation-free `no_std`
+`brynja-hash-tuple` leaf. Whole and exact-length streamed tuple items preserve
+item identity, order, empty values, and canonical arbitrary-bit tails; fixed
+and incremental XOF output, customization, ordinary and hardened owners, typed
+secret output, checked bounds, abandoned-item failure, official examples, an
+independent differential oracle, package-external use, proofs, Miri,
+AddressSanitizer, and Rust 1.90.0/1.98.1 cleanup evidence are bound to the
+implementation. TupleHash is fully implemented but is neither independently
+verified nor FIPS 140-3 validated. ParallelHash and combined SP 800-185 final
+acceptance remain pending.
+
 ## Install
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.12`; the current internal `0.24.13` KMAC
-final candidate passed its exceptional pentest and retest, selects no
-crates.io publication, and awaits green hosted checks and its signed tag.
+milestones continue through `0.24.13`; the current internal `0.24.14`
+TupleHash candidate selects no crates.io publication and awaits its exceptional
+security assessment.
 The published
 dependency is:
 
@@ -988,14 +1001,15 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.13 exposes cumulative foundations, complete SHA-2, SHA-3/SHAKE, cSHAKE, and KMAC/KMACXOF APIs; optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
+| `brynja` | Modern production facade | Internal v0.24.14 exposes cumulative foundations, complete SHA-2, SHA-3/SHAKE, cSHAKE, KMAC/KMACXOF, and TupleHash/TupleHashXOF APIs; optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |
-| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, TupleHash and ParallelHash ownership | v0.1.0 contains all six fully implemented FIPS 202 functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary and hardened byte/arbitrary-bit APIs; both CPU candidates remain unadmitted, and the wider SP 800-185 family remains in progress through v0.24.17 |
+| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, and SP 800-185 encoding foundations | v0.1.0 contains all six fully implemented FIPS 202 functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary and hardened byte/arbitrary-bit APIs; both CPU candidates remain unadmitted, and the wider SP 800-185 family remains in progress through v0.24.17 |
 | `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | v0.1.0 implemented internally at v0.24.13; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
+| `brynja-hash-tuple` | Complete TupleHash128/256 and TupleHashXOF128/256 with structural item boundaries and hardened ownership | v0.1.0 implemented internally at v0.24.14; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
 | Future `brynja-mac-hmac` | Complete generic HMAC over admitted fixed-output hashes | Planned from v0.25.0 through v0.25.2 |
-| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six SHA-2 algorithms, all six FIPS 202 functions, complete cSHAKE, SP 800-185 encodings, and all four KMAC/KMACXOF constructions; other planned cryptography and provider effects remain absent |
+| `brynja-crypto` | Provider contracts, cryptographic composition, policy, AEADs, KDFs, RSA, ECC, and exact family integration | Reexports all six SHA-2 algorithms, all six FIPS 202 functions, complete cSHAKE, SP 800-185 encodings, all four KMAC/KMACXOF constructions, and all four TupleHash/TupleHashXOF constructions; other planned cryptography and provider effects remain absent |
 | `brynja-crypto-cpu` | Optional zero-dependency no_std ISA-kernel boundary | Published metadata v0.1.1; five SHA-2 plus x86_64 AVX2 and AArch64 SHA3 Keccak candidates implemented; x86 SHA-512 and RISC-V Keccak are scalar-only; zero admitted backends |
 | `brynja-crypto-cpu-std` | Directly selected host detector adapter | Published metadata v0.1.1; complete-family reporting with scalar fallback, RISC-V auto-detection disabled; absent from facade and FIPS graphs |
 | `brynja-pki` | Bounded DER framing and admitted canonical ASN.1 values now; schema decoding, X.509, path validation, and revocation later | DER reader and canonical primitive/container foundations implemented; package remains published at 0.2.0 until the next checkpoint |

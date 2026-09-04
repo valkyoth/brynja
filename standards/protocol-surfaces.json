@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "645b3114378459eb4f20711dc20859369cfcc8ba7f179498c3db4552fac3cab3",
+  "policy_sha256": "eba7ce33dbada9349ec05fa6bd0a3eea13b5719bb9a938f9d66c21a26937ebb2",
   "schema": 2,
   "source_ledger_sha256": "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df",
   "surfaces": [
@@ -234,6 +234,20 @@
       "owner": "0.24.12",
       "rationale": "The complete SP 800-185 cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF family is planned before 1.0 with exact bit-string encoding, keyed cleanup, portable usability, parallel execution, and cross-backend acceptance.",
       "test_target": "tests/surface/primitives.rs#sp800_185"
+    },
+    {
+      "code_target": "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.tuplehash",
+      "kind": "semantic",
+      "normative_sources": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "owner": "0.24.14",
+      "rationale": "All four SP 800-185 TupleHash and TupleHashXOF identities are implemented over the hardened cSHAKE owner with structural ordered tuple items, complete arbitrary-bit and exact-length streaming input, fixed and incremental XOF output, typed secret output, and fail-closed incomplete-item handling.",
+      "test_target": "scripts/tuplehash/check-tuplehash.py#main"
     },
     {
       "code_target": "crates/brynja-dtls-core/src/path.rs#PathToken",

@@ -78,6 +78,13 @@ scripts/kmac/check-kmac-conformance-gate.sh
 scripts/kmac/check-kmac-codegen.sh
 cargo test --locked --manifest-path assurance/kmac-public-api/Cargo.toml
 cargo clippy --locked --manifest-path assurance/kmac-public-api/Cargo.toml --all-targets -- -D warnings
+python3 scripts/tuplehash/check-tuplehash.py
+python3 scripts/tuplehash/test-tuplehash.py
+python3 scripts/tuplehash/check-tuplehash-differential.py
+scripts/tuplehash/check-tuplehash-codegen.sh
+cargo test --locked --manifest-path assurance/tuplehash-public-api/Cargo.toml
+cargo clippy --locked --manifest-path assurance/tuplehash-public-api/Cargo.toml \
+  --all-targets -- -A clippy::chunks_exact_to_as_chunks -D warnings
 python3 scripts/hash/check-final-acceptance.py
 python3 scripts/hash/test-final-acceptance.py
 scripts/sha2/check-sha256-cpu-codegen.sh

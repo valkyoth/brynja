@@ -39,8 +39,10 @@ adds the complete SP 800-185 encoding foundation plus cSHAKE128 and cSHAKE256
 with byte and arbitrary-bit function names, customization, messages and output;
 repository milestone v0.24.13 builds all four KMAC/KMACXOF constructions over
 the hardened cSHAKE owner in the separate `brynja-mac-kmac` leaf, using an
-in-place reader transition that clears the exact vacated source owner. The wider
-SP 800-185 family remains in progress through v0.24.17.
+in-place reader transition that clears the exact vacated source owner.
+Repository milestone v0.24.14 adds all four TupleHash/TupleHashXOF
+constructions in the separate `brynja-hash-tuple` leaf. The wider SP 800-185
+family remains in progress through v0.24.17.
 
 ```rust
 use brynja_hash_sha3::{Sha3_256, sha3_256};
@@ -124,7 +126,8 @@ pentest evidence rather than independent cryptographic verification.
 | Complete SHA-3/SHAKE family, including final combined acceptance | ✅ Fully implemented | ❌ Not independently verified |
 | SP 800-185 encodings (`left_encode`, `right_encode`, `encode_string`, `bytepad`) | ✅ Implemented | ❌ Not independently verified |
 | cSHAKE128 and cSHAKE256 | ✅ Implemented | ❌ Not independently verified |
-| Complete SP 800-185 family | 🚧 In progress — cSHAKE and KMAC complete; TupleHash and ParallelHash pending | ❌ Not independently verified |
+| TupleHash128/256 and TupleHashXOF128/256 | ✅ Fully implemented | ❌ Not independently verified |
+| Complete SP 800-185 family | 🚧 In progress — cSHAKE, KMAC, and TupleHash complete; ParallelHash pending | ❌ Not independently verified |
 
 Only a named independent reviewer and linked review evidence can change the
 independent status. Project tests, CI, Kani, Miri, fuzzing, and pentests do not

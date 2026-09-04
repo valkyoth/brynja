@@ -844,6 +844,42 @@
         "planned:negative:scripts/kmac/test-kmac.py#main"
       ]
     },
+    "BRY-REQ-CRYPTO-0016": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.tuplehash"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.24.14"
+      ],
+      "sources": [
+        "nist:NIST.FIPS.202.pdf",
+        "nist:NIST.SP.800-185.pdf"
+      ],
+      "targets": [
+        "actual-symbol:crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED"
+      ],
+      "tests": [
+        "planned:positive:scripts/tuplehash/check-tuplehash.py#main",
+        "planned:negative:scripts/tuplehash/test-tuplehash.py#main"
+      ]
+    },
     "BRY-REQ-CT-0001": {
       "authority_roles": [
         "compatibility",
@@ -6138,6 +6174,7 @@
         "BRY-REQ-CRYPTO-0013",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -6332,6 +6369,9 @@
       ],
       "algorithm.sp800-185": [
         "BRY-REQ-CRYPTO-0014"
+      ],
+      "algorithm.tuplehash": [
+        "BRY-REQ-CRYPTO-0016"
       ],
       "boundary.dtls.path-identity": [
         "BRY-REQ-DTLS-0102"
@@ -9015,6 +9055,7 @@
         "BRY-REQ-CRYPTO-0013",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-PQ-0117"
       ],
       "ct": [
@@ -9208,6 +9249,7 @@
         "BRY-REQ-CRYPTO-0013",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-LEGACY-0100",
         "BRY-REQ-LEGACY-0300",
@@ -9229,6 +9271,7 @@
         "BRY-REQ-CRYPTO-0012",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CT-0001",
         "BRY-REQ-ENC-0001",
         "BRY-REQ-ENC-0002",
@@ -9262,6 +9305,7 @@
         "BRY-REQ-CRYPTO-0007",
         "BRY-REQ-CRYPTO-0009",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-TLS-0005"
       ],
       "key-lifecycle": [
@@ -9272,6 +9316,7 @@
         "BRY-REQ-CRYPTO-0012",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
@@ -9316,6 +9361,7 @@
         "BRY-REQ-CRYPTO-0013",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -9466,6 +9512,7 @@
         "BRY-REQ-CRYPTO-0012",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
         "BRY-REQ-ENTROPY-1241",
@@ -9491,6 +9538,7 @@
         "BRY-REQ-CRYPTO-0013",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -9749,6 +9797,7 @@
         "BRY-REQ-CRYPTO-0013",
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10084,6 +10133,9 @@
       "0.24.13": [
         "BRY-REQ-CRYPTO-0015"
       ],
+      "0.24.14": [
+        "BRY-REQ-CRYPTO-0016"
+      ],
       "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
       ],
@@ -10413,7 +10465,8 @@
       "nist:NIST.FIPS.202.pdf": [
         "BRY-REQ-CRYPTO-0002",
         "BRY-REQ-CRYPTO-0014",
-        "BRY-REQ-CRYPTO-0015"
+        "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016"
       ],
       "nist:NIST.FIPS.203.pdf": [
         "BRY-REQ-PQ-0117"
@@ -10423,7 +10476,8 @@
       ],
       "nist:NIST.SP.800-185.pdf": [
         "BRY-REQ-CRYPTO-0014",
-        "BRY-REQ-CRYPTO-0015"
+        "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016"
       ],
       "nist:NIST.SP.800-186.pdf": [
         "BRY-REQ-CRYPTO-0010"
@@ -10931,6 +10985,9 @@
       ],
       "actual-symbol:crates/brynja-hash-sha3/src/lib.rs#SHAKE256_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0002"
+      ],
+      "actual-symbol:crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED": [
+        "BRY-REQ-CRYPTO-0016"
       ],
       "actual-symbol:crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0015"
@@ -11446,6 +11503,9 @@
       "planned:negative:scripts/kmac/test-kmac.py#main": [
         "BRY-REQ-CRYPTO-0015"
       ],
+      "planned:negative:scripts/tuplehash/test-tuplehash.py#main": [
+        "BRY-REQ-CRYPTO-0016"
+      ],
       "planned:negative:tests/conformance/dtls.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-DTLS-0116"
       ],
@@ -11854,6 +11914,9 @@
       ],
       "planned:positive:scripts/kmac/check-kmac.py#main": [
         "BRY-REQ-CRYPTO-0015"
+      ],
+      "planned:positive:scripts/tuplehash/check-tuplehash.py#main": [
+        "BRY-REQ-CRYPTO-0016"
       ],
       "planned:positive:tests/conformance/dtls.rs#audit_regression": [
         "BRY-REQ-DTLS-0116"

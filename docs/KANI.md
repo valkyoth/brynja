@@ -1,6 +1,6 @@
 # Kani Verification Policy
 
-Status: v0.24.13 SHA-2, FIPS 202, and KMAC policy harnesses admitted
+Status: v0.24.14 SHA-2, FIPS 202, KMAC, and TupleHash policy harnesses admitted
 
 Brynja builds, tests, and releases on the active stable Rust toolchain. Kani is
 compiler-integration-sensitive and therefore uses a separately documented

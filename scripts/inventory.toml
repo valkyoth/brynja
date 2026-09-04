@@ -62,6 +62,10 @@ purpose = "SHA-2 implementation, public acceptance, and architecture-specific ev
 extensions = [".py", ".sh"]
 purpose = "SHA-3 and SHAKE implementation, public acceptance, and differential evidence"
 
+[category.tuplehash]
+extensions = [".py", ".sh"]
+purpose = "TupleHash and TupleHashXOF implementation, package acceptance, and differential evidence"
+
 [category.standards]
 extensions = [".py", ".sh"]
 purpose = "Standards authorities, protocol surfaces, and normative requirements"

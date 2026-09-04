@@ -87,7 +87,16 @@ full_kmac() {
     run_miri -p brynja-mac-kmac --tests
 }
 
-all_groups=(core sanitization sha2 sha3 kmac)
+quick_tuplehash() {
+    run_miri --manifest-path crates/brynja-hash-tuple/Cargo.toml \
+        --test api tuple_boundaries_order_and_empty_items_are_distinct
+}
+
+full_tuplehash() {
+    run_miri -p brynja-hash-tuple --tests
+}
+
+all_groups=(core sanitization sha2 sha3 kmac tuplehash)
 mode="${1:---full}"
 shift || true
 

@@ -246,3 +246,20 @@ work_bound = "Absorb work is linear in checked key, customization, and message b
 evidence_gap = "All four KMAC identities have official-example, arbitrary-bit differential, package-external, cleanup-codegen, proof, Miri, sanitizer, no_std, mutation and timing evidence; independent cryptographic review, FIPS 140-3 validation, and the wider TupleHash/ParallelHash family remain incomplete."
 residual = "All services report non-approved; compiler-created copies, registers, caches, dumps, swap, aborts, forced termination, physical attacks and caller-owned copies remain outside portable crate cleanup guarantees."
 mapping_rationale = "KMAC is separately represented so its completed keyed owner can be admitted without falsely completing the broader SP 800-185 family before TupleHash and ParallelHash milestones."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0016"
+owner = "0.24.14"
+lifecycle = "implemented"
+revision = 1
+decision_ids = ["algorithm.tuplehash"]
+sources = [{ id = "nist:NIST.FIPS.202.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-185.pdf", authority_role = "current" }]
+statement = "TupleHash128, TupleHash256, TupleHashXOF128, and TupleHashXOF256 implement exact function-name separation, ordered encode_string item boundaries, customization, fixed-versus-XOF right encoding, arbitrary-bit and exact-length streamed items, and ordinary or hardened output ownership over the admitted FIPS 202 permutation."
+invariants = ["algorithm-admission", "canonical-encoding", "failure-atomicity", "key-lifecycle", "resource-bound", "side-channel", "validation", "work-bound"]
+target = "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED"
+positive_test = "scripts/tuplehash/check-tuplehash.py#main"
+negative_test = "scripts/tuplehash/test-tuplehash.py#main"
+work_bound = "Absorb work is linear in checked customization, item-prefix, and item bits; output work is linear in the caller-selected public length, with fixed storage and no content-dependent discovery or allocation."
+evidence_gap = "All four TupleHash identities have official-example, arbitrary-bit differential, package-external, exact-length streaming, cleanup-codegen, proof, Miri, sanitizer, no_std, and mutation evidence; independent cryptographic review, FIPS 140-3 validation, and the wider ParallelHash family remain incomplete."
+residual = "Outputs remain non-approved; compiler-created copies, registers, caches, dumps, swap, aborts, forced termination, physical attacks, and caller-owned copies remain outside portable crate cleanup guarantees."
+mapping_rationale = "TupleHash is separately represented so its complete structural item API can be admitted without falsely completing the broader SP 800-185 family before ParallelHash and combined acceptance."

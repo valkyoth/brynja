@@ -41,7 +41,9 @@ arbitrary-bit message functions and arbitrary-bit SHAKE output from
 `brynja-hash-sha3`. The same leaf now supplies complete SP 800-185 encodings
 and cSHAKE128/cSHAKE256 ordinary and hardened APIs, plus complete KMAC128,
 KMAC256, KMACXOF128, and KMACXOF256 default strength-enforcing APIs from
-`brynja-mac-kmac`. Exact weak/short conformance entry points require the leaf's
+`brynja-mac-kmac`, and complete TupleHash128, TupleHash256, TupleHashXOF128,
+and TupleHashXOF256 APIs from `brynja-hash-tuple`. Exact weak/short KMAC
+conformance entry points require the leaf's
 explicit assurance feature. Its broader provider effects, AEADs,
 KDFs, public-key cryptography, TLS, PKI, platform, and legacy-protocol scope
 remain unimplemented.
@@ -59,7 +61,8 @@ verification.
 | `brynja-crypto` | Provider contracts, cryptographic composition, AEADs, KDFs, RSA, and ECC | ❌ Not verified |
 
 All six SHA-2 algorithms, all six FIPS 202 functions, both cSHAKE strengths,
-and all four KMAC/KMACXOF constructions are usable through
+all four KMAC/KMACXOF constructions, and all four TupleHash/TupleHashXOF
+constructions are usable through
 this component; the remaining planned composition layer is not implemented
 yet. Ordinary unkeyed hash and XOF states do not guarantee erasure of secret-
 input remnants or private internal state. SHA-2 and SHA-3/SHAKE secret-bearing

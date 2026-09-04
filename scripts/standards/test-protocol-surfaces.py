@@ -58,19 +58,20 @@ def bind(policy: dict, ledger: dict) -> None:
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
-    assert len(register["surfaces"]) == 4457
+    assert len(register["surfaces"]) == 4458
     implemented = {
         surface["id"]
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 70
+    assert len(implemented) == 71
     assert all(
         surface_id.startswith("iana.tls-parameters.tls-parameters-5")
         or surface_id.startswith("iana.tls-parameters.tls-parameters-6")
         or surface_id
         in {
-            "algorithm.kmac", "algorithm.sha2", "algorithm.sha3-shake", "facility.sslkeylogfile.test-support",
+            "algorithm.kmac", "algorithm.sha2", "algorithm.sha3-shake", "algorithm.tuplehash",
+            "facility.sslkeylogfile.test-support",
             "facility.entropy.secure-random-contract",
             "format.asn1.values", "format.der.framing", "state.tls.secret-lifetime",
         }
@@ -482,7 +483,6 @@ def test_duplicate_json_key_fails() -> None:
         path = Path(directory) / "duplicate.json"
         path.write_text('{"schema": 1, "schema": 2}', encoding="utf-8")
         assert_fails("duplicate JSON key", lib.read_json, path)
-
 
 def main() -> int:
     tests = [

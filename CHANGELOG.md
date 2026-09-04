@@ -35,6 +35,21 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Implement complete TupleHash128, TupleHash256, TupleHashXOF128, and
+  TupleHashXOF256 in the new allocation-free `no_std` `brynja-hash-tuple`
+  leaf. Whole and affine exact-length streamed tuple items preserve order,
+  empty values, structural boundaries, and canonical arbitrary-bit inputs;
+  fixed and incremental XOF output support ordinary public and hardened typed-
+  secret ownership without exposing cSHAKE or Keccak internals.
+- Bind all twelve official NIST TupleHash/TupleHashXOF examples, a separately
+  composed 256-case arbitrary-bit oracle, tuple partition/collision negatives,
+  abandoned-item failure, package-external bare-metal use, twenty-four
+  cumulative Kani bounds, Miri, AddressSanitizer, source-policy mutations, and
+  Rust 1.90.0/1.98.1 cleanup evidence to v0.24.14. TupleHash is fully
+  implemented but not independently verified or FIPS 140-3 validated; the
+  complete SP 800-185 family remains in progress through ParallelHash and
+  combined final acceptance.
+
 - Implement complete KMAC128, KMAC256, KMACXOF128, and KMACXOF256 in the new
   allocation-free `no_std` `brynja-mac-kmac` leaf. The public surface separates
   exact standards conformance from strength-enforcing production policy,

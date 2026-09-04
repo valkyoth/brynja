@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "d244115fbcb0f94ef71e9a8cf1a1bd459a0f931facdc5e872377b14f50824f40",
-  "domain_policy_sha256": "9f29ec1f24c4357201e8e2603e8772ca4dc29f6c93f3b93dcca72ad154a245d5",
-  "policy_sha256": "8fa83f2d5fcf37e391724b6884a062ddfc8553c2c40a8ff1db788f3392ceaca2",
+  "domain_policy_sha256": "6a121d3a40eb0f3070cb3f5555f0ab88f72e1358fccc9075e5cb3227cc01068b",
+  "policy_sha256": "68e03beab4ef56ab35e264d34cbd839dd68f66ea3e7e2753a5f80266614bd361",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3255,6 +3255,106 @@
         }
       ],
       "work_bound": "Absorb work is linear in checked key, customization, and message bits; output and verification work is linear in the caller-selected public output or candidate length, with no content-dependent early exit."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.tuplehash"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "All four TupleHash identities have official-example, arbitrary-bit differential, package-external, exact-length streaming, cleanup-codegen, proof, Miri, sanitizer, no_std, and mutation evidence; independent cryptographic review, FIPS 140-3 validation, and the wider ParallelHash family remain incomplete.",
+      "id": "BRY-REQ-CRYPTO-0016",
+      "invariants": [
+        "algorithm-admission",
+        "canonical-encoding",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "side-channel",
+        "validation",
+        "work-bound"
+      ],
+      "lifecycle": "implemented",
+      "mapping_rationale": "TupleHash is separately represented so its complete structural item API can be admitted without falsely completing the broader SP 800-185 family before ParallelHash and combined acceptance.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.24.14",
+      "profile": "crypto-encoding-pkix",
+      "residual": "Outputs remain non-approved; compiler-created copies, registers, caches, dumps, swap, aborts, forced termination, physical attacks, and caller-owned copies remain outside portable crate cleanup guarantees.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "sha3-derived",
+            "symmetric"
+          ],
+          "id": "nist:NIST.FIPS.202.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.0",
+            "0.23.0",
+            "0.24.0",
+            "0.24.12",
+            "0.24.13",
+            "0.24.14",
+            "0.24.15",
+            "0.24.16",
+            "0.24.17",
+            "0.25.0",
+            "0.26.0",
+            "0.27.0",
+            "0.28.0",
+            "0.29.0",
+            "0.30.0",
+            "0.31.0"
+          ],
+          "role": "sha3-shake",
+          "sha256": "1592607831ff0908cc590632ce371c6c95e94025bb1a0c8ae90a4d0ec1ed025e"
+        },
+        {
+          "authority_role": "current",
+          "domains": [
+            "sha3-derived"
+          ],
+          "id": "nist:NIST.SP.800-185.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.24.12",
+            "0.24.13",
+            "0.24.14",
+            "0.24.15",
+            "0.24.16",
+            "0.24.17"
+          ],
+          "role": "sha3-derived",
+          "sha256": "0ebcdfb5b145bcb6a8a0f49737a201e8fb30dce06951595a07010774d402d7c5"
+        }
+      ],
+      "statement": "TupleHash128, TupleHash256, TupleHashXOF128, and TupleHashXOF256 implement exact function-name separation, ordered encode_string item boundaries, customization, fixed-versus-XOF right encoding, arbitrary-bit and exact-length streamed items, and ordinary or hardened output ownership over the admitted FIPS 202 permutation.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "scripts/tuplehash/check-tuplehash.py#main"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "scripts/tuplehash/test-tuplehash.py#main"
+        }
+      ],
+      "work_bound": "Absorb work is linear in checked customization, item-prefix, and item bits; output work is linear in the caller-selected public length, with fixed storage and no content-dependent discovery or allocation."
     },
     {
       "applicability": "apply",
@@ -30311,9 +30411,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "be7d6ceffb95c00bf490c190dd841e14703cbdba43cc08122755372da1edf25b",
+  "residual_policy_sha256": "265b0a1296d37cda79a484e5c8aad9c1c28237be834bd6b926aa9c0990f4ec26",
   "schema": 5,
   "source_ledger_sha256": "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df",
-  "surface_register_sha256": "91bcbc33a62cc0b3e07e41f46219e8dcafbbcf53bde023c36f9219e8558155a0",
-  "transport_policy_sha256": "a3d1252d4189edcd24e5ebb1e3dcd18f6c2f5ab9f522446b13a5455386654257"
+  "surface_register_sha256": "e7dd2def74c5292ea79ca8bd7e7bfc81c75d6c5e917dd2c9eb58e587aade5375",
+  "transport_policy_sha256": "7aadad54eab9f4993f8cfab54ac545d532729d19bd9b2d4a6a9a695a9046f721"
 }

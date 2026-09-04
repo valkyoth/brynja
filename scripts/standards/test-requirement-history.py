@@ -38,7 +38,7 @@ def baseline(*rows: dict) -> dict:
 
 def test_production_builder_enforces_git_history() -> None:
     matrix, _ = checker.build_matrix()
-    assert len(matrix["requirements"]) == 170
+    assert len(matrix["requirements"]) == 171
 
 
 def test_illegal_history_transition_fails() -> None:

@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GROUPS = ("core", "sanitization", "sha2", "sha3", "kmac")
+GROUPS = ("core", "sanitization", "sha2", "sha3", "kmac", "tuplehash")
 FULL_EXACT = {
     "Cargo.lock",
     "Cargo.toml",
@@ -44,13 +44,19 @@ GROUP_PREFIXES = {
         "crates/brynja-mac-kmac/",
         "scripts/kmac/",
     ),
+    "tuplehash": (
+        "assurance/tuplehash-",
+        "crates/brynja-hash-tuple/",
+        "scripts/tuplehash/",
+    ),
 }
 DOWNSTREAM = {
-    "core": {"sanitization", "sha2", "sha3", "kmac"},
+    "core": {"sanitization", "sha2", "sha3", "kmac", "tuplehash"},
     "sanitization": set(),
     "sha2": set(),
-    "sha3": {"kmac"},
+    "sha3": {"kmac", "tuplehash"},
     "kmac": set(),
+    "tuplehash": set(),
 }
 
 
@@ -110,7 +116,7 @@ def validate_repository() -> None:
     runner = (ROOT / "scripts/zeroization/check-zeroization-miri.sh").read_text()
     tag_runner = (ROOT / "scripts/zeroization/check-tag-miri.sh").read_text()
     tag_gate = (ROOT / "scripts/tag_gate.sh").read_text()
-    literal = "all_groups=(core sanitization sha2 sha3 kmac)"
+    literal = "all_groups=(core sanitization sha2 sha3 kmac tuplehash)"
     if runner.count(literal) != 1:
         raise MiriScopeError("Miri runner group inventory drifted")
     for group in GROUPS:

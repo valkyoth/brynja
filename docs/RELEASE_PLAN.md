@@ -3334,7 +3334,7 @@ Exit criteria:
 
 ### v0.24.14 - Complete TupleHash And TupleHashXOF
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Implement TupleHash128, TupleHash256, TupleHashXOF128 and TupleHashXOF256 with ordered unambiguous arbitrary-bit-string tuple items, ordinary and hardened secret-bearing whole-item and exact-length streaming item APIs, customization, fixed and incremental XOF output, checked tuple and output bounds, transactional failures, complete internal sanitization, official examples, partition and collision-separation negatives, proofs and public types that cannot silently flatten a tuple into one byte string.
 

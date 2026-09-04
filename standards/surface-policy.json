@@ -943,6 +943,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED",
+        "disposition": "implemented",
+        "domain": "cryptography",
+        "owner": "0.24.14",
+        "rationale": "All four SP 800-185 TupleHash and TupleHashXOF identities are implemented over the hardened cSHAKE owner with structural ordered tuple items, complete arbitrary-bit and exact-length streaming input, fixed and incremental XOF output, typed secret output, and fail-closed incomplete-item handling.",
+        "sources": ["nist:NIST.FIPS.202.pdf", "nist:NIST.SP.800-185.pdf"],
+        "test_target": "scripts/tuplehash/check-tuplehash.py#main"
+      },
+      "id": "algorithm.tuplehash"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-crypto/src/hmac.rs",
         "disposition": "future-work",
         "domain": "cryptography",

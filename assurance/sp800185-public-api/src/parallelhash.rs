@@ -137,6 +137,18 @@ fn scheduled256(input: &[u8]) -> Result<[u8; 79], AcceptanceError> {
 }
 
 fn hardened_profiles() -> Result<(), AcceptanceError> {
+    let mut expected_fixed128 = [0_u8; 32];
+    let mut expected_fixed256 = [0_u8; 64];
+    let mut expected_xof128 = [0_u8; 37];
+    let mut expected_xof256 = [0_u8; 73];
+    parallel_hash128(b"secret input", &mut [0; 7], b"secret", &mut expected_fixed128)
+        .map_err(|_| AcceptanceError::ParallelHash)?;
+    parallel_hash256(b"secret input", &mut [0; 7], b"secret", &mut expected_fixed256)
+        .map_err(|_| AcceptanceError::ParallelHash)?;
+    parallel_hash_xof128(b"secret input", &mut [0; 7], b"secret", &mut expected_xof128)
+        .map_err(|_| AcceptanceError::ParallelHash)?;
+    parallel_hash_xof256(b"secret input", &mut [0; 7], b"secret", &mut expected_xof256)
+        .map_err(|_| AcceptanceError::ParallelHash)?;
     let mut fixed128 = [0xa5_u8; 32];
     let mut fixed256 = [0xa5_u8; 64];
     let mut xof128 = [0xa5_u8; 37];
@@ -146,18 +158,24 @@ fn hardened_profiles() -> Result<(), AcceptanceError> {
         let mut state = HardenedParallelHash128::new(&mut workspace128, b"secret")
             .map_err(|_| AcceptanceError::ParallelHash)?;
         state.update(b"secret input").map_err(|_| AcceptanceError::ParallelHash)?;
-        let _secret = state
+        let secret = state
             .finalize_secret(&mut fixed128)
             .map_err(|_| AcceptanceError::ParallelHash)?;
+        if secret.expose() != expected_fixed128 {
+            return Err(AcceptanceError::ParallelHash);
+        }
     }
     let mut workspace256 = [0xa5_u8; 7];
     {
         let mut state = HardenedParallelHash256::new(&mut workspace256, b"secret")
             .map_err(|_| AcceptanceError::ParallelHash)?;
         state.update(b"secret input").map_err(|_| AcceptanceError::ParallelHash)?;
-        let _secret = state
+        let secret = state
             .finalize_secret(&mut fixed256)
             .map_err(|_| AcceptanceError::ParallelHash)?;
+        if secret.expose() != expected_fixed256 {
+            return Err(AcceptanceError::ParallelHash);
+        }
     }
     let mut xof_workspace128 = [0xa5_u8; 7];
     {
@@ -165,9 +183,12 @@ fn hardened_profiles() -> Result<(), AcceptanceError> {
             .map_err(|_| AcceptanceError::ParallelHash)?;
         state.update(b"secret input").map_err(|_| AcceptanceError::ParallelHash)?;
         let mut reader = state.finalize_xof().map_err(|_| AcceptanceError::ParallelHash)?;
-        let _secret = reader
+        let secret = reader
             .squeeze_secret(&mut xof128)
             .map_err(|_| AcceptanceError::ParallelHash)?;
+        if secret.expose() != expected_xof128 {
+            return Err(AcceptanceError::ParallelHash);
+        }
     }
     let mut xof_workspace256 = [0xa5_u8; 7];
     {
@@ -175,9 +196,12 @@ fn hardened_profiles() -> Result<(), AcceptanceError> {
             .map_err(|_| AcceptanceError::ParallelHash)?;
         state.update(b"secret input").map_err(|_| AcceptanceError::ParallelHash)?;
         let mut reader = state.finalize_xof().map_err(|_| AcceptanceError::ParallelHash)?;
-        let _secret = reader
+        let secret = reader
             .squeeze_secret(&mut xof256)
             .map_err(|_| AcceptanceError::ParallelHash)?;
+        if secret.expose() != expected_xof256 {
+            return Err(AcceptanceError::ParallelHash);
+        }
     }
     if fixed128 != [0; 32]
         || fixed256 != [0; 64]

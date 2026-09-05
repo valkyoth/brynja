@@ -92,6 +92,19 @@ fn streaming_bits_and_boundaries() -> Result<(), AcceptanceError> {
 }
 
 fn hardened_profiles() -> Result<(), AcceptanceError> {
+    let items: &[&[u8]] = &[b"secret item"];
+    let mut expected_fixed128 = [0_u8; 32];
+    let mut expected_fixed256 = [0_u8; 64];
+    let mut expected_xof128 = [0_u8; 37];
+    let mut expected_xof256 = [0_u8; 73];
+    tuple_hash128(items, b"secret", &mut expected_fixed128)
+        .map_err(|_| AcceptanceError::TupleHash)?;
+    tuple_hash256(items, b"secret", &mut expected_fixed256)
+        .map_err(|_| AcceptanceError::TupleHash)?;
+    tuple_hash_xof128(items, b"secret", &mut expected_xof128)
+        .map_err(|_| AcceptanceError::TupleHash)?;
+    tuple_hash_xof256(items, b"secret", &mut expected_xof256)
+        .map_err(|_| AcceptanceError::TupleHash)?;
     let mut fixed128 = [0xa5_u8; 32];
     let mut fixed256 = [0xa5_u8; 64];
     let mut xof128 = [0xa5_u8; 37];
@@ -100,35 +113,47 @@ fn hardened_profiles() -> Result<(), AcceptanceError> {
         let mut state = HardenedTupleHash128::new(b"secret")
             .map_err(|_| AcceptanceError::TupleHash)?;
         state.push_item(b"secret item").map_err(|_| AcceptanceError::TupleHash)?;
-        let _secret = state
+        let secret = state
             .finalize_secret(&mut fixed128)
             .map_err(|_| AcceptanceError::TupleHash)?;
+        if secret.expose() != expected_fixed128 {
+            return Err(AcceptanceError::TupleHash);
+        }
     }
     {
         let mut state = HardenedTupleHash256::new(b"secret")
             .map_err(|_| AcceptanceError::TupleHash)?;
         state.push_item(b"secret item").map_err(|_| AcceptanceError::TupleHash)?;
-        let _secret = state
+        let secret = state
             .finalize_secret(&mut fixed256)
             .map_err(|_| AcceptanceError::TupleHash)?;
+        if secret.expose() != expected_fixed256 {
+            return Err(AcceptanceError::TupleHash);
+        }
     }
     {
         let mut state = HardenedTupleHashXof128::new(b"secret")
             .map_err(|_| AcceptanceError::TupleHash)?;
         state.push_item(b"secret item").map_err(|_| AcceptanceError::TupleHash)?;
         let mut reader = state.finalize_xof().map_err(|_| AcceptanceError::TupleHash)?;
-        let _secret = reader
+        let secret = reader
             .squeeze_secret(&mut xof128)
             .map_err(|_| AcceptanceError::TupleHash)?;
+        if secret.expose() != expected_xof128 {
+            return Err(AcceptanceError::TupleHash);
+        }
     }
     {
         let mut state = HardenedTupleHashXof256::new(b"secret")
             .map_err(|_| AcceptanceError::TupleHash)?;
         state.push_item(b"secret item").map_err(|_| AcceptanceError::TupleHash)?;
         let mut reader = state.finalize_xof().map_err(|_| AcceptanceError::TupleHash)?;
-        let _secret = reader
+        let secret = reader
             .squeeze_secret(&mut xof256)
             .map_err(|_| AcceptanceError::TupleHash)?;
+        if secret.expose() != expected_xof256 {
+            return Err(AcceptanceError::TupleHash);
+        }
     }
     if fixed128 != [0; 32] || fixed256 != [0; 64] || xof128 != [0; 37] || xof256 != [0; 73] {
         return Err(AcceptanceError::TupleHash);

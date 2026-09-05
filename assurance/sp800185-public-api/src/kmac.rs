@@ -98,6 +98,23 @@ fn streaming_bits_and_conformance() -> Result<(), AcceptanceError> {
 fn hardened_outputs() -> Result<(), AcceptanceError> {
     let key128 = [0x42_u8; 16];
     let key256 = [0x24_u8; 32];
+    // Public fixture keys/messages: declassification is only for this oracle.
+    let mut expected_fixed128 = [0_u8; 32];
+    let mut expected_fixed256 = [0_u8; 64];
+    let mut expected_xof128 = [0_u8; 37];
+    let mut expected_xof256 = [0_u8; 73];
+    let _expected_tag128 = kmac128(&key128, b"message", b"secret", &mut expected_fixed128)
+        .map_err(|_| AcceptanceError::Kmac)?;
+    let _expected_tag256 = kmac256(&key256, b"message", b"secret", &mut expected_fixed256)
+        .map_err(|_| AcceptanceError::Kmac)?;
+    kmacxof128_public(
+        &key128, b"", b"secret", &mut expected_xof128,
+        KmacPublicDeclassification::acknowledge(),
+    ).map_err(|_| AcceptanceError::Kmac)?;
+    kmacxof256_public(
+        &key256, b"", b"secret", &mut expected_xof256,
+        KmacPublicDeclassification::acknowledge(),
+    ).map_err(|_| AcceptanceError::Kmac)?;
     let mut fixed128 = [0xa5_u8; 32];
     let mut fixed256 = [0xa5_u8; 64];
     let mut xof128 = [0xa5_u8; 37];
@@ -105,30 +122,42 @@ fn hardened_outputs() -> Result<(), AcceptanceError> {
     {
         let mut state = Kmac128::new(&key128, b"secret").map_err(|_| AcceptanceError::Kmac)?;
         state.update(b"message").map_err(|_| AcceptanceError::Kmac)?;
-        let _secret = state
+        let secret = state
             .finalize_secret(&mut fixed128)
             .map_err(|_| AcceptanceError::Kmac)?;
+        if secret.expose() != expected_fixed128 {
+            return Err(AcceptanceError::Kmac);
+        }
     }
     {
         let mut state = Kmac256::new(&key256, b"secret").map_err(|_| AcceptanceError::Kmac)?;
         state.update(b"message").map_err(|_| AcceptanceError::Kmac)?;
-        let _secret = state
+        let secret = state
             .finalize_secret(&mut fixed256)
             .map_err(|_| AcceptanceError::Kmac)?;
+        if secret.expose() != expected_fixed256 {
+            return Err(AcceptanceError::Kmac);
+        }
     }
     {
         let state = KmacXof128::new(&key128, b"secret").map_err(|_| AcceptanceError::Kmac)?;
         let mut reader = state.finalize_xof().map_err(|_| AcceptanceError::Kmac)?;
-        let _secret = reader
+        let secret = reader
             .squeeze_secret(&mut xof128)
             .map_err(|_| AcceptanceError::Kmac)?;
+        if secret.expose() != expected_xof128 {
+            return Err(AcceptanceError::Kmac);
+        }
     }
     {
         let state = KmacXof256::new(&key256, b"secret").map_err(|_| AcceptanceError::Kmac)?;
         let mut reader = state.finalize_xof().map_err(|_| AcceptanceError::Kmac)?;
-        let _secret = reader
+        let secret = reader
             .squeeze_secret(&mut xof256)
             .map_err(|_| AcceptanceError::Kmac)?;
+        if secret.expose() != expected_xof256 {
+            return Err(AcceptanceError::Kmac);
+        }
     }
     if fixed128 != [0; 32] || fixed256 != [0; 64] || xof128 != [0; 37] || xof256 != [0; 73] {
         return Err(AcceptanceError::Kmac);

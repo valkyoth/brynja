@@ -75,6 +75,15 @@ fn streaming_and_bits() -> Result<(), AcceptanceError> {
 }
 
 fn hardened_profiles() -> Result<(), AcceptanceError> {
+    // These are public test messages, not application secrets. The ordinary
+    // APIs are checked against official examples above; check the distinct
+    // secret-output paths against the same inputs before checking erasure.
+    let mut expected128 = [0_u8; 32];
+    let mut expected256 = [0_u8; 67];
+    cshake128(b"secret input", b"", b"portable acceptance", &mut expected128)
+        .map_err(|_| AcceptanceError::Cshake)?;
+    cshake256(b"secret input", b"KDF", b"portable acceptance", &mut expected256)
+        .map_err(|_| AcceptanceError::Cshake)?;
     let mut output128 = [0xa5_u8; 32];
     {
         let mut state = HardenedCshake128::new(b"", b"portable acceptance")
@@ -83,7 +92,7 @@ fn hardened_profiles() -> Result<(), AcceptanceError> {
         let secret = state
             .finalize_secret(&mut output128)
             .map_err(|_| AcceptanceError::Cshake)?;
-        if secret.expose().iter().all(|byte| *byte == 0) {
+        if secret.expose() != expected128 {
             return Err(AcceptanceError::Cshake);
         }
     }
@@ -96,7 +105,7 @@ fn hardened_profiles() -> Result<(), AcceptanceError> {
         let secret = reader
             .squeeze_secret(&mut output256)
             .map_err(|_| AcceptanceError::Cshake)?;
-        if secret.expose().iter().all(|byte| *byte == 0) {
+        if secret.expose() != expected256 {
             return Err(AcceptanceError::Cshake);
         }
     }

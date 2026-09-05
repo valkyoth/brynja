@@ -29,9 +29,10 @@ unadmitted backend and parallel execution disposition.
   item streaming, caller-scheduled ParallelHash leaves, zero-length inputs and
   outputs, positive `B = 1`, invalid `B = 0`, full-strength KMAC constructors,
   and explicitly feature-gated weak-key conformance.
-- Exercise every hardened identity profile and verify that each caller-owned
-  typed-secret destination—and each ParallelHash workspace—has been cleared
-  when its owner ends.
+- Compare every live hardened identity result with the ordinary/public API
+  result for identical test inputs and output lengths, before verifying that
+  each typed-secret destination—and each ParallelHash workspace—is cleared
+  when its owner ends. Fixture inputs are public test data, not real secrets.
 - Freeze a real package-owned input file, fixture source, lockfile, public
   status, release metadata, official-vector sources, independent differential
   entry points, Rust matrix, bare-metal matrix, and hosted lanes by SHA-256.
@@ -57,9 +58,13 @@ unadmitted backend and parallel execution disposition.
   campaigns remain mandatory and hash-bound to the combined acceptance.
 - The new fixture runs under every supported Rust 1.90.0–1.98.1 lane and is
   checked as a library on every declared `no_std` target.
-- Twelve mutation cases reject missing identities, `std`, hardened coverage,
+- Twenty-six policy mutation cases reject missing identities, `std`, hardened coverage,
   conformance, streamed tuples, scheduled leaves, honest status, CI wiring, or
-  reviewed-hash integrity.
+  reviewed-hash integrity, including removal of any live-output comparison.
+- Forty-two compiled executable mutations (zero output, constant output and
+  a flipped final bit for each of fourteen hardened profiles) must report the
+  expected typed acceptance failure. Compilation failures do not count as
+  successful rejection; pristine fixtures must pass before and after.
 
 ## Security And Residual Limits
 

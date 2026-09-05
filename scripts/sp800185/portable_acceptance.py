@@ -34,6 +34,7 @@ FILES = (
     Path("scripts/kmac/check-kmac-differential.py"),
     Path("scripts/tuplehash/check-tuplehash-differential.py"),
     Path("scripts/parallelhash/check-parallelhash-differential.py"),
+    Path("scripts/sp800185/test-portable-acceptance.py"),
     Path("scripts/checks.sh"),
     Path("scripts/ci/check-rust-version-matrix.sh"),
     Path("scripts/assurance/check-bare-metal.sh"),
@@ -155,6 +156,16 @@ def validate(root: Path = ROOT, check_hashes: bool = True) -> None:
     for relative, required in tokens.items():
         for token in required:
             require(loaded[relative], token, f"portable fixture {relative.name}")
+    for name in ("cshake", "kmac", "tuplehash", "parallelhash"):
+        source = loaded[FIXTURE / f"src/{name}.rs"]
+        outputs = ("128", "256") if name == "cshake" else (
+            "_fixed128", "_fixed256", "_xof128", "_xof256",
+        )
+        for output in outputs:
+            require_count(
+                source, f"if secret.expose() != expected{output} {{", 1,
+                f"{name} live hardened output comparison",
+            )
     report = loaded[MAIN]
     for token in (
         "SP 800-185 portable public API acceptance: PASS",

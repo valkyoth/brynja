@@ -37,18 +37,6 @@ name = "brynja-hash-core"
 version = "0.1.0"
 
 [[package]]
-name = "brynja-hash-final-acceptance-fixture"
-version = "0.0.0"
-dependencies = [
- "brynja-crypto-cpu",
- "brynja-hash-sha2",
- "brynja-hash-sha3",
- "brynja-sha2-public-api-fixture",
- "brynja-sha3-hardened-api-fixture",
- "brynja-sha3-public-api-fixture",
-]
-
-[[package]]
 name = "brynja-hash-parallel"
 version = "0.1.0"
 dependencies = [
@@ -57,11 +45,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-hash-parallel-std"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-hash-parallel",
+]
+
+[[package]]
 name = "brynja-hash-sha2"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
- "brynja-crypto-cpu",
  "brynja-hash-core",
 ]
 
@@ -104,26 +99,25 @@ dependencies = [
 ]
 
 [[package]]
-name = "brynja-sha2-public-api-fixture"
+name = "brynja-sp800185-final-fixture"
 version = "0.0.0"
 dependencies = [
- "brynja",
- "brynja-hash-sha2",
+ "brynja-crypto-cpu",
+ "brynja-hash-parallel",
+ "brynja-hash-parallel-std",
+ "brynja-sp800185-public-api-fixture",
 ]
 
 [[package]]
-name = "brynja-sha3-hardened-api-fixture"
-version = "0.0.0"
-dependencies = [
- "brynja-hash-sha3",
-]
-
-[[package]]
-name = "brynja-sha3-public-api-fixture"
+name = "brynja-sp800185-public-api-fixture"
 version = "0.0.0"
 dependencies = [
  "brynja",
+ "brynja-crypto",
+ "brynja-hash-parallel",
  "brynja-hash-sha3",
+ "brynja-hash-tuple",
+ "brynja-mac-kmac",
 ]
 
 [[package]]

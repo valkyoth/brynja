@@ -28,6 +28,14 @@ feature, and package-content gaps. It establishes public usability, not
 independent cryptographic review, FIPS validation, accelerated admission, or
 secret-state erasure.
 
+The v0.24.16 `sp800185-public-api` consumer freezes all fourteen SP 800-185
+identities and their ordinary/hardened public API expectations. The v0.24.17
+`sp800185-final` hosted fixture reruns that unchanged source/input contract and
+adds sequential/caller-scheduled/threaded ParallelHash comparisons and bounded
+failure checks. It deliberately depends on the separate optional std executor;
+the original consumer remains no_std and neither fixture is published. See
+[final acceptance and native capture](../docs/sp800185-final-acceptance.md).
+
 The v0.24.0-v0.24.2 `sha3-differential` fixture is an isolated repository-only
 host adapter. It feeds 328 deterministic public messages through all four
 public SHA-3 digest APIs and both public SHAKE XOF APIs, then compares every

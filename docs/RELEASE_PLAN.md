@@ -3591,7 +3591,7 @@ Exit criteria:
 
 ### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance
 
-Status: awaiting green CI
+Status: released
 
 Plan scope: Freeze and pass package-external fixtures for all fourteen named cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF and ParallelHash/ParallelHashXOF instances through ordinary and hardened secret-bearing one-shot, streaming, incremental squeeze, forced portable, arbitrary-bit-tail and representative real-data paths; verify N, S, K, tuple boundaries, B, L, zero-length cases, exact official examples, no_std package use, complete internal cleanup and misuse failures while keeping the derived family In progress.
 
@@ -3626,7 +3626,7 @@ Exit criteria:
 
 ### v0.24.17 - SP 800-185 Cross-Backend And Parallel Final Acceptance
 
-Status: planned
+Status: awaiting pentest
 
 Plan scope: Rerun the unchanged v0.24.16 ordinary and hardened fixture through portable and every cleanup-qualified admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs, bounded failure and complete worker cleanup, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and sanitization evidence, and mark SP 800-185 Fully implemented only when every named instance, ownership profile and backend has an explicit passing or unadmitted disposition on the final code.
 

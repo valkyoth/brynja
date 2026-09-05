@@ -1,6 +1,6 @@
 # Brynja 0.24.16 Release Notes
 
-Status: awaiting green CI
+Status: released
 
 ## Summary
 

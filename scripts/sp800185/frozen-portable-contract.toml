@@ -1,0 +1,12 @@
+# Frozen from signed v0.24.16: source/input, not facade-version metadata.
+baseline = "v0.24.16"
+[files]
+"assurance/sp800185-public-api/src/cshake.rs" = "ea7e29ff15aa625055111042925f186da084cbec92204c7ccdfdd2a95d8985af"
+"assurance/sp800185-public-api/src/facades.rs" = "1b90a3e96bdc3675205bc0ef7f0d861487cbc23d34b81997646440db42490497"
+"assurance/sp800185-public-api/src/kmac.rs" = "11fbf69a842982289e9d8c77acdd32f054f25144760f3f49ac0b4f427403d154"
+"assurance/sp800185-public-api/src/lib.rs" = "7215558709a8cc4870c0d2f491ccdcf3b3adbd862fb8bb1187d8a336eeaab3b6"
+"assurance/sp800185-public-api/src/main.rs" = "ca403f1456d94b207ed782baee4b84e579707c552376be1c2daed1a3a5b1cf8c"
+"assurance/sp800185-public-api/src/parallelhash.rs" = "ee69749b1bdb471f8fbad3bf3f69a27c555e9adaa6b972436ea239a74eef7fea"
+"assurance/sp800185-public-api/src/tuplehash.rs" = "e0f5a5d793ed0af0bcfea9cf82a8a44e8390c8f4db6a4ac145dd313481810d8a"
+"assurance/sp800185-public-api/src/vectors.rs" = "390669cf9dee21da18abe9fd4d09fd5679fbb79b93e80b7324c5a62a806f7f0f"
+"assurance/sp800185-public-api/fixtures/representative.txt" = "646938d3edbe595a53a4e88af5c2c8c3377a0b75fb2f1cdedee8a261aea37025"

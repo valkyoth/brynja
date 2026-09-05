@@ -1,0 +1,22 @@
+[workspace]
+
+[package]
+name = "brynja-sp800185-final-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-sp800185-public-api-fixture = { path = "../sp800185-public-api" }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", default-features = false }
+brynja-hash-parallel = { path = "../../crates/brynja-hash-parallel", default-features = false }
+brynja-hash-parallel-std = { path = "../../crates/brynja-hash-parallel-std" }
+
+[lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+
+[lints.clippy]
+unwrap_used = "forbid"
+expect_used = "forbid"

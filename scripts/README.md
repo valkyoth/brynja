@@ -35,7 +35,7 @@ file beneath a Cargo `target/` directory, regardless of workspace depth.
 | `sanitization/` | Sanitization dependency admission and optimized-code checks |
 | `sha2/` | SHA-2 source policy, public acceptance, CPU code generation, QEMU, and native capture scripts |
 | `sha3/` | SHA-3/SHAKE source policy, differential evidence, and frozen public acceptance scripts |
-| `sp800185/` | Combined portable cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF acceptance and closure policy |
+| `sp800185/` | Combined portable and hosted SP 800-185 acceptance, parallel execution comparisons, frozen-contract policy and reviewed native capture |
 | `tuplehash/` | TupleHash/TupleHashXOF source policy, mutation, package, and differential evidence |
 | `standards/` | RFC/local authority lifecycle observation, protocol surfaces, and normative requirement generation and validation |
 | `zeroization/` | First-party zeroization source, compiler-artifact, stage-aware local pre-tag Miri, and sanitizer evidence |

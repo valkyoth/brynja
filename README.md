@@ -937,14 +937,13 @@ contract passes final backend and native-parallel disposition at v0.24.17.
 
 Brynja is not ready to secure application traffic and does not implement TLS.
 The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
-milestones continue through `0.24.15`; the current internal `0.24.16`
-portable SP 800-185 acceptance candidate selects no crates.io publication. The
-[current pentest report](https://github.com/valkyoth/brynja/blob/main/security/pentest/v0.24.16.md)
-records `PASS`/`PASS` with zero open findings after the hardened live-output
-acceptance gap was remediated and the owner reported a green retest. The
-report-bearing candidate awaits green GitHub and CodeQL. v0.24.16 changes assurance and
-documentation rather than cryptographic implementation and retains the same
-independent-review and FIPS limitations.
+milestones continue through `0.24.16`; the current internal `0.24.17`
+SP 800-185 execution-acceptance candidate selects no crates.io publication.
+It reruns the frozen portable contract and compares sequential, caller-scheduled
+and threaded ParallelHash. Pentest and reviewed native-evidence disposition
+remain pending; the family stays **In progress**. No production cryptography
+or backend admission changes. See the
+[final acceptance procedure](https://github.com/valkyoth/brynja/blob/main/docs/sp800185-final-acceptance.md).
 The published
 dependency is:
 
@@ -1053,7 +1052,7 @@ selected set in dependency order and publishes the facade last.
 
 | Package | Role | Current status |
 | --- | --- | --- |
-| `brynja` | Modern production facade | Internal v0.24.16 exposes cumulative foundations and the same complete named hash/MAC APIs with portable SP 800-185 acceptance; optional CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
+| `brynja` | Modern production facade | Internal v0.24.17 adds SP 800-185 execution acceptance around the same complete named hash/MAC APIs; native review is pending, CPU candidates remain unadmitted, and no TLS engine or provider effect exists |
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |

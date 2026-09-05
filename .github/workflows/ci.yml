@@ -97,6 +97,8 @@ jobs:
           --all-targets --
           -A clippy::chunks_exact_to_as_chunks
           -D warnings
+      - name: Run SP 800-185 parallel execution acceptance
+        run: cargo run --quiet --locked --manifest-path assurance/sp800185-final/Cargo.toml
       - name: Test assurance platform boundary
         run: python scripts/assurance/test-assurance.py
       - name: Test CPU evidence admission boundary
@@ -131,6 +133,8 @@ jobs:
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/hash-final-acceptance/Cargo.toml
       - name: Run portable SP 800-185 public API acceptance
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sp800185-public-api/Cargo.toml
+      - name: Run SP 800-185 parallel execution acceptance
+        run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sp800185-final/Cargo.toml
       - name: Verify zeroization emitted code
         run: scripts/zeroization/check-zeroization-codegen.sh "${{ matrix.rust }}" x86_64-unknown-linux-gnu
       - name: Verify constant-time emitted code

@@ -2,7 +2,7 @@
 
 These are non-authorizing execution observations, not CPU-backend admission,
 independent cryptographic verification, FIPS validation or full release approval.
-Both reports retain their original `PENDING_REVIEW` field; the review below
+All reports retain their original `PENDING_REVIEW` field; the review below
 checks capture integrity and observed results, not a hardware attestation.
 
 ## Source and execution
@@ -20,21 +20,32 @@ dependency cache warmed. Native capture then ran offline. Both detached runners
 exited 0; both checkouts remained clean at the same commit afterward. Host
 addresses, login names, SSH-key information and installation logs are not archived.
 
+The owner supplied the Apple M2/macOS arm64 report from the same f264a03
+commit and Rust 1.98.1. Remote Mac access was not used; its native execution
+is operator-attested, not independently witnessed. The initial offline attempt
+could not resolve the pinned sanitization 2.0.4 in the local Cargo cache.
+After the locked dependency fetch, the owner supplied a complete offline
+capture. No dependency upgrade or source change was required. The original
+JSON bytes are preserved; no hostname, login or absolute home path appears.
+
 | Lane | Raw report SHA-256 | Observation |
 | --- | --- | --- |
 | [AWS Intel](aws-intel-x86_64.json) | `5f117a4ebb335ba851aeebd1e86f4d8a2f76549d87e8396051c04ea2451e3897` | PASS |
 | [AWS AArch64](aws-aarch64.json) | `8342c79bbd072fd9464bf3ff41985b5b85a6751c62ade03b3cba09a4d90bdf4a` | PASS |
+| [Apple M2](apple-m2-aarch64.json) | `350c71198e7d9e0bbe4ee65ffaad44eddfca29aeb83b0496276321c1f7bb99b8` | PASS |
 
 ## Review performed
 
-- Matched remote report checksums with the downloaded, unmodified JSON bytes.
+- Matched AWS remote report checksums with the downloaded, unmodified JSON
+  bytes; hashed the owner-supplied Mac file and preserved it byte-for-byte.
 - Rejected duplicate JSON keys during review; checked exact schema fields,
   source commit, compiler, lane/architecture, commands and policy hash.
 - Recomputed all four stdout hashes and checked zero backend admissions.
 - Verified 540 parallel comparisons, 24 bounded failure cases, six worker-fault
   tests, three conditional Keccak KAT tests and twelve distinct benchmark rows.
 - Rechecked the first/last tag-mismatch timing ratios against the 1.250 bound.
-  Intel observed 271127/270789 ns; ARM observed 335324/326317 ns.
+  Intel observed 271127/270789 ns; AWS ARM observed 335324/326317 ns;
+  Apple M2 observed 202085/200586 ns.
 - Confirmed every benchmark measured positive durations and compared exact
   outputs before reporting success. Threaded execution was slower than
   sequential execution for these 16 KiB samples; no speedup claim is made.
@@ -45,7 +56,8 @@ bounded timing heuristic and signed source commits do not establish a trusted
 runner, general constant-time behavior, keyed acceleration cleanup or backend
 admission. The archived reports remain separate from formal CPU evidence.
 
-The Mac M2 observation and remaining release checks are still outstanding.
+The Mac M2 observation now passes the report integrity/result review. Local
+AMD evidence reconciliation and the remaining release checks are outstanding.
 SP 800-185 stays **In progress**. This archival/documentation update does not
 change the assessed Rust code or the capture fixture. Later comparisons must
 bind these reports to f264a03, not silently attribute them to a newer commit.

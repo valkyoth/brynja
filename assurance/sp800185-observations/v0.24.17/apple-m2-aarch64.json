@@ -1,0 +1,74 @@
+{
+  "admitted_keccak_backends": [],
+  "architecture": "arm64",
+  "claim": "portable execution only; no independent review or FIPS validation",
+  "commands": {
+    "candidate_kat": [
+      "cargo",
+      "+1.98.1",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "brynja-crypto-cpu",
+      "--lib",
+      "keccak"
+    ],
+    "execution": [
+      "cargo",
+      "+1.98.1",
+      "run",
+      "--quiet",
+      "--locked",
+      "--offline",
+      "--release",
+      "--manifest-path",
+      "assurance/sp800185-final/Cargo.toml",
+      "--",
+      "--benchmark"
+    ],
+    "tag_timing": [
+      "cargo",
+      "+1.98.1",
+      "run",
+      "--quiet",
+      "--locked",
+      "--offline",
+      "--release",
+      "--manifest-path",
+      "assurance/kmac-timing/Cargo.toml"
+    ],
+    "worker_faults": [
+      "cargo",
+      "+1.98.1",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "brynja-hash-parallel-std",
+      "--lib"
+    ]
+  },
+  "commit": "f264a0351d4f8d86d056e7582986a297aee50672",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "lane": "apple-m2-aarch64",
+  "milestone": "0.24.17",
+  "native_operator_attestation_required": true,
+  "policy_sha256": "7e62571f07eef4ec6b13d7086f1b438ff2532e8b65c912e0906dfa465fe0a9a4",
+  "schema": 1,
+  "status": "PENDING_REVIEW",
+  "stdout": {
+    "candidate_kat": "\nrunning 3 tests\ntest keccak::tests::wrong_architecture_is_rejected_before_instruction_use ... ok\ntest keccak::tests::supported_candidate_passes_kat_and_quarantines_corruption ... ok\ntest keccak::tests::supported_candidate_matches_portable_permutation_corpus ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.16s\n\n",
+    "execution": "SP 800-185 execution acceptance: PASS\nidentities: 14\nparallel comparisons: 540\nbounded failure cases: 24\nunadmitted Keccak candidates: 2\nelapsed_ns: 51685083\nfamily closure: pending reviewed native evidence disposition\nindependently verified: NO; FIPS 140-3 validated: NO\nbenchmark: parallel_hash128 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=1160249 threaded_ns=4595000\nbenchmark: parallel_hash128 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=1126168 threaded_ns=2984041\nbenchmark: parallel_hash128 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=1077000 threaded_ns=2542295\nbenchmark: parallel_hash256 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=1201624 threaded_ns=4293542\nbenchmark: parallel_hash256 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=1155416 threaded_ns=2829625\nbenchmark: parallel_hash256 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=1142458 threaded_ns=2424957\nbenchmark: parallel_hash_xof128 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=983415 threaded_ns=3785334\nbenchmark: parallel_hash_xof128 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=940792 threaded_ns=2532419\nbenchmark: parallel_hash_xof128 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=944375 threaded_ns=2384624\nbenchmark: parallel_hash_xof256 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=1045458 threaded_ns=3830373\nbenchmark: parallel_hash_xof256 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=1028124 threaded_ns=2563751\nbenchmark: parallel_hash_xof256 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=1037165 threaded_ns=2403708\n",
+    "tag_timing": "KMAC tag comparison timing: first=202085ns last=200586ns ratio-bound=1.250\n",
+    "worker_faults": "\nrunning 6 tests\ntest tests::all_public_operations_reject_concurrent_use_without_waiting ... ok\ntest tests::poisoned_operation_gate_fails_closed ... ok\ntest worker::tests::worker_panic_becomes_closed_error ... ok\ntest worker::tests::every_panicking_worker_is_joined_without_scope_unwind ... ok\ntest worker::tests::launch_failure_is_typed_and_started_worker_is_joined ... ok\ntest worker::tests::launch_failure_is_typed_and_joined_for_parallel_hash256 ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n"
+  },
+  "stdout_sha256": {
+    "candidate_kat": "03675f9f21f9ea139966a31648857c74aa5bb19315d76c9aa020baa1f3fc869f",
+    "execution": "4c2b93efea7e59b5cff59c52ce8c7703ff2ceb6d0752ab7a1f66fab6e44e6659",
+    "tag_timing": "ab114f8f8ddb90eeba32a40c7891e500c87784d4df873d9453245dbb24b3116d",
+    "worker_faults": "3c47fb54ffcf892bae571a12823d28a01c063130601eeaba3c9a61e764194f22"
+  },
+  "system": "Darwin",
+  "vendor": "Apple M2"
+}

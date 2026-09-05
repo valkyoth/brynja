@@ -133,9 +133,9 @@ unadmitted; the family table is deliberately not promoted before the
 [native-evidence checklist](sp800185-final-acceptance.md) is complete.
 The owner-supplied review of v0.24.16 through c58711b found no Critical, High,
 Medium or Low findings. This is a security-assessment PASS, not final native
-acceptance or permission to tag. AWS Intel and AArch64 observations now pass
+acceptance or permission to tag. AWS Intel, AWS AArch64 and Apple M2 observations now pass
 and are [archived with their source binding](../assurance/sp800185-observations/v0.24.17/README.md);
-the M2 observation and remaining release checks are still outstanding.
+local AMD evidence reconciliation and remaining release checks are still outstanding.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

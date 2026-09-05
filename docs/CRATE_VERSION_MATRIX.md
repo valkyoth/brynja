@@ -1,6 +1,6 @@
 # Crate Version Matrix
 
-Status: milestones through v0.24.17 signed; v0.24.18 isolated legacy SHA-1 candidate awaiting exceptional pentest; v0.20.0 remains published
+Status: milestones through v0.24.17 signed; v0.24.18 isolated legacy SHA-1 candidate passed exceptional retest; v0.20.0 remains published
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.18`. `brynja-hash-core 0.1.0`,
@@ -38,7 +38,7 @@ implementation or production readiness.
 
 New unpublished `brynja-legacy-sha1 0.1.0` implements the complete portable
 legacy primitive and mandatory private-state cleanup, with no modern facade,
-TLS, PKIX or FIPS edge. Exceptional pentest is pending. The SHA-1 family
+TLS, PKIX or FIPS edge. Exceptional pentest and retest passed. The SHA-1 family
 remains In progress until the later portable/accelerated final acceptance.
 
 The initial exceptional v0.24.12 assessment found one Medium metadata-

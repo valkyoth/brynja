@@ -1,6 +1,6 @@
 # Brynja 0.24.18 Release Notes
 
-Status: implementation candidate; exceptional pentest pending
+Status: exceptional retest and full local release check passed; awaiting green GitHub/CodeQL and owner tag authorization
 
 ## Summary
 
@@ -54,6 +54,25 @@ is deferred to performance work with measurement and equivalent cleanup tests;
 no throughput improvement or CPU admission is claimed here.
 
 ## Release conditions
+
+The owner-supplied retest of v0.24.17 through 351c9292 reported no Critical,
+High or Medium findings. The permanent report records PASS/PASS with zero
+open findings. This is not named independent cryptographic review or FIPS
+validation. The reviewer's online toolchain probe was blocked by sandbox DNS;
+the local release check independently completed that online freshness stage.
+
+The complete repository gate, twelve Rust lanes, three bare-metal targets,
+supplemental QEMU/timing checks, all eight full Miri groups, full AddressSanitizer
+wrapper and all twenty-six Kani harnesses passed. Miri groups ran in isolated
+parallel caches; no group was omitted. LeakSanitizer remains excluded because
+of the documented ptrace restriction. Standards/live-authority, tool freshness,
+dependency admission, RustSec, cargo-deny, SBOM and protected-release controls
+also passed. The publication check/dry-run selects zero crates, including
+changed support crates; all thirty-three publishing-policy regressions pass.
+
+No Rust, dependency, toolchain or publication selection changed after the
+reviewed 351c9292 commit. This release-check reconciliation updates only
+documentation and its reviewed metadata bindings.
 
 Exceptional pentest, local release check, report commit, green GitHub/CodeQL,
 then explicit owner permission to tag. This is an internal development tag

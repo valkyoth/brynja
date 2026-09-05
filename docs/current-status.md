@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 173 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.17 signed; v0.24.18 legacy SHA-1 implementation candidate awaiting exceptional pentest
+Status: v0.20.0 published; milestones through v0.24.17 signed; v0.24.18 legacy SHA-1 candidate passed exceptional retest; release-check evidence is tracked in the pentest report and green GitHub/CodeQL is required before tagging
 
 The v0.24.18 candidate adds complete ordinary and hardened byte/arbitrary-bit
 SHA-1 in the unpublished `brynja-legacy-sha1` leaf. It is collision-broken,

@@ -18,7 +18,7 @@ Keep a Changelog and Semantic Versioning.
 - v0.24.18 complete isolated portable legacy SHA-1 byte/bit streaming and
   one-shot APIs, sealed hardened ownership, six-region cleanup, official
   vectors, differential/downstream tests and dynamic/compiler proof bindings.
-  Exceptional pentest is pending; no modern facade edge or publication.
+  Exceptional pentest and retest passed; no modern facade edge or publication.
 
 - Complete v0.24.17 SP 800-185 final acceptance with same-commit AMD, Intel,
   AWS ARM and Apple M2 observations, complete local release evidence and an
@@ -35,6 +35,8 @@ Keep a Changelog and Semantic Versioning.
 
 ### Fixed
 
+- Detect invalid private SHA-1 buffer offsets in debug builds, with exhaustive
+  offset fault-injection tests and a clean exceptional retest for v0.24.18.
 - Keep the architecture-specific Keccak differential reference test out of
   RISC-V test builds, where no Keccak backend exists, while preserving the
   RISC-V Zknh SHA-2 QEMU suite and every x86_64/AArch64 Keccak test.

@@ -946,7 +946,7 @@ The latest signed and crates.io checkpoint is `0.20.0`. Signed internal
 milestones continue through `0.24.17`; the current internal `0.24.18`
 candidate adds the separate complete portable `brynja-legacy-sha1` leaf.
 It has ordinary and hardened byte/bit APIs, but is collision-broken, unpublished
-and never enabled by the modern facade. Exceptional pentest is pending; final
+and never enabled by the modern facade. Exceptional pentest and retest passed; final
 SHA-1 family acceptance remains later in 0.24.x. SP 800-185 remains **Fully
 implemented** after signed v0.24.17 acceptance; CPU backends remain unadmitted.
 See the [SHA-1 contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-sha1.md).

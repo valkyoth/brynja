@@ -3669,7 +3669,7 @@ Exit criteria:
 
 ### v0.24.18 - Complete First-Party Legacy SHA-1
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Plan scope: Implement complete byte and canonical arbitrary-bit streaming and one-shot SHA-1 once in isolated `brynja-legacy-sha1`, with every FIPS 180-4 operation, ordinary and hardened secret-bearing states, official vectors, checked bit exhaustion, complete internal sanitization, public consumer APIs and conspicuous collision warnings; add no modern facade, default, TLS, PKIX, FIPS or general-hash edge, and require later HMAC, HKDF and OpenPGP consumers to use separately typed admission without reimplementation.
 

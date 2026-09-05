@@ -1,0 +1,74 @@
+{
+  "admitted_keccak_backends": [],
+  "architecture": "x86_64",
+  "claim": "portable execution only; no independent review or FIPS validation",
+  "commands": {
+    "candidate_kat": [
+      "cargo",
+      "+1.98.1",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "brynja-crypto-cpu",
+      "--lib",
+      "keccak"
+    ],
+    "execution": [
+      "cargo",
+      "+1.98.1",
+      "run",
+      "--quiet",
+      "--locked",
+      "--offline",
+      "--release",
+      "--manifest-path",
+      "assurance/sp800185-final/Cargo.toml",
+      "--",
+      "--benchmark"
+    ],
+    "tag_timing": [
+      "cargo",
+      "+1.98.1",
+      "run",
+      "--quiet",
+      "--locked",
+      "--offline",
+      "--release",
+      "--manifest-path",
+      "assurance/kmac-timing/Cargo.toml"
+    ],
+    "worker_faults": [
+      "cargo",
+      "+1.98.1",
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "brynja-hash-parallel-std",
+      "--lib"
+    ]
+  },
+  "commit": "f264a0351d4f8d86d056e7582986a297aee50672",
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "lane": "aws-intel-x86_64",
+  "milestone": "0.24.17",
+  "native_operator_attestation_required": true,
+  "policy_sha256": "7e62571f07eef4ec6b13d7086f1b438ff2532e8b65c912e0906dfa465fe0a9a4",
+  "schema": 1,
+  "status": "PENDING_REVIEW",
+  "stdout": {
+    "candidate_kat": "\nrunning 3 tests\ntest keccak::tests::wrong_architecture_is_rejected_before_instruction_use ... ok\ntest keccak::tests::supported_candidate_passes_kat_and_quarantines_corruption ... ok\ntest keccak::tests::supported_candidate_matches_portable_permutation_corpus ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.13s\n\n",
+    "execution": "SP 800-185 execution acceptance: PASS\nidentities: 14\nparallel comparisons: 540\nbounded failure cases: 24\nunadmitted Keccak candidates: 2\nelapsed_ns: 45512322\nfamily closure: pending reviewed native evidence disposition\nindependently verified: NO; FIPS 140-3 validated: NO\nbenchmark: parallel_hash128 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=1392326 threaded_ns=5712409\nbenchmark: parallel_hash128 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=1436316 threaded_ns=3233949\nbenchmark: parallel_hash128 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=1384350 threaded_ns=3041484\nbenchmark: parallel_hash256 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=1672139 threaded_ns=5950272\nbenchmark: parallel_hash256 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=1650837 threaded_ns=3306991\nbenchmark: parallel_hash256 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=1644557 threaded_ns=3043885\nbenchmark: parallel_hash_xof128 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=1398856 threaded_ns=5803006\nbenchmark: parallel_hash_xof128 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=1419363 threaded_ns=3232096\nbenchmark: parallel_hash_xof128 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=1392402 threaded_ns=2944844\nbenchmark: parallel_hash_xof256 workers=1 bytes=16384 block=1024 samples=8 sequential_ns=1742627 threaded_ns=5949188\nbenchmark: parallel_hash_xof256 workers=2 bytes=16384 block=1024 samples=8 sequential_ns=1668264 threaded_ns=3195141\nbenchmark: parallel_hash_xof256 workers=4 bytes=16384 block=1024 samples=8 sequential_ns=1672642 threaded_ns=3029071\n",
+    "tag_timing": "KMAC tag comparison timing: first=271127ns last=270789ns ratio-bound=1.250\n",
+    "worker_faults": "\nrunning 6 tests\ntest tests::poisoned_operation_gate_fails_closed ... ok\ntest tests::all_public_operations_reject_concurrent_use_without_waiting ... ok\ntest worker::tests::worker_panic_becomes_closed_error ... ok\ntest worker::tests::every_panicking_worker_is_joined_without_scope_unwind ... ok\ntest worker::tests::launch_failure_is_typed_and_started_worker_is_joined ... ok\ntest worker::tests::launch_failure_is_typed_and_joined_for_parallel_hash256 ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n"
+  },
+  "stdout_sha256": {
+    "candidate_kat": "ad0fd99cbae5a1bb38d759c170b3aaed51361d62c265e700a31cd0deacff677c",
+    "execution": "2bccc41486a8b90fea38d57e10a50a75f44f9cea658c727751d450cb99e8e213",
+    "tag_timing": "f9b086317dca7c5d794b5b4312c364dbd8fe88ab02a8522af849d30fbe00fb46",
+    "worker_faults": "2d1ca7a52dd5bc12b18b5c13fbf2673d3e9bf5c2d1f9171b25a1d849dc9c71d3"
+  },
+  "system": "Linux",
+  "vendor": "GenuineIntel"
+}

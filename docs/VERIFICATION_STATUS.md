@@ -88,6 +88,9 @@ four ParallelHash/ParallelHashXOF identities, schema-driven ASN.1
 processor, X.509 validator, handshake parser, or complete protocol engine in
 this inventory is currently implemented. Independent-review status cannot be
 inferred from implementation, testing, formal proof, pentest, or release
-status. The derived SP 800-185 family remains In progress until v0.24.17
-replays the frozen portable contract through every backend and parallel
-execution disposition on final unchanged source.
+status. The derived SP 800-185 family is **Fully implemented** after v0.24.17
+replayed the frozen portable contract, completed the required local release
+checks and reviewed same-commit AMD, Intel, AWS ARM and Apple M2 observations.
+All backend and parallel execution routes have passing or explicit unadmitted
+dispositions. No CPU backend admission, independent verification or FIPS
+validation follows from this acceptance.

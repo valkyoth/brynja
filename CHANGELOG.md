@@ -15,6 +15,12 @@ Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Complete v0.24.17 SP 800-185 final acceptance with same-commit AMD, Intel,
+  AWS ARM and Apple M2 observations, complete local release evidence and an
+  explicit RISC-V coverage limitation. Mark all fourteen SP 800-185 identities
+  Fully implemented without admitting CPU backends or claiming independent
+  cryptographic review or FIPS validation. This internal tag publishes no crates.
+
 - Add the v0.24.16 frozen package-external `no_std` SP 800-185 acceptance
   fixture covering all fourteen cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF,
   and ParallelHash/ParallelHashXOF identities across official, streaming,

@@ -3626,12 +3626,13 @@ Exit criteria:
 
 ### v0.24.17 - SP 800-185 Cross-Backend And Parallel Final Acceptance
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Assessment update: the owner-supplied pentest of c58711b passed with no findings.
-This assurance stage remains open for native-evidence assessment and final
-release checks; no vulnerability remediation or new cryptographic review is
-implied. Do not advance to awaiting green CI until those prerequisites close.
+Same-commit AMD, Intel, AWS ARM and Apple M2 evidence and all required local
+release-check stages passed. SP 800-185 is Fully implemented with CPU candidates
+still unadmitted and a documented RISC-V coverage limitation. Await green
+GitHub/CodeQL and explicit tag authorization; publish no crates.
 
 Plan scope: Rerun the unchanged v0.24.16 ordinary and hardened fixture through portable and every cleanup-qualified admitted Keccak backend, exercise sequential, caller-scheduled and optional std ParallelHash execution with deterministic outputs, bounded failure and complete worker cleanup, collect cross-architecture performance, timing, emitted-code, KAT, quarantine and sanitization evidence, and mark SP 800-185 Fully implemented only when every named instance, ownership profile and backend has an explicit passing or unadmitted disposition on the final code.
 

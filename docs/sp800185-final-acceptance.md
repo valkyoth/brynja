@@ -1,9 +1,9 @@
 # SP 800-185 Final Execution Acceptance — v0.24.17
 
-Status: owner-supplied pentest PASS; reviewed native evidence and final release checks pending.
+Status: owner-supplied pentest, native observation review and local release checks PASS; awaiting green GitHub/CodeQL.
 
 This milestone adds assurance tooling, not cryptographic implementation. The
-combined family remains **In progress** until the evidence below is reviewed.
+combined SP 800-185 family is now **Fully implemented** after the review below.
 No result here is independent cryptographic verification or FIPS validation.
 
 ## Reproduce the consumer contract
@@ -22,7 +22,9 @@ remain byte-identical after checkout newline normalization. Only Cargo
 manifest/lock facade-version metadata advances to resolve the current facade;
 no fixture input, expectation or API call changes. Its original executable
 still prints the historical portable-stage status. The new execution fixture
-is the current report; neither report alone changes a verification table.
+records pre-review observations. Its fixed pending-closure line and the raw
+JSON `PENDING_REVIEW` field are not live release-status flags. Neither executable
+alone changes a verification table; the reviewed disposition is recorded here.
 
 The hosted fixture reruns all fourteen identities, fourteen official examples,
 fourteen hardened profiles and three public layers. It then performs 540
@@ -107,18 +109,37 @@ silently dropping them or weakening the threshold.
 ## Final closure checklist
 
 - [x] Owner-supplied pentest PASS recorded for c58711b; no findings or remediation.
-- [ ] Same-commit AMD, Apple M2 and AWS AArch64 execution reports reviewed;
+- [x] Same-commit AMD, Apple M2 and AWS AArch64 execution reports reviewed;
       Intel and RISC-V results or explicit unavailability dispositions recorded.
-- [ ] CPU candidates remain unadmitted; no cleanup-qualified accelerated
+- [x] CPU candidates remain unadmitted; no cleanup-qualified accelerated
       SP 800-185 route is claimed. Changed admission requires new review.
-- [ ] Current compiler/target KMAC and shared hardened cleanup/codegen evidence,
+- [x] Current compiler/target KMAC and shared hardened cleanup/codegen evidence,
       package acceptance, official examples and all four differential campaigns pass.
-- [ ] Rust 1.90.0–1.98.1, no_std target matrix, hosted std checks and repository
+- [x] Rust 1.90.0–1.98.1, no_std target matrix, hosted std checks and repository
       gate pass; staged local dynamic-analysis requirements are satisfied.
-- [ ] Evidence binds the final implementation and fixture. Repeat affected
+- [x] Evidence binds the final implementation and fixture. Repeat affected
       checks after any source or expectation change; document metadata-only deltas.
-- [ ] Only then update the family table, permanent report and release status;
-      wait for green GitHub/CodeQL and explicit tag authorization. Publish nothing.
+- [x] Family table, permanent report and release status reconciled after technical
+      acceptance. No independent-review or FIPS status is promoted.
+- [ ] Green GitHub/CodeQL and explicit tag authorization. Publish nothing.
+
+The [four native observations](../assurance/sp800185-observations/v0.24.17/README.md)
+all bind f264a0351d4f8d86d056e7582986a297aee50672 and Rust 1.98.1. Each passed
+540 comparisons, 24 bounded failures, worker-fault and conditional candidate
+tests, twelve benchmark rows and the bounded tag-timing probe. RISC-V has an
+explicit portable-only/no-native-observation disposition, not a claimed run.
+
+The complete repository gate, twelve-version Rust matrix, three bare-metal
+targets, supplemental QEMU checks, current standards/tool/dependency checks,
+SBOM, AddressSanitizer, all seven full Miri groups and all 25 Kani proofs passed.
+KMAC/shared cleanup codegen passed on x86_64 and AArch64 at Rust 1.90.0/1.98.1.
+The Miri groups used the existing isolated-cache runner, with the remaining
+groups run concurrently; no group was replaced by a smoke test.
+
+Later evidence archival, release documentation and status-policy reconciliation
+do not change production Rust, fixture Rust, test inputs, capture commands or
+dependency resolution. Raw captures remain bound to their original policy hash,
+not retrospectively relabeled as captures of this documentation commit.
 
 Memory clearing remains limited to declared crate-owned regions during normal
 execution/unwind. No register, spill, cache, DMA, swap, dump, abort, forced

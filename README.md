@@ -69,7 +69,12 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
-| SP 800-185 family | 🚧 In progress — all named functions implemented; portable acceptance passed at v0.24.16, cross-backend final acceptance pending | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
+| SP 800-185 family | ✅ Fully implemented | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
+
+SP 800-185 portable acceptance passed at v0.24.16; final acceptance passed at v0.24.17.
+All fourteen ordinary/hardened identities and parallel execution
+routes have passing or explicit unadmitted dispositions. CPU candidates remain
+unadmitted; implementation completion is not independent review or FIPS validation.
 
 ### Modern Message Authentication
 
@@ -923,15 +928,15 @@ than create an executor per request. All twelve official NIST examples
 pass. ParallelHash is implemented but neither independently verified nor FIPS
 140-3 validated; combined family acceptance remains at v0.24.16-v0.24.17.
 
-The internal `0.24.16` candidate freezes one package-external `no_std`
+Signed `0.24.16` freezes one package-external `no_std`
 consumer contract across all fourteen cSHAKE, KMAC/KMACXOF,
 TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF identities. It checks
 one exact official output per identity plus ordinary, hardened, streaming,
 incremental-XOF, arbitrary-bit, zero-length, misuse, real-data, exact tuple
 item, and caller-scheduled leaf paths. The same fixture is required across Rust
 1.90.0–1.98.1 and every declared bare-metal target. Portable acceptance has
-passed; the overall SP 800-185 family remains **In progress** until the frozen
-contract passes final backend and native-parallel disposition at v0.24.17.
+passed at that milestone. The unchanged contract now also passes final backend
+and native-parallel disposition at v0.24.17; SP 800-185 is **Fully implemented**.
 
 ## Install
 
@@ -941,9 +946,10 @@ milestones continue through `0.24.16`; the current internal `0.24.17`
 SP 800-185 execution-acceptance candidate selects no crates.io publication.
 It reruns the frozen portable contract and compares sequential, caller-scheduled
 and threaded ParallelHash. The owner-supplied pentest passed with no findings;
-reviewed native evidence and final release checks remain pending. The family
-stays **In progress**. No production cryptography
-or backend admission changes. See the
+same-commit AMD, Intel, AWS ARM and Apple M2 observations and every required
+local release-check stage passed. SP 800-185 is **Fully implemented**; green
+GitHub/CodeQL and explicit tag authorization are still required. No production
+cryptography or backend admission changes. See the
 [final acceptance procedure](https://github.com/valkyoth/brynja/blob/main/docs/sp800185-final-acceptance.md).
 The published
 dependency is:
@@ -1057,7 +1063,7 @@ selected set in dependency order and publishes the facade last.
 | `brynja-core` | Bounded wire, buffer, error, state, provider, entropy, time, and mandatory security-outcome domains | Prior domains plus pending/FIPS-aware authority and mandatory security-outcome contracts implemented |
 | `brynja-hash-core` | Fixed-output and extendable-output hash interfaces without algorithms | v0.1.0 implemented; allocation-free `no_std` support boundary |
 | `brynja-hash-sha2` | Reusable SHA-2 family ownership | v0.1.0 contains all six fully implemented FIPS 180-4 ordinary and hardened byte and canonical arbitrary-bit APIs plus forced ordinary CPU-candidate APIs; all five candidates remain unadmitted |
-| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, and SP 800-185 encoding foundations | v0.1.0 contains all six fully implemented FIPS 202 functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary and hardened byte/arbitrary-bit APIs; both CPU candidates remain unadmitted, and the wider SP 800-185 family remains in progress through v0.24.17 |
+| `brynja-hash-sha3` | Reusable SHA-3, SHAKE, cSHAKE, and SP 800-185 encoding foundations | v0.1.0 contains all six fully implemented FIPS 202 functions plus complete SP 800-185 encodings and cSHAKE128/cSHAKE256 ordinary and hardened byte/arbitrary-bit APIs; both CPU candidates remain unadmitted, and the wider SP 800-185 family passed final acceptance at v0.24.17 |
 | `brynja-mac-kmac` | Complete KMAC128/256 and KMACXOF128/256 with secret-state cleanup and typed verification | v0.1.0 implemented internally at v0.24.13; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
 | `brynja-hash-tuple` | Complete TupleHash128/256 and TupleHashXOF128/256 with structural item boundaries and hardened ownership | v0.1.0 implemented internally at v0.24.14; unpublished until a public checkpoint, independently unverified, and not FIPS validated |
 | `brynja-hash-parallel` | Complete allocation-free ParallelHash128/256 and ParallelHashXOF128/256 with hardened and ordered scheduling APIs | v0.1.0 implemented internally at v0.24.15; unpublished until a public checkpoint, independently unverified, and not FIPS validated |

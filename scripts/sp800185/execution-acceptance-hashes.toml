@@ -15,4 +15,4 @@
 "scripts/checks.sh" = "e0054fd3e473267b3cae2aa94b2bbcd3af585310102f9d8c2876a6e4fb4da96b"
 "scripts/ci/check-rust-version-matrix.sh" = "ade3e12ae37f47ffaa7dfcf0303cd338147604d6ff7bda68a495c5ab356d79d7"
 ".github/workflows/ci.yml" = "9b5ed1a139641356c6267b0190486786de40f1c549c7d3dd2fb750dfcfee29ed"
-"docs/sp800185-final-acceptance.md" = "6e6d8493c24e9466ac51f1497b4d29c285bd5230c88c380f45698f00b5e54efc"
+"docs/sp800185-final-acceptance.md" = "fe893759262addf574dc3924786fa1ae2b0bd5f595b28b701098b8e64803ba8b"

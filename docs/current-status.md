@@ -17,7 +17,7 @@ Current generated planning coverage is 2003 non-RC rows
 surfaces and 172 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.16 signed; v0.24.17 pentest passed, native evidence and final release checks pending
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.16 signed; v0.24.17 pentest, native evidence and local release checks passed; awaiting green GitHub/CodeQL
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -123,19 +123,21 @@ passes. Its live hardened outputs are now compared exactly before cleanup;
 42 executable corruption cases and 26 policy mutations reject regressions.
 The owner reports a green retest of `f007c809c8aadedd12917a8ae05083615292262a`;
 the [v0.24.16 report](../security/pentest/v0.24.16.md) records `PASS`/`PASS`
-with zero open findings. The overall SP 800-185 family remains **In progress** pending v0.24.17
-backend, native-parallel, timing, performance, and final evidence disposition.
+with zero open findings. The overall SP 800-185 family is now **Fully implemented**
+after v0.24.17 backend, native-parallel, timing, performance and final evidence disposition.
 The v0.24.17 candidate adds a hosted final-execution fixture, 540 parallel
 output comparisons, 24 bounded-failure cases, executable corruption tests and
 privacy-minimized native capture. The original portable Rust/input contract
 and all production cryptography remain unchanged. CPU candidates remain
-unadmitted; the family table is deliberately not promoted before the
-[native-evidence checklist](sp800185-final-acceptance.md) is complete.
+unadmitted; the family table reflects the completed technical acceptance in the
+[native-evidence checklist](sp800185-final-acceptance.md).
 The owner-supplied review of v0.24.16 through c58711b found no Critical, High,
-Medium or Low findings. This is a security-assessment PASS, not final native
-acceptance or permission to tag. AWS Intel, AWS AArch64 and Apple M2 observations now pass
+Medium or Low findings. This is a security-assessment PASS, not independent
+cryptographic verification or permission to tag. AMD, AWS Intel, AWS AArch64
+and Apple M2 observations pass
 and are [archived with their source binding](../assurance/sp800185-observations/v0.24.17/README.md);
-local AMD evidence reconciliation and remaining release checks are still outstanding.
+all required local release-check stages passed. Green GitHub/CodeQL and explicit
+tag authorization remain outstanding; no crates.io publication is selected.
 It also
 has bounded DER tag-length-value framing
 and admitted canonical ASN.1 primitive/container foundations, but still has no

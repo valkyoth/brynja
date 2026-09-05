@@ -143,6 +143,8 @@ def main() -> int:
         ),
         (fixture / "src/main.rs", "independently verified: NO", "independently verified: YES"),
         (Path("README.md"), "portable acceptance passed at v0.24.16", "portable acceptance pending"),
+        (Path("README.md"), "SP 800-185 family | ✅ Fully implemented", "SP 800-185 family | 🚧 In progress"),
+        (Path("crates/brynja/README.md"), "final acceptance passed at v0.24.17", "final acceptance pending"),
         (
             Path("docs/RELEASE_PLAN.md"),
             "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: released",

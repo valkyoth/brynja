@@ -174,8 +174,9 @@ def validate(root: Path = ROOT, check_hashes: bool = True) -> None:
     ):
         require(report, token, "portable runnable report")
     for relative in (Path("README.md"), Path("crates/brynja/README.md")):
-        require(loaded[relative], "SP 800-185 family | 🚧 In progress", "public status")
+        require(loaded[relative], "SP 800-185 family | ✅ Fully implemented", "public status")
         require(loaded[relative], "portable acceptance passed at v0.24.16", "public status")
+        require(loaded[relative], "final acceptance passed at v0.24.17", "public status")
     require(
         loaded[Path("docs/RELEASE_PLAN.md")],
         "### v0.24.16 - SP 800-185 Portable Public API Usability Acceptance\n\nStatus: released",

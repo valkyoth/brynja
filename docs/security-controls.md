@@ -1,5 +1,23 @@
 # Security Controls
 
+## Conformance-fixture isolation
+
+The standalone `assurance/sp800185-public-api` workspace explicitly enables
+KMAC's `conformance-testing` feature to exercise standards-valid short and empty
+keys. Cargo features unify within that build graph, including dependencies
+reached through its facade; this does not enable the feature in a separate
+ordinary application build. The normal constructors still enforce key strength
+even when the extra conformance constructors are available.
+
+Future reviewers must preserve this workspace boundary and keep the feature
+out of default production dependency paths. Moving a conformance fixture into
+the main workspace requires rechecking resolved features and the default-build
+compile-fail test in `scripts/kmac/check-kmac-conformance-gate.sh`. An application
+that explicitly enables the feature also exposes the conformance APIs; the
+workspace boundary is not a restriction on downstream opt-in.
+
+## Control inventory
+
 Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance is implemented and awaiting pentest
 
 | Control | Foundation enforcement |

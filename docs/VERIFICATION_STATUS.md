@@ -14,6 +14,11 @@ reviewed implementation. Passing the project's own tests, CI, Kani, Miri,
 sanitizers, fuzzing, differential testing, or pentests does not by itself
 constitute independent cryptographic or protocol verification.
 
+Repository-local acceptance hashes detect drift; they are not signatures or
+independent review attestations. A contributor able to change both source and
+its hash inventory can make them agree. Review of both changes remains necessary;
+a signed commit or tag identifies its signing key, not independent approval.
+
 FIPS validation is a separate official claim. Brynja has no FIPS 140-3
 validation, certificate, validated module, approved security policy, or
 certificate-bound operational-environment claim.

@@ -113,9 +113,9 @@ manifest. Fifty-one residual requirements bind 33 authorities and review
 182 normative RFC sections through 165 exact requirement mappings and 17
 explicit exclusions while assigning every one of the 791 surfaces left by the
 earlier bundles. The generated closure proves that all 130 locked authorities,
-all 1185 ordered non-RC roadmap rows, all 4,459 current surfaces, and all 172 requirements have
+all 1201 ordered non-RC roadmap rows, all 4,459 current surfaces, and all 172 requirements have
 bidirectional ownership. The new OpenPGP rows are fenced from implementation
-until v0.163.0 authenticates their RFC, errata, registry, algorithm, and
+until v0.211.0 authenticates their RFC, errata, registry, algorithm, and
 compression authority closure and generates the corresponding requirements
 and surfaces. Local rights, mutable NIST and IANA refresh rules,
 the resolved hybrid-source gate plus unavailable legacy and FIPS-validation
@@ -146,7 +146,7 @@ policies before matrix generation. A normative section cannot be mapped in one
 bundle and excluded in another, duplicate exclusions must agree, and a
 delegated section is accepted only when another bundle records an exact mapped
 or excluded owner. RFC 9853 state, extension, ContentType 27, and message
-registry surfaces remain inside the DTLS v0.111.1 boundary. RFC 6066 sections
+registry surfaces remain inside the DTLS v0.155.1 boundary. RFC 6066 sections
 are split among their exact TLS 1.2, TLS 1.3, SNI, certificate-status,
 status-transport, alert, terminology, bounded wire-ignore, and
 configuration-rejection decisions. RFC 7568 section 3 is authority

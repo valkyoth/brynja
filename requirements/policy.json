@@ -201,9 +201,9 @@
       "lifecycle": "caller-owned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.130.0",
+      "owner": "0.178.0",
       "residual": "Brynja still validates ALPN wire bounds and negotiation context while application protocol semantics stay external.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -236,9 +236,9 @@
       "lifecycle": "caller-owned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.148.0",
+      "owner": "0.196.0",
       "residual": "Private-use values never become interoperable defaults and must remain explicitly configured and collision-scoped.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -271,9 +271,9 @@
       "lifecycle": "planned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.67.0",
+      "owner": "0.111.0",
       "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -306,9 +306,9 @@
       "lifecycle": "planned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.148.1",
+      "owner": "0.196.1",
       "residual": "Heartbeat remains disabled by default and cannot be treated as implicit application liveness; malformed, unsolicited, excessive, or unnegotiated messages remain rejected.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -345,9 +345,9 @@
       "lifecycle": "caller-owned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.130.0",
+      "owner": "0.178.0",
       "residual": "Brynja owns bounded opaque transport and exact transcript binding but not the selected application's semantics.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -380,9 +380,9 @@
       "lifecycle": "legacy",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.180.5",
+      "owner": "0.242.0",
       "residual": "Legacy package presence never permits modern-facade reachability, automatic fallback, or a security claim.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "source": {
         "anchor": "TLS 1.0 and SSL 3.0 do not interoperate",
@@ -417,9 +417,9 @@
       "lifecycle": "planned",
       "mapping_rationale": null,
       "mapping_scope": "exact-source",
-      "owner": "0.120.0",
-      "residual": "Implementation, complete normative extraction, negative vectors, interoperability, and independent review remain owned by v0.120.0.",
-      "revision": 3,
+      "owner": "0.164.0",
+      "residual": "Implementation, complete normative extraction, negative vectors, interoperability, and independent review remain owned by v0.164.0.",
+      "revision": 4,
       "scope": "protocol",
       "source": {
         "anchor": "the server MUST perform the encapsulation key check",
@@ -444,6 +444,6 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df",
-  "surface_register_sha256": "935609432516713090407f79cd67d41070a8dd89ae07d59563db7968ff9fe8d4"
+  "source_ledger_sha256": "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac",
+  "surface_register_sha256": "b3ce0df81c44e62824f5d62f37935efc73cd18e454ff0b92c226e83815a4dcc1"
 }

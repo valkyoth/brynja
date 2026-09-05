@@ -3,7 +3,8 @@ domain = "ocsp"
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0001"
-owner = "0.58.0"
+revision = 3
+owner = "0.99.0"
 lifecycle = "planned"
 decision_ids = ["protocol.ocsp"]
 sources = [{ id = "rfc:5754", authority_role = "current" }, { id = "rfc:6960", authority_role = "current" }, { id = "rfc:9654", authority_role = "current" }]
@@ -13,13 +14,14 @@ target = "crates/brynja-pki/src/ocsp.rs#OcspValidator"
 positive_test = "tests/requirements/ocsp.rs#authorized_fresh_responses"
 negative_test = "tests/requirements/ocsp.rs#identity_nonce_freshness_and_signature_failures"
 work_bound = "OCSP parsing and validation enforce hard response-byte, object, single-response, extension, signature, time-comparison, and aggregate-work ceilings."
-evidence_gap = "Response corpora, responder chains, nonce cases, clock boundaries, algorithm identifiers, and differential evidence remain unresolved until v0.58.0."
+evidence_gap = "Response corpora, responder chains, nonce cases, clock boundaries, algorithm identifiers, and differential evidence remain unresolved until v0.99.0."
 residual = "Transport, cache, clock, and hard-versus-soft-fail policy remain typed caller inputs and cannot override invalid signed OCSP data."
 mapping_rationale = "The OCSP semantic surface directly cites RFC 6960, RFC 9654 supplies the current nonce update, and RFC 5754 constrains related SHA-2 identifiers."
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0002"
-owner = "0.58.1"
+revision = 3
+owner = "0.99.1"
 lifecycle = "planned"
 decision_ids = ["iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-tlsfeature.1"]
 sources = [{ id = "rfc:7633", authority_role = "current" }]
@@ -29,13 +31,14 @@ target = "crates/brynja-pki/src/tls_feature.rs#MustStaple"
 positive_test = "tests/requirements/must_staple.rs#satisfied_status_request"
 negative_test = "tests/requirements/must_staple.rs#missing_invalid_and_unknown_features"
 work_bound = "Feature processing uses bounded exact extension scans and at most the configured finite set of stapled responses under one validation budget."
-evidence_gap = "RFC 7633 certificate and handshake combinations, unknown values, duplicates, and state-integration evidence remain unresolved until v0.58.1."
+evidence_gap = "RFC 7633 certificate and handshake combinations, unknown values, duplicates, and state-integration evidence remain unresolved until v0.99.1."
 residual = "Audit delivery is observational only, and no event loss or caller preference can turn an unsatisfied mandatory feature into success."
 mapping_rationale = "The selected future-work TLS Feature OID surface cites RFC 7633 directly and maps its certificate policy to the dedicated must-staple milestone."
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0003"
-owner = "0.58.2"
+revision = 3
+owner = "0.99.2"
 lifecycle = "planned"
 decision_ids = ["protocol.ocsp"]
 sources = [{ id = "rfc:9919", authority_role = "current" }]
@@ -45,13 +48,14 @@ target = "crates/brynja-pki/src/ocsp_lightweight.rs#MessageProfile"
 positive_test = "tests/requirements/ocsp_lightweight.rs#rfc9919_messages"
 negative_test = "tests/requirements/ocsp_lightweight.rs#profile_order_and_freshness_failures"
 work_bound = "The profile admits one request identity and bounded response objects, extensions, signatures, timestamps, and total parse and verification work."
-evidence_gap = "RFC 9919 messages, ordering, freshness, responder-ID, nonce fallback, and malformed profile corpora remain unresolved until v0.58.2."
+evidence_gap = "RFC 9919 messages, ordering, freshness, responder-ID, nonce fallback, and malformed profile corpora remain unresolved until v0.99.2."
 residual = "The lightweight profile narrows messages but never weakens signature, issuer, serial, responder authorization, or freshness checks."
 mapping_rationale = "The OCSP semantic surface cites RFC 9919 directly, while this requirement isolates its strict lightweight message-profile obligations."
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0004"
-owner = "0.58.3"
+revision = 3
+owner = "0.99.3"
 lifecycle = "planned"
 decision_ids = ["protocol.ocsp"]
 sources = [{ id = "rfc:9919", authority_role = "current" }]
@@ -61,13 +65,14 @@ target = "crates/brynja-pki/src/ocsp_transport.rs#TransportEffect"
 positive_test = "tests/requirements/ocsp_transport.rs#get_post_and_cache_metadata"
 negative_test = "tests/requirements/ocsp_transport.rs#uri_media_length_retry_and_cache_failures"
 work_bound = "AIA, Base64, URI, request, response, cache metadata, retry, and effect counts each have immutable size and aggregate-work ceilings."
-evidence_gap = "GET and POST boundaries, URI encoding, media and length rejection, cache invalidation, and effect-state evidence remain unresolved until v0.58.3."
+evidence_gap = "GET and POST boundaries, URI encoding, media and length rejection, cache invalidation, and effect-state evidence remain unresolved until v0.99.3."
 residual = "Caller transport and cache behavior cannot authorize a response; only validated signed OCSP data and explicit policy affect certificate status."
 mapping_rationale = "The OCSP semantic surface cites RFC 9919 directly, while this requirement isolates the caller-owned transport and cache boundary."
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0005"
-owner = "0.148.2"
+revision = 5
+owner = "0.196.2"
 lifecycle = "planned"
 decision_ids = ["facility.status-request-v2"]
 sources = [{ id = "rfc:6961", authority_role = "compatibility" }]
@@ -77,13 +82,14 @@ target = "crates/brynja-tls/src/certificate_status.rs#StatusRequestV2"
 positive_test = "tests/requirements/status_request_v2.rs#complete_multi_certificate_status"
 negative_test = "tests/requirements/status_request_v2.rs#association_unsolicited_resumption_and_bound_failures"
 work_bound = "Request items, response vectors, responder identifiers, certificate associations and aggregate status work have immutable ceilings."
-evidence_gap = "Complete role, version, association, resumption, malformed and independent-peer evidence remains unresolved until v0.148.2."
+evidence_gap = "Complete role, version, association, resumption, malformed and independent-peer evidence remains unresolved until v0.196.2."
 residual = "The facility remains separately selected and cannot weaken ordinary OCSP or certificate validation."
-mapping_rationale = "RFC 6961 defines a real optional facility, so v0.148.2 owns its complete implementation rather than an exclusion boundary."
+mapping_rationale = "RFC 6961 defines a real optional facility, so v0.196.2 owns its complete implementation rather than an exclusion boundary."
 
 [[requirement]]
 id = "BRY-REQ-OCSP-0006"
-owner = "0.136.0"
+revision = 5
+owner = "0.184.0"
 lifecycle = "planned"
 decision_ids = ["iana.tls-extensiontype-values.certificate-status"]
 sources = [{ id = "rfc:6066", authority_role = "current" }]
@@ -93,6 +99,6 @@ target = "crates/brynja-tls/src/certificate_status.rs#CertificateStatusType"
 positive_test = "tests/requirements/certificate_status.rs#ocsp_negotiation"
 negative_test = "tests/requirements/certificate_status.rs#unknown_context_and_length_failures"
 work_bound = "Negotiation and parsing apply hard status-type, responder-ID count, extension, response-size, and aggregate-work limits before validation."
-evidence_gap = "Exact context, registry, malformed length, unknown value, and TLS integration evidence remain unresolved until v0.136.0."
+evidence_gap = "Exact context, registry, malformed length, unknown value, and TLS integration evidence remain unresolved until v0.184.0."
 residual = "Negotiation only transports status data and never makes an unvalidated OCSP response or caller transport authoritative."
 mapping_rationale = "The certificate-status registry surface cites RFC 6066 directly and remains owned by its later optional TLS facility milestone."

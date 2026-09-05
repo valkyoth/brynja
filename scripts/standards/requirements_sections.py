@@ -216,8 +216,13 @@ def apply(
     bound_requirements = {
         requirement_id for requirement_id, _source_id in pair_sections
     }
+    # Non-section-bound transport records also need explicit content revisions.
+    # Keep all section-bound revisions mandatory and reject orphan overrides;
+    # immutable Git-history validation still enforces each exact increment.
     if (
-        set(policy["revisions"]) != bound_requirements
+        not bound_requirements <= set(policy["revisions"]) <= {
+            requirement["id"] for requirement in requirements
+        }
         or any(
             not isinstance(value, int) or value < minimum_revision
             for value in policy["revisions"].values()

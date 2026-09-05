@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df"
+source_ledger_sha256 = "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
 
 [[surface]]
 id = "state.tls.secret-lifetime"
@@ -16,7 +16,7 @@ rationale = "Every TLS-family secret transition has explicit ownership, destruct
 [[surface]]
 id = "state.tls13.recordless-boundary"
 requirement_id = "BRY-REQ-TLS13-0061"
-owner = "0.61.0"
+owner = "0.105.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -27,7 +27,7 @@ rationale = "The TLS 1.3 handshake state machine remains record-independent and 
 [[surface]]
 id = "state.tls13.sans-io-driver"
 requirement_id = "BRY-REQ-TLS13-0062"
-owner = "0.62.0"
+owner = "0.106.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -38,7 +38,7 @@ rationale = "All handshake effects are explicit deterministic actions with bound
 [[surface]]
 id = "state.tls13.record-protection"
 requirement_id = "BRY-REQ-TLS13-0063"
-owner = "0.63.0"
+owner = "0.107.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -49,7 +49,7 @@ rationale = "TLS 1.3 record protection validates inner plaintext and sequence ex
 [[surface]]
 id = "state.tls13.handshake-codec"
 requirement_id = "BRY-REQ-TLS13-0064"
-owner = "0.64.0"
+owner = "0.108.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:6066", "rfc:9846"]
@@ -60,7 +60,7 @@ rationale = "Every TLS 1.3 handshake message and extension context has bounded c
 [[surface]]
 id = "state.tls13.transcript-key-schedule"
 requirement_id = "BRY-REQ-TLS13-0065"
-owner = "0.65.0"
+owner = "0.109.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -71,7 +71,7 @@ rationale = "Transcript and key-schedule transitions preserve exact bytes and de
 [[surface]]
 id = "state.tls13.client-hello"
 requirement_id = "BRY-REQ-TLS13-0066"
-owner = "0.66.0"
+owner = "0.110.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:6066", "rfc:7301", "rfc:7685", "rfc:8701", "rfc:9846"]
@@ -82,7 +82,7 @@ rationale = "ClientHello construction and parsing are bounded, preserve original
 [[surface]]
 id = "state.tls13.hello-retry-request"
 requirement_id = "BRY-REQ-TLS13-0067"
-owner = "0.67.0"
+owner = "0.111.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:8448", "rfc:9846"]
@@ -93,7 +93,7 @@ rationale = "HelloRetryRequest enforces selected-group, cookie, second-ClientHel
 [[surface]]
 id = "state.tls.version-negotiation"
 requirement_id = "BRY-REQ-TLS-0068"
-owner = "0.68.0"
+owner = "0.112.0"
 domain = "tls"
 disposition = "future-work"
 sources = ["rfc:8996", "rfc:9325", "rfc:9846", "rfc:9852"]
@@ -104,7 +104,7 @@ rationale = "Version negotiation skips unknown offers, rejects recognized legacy
 [[surface]]
 id = "state.tls13.authenticated-server-flight"
 requirement_id = "BRY-REQ-TLS13-0069"
-owner = "0.69.0"
+owner = "0.114.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:6066", "rfc:7301", "rfc:9846"]
@@ -115,7 +115,7 @@ rationale = "The server flight authenticates negotiation and certificates before
 [[surface]]
 id = "state.tls13.certificate-selection"
 requirement_id = "BRY-REQ-TLS13-0070"
-owner = "0.70.0"
+owner = "0.113.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -126,7 +126,7 @@ rationale = "Certificate negotiation applies signature, authority, OID-filter, p
 [[surface]]
 id = "state.tls13.status-sct-transport"
 requirement_id = "BRY-REQ-TLS13-0071"
-owner = "0.71.0"
+owner = "0.115.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:6066", "rfc:9846"]
@@ -137,7 +137,7 @@ rationale = "Stapled OCSP and SCT bytes are bounded, context-checked, transcript
 [[surface]]
 id = "state.tls13.client-authentication-finished"
 requirement_id = "BRY-REQ-TLS13-0072"
-owner = "0.72.0"
+owner = "0.116.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -148,7 +148,7 @@ rationale = "Client authentication, CertificateVerify, and Finished permit appli
 [[surface]]
 id = "state.tls13.alerts-cancellation"
 requirement_id = "BRY-REQ-TLS13-0073"
-owner = "0.73.0"
+owner = "0.117.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -159,7 +159,7 @@ rationale = "Alerts, close, illegal messages, backpressure, cancellation, and pr
 [[surface]]
 id = "state.tls13.stateful-resumption"
 requirement_id = "BRY-REQ-TLS13-0074"
-owner = "0.74.0"
+owner = "0.118.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:5077", "rfc:9846"]
@@ -170,7 +170,7 @@ rationale = "Stateful tickets and binders use separated identity, cache, deploym
 [[surface]]
 id = "state.tls13.stateless-resumption"
 requirement_id = "BRY-REQ-TLS13-0075"
-owner = "0.75.0"
+owner = "0.119.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:5077", "rfc:9846"]
@@ -181,7 +181,7 @@ rationale = "Stateless ticket protection authenticates all protocol, identity, p
 [[surface]]
 id = "state.tls13.external-psk-policy"
 requirement_id = "BRY-REQ-TLS13-0076"
-owner = "0.76.0"
+owner = "0.120.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9257", "rfc:9846"]
@@ -192,7 +192,7 @@ rationale = "External PSKs remain distinct from resumption, require forward-secr
 [[surface]]
 id = "state.tls13.external-psk-importer"
 requirement_id = "BRY-REQ-TLS13-0761"
-owner = "0.76.1"
+owner = "0.120.1"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9258"]
@@ -203,7 +203,7 @@ rationale = "Imported PSKs bind protocol, KDF, context, application, ALPN, and d
 [[surface]]
 id = "state.tls13.external-psk-provisioning"
 requirement_id = "BRY-REQ-TLS13-0762"
-owner = "0.76.2"
+owner = "0.120.2"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9257"]
@@ -214,7 +214,7 @@ rationale = "Provisioning enforces entropy, role, peer, node, identity, collisio
 [[surface]]
 id = "state.tls13.zero-rtt"
 requirement_id = "BRY-REQ-TLS13-0077"
-owner = "0.77.0"
+owner = "0.121.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -225,7 +225,7 @@ rationale = "Zero-RTT is opt-in and binds atomic anti-replay, freshness, ticket,
 [[surface]]
 id = "state.tls13.key-update"
 requirement_id = "BRY-REQ-TLS13-0078"
-owner = "0.78.0"
+owner = "0.122.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9846"]
@@ -236,7 +236,7 @@ rationale = "KeyUpdate performs checked traffic-secret replacement, destroys obs
 [[surface]]
 id = "state.tls.exporters"
 requirement_id = "BRY-REQ-TLS-0079"
-owner = "0.79.0"
+owner = "0.123.0"
 domain = "tls"
 disposition = "future-work"
 sources = ["rfc:5705", "rfc:5929", "rfc:9266", "rfc:9846"]
@@ -247,7 +247,7 @@ rationale = "Exporters and channel bindings enforce exact labels, contexts, tran
 [[surface]]
 id = "state.tls13.suite-profile"
 requirement_id = "BRY-REQ-TLS13-0080"
-owner = "0.80.0"
+owner = "0.124.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9325", "rfc:9846"]
@@ -258,7 +258,7 @@ rationale = "The initial TLS 1.3 profile admits exactly the three reviewed AEAD 
 [[surface]]
 id = "state.tls13.conformance"
 requirement_id = "BRY-REQ-TLS13-0081"
-owner = "0.81.0"
+owner = "0.125.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:8448", "rfc:9846"]
@@ -269,7 +269,7 @@ rationale = "TLS 1.3 conformance requires vectors, truncation, fragmentation, in
 [[surface]]
 id = "state.tls13.audit-gate"
 requirement_id = "BRY-REQ-TLS13-0082"
-owner = "0.82.0"
+owner = "0.126.0"
 domain = "tls13"
 disposition = "future-work"
 sources = ["rfc:9325", "rfc:9846"]

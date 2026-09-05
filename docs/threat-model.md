@@ -240,7 +240,7 @@ Nonempty approved sets fail until exact service identities exist, and an
 operation-only indicator cannot authorize execution.
 Permanent failure is currently scoped to a caller-owned session. Because no
 service is approved or executable, constructing a sibling session is not a
-present bypass. v0.127.1 must introduce one module-wide irreversible latch
+present bypass. v0.175.0 must introduce one module-wide irreversible latch
 shared by current and future sessions before any executable or approved FIPS
 service exists.
 Ordinary backend policy, opportunistic/std dispatch, and the sealed-provider
@@ -248,8 +248,8 @@ placeholder cannot cross that boundary. The self-test runner is explicitly
 trusted; dishonest runner success remains an operating-boundary violation, not
 evidence created or detected by these policy types.
 Its application-implementable return value grants no execution or approved
-status. v0.125.0 must make both require an opaque unforgeable module-owned
-attestation, and v0.127.0 must ensure only complete final-image integrity and
+status. v0.173.0 must make both require an opaque unforgeable module-owned
+attestation, and v0.175.1 must ensure only complete final-image integrity and
 pre-operational tests can issue an artifact-, environment-, generation-, and
 test-plan-bound instance.
 v0.13.1 backend types add only inert identities, exact feature/operation

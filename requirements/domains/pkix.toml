@@ -3,7 +3,8 @@ domain = "pkix"
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0001"
-owner = "0.50.0"
+revision = 3
+owner = "0.91.0"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:5280", authority_role = "current" }, { id = "rfc:6818", authority_role = "current" }]
@@ -13,13 +14,14 @@ target = "crates/brynja-pki/src/x509.rs#Certificate"
 positive_test = "tests/requirements/x509.rs#current_signed_certificates"
 negative_test = "tests/requirements/x509.rs#ambiguous_algorithms_and_malformed_der"
 work_bound = "Certificate decoding uses hard byte, depth, node, extension, name, and AlgorithmIdentifier limits under one immutable work budget."
-evidence_gap = "Current algorithm corpora, exact signed-slice tests, RFC errata cases, differential decoding, and fuzz evidence remain unresolved until v0.50.0."
+evidence_gap = "Current algorithm corpora, exact signed-slice tests, RFC errata cases, differential decoding, and fuzz evidence remain unresolved until v0.91.0."
 residual = "A syntactically valid certificate is not trusted; path, identity, policy, revocation, and algorithm-position validation remain separate stages."
 mapping_rationale = "The signed X.509 semantic surface directly cites RFC 5280, while RFC 6818 supplies mandatory corrections within the same current authority closure."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0002"
-owner = "0.51.0"
+revision = 4
+owner = "0.92.0"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:3986", authority_role = "current" }, { id = "rfc:5890", authority_role = "current" }, { id = "rfc:5891", authority_role = "current" }, { id = "rfc:5892", authority_role = "current" }, { id = "rfc:8753", authority_role = "current" }, { id = "rfc:9525", authority_role = "current" }, { id = "rfc:9549", authority_role = "current" }, { id = "rfc:9598", authority_role = "current" }]
@@ -29,13 +31,14 @@ target = "crates/brynja-pki/src/identity.rs#ServiceIdentity"
 positive_test = "tests/requirements/service_identity.rs#typed_reference_identifiers"
 negative_test = "tests/requirements/service_identity.rs#wildcards_unicode_and_cross_type_confusion"
 work_bound = "Identity comparison applies fixed label, name, wildcard, URI, mailbox, and aggregate comparison limits without network access or Unicode mapping."
-evidence_gap = "Internationalization, wildcard, URI, email, IP, and cross-type negative corpora plus differential comparison evidence remain unresolved until v0.51.0."
+evidence_gap = "Internationalization, wildcard, URI, email, IP, and cross-type negative corpora plus differential comparison evidence remain unresolved until v0.92.0."
 residual = "Unicode mapping and presentation remain caller-owned; Brynja accepts only policy-bounded input forms and never falls back across identifier types."
 mapping_rationale = "This reviewed cross-domain identity bundle maps the complete current URI, IDNA, email, and RFC 9525 authority set to the signed X.509 input surface."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0003"
-owner = "0.52.0"
+revision = 3
+owner = "0.93.0"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:5280", authority_role = "current" }]
@@ -45,13 +48,14 @@ target = "crates/brynja-pki/src/path.rs#PathBuilder"
 positive_test = "tests/requirements/path_building.rs#deterministic_paths"
 negative_test = "tests/requirements/path_building.rs#loops_candidates_and_work_exhaustion"
 work_bound = "Construction enforces hard depth, candidate, edge, comparison, output, and aggregate-work ceilings before exploring another path."
-evidence_gap = "Adversarial graph corpora, deterministic-selection properties, exhaustion tests, and complexity proofs remain unresolved until v0.52.0."
+evidence_gap = "Adversarial graph corpora, deterministic-selection properties, exhaustion tests, and complexity proofs remain unresolved until v0.93.0."
 residual = "Caller pool quality and trust policy remain external, but neither can disable loop detection, deterministic ordering, or hard work ceilings."
 mapping_rationale = "The signed certificate surface and RFC 5280 path model directly own bounded construction even though construction precedes final validation."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0004"
-owner = "0.53.0"
+revision = 3
+owner = "0.94.0"
 lifecycle = "planned"
 decision_ids = ["iana.smi-numbers.smi-numbers-1.3.101"]
 sources = [{ id = "rfc:3279", authority_role = "current" }, { id = "rfc:4055", authority_role = "current" }, { id = "rfc:5280", authority_role = "current" }, { id = "rfc:5480", authority_role = "current" }, { id = "rfc:5758", authority_role = "current" }, { id = "rfc:8410", authority_role = "current" }, { id = "rfc:9295", authority_role = "current" }]
@@ -61,13 +65,14 @@ target = "crates/brynja-pki/src/validate.rs#ChainValidator"
 positive_test = "tests/requirements/chain_validation.rs#admitted_algorithms_and_constraints"
 negative_test = "tests/requirements/chain_validation.rs#unknown_parameters_usage_and_path_failures"
 work_bound = "Validation performs bounded per-certificate signature and extension work under fixed chain-depth, identifier, comparison, and total-work ceilings."
-evidence_gap = "AlgorithmIdentifier presence and absence matrices, chain corpora, signature-position policy, and cross-implementation evidence remain unresolved until v0.53.0."
+evidence_gap = "AlgorithmIdentifier presence and absence matrices, chain corpora, signature-position policy, and cross-implementation evidence remain unresolved until v0.94.0."
 residual = "The SMI registry remains caller-owned or future work per entry; registry presence never admits an algorithm without the frozen v1 decision gate."
 mapping_rationale = "The selected future-work SMI subtree anchors the complete registry surface, while the joined PKIX algorithm authorities define the cross-domain deny-by-default validation policy."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0005"
-owner = "0.54.0"
+revision = 3
+owner = "0.95.0"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:5280", authority_role = "current" }, { id = "rfc:9549", authority_role = "current" }, { id = "rfc:9598", authority_role = "current" }]
@@ -77,13 +82,14 @@ target = "crates/brynja-pki/src/name_constraints.rs#NameConstraints"
 positive_test = "tests/requirements/name_constraints.rs#permitted_and_excluded_subtrees"
 negative_test = "tests/requirements/name_constraints.rs#normalization_subtree_and_work_limits"
 work_bound = "Constraint evaluation has fixed name, subtree, label, comparison, normalization, and aggregate-work budgets across the entire path."
-evidence_gap = "Cross-type, internationalized, directory-name, subtree, and budget corpora plus complexity evidence remain unresolved until v0.54.0."
+evidence_gap = "Cross-type, internationalized, directory-name, subtree, and budget corpora plus complexity evidence remain unresolved until v0.95.0."
 residual = "Unsupported name forms and caller Unicode presentation cannot silently bypass a critical nameConstraints extension."
 mapping_rationale = "The signed X.509 surface directly cites RFC 5280, and the current internationalization updates constrain its cross-domain name processing."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0006"
-owner = "0.55.0"
+revision = 3
+owner = "0.96.0"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:5280", authority_role = "current" }, { id = "rfc:9618", authority_role = "current" }]
@@ -93,13 +99,14 @@ target = "crates/brynja-pki/src/policy.rs#PolicyValidator"
 positive_test = "tests/requirements/certificate_policy.rs#valid_policy_graphs"
 negative_test = "tests/requirements/certificate_policy.rs#cycles_explosion_and_invalid_mappings"
 work_bound = "Policy processing uses hard depth, node, edge, output, comparison, and total-work ceilings and forbids exponential tree construction."
-evidence_gap = "RFC 9618 examples, adversarial graph corpora, bounded-model proofs, and differential policy evidence remain unresolved until v0.55.0."
+evidence_gap = "RFC 9618 examples, adversarial graph corpora, bounded-model proofs, and differential policy evidence remain unresolved until v0.96.0."
 residual = "Application policy selection remains caller-owned but cannot weaken signature-first processing or structural and work bounds."
 mapping_rationale = "The signed certificate surface is the direct RFC 5280 input, while RFC 9618 updates the cross-domain policy algorithm and its bounded graph semantics."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0007"
-owner = "0.56.0"
+revision = 3
+owner = "0.97.0"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:5280", authority_role = "current" }]
@@ -109,13 +116,14 @@ target = "crates/brynja-pki/src/trust.rs#TrustPolicy"
 positive_test = "tests/requirements/trust.rs#anchors_cross_signing_and_selection"
 negative_test = "tests/requirements/trust.rs#distrust_ambiguity_and_algorithm_positions"
 work_bound = "Trust evaluation shares fixed path, candidate, comparison, algorithm, and aggregate-work ceilings with construction and validation."
-evidence_gap = "Cross-signing graphs, deterministic-choice fixtures, distrust transitions, and algorithm-position matrices remain unresolved until v0.56.0."
+evidence_gap = "Cross-signing graphs, deterministic-choice fixtures, distrust transitions, and algorithm-position matrices remain unresolved until v0.97.0."
 residual = "Brynja does not ship or update a trust store and never converts certificate self-signature into trust without an explicit anchor."
 mapping_rationale = "The signed RFC 5280 certificate surface directly supplies the inputs whose trust semantics are frozen by this dedicated policy milestone."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0008"
-owner = "0.57.0"
+revision = 3
+owner = "0.98.0"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:5280", authority_role = "current" }, { id = "rfc:10007", authority_role = "current" }]
@@ -125,13 +133,14 @@ target = "crates/brynja-pki/src/crl.rs#CrlValidator"
 positive_test = "tests/requirements/crl.rs#base_delta_and_indirect_crls"
 negative_test = "tests/requirements/crl.rs#issuer_usage_freshness_and_work_limits"
 work_bound = "CRL processing has hard issuer, distribution-point, reason, entry, serial-lookup, size, signature, and aggregate-work ceilings."
-evidence_gap = "Current RFC 10007 clarification cases, base and delta corpora, indirect CRLs, and exhaustion evidence remain unresolved until v0.57.0."
+evidence_gap = "Current RFC 10007 clarification cases, base and delta corpora, indirect CRLs, and exhaustion evidence remain unresolved until v0.98.0."
 residual = "Network retrieval and cache storage remain caller-owned effects and cannot make stale, unauthorized, or unverified CRL data authoritative."
 mapping_rationale = "RFC 5280 directly governs signed certificate and CRL processing, while RFC 10007 adds the current cross-domain cRLSign clarification."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0009"
-owner = "0.57.1"
+revision = 3
+owner = "0.98.1"
 lifecycle = "planned"
 decision_ids = ["format.x509.signed"]
 sources = [{ id = "rfc:9608", authority_role = "current" }]
@@ -141,15 +150,15 @@ target = "crates/brynja-pki/src/revocation.rs#NoRevAvail"
 positive_test = "tests/requirements/no_rev_avail.rs#valid_end_entity_policy"
 negative_test = "tests/requirements/no_rev_avail.rs#ca_and_contradictory_extensions"
 work_bound = "The extension decision uses bounded exact extension scans and shares certificate duplicate, criticality, and aggregate-work ceilings."
-evidence_gap = "RFC 9608 combinations, policy toggles, duplicate extensions, and path integration evidence remain unresolved until v0.57.1."
+evidence_gap = "RFC 9608 combinations, policy toggles, duplicate extensions, and path integration evidence remain unresolved until v0.98.1."
 residual = "Skipping revocation remains an explicit caller policy result and never applies to a CA certificate or contradictory certificate."
 mapping_rationale = "This reviewed cross-domain rule maps RFC 9608 into the signed X.509 surface because the extension modifies certificate revocation semantics rather than defining a new format."
 
 [[requirement]]
 id = "BRY-REQ-PKIX-0010"
-owner = "0.60.11"
+owner = "0.104.0"
 lifecycle = "planned"
-revision = 4
+revision = 5
 decision_ids = ["format.x509.unsigned"]
 sources = [{ id = "rfc:9925", authority_role = "current" }]
 statement = "Unsigned X.509 objects are completely implemented through explicit non-authenticating types that cannot satisfy trust, signature-verification, or secure-transport authentication."
@@ -158,6 +167,6 @@ target = "crates/brynja-pki/src/x509.rs#UnsignedCertificate"
 positive_test = "tests/requirements/unsigned_x509.rs#complete_non_authenticating_round_trip"
 negative_test = "tests/requirements/unsigned_x509.rs#trust_signature_and_transport_substitution_rejected"
 work_bound = "Unsigned parsing, generation and validation share bounded DER, extension, object and aggregate-work ceilings without entering path construction."
-evidence_gap = "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.60.11."
+evidence_gap = "Complete format, round-trip, consumer and type-substitution evidence remains unresolved until v0.104.0."
 residual = "Unsigned objects can never satisfy authentication even though their standardized format is completely implemented."
-mapping_rationale = "RFC 9925 defines a real format owned by v0.60.11 with an unforgeable non-authentication boundary."
+mapping_rationale = "RFC 9925 defines a real format owned by v0.104.0 with an unforgeable non-authentication boundary."

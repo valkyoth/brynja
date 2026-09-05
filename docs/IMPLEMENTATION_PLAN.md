@@ -23,7 +23,7 @@ claim.
   implementations; external assembly, objects, archives, and shared libraries
   are forbidden.
 - The core workspace admits no unreviewed external runtime, build, development,
-  fuzz, test, or tooling crates in Cargo manifests. v0.47.1 may admit an exact
+  fuzz, test, or tooling crates in Cargo manifests. v0.88.1 may admit an exact
   first-party `base64-ng` package with default features disabled solely behind
   bounded Base64, PEM, and OpenPGP armor boundaries, provided the reachable
   path is allocation-free, `no_std`, native-code-free, non-cryptographic and
@@ -156,11 +156,11 @@ Before cryptographic implementation begins, SHA-2 is assigned to
 `brynja-crypto` owns provider contracts, compositions, and scalar primitives
 that do not yet justify a smaller family, and consumes the exact family symbols
 rather than copying them. The complete pre-1.0 catalogue expansion is assigned
-v0.181.0-v0.280.0 in the
+v0.250.0-v0.350.0 in the
 [unified release plan](RELEASE_PLAN.md#unified-catalogue-scope-and-api-contracts).
 The [scope register](CATALOGUE_SCOPE_REGISTER.json) maps all 104 inherited
 inventory rows, exact family contracts, prerequisite owners and acceptance
-steps; final whole-project gates follow at v0.281.0-v0.285.0.
+steps; final whole-project gates follow at v0.351.0-v0.355.0.
 
 `brynja-crypto-cpu` is an optional downstream `no_std` implementation package:
 it may contain only separately admitted ISA kernels, static
@@ -279,12 +279,12 @@ pentest, and release line. Code never changes classification silently in place.
    Every CPU path retains per-compiler
    constant-time, emitted-code, KAT, quarantine, differential, performance and
    residual-risk evidence. Each arithmetic or cryptographic milestone
-   introduces its applicable proof harness beside the implementation; v0.155.0
+   introduces its applicable proof harness beside the implementation; v0.203.0
    completes coverage and publishes gaps rather than introducing the models for
    the first time. Classify claims as symbolic full-width, sound
    limb-count-parameterized, or reduced-width algorithm/harness validation, and
    treat production-width vectors and differentials as evidence rather than
-   proof of equivalence. At v0.155.0, generate a deterministic machine-readable
+   proof of equivalence. At v0.203.0, generate a deterministic machine-readable
    register mapping each primitive and scalar or accelerated implementation
    symbol, property, supported width or parameter, exact CPU feature bundle,
    verification method, evidence, assumptions, and residual gaps.
@@ -438,7 +438,7 @@ The repository will maintain:
   not equivalence proofs, and residual proof gaps remain explicit;
 - schema, deterministic-regeneration, symbol-resolution, uniqueness,
   completeness, evidence-reference, supported-parameter, and residual-gap tests
-  for the v0.155.0 machine-readable cryptographic claim register;
+  for the v0.203.0 machine-readable cryptographic claim register;
 - current FIPS 140-3 requirement/assertion, guidance, RFG, transition, caveat,
   security-policy, algorithm, ESV, artifact, lab, certificate, operational
   environment, approved-profile, manifest, facade, claim, update, and

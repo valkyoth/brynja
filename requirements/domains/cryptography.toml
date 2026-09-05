@@ -37,6 +37,7 @@ mapping_rationale = "The SHA-3 and SHAKE semantic surface directly records the c
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0003"
+revision = 2
 owner = "0.25.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.hmac"]
@@ -53,6 +54,7 @@ mapping_rationale = "The HMAC semantic surface is directly sourced by the curren
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0004"
+revision = 2
 owner = "0.26.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.hkdf"]
@@ -101,6 +103,7 @@ mapping_rationale = "The separate GHASH semantic surface is directly governed by
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0007"
+revision = 2
 owner = "0.29.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.aes-gcm"]
@@ -117,6 +120,7 @@ mapping_rationale = "The AES-GCM semantic surface directly joins the generic RFC
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0008"
+revision = 2
 owner = "0.30.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.chacha20"]
@@ -133,6 +137,7 @@ mapping_rationale = "The separate ChaCha20 semantic surface directly records the
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0009"
+revision = 2
 owner = "0.31.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.chacha20-poly1305"]
@@ -151,7 +156,7 @@ mapping_rationale = "The combined ChaCha20-Poly1305 semantic surface directly re
 id = "BRY-REQ-CRYPTO-0010"
 owner = "0.33.0"
 lifecycle = "planned"
-revision = 3
+revision = 4
 decision_ids = ["algorithm.elliptic-curve"]
 sources = [{ id = "nist:NIST.FIPS.186-5.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-186.pdf", authority_role = "current" }, { id = "nist:NIST.SP.800-56Ar3.pdf", authority_role = "current" }, { id = "rfc:5480", authority_role = "current" }, { id = "rfc:5758", authority_role = "current" }, { id = "rfc:6979", authority_role = "current" }, { id = "rfc:7748", authority_role = "current" }, { id = "rfc:8813", authority_role = "current" }]
 statement = "Elliptic-curve arithmetic, encodings, key agreement, and ECDSA inputs use admitted curves, canonical values, fixed schedules, and validated public points."
@@ -160,13 +165,14 @@ target = "crates/brynja-crypto/src/ecc.rs#FieldAndGroup"
 positive_test = "tests/requirements/crypto_ecc.rs#official_group_and_signature_vectors"
 negative_test = "tests/requirements/crypto_ecc.rs#invalid_points_scalars_and_shared_secrets"
 work_bound = "Field and group operations use fixed public widths and schedules with no attacker-selected allocation, limb count, or secret-dependent loop bound."
-evidence_gap = "Full-width arithmetic proofs, exceptional-input campaigns, lifecycle tests, emitted-code review, and side-channel evidence remain unresolved across v0.33.0 through v0.41.0."
+evidence_gap = "Full-width arithmetic proofs, exceptional-input campaigns, lifecycle tests, emitted-code review, and side-channel evidence remain unresolved across v0.33.0 through v0.42.0."
 residual = "Each concrete curve and operation still requires its own milestone evidence; this foundation does not itself admit P-521 or Ed448, which receive complete later v0.45 milestones, and arbitrary explicit curves remain excluded."
 mapping_rationale = "The elliptic-curve semantic surface directly cites the core EC, X25519, and NIST curve authorities; cross-document algorithm details remain versioned."
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0011"
-owner = "0.42.0"
+revision = 3
+owner = "0.44.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.rsa"]
 sources = [{ id = "rfc:3279", authority_role = "current" }, { id = "rfc:4055", authority_role = "current" }, { id = "rfc:5756", authority_role = "current" }, { id = "rfc:8017", authority_role = "current" }]
@@ -176,15 +182,15 @@ target = "crates/brynja-crypto/src/rsa.rs#RsaVerification"
 positive_test = "tests/requirements/crypto_rsa.rs#pss_and_pkcs1_vectors"
 negative_test = "tests/requirements/crypto_rsa.rs#ambiguous_parameters_and_padding"
 work_bound = "RSA uses policy-fixed modulus widths, exponents, and operation counts with no attacker-selected limb count, allocation, or normalization schedule."
-evidence_gap = "Arithmetic proofs, strict decoding corpora, signature vectors, fault cases, and side-channel evidence remain unresolved across v0.32.0 and v0.42.0 through v0.44.0."
+evidence_gap = "Arithmetic proofs, strict decoding corpora, signature vectors, fault cases, and side-channel evidence remain unresolved across v0.32.0 and v0.44.0 through v0.46.0."
 residual = "PKCS1 v1.5 signing, weak hashes, ambiguous parameters, unvalidated private keys, and first-party key generation remain excluded."
 mapping_rationale = "The RSA semantic surface directly cites RFC 8017 while the related PKIX algorithm-identifier authorities constrain its exact accepted encodings."
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0012"
-owner = "0.45.0"
+owner = "0.47.0"
 lifecycle = "planned"
-revision = 4
+revision = 5
 decision_ids = ["algorithm.ed25519"]
 sources = [{ id = "rfc:8032", authority_role = "current" }, { id = "rfc:8410", authority_role = "current" }, { id = "rfc:9295", authority_role = "current" }]
 statement = "Ed25519 signing and verification enforce canonical encodings, scalar and point validity, small-order and malleability rejection, and absent AlgorithmIdentifier parameters."
@@ -193,13 +199,14 @@ target = "crates/brynja-crypto/src/ed25519.rs#Ed25519"
 positive_test = "tests/requirements/crypto_ed25519.rs#rfc8032_vectors"
 negative_test = "tests/requirements/crypto_ed25519.rs#noncanonical_and_small_order_inputs"
 work_bound = "Signing and verification use fixed public widths and bounded schedules, with no attacker-selected group size or secret-dependent iteration."
-evidence_gap = "Official vectors, malformed corpora, key-lifecycle tests, emitted-code review, and target side-channel evidence remain unresolved until v0.45.0."
-residual = "Ed448 remains outside this Ed25519 owner and receives its own complete v0.45.7-v0.45.10 milestones; newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes."
+evidence_gap = "Official vectors, malformed corpora, key-lifecycle tests, emitted-code review, and target side-channel evidence remain unresolved until v0.47.0."
+residual = "Ed448 remains outside this Ed25519 owner and receives its own complete v0.48.2-v0.48.6 milestones; newly reported RFC 8410 erratum 9045 stays track-not-applied until its official status changes."
 mapping_rationale = "The Ed25519 semantic surface directly cites the algorithm and PKIX identifier authorities, including the current RFC 9295 clarification."
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0013"
-owner = "0.46.0"
+revision = 2
+owner = "0.51.0"
 lifecycle = "planned"
 decision_ids = ["iana.tls-parameters.tls-kdf-ids"]
 sources = [{ id = "rfc:3279", authority_role = "current" }]
@@ -209,9 +216,9 @@ target = "crates/brynja-crypto/src/algorithm.rs#AlgorithmPolicy"
 positive_test = "tests/requirements/crypto_admission.rs#explicit_allowlist"
 negative_test = "tests/requirements/crypto_admission.rs#unknown_and_excluded_algorithms"
 work_bound = "Identifier dispatch uses bounded exact comparison against a frozen allowlist and never performs attacker-selected discovery or dynamic loading."
-evidence_gap = "The complete v1 allowlist and per-algorithm functional, lifecycle, resource, and side-channel evidence remain unresolved until v0.46.0 and v0.47.0."
+evidence_gap = "The complete v1 allowlist and per-algorithm functional, lifecycle, resource, and side-channel evidence remain unresolved until v0.51.0 and v0.88.0."
 residual = "Registry presence is not admission, and hybrid or post-quantum algorithms remain owned by their later explicit coverage and implementation gates."
-mapping_rationale = "This reviewed cross-domain rule binds the complete cryptography registry surface to the v0.46.0 deny-by-default decision gate rather than treating any one RFC registry as automatic admission."
+mapping_rationale = "This reviewed cross-domain rule binds the complete cryptography registry surface to the v0.51.0 deny-by-default decision gate rather than treating any one RFC registry as automatic admission."
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0014"

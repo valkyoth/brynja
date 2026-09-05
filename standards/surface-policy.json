@@ -5,7 +5,7 @@
         "code_target": "crates/brynja-tls/src/registry_policy.rs",
         "disposition": "intentionally-rejected",
         "domain": "tls",
-        "owner": "0.46.0",
+        "owner": "0.51.0",
         "rationale": "Unadmitted TLS registry values remain rejected until their owning decision gate explicitly admits them.",
         "sources": [
           "iana:tls-parameters",
@@ -54,7 +54,7 @@
             "code_target": "crates/brynja-tls13-handshake/src/message.rs",
             "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.61.0",
+            "owner": "0.105.0",
             "rationale": "Handshake message types require generated bounded codecs and state-machine ownership before admission.",
             "sources": [
               "iana:tls-parameters",
@@ -71,7 +71,7 @@
             "code_target": "crates/brynja-crypto/src/algorithm.rs",
             "disposition": "future-work",
             "domain": "cryptography",
-            "owner": "0.46.0",
+            "owner": "0.51.0",
             "rationale": "Cipher suites, groups, signatures, hashes, and KDF identifiers remain planned until the version-one algorithm decision gate.",
             "sources": [
               "iana:tls-parameters",
@@ -91,7 +91,7 @@
             "code_target": "crates/brynja-tls13/src/psk.rs",
             "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.74.0",
+            "owner": "0.118.0",
             "rationale": "PSK exchange modes are deferred to the binder, ticket, resumption, and external-PSK milestones.",
             "sources": [
               "iana:tls-parameters",
@@ -108,7 +108,7 @@
             "code_target": "crates/brynja-tls13/src/exporter.rs",
             "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.79.0",
+            "owner": "0.123.0",
             "rationale": "Exporter labels remain opaque inputs to a future domain-separated exporter API and are not interpreted at this milestone.",
             "sources": [
               "iana:tls-parameters",
@@ -125,7 +125,7 @@
             "code_target": "crates/brynja-legacy/src/registry.rs",
             "disposition": "legacy-only",
             "domain": "legacy",
-            "owner": "0.180.1",
+            "owner": "0.240.0",
             "rationale": "Obsolete certificate, curve, signature, and hash registries feed the complete independently packaged legacy protocol implementations admitted before 1.0.",
             "sources": [
               "iana:tls-parameters",
@@ -146,7 +146,7 @@
             "code_target": "crates/brynja-tls/src/legacy_extensions.rs",
             "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.148.3",
+            "owner": "0.196.3",
             "rationale": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
             "sources": [
               "iana:tls-parameters"
@@ -164,8 +164,8 @@
             "code_target": "crates/brynja-tls/src/heartbeat.rs",
             "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.148.1",
-            "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.148.1.",
+            "owner": "0.196.1",
+            "rationale": "Heartbeat message types and modes receive the complete bounded opt-in TLS and DTLS implementation owned by v0.196.1.",
             "sources": [
               "iana:tls-parameters",
               "rfc:6520"
@@ -199,7 +199,7 @@
             "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
             "disposition": "future-work",
             "domain": "dtls",
-            "owner": "0.111.1",
+            "owner": "0.155.1",
             "rationale": "Registered RRC message values are owned by the DTLS return-routability engine and cannot be routed through the stream-TLS facade.",
             "sources": [
               "iana:tls-parameters"
@@ -217,7 +217,7 @@
         "code_target": "crates/brynja-tls/src/extensions.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.148.0",
+        "owner": "0.196.0",
         "rationale": "Registered extension values require an explicit context and composition decision before version-one completion.",
         "sources": [
           "iana:tls-extensiontype-values",
@@ -232,7 +232,7 @@
             "code_target": "crates/brynja-tls/src/alpn.rs",
             "disposition": "caller-owned",
             "domain": "application",
-            "owner": "0.130.0",
+            "owner": "0.178.0",
             "rationale": "Brynja transports ALPN protocol identifiers opaquely while the application owns protocol selection and semantics.",
             "sources": [
               "iana:tls-extensiontype-values",
@@ -249,7 +249,7 @@
             "code_target": "crates/brynja-tls/src/certificate_type.rs",
             "disposition": "future-work",
             "domain": "pki",
-            "owner": "0.136.0",
+            "owner": "0.184.0",
             "rationale": "Certificate type and status registries are deferred to X.509, raw-public-key, and status-feature milestones.",
             "sources": [
               "iana:tls-extensiontype-values",
@@ -267,7 +267,7 @@
             "code_target": "crates/brynja-tls/src/cached_info.rs",
             "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.148.2",
+            "owner": "0.196.2",
             "rationale": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
             "sources": [
               "iana:tls-extensiontype-values"
@@ -283,7 +283,7 @@
             "code_target": "crates/brynja-tls/src/certificate_compression.rs",
             "disposition": "future-work",
             "domain": "tls",
-            "owner": "0.146.0",
+            "owner": "0.194.0",
             "rationale": "Certificate compression requires caller-owned bounded providers and explicit negotiation before admission.",
             "sources": [
               "iana:tls-extensiontype-values",
@@ -302,7 +302,7 @@
         "code_target": "crates/brynja-tls13/src/ech.rs",
         "disposition": "future-work",
         "domain": "ech",
-        "owner": "0.140.0",
+        "owner": "0.188.0",
         "rationale": "ECH configuration extensions remain bounded future work behind the complete ECH configuration and retry policy.",
         "sources": [
           "iana:tls-ech-configuration-extensions",
@@ -318,7 +318,7 @@
         "code_target": "crates/brynja-crypto/src/hpke.rs",
         "disposition": "future-work",
         "domain": "hpke",
-        "owner": "0.138.0",
+        "owner": "0.186.1",
         "rationale": "HPKE KEM, KDF, and AEAD identifiers remain future work behind the bounded base-mode implementation.",
         "sources": [
           "iana:hpke",
@@ -334,7 +334,7 @@
         "code_target": "crates/brynja-quic-tls/src/boundary.rs",
         "disposition": "caller-owned",
         "domain": "quic",
-        "owner": "0.94.0",
+        "owner": "0.138.0",
         "rationale": "The QUIC transport owns frames, parameters, errors, and version negotiation outside Brynja's TLS cryptographic adapter.",
         "sources": [
           "iana:quic",
@@ -349,7 +349,7 @@
             "code_target": "crates/brynja-quic-tls/src/version.rs",
             "disposition": "future-work",
             "domain": "quic",
-            "owner": "0.94.0",
+            "owner": "0.138.0",
             "rationale": "Each admitted QUIC version requires an exact version-specific initial-secret and header-protection profile.",
             "sources": [
               "iana:quic",
@@ -368,7 +368,7 @@
         "code_target": "crates/brynja-pki/src/ct.rs",
         "disposition": "future-work",
         "domain": "ct",
-        "owner": "0.59.0",
+        "owner": "0.100.0",
         "rationale": "Certificate Transparency algorithms, artifacts, logs, and errors remain versioned future validation work.",
         "sources": [
           "iana:trans",
@@ -384,7 +384,7 @@
         "code_target": "crates/brynja-pki/src/oid.rs",
         "disposition": "caller-owned",
         "domain": "pkix",
-        "owner": "0.53.0",
+        "owner": "0.94.0",
         "rationale": "Unselected SMI namespaces are preserved as caller-owned identifiers and do not gain implicit PKIX semantics.",
         "sources": [
           "iana:smi-numbers",
@@ -399,7 +399,7 @@
             "code_target": "crates/brynja-pki/src/oid.rs",
             "disposition": "future-work",
             "domain": "pkix",
-            "owner": "0.53.0",
+            "owner": "0.94.0",
             "rationale": "PKIX extensions, purposes, algorithms, names, access descriptors, and OCSP identifiers require explicit DER and path-validation handling.",
             "sources": [
               "iana:smi-numbers",
@@ -424,7 +424,7 @@
         "code_target": "crates/brynja-platform/src/dns.rs",
         "disposition": "caller-owned",
         "domain": "dns",
-        "owner": "0.140.0",
+        "owner": "0.188.0",
         "rationale": "DNS resolution, record processing, and DNSSEC remain caller-owned inputs to ECH configuration selection.",
         "sources": [
           "iana:dns-parameters",
@@ -442,7 +442,7 @@
         "code_target": "crates/brynja-tls13/src/engine.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.61.0",
+        "owner": "0.105.0",
         "rationale": "Current TLS 1.3 remains the primary future stream protocol and is not implemented by this release.",
         "sources": ["rfc:9846", "rfc:9325"],
         "test_target": "tests/surface/tls13.rs#protocol"
@@ -454,7 +454,7 @@
         "code_target": "crates/brynja-tls12/src/engine.rs",
         "disposition": "future-work",
         "domain": "tls12",
-        "owner": "0.83.0",
+        "owner": "0.127.0",
         "rationale": "TLS 1.2 is retained only as a separately hardened compatibility engine with no downgrade path.",
         "sources": ["rfc:5246", "rfc:9325"],
         "test_target": "tests/surface/tls12.rs#protocol"
@@ -466,7 +466,7 @@
         "code_target": "crates/brynja-dtls/src/dtls13.rs",
         "disposition": "future-work",
         "domain": "dtls",
-        "owner": "0.102.0",
+        "owner": "0.146.0",
         "rationale": "DTLS 1.3 remains future work in its independent datagram state-machine boundary.",
         "sources": ["rfc:9147"],
         "test_target": "tests/surface/dtls13.rs#protocol"
@@ -478,7 +478,7 @@
         "code_target": "crates/brynja-dtls/src/dtls12.rs",
         "disposition": "future-work",
         "domain": "dtls",
-        "owner": "0.110.0",
+        "owner": "0.154.0",
         "rationale": "DTLS 1.2 remains a hardened compatibility profile isolated from the DTLS 1.3 engine.",
         "sources": ["rfc:6347", "rfc:9325"],
         "test_target": "tests/surface/dtls12.rs#protocol"
@@ -490,7 +490,7 @@
         "code_target": "crates/brynja-quic-tls/src/version.rs",
         "disposition": "future-work",
         "domain": "quic",
-        "owner": "0.94.0",
+        "owner": "0.138.0",
         "rationale": "QUIC v1 and v2 cryptography require distinct exact salts, labels, header protection, and version binding.",
         "sources": ["rfc:9001", "rfc:9369", "iana:quic"],
         "test_target": "tests/surface/quic_versions.rs#version_specific_crypto"
@@ -526,7 +526,7 @@
         "code_target": "crates/brynja-pki/src/x509.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.50.0",
+        "owner": "0.91.0",
         "rationale": "Signed X.509 certificates require bounded DER, algorithm consistency, path processing, and identity validation.",
         "sources": ["rfc:5280", "rfc:9525"],
         "test_target": "tests/surface/x509.rs#signed"
@@ -538,7 +538,7 @@
         "code_target": "crates/brynja-pki/src/x509.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.60.11",
+        "owner": "0.104.0",
         "rationale": "The authenticated unsigned X.509 profile receives a complete explicitly non-authenticating typed implementation.",
         "sources": ["rfc:9925"],
         "test_target": "tests/surface/x509.rs#unsigned_rejected"
@@ -550,7 +550,7 @@
         "code_target": "crates/brynja-pki/src/key_format.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.49.4",
+        "owner": "0.90.4",
         "rationale": "PKCS8, SEC1, and PKCS1 private-key containers require bounded DER and strict algorithm binding.",
         "sources": ["rfc:5958", "rfc:8017"],
         "test_target": "tests/surface/private_keys.rs#formats"
@@ -562,7 +562,7 @@
         "code_target": "crates/brynja-pki/src/pem.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.48.0",
+        "owner": "0.89.0",
         "rationale": "PEM and certificate-chain containers require bounded decoding and exact label handling.",
         "sources": ["rfc:7468"],
         "test_target": "tests/surface/pem.rs#formats"
@@ -574,7 +574,7 @@
         "code_target": "crates/brynja-pki/src/ocsp.rs",
         "disposition": "future-work",
         "domain": "ocsp",
-        "owner": "0.58.0",
+        "owner": "0.99.0",
         "rationale": "OCSP parsing, validation, freshness, nonce, transport, and cache semantics remain staged future work.",
         "sources": ["rfc:6960", "rfc:9654", "rfc:9919"],
         "test_target": "tests/surface/ocsp.rs#protocol"
@@ -586,7 +586,7 @@
         "code_target": "crates/brynja-pki/src/ct.rs",
         "disposition": "future-work",
         "domain": "ct",
-        "owner": "0.59.0",
+        "owner": "0.100.0",
         "rationale": "Certificate Transparency validation remains explicitly versioned future work.",
         "sources": ["rfc:6962", "rfc:9162"],
         "test_target": "tests/surface/ct.rs#protocol"
@@ -598,7 +598,7 @@
         "code_target": "crates/brynja-crypto/src/hpke.rs",
         "disposition": "future-work",
         "domain": "hpke",
-        "owner": "0.138.0",
+        "owner": "0.186.1",
         "rationale": "HPKE KEM and context derivation remain bounded cryptographic foundations downstream of validated provider ports.",
         "sources": ["rfc:9180", "iana:hpke"],
         "test_target": "tests/surface/hpke.rs#context_foundation"
@@ -610,7 +610,7 @@
         "code_target": "crates/brynja-crypto/src/hpke.rs",
         "disposition": "future-work",
         "domain": "hpke",
-        "owner": "0.139.0",
+        "owner": "0.187.0",
         "rationale": "HPKE Base is implemented first and the remaining RFC 9180 modes receive their own following milestones.",
         "sources": ["rfc:9180", "iana:hpke"],
         "test_target": "tests/surface/hpke.rs#base_mode"
@@ -622,8 +622,8 @@
         "code_target": "crates/brynja-crypto/src/hpke.rs",
         "disposition": "future-work",
         "domain": "hpke",
-        "owner": "0.139.2",
-        "rationale": "HPKE PSK, Auth, and AuthPSK modes are implemented separately at v0.139.2 through v0.139.4 and closed by v0.139.5.",
+        "owner": "0.187.2",
+        "rationale": "HPKE PSK, Auth, and AuthPSK modes are implemented separately at v0.187.2 through v0.187.4 and closed by v0.187.5.",
         "sources": ["rfc:9180"],
         "test_target": "tests/surface/hpke.rs#all_modes"
       },
@@ -634,7 +634,7 @@
         "code_target": "crates/brynja-crypto/src/hpke.rs",
         "disposition": "future-work",
         "domain": "hpke",
-        "owner": "0.139.1",
+        "owner": "0.187.1",
         "rationale": "HPKE export and context lifecycle require bounded output, role separation, exhaustion closure, cancellation, and immediate secret destruction.",
         "sources": ["rfc:9180", "iana:hpke"],
         "test_target": "tests/surface/hpke.rs#export_lifecycle"
@@ -646,7 +646,7 @@
         "code_target": "crates/brynja-tls13/src/ech.rs",
         "disposition": "future-work",
         "domain": "ech",
-        "owner": "0.140.0",
+        "owner": "0.188.0",
         "rationale": "ECH remains future work with caller-owned DNS, retry, configuration generation, and inner-name policy.",
         "sources": ["rfc:9848", "rfc:9849", "rfc:9460"],
         "test_target": "tests/surface/ech.rs#protocol"
@@ -658,7 +658,7 @@
         "code_target": "crates/brynja-tls13/src/ech.rs",
         "disposition": "future-work",
         "domain": "ech",
-        "owner": "0.140.1",
+        "owner": "0.188.1",
         "rationale": "ECH configuration bootstrap and cache lifecycle require bounded hostile parsing, typed provenance, mandatory-extension handling, expiry, and rotation.",
         "sources": ["rfc:9848", "rfc:9849", "rfc:9460"],
         "test_target": "tests/surface/ech.rs#configuration_bootstrap"
@@ -670,7 +670,7 @@
         "code_target": "crates/brynja-tls13/src/ech.rs",
         "disposition": "future-work",
         "domain": "ech",
-        "owner": "0.141.0",
+        "owner": "0.189.0",
         "rationale": "ECH client construction requires exact inner and outer messages, AAD, padding, transcript preservation, GREASE, and resource policy.",
         "sources": ["rfc:9180", "rfc:9849"],
         "test_target": "tests/surface/ech.rs#client_construction"
@@ -682,7 +682,7 @@
         "code_target": "crates/brynja-tls13/src/ech.rs",
         "disposition": "future-work",
         "domain": "ech",
-        "owner": "0.142.0",
+        "owner": "0.190.0",
         "rationale": "ECH server opening requires configuration lookup, uniform HPKE rejection, consistency checks, acceptance confirmation, and bound identity selection.",
         "sources": ["rfc:9180", "rfc:9849"],
         "test_target": "tests/surface/ech.rs#server_opening"
@@ -694,7 +694,7 @@
         "code_target": "crates/brynja-tls13/src/ech.rs",
         "disposition": "future-work",
         "domain": "ech",
-        "owner": "0.143.0",
+        "owner": "0.191.0",
         "rationale": "ECH retry and rotation require exact HelloRetryRequest transcript invariants, retry authority, generation changes, and downgrade detection.",
         "sources": ["rfc:9848", "rfc:9849"],
         "test_target": "tests/surface/ech.rs#hrr_retry_rotation"
@@ -706,7 +706,7 @@
         "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.148.1",
+        "owner": "0.196.1",
         "rationale": "Heartbeat receives a complete bounded opt-in TLS and DTLS implementation and remains disabled by default.",
         "sources": ["rfc:6520"],
         "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
@@ -718,7 +718,7 @@
         "code_target": "crates/brynja-tls12/src/extensions.rs",
         "disposition": "future-work",
         "domain": "tls12",
-        "owner": "0.148.2",
+        "owner": "0.196.2",
         "rationale": "status_request_v2 receives a complete separately selected implementation without changing hardened defaults.",
         "sources": ["rfc:6961"],
         "test_target": "tests/surface/status_request_v2.rs#rejected"
@@ -754,7 +754,7 @@
         "code_target": "crates/brynja-tls13-handshake/src/authentication.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.82.2",
+        "owner": "0.126.2",
         "rationale": "TLS 1.3 post-handshake authentication receives a complete explicit client and server state machine.",
         "sources": ["rfc:9846"],
         "test_target": "tests/surface/post_handshake_auth.rs#rejected"
@@ -766,7 +766,7 @@
         "code_target": "crates/brynja-tls13/src/psk.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.82.3",
+        "owner": "0.126.3",
         "rationale": "Certificate authentication combined with an external PSK receives a complete explicitly selected RFC 9973 profile.",
         "sources": ["rfc:9973"],
         "test_target": "tests/surface/external_psk.rs#certificate_mode_rejected"
@@ -778,7 +778,7 @@
         "code_target": "crates/brynja-tls13-handshake/src/signature.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.82.4",
+        "owner": "0.126.4",
         "rationale": "Legacy PKCS1 client CertificateVerify code points receive their complete exact-role compatibility profile.",
         "sources": ["rfc:9963"],
         "test_target": "tests/surface/signatures.rs#legacy_client_pkcs1_rejected"
@@ -790,7 +790,7 @@
         "code_target": "crates/brynja-pki/src/algorithm.rs",
         "disposition": "future-work",
         "domain": "pkix",
-        "owner": "0.60.11",
+        "owner": "0.104.0",
         "rationale": "RFC 9935 ML-KEM PKIX credentials receive complete typed generation, parsing and validation profiles.",
         "sources": ["rfc:9935"],
         "test_target": "tests/surface/ml_kem.rs#pkix_rejected"
@@ -802,7 +802,7 @@
         "code_target": "crates/brynja-tls/src/record_size_limit.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.136.0",
+        "owner": "0.184.0",
         "rationale": "Record Size Limit requires directional negotiation, fragmentation and buffering limits, peer-violation handling, and interoperability evidence.",
         "sources": ["rfc:8449", "iana:tls-extensiontype-values"],
         "test_target": "tests/surface/record_size_limit.rs#profile"
@@ -814,7 +814,7 @@
         "code_target": "crates/brynja-tls/src/certificate_compression.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.145.0",
+        "owner": "0.193.0",
         "rationale": "Certificate decompression remains hostile pre-authentication work behind a caller-owned bounded receive provider.",
         "sources": ["rfc:8879", "iana:tls-extensiontype-values"],
         "test_target": "tests/surface/certificate_compression.rs#receive_provider"
@@ -826,7 +826,7 @@
         "code_target": "crates/brynja-tls/src/certificate_compression.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.146.0",
+        "owner": "0.194.0",
         "rationale": "Precompressed certificate artifacts require bounded decompression, canonical byte comparison, complete input binding, and rotation invalidation.",
         "sources": ["rfc:8879", "iana:tls-extensiontype-values"],
         "test_target": "tests/surface/certificate_compression.rs#artifact_validation"
@@ -838,7 +838,7 @@
         "code_target": "crates/brynja-tls/src/certificate_compression.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.146.1",
+        "owner": "0.194.1",
         "rationale": "Certificate compression sending requires peer negotiation, current validated artifacts, exact transcript bytes, and fail-closed fallback policy.",
         "sources": ["rfc:8879", "iana:tls-extensiontype-values"],
         "test_target": "tests/surface/certificate_compression.rs#send_integration"
@@ -850,7 +850,7 @@
         "code_target": "crates/brynja-tls/src/configuration.rs#LegacyExtensionConfiguration",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.148.4",
+        "owner": "0.196.4",
         "rationale": "The authenticated legacy RFC 6066 facilities receive complete explicit configuration and protocol implementations.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6066"],
         "test_target": "tests/requirements/rfc6066_configuration.rs#complete_legacy_profiles"
@@ -862,7 +862,7 @@
         "code_target": "crates/brynja-tls/src/extensions.rs",
         "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.61.0",
+        "owner": "0.105.0",
         "rationale": "Unknown ignorable extension values are preserved only where the governing protocol explicitly permits safe ignore.",
         "sources": ["rfc:9846"],
         "test_target": "tests/surface/extensions.rs#unknown_ignorable"
@@ -874,7 +874,7 @@
         "code_target": "crates/brynja-tls/src/raw_public_key.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.137.0",
+        "owner": "0.185.0",
         "rationale": "Raw public keys remain an opt-in authentication profile separate from X.509 trust processing.",
         "sources": ["rfc:7250"],
         "test_target": "tests/surface/raw_public_keys.rs#profile"
@@ -886,7 +886,7 @@
         "code_target": "crates/brynja-tls/src/delegated_credentials.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.144.0",
+        "owner": "0.192.0",
         "rationale": "Delegated credentials require strict lifetime, algorithm, transcript, and certificate binding.",
         "sources": ["rfc:9345"],
         "test_target": "tests/surface/delegated_credentials.rs#profile"
@@ -1054,7 +1054,7 @@
         "code_target": "crates/brynja-crypto/src/rsa.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.42.0",
+        "owner": "0.44.0",
         "rationale": "RSA-PSS verification and bounded RSA arithmetic remain future work before any private operation.",
         "sources": ["rfc:8017"],
         "test_target": "tests/surface/primitives.rs#rsa"
@@ -1078,7 +1078,7 @@
         "code_target": "crates/brynja-crypto/src/ed25519.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.45.0",
+        "owner": "0.47.0",
         "rationale": "Ed25519 remains future strict verification and signing work with canonical encoding checks.",
         "sources": ["rfc:8032", "rfc:8410"],
         "test_target": "tests/surface/primitives.rs#ed25519"
@@ -1090,7 +1090,7 @@
         "code_target": "crates/brynja-crypto/src/ml_kem.rs",
         "disposition": "future-work",
         "domain": "cryptography",
-        "owner": "0.117.0",
+        "owner": "0.161.0",
         "rationale": "ML-KEM remains future first-party key-establishment work subject to FIPS 203 and transition policy.",
         "sources": ["nist:NIST.FIPS.203.pdf", "nist:NIST.SP.800-227.pdf", "rfc:9954"],
         "test_target": "tests/surface/primitives.rs#ml_kem"
@@ -1114,7 +1114,7 @@
         "code_target": "crates/brynja-fips-module/src/entropy.rs",
         "disposition": "future-work",
         "domain": "entropy",
-        "owner": "0.124.0",
+        "owner": "0.168.0",
         "rationale": "FIPS entropy-source admission requires exact construction, operational environment, assessment, health tests, and catastrophic failure handling.",
         "sources": ["nist:NIST.SP.800-90B.pdf"],
         "test_target": "tests/surface/entropy.rs#source_health"
@@ -1126,7 +1126,7 @@
         "code_target": "crates/brynja-fips-module/src/drbg.rs",
         "disposition": "future-work",
         "domain": "entropy",
-        "owner": "0.124.1",
+        "owner": "0.169.0",
         "rationale": "The selected SP 800-90A DRBG requires complete instantiate, generate, reseed, uninstantiate, state-protection, and catastrophic-error behavior.",
         "sources": ["nist:NIST.SP.800-90Ar1.pdf"],
         "test_target": "tests/surface/entropy.rs#drbg"
@@ -1138,7 +1138,7 @@
         "code_target": "crates/brynja-fips-module/src/rbg.rs",
         "disposition": "future-work",
         "domain": "entropy",
-        "owner": "0.124.2",
+        "owner": "0.170.0",
         "rationale": "The selected SP 800-90C RBG construction requires exact source and DRBG topology, reseed chains, health propagation, and service boundaries.",
         "sources": ["nist:NIST.SP.800-90Ar1.pdf", "nist:NIST.SP.800-90B.pdf", "nist:NIST.SP.800-90C.pdf"],
         "test_target": "tests/surface/entropy.rs#rbg_construction"
@@ -1150,8 +1150,8 @@
         "code_target": "crates/brynja-tls13/src/hybrid.rs",
         "disposition": "future-work",
         "domain": "hybrid",
-        "owner": "0.120.0",
-        "rationale": "Final RFC 10024 and final IANA assignments define exactly three ECDHE-ML-KEM groups for planned v0.120.0 implementation; provisional drafts and private values remain forbidden.",
+        "owner": "0.164.0",
+        "rationale": "Final RFC 10024 and final IANA assignments define exactly three ECDHE-ML-KEM groups for planned v0.164.0 implementation; provisional drafts and private values remain forbidden.",
         "sources": ["rfc:9954", "rfc:10024", "iana:tls-parameters"],
         "test_target": "tests/surface/hybrid.rs#standard_groups"
       },
@@ -1162,7 +1162,7 @@
         "code_target": "crates/brynja-legacy-tls11/src/lib.rs",
         "disposition": "legacy-only",
         "domain": "legacy",
-        "owner": "0.180.2",
+        "owner": "0.241.0",
         "rationale": "TLS 1.1 is confined to an independently packaged insecure legacy release line.",
         "sources": ["rfc:4346"],
         "test_target": "tests/surface/legacy.rs#tls11_isolation"
@@ -1174,7 +1174,7 @@
         "code_target": "crates/brynja-legacy-tls10/src/lib.rs",
         "disposition": "legacy-only",
         "domain": "legacy",
-        "owner": "0.180.5",
+        "owner": "0.242.0",
         "rationale": "TLS 1.0 is confined to an independently packaged insecure legacy release line.",
         "sources": ["rfc:2246"],
         "test_target": "tests/surface/legacy.rs#tls10_isolation"
@@ -1186,7 +1186,7 @@
         "code_target": "crates/brynja-legacy-ssl3/src/lib.rs",
         "disposition": "legacy-only",
         "domain": "legacy",
-        "owner": "0.180.11",
+        "owner": "0.244.0",
         "rationale": "SSL 3.0 is confined to an independently packaged insecure legacy release line and remains prohibited by current TLS policy.",
         "sources": ["rfc:6101", "rfc:7568"],
         "test_target": "tests/surface/legacy.rs#ssl3_isolation"
@@ -1198,7 +1198,7 @@
         "code_target": "crates/brynja-legacy-ssl2/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "0.180.14",
+        "owner": "0.245.0",
         "rationale": "SSL 2.0 remains source-blocked before any independent insecure legacy release line can begin.",
         "sources": ["rfc:6176"],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1211,7 +1211,7 @@
         "code_target": "crates/brynja-legacy-wtls/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "0.180.17",
+        "owner": "0.246.0",
         "rationale": "WTLS research and implementation remain blocked until authenticated protocol-source provenance and rights are recorded.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1224,7 +1224,7 @@
         "code_target": "crates/brynja-legacy-pct/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "0.180.20",
+        "owner": "0.247.0",
         "rationale": "PCT remains blocked until authenticated protocol-source provenance and rights are recorded.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1237,7 +1237,7 @@
         "code_target": "crates/brynja-legacy-snp/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "0.180.22",
+        "owner": "0.248.0",
         "rationale": "Secure Network Programming remains blocked until authenticated protocol-source provenance and rights are recorded.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1250,7 +1250,7 @@
         "code_target": "crates/brynja-research-ssl1/src/lib.rs",
         "disposition": "future-work",
         "domain": "legacy",
-        "owner": "0.180.1",
+        "owner": "0.240.0",
         "rationale": "SSL 1 reconstruction research remains source-blocked and can never become a secure or published protocol product.",
         "sources": [],
         "source_blocker": "legacy-non-rfc-sources",
@@ -1265,7 +1265,7 @@
         "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcContentType",
         "disposition": "future-work",
         "domain": "dtls",
-        "owner": "0.111.1",
+        "owner": "0.155.1",
         "rationale": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
         "sources": ["iana:tls-parameters", "rfc:9853"],
         "test_target": "tests/requirements/dtls_routability.rs#reject_rrc_content_type_outside_dtls"
@@ -1282,7 +1282,7 @@
         "code_target": "crates/brynja-dtls-core/src/routability.rs#RrcMessageType",
         "disposition": "future-work",
         "domain": "dtls",
-        "owner": "0.111.1",
+        "owner": "0.155.1",
         "rationale": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
         "sources": ["iana:tls-extensiontype-values", "rfc:9853"],
         "test_target": "tests/requirements/dtls_routability.rs#registry"
@@ -1299,7 +1299,7 @@
         "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
         "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.64.0",
+        "owner": "0.108.0",
         "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
         "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
@@ -1316,7 +1316,7 @@
         "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
         "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.64.0",
+        "owner": "0.108.0",
         "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
         "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
@@ -1333,7 +1333,7 @@
         "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
         "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.64.0",
+        "owner": "0.108.0",
         "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
         "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
@@ -1350,7 +1350,7 @@
         "code_target": "crates/brynja-tls-core/src/extensions.rs#UnsupportedClientHelloExtension",
         "disposition": "safely-ignored",
         "domain": "tls",
-        "owner": "0.64.0",
+        "owner": "0.108.0",
         "rationale": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6066", "rfc:9846"],
         "test_target": "tests/requirements/rfc6066_wire.rs#ignored_client_hello_bodies"
@@ -1367,7 +1367,7 @@
         "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.148.1",
+        "owner": "0.196.1",
         "rationale": "The Heartbeat content type receives complete bounded opt-in TLS and DTLS handling.",
         "sources": ["iana:tls-parameters", "rfc:6520"],
         "test_target": "crates/brynja-protocol/tests/tls_records.rs#heartbeat_and_unknown_content_fail_before_payload_processing"
@@ -1384,7 +1384,7 @@
         "code_target": "crates/brynja-protocol/src/tls/content_type.rs#WirePolicy",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.148.1",
+        "owner": "0.196.1",
         "rationale": "Heartbeat extension negotiation receives complete bounded opt-in TLS and DTLS handling.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6520"],
         "test_target": "crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile"
@@ -1401,7 +1401,7 @@
         "code_target": "crates/brynja-tls/src/extensions.rs",
         "disposition": "caller-owned",
         "domain": "application",
-        "owner": "0.148.0",
+        "owner": "0.196.0",
         "rationale": "Private-use extension values remain explicitly configured and collision-scoped by the caller and never imply public interoperability.",
         "sources": ["iana:tls-extensiontype-values", "rfc:9846"],
         "test_target": "tests/surface/extensions.rs#private_use"
@@ -1418,7 +1418,7 @@
         "code_target": "crates/brynja-tls12/src/extensions.rs",
         "disposition": "future-work",
         "domain": "tls12",
-        "owner": "0.148.2",
+        "owner": "0.196.2",
         "rationale": "The status_request_v2 extension receives a complete separately selected implementation.",
         "sources": ["iana:tls-extensiontype-values", "rfc:6961"],
         "test_target": "tests/surface/status_request_v2.rs#extension"
@@ -1435,7 +1435,7 @@
         "code_target": "crates/brynja-tls13-handshake/src/authentication.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.82.2",
+        "owner": "0.126.2",
         "rationale": "The post_handshake_auth extension receives a complete explicit client and server state machine.",
         "sources": ["iana:tls-extensiontype-values", "rfc:9846"],
         "test_target": "tests/surface/post_handshake_auth.rs#extension"
@@ -1452,7 +1452,7 @@
         "code_target": "crates/brynja-tls/src/certificate_compression.rs",
         "disposition": "future-work",
         "domain": "tls",
-        "owner": "0.146.0",
+        "owner": "0.194.0",
         "rationale": "The compress_certificate extension remains behind bounded caller-provider admission.",
         "sources": ["iana:tls-extensiontype-values", "rfc:8879"],
         "test_target": "tests/surface/certificate_compression.rs#extension"
@@ -1469,7 +1469,7 @@
         "code_target": "crates/brynja-tls13/src/ech.rs",
         "disposition": "future-work",
         "domain": "ech",
-        "owner": "0.140.0",
+        "owner": "0.188.0",
         "rationale": "The encrypted_client_hello extension remains behind the complete ECH policy milestone.",
         "sources": ["iana:tls-extensiontype-values", "rfc:9849"],
         "test_target": "tests/surface/ech.rs#extension"
@@ -1486,7 +1486,7 @@
         "code_target": "crates/brynja-tls13/src/cipher_suite.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.67.0",
+        "owner": "0.111.0",
         "rationale": "TLS_AES_128_GCM_SHA256 is an admitted future TLS 1.3 cipher suite.",
         "sources": ["iana:tls-parameters", "rfc:9846"],
         "test_target": "tests/surface/cipher_suites.rs#aes128_gcm"
@@ -1503,7 +1503,7 @@
         "code_target": "crates/brynja-tls13/src/cipher_suite.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.67.0",
+        "owner": "0.111.0",
         "rationale": "TLS_AES_256_GCM_SHA384 is an admitted future TLS 1.3 cipher suite.",
         "sources": ["iana:tls-parameters", "rfc:9846"],
         "test_target": "tests/surface/cipher_suites.rs#aes256_gcm"
@@ -1520,7 +1520,7 @@
         "code_target": "crates/brynja-tls13/src/cipher_suite.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.67.0",
+        "owner": "0.111.0",
         "rationale": "TLS_CHACHA20_POLY1305_SHA256 is an admitted future TLS 1.3 cipher suite.",
         "sources": ["iana:tls-parameters", "rfc:9846"],
         "test_target": "tests/surface/cipher_suites.rs#chacha20"
@@ -1537,7 +1537,7 @@
         "code_target": "crates/brynja-tls13/src/key_share.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.68.0",
+        "owner": "0.112.0",
         "rationale": "secp256r1 is an admitted future TLS 1.3 key-exchange group.",
         "sources": ["iana:tls-parameters", "rfc:5480"],
         "test_target": "tests/surface/groups.rs#p256"
@@ -1554,7 +1554,7 @@
         "code_target": "crates/brynja-tls13/src/key_share.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.68.0",
+        "owner": "0.112.0",
         "rationale": "secp384r1 is an admitted future TLS 1.3 key-exchange group.",
         "sources": ["iana:tls-parameters", "rfc:5480"],
         "test_target": "tests/surface/groups.rs#p384"
@@ -1571,7 +1571,7 @@
         "code_target": "crates/brynja-tls13/src/key_share.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.68.0",
+        "owner": "0.112.0",
         "rationale": "x25519 is an admitted future TLS 1.3 key-exchange group.",
         "sources": ["iana:tls-parameters", "rfc:7748"],
         "test_target": "tests/surface/groups.rs#x25519"
@@ -1588,7 +1588,7 @@
         "code_target": "crates/brynja-tls13-handshake/src/signature.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.69.0",
+        "owner": "0.114.0",
         "rationale": "ecdsa_secp256r1_sha256 is an admitted future handshake signature scheme.",
         "sources": ["iana:tls-parameters", "rfc:9846"],
         "test_target": "tests/surface/signatures.rs#ecdsa_p256"
@@ -1605,7 +1605,7 @@
         "code_target": "crates/brynja-tls13-handshake/src/signature.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.69.0",
+        "owner": "0.114.0",
         "rationale": "rsa_pss_rsae_sha256 is an admitted future handshake signature scheme.",
         "sources": ["iana:tls-parameters", "rfc:9846"],
         "test_target": "tests/surface/signatures.rs#rsa_pss"
@@ -1622,7 +1622,7 @@
         "code_target": "crates/brynja-tls13-handshake/src/signature.rs",
         "disposition": "future-work",
         "domain": "tls13",
-        "owner": "0.69.0",
+        "owner": "0.114.0",
         "rationale": "ed25519 is an admitted future handshake signature scheme.",
         "sources": ["iana:tls-parameters", "rfc:9846"],
         "test_target": "tests/surface/signatures.rs#ed25519"
@@ -1636,5 +1636,5 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df"
+  "source_ledger_sha256": "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
 }

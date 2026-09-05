@@ -42,7 +42,7 @@ callers with identical destruction guarantees; legacy code does not receive a
 separate weaker sanitizer. Any future need for `brynja-legacy-sanitization`
 requires its own numbered admission review.
 
-Base64 is an encoding boundary, not cryptography. v0.47.1 reviews the latest
+Base64 is an encoding boundary, not cryptography. v0.88.1 reviews the latest
 stable first-party `base64-ng` family and may admit only an exact-pinned,
 default-feature-disabled, allocation-free `no_std` edge with no unsafe, native
 code, build script, or transitive package. `base64-ng-openpgp` is admitted only
@@ -174,7 +174,7 @@ parameterized over limb count, reduced-width exhaustive models that validate
 algorithm and harness structure, and production-width vector or differential
 evidence. Reduced-width evidence never proves production-width equivalence;
 residual width, path, abstraction, and tool gaps remain explicit through the
-v0.155.0 final coverage gate. That gate owns a deterministic machine-readable
+v0.203.0 final coverage gate. That gate owns a deterministic machine-readable
 claim register mapping each primitive and exact implementation symbol to its
 property, supported widths or parameters, verification method, evidence,
 assumptions, and residual gaps; repository checks reject stale or incomplete

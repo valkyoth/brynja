@@ -36,7 +36,7 @@ def main():
         reject(data)
     for family_index, family in enumerate(register["families"]):
         data = copy.deepcopy(register)
-        data["families"][family_index]["requires"] = ["0.285.0"]
+        data["families"][family_index]["requires"] = ["0.355.0"]
         reject(data)
         data = copy.deepcopy(register)
         data["families"][family_index]["milestones"] = [m for m in family["milestones"] if m["stage"] != "portable-acceptance"]

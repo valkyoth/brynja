@@ -60,7 +60,7 @@ code they examine. Each report must name:
 - every residual gap.
 
 Production-width vectors and independent differential tests are evidence, not
-proof of equivalence. v0.155.0 completes the machine-readable claim register
+proof of equivalence. v0.203.0 completes the machine-readable claim register
 and residual-gap audit; it does not retroactively convert bounded models into
 full-width proofs.
 

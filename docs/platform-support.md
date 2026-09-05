@@ -63,7 +63,7 @@ tests, and external audit. Missing capabilities always fail closed.
 
 ## Optional High-Assurance Platform Security
 
-Versions 0.126.1 through 0.126.5 add a separately selected protected-memory
+Versions 0.174.1 through 0.174.5 add a separately selected protected-memory
 layer. `brynja-platform-security` defines an allocation-free `no_std` contract
 for immovable protected regions, control requirements, sealed enforcement
 evidence, and clear-before-release ordering. `brynja-platform-security-std`

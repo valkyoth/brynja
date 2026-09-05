@@ -1,11 +1,11 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df"
+source_ledger_sha256 = "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
 
 [[surface]]
 id = "boundary.quic.encryption-level-ownership"
 requirement_id = "BRY-REQ-QUIC-0094"
-owner = "0.94.0"
+owner = "0.138.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9000", "rfc:9001"]
@@ -16,7 +16,7 @@ rationale = "Brynja consumes ordered CRYPTO bytes and emits secret events while 
 [[surface]]
 id = "state.quic.tls-profile"
 requirement_id = "BRY-REQ-QUIC-0095"
-owner = "0.95.0"
+owner = "0.139.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9001"]
@@ -27,7 +27,7 @@ rationale = "The recordless QUIC profile enforces encryption-level legality, req
 [[surface]]
 id = "boundary.quic.key-derivation"
 requirement_id = "BRY-REQ-QUIC-0096"
-owner = "0.96.0"
+owner = "0.140.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9001", "rfc:9369"]
@@ -38,7 +38,7 @@ rationale = "TLS emits typed traffic secrets and an optional helper derives QUIC
 [[surface]]
 id = "boundary.quic.transport-parameters"
 requirement_id = "BRY-REQ-QUIC-0097"
-owner = "0.97.0"
+owner = "0.141.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9000", "rfc:9001"]
@@ -49,7 +49,7 @@ rationale = "Transport parameters receive bounded syntactic parsing and transcri
 [[surface]]
 id = "state.quic.sans-io-handshake"
 requirement_id = "BRY-REQ-QUIC-0098"
-owner = "0.98.0"
+owner = "0.142.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9001"]
@@ -60,7 +60,7 @@ rationale = "The QUIC handshake has deterministic per-level input, output, alert
 [[surface]]
 id = "state.quic.resumption-lifecycle"
 requirement_id = "BRY-REQ-QUIC-0099"
-owner = "0.99.0"
+owner = "0.143.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9000", "rfc:9001"]
@@ -71,7 +71,7 @@ rationale = "Tickets distinguish TLS completion from QUIC confirmation and bind 
 [[surface]]
 id = "state.quic.zero-rtt"
 requirement_id = "BRY-REQ-QUIC-0991"
-owner = "0.99.1"
+owner = "0.143.1"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9001"]
@@ -82,7 +82,7 @@ rationale = "QUIC zero-RTT enforces its sentinel size, remembered parameters, ap
 [[surface]]
 id = "boundary.quic.crypto-reassembly-helper"
 requirement_id = "BRY-REQ-QUIC-0100"
-owner = "0.100.0"
+owner = "0.144.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9000", "rfc:9001"]
@@ -93,7 +93,7 @@ rationale = "The optional CRYPTO-offset reassembly helper is explicit, bounded, 
 [[surface]]
 id = "state.quic.conformance-audit"
 requirement_id = "BRY-REQ-QUIC-0101"
-owner = "0.101.0"
+owner = "0.145.0"
 domain = "quic"
 disposition = "future-work"
 sources = ["rfc:9000", "rfc:9001", "rfc:9002", "rfc:9369"]

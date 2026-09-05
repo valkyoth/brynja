@@ -9,7 +9,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.130.0"
+        "0.178.0"
       ],
       "sources": [
         "iana.tls-extensiontype-values.alpn-protocol-ids"
@@ -95,14 +95,14 @@
         "work-bound"
       ],
       "owners": [
-        "0.130.0"
+        "0.178.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
         "rfc:7301"
       ],
       "targets": [
-        "boundary:boundary:application.0.130.0"
+        "boundary:boundary:application.0.178.0"
       ],
       "tests": [
         "planned:positive:tests/surface/alpn.rs#opaque_round_trip",
@@ -127,7 +127,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.146.0"
+        "0.194.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -165,7 +165,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.146.0"
+        "0.194.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -289,7 +289,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.0"
+        "0.196.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -327,7 +327,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.2"
+        "0.196.2"
       ],
       "sources": [
         "iana:tls-extensiontype-values"
@@ -688,7 +688,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.42.0"
+        "0.44.0"
       ],
       "sources": [
         "rfc:3279",
@@ -725,7 +725,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.45.0"
+        "0.47.0"
       ],
       "sources": [
         "rfc:8032",
@@ -758,7 +758,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.46.0"
+        "0.51.0"
       ],
       "sources": [
         "rfc:3279"
@@ -936,7 +936,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.59.0"
+        "0.100.0"
       ],
       "sources": [
         "rfc:6962",
@@ -967,7 +967,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.59.0"
+        "0.100.0"
       ],
       "sources": [
         "iana:trans"
@@ -1428,14 +1428,14 @@
         "work-bound"
       ],
       "owners": [
-        "0.140.0"
+        "0.188.0"
       ],
       "sources": [
         "iana:dns-parameters",
         "rfc:9460"
       ],
       "targets": [
-        "boundary:boundary:dns.0.140.0"
+        "boundary:boundary:dns.0.188.0"
       ],
       "tests": [
         "planned:positive:tests/surface/dns_boundary.rs#caller_owned",
@@ -1460,7 +1460,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.102.0"
+        "0.146.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1492,7 +1492,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.103.0"
+        "0.147.0"
       ],
       "sources": [
         "rfc:6347",
@@ -1525,7 +1525,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.104.0"
+        "0.148.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1556,7 +1556,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.105.0"
+        "0.149.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1587,7 +1587,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.106.0"
+        "0.150.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1619,7 +1619,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.107.0"
+        "0.151.0"
       ],
       "sources": [
         "rfc:6347",
@@ -1651,7 +1651,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.108.0"
+        "0.152.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1682,7 +1682,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.109.0"
+        "0.153.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1713,7 +1713,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.110.0"
+        "0.154.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1744,7 +1744,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.111.0"
+        "0.155.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1775,7 +1775,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.112.0"
+        "0.156.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1806,7 +1806,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.113.0"
+        "0.157.0"
       ],
       "sources": [
         "rfc:9147"
@@ -1838,7 +1838,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.114.0"
+        "0.158.0"
       ],
       "sources": [
         "rfc:6347",
@@ -1872,7 +1872,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.115.0"
+        "0.159.0"
       ],
       "sources": [
         "rfc:6347",
@@ -1905,7 +1905,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.116.0"
+        "0.160.0"
       ],
       "sources": [
         "rfc:6347",
@@ -1938,7 +1938,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.111.1"
+        "0.155.1"
       ],
       "sources": [
         "rfc:9853"
@@ -1970,7 +1970,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.140.0"
+        "0.188.0"
       ],
       "sources": [
         "rfc:9460",
@@ -2003,7 +2003,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.141.0"
+        "0.189.0"
       ],
       "sources": [
         "rfc:9180",
@@ -2035,7 +2035,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.142.0"
+        "0.190.0"
       ],
       "sources": [
         "rfc:9180",
@@ -2067,7 +2067,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.143.0"
+        "0.191.0"
       ],
       "sources": [
         "rfc:9848",
@@ -2100,7 +2100,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.140.1"
+        "0.188.1"
       ],
       "sources": [
         "rfc:9460",
@@ -2133,7 +2133,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.140.0"
+        "0.188.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -2181,7 +2181,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.140.0"
+        "0.188.0"
       ],
       "sources": [
         "iana:tls-ech-configuration-extensions",
@@ -2278,7 +2278,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.48.0"
+        "0.89.0"
       ],
       "sources": [
         "rfc:7468"
@@ -2311,7 +2311,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.49.4"
+        "0.90.4"
       ],
       "sources": [
         "rfc:5958",
@@ -2378,7 +2378,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.124.0"
+        "0.168.0"
       ],
       "sources": [
         "nist:NIST.SP.800-90B.pdf"
@@ -2410,7 +2410,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.124.1"
+        "0.169.0"
       ],
       "sources": [
         "nist:NIST.SP.800-90Ar1.pdf"
@@ -2442,7 +2442,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.124.2"
+        "0.170.0"
       ],
       "sources": [
         "nist:NIST.SP.800-90Ar1.pdf",
@@ -2477,7 +2477,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.138.0"
+        "0.186.1"
       ],
       "sources": [
         "iana:hpke",
@@ -2511,7 +2511,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.139.0"
+        "0.187.0"
       ],
       "sources": [
         "iana:hpke",
@@ -2545,7 +2545,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.139.1"
+        "0.187.1"
       ],
       "sources": [
         "iana:hpke",
@@ -2622,7 +2622,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.138.0"
+        "0.186.1"
       ],
       "sources": [
         "iana:hpke",
@@ -2656,7 +2656,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.139.2"
+        "0.187.2"
       ],
       "sources": [
         "rfc:9180"
@@ -2678,7 +2678,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.120.0"
+        "0.164.0"
       ],
       "sources": [
         "rfc:10024#4.2"
@@ -2722,7 +2722,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.130.0"
+        "0.178.0"
       ],
       "sources": [
         "iana.tls-extensiontype-values.alpn-protocol-ids"
@@ -2743,7 +2743,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.148.0"
+        "0.196.0"
       ],
       "sources": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
@@ -2806,7 +2806,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.180.5"
+        "0.242.0"
       ],
       "sources": [
         "rfc:2246#3"
@@ -2836,7 +2836,7 @@
         "algorithm-admission"
       ],
       "owners": [
-        "0.180.2"
+        "0.241.0"
       ],
       "sources": [
         "rfc:4346"
@@ -2868,7 +2868,7 @@
         "algorithm-admission"
       ],
       "owners": [
-        "0.180.11"
+        "0.244.0"
       ],
       "sources": [
         "rfc:6101",
@@ -2899,7 +2899,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.180.14"
+        "0.245.0"
       ],
       "sources": [
         "rfc:6176"
@@ -2927,7 +2927,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.180.17"
+        "0.246.0"
       ],
       "sources": [],
       "targets": [
@@ -2953,7 +2953,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.180.20"
+        "0.247.0"
       ],
       "sources": [],
       "targets": [
@@ -2979,7 +2979,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.180.22"
+        "0.248.0"
       ],
       "sources": [],
       "targets": [
@@ -3064,7 +3064,7 @@
         "algorithm-admission"
       ],
       "owners": [
-        "0.180.1"
+        "0.240.0"
       ],
       "sources": [
         "iana:tls-parameters",
@@ -3095,7 +3095,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.180.1"
+        "0.240.0"
       ],
       "sources": [],
       "targets": [
@@ -3145,7 +3145,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.3"
+        "0.196.3"
       ],
       "sources": [
         "iana:tls-parameters"
@@ -3177,7 +3177,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.58.0"
+        "0.99.0"
       ],
       "sources": [
         "rfc:5754",
@@ -3209,7 +3209,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.58.1"
+        "0.99.1"
       ],
       "sources": [
         "rfc:7633"
@@ -3241,7 +3241,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.58.2"
+        "0.99.2"
       ],
       "sources": [
         "rfc:9919"
@@ -3272,7 +3272,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.58.3"
+        "0.99.3"
       ],
       "sources": [
         "rfc:9919"
@@ -3303,7 +3303,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.148.2"
+        "0.196.2"
       ],
       "sources": [
         "rfc:6961"
@@ -3335,7 +3335,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.136.0"
+        "0.184.0"
       ],
       "sources": [
         "rfc:6066"
@@ -3396,7 +3396,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.136.0"
+        "0.184.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -3428,7 +3428,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.137.0"
+        "0.185.0"
       ],
       "sources": [
         "rfc:7250"
@@ -3459,7 +3459,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.144.0"
+        "0.192.0"
       ],
       "sources": [
         "rfc:9345"
@@ -3490,7 +3490,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.145.0"
+        "0.193.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -3522,7 +3522,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.146.0"
+        "0.194.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -3554,7 +3554,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.146.1"
+        "0.194.1"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -3587,7 +3587,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.50.0"
+        "0.91.0"
       ],
       "sources": [
         "rfc:5280",
@@ -3619,7 +3619,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.51.0"
+        "0.92.0"
       ],
       "sources": [
         "rfc:3986",
@@ -3656,7 +3656,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.52.0"
+        "0.93.0"
       ],
       "sources": [
         "rfc:5280"
@@ -3688,7 +3688,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.53.0"
+        "0.94.0"
       ],
       "sources": [
         "rfc:3279",
@@ -3725,7 +3725,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.54.0"
+        "0.95.0"
       ],
       "sources": [
         "rfc:5280",
@@ -3757,7 +3757,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.55.0"
+        "0.96.0"
       ],
       "sources": [
         "rfc:5280",
@@ -3789,7 +3789,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.56.0"
+        "0.97.0"
       ],
       "sources": [
         "rfc:5280"
@@ -3819,7 +3819,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.57.0"
+        "0.98.0"
       ],
       "sources": [
         "rfc:5280",
@@ -3850,7 +3850,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.57.1"
+        "0.98.1"
       ],
       "sources": [
         "rfc:9608"
@@ -3881,7 +3881,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.60.11"
+        "0.104.0"
       ],
       "sources": [
         "rfc:9925"
@@ -3911,13 +3911,13 @@
         "work-bound"
       ],
       "owners": [
-        "0.53.0"
+        "0.94.0"
       ],
       "sources": [
         "iana:smi-numbers"
       ],
       "targets": [
-        "boundary:boundary:pkix.0.53.0"
+        "boundary:boundary:pkix.0.94.0"
       ],
       "tests": [
         "planned:positive:tests/surface/smi_boundary.rs#caller_owned",
@@ -3943,7 +3943,7 @@
         "side-channel"
       ],
       "owners": [
-        "0.117.0"
+        "0.161.0"
       ],
       "sources": [
         "nist:NIST.FIPS.203.pdf",
@@ -3975,7 +3975,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.60.11"
+        "0.104.0"
       ],
       "sources": [
         "rfc:9935"
@@ -4006,7 +4006,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.94.0"
+        "0.138.0"
       ],
       "sources": [
         "rfc:9000"
@@ -4038,7 +4038,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.94.0"
+        "0.138.0"
       ],
       "sources": [
         "rfc:9000",
@@ -4070,7 +4070,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.95.0"
+        "0.139.0"
       ],
       "sources": [
         "rfc:9001"
@@ -4103,7 +4103,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.96.0"
+        "0.140.0"
       ],
       "sources": [
         "rfc:9001",
@@ -4136,7 +4136,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.97.0"
+        "0.141.0"
       ],
       "sources": [
         "rfc:9000",
@@ -4168,7 +4168,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.98.0"
+        "0.142.0"
       ],
       "sources": [
         "rfc:9001"
@@ -4200,7 +4200,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.99.0"
+        "0.143.0"
       ],
       "sources": [
         "rfc:9000",
@@ -4233,7 +4233,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.100.0"
+        "0.144.0"
       ],
       "sources": [
         "rfc:9000",
@@ -4266,7 +4266,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.101.0"
+        "0.145.0"
       ],
       "sources": [
         "rfc:9000",
@@ -4300,7 +4300,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.99.1"
+        "0.143.1"
       ],
       "sources": [
         "rfc:9001"
@@ -4330,13 +4330,13 @@
         "work-bound"
       ],
       "owners": [
-        "0.94.0"
+        "0.138.0"
       ],
       "sources": [
         "iana:quic"
       ],
       "targets": [
-        "boundary:boundary:quic.0.94.0"
+        "boundary:boundary:quic.0.138.0"
       ],
       "tests": [
         "planned:positive:tests/surface/quic_boundary.rs#caller_owned",
@@ -4361,7 +4361,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.4"
+        "0.196.4"
       ],
       "sources": [
         "iana:tls-extensiontype-values"
@@ -4395,7 +4395,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.64.0"
+        "0.108.0"
       ],
       "sources": [
         "iana:tls-extensiontype-values"
@@ -4432,7 +4432,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.111.1"
+        "0.155.1"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -4464,7 +4464,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.111.1"
+        "0.155.1"
       ],
       "sources": [
         "iana:tls-parameters"
@@ -4602,7 +4602,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.67.0"
+        "0.111.0"
       ],
       "sources": [
         "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
@@ -4623,7 +4623,7 @@
       "evidence": [],
       "invariants": [],
       "owners": [
-        "0.148.1"
+        "0.196.1"
       ],
       "sources": [
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
@@ -4718,7 +4718,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.1"
+        "0.196.1"
       ],
       "sources": [
         "rfc:6520"
@@ -4779,7 +4779,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.68.0"
+        "0.112.0"
       ],
       "sources": [
         "rfc:8996",
@@ -4812,7 +4812,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.79.0"
+        "0.123.0"
       ],
       "sources": [
         "rfc:5705",
@@ -4845,7 +4845,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.92.0"
+        "0.136.0"
       ],
       "sources": [
         "rfc:9325",
@@ -4877,7 +4877,7 @@
         "work-bound"
       ],
       "owners": [
-        "0.93.0"
+        "0.137.0"
       ],
       "sources": [
         "rfc:9325",
@@ -4910,7 +4910,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.83.0"
+        "0.127.0"
       ],
       "sources": [
         "rfc:5246",
@@ -4946,7 +4946,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.84.0"
+        "0.128.0"
       ],
       "sources": [
         "rfc:5246",
@@ -4979,7 +4979,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.85.0"
+        "0.129.0"
       ],
       "sources": [
         "rfc:5246",
@@ -5015,7 +5015,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.86.0"
+        "0.130.0"
       ],
       "sources": [
         "rfc:7627",
@@ -5048,7 +5048,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.87.0"
+        "0.131.0"
       ],
       "sources": [
         "rfc:5746",
@@ -5082,7 +5082,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.88.0"
+        "0.132.0"
       ],
       "sources": [
         "rfc:5246",
@@ -5114,7 +5114,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.89.0"
+        "0.133.0"
       ],
       "sources": [
         "rfc:5288",
@@ -5149,7 +5149,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.90.0"
+        "0.134.0"
       ],
       "sources": [
         "rfc:5077",
@@ -5182,7 +5182,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.91.0"
+        "0.135.0"
       ],
       "sources": [
         "rfc:9325"
@@ -5213,7 +5213,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.83.1"
+        "0.127.1"
       ],
       "sources": [
         "rfc:9155",
@@ -5245,7 +5245,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.83.2"
+        "0.127.2"
       ],
       "sources": [
         "rfc:9851"
@@ -5277,7 +5277,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.2"
+        "0.196.2"
       ],
       "sources": [
         "iana:tls-extensiontype-values",
@@ -5309,7 +5309,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.90.1"
+        "0.134.1"
       ],
       "sources": [
         "rfc:6066",
@@ -5341,7 +5341,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.148.2"
+        "0.196.2"
       ],
       "sources": [
         "rfc:6961"
@@ -5372,7 +5372,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.82.4"
+        "0.126.4"
       ],
       "sources": [
         "rfc:9963"
@@ -5403,7 +5403,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.61.0"
+        "0.105.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5434,7 +5434,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.62.0"
+        "0.106.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5465,7 +5465,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.63.0"
+        "0.107.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5496,7 +5496,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.64.0"
+        "0.108.0"
       ],
       "sources": [
         "rfc:6066",
@@ -5529,7 +5529,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.65.0"
+        "0.109.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5560,7 +5560,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.66.0"
+        "0.110.0"
       ],
       "sources": [
         "rfc:6066",
@@ -5596,7 +5596,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.67.0"
+        "0.111.0"
       ],
       "sources": [
         "rfc:8448",
@@ -5628,7 +5628,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.69.0"
+        "0.114.0"
       ],
       "sources": [
         "rfc:6066",
@@ -5661,7 +5661,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.70.0"
+        "0.113.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5692,7 +5692,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.71.0"
+        "0.115.0"
       ],
       "sources": [
         "rfc:6066",
@@ -5724,7 +5724,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.72.0"
+        "0.116.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5755,7 +5755,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.73.0"
+        "0.117.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5787,7 +5787,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.74.0"
+        "0.118.0"
       ],
       "sources": [
         "rfc:5077",
@@ -5820,7 +5820,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.75.0"
+        "0.119.0"
       ],
       "sources": [
         "rfc:5077",
@@ -5853,7 +5853,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.76.0"
+        "0.120.0"
       ],
       "sources": [
         "rfc:9257",
@@ -5885,7 +5885,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.77.0"
+        "0.121.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5917,7 +5917,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.78.0"
+        "0.122.0"
       ],
       "sources": [
         "rfc:9846"
@@ -5948,7 +5948,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.80.0"
+        "0.124.0"
       ],
       "sources": [
         "rfc:9325",
@@ -5981,7 +5981,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.81.0"
+        "0.125.0"
       ],
       "sources": [
         "rfc:8448",
@@ -6013,7 +6013,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.82.0"
+        "0.126.0"
       ],
       "sources": [
         "rfc:9325",
@@ -6045,7 +6045,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.82.2"
+        "0.126.2"
       ],
       "sources": [
         "rfc:9846"
@@ -6077,7 +6077,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.76.1"
+        "0.120.1"
       ],
       "sources": [
         "rfc:9258"
@@ -6109,7 +6109,7 @@
         "key-lifecycle"
       ],
       "owners": [
-        "0.76.2"
+        "0.120.2"
       ],
       "sources": [
         "rfc:9257"
@@ -6141,7 +6141,7 @@
         "version-separation"
       ],
       "owners": [
-        "0.82.3"
+        "0.126.3"
       ],
       "sources": [
         "rfc:9973"
@@ -9989,183 +9989,314 @@
         "BRY-REQ-TLS-0010"
       ],
       "0.100.0": [
-        "BRY-REQ-QUIC-0100"
-      ],
-      "0.101.0": [
-        "BRY-REQ-QUIC-0101"
-      ],
-      "0.102.0": [
-        "BRY-REQ-DTLS-0102"
-      ],
-      "0.103.0": [
-        "BRY-REQ-DTLS-0103"
+        "BRY-REQ-CT-0001",
+        "BRY-REQ-CTREG-0059"
       ],
       "0.104.0": [
-        "BRY-REQ-DTLS-0104"
+        "BRY-REQ-PKIX-0010",
+        "BRY-REQ-PQPKIX-0046"
       ],
       "0.105.0": [
-        "BRY-REQ-DTLS-0105"
+        "BRY-REQ-TLS13-0061"
       ],
       "0.106.0": [
-        "BRY-REQ-DTLS-0106"
+        "BRY-REQ-TLS13-0062"
       ],
       "0.107.0": [
-        "BRY-REQ-DTLS-0107"
+        "BRY-REQ-TLS13-0063"
       ],
       "0.108.0": [
-        "BRY-REQ-DTLS-0108"
+        "BRY-REQ-RFC6066X-0148",
+        "BRY-REQ-TLS13-0064"
       ],
       "0.109.0": [
-        "BRY-REQ-DTLS-0109"
+        "BRY-REQ-TLS13-0065"
       ],
       "0.110.0": [
-        "BRY-REQ-DTLS-0110"
+        "BRY-REQ-TLS13-0066"
       ],
       "0.111.0": [
-        "BRY-REQ-DTLS-0111"
-      ],
-      "0.111.1": [
-        "BRY-REQ-DTLS-1111",
-        "BRY-REQ-RRCREG-0148",
-        "BRY-REQ-RRCTYPE-0111"
+        "BRY-REQ-TLS-0001",
+        "BRY-REQ-TLS13-0067"
       ],
       "0.112.0": [
-        "BRY-REQ-DTLS-0112"
+        "BRY-REQ-TLS-0068"
       ],
       "0.113.0": [
-        "BRY-REQ-DTLS-0113"
+        "BRY-REQ-TLS13-0070"
       ],
       "0.114.0": [
-        "BRY-REQ-DTLS-0114"
+        "BRY-REQ-TLS13-0069"
       ],
       "0.115.0": [
-        "BRY-REQ-DTLS-0115"
+        "BRY-REQ-TLS13-0071"
       ],
       "0.116.0": [
-        "BRY-REQ-DTLS-0116"
+        "BRY-REQ-TLS13-0072"
       ],
       "0.117.0": [
-        "BRY-REQ-PQ-0117"
+        "BRY-REQ-TLS13-0073"
+      ],
+      "0.118.0": [
+        "BRY-REQ-TLS13-0074"
+      ],
+      "0.119.0": [
+        "BRY-REQ-TLS13-0075"
       ],
       "0.120.0": [
-        "BRY-REQ-HYB-0001"
+        "BRY-REQ-TLS13-0076"
+      ],
+      "0.120.1": [
+        "BRY-REQ-TLS13-0761"
+      ],
+      "0.120.2": [
+        "BRY-REQ-TLS13-0762"
+      ],
+      "0.121.0": [
+        "BRY-REQ-TLS13-0077"
+      ],
+      "0.122.0": [
+        "BRY-REQ-TLS13-0078"
+      ],
+      "0.123.0": [
+        "BRY-REQ-TLS-0079"
       ],
       "0.124.0": [
-        "BRY-REQ-ENTROPY-0124"
+        "BRY-REQ-TLS13-0080"
       ],
-      "0.124.1": [
-        "BRY-REQ-ENTROPY-1241"
+      "0.125.0": [
+        "BRY-REQ-TLS13-0081"
       ],
-      "0.124.2": [
-        "BRY-REQ-ENTROPY-1242"
+      "0.126.0": [
+        "BRY-REQ-TLS13-0082"
+      ],
+      "0.126.2": [
+        "BRY-REQ-TLS13-0721"
+      ],
+      "0.126.3": [
+        "BRY-REQ-TLS13-0763"
+      ],
+      "0.126.4": [
+        "BRY-REQ-TLS13-0046"
+      ],
+      "0.127.0": [
+        "BRY-REQ-TLS12-0083"
+      ],
+      "0.127.1": [
+        "BRY-REQ-TLS12-0831"
+      ],
+      "0.127.2": [
+        "BRY-REQ-TLS12-0832"
+      ],
+      "0.128.0": [
+        "BRY-REQ-TLS12-0084"
+      ],
+      "0.129.0": [
+        "BRY-REQ-TLS12-0085"
       ],
       "0.130.0": [
-        "BRY-REQ-APP-0001",
-        "BRY-REQ-APPLICATION-0130",
-        "BRY-REQ-IANA-0002"
+        "BRY-REQ-TLS12-0086"
+      ],
+      "0.131.0": [
+        "BRY-REQ-TLS12-0087"
+      ],
+      "0.132.0": [
+        "BRY-REQ-TLS12-0088"
+      ],
+      "0.133.0": [
+        "BRY-REQ-TLS12-0089"
+      ],
+      "0.134.0": [
+        "BRY-REQ-TLS12-0090"
+      ],
+      "0.134.1": [
+        "BRY-REQ-TLS12EXT-0901"
+      ],
+      "0.135.0": [
+        "BRY-REQ-TLS12-0091"
       ],
       "0.136.0": [
-        "BRY-REQ-OCSP-0006",
-        "BRY-REQ-OPTIONAL-0136"
+        "BRY-REQ-TLS-0092"
       ],
       "0.137.0": [
-        "BRY-REQ-OPTIONAL-0137"
+        "BRY-REQ-TLS-0093"
       ],
       "0.138.0": [
-        "BRY-REQ-HPKE-0138",
-        "BRY-REQ-HPKEREG-0138"
+        "BRY-REQ-QUIC-0093",
+        "BRY-REQ-QUIC-0094",
+        "BRY-REQ-QUICREG-0094"
       ],
       "0.139.0": [
-        "BRY-REQ-HPKE-0139"
-      ],
-      "0.139.1": [
-        "BRY-REQ-HPKE-1391"
-      ],
-      "0.139.2": [
-        "BRY-REQ-HPKEX-1391"
+        "BRY-REQ-QUIC-0095"
       ],
       "0.14.0": [
         "BRY-REQ-ENTROPY-0014"
       ],
       "0.140.0": [
+        "BRY-REQ-QUIC-0096"
+      ],
+      "0.141.0": [
+        "BRY-REQ-QUIC-0097"
+      ],
+      "0.142.0": [
+        "BRY-REQ-QUIC-0098"
+      ],
+      "0.143.0": [
+        "BRY-REQ-QUIC-0099"
+      ],
+      "0.143.1": [
+        "BRY-REQ-QUIC-0991"
+      ],
+      "0.144.0": [
+        "BRY-REQ-QUIC-0100"
+      ],
+      "0.145.0": [
+        "BRY-REQ-QUIC-0101"
+      ],
+      "0.146.0": [
+        "BRY-REQ-DTLS-0102"
+      ],
+      "0.147.0": [
+        "BRY-REQ-DTLS-0103"
+      ],
+      "0.148.0": [
+        "BRY-REQ-DTLS-0104"
+      ],
+      "0.149.0": [
+        "BRY-REQ-DTLS-0105"
+      ],
+      "0.150.0": [
+        "BRY-REQ-DTLS-0106"
+      ],
+      "0.151.0": [
+        "BRY-REQ-DTLS-0107"
+      ],
+      "0.152.0": [
+        "BRY-REQ-DTLS-0108"
+      ],
+      "0.153.0": [
+        "BRY-REQ-DTLS-0109"
+      ],
+      "0.154.0": [
+        "BRY-REQ-DTLS-0110"
+      ],
+      "0.155.0": [
+        "BRY-REQ-DTLS-0111"
+      ],
+      "0.155.1": [
+        "BRY-REQ-DTLS-1111",
+        "BRY-REQ-RRCREG-0148",
+        "BRY-REQ-RRCTYPE-0111"
+      ],
+      "0.156.0": [
+        "BRY-REQ-DTLS-0112"
+      ],
+      "0.157.0": [
+        "BRY-REQ-DTLS-0113"
+      ],
+      "0.158.0": [
+        "BRY-REQ-DTLS-0114"
+      ],
+      "0.159.0": [
+        "BRY-REQ-DTLS-0115"
+      ],
+      "0.160.0": [
+        "BRY-REQ-DTLS-0116"
+      ],
+      "0.161.0": [
+        "BRY-REQ-PQ-0117"
+      ],
+      "0.164.0": [
+        "BRY-REQ-HYB-0001"
+      ],
+      "0.168.0": [
+        "BRY-REQ-ENTROPY-0124"
+      ],
+      "0.169.0": [
+        "BRY-REQ-ENTROPY-1241"
+      ],
+      "0.170.0": [
+        "BRY-REQ-ENTROPY-1242"
+      ],
+      "0.178.0": [
+        "BRY-REQ-APP-0001",
+        "BRY-REQ-APPLICATION-0130",
+        "BRY-REQ-IANA-0002"
+      ],
+      "0.184.0": [
+        "BRY-REQ-OCSP-0006",
+        "BRY-REQ-OPTIONAL-0136"
+      ],
+      "0.185.0": [
+        "BRY-REQ-OPTIONAL-0137"
+      ],
+      "0.186.1": [
+        "BRY-REQ-HPKE-0138",
+        "BRY-REQ-HPKEREG-0138"
+      ],
+      "0.187.0": [
+        "BRY-REQ-HPKE-0139"
+      ],
+      "0.187.1": [
+        "BRY-REQ-HPKE-1391"
+      ],
+      "0.187.2": [
+        "BRY-REQ-HPKEX-1391"
+      ],
+      "0.188.0": [
         "BRY-REQ-DNS-0140",
         "BRY-REQ-ECH-0140",
         "BRY-REQ-ECHEXT-0140",
         "BRY-REQ-ECHREG-0140"
       ],
-      "0.140.1": [
+      "0.188.1": [
         "BRY-REQ-ECH-1401"
       ],
-      "0.141.0": [
+      "0.189.0": [
         "BRY-REQ-ECH-0141"
       ],
-      "0.142.0": [
+      "0.19.0": [
+        "BRY-REQ-TLS-0019"
+      ],
+      "0.190.0": [
         "BRY-REQ-ECH-0142"
       ],
-      "0.143.0": [
+      "0.191.0": [
         "BRY-REQ-ECH-0143"
       ],
-      "0.144.0": [
+      "0.192.0": [
         "BRY-REQ-OPTIONAL-0144"
       ],
-      "0.145.0": [
+      "0.193.0": [
         "BRY-REQ-OPTIONAL-0145"
       ],
-      "0.146.0": [
+      "0.194.0": [
         "BRY-REQ-CERTEXT-0146",
         "BRY-REQ-CERTREG-0146",
         "BRY-REQ-OPTIONAL-0146"
       ],
-      "0.146.1": [
+      "0.194.1": [
         "BRY-REQ-OPTIONAL-1461"
       ],
-      "0.148.0": [
+      "0.196.0": [
         "BRY-REQ-COMPOSE-0148",
         "BRY-REQ-IANA-0003"
       ],
-      "0.148.1": [
+      "0.196.1": [
         "BRY-REQ-TLS-0002",
         "BRY-REQ-TLS-0018"
       ],
-      "0.148.2": [
+      "0.196.2": [
         "BRY-REQ-COMPOSEX-0148",
         "BRY-REQ-OCSP-0005",
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
       ],
-      "0.148.3": [
+      "0.196.3": [
         "BRY-REQ-LEGACYTLSFACREG-0148"
       ],
-      "0.148.4": [
+      "0.196.4": [
         "BRY-REQ-RFC6066CFG-0148"
-      ],
-      "0.180.1": [
-        "BRY-REQ-LEGACY-0800",
-        "BRY-REQ-LEGACYSSL1-0800"
-      ],
-      "0.180.11": [
-        "BRY-REQ-LEGACY-0300"
-      ],
-      "0.180.14": [
-        "BRY-REQ-LEGACY-0400"
-      ],
-      "0.180.17": [
-        "BRY-REQ-LEGACY-0500"
-      ],
-      "0.180.2": [
-        "BRY-REQ-LEGACY-0100"
-      ],
-      "0.180.20": [
-        "BRY-REQ-LEGACY-0600"
-      ],
-      "0.180.22": [
-        "BRY-REQ-LEGACY-0700"
-      ],
-      "0.180.5": [
-        "BRY-REQ-LEG-0001"
-      ],
-      "0.19.0": [
-        "BRY-REQ-TLS-0019"
       ],
       "0.20.0": [
         "BRY-REQ-ENC-0001"
@@ -10190,6 +10321,31 @@
       ],
       "0.24.2": [
         "BRY-REQ-CRYPTO-0002"
+      ],
+      "0.240.0": [
+        "BRY-REQ-LEGACY-0800",
+        "BRY-REQ-LEGACYSSL1-0800"
+      ],
+      "0.241.0": [
+        "BRY-REQ-LEGACY-0100"
+      ],
+      "0.242.0": [
+        "BRY-REQ-LEG-0001"
+      ],
+      "0.244.0": [
+        "BRY-REQ-LEGACY-0300"
+      ],
+      "0.245.0": [
+        "BRY-REQ-LEGACY-0400"
+      ],
+      "0.246.0": [
+        "BRY-REQ-LEGACY-0500"
+      ],
+      "0.247.0": [
+        "BRY-REQ-LEGACY-0600"
+      ],
+      "0.248.0": [
+        "BRY-REQ-LEGACY-0700"
       ],
       "0.25.0": [
         "BRY-REQ-CRYPTO-0003"
@@ -10224,219 +10380,63 @@
       "0.33.0": [
         "BRY-REQ-CRYPTO-0010"
       ],
-      "0.42.0": [
+      "0.44.0": [
         "BRY-REQ-CRYPTO-0011"
       ],
-      "0.45.0": [
+      "0.47.0": [
         "BRY-REQ-CRYPTO-0012"
-      ],
-      "0.46.0": [
-        "BRY-REQ-CRYPTO-0013"
-      ],
-      "0.48.0": [
-        "BRY-REQ-ENC-0003"
-      ],
-      "0.49.4": [
-        "BRY-REQ-ENC-0004"
       ],
       "0.5.0": [
         "BRY-REQ-TLS-0005"
       ],
-      "0.50.0": [
+      "0.51.0": [
+        "BRY-REQ-CRYPTO-0013"
+      ],
+      "0.89.0": [
+        "BRY-REQ-ENC-0003"
+      ],
+      "0.90.4": [
+        "BRY-REQ-ENC-0004"
+      ],
+      "0.91.0": [
         "BRY-REQ-PKIX-0001"
       ],
-      "0.51.0": [
+      "0.92.0": [
         "BRY-REQ-PKIX-0002"
       ],
-      "0.52.0": [
+      "0.93.0": [
         "BRY-REQ-PKIX-0003"
       ],
-      "0.53.0": [
+      "0.94.0": [
         "BRY-REQ-PKIX-0004",
         "BRY-REQ-PKIXREG-0053"
       ],
-      "0.54.0": [
+      "0.95.0": [
         "BRY-REQ-PKIX-0005"
       ],
-      "0.55.0": [
+      "0.96.0": [
         "BRY-REQ-PKIX-0006"
       ],
-      "0.56.0": [
+      "0.97.0": [
         "BRY-REQ-PKIX-0007"
       ],
-      "0.57.0": [
+      "0.98.0": [
         "BRY-REQ-PKIX-0008"
       ],
-      "0.57.1": [
+      "0.98.1": [
         "BRY-REQ-PKIX-0009"
       ],
-      "0.58.0": [
+      "0.99.0": [
         "BRY-REQ-OCSP-0001"
       ],
-      "0.58.1": [
+      "0.99.1": [
         "BRY-REQ-OCSP-0002"
       ],
-      "0.58.2": [
+      "0.99.2": [
         "BRY-REQ-OCSP-0003"
       ],
-      "0.58.3": [
+      "0.99.3": [
         "BRY-REQ-OCSP-0004"
-      ],
-      "0.59.0": [
-        "BRY-REQ-CT-0001",
-        "BRY-REQ-CTREG-0059"
-      ],
-      "0.60.11": [
-        "BRY-REQ-PKIX-0010",
-        "BRY-REQ-PQPKIX-0046"
-      ],
-      "0.61.0": [
-        "BRY-REQ-TLS13-0061"
-      ],
-      "0.62.0": [
-        "BRY-REQ-TLS13-0062"
-      ],
-      "0.63.0": [
-        "BRY-REQ-TLS13-0063"
-      ],
-      "0.64.0": [
-        "BRY-REQ-RFC6066X-0148",
-        "BRY-REQ-TLS13-0064"
-      ],
-      "0.65.0": [
-        "BRY-REQ-TLS13-0065"
-      ],
-      "0.66.0": [
-        "BRY-REQ-TLS13-0066"
-      ],
-      "0.67.0": [
-        "BRY-REQ-TLS-0001",
-        "BRY-REQ-TLS13-0067"
-      ],
-      "0.68.0": [
-        "BRY-REQ-TLS-0068"
-      ],
-      "0.69.0": [
-        "BRY-REQ-TLS13-0069"
-      ],
-      "0.70.0": [
-        "BRY-REQ-TLS13-0070"
-      ],
-      "0.71.0": [
-        "BRY-REQ-TLS13-0071"
-      ],
-      "0.72.0": [
-        "BRY-REQ-TLS13-0072"
-      ],
-      "0.73.0": [
-        "BRY-REQ-TLS13-0073"
-      ],
-      "0.74.0": [
-        "BRY-REQ-TLS13-0074"
-      ],
-      "0.75.0": [
-        "BRY-REQ-TLS13-0075"
-      ],
-      "0.76.0": [
-        "BRY-REQ-TLS13-0076"
-      ],
-      "0.76.1": [
-        "BRY-REQ-TLS13-0761"
-      ],
-      "0.76.2": [
-        "BRY-REQ-TLS13-0762"
-      ],
-      "0.77.0": [
-        "BRY-REQ-TLS13-0077"
-      ],
-      "0.78.0": [
-        "BRY-REQ-TLS13-0078"
-      ],
-      "0.79.0": [
-        "BRY-REQ-TLS-0079"
-      ],
-      "0.80.0": [
-        "BRY-REQ-TLS13-0080"
-      ],
-      "0.81.0": [
-        "BRY-REQ-TLS13-0081"
-      ],
-      "0.82.0": [
-        "BRY-REQ-TLS13-0082"
-      ],
-      "0.82.2": [
-        "BRY-REQ-TLS13-0721"
-      ],
-      "0.82.3": [
-        "BRY-REQ-TLS13-0763"
-      ],
-      "0.82.4": [
-        "BRY-REQ-TLS13-0046"
-      ],
-      "0.83.0": [
-        "BRY-REQ-TLS12-0083"
-      ],
-      "0.83.1": [
-        "BRY-REQ-TLS12-0831"
-      ],
-      "0.83.2": [
-        "BRY-REQ-TLS12-0832"
-      ],
-      "0.84.0": [
-        "BRY-REQ-TLS12-0084"
-      ],
-      "0.85.0": [
-        "BRY-REQ-TLS12-0085"
-      ],
-      "0.86.0": [
-        "BRY-REQ-TLS12-0086"
-      ],
-      "0.87.0": [
-        "BRY-REQ-TLS12-0087"
-      ],
-      "0.88.0": [
-        "BRY-REQ-TLS12-0088"
-      ],
-      "0.89.0": [
-        "BRY-REQ-TLS12-0089"
-      ],
-      "0.90.0": [
-        "BRY-REQ-TLS12-0090"
-      ],
-      "0.90.1": [
-        "BRY-REQ-TLS12EXT-0901"
-      ],
-      "0.91.0": [
-        "BRY-REQ-TLS12-0091"
-      ],
-      "0.92.0": [
-        "BRY-REQ-TLS-0092"
-      ],
-      "0.93.0": [
-        "BRY-REQ-TLS-0093"
-      ],
-      "0.94.0": [
-        "BRY-REQ-QUIC-0093",
-        "BRY-REQ-QUIC-0094",
-        "BRY-REQ-QUICREG-0094"
-      ],
-      "0.95.0": [
-        "BRY-REQ-QUIC-0095"
-      ],
-      "0.96.0": [
-        "BRY-REQ-QUIC-0096"
-      ],
-      "0.97.0": [
-        "BRY-REQ-QUIC-0097"
-      ],
-      "0.98.0": [
-        "BRY-REQ-QUIC-0098"
-      ],
-      "0.99.0": [
-        "BRY-REQ-QUIC-0099"
-      ],
-      "0.99.1": [
-        "BRY-REQ-QUIC-0991"
       ]
     },
     "sources": {
@@ -11083,10 +11083,10 @@
       "boundary:boundary:application-alpn-semantics": [
         "BRY-REQ-APP-0001"
       ],
-      "boundary:boundary:application.0.130.0": [
+      "boundary:boundary:application.0.178.0": [
         "BRY-REQ-APPLICATION-0130"
       ],
-      "boundary:boundary:dns.0.140.0": [
+      "boundary:boundary:dns.0.188.0": [
         "BRY-REQ-DNS-0140"
       ],
       "boundary:boundary:iana-designated-expert": [
@@ -11096,7 +11096,7 @@
         "BRY-REQ-KEYLOGREG-0010",
         "BRY-REQ-OPERATIONS-0010"
       ],
-      "boundary:boundary:pkix.0.53.0": [
+      "boundary:boundary:pkix.0.94.0": [
         "BRY-REQ-PKIXREG-0053"
       ],
       "boundary:boundary:private-use-codepoints": [
@@ -11105,7 +11105,7 @@
       "boundary:boundary:quic-transport-owned": [
         "BRY-REQ-QUIC-0093"
       ],
-      "boundary:boundary:quic.0.94.0": [
+      "boundary:boundary:quic.0.138.0": [
         "BRY-REQ-QUICREG-0094"
       ],
       "legacy-boundary:crates/brynja-legacy-ssl3/src/lib.rs": [

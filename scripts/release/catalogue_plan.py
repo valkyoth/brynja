@@ -10,10 +10,10 @@ MIGRATED_MAPPING_SHA256 = "24caacccbd46be819911f127d709225d9d1a4d546216f8bc8b95b
 DOMAINS = {"utility", "research-utility", "crypto", "research", "legacy",
            "mac", "mac-legacy", "password", "field", "perceptual", "source-research"}
 PREREQUISITES = {
-    "Skein": "0.182.4", "MDC": "0.46.18", "scrypt": "0.46.64",
-    "EksBlowfish and bcrypt": "0.46.28", "Poly1305-AES": "0.31.3",
-    "CMAC extension profiles": "0.167.7", "HMAC catalogue adapters": "0.25.2",
-    "UMAC": "0.27.4", "VMAC": "0.27.4", "PMAC": "0.27.4",
+    "Skein": "0.251.4", "MDC": "0.59.2", "scrypt": "0.77.3",
+    "EksBlowfish and bcrypt": "0.66.1", "Poly1305-AES": "0.31.3",
+    "CMAC extension profiles": "0.217.1", "HMAC catalogue adapters": "0.25.2",
+    "UMAC": "0.27.5", "VMAC": "0.27.5", "PMAC": "0.27.5",
 }
 FAMILY_EDGES = {"BLAKE2 tree profiles": "BLAKE2s", "BLAKE2X": "BLAKE2s",
                 "KangarooTwelve": "TurboSHAKE", "scrypt": "Salsa20 core for scrypt",
@@ -51,7 +51,7 @@ def validate(entries, register=None):
         raise ValueError("catalogue reuse points to absent implementation")
     if data["reuse"]["SHA-512/t"] != "0.23.2":
         raise ValueError("SHA-512/t reuse must point to IV-generation closure")
-    if data["lifecycle_versions"] != ["0.181.4", "0.278.1"]:
+    if data["lifecycle_versions"] != ["0.250.4", "0.348.1"]:
         raise ValueError("catalogue standards update closure drift")
     if not data["post_1_0_exception"].startswith("RISC-V native/community qualification only;"):
         raise ValueError("catalogue silently deferred non-RISC-V scope")
@@ -96,7 +96,7 @@ def validate(entries, register=None):
         predecessor = FAMILY_EDGES.get(family["name"])
         if predecessor and families[predecessor]["milestones"][-1]["version"] not in family["requires"]:
             raise ValueError("catalogue lost its accepted family prerequisite")
-        if actual[-1] >= positions.get("0.276.0", -1):
+        if actual[-1] >= positions.get("0.346.0", -1):
             raise ValueError("catalogue implementation follows integrated closure")
         admission_scope = scopes[milestones[0]["version"]][1]
         if "freeze every " + "; ".join(family["variants"]) + " profile" not in admission_scope:
@@ -108,16 +108,16 @@ def validate(entries, register=None):
     record_versions = [r["version"] for r in records]
     if len(record_versions) != len(set(record_versions)):
         raise ValueError("duplicate catalogue milestone ownership")
-    expected = {v for v in positions if v.startswith("0.") and 181 <= int(v.split(".")[1]) <= 280}
+    expected = {v for v in positions if v.startswith("0.") and 250 <= int(v.split(".")[1]) <= 350}
     if set(record_versions) != expected:
         raise ValueError("catalogue spine has missing or unowned milestones")
     for record in records:
         title, scope = scopes.get(record["version"], (None, ""))
         if title != record["title"] or hashlib.sha256(scope.encode()).hexdigest() != record["scope_sha256"]:
             raise ValueError("catalogue plan scope differs from reviewed API register")
-    for a, b in (("0.278.1", "0.281.0"), ("0.280.0", "0.281.0"),
-                 ("0.281.1", "0.282.0"), ("0.282.0", "0.283.0"),
-                 ("0.283.0", "0.284.0"), ("0.284.0", "0.285.0"),
-                 ("0.285.0", "1.0.0-rc.1")):
+    for a, b in (("0.348.1", "0.351.0"), ("0.350.0", "0.351.0"),
+                 ("0.351.1", "0.352.0"), ("0.352.0", "0.353.0"),
+                 ("0.353.0", "0.354.0"), ("0.354.0", "0.355.0"),
+                 ("0.355.0", "1.0.0-rc.1")):
         if a not in positions or b not in positions or positions[a] >= positions[b]:
             raise ValueError("final production gate precedes expanded scope")

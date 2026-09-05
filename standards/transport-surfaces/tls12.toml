@@ -1,11 +1,11 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df"
+source_ledger_sha256 = "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
 
 [[surface]]
 id = "state.tls12.engine-policy"
 requirement_id = "BRY-REQ-TLS12-0083"
-owner = "0.83.0"
+owner = "0.127.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:5246", "rfc:6176", "rfc:7465", "rfc:7919", "rfc:9325"]
@@ -16,7 +16,7 @@ rationale = "TLS 1.2 remains an isolated ECDHE-plus-AEAD engine that excludes ob
 [[surface]]
 id = "state.tls12.deprecation-closure"
 requirement_id = "BRY-REQ-TLS12-0831"
-owner = "0.83.1"
+owner = "0.127.1"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:9155", "rfc:10015"]
@@ -27,7 +27,7 @@ rationale = "TLS and DTLS 1.2 never offer or select deprecated hashes, key excha
 [[surface]]
 id = "state.tls12.feature-freeze"
 requirement_id = "BRY-REQ-TLS12-0832"
-owner = "0.83.2"
+owner = "0.127.2"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:9851"]
@@ -38,7 +38,7 @@ rationale = "TLS 1.2 additions after the feature freeze fail closed except the e
 [[surface]]
 id = "state.tls12.prf-key-block"
 requirement_id = "BRY-REQ-TLS12-0084"
-owner = "0.84.0"
+owner = "0.128.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:5246", "rfc:7627"]
@@ -49,7 +49,7 @@ rationale = "The TLS 1.2 PRF and key block enforce Extended Main Secret inputs, 
 [[surface]]
 id = "state.tls12.record-protection"
 requirement_id = "BRY-REQ-TLS12-0085"
-owner = "0.85.0"
+owner = "0.129.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:5246", "rfc:5288", "rfc:5289", "rfc:7905"]
@@ -60,7 +60,7 @@ rationale = "TLS 1.2 AEAD records enforce nonce, additional-data, sequence, reco
 [[surface]]
 id = "state.tls12.extended-main-secret"
 requirement_id = "BRY-REQ-TLS12-0086"
-owner = "0.86.0"
+owner = "0.130.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:7627", "rfc:9846"]
@@ -71,7 +71,7 @@ rationale = "Extended Main Secret is mandatory and binds the correct session has
 [[surface]]
 id = "state.tls12.signaling-renegotiation"
 requirement_id = "BRY-REQ-TLS12-0087"
-owner = "0.87.0"
+owner = "0.131.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:5746", "rfc:7507", "rfc:7627", "rfc:9846"]
@@ -82,7 +82,7 @@ rationale = "Initial signaling cipher values and downgrade sentinels are context
 [[surface]]
 id = "state.tls12.ecdhe-handshake"
 requirement_id = "BRY-REQ-TLS12-0088"
-owner = "0.88.0"
+owner = "0.132.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:5246", "rfc:8422"]
@@ -93,7 +93,7 @@ rationale = "ECDHE ECDSA and RSA client and server handshakes are isolated, boun
 [[surface]]
 id = "state.tls12.suite-profile"
 requirement_id = "BRY-REQ-TLS12-0089"
-owner = "0.89.0"
+owner = "0.133.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:5288", "rfc:5289", "rfc:7905", "rfc:9325"]
@@ -104,7 +104,7 @@ rationale = "The hardened TLS 1.2 profile admits exactly six reviewed ECDHE and 
 [[surface]]
 id = "state.tls12.resumption-interoperability"
 requirement_id = "BRY-REQ-TLS12-0090"
-owner = "0.90.0"
+owner = "0.134.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:5077", "rfc:5246", "rfc:9325"]
@@ -115,7 +115,7 @@ rationale = "TLS 1.2 resumption binds protocol-specific ticket state, extension 
 [[surface]]
 id = "state.tls12.rfc6066-extensions"
 requirement_id = "BRY-REQ-TLS12EXT-0901"
-owner = "0.90.1"
+owner = "0.134.1"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:6066", "rfc:9846"]
@@ -126,7 +126,7 @@ rationale = "TLS 1.2 owns version-specific SNI resumption binding, status_reques
 [[surface]]
 id = "state.tls12.audit-gate"
 requirement_id = "BRY-REQ-TLS12-0091"
-owner = "0.91.0"
+owner = "0.135.0"
 domain = "tls12"
 disposition = "future-work"
 sources = ["rfc:9325"]
@@ -137,7 +137,7 @@ rationale = "TLS 1.2 retains independent disablement and cannot pass its milesto
 [[surface]]
 id = "state.tls.one-pass-router"
 requirement_id = "BRY-REQ-TLS-0092"
-owner = "0.92.0"
+owner = "0.136.0"
 domain = "tls"
 disposition = "future-work"
 sources = ["rfc:9325", "rfc:9846", "rfc:9852"]
@@ -148,7 +148,7 @@ rationale = "The evergreen router selects one highest acceptable engine once and
 [[surface]]
 id = "state.tls.routing-audit-gate"
 requirement_id = "BRY-REQ-TLS-0093"
-owner = "0.93.0"
+owner = "0.137.0"
 domain = "tls"
 disposition = "future-work"
 sources = ["rfc:9325", "rfc:9846"]

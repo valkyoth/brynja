@@ -38,7 +38,7 @@ def validate(surfaces: list[dict]) -> None:
         surface = by_id[identifier]
         if (
             surface["domain"] != "dtls"
-            or surface["owner"] != "0.111.1"
+            or surface["owner"] != "0.155.1"
             or not surface["code_target"].startswith(
                 "crates/brynja-dtls-core/src/"
             )
@@ -66,7 +66,7 @@ def validate(surfaces: list[dict]) -> None:
         surface = by_id[identifier]
         if (
             surface["domain"] != "tls"
-            or surface["owner"] != "0.64.0"
+            or surface["owner"] != "0.108.0"
             or surface["disposition"] != "safely-ignored"
             or surface["code_target"]
             != "crates/brynja-tls-core/src/extensions.rs#"
@@ -80,7 +80,7 @@ def validate(surfaces: list[dict]) -> None:
     if (
         configuration is None
         or configuration["domain"] != "tls"
-        or configuration["owner"] != "0.148.4"
+        or configuration["owner"] != "0.196.4"
         or configuration["disposition"] != "future-work"
         or configuration["code_target"]
         != "crates/brynja-tls/src/configuration.rs#"

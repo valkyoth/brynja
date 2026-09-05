@@ -7,6 +7,7 @@ import copy
 import importlib.util
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -168,6 +169,29 @@ def main() -> int:
     count = support.run_tests(globals())
     print(f"{count} transport-requirement tests passed")
     return 0
+
+
+def test_unbound_requirement_revision_is_preserved() -> None:
+    ledger, register, versions = inputs()
+    requirements, _coverage, _digest = transport.build(ledger, register, versions)
+    item = next(r for r in requirements if r["id"] == "BRY-REQ-TLS12-0832")
+    assert item["revision"] == 2
+
+
+def test_section_revision_rejects_unknown_requirement() -> None:
+    ledger, register, versions = inputs()
+    policy = transport.sections.read_policy(transport.CONFIG.section_policy)
+    policy["revisions"]["BRY-REQ-UNKNOWN-9999"] = 1
+    with patch.object(transport.sections, "read_policy", return_value=policy):
+        assert_fails("revision set is incomplete", transport.build, ledger, register, versions)
+
+
+def test_section_revision_cannot_omit_bound_requirement() -> None:
+    ledger, register, versions = inputs()
+    policy = transport.sections.read_policy(transport.CONFIG.section_policy)
+    del policy["revisions"]["BRY-REQ-DTLS-0114"]
+    with patch.object(transport.sections, "read_policy", return_value=policy):
+        assert_fails("revision set is incomplete", transport.build, ledger, register, versions)
 
 
 if __name__ == "__main__":

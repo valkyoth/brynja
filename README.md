@@ -160,7 +160,7 @@ exhaustive packet/subpacket dispositions, and downstream fixtures proving that
 public Brynja APIs are sufficient to build an OpenPGP protocol client. UI,
 storage, networking, key discovery, identity trust, and PGP/MIME remain
 application-owned. OpenPGP is outside the FIPS validated-module plan. Base64 is the one encoding algorithm Brynja does not
-plan to duplicate: v0.47.1 will audit the latest stable first-party
+plan to duplicate: v0.88.1 will audit the latest stable first-party
 `base64-ng` family and admit only an exact-pinned, allocation-free `no_std`
 edge suitable for PEM and OpenPGP armor.
 
@@ -557,12 +557,12 @@ certificate, independent verification, or FIPS validation.
 The public `FipsSelfTestRunner` trait is a trusted architecture seam, not
 self-test evidence: application code can implement it, and its success grants
 no provider execution or approved status. Before either becomes possible,
-v0.125.0 and v0.127.0 require an opaque module-owned attestation that only the
+v0.173.0 and v0.175.1 require an opaque module-owned attestation that only the
 complete final-image integrity and pre-operational self-tests can issue.
 
 Permanent failure is currently caller-session-scoped. That has no executable
 bypass today because every service is non-approved and no provider effect
-exists. Before executable or approved FIPS services exist, v0.127.1 must make
+exists. Before executable or approved FIPS services exist, v0.175.0 must make
 the irreversible failure latch module-wide so a fresh sibling session cannot
 reset or bypass it.
 
@@ -985,7 +985,7 @@ selected set in dependency order and publishes the facade last.
 - Unreviewed runtime and build dependencies are forbidden in the core
   workspace. The only planned core encoding exception is an exact-pinned,
   default-feature-disabled `base64-ng` edge confined to bounded Base64, PEM,
-  and OpenPGP armor after its v0.47.1 admission review; it never implements
+  and OpenPGP armor after its v0.88.1 admission review; it never implements
   cryptography or enters `brynja-fips-module`. Future
   separately selected `brynja-rustls` and `brynja-tokio` companion adapters may
   depend only on the exact pure-Rust ecosystem API they implement, in separate
@@ -1074,18 +1074,18 @@ selected set in dependency order and publishes the facade last.
 | `brynja-tls12` | Version-specific explicitly hardened TLS 1.2 engine | Foundation only |
 | `brynja-quic-tls` | QUIC/TLS handshake integration | Foundation only |
 | `brynja-dtls` | Modern DTLS engines | Foundation only |
-| Future `brynja-openpgp-core` | RFC 9580 packet, registry, resource, certificate, and key models | Planned from v0.163.0 |
-| Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.165.0 |
-| Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.180.0 |
+| Future `brynja-openpgp-core` | RFC 9580 packet, registry, resource, certificate, and key models | Planned from v0.211.0 |
+| Future `brynja-openpgp-armor` | Allocation-free ASCII Armor over the admitted Base64 boundary | Planned from v0.213.0 |
+| Future `brynja-openpgp` | Modern RFC 9580 Sans-I/O facade and operation engines | Planned through v0.239.0 |
 | Future `brynja-openpgp-legacy` | Complete deprecated-algorithm and historical-key compatibility with no modern facade edge | Required before 1.0 and separately isolated |
-| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Portable implementation at v0.24.18, frozen acceptance at v0.24.20, SHA-instruction acceleration at v0.24.21, and final cross-backend closure at v0.24.23; OpenPGP consumers receive separate reviews at v0.169.2, v0.169.3, v0.169.5, and v0.171.2 |
+| Future `brynja-legacy-sha1` | Complete streaming and fixed-message SHA-1 with legacy warnings | Portable implementation at v0.24.18, frozen acceptance at v0.24.20, SHA-instruction acceleration at v0.24.21, and final cross-backend closure at v0.24.23; OpenPGP consumers receive separate reviews at v0.225.1, v0.225.2, v0.226.0, and v0.230.2 |
 | Future `brynja-legacy-md5` | Complete streaming and fixed-message MD5 with legacy warnings | Portable implementation at v0.24.19, frozen acceptance at v0.24.20, multi-buffer SIMD at v0.24.22, and final cross-backend closure at v0.24.23 solely before isolated HMAC-MD5 compatibility |
 | `brynja-platform` | Explicit entropy, time, storage, and I/O integration | Foundation only |
-| Future `brynja-platform-security` | Optional `no_std` protected-region contract and typed enforcement evidence | Planned at v0.126.1; never performs hidden OS effects |
-| Future `brynja-platform-security-std` | Optional Linux, Android, Windows, macOS, iOS, and BSD protected-memory providers | Planned at v0.126.2-v0.126.5; outside every default graph |
+| Future `brynja-platform-security` | Optional `no_std` protected-region contract and typed enforcement evidence | Planned at v0.174.1; never performs hidden OS effects |
+| Future `brynja-platform-security-std` | Optional Linux, Android, Windows, macOS, iOS, and BSD protected-memory providers | Planned at v0.174.2-v0.174.5; outside every default graph |
 | `brynja-sanitization` | Optional protocol-neutral first-party sanitization adapter | v0.1.1 published; current source exact-pins `sanitization 2.0.4`; absent from facade and FIPS graphs |
 | `brynja-legacy` | Opt-in legacy facade; no default features | Boundary only |
-| `brynja-legacy-*` engines | Complete TLS 1.2/1.1/1.0, DTLS 1.2/1.0, SSL, WTLS, PCT, and SNP compatibility with independent package policy | Boundaries exist; complete v0.180.1-v0.180.24 implementation chains are required before 1.0 |
+| `brynja-legacy-*` engines | Complete TLS 1.2/1.1/1.0, DTLS 1.2/1.0, SSL, WTLS, PCT, and SNP compatibility with independent package policy | Boundaries exist; complete v0.240.0-v0.249.0 implementation chains are required before 1.0 |
 | `brynja-test-support` | RFC 9850 key-log encoder plus deterministic random and clock fixtures | Implemented, unpublished, production-unreachable; never a randomness or production time source |
 | Other repository-only crates | Tests, interop, tasks, and proof harnesses | Unpublished |
 
@@ -1101,7 +1101,7 @@ macOS, Android, and iOS, and to run host tests on Linux, Windows, and macOS.
 Aesynx is a planned portability target: no API may assume a current operating
 system, allocator, socket type, filesystem, clock, or platform RNG.
 
-The future v0.126.1-v0.126.5 high-assurance layer is explicitly opt-in. It can
+The future v0.174.1-v0.174.5 high-assurance layer is explicitly opt-in. It can
 require protected pages and verify supported process controls, but it cannot
 guarantee erasure of registers, caches, caller-owned copies, dumps, swap,
 hibernation, DMA-visible memory, forced termination, or physical media unless

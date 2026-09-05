@@ -230,14 +230,14 @@ independent verification, or FIPS validation.
 `FipsSelfTestRunner` is intentionally public only as a trusted architecture
 seam. Application code can implement it, so its return value is not self-test
 evidence and grants no execution or approved status. Before those capabilities
-exist, v0.125.0 and v0.127.0 require an opaque module-owned attestation issued
+exist, v0.173.0 and v0.175.1 require an opaque module-owned attestation issued
 only by the complete final-image integrity and pre-operational self-tests.
 
 Permanent failure is currently scoped to one caller-owned
 `FipsModuleSession`; sibling sessions over the same configuration are
 independent. This is not currently exploitable because every service is
 non-approved and no provider effect exists. Before executable or approved FIPS
-services exist, v0.127.1 must replace this with one module-wide irreversible
+services exist, v0.175.0 must replace this with one module-wide irreversible
 failure latch that fresh sibling sessions cannot reset or bypass.
 
 v0.18 adds sealed type-level domains and one caller-owned authoritative state

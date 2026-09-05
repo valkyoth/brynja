@@ -1,24 +1,24 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df"
-surface_register_sha256 = "935609432516713090407f79cd67d41070a8dd89ae07d59563db7968ff9fe8d4"
+source_ledger_sha256 = "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
+surface_register_sha256 = "b3ce0df81c44e62824f5d62f37935efc73cd18e454ff0b92c226e83815a4dcc1"
 source_domains = ["dtls", "quic", "tls12", "tls13", "tls13-session"]
 surface_domains = ["dtls", "quic", "tls", "tls12", "tls13"]
 surface_auto_requirements = true
 surface_exclusion = []
 owner_milestones = [
   "0.10.0",
-  "0.61.0", "0.62.0", "0.63.0", "0.64.0", "0.65.0", "0.66.0",
-  "0.67.0", "0.68.0", "0.69.0", "0.70.0", "0.71.0", "0.72.0",
-  "0.73.0", "0.74.0", "0.75.0", "0.76.0", "0.76.1", "0.76.2",
-  "0.77.0", "0.78.0", "0.79.0", "0.80.0", "0.81.0", "0.82.0",
-  "0.83.0", "0.83.1", "0.83.2", "0.84.0", "0.85.0", "0.86.0",
-  "0.87.0", "0.88.0", "0.89.0", "0.90.0", "0.90.1", "0.91.0", "0.92.0",
-  "0.93.0", "0.94.0", "0.95.0", "0.96.0", "0.97.0", "0.98.0",
-  "0.99.0", "0.99.1", "0.100.0", "0.101.0", "0.102.0",
-  "0.103.0", "0.104.0", "0.105.0", "0.106.0", "0.107.0",
-  "0.108.0", "0.109.0", "0.110.0", "0.111.0", "0.111.1",
-  "0.112.0", "0.113.0", "0.114.0", "0.115.0", "0.116.0",
+  "0.105.0", "0.106.0", "0.107.0", "0.108.0", "0.109.0", "0.110.0",
+  "0.111.0", "0.112.0", "0.114.0", "0.113.0", "0.115.0", "0.116.0",
+  "0.117.0", "0.118.0", "0.119.0", "0.120.0", "0.120.1", "0.120.2",
+  "0.121.0", "0.122.0", "0.123.0", "0.124.0", "0.125.0", "0.126.0",
+  "0.127.0", "0.127.1", "0.127.2", "0.128.0", "0.129.0", "0.130.0",
+  "0.131.0", "0.132.0", "0.133.0", "0.134.0", "0.134.1", "0.135.0", "0.136.0",
+  "0.137.0", "0.138.0", "0.139.0", "0.140.0", "0.141.0", "0.142.0",
+  "0.143.0", "0.143.1", "0.144.0", "0.145.0", "0.146.0",
+  "0.147.0", "0.148.0", "0.149.0", "0.150.0", "0.151.0",
+  "0.152.0", "0.153.0", "0.154.0", "0.155.0", "0.155.1",
+  "0.156.0", "0.157.0", "0.158.0", "0.159.0", "0.160.0",
 ]
 
 [[authority_exclusion]]
@@ -28,79 +28,79 @@ rationale = "SSLKEYLOGFILE is an operational test-support-only facility whose co
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.136.0"
+owner = "0.184.0"
 deferred_to = "0.3.5"
 rationale = "The optional Record Size Limit facility is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.137.0"
+owner = "0.185.0"
 deferred_to = "0.3.5"
 rationale = "The optional Raw Public Key facility is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.144.0"
+owner = "0.192.0"
 deferred_to = "0.3.5"
 rationale = "The optional delegated-credential facility is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.145.0"
+owner = "0.193.0"
 deferred_to = "0.3.5"
 rationale = "The optional certificate-decompression receive provider is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.146.0"
+owner = "0.194.0"
 deferred_to = "0.3.5"
 rationale = "Precompressed certificate artifact validation is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.146.1"
+owner = "0.194.1"
 deferred_to = "0.3.5"
 rationale = "Certificate-compression send integration is normatively populated during the optional and residual v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.148.0"
+owner = "0.196.0"
 deferred_to = "0.3.5"
 rationale = "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.148.4"
+owner = "0.196.4"
 deferred_to = "0.3.5"
 rationale = "The complete RFC 6066 compatibility configuration facility is normatively populated by the residual closure and implemented through its explicit pre-1.0 owner."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.64.0"
+owner = "0.108.0"
 deferred_to = "0.3.5"
 rationale = "The four explicitly known unsupported RFC 6066 registry entries are shared handshake-codec wire surfaces closed by the v0.3.5 residual bundle, while the TLS 1.2 semantic engine state remains in transport coverage."
 
 [[surface_defer_group]]
 domain = "dtls"
-owner = "0.111.1"
+owner = "0.155.1"
 deferred_to = "0.3.5"
-rationale = "The DTLS RRC extension and IANA message registry share the v0.111.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
+rationale = "The DTLS RRC extension and IANA message registry share the v0.155.1 DTLS implementation boundary but their exact registry closure is retained by the residual v0.3.5 bundle."
 
 [[surface_defer_group]]
 domain = "tls12"
-owner = "0.148.2"
+owner = "0.196.2"
 deferred_to = "0.3.5"
 rationale = "The complete status_request_v2 compatibility registry and protocol surfaces are normatively populated by the residual closure under their explicit pre-1.0 owner."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.148.2"
+owner = "0.196.2"
 deferred_to = "0.3.5"
 rationale = "The complete cached-information and related certificate-status compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
 
 [[surface_defer_group]]
 domain = "tls"
-owner = "0.148.3"
+owner = "0.196.3"
 deferred_to = "0.3.5"
 rationale = "Supplemental data, user mapping, and authorization-data compatibility facilities are normatively populated by the residual closure under their explicit pre-1.0 owner."
 
@@ -117,86 +117,86 @@ requirement_id = "BRY-REQ-TLS-0019"
 
 [[surface_group]]
 domain = "tls"
-owner = "0.148.1"
+owner = "0.196.1"
 disposition = "future-work"
 requirement_id = "BRY-REQ-TLS-0018"
 
 [[surface_group]]
 domain = "tls"
-owner = "0.61.0"
+owner = "0.105.0"
 requirement_id = "BRY-REQ-TLS13-0061"
 
 [[surface_group]]
 domain = "tls"
-owner = "0.74.0"
+owner = "0.118.0"
 requirement_id = "BRY-REQ-TLS13-0074"
 
 [[surface_group]]
 domain = "tls"
-owner = "0.79.0"
+owner = "0.123.0"
 requirement_id = "BRY-REQ-TLS-0079"
 
 [[surface_group]]
 domain = "tls12"
-owner = "0.83.0"
+owner = "0.127.0"
 requirement_id = "BRY-REQ-TLS12-0083"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.82.4"
+owner = "0.126.4"
 disposition = "future-work"
 requirement_id = "BRY-REQ-TLS13-0046"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.61.0"
+owner = "0.105.0"
 requirement_id = "BRY-REQ-TLS13-0061"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.67.0"
+owner = "0.111.0"
 requirement_id = "BRY-REQ-TLS13-0067"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.68.0"
+owner = "0.112.0"
 requirement_id = "BRY-REQ-TLS-0068"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.69.0"
+owner = "0.114.0"
 requirement_id = "BRY-REQ-TLS13-0069"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.82.2"
+owner = "0.126.2"
 disposition = "future-work"
 requirement_id = "BRY-REQ-TLS13-0721"
 
 [[surface_group]]
 domain = "tls13"
-owner = "0.82.3"
+owner = "0.126.3"
 disposition = "future-work"
 requirement_id = "BRY-REQ-TLS13-0763"
 
 [[surface_group]]
 domain = "quic"
-owner = "0.94.0"
+owner = "0.138.0"
 disposition = "future-work"
 requirement_id = "BRY-REQ-QUIC-0094"
 
 [[surface_group]]
 domain = "quic"
-owner = "0.94.0"
+owner = "0.138.0"
 disposition = "caller-owned"
 requirement_id = "BRY-REQ-QUIC-0093"
 
 [[surface_group]]
 domain = "dtls"
-owner = "0.102.0"
+owner = "0.146.0"
 requirement_id = "BRY-REQ-DTLS-0102"
 
 [[surface_group]]
 domain = "dtls"
-owner = "0.110.0"
+owner = "0.154.0"
 requirement_id = "BRY-REQ-DTLS-0110"

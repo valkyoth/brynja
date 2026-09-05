@@ -1,11 +1,11 @@
 schema = 1
 milestone = "0.3.4"
-source_ledger_sha256 = "6a01ab3d7a222499bdf977b510feeb23abb51928f10419c6c94096cdf66e35df"
+source_ledger_sha256 = "4773f20b9d7791e981c1e9fa95b2afb7cfdabfc7d0be4bf8941724edd44035ac"
 
 [[surface]]
 id = "boundary.dtls.path-identity"
 requirement_id = "BRY-REQ-DTLS-0102"
-owner = "0.102.0"
+owner = "0.146.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -16,7 +16,7 @@ rationale = "Opaque caller-provided path tokens bind cookie, amplification, CID,
 [[surface]]
 id = "state.dtls.version-negotiation"
 requirement_id = "BRY-REQ-DTLS-0103"
-owner = "0.103.0"
+owner = "0.147.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:6347", "rfc:9147", "rfc:9325"]
@@ -27,7 +27,7 @@ rationale = "DTLS negotiation skips unknown offers, rejects recognized legacy ve
 [[surface]]
 id = "state.dtls13.headers-epochs"
 requirement_id = "BRY-REQ-DTLS-0104"
-owner = "0.104.0"
+owner = "0.148.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -38,7 +38,7 @@ rationale = "DTLS 1.3 unified headers, epochs, compact sequence reconstruction, 
 [[surface]]
 id = "state.dtls13.record-number-encryption"
 requirement_id = "BRY-REQ-DTLS-0105"
-owner = "0.105.0"
+owner = "0.149.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -49,7 +49,7 @@ rationale = "Record-number encryption authenticates reconstruction and never mut
 [[surface]]
 id = "state.dtls.replay-epoch-lifetime"
 requirement_id = "BRY-REQ-DTLS-0106"
-owner = "0.106.0"
+owner = "0.150.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -60,7 +60,7 @@ rationale = "Replay windows and epoch keys have fixed bounds, transactional inst
 [[surface]]
 id = "state.dtls12.connection-id"
 requirement_id = "BRY-REQ-DTLS-0107"
-owner = "0.107.0"
+owner = "0.151.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:6347", "rfc:9146"]
@@ -71,7 +71,7 @@ rationale = "DTLS 1.2 CID negotiation preserves its version-specific record, rou
 [[surface]]
 id = "state.dtls13.connection-id-update"
 requirement_id = "BRY-REQ-DTLS-0108"
-owner = "0.108.0"
+owner = "0.152.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -82,7 +82,7 @@ rationale = "DTLS 1.3 CID updates bound active and retired identifiers and prese
 [[surface]]
 id = "state.dtls.fragment-reassembly"
 requirement_id = "BRY-REQ-DTLS-0109"
-owner = "0.109.0"
+owner = "0.153.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -93,7 +93,7 @@ rationale = "Handshake fragmentation and caller-workspace reassembly are bounded
 [[surface]]
 id = "state.dtls.flights-acks-timers"
 requirement_id = "BRY-REQ-DTLS-0110"
-owner = "0.110.0"
+owner = "0.154.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -104,7 +104,7 @@ rationale = "Flights, ACKs, timer actions, retransmission caches, backoff, conge
 [[surface]]
 id = "state.dtls.address-validation"
 requirement_id = "BRY-REQ-DTLS-0111"
-owner = "0.111.0"
+owner = "0.155.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -115,7 +115,7 @@ rationale = "Path-bound cookies, amplification budgets, PMTU policy, and cheap r
 [[surface]]
 id = "state.dtls.return-routability"
 requirement_id = "BRY-REQ-DTLS-1111"
-owner = "0.111.1"
+owner = "0.155.1"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9853"]
@@ -126,7 +126,7 @@ rationale = "Return-routability checks authenticate path challenge, response, ti
 [[surface]]
 id = "state.dtls13.handshake"
 requirement_id = "BRY-REQ-DTLS-0112"
-owner = "0.112.0"
+owner = "0.156.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -137,7 +137,7 @@ rationale = "DTLS 1.3 client and server states handle duplicates, key updates, t
 [[surface]]
 id = "state.dtls13.early-data-exclusion"
 requirement_id = "BRY-REQ-DTLS-0113"
-owner = "0.113.0"
+owner = "0.157.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:9147"]
@@ -148,7 +148,7 @@ rationale = "DTLS 1.3 early data is never offered, accepted, derived, retained, 
 [[surface]]
 id = "state.dtls12.hardened-profile"
 requirement_id = "BRY-REQ-DTLS-0114"
-owner = "0.114.0"
+owner = "0.158.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:6347", "rfc:9325", "rfc:10015"]
@@ -159,7 +159,7 @@ rationale = "DTLS 1.2 uses only the hardened TLS 1.2 profile with isolated epoch
 [[surface]]
 id = "state.dtls.one-pass-router"
 requirement_id = "BRY-REQ-DTLS-0115"
-owner = "0.115.0"
+owner = "0.159.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:6347", "rfc:9147"]
@@ -170,7 +170,7 @@ rationale = "The DTLS router selects one highest acceptable engine once and neve
 [[surface]]
 id = "state.dtls.conformance-audit"
 requirement_id = "BRY-REQ-DTLS-0116"
-owner = "0.116.0"
+owner = "0.160.0"
 domain = "dtls"
 disposition = "future-work"
 sources = ["rfc:6347", "rfc:9147", "rfc:9325"]

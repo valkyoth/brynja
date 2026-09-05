@@ -42,7 +42,7 @@ mapping_rationale = "The shared TLS wire-policy surface governs registry represe
 [[requirement]]
 domain = "tls"
 id = "BRY-REQ-TLS-0018"
-owner = "0.148.1"
+owner = "0.196.1"
 lifecycle = "planned"
 decision_ids = ["facility.heartbeat"]
 sources = [{ id = "rfc:6520", authority_role = "current" }]
@@ -52,14 +52,14 @@ target = "crates/brynja-tls/src/heartbeat.rs#HeartbeatFacility"
 positive_test = "tests/requirements/heartbeat.rs#complete_opt_in_client_server_profiles"
 negative_test = "tests/requirements/heartbeat.rs#length_disclosure_amplification_and_default_rejection"
 work_bound = "Payload, padding, response, rate, amplification, path and aggregate work are bounded before echo or output mutation."
-evidence_gap = "Complete TLS/DTLS version, role, resumption, path, resource and interoperability evidence remains unresolved until v0.148.1."
+evidence_gap = "Complete TLS/DTLS version, role, resumption, path, resource and interoperability evidence remains unresolved until v0.196.1."
 residual = "Heartbeat remains unsuitable as implicit application liveness and is never enabled by a modern default."
-mapping_rationale = "RFC 6520 defines a real standardized facility, so v0.148.1 owns its complete opt-in implementation rather than recognition-only rejection."
+mapping_rationale = "RFC 6520 defines a real standardized facility, so v0.196.1 owns its complete opt-in implementation rather than recognition-only rejection."
 
 [[requirement]]
 domain = "tls13"
 id = "BRY-REQ-TLS13-0046"
-owner = "0.82.4"
+owner = "0.126.4"
 lifecycle = "planned"
 decision_ids = ["algorithm.legacy-pkcs1-client-signature"]
 sources = [{ id = "rfc:9963", authority_role = "current" }]
@@ -69,14 +69,14 @@ target = "crates/brynja-tls13-handshake/src/signature.rs#LegacyClientPkcs1"
 positive_test = "tests/requirements/tls13_legacy_client_signature.rs#client_sign_server_verify"
 negative_test = "tests/requirements/tls13_legacy_client_signature.rs#role_scheme_and_default_rejection"
 work_bound = "Negotiation, certificate selection, signing, verification and transcript work share the fixed TLS 1.3 handshake and RSA limits."
-evidence_gap = "Complete role, certificate, signature, transcript, interop and isolation evidence remains unresolved until v0.82.4."
+evidence_gap = "Complete role, certificate, signature, transcript, interop and isolation evidence remains unresolved until v0.126.4."
 residual = "The code points remain absent from server signatures and modern defaults despite complete explicit compatibility."
-mapping_rationale = "RFC 9963 defines an exact compatibility capability owned by v0.82.4 over the sole legacy RSA implementation."
+mapping_rationale = "RFC 9963 defines an exact compatibility capability owned by v0.126.4 over the sole legacy RSA implementation."
 
 [[requirement]]
 domain = "tls13"
 id = "BRY-REQ-TLS13-0721"
-owner = "0.82.2"
+owner = "0.126.2"
 lifecycle = "planned"
 decision_ids = ["facility.tls13.post-handshake-authentication"]
 sources = [{ id = "rfc:9846", authority_role = "current" }]
@@ -86,14 +86,14 @@ target = "crates/brynja-tls13-handshake/src/authentication.rs#PostHandshakeAuthe
 positive_test = "tests/requirements/tls13_post_handshake_auth.rs#complete_client_server_flow"
 negative_test = "tests/requirements/tls13_post_handshake_auth.rs#ordering_context_concurrency_and_default_rejection"
 work_bound = "Requests, transcripts, credentials, concurrent states and aggregate post-handshake work have explicit connection-scoped ceilings."
-evidence_gap = "Complete configuration, role, ordering, transcript, KeyUpdate, resumption, cancellation and interop evidence remains unresolved until v0.82.2."
+evidence_gap = "Complete configuration, role, ordering, transcript, KeyUpdate, resumption, cancellation and interop evidence remains unresolved until v0.126.2."
 residual = "The facility remains disabled by default and cannot silently grant renewed application authorization."
-mapping_rationale = "The TLS 1.3 authority defines a real optional state machine, so v0.82.2 owns its complete explicit implementation."
+mapping_rationale = "The TLS 1.3 authority defines a real optional state machine, so v0.126.2 owns its complete explicit implementation."
 
 [[requirement]]
 domain = "tls13"
 id = "BRY-REQ-TLS13-0763"
-owner = "0.82.3"
+owner = "0.126.3"
 lifecycle = "planned"
 decision_ids = ["facility.external-psk.certificate-authentication"]
 sources = [{ id = "rfc:9973", authority_role = "current" }]
@@ -103,14 +103,14 @@ target = "crates/brynja-tls13/src/psk.rs#CertificateExternalPskMode"
 positive_test = "tests/requirements/tls13_certificate_psk.rs#complete_client_server_flow"
 negative_test = "tests/requirements/tls13_certificate_psk.rs#credential_role_importer_and_fallback_failures"
 work_bound = "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
-evidence_gap = "Complete binder, certificate, role, importer, resumption, early-data, privacy and interop evidence remains unresolved until v0.82.3."
+evidence_gap = "Complete binder, certificate, role, importer, resumption, early-data, privacy and interop evidence remains unresolved until v0.126.3."
 residual = "The combined mode remains explicit and cannot substitute for certificate-only or PSK-only authentication."
-mapping_rationale = "RFC 9973 defines a complete combined mode owned by v0.82.3 rather than an exclusion surface."
+mapping_rationale = "RFC 9973 defines a complete combined mode owned by v0.126.3 rather than an exclusion surface."
 
 [[requirement]]
 domain = "quic"
 id = "BRY-REQ-QUIC-0093"
-owner = "0.94.0"
+owner = "0.138.0"
 lifecycle = "caller-owned"
 decision_ids = ["iana.quic.quic-frame-types"]
 sources = [{ id = "rfc:9000", authority_role = "caller-owned" }]
@@ -120,6 +120,6 @@ target = "boundary:quic-transport-owned"
 positive_test = "tests/requirements/quic_ownership.rs#typed_transport_boundary"
 negative_test = "tests/requirements/quic_ownership.rs#reject_transport_semantic_claims"
 work_bound = "Brynja accepts only bounded ordered handshake bytes and typed transport inputs; transport processing cannot consume Brynja state implicitly."
-evidence_gap = "Executable API-boundary, feature-graph, packet-injection, recovery, version, and integration tests remain unresolved until v0.94.0."
+evidence_gap = "Executable API-boundary, feature-graph, packet-injection, recovery, version, and integration tests remain unresolved until v0.138.0."
 residual = "The caller must provide a correct and separately reviewed QUIC transport, loss-recovery, congestion-control, and path implementation."
 mapping_rationale = "RFC 9000 and the caller-owned QUIC frame registry establish the explicit transport boundary around Brynja's recordless TLS adapter."

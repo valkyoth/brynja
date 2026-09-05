@@ -1,16 +1,19 @@
 # Current Status
 
+The [ordering review](ROADMAP_ORDERING_AUDIT.md) splits oversized future
+families and records prerequisites without renumbering any v0.24.x work.
+
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
 current implementation claim. Standalone DER encode/decode completion is
-planned for v0.33.9. The former standalone hash and legacy plans are now
-consolidated into the pre-1.0 roadmap, with final release gates through v0.285.0.
-Current generated planning coverage is 1185 non-RC rows
-(1186 milestones including the release candidate), 130 authorities, 4,459
+planned for v0.34.6. The former standalone hash and legacy plans are now
+consolidated into the pre-1.0 roadmap, with final release gates through v0.355.0.
+Current generated planning coverage is 1201 non-RC rows
+(1202 milestones including the release candidate), 130 authorities, 4,459
 surfaces and 172 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 signed and published; v0.21.0 through v0.24.15 signed; v0.24.16 portable SP 800-185 acceptance passed owner-reported retest and is awaiting green CI
+Status: v0.20.0 signed and published; v0.21.0 through v0.24.16 signed; the next implementation stop remains v0.24.17
 
 Brynja has implemented only shared alert/failure and bounded numeric/resource
 value domains plus protocol-neutral borrowed read and transactional
@@ -666,7 +669,7 @@ Version 0.3.1 adds explicit protocol-surface decisions:
   production SSLKEYLOGFILE, TLS 1.3 post-handshake authentication,
   certificate-with-external-PSK, legacy PKCS1 client signatures, ML-KEM PKIX
   credentials and unsigned X.509 certificates; the original HPKE non-base-mode
-  exclusion is now superseded by separately planned v0.139.2-v0.139.5
+  exclusion is now superseded by separately planned v0.187.2-v0.187.5
   PSK/Auth/AuthPSK implementation and acceptance milestones;
 - QUIC version-specific cryptography and certificate compression remain
   explicit bounded future work, while unknown extensions are safely ignored
@@ -762,7 +765,7 @@ Version 0.3.5 completes the optional, legacy, operational, and residual pass:
   with delegated sections accepted only when another bundle records an exact
   owner;
 - the DTLS RRC state, extension, ContentType 27, and message registry are fixed
-  at v0.111.1, while stream TLS must reject RRC admission;
+  at v0.155.1, while stream TLS must reject RRC admission;
 - RFC 6066 is split among exact TLS 1.2, TLS 1.3, SNI, status, alert,
   terminology, bounded peer ClientHello ignore, and configuration-rejection
   decisions instead of being mapped wholesale to OCSP; and
@@ -828,7 +831,7 @@ Version 0.6.0 adds bounded numeric and resource foundations:
 - small-domain arithmetic and advance matrices are exhaustively checked, with
   additional boundary, representation, zero-budget, and compile-fail tests;
 - the reviewed 2026-07-31 IANA DNS snapshot adds three registries and
-  seventeen entries, all explicitly caller-owned by v0.140.0, bringing the
+  seventeen entries, all explicitly caller-owned by v0.188.0, bringing the
   then-current register to 4,444 surfaces without admitting provisional draft
   text or advancing a protocol implementation claim;
 - the reviewed 2026-08-09 refresh adds only one caller-owned provisional
@@ -1303,10 +1306,10 @@ findings. A final full-delta review through exact signed candidate
 `3f889a2c07ae513235fd8cb9056faa983f2135e9` substantiated no open Critical,
 High, or Medium vulnerability and confirmed both remediations. Permanent
 failure remains caller-session-scoped and is currently
-non-exploitable because no service is approved or executable; v0.127.1 now
+non-exploitable because no service is approved or executable; v0.175.0 now
 explicitly requires a module-wide irreversible latch that sibling sessions
 cannot bypass before that changes. The application-implementable self-test
-runner likewise grants no execution or approved status; v0.125.0/v0.127.0
+runner likewise grants no execution or approved status; v0.173.0/v0.175.1
 require an opaque module-owned attestation issued only by complete final-image
 tests before either can become reachable. v0.17.0 selects no crates.io
 publication.
@@ -1347,7 +1350,7 @@ release with no code claiming erasure; the repository-owner retest passed.
 Everything beyond those foundation domains remains governance and planning
 evidence, not protocol implementation. Final Standards Track RFC 10024 and
 the matching IANA assignments now resolve the source gate for exactly three
-planned ECDHE-ML-KEM groups. Their implementation remains owned by v0.120.0,
+planned ECDHE-ML-KEM groups. Their implementation remains owned by v0.164.0,
 and draft or private identifiers remain forbidden. Non-RFC legacy requirements
 carry machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation

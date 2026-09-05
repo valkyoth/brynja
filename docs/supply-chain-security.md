@@ -26,7 +26,7 @@ forces a new admission decision. Release-gate online checks also reject a newer
 crates.io release or package-checksum drift. Failure removes or withholds the
 adapter without changing Brynja's mandatory internal destruction path.
 
-Version 0.47.1 may admit the latest stable first-party `base64-ng` family only
+Version 0.88.1 may admit the latest stable first-party `base64-ng` family only
 as an encoding dependency for bounded Base64, PEM, and OpenPGP armor. Admission
 requires an exact pin, default features disabled, `no_std`, no allocator in the
 reachable protocol path, no unsafe or native code, no build script, no

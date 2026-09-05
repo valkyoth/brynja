@@ -4,8 +4,8 @@ version = 1
 [review]
 checked_at = "2026-09-03"
 owner = "Brynja standards review"
-pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.140.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh. On 2026-08-09 the official IANA XML and its SHA-256 were independently retrieved and reviewed: the TLS ExtensionType registry update dated 2026-08-07 adds only the `snifq/1` SNIF over QUIC ALPN entry referencing provisional draft-zubov-snif-05; it remains caller-owned at v0.130.0 and does not admit draft authority or runtime code. The DNS Parameters update dated 2026-08-04 changes only three existing references from drafts to RFC 10029 and RFC 10023, adds no allocation, remains caller-owned at v0.140.0, and does not admit either RFC into Brynja protocol scope. On 2026-08-11 final Standards Track RFC 10024 and the official TLS Parameters XML were independently retrieved and reviewed: the registry changes only the three final ECDHE-ML-KEM group and two obsoleted Kyber draft references from draft metadata to RFC 10024. RFC 10024 has no reported errata and adding it changes no existing errata record. The former admission blocker is resolved for planned v0.120.0 implementation; no protocol code is admitted at this refresh. Later on 2026-08-11 the official DNS Parameters XML added only the `_x402` TXT underscored service name referencing provisional draft-hawkins-x402-dns-discovery-01; it remains caller-owned at v0.140.0, does not admit draft authority or runtime code, and is included only to preserve complete registry coverage. The later 2026-08-11 TLS ExtensionType update allocates certificate type value 4 to C509 Certificate under provisional draft-ietf-cose-cbor-encoded-cert-20 and moves the unassigned range start to 5; the allocation remains future work, the draft is not admitted as normative authority, and no runtime code is admitted by this refresh. On 2026-08-17 the official final SP 800-185 publication page and PDF were reviewed and the exact PDF was pinned for pre-1.0 cSHAKE, KMAC, TupleHash and ParallelHash planning; NIST's 2025 decision to revise the document remains an explicit lifecycle-monitor input and admits no unpublished revision text. Later on 2026-08-17 verified editorial RFC 9954 erratum 9136 was retrieved and reviewed: it corrects two TLS 1.3 section references from 4.2.8 to 4.3.8, changes no normative hybrid-key-exchange behavior, remains an explicit implementation input for planned v0.117.0, and admits no runtime code in this refresh."
-latest_pin_provenance = "On 2026-08-28 the official IANA SMI Numbers and DNS Parameters XML files plus the complete locked-RFC errata set were independently retrieved and reviewed. SMI advances two MAC-address references to RFC 10031 and adds provisional id-rdna-c509Name value 2; existing PKIX/OCSP ownership at v0.48.0 is unchanged. DNS adds provisional UNECE/ISO RR types, the RFC 8460 _tls underscored TXT name, a temporary provisional DELEG parameter, and schema-only NOTIFY mnemonic normalization; existing caller-owned v0.140.0 disposition is unchanged. Reported technical RFC 3986 erratum 9147 remains track-not-applied and cannot alter requirements. On 2026-08-31 the v0.24.5 lifecycle monitor detected newly reported editorial RFC 9846 erratum 9157. Official review confirms that it capitalizes two Appendix F.1 references to the defined Main Secret, remains unverified and track-not-applied, changes no TLS behavior or requirement, and is owned by the existing TLS 1.3 milestones. On 2026-09-03 the v0.24.11 release gate detected newly reported technical RFC 9846 erratum 9161. Official review confirms that it distinguishes the syntactically permitted empty CertificateRequest extension vector from the conforming sender requirement to include signature_algorithms, remains unverified and track-not-applied, changes no wire rule or sender requirement, and is owned by the existing TLS 1.3 milestones. No referenced draft, RFC, unverified erratum, authority state, or runtime code is admitted by these evidence refreshes."
+pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.188.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh. On 2026-08-09 the official IANA XML and its SHA-256 were independently retrieved and reviewed: the TLS ExtensionType registry update dated 2026-08-07 adds only the `snifq/1` SNIF over QUIC ALPN entry referencing provisional draft-zubov-snif-05; it remains caller-owned at v0.178.0 and does not admit draft authority or runtime code. The DNS Parameters update dated 2026-08-04 changes only three existing references from drafts to RFC 10029 and RFC 10023, adds no allocation, remains caller-owned at v0.188.0, and does not admit either RFC into Brynja protocol scope. On 2026-08-11 final Standards Track RFC 10024 and the official TLS Parameters XML were independently retrieved and reviewed: the registry changes only the three final ECDHE-ML-KEM group and two obsoleted Kyber draft references from draft metadata to RFC 10024. RFC 10024 has no reported errata and adding it changes no existing errata record. The former admission blocker is resolved for planned v0.164.0 implementation; no protocol code is admitted at this refresh. Later on 2026-08-11 the official DNS Parameters XML added only the `_x402` TXT underscored service name referencing provisional draft-hawkins-x402-dns-discovery-01; it remains caller-owned at v0.188.0, does not admit draft authority or runtime code, and is included only to preserve complete registry coverage. The later 2026-08-11 TLS ExtensionType update allocates certificate type value 4 to C509 Certificate under provisional draft-ietf-cose-cbor-encoded-cert-20 and moves the unassigned range start to 5; the allocation remains future work, the draft is not admitted as normative authority, and no runtime code is admitted by this refresh. On 2026-08-17 the official final SP 800-185 publication page and PDF were reviewed and the exact PDF was pinned for pre-1.0 cSHAKE, KMAC, TupleHash and ParallelHash planning; NIST's 2025 decision to revise the document remains an explicit lifecycle-monitor input and admits no unpublished revision text. Later on 2026-08-17 verified editorial RFC 9954 erratum 9136 was retrieved and reviewed: it corrects two TLS 1.3 section references from 4.2.8 to 4.3.8, changes no normative hybrid-key-exchange behavior, remains an explicit implementation input for planned v0.161.0, and admits no runtime code in this refresh."
+latest_pin_provenance = "On 2026-08-28 the official IANA SMI Numbers and DNS Parameters XML files plus the complete locked-RFC errata set were independently retrieved and reviewed. SMI advances two MAC-address references to RFC 10031 and adds provisional id-rdna-c509Name value 2; existing PKIX/OCSP ownership at v0.89.0 is unchanged. DNS adds provisional UNECE/ISO RR types, the RFC 8460 _tls underscored TXT name, a temporary provisional DELEG parameter, and schema-only NOTIFY mnemonic normalization; existing caller-owned v0.188.0 disposition is unchanged. Reported technical RFC 3986 erratum 9147 remains track-not-applied and cannot alter requirements. On 2026-08-31 the v0.24.5 lifecycle monitor detected newly reported editorial RFC 9846 erratum 9157. Official review confirms that it capitalizes two Appendix F.1 references to the defined Main Secret, remains unverified and track-not-applied, changes no TLS behavior or requirement, and is owned by the existing TLS 1.3 milestones. On 2026-09-03 the v0.24.11 release gate detected newly reported technical RFC 9846 erratum 9161. Official review confirms that it distinguishes the syntactically permitted empty CertificateRequest extension vector from the conforming sender requirement to include signature_algorithms, remains unverified and track-not-applied, changes no wire rule or sender requirement, and is owned by the existing TLS 1.3 milestones. No referenced draft, RFC, unverified erratum, authority state, or runtime code is admitted by these evidence refreshes."
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
 rfc_index_sha256 = "de78e7827eb0e96f9a0c0437ab0194d5b524fc93d5bede66d16c778e98c02a13"
 errata = "https://errata.rfc-editor.org/search/"
@@ -23,7 +23,7 @@ id = "tls-parameters"
 url = "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
 expected_sha256 = "a618297067b989a3938030cd96d163df88154031a4c976c67a3f719ecbe944ff"
 domains = ["standards", "tls12", "tls13", "dtls", "hybrid"]
-milestones = ["0.3.0", "0.3.1", "0.3.4", "0.120.0"]
+milestones = ["0.3.0", "0.3.1", "0.3.4", "0.164.0"]
 
 [[registry]]
 id = "tls-extensiontype-values"
@@ -37,42 +37,42 @@ id = "tls-ech-configuration-extensions"
 url = "https://www.iana.org/assignments/tls-ech-configuration-extensions/tls-ech-configuration-extensions.xml"
 expected_sha256 = "b481939a3ea685209a7026e508ba554d904ec5afc6439d29a2bc2e13b6053e98"
 domains = ["ech"]
-milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
+milestones = ["0.3.0", "0.3.1", "0.3.5", "0.188.0"]
 
 [[registry]]
 id = "hpke"
 url = "https://www.iana.org/assignments/hpke/hpke.xml"
 expected_sha256 = "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
 domains = ["hpke", "ech"]
-milestones = ["0.3.0", "0.3.1", "0.3.5", "0.138.0"]
+milestones = ["0.3.0", "0.3.1", "0.3.5", "0.186.1"]
 
 [[registry]]
 id = "quic"
 url = "https://www.iana.org/assignments/quic/quic.xml"
 expected_sha256 = "8867dffa0213139187ea9bb358ab907b746f47918a6ed713c38a322580232536"
 domains = ["quic"]
-milestones = ["0.3.0", "0.3.1", "0.3.4", "0.94.0"]
+milestones = ["0.3.0", "0.3.1", "0.3.4", "0.138.0"]
 
 [[registry]]
 id = "trans"
 url = "https://www.iana.org/assignments/trans/trans.xml"
 expected_sha256 = "c861d172ca324e939d2495f3ec03551ed3fbf9118cd791ada1da4a3c52566066"
 domains = ["ct"]
-milestones = ["0.3.0", "0.3.1", "0.3.3", "0.59.0"]
+milestones = ["0.3.0", "0.3.1", "0.3.3", "0.100.0"]
 
 [[registry]]
 id = "smi-numbers"
 url = "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
 expected_sha256 = "763a767641c6b9c8e2025b89cb23d246e6d1b02c8f3dd6bedbf9a2b53909fd55"
 domains = ["pkix", "ocsp"]
-milestones = ["0.3.0", "0.3.1", "0.3.3", "0.48.0"]
+milestones = ["0.3.0", "0.3.1", "0.3.3", "0.89.0"]
 
 [[registry]]
 id = "dns-parameters"
 url = "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
 expected_sha256 = "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c"
 domains = ["ech"]
-milestones = ["0.3.0", "0.3.1", "0.3.5", "0.140.0"]
+milestones = ["0.3.0", "0.3.1", "0.3.5", "0.188.0"]
 
 [[domain]]
 id = "standards"
@@ -100,109 +100,109 @@ local = ["RISCV.Crypto.Scalar-1.0.1.pdf", "RISCV.Crypto.Vector-1.0.pdf"]
 
 [[domain]]
 id = "public-key"
-milestones = ["0.32.0", "0.33.0", "0.34.0", "0.35.0", "0.36.0", "0.37.0", "0.38.0", "0.39.0", "0.40.0", "0.41.0", "0.42.0", "0.43.0", "0.44.0", "0.45.0"]
+milestones = ["0.32.0", "0.33.0", "0.35.0", "0.36.0", "0.37.0", "0.38.0", "0.39.0", "0.40.0", "0.41.0", "0.42.0", "0.44.0", "0.45.0", "0.46.0", "0.47.0"]
 rfcs = [3279, 4055, 5480, 5756, 5758, 6979, 7748, 8017, 8032, 8410, 8813, 9295]
 local = ["NIST.FIPS.186-5.pdf", "NIST.SP.800-186.pdf", "NIST.SP.800-56Ar3.pdf"]
 
 [[domain]]
 id = "key-containers"
-milestones = ["0.20.0", "0.21.0", "0.48.0", "0.49.0", "0.50.0"]
+milestones = ["0.20.0", "0.21.0", "0.89.0", "0.90.0", "0.91.0"]
 rfcs = [5912, 5958, 7468, 8017]
 local = ["ITU-T.X.690-202102.pdf", "ITU-T.X.690-202109-Err1.pdf"]
 
 [[domain]]
 id = "pkix"
-milestones = ["0.50.0", "0.51.0", "0.52.0", "0.53.0", "0.54.0", "0.55.0", "0.56.0", "0.57.0", "0.57.1"]
+milestones = ["0.91.0", "0.92.0", "0.93.0", "0.94.0", "0.95.0", "0.96.0", "0.97.0", "0.98.0", "0.98.1"]
 rfcs = [3986, 5280, 5890, 5891, 5892, 6818, 8753, 9525, 9549, 9598, 9608, 9618, 9925, 10007]
 local = []
 
 [[domain]]
 id = "ocsp"
-milestones = ["0.58.0", "0.58.1", "0.58.2", "0.58.3", "0.71.0"]
+milestones = ["0.99.0", "0.99.1", "0.99.2", "0.99.3", "0.115.0"]
 rfcs = [5754, 6066, 6960, 6961, 7633, 9654, 9919]
 local = []
 
 [[domain]]
 id = "ct"
-milestones = ["0.59.0", "0.71.0"]
+milestones = ["0.100.0", "0.115.0"]
 rfcs = [6962, 9162]
 local = []
 
 [[domain]]
 id = "tls13"
-milestones = ["0.10.0", "0.61.0", "0.62.0", "0.63.0", "0.64.0", "0.65.0", "0.66.0", "0.67.0", "0.68.0", "0.69.0", "0.70.0", "0.71.0", "0.72.0", "0.73.0", "0.74.0", "0.75.0", "0.76.0", "0.76.1", "0.76.2", "0.77.0", "0.78.0", "0.79.0", "0.80.0", "0.81.0", "0.82.0"]
+milestones = ["0.10.0", "0.105.0", "0.106.0", "0.107.0", "0.108.0", "0.109.0", "0.110.0", "0.111.0", "0.112.0", "0.114.0", "0.113.0", "0.115.0", "0.116.0", "0.117.0", "0.118.0", "0.119.0", "0.120.0", "0.120.1", "0.120.2", "0.121.0", "0.122.0", "0.123.0", "0.124.0", "0.125.0", "0.126.0"]
 rfcs = [6066, 6520, 7301, 7685, 8448, 8701, 8996, 9325, 9846, 9850, 9852, 9963]
 local = []
 
 [[domain]]
 id = "tls13-session"
-milestones = ["0.74.0", "0.75.0", "0.76.0", "0.76.1", "0.76.2", "0.77.0", "0.78.0", "0.79.0"]
+milestones = ["0.118.0", "0.119.0", "0.120.0", "0.120.1", "0.120.2", "0.121.0", "0.122.0", "0.123.0"]
 rfcs = [5077, 5705, 5929, 9257, 9258, 9266, 9846, 9973]
 local = []
 
 [[domain]]
 id = "tls12"
-milestones = ["0.83.0", "0.83.1", "0.83.2", "0.84.0", "0.85.0", "0.86.0", "0.87.0", "0.88.0", "0.89.0", "0.90.0", "0.91.0", "0.92.0", "0.93.0"]
+milestones = ["0.127.0", "0.127.1", "0.127.2", "0.128.0", "0.129.0", "0.130.0", "0.131.0", "0.132.0", "0.133.0", "0.134.0", "0.135.0", "0.136.0", "0.137.0"]
 rfcs = [5246, 5288, 5289, 5746, 6066, 6176, 7465, 7507, 7627, 7905, 7919, 8422, 9155, 9325, 9846, 9851, 10015]
 local = []
 
 [[domain]]
 id = "tls12-rfc6066"
-milestones = ["0.90.1"]
+milestones = ["0.134.1"]
 rfcs = [6066]
 local = []
 
 [[domain]]
 id = "quic"
-milestones = ["0.94.0", "0.95.0", "0.96.0", "0.97.0", "0.98.0", "0.99.0", "0.100.0", "0.101.0"]
+milestones = ["0.138.0", "0.139.0", "0.140.0", "0.141.0", "0.142.0", "0.143.0", "0.144.0", "0.145.0"]
 rfcs = [9000, 9001, 9002, 9369]
 local = []
 
 [[domain]]
 id = "dtls"
-milestones = ["0.102.0", "0.103.0", "0.104.0", "0.105.0", "0.106.0", "0.107.0", "0.108.0", "0.109.0", "0.110.0", "0.111.0", "0.112.0", "0.113.0", "0.114.0", "0.115.0", "0.116.0"]
+milestones = ["0.146.0", "0.147.0", "0.148.0", "0.149.0", "0.150.0", "0.151.0", "0.152.0", "0.153.0", "0.154.0", "0.155.0", "0.156.0", "0.157.0", "0.158.0", "0.159.0", "0.160.0"]
 rfcs = [6347, 9146, 9147, 9325, 9853, 10015]
 local = []
 
 [[domain]]
 id = "hybrid"
-milestones = ["0.117.0", "0.118.0", "0.119.0", "0.120.0", "0.121.0", "0.122.0"]
+milestones = ["0.161.0", "0.162.0", "0.163.0", "0.164.0", "0.165.0", "0.166.0"]
 rfcs = [9935, 9954, 10024]
 local = ["NIST.FIPS.203.pdf", "NIST.SP.800-227.pdf"]
 
 [[domain]]
 id = "hpke"
-milestones = ["0.138.0", "0.139.0", "0.139.1"]
+milestones = ["0.186.1", "0.187.0", "0.187.1"]
 rfcs = [9180]
 local = []
 
 [[domain]]
 id = "ech"
-milestones = ["0.140.0", "0.140.1", "0.141.0", "0.142.0", "0.143.0"]
+milestones = ["0.188.0", "0.188.1", "0.189.0", "0.190.0", "0.191.0"]
 rfcs = [9180, 9460, 9848, 9849]
 local = []
 
 [[domain]]
 id = "optional"
-milestones = ["0.136.0", "0.137.0", "0.144.0", "0.145.0", "0.146.0", "0.146.1"]
+milestones = ["0.184.0", "0.185.0", "0.192.0", "0.193.0", "0.194.0", "0.194.1"]
 rfcs = [7250, 8449, 8879, 9345]
 local = []
 
 [[domain]]
 id = "legacy"
 milestones = [
-  "0.180.1", "0.180.2", "0.180.3", "0.180.4", "0.180.5", "0.180.6",
-  "0.180.7", "0.180.8", "0.180.9", "0.180.10", "0.180.11", "0.180.12",
-  "0.180.13", "0.180.14", "0.180.15", "0.180.16", "0.180.17",
-  "0.180.18", "0.180.19", "0.180.20", "0.180.21", "0.180.22",
-  "0.180.23", "0.180.24",
+  "0.240.0", "0.241.0", "0.241.1", "0.241.2", "0.242.0", "0.242.1",
+  "0.242.2", "0.243.0", "0.243.1", "0.243.2", "0.244.0", "0.244.1",
+  "0.244.2", "0.245.0", "0.245.1", "0.245.2", "0.246.0",
+  "0.246.1", "0.246.2", "0.247.0", "0.247.1", "0.248.0",
+  "0.248.1", "0.249.0",
 ]
 rfcs = [2246, 4346, 6101, 6151, 6176, 7568, 8996]
 local = []
 
 [[domain]]
 id = "entropy"
-milestones = ["0.14.0", "0.124.0", "0.124.1", "0.124.2", "0.125.0", "0.126.0"]
+milestones = ["0.14.0", "0.168.0", "0.169.0", "0.170.0", "0.173.0", "0.174.0"]
 rfcs = []
 local = ["NIST.SP.800-90Ar1.pdf", "NIST.SP.800-90B.pdf", "NIST.SP.800-90C.pdf"]
 
@@ -216,13 +216,13 @@ reason = "Superseded TLS extension baseline; RFC 6066 is locked."
 source = 3279
 relation = "updated-by"
 target = 4491
-reason = "Not yet locked: v0.46.44-v0.46.54 and v0.60.4 must authenticate and admit the complete GOST primitive and legacy-PKIX profiles before implementation."
+reason = "Not yet locked: v0.74.0-v0.75.2 and v0.102.3 must authenticate and admit the complete GOST primitive and legacy-PKIX profiles before implementation."
 
 [[closure_exclusion]]
 source = 3279
 relation = "updated-by"
 target = 8692
-reason = "Not yet locked: v0.60.1 must authenticate and schedule the complete SHAKE-based legacy-PKIX profiles before implementation."
+reason = "Not yet locked: v0.102.0 must authenticate and schedule the complete SHAKE-based legacy-PKIX profiles before implementation."
 
 [[closure_exclusion]]
 source = 3986
@@ -329,9 +329,9 @@ reason = "YANG document guidance is outside Brynja registry policy."
 [[blocker]]
 id = "ecdhe-ml-kem-groups"
 status = "resolved"
-owner = "0.120.0"
+owner = "0.164.0"
 required_registry = "tls-parameters"
 required_final_rfc = true
 required_final_iana_codepoints = true
 drafts_forbidden = true
-reason = "Final Standards Track RFC 10024 and final IANA values now define the three admitted hybrid groups; implementation remains planned only for v0.120.0 and drafts and private values remain forbidden."
+reason = "Final Standards Track RFC 10024 and final IANA values now define the three admitted hybrid groups; implementation remains planned only for v0.164.0 and drafts and private values remain forbidden."

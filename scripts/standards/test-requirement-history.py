@@ -162,7 +162,7 @@ def test_iana_lifecycle_disposition_mismatch_fails() -> None:
 def test_iana_owner_mismatch_fails() -> None:
     policy, ledger, register = inputs()
     broken = copy.deepcopy(policy)
-    requirement(broken, "BRY-REQ-TLS-0001")["owner"] = "0.68.0"
+    requirement(broken, "BRY-REQ-TLS-0001")["owner"] = "0.112.0"
     assert_fails(
         "owner conflicts with linked surfaces",
         checker.build_matrix,

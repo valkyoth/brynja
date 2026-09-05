@@ -91,8 +91,8 @@ with zero open findings. A final full-delta review through exact signed
 candidate `3f889a2c07ae513235fd8cb9056faa983f2135e9` substantiated no open
 Critical, High, or Medium vulnerability. The report retains caller-session-
 scoped failure and application-implementable self-test success as
-non-exploitable future constraints gated by module-wide failure at v0.127.1
-and opaque module-owned attestation at v0.125.0/v0.127.0. It implements no module,
+non-exploitable future constraints gated by module-wide failure at v0.175.0
+and opaque module-owned attestation at v0.173.0/v0.175.1. It implements no module,
 service, algorithm or validation and selects no package publication.
 Signed tag v0.17.0 contains the final reviewed remediation. The v0.18.0 stage
 adds only sealed mandatory decision domains, one caller-owned authoritative

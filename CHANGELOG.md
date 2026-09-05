@@ -5,6 +5,14 @@ Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Split oversized future roadmap chains into family-sized minor versions,
+  preserve v0.24.x, and record stable old-to-new identities and checked
+  prerequisites. Add fifteen portable acceptance stops before acceleration
+  and a separate post-engine TLS 1.2 exporter stop. See the
+  [ordering review](docs/ROADMAP_ORDERING_AUDIT.md).
+
 ### Added
 
 - Add the v0.24.16 frozen package-external `no_std` SP 800-185 acceptance

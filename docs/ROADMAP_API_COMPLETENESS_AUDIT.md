@@ -1,5 +1,9 @@
 # Public Operation And Prerequisite Roadmap Audit
 
+Historical review: numerical results below describe the earlier ordering pass.
+The current expansion and final gate positions are recorded in
+[ROADMAP_EXPANSION_AUDIT.md](ROADMAP_EXPANSION_AUDIT.md).
+
 Date: 2026-09-05
 Scope: planning review during v0.24.16, not an implementation or security audit
 
@@ -45,7 +49,7 @@ current algorithm status, dependency, CPU admission or release cadence changes.
 | OpenPGP client acceptance promised export but had no equally explicit implementation owner | v0.235.2 public/protected-secret and explicitly authorized typed-secret unprotected export, paired with import; non-exportable handles stay non-exportable |
 | Early RSA wording incorrectly said v1 would not generate keys | v0.43.0 owns complete generation/import/validation before private operations at v0.46.0 |
 | An early substrate gate could demand algorithms intentionally scheduled much later | v0.87.2 distinguishes completed consumer dependencies from explicitly numbered later owners; no executable forward dependency is permitted |
-| A late protocol integration could conceal an unfinished standalone direction | v0.351.1 whole-project public-operation closure before integrated release rehearsal |
+| A late protocol integration could conceal an unfinished standalone direction | v0.476.1 whole-project public-operation closure before integrated release rehearsal |
 
 The DER rule/type inventory is derived from authenticated ASN.1 and DER
 authorities, including edition-specific rules and errata. DER is not shorthand
@@ -93,7 +97,7 @@ test does not establish correct EAX composition.
 | Ecosystem and platform adapters | Host effects and framework traits remain optional downstream boundaries; adapter convenience cannot replace a missing core operation or add native cryptography. |
 | OpenPGP | Packet, key, sign/verify, encrypt/decrypt, wrap/unwrap, armor and both compression directions are assigned; explicit key export and primitive prerequisites are added above. Application trust, storage and discovery remain caller-owned. |
 | Named legacy protocols | Both client/server and applicable send/receive operations remain scheduled through v0.249.0, with dangerous selection and source-rights blockers rather than silent modern fallback. |
-| Final product | v0.351.1 checks the complete public operation inventory, followed by integrated rehearsal, external audit, remediation and exact-candidate gates. |
+| Final product | v0.476.1 checks the complete public operation inventory, followed by integrated rehearsal, external audit, remediation and exact-candidate gates. |
 
 ## Enforcement And Follow-Up
 

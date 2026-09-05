@@ -9,6 +9,7 @@ cp docs/RELEASE_PLAN.md "$release_tmp"
 cp docs/VERSION_PLAN.md "$version_tmp"
 python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp"
 python3 scripts/release/test-catalogue-plan.py
+python3 scripts/release/test-expansion-plan.py
 python3 scripts/release/test-roadmap-schedule.py
 
 sed -i '0,/Status: planned/{/Status: planned/d;}' "$release_tmp"

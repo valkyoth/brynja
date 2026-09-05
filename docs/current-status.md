@@ -1,5 +1,9 @@
 # Current Status
 
+The [five-part expansion](ROADMAP_EXPANSION_AUDIT.md) adds modern, legacy,
+research and reusable API owners, with larger protocols last. This is planned
+work, not a change in current implementation or verification status.
+
 The [ordering review](ROADMAP_ORDERING_AUDIT.md) splits oversized future
 families and records prerequisites without renumbering any v0.24.x work.
 
@@ -7,9 +11,9 @@ The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
 current implementation claim. Standalone DER encode/decode completion is
 planned for v0.34.6. The former standalone hash and legacy plans are now
-consolidated into the pre-1.0 roadmap, with final release gates through v0.355.0.
-Current generated planning coverage is 1201 non-RC rows
-(1202 milestones including the release candidate), 130 authorities, 4,459
+consolidated into the pre-1.0 roadmap, with final release gates through v0.480.0.
+Current generated planning coverage is 2003 non-RC rows
+(2004 milestones including the release candidate), 130 authorities, 4,459
 surfaces and 172 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 

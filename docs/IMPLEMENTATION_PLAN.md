@@ -160,7 +160,9 @@ v0.250.0-v0.350.0 in the
 [unified release plan](RELEASE_PLAN.md#unified-catalogue-scope-and-api-contracts).
 The [scope register](CATALOGUE_SCOPE_REGISTER.json) maps all 104 inherited
 inventory rows, exact family contracts, prerequisite owners and acceptance
-steps; final whole-project gates follow at v0.351.0-v0.355.0.
+steps. The [five-part expansion](ROADMAP_EXPANSION_AUDIT.md) additionally
+assigns missing families and API backfills, then formats and the larger
+protocols at the end. Final whole-project gates follow at v0.476.0-v0.480.0.
 
 `brynja-crypto-cpu` is an optional downstream `no_std` implementation package:
 it may contain only separately admitted ISA kernels, static

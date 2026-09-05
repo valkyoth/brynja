@@ -41,7 +41,7 @@ def validate_manifest(data):
         raise ValueError("roadmap schedule schema or immutable boundary drift")
     records = data["milestones"]
     versions = [r["version"] for r in records]
-    if len(records) != 1202 or len(set(versions)) != len(records):
+    if len(records) != 2004 or len(set(versions)) != len(records):
         raise ValueError("missing or duplicate scheduled milestone")
     if len({r["id"] for r in records}) != len(records):
         raise ValueError("duplicate stable milestone identity")
@@ -61,7 +61,7 @@ def validate_manifest(data):
                 raise ValueError("executable prerequisite missing or scheduled after consumer")
         if len(set(record["requires"])) != len(record["requires"]):
             raise ValueError("duplicate prerequisite")
-    if list(minors) != list(range(1, 356)):
+    if list(minors) != list(range(1, 481)):
         raise ValueError("unexplained minor-version gap")
     for minor, patches in minors.items():
         if patches != list(range(len(patches))):

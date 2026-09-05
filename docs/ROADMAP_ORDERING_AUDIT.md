@@ -1,5 +1,9 @@
 # Roadmap Ordering Review
 
+Historical review: numerical results below describe the earlier ordering pass.
+The current expansion and final gate positions are recorded in
+[ROADMAP_EXPANSION_AUDIT.md](ROADMAP_EXPANSION_AUDIT.md).
+
 Date: 2026-09-05. Baseline: `dbe6f4b`.
 This is a planning review, not an implementation or cryptographic assessment.
 

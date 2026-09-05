@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import catalogue_plan
+import expansion_plan
 import roadmap_schedule
 
 VERSION = r"(?:0\.[0-9]+\.[0-9]+|1\.0\.0(?:-rc\.[0-9]+)?)"
@@ -41,7 +42,7 @@ API_CLOSURE_EDGES = (
     ("v0.216.3", "v0.218.0"),
     ("v0.217.1", "v0.221.0"),
     ("v0.235.2", "v0.237.2"),
-    ("v0.351.1", "v0.352.0"),
+    ("v0.476.1", "v0.477.0"),
 )
 
 API_SCOPE_CONTRACTS = {
@@ -58,7 +59,8 @@ API_SCOPE_CONTRACTS = {
     "v0.218.0": ("v0.216.3 BLAKE2b", "H-prime"),
     "v0.221.0": ("v0.217.1 AES-CMAC", "seal/open"),
     "v0.235.2": ("export", "typed-secret unprotected", "import"),
-    "v0.351.1": ("public package", "complete safe operation directions"),
+    "v0.197.0": ("scheduled before this stop", "unchecked cryptographic internals", "reviewed public hash"),
+    "v0.476.1": ("public package", "complete safe operation directions"),
 }
 
 
@@ -154,6 +156,7 @@ def validate(release_path: Path, version_path: Path) -> None:
     entries = version_entries(version_path)
     validate_api_closure(entries)
     catalogue_plan.validate(entries)
+    expansion_plan.validate(entries)
     roadmap_schedule.validate(entries)
     text = release_path.read_text(encoding="utf-8")
     matches = list(HEADING.finditer(text))

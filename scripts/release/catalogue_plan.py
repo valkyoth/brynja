@@ -49,7 +49,7 @@ def validate(entries, register=None):
         raise ValueError("inventory refers to an unknown owner")
     if any(v not in positions for v in data["reuse"].values()):
         raise ValueError("catalogue reuse points to absent implementation")
-    if data["reuse"]["SHA-512/t"] != "0.23.2":
+    if data["reuse"]["SHA-512/t"] != "0.24.29":
         raise ValueError("SHA-512/t reuse must point to IV-generation closure")
     if data["lifecycle_versions"] != ["0.250.4", "0.348.1"]:
         raise ValueError("catalogue standards update closure drift")
@@ -115,9 +115,9 @@ def validate(entries, register=None):
         title, scope = scopes.get(record["version"], (None, ""))
         if title != record["title"] or hashlib.sha256(scope.encode()).hexdigest() != record["scope_sha256"]:
             raise ValueError("catalogue plan scope differs from reviewed API register")
-    for a, b in (("0.348.1", "0.351.0"), ("0.350.0", "0.351.0"),
-                 ("0.351.1", "0.352.0"), ("0.352.0", "0.353.0"),
-                 ("0.353.0", "0.354.0"), ("0.354.0", "0.355.0"),
-                 ("0.355.0", "1.0.0-rc.1")):
+    for a, b in (("0.348.1", "0.476.0"), ("0.350.0", "0.476.0"),
+                 ("0.476.1", "0.477.0"), ("0.477.0", "0.478.0"),
+                 ("0.478.0", "0.479.0"), ("0.479.0", "0.480.0"),
+                 ("0.480.0", "1.0.0-rc.1")):
         if a not in positions or b not in positions or positions[a] >= positions[b]:
             raise ValueError("final production gate precedes expanded scope")
